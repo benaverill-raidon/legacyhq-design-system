@@ -1,0 +1,74 @@
+{
+  "Semantic": {
+      "spacing-0": {
+        "value": "var(--spacing-0)",
+        "type": "float",
+        "originalName": "spacing/0"
+      },
+      "spacing-025": {
+        "value": "var(--spacing-2)",
+        "type": "float",
+        "originalName": "spacing/025"
+      },
+      "spacing-050": {
+        "value": "var(--spacing-4)",
+        "type": "float",
+        "originalName": "spacing/050"
+      },
+      "spacing-075": {
+        "value": "var(--spacing-6)",
+        "type": "float",
+        "originalName": "spacing/075"
+      },
+      "spacing-100": {
+        "value": "var(--spacing-8)",
+        "type": "float",
+        "originalName": "spacing/100"
+      },
+      "spacing-150": {
+        "value": "var(--spacing-12)",
+        "type": "float",
+        "originalName": "spacing/150"
+      },
+      "spacing-200": {
+        "value": "var(--spacing-16)",
+        "type": "float",
+        "originalName": "spacing/200"
+      },
+      "spacing-250": {
+        "value": "var(--spacing-20)",
+        "type": "float",
+        "originalName": "spacing/250"
+      },
+      "spacing-300": {
+        "value": "var(--spacing-24)",
+        "type": "float",
+        "originalName": "spacing/300"
+      },
+      "spacing-400": {
+        "value": "var(--spacing-32)",
+        "type": "float",
+        "originalName": "spacing/400"
+      },
+      "spacing-500": {
+        "value": "var(--spacing-40)",
+        "type": "float",
+        "originalName": "spacing/500"
+      },
+      "spacing-600": {
+        "value": "var(--spacing-48)",
+        "type": "float",
+        "originalName": "spacing/600"
+      },
+      "spacing-800": {
+        "value": "var(--spacing-64)",
+        "type": "float",
+        "originalName": "spacing/800"
+      },
+      "spacing-1000": {
+        "value": "var(--spacing-80)",
+        "type": "float",
+        "originalName": "spacing/1000"
+      }
+    }
+  }

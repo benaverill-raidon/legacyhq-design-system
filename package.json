@@ -1,0 +1,33 @@
+{
+  "name": "design-system",
+  "version": "1.0.0",
+  "description": "Design system for LegacyHQ",
+  "main": "index.js",
+  "scripts": {
+    "build": "style-dictionary build -c style-dictionary.config.js",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "keywords": [
+    "\"design",
+    "tokens\"",
+    "\"design",
+    "system\"",
+    "\"legacyhq\""
+  ],
+  "author": "benjamin averill",
+  "license": "ISC",
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.2.8",
+    "@storybook/addon-docs": "^10.2.8",
+    "@storybook/react-vite": "^10.2.8",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "storybook": "^10.2.8",
+    "style-dictionary": "^5.0.0",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "sass": "^1.97.0"
+  }
+}

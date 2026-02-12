@@ -1,0 +1,70 @@
+{
+  "shadow": {
+    "lg": {
+      "x": {
+        "value": 8,
+        "type": "float",
+        "originalName": "shadow/lg/x"
+      },
+      "y": {
+        "value": 24,
+        "type": "float",
+        "originalName": "shadow/lg/y"
+      },
+      "blur": {
+        "value": 12,
+        "type": "float",
+        "originalName": "shadow/lg/blur"
+      },
+      "spread": {
+        "value": -4,
+        "type": "float",
+        "originalName": "shadow/lg/spread"
+      }
+    },
+    "md": {
+      "x": {
+        "value": 4,
+        "type": "float",
+        "originalName": "shadow/md/x"
+      },
+      "y": {
+        "value": 12,
+        "type": "float",
+        "originalName": "shadow/md/y"
+      },
+      "blur": {
+        "value": 4,
+        "type": "float",
+        "originalName": "shadow/md/blur"
+      },
+      "spread": {
+        "value": 8,
+        "type": "float",
+        "originalName": "shadow/md/spread"
+      }
+    },
+    "sm": {
+      "x": {
+        "value": 0,
+        "type": "float",
+        "originalName": "shadow/sm/x"
+      },
+      "y": {
+        "value": 4,
+        "type": "float",
+        "originalName": "shadow/sm/y"
+      },
+      "blur": {
+        "value": 4,
+        "type": "float",
+        "originalName": "shadow/sm/blur"
+      },
+      "spread": {
+        "value": 0,
+        "type": "float",
+        "originalName": "shadow/sm/spread"
+      }
+    }
+  }
+}

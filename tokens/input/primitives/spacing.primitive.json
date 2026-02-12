@@ -1,0 +1,119 @@
+{
+  "spacing": {
+    "minus-32": {
+      "value": -32,
+      "type": "float",
+      "originalName": "spacing/minus-32"
+    },
+    "minus-24": {
+      "value": -24,
+      "type": "float",
+      "originalName": "spacing/minus-24"
+    },
+    "minus-20": {
+      "value": -20,
+      "type": "float",
+      "originalName": "spacing/minus-20"
+    },
+    "minus-16": {
+      "value": -16,
+      "type": "float",
+      "originalName": "spacing/minus-16"
+    },
+    "minus-12": {
+      "value": -12,
+      "type": "float",
+      "originalName": "spacing/minus-12"
+    },
+    "minus-8": {
+      "value": -8,
+      "type": "float",
+      "originalName": "spacing/minus-8"
+    },
+    "minus-6": {
+      "value": -6,
+      "type": "float",
+      "originalName": "spacing/minus-6"
+    },
+    "minus-4": {
+      "value": -4,
+      "type": "float",
+      "originalName": "spacing/minus-4"
+    },
+    "minus-2": {
+      "value": -2,
+      "type": "float",
+      "originalName": "spacing/minus-2"
+    },
+    "0": {
+      "value": 0,
+      "type": "float",
+      "originalName": "spacing/0"
+    },
+    "2": {
+      "value": 2,
+      "type": "float",
+      "originalName": "spacing/2"
+    },
+    "4": {
+      "value": 4,
+      "type": "float",
+      "originalName": "spacing/4"
+    },
+    "6": {
+      "value": 6,
+      "type": "float",
+      "originalName": "spacing/6"
+    },
+    "8": {
+      "value": 8,
+      "type": "float",
+      "originalName": "spacing/8"
+    },
+    "12": {
+      "value": 12,
+      "type": "float",
+      "originalName": "spacing/12"
+    },
+    "16": {
+      "value": 16,
+      "type": "float",
+      "originalName": "spacing/16"
+    },
+    "20": {
+      "value": 20,
+      "type": "float",
+      "originalName": "spacing/20"
+    },
+    "24": {
+      "value": 24,
+      "type": "float",
+      "originalName": "spacing/24"
+    },
+    "32": {
+      "value": 32,
+      "type": "float",
+      "originalName": "spacing/32"
+    },
+    "40": {
+      "value": 40,
+      "type": "float",
+      "originalName": "spacing/40"
+    },
+    "48": {
+      "value": 48,
+      "type": "float",
+      "originalName": "spacing/48"
+    },
+    "64": {
+      "value": 64,
+      "type": "float",
+      "originalName": "spacing/64"
+    },
+    "80": {
+      "value": 80,
+      "type": "float",
+      "originalName": "spacing/80"
+    }
+  }
+}

@@ -1,7 +1,8 @@
 /** @type { import('@storybook/react').Preview } */
 import { createElement } from 'react';
-import '../dist/tokens/theme.light.css';
-import '../dist/tokens/theme.dark.css';
+import '../packages/ui/src/tokens/generated/tokens.css';
+import '../packages/ui/src/tokens/generated/light.css';
+import '../packages/ui/src/tokens/generated/dark.css';
 
 const preview = {
   globalTypes: {

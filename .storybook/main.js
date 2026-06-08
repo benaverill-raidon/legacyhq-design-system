@@ -3,8 +3,7 @@
 /** @type { import('@storybook/react-vite').StorybookConfig } */
 const config = {
   "stories": [
-    "../src/components/**/*.stories.@(js|jsx|mjs|ts|tsx|mdx)",
-    "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx|mdx)"
+    "../packages/ui/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx|mdx)"
   ],
   "addons": [
     "@storybook/addon-docs",

@@ -1,0 +1,76 @@
+.spinner {
+  --spinner-size: var(--component-spinner-size-lg);
+  --spinner-stroke-width: var(--component-spinner-border-width-lg);
+  --spinner-rotation-duration: 860ms;
+  --spinner-rotation-easing: cubic-bezier(0.4, 0.15, 0.6, 0.85);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--spinner-size);
+  block-size: var(--spinner-size);
+  color: var(--color-border-bold);
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.size_sm {
+  --spinner-size: var(--component-spinner-size-sm);
+  --spinner-stroke-width: var(--component-spinner-border-width-sm);
+}
+
+.size_md {
+  --spinner-size: var(--component-spinner-size-md);
+  --spinner-stroke-width: var(--component-spinner-border-width-md);
+}
+
+.size_lg {
+  --spinner-size: var(--component-spinner-size-lg);
+  --spinner-stroke-width: var(--component-spinner-border-width-lg);
+}
+
+.size_xl {
+  --spinner-size: var(--component-spinner-size-xl);
+  --spinner-stroke-width: var(--component-spinner-border-width-xl);
+}
+
+.svg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+  animation: spinner-rotate var(--spinner-rotation-duration) var(--spinner-rotation-easing) infinite;
+  transform-origin: center;
+}
+
+.arc {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--spinner-stroke-width);
+  stroke-linecap: butt;
+  transform-origin: center;
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svg {
+    animation: none;
+  }
+}

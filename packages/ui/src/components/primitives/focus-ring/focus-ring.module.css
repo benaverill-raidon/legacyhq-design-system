@@ -1,0 +1,26 @@
+.focusRing {
+  --focus-ring-color: var(--color-border-focused);
+  --focus-ring-width: var(--border-width-focused);
+  --focus-ring-offset: 2px;
+
+  border-radius: inherit;
+}
+
+.focusRing:focus-visible {
+  outline-color: var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  outline-style: solid;
+  outline-width: var(--focus-ring-width);
+}
+
+.focusRingDefault {
+  --focus-ring-width: var(--border-width-focused);
+}
+
+.focusRingCompact {
+  --focus-ring-width: var(--border-width-default);
+}
+
+.focusRingDisabled:focus-visible {
+  outline: none;
+}

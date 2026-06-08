@@ -1,0 +1,64 @@
+.badge {
+  --badge-background: var(--color-background-neutral-bold-default);
+  --badge-color: var(--color-content-inverse);
+  --badge-radius: var(--border-radius-sm);
+  --badge-padding-inline: var(--spacing-050);
+  --badge-min-size: var(--spacing-20);
+  --badge-font-family: var(--typography-overline-sm-font-family);
+  --badge-font-weight: var(--typography-overline-sm-font-weight);
+  --badge-font-size: var(--typography-overline-sm-font-size);
+  --badge-line-height: var(--typography-overline-sm-line-height);
+  --badge-letter-spacing: var(--typography-overline-sm-letter-spacing);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: var(--badge-min-size);
+  min-block-size: var(--badge-min-size);
+  padding-block: var(--spacing-0);
+  padding-inline: var(--badge-padding-inline);
+  border: 0;
+  border-radius: var(--badge-radius);
+  background: var(--badge-background);
+  color: var(--badge-color);
+  font-family: var(--badge-font-family);
+  font-size: var(--badge-font-size);
+  font-weight: var(--badge-font-weight);
+  line-height: var(--badge-line-height);
+  letter-spacing: var(--badge-letter-spacing);
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.tone_default {
+  --badge-background: var(--color-background-neutral-bold-default);
+  --badge-color: var(--color-content-inverse);
+}
+
+.tone_inverse {
+  --badge-background: var(--color-background-neutral-default);
+  --badge-color: var(--color-content-default);
+}
+
+.tone_brand {
+  --badge-background: var(--color-background-brand-bold-default);
+  --badge-color: var(--color-content-inverse);
+}
+
+.tone_success {
+  --badge-background: var(--color-background-success-bold-default);
+  --badge-color: var(--color-content-inverse);
+}
+
+.tone_error {
+  --badge-background: var(--color-background-error-bold-default);
+  --badge-color: var(--color-content-inverse);
+}
+
+:global([data-theme="dark"]) .tone_inverse {
+  --badge-background: var(--color-elevation-surface-default);
+  --badge-color: var(--color-content-default);
+}

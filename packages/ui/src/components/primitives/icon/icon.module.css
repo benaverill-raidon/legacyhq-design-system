@@ -1,0 +1,76 @@
+.root {
+  --icon-size: 16px;
+  --icon-container-size: var(--icon-size);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-container-size);
+  block-size: var(--icon-container-size);
+  color: var(--color-content-default);
+  flex: 0 0 auto;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.size_sm {
+  --icon-size: 12px;
+}
+
+.size_md {
+  --icon-size: 16px;
+}
+
+.spacing_none {
+  --icon-container-size: var(--icon-size);
+}
+
+.spacing_spacious {
+  --icon-container-size: 24px;
+}
+
+.color_default {
+  color: var(--color-content-default);
+}
+
+.color_subtle {
+  color: var(--color-content-subtle);
+}
+
+.color_inverse {
+  color: var(--color-content-inverse);
+}
+
+.color_brand {
+  color: var(--color-content-brand);
+}
+
+.color_success {
+  color: var(--color-content-success);
+}
+
+.color_warning {
+  color: var(--color-content-warning);
+}
+
+.color_error {
+  color: var(--color-content-error);
+}
+
+.color_information {
+  color: var(--color-content-information);
+}
+
+.color_disabled {
+  color: var(--color-content-disabled);
+}
+
+.svg {
+  display: block;
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
+  fill: currentColor;
+  color: inherit;
+  overflow: visible;
+  flex: 0 0 auto;
+}

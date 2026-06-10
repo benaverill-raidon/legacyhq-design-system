@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const PriorityTrivialIcon = React.memo(function PriorityTrivialIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M7.99998 1.33301C4.31331 1.33301 1.33331 4.31301 1.33331 7.99967C1.33331 11.6863 4.31331 14.6663 7.99998 14.6663C11.6866 14.6663 14.6666 11.6863 14.6666 7.99967C14.6666 4.31301 11.6866 1.33301 7.99998 1.33301ZM7.99998 13.333C5.05331 13.333 2.66665 10.9463 2.66665 7.99967C2.66665 5.05301 5.05331 2.66634 7.99998 2.66634C10.9466 2.66634 13.3333 5.05301 13.3333 7.99967C13.3333 10.9463 10.9466 13.333 7.99998 13.333Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+PriorityTrivialIcon.displayName = 'PriorityTrivialIcon';

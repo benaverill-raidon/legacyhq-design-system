@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const NoteIcon = React.memo(function NoteIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M12.6667 3.33333V9.33333H9.33333V12.6667H3.33333V3.33333H12.6667ZM12.6667 2H3.33333C2.6 2 2 2.6 2 3.33333V12.6667C2 13.4 2.6 14 3.33333 14H10L14 10V3.33333C14 2.6 13.4 2 12.6667 2ZM8 9.33333H4.66667V8H8V9.33333ZM11.3333 6.66667H4.66667V5.33333H11.3333V6.66667Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+NoteIcon.displayName = 'NoteIcon';

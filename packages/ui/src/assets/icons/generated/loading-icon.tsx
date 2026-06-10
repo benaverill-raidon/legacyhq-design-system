@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const LoadingIcon = React.memo(function LoadingIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M7.99998 2.66683V1.3335C4.32665 1.3335 1.33331 4.32683 1.33331 8.00016C1.33331 9.09491 1.59918 10.1293 2.06967 11.042L3.22532 10.3748C2.86788 9.65921 2.66665 8.85267 2.66665 8.00016C2.66665 5.06016 5.05998 2.66683 7.99998 2.66683Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+LoadingIcon.displayName = 'LoadingIcon';

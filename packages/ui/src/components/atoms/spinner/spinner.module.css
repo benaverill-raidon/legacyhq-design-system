@@ -1,5 +1,5 @@
 .spinner {
-  --spinner-size: var(--component-spinner-size-lg);
+  --spinner-size: var(--spacing-300);
   --spinner-stroke-width: var(--component-spinner-border-width-lg);
   --spinner-rotation-duration: 860ms;
   --spinner-rotation-easing: cubic-bezier(0.4, 0.15, 0.6, 0.85);
@@ -15,22 +15,22 @@
 }
 
 .size_sm {
-  --spinner-size: var(--component-spinner-size-sm);
+  --spinner-size: var(--spacing-150);
   --spinner-stroke-width: var(--component-spinner-border-width-sm);
 }
 
 .size_md {
-  --spinner-size: var(--component-spinner-size-md);
+  --spinner-size: var(--spacing-200);
   --spinner-stroke-width: var(--component-spinner-border-width-md);
 }
 
 .size_lg {
-  --spinner-size: var(--component-spinner-size-lg);
+  --spinner-size: var(--spacing-300);
   --spinner-stroke-width: var(--component-spinner-border-width-lg);
 }
 
 .size_xl {
-  --spinner-size: var(--component-spinner-size-xl);
+  --spinner-size: var(--spacing-600);
   --spinner-stroke-width: var(--component-spinner-border-width-xl);
 }
 

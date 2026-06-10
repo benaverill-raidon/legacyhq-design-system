@@ -1,0 +1,14 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const SortDescendingIcon = React.memo(function SortDescendingIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M2 11.3291H6V9.99577H2V11.3291ZM2 3.3291V4.66243H14V3.3291H2ZM2 7.99577H9.3346V6.66244H2V7.99577Z" fill="currentColor"/>
+<path d="M13.0244 10.0046H15.0244L12.3577 12.6712L9.69108 10.0046H11.6911L11.6911 6.66862H13.0244V10.0046Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+SortDescendingIcon.displayName = 'SortDescendingIcon';

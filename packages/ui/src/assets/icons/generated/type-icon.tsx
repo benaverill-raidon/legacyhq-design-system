@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const TypeIcon = React.memo(function TypeIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M7.66669 1.33301L4.00002 7.33301H11.3334L7.66669 1.33301ZM7.66669 3.89301L8.95335 5.99967H6.37335L7.66669 3.89301ZM11.3334 8.66634C9.67335 8.66634 8.33335 10.0063 8.33335 11.6663C8.33335 13.3263 9.67335 14.6663 11.3334 14.6663C12.9934 14.6663 14.3334 13.3263 14.3334 11.6663C14.3334 10.0063 12.9934 8.66634 11.3334 8.66634ZM11.3334 13.333C10.4134 13.333 9.66669 12.5863 9.66669 11.6663C9.66669 10.7463 10.4134 9.99967 11.3334 9.99967C12.2534 9.99967 13 10.7463 13 11.6663C13 12.5863 12.2534 13.333 11.3334 13.333ZM1.66669 14.333H7.00002V8.99967H1.66669V14.333ZM3.00002 10.333H5.66669V12.9997H3.00002V10.333Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+TypeIcon.displayName = 'TypeIcon';

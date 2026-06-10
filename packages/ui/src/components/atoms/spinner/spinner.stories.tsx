@@ -82,21 +82,22 @@ const mutedTextStyle = {
 
 export const Playground: Story = {};
 
+export const Variants: Story = {
+  render: () => (
+    <div style={rowStyle}>
+      {sizes.map((size) => (
+        <span key={size} style={inlineTextStyle}>
+          <Spinner size={size} />
+          {size}
+        </span>
+      ))}
+    </div>
+  ),
+};
+
 export const Examples: Story = {
   render: () => (
     <div style={stackStyle}>
-      <div style={exampleCardStyle}>
-        <strong>All sizes</strong>
-        <div style={rowStyle}>
-          {sizes.map((size) => (
-            <span key={size} style={inlineTextStyle}>
-              <Spinner size={size} />
-              {size}
-            </span>
-          ))}
-        </div>
-      </div>
-
       <div style={exampleCardStyle}>
         <strong>Default loading</strong>
         <Spinner />

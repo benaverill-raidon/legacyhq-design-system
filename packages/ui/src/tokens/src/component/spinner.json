@@ -1,24 +1,6 @@
 {
   "component": {
     "spinner": {
-      "size": {
-        "sm": {
-          "value": "12px",
-          "type": "dimension"
-        },
-        "md": {
-          "value": "16px",
-          "type": "dimension"
-        },
-        "lg": {
-          "value": "24px",
-          "type": "dimension"
-        },
-        "xl": {
-          "value": "48px",
-          "type": "dimension"
-        }
-      },
       "border": {
         "width": {
           "sm": {

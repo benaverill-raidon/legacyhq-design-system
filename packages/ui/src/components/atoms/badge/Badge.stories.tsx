@@ -1,5 +1,9 @@
+import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Badge } from './Badge';
+import type { BadgeTone } from './Badge.types';
+
+const tones: BadgeTone[] = ['default', 'inverse', 'brand', 'success', 'error'];
 
 const meta: Meta<typeof Badge> = {
   title: 'UI/Atoms/Badge',
@@ -9,9 +13,10 @@ const meta: Meta<typeof Badge> = {
     tone: 'default',
   },
   argTypes: {
+    children: { control: 'text' },
     tone: {
       control: 'select',
-      options: ['default', 'inverse', 'brand', 'success', 'error'],
+      options: tones,
     },
     ariaLabel: { control: 'text' },
     className: { control: false },
@@ -22,32 +27,77 @@ export default meta;
 
 type Story = StoryObj<typeof Badge>;
 
-export const Default: Story = {};
+const stackStyle = {
+  display: 'grid',
+  gap: 'var(--spacing-200)',
+  color: 'var(--color-content-default)',
+} satisfies CSSProperties;
 
-export const Inverse: Story = {
-  args: {
-    tone: 'inverse',
-    children: '+1',
-  },
+const rowStyle = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: 'var(--spacing-150)',
+} satisfies CSSProperties;
+
+const cardStyle = {
+  display: 'grid',
+  gap: 'var(--spacing-100)',
+  padding: 'var(--spacing-200)',
+  border: 'var(--border-width-default) solid var(--color-border-default)',
+  borderRadius: 'var(--border-radius-md)',
+  background: 'var(--color-elevation-surface-default)',
+  color: 'var(--color-content-default)',
+} satisfies CSSProperties;
+
+const darkSurfaceStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 'var(--spacing-150)',
+  padding: 'var(--spacing-200)',
+  borderRadius: 'var(--border-radius-md)',
+  background: 'var(--color-background-neutral-bold-default)',
+  color: 'var(--color-content-inverse)',
+} satisfies CSSProperties;
+
+export const Playground: Story = {};
+
+export const Variants: Story = {
+  render: () => (
+    <div style={rowStyle}>
+      {tones.map((tone) => (
+        <Badge key={tone} tone={tone}>
+          {tone === 'error' ? '-1' : tone === 'success' ? '+1' : '1'}
+        </Badge>
+      ))}
+    </div>
+  ),
 };
 
-export const Brand: Story = {
-  args: {
-    tone: 'brand',
-    children: '1',
-  },
-};
+export const Examples: Story = {
+  render: () => (
+    <div style={stackStyle}>
+      <div style={cardStyle}>
+        <span>Unread notifications</span>
+        <div style={rowStyle}>
+          <Badge ariaLabel="1 unread notification">1</Badge>
+          <Badge tone="brand">1</Badge>
+        </div>
+      </div>
 
-export const Success: Story = {
-  args: {
-    tone: 'success',
-    children: '+1',
-  },
-};
+      <div style={cardStyle}>
+        <span>Score deltas</span>
+        <div style={rowStyle}>
+          <Badge tone="success">+1</Badge>
+          <Badge tone="error">-1</Badge>
+        </div>
+      </div>
 
-export const Error: Story = {
-  args: {
-    tone: 'error',
-    children: '-1',
-  },
+      <div data-theme="dark" style={darkSurfaceStyle}>
+        <Badge>1</Badge>
+        <Badge tone="inverse">1</Badge>
+        <Badge tone="brand">1</Badge>
+      </div>
+    </div>
+  ),
 };

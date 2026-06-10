@@ -1,0 +1,24 @@
+{
+  "component": {
+    "radio": {
+      "indicator": {
+        "size": {
+          "value": "var(--spacing-200)",
+          "type": "dimension"
+        }
+      },
+      "hit-area": {
+        "size": {
+          "value": "var(--spacing-300)",
+          "type": "dimension"
+        }
+      },
+      "dot": {
+        "size": {
+          "value": "var(--spacing-050)",
+          "type": "dimension"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,199 @@
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-050);
+  width: fit-content;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  text-transform: var(--typography-body-md-text-transform);
+  cursor: pointer;
+}
+
+.control {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--component-radio-hit-area-size);
+  block-size: var(--component-radio-hit-area-size);
+  border-radius: var(--border-radius-full-round);
+}
+
+.input {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  z-index: 1;
+  inline-size: var(--component-radio-indicator-size);
+  block-size: var(--component-radio-indicator-size);
+  margin: var(--spacing-0);
+  border: 0;
+  border-radius: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: inherit;
+  transform: translate(-50%, -50%);
+}
+
+.indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--component-radio-indicator-size);
+  block-size: var(--component-radio-indicator-size);
+  border: var(--border-width-default) solid var(--color-border-input);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-input-default);
+  pointer-events: none;
+}
+
+.indicator::after {
+  position: absolute;
+  inline-size: var(--component-radio-dot-size);
+  block-size: var(--component-radio-dot-size);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-content-inverse);
+  content: '';
+  opacity: 0;
+}
+
+.labelText {
+  display: inline-flex;
+  align-items: baseline;
+  min-inline-size: 0;
+}
+
+.requiredIndicator {
+  margin-inline-start: var(--spacing-025);
+  color: var(--color-content-error);
+}
+
+.radio:not([data-disabled='true']):hover .indicator {
+  background: var(--color-background-input-hovered);
+}
+
+.radio:not([data-disabled='true']):active .indicator {
+  background: var(--color-background-input-pressed);
+}
+
+.input:checked + .indicator {
+  border-color: var(--color-background-selected-bold-default);
+  background: var(--color-background-selected-bold-default);
+}
+
+.radio:not([data-disabled='true']):hover .input:checked + .indicator {
+  border-color: var(--color-background-selected-bold-hovered);
+  background: var(--color-background-selected-bold-hovered);
+}
+
+.radio:not([data-disabled='true']):active .input:checked + .indicator {
+  border-color: var(--color-background-selected-bold-pressed);
+  background: var(--color-background-selected-bold-pressed);
+}
+
+.input:checked + .indicator::after {
+  opacity: 1;
+}
+
+.radio[data-invalid='true'] .indicator {
+  border-color: var(--color-border-error);
+}
+
+.radio[data-invalid='true'] .input:checked + .indicator {
+  border-color: var(--color-border-error);
+  background: var(--color-background-selected-bold-default);
+}
+
+.radio[data-invalid='true']:not([data-disabled='true']):hover .input:checked + .indicator {
+  border-color: var(--color-border-error);
+  background: var(--color-background-selected-bold-hovered);
+}
+
+.radio[data-invalid='true']:not([data-disabled='true']):active .input:checked + .indicator {
+  border-color: var(--color-border-error);
+  background: var(--color-background-selected-bold-pressed);
+}
+
+.radio[data-disabled='true'] {
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.radio[data-disabled='true'] .indicator,
+.radio[data-disabled='true']:hover .indicator,
+.radio[data-disabled='true']:active .indicator {
+  background: var(--color-background-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+.radio[data-disabled='true'] .input:checked + .indicator {
+  border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+}
+
+.radio[data-disabled='true'] .input:checked + .indicator::after {
+  background: var(--color-content-disabled);
+}
+
+.group {
+  min-inline-size: 0;
+  margin: var(--spacing-0);
+  padding: var(--spacing-0);
+  border: 0;
+  color: var(--color-content-default);
+}
+
+.legend {
+  display: inline-flex;
+  align-items: baseline;
+  padding: var(--spacing-0);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  text-transform: var(--typography-body-md-text-transform);
+}
+
+.description {
+  margin-block-start: var(--spacing-050);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.options {
+  display: flex;
+  gap: var(--spacing-0);
+  margin-block-start: var(--spacing-0);
+}
+
+.orientation_vertical .options {
+  flex-direction: column;
+}
+
+.orientation_horizontal .options {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.errorMessage {
+  margin-block-start: var(--spacing-050);
+  color: var(--color-content-error);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}

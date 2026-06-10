@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const WealthManagementIcon = React.memo(function WealthManagementIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M8.26002 7.26667C6.74669 6.87333 6.26002 6.46667 6.26002 5.83333C6.26002 5.10667 6.93336 4.6 8.06002 4.6C9.24669 4.6 9.68669 5.16667 9.72669 6H11.2C11.1534 4.85333 10.4534 3.8 9.06002 3.46V2H7.06002V3.44C5.76669 3.72 4.72669 4.56 4.72669 5.84667C4.72669 7.38667 6.00002 8.15333 7.86002 8.6C9.52669 9 9.86002 9.58667 9.86002 10.2067C9.86002 10.6667 9.53336 11.4 8.06002 11.4C6.68669 11.4 6.14669 10.7867 6.07336 10H4.60669C4.68669 11.46 5.78002 12.28 7.06002 12.5533V14H9.06002V12.5667C10.36 12.32 11.3934 11.5667 11.3934 10.2C11.3934 8.30667 9.77336 7.66 8.26002 7.26667Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+WealthManagementIcon.displayName = 'WealthManagementIcon';

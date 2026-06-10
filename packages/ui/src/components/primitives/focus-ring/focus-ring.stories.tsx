@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FocusRing } from './focus-ring';
 import styles from './focus-ring.module.css';
@@ -7,14 +8,12 @@ const meta: Meta<typeof FocusRing> = {
   component: FocusRing,
   args: {
     borderWidth: 'default',
-    disabled: false,
   },
   argTypes: {
     borderWidth: {
       control: 'radio',
       options: ['default', 'compact'],
     },
-    disabled: { control: 'boolean' },
     className: { control: false },
     children: { control: false },
   },
@@ -26,16 +25,17 @@ type Story = StoryObj<typeof FocusRing>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-100)',
+  gap: 'var(--spacing-150)',
   justifyItems: 'start',
-} satisfies React.CSSProperties;
+  color: 'var(--color-content-default)',
+} satisfies CSSProperties;
 
 const rowStyle = {
   display: 'flex',
   alignItems: 'center',
   gap: 'var(--spacing-100)',
   flexWrap: 'wrap',
-} satisfies React.CSSProperties;
+} satisfies CSSProperties;
 
 const buttonStyle = {
   border: 'var(--border-width-default) solid var(--color-border-default)',
@@ -44,7 +44,7 @@ const buttonStyle = {
   color: 'var(--color-content-default)',
   padding: 'var(--spacing-050) var(--spacing-100)',
   font: 'inherit',
-} satisfies React.CSSProperties;
+} satisfies CSSProperties;
 
 const inputStyle = {
   border: 'var(--border-width-default) solid var(--color-border-input)',
@@ -53,7 +53,7 @@ const inputStyle = {
   color: 'var(--color-content-default)',
   padding: 'var(--spacing-050) var(--spacing-100)',
   font: 'inherit',
-} satisfies React.CSSProperties;
+} satisfies CSSProperties;
 
 const surfaceStyle = {
   display: 'grid',
@@ -61,9 +61,16 @@ const surfaceStyle = {
   padding: 'var(--spacing-200)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
-} satisfies React.CSSProperties;
+  color: 'var(--color-content-default)',
+} satisfies CSSProperties;
 
-export const Basic: Story = {
+const darkSurfaceStyle = {
+  ...surfaceStyle,
+  background: 'var(--color-background-neutral-bold-default)',
+  color: 'var(--color-content-inverse)',
+} satisfies CSSProperties;
+
+export const Playground: Story = {
   render: (args) => (
     <FocusRing {...args}>
       <button type="button" style={buttonStyle}>
@@ -73,36 +80,24 @@ export const Basic: Story = {
   ),
 };
 
-export const Default: Story = {
-  args: {
-    borderWidth: 'default',
-  },
-  render: (args) => (
-    <FocusRing {...args}>
-      <button type="button" style={buttonStyle}>
-        Default
-      </button>
-    </FocusRing>
-  ),
-};
-
-export const Compact: Story = {
-  args: {
-    borderWidth: 'compact',
-  },
-  render: (args) => (
-    <FocusRing {...args}>
-      <button type="button" style={buttonStyle}>
-        Compact
-      </button>
-    </FocusRing>
+export const Variants: Story = {
+  render: () => (
+    <div style={rowStyle}>
+      <FocusRing borderWidth="default">
+        <button type="button" style={buttonStyle}>
+          Default
+        </button>
+      </FocusRing>
+      <FocusRing borderWidth="compact">
+        <button type="button" style={buttonStyle}>
+          Compact
+        </button>
+      </FocusRing>
+    </div>
   ),
 };
 
 export const Examples: Story = {
-  parameters: {
-    backgrounds: { default: 'dark' },
-  },
   render: () => (
     <div style={stackStyle}>
       <div style={rowStyle}>
@@ -113,23 +108,22 @@ export const Examples: Story = {
         </FocusRing>
         <label style={rowStyle}>
           <input className={`${styles.focusRing} ${styles.focusRingCompact}`} type="checkbox" />
-          <span style={{ color: 'var(--color-content-default)' }}>Label</span>
+          <span>Label</span>
         </label>
         <input className={`${styles.focusRing} ${styles.focusRingDefault}`} placeholder="Placeholder" style={inputStyle} />
       </div>
-      <div data-theme="dark" style={surfaceStyle}>
-        <div style={stackStyle}>
-          <FocusRing>
-            <button type="button" style={buttonStyle}>
-              Button
-            </button>
-          </FocusRing>
-          <label style={rowStyle}>
-            <input className={`${styles.focusRing} ${styles.focusRingCompact}`} type="checkbox" />
-            <span style={{ color: 'var(--color-content-default)' }}>Label</span>
-          </label>
-          <input className={`${styles.focusRing} ${styles.focusRingDefault}`} placeholder="Placeholder" style={inputStyle} />
-        </div>
+
+      <div data-theme="dark" style={darkSurfaceStyle}>
+        <FocusRing>
+          <button type="button" style={buttonStyle}>
+            Button
+          </button>
+        </FocusRing>
+        <label style={rowStyle}>
+          <input className={`${styles.focusRing} ${styles.focusRingCompact}`} type="checkbox" />
+          <span>Label</span>
+        </label>
+        <input className={`${styles.focusRing} ${styles.focusRingDefault}`} placeholder="Placeholder" style={inputStyle} />
       </div>
     </div>
   ),

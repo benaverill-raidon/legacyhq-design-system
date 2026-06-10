@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const TextUnderlineIcon = React.memo(function TextUnderlineIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M7.99998 11.3333C10.2066 11.3333 12 9.54 12 7.33333V2H10.3333V7.33333C10.3333 8.62 9.28665 9.66667 7.99998 9.66667C6.71331 9.66667 5.66665 8.62 5.66665 7.33333V2H3.99998V7.33333C3.99998 9.54 5.79331 11.3333 7.99998 11.3333ZM3.33331 12.6667V14H12.6666V12.6667H3.33331Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+TextUnderlineIcon.displayName = 'TextUnderlineIcon';

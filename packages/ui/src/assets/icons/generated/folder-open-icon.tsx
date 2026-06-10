@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const FolderOpenIcon = React.memo(function FolderOpenIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M13.3333 3.99984H7.99998L6.66665 2.6665H2.66665C1.93331 2.6665 1.33998 3.2665 1.33998 3.99984L1.33331 11.9998C1.33331 12.7332 1.93331 13.3332 2.66665 13.3332H13.3333C14.0666 13.3332 14.6666 12.7332 14.6666 11.9998V5.33317C14.6666 4.59984 14.0666 3.99984 13.3333 3.99984ZM13.3333 11.9998H2.66665V5.33317H13.3333V11.9998Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+FolderOpenIcon.displayName = 'FolderOpenIcon';

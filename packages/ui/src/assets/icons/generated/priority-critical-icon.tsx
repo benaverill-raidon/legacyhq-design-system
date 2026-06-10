@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const PriorityCriticalIcon = React.memo(function PriorityCriticalIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M3.33911 5.66405C3.33913 5.21744 3.55907 4.81746 3.89902 4.57746L8.00586 1.66406L12.1127 4.57746C12.4526 4.81746 12.6661 5.21744 12.6661 5.66405L12.6661 14.3359L8.00586 11.0026L3.33911 14.3359L3.33911 5.66405ZM8.00651 9.3639L11.3327 11.7421L11.3327 5.66405C11.3327 5.66156 11.3316 5.65969 11.3314 5.65819L8.00586 3.29882L4.67247 5.66339L4.67247 11.7447L8.00651 9.3639Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+PriorityCriticalIcon.displayName = 'PriorityCriticalIcon';

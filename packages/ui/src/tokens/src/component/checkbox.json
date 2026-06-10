@@ -1,0 +1,18 @@
+{
+  "component": {
+    "checkbox": {
+      "indicator": {
+        "size": {
+          "value": "var(--spacing-200)",
+          "type": "dimension"
+        }
+      },
+      "hit-area": {
+        "size": {
+          "value": "var(--spacing-300)",
+          "type": "dimension"
+        }
+      }
+    }
+  }
+}

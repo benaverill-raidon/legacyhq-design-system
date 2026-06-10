@@ -1,0 +1,15 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const ContentWidthWideIcon = React.memo(function ContentWidthWideIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M13.6666 6.6665V9.33317H2.33333V6.6665H13.6666ZM14.3333 5.33317H1.66667C1.3 5.33317 1 5.63317 1 5.99984V9.99984C1 10.3665 1.3 10.6665 1.66667 10.6665H14.3333C14.7 10.6665 15 10.3665 15 9.99984V5.99984C15 5.63317 14.7 5.33317 14.3333 5.33317Z" fill="currentColor"/>
+<path d="M5.33332 2.6665H10.6667V3.99984H5.33332V2.6665Z" fill="currentColor"/>
+<path d="M5.33332 11.9998H10.6667V13.3332H5.33332V11.9998Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+ContentWidthWideIcon.displayName = 'ContentWidthWideIcon';

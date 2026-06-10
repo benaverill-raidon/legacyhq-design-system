@@ -1,0 +1,106 @@
+{
+  "component": {
+    "toggle": {
+      "md": {
+        "gap": {
+          "value": "var(--spacing-100)",
+          "type": "dimension"
+        },
+        "track": {
+          "width": {
+            "value": "var(--spacing-600)",
+            "type": "dimension"
+          },
+          "height": {
+            "value": "var(--spacing-300)",
+            "type": "dimension"
+          }
+        },
+        "thumb": {
+          "size": {
+            "value": "var(--spacing-200)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-050)",
+            "type": "dimension"
+          },
+          "translate-x": {
+            "value": "var(--spacing-300)",
+            "type": "dimension"
+          }
+        },
+        "icon": {
+          "size": {
+            "value": "var(--spacing-150)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-100)",
+            "type": "dimension"
+          }
+        }
+      },
+      "sm": {
+        "gap": {
+          "value": "var(--spacing-075)",
+          "type": "dimension"
+        },
+        "track": {
+          "width": {
+            "value": "var(--spacing-500)",
+            "type": "dimension"
+          },
+          "height": {
+            "value": "var(--spacing-250)",
+            "type": "dimension"
+          }
+        },
+        "thumb": {
+          "size": {
+            "value": "var(--spacing-150)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-050)",
+            "type": "dimension"
+          },
+          "translate-x": {
+            "value": "var(--spacing-250)",
+            "type": "dimension"
+          }
+        },
+        "icon": {
+          "size": {
+            "value": "var(--spacing-150)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-075)",
+            "type": "dimension"
+          }
+        }
+      },
+      "thumb": {
+        "pressed-scale-x": {
+          "value": "1.16",
+          "type": "number"
+        }
+      },
+      "motion": {
+        "duration": {
+          "value": "180ms",
+          "type": "duration"
+        },
+        "reduced-duration": {
+          "value": "0ms",
+          "type": "duration"
+        },
+        "easing": {
+          "value": "ease-out",
+          "type": "cubicBezier"
+        }
+      }
+    }
+  }
+}

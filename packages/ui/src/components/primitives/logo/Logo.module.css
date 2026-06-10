@@ -1,0 +1,49 @@
+.logo {
+  --logo-height: 40px;
+  --logo-mark-color: var(--color-content-brand);
+
+  display: inline-flex;
+  align-items: center;
+  inline-size: fit-content;
+  block-size: var(--logo-height);
+  line-height: 0;
+  color: var(--color-content-default);
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.size_xxs {
+  --logo-height: 16px;
+}
+
+.size_xs {
+  --logo-height: 24px;
+}
+
+.size_sm {
+  --logo-height: 32px;
+}
+
+.size_md {
+  --logo-height: 40px;
+}
+
+.size_lg {
+  --logo-height: 48px;
+}
+
+.svg {
+  display: block;
+  inline-size: auto;
+  block-size: 100%;
+  max-inline-size: none;
+  flex: 0 0 auto;
+}
+
+.type_mark .svg {
+  aspect-ratio: 1;
+}
+
+[data-theme='dark'] .logo {
+  --logo-mark-color: var(--color-content-brand);
+}

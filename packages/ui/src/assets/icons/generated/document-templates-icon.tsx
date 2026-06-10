@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const DocumentTemplatesIcon = React.memo(function DocumentTemplatesIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M2.66671 4.00016H1.33337V13.3335C1.33337 14.0668 1.93337 14.6668 2.66671 14.6668H12V13.3335H2.66671V4.00016ZM13.3334 1.3335H5.33337C4.60004 1.3335 4.00004 1.9335 4.00004 2.66683V10.6668C4.00004 11.4002 4.60004 12.0002 5.33337 12.0002H13.3334C14.0667 12.0002 14.6667 11.4002 14.6667 10.6668V2.66683C14.6667 1.9335 14.0667 1.3335 13.3334 1.3335ZM13.3334 10.6668H5.33337V2.66683H13.3334V10.6668ZM6.66671 6.00016H12V7.3335H6.66671V6.00016ZM6.66671 8.00016H9.33337V9.3335H6.66671V8.00016ZM6.66671 4.00016H12V5.3335H6.66671V4.00016Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+DocumentTemplatesIcon.displayName = 'DocumentTemplatesIcon';

@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const FolderCopyIcon = React.memo(function FolderCopyIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M2.00002 12.9998H13.3334V14.3332H2.00002C1.26669 14.3332 0.666687 13.7332 0.666687 12.9998V4.33317H2.00002V12.9998ZM15.3334 4.33317V10.3332C15.3334 11.0665 14.7334 11.6665 14 11.6665H4.66669C3.93335 11.6665 3.33335 11.0665 3.33335 10.3332L3.34002 2.99984C3.34002 2.2665 3.93335 1.6665 4.66669 1.6665H8.00002L9.33335 2.99984H14C14.7334 2.99984 15.3334 3.59984 15.3334 4.33317ZM4.66669 10.3332H14V4.33317H8.78002L7.44669 2.99984H4.66669V10.3332Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+FolderCopyIcon.displayName = 'FolderCopyIcon';

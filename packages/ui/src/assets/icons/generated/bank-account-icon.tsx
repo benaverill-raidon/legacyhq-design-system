@@ -1,0 +1,14 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const BankAccountIcon = React.memo(function BankAccountIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M13.6666 4.85333V3.33333C13.6666 2.6 13.0666 2 12.3333 2H2.99996C2.25996 2 1.66663 2.6 1.66663 3.33333V12.6667C1.66663 13.4 2.25996 14 2.99996 14H12.3333C13.0666 14 13.6666 13.4 13.6666 12.6667V11.1467C14.06 10.9133 14.3333 10.4933 14.3333 10V6C14.3333 5.50667 14.06 5.08667 13.6666 4.85333ZM13 6V10H8.33329V6H13ZM2.99996 12.6667V3.33333H12.3333V4.66667H8.33329C7.59996 4.66667 6.99996 5.26667 6.99996 6V10C6.99996 10.7333 7.59996 11.3333 8.33329 11.3333H12.3333V12.6667H2.99996Z" fill="currentColor"/>
+<path d="M10.3333 9C10.8856 9 11.3333 8.55228 11.3333 8C11.3333 7.44772 10.8856 7 10.3333 7C9.78101 7 9.33329 7.44772 9.33329 8C9.33329 8.55228 9.78101 9 10.3333 9Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+BankAccountIcon.displayName = 'BankAccountIcon';

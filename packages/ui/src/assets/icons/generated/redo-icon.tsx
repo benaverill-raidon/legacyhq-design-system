@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const RedoIcon = React.memo(function RedoIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M12.42 7.4C11.1867 6.32667 9.58666 5.66667 7.81999 5.66667C4.71999 5.66667 2.09999 7.68667 1.17999 10.48L2.75333 11C3.45333 8.87333 5.45333 7.33333 7.81999 7.33333C9.11999 7.33333 10.3067 7.81333 11.2333 8.58667L8.81999 11H14.82V5L12.42 7.4Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+RedoIcon.displayName = 'RedoIcon';

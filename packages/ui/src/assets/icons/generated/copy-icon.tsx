@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const CopyIcon = React.memo(function CopyIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M11 0.666504H3.00002C2.26669 0.666504 1.66669 1.2665 1.66669 1.99984V11.3332H3.00002V1.99984H11V0.666504ZM13 3.33317H5.66669C4.93335 3.33317 4.33335 3.93317 4.33335 4.6665V13.9998C4.33335 14.7332 4.93335 15.3332 5.66669 15.3332H13C13.7334 15.3332 14.3334 14.7332 14.3334 13.9998V4.6665C14.3334 3.93317 13.7334 3.33317 13 3.33317ZM13 13.9998H5.66669V4.6665H13V13.9998Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+CopyIcon.displayName = 'CopyIcon';

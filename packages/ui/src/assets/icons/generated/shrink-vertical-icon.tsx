@@ -1,0 +1,15 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const ShrinkVerticalIcon = React.memo(function ShrinkVerticalIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M5.33331 10.6637H7.33331V13.9997H8.66665V10.6637H10.6666L7.99998 7.99707L5.33331 10.6637Z" fill="currentColor"/>
+<path d="M7.33331 10.6637H5.33331L7.99998 7.99707L10.6666 10.6637H8.66665V13.9997H7.33331V10.6637Z" fill="currentColor"/>
+<path d="M8.66665 4.66895L10.6666 4.66894L7.99998 7.33561L5.33331 4.66895L7.33331 4.66895L7.33331 1.33301L8.66665 1.33301L8.66665 4.66895Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+ShrinkVerticalIcon.displayName = 'ShrinkVerticalIcon';

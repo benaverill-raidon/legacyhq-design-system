@@ -1,0 +1,2386 @@
+[
+  {
+    "name": "add",
+    "component": "AddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "add",
+      "create",
+      "plus",
+      "new"
+    ],
+    "label": "Add"
+  },
+  {
+    "name": "administrative-account",
+    "component": "AdministrativeAccountIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "administrative-account",
+      "administrative",
+      "account"
+    ],
+    "label": "Administrative Account"
+  },
+  {
+    "name": "alive-and-well",
+    "component": "AliveAndWellIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "alive-and-well",
+      "alive",
+      "and",
+      "well"
+    ],
+    "label": "Alive And Well"
+  },
+  {
+    "name": "all",
+    "component": "AllIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "all"
+    ],
+    "label": "All"
+  },
+  {
+    "name": "alt-route",
+    "component": "AltRouteIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "alt-route",
+      "alt",
+      "route"
+    ],
+    "label": "Alt Route"
+  },
+  {
+    "name": "archive-remove",
+    "component": "ArchiveRemoveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "archive-remove",
+      "archive",
+      "remove",
+      "unarchive",
+      "restore"
+    ],
+    "label": "Archive Remove"
+  },
+  {
+    "name": "archive",
+    "component": "ArchiveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "archive",
+      "box",
+      "store"
+    ],
+    "label": "Archive"
+  },
+  {
+    "name": "arrow-down-left",
+    "component": "ArrowDownLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-down-left",
+      "arrow",
+      "down",
+      "left"
+    ],
+    "label": "Arrow Down Left"
+  },
+  {
+    "name": "arrow-down-right-angle",
+    "component": "ArrowDownRightAngleIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-down-right-angle",
+      "arrow",
+      "down",
+      "right",
+      "angle"
+    ],
+    "label": "Arrow Down Right Angle"
+  },
+  {
+    "name": "arrow-down-right",
+    "component": "ArrowDownRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-down-right",
+      "arrow",
+      "down",
+      "right"
+    ],
+    "label": "Arrow Down Right"
+  },
+  {
+    "name": "arrow-down",
+    "component": "ArrowDownIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-down",
+      "arrow",
+      "down"
+    ],
+    "label": "Arrow Down"
+  },
+  {
+    "name": "arrow-left-tab",
+    "component": "ArrowLeftTabIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-left-tab",
+      "arrow",
+      "left",
+      "tab"
+    ],
+    "label": "Arrow Left Tab"
+  },
+  {
+    "name": "arrow-left",
+    "component": "ArrowLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-left",
+      "arrow",
+      "left"
+    ],
+    "label": "Arrow Left"
+  },
+  {
+    "name": "arrow-right-tab",
+    "component": "ArrowRightTabIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-right-tab",
+      "arrow",
+      "right",
+      "tab"
+    ],
+    "label": "Arrow Right Tab"
+  },
+  {
+    "name": "arrow-right",
+    "component": "ArrowRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-right",
+      "arrow",
+      "right"
+    ],
+    "label": "Arrow Right"
+  },
+  {
+    "name": "arrow-up-left",
+    "component": "ArrowUpLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-up-left",
+      "arrow",
+      "up",
+      "left"
+    ],
+    "label": "Arrow Up Left"
+  },
+  {
+    "name": "arrow-up-right",
+    "component": "ArrowUpRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-up-right",
+      "arrow",
+      "up",
+      "right"
+    ],
+    "label": "Arrow Up Right"
+  },
+  {
+    "name": "arrow-up",
+    "component": "ArrowUpIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "arrow-up",
+      "arrow",
+      "up"
+    ],
+    "label": "Arrow Up"
+  },
+  {
+    "name": "assets",
+    "component": "AssetsIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "assets"
+    ],
+    "label": "Assets"
+  },
+  {
+    "name": "attachment",
+    "component": "AttachmentIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "attachment"
+    ],
+    "label": "Attachment"
+  },
+  {
+    "name": "auto-edit",
+    "component": "AutoEditIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "auto-edit",
+      "auto",
+      "edit"
+    ],
+    "label": "Auto Edit"
+  },
+  {
+    "name": "bank-account",
+    "component": "BankAccountIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "bank-account",
+      "bank",
+      "account"
+    ],
+    "label": "Bank Account"
+  },
+  {
+    "name": "book",
+    "component": "BookIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "book"
+    ],
+    "label": "Book"
+  },
+  {
+    "name": "calendar",
+    "component": "CalendarIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "calendar"
+    ],
+    "label": "Calendar"
+  },
+  {
+    "name": "call",
+    "component": "CallIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "call"
+    ],
+    "label": "Call"
+  },
+  {
+    "name": "cancel",
+    "component": "CancelIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "cancel"
+    ],
+    "label": "Cancel"
+  },
+  {
+    "name": "caret-down",
+    "component": "CaretDownIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "caret-down",
+      "caret",
+      "down"
+    ],
+    "label": "Caret Down"
+  },
+  {
+    "name": "caret-left",
+    "component": "CaretLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "caret-left",
+      "caret",
+      "left"
+    ],
+    "label": "Caret Left"
+  },
+  {
+    "name": "caret-right",
+    "component": "CaretRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "caret-right",
+      "caret",
+      "right"
+    ],
+    "label": "Caret Right"
+  },
+  {
+    "name": "caret-up",
+    "component": "CaretUpIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "caret-up",
+      "caret",
+      "up"
+    ],
+    "label": "Caret Up"
+  },
+  {
+    "name": "check",
+    "component": "CheckIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "check",
+      "done",
+      "confirm",
+      "success"
+    ],
+    "label": "Check"
+  },
+  {
+    "name": "chevron-double-left",
+    "component": "ChevronDoubleLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "chevron-double-left",
+      "chevron",
+      "double",
+      "left"
+    ],
+    "label": "Chevron Double Left"
+  },
+  {
+    "name": "chevron-double-right",
+    "component": "ChevronDoubleRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "chevron-double-right",
+      "chevron",
+      "double",
+      "right"
+    ],
+    "label": "Chevron Double Right"
+  },
+  {
+    "name": "chevron-left",
+    "component": "ChevronLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "chevron-left",
+      "chevron",
+      "left"
+    ],
+    "label": "Chevron Left"
+  },
+  {
+    "name": "chevron-right",
+    "component": "ChevronRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "chevron-right",
+      "chevron",
+      "right"
+    ],
+    "label": "Chevron Right"
+  },
+  {
+    "name": "close",
+    "component": "CloseIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "close",
+      "dismiss",
+      "remove",
+      "x"
+    ],
+    "label": "Close"
+  },
+  {
+    "name": "closely-held-business",
+    "component": "CloselyHeldBusinessIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "closely-held-business",
+      "closely",
+      "held",
+      "business"
+    ],
+    "label": "Closely Held Business"
+  },
+  {
+    "name": "collapse-horizontal",
+    "component": "CollapseHorizontalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "collapse-horizontal",
+      "collapse",
+      "horizontal"
+    ],
+    "label": "Collapse Horizontal"
+  },
+  {
+    "name": "collapse-vertical",
+    "component": "CollapseVerticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "collapse-vertical",
+      "collapse",
+      "vertical"
+    ],
+    "label": "Collapse Vertical"
+  },
+  {
+    "name": "comment-add",
+    "component": "CommentAddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "comment-add",
+      "comment",
+      "add"
+    ],
+    "label": "Comment Add"
+  },
+  {
+    "name": "comment",
+    "component": "CommentIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "comment"
+    ],
+    "label": "Comment"
+  },
+  {
+    "name": "configure",
+    "component": "ConfigureIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "configure"
+    ],
+    "label": "Configure"
+  },
+  {
+    "name": "contact-support",
+    "component": "ContactSupportIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "contact-support",
+      "contact",
+      "support"
+    ],
+    "label": "Contact Support"
+  },
+  {
+    "name": "content-width-narrow",
+    "component": "ContentWidthNarrowIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "content-width-narrow",
+      "content",
+      "width",
+      "narrow"
+    ],
+    "label": "Content Width Narrow"
+  },
+  {
+    "name": "content-width-wide",
+    "component": "ContentWidthWideIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "content-width-wide",
+      "content",
+      "width",
+      "wide"
+    ],
+    "label": "Content Width Wide"
+  },
+  {
+    "name": "copy",
+    "component": "CopyIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "copy"
+    ],
+    "label": "Copy"
+  },
+  {
+    "name": "counselpro-logo",
+    "component": "CounselproLogoIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "counselpro-logo",
+      "counselpro",
+      "logo"
+    ],
+    "label": "Counselpro Logo"
+  },
+  {
+    "name": "dashboard",
+    "component": "DashboardIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "dashboard"
+    ],
+    "label": "Dashboard"
+  },
+  {
+    "name": "data-error",
+    "component": "DataErrorIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "data-error",
+      "data",
+      "error"
+    ],
+    "label": "Data Error"
+  },
+  {
+    "name": "deceased",
+    "component": "DeceasedIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "deceased"
+    ],
+    "label": "Deceased"
+  },
+  {
+    "name": "delete",
+    "component": "DeleteIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "delete",
+      "trash",
+      "remove"
+    ],
+    "label": "Delete"
+  },
+  {
+    "name": "description",
+    "component": "DescriptionIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "description"
+    ],
+    "label": "Description"
+  },
+  {
+    "name": "disinherited",
+    "component": "DisinheritedIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "disinherited"
+    ],
+    "label": "Disinherited"
+  },
+  {
+    "name": "distance",
+    "component": "DistanceIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "distance"
+    ],
+    "label": "Distance"
+  },
+  {
+    "name": "document-add",
+    "component": "DocumentAddIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "document-add",
+      "document",
+      "add"
+    ],
+    "label": "Document Add"
+  },
+  {
+    "name": "document-generation",
+    "component": "DocumentGenerationIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "document-generation",
+      "document",
+      "generation"
+    ],
+    "label": "Document Generation"
+  },
+  {
+    "name": "document-templates",
+    "component": "DocumentTemplatesIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "document-templates",
+      "document",
+      "templates"
+    ],
+    "label": "Document Templates"
+  },
+  {
+    "name": "documents",
+    "component": "DocumentsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "documents"
+    ],
+    "label": "Documents"
+  },
+  {
+    "name": "download",
+    "component": "DownloadIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "download"
+    ],
+    "label": "Download"
+  },
+  {
+    "name": "drag-handle-horizontal",
+    "component": "DragHandleHorizontalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "drag-handle-horizontal",
+      "drag",
+      "handle",
+      "horizontal"
+    ],
+    "label": "Drag Handle Horizontal"
+  },
+  {
+    "name": "drag-handle-vertical",
+    "component": "DragHandleVerticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "drag-handle-vertical",
+      "drag",
+      "handle",
+      "vertical"
+    ],
+    "label": "Drag Handle Vertical"
+  },
+  {
+    "name": "edit",
+    "component": "EditIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "edit",
+      "pencil",
+      "modify"
+    ],
+    "label": "Edit"
+  },
+  {
+    "name": "email",
+    "component": "EmailIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "email"
+    ],
+    "label": "Email"
+  },
+  {
+    "name": "estate",
+    "component": "EstateIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "estate"
+    ],
+    "label": "Estate"
+  },
+  {
+    "name": "event-templates",
+    "component": "EventTemplatesIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "event-templates",
+      "event",
+      "templates"
+    ],
+    "label": "Event Templates"
+  },
+  {
+    "name": "events",
+    "component": "EventsIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "events"
+    ],
+    "label": "Events"
+  },
+  {
+    "name": "expand-horizontal",
+    "component": "ExpandHorizontalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "expand-horizontal",
+      "expand",
+      "horizontal"
+    ],
+    "label": "Expand Horizontal"
+  },
+  {
+    "name": "expand-less",
+    "component": "ExpandLessIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "expand-less",
+      "expand",
+      "less"
+    ],
+    "label": "Expand Less"
+  },
+  {
+    "name": "expand-more",
+    "component": "ExpandMoreIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "expand-more",
+      "expand",
+      "more"
+    ],
+    "label": "Expand More"
+  },
+  {
+    "name": "expand-vertical",
+    "component": "ExpandVerticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "expand-vertical",
+      "expand",
+      "vertical"
+    ],
+    "label": "Expand Vertical"
+  },
+  {
+    "name": "figma-component",
+    "component": "FigmaComponentIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "figma-component",
+      "figma",
+      "component"
+    ],
+    "label": "Figma Component"
+  },
+  {
+    "name": "figma",
+    "component": "FigmaIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "figma"
+    ],
+    "label": "Figma"
+  },
+  {
+    "name": "file",
+    "component": "FileIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "file"
+    ],
+    "label": "File"
+  },
+  {
+    "name": "filter",
+    "component": "FilterIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "filter"
+    ],
+    "label": "Filter"
+  },
+  {
+    "name": "firms-all",
+    "component": "FirmsAllIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "firms-all",
+      "firms",
+      "all"
+    ],
+    "label": "Firms All"
+  },
+  {
+    "name": "folder-add",
+    "component": "FolderAddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "folder-add",
+      "folder",
+      "add"
+    ],
+    "label": "Folder Add"
+  },
+  {
+    "name": "folder-copy",
+    "component": "FolderCopyIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "folder-copy",
+      "folder",
+      "copy"
+    ],
+    "label": "Folder Copy"
+  },
+  {
+    "name": "folder-open",
+    "component": "FolderOpenIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "folder-open",
+      "folder",
+      "open"
+    ],
+    "label": "Folder Open"
+  },
+  {
+    "name": "folder",
+    "component": "FolderIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "folder"
+    ],
+    "label": "Folder"
+  },
+  {
+    "name": "fullscreen-enter",
+    "component": "FullscreenEnterIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "fullscreen-enter",
+      "fullscreen",
+      "enter"
+    ],
+    "label": "Fullscreen Enter"
+  },
+  {
+    "name": "fullscreen-exit",
+    "component": "FullscreenExitIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "fullscreen-exit",
+      "fullscreen",
+      "exit"
+    ],
+    "label": "Fullscreen Exit"
+  },
+  {
+    "name": "google",
+    "component": "GoogleIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "google"
+    ],
+    "label": "Google"
+  },
+  {
+    "name": "grow-diagonal",
+    "component": "GrowDiagonalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "grow-diagonal",
+      "grow",
+      "diagonal"
+    ],
+    "label": "Grow Diagonal"
+  },
+  {
+    "name": "grow-horizontal",
+    "component": "GrowHorizontalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "grow-horizontal",
+      "grow",
+      "horizontal"
+    ],
+    "label": "Grow Horizontal"
+  },
+  {
+    "name": "grow-vertical",
+    "component": "GrowVerticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "grow-vertical",
+      "grow",
+      "vertical"
+    ],
+    "label": "Grow Vertical"
+  },
+  {
+    "name": "home",
+    "component": "HomeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "home"
+    ],
+    "label": "Home"
+  },
+  {
+    "name": "image-add",
+    "component": "ImageAddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "image-add",
+      "image",
+      "add"
+    ],
+    "label": "Image Add"
+  },
+  {
+    "name": "image",
+    "component": "ImageIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "image"
+    ],
+    "label": "Image"
+  },
+  {
+    "name": "incapacitated",
+    "component": "IncapacitatedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "incapacitated"
+    ],
+    "label": "Incapacitated"
+  },
+  {
+    "name": "income",
+    "component": "IncomeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "income"
+    ],
+    "label": "Income"
+  },
+  {
+    "name": "institutions",
+    "component": "InstitutionsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "institutions"
+    ],
+    "label": "Institutions"
+  },
+  {
+    "name": "integrations",
+    "component": "IntegrationsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "integrations"
+    ],
+    "label": "Integrations"
+  },
+  {
+    "name": "integrity-management",
+    "component": "IntegrityManagementIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "integrity-management",
+      "integrity",
+      "management"
+    ],
+    "label": "Integrity Management"
+  },
+  {
+    "name": "investment-account",
+    "component": "InvestmentAccountIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "investment-account",
+      "investment",
+      "account"
+    ],
+    "label": "Investment Account"
+  },
+  {
+    "name": "layout-one-column",
+    "component": "LayoutOneColumnIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "layout-one-column",
+      "layout",
+      "one",
+      "column"
+    ],
+    "label": "Layout One Column"
+  },
+  {
+    "name": "layout-three-columns-sidebars",
+    "component": "LayoutThreeColumnsSidebarsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "layout-three-columns-sidebars",
+      "layout",
+      "three",
+      "columns",
+      "sidebars"
+    ],
+    "label": "Layout Three Columns Sidebars"
+  },
+  {
+    "name": "layout-three-columns",
+    "component": "LayoutThreeColumnsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "layout-three-columns",
+      "layout",
+      "three",
+      "columns"
+    ],
+    "label": "Layout Three Columns"
+  },
+  {
+    "name": "layout-two-columns-sidebar-left",
+    "component": "LayoutTwoColumnsSidebarLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "layout-two-columns-sidebar-left",
+      "layout",
+      "two",
+      "columns",
+      "sidebar",
+      "left"
+    ],
+    "label": "Layout Two Columns Sidebar Left"
+  },
+  {
+    "name": "layout-two-columns-sidebar-right",
+    "component": "LayoutTwoColumnsSidebarRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "layout-two-columns-sidebar-right",
+      "layout",
+      "two",
+      "columns",
+      "sidebar",
+      "right"
+    ],
+    "label": "Layout Two Columns Sidebar Right"
+  },
+  {
+    "name": "library-add",
+    "component": "LibraryAddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "library-add",
+      "library",
+      "add"
+    ],
+    "label": "Library Add"
+  },
+  {
+    "name": "life-insurance-policy",
+    "component": "LifeInsurancePolicyIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "life-insurance-policy",
+      "life",
+      "insurance",
+      "policy"
+    ],
+    "label": "Life Insurance Policy"
+  },
+  {
+    "name": "link-external",
+    "component": "LinkExternalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "link-external",
+      "link",
+      "external",
+      "open"
+    ],
+    "label": "Link External"
+  },
+  {
+    "name": "link",
+    "component": "LinkIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "link"
+    ],
+    "label": "Link"
+  },
+  {
+    "name": "list-remove",
+    "component": "ListRemoveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "list-remove",
+      "list",
+      "remove"
+    ],
+    "label": "List Remove"
+  },
+  {
+    "name": "loading",
+    "component": "LoadingIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "loading"
+    ],
+    "label": "Loading"
+  },
+  {
+    "name": "location",
+    "component": "LocationIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "location"
+    ],
+    "label": "Location"
+  },
+  {
+    "name": "log-in",
+    "component": "LogInIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "log-in",
+      "log",
+      "in",
+      "login",
+      "sign in"
+    ],
+    "label": "Log In"
+  },
+  {
+    "name": "log-out",
+    "component": "LogOutIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "log-out",
+      "log",
+      "out",
+      "logout",
+      "sign out"
+    ],
+    "label": "Log Out"
+  },
+  {
+    "name": "maximize",
+    "component": "MaximizeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "maximize"
+    ],
+    "label": "Maximize"
+  },
+  {
+    "name": "mention",
+    "component": "MentionIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "mention"
+    ],
+    "label": "Mention"
+  },
+  {
+    "name": "menu",
+    "component": "MenuIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "menu"
+    ],
+    "label": "Menu"
+  },
+  {
+    "name": "message",
+    "component": "MessageIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "message"
+    ],
+    "label": "Message"
+  },
+  {
+    "name": "microsoft",
+    "component": "MicrosoftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "microsoft"
+    ],
+    "label": "Microsoft"
+  },
+  {
+    "name": "minimize",
+    "component": "MinimizeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "minimize"
+    ],
+    "label": "Minimize"
+  },
+  {
+    "name": "minor",
+    "component": "MinorIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "minor"
+    ],
+    "label": "Minor"
+  },
+  {
+    "name": "miscellaneous-asset",
+    "component": "MiscellaneousAssetIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "miscellaneous-asset",
+      "miscellaneous",
+      "asset"
+    ],
+    "label": "Miscellaneous Asset"
+  },
+  {
+    "name": "more-horiz",
+    "component": "MoreHorizIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "more-horiz",
+      "more",
+      "horiz"
+    ],
+    "label": "More Horiz"
+  },
+  {
+    "name": "more-vert",
+    "component": "MoreVertIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "more-vert",
+      "more",
+      "vert"
+    ],
+    "label": "More Vert"
+  },
+  {
+    "name": "my-location",
+    "component": "MyLocationIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "my-location",
+      "my",
+      "location"
+    ],
+    "label": "My Location"
+  },
+  {
+    "name": "node",
+    "component": "NodeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "node"
+    ],
+    "label": "Node"
+  },
+  {
+    "name": "non-qualified-annuity",
+    "component": "NonQualifiedAnnuityIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "non-qualified-annuity",
+      "non",
+      "qualified",
+      "annuity"
+    ],
+    "label": "Non Qualified Annuity"
+  },
+  {
+    "name": "note",
+    "component": "NoteIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "note"
+    ],
+    "label": "Note"
+  },
+  {
+    "name": "notification-off",
+    "component": "NotificationOffIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "notification-off",
+      "notification",
+      "off"
+    ],
+    "label": "Notification Off"
+  },
+  {
+    "name": "notification",
+    "component": "NotificationIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "notification",
+      "bell",
+      "alert"
+    ],
+    "label": "Notification"
+  },
+  {
+    "name": "outline",
+    "component": "OutlineIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "outline"
+    ],
+    "label": "Outline"
+  },
+  {
+    "name": "panel-left",
+    "component": "PanelLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "panel-left",
+      "panel",
+      "left"
+    ],
+    "label": "Panel Left"
+  },
+  {
+    "name": "panel-right",
+    "component": "PanelRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "panel-right",
+      "panel",
+      "right"
+    ],
+    "label": "Panel Right"
+  },
+  {
+    "name": "people-all",
+    "component": "PeopleAllIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "people-all",
+      "people",
+      "all"
+    ],
+    "label": "People All"
+  },
+  {
+    "name": "person-account-management",
+    "component": "PersonAccountManagementIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "person-account-management",
+      "person",
+      "account",
+      "management"
+    ],
+    "label": "Person Account Management"
+  },
+  {
+    "name": "person-account",
+    "component": "PersonAccountIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "person-account",
+      "person",
+      "account"
+    ],
+    "label": "Person Account"
+  },
+  {
+    "name": "person-add",
+    "component": "PersonAddIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "person-add",
+      "person",
+      "add"
+    ],
+    "label": "Person Add"
+  },
+  {
+    "name": "person-added",
+    "component": "PersonAddedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "person-added",
+      "person",
+      "added"
+    ],
+    "label": "Person Added"
+  },
+  {
+    "name": "person-link",
+    "component": "PersonLinkIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "person-link",
+      "person",
+      "link"
+    ],
+    "label": "Person Link"
+  },
+  {
+    "name": "person-remove",
+    "component": "PersonRemoveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "person-remove",
+      "person",
+      "remove"
+    ],
+    "label": "Person Remove"
+  },
+  {
+    "name": "person",
+    "component": "PersonIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "person"
+    ],
+    "label": "Person"
+  },
+  {
+    "name": "picker-date",
+    "component": "PickerDateIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "picker-date",
+      "picker",
+      "date"
+    ],
+    "label": "Picker Date"
+  },
+  {
+    "name": "picker-time",
+    "component": "PickerTimeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "picker-time",
+      "picker",
+      "time"
+    ],
+    "label": "Picker Time"
+  },
+  {
+    "name": "pin-left",
+    "component": "PinLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "pin-left",
+      "pin",
+      "left"
+    ],
+    "label": "Pin Left"
+  },
+  {
+    "name": "pin-remove",
+    "component": "PinRemoveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "pin-remove",
+      "pin",
+      "remove"
+    ],
+    "label": "Pin Remove"
+  },
+  {
+    "name": "pin-right",
+    "component": "PinRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "pin-right",
+      "pin",
+      "right"
+    ],
+    "label": "Pin Right"
+  },
+  {
+    "name": "pin",
+    "component": "PinIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "pin"
+    ],
+    "label": "Pin"
+  },
+  {
+    "name": "priority-blocker",
+    "component": "PriorityBlockerIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-blocker",
+      "priority",
+      "blocker"
+    ],
+    "label": "Priority Blocker"
+  },
+  {
+    "name": "priority-critical",
+    "component": "PriorityCriticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-critical",
+      "priority",
+      "critical"
+    ],
+    "label": "Priority Critical"
+  },
+  {
+    "name": "priority-high",
+    "component": "PriorityHighIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-high",
+      "priority",
+      "high"
+    ],
+    "label": "Priority High"
+  },
+  {
+    "name": "priority-highest",
+    "component": "PriorityHighestIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-highest",
+      "priority",
+      "highest"
+    ],
+    "label": "Priority Highest"
+  },
+  {
+    "name": "priority-low",
+    "component": "PriorityLowIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-low",
+      "priority",
+      "low"
+    ],
+    "label": "Priority Low"
+  },
+  {
+    "name": "priority-lowest",
+    "component": "PriorityLowestIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-lowest",
+      "priority",
+      "lowest"
+    ],
+    "label": "Priority Lowest"
+  },
+  {
+    "name": "priority-major",
+    "component": "PriorityMajorIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-major",
+      "priority",
+      "major"
+    ],
+    "label": "Priority Major"
+  },
+  {
+    "name": "priority-medium",
+    "component": "PriorityMediumIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-medium",
+      "priority",
+      "medium"
+    ],
+    "label": "Priority Medium"
+  },
+  {
+    "name": "priority-minor",
+    "component": "PriorityMinorIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-minor",
+      "priority",
+      "minor"
+    ],
+    "label": "Priority Minor"
+  },
+  {
+    "name": "priority-trivial",
+    "component": "PriorityTrivialIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "priority-trivial",
+      "priority",
+      "trivial"
+    ],
+    "label": "Priority Trivial"
+  },
+  {
+    "name": "problem",
+    "component": "ProblemIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "problem"
+    ],
+    "label": "Problem"
+  },
+  {
+    "name": "qualified-plan",
+    "component": "QualifiedPlanIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "qualified-plan",
+      "qualified",
+      "plan"
+    ],
+    "label": "Qualified Plan"
+  },
+  {
+    "name": "real-estate",
+    "component": "RealEstateIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "real-estate",
+      "real",
+      "estate"
+    ],
+    "label": "Real Estate"
+  },
+  {
+    "name": "recent-activity",
+    "component": "RecentActivityIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "recent-activity",
+      "recent",
+      "activity"
+    ],
+    "label": "Recent Activity"
+  },
+  {
+    "name": "redo",
+    "component": "RedoIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "redo"
+    ],
+    "label": "Redo"
+  },
+  {
+    "name": "referral-direct-mail",
+    "component": "ReferralDirectMailIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "referral-direct-mail",
+      "referral",
+      "direct",
+      "mail"
+    ],
+    "label": "Referral Direct Mail"
+  },
+  {
+    "name": "referral-existing-client",
+    "component": "ReferralExistingClientIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "referral-existing-client",
+      "referral",
+      "existing",
+      "client"
+    ],
+    "label": "Referral Existing Client"
+  },
+  {
+    "name": "referral-internet",
+    "component": "ReferralInternetIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "referral-internet",
+      "referral",
+      "internet"
+    ],
+    "label": "Referral Internet"
+  },
+  {
+    "name": "referral-newspaper",
+    "component": "ReferralNewspaperIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "referral-newspaper",
+      "referral",
+      "newspaper"
+    ],
+    "label": "Referral Newspaper"
+  },
+  {
+    "name": "referral",
+    "component": "ReferralIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "referral"
+    ],
+    "label": "Referral"
+  },
+  {
+    "name": "refresh",
+    "component": "RefreshIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "refresh"
+    ],
+    "label": "Refresh"
+  },
+  {
+    "name": "relationship",
+    "component": "RelationshipIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "relationship"
+    ],
+    "label": "Relationship"
+  },
+  {
+    "name": "remove-fill",
+    "component": "RemoveFillIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "remove-fill",
+      "remove",
+      "fill"
+    ],
+    "label": "Remove Fill"
+  },
+  {
+    "name": "remove-outline",
+    "component": "RemoveOutlineIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "remove-outline",
+      "remove",
+      "outline"
+    ],
+    "label": "Remove Outline"
+  },
+  {
+    "name": "resize-handle",
+    "component": "ResizeHandleIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "resize-handle",
+      "resize",
+      "handle"
+    ],
+    "label": "Resize Handle"
+  },
+  {
+    "name": "retry",
+    "component": "RetryIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "retry"
+    ],
+    "label": "Retry"
+  },
+  {
+    "name": "roadmap",
+    "component": "RoadmapIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "roadmap"
+    ],
+    "label": "Roadmap"
+  },
+  {
+    "name": "save",
+    "component": "SaveIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "save"
+    ],
+    "label": "Save"
+  },
+  {
+    "name": "savings-bond",
+    "component": "SavingsBondIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "savings-bond",
+      "savings",
+      "bond"
+    ],
+    "label": "Savings Bond"
+  },
+  {
+    "name": "schedule-meeting",
+    "component": "ScheduleMeetingIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "schedule-meeting",
+      "schedule",
+      "meeting"
+    ],
+    "label": "Schedule Meeting"
+  },
+  {
+    "name": "search",
+    "component": "SearchIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "search",
+      "find",
+      "lookup"
+    ],
+    "label": "Search"
+  },
+  {
+    "name": "security",
+    "component": "SecurityIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "security"
+    ],
+    "label": "Security"
+  },
+  {
+    "name": "send",
+    "component": "SendIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "send"
+    ],
+    "label": "Send"
+  },
+  {
+    "name": "services-legal",
+    "component": "ServicesLegalIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "services-legal",
+      "services",
+      "legal"
+    ],
+    "label": "Services Legal"
+  },
+  {
+    "name": "services",
+    "component": "ServicesIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "services"
+    ],
+    "label": "Services"
+  },
+  {
+    "name": "settings",
+    "component": "SettingsIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "settings"
+    ],
+    "label": "Settings"
+  },
+  {
+    "name": "share",
+    "component": "ShareIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "share"
+    ],
+    "label": "Share"
+  },
+  {
+    "name": "shrink-diagonal",
+    "component": "ShrinkDiagonalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "shrink-diagonal",
+      "shrink",
+      "diagonal"
+    ],
+    "label": "Shrink Diagonal"
+  },
+  {
+    "name": "shrink-horizontal",
+    "component": "ShrinkHorizontalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "shrink-horizontal",
+      "shrink",
+      "horizontal"
+    ],
+    "label": "Shrink Horizontal"
+  },
+  {
+    "name": "shrink-vertical",
+    "component": "ShrinkVerticalIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "shrink-vertical",
+      "shrink",
+      "vertical"
+    ],
+    "label": "Shrink Vertical"
+  },
+  {
+    "name": "sidebar-collapse",
+    "component": "SidebarCollapseIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "sidebar-collapse",
+      "sidebar",
+      "collapse"
+    ],
+    "label": "Sidebar Collapse"
+  },
+  {
+    "name": "sidebar-expand",
+    "component": "SidebarExpandIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "sidebar-expand",
+      "sidebar",
+      "expand"
+    ],
+    "label": "Sidebar Expand"
+  },
+  {
+    "name": "signature",
+    "component": "SignatureIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "signature"
+    ],
+    "label": "Signature"
+  },
+  {
+    "name": "signed",
+    "component": "SignedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "signed"
+    ],
+    "label": "Signed"
+  },
+  {
+    "name": "sort-ascending",
+    "component": "SortAscendingIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "sort-ascending",
+      "sort",
+      "ascending"
+    ],
+    "label": "Sort Ascending"
+  },
+  {
+    "name": "sort-descending",
+    "component": "SortDescendingIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "sort-descending",
+      "sort",
+      "descending"
+    ],
+    "label": "Sort Descending"
+  },
+  {
+    "name": "star-starred",
+    "component": "StarStarredIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "star-starred",
+      "star",
+      "starred"
+    ],
+    "label": "Star Starred"
+  },
+  {
+    "name": "star-unstarred",
+    "component": "StarUnstarredIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "star-unstarred",
+      "star",
+      "unstarred"
+    ],
+    "label": "Star Unstarred"
+  },
+  {
+    "name": "status-discovery",
+    "component": "StatusDiscoveryIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-discovery",
+      "status",
+      "discovery"
+    ],
+    "label": "Status Discovery"
+  },
+  {
+    "name": "status-error",
+    "component": "StatusErrorIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-error",
+      "status",
+      "error"
+    ],
+    "label": "Status Error"
+  },
+  {
+    "name": "status-information",
+    "component": "StatusInformationIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-information",
+      "status",
+      "information"
+    ],
+    "label": "Status Information"
+  },
+  {
+    "name": "status-success",
+    "component": "StatusSuccessIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-success",
+      "status",
+      "success"
+    ],
+    "label": "Status Success"
+  },
+  {
+    "name": "status-verified",
+    "component": "StatusVerifiedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-verified",
+      "status",
+      "verified"
+    ],
+    "label": "Status Verified"
+  },
+  {
+    "name": "status-warning",
+    "component": "StatusWarningIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "status-warning",
+      "status",
+      "warning"
+    ],
+    "label": "Status Warning"
+  },
+  {
+    "name": "support",
+    "component": "SupportIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "support"
+    ],
+    "label": "Support"
+  },
+  {
+    "name": "tag",
+    "component": "TagIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "tag"
+    ],
+    "label": "Tag"
+  },
+  {
+    "name": "task-complete",
+    "component": "TaskCompleteIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "task-complete",
+      "task",
+      "complete"
+    ],
+    "label": "Task Complete"
+  },
+  {
+    "name": "task-in-progress",
+    "component": "TaskInProgressIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "task-in-progress",
+      "task",
+      "in",
+      "progress"
+    ],
+    "label": "Task In Progress"
+  },
+  {
+    "name": "task-not-started",
+    "component": "TaskNotStartedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "task-not-started",
+      "task",
+      "not",
+      "started"
+    ],
+    "label": "Task Not Started"
+  },
+  {
+    "name": "task",
+    "component": "TaskIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "task"
+    ],
+    "label": "Task"
+  },
+  {
+    "name": "team-and-partners",
+    "component": "TeamAndPartnersIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "team-and-partners",
+      "team",
+      "and",
+      "partners"
+    ],
+    "label": "Team And Partners"
+  },
+  {
+    "name": "text-bold",
+    "component": "TextBoldIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-bold",
+      "text",
+      "bold"
+    ],
+    "label": "Text Bold"
+  },
+  {
+    "name": "text-indent-left",
+    "component": "TextIndentLeftIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-indent-left",
+      "text",
+      "indent",
+      "left"
+    ],
+    "label": "Text Indent Left"
+  },
+  {
+    "name": "text-indent-right",
+    "component": "TextIndentRightIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-indent-right",
+      "text",
+      "indent",
+      "right"
+    ],
+    "label": "Text Indent Right"
+  },
+  {
+    "name": "text-italic",
+    "component": "TextItalicIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-italic",
+      "text",
+      "italic"
+    ],
+    "label": "Text Italic"
+  },
+  {
+    "name": "text-strikethrough",
+    "component": "TextStrikethroughIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-strikethrough",
+      "text",
+      "strikethrough"
+    ],
+    "label": "Text Strikethrough"
+  },
+  {
+    "name": "text-style",
+    "component": "TextStyleIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-style",
+      "text",
+      "style"
+    ],
+    "label": "Text Style"
+  },
+  {
+    "name": "text-underline",
+    "component": "TextUnderlineIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text-underline",
+      "text",
+      "underline"
+    ],
+    "label": "Text Underline"
+  },
+  {
+    "name": "text",
+    "component": "TextIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "text"
+    ],
+    "label": "Text"
+  },
+  {
+    "name": "theme",
+    "component": "ThemeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "theme"
+    ],
+    "label": "Theme"
+  },
+  {
+    "name": "today",
+    "component": "TodayIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "today"
+    ],
+    "label": "Today"
+  },
+  {
+    "name": "transfer",
+    "component": "TransferIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "transfer"
+    ],
+    "label": "Transfer"
+  },
+  {
+    "name": "treasury-direct",
+    "component": "TreasuryDirectIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "treasury-direct",
+      "treasury",
+      "direct"
+    ],
+    "label": "Treasury Direct"
+  },
+  {
+    "name": "trust",
+    "component": "TrustIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "trust"
+    ],
+    "label": "Trust"
+  },
+  {
+    "name": "type",
+    "component": "TypeIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "type"
+    ],
+    "label": "Type"
+  },
+  {
+    "name": "undo",
+    "component": "UndoIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "undo"
+    ],
+    "label": "Undo"
+  },
+  {
+    "name": "upload",
+    "component": "UploadIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "upload"
+    ],
+    "label": "Upload"
+  },
+  {
+    "name": "video",
+    "component": "VideoIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "video"
+    ],
+    "label": "Video"
+  },
+  {
+    "name": "virtual",
+    "component": "VirtualIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "virtual"
+    ],
+    "label": "Virtual"
+  },
+  {
+    "name": "visibility-hide",
+    "component": "VisibilityHideIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "visibility-hide",
+      "visibility",
+      "hide",
+      "eye"
+    ],
+    "label": "Visibility Hide"
+  },
+  {
+    "name": "visibility-show",
+    "component": "VisibilityShowIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "visibility-show",
+      "visibility",
+      "show",
+      "eye"
+    ],
+    "label": "Visibility Show"
+  },
+  {
+    "name": "wealth-management",
+    "component": "WealthManagementIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "wealth-management",
+      "wealth",
+      "management"
+    ],
+    "label": "Wealth Management"
+  },
+  {
+    "name": "will",
+    "component": "WillIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "will"
+    ],
+    "label": "Will"
+  },
+  {
+    "name": "zoom-in",
+    "component": "ZoomInIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "zoom-in",
+      "zoom",
+      "in"
+    ],
+    "label": "Zoom In"
+  },
+  {
+    "name": "zoom-out",
+    "component": "ZoomOutIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "zoom-out",
+      "zoom",
+      "out"
+    ],
+    "label": "Zoom Out"
+  }
+]

@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const RefreshIcon = React.memo(function RefreshIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M11.7633 4.23366C10.7966 3.26699 9.46998 2.66699 7.99665 2.66699C5.04998 2.66699 2.66998 5.05366 2.66998 8.00033C2.66998 10.947 5.04998 13.3337 7.99665 13.3337C10.4833 13.3337 12.5566 11.6337 13.15 9.33366H11.7633C11.2166 10.887 9.73665 12.0003 7.99665 12.0003C5.78998 12.0003 3.99665 10.207 3.99665 8.00033C3.99665 5.79366 5.78998 4.00033 7.99665 4.00033C9.10332 4.00033 10.09 4.46033 10.81 5.18699L8.66332 7.33366H13.33V2.66699L11.7633 4.23366Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+RefreshIcon.displayName = 'RefreshIcon';

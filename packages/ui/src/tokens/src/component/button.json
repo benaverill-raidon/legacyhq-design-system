@@ -1,0 +1,24 @@
+{
+  "component": {
+    "button": {
+      "min-height": {
+        "xs": {
+          "value": "var(--dimension-24)",
+          "type": "dimension"
+        },
+        "sm": {
+          "value": "var(--dimension-32)",
+          "type": "dimension"
+        },
+        "md": {
+          "value": "var(--dimension-40)",
+          "type": "dimension"
+        },
+        "lg": {
+          "value": "var(--dimension-48)",
+          "type": "dimension"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+# Node
+node_modules/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+build/
+dist/
+.storybook-out/
+storybook-static/
+coverage/
+.turbo/
+.vite/
+.cache/
+.next/
+.parcel-cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Design export archives
+packages/ui/src/tokens/figma-export/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

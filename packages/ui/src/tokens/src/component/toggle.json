@@ -1,0 +1,106 @@
+{
+  "component": {
+    "toggle": {
+      "md": {
+        "gap": {
+          "value": "var(--spacing-100)",
+          "type": "dimension"
+        },
+        "track": {
+          "width": {
+            "value": "var(--dimension-48)",
+            "type": "dimension"
+          },
+          "height": {
+            "value": "var(--dimension-24)",
+            "type": "dimension"
+          }
+        },
+        "thumb": {
+          "size": {
+            "value": "var(--dimension-16)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-050)",
+            "type": "dimension"
+          },
+          "translate-x": {
+            "value": "var(--dimension-24)",
+            "type": "dimension"
+          }
+        },
+        "icon": {
+          "size": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-100)",
+            "type": "dimension"
+          }
+        }
+      },
+      "sm": {
+        "gap": {
+          "value": "var(--spacing-075)",
+          "type": "dimension"
+        },
+        "track": {
+          "width": {
+            "value": "var(--dimension-40)",
+            "type": "dimension"
+          },
+          "height": {
+            "value": "var(--dimension-20)",
+            "type": "dimension"
+          }
+        },
+        "thumb": {
+          "size": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-050)",
+            "type": "dimension"
+          },
+          "translate-x": {
+            "value": "var(--dimension-20)",
+            "type": "dimension"
+          }
+        },
+        "icon": {
+          "size": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "offset": {
+            "value": "var(--spacing-075)",
+            "type": "dimension"
+          }
+        }
+      },
+      "thumb": {
+        "pressed-scale-x": {
+          "value": "1.16",
+          "type": "number"
+        }
+      },
+      "motion": {
+        "duration": {
+          "value": "180ms",
+          "type": "duration"
+        },
+        "reduced-duration": {
+          "value": "0ms",
+          "type": "duration"
+        },
+        "easing": {
+          "value": "ease-out",
+          "type": "cubicBezier"
+        }
+      }
+    }
+  }
+}

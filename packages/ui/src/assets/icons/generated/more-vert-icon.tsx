@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const MoreVertIcon = React.memo(function MoreVertIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M8.00002 5.33366C8.73335 5.33366 9.33335 4.73366 9.33335 4.00033C9.33335 3.26699 8.73335 2.66699 8.00002 2.66699C7.26669 2.66699 6.66669 3.26699 6.66669 4.00033C6.66669 4.73366 7.26669 5.33366 8.00002 5.33366ZM8.00002 6.66699C7.26669 6.66699 6.66669 7.26699 6.66669 8.00033C6.66669 8.73366 7.26669 9.33366 8.00002 9.33366C8.73335 9.33366 9.33335 8.73366 9.33335 8.00033C9.33335 7.26699 8.73335 6.66699 8.00002 6.66699ZM8.00002 10.667C7.26669 10.667 6.66669 11.267 6.66669 12.0003C6.66669 12.7337 7.26669 13.3337 8.00002 13.3337C8.73335 13.3337 9.33335 12.7337 9.33335 12.0003C9.33335 11.267 8.73335 10.667 8.00002 10.667Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+MoreVertIcon.displayName = 'MoreVertIcon';

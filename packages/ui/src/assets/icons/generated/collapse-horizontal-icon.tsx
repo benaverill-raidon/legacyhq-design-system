@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const CollapseHorizontalIcon = React.memo(function CollapseHorizontalIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M3.33335 5.33317L3.33335 7.33317H0.666687L0.666687 8.6665H3.33335L3.33335 10.6665L6.00002 7.99984L3.33335 5.33317ZM12.6667 10.6665V8.6665L15.3334 8.6665L15.3334 7.33317L12.6667 7.33317V5.33317L10 7.99984L12.6667 10.6665ZM8.66669 2.6665L7.33335 2.6665L7.33335 13.3332H8.66669L8.66669 2.6665Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+CollapseHorizontalIcon.displayName = 'CollapseHorizontalIcon';

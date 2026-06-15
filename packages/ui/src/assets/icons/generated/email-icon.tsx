@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const EmailIcon = React.memo(function EmailIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M14.6666 3.99984C14.6666 3.2665 14.0666 2.6665 13.3333 2.6665H2.66665C1.93331 2.6665 1.33331 3.2665 1.33331 3.99984V11.9998C1.33331 12.7332 1.93331 13.3332 2.66665 13.3332H13.3333C14.0666 13.3332 14.6666 12.7332 14.6666 11.9998V3.99984ZM13.3333 3.99984L7.99998 7.33317L2.66665 3.99984H13.3333ZM13.3333 11.9998H2.66665V5.33317L7.99998 8.6665L13.3333 5.33317V11.9998Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+EmailIcon.displayName = 'EmailIcon';

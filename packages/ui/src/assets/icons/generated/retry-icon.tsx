@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const RetryIcon = React.memo(function RetryIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M8.00002 3.99967V1.33301L4.66669 4.66634L8.00002 7.99967V5.33301C10.2067 5.33301 12 7.12634 12 9.33301C12 11.5397 10.2067 13.333 8.00002 13.333C5.79335 13.333 4.00002 11.5397 4.00002 9.33301H2.66669C2.66669 12.2797 5.05335 14.6663 8.00002 14.6663C10.9467 14.6663 13.3334 12.2797 13.3334 9.33301C13.3334 6.38634 10.9467 3.99967 8.00002 3.99967Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+RetryIcon.displayName = 'RetryIcon';

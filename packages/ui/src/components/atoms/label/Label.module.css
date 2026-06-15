@@ -1,0 +1,131 @@
+.label {
+  --label-background: var(--color-background-neutral-default);
+  --label-color: var(--color-content-subtle);
+  --label-padding-block: var(--spacing-025);
+  --label-padding-inline: var(--spacing-075);
+  --label-font-family: var(--typography-overline-md-font-family);
+  --label-font-weight: var(--typography-overline-md-font-weight);
+  --label-font-size: var(--typography-overline-md-font-size);
+  --label-line-height: var(--typography-overline-md-line-height);
+  --label-letter-spacing: var(--typography-overline-md-letter-spacing);
+  --label-text-transform: var(--typography-overline-md-text-transform);
+
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding-block: var(--label-padding-block);
+  padding-inline: var(--label-padding-inline);
+  border: none;
+  border-radius: var(--border-radius-xs);
+  background: var(--label-background);
+  color: var(--label-color);
+  font-family: var(--label-font-family);
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  line-height: var(--label-line-height);
+  letter-spacing: var(--label-letter-spacing);
+  text-transform: var(--label-text-transform);
+  white-space: nowrap;
+}
+
+.size_sm {
+  --label-padding-block: var(--spacing-025);
+  --label-padding-inline: var(--spacing-050);
+  --label-font-family: var(--typography-overline-sm-font-family);
+  --label-font-weight: var(--typography-overline-sm-font-weight);
+  --label-font-size: var(--typography-overline-sm-font-size);
+  --label-line-height: var(--typography-overline-sm-line-height);
+  --label-letter-spacing: var(--typography-overline-sm-letter-spacing);
+  --label-text-transform: var(--typography-overline-sm-text-transform);
+}
+
+.size_md {
+  --label-padding-block: var(--spacing-025);
+  --label-padding-inline: var(--spacing-075);
+  --label-font-family: var(--typography-overline-md-font-family);
+  --label-font-weight: var(--typography-overline-md-font-weight);
+  --label-font-size: var(--typography-overline-md-font-size);
+  --label-line-height: var(--typography-overline-md-line-height);
+  --label-letter-spacing: var(--typography-overline-md-letter-spacing);
+  --label-text-transform: var(--typography-overline-md-text-transform);
+}
+
+.tone_default.emphasis_subtle {
+  --label-background: var(--color-background-neutral-default);
+  --label-color: var(--color-content-subtle);
+}
+
+.tone_default.emphasis_bold {
+  --label-background: var(--color-background-accent-gray-bolder-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_information.emphasis_subtle {
+  --label-background: var(--color-background-information-default);
+  --label-color: var(--color-content-information);
+}
+
+.tone_information.emphasis_bold {
+  --label-background: var(--color-background-information-bold-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_warning.emphasis_subtle {
+  --label-background: var(--color-background-warning-default);
+  --label-color: var(--color-content-warning);
+}
+
+.tone_warning.emphasis_bold {
+  --label-background: var(--color-background-warning-bold-default);
+  --label-color: var(--color-content-warning-inverse);
+}
+
+.tone_discovery.emphasis_subtle {
+  --label-background: var(--color-background-discovery-default);
+  --label-color: var(--color-content-discovery);
+}
+
+.tone_discovery.emphasis_bold {
+  --label-background: var(--color-background-discovery-bold-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_error.emphasis_subtle {
+  --label-background: var(--color-background-error-default);
+  --label-color: var(--color-content-error);
+}
+
+.tone_error.emphasis_bold {
+  --label-background: var(--color-background-error-bold-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_success.emphasis_subtle {
+  --label-background: var(--color-background-success-default);
+  --label-color: var(--color-content-success);
+}
+
+.tone_success.emphasis_bold {
+  --label-background: var(--color-background-success-bold-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_law.emphasis_subtle {
+  --label-background: var(--color-background-brand-default-default);
+  --label-color: var(--color-content-default);
+}
+
+.tone_law.emphasis_bold {
+  --label-background: var(--color-background-brand-boldest-default);
+  --label-color: var(--color-content-inverse);
+}
+
+.tone_wealth.emphasis_subtle {
+  --label-background: var(--color-background-accent-green-subtler-default);
+  --label-color: var(--color-content-default);
+}
+
+.tone_wealth.emphasis_bold {
+  --label-background: var(--color-background-accent-green-bolder-default);
+  --label-color: var(--color-content-inverse);
+}

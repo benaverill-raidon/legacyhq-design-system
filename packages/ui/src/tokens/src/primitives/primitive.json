@@ -1,0 +1,1129 @@
+{
+  "Value": {
+    "color-red-100": {
+      "value": "#ffe0df",
+      "type": "color",
+      "originalName": "color/red/100"
+    },
+    "color-red-200": {
+      "value": "#ffc7c5",
+      "type": "color",
+      "originalName": "color/red/200"
+    },
+    "color-red-300": {
+      "value": "#ffa09d",
+      "type": "color",
+      "originalName": "color/red/300"
+    },
+    "color-red-400": {
+      "value": "#ff6964",
+      "type": "color",
+      "originalName": "color/red/400"
+    },
+    "color-red-500": {
+      "value": "#ff3b34",
+      "type": "color",
+      "originalName": "color/red/500"
+    },
+    "color-red-600": {
+      "value": "#ed1c15",
+      "type": "color",
+      "originalName": "color/red/600"
+    },
+    "color-red-700": {
+      "value": "#c8130d",
+      "type": "color",
+      "originalName": "color/red/700"
+    },
+    "color-red-800": {
+      "value": "#a5140f",
+      "type": "color",
+      "originalName": "color/red/800"
+    },
+    "color-red-900": {
+      "value": "#881814",
+      "type": "color",
+      "originalName": "color/red/900"
+    },
+    "color-red-1000": {
+      "value": "#4b0604",
+      "type": "color",
+      "originalName": "color/red/1000"
+    },
+    "color-orange-100": {
+      "value": "#fff6c5",
+      "type": "color",
+      "originalName": "color/orange/100"
+    },
+    "color-orange-200": {
+      "value": "#ffed85",
+      "type": "color",
+      "originalName": "color/orange/200"
+    },
+    "color-orange-300": {
+      "value": "#ffdd46",
+      "type": "color",
+      "originalName": "color/orange/300"
+    },
+    "color-orange-400": {
+      "value": "#ffcb1b",
+      "type": "color",
+      "originalName": "color/orange/400"
+    },
+    "color-orange-500": {
+      "value": "#fca700",
+      "type": "color",
+      "originalName": "color/orange/500"
+    },
+    "color-orange-600": {
+      "value": "#e28000",
+      "type": "color",
+      "originalName": "color/orange/600"
+    },
+    "color-orange-700": {
+      "value": "#bb5802",
+      "type": "color",
+      "originalName": "color/orange/700"
+    },
+    "color-orange-800": {
+      "value": "#984408",
+      "type": "color",
+      "originalName": "color/orange/800"
+    },
+    "color-orange-900": {
+      "value": "#7c380b",
+      "type": "color",
+      "originalName": "color/orange/900"
+    },
+    "color-orange-1000": {
+      "value": "#481b00",
+      "type": "color",
+      "originalName": "color/orange/1000"
+    },
+    "color-yellow-100": {
+      "value": "#ffffc2",
+      "type": "color",
+      "originalName": "color/yellow/100"
+    },
+    "color-yellow-200": {
+      "value": "#fffc89",
+      "type": "color",
+      "originalName": "color/yellow/200"
+    },
+    "color-yellow-300": {
+      "value": "#fff245",
+      "type": "color",
+      "originalName": "color/yellow/300"
+    },
+    "color-yellow-400": {
+      "value": "#fce213",
+      "type": "color",
+      "originalName": "color/yellow/400"
+    },
+    "color-yellow-500": {
+      "value": "#ecc806",
+      "type": "color",
+      "originalName": "color/yellow/500"
+    },
+    "color-yellow-600": {
+      "value": "#cf9f02",
+      "type": "color",
+      "originalName": "color/yellow/600"
+    },
+    "color-yellow-700": {
+      "value": "#a37005",
+      "type": "color",
+      "originalName": "color/yellow/700"
+    },
+    "color-yellow-800": {
+      "value": "#86580d",
+      "type": "color",
+      "originalName": "color/yellow/800"
+    },
+    "color-yellow-900": {
+      "value": "#724811",
+      "type": "color",
+      "originalName": "color/yellow/900"
+    },
+    "color-yellow-1000": {
+      "value": "#432605",
+      "type": "color",
+      "originalName": "color/yellow/1000"
+    },
+    "color-green-100": {
+      "value": "#dbf8cf",
+      "type": "color",
+      "originalName": "color/green/100"
+    },
+    "color-teal-100": {
+      "value": "#dcfff1",
+      "type": "color",
+      "originalName": "color/teal/100"
+    },
+    "color-teal-200": {
+      "value": "#baf3db",
+      "type": "color",
+      "originalName": "color/teal/200"
+    },
+    "color-teal-300": {
+      "value": "#7ee2b8",
+      "type": "color",
+      "originalName": "color/teal/300"
+    },
+    "color-teal-400": {
+      "value": "#4bce97",
+      "type": "color",
+      "originalName": "color/teal/400"
+    },
+    "color-teal-500": {
+      "value": "#2abb7f",
+      "type": "color",
+      "originalName": "color/teal/500"
+    },
+    "color-teal-600": {
+      "value": "#22a06b",
+      "type": "color",
+      "originalName": "color/teal/600"
+    },
+    "color-teal-700": {
+      "value": "#1f845a",
+      "type": "color",
+      "originalName": "color/teal/700"
+    },
+    "color-teal-800": {
+      "value": "#216e4e",
+      "type": "color",
+      "originalName": "color/teal/800"
+    },
+    "color-teal-900": {
+      "value": "#164b35",
+      "type": "color",
+      "originalName": "color/teal/900"
+    },
+    "color-teal-1000": {
+      "value": "#1c3329",
+      "type": "color",
+      "originalName": "color/teal/1000"
+    },
+    "color-green-200": {
+      "value": "#b8f2a4",
+      "type": "color",
+      "originalName": "color/green/200"
+    },
+    "color-green-300": {
+      "value": "#8ae86e",
+      "type": "color",
+      "originalName": "color/green/300"
+    },
+    "color-green-400": {
+      "value": "#64d942",
+      "type": "color",
+      "originalName": "color/green/400"
+    },
+    "color-green-500": {
+      "value": "#43bf23",
+      "type": "color",
+      "originalName": "color/green/500"
+    },
+    "color-green-600": {
+      "value": "#309818",
+      "type": "color",
+      "originalName": "color/green/600"
+    },
+    "color-green-700": {
+      "value": "#277417",
+      "type": "color",
+      "originalName": "color/green/700"
+    },
+    "color-green-800": {
+      "value": "#235c18",
+      "type": "color",
+      "originalName": "color/green/800"
+    },
+    "color-green-900": {
+      "value": "#214e19",
+      "type": "color",
+      "originalName": "color/green/900"
+    },
+    "color-green-1000": {
+      "value": "#0c2b08",
+      "type": "color",
+      "originalName": "color/green/1000"
+    },
+    "color-blue-100": {
+      "value": "#d7f1ff",
+      "type": "color",
+      "originalName": "color/blue/100"
+    },
+    "color-purple-100": {
+      "value": "#f3f0ff",
+      "type": "color",
+      "originalName": "color/purple/100"
+    },
+    "color-purple-200": {
+      "value": "#dfd8fd",
+      "type": "color",
+      "originalName": "color/purple/200"
+    },
+    "color-purple-300": {
+      "value": "#b8acf6",
+      "type": "color",
+      "originalName": "color/purple/300"
+    },
+    "color-purple-400": {
+      "value": "#9f8fef",
+      "type": "color",
+      "originalName": "color/purple/400"
+    },
+    "color-purple-500": {
+      "value": "#8f7ee7",
+      "type": "color",
+      "originalName": "color/purple/500"
+    },
+    "color-purple-600": {
+      "value": "#8270db",
+      "type": "color",
+      "originalName": "color/purple/600"
+    },
+    "color-purple-700": {
+      "value": "#6e5dc6",
+      "type": "color",
+      "originalName": "color/purple/700"
+    },
+    "color-purple-800": {
+      "value": "#5e4db2",
+      "type": "color",
+      "originalName": "color/purple/800"
+    },
+    "color-purple-900": {
+      "value": "#352c63",
+      "type": "color",
+      "originalName": "color/purple/900"
+    },
+    "color-purple-1000": {
+      "value": "#2b273f",
+      "type": "color",
+      "originalName": "color/purple/1000"
+    },
+    "color-magenta-100": {
+      "value": "#ffecf8",
+      "type": "color",
+      "originalName": "color/magenta/100"
+    },
+    "color-magenta-200": {
+      "value": "#fdd0ec",
+      "type": "color",
+      "originalName": "color/magenta/200"
+    },
+    "color-magenta-300": {
+      "value": "#f797d2",
+      "type": "color",
+      "originalName": "color/magenta/300"
+    },
+    "color-magenta-400": {
+      "value": "#e774bb",
+      "type": "color",
+      "originalName": "color/magenta/400"
+    },
+    "color-magenta-500": {
+      "value": "#da62ac",
+      "type": "color",
+      "originalName": "color/magenta/500"
+    },
+    "color-magenta-600": {
+      "value": "#cd519d",
+      "type": "color",
+      "originalName": "color/magenta/600"
+    },
+    "color-magenta-700": {
+      "value": "#ae4787",
+      "type": "color",
+      "originalName": "color/magenta/700"
+    },
+    "color-magenta-800": {
+      "value": "#943d73",
+      "type": "color",
+      "originalName": "color/magenta/800"
+    },
+    "color-magenta-900": {
+      "value": "#50253f",
+      "type": "color",
+      "originalName": "color/magenta/900"
+    },
+    "color-magenta-1000": {
+      "value": "#3d2232",
+      "type": "color",
+      "originalName": "color/magenta/1000"
+    },
+    "color-blue-200": {
+      "value": "#b9e8ff",
+      "type": "color",
+      "originalName": "color/blue/200"
+    },
+    "color-blue-300": {
+      "value": "#88ddff",
+      "type": "color",
+      "originalName": "color/blue/300"
+    },
+    "color-blue-400": {
+      "value": "#50c7ff",
+      "type": "color",
+      "originalName": "color/blue/400"
+    },
+    "color-blue-500": {
+      "value": "#28a9ff",
+      "type": "color",
+      "originalName": "color/blue/500"
+    },
+    "color-blue-600": {
+      "value": "#1890ff",
+      "type": "color",
+      "originalName": "color/blue/600"
+    },
+    "color-blue-700": {
+      "value": "#0a73eb",
+      "type": "color",
+      "originalName": "color/blue/700"
+    },
+    "color-blue-800": {
+      "value": "#0f5cbe",
+      "type": "color",
+      "originalName": "color/blue/800"
+    },
+    "color-blue-900": {
+      "value": "#135095",
+      "type": "color",
+      "originalName": "color/blue/900"
+    },
+    "color-blue-1000": {
+      "value": "#11315a",
+      "type": "color",
+      "originalName": "color/blue/1000"
+    },
+    "color-neutral-light-solid-0": {
+      "value": "#ffffff",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/0"
+    },
+    "color-neutral-light-alpha-100a": {
+      "value": "rgba(40, 39, 39, 0.04)",
+      "type": "color",
+      "originalName": "color/neutral/light/alpha/100A"
+    },
+    "color-neutral-light-alpha-200a": {
+      "value": "rgba(40, 39, 39, 0.08)",
+      "type": "color",
+      "originalName": "color/neutral/light/alpha/200A"
+    },
+    "color-neutral-light-alpha-300a": {
+      "value": "rgba(40, 39, 39, 0.16)",
+      "type": "color",
+      "originalName": "color/neutral/light/alpha/300A"
+    },
+    "color-neutral-light-alpha-400a": {
+      "value": "rgba(40, 39, 39, 0.32)",
+      "type": "color",
+      "originalName": "color/neutral/light/alpha/400A"
+    },
+    "color-neutral-light-alpha-500a": {
+      "value": "rgba(40, 39, 39, 0.48)",
+      "type": "color",
+      "originalName": "color/neutral/light/alpha/500A"
+    },
+    "color-neutral-light-solid-100": {
+      "value": "#f8f8f8",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/100"
+    },
+    "color-neutral-light-solid-200": {
+      "value": "#f0f0f0",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/200"
+    },
+    "color-neutral-light-solid-300": {
+      "value": "#e5e4e3",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/300"
+    },
+    "color-neutral-light-solid-400": {
+      "value": "#d2d1cf",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/400"
+    },
+    "color-neutral-light-solid-500": {
+      "value": "#b7b5b2",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/500"
+    },
+    "color-neutral-light-solid-600": {
+      "value": "#a7a5a2",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/600"
+    },
+    "color-neutral-light-solid-700": {
+      "value": "#84817e",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/700"
+    },
+    "color-neutral-light-solid-800": {
+      "value": "#6d6a68",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/800"
+    },
+    "color-neutral-light-solid-900": {
+      "value": "#5c5a58",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/900"
+    },
+    "color-neutral-light-solid-1000": {
+      "value": "#504e4c",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/1000"
+    },
+    "color-neutral-light-solid-1100": {
+      "value": "#282727",
+      "type": "color",
+      "originalName": "color/neutral/light/solid/1100"
+    },
+    "dimension-minus-32": {
+      "value": "-32px",
+      "type": "float",
+      "originalName": "dimension/minus-32"
+    },
+    "dimension-minus-24": {
+      "value": "-24px",
+      "type": "float",
+      "originalName": "dimension/minus-24"
+    },
+    "dimension-minus-20": {
+      "value": "-20px",
+      "type": "float",
+      "originalName": "dimension/minus-20"
+    },
+    "dimension-minus-16": {
+      "value": "-16px",
+      "type": "float",
+      "originalName": "dimension/minus-16"
+    },
+    "dimension-minus-12": {
+      "value": "-12px",
+      "type": "float",
+      "originalName": "dimension/minus-12"
+    },
+    "dimension-minus-8": {
+      "value": "-8px",
+      "type": "float",
+      "originalName": "dimension/minus-8"
+    },
+    "dimension-minus-6": {
+      "value": "-6px",
+      "type": "float",
+      "originalName": "dimension/minus-6"
+    },
+    "dimension-minus-4": {
+      "value": "-4px",
+      "type": "float",
+      "originalName": "dimension/minus-4"
+    },
+    "dimension-minus-2": {
+      "value": "-2px",
+      "type": "float",
+      "originalName": "dimension/minus-2"
+    },
+    "dimension-0": {
+      "value": "0px",
+      "type": "float",
+      "originalName": "dimension/0"
+    },
+    "dimension-2": {
+      "value": "2px",
+      "type": "float",
+      "originalName": "dimension/2"
+    },
+    "dimension-4": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "dimension/4"
+    },
+    "dimension-6": {
+      "value": "6px",
+      "type": "float",
+      "originalName": "dimension/6"
+    },
+    "dimension-8": {
+      "value": "8px",
+      "type": "float",
+      "originalName": "dimension/8"
+    },
+    "dimension-12": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "dimension/12"
+    },
+    "dimension-16": {
+      "value": "16px",
+      "type": "float",
+      "originalName": "dimension/16"
+    },
+    "dimension-20": {
+      "value": "20px",
+      "type": "float",
+      "originalName": "dimension/20"
+    },
+    "dimension-24": {
+      "value": "24px",
+      "type": "float",
+      "originalName": "dimension/24"
+    },
+    "dimension-32": {
+      "value": "32px",
+      "type": "float",
+      "originalName": "dimension/32"
+    },
+    "dimension-40": {
+      "value": "40px",
+      "type": "float",
+      "originalName": "dimension/40"
+    },
+    "dimension-48": {
+      "value": "48px",
+      "type": "float",
+      "originalName": "dimension/48"
+    },
+    "dimension-64": {
+      "value": "64px",
+      "type": "float",
+      "originalName": "dimension/64"
+    },
+    "dimension-80": {
+      "value": "80px",
+      "type": "float",
+      "originalName": "dimension/80"
+    },
+    "dimension-104": {
+      "value": "104px",
+      "type": "float",
+      "originalName": "dimension/104"
+    },
+    "typography-font-family-merriweather": {
+      "value": "\"Merriweather\"",
+      "type": "string",
+      "originalName": "typography/font-family/merriweather"
+    },
+    "typography-font-size-12": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "typography/font-size/12"
+    },
+    "typography-font-size-14": {
+      "value": "14px",
+      "type": "float",
+      "originalName": "typography/font-size/14"
+    },
+    "typography-font-size-16": {
+      "value": "16px",
+      "type": "float",
+      "originalName": "typography/font-size/16"
+    },
+    "typography-font-size-20": {
+      "value": "20px",
+      "type": "float",
+      "originalName": "typography/font-size/20"
+    },
+    "typography-font-size-24": {
+      "value": "24px",
+      "type": "float",
+      "originalName": "typography/font-size/24"
+    },
+    "typography-font-size-28": {
+      "value": "28px",
+      "type": "float",
+      "originalName": "typography/font-size/28"
+    },
+    "typography-font-size-32": {
+      "value": "32px",
+      "type": "float",
+      "originalName": "typography/font-size/32"
+    },
+    "typography-font-size-40": {
+      "value": "40px",
+      "type": "float",
+      "originalName": "typography/font-size/40"
+    },
+    "typography-font-size-48": {
+      "value": "48px",
+      "type": "float",
+      "originalName": "typography/font-size/48"
+    },
+    "typography-font-weight-400": {
+      "value": "400",
+      "type": "float",
+      "originalName": "typography/font-weight/400"
+    },
+    "typography-font-weight-600": {
+      "value": "600",
+      "type": "float",
+      "originalName": "typography/font-weight/600"
+    },
+    "typography-letter-spacing-minus-2": {
+      "value": "-2px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/minus-2"
+    },
+    "typography-letter-spacing-minus-1-half": {
+      "value": "-1.5px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/minus-1-half"
+    },
+    "typography-letter-spacing-minus-1": {
+      "value": "-1px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/minus-1"
+    },
+    "typography-letter-spacing-minus-half": {
+      "value": "-0.5px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/minus-half"
+    },
+    "typography-letter-spacing-0": {
+      "value": "0px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/0"
+    },
+    "typography-letter-spacing-half": {
+      "value": "0.5px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/half"
+    },
+    "typography-letter-spacing-1": {
+      "value": "1px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/1"
+    },
+    "typography-letter-spacing-1-half": {
+      "value": "1.5px",
+      "type": "float",
+      "originalName": "typography/letter-spacing/1-half"
+    },
+    "typography-line-height-16": {
+      "value": "16px",
+      "type": "float",
+      "originalName": "typography/line-height/16"
+    },
+    "typography-line-height-20": {
+      "value": "20px",
+      "type": "float",
+      "originalName": "typography/line-height/20"
+    },
+    "typography-line-height-24": {
+      "value": "24px",
+      "type": "float",
+      "originalName": "typography/line-height/24"
+    },
+    "typography-line-height-28": {
+      "value": "28px",
+      "type": "float",
+      "originalName": "typography/line-height/28"
+    },
+    "typography-line-height-32": {
+      "value": "32px",
+      "type": "float",
+      "originalName": "typography/line-height/32"
+    },
+    "typography-line-height-36": {
+      "value": "36px",
+      "type": "float",
+      "originalName": "typography/line-height/36"
+    },
+    "typography-line-height-40": {
+      "value": "40px",
+      "type": "float",
+      "originalName": "typography/line-height/40"
+    },
+    "typography-line-height-48": {
+      "value": "48px",
+      "type": "float",
+      "originalName": "typography/line-height/48"
+    },
+    "typography-line-height-56": {
+      "value": "56px",
+      "type": "float",
+      "originalName": "typography/line-height/56"
+    },
+    "typography-paragraph-spacing-0": {
+      "value": "0px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/0"
+    },
+    "typography-paragraph-spacing-12": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/12"
+    },
+    "typography-paragraph-spacing-16": {
+      "value": "16px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/16"
+    },
+    "typography-paragraph-spacing-20": {
+      "value": "20px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/20"
+    },
+    "typography-paragraph-spacing-24": {
+      "value": "24px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/24"
+    },
+    "typography-paragraph-spacing-28": {
+      "value": "28px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/28"
+    },
+    "typography-paragraph-spacing-32": {
+      "value": "32px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/32"
+    },
+    "typography-paragraph-spacing-36": {
+      "value": "36px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/36"
+    },
+    "typography-paragraph-spacing-40": {
+      "value": "40px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/40"
+    },
+    "typography-paragraph-spacing-48": {
+      "value": "48px",
+      "type": "float",
+      "originalName": "typography/paragraph-spacing/48"
+    },
+    "typography-text-transform-none": {
+      "value": "\"none\"",
+      "type": "string",
+      "originalName": "typography/text-transform/none"
+    },
+    "typography-text-transform-uppercase": {
+      "value": "\"uppercase\"",
+      "type": "string",
+      "originalName": "typography/text-transform/uppercase"
+    },
+    "typography-font-family-public-sans": {
+      "value": "\"Public Sans\"",
+      "type": "string",
+      "originalName": "typography/font-family/public-sans"
+    },
+    "border-radius-2": {
+      "value": "2px",
+      "type": "float",
+      "originalName": "border/radius/2"
+    },
+    "border-radius-4": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "border/radius/4"
+    },
+    "border-radius-5": {
+      "value": "5px",
+      "type": "float",
+      "originalName": "border/radius/5"
+    },
+    "border-radius-8": {
+      "value": "8px",
+      "type": "float",
+      "originalName": "border/radius/8"
+    },
+    "border-radius-16": {
+      "value": "16px",
+      "type": "float",
+      "originalName": "border/radius/16"
+    },
+    "border-radius-round": {
+      "value": "999px",
+      "type": "float",
+      "originalName": "border/radius/round"
+    },
+    "border-width-1": {
+      "value": "1px",
+      "type": "float",
+      "originalName": "border/width/1"
+    },
+    "border-width-1-half": {
+      "value": "1.5px",
+      "type": "float",
+      "originalName": "border/width/1-half"
+    },
+    "border-width-2": {
+      "value": "2px",
+      "type": "float",
+      "originalName": "border/width/2"
+    },
+    "border-width-3": {
+      "value": "3px",
+      "type": "float",
+      "originalName": "border/width/3"
+    },
+    "shadow-lg-x": {
+      "value": "8px",
+      "type": "float",
+      "originalName": "shadow/lg/x"
+    },
+    "shadow-lg-y": {
+      "value": "24px",
+      "type": "float",
+      "originalName": "shadow/lg/y"
+    },
+    "shadow-lg-blur": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "shadow/lg/blur"
+    },
+    "shadow-lg-spread": {
+      "value": "-4px",
+      "type": "float",
+      "originalName": "shadow/lg/spread"
+    },
+    "shadow-md-x": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "shadow/md/x"
+    },
+    "shadow-md-y": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "shadow/md/y"
+    },
+    "shadow-md-blur": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "shadow/md/blur"
+    },
+    "shadow-md-spread": {
+      "value": "8px",
+      "type": "float",
+      "originalName": "shadow/md/spread"
+    },
+    "shadow-sm-x": {
+      "value": "0px",
+      "type": "float",
+      "originalName": "shadow/sm/x"
+    },
+    "shadow-sm-y": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "shadow/sm/y"
+    },
+    "shadow-sm-blur": {
+      "value": "4px",
+      "type": "float",
+      "originalName": "shadow/sm/blur"
+    },
+    "shadow-sm-spread": {
+      "value": "0px",
+      "type": "float",
+      "originalName": "shadow/sm/spread"
+    },
+    "color-neutral-dark-solid--100": {
+      "value": "#1f1e1e",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/-100"
+    },
+    "color-neutral-dark-alpha--100a": {
+      "value": "rgba(31, 30, 30, 0.44)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/-100A"
+    },
+    "color-neutral-dark-solid-0": {
+      "value": "#282727",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/0"
+    },
+    "color-neutral-dark-alpha-100a": {
+      "value": "rgba(248, 248, 248, 0.04)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/100A"
+    },
+    "color-neutral-dark-alpha-200a": {
+      "value": "rgba(248, 248, 248, 0.08)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/200A"
+    },
+    "color-neutral-dark-alpha-300a": {
+      "value": "rgba(248, 248, 248, 0.16)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/300A"
+    },
+    "color-neutral-dark-alpha-400a": {
+      "value": "rgba(248, 248, 248, 0.32)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/400A"
+    },
+    "color-neutral-dark-alpha-500a": {
+      "value": "rgba(248, 248, 248, 0.48)",
+      "type": "color",
+      "originalName": "color/neutral/dark/alpha/500A"
+    },
+    "color-neutral-dark-solid-100": {
+      "value": "#3d3c3a",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/100"
+    },
+    "color-neutral-dark-solid-200": {
+      "value": "#504e4c",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/200"
+    },
+    "color-neutral-dark-solid-300": {
+      "value": "#6d6a68",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/300"
+    },
+    "color-neutral-dark-solid-400": {
+      "value": "#84817e",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/400"
+    },
+    "color-neutral-dark-solid-500": {
+      "value": "#a7a5a2",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/500"
+    },
+    "color-neutral-dark-solid-600": {
+      "value": "#b7b5b2",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/600"
+    },
+    "color-neutral-dark-solid-700": {
+      "value": "#d2d1cf",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/700"
+    },
+    "color-neutral-dark-solid-800": {
+      "value": "#e5e4e3",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/800"
+    },
+    "color-neutral-dark-solid-900": {
+      "value": "#f0f0f0",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/900"
+    },
+    "color-neutral-dark-solid-1000": {
+      "value": "#f8f8f8",
+      "type": "color",
+      "originalName": "color/neutral/dark/solid/1000"
+    },
+    "color-brand-prussian-100": {
+      "value": "#e5f6ff",
+      "type": "color",
+      "originalName": "color/brand/prussian/100"
+    },
+    "color-brand-prussian-200": {
+      "value": "#ccecff",
+      "type": "color",
+      "originalName": "color/brand/prussian/200"
+    },
+    "color-brand-prussian-300": {
+      "value": "#b3e3ff",
+      "type": "color",
+      "originalName": "color/brand/prussian/300"
+    },
+    "color-brand-prussian-400": {
+      "value": "#8ecaed",
+      "type": "color",
+      "originalName": "color/brand/prussian/400"
+    },
+    "color-brand-prussian-500": {
+      "value": "#6aadd4",
+      "type": "color",
+      "originalName": "color/brand/prussian/500"
+    },
+    "color-brand-prussian-600": {
+      "value": "#4a91ba",
+      "type": "color",
+      "originalName": "color/brand/prussian/600"
+    },
+    "color-brand-prussian-700": {
+      "value": "#3077a1",
+      "type": "color",
+      "originalName": "color/brand/prussian/700"
+    },
+    "color-brand-prussian-800": {
+      "value": "#1b6087",
+      "type": "color",
+      "originalName": "color/brand/prussian/800"
+    },
+    "color-brand-prussian-900": {
+      "value": "#003655",
+      "type": "color",
+      "originalName": "color/brand/prussian/900"
+    },
+    "color-brand-prussian-1000": {
+      "value": "#06273b",
+      "type": "color",
+      "originalName": "color/brand/prussian/1000"
+    },
+    "color-brand-prussian-1100": {
+      "value": "#071822",
+      "type": "color",
+      "originalName": "color/brand/prussian/1100"
+    },
+    "color-brand-umber-100": {
+      "value": "#f8f6f4",
+      "type": "color",
+      "originalName": "color/brand/umber/100"
+    },
+    "color-brand-umber-200": {
+      "value": "#eeece6",
+      "type": "color",
+      "originalName": "color/brand/umber/200"
+    },
+    "color-brand-umber-300": {
+      "value": "#e4e0d9",
+      "type": "color",
+      "originalName": "color/brand/umber/300"
+    },
+    "color-brand-umber-400": {
+      "value": "#c4bbad",
+      "type": "color",
+      "originalName": "color/brand/umber/400"
+    },
+    "color-brand-umber-500": {
+      "value": "#ac9d8b",
+      "type": "color",
+      "originalName": "color/brand/umber/500"
+    },
+    "color-brand-umber-600": {
+      "value": "#9b8874",
+      "type": "color",
+      "originalName": "color/brand/umber/600"
+    },
+    "color-brand-umber-700": {
+      "value": "#8e7968",
+      "type": "color",
+      "originalName": "color/brand/umber/700"
+    },
+    "color-brand-umber-800": {
+      "value": "#776357",
+      "type": "color",
+      "originalName": "color/brand/umber/800"
+    },
+    "color-brand-umber-900": {
+      "value": "#62524a",
+      "type": "color",
+      "originalName": "color/brand/umber/900"
+    },
+    "color-brand-umber-1000": {
+      "value": "#50443e",
+      "type": "color",
+      "originalName": "color/brand/umber/1000"
+    },
+    "color-brand-umber-1100": {
+      "value": "#2a2320",
+      "type": "color",
+      "originalName": "color/brand/umber/1100"
+    }
+  }
+}

@@ -136,6 +136,14 @@ export const Examples: Story = {
 
       <div style={cardStyle}>
         <SliderRange label="Budget range" defaultValue={[25, 75]} showValue showSteps steps={[0, 25, 50, 75, 100]} />
+        <SliderRange
+          label="Minimum distance range"
+          defaultValue={[49, 50]}
+          minDistance={10}
+          showValue
+          showSteps
+          steps={[0, 25, 50, 75, 100]}
+        />
         <SliderRange label="Lower handle moved" defaultValue={[10, 70]} showValue showSteps steps={[0, 10, 25, 50, 70, 100]} />
         <SliderRange label="Upper handle moved" defaultValue={[30, 90]} showValue showSteps steps={[0, 30, 50, 75, 90, 100]} />
       </div>

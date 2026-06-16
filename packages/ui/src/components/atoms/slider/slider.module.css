@@ -1,8 +1,9 @@
 .root {
   --slider-track-height: var(--component-slider-track-height-md);
   --slider-handle-width: var(--component-slider-handle-width-md);
+  --slider-handle-width-pressed: var(--dimension-2);
   --slider-handle-height: var(--component-slider-handle-height-md);
-  --slider-scale-inset: var(--spacing-075);
+  --slider-scale-inset: var(--component-slider-handle-half-width);
   --slider-internal-gap: var(--spacing-075);
   --slider-handle-visual-color: var(--color-background-selected-bold-default);
 
@@ -111,7 +112,7 @@
   position: absolute;
   inset-block: 0;
   inset-inline: var(--slider-scale-inset);
-  z-index: 3;
+  z-index: 5;
   inline-size: calc(100% - var(--slider-scale-inset) - var(--slider-scale-inset));
   block-size: 100%;
   margin: var(--spacing-0);
@@ -145,7 +146,7 @@
   border-radius: var(--border-radius-full-round);
   appearance: none;
   -webkit-appearance: none;
-  background: var(--slider-handle-visual-color);
+  background: transparent;
 }
 
 .input::-moz-range-track {
@@ -160,39 +161,78 @@
   height: var(--slider-handle-height);
   border: 0;
   border-radius: var(--border-radius-full-round);
+  background: transparent;
+}
+
+.steps,
+.handles,
+.valueIndicators {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.handles {
+  z-index: 4;
+}
+
+.handle {
+  position: absolute;
+  inset-block-start: 50%;
+  display: grid;
+  place-items: center;
+  inline-size: var(--slider-handle-width);
+  block-size: var(--slider-handle-height);
+  border-radius: var(--border-radius-full-round);
+  transform: translate(-50%, -50%);
+}
+
+.handleVisual {
+  inline-size: var(--slider-handle-width);
+  block-size: var(--slider-handle-height);
+  border-radius: var(--border-radius-full-round);
   background: var(--slider-handle-visual-color);
 }
 
-.input:focus-visible::-webkit-slider-thumb,
-.input[data-preview-state='focus']::-webkit-slider-thumb {
-  outline: var(--border-width-focused) solid var(--color-border-focused);
-  outline-offset: var(--spacing-0);
+.handleSingle {
+  inset-inline-start: var(--slider-value-position);
 }
 
-.input:focus-visible::-moz-range-thumb,
-.input[data-preview-state='focus']::-moz-range-thumb {
-  outline: var(--border-width-focused) solid var(--color-border-focused);
-  outline-offset: var(--spacing-0);
+.handleLower {
+  inset-inline-start: var(--slider-lower-position);
 }
 
-.root:not([data-disabled='true']):hover .input::-webkit-slider-thumb,
-.input[data-preview-state='hover']::-webkit-slider-thumb {
+.handleUpper {
+  inset-inline-start: var(--slider-upper-position);
+}
+
+.root:not([data-disabled='true']):hover .handle,
+.control:has(.input[data-preview-state='hover']) .handle {
   --slider-handle-visual-color: var(--color-background-selected-bold-hovered);
 }
 
-.root:not([data-disabled='true']):active .input::-webkit-slider-thumb,
-.input[data-preview-state='press']::-webkit-slider-thumb {
+.root:not([data-disabled='true']):active .handle,
+.control:has(.input[data-preview-state='press']) .handle {
   --slider-handle-visual-color: var(--color-background-selected-bold-pressed);
 }
 
-.root:not([data-disabled='true']):hover .input::-moz-range-thumb,
-.input[data-preview-state='hover']::-moz-range-thumb {
-  --slider-handle-visual-color: var(--color-background-selected-bold-hovered);
+.root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle .handleVisual,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):active .handleLower .handleVisual,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):active .handleUpper .handleVisual,
+.control:has(.singleInput[data-preview-state='press']) .handleSingle .handleVisual,
+.control:has(.rangeInputLower[data-preview-state='press']) .handleLower .handleVisual,
+.control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper .handleVisual {
+  inline-size: var(--slider-handle-width-pressed);
 }
 
-.root:not([data-disabled='true']):active .input::-moz-range-thumb,
-.input[data-preview-state='press']::-moz-range-thumb {
-  --slider-handle-visual-color: var(--color-background-selected-bold-pressed);
+.control:has(.singleInput:focus-visible) .handleSingle,
+.control:has(.singleInput[data-preview-state='focus']) .handleSingle,
+.control:has(.rangeInputLower:focus-visible) .handleLower,
+.control:has(.rangeInputLower[data-preview-state='focus']) .handleLower,
+.control:has(.rangeInputUpper:focus-visible) .handleUpper,
+.control:has(.rangeInputUpper[data-preview-state='focus']) .handleUpper {
+  outline: var(--border-width-focused) solid var(--color-border-focused);
+  outline-offset: var(--spacing-050);
 }
 
 .root[data-disabled='true'] {
@@ -208,8 +248,7 @@
   background: var(--color-content-disabled);
 }
 
-.root[data-disabled='true'] .input::-webkit-slider-thumb,
-.root[data-disabled='true'] .input::-moz-range-thumb {
+.root[data-disabled='true'] .handle {
   --slider-handle-visual-color: var(--color-content-disabled);
 }
 
@@ -237,6 +276,11 @@
   z-index: 6;
 }
 
+.rangeRoot[data-active-handle='lower'] .handleLower,
+.rangeRoot[data-active-handle='upper'] .handleUpper {
+  z-index: 2;
+}
+
 .rangeInput::-webkit-slider-thumb {
   pointer-events: auto;
 }
@@ -246,12 +290,8 @@
 }
 
 .steps {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: 0;
   z-index: 1;
   box-sizing: border-box;
-  pointer-events: none;
 }
 
 .step {
@@ -274,13 +314,6 @@
 
 .step[data-active='true'] .stepDot {
   background: var(--color-content-selected);
-}
-
-.valueIndicators {
-  position: absolute;
-  inset-block: 0;
-  inset-inline: 0;
-  pointer-events: none;
 }
 
 .valueIndicator {
@@ -380,13 +413,28 @@
 .orientation_vertical .input::-webkit-slider-thumb {
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);
-  transform: rotate(90deg);
 }
 
 .orientation_vertical .input::-moz-range-thumb {
   width: var(--slider-handle-width);
   height: var(--slider-handle-height);
-  transform: rotate(90deg);
+}
+
+.orientation_vertical .handle {
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.orientation_vertical .handleSingle {
+  inset-block-start: calc(100% - var(--slider-value-position));
+}
+
+.orientation_vertical .handleLower {
+  inset-block-start: calc(100% - var(--slider-lower-position));
+}
+
+.orientation_vertical .handleUpper {
+  inset-block-start: calc(100% - var(--slider-upper-position));
 }
 
 .orientation_vertical .step {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import {
   clampValue,
-  getInsetPosition,
   getPercent,
   getStepModels,
+  getVisualPosition,
   mergeClassNames,
   useSliderDragState,
 } from './slider';
@@ -30,11 +30,28 @@ type SliderRangeStyle = React.CSSProperties & {
   '--slider-upper-percent'?: string;
 };
 
-function normalizeRangeValue(value: [number, number], min: number, max: number): [number, number] {
+function getEffectiveMinDistance(minDistance: number, min: number, max: number) {
+  if (!Number.isFinite(minDistance)) {
+    return 0;
+  }
+
+  return Math.min(Math.max(0, minDistance), Math.max(0, max - min));
+}
+
+function normalizeRangeValue(value: [number, number], min: number, max: number, minDistance = 0): [number, number] {
   const lower = clampValue(Math.min(value[0], value[1]), min, max);
   const upper = clampValue(Math.max(value[0], value[1]), min, max);
+  const effectiveMinDistance = getEffectiveMinDistance(minDistance, min, max);
 
-  return [lower, upper];
+  if (upper - lower >= effectiveMinDistance) {
+    return [lower, upper];
+  }
+
+  if (lower + effectiveMinDistance <= max) {
+    return [lower, lower + effectiveMinDistance];
+  }
+
+  return [upper - effectiveMinDistance, upper];
 }
 
 const minPositionVariable = 'var(--slider-min-position)';
@@ -66,6 +83,8 @@ export const SliderRange = React.memo(
       label,
       value,
       defaultValue = [25, 75],
+      minDistance = 1,
+      disableSwap = true,
       min = 0,
       max = 100,
       step = 1,
@@ -92,18 +111,19 @@ export const SliderRange = React.memo(
     const minHandleLabelId = `${id ?? generatedId}-min-label`;
     const maxHandleLabelId = `${id ?? generatedId}-max-label`;
     const isControlled = value !== undefined;
+    const effectiveMinDistance = getEffectiveMinDistance(minDistance, min, max);
     const [uncontrolledValue, setUncontrolledValue] = React.useState<[number, number]>(
-      normalizeRangeValue(defaultValue, min, max),
+      normalizeRangeValue(defaultValue, min, max, effectiveMinDistance),
     );
     const [activeHandle, setActiveHandle] = React.useState<'lower' | 'upper' | null>(null);
-    const currentValue = normalizeRangeValue(isControlled ? value : uncontrolledValue, min, max);
+    const currentValue = normalizeRangeValue(isControlled ? value : uncontrolledValue, min, max, effectiveMinDistance);
     const [lowerValue, upperValue] = currentValue;
     const lowerPercent = getPercent(lowerValue, min, max);
     const upperPercent = getPercent(upperValue, min, max);
-    const minPosition = getInsetPosition(0);
-    const maxPosition = getInsetPosition(100);
-    const lowerPosition = getInsetPosition(lowerPercent);
-    const upperPosition = getInsetPosition(upperPercent);
+    const minPosition = getVisualPosition(0);
+    const maxPosition = getVisualPosition(100);
+    const lowerPosition = getVisualPosition(lowerPercent);
+    const upperPosition = getVisualPosition(upperPercent);
     const stepModels = getStepModels(showSteps, steps, min, max, step, lowerPercent, upperPercent);
     const ariaLabelledByMin = label !== undefined ? `${labelId} ${minHandleLabelId}` : minHandleLabelId;
     const ariaLabelledByMax = label !== undefined ? `${labelId} ${maxHandleLabelId}` : maxHandleLabelId;
@@ -111,7 +131,7 @@ export const SliderRange = React.memo(
 
     const commitValue = React.useCallback(
       (nextValue: [number, number], event: React.ChangeEvent<HTMLInputElement>) => {
-        const normalizedValue = normalizeRangeValue(nextValue, min, max);
+        const normalizedValue = normalizeRangeValue(nextValue, min, max, effectiveMinDistance);
 
         if (!isControlled) {
           setUncontrolledValue(normalizedValue);
@@ -119,25 +139,29 @@ export const SliderRange = React.memo(
 
         onValueChange?.(normalizedValue, event);
       },
-      [isControlled, max, min, onValueChange],
+      [effectiveMinDistance, isControlled, max, min, onValueChange],
     );
 
     const handleLowerChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nextLower = Math.min(event.currentTarget.valueAsNumber, upperValue);
+        const nextLower = disableSwap
+          ? Math.min(event.currentTarget.valueAsNumber, upperValue - effectiveMinDistance)
+          : event.currentTarget.valueAsNumber;
         setActiveHandle('lower');
         commitValue([nextLower, upperValue], event);
       },
-      [commitValue, upperValue],
+      [commitValue, disableSwap, effectiveMinDistance, upperValue],
     );
 
     const handleUpperChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nextUpper = Math.max(event.currentTarget.valueAsNumber, lowerValue);
+        const nextUpper = disableSwap
+          ? Math.max(event.currentTarget.valueAsNumber, lowerValue + effectiveMinDistance)
+          : event.currentTarget.valueAsNumber;
         setActiveHandle('upper');
         commitValue([lowerValue, nextUpper], event);
       },
-      [commitValue, lowerValue],
+      [commitValue, disableSwap, effectiveMinDistance, lowerValue],
     );
 
     return (
@@ -201,7 +225,6 @@ export const SliderRange = React.memo(
                   key={stepMarker.value}
                   style={
                     {
-                      '--slider-step-percent': `${stepMarker.percent}%`,
                       '--slider-step-position': stepMarker.position,
                     } as React.CSSProperties
                   }
@@ -219,6 +242,15 @@ export const SliderRange = React.memo(
             <output className={mergeClassNames(styles.valueIndicator, styles.valueIndicatorUpper)} htmlFor={maxInputId}>
               {upperValue}
             </output>
+          </div>
+
+          <div className={styles.handles} aria-hidden="true">
+            <span className={mergeClassNames(styles.handle, styles.handleLower)}>
+              <span className={styles.handleVisual} />
+            </span>
+            <span className={mergeClassNames(styles.handle, styles.handleUpper)}>
+              <span className={styles.handleVisual} />
+            </span>
           </div>
 
           <input

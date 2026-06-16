@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getInsetPosition } from './slider';
+import { getVisualPosition } from './slider';
 import * as sliderExports from './index';
 import { Slider, SliderCentered, SliderRange } from './index';
 import styles from './slider.module.css';
@@ -22,6 +22,26 @@ function expectStandardSegmentGap(styleValue: string | null | undefined) {
   expect(styleValue).toContain(
     '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--slider-internal-gap))',
   );
+}
+
+function getCustomProperty(element: Element | null | undefined, property: string) {
+  return element instanceof HTMLElement ? element.style.getPropertyValue(property).trim() : '';
+}
+
+function expectSharedCoordinateLayer(container: HTMLElement) {
+  const control = container.querySelector(`.${styles.control}`);
+  const track = container.querySelector(`.${styles.track}`);
+  const steps = container.querySelector(`.${styles.steps}`);
+  const handles = container.querySelector(`.${styles.handles}`);
+  const valueIndicators = container.querySelector(`.${styles.valueIndicators}`);
+
+  expect(control).toBeInTheDocument();
+  expect(track?.parentElement).toBe(control);
+  expect(steps?.parentElement).toBe(control);
+  expect(handles?.parentElement).toBe(control);
+  expect(valueIndicators?.parentElement).toBe(control);
+  expect(track?.contains(steps)).toBe(false);
+  expect(track?.contains(handles)).toBe(false);
 }
 
 describe('Slider', () => {
@@ -113,8 +133,8 @@ describe('Slider', () => {
   it('renders explicit steps when enabled', () => {
     const { container } = render(<Slider aria-label="Steps" showSteps steps={[50]} defaultValue={50} />);
 
-    expect(container.querySelectorAll(`.${styles.step}`)).toHaveLength(1);
-    expect(container.querySelectorAll(`.${styles.stepDot}`)).toHaveLength(1);
+    expect(container.querySelectorAll(`.${styles.step}`)).toHaveLength(3);
+    expect(container.querySelectorAll(`.${styles.stepDot}`)).toHaveLength(3);
   });
 
   it('derives visible steps from step when the count is reasonable', () => {
@@ -133,6 +153,28 @@ describe('Slider', () => {
     expectInsetPosition(steps[2]?.getAttribute('style'), 1);
   });
 
+  it('preserves endpoint steps around explicit numeric steps', () => {
+    const { container } = render(<Slider aria-label="Explicit steps" showSteps steps={[50]} defaultValue={50} />);
+
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(steps).toHaveLength(3);
+    expectInsetPosition(steps[0]?.getAttribute('style'), 0);
+    expectInsetPosition(steps[1]?.getAttribute('style'), 0.5);
+    expectInsetPosition(steps[2]?.getAttribute('style'), 1);
+  });
+
+  it('uses the exact value-position string for matching explicit steps', () => {
+    const { container } = render(<Slider aria-label="Matching step" showSteps steps={[50]} defaultValue={50} />);
+
+    const control = container.querySelector(`.${styles.control}`);
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(getCustomProperty(steps[1], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-value-position'),
+    );
+  });
+
   it('skips excessive auto steps but preserves endpoints', () => {
     const { container } = render(<Slider aria-label="Too many steps" showSteps step={1} defaultValue={50} />);
 
@@ -145,12 +187,20 @@ describe('Slider', () => {
     expect(container.querySelectorAll(`.${styles.step}`)).toHaveLength(2);
   });
 
-  it('renders segmented decorative bars around the native handle', () => {
+  it('renders segmented decorative bars and a private visual handle', () => {
     const { container } = render(<Slider aria-label="Segmented" defaultValue={50} />);
 
     expect(container.querySelector(`.${styles.inactiveTrackStart}`)).toBeInTheDocument();
     expect(container.querySelector(`.${styles.activeTrack}`)).toBeInTheDocument();
     expect(container.querySelector(`.${styles.inactiveTrackEnd}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.handleSingle}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.handleSingle} .${styles.handleVisual}`)).toBeInTheDocument();
+  });
+
+  it('renders track steps handles and value indicators as siblings in the shared coordinate layer', () => {
+    const { container } = render(<Slider aria-label="Layered steps" defaultValue={50} showSteps />);
+
+    expectSharedCoordinateLayer(container);
   });
 
   it('exposes inset endpoint position variables for alignment', () => {
@@ -167,6 +217,29 @@ describe('Slider', () => {
 
     expectInsetPosition(control?.getAttribute('style'), 1);
     expectStandardSegmentGap(control?.getAttribute('style'));
+  });
+
+  it('positions the visual handle on the same inset variable as value-based visuals', () => {
+    const { container } = render(<Slider aria-label="Visual handle" value={50} onValueChange={() => undefined} />);
+
+    const control = container.querySelector(`.${styles.control}`);
+    const handle = container.querySelector(`.${styles.handleSingle}`);
+    const handleVisual = container.querySelector(`.${styles.handleVisual}`);
+
+    expect(handle).toBeInTheDocument();
+    expect(handleVisual?.parentElement).toBe(handle);
+    expect(control?.getAttribute('style')).toContain('--slider-value-position: calc(var(--slider-scale-inset)');
+    expect(sliderCss).toContain('inset-inline-start: var(--slider-value-position);');
+    expect(sliderCss).toContain('inset-block-start: calc(100% - var(--slider-value-position));');
+  });
+
+  it('does not emit raw percent step positioning styles', () => {
+    const { container } = render(<Slider aria-label="No raw step percent" showSteps steps={[50]} defaultValue={50} />);
+
+    container.querySelectorAll(`.${styles.step}`).forEach((step) => {
+      expect(step.getAttribute('style')).toContain('--slider-step-position: calc(var(--slider-scale-inset)');
+      expect(step.getAttribute('style')).not.toContain('--slider-step-percent');
+    });
   });
 
   it('sets standard slider positions for 0 50 and 100 on the shared inset helper', () => {
@@ -187,15 +260,15 @@ describe('Slider', () => {
     expectStandardSegmentGap(control?.getAttribute('style'));
   });
 
-  it('derives handle and stop positions from the shared inset helper', () => {
-    expect(getInsetPosition(0)).toBe(
-      'calc(var(--slider-scale-inset) + ((100% - (var(--slider-scale-inset) * 2)) * 0))',
+  it('derives handle and step positions from the shared visual position helper', () => {
+    expect(getVisualPosition(0)).toBe(
+      'calc(var(--slider-scale-inset) + ((100% - var(--slider-scale-inset) - var(--slider-scale-inset)) * 0))',
     );
-    expect(getInsetPosition(50)).toBe(
-      'calc(var(--slider-scale-inset) + ((100% - (var(--slider-scale-inset) * 2)) * 0.5))',
+    expect(getVisualPosition(50)).toBe(
+      'calc(var(--slider-scale-inset) + ((100% - var(--slider-scale-inset) - var(--slider-scale-inset)) * 0.5))',
     );
-    expect(getInsetPosition(100)).toBe(
-      'calc(var(--slider-scale-inset) + ((100% - (var(--slider-scale-inset) * 2)) * 1))',
+    expect(getVisualPosition(100)).toBe(
+      'calc(var(--slider-scale-inset) + ((100% - var(--slider-scale-inset) - var(--slider-scale-inset)) * 1))',
     );
   });
 
@@ -267,6 +340,41 @@ describe('SliderCentered', () => {
     expectInsetPosition(control?.getAttribute('style'), 0.5);
     expectInsetPosition(control?.getAttribute('style'), 0.25);
   });
+
+  it('positions centered slider explicit steps with the shared helper', () => {
+    const { container } = render(
+      <SliderCentered aria-label="Centered steps" showSteps steps={[-50, 0, 50]} defaultValue={0} />,
+    );
+
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(steps).toHaveLength(5);
+    expectInsetPosition(steps[0]?.getAttribute('style'), 0);
+    expectInsetPosition(steps[2]?.getAttribute('style'), 0.5);
+    expectInsetPosition(steps[4]?.getAttribute('style'), 1);
+  });
+
+  it('renders centered slider steps in the shared coordinate layer', () => {
+    const { container } = render(<SliderCentered aria-label="Centered layers" defaultValue={0} showSteps />);
+
+    expectSharedCoordinateLayer(container);
+  });
+
+  it('uses the exact origin-position string for the centered zero step', () => {
+    const { container } = render(
+      <SliderCentered aria-label="Centered matching step" showSteps steps={[-50, 0, 50]} defaultValue={0} />,
+    );
+
+    const control = container.querySelector(`.${styles.control}`);
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(getCustomProperty(steps[2], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-origin-position'),
+    );
+    expect(getCustomProperty(steps[2], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-value-position'),
+    );
+  });
 });
 
 describe('SliderRange', () => {
@@ -305,7 +413,7 @@ describe('SliderRange', () => {
     const upper = screen.getByRole('slider', { name: /Maximum value/ });
 
     fireEvent.change(lower, { target: { value: '90' } });
-    expect(handleValueChange).toHaveBeenLastCalledWith([75, 75], expect.objectContaining({ target: lower }));
+    expect(handleValueChange).toHaveBeenLastCalledWith([74, 75], expect.objectContaining({ target: lower }));
 
     expect(lower).toHaveAttribute('min', '0');
     expect(lower).toHaveAttribute('max', '100');
@@ -350,7 +458,42 @@ describe('SliderRange', () => {
 
     fireEvent.change(upper, { target: { value: '10' } });
 
-    expect(handleValueChange).toHaveBeenLastCalledWith([25, 25], expect.objectContaining({ target: upper }));
+    expect(handleValueChange).toHaveBeenLastCalledWith([25, 26], expect.objectContaining({ target: upper }));
+  });
+
+  it('respects custom minDistance for lower and upper handles', () => {
+    const handleValueChange = vi.fn();
+
+    render(<SliderRange label="Budget" defaultValue={[25, 75]} minDistance={10} onValueChange={handleValueChange} />);
+
+    const lower = screen.getByRole('slider', { name: /Minimum value/ });
+    const upper = screen.getByRole('slider', { name: /Maximum value/ });
+
+    fireEvent.change(lower, { target: { value: '72' } });
+    expect(handleValueChange).toHaveBeenLastCalledWith([65, 75], expect.objectContaining({ target: lower }));
+
+    fireEvent.change(upper, { target: { value: '30' } });
+    expect(handleValueChange).toHaveBeenLastCalledWith([65, 75], expect.objectContaining({ target: upper }));
+  });
+
+  it('allows thumb swapping when disableSwap is false', () => {
+    const handleValueChange = vi.fn();
+
+    render(
+      <SliderRange
+        label="Budget"
+        defaultValue={[25, 75]}
+        disableSwap={false}
+        minDistance={0}
+        onValueChange={handleValueChange}
+      />,
+    );
+
+    const lower = screen.getByRole('slider', { name: /Minimum value/ });
+
+    fireEvent.change(lower, { target: { value: '90' } });
+
+    expect(handleValueChange).toHaveBeenLastCalledWith([75, 90], expect.objectContaining({ target: lower }));
   });
 
   it('supports custom handle labels without a visible label', () => {
@@ -373,6 +516,8 @@ describe('SliderRange', () => {
 
     const control = container.querySelector(`.${styles.control}`);
 
+    expect(container.querySelector(`.${styles.handleLower}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.handleUpper}`)).toBeInTheDocument();
     expectInsetPosition(control?.getAttribute('style'), 0.25);
     expectInsetPosition(control?.getAttribute('style'), 0.75);
     expect(control?.getAttribute('style')).toContain(
@@ -380,6 +525,38 @@ describe('SliderRange', () => {
     );
     expect(control?.getAttribute('style')).toContain(
       '--slider-active-end: calc(var(--slider-upper-position) - var(--slider-internal-gap))',
+    );
+  });
+
+  it('positions range explicit steps with the shared helper', () => {
+    const { container } = render(<SliderRange label="Budget" defaultValue={[25, 75]} showSteps steps={[25, 75]} />);
+
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(steps).toHaveLength(4);
+    expectInsetPosition(steps[0]?.getAttribute('style'), 0);
+    expectInsetPosition(steps[1]?.getAttribute('style'), 0.25);
+    expectInsetPosition(steps[2]?.getAttribute('style'), 0.75);
+    expectInsetPosition(steps[3]?.getAttribute('style'), 1);
+  });
+
+  it('renders range slider steps and handles in the shared coordinate layer', () => {
+    const { container } = render(<SliderRange label="Budget" defaultValue={[25, 75]} showSteps />);
+
+    expectSharedCoordinateLayer(container);
+  });
+
+  it('uses the exact lower and upper handle position strings for matching range steps', () => {
+    const { container } = render(<SliderRange label="Budget" defaultValue={[25, 75]} showSteps steps={[25, 75]} />);
+
+    const control = container.querySelector(`.${styles.control}`);
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(getCustomProperty(steps[1], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-lower-position'),
+    );
+    expect(getCustomProperty(steps[2], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-upper-position'),
     );
   });
 
@@ -418,9 +595,38 @@ describe('slider exports', () => {
 });
 
 describe('slider CSS contract', () => {
-  it('uses semantic spacing 075 for scale inset and internal gap', () => {
-    expect(sliderCss).toContain('--slider-scale-inset: var(--spacing-075);');
+  it('uses handle half-width for scale inset and semantic spacing 075 for internal gaps', () => {
+    expect(sliderCss).toContain('--slider-scale-inset: var(--component-slider-handle-half-width);');
     expect(sliderCss).toContain('--slider-internal-gap: var(--spacing-075);');
+  });
+
+  it('uses the focus ring token mapping on the private visual handle', () => {
+    expect(sliderCss).toContain('outline: var(--border-width-focused) solid var(--color-border-focused);');
+    expect(sliderCss).toContain('outline-offset: var(--spacing-050);');
+    expect(sliderCss).not.toContain('outline-offset: var(--spacing-0);');
+  });
+
+  it('makes the native thumb transparent and uses a custom visual handle', () => {
+    expect(sliderCss).toContain('background: transparent;');
+    expect(sliderCss).toContain('.handle {');
+    expect(sliderCss).toContain('.handleVisual {');
+    expect(sliderCss).toContain('background: var(--slider-handle-visual-color);');
+    expect(sliderCss).toContain('inset-inline-start: var(--slider-lower-position);');
+    expect(sliderCss).toContain('inset-inline-start: var(--slider-upper-position);');
+  });
+
+  it('shrinks only the inner visual handle to the pressed width without changing positioning rules', () => {
+    expect(sliderCss).toContain('--slider-handle-width-pressed: var(--dimension-2);');
+    expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\']):active .handleSingle .handleVisual');
+    expect(sliderCss).toContain(
+      '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):active .handleLower .handleVisual',
+    );
+    expect(sliderCss).toContain('.control:has(.singleInput[data-preview-state=\'press\']) .handleSingle .handleVisual');
+    expect(sliderCss).toContain('inline-size: var(--slider-handle-width-pressed);');
+    expect(sliderCss).toContain('.handle {');
+    expect(sliderCss).toContain('inline-size: var(--slider-handle-width);');
+    expect(sliderCss).toContain('transform: translate(-50%, -50%);');
+    expect(sliderCss).toContain('transform: translate(-50%, -50%) rotate(90deg);');
   });
 
   it('does not use stop-layer padding or transparent handle extensions', () => {
@@ -432,6 +638,10 @@ describe('slider CSS contract', () => {
   it('positions stops from the shared step position variable without layer padding', () => {
     expect(sliderCss).toContain('inset-inline-start: var(--slider-step-position);');
     expect(sliderCss).toContain('inset-block-start: calc(100% - var(--slider-step-position));');
+    expect(sliderCss).toContain('.steps,');
+    expect(sliderCss).toContain('.handles,');
+    expect(sliderCss).toContain('.valueIndicators');
+    expect(sliderCss).toContain('inset: 0;');
     expect(sliderCss).not.toContain('padding-inline: var(--slider-stop-layer-padding)');
     expect(sliderCss).not.toContain('padding-block: var(--slider-stop-layer-padding)');
   });

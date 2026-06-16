@@ -59,10 +59,12 @@ export function getPercent(value: number, min: number, max: number) {
   return clampValue(((value - min) / (max - min)) * 100, 0, 100);
 }
 
-export function getInsetPosition(percent: number) {
+export function getVisualPosition(percent: number) {
   const clampedPercent = clampValue(percent, 0, 100);
-  return `calc(var(--slider-scale-inset) + ((100% - (var(--slider-scale-inset) * 2)) * ${clampedPercent / 100}))`;
+  return `calc(var(--slider-scale-inset) + ((100% - var(--slider-scale-inset) - var(--slider-scale-inset)) * ${clampedPercent / 100}))`;
 }
+
+export const getInsetPosition = getVisualPosition;
 
 export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined, min: number, max: number, step: number) {
   const edgeSteps = [min, max];
@@ -70,7 +72,7 @@ export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined,
     Array.from(new Set(values)).filter((stepValue) => stepValue >= min && stepValue <= max).sort((a, b) => a - b);
 
   if (steps?.length) {
-    return showSteps ? sortedUniqueSteps(steps) : sortedUniqueSteps(edgeSteps);
+    return showSteps ? sortedUniqueSteps([...edgeSteps, ...steps]) : sortedUniqueSteps(edgeSteps);
   }
 
   if (!showSteps) {
@@ -155,7 +157,7 @@ export function getStepModels(
     return {
       value: stepValue,
       percent,
-      position: getInsetPosition(percent),
+      position: getVisualPosition(percent),
       active: percent >= startPercent && percent <= endPercent,
     };
   });
@@ -232,16 +234,16 @@ export function SliderBaseComponent(
   const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
   const currentValue = clampValue(isControlled ? value : uncontrolledValue, min, max);
   const valuePercent = getPercent(currentValue, min, max);
-  const minPosition = getInsetPosition(0);
-  const maxPosition = getInsetPosition(100);
-  const valuePosition = getInsetPosition(valuePercent);
+  const minPosition = getVisualPosition(0);
+  const maxPosition = getVisualPosition(100);
+  const valuePosition = getVisualPosition(valuePercent);
   const origin = clampValue(0, min, max);
   const originPercent = getPercent(origin, min, max);
-  const originPosition = getInsetPosition(originPercent);
+  const originPosition = getVisualPosition(originPercent);
   const startPercent = fillMode === 'centered' ? Math.min(originPercent, valuePercent) : 0;
   const endPercent = fillMode === 'centered' ? Math.max(originPercent, valuePercent) : valuePercent;
-  const startPosition = getInsetPosition(startPercent);
-  const endPosition = getInsetPosition(endPercent);
+  const startPosition = getVisualPosition(startPercent);
+  const endPosition = getVisualPosition(endPercent);
   const stepModels = getStepModels(showSteps, steps, min, max, step, startPercent, endPercent);
   const { activeShape, segmentStyles } = getSingleSegmentStyles(fillMode, valuePercent, originPercent);
   const { isDragging, startDragging, stopDragging } = useSliderDragState();
@@ -306,7 +308,6 @@ export function SliderBaseComponent(
                 key={stepMarker.value}
                 style={
                   {
-                    '--slider-step-percent': `${stepMarker.percent}%`,
                     '--slider-step-position': stepMarker.position,
                   } as React.CSSProperties
                 }
@@ -321,6 +322,12 @@ export function SliderBaseComponent(
           <output className={styles.valueIndicator} htmlFor={inputId}>
             {currentValue}
           </output>
+        </div>
+
+        <div className={styles.handles} aria-hidden="true">
+          <span className={mergeClassNames(styles.handle, styles.handleSingle)}>
+            <span className={styles.handleVisual} />
+          </span>
         </div>
 
         <input

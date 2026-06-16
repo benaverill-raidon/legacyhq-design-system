@@ -1,0 +1,97 @@
+.root {
+  --link-color: var(--color-link-default);
+  --link-color-pressed: var(--color-link-pressed);
+  --link-color-visited: var(--color-link-visited-default);
+  --link-color-visited-pressed: var(--color-link-visited-pressed);
+  --link-icon-size: var(--dimension-16);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-050);
+  width: fit-content;
+  color: var(--link-color);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+  text-decoration-line: none;
+  cursor: pointer;
+}
+
+.root:hover,
+.root:active {
+  text-decoration-line: underline;
+}
+
+.root:active {
+  color: var(--link-color-pressed);
+}
+
+.root:visited {
+  color: var(--link-color-visited);
+}
+
+.root:visited:active {
+  color: var(--link-color-visited-pressed);
+}
+
+.appearance_default {
+  --link-color: var(--color-link-default);
+  --link-color-pressed: var(--color-link-pressed);
+  --link-color-visited: var(--color-link-visited-default);
+  --link-color-visited-pressed: var(--color-link-visited-pressed);
+}
+
+.appearance_subtle {
+  --link-color: var(--color-content-subtle);
+  --link-color-pressed: var(--color-content-default);
+  --link-color-visited: var(--color-link-visited-default);
+  --link-color-visited-pressed: var(--color-link-visited-pressed);
+}
+
+.appearance_inverse {
+  --link-color: var(--color-content-inverse);
+  --link-color-pressed: var(--color-content-inverse);
+  --link-color-visited: var(--color-content-inverse);
+  --link-color-visited-pressed: var(--color-content-inverse);
+}
+
+.size_sm {
+  --link-icon-size: var(--dimension-12);
+
+  font-family: var(--typography-heading-xxs-font-family);
+  font-size: var(--typography-heading-xxs-font-size);
+  font-weight: var(--typography-heading-xxs-font-weight);
+  line-height: var(--typography-heading-xxs-line-height);
+  letter-spacing: var(--typography-heading-xxs-letter-spacing);
+  text-transform: var(--typography-heading-xxs-text-transform);
+}
+
+.size_md {
+  --link-icon-size: var(--dimension-16);
+}
+
+.content {
+  min-inline-size: 0;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  inline-size: var(--link-icon-size);
+  block-size: var(--link-icon-size);
+  color: inherit;
+  line-height: var(--spacing-0);
+}
+
+.iconSvg {
+  display: block;
+  inline-size: var(--link-icon-size);
+  block-size: var(--link-icon-size);
+  fill: currentColor;
+  color: inherit;
+}

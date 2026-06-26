@@ -1,7 +1,9 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-050);
+  gap: var(--spacing-025);
+  min-block-size: var(--component-checkbox-item-min-height);
+  overflow: visible;
   width: fit-content;
   color: var(--color-content-default);
   font-family: var(--typography-body-md-font-family);
@@ -20,8 +22,9 @@
   align-items: center;
   justify-content: center;
   inline-size: var(--component-checkbox-hit-area-size);
-  block-size: var(--component-checkbox-hit-area-size);
-  border-radius: var(--border-radius-sm);
+  block-size: var(--component-checkbox-item-min-height);
+  border-radius: var(--border-radius-full-round);
+  overflow: visible;
 }
 
 .input {
@@ -29,11 +32,11 @@
   inset-block-start: 50%;
   inset-inline-start: 50%;
   z-index: 1;
-  inline-size: var(--component-checkbox-indicator-size);
-  block-size: var(--component-checkbox-indicator-size);
-  margin: 0;
+  inline-size: var(--component-checkbox-hit-area-size);
+  block-size: var(--component-checkbox-hit-area-size);
+  margin: var(--spacing-0);
   border: 0;
-  border-radius: var(--border-radius-xs);
+  border-radius: var(--border-radius-full-round);
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
@@ -41,42 +44,66 @@
   transform: translate(-50%, -50%);
 }
 
-.indicator {
-  position: relative;
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
+
+.indicatorTarget {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  inline-size: var(--component-checkbox-hit-area-size);
+  block-size: var(--component-checkbox-hit-area-size);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-selected-subtle-default);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.indicatorFocus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--component-checkbox-indicator-focus-size);
+  block-size: var(--component-checkbox-indicator-focus-size);
+  border-radius: var(--border-radius-sm);
+}
+
+.input:focus-visible + .indicatorTarget .indicatorFocus {
+  outline: var(--border-width-bold) solid var(--color-border-focused);
+  outline-offset: var(--spacing-0);
+}
+
+.indicatorIcon {
+  display: none;
   inline-size: var(--component-checkbox-indicator-size);
   block-size: var(--component-checkbox-indicator-size);
-  border: var(--border-width-default) solid var(--color-border-input);
+  color: var(--color-border-input);
+}
+
+.uncheckedIcon {
+  display: inline-flex;
+}
+
+.selectedIcon {
   border-radius: var(--border-radius-xs);
-  background: var(--color-background-input-default);
-  pointer-events: none;
-}
-
-.indicator::before,
-.indicator::after {
-  position: absolute;
-  content: '';
-  opacity: 0;
-}
-
-.indicator::before {
-  inline-size: var(--spacing-050);
-  block-size: var(--spacing-100);
-  border-color: var(--color-content-inverse);
-  border-style: solid;
-  border-width: 0 var(--border-width-selected) var(--border-width-selected) 0;
-  transform: rotate(45deg);
-  transform-origin: center;
-  translate: 0 calc(var(--spacing-025) * -1);
-}
-
-.indicator::after {
-  inline-size: var(--spacing-100);
-  block-size: var(--border-width-selected);
-  border-radius: var(--border-radius-full-round);
   background: var(--color-content-inverse);
+  color: var(--color-content-selected);
+}
+
+.input:checked + .indicatorTarget .uncheckedIcon,
+.root[data-indeterminate='true'] .indicatorTarget .uncheckedIcon,
+.root[data-indeterminate='true'] .indicatorTarget .checkedIcon {
+  display: none;
+}
+
+.input:checked + .indicatorTarget .checkedIcon,
+.root[data-indeterminate='true'] .indicatorTarget .indeterminateIcon {
+  display: inline-flex;
 }
 
 .labelText {
@@ -90,64 +117,22 @@
   color: var(--color-content-error);
 }
 
-.root:not([data-disabled='true']):hover .indicator {
-  background: var(--color-background-input-hovered);
+.root:not([data-disabled='true']):hover .indicatorTarget,
+.root:global(.previewHover):not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-selected-subtle-hovered);
 }
 
-.root:not([data-disabled='true']):active .indicator {
-  background: var(--color-background-input-pressed);
+.root:not([data-disabled='true']):active .indicatorTarget,
+.root:global(.previewPress):not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-selected-subtle-pressed);
 }
 
-.input:checked + .indicator,
-.root[data-indeterminate='true'] .indicator {
-  border-color: var(--color-background-selected-bold-default);
-  background: var(--color-background-selected-bold-default);
+.root[data-invalid='true'] .indicatorIcon {
+  color: var(--color-border-error);
 }
 
-.root:not([data-disabled='true']):hover .input:checked + .indicator,
-.root:not([data-disabled='true'])[data-indeterminate='true']:hover .indicator {
-  border-color: var(--color-background-selected-bold-hovered);
-  background: var(--color-background-selected-bold-hovered);
-}
-
-.root:not([data-disabled='true']):active .input:checked + .indicator,
-.root:not([data-disabled='true'])[data-indeterminate='true']:active .indicator {
-  border-color: var(--color-background-selected-bold-pressed);
-  background: var(--color-background-selected-bold-pressed);
-}
-
-.input:checked + .indicator::before {
-  opacity: 1;
-}
-
-.root[data-indeterminate='true'] .indicator::before {
-  opacity: 0;
-}
-
-.root[data-indeterminate='true'] .indicator::after {
-  opacity: 1;
-}
-
-.root[data-invalid='true'] .indicator {
-  border-color: var(--color-border-error);
-}
-
-.root[data-invalid='true'] .input:checked + .indicator,
-.root[data-invalid='true'][data-indeterminate='true'] .indicator {
-  border-color: var(--color-border-error);
-  background: var(--color-background-selected-bold-default);
-}
-
-.root[data-invalid='true']:not([data-disabled='true']):hover .input:checked + .indicator,
-.root[data-invalid='true']:not([data-disabled='true'])[data-indeterminate='true']:hover .indicator {
-  border-color: var(--color-border-error);
-  background: var(--color-background-selected-bold-hovered);
-}
-
-.root[data-invalid='true']:not([data-disabled='true']):active .input:checked + .indicator,
-.root[data-invalid='true']:not([data-disabled='true'])[data-indeterminate='true']:active .indicator {
-  border-color: var(--color-border-error);
-  background: var(--color-background-selected-bold-pressed);
+.root[data-invalid='true'] .selectedIcon {
+  background: var(--color-content-inverse);
 }
 
 .root[data-disabled='true'] {
@@ -155,17 +140,18 @@
   cursor: not-allowed;
 }
 
-.root[data-disabled='true'] .indicator,
-.root[data-disabled='true']:hover .indicator,
-.root[data-disabled='true']:active .indicator {
-  border-color: transparent;
+.root[data-disabled='true'] .indicatorTarget,
+.root[data-disabled='true']:hover .indicatorTarget,
+.root[data-disabled='true']:active .indicatorTarget,
+.root:global(.previewHover)[data-disabled='true'] .indicatorTarget,
+.root:global(.previewPress)[data-disabled='true'] .indicatorTarget {
+  background: var(--color-background-selected-subtle-default);
+}
+
+.root[data-disabled='true'] .indicatorIcon {
+  color: var(--color-content-disabled);
+}
+
+.root[data-disabled='true'] .selectedIcon {
   background: var(--color-background-disabled);
-}
-
-.root[data-disabled='true'] .indicator::before {
-  border-color: var(--color-content-disabled);
-}
-
-.root[data-disabled='true'] .indicator::after {
-  background: var(--color-content-disabled);
 }

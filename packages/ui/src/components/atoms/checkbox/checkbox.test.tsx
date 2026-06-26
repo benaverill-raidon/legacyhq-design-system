@@ -1,8 +1,13 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Checkbox } from './checkbox';
 import styles from './checkbox.module.css';
+
+const checkboxCss = readFileSync('packages/ui/src/components/atoms/checkbox/checkbox.module.css', 'utf8');
+const tokenCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -11,6 +16,7 @@ describe('Checkbox', () => {
     render(<Checkbox aria-label="Select row" />);
 
     expect(screen.getByRole('checkbox', { name: 'Select row' })).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: 'Select row' }).tagName).toBe('INPUT');
   });
 
   it('renders a visible label', () => {
@@ -78,13 +84,28 @@ describe('Checkbox', () => {
     expect(screen.getByRole('checkbox', { name: 'Mixed' })).toBeChecked();
   });
 
-  it('renders a private decorative indicator without svg control icons', () => {
-    const { container } = render(<Checkbox label="Decorative indicator" />);
-    const indicator = container.querySelector(`.${styles.indicator}`);
+  it('renders the unchecked checkbox icon', () => {
+    render(<Checkbox label="Unchecked icon" />);
 
-    expect(indicator).toBeInTheDocument();
-    expect(indicator).toHaveAttribute('aria-hidden', 'true');
-    expect(container.querySelector('svg')).not.toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-empty-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-empty-icon').querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('renders the checked checkbox icon', () => {
+    render(<Checkbox label="Checked icon" defaultChecked />);
+
+    expect(screen.getByTestId('checkbox-fill-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-fill-icon').querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('renders the indeterminate checkbox icon', () => {
+    render(<Checkbox label="Indeterminate icon" indeterminate />);
+
+    expect(screen.getByTestId('checkbox-indeterminate-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-indeterminate-icon').querySelector('svg')).toHaveAttribute(
+      'aria-hidden',
+      'true',
+    );
   });
 
   it('applies disabled state and prevents interaction', () => {
@@ -156,10 +177,31 @@ describe('Checkbox', () => {
     expect(screen.getByRole('checkbox', { name: 'Select current row' })).toBeInTheDocument();
   });
 
-  it('uses expected base classes', () => {
+  it('uses expected base classes and indicator focus anatomy', () => {
     const { container } = render(<Checkbox label="Classes" />);
+    const input = screen.getByRole('checkbox', { name: 'Classes' });
 
     expect(container.querySelector('label')).toHaveClass(styles.root);
-    expect(screen.getByRole('checkbox', { name: 'Classes' })).toHaveClass(styles.input);
+    expect(input).toHaveClass(styles.input);
+    expect(container.querySelector(`.${styles.indicatorTarget}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.indicatorFocus}`)).toBeInTheDocument();
+  });
+  it('uses compact density tokens for item, target, and focus anatomy', () => {
+    expect(checkboxCss).toMatch(/\.root \{[^}]*gap: var\(--spacing-025\);/);
+    expect(checkboxCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/);
+    expect(checkboxCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus {');
+    expect(checkboxCss).not.toContain('.input:focus-visible + .indicatorTarget {');
+    expect(checkboxCss).not.toMatch(/\.indicatorTarget \{[^}]*outline:/);
+    expect(checkboxCss).toContain('min-block-size: var(--component-checkbox-item-min-height);');
+    expect(checkboxCss).toContain('block-size: var(--component-checkbox-item-min-height);');
+    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-hit-area-size);');
+    expect(checkboxCss).toContain('block-size: var(--component-checkbox-hit-area-size);');
+    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-focus-size);');
+    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-focus-size);');
+    expect(checkboxCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-sm\);/);
+    expect(tokenCss).toContain('--component-checkbox-indicator-focus-size: var(--dimension-16);');
+    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-size);');
+    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-size);');
+    expect(checkboxCss).toContain('outline-offset: var(--spacing-0);');
   });
 });

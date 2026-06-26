@@ -1,11 +1,11 @@
 import type * as React from 'react';
 
-export type ToggleSize = 'sm' | 'md';
+export type SwitchSize = 'sm' | 'md';
 
-export interface ToggleProps
+export interface SwitchProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'defaultChecked' | 'size' | 'onChange'> {
   label?: React.ReactNode;
-  size?: ToggleSize;
+  size?: SwitchSize;
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
@@ -13,3 +13,4 @@ export interface ToggleProps
   onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
+

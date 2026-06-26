@@ -16,7 +16,7 @@
   padding-block: var(--label-padding-block);
   padding-inline: var(--label-padding-inline);
   border: none;
-  border-radius: var(--border-radius-xs);
+  border-radius: var(--border-radius-sm);
   background: var(--label-background);
   color: var(--label-color);
   font-family: var(--label-font-family);

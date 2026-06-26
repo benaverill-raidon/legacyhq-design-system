@@ -21,9 +21,14 @@
       "originalName": "border/radius/lg"
     },
     "border-radius-xl": {
-      "value": "var(--border-radius-16)",
+      "value": "var(--border-radius-12)",
       "type": "float",
       "originalName": "border/radius/xl"
+    },
+    "border-radius-xxl": {
+      "value": "var(--border-radius-16)",
+      "type": "float",
+      "originalName": "border/radius/xxl"
     },
     "border-radius-full-round": {
       "value": "var(--border-radius-round)",
@@ -35,15 +40,10 @@
       "type": "float",
       "originalName": "border/width/default"
     },
-    "border-width-selected": {
+    "border-width-bold": {
       "value": "var(--border-width-2)",
       "type": "float",
-      "originalName": "border/width/selected"
-    },
-    "border-width-focused": {
-      "value": "var(--border-width-2)",
-      "type": "float",
-      "originalName": "border/width/focused"
+      "originalName": "border/width/bold"
     }
   }
 }

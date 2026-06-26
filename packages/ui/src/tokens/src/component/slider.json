@@ -17,11 +17,11 @@
           }
         },
         "radius": {
-          "value": "var(--border-radius-lg)",
+          "value": "var(--border-radius-xl)",
           "type": "dimension"
         },
         "adjacent-radius": {
-          "value": "var(--border-radius-xs)",
+          "value": "var(--border-radius-sm)",
           "type": "dimension"
         }
       },

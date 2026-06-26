@@ -137,12 +137,28 @@ export const Examples: Story = {
       <div style={cardStyle}>
         <SliderRange label="Budget range" defaultValue={[25, 75]} showValue showSteps steps={[0, 25, 50, 75, 100]} />
         <SliderRange
-          label="Minimum distance range"
-          defaultValue={[49, 50]}
+          label="Range overlapping handles"
+          defaultValue={[40, 40]}
+          showValue
+          showSteps
+          steps={[0, 25, 40, 50, 75, 100]}
+        />
+        <SliderRange
+          label="Range with minimum distance"
+          defaultValue={[20, 80]}
           minDistance={10}
           showValue
           showSteps
-          steps={[0, 25, 50, 75, 100]}
+          steps={[0, 20, 50, 80, 100]}
+        />
+        <SliderRange
+          label="Range with minimum distance and disableSwap"
+          defaultValue={[20, 80]}
+          minDistance={10}
+          disableSwap
+          showValue
+          showSteps
+          steps={[0, 20, 50, 80, 100]}
         />
         <SliderRange label="Lower handle moved" defaultValue={[10, 70]} showValue showSteps steps={[0, 10, 25, 50, 70, 100]} />
         <SliderRange label="Upper handle moved" defaultValue={[30, 90]} showValue showSteps steps={[0, 30, 50, 75, 90, 100]} />
@@ -169,7 +185,7 @@ export const Examples: Story = {
         <SliderRange
           aria-label="Tall vertical range slider"
           orientation="vertical"
-          defaultValue={[25, 75]}
+          defaultValue={[50, 50]}
           showValue
           showSteps
           steps={[0, 25, 50, 75, 100]}

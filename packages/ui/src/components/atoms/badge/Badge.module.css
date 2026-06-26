@@ -8,7 +8,7 @@
   padding-block: var(--spacing-0);
   padding-inline: var(--spacing-050);
   border: 0;
-  border-radius: var(--border-radius-xs);
+  border-radius: var(--border-radius-sm);
   background: var(--color-elevation-surface-default);
   color: var(--color-content-default);
   font-family: var(--typography-overline-sm-font-family);

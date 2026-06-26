@@ -1,8 +1,12 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Label } from './Label';
 import styles from './Label.module.css';
+
+const labelCss = readFileSync('packages/ui/src/components/atoms/label/Label.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -74,5 +78,9 @@ describe('Label', () => {
     render(<Label>Static</Label>);
 
     expect(screen.getByText('Static')).not.toHaveAttribute('tabindex');
+  });
+
+  it('uses the small semantic border radius token', () => {
+    expect(labelCss).toContain('border-radius: var(--border-radius-sm);');
   });
 });

@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const RadioUncheckedIcon = React.memo(function RadioUncheckedIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path fillRule="evenodd" clipRule="evenodd" d="M8 3.33333C5.42267 3.33333 3.33333 5.42267 3.33333 8C3.33333 10.5773 5.42267 12.6667 8 12.6667C10.5773 12.6667 12.6667 10.5773 12.6667 8C12.6667 5.42267 10.5773 3.33333 8 3.33333ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+RadioUncheckedIcon.displayName = 'RadioUncheckedIcon';

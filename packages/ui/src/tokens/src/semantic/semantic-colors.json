@@ -830,6 +830,21 @@
       "type": "color",
       "originalName": "color/background/selected/pressed"
     },
+    "color-background-selected-subtle-default": {
+      "value": "rgba(0, 54, 85, 0)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/default"
+    },
+    "color-background-selected-subtle-hovered": {
+      "value": "var(--color-brand-prussian-alpha-light-200a)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/hovered"
+    },
+    "color-background-selected-subtle-pressed": {
+      "value": "var(--color-brand-prussian-alpha-light-300a)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/pressed"
+    },
     "color-background-selected-bold-default": {
       "value": "var(--color-brand-prussian-900)",
       "type": "color",
@@ -2096,6 +2111,21 @@
       "value": "var(--color-brand-prussian-700)",
       "type": "color",
       "originalName": "color/background/selected/pressed"
+    },
+    "color-background-selected-subtle-default": {
+      "value": "rgba(106, 173, 212, 0)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/default"
+    },
+    "color-background-selected-subtle-hovered": {
+      "value": "var(--color-brand-prussian-alpha-dark-200a)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/hovered"
+    },
+    "color-background-selected-subtle-pressed": {
+      "value": "var(--color-brand-prussian-alpha-dark-300a)",
+      "type": "color",
+      "originalName": "color/background/selected/subtle/pressed"
     },
     "color-background-selected-bold-default": {
       "value": "var(--color-brand-prussian-500)",

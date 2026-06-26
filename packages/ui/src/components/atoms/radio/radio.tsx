@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { focusRingClassNames } from '../../primitives/focus-ring';
+import { RadioCheckedIcon, RadioUncheckedIcon } from '../../../assets/icons';
 import styles from './radio.module.css';
 import type { RadioProps } from './radio.types';
 
@@ -61,12 +61,7 @@ export const Radio = React.memo(
             {...rest}
             ref={(node) => setRefs(node, forwardedRef)}
             id={inputId}
-            className={mergeClassNames(
-              styles.input,
-              focusRingClassNames.focusRing,
-              focusRingClassNames.focusRingDefault,
-              inputClassName,
-            )}
+            className={mergeClassNames(styles.input, inputClassName)}
             type="radio"
             checked={checked}
             defaultChecked={defaultChecked}
@@ -75,7 +70,20 @@ export const Radio = React.memo(
             aria-invalid={invalid ? true : ariaInvalid}
             onChange={handleChange}
           />
-          <span className={styles.indicator} aria-hidden="true" />
+          <span className={styles.indicatorTarget} aria-hidden="true">
+            <span className={styles.indicatorFocus}>
+              <RadioUncheckedIcon
+                className={mergeClassNames(styles.indicatorIcon, styles.uncheckedIcon)}
+                decorative
+                testId="radio-unchecked-icon"
+              />
+              <RadioCheckedIcon
+                className={mergeClassNames(styles.indicatorIcon, styles.checkedIcon)}
+                decorative
+                testId="radio-checked-icon"
+              />
+            </span>
+          </span>
         </span>
 
         {label !== undefined ? (

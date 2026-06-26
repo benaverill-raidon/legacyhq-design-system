@@ -1,15 +1,15 @@
-# Toggle Component Codex Instructions
+# Switch Component Codex Instructions
 
 ## Task
 
-Implement the `Toggle` atom component for the design system.
+Implement the `Switch` atom component for the design system.
 
 ## Source Priority
 
-1. `toggle-component-spec.md`
-2. `toggle-component-prompt.md`
+1. `switch-component-spec.md`
+2. `switch-component-prompt.md`
 3. Figma screenshots / Figma plugin inspection
-4. `toggle-component-checklist.md`
+4. `switch-component-checklist.md`
 
 If anything conflicts, follow the higher-priority source.
 
@@ -18,18 +18,18 @@ If anything conflicts, follow the higher-priority source.
 Create:
 
 ```txt
-packages/ui/src/components/atoms/toggle/
-├── toggle.tsx
-├── toggle.types.ts
-├── toggle.module.css
-├── toggle.test.tsx
-├── toggle.stories.tsx
+packages/ui/src/components/atoms/switch/
+├── switch.tsx
+├── switch.types.ts
+├── switch.module.css
+├── switch.test.tsx
+├── switch.stories.tsx
 └── index.ts
 ```
 
 ## Implementation Direction
 
-Build Toggle as a native checkbox input with switch semantics:
+Build Switch as a native checkbox input with switch semantics:
 
 ```tsx
 <input type="checkbox" role="switch" />
@@ -52,7 +52,7 @@ Internal check/X marks may be CSS pseudo-elements or private inline SVG, but the
 Use this API unless the spec says otherwise:
 
 ```ts
-export interface ToggleProps
+export interface SwitchProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
     'type' | 'checked' | 'defaultChecked' | 'size'
@@ -97,11 +97,11 @@ Use semantic color tokens:
 
 Use component-scoped geometry tokens where needed:
 
-- `--component-toggle-track-width`
-- `--component-toggle-track-height`
-- `--component-toggle-thumb-size`
-- `--component-toggle-thumb-offset`
-- `--component-toggle-thumb-translate-x`
+- `--component-switch-track-width`
+- `--component-switch-track-height`
+- `--component-switch-thumb-size`
+- `--component-switch-thumb-offset`
+- `--component-switch-thumb-translate-x`
 
 Codex should inspect the Figma component via plugin access to determine the exact geometry values.
 
@@ -122,7 +122,7 @@ Respect `prefers-reduced-motion`.
 Use:
 
 ```txt
-Toggle
+Switch
 ├─ Playground
 ├─ Variants
 └─ Examples
@@ -174,3 +174,5 @@ After implementation, summarize:
 5. Missing tokens
 6. Files changed
 7. Spec compliance confirmation
+
+

@@ -1,9 +1,13 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Radio } from './radio';
 import { RadioGroup } from './radio-group';
+
+const radioCss = readFileSync('packages/ui/src/components/atoms/radio/radio.module.css', 'utf8');
 
 const options = [
   { value: 'one', label: 'One' },
@@ -152,5 +156,9 @@ describe('RadioGroup', () => {
     first.focus();
 
     expect(first).toHaveFocus();
+  });
+  it('uses zero group gap for compact radio groups', () => {
+    expect(radioCss).toMatch(/\.options \{[^}]*gap: var\(--spacing-0\);/);
+    expect(radioCss).not.toContain('gap: -');
   });
 });

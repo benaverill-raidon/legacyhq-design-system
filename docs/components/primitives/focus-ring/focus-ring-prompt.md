@@ -86,7 +86,7 @@ Use CSS variables only.
 Required token mapping:
 
 ```txt
-default → --border-width-focused
+default → --border-width-bold
 compact → --border-width-default
 both → --color-border-focused
 ```
@@ -101,7 +101,7 @@ Preferred CSS behavior:
 }
 
 .focusRingDefault:focus-visible {
-  outline-width: var(--border-width-focused);
+  outline-width: var(--border-width-bold);
 }
 
 .focusRingCompact:focus-visible {
@@ -172,7 +172,7 @@ Create tests for:
 
 1. Follow `focus-ring-spec.md` exactly.
 2. Use `--color-border-focused` for color.
-3. Use `--border-width-focused` for default.
+3. Use `--border-width-bold` for default.
 4. Use `--border-width-default` for compact.
 5. Use `:focus-visible`.
 6. No MUI.

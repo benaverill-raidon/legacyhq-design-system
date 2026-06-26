@@ -56,6 +56,15 @@
   --link-color-pressed: var(--color-content-inverse);
   --link-color-visited: var(--color-content-inverse);
   --link-color-visited-pressed: var(--color-content-inverse);
+
+  color: var(--color-content-inverse);
+}
+
+.appearance_inverse:hover,
+.appearance_inverse:active,
+.appearance_inverse:focus-visible,
+.appearance_inverse:visited {
+  color: var(--color-content-inverse);
 }
 
 .size_sm {

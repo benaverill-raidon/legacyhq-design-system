@@ -7,11 +7,11 @@
   --border-radius-sm: var(--border-radius-4);
   --border-radius-md: var(--border-radius-5);
   --border-radius-lg: var(--border-radius-8);
-  --border-radius-xl: var(--border-radius-16);
+  --border-radius-xl: var(--border-radius-12);
+  --border-radius-xxl: var(--border-radius-16);
   --border-radius-full-round: var(--border-radius-round);
   --border-width-default: var(--border-width-1);
-  --border-width-selected: var(--border-width-2);
-  --border-width-focused: var(--border-width-2);
+  --border-width-bold: var(--border-width-2);
   --spacing-minus-minus-400: var(--dimension-minus-32);
   --spacing-minus-minus-300: var(--dimension-minus-24);
   --spacing-minus-minus-250: var(--dimension-minus-20);
@@ -321,6 +321,9 @@
   --color-background-selected-default: var(--color-brand-prussian-100);
   --color-background-selected-hovered: var(--color-brand-prussian-200);
   --color-background-selected-pressed: var(--color-brand-prussian-300);
+  --color-background-selected-subtle-default: rgba(0, 54, 85, 0);
+  --color-background-selected-subtle-hovered: var(--color-brand-prussian-alpha-light-200a);
+  --color-background-selected-subtle-pressed: var(--color-brand-prussian-alpha-light-300a);
   --color-background-selected-bold-default: var(--color-brand-prussian-900);
   --color-background-selected-bold-hovered: var(--color-brand-prussian-1000);
   --color-background-selected-bold-pressed: var(--color-brand-prussian-1100);

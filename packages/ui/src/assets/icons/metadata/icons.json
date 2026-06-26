@@ -340,6 +340,39 @@
     "label": "Check"
   },
   {
+    "name": "checkbox-empty",
+    "component": "CheckboxEmptyIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "checkbox-empty",
+      "checkbox",
+      "empty"
+    ],
+    "label": "Checkbox Empty"
+  },
+  {
+    "name": "checkbox-fill",
+    "component": "CheckboxFillIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "checkbox-fill",
+      "checkbox",
+      "fill"
+    ],
+    "label": "Checkbox Fill"
+  },
+  {
+    "name": "checkbox-indeterminate",
+    "component": "CheckboxIndeterminateIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "checkbox-indeterminate",
+      "checkbox",
+      "indeterminate"
+    ],
+    "label": "Checkbox Indeterminate"
+  },
+  {
     "name": "chevron-double-left",
     "component": "ChevronDoubleLeftIcon",
     "category": "multi-purpose",
@@ -1626,6 +1659,28 @@
       "plan"
     ],
     "label": "Qualified Plan"
+  },
+  {
+    "name": "radio-checked",
+    "component": "RadioCheckedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "radio-checked",
+      "radio",
+      "checked"
+    ],
+    "label": "Radio Checked"
+  },
+  {
+    "name": "radio-unchecked",
+    "component": "RadioUncheckedIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "radio-unchecked",
+      "radio",
+      "unchecked"
+    ],
+    "label": "Radio Unchecked"
   },
   {
     "name": "real-estate",

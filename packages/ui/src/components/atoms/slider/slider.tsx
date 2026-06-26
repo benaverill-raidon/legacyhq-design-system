@@ -30,11 +30,14 @@ interface SliderBaseComponentProps extends SliderProps {
   defaultDefaultValue: number;
 }
 
+type SliderStepPlacement = 'start' | 'middle' | 'end';
+
 interface SliderStep {
   value: number;
   percent: number;
   position: string;
   active: boolean;
+  placement: SliderStepPlacement;
 }
 
 const maxAutoSteps = 25;
@@ -61,7 +64,7 @@ export function getPercent(value: number, min: number, max: number) {
 
 export function getVisualPosition(percent: number) {
   const clampedPercent = clampValue(percent, 0, 100);
-  return `calc(var(--slider-scale-inset) + ((100% - var(--slider-scale-inset) - var(--slider-scale-inset)) * ${clampedPercent / 100}))`;
+  return `calc(var(--slider-value-scale-inset) + ((100% - var(--slider-value-scale-inset) - var(--slider-value-scale-inset)) * ${clampedPercent / 100}))`;
 }
 
 export const getInsetPosition = getVisualPosition;
@@ -93,11 +96,11 @@ export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined,
 }
 
 function beforeSegmentBoundary(position: string) {
-  return `calc(${position} - var(--slider-internal-gap))`;
+  return `calc(${position} - var(--slider-current-handle-half-width) - var(--slider-current-gap))`;
 }
 
 function afterSegmentBoundary(position: string) {
-  return `calc(${position} + var(--slider-internal-gap))`;
+  return `calc(${position} + var(--slider-current-handle-half-width) + var(--slider-current-gap))`;
 }
 
 function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, originPercent: number) {
@@ -131,13 +134,13 @@ function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, 
 
   return {
     activeShape: 'middle',
-      segmentStyles: {
-        '--slider-inactive-start-start': minPositionVariable,
-        '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
-        '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
-        '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
-        '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
-        '--slider-inactive-end-end': maxPositionVariable,
+    segmentStyles: {
+      '--slider-inactive-start-start': minPositionVariable,
+      '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
+      '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
+      '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
+      '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
+      '--slider-inactive-end-end': maxPositionVariable,
     },
   };
 }
@@ -151,14 +154,19 @@ export function getStepModels(
   startPercent: number,
   endPercent: number,
 ): SliderStep[] {
-  return getDerivedSteps(showSteps, steps, min, max, step).map((stepValue) => {
+  const derivedSteps = getDerivedSteps(showSteps, steps, min, max, step);
+
+  return derivedSteps.map((stepValue, index) => {
     const percent = getPercent(stepValue, min, max);
+    const placement: SliderStepPlacement =
+      derivedSteps.length === 1 ? 'middle' : index === 0 ? 'start' : index === derivedSteps.length - 1 ? 'end' : 'middle';
 
     return {
       value: stepValue,
       percent,
       position: getVisualPosition(percent),
       active: percent >= startPercent && percent <= endPercent,
+      placement,
     };
   });
 }
@@ -278,6 +286,7 @@ export function SliderBaseComponent(
       <div
         className={styles.control}
         data-active-shape={activeShape}
+        data-has-steps={stepModels.length ? 'true' : undefined}
         style={
           {
             ...segmentStyles,
@@ -305,6 +314,7 @@ export function SliderBaseComponent(
               <span
                 className={styles.step}
                 data-active={stepMarker.active ? 'true' : undefined}
+                data-placement={stepMarker.placement}
                 key={stepMarker.value}
                 style={
                   {

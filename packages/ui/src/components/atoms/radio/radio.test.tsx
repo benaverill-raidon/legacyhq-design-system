@@ -1,8 +1,13 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Radio } from './radio';
 import styles from './radio.module.css';
+
+const radioCss = readFileSync('packages/ui/src/components/atoms/radio/radio.module.css', 'utf8');
+const tokenCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -11,6 +16,7 @@ describe('Radio', () => {
     render(<Radio aria-label="Select row" name="row" value="one" />);
 
     expect(screen.getByRole('radio', { name: 'Select row' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Select row' }).tagName).toBe('INPUT');
   });
 
   it('renders a visible label', () => {
@@ -36,6 +42,20 @@ describe('Radio', () => {
     render(<Radio label="Unchecked" name="unchecked" value="unchecked" />);
 
     expect(screen.getByRole('radio', { name: 'Unchecked' })).not.toBeChecked();
+  });
+
+  it('renders the unchecked radio icon', () => {
+    render(<Radio label="Unchecked icon" name="unchecked-icon" value="unchecked" />);
+
+    expect(screen.getByTestId('radio-unchecked-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('radio-unchecked-icon').querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('renders the checked radio icon', () => {
+    render(<Radio label="Checked icon" name="checked-icon" value="checked" defaultChecked />);
+
+    expect(screen.getByTestId('radio-checked-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('radio-checked-icon').querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('supports disabled state', () => {
@@ -95,18 +115,37 @@ describe('Radio', () => {
     expect(radio).toHaveAttribute('value', '123');
   });
 
-  it('renders a private decorative indicator without svg control icons', () => {
-    const { container } = render(<Radio label="Decorative indicator" name="decorative" value="decorative" />);
-    const indicator = container.querySelector(`.${styles.indicator}`);
+  it('uses expected base classes and indicator focus anatomy', () => {
+    const { container } = render(<Radio label="Classes" name="classes" value="classes" />);
+    const input = screen.getByRole('radio', { name: 'Classes' });
 
-    expect(indicator).toBeInTheDocument();
-    expect(indicator).toHaveAttribute('aria-hidden', 'true');
-    expect(container.querySelector('svg')).not.toBeInTheDocument();
+    expect(container.querySelector('label')).toHaveClass(styles.radio);
+    expect(input).toHaveClass(styles.input);
+    expect(container.querySelector(`.${styles.indicatorTarget}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.indicatorFocus}`)).toBeInTheDocument();
   });
 
   it('does not add a manual radio role', () => {
     render(<Radio label="Native" name="native" value="native" />);
 
     expect(screen.getByRole('radio', { name: 'Native' }).tagName).toBe('INPUT');
+  });
+  it('uses compact density tokens for item, target, and focus anatomy', () => {
+    expect(radioCss).toMatch(/\.radio \{[^}]*gap: var\(--spacing-025\);/);
+    expect(radioCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/);
+    expect(radioCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus {');
+    expect(radioCss).not.toContain('.input:focus-visible + .indicatorTarget {');
+    expect(radioCss).not.toMatch(/\.indicatorTarget \{[^}]*outline:/);
+    expect(radioCss).toContain('min-block-size: var(--component-radio-item-min-height);');
+    expect(radioCss).toContain('block-size: var(--component-radio-item-min-height);');
+    expect(radioCss).toContain('inline-size: var(--component-radio-hit-area-size);');
+    expect(radioCss).toContain('block-size: var(--component-radio-hit-area-size);');
+    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-focus-size);');
+    expect(radioCss).toContain('block-size: var(--component-radio-indicator-focus-size);');
+    expect(radioCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-full-round\);/);
+    expect(tokenCss).toContain('--component-radio-indicator-focus-size: var(--dimension-16);');
+    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-size);');
+    expect(radioCss).toContain('block-size: var(--component-radio-indicator-size);');
+    expect(radioCss).toContain('outline-offset: var(--spacing-0);');
   });
 });

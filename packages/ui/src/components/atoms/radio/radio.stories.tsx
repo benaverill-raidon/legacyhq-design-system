@@ -75,6 +75,10 @@ const cellStyle = {
   textAlign: 'start',
 } satisfies CSSProperties;
 
+const helpTextStyle = {
+  color: 'var(--color-content-subtle)',
+} satisfies CSSProperties;
+
 function ControlledGroupExample() {
   const [value, setValue] = React.useState('email');
 
@@ -95,20 +99,32 @@ export const Variants: Story = {
   render: () => (
     <div style={stackStyle}>
       <div style={rowStyle}>
-        <Radio label="Unchecked" name="radio-variants-default" value="unchecked" />
-        <Radio label="Checked" name="radio-variants-default" value="checked" defaultChecked />
-        <Radio label="Focused" name="radio-variants-focus" value="focused" autoFocus />
+        <Radio label="Unselected" name="radio-variants-default" value="unchecked" />
+        <Radio label="Selected" name="radio-variants-default" value="checked" defaultChecked />
       </div>
 
       <div style={rowStyle}>
-        <Radio label="Invalid" name="radio-variants-invalid" value="invalid-unchecked" invalid />
-        <Radio label="Invalid checked" name="radio-variants-invalid" value="invalid-checked" invalid defaultChecked />
+        <Radio label="Invalid unselected" name="radio-variants-invalid" value="invalid-unchecked" invalid />
+        <Radio label="Invalid selected" name="radio-variants-invalid" value="invalid-checked" invalid defaultChecked />
       </div>
 
       <div style={rowStyle}>
-        <Radio label="Disabled" name="radio-variants-disabled" value="disabled-unchecked" disabled />
-        <Radio label="Disabled checked" name="radio-variants-disabled" value="disabled-checked" disabled defaultChecked />
+        <Radio label="Disabled unselected" name="radio-variants-disabled" value="disabled-unchecked" disabled />
+        <Radio label="Disabled selected" name="radio-variants-disabled" value="disabled-checked" disabled defaultChecked />
         <Radio label="Required" name="radio-variants-required" value="required" required />
+      </div>
+
+      <div style={rowStyle}>
+        <Radio label="Hover" name="radio-state-hover" value="hover" className="previewHover" />
+        <Radio label="Hover selected" name="radio-state-hover" value="hover-selected" className="previewHover" defaultChecked />
+      </div>
+      <div style={rowStyle}>
+        <Radio label="Press" name="radio-state-press" value="press" className="previewPress" />
+        <Radio label="Press selected" name="radio-state-press" value="press-selected" className="previewPress" defaultChecked />
+      </div>
+      <div style={rowStyle}>
+        <Radio label="Focus" name="radio-state-focus" value="focus" autoFocus />
+        <Radio label="Disabled hover" name="radio-state-disabled" value="disabled-hover" className="previewHover" disabled defaultChecked />
       </div>
     </div>
   ),
@@ -119,6 +135,12 @@ export const Examples: Story = {
     <div style={stackStyle}>
       <div style={cardStyle}>
         <Radio label="Standalone option" name="standalone-radio" value="standalone" />
+        <Radio aria-label="Select current row" name="accessibility-row" value="row" />
+        <Radio label="Required choice" name="accessibility-required" value="required" required />
+        <Radio label="Invalid choice" name="accessibility-invalid" value="invalid" invalid aria-describedby="radio-error" />
+        <p id="radio-error" style={helpTextStyle}>
+          Choose one option before continuing.
+        </p>
       </div>
 
       <div style={cardStyle}>

@@ -1,6 +1,6 @@
 .focusRing {
   --focus-ring-color: var(--color-border-focused);
-  --focus-ring-width: var(--border-width-focused);
+  --focus-ring-width: var(--border-width-bold);
   --focus-ring-offset: 2px;
 
   border-radius: inherit;
@@ -14,7 +14,7 @@
 }
 
 .focusRingDefault {
-  --focus-ring-width: var(--border-width-focused);
+  --focus-ring-width: var(--border-width-bold);
 }
 
 .focusRingCompact {

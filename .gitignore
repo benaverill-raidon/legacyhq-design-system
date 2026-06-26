@@ -31,3 +31,6 @@ packages/ui/src/tokens/figma-export/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Throw away files
+2026-06.07/

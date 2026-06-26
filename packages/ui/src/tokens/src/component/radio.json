@@ -1,15 +1,25 @@
 {
   "component": {
     "radio": {
+      "item": {
+        "min-height": {
+          "value": "28px",
+          "type": "dimension"
+        }
+      },
       "indicator": {
         "size": {
+          "value": "var(--dimension-16)",
+          "type": "dimension"
+        },
+        "focus-size": {
           "value": "var(--dimension-16)",
           "type": "dimension"
         }
       },
       "hit-area": {
         "size": {
-          "value": "var(--dimension-24)",
+          "value": "var(--dimension-32)",
           "type": "dimension"
         }
       },

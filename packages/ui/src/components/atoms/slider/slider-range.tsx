@@ -149,7 +149,7 @@ export const SliderRange = React.memo(
       label,
       value,
       defaultValue = [25, 75],
-      minDistance = 0,
+      minDistance = 1,
       disableSwap = false,
       min = 0,
       max = 100,

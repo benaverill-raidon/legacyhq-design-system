@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -6,6 +8,8 @@ import { Link, getSecureRel } from './link';
 import styles from './link.module.css';
 
 afterEach(cleanup);
+
+const linkCss = readFileSync('packages/ui/src/components/atoms/link/link.module.css', 'utf8');
 
 describe('Link', () => {
   it('renders a native anchor with children', () => {
@@ -152,5 +156,14 @@ describe('Link', () => {
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );
+  });
+
+  it('maps the inverse appearance directly to the inverse content token across states', () => {
+    expect(linkCss).toContain('.appearance_inverse {');
+    expect(linkCss).toContain('color: var(--color-content-inverse);');
+    expect(linkCss).toContain('.appearance_inverse:hover');
+    expect(linkCss).toContain('.appearance_inverse:active');
+    expect(linkCss).toContain('.appearance_inverse:focus-visible');
+    expect(linkCss).toContain('.appearance_inverse:visited');
   });
 });

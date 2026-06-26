@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { focusRingClassNames } from '../../primitives/focus-ring';
-import styles from './toggle.module.css';
-import type { ToggleProps } from './toggle.types';
+import styles from './switch.module.css';
+import type { SwitchProps } from './switch.types';
 
 function mergeClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-export const Toggle = React.memo(
-  React.forwardRef<HTMLInputElement, ToggleProps>(function Toggle(
+export const Switch = React.memo(
+  React.forwardRef<HTMLInputElement, SwitchProps>(function Switch(
     {
       label,
       size = 'md',
@@ -79,4 +79,5 @@ export const Toggle = React.memo(
   }),
 );
 
-Toggle.displayName = 'Toggle';
+Switch.displayName = 'Switch';
+

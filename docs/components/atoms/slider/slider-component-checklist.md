@@ -20,7 +20,7 @@ Atom family.
 
 - TextField: use when precise numeric entry is required.
 - Select: use when choosing from discrete named options.
-- Toggle: use for binary on/off settings.
+- Switch: use for binary on/off settings.
 - Range: deprecated previous name. Replace with Slider naming.
 
 ## Recommended Usage

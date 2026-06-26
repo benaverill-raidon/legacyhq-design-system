@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { focusRingClassNames } from '../../primitives/focus-ring';
+import { CheckboxEmptyIcon, CheckboxFillIcon, CheckboxIndeterminateIcon } from '../../../assets/icons';
 import styles from './checkbox.module.css';
 import type { CheckboxProps } from './checkbox.types';
 
@@ -65,11 +65,7 @@ export const Checkbox = React.memo(
             {...rest}
             ref={(node) => setRefs(node, inputRef, forwardedRef)}
             id={inputId}
-            className={mergeClassNames(
-              styles.input,
-              focusRingClassNames.focusRing,
-              focusRingClassNames.focusRingDefault,
-            )}
+            className={styles.input}
             type="checkbox"
             checked={checked}
             defaultChecked={defaultChecked}
@@ -79,7 +75,25 @@ export const Checkbox = React.memo(
             aria-checked={indeterminate ? 'mixed' : ariaChecked}
             onChange={handleChange}
           />
-          <span className={styles.indicator} aria-hidden="true" />
+          <span className={styles.indicatorTarget} aria-hidden="true">
+            <span className={styles.indicatorFocus}>
+              <CheckboxEmptyIcon
+                className={mergeClassNames(styles.indicatorIcon, styles.uncheckedIcon)}
+                decorative
+                testId="checkbox-empty-icon"
+              />
+              <CheckboxFillIcon
+                className={mergeClassNames(styles.indicatorIcon, styles.selectedIcon, styles.checkedIcon)}
+                decorative
+                testId="checkbox-fill-icon"
+              />
+              <CheckboxIndeterminateIcon
+                className={mergeClassNames(styles.indicatorIcon, styles.selectedIcon, styles.indeterminateIcon)}
+                decorative
+                testId="checkbox-indeterminate-icon"
+              />
+            </span>
+          </span>
         </span>
 
         {label !== undefined ? (

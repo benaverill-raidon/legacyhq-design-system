@@ -92,15 +92,32 @@ export const Variants: Story = {
       </div>
 
       <div style={rowStyle}>
-        <Checkbox label="Invalid" invalid />
+        <Checkbox label="Invalid unchecked" invalid />
         <Checkbox label="Invalid checked" invalid defaultChecked />
+        <Checkbox label="Invalid indeterminate" invalid indeterminate />
+      </div>
+
+      <div style={rowStyle}>
+        <Checkbox label="Disabled unchecked" disabled />
+        <Checkbox label="Disabled checked" disabled defaultChecked />
+        <Checkbox label="Disabled indeterminate" disabled indeterminate />
         <Checkbox label="Required" required />
       </div>
 
       <div style={rowStyle}>
-        <Checkbox label="Disabled" disabled />
-        <Checkbox label="Disabled checked" disabled defaultChecked />
-        <Checkbox label="Focused" autoFocus />
+        <Checkbox label="Hover" className="previewHover" />
+        <Checkbox label="Hover checked" className="previewHover" defaultChecked />
+        <Checkbox label="Hover indeterminate" className="previewHover" indeterminate />
+      </div>
+      <div style={rowStyle}>
+        <Checkbox label="Press" className="previewPress" />
+        <Checkbox label="Press checked" className="previewPress" defaultChecked />
+        <Checkbox label="Press indeterminate" className="previewPress" indeterminate />
+      </div>
+      <div style={rowStyle}>
+        <Checkbox label="Focus" autoFocus />
+        <Checkbox label="Focus checked" defaultChecked />
+        <Checkbox label="Disabled hover" className="previewHover" disabled defaultChecked />
       </div>
     </div>
   ),
@@ -126,6 +143,11 @@ export const Examples: Story = {
         <Checkbox label="I agree to the retention policy" required />
         <Checkbox label="Archived option" disabled />
         <Checkbox label="This selection needs review" invalid />
+        <Checkbox aria-label="Select current row" />
+        <Checkbox label="Invalid selection with described error" invalid aria-describedby="checkbox-error" />
+        <p id="checkbox-error" style={legendStyle}>
+          Select this option before continuing.
+        </p>
       </div>
 
       <div style={cardStyle}>

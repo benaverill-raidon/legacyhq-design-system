@@ -1,32 +1,32 @@
-# Toggle Component Spec
+# Switch Component Spec
 
 ## Component Overview
 
-`Toggle` is an atom component used to switch between enabled and disabled states. It is visually similar to a switch and functionally implemented with a native checkbox input using `role="switch"`.
+`Switch` is an atom component used to switch between enabled and disabled states. It is visually similar to a switch and functionally implemented with a native checkbox input using `role="switch"`.
 
 The component must be accessible, token-driven, theme-aware, and consistent with Checkbox and Radio architecture.
 
 ## Folder Location
 
 ```txt
-packages/ui/src/components/atoms/toggle/
+packages/ui/src/components/atoms/switch/
 ```
 
 ## Required Files
 
 ```txt
-toggle.tsx
-toggle.types.ts
-toggle.module.css
-toggle.test.tsx
-toggle.stories.tsx
+switch.tsx
+switch.types.ts
+switch.module.css
+switch.test.tsx
+switch.stories.tsx
 index.ts
 ```
 
 ## Anatomy
 
 ```txt
-Toggle
+Switch
 ├─ root
 ├─ input[type="checkbox"][role="switch"]
 ├─ indicator
@@ -40,7 +40,7 @@ Toggle
 ## Public API
 
 ```ts
-export interface ToggleProps
+export interface SwitchProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
     'type' | 'checked' | 'defaultChecked' | 'size'
@@ -160,11 +160,11 @@ Do not use semantic spacing tokens directly for component anatomy if exact value
 Preferred approach:
 
 ```css
---component-toggle-track-width
---component-toggle-track-height
---component-toggle-thumb-size
---component-toggle-thumb-offset
---component-toggle-thumb-translate-x
+--component-switch-track-width
+--component-switch-track-height
+--component-switch-thumb-size
+--component-switch-thumb-offset
+--component-switch-thumb-translate-x
 ```
 
 These may map to primitive values or existing spacing tokens after Figma dimensions are confirmed.
@@ -193,7 +193,7 @@ These may map to primitive values or existing spacing tokens after Figma dimensi
 ## Storybook Structure
 
 ```txt
-Toggle
+Switch
 ├─ Playground
 ├─ Variants
 └─ Examples
@@ -227,8 +227,8 @@ Show:
 
 Show:
 
-- labeled toggle
-- toggle without visible label
+- labeled switch
+- switch without visible label
 - setting row usage
 - form usage
 - disabled setting
@@ -277,5 +277,7 @@ Test:
 - Component uses Focus Ring utilities.
 - Component uses semantic color tokens.
 - Component uses component-scoped geometry tokens where needed.
-- No shared icon-library toggle assets are introduced.
+- No shared icon-library switch assets are introduced.
 - Motion respects `prefers-reduced-motion`.
+
+

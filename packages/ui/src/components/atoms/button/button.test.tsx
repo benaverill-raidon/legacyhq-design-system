@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -6,6 +8,8 @@ import { focusRingClassNames } from '../../primitives/focus-ring';
 import { Button } from './button';
 import styles from './button.module.css';
 import type { ButtonAppearance, ButtonSize, ButtonTone } from './button.types';
+
+const buttonCss = readFileSync('packages/ui/src/components/atoms/button/button.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -175,5 +179,16 @@ describe('Button', () => {
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );
+  });
+
+  it('maps button radii by size and tokenizes the focus ring offset', () => {
+    expect(buttonCss).toContain('--button-border-radius: var(--border-radius-sm);');
+    expect(buttonCss).toContain('--focus-ring-offset: var(--spacing-025);');
+    expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
+    expect(buttonCss).toMatch(/\.size_md \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
+    expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?--button-border-radius: var\(--border-radius-xl\);/);
+    expect(buttonCss).not.toContain('border-radius: 10px;');
+    expect(buttonCss).not.toContain('border-radius: 12px;');
+    expect(buttonCss).not.toContain('border-radius: 14px;');
   });
 });

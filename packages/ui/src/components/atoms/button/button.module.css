@@ -1,4 +1,6 @@
 .button {
+  --button-border-radius: var(--border-radius-sm);
+  --focus-ring-offset: var(--spacing-025);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8,7 +10,7 @@
   padding-block: var(--spacing-0);
   padding-inline: var(--spacing-150);
   border: var(--border-width-default) solid var(--color-border-default);
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--button-border-radius);
   background: var(--color-background-neutral-subtle-default);
   color: var(--color-content-subtle);
   font-family: var(--typography-heading-xs-font-family);
@@ -44,16 +46,19 @@
 }
 
 .size_sm {
+  --button-border-radius: var(--border-radius-lg);
   min-block-size: var(--component-button-min-height-sm);
   padding-inline: var(--spacing-100);
 }
 
 .size_md {
+  --button-border-radius: var(--border-radius-lg);
   min-block-size: var(--component-button-min-height-md);
   padding-inline: var(--spacing-150);
 }
 
 .size_lg {
+  --button-border-radius: var(--border-radius-xl);
   min-block-size: var(--component-button-min-height-lg);
   padding-inline: var(--spacing-200);
 

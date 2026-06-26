@@ -35,6 +35,8 @@ export interface SliderRangeProps
     Omit<SliderBaseProps, 'steps'> {
   value?: [number, number];
   defaultValue?: [number, number];
+  minDistance?: number;
+  disableSwap?: boolean;
   minLabel?: string;
   maxLabel?: string;
   steps?: number[];

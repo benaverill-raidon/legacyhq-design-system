@@ -2,14 +2,28 @@ import * as React from 'react';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import {
   clampValue,
-  getInsetPosition,
   getPercent,
   getStepModels,
+  getVisualPosition,
   mergeClassNames,
   useSliderDragState,
 } from './slider';
 import styles from './slider.module.css';
 import type { SliderOrientation, SliderRangeProps, SliderSize } from './slider.types';
+
+type ActiveThumb = 0 | 1;
+
+function getHandleName(activeThumb: ActiveThumb | null) {
+  if (activeThumb === 0) {
+    return 'lower';
+  }
+
+  if (activeThumb === 1) {
+    return 'upper';
+  }
+
+  return undefined;
+}
 
 type SliderRangeStyle = React.CSSProperties & {
   '--slider-active-end'?: string;
@@ -30,24 +44,93 @@ type SliderRangeStyle = React.CSSProperties & {
   '--slider-upper-percent'?: string;
 };
 
-function normalizeRangeValue(value: [number, number], min: number, max: number): [number, number] {
-  const lower = clampValue(Math.min(value[0], value[1]), min, max);
-  const upper = clampValue(Math.max(value[0], value[1]), min, max);
+function getEffectiveMinDistance(minDistance: number | undefined, min: number, max: number) {
+  if (minDistance === undefined || !Number.isFinite(minDistance)) {
+    return 0;
+  }
 
-  return [lower, upper];
+  return Math.min(Math.max(0, minDistance), Math.max(0, max - min));
 }
 
+function normalizeRangeValue(value: [number, number], min: number, max: number, minDistance = 0): [number, number] {
+  const lower = clampValue(Math.min(value[0], value[1]), min, max);
+  const upper = clampValue(Math.max(value[0], value[1]), min, max);
+  const effectiveMinDistance = getEffectiveMinDistance(minDistance, min, max);
+
+  if (upper - lower >= effectiveMinDistance) {
+    return [lower, upper];
+  }
+
+  if (lower + effectiveMinDistance <= max) {
+    return [lower, lower + effectiveMinDistance];
+  }
+
+  return [upper - effectiveMinDistance, upper];
+}
+
+function getNextRangeValue(
+  nextThumbValue: number,
+  activeThumb: ActiveThumb,
+  currentValue: [number, number],
+  min: number,
+  max: number,
+  minDistance: number,
+  disableSwap: boolean,
+): { activeThumb: ActiveThumb; value: [number, number] } {
+  const nextValue = clampValue(nextThumbValue, min, max);
+  const [lowerValue, upperValue] = currentValue;
+
+  if (activeThumb === 0) {
+    if (disableSwap) {
+      return {
+        activeThumb,
+        value: normalizeRangeValue([Math.min(nextValue, upperValue - minDistance), upperValue], min, max, minDistance),
+      };
+    }
+
+    if (nextValue > upperValue - minDistance) {
+      return {
+        activeThumb: 1,
+        value: normalizeRangeValue([upperValue, Math.max(nextValue, upperValue + minDistance)], min, max, minDistance),
+      };
+    }
+
+    return {
+      activeThumb,
+      value: normalizeRangeValue([nextValue, upperValue], min, max, minDistance),
+    };
+  }
+
+  if (disableSwap) {
+    return {
+      activeThumb,
+      value: normalizeRangeValue([lowerValue, Math.max(nextValue, lowerValue + minDistance)], min, max, minDistance),
+    };
+  }
+
+  if (nextValue < lowerValue + minDistance) {
+    return {
+      activeThumb: 0,
+      value: normalizeRangeValue([Math.min(nextValue, lowerValue - minDistance), lowerValue], min, max, minDistance),
+    };
+  }
+
+  return {
+    activeThumb,
+    value: normalizeRangeValue([lowerValue, nextValue], min, max, minDistance),
+  };
+}
 const minPositionVariable = 'var(--slider-min-position)';
 const maxPositionVariable = 'var(--slider-max-position)';
 const lowerPositionVariable = 'var(--slider-lower-position)';
 const upperPositionVariable = 'var(--slider-upper-position)';
 
 function beforeSegmentBoundary(position: string) {
-  return `calc(${position} - var(--slider-internal-gap))`;
+  return `calc(${position} - var(--slider-current-handle-half-width) - var(--slider-current-gap))`;
 }
 
 function afterSegmentBoundary(position: string) {
-  return `calc(${position} + var(--slider-internal-gap))`;
+  return `calc(${position} + var(--slider-current-handle-half-width) + var(--slider-current-gap))`;
 }
 
 function getRootClasses(orientation: SliderOrientation, size: SliderSize, className?: string) {
@@ -66,6 +149,8 @@ export const SliderRange = React.memo(
       label,
       value,
       defaultValue = [25, 75],
+      minDistance = 0,
+      disableSwap = false,
       min = 0,
       max = 100,
       step = 1,
@@ -92,26 +177,28 @@ export const SliderRange = React.memo(
     const minHandleLabelId = `${id ?? generatedId}-min-label`;
     const maxHandleLabelId = `${id ?? generatedId}-max-label`;
     const isControlled = value !== undefined;
+    const effectiveMinDistance = getEffectiveMinDistance(minDistance, min, max);
     const [uncontrolledValue, setUncontrolledValue] = React.useState<[number, number]>(
-      normalizeRangeValue(defaultValue, min, max),
+      normalizeRangeValue(defaultValue, min, max, effectiveMinDistance),
     );
-    const [activeHandle, setActiveHandle] = React.useState<'lower' | 'upper' | null>(null);
-    const currentValue = normalizeRangeValue(isControlled ? value : uncontrolledValue, min, max);
+    const [activeThumb, setActiveThumb] = React.useState<ActiveThumb | null>(null);
+    const currentValue = normalizeRangeValue(isControlled ? value : uncontrolledValue, min, max, effectiveMinDistance);
     const [lowerValue, upperValue] = currentValue;
     const lowerPercent = getPercent(lowerValue, min, max);
     const upperPercent = getPercent(upperValue, min, max);
-    const minPosition = getInsetPosition(0);
-    const maxPosition = getInsetPosition(100);
-    const lowerPosition = getInsetPosition(lowerPercent);
-    const upperPosition = getInsetPosition(upperPercent);
+    const minPosition = getVisualPosition(0);
+    const maxPosition = getVisualPosition(100);
+    const lowerPosition = getVisualPosition(lowerPercent);
+    const upperPosition = getVisualPosition(upperPercent);
     const stepModels = getStepModels(showSteps, steps, min, max, step, lowerPercent, upperPercent);
     const ariaLabelledByMin = label !== undefined ? `${labelId} ${minHandleLabelId}` : minHandleLabelId;
     const ariaLabelledByMax = label !== undefined ? `${labelId} ${maxHandleLabelId}` : maxHandleLabelId;
     const { isDragging, startDragging, stopDragging } = useSliderDragState();
+    const isOverlapping = lowerValue === upperValue;
 
     const commitValue = React.useCallback(
       (nextValue: [number, number], event: React.ChangeEvent<HTMLInputElement>) => {
-        const normalizedValue = normalizeRangeValue(nextValue, min, max);
+        const normalizedValue = normalizeRangeValue(nextValue, min, max, effectiveMinDistance);
 
         if (!isControlled) {
           setUncontrolledValue(normalizedValue);
@@ -119,35 +206,50 @@ export const SliderRange = React.memo(
 
         onValueChange?.(normalizedValue, event);
       },
-      [isControlled, max, min, onValueChange],
+      [effectiveMinDistance, isControlled, max, min, onValueChange],
+    );
+
+    const updateRangeValue = React.useCallback(
+      (nextThumbValue: number, changedThumb: ActiveThumb, event: React.ChangeEvent<HTMLInputElement>) => {
+        const nextRangeState = getNextRangeValue(
+          nextThumbValue,
+          isDragging ? (activeThumb ?? changedThumb) : changedThumb,
+          currentValue,
+          min,
+          max,
+          effectiveMinDistance,
+          disableSwap,
+        );
+
+        setActiveThumb(nextRangeState.activeThumb);
+        commitValue(nextRangeState.value, event);
+      },
+      [activeThumb, commitValue, currentValue, disableSwap, effectiveMinDistance, isDragging, max, min],
     );
 
     const handleLowerChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nextLower = Math.min(event.currentTarget.valueAsNumber, upperValue);
-        setActiveHandle('lower');
-        commitValue([nextLower, upperValue], event);
+        updateRangeValue(event.currentTarget.valueAsNumber, 0, event);
       },
-      [commitValue, upperValue],
+      [updateRangeValue],
     );
 
     const handleUpperChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        const nextUpper = Math.max(event.currentTarget.valueAsNumber, lowerValue);
-        setActiveHandle('upper');
-        commitValue([lowerValue, nextUpper], event);
+        updateRangeValue(event.currentTarget.valueAsNumber, 1, event);
       },
-      [commitValue, lowerValue],
+      [updateRangeValue],
     );
 
     return (
       <div
         {...rest}
         className={getRootClasses(orientation, size, className)}
-        data-active-handle={activeHandle ?? undefined}
+        data-active-handle={getHandleName(activeThumb)}
         data-dragging={isDragging ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
         data-orientation={orientation}
+        data-overlapping={isOverlapping ? 'true' : undefined}
         data-show-value={showValue ? 'true' : undefined}
       >
         {label !== undefined ? (
@@ -165,6 +267,7 @@ export const SliderRange = React.memo(
         <div
           className={styles.control}
           data-active-shape="middle"
+          data-has-steps={stepModels.length ? 'true' : undefined}
           style={
             {
               '--slider-inactive-start-start': minPositionVariable,
@@ -198,10 +301,10 @@ export const SliderRange = React.memo(
                 <span
                   className={styles.step}
                   data-active={stepMarker.active ? 'true' : undefined}
+                  data-placement={stepMarker.placement}
                   key={stepMarker.value}
                   style={
                     {
-                      '--slider-step-percent': `${stepMarker.percent}%`,
                       '--slider-step-position': stepMarker.position,
                     } as React.CSSProperties
                   }
@@ -219,6 +322,15 @@ export const SliderRange = React.memo(
             <output className={mergeClassNames(styles.valueIndicator, styles.valueIndicatorUpper)} htmlFor={maxInputId}>
               {upperValue}
             </output>
+          </div>
+
+          <div className={styles.handles} aria-hidden="true">
+            <span className={mergeClassNames(styles.handle, styles.handleLower)}>
+              <span className={styles.handleVisual} />
+            </span>
+            <span className={mergeClassNames(styles.handle, styles.handleUpper)}>
+              <span className={styles.handleVisual} />
+            </span>
           </div>
 
           <input
@@ -240,14 +352,14 @@ export const SliderRange = React.memo(
             disabled={disabled}
             name={name}
             onBlur={() => {
-              setActiveHandle(null);
+              setActiveThumb(null);
               stopDragging();
             }}
             onChange={handleLowerChange}
-            onFocus={() => setActiveHandle('lower')}
+            onFocus={() => setActiveThumb(0)}
             onPointerCancel={stopDragging}
             onPointerDown={() => {
-              setActiveHandle('lower');
+              setActiveThumb(0);
               startDragging();
             }}
             onPointerUp={stopDragging}
@@ -270,14 +382,14 @@ export const SliderRange = React.memo(
             disabled={disabled}
             name={name ? `${name}Max` : undefined}
             onBlur={() => {
-              setActiveHandle(null);
+              setActiveThumb(null);
               stopDragging();
             }}
             onChange={handleUpperChange}
-            onFocus={() => setActiveHandle('upper')}
+            onFocus={() => setActiveThumb(1)}
             onPointerCancel={stopDragging}
             onPointerDown={() => {
-              setActiveHandle('upper');
+              setActiveThumb(1);
               startDragging();
             }}
             onPointerUp={stopDragging}

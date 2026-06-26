@@ -835,6 +835,11 @@
       "type": "float",
       "originalName": "border/radius/8"
     },
+    "border-radius-12": {
+      "value": "12px",
+      "type": "float",
+      "originalName": "border/radius/12"
+    },
     "border-radius-16": {
       "value": "16px",
       "type": "float",
@@ -1069,6 +1074,56 @@
       "value": "#071822",
       "type": "color",
       "originalName": "color/brand/prussian/1100"
+    },
+    "color-brand-prussian-alpha-light-100a": {
+      "value": "rgba(0, 54, 85, 0.04)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/light/100A"
+    },
+    "color-brand-prussian-alpha-light-200a": {
+      "value": "rgba(0, 54, 85, 0.08)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/light/200A"
+    },
+    "color-brand-prussian-alpha-light-300a": {
+      "value": "rgba(0, 54, 85, 0.16)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/light/300A"
+    },
+    "color-brand-prussian-alpha-light-400a": {
+      "value": "rgba(0, 54, 85, 0.32)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/light/400A"
+    },
+    "color-brand-prussian-alpha-light-500a": {
+      "value": "rgba(0, 54, 85, 0.48)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/light/500A"
+    },
+    "color-brand-prussian-alpha-dark-100a": {
+      "value": "rgba(106, 173, 212, 0.04)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/dark/100A"
+    },
+    "color-brand-prussian-alpha-dark-200a": {
+      "value": "rgba(106, 173, 212, 0.08)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/dark/200A"
+    },
+    "color-brand-prussian-alpha-dark-300a": {
+      "value": "rgba(106, 173, 212, 0.16)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/dark/300A"
+    },
+    "color-brand-prussian-alpha-dark-400a": {
+      "value": "rgba(106, 173, 212, 0.32)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/dark/400A"
+    },
+    "color-brand-prussian-alpha-dark-500a": {
+      "value": "rgba(106, 173, 212, 0.48)",
+      "type": "color",
+      "originalName": "color/brand/prussian/alpha/dark/500A"
     },
     "color-brand-umber-100": {
       "value": "#f8f6f4",

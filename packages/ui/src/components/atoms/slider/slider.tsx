@@ -30,11 +30,14 @@ interface SliderBaseComponentProps extends SliderProps {
   defaultDefaultValue: number;
 }
 
+type SliderStepPlacement = 'start' | 'middle' | 'end';
+
 interface SliderStep {
   value: number;
   percent: number;
   position: string;
   active: boolean;
+  placement: SliderStepPlacement;
 }
 
 const maxAutoSteps = 25;
@@ -59,10 +62,12 @@ export function getPercent(value: number, min: number, max: number) {
   return clampValue(((value - min) / (max - min)) * 100, 0, 100);
 }
 
-export function getInsetPosition(percent: number) {
+export function getVisualPosition(percent: number) {
   const clampedPercent = clampValue(percent, 0, 100);
-  return `calc(var(--slider-scale-inset) + ((100% - (var(--slider-scale-inset) * 2)) * ${clampedPercent / 100}))`;
+  return `calc(var(--slider-value-scale-inset) + ((100% - var(--slider-value-scale-inset) - var(--slider-value-scale-inset)) * ${clampedPercent / 100}))`;
 }
+
+export const getInsetPosition = getVisualPosition;
 
 export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined, min: number, max: number, step: number) {
   const edgeSteps = [min, max];
@@ -70,7 +75,7 @@ export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined,
     Array.from(new Set(values)).filter((stepValue) => stepValue >= min && stepValue <= max).sort((a, b) => a - b);
 
   if (steps?.length) {
-    return showSteps ? sortedUniqueSteps(steps) : sortedUniqueSteps(edgeSteps);
+    return showSteps ? sortedUniqueSteps([...edgeSteps, ...steps]) : sortedUniqueSteps(edgeSteps);
   }
 
   if (!showSteps) {
@@ -91,11 +96,11 @@ export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined,
 }
 
 function beforeSegmentBoundary(position: string) {
-  return `calc(${position} - var(--slider-internal-gap))`;
+  return `calc(${position} - var(--slider-current-handle-half-width) - var(--slider-current-gap))`;
 }
 
 function afterSegmentBoundary(position: string) {
-  return `calc(${position} + var(--slider-internal-gap))`;
+  return `calc(${position} + var(--slider-current-handle-half-width) + var(--slider-current-gap))`;
 }
 
 function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, originPercent: number) {
@@ -129,13 +134,13 @@ function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, 
 
   return {
     activeShape: 'middle',
-      segmentStyles: {
-        '--slider-inactive-start-start': minPositionVariable,
-        '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
-        '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
-        '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
-        '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
-        '--slider-inactive-end-end': maxPositionVariable,
+    segmentStyles: {
+      '--slider-inactive-start-start': minPositionVariable,
+      '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
+      '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
+      '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
+      '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
+      '--slider-inactive-end-end': maxPositionVariable,
     },
   };
 }
@@ -149,14 +154,19 @@ export function getStepModels(
   startPercent: number,
   endPercent: number,
 ): SliderStep[] {
-  return getDerivedSteps(showSteps, steps, min, max, step).map((stepValue) => {
+  const derivedSteps = getDerivedSteps(showSteps, steps, min, max, step);
+
+  return derivedSteps.map((stepValue, index) => {
     const percent = getPercent(stepValue, min, max);
+    const placement: SliderStepPlacement =
+      derivedSteps.length === 1 ? 'middle' : index === 0 ? 'start' : index === derivedSteps.length - 1 ? 'end' : 'middle';
 
     return {
       value: stepValue,
       percent,
-      position: getInsetPosition(percent),
+      position: getVisualPosition(percent),
       active: percent >= startPercent && percent <= endPercent,
+      placement,
     };
   });
 }
@@ -232,16 +242,16 @@ export function SliderBaseComponent(
   const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
   const currentValue = clampValue(isControlled ? value : uncontrolledValue, min, max);
   const valuePercent = getPercent(currentValue, min, max);
-  const minPosition = getInsetPosition(0);
-  const maxPosition = getInsetPosition(100);
-  const valuePosition = getInsetPosition(valuePercent);
+  const minPosition = getVisualPosition(0);
+  const maxPosition = getVisualPosition(100);
+  const valuePosition = getVisualPosition(valuePercent);
   const origin = clampValue(0, min, max);
   const originPercent = getPercent(origin, min, max);
-  const originPosition = getInsetPosition(originPercent);
+  const originPosition = getVisualPosition(originPercent);
   const startPercent = fillMode === 'centered' ? Math.min(originPercent, valuePercent) : 0;
   const endPercent = fillMode === 'centered' ? Math.max(originPercent, valuePercent) : valuePercent;
-  const startPosition = getInsetPosition(startPercent);
-  const endPosition = getInsetPosition(endPercent);
+  const startPosition = getVisualPosition(startPercent);
+  const endPosition = getVisualPosition(endPercent);
   const stepModels = getStepModels(showSteps, steps, min, max, step, startPercent, endPercent);
   const { activeShape, segmentStyles } = getSingleSegmentStyles(fillMode, valuePercent, originPercent);
   const { isDragging, startDragging, stopDragging } = useSliderDragState();
@@ -276,6 +286,7 @@ export function SliderBaseComponent(
       <div
         className={styles.control}
         data-active-shape={activeShape}
+        data-has-steps={stepModels.length ? 'true' : undefined}
         style={
           {
             ...segmentStyles,
@@ -303,10 +314,10 @@ export function SliderBaseComponent(
               <span
                 className={styles.step}
                 data-active={stepMarker.active ? 'true' : undefined}
+                data-placement={stepMarker.placement}
                 key={stepMarker.value}
                 style={
                   {
-                    '--slider-step-percent': `${stepMarker.percent}%`,
                     '--slider-step-position': stepMarker.position,
                   } as React.CSSProperties
                 }
@@ -321,6 +332,12 @@ export function SliderBaseComponent(
           <output className={styles.valueIndicator} htmlFor={inputId}>
             {currentValue}
           </output>
+        </div>
+
+        <div className={styles.handles} aria-hidden="true">
+          <span className={mergeClassNames(styles.handle, styles.handleSingle)}>
+            <span className={styles.handleVisual} />
+          </span>
         </div>
 
         <input

@@ -1,6 +1,6 @@
 {
   "component": {
-    "toggle": {
+    "switch": {
       "md": {
         "gap": {
           "value": "var(--spacing-100)",
@@ -104,3 +104,4 @@
     }
   }
 }
+

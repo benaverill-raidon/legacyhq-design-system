@@ -1,8 +1,8 @@
-# Toggle Component Checklist
+# Switch Component Checklist
 
 ## Purpose
 
-A toggle lets users switch a setting between enabled and disabled states. It is best used for immediate, binary preferences where the result is clear from the label or surrounding context.
+A switch lets users turn a setting or option on or off. It is best used for immediate, binary preferences where the result is clear from the label or surrounding context.
 
 ## Component Type
 
@@ -17,10 +17,10 @@ Atom component.
 
 ## When Not to Use
 
-- Do not use Toggle for selecting one option from a group. Use RadioGroup.
-- Do not use Toggle for multi-selection. Use Checkbox.
-- Do not use Toggle for one-time form confirmation. Use Checkbox.
-- Do not use Toggle when the action needs confirmation before applying.
+- Do not use Switch for selecting one option from a group. Use RadioGroup.
+- Do not use Switch for multi-selection. Use Checkbox.
+- Do not use Switch for one-time form confirmation. Use Checkbox.
+- Do not use Switch when the action needs confirmation before applying.
 
 ## Content Rules
 
@@ -45,7 +45,7 @@ Atom component.
 
 ## Architecture Requirements
 
-- Public component: `Toggle`.
+- Public component: `Switch`.
 - Native input remains the source of truth.
 - Private visual indicator renders track, thumb, and internal marks.
 - Indicator is component anatomy and must not be exported publicly.
@@ -53,7 +53,7 @@ Atom component.
 
 ## Design Decisions
 
-- Code component name is `Toggle`.
+- Code component name is `Switch`.
 - Optional visible label is supported and uses `body-md` typography.
 - Control-only usage is allowed when an accessible label is provided.
 - API mirrors Checkbox where possible.
@@ -84,3 +84,5 @@ Atom component.
   - focus ring radius/offset
 - Confirm whether internal check/X marks are drawn with CSS pseudo-elements or private inline SVG.
 - Confirm whether component-level geometry tokens need to be added after Figma values are extracted.
+
+

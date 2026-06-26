@@ -1,16 +1,16 @@
 .root {
-  --toggle-gap: var(--component-toggle-md-gap);
-  --toggle-track-width: var(--component-toggle-md-track-width);
-  --toggle-track-height: var(--component-toggle-md-track-height);
-  --toggle-thumb-size: var(--component-toggle-md-thumb-size);
-  --toggle-thumb-offset: var(--component-toggle-md-thumb-offset);
-  --toggle-thumb-translate-x: var(--component-toggle-md-thumb-translate-x);
-  --toggle-icon-size: var(--component-toggle-md-icon-size);
-  --toggle-icon-offset: var(--component-toggle-md-icon-offset);
+  --switch-gap: var(--component-switch-md-gap);
+  --switch-track-width: var(--component-switch-md-track-width);
+  --switch-track-height: var(--component-switch-md-track-height);
+  --switch-thumb-size: var(--component-switch-md-thumb-size);
+  --switch-thumb-offset: var(--component-switch-md-thumb-offset);
+  --switch-thumb-translate-x: var(--component-switch-md-thumb-translate-x);
+  --switch-icon-size: var(--component-switch-md-icon-size);
+  --switch-icon-offset: var(--component-switch-md-icon-offset);
 
   display: inline-flex;
   align-items: center;
-  gap: var(--toggle-gap);
+  gap: var(--switch-gap);
   width: fit-content;
   color: var(--color-content-default);
   font-family: var(--typography-body-md-font-family);
@@ -23,25 +23,25 @@
 }
 
 .size_md {
-  --toggle-gap: var(--component-toggle-md-gap);
-  --toggle-track-width: var(--component-toggle-md-track-width);
-  --toggle-track-height: var(--component-toggle-md-track-height);
-  --toggle-thumb-size: var(--component-toggle-md-thumb-size);
-  --toggle-thumb-offset: var(--component-toggle-md-thumb-offset);
-  --toggle-thumb-translate-x: var(--component-toggle-md-thumb-translate-x);
-  --toggle-icon-size: var(--component-toggle-md-icon-size);
-  --toggle-icon-offset: var(--component-toggle-md-icon-offset);
+  --switch-gap: var(--component-switch-md-gap);
+  --switch-track-width: var(--component-switch-md-track-width);
+  --switch-track-height: var(--component-switch-md-track-height);
+  --switch-thumb-size: var(--component-switch-md-thumb-size);
+  --switch-thumb-offset: var(--component-switch-md-thumb-offset);
+  --switch-thumb-translate-x: var(--component-switch-md-thumb-translate-x);
+  --switch-icon-size: var(--component-switch-md-icon-size);
+  --switch-icon-offset: var(--component-switch-md-icon-offset);
 }
 
 .size_sm {
-  --toggle-gap: var(--component-toggle-sm-gap);
-  --toggle-track-width: var(--component-toggle-sm-track-width);
-  --toggle-track-height: var(--component-toggle-sm-track-height);
-  --toggle-thumb-size: var(--component-toggle-sm-thumb-size);
-  --toggle-thumb-offset: var(--component-toggle-sm-thumb-offset);
-  --toggle-thumb-translate-x: var(--component-toggle-sm-thumb-translate-x);
-  --toggle-icon-size: var(--component-toggle-sm-icon-size);
-  --toggle-icon-offset: var(--component-toggle-sm-icon-offset);
+  --switch-gap: var(--component-switch-sm-gap);
+  --switch-track-width: var(--component-switch-sm-track-width);
+  --switch-track-height: var(--component-switch-sm-track-height);
+  --switch-thumb-size: var(--component-switch-sm-thumb-size);
+  --switch-thumb-offset: var(--component-switch-sm-thumb-offset);
+  --switch-thumb-translate-x: var(--component-switch-sm-thumb-translate-x);
+  --switch-icon-size: var(--component-switch-sm-icon-size);
+  --switch-icon-offset: var(--component-switch-sm-icon-offset);
 
   font-family: var(--typography-body-sm-font-family);
   font-size: var(--typography-body-sm-font-size);
@@ -57,8 +57,8 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  inline-size: var(--toggle-track-width);
-  block-size: var(--toggle-track-height);
+  inline-size: var(--switch-track-width);
+  block-size: var(--switch-track-height);
   border-radius: var(--border-radius-full-round);
 }
 
@@ -81,46 +81,46 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  inline-size: var(--toggle-track-width);
-  block-size: var(--toggle-track-height);
+  inline-size: var(--switch-track-width);
+  block-size: var(--switch-track-height);
   overflow: hidden;
   border-radius: var(--border-radius-full-round);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse);
   pointer-events: none;
-  transition: background-color var(--component-toggle-motion-duration) var(--component-toggle-motion-easing);
+  transition: background-color var(--component-switch-motion-duration) var(--component-switch-motion-easing);
 }
 
 .thumb {
   position: absolute;
-  inset-block-start: var(--toggle-thumb-offset);
-  inset-inline-start: var(--toggle-thumb-offset);
+  inset-block-start: var(--switch-thumb-offset);
+  inset-inline-start: var(--switch-thumb-offset);
   z-index: 1;
-  inline-size: var(--toggle-thumb-size);
-  block-size: var(--toggle-thumb-size);
+  inline-size: var(--switch-thumb-size);
+  block-size: var(--switch-thumb-size);
   border-radius: var(--border-radius-full-round);
   background: var(--color-content-inverse);
   transform: translateX(var(--spacing-0));
   transform-origin: left center;
-  transition: transform var(--component-toggle-motion-duration) var(--component-toggle-motion-easing);
+  transition: transform var(--component-switch-motion-duration) var(--component-switch-motion-easing);
 }
 
 .icon {
   position: absolute;
   inset-block-start: 50%;
-  inline-size: var(--toggle-icon-size);
-  block-size: var(--toggle-icon-size);
+  inline-size: var(--switch-icon-size);
+  block-size: var(--switch-icon-size);
   color: var(--color-content-inverse);
   transform: translateY(-50%);
 }
 
 .iconOn {
-  inset-inline-start: var(--toggle-icon-offset);
+  inset-inline-start: var(--switch-icon-offset);
   opacity: 0;
 }
 
 .iconOff {
-  inset-inline-end: var(--toggle-icon-offset);
+  inset-inline-end: var(--switch-icon-offset);
   opacity: 1;
 }
 
@@ -128,11 +128,11 @@
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  inline-size: calc(var(--toggle-icon-size) / 2);
-  block-size: calc(var(--toggle-icon-size) - var(--toggle-thumb-offset));
+  inline-size: calc(var(--switch-icon-size) / 2);
+  block-size: calc(var(--switch-icon-size) - var(--switch-thumb-offset));
   border-color: currentColor;
   border-style: solid;
-  border-width: 0 var(--border-width-selected) var(--border-width-selected) 0;
+  border-width: 0 var(--border-width-bold) var(--border-width-bold) 0;
   content: '';
   transform: translate(-50%, -60%) rotate(45deg);
 }
@@ -142,8 +142,8 @@
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
-  inline-size: var(--toggle-icon-size);
-  block-size: var(--border-width-selected);
+  inline-size: var(--switch-icon-size);
+  block-size: var(--border-width-bold);
   border-radius: var(--border-radius-full-round);
   background: currentColor;
   content: '';
@@ -177,7 +177,7 @@
 }
 
 .root:not([data-disabled='true']):active .thumb {
-  transform: scaleX(var(--component-toggle-thumb-pressed-scale-x));
+  transform: scaleX(var(--component-switch-thumb-pressed-scale-x));
 }
 
 .input:checked + .indicator {
@@ -193,12 +193,12 @@
 }
 
 .input:checked + .indicator .thumb {
-  transform: translateX(var(--toggle-thumb-translate-x));
+  transform: translateX(var(--switch-thumb-translate-x));
   transform-origin: right center;
 }
 
 .root:not([data-disabled='true']):active .input:checked + .indicator .thumb {
-  transform: translateX(var(--toggle-thumb-translate-x)) scaleX(var(--component-toggle-thumb-pressed-scale-x));
+  transform: translateX(var(--switch-thumb-translate-x)) scaleX(var(--component-switch-thumb-pressed-scale-x));
 }
 
 .input:checked + .indicator .iconOn {
@@ -228,6 +228,7 @@
 @media (prefers-reduced-motion: reduce) {
   .indicator,
   .thumb {
-    transition-duration: var(--component-toggle-motion-reduced-duration);
+    transition-duration: var(--component-switch-motion-reduced-duration);
   }
 }
+

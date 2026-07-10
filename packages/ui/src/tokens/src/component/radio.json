@@ -11,10 +11,6 @@
         "size": {
           "value": "var(--dimension-16)",
           "type": "dimension"
-        },
-        "focus-size": {
-          "value": "var(--dimension-16)",
-          "type": "dimension"
         }
       },
       "hit-area": {

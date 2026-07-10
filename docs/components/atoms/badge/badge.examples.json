@@ -1,0 +1,76 @@
+{
+  "component": "Badge",
+  "examples": [
+    {
+      "name": "Default count",
+      "description": "Standard numeric badge.",
+      "jsx": "<Badge>1</Badge>",
+      "props": {
+        "children": "1",
+        "tone": "default"
+      }
+    },
+    {
+      "name": "Unread notification count",
+      "description": "Badge with accessible context for an otherwise ambiguous value.",
+      "jsx": "<Badge ariaLabel=\"1 unread notification\">1</Badge>",
+      "props": {
+        "children": "1",
+        "ariaLabel": "1 unread notification"
+      }
+    },
+    {
+      "name": "Brand badge",
+      "description": "Brand-emphasis numeric badge.",
+      "jsx": "<Badge tone=\"brand\">1</Badge>",
+      "props": {
+        "children": "1",
+        "tone": "brand"
+      }
+    },
+    {
+      "name": "Positive delta",
+      "description": "Success tone for a positive score or count change.",
+      "jsx": "<Badge tone=\"success\">+1</Badge>",
+      "props": {
+        "children": "+1",
+        "tone": "success"
+      }
+    },
+    {
+      "name": "Negative delta",
+      "description": "Error tone for a negative score or count change.",
+      "jsx": "<Badge tone=\"error\">-1</Badge>",
+      "props": {
+        "children": "-1",
+        "tone": "error"
+      }
+    },
+    {
+      "name": "Inverse badge on dark surface",
+      "description": "Inverse tone for badges placed on dark or bold surfaces.",
+      "jsx": "<div data-theme=\"dark\"><Badge tone=\"inverse\">1</Badge></div>",
+      "props": {
+        "children": "1",
+        "tone": "inverse"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Long label",
+      "jsx": "<Badge>Overdue approval required</Badge>",
+      "reason": "Badge is for compact numeric values, not long labels."
+    },
+    {
+      "name": "Interactive badge",
+      "jsx": "<Badge onClick={handleClick}>1</Badge>",
+      "reason": "Badge is non-interactive and does not support action behavior."
+    },
+    {
+      "name": "Status text",
+      "jsx": "<Badge>Active</Badge>",
+      "reason": "Use Tag or Label for status/classification text."
+    }
+  ]
+}

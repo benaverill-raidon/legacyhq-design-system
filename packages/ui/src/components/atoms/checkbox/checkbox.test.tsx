@@ -196,12 +196,14 @@ describe('Checkbox', () => {
     expect(checkboxCss).toContain('block-size: var(--component-checkbox-item-min-height);');
     expect(checkboxCss).toContain('inline-size: var(--component-checkbox-hit-area-size);');
     expect(checkboxCss).toContain('block-size: var(--component-checkbox-hit-area-size);');
-    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-focus-size);');
-    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-focus-size);');
+    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-size);');
+    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-size);');
     expect(checkboxCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-sm\);/);
-    expect(tokenCss).toContain('--component-checkbox-indicator-focus-size: var(--dimension-16);');
+    expect(tokenCss).not.toContain('--component-checkbox-indicator-focus-size:');
     expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-size);');
     expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-size);');
     expect(checkboxCss).toContain('outline-offset: var(--spacing-0);');
   });
 });
+
+

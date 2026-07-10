@@ -45,7 +45,7 @@
 
 .size_xs {
   min-block-size: var(--component-button-min-height-xs);
-  padding-inline: var(--spacing-100);
+  padding-inline: var(--spacing-075);
 }
 
 .size_sm {

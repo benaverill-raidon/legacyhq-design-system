@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Default",
+      "jsx": "<ToggleButton>Bold</ToggleButton>"
+    },
+    {
+      "name": "Selected",
+      "jsx": "<ToggleButton pressed>Bold</ToggleButton>"
+    },
+    {
+      "name": "With icon",
+      "jsx": "<ToggleButton iconBefore={<Icon name='bold'/>}>Bold</ToggleButton>"
+    }
+  ]
+}

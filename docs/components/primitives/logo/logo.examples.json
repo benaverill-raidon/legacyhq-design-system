@@ -1,0 +1,12 @@
+{
+  "examples": [
+    {
+      "name": "Header",
+      "jsx": "<Logo />"
+    },
+    {
+      "name": "Authentication",
+      "jsx": "<Logo size='lg' />"
+    }
+  ]
+}

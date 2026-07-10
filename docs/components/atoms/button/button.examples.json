@@ -1,0 +1,125 @@
+{
+  "component": "Button",
+  "examples": [
+    {
+      "name": "Default action",
+      "description": "A standard secondary/neutral action.",
+      "jsx": "<Button>Cancel</Button>",
+      "props": {
+        "children": "Cancel"
+      }
+    },
+    {
+      "name": "Primary action",
+      "description": "The main action in a form, dialog, or workflow.",
+      "jsx": "<Button appearance=\"primary\">Save changes</Button>",
+      "props": {
+        "appearance": "primary",
+        "children": "Save changes"
+      }
+    },
+    {
+      "name": "Subtle action",
+      "description": "A low-emphasis action.",
+      "jsx": "<Button appearance=\"subtle\">Preview</Button>",
+      "props": {
+        "appearance": "subtle",
+        "children": "Preview"
+      }
+    },
+    {
+      "name": "Warning action",
+      "description": "A cautionary action.",
+      "jsx": "<Button appearance=\"primary\" tone=\"warning\">Archive matter</Button>",
+      "props": {
+        "appearance": "primary",
+        "tone": "warning",
+        "children": "Archive matter"
+      }
+    },
+    {
+      "name": "Destructive action",
+      "description": "A high-risk or destructive action.",
+      "jsx": "<Button appearance=\"primary\" tone=\"error\">Delete matter</Button>",
+      "props": {
+        "appearance": "primary",
+        "tone": "error",
+        "children": "Delete matter"
+      }
+    },
+    {
+      "name": "Discovery action",
+      "description": "An action that leads to guidance, education, or setup discovery.",
+      "jsx": "<Button appearance=\"primary\" tone=\"discovery\">Explore setup</Button>",
+      "props": {
+        "appearance": "primary",
+        "tone": "discovery",
+        "children": "Explore setup"
+      }
+    },
+    {
+      "name": "Loading submit",
+      "description": "A loading form submit button that preserves its visible label.",
+      "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
+      "props": {
+        "appearance": "primary",
+        "type": "submit",
+        "isLoading": true,
+        "children": "Save matter"
+      }
+    },
+    {
+      "name": "Icon before",
+      "description": "A button with a leading icon.",
+      "jsx": "<Button iconBefore={<CheckIcon />}>Save changes</Button>",
+      "props": {
+        "iconBefore": "CheckIcon",
+        "children": "Save changes"
+      }
+    },
+    {
+      "name": "Icon after",
+      "description": "A button with a trailing icon.",
+      "jsx": "<Button iconAfter={<ArrowRightIcon />}>Continue</Button>",
+      "props": {
+        "iconAfter": "ArrowRightIcon",
+        "children": "Continue"
+      }
+    },
+    {
+      "name": "Full width",
+      "description": "A button that fills its container.",
+      "jsx": "<Button isFullWidth>Continue</Button>",
+      "props": {
+        "isFullWidth": true,
+        "children": "Continue"
+      }
+    },
+    {
+      "name": "Disabled",
+      "description": "A disabled button using native disabled behavior.",
+      "jsx": "<Button isDisabled>Disabled</Button>",
+      "props": {
+        "isDisabled": true,
+        "children": "Disabled"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Icon only",
+      "reason": "Use IconButton for icon-only actions.",
+      "jsx": "<Button iconBefore={<CheckIcon />} />"
+    },
+    {
+      "name": "Navigation",
+      "reason": "Use LinkButton or Link for navigation-only behavior.",
+      "jsx": "<Button onClick={() => navigate('/clients')}>Clients</Button>"
+    },
+    {
+      "name": "Toggle state",
+      "reason": "Use ToggleButton for selected/unselected button state.",
+      "jsx": "<Button aria-pressed=\"true\">Bold</Button>"
+    }
+  ]
+}

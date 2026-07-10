@@ -1,2 +1,3 @@
-export { Label } from './Label';
-export type { LabelEmphasis, LabelProps, LabelSize, LabelTone } from './Label.types';
+export { Label } from './label';
+export type { LabelEmphasis, LabelProps, LabelSize, LabelTone } from './label.types';
+

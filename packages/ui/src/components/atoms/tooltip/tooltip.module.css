@@ -1,17 +1,18 @@
-.root {
+.triggerWrapper {
   display: inline-flex;
-  position: relative;
+  align-items: inherit;
+  justify-content: inherit;
   inline-size: fit-content;
+  block-size: fit-content;
+  flex: 0 0 auto;
   vertical-align: middle;
 }
 
 .content {
-  --tooltip-z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-050);
   box-sizing: border-box;
-  max-inline-size: 420px;
   padding-block: var(--spacing-025);
   padding-inline: var(--spacing-075);
   border-radius: var(--border-radius-sm);
@@ -22,8 +23,9 @@
   font-weight: var(--typography-body-sm-font-weight);
   line-height: var(--typography-body-sm-line-height);
   letter-spacing: var(--typography-body-sm-letter-spacing);
-  position: absolute;
-  z-index: var(--tooltip-z-index);
+  position: fixed;
+  z-index: var(--component-tooltip-z-index);
+  pointer-events: none;
 }
 
 .contentText {
@@ -32,7 +34,7 @@
 }
 
 .truncate {
-  max-inline-size: 420px;
+  max-inline-size: var(--component-tooltip-max-width-truncated);
 }
 
 .truncate .contentText {
@@ -42,7 +44,7 @@
 }
 
 .wrap {
-  max-inline-size: 240px;
+  max-inline-size: var(--component-tooltip-max-width-wrapped);
 }
 
 .wrap .contentText {
@@ -51,25 +53,13 @@
 }
 
 .placement_top {
-  inset-inline-start: 50%;
-  inset-block-end: calc(100% + var(--spacing-050));
-  transform: translateX(-50%);
 }
 
 .placement_right {
-  inset-inline-start: calc(100% + var(--spacing-050));
-  inset-block-start: 50%;
-  transform: translateY(-50%);
 }
 
 .placement_bottom {
-  inset-inline-start: 50%;
-  inset-block-start: calc(100% + var(--spacing-050));
-  transform: translateX(-50%);
 }
 
 .placement_left {
-  inset-inline-end: calc(100% + var(--spacing-050));
-  inset-block-start: 50%;
-  transform: translateY(-50%);
 }

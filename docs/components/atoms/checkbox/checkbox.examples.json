@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Basic",
+      "jsx": "<Checkbox>Receive updates</Checkbox>"
+    },
+    {
+      "name": "Checked",
+      "jsx": "<Checkbox defaultChecked>Receive updates</Checkbox>"
+    },
+    {
+      "name": "Disabled",
+      "jsx": "<Checkbox isDisabled>Receive updates</Checkbox>"
+    }
+  ]
+}

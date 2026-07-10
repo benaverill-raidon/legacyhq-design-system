@@ -1,6 +1,6 @@
 import * as React from 'react';
-import styles from './Label.module.css';
-import type { LabelProps } from './Label.types';
+import styles from './label.module.css';
+import type { LabelProps } from './label.types';
 
 function mergeClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(' ');
@@ -30,3 +30,4 @@ export const Label = React.memo(function Label({
 });
 
 Label.displayName = 'Label';
+

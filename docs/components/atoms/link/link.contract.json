@@ -1,0 +1,84 @@
+{
+  "name": "Link",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Navigation.",
+  "intent": "Hyperlink behavior.",
+  "useCases": [
+    "Internal navigation",
+    "External links"
+  ],
+  "antiPatterns": [
+    "Submitting forms",
+    "State-changing actions"
+  ],
+  "anatomy": [
+    "anchor",
+    "content",
+    "optional icons"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "default",
+      "subtle"
+    ]
+  },
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "visited",
+    "disabled"
+  ],
+  "slots": [
+    "iconBefore",
+    "children",
+    "iconAfter"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "nativeElement": "a",
+    "accessibleNameRequired": true
+  },
+  "keyboardInteraction": [
+    "Enter activates"
+  ],
+  "behaviorRules": [
+    "Use anchor semantics.",
+    "External links may show icon."
+  ],
+  "compositionRules": [
+    "Use LinkButton when link should appear as button."
+  ],
+  "contentRules": [
+    "Use descriptive link text."
+  ],
+  "responsiveRules": [],
+  "themeRules": [],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing"
+  ],
+  "relatedComponents": [
+    "Button",
+    "LinkButton",
+    "Tooltip"
+  ],
+  "do": [
+    "Use for navigation"
+  ],
+  "dont": [
+    "Use for actions"
+  ],
+  "acceptanceCriteria": [
+    "Keyboard accessible",
+    "Focus visible",
+    "Correct semantics"
+  ]
+}

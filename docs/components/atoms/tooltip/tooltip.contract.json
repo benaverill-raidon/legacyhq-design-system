@@ -1,0 +1,34 @@
+{
+  "name": "Tooltip",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Supplemental contextual information.",
+  "anatomy": [
+    "trigger",
+    "disabled-pointer-wrapper(optional)",
+    "content"
+  ],
+  "variants": {
+    "placement": ["top", "right", "bottom", "left"]
+  },
+  "states": ["hidden", "visible", "disabled"],
+  "tokens": {
+    "component": [
+      "--component-tooltip-z-index",
+      "--component-tooltip-max-width-truncated",
+      "--component-tooltip-max-width-wrapped"
+    ]
+  },
+  "accessibility": {
+    "triggeredBy": ["pointer", "focus"],
+    "focusable": false,
+    "describedByWhileVisible": true
+  },
+  "behaviorRules": [
+    "Owns trigger behavior via composition.",
+    "Supports disabled native controls with a non-focusable pointer wrapper.",
+    "Does not render or attach behavior when content is absent.",
+    "Skips internal behavior when consumer handlers prevent default."
+  ],
+  "relatedComponents": ["IconButton", "ToggleIconButton", "Button"]
+}

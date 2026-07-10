@@ -1,0 +1,68 @@
+{
+  "name": "Avatar",
+  "anatomy": [
+    {
+      "part": "root",
+      "description": "Owns size, data attributes, focus ring classes, and accessibility attributes."
+    },
+    {
+      "part": "surface",
+      "description": "Painted circular surface that owns background, radius, and selected or interaction overlays."
+    },
+    {
+      "part": "badgeContainer",
+      "description": "Dedicated placement container for presence or status."
+    },
+    {
+      "part": "badgeIcon",
+      "description": "The actual presence dot or status icon inside the badge container, including the inverse border."
+    }
+  ],
+  "props": {
+    "presence": {
+      "values": ["none", "online", "offline", "busy"]
+    },
+    "status": {
+      "values": ["none", "accepted", "declined"]
+    }
+  },
+  "tokens": {
+    "component": [
+      "--component-avatar-size-xxs",
+      "--component-avatar-size-xs",
+      "--component-avatar-size-sm",
+      "--component-avatar-size-md",
+      "--component-avatar-size-lg",
+      "--component-avatar-size-xl",
+      "--component-avatar-size-xxl",
+      "--component-avatar-fallback-size-xxs",
+      "--component-avatar-fallback-size-xs",
+      "--component-avatar-fallback-size-sm",
+      "--component-avatar-fallback-size-md",
+      "--component-avatar-fallback-size-lg",
+      "--component-avatar-fallback-size-xl",
+      "--component-avatar-fallback-size-xxl",
+      "--component-avatar-badge-size-xxs",
+      "--component-avatar-badge-size-xs",
+      "--component-avatar-badge-size-sm",
+      "--component-avatar-badge-size-md",
+      "--component-avatar-badge-size-lg",
+      "--component-avatar-badge-size-xl",
+      "--component-avatar-badge-size-xxl",
+      "--component-avatar-badge-icon-size-xxs",
+      "--component-avatar-badge-icon-size-xs",
+      "--component-avatar-badge-icon-size-sm",
+      "--component-avatar-badge-icon-size-md",
+      "--component-avatar-badge-icon-size-lg",
+      "--component-avatar-badge-icon-size-xl",
+      "--component-avatar-badge-icon-size-xxl"
+    ],
+    "semantic": {
+      "offlineBadge": "--color-content-subtle",
+      "selectedBorder": "--color-border-selected",
+      "badgeBorder": "--color-border-inverse",
+      "hovered": "--color-interaction-hovered",
+      "pressed": "--color-interaction-pressed"
+    }
+  }
+}

@@ -772,11 +772,11 @@ describe('slider CSS contract', () => {
     expect(darkCss).toContain('--border-radius-xxl: var(--border-radius-16);');
   });
 
-  it('maps slider end and adjacent radii to separate semantic tokens', () => {
-    expect(tokensCss).toContain('--component-slider-track-radius: var(--border-radius-xl);');
-    expect(tokensCss).toContain('--component-slider-track-adjacent-radius: var(--border-radius-sm);');
-    expect(sliderCss).toContain('border-start-start-radius: var(--component-slider-track-radius);');
-    expect(sliderCss).toContain('border-start-end-radius: var(--component-slider-track-adjacent-radius);');
+  it('uses semantic radius tokens directly for slider track corners', () => {
+    expect(tokensCss).not.toContain('--component-slider-track-radius:');
+    expect(tokensCss).not.toContain('--component-slider-track-adjacent-radius:');
+    expect(sliderCss).toContain('border-start-start-radius: var(--border-radius-xl);');
+    expect(sliderCss).toContain('border-start-end-radius: var(--border-radius-sm);');
   });
   it('uses the canonical visual scale and interactive gap variables', () => {
     expect(sliderCss).toContain('--slider-scale-inset: var(--component-slider-handle-half-width);');
@@ -862,5 +862,7 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('background: var(--color-background-brand-subtle-default);');
   });
 });
+
+
 
 

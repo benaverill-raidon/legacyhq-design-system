@@ -1,0 +1,12 @@
+{
+  "examples": [
+    {
+      "name": "Internal",
+      "jsx": "<Link href='/clients'>Clients</Link>"
+    },
+    {
+      "name": "External",
+      "jsx": "<Link href='https://example.com' external>Documentation</Link>"
+    }
+  ]
+}

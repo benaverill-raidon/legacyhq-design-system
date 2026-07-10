@@ -1,0 +1,30 @@
+{
+  "component": "Avatar",
+  "examples": [
+    {
+      "name": "Presence badge",
+      "description": "Shows availability when no calendar status is present.",
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" />"
+    },
+    {
+      "name": "Offline badge",
+      "description": "Uses the semantic subtle content color for the offline badge icon.",
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"offline\" />"
+    },
+    {
+      "name": "Calendar status badge",
+      "description": "Shows calendar invite response status.",
+      "jsx": "<Avatar name=\"Ben Averill\" status=\"accepted\" />"
+    },
+    {
+      "name": "Status wins over presence",
+      "description": "Renders accepted status badge instead of online presence badge.",
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" status=\"accepted\" />"
+    },
+    {
+      "name": "Disabled interactive avatar",
+      "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
+      "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import styles from './Badge.module.css';
-import type { BadgeProps } from './Badge.types';
+import styles from './badge.module.css';
+import type { BadgeProps } from './badge.types';
 
 export const Badge = React.memo(function Badge({
   children,
@@ -18,3 +18,4 @@ export const Badge = React.memo(function Badge({
 });
 
 Badge.displayName = 'Badge';
+

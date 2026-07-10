@@ -1,0 +1,107 @@
+{
+  "name": "Tag",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Display compact metadata with optional navigation and removal.",
+  "intent": "Represent entities and contextual metadata throughout LegacyHQ.",
+  "useCases": [
+    "Entity references",
+    "Filters",
+    "Categories",
+    "Metadata"
+  ],
+  "antiPatterns": [
+    "Primary actions",
+    "Long text",
+    "Paragraph content"
+  ],
+  "anatomy": [
+    "container",
+    "optional leading icon",
+    "label",
+    "optional remove button"
+  ],
+  "props": {},
+  "variants": {
+    "tone": [
+      "standard",
+      "brand",
+      "blue",
+      "green",
+      "purple",
+      "red",
+      "teal",
+      "yellow",
+      "orange",
+      "magenta"
+    ]
+  },
+  "sizes": [
+    "sm",
+    "md"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focused",
+    "disabled"
+  ],
+  "slots": [
+    "icon",
+    "children",
+    "removeButton"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "navigationAndRemovalIndependent": true,
+    "accessibleNameRequired": true
+  },
+  "keyboardInteraction": [
+    "Enter activates link",
+    "Space/Enter activates remove button",
+    "Tab navigates independently between link and remove button"
+  ],
+  "behaviorRules": [
+    "Navigation and removal are separate interactive regions.",
+    "Remove button uses independent hover, press, and focus states.",
+    "Tag body uses tone-specific interaction states."
+  ],
+  "compositionRules": [
+    "May contain icon.",
+    "May be removable.",
+    "May be navigable.",
+    "Navigation and removal may coexist."
+  ],
+  "contentRules": [
+    "Keep labels concise."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tone tokens."
+  ],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing",
+    "Rounded clipping handled by painted child surfaces."
+  ],
+  "relatedComponents": [
+    "Label",
+    "Badge",
+    "Link"
+  ],
+  "do": [
+    "Use for entity references.",
+    "Provide accessible labels."
+  ],
+  "dont": [
+    "Merge navigation and removal into one interactive target."
+  ],
+  "acceptanceCriteria": [
+    "Independent keyboard focus",
+    "Correct tone mapping",
+    "Correct sizing",
+    "Visible focus",
+    "Independent interaction states"
+  ]
+}

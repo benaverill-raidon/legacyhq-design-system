@@ -79,10 +79,10 @@
 .inactiveTrackStart {
   inset-inline-start: var(--slider-inactive-start-start);
   inline-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
-  border-start-start-radius: var(--component-slider-track-radius);
-  border-end-start-radius: var(--component-slider-track-radius);
-  border-start-end-radius: var(--component-slider-track-adjacent-radius);
-  border-end-end-radius: var(--component-slider-track-adjacent-radius);
+  border-start-start-radius: var(--border-radius-xl);
+  border-end-start-radius: var(--border-radius-xl);
+  border-start-end-radius: var(--border-radius-sm);
+  border-end-end-radius: var(--border-radius-sm);
   background: var(--color-background-brand-subtle-default);
 }
 
@@ -93,10 +93,10 @@
 }
 
 .control[data-active-shape='edge'] .activeTrack {
-  border-start-start-radius: var(--component-slider-track-radius);
-  border-end-start-radius: var(--component-slider-track-radius);
-  border-start-end-radius: var(--component-slider-track-adjacent-radius);
-  border-end-end-radius: var(--component-slider-track-adjacent-radius);
+  border-start-start-radius: var(--border-radius-xl);
+  border-end-start-radius: var(--border-radius-xl);
+  border-start-end-radius: var(--border-radius-sm);
+  border-end-end-radius: var(--border-radius-sm);
 }
 
 .control[data-has-steps='true'] {
@@ -114,16 +114,16 @@
 
 
 .control[data-active-shape='middle'] .activeTrack {
-  border-radius: var(--component-slider-track-adjacent-radius);
+  border-radius: var(--border-radius-sm);
 }
 
 .inactiveTrackEnd {
   inset-inline-start: var(--slider-inactive-end-start);
   inline-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
-  border-start-start-radius: var(--component-slider-track-adjacent-radius);
-  border-end-start-radius: var(--component-slider-track-adjacent-radius);
-  border-start-end-radius: var(--component-slider-track-radius);
-  border-end-end-radius: var(--component-slider-track-radius);
+  border-start-start-radius: var(--border-radius-sm);
+  border-end-start-radius: var(--border-radius-sm);
+  border-start-end-radius: var(--border-radius-xl);
+  border-end-end-radius: var(--border-radius-xl);
   background: var(--color-background-brand-subtle-default);
 }
 
@@ -397,10 +397,10 @@
 .orientation_vertical .inactiveTrackStart {
   inset-block-start: calc(100% - var(--slider-inactive-start-end));
   block-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
-  border-start-start-radius: var(--component-slider-track-adjacent-radius);
-  border-start-end-radius: var(--component-slider-track-adjacent-radius);
-  border-end-start-radius: var(--component-slider-track-radius);
-  border-end-end-radius: var(--component-slider-track-radius);
+  border-start-start-radius: var(--border-radius-sm);
+  border-start-end-radius: var(--border-radius-sm);
+  border-end-start-radius: var(--border-radius-xl);
+  border-end-end-radius: var(--border-radius-xl);
 }
 
 .orientation_vertical .activeTrack {
@@ -409,10 +409,10 @@
 }
 
 .orientation_vertical .control[data-active-shape='edge'] .activeTrack {
-  border-start-start-radius: var(--component-slider-track-adjacent-radius);
-  border-start-end-radius: var(--component-slider-track-adjacent-radius);
-  border-end-start-radius: var(--component-slider-track-radius);
-  border-end-end-radius: var(--component-slider-track-radius);
+  border-start-start-radius: var(--border-radius-sm);
+  border-start-end-radius: var(--border-radius-sm);
+  border-end-start-radius: var(--border-radius-xl);
+  border-end-end-radius: var(--border-radius-xl);
 }
 
 .orientation_vertical .control[data-has-steps='true'] {
@@ -421,16 +421,16 @@
 
 
 .control[data-active-shape='middle'] .activeTrack {
-  border-radius: var(--component-slider-track-adjacent-radius);
+  border-radius: var(--border-radius-sm);
 }
 
 .orientation_vertical .inactiveTrackEnd {
   inset-block-start: calc(100% - var(--slider-inactive-end-end));
   block-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
-  border-start-start-radius: var(--component-slider-track-radius);
-  border-start-end-radius: var(--component-slider-track-radius);
-  border-end-start-radius: var(--component-slider-track-adjacent-radius);
-  border-end-end-radius: var(--component-slider-track-adjacent-radius);
+  border-start-start-radius: var(--border-radius-xl);
+  border-start-end-radius: var(--border-radius-xl);
+  border-end-start-radius: var(--border-radius-sm);
+  border-end-end-radius: var(--border-radius-sm);
 }
 
 .orientation_vertical .input {
@@ -511,4 +511,5 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
 

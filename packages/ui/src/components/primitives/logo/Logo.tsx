@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { logoFullSvg, logoMarkSvg, logoWordmarkSvg } from '../../../assets/logos';
-import styles from './Logo.module.css';
-import type { LogoProps, LogoType } from './Logo.types';
+import styles from './logo.module.css';
+import type { LogoProps, LogoType } from './logo.types';
 
 const logoSvgByType: Record<LogoType, string> = {
   mark: logoMarkSvg,
@@ -57,3 +57,4 @@ export const Logo = React.memo(function Logo({
 });
 
 Logo.displayName = 'Logo';
+

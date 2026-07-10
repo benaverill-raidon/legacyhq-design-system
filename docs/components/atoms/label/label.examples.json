@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Default",
+      "jsx": "<Label>Draft</Label>"
+    },
+    {
+      "name": "Law",
+      "jsx": "<Label tone='law'>Estate</Label>"
+    },
+    {
+      "name": "Bold",
+      "jsx": "<Label appearance='bold'>Approved</Label>"
+    }
+  ]
+}

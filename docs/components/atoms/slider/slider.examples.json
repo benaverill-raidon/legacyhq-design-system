@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Single",
+      "jsx": "<Slider value={50} />"
+    },
+    {
+      "name": "Range",
+      "jsx": "<Slider type='slider-range' value={[25,75]} />"
+    },
+    {
+      "name": "Centered",
+      "jsx": "<Slider type='slider-centered' value={0} />"
+    }
+  ]
+}

@@ -15,14 +15,6 @@
             "value": "var(--dimension-40)",
             "type": "dimension"
           }
-        },
-        "radius": {
-          "value": "var(--border-radius-xl)",
-          "type": "dimension"
-        },
-        "adjacent-radius": {
-          "value": "var(--border-radius-sm)",
-          "type": "dimension"
         }
       },
       "handle": {

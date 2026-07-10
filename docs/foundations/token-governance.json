@@ -1,0 +1,185 @@
+{
+    "id": "token-governance",
+    "designSystem": "LegacyHQ",
+    "artifact": "token-governance",
+    "version": "1.0.0",
+    "status": "stable",
+    "owner": "LegacyHQ Design System",
+    "lastReviewed": "2026-07-07",
+    "appliesTo": [
+        "tokens",
+        "components",
+        "themes"
+    ],
+    "overview": {
+        "description": "LegacyHQ uses a three-tier token architecture to create a scalable, maintainable, and themeable design system while minimizing duplicate meanings.",
+        "tiers": [
+            "primitive",
+            "semantic",
+            "component"
+        ]
+    },
+    "architecture": {
+        "tiers": [
+            {
+                "id": 1,
+                "key": "primitive",
+                "name": "Primitive Tokens",
+                "purpose": "Raw design values.",
+                "examples": [
+                    "color.blue.500",
+                    "color.gray.100",
+                    "spacing.4",
+                    "radius.md",
+                    "shadow.sm"
+                ],
+                "rules": [
+                    "Primitive tokens contain raw values only.",
+                    "Primitive tokens must not represent intent.",
+                    "Components must never consume primitive tokens directly."
+                ],
+                "representsIntent": false,
+                "containsRawValues": true,
+                "componentConsumptionAllowed": false,
+                "exampleMapping": {
+                    "token": "color.blue.500",
+                    "value": "#0057FF"
+                }
+            },
+            {
+                "id": 2,
+                "key": "semantic",
+                "name": "Semantic Tokens",
+                "purpose": "Meaning and design intent.",
+                "examples": [
+                    "color.background.primary",
+                    "color.background.brand",
+                    "color.text.primary",
+                    "color.text.inverse",
+                    "color.border.default"
+                ],
+                "rules": [
+                    "Semantic tokens should be the primary tokens consumed throughout the system.",
+                    "Semantic tokens map to primitive tokens.",
+                    "New semantic tokens should only be created when a new meaning is introduced."
+                ],
+                "representsIntent": true,
+                "mapsTo": "primitive",
+                "primaryConsumptionLayer": true,
+                "exampleMapping": {
+                    "token": "color.background.brand",
+                    "aliases": "color.blue.500"
+                }
+            },
+            {
+                "id": 3,
+                "key": "component",
+                "name": "Component Tokens",
+                "purpose": "Component-specific decisions.",
+                "examples": [
+                    "button.primary.background",
+                    "button.primary.text",
+                    "alert.success.icon"
+                ],
+                "rules": [
+                    "Component tokens are exceptions, not defaults.",
+                    "Component tokens should generally alias semantic tokens.",
+                    "Component tokens should only exist when a component requires independent control, theming, or behavior."
+                ],
+                "representsIntent": true,
+                "mapsTo": "semantic",
+                "defaultPolicy": "exception",
+                "exampleMapping": {
+                    "token": "button.primary.background",
+                    "aliases": "color.background.brand"
+                }
+            }
+        ]
+    },
+    "componentTokenCreationRule": {
+        "description": "Before creating a component token, determine whether the semantic layer already expresses the needed meaning.",
+        "steps": [
+            "Search existing semantic tokens.",
+            "Determine whether a semantic token already expresses the same meaning.",
+            "Reuse the semantic token whenever possible.",
+            "Create a component token only when the semantic layer cannot adequately express the requirement."
+        ],
+        "ifEquivalentSemanticTokenExists": {
+            "action": "do_not_create_component_token",
+            "rule": "If an equivalent semantic token exists, do not create a new component token."
+        },
+        "preferredExample": {
+            "label": "Button Background",
+            "token": "color.background.brand"
+        },
+        "avoidExample": {
+            "token": "button.primary.background",
+            "aliases": "color.background.brand",
+            "allowedOnlyWhen": "There is a documented need for independent control."
+        }
+    },
+    "namingConventions": {
+        "primitive": {
+            "format": "category.scale.value",
+            "examples": [
+                "color.blue.500",
+                "spacing.4",
+                "radius.md"
+            ]
+        },
+        "semantic": {
+            "format": "category.role.state",
+            "examples": [
+                "color.background.primary",
+                "color.background.brand",
+                "color.text.primary",
+                "color.border.default"
+            ]
+        },
+        "component": {
+            "format": "component.variant.property",
+            "examples": [
+                "button.primary.background",
+                "button.primary.text",
+                "alert.success.icon"
+            ]
+        }
+    },
+    "antiPatterns": [
+        "Duplicate meanings.",
+        "Component tokens that mirror existing semantic tokens.",
+        "Component tokens that reference primitive values directly.",
+        "Creating tokens for a single isolated use case.",
+        "Creating semantic tokens that differ only by component name."
+    ],
+    "antiPatternExamples": [
+        {
+            "type": "duplicatedComponentMeaning",
+            "bad": [
+                "button.primary.background",
+                "badge.primary.background",
+                "toast.primary.background"
+            ],
+            "reason": "All represent the same meaning.",
+            "good": "color.background.brand"
+        }
+    ],
+    "decisionFramework": {
+        "questions": [
+            "Does a token already exist?",
+            "Can an existing semantic token be reused?",
+            "Will multiple components share this meaning?",
+            "Does the token represent meaning or implementation?"
+        ],
+        "defaultDecision": "If a semantic token already expresses the meaning, reuse it.",
+        "principle": "When in doubt, prefer fewer tokens with clearer intent."
+    },
+    "defaults": {
+        "preferSemanticReuse": true,
+        "preferFewerTokens": true,
+        "preferIntentOverImplementation": true,
+        "allowPrimitiveConsumptionByComponents": false,
+        "allowComponentTokenForSemanticDuplicate": false,
+        "componentTokensRequireDocumentedNeed": true
+    }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "Checkbox",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Select one or more independent options.",
+  "intent": "Native checkbox control.",
+  "useCases": [
+    "Multi-select",
+    "Boolean setting"
+  ],
+  "antiPatterns": [
+    "Mutually exclusive choices"
+  ],
+  "anatomy": [
+    "input",
+    "indicator",
+    "label",
+    "helperText"
+  ],
+  "props": {},
+  "variants": {},
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "checked",
+    "indeterminate",
+    "disabled",
+    "invalid"
+  ],
+  "slots": [
+    "label",
+    "helperText"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "nativeElement": "input[type=checkbox]"
+  },
+  "keyboardInteraction": [
+    "Space toggles"
+  ],
+  "behaviorRules": [],
+  "compositionRules": [],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [],
+  "implementationNotes": [],
+  "relatedComponents": [
+    "Radio",
+    "Switch"
+  ],
+  "do": [
+    "Use for independent choices"
+  ],
+  "dont": [
+    "Use for exclusive choices"
+  ],
+  "acceptanceCriteria": []
+}

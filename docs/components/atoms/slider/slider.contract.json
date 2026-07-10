@@ -1,0 +1,79 @@
+{
+  "name": "Slider",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Numeric range selection.",
+  "intent": "Accessible visual value selection.",
+  "useCases": [
+    "Single",
+    "Range",
+    "Centered"
+  ],
+  "antiPatterns": [
+    "Precise text input"
+  ],
+  "anatomy": [
+    "track",
+    "thumb",
+    "steps"
+  ],
+  "props": {},
+  "variants": {
+    "type": [
+      "slider",
+      "slider-centered",
+      "slider-range"
+    ]
+  },
+  "sizes": [
+    "md"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "disabled"
+  ],
+  "slots": [
+    "label",
+    "helperText"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "role": "slider"
+  },
+  "keyboardInteraction": [
+    "Arrow keys",
+    "Home",
+    "End",
+    "Page Up",
+    "Page Down"
+  ],
+  "behaviorRules": [
+    "Supports overlap.",
+    "Supports disableSwap.",
+    "Supports minDistance."
+  ],
+  "compositionRules": [],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing"
+  ],
+  "relatedComponents": [
+    "Text Field"
+  ],
+  "do": [
+    "Use for bounded ranges"
+  ],
+  "dont": [
+    "Use for precise entry"
+  ],
+  "acceptanceCriteria": [
+    "Keyboard accessible",
+    "Correct range behavior"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "External icon button composition",
+      "jsx": "<Tooltip content='Search'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
+    },
+    {
+      "name": "Disabled explanation",
+      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' isDisabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
+    },
+    {
+      "name": "Supplemental clarification",
+      "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>"
+    }
+  ]
+}

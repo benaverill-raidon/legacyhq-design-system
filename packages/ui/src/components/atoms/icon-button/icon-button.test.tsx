@@ -1,9 +1,9 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CloseIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { IconButton } from './icon-button';
@@ -14,6 +14,14 @@ afterEach(cleanup);
 const iconButtonCss = readFileSync('packages/ui/src/components/atoms/icon-button/icon-button.module.css', 'utf8');
 
 describe('IconButton', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it('renders a native button', () => {
     render(
       <IconButton aria-label="Close">
@@ -36,7 +44,7 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'Close' })).toHaveAttribute('type', 'button');
   });
 
-  it('forwards refs', () => {
+  it('forwards refs to the native button', () => {
     const ref = React.createRef<HTMLButtonElement>();
 
     render(
@@ -46,6 +54,7 @@ describe('IconButton', () => {
     );
 
     expect(ref.current).toBeInstanceOf(HTMLButtonElement);
+    expect(ref.current?.tagName).toBe('BUTTON');
   });
 
   it('renders children as icon content', () => {
@@ -74,7 +83,7 @@ describe('IconButton', () => {
     render(
       <>
         <span id="more-actions-label">More actions</span>
-        <IconButton aria-labelledby="more-actions-label">
+        <IconButton aria-labelledby="more-actions-label" tooltip="Custom explanation">
           <CloseIcon />
         </IconButton>
       </>,
@@ -83,9 +92,77 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'More actions' })).toBeInTheDocument();
   });
 
+  it('creates default tooltip content from a string aria-label', () => {
+    render(
+      <IconButton aria-label="Edit">
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Edit' });
+    fireEvent.pointerEnter(button);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Edit');
+  });
+
+  it('uses custom tooltip content without changing the accessible name', () => {
+    render(
+      <IconButton aria-label="Edit" tooltip="Custom explanation">
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Edit' });
+    fireEvent.pointerEnter(button);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(button).toHaveAccessibleName('Edit');
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Custom explanation');
+  });
+
+  it('tooltip false suppresses tooltip rendering', () => {
+    render(
+      <IconButton aria-label="Edit" tooltip={false}>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Edit' });
+    fireEvent.pointerEnter(button);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('aria-labelledby with explicit tooltip works', () => {
+    render(
+      <>
+        <span id="menu-label">More actions</span>
+        <IconButton aria-labelledby="menu-label" tooltip="More actions menu">
+          <CloseIcon />
+        </IconButton>
+      </>,
+    );
+
+    const button = screen.getByRole('button', { name: 'More actions' });
+    fireEvent.pointerEnter(button);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByRole('tooltip')).toHaveTextContent('More actions menu');
+  });
+
   it('applies appearance classes', () => {
     const { rerender } = render(
-      <IconButton aria-label="Default" appearance="default">
+      <IconButton aria-label="Default" appearance="default" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -93,7 +170,7 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'Default' })).toHaveClass(styles.appearance_default);
 
     rerender(
-      <IconButton aria-label="Primary" appearance="primary">
+      <IconButton aria-label="Primary" appearance="primary" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -101,7 +178,7 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'Primary' })).toHaveClass(styles.appearance_primary);
 
     rerender(
-      <IconButton aria-label="Subtle" appearance="subtle">
+      <IconButton aria-label="Subtle" appearance="subtle" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -114,7 +191,7 @@ describe('IconButton', () => {
 
     sizes.forEach((size) => {
       const { unmount } = render(
-        <IconButton aria-label={size} size={size}>
+        <IconButton aria-label={size} size={size} tooltip={false}>
           <CloseIcon />
         </IconButton>,
       );
@@ -127,7 +204,7 @@ describe('IconButton', () => {
 
   it('applies shape classes', () => {
     const { rerender } = render(
-      <IconButton aria-label="Square" shape="square">
+      <IconButton aria-label="Square" shape="square" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -135,7 +212,7 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'Square' })).toHaveClass(styles.shape_square);
 
     rerender(
-      <IconButton aria-label="Round" shape="round">
+      <IconButton aria-label="Round" shape="round" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -160,6 +237,25 @@ describe('IconButton', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
+  it('disabled IconButton can show a tooltip on hover while remaining disabled', () => {
+    render(
+      <IconButton aria-label="Disabled" isDisabled>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Disabled' });
+    expect(button).toBeDisabled();
+    expect(button.parentElement?.hasAttribute('tabindex')).toBe(false);
+
+    fireEvent.pointerEnter(button.parentElement as HTMLElement);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Disabled');
+  });
+
   it('loading renders spinner and sets aria-busy', () => {
     const { container } = render(
       <IconButton aria-label="Loading" isLoading>
@@ -167,16 +263,15 @@ describe('IconButton', () => {
       </IconButton>,
     );
 
-    const button = screen.getByRole('button', { name: 'Loading' });
-
-    expect(button).toHaveAttribute('aria-busy', 'true');
-    expect(button).toHaveAttribute('aria-disabled', 'true');
+    const loadingButton = screen.getByRole('button', { name: 'Loading' });
+    expect(loadingButton).toHaveAttribute('aria-busy', 'true');
+    expect(loadingButton).toHaveAttribute('aria-disabled', 'true');
     expect(container.querySelector(`.${styles.spinner}`)).toBeInTheDocument();
   });
 
   it('expanded sets aria-expanded', () => {
     render(
-      <IconButton aria-label="More actions" isExpanded>
+      <IconButton aria-label="More actions" isExpanded tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -186,7 +281,7 @@ describe('IconButton', () => {
 
   it('supports custom className', () => {
     render(
-      <IconButton aria-label="Custom" className="custom-icon-button" data-testid="icon-button">
+      <IconButton aria-label="Custom" className="custom-icon-button" data-testid="icon-button" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -198,7 +293,7 @@ describe('IconButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <IconButton aria-label="Interactive" onClick={handleClick}>
+      <IconButton aria-label="Interactive" onClick={handleClick} tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -212,7 +307,7 @@ describe('IconButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <IconButton aria-label="Busy" isLoading onClick={handleClick}>
+      <IconButton aria-label="Busy" isLoading onClick={handleClick} tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );
@@ -228,7 +323,7 @@ describe('IconButton', () => {
 
   it('uses the shared focus ring classes', () => {
     render(
-      <IconButton aria-label="Focusable">
+      <IconButton aria-label="Focusable" tooltip={false}>
         <CloseIcon />
       </IconButton>,
     );

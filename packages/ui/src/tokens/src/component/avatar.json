@@ -1,0 +1,130 @@
+{
+  "component": {
+    "avatar": {
+      "size": {
+        "xxs": {
+          "value": "var(--dimension-16)",
+          "type": "dimension"
+        },
+        "xs": {
+          "value": "var(--dimension-24)",
+          "type": "dimension"
+        },
+        "sm": {
+          "value": "var(--dimension-32)",
+          "type": "dimension"
+        },
+        "md": {
+          "value": "var(--dimension-40)",
+          "type": "dimension"
+        },
+        "lg": {
+          "value": "var(--dimension-48)",
+          "type": "dimension"
+        },
+        "xl": {
+          "value": "72px",
+          "type": "dimension"
+        },
+        "xxl": {
+          "value": "128px",
+          "type": "dimension"
+        }
+      },
+      "fallback": {
+        "size": {
+          "xxs": {
+            "value": "var(--dimension-8)",
+            "type": "dimension"
+          },
+          "xs": {
+            "value": "10px",
+            "type": "dimension"
+          },
+          "sm": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "md": {
+            "value": "var(--dimension-16)",
+            "type": "dimension"
+          },
+          "lg": {
+            "value": "20px",
+            "type": "dimension"
+          },
+          "xl": {
+            "value": "var(--dimension-24)",
+            "type": "dimension"
+          },
+          "xxl": {
+            "value": "var(--dimension-32)",
+            "type": "dimension"
+          }
+        }
+      },
+      "badge": {
+        "size": {
+          "xxs": {
+            "value": "10px",
+            "type": "dimension"
+          },
+          "xs": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "sm": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "md": {
+            "value": "14px",
+            "type": "dimension"
+          },
+          "lg": {
+            "value": "var(--dimension-16)",
+            "type": "dimension"
+          },
+          "xl": {
+            "value": "20px",
+            "type": "dimension"
+          },
+          "xxl": {
+            "value": "20px",
+            "type": "dimension"
+          }
+        },
+        "icon-size": {
+          "xxs": {
+            "value": "10px",
+            "type": "dimension"
+          },
+          "xs": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "sm": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "md": {
+            "value": "14px",
+            "type": "dimension"
+          },
+          "lg": {
+            "value": "var(--dimension-16)",
+            "type": "dimension"
+          },
+          "xl": {
+            "value": "18px",
+            "type": "dimension"
+          },
+          "xxl": {
+            "value": "20px",
+            "type": "dimension"
+          }
+        }
+      }
+    }
+  }
+}

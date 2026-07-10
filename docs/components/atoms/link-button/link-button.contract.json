@@ -1,0 +1,90 @@
+{
+  "name": "LinkButton",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Navigation styled as a button.",
+  "intent": "Combine anchor semantics with Button visuals.",
+  "useCases": [
+    "Primary navigation",
+    "External links",
+    "CTA navigation"
+  ],
+  "antiPatterns": [
+    "Submitting forms",
+    "State-changing actions"
+  ],
+  "anatomy": [
+    "anchor",
+    "optional leading icon",
+    "label",
+    "optional trailing icon"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "default",
+      "subtle",
+      "bold"
+    ]
+  },
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "disabled"
+  ],
+  "slots": [
+    "iconBefore",
+    "children",
+    "iconAfter"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "nativeElement": "a",
+    "accessibleNameRequired": true
+  },
+  "keyboardInteraction": [
+    "Enter activates link"
+  ],
+  "behaviorRules": [
+    "Uses native anchor behavior.",
+    "Shares Button visual styling.",
+    "Routes to another page or location."
+  ],
+  "compositionRules": [
+    "May compose with Icon."
+  ],
+  "contentRules": [
+    "Use concise action-oriented labels."
+  ],
+  "responsiveRules": [],
+  "themeRules": [],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing",
+    "Shares sizing tokens with Button"
+  ],
+  "relatedComponents": [
+    "Button",
+    "Link",
+    "IconButton"
+  ],
+  "do": [
+    "Use for navigation."
+  ],
+  "dont": [
+    "Use for page-local actions."
+  ],
+  "acceptanceCriteria": [
+    "Maintains anchor semantics",
+    "Matches Button visuals",
+    "Visible keyboard focus"
+  ]
+}

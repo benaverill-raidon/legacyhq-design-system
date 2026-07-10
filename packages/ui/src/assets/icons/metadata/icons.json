@@ -23,6 +23,15 @@
     "label": "Administrative Account"
   },
   {
+    "name": "agreement",
+    "component": "AgreementIcon",
+    "category": "multi-purpose",
+    "keywords": [
+      "agreement"
+    ],
+    "label": "Agreement"
+  },
+  {
     "name": "alive-and-well",
     "component": "AliveAndWellIcon",
     "category": "single-purpose",
@@ -711,15 +720,6 @@
     "label": "Email"
   },
   {
-    "name": "estate",
-    "component": "EstateIcon",
-    "category": "single-purpose",
-    "keywords": [
-      "estate"
-    ],
-    "label": "Estate"
-  },
-  {
     "name": "event-templates",
     "component": "EventTemplatesIcon",
     "category": "single-purpose",
@@ -782,6 +782,17 @@
       "vertical"
     ],
     "label": "Expand Vertical"
+  },
+  {
+    "name": "family-tree",
+    "component": "FamilyTreeIcon",
+    "category": "single-purpose",
+    "keywords": [
+      "family-tree",
+      "family",
+      "tree"
+    ],
+    "label": "Family Tree"
   },
   {
     "name": "figma-component",
@@ -1907,15 +1918,6 @@
       "legal"
     ],
     "label": "Services Legal"
-  },
-  {
-    "name": "services",
-    "component": "ServicesIcon",
-    "category": "multi-purpose",
-    "keywords": [
-      "services"
-    ],
-    "label": "Services"
   },
   {
     "name": "settings",

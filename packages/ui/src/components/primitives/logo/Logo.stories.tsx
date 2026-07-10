@@ -1,8 +1,8 @@
 import type { CSSProperties } from 'react';
 import { Fragment } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Logo } from './Logo';
-import type { LogoSize, LogoType } from './Logo.types';
+import { Logo } from './logo';
+import type { LogoSize, LogoType } from './logo.types';
 
 const types: LogoType[] = ['mark', 'wordmark', 'full'];
 const sizes: LogoSize[] = ['xxs', 'xs', 'sm', 'md', 'lg'];
@@ -160,3 +160,4 @@ export const Examples: Story = {
     </div>
   ),
 };
+

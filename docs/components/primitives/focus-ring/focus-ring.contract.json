@@ -1,0 +1,72 @@
+{
+  "name": "FocusRing",
+  "category": "primitive",
+  "status": "stable",
+  "purpose": "Shared keyboard focus treatment.",
+  "intent": "Provide one consistent focus indicator across the design system.",
+  "useCases": [
+    "Wrap interactive controls",
+    "Shared focus utility"
+  ],
+  "antiPatterns": [
+    "Standalone decoration",
+    "Pointer-only hover indicator"
+  ],
+  "anatomy": [
+    "focus outline"
+  ],
+  "props": {},
+  "variants": {
+    "default": []
+  },
+  "sizes": [],
+  "states": [
+    "focused",
+    "unfocused"
+  ],
+  "slots": [],
+  "tokens": {
+    "color": "color-border-focused"
+  },
+  "accessibility": {
+    "focusVisibleOnly": true
+  },
+  "keyboardInteraction": [
+    "Appears on :focus-visible"
+  ],
+  "behaviorRules": [
+    "Use shared implementation.",
+    "Do not create component-specific focus styles unless documented."
+  ],
+  "compositionRules": [
+    "Applied by interactive components."
+  ],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tokens."
+  ],
+  "implementationNotes": [
+    "Shared primitive."
+  ],
+  "relatedComponents": [
+    "Button",
+    "IconButton",
+    "Link",
+    "Checkbox",
+    "Radio",
+    "Switch",
+    "Slider",
+    "Tag"
+  ],
+  "do": [
+    "Reuse everywhere"
+  ],
+  "dont": [
+    "Duplicate focus implementations"
+  ],
+  "acceptanceCriteria": [
+    "Visible on keyboard focus",
+    "Consistent across components"
+  ]
+}

@@ -68,8 +68,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-radio-indicator-focus-size);
-  block-size: var(--component-radio-indicator-focus-size);
+  inline-size: var(--component-radio-indicator-size);
+  block-size: var(--component-radio-indicator-size);
   border-radius: var(--border-radius-full-round);
 }
 
@@ -199,3 +199,4 @@
   line-height: var(--typography-body-md-line-height);
   letter-spacing: var(--typography-body-md-letter-spacing);
 }
+

@@ -1,0 +1,13 @@
+import * as React from 'react';
+import { IconBase } from '../../../components/primitives/icon';
+import type { IconProps } from '../../../components/primitives/icon';
+
+export const FamilyTreeIcon = React.memo(function FamilyTreeIcon(props: IconProps) {
+  return (
+    <IconBase {...props} viewBox="0 0 16 16">
+      <path d="M14.6667 7.33333V2H10V4H6.00004V2H1.33337V7.33333H6.00004V5.33333H7.33337V12H10V14H14.6667V8.66667H10V10.6667H8.66671V5.33333H10V7.33333H14.6667ZM4.66671 6H2.66671V3.33333H4.66671V6ZM11.3334 10H13.3334V12.6667H11.3334V10ZM11.3334 3.33333H13.3334V6H11.3334V3.33333Z" fill="currentColor"/>
+    </IconBase>
+  );
+});
+
+FamilyTreeIcon.displayName = 'FamilyTreeIcon';

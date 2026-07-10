@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Default",
+      "jsx": "<ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+    },
+    {
+      "name": "Selected",
+      "jsx": "<ToggleIconButton pressed aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+    },
+    {
+      "name": "With Tooltip",
+      "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton></Tooltip>"
+    }
+  ]
+}

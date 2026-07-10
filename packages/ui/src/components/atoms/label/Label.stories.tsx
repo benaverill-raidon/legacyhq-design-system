@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Label } from './Label';
-import type { LabelEmphasis, LabelSize, LabelTone } from './Label.types';
+import { Label } from './label';
+import type { LabelEmphasis, LabelSize, LabelTone } from './label.types';
 
 const tones: LabelTone[] = [
   'default',
@@ -153,3 +153,4 @@ export const Examples: Story = {
     </div>
   ),
 };
+

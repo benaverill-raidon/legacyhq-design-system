@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Default tooltip from aria-label",
+      "jsx": "<IconButton aria-label='Search'><Icon name='search' /></IconButton>"
+    },
+    {
+      "name": "Custom tooltip content",
+      "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><Icon name='edit' /></IconButton>"
+    },
+    {
+      "name": "External tooltip composition",
+      "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
+    }
+  ]
+}

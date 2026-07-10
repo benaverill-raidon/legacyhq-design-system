@@ -1,0 +1,94 @@
+{
+  "name": "ToggleIconButton",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Persistent icon-only toggle control.",
+  "intent": "Combine compact icon-only presentation with toggle behavior.",
+  "useCases": [
+    "Toolbar formatting",
+    "View toggles",
+    "Pinned actions"
+  ],
+  "antiPatterns": [
+    "Navigation",
+    "Unlabeled actions"
+  ],
+  "anatomy": [
+    "button",
+    "icon"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "default",
+      "subtle",
+      "bold"
+    ]
+  },
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "selected",
+    "disabled",
+    "loading"
+  ],
+  "slots": [
+    "children(icon)"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "ariaPressed": true,
+    "accessibleNameRequired": true,
+    "tooltipRecommended": true
+  },
+  "keyboardInteraction": [
+    "Space toggles",
+    "Enter toggles"
+  ],
+  "behaviorRules": [
+    "Selected state persists until toggled.",
+    "Shares sizing with Icon Button.",
+    "Tooltip should describe the action."
+  ],
+  "compositionRules": [
+    "Composes with Icon and Tooltip."
+  ],
+  "contentRules": [
+    "Single icon only."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tokens."
+  ],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing",
+    "Derived from Toggle Button foundation"
+  ],
+  "relatedComponents": [
+    "ToggleButton",
+    "IconButton",
+    "Tooltip"
+  ],
+  "do": [
+    "Provide aria-label."
+  ],
+  "dont": [
+    "Use tooltip as the accessible name."
+  ],
+  "acceptanceCriteria": [
+    "Correct aria-pressed",
+    "Keyboard accessible",
+    "Visible focus",
+    "Selected state rendered",
+    "Tooltip supported"
+  ]
+}

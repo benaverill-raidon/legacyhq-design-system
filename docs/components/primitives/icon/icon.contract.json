@@ -1,0 +1,76 @@
+{
+  "name": "Icon",
+  "category": "primitive",
+  "status": "stable",
+  "purpose": "Render standardized icons throughout the design system.",
+  "intent": "Provide consistent iconography with semantic sizing and inherited color.",
+  "useCases": [
+    "Buttons",
+    "Status",
+    "Navigation",
+    "Supporting labels"
+  ],
+  "antiPatterns": [
+    "Standalone unlabeled interactive controls",
+    "Conveying critical meaning without accessible text"
+  ],
+  "anatomy": [
+    "svg"
+  ],
+  "props": {},
+  "variants": {},
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [],
+  "slots": [],
+  "tokens": {
+    "size": "dimension",
+    "color": "inherits parent"
+  },
+  "accessibility": {
+    "decorative": "aria-hidden",
+    "informative": "accessible name required"
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Icons inherit color by default.",
+    "Do not hardcode fills unless explicitly required."
+  ],
+  "compositionRules": [
+    "Primarily used within other components."
+  ],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic color inheritance."
+  ],
+  "implementationNotes": [
+    "SVG-based.",
+    "CSS Modules."
+  ],
+  "relatedComponents": [
+    "Button",
+    "IconButton",
+    "Tag",
+    "Checkbox",
+    "Radio",
+    "Tooltip",
+    "Avatar"
+  ],
+  "do": [
+    "Use semantic sizes",
+    "Inherit parent color"
+  ],
+  "dont": [
+    "Use as the only label for controls unless accessible name exists"
+  ],
+  "acceptanceCriteria": [
+    "Consistent sizing",
+    "Accessible behavior",
+    "Theme compatible"
+  ]
+}

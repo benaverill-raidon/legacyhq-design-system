@@ -1,0 +1,61 @@
+{
+  "name": "Logo",
+  "category": "primitive",
+  "status": "stable",
+  "purpose": "Represent the LegacyHQ brand.",
+  "intent": "Consistent branded visual identity.",
+  "useCases": [
+    "Application header",
+    "Authentication",
+    "Marketing"
+  ],
+  "antiPatterns": [
+    "Stretching",
+    "Changing colors",
+    "Combining with unapproved graphics"
+  ],
+  "anatomy": [
+    "symbol",
+    "wordmark"
+  ],
+  "props": {},
+  "variants": {},
+  "sizes": [],
+  "states": [],
+  "slots": [],
+  "tokens": {},
+  "accessibility": {
+    "decorative": "aria-hidden",
+    "informative": "alt text required"
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Preserve aspect ratio.",
+    "Do not modify brand artwork."
+  ],
+  "compositionRules": [
+    "May be used with approved wordmark or symbol."
+  ],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [
+    "Supports light and dark themes."
+  ],
+  "implementationNotes": [
+    "SVG preferred."
+  ],
+  "relatedComponents": [
+    "Icon"
+  ],
+  "do": [
+    "Use approved assets."
+  ],
+  "dont": [
+    "Recolor or distort."
+  ],
+  "acceptanceCriteria": [
+    "Correct asset",
+    "Correct theme variant",
+    "Maintains aspect ratio"
+  ]
+}

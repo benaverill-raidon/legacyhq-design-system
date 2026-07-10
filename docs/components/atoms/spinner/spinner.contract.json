@@ -1,0 +1,67 @@
+{
+  "name": "Spinner",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Indeterminate loading indicator.",
+  "intent": "Communicate ongoing work.",
+  "useCases": [
+    "Loading actions",
+    "Loading content"
+  ],
+  "antiPatterns": [
+    "Progress tracking"
+  ],
+  "anatomy": [
+    "container",
+    "indicator"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "default"
+    ]
+  },
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default"
+  ],
+  "slots": [],
+  "tokens": {},
+  "accessibility": {
+    "ariaLive": "optional"
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Continuous animation"
+  ],
+  "compositionRules": [
+    "May replace Button leading icon"
+  ],
+  "contentRules": [],
+  "responsiveRules": [],
+  "themeRules": [
+    "Semantic tokens"
+  ],
+  "implementationNotes": [
+    "CSS Modules"
+  ],
+  "relatedComponents": [
+    "Button",
+    "Progress Indicator"
+  ],
+  "do": [
+    "Use for indeterminate loading"
+  ],
+  "dont": [
+    "Use for progress"
+  ],
+  "acceptanceCriteria": [
+    "Correct size",
+    "Smooth animation",
+    "Accessible"
+  ]
+}

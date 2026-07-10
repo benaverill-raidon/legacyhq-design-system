@@ -1,0 +1,12 @@
+{
+  "examples": [
+    {
+      "name": "Button",
+      "jsx": "<FocusRing><Button>Save</Button></FocusRing>"
+    },
+    {
+      "name": "Checkbox",
+      "jsx": "<FocusRing><Checkbox /></FocusRing>"
+    }
+  ]
+}

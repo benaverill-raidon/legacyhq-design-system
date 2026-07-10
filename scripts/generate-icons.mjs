@@ -22,7 +22,7 @@ const singlePurposeNames = new Set([
   'document-add',
   'document-generation',
   'document-templates',
-  'estate',
+  'family-tree',
   'event-templates',
   'events',
   'firms-all',
@@ -227,3 +227,4 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
+

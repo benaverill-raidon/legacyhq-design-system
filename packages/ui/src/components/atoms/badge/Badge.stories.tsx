@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Badge } from './Badge';
-import type { BadgeTone } from './Badge.types';
+import { Badge } from './badge';
+import type { BadgeTone } from './badge.types';
 
 const tones: BadgeTone[] = ['default', 'inverse', 'brand', 'success', 'error'];
 
@@ -101,3 +101,4 @@ export const Examples: Story = {
     </div>
   ),
 };
+

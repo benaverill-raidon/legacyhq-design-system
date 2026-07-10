@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
-import { Badge } from './Badge';
+import { Badge } from './badge';
 
 const badgeCss = readFileSync('packages/ui/src/components/atoms/badge/Badge.module.css', 'utf8');
 
@@ -44,3 +44,4 @@ describe('Badge', () => {
     expect(badgeCss).toContain('border-radius: var(--border-radius-sm);');
   });
 });
+

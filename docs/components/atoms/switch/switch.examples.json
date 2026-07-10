@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Default",
+      "jsx": "<Switch>Notifications</Switch>"
+    },
+    {
+      "name": "Checked",
+      "jsx": "<Switch defaultChecked>Email alerts</Switch>"
+    },
+    {
+      "name": "Disabled",
+      "jsx": "<Switch disabled>Automatic updates</Switch>"
+    }
+  ]
+}

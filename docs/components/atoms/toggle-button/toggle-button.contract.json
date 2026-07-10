@@ -1,0 +1,94 @@
+{
+  "name": "ToggleButton",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Persistent toggle control styled as a button.",
+  "intent": "Represent binary selection while remaining button-like.",
+  "useCases": [
+    "Formatting",
+    "Filters",
+    "View toggles"
+  ],
+  "antiPatterns": [
+    "Navigation",
+    "Transient actions"
+  ],
+  "anatomy": [
+    "button",
+    "optional leading icon",
+    "label",
+    "optional trailing icon"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "default",
+      "subtle",
+      "bold"
+    ]
+  },
+  "sizes": [
+    "xs",
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "selected",
+    "disabled",
+    "loading"
+  ],
+  "slots": [
+    "iconBefore",
+    "children",
+    "iconAfter"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "ariaPressed": true
+  },
+  "keyboardInteraction": [
+    "Space toggles",
+    "Enter toggles"
+  ],
+  "behaviorRules": [
+    "Selected state persists until toggled.",
+    "Shares sizing and visual language with Button."
+  ],
+  "compositionRules": [
+    "May include icons and spinner."
+  ],
+  "contentRules": [
+    "Use concise action labels."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tokens."
+  ],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing",
+    "Built from Button foundation"
+  ],
+  "relatedComponents": [
+    "Button",
+    "IconButton",
+    "ToggleIconButton"
+  ],
+  "do": [
+    "Use for persistent state"
+  ],
+  "dont": [
+    "Use for page navigation"
+  ],
+  "acceptanceCriteria": [
+    "Correct aria-pressed",
+    "Keyboard accessible",
+    "Visible focus",
+    "Selected state rendered correctly"
+  ]
+}

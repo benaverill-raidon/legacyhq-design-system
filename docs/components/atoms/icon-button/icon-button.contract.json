@@ -1,0 +1,37 @@
+{
+  "name": "IconButton",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Icon-only action button.",
+  "anatomy": [
+    "button",
+    "icon",
+    "spinner(optional)",
+    "tooltip(optional)"
+  ],
+  "props": {
+    "tooltip": {
+      "values": ["ReactNode", false]
+    },
+    "tooltipPlacement": {
+      "values": ["top", "right", "bottom", "left"]
+    }
+  },
+  "variants": {
+    "appearance": ["default", "primary", "subtle"],
+    "shape": ["square", "round"]
+  },
+  "sizes": ["xs", "sm", "md", "lg"],
+  "states": ["default", "hover", "pressed", "focus", "disabled", "loading", "expanded"],
+  "accessibility": {
+    "accessibleNameRequired": true,
+    "tooltipUsesAccessibleNameByDefault": true
+  },
+  "behaviorRules": [
+    "Uses aria-label as default tooltip content when tooltip is omitted.",
+    "Does not infer tooltip text from aria-labelledby.",
+    "tooltip={false} suppresses internal Tooltip rendering.",
+    "Forwarded ref resolves to the native button."
+  ],
+  "relatedComponents": ["Button", "Tooltip", "ToggleIconButton", "Spinner"]
+}

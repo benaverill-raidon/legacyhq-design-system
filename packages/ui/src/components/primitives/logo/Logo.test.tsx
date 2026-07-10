@@ -1,8 +1,8 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
-import { Logo } from './Logo';
-import styles from './Logo.module.css';
+import { Logo } from './logo';
+import styles from './logo.module.css';
 
 afterEach(cleanup);
 
@@ -82,3 +82,4 @@ describe('Logo', () => {
     expect(svg).toHaveClass(styles.svg);
   });
 });
+

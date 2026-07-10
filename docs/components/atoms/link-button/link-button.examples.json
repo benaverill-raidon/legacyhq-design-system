@@ -1,0 +1,12 @@
+{
+  "examples": [
+    {
+      "name": "Internal navigation",
+      "jsx": "<LinkButton href='/clients'>View clients</LinkButton>"
+    },
+    {
+      "name": "External navigation",
+      "jsx": "<LinkButton href='https://example.com' external>Documentation</LinkButton>"
+    }
+  ]
+}

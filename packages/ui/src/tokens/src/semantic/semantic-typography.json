@@ -105,6 +105,41 @@
       "type": "string",
       "originalName": "typography/display/sm/text-transform"
     },
+    "typography-display-xs-font-family": {
+      "value": "var(--typography-font-family-merriweather)",
+      "type": "string",
+      "originalName": "typography/display/xs/font-family"
+    },
+    "typography-display-xs-font-weight": {
+      "value": "var(--typography-font-weight-600)",
+      "type": "float",
+      "originalName": "typography/display/xs/font-weight"
+    },
+    "typography-display-xs-font-size": {
+      "value": "var(--typography-font-size-24)",
+      "type": "float",
+      "originalName": "typography/display/xs/font-size"
+    },
+    "typography-display-xs-line-height": {
+      "value": "var(--typography-line-height-28)",
+      "type": "float",
+      "originalName": "typography/display/xs/line-height"
+    },
+    "typography-display-xs-letter-spacing": {
+      "value": "var(--typography-letter-spacing-0)",
+      "type": "float",
+      "originalName": "typography/display/xs/letter-spacing"
+    },
+    "typography-display-xs-paragraph-spacing": {
+      "value": "var(--typography-paragraph-spacing-0)",
+      "type": "float",
+      "originalName": "typography/display/xs/paragraph-spacing"
+    },
+    "typography-display-xs-text-transform": {
+      "value": "var(--typography-text-transform-none)",
+      "type": "string",
+      "originalName": "typography/display/xs/text-transform"
+    },
     "typography-heading-xxl-font-family": {
       "value": "var(--typography-font-family-public-sans)",
       "type": "string",
@@ -296,7 +331,7 @@
       "originalName": "typography/heading/sm/font-size"
     },
     "typography-heading-sm-line-height": {
-      "value": "var(--typography-line-height-20)",
+      "value": "var(--typography-line-height-24)",
       "type": "float",
       "originalName": "typography/heading/sm/line-height"
     },
@@ -511,7 +546,7 @@
       "originalName": "typography/overline/lg/line-height"
     },
     "typography-overline-lg-letter-spacing": {
-      "value": "var(--typography-letter-spacing-1-half)",
+      "value": "var(--typography-letter-spacing-1)",
       "type": "float",
       "originalName": "typography/overline/lg/letter-spacing"
     },
@@ -546,7 +581,7 @@
       "originalName": "typography/overline/md/line-height"
     },
     "typography-overline-md-letter-spacing": {
-      "value": "var(--typography-letter-spacing-1)",
+      "value": "var(--typography-letter-spacing-half)",
       "type": "float",
       "originalName": "typography/overline/md/letter-spacing"
     },
@@ -581,7 +616,7 @@
       "originalName": "typography/overline/sm/line-height"
     },
     "typography-overline-sm-letter-spacing": {
-      "value": "var(--typography-letter-spacing-half)",
+      "value": "var(--typography-letter-spacing-0)",
       "type": "float",
       "originalName": "typography/overline/sm/letter-spacing"
     },

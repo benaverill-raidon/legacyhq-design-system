@@ -1,0 +1,84 @@
+{
+  "name": "Switch",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Binary toggle control.",
+  "intent": "Immediately enable or disable a setting.",
+  "useCases": [
+    "Settings",
+    "Preferences",
+    "Feature toggles"
+  ],
+  "antiPatterns": [
+    "Multiple choice",
+    "Deferred form submission"
+  ],
+  "anatomy": [
+    "track",
+    "thumb",
+    "label",
+    "helperText"
+  ],
+  "props": {},
+  "variants": {},
+  "sizes": [
+    "sm",
+    "md"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focused",
+    "checked",
+    "disabled",
+    "invalid"
+  ],
+  "slots": [
+    "label",
+    "helperText"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "nativeElement": "input[type=checkbox]",
+    "role": "switch"
+  },
+  "keyboardInteraction": [
+    "Space toggles",
+    "Tab focuses"
+  ],
+  "behaviorRules": [
+    "State changes immediately.",
+    "Supports controlled and uncontrolled usage."
+  ],
+  "compositionRules": [
+    "Can be used with helper text."
+  ],
+  "contentRules": [
+    "Use concise labels describing the enabled state."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic color tokens."
+  ],
+  "implementationNotes": [
+    "CSS Modules",
+    "Shared FocusRing"
+  ],
+  "relatedComponents": [
+    "Checkbox",
+    "Radio"
+  ],
+  "do": [
+    "Use for immediate binary settings."
+  ],
+  "dont": [
+    "Use when confirmation is required."
+  ],
+  "acceptanceCriteria": [
+    "Keyboard accessible",
+    "Visible focus",
+    "Correct checked state",
+    "Accessible labeling"
+  ]
+}

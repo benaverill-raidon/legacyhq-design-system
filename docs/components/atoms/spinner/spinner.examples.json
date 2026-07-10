@@ -1,0 +1,12 @@
+{
+  "examples": [
+    {
+      "name": "Standalone",
+      "jsx": "<Spinner />"
+    },
+    {
+      "name": "Button",
+      "jsx": "<Button isLoading>Save</Button>"
+    }
+  ]
+}

@@ -68,8 +68,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-checkbox-indicator-focus-size);
-  block-size: var(--component-checkbox-indicator-focus-size);
+  inline-size: var(--component-checkbox-indicator-size);
+  block-size: var(--component-checkbox-indicator-size);
   border-radius: var(--border-radius-sm);
 }
 
@@ -155,3 +155,4 @@
 .root[data-disabled='true'] .selectedIcon {
   background: var(--color-background-disabled);
 }
+

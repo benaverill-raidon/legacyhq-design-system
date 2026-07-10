@@ -170,6 +170,11 @@
       "type": "color",
       "originalName": "color/border/bold"
     },
+    "color-border-bolder": {
+      "value": "var(--color-neutral-light-solid-1100)",
+      "type": "color",
+      "originalName": "color/border/bolder"
+    },
     "color-border-inverse": {
       "value": "var(--color-neutral-light-solid-0)",
       "type": "color",

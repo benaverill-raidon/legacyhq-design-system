@@ -1,0 +1,249 @@
+{
+  "name": "Badge",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Display compact numeric values such as counts, tallies, and score changes.",
+  "intent": "Provide a small, non-interactive visual indicator that supports fast scanning without adding action or status-label semantics.",
+  "nativeElement": "span",
+  "sourceFiles": {
+    "component": "badge.tsx",
+    "types": "badge.types.ts",
+    "styles": "badge.module.css",
+    "stories": "Badge.stories.tsx",
+    "tests": "Badge.test.tsx",
+    "index": "index.ts"
+  },
+  "useCases": [
+    "notification counts",
+    "small totals",
+    "score deltas",
+    "lightweight numeric indicators",
+    "counts in navigation",
+    "counts in tables",
+    "counts in lists",
+    "counts in cards",
+    "counts near buttons"
+  ],
+  "antiPatterns": [
+    "long text labels",
+    "multi-line content",
+    "complex status information",
+    "primary actions",
+    "navigation",
+    "interactive controls",
+    "loading indicators"
+  ],
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "span",
+      "required": true,
+      "description": "Single visual container for the badge value."
+    },
+    {
+      "part": "text",
+      "element": "ReactNode children",
+      "required": true,
+      "description": "Short visible numeric value."
+    }
+  ],
+  "props": {
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "Visible badge content. Intended for short numeric values."
+    },
+    "tone": {
+      "type": "BadgeTone",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "inverse", "brand", "success", "error"],
+      "description": "Visual tone for badge emphasis or semantic meaning."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible label when the visible value needs additional context."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Optional custom class name."
+    }
+  },
+  "variants": {
+    "tone": {
+      "default": {
+        "purpose": "Standard badge value.",
+        "className": "tone_default"
+      },
+      "inverse": {
+        "purpose": "Badge for dark or bold surfaces.",
+        "className": "tone_inverse"
+      },
+      "brand": {
+        "purpose": "Brand-emphasis badge.",
+        "className": "tone_brand"
+      },
+      "success": {
+        "purpose": "Positive values or increases.",
+        "className": "tone_success"
+      },
+      "error": {
+        "purpose": "Negative values or decreases.",
+        "className": "tone_error"
+      }
+    }
+  },
+  "sizes": [
+    {
+      "name": "default",
+      "minInlineSize": "spacing-200",
+      "blockSize": "spacing-200",
+      "paddingInline": "spacing-050"
+    }
+  ],
+  "states": ["default"],
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "supports": ["short numeric value", "positive delta", "negative delta"]
+    }
+  ],
+  "tokens": {
+    "layout": {
+      "minInlineSize": "--spacing-200",
+      "blockSize": "--spacing-200",
+      "paddingBlock": "--spacing-0",
+      "paddingInline": "--spacing-050"
+    },
+    "radius": {
+      "root": "--border-radius-sm"
+    },
+    "typography": {
+      "fontFamily": "--typography-overline-sm-font-family",
+      "fontSize": "--typography-overline-sm-font-size",
+      "fontWeight": "--typography-overline-sm-font-weight",
+      "lineHeight": "--typography-overline-sm-line-height",
+      "letterSpacing": "--typography-overline-sm-letter-spacing"
+    },
+    "color": {
+      "default": {
+        "background": "--color-elevation-surface-default",
+        "content": "--color-content-default"
+      },
+      "inverse": {
+        "background": "--color-background-neutral-bold-default",
+        "content": "--color-content-inverse"
+      },
+      "brand": {
+        "background": "--color-background-brand-bold-default",
+        "content": "--color-content-inverse"
+      },
+      "success": {
+        "background": "--color-background-success-bold-default",
+        "content": "--color-content-inverse"
+      },
+      "error": {
+        "background": "--color-background-error-bold-default",
+        "content": "--color-content-inverse"
+      }
+    }
+  },
+  "accessibility": {
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "ariaLabel": {
+      "supported": true,
+      "prop": "ariaLabel",
+      "mapsTo": "aria-label",
+      "useWhen": "Visible numeric value needs additional context."
+    },
+    "requirements": [
+      "Do not add button behavior.",
+      "Do not add keyboard interaction.",
+      "Use ariaLabel when the visible value is ambiguous.",
+      "Ensure color contrast meets requirements for all tones."
+    ]
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Render a non-interactive span.",
+    "Do not make Badge focusable.",
+    "Do not add hover, pressed, active, loading, or disabled states.",
+    "Default tone is default.",
+    "Apply data-tone equal to the selected tone.",
+    "Support className composition."
+  ],
+  "compositionRules": [
+    "Badge may appear inside navigation, tables, lists, cards, buttons, and summaries.",
+    "Use Tooltip if additional visible explanation is needed.",
+    "Use Tag or Label for text classification instead of Badge.",
+    "Use Button or IconButton for actions."
+  ],
+  "contentRules": [
+    "Content should be short and numeric.",
+    "Recommended content length is 1 to 4 characters.",
+    "Supported examples include 1, +1, and -1.",
+    "Content must not wrap.",
+    "Do not use long words or phrases."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes.",
+    "Tone colors must use semantic CSS variables.",
+    "Inverse tone is intended for dark or bold surfaces."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, radius, or typography when tokens exist.",
+    "Badge has no dependencies."
+  ],
+  "relatedComponents": ["Tag", "Label", "Tooltip", "Button", "IconButton"],
+  "do": [
+    "Use for short numeric values.",
+    "Use ariaLabel for ambiguous counts.",
+    "Use success for positive deltas.",
+    "Use error for negative deltas.",
+    "Keep implementation simple."
+  ],
+  "dont": [
+    "Do not use for long text labels.",
+    "Do not use for status labels requiring explanation.",
+    "Do not make interactive.",
+    "Do not add icons.",
+    "Do not add loading, disabled, hover, or active states.",
+    "Do not use as navigation."
+  ],
+  "acceptanceCriteria": [
+    "Renders children.",
+    "Defaults tone to default.",
+    "Supports all BadgeTone values.",
+    "Applies data-tone for selected tone.",
+    "Supports ariaLabel mapped to aria-label.",
+    "Supports className.",
+    "Uses border-radius-sm.",
+    "Uses tokenized typography, spacing, radius, and colors.",
+    "Does not render interactive semantics.",
+    "Storybook includes Playground, Variants, and Examples.",
+    "Tests cover children, default tone, selected tone, ariaLabel, className, and radius token usage."
+  ],
+  "knownLimitations": [
+    "No overflow formatting such as 99+.",
+    "No icon support.",
+    "No non-numeric content guidance beyond recommended limits."
+  ],
+  "futureEnhancements": [
+    "Overflow formatting",
+    "Additional tones",
+    "Icon support if a real use case emerges"
+  ]
+}

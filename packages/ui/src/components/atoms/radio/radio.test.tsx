@@ -140,12 +140,14 @@ describe('Radio', () => {
     expect(radioCss).toContain('block-size: var(--component-radio-item-min-height);');
     expect(radioCss).toContain('inline-size: var(--component-radio-hit-area-size);');
     expect(radioCss).toContain('block-size: var(--component-radio-hit-area-size);');
-    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-focus-size);');
-    expect(radioCss).toContain('block-size: var(--component-radio-indicator-focus-size);');
+    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-size);');
+    expect(radioCss).toContain('block-size: var(--component-radio-indicator-size);');
     expect(radioCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-full-round\);/);
-    expect(tokenCss).toContain('--component-radio-indicator-focus-size: var(--dimension-16);');
+    expect(tokenCss).not.toContain('--component-radio-indicator-focus-size:');
     expect(radioCss).toContain('inline-size: var(--component-radio-indicator-size);');
     expect(radioCss).toContain('block-size: var(--component-radio-indicator-size);');
     expect(radioCss).toContain('outline-offset: var(--spacing-0);');
   });
 });
+
+

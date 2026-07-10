@@ -1,0 +1,65 @@
+.triggerWrapper {
+  display: inline-flex;
+  align-items: inherit;
+  justify-content: inherit;
+  inline-size: fit-content;
+  block-size: fit-content;
+  flex: 0 0 auto;
+  vertical-align: middle;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-050);
+  box-sizing: border-box;
+  padding-block: var(--spacing-025);
+  padding-inline: var(--spacing-075);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-background-neutral-bold-default);
+  color: var(--color-content-inverse);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+  position: fixed;
+  z-index: var(--component-tooltip-z-index);
+  pointer-events: none;
+}
+
+.contentText {
+  min-inline-size: 0;
+  color: inherit;
+}
+
+.truncate {
+  max-inline-size: var(--component-tooltip-max-width-truncated);
+}
+
+.truncate .contentText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.wrap {
+  max-inline-size: var(--component-tooltip-max-width-wrapped);
+}
+
+.wrap .contentText {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.placement_top {
+}
+
+.placement_right {
+}
+
+.placement_bottom {
+}
+
+.placement_left {
+}

@@ -1,0 +1,361 @@
+{
+  "name": "Button",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Trigger a user-initiated action.",
+  "intent": "Provide a consistent native action control with separate visual emphasis and semantic tone.",
+  "useCases": [
+    "submit a form",
+    "save changes",
+    "continue to the next step",
+    "open a dialog",
+    "open a menu",
+    "start a workflow",
+    "confirm a decision",
+    "cancel a decision",
+    "perform warning actions",
+    "perform destructive or error actions",
+    "perform discovery-oriented actions"
+  ],
+  "antiPatterns": [
+    "navigation-only behavior",
+    "icon-only action",
+    "toggleable selected state",
+    "standalone loading indicator without a user action",
+    "ARIA role recreating native button behavior"
+  ],
+  "anatomy": [
+    {
+      "name": "root",
+      "element": "button",
+      "required": true
+    },
+    {
+      "name": "leading",
+      "description": "leading icon slot or loading spinner",
+      "required": false
+    },
+    {
+      "name": "content",
+      "description": "visible button label/content",
+      "required": true
+    },
+    {
+      "name": "trailing",
+      "description": "trailing icon slot",
+      "required": false
+    }
+  ],
+  "props": {
+    "size": {
+      "type": "enum",
+      "values": [
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md",
+      "required": false
+    },
+    "appearance": {
+      "type": "enum",
+      "values": [
+        "default",
+        "primary",
+        "subtle"
+      ],
+      "default": "default",
+      "required": false
+    },
+    "tone": {
+      "type": "enum",
+      "values": [
+        "neutral",
+        "warning",
+        "error",
+        "discovery"
+      ],
+      "default": "neutral",
+      "required": false
+    },
+    "isDisabled": {
+      "type": "boolean",
+      "default": false,
+      "required": false,
+      "mapsTo": "disabled"
+    },
+    "isLoading": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "isFullWidth": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "iconBefore": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false
+    },
+    "iconAfter": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": true
+    },
+    "type": {
+      "type": "button | submit | reset",
+      "default": "button",
+      "required": false
+    },
+    "className": {
+      "type": "string",
+      "default": null,
+      "required": false
+    },
+    "onClick": {
+      "type": "React.MouseEventHandler<HTMLButtonElement>",
+      "default": null,
+      "required": false
+    }
+  },
+  "variants": {
+    "appearance": [
+      "default",
+      "primary",
+      "subtle"
+    ],
+    "tone": [
+      "neutral",
+      "warning",
+      "error",
+      "discovery"
+    ]
+  },
+  "sizes": [
+    {
+      "name": "xs",
+      "minHeightToken": "--component-button-min-height-xs",
+      "paddingInlineToken": "--spacing-075",
+      "radiusToken": "--border-radius-sm"
+    },
+    {
+      "name": "sm",
+      "minHeightToken": "--component-button-min-height-sm",
+      "paddingInlineToken": "--spacing-100",
+      "radiusToken": "--border-radius-lg"
+    },
+    {
+      "name": "md",
+      "minHeightToken": "--component-button-min-height-md",
+      "paddingInlineToken": "--spacing-150",
+      "radiusToken": "--border-radius-lg"
+    },
+    {
+      "name": "lg",
+      "minHeightToken": "--component-button-min-height-lg",
+      "paddingInlineToken": "--spacing-200",
+      "radiusToken": "--border-radius-xl"
+    }
+  ],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focus",
+    "disabled",
+    "loading"
+  ],
+  "slots": [
+    {
+      "name": "iconBefore",
+      "required": false,
+      "allowedContent": "React.ReactNode",
+      "iconSize": "md"
+    },
+    {
+      "name": "children",
+      "required": true,
+      "allowedContent": "React.ReactNode"
+    },
+    {
+      "name": "iconAfter",
+      "required": false,
+      "allowedContent": "React.ReactNode",
+      "iconSize": "md"
+    }
+  ],
+  "tokens": {
+    "component": {
+      "minHeight": {
+        "xs": "--component-button-min-height-xs",
+        "sm": "--component-button-min-height-sm",
+        "md": "--component-button-min-height-md",
+        "lg": "--component-button-min-height-lg"
+      }
+    },
+    "semantic": {
+      "spacing": {
+        "xsPaddingInline": "--spacing-075",
+        "smPaddingInline": "--spacing-100",
+        "mdPaddingInline": "--spacing-150",
+        "lgPaddingInline": "--spacing-200",
+        "gap": "--spacing-075",
+        "focusRingOffset": "--spacing-025"
+      },
+      "border": {
+        "width": "--border-width-default",
+        "radiusDefault": "--border-radius-sm",
+        "radiusSmMd": "--border-radius-lg",
+        "radiusLg": "--border-radius-xl"
+      },
+      "typography": {
+        "default": "heading-xs",
+        "lg": "heading-sm"
+      },
+      "color": {
+        "defaultBorder": "--color-border-default",
+        "defaultBackground": "--color-background-neutral-subtle-default",
+        "defaultContent": "--color-content-subtle",
+        "primaryNeutralBackground": "--color-background-brand-bold-default",
+        "primaryNeutralContent": "--color-content-inverse",
+        "primaryWarningBackground": "--color-background-warning-bold-default",
+        "primaryWarningContent": "--color-content-warning-inverse",
+        "primaryErrorBackground": "--color-background-error-bold-default",
+        "primaryDiscoveryBackground": "--color-background-discovery-bold-default",
+        "disabledBorder": "--color-border-disabled",
+        "disabledBackground": "--color-background-disabled",
+        "disabledContent": "--color-content-disabled"
+      }
+    }
+  },
+  "accessibility": {
+    "nativeElement": "button",
+    "defaultType": "button",
+    "supportsSubmit": true,
+    "supportsReset": true,
+    "disabledMechanism": "native disabled attribute",
+    "loadingAria": {
+      "ariaBusy": true,
+      "ariaDisabled": true
+    },
+    "focus": "shared Focus Ring primitive/utilities",
+    "requiresVisibleLabel": true,
+    "roleOverrideAllowed": false
+  },
+  "keyboardInteraction": [
+    {
+      "key": "Enter",
+      "behavior": "activate through native button behavior"
+    },
+    {
+      "key": "Space",
+      "behavior": "activate through native button behavior"
+    },
+    {
+      "key": "Tab",
+      "behavior": "focus when enabled"
+    }
+  ],
+  "behaviorRules": [
+    "Render a native button element.",
+    "Default type must be button.",
+    "Suppress onClick when isDisabled is true.",
+    "Suppress onClick when isLoading is true.",
+    "Set aria-busy when isLoading is true.",
+    "Set data-loading when isLoading is true.",
+    "Render Spinner in the leading area when isLoading is true.",
+    "Keep children visible when loading.",
+    "Use iconBefore only when not loading.",
+    "Render iconAfter when provided.",
+    "Set inline-size to 100% when isFullWidth is true.",
+    "Apply disabled visual treatment with native disabled attribute."
+  ],
+  "compositionRules": [
+    "Use Button for actions, not navigation.",
+    "Use Link Button for anchor-like navigation styled as a button.",
+    "Use Icon Button for icon-only actions.",
+    "Use Toggle Button for selected/unselected button state.",
+    "Do not nest interactive elements inside Button."
+  ],
+  "contentRules": [
+    "Button text must describe the action.",
+    "Do not rely on color alone to communicate warning or destructive meaning.",
+    "Keep labels short and action-oriented.",
+    "Keep visible label when loading."
+  ],
+  "responsiveRules": [
+    "Use isFullWidth when a button must fill its container.",
+    "Button content should remain inline-flex and nowrap by default.",
+    "Use layout containers for wrapping groups of buttons."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme must be supported through generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef.",
+    "Use React.memo.",
+    "Use CSS Modules.",
+    "Use focusRingClassNames.focusRing and focusRingClassNames.focusRingDefault.",
+    "Use Spinner size sm for loading indicator.",
+    "Use medium icon size by inherited icon implementation; do not expose icon size prop.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": [
+    "IconButton",
+    "LinkButton",
+    "ToggleButton",
+    "ToggleIconButton",
+    "Spinner",
+    "FocusRing"
+  ],
+  "do": [
+    "Use Button for user-triggered actions.",
+    "Use appearance to control emphasis.",
+    "Use tone to control semantic intent.",
+    "Use children for label content.",
+    "Use native button props when needed.",
+    "Use semantic design tokens.",
+    "Preserve label width during loading."
+  ],
+  "dont": [
+    "Do not use Button for navigation-only behavior.",
+    "Do not use Button for icon-only controls.",
+    "Do not add selected or toggled behavior.",
+    "Do not expose icon size props.",
+    "Do not recreate native button behavior with ARIA roles.",
+    "Do not hardcode colors, spacing, or typography.",
+    "Do not collapse loading to spinner-only."
+  ],
+  "acceptanceCriteria": [
+    "Renders a native button.",
+    "Defaults to type button.",
+    "Supports custom button type.",
+    "Supports sizes xs, sm, md, lg.",
+    "Supports appearances default, primary, subtle.",
+    "Supports tones neutral, warning, error, discovery.",
+    "Uses native disabled attribute when disabled.",
+    "Suppresses click while disabled.",
+    "Suppresses click while loading.",
+    "Sets aria-busy while loading.",
+    "Renders Spinner while loading.",
+    "Keeps visible label while loading.",
+    "Supports iconBefore.",
+    "Supports iconAfter.",
+    "Supports isFullWidth.",
+    "Applies shared focus ring classes.",
+    "Uses component min-height tokens.",
+    "Uses semantic spacing, typography, border, and color tokens.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

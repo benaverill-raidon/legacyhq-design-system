@@ -1,0 +1,80 @@
+{
+  "name": "Radio",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Single selection from a group.",
+  "intent": "Native radio behavior with shared LegacyHQ styling.",
+  "useCases": [
+    "Mutually exclusive choices"
+  ],
+  "antiPatterns": [
+    "Multi-select",
+    "Independent toggles"
+  ],
+  "anatomy": [
+    "input",
+    "indicator",
+    "label",
+    "helperText"
+  ],
+  "props": {},
+  "variants": {},
+  "sizes": [],
+  "states": [
+    "default",
+    "hover",
+    "pressed",
+    "focused",
+    "selected",
+    "disabled",
+    "invalid"
+  ],
+  "slots": [
+    "label",
+    "helperText"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "nativeElement": "input[type=radio]",
+    "grouping": "fieldset/legend recommended"
+  },
+  "keyboardInteraction": [
+    "Tab enters group",
+    "Arrow keys move selection",
+    "Space selects focused option"
+  ],
+  "behaviorRules": [
+    "Only one option selected within a group."
+  ],
+  "compositionRules": [
+    "Used within RadioGroup."
+  ],
+  "contentRules": [
+    "Labels should be concise and unique."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tokens."
+  ],
+  "implementationNotes": [
+    "Shared FocusRing",
+    "Shared Indicator primitive",
+    "CSS Modules"
+  ],
+  "relatedComponents": [
+    "Checkbox",
+    "Switch"
+  ],
+  "do": [
+    "Use for exclusive choices"
+  ],
+  "dont": [
+    "Use for multiple selections"
+  ],
+  "acceptanceCriteria": [
+    "Native semantics",
+    "Keyboard accessible",
+    "Visible focus",
+    "Single selection enforced"
+  ]
+}

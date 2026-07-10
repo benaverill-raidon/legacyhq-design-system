@@ -9,6 +9,7 @@ const TOKEN_ROOT = fs.existsSync("packages/ui/src/tokens/src/primitives/primitiv
 
 const GENERATED_PATH = "packages/ui/src/tokens/generated/";
 const MODE_WRAPPERS = new Set(["Value", "Light", "Dark", "Mode 1"]);
+const THEME_MODE_WRAPPERS = new Set(["Light", "Dark", "Mode 1"]);
 
 function normalizeNameSegment(segment) {
   return String(segment)
@@ -54,21 +55,31 @@ function isComponent(token) {
   return normalizedFilePath(token).includes("/component/");
 }
 
+function isThemeWrappedToken(token) {
+  return THEME_MODE_WRAPPERS.has(token.path[0]);
+}
+
+function isComponentModeToken(token) {
+  return isComponent(token) && isThemeWrappedToken(token);
+}
+
 function isBaseToken(token) {
-  return isPrimitive(token) || isResponsive(token) || isComponent(token);
+  return isPrimitive(token) || isResponsive(token) || (isComponent(token) && !isThemeWrappedToken(token));
 }
 
 function isLightSemantic(token) {
   return (
-    normalizedFilePath(token).includes("/semantic/") &&
-    (token.path[0] === "Light" || token.path[0] === "Mode 1")
+    (normalizedFilePath(token).includes("/semantic/") &&
+      (token.path[0] === "Light" || token.path[0] === "Mode 1")) ||
+    isComponentModeToken(token) && (token.path[0] === "Light" || token.path[0] === "Mode 1")
   );
 }
 
 function isDarkSemantic(token) {
   return (
-    normalizedFilePath(token).includes("/semantic/") &&
-    (token.path[0] === "Dark" || token.path[0] === "Mode 1")
+    (normalizedFilePath(token).includes("/semantic/") &&
+      (token.path[0] === "Dark" || token.path[0] === "Mode 1")) ||
+    isComponentModeToken(token) && (token.path[0] === "Dark" || token.path[0] === "Mode 1")
   );
 }
 

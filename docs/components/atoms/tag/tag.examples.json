@@ -1,0 +1,20 @@
+{
+  "examples": [
+    {
+      "name": "Static",
+      "jsx": "<Tag>Estate</Tag>"
+    },
+    {
+      "name": "Linked",
+      "jsx": "<Tag href='/clients/1'>Ben Averill</Tag>"
+    },
+    {
+      "name": "Removable",
+      "jsx": "<Tag onRemove={...}>Filter</Tag>"
+    },
+    {
+      "name": "Linked & Removable",
+      "jsx": "<Tag href='/asset/1' onRemove={...}>Vacation Home</Tag>"
+    }
+  ]
+}

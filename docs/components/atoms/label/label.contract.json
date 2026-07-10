@@ -1,0 +1,79 @@
+{
+  "name": "Label",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Display short metadata.",
+  "intent": "Compact semantic annotation.",
+  "useCases": [
+    "Status",
+    "Category",
+    "Metadata"
+  ],
+  "antiPatterns": [
+    "Navigation",
+    "Actions"
+  ],
+  "anatomy": [
+    "container",
+    "text"
+  ],
+  "props": {},
+  "variants": {
+    "appearance": [
+      "subtle",
+      "bold"
+    ],
+    "tone": [
+      "default",
+      "brand",
+      "law",
+      "wealth"
+    ]
+  },
+  "sizes": [
+    "sm",
+    "md"
+  ],
+  "states": [
+    "default",
+    "disabled"
+  ],
+  "slots": [
+    "children"
+  ],
+  "tokens": {},
+  "accessibility": {
+    "interactive": false
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Non-interactive."
+  ],
+  "compositionRules": [
+    "Can appear beside headings, tables, cards."
+  ],
+  "contentRules": [
+    "Keep text concise."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Semantic tone mapping."
+  ],
+  "implementationNotes": [
+    "CSS Modules"
+  ],
+  "relatedComponents": [
+    "Badge",
+    "Tag"
+  ],
+  "do": [
+    "Use for metadata"
+  ],
+  "dont": [
+    "Use as a button or link"
+  ],
+  "acceptanceCriteria": [
+    "Correct semantic tones",
+    "Consistent sizing"
+  ]
+}

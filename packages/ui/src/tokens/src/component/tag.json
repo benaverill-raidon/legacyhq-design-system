@@ -1,0 +1,40 @@
+{
+  "component": {
+    "tag": {
+      "min-height": {
+        "sm": {
+          "value": "var(--dimension-24)",
+          "type": "dimension"
+        },
+        "md": {
+          "value": "var(--dimension-32)",
+          "type": "dimension"
+        }
+      },
+      "remove": {
+        "size": {
+          "sm": {
+            "value": "var(--dimension-24)",
+            "type": "dimension"
+          },
+          "md": {
+            "value": "var(--dimension-32)",
+            "type": "dimension"
+          }
+        }
+      },
+      "icon": {
+        "size": {
+          "sm": {
+            "value": "var(--dimension-12)",
+            "type": "dimension"
+          },
+          "md": {
+            "value": "var(--dimension-16)",
+            "type": "dimension"
+          }
+        }
+      }
+    }
+  }
+}

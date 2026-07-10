@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "name": "Decorative",
+      "jsx": "<Icon name='search' aria-hidden />"
+    },
+    {
+      "name": "Informative",
+      "jsx": "<Icon name='warning' aria-label='Warning' />"
+    },
+    {
+      "name": "Button",
+      "jsx": "<Button iconBefore={<Icon name='add' />}>New</Button>"
+    }
+  ]
+}

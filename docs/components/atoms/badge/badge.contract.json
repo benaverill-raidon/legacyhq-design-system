@@ -6,9 +6,9 @@
   "intent": "Provide a small, non-interactive visual indicator that supports fast scanning without adding action or status-label semantics.",
   "nativeElement": "span",
   "sourceFiles": {
-    "component": "Badge.tsx",
-    "types": "Badge.types.ts",
-    "styles": "Badge.module.css",
+    "component": "badge.tsx",
+    "types": "badge.types.ts",
+    "styles": "badge.module.css",
     "stories": "Badge.stories.tsx",
     "tests": "Badge.test.tsx",
     "index": "index.ts"

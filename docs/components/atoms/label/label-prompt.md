@@ -29,7 +29,7 @@ Do not use:
 Create the component under:
 
 ```text
-packages/ui/src/components/atoms/Label/
+packages/ui/src/components/atoms/label/
 ```
 
 ## Required Files
@@ -37,13 +37,13 @@ packages/ui/src/components/atoms/Label/
 Create the following files:
 
 ```text
-packages/ui/src/components/atoms/Label/
-├─ Label.tsx
-├─ Label.module.css
-├─ Label.stories.tsx
-├─ Label.test.tsx
-├─ Label.types.ts
-└─ index.ts
+packages/ui/src/components/atoms/label/
+Ã¢â€Å“Ã¢â€â‚¬ label.tsx
+Ã¢â€Å“Ã¢â€â‚¬ label.module.css
+Ã¢â€Å“Ã¢â€â‚¬ Label.stories.tsx
+Ã¢â€Å“Ã¢â€â‚¬ Label.test.tsx
+Ã¢â€Å“Ã¢â€â‚¬ label.types.ts
+Ã¢â€â€Ã¢â€â‚¬ index.ts
 ```
 
 If this repository uses a different naming/export convention for existing components, follow the existing convention while preserving the same component API.
@@ -215,9 +215,9 @@ Create `Label.stories.tsx` using this atom structure:
 
 ```text
 Label
-├─ Playground
-├─ Variants
-└─ Examples
+Ã¢â€Å“Ã¢â€â‚¬ Playground
+Ã¢â€Å“Ã¢â€â‚¬ Variants
+Ã¢â€â€Ã¢â€â‚¬ Examples
 ```
 
 Stories are documentation pages, not one story per variant.

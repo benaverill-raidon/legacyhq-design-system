@@ -43,25 +43,25 @@ Preferred future structure:
 
 ```txt
 packages/ui/src/assets/logos/
-├─ logo-mark.svg
-├─ logo-wordmark.svg
-├─ logo-full.svg
-└─ index.ts
+Ã¢â€Å“Ã¢â€â‚¬ logo-mark.svg
+Ã¢â€Å“Ã¢â€â‚¬ logo-wordmark.svg
+Ã¢â€Å“Ã¢â€â‚¬ logo-full.svg
+Ã¢â€â€Ã¢â€â‚¬ index.ts
 ```
 
 If the current exported assets are still split by theme, support this structure initially:
 
 ```txt
 packages/ui/src/assets/logos/
-├─ light/
-│  ├─ logo-mark.svg
-│  ├─ logo-wordmark.svg
-│  └─ logo-full.svg
-├─ dark/
-│  ├─ logo-mark.svg
-│  ├─ logo-wordmark.svg
-│  └─ logo-full.svg
-└─ index.ts
+Ã¢â€Å“Ã¢â€â‚¬ light/
+Ã¢â€â€š  Ã¢â€Å“Ã¢â€â‚¬ logo-mark.svg
+Ã¢â€â€š  Ã¢â€Å“Ã¢â€â‚¬ logo-wordmark.svg
+Ã¢â€â€š  Ã¢â€â€Ã¢â€â‚¬ logo-full.svg
+Ã¢â€Å“Ã¢â€â‚¬ dark/
+Ã¢â€â€š  Ã¢â€Å“Ã¢â€â‚¬ logo-mark.svg
+Ã¢â€â€š  Ã¢â€Å“Ã¢â€â‚¬ logo-wordmark.svg
+Ã¢â€â€š  Ã¢â€â€Ã¢â€â‚¬ logo-full.svg
+Ã¢â€â€Ã¢â€â‚¬ index.ts
 ```
 
 Important:
@@ -74,13 +74,13 @@ If light and dark SVGs only differ by color, prefer converting to CSS-themeable 
 Create:
 
 ```txt
-packages/ui/src/components/primitives/Logo/
-├─ Logo.tsx
-├─ Logo.types.ts
-├─ Logo.module.css
-├─ Logo.test.tsx
-├─ Logo.stories.tsx
-└─ index.ts
+packages/ui/src/components/primitives/logo/
+Ã¢â€Å“Ã¢â€â‚¬ logo.tsx
+Ã¢â€Å“Ã¢â€â‚¬ logo.types.ts
+Ã¢â€Å“Ã¢â€â‚¬ logo.module.css
+Ã¢â€Å“Ã¢â€â‚¬ Logo.test.tsx
+Ã¢â€Å“Ã¢â€â‚¬ Logo.stories.tsx
+Ã¢â€â€Ã¢â€â‚¬ index.ts
 ```
 
 ---
@@ -182,9 +182,9 @@ Create:
 
 ```txt
 Logo
-├─ Playground
-├─ Variants
-└─ Examples
+Ã¢â€Å“Ã¢â€â‚¬ Playground
+Ã¢â€Å“Ã¢â€â‚¬ Variants
+Ã¢â€â€Ã¢â€â‚¬ Examples
 ```
 
 ### Playground

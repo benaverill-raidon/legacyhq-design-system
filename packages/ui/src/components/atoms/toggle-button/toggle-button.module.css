@@ -1,0 +1,120 @@
+.toggleButton {
+  --toggle-button-border-radius: var(--border-radius-sm);
+  --focus-ring-offset: var(--spacing-025);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: var(--component-button-min-height-md);
+  padding-block: var(--spacing-0);
+  padding-inline: var(--spacing-150);
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--toggle-button-border-radius);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+  gap: var(--spacing-075);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.toggleButton:not(:disabled):not(.selected):hover {
+  background: var(--color-background-neutral-subtle-hovered);
+}
+
+.toggleButton:not(:disabled):not(.selected):active {
+  background: var(--color-background-neutral-subtle-pressed);
+}
+
+.size_xs {
+  min-block-size: var(--component-button-min-height-xs);
+  padding-inline: var(--spacing-100);
+}
+
+.size_sm {
+  --toggle-button-border-radius: var(--border-radius-lg);
+  min-block-size: var(--component-button-min-height-sm);
+  padding-inline: var(--spacing-100);
+}
+
+.size_md {
+  --toggle-button-border-radius: var(--border-radius-lg);
+  min-block-size: var(--component-button-min-height-md);
+  padding-inline: var(--spacing-150);
+}
+
+.size_lg {
+  --toggle-button-border-radius: var(--border-radius-xl);
+  min-block-size: var(--component-button-min-height-lg);
+  padding-inline: var(--spacing-200);
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+  text-transform: var(--typography-heading-sm-text-transform);
+}
+
+.tone_default {
+  border-color: var(--color-border-default);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+}
+
+.tone_subtle {
+  border-color: var(--color-background-neutral-subtle-default);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+}
+
+.selected,
+.selected:hover,
+.selected:active {
+  border-color: var(--color-border-selected);
+  background: var(--color-background-selected-default);
+  color: var(--color-content-selected);
+}
+
+.toggleButton:disabled,
+.toggleButton:disabled:hover,
+.toggleButton:disabled:active,
+.toggleButton:disabled.selected,
+.toggleButton:disabled.selected:hover,
+.toggleButton:disabled.selected:active {
+  border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.leading,
+.trailing,
+.content {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+}
+
+.content {
+  flex-shrink: 1;
+}
+
+.leading,
+.trailing {
+  color: inherit;
+}
+
+.leading :global([data-color]),
+.trailing :global([data-color]) {
+  color: inherit;
+}

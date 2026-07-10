@@ -1,0 +1,191 @@
+.linkButton {
+  --button-border-radius: var(--border-radius-sm);
+  --focus-ring-offset: var(--spacing-025);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  min-block-size: var(--component-button-min-height-md);
+  padding-block: var(--spacing-0);
+  padding-inline: var(--spacing-150);
+  border: var(--border-width-default) solid var(--color-border-default);
+  border-radius: var(--button-border-radius);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-decoration: none;
+  text-transform: var(--typography-heading-xs-text-transform);
+  gap: var(--spacing-075);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+}
+
+.linkButton:not([aria-disabled='true']):not([data-loading='true']):hover {
+  background: var(--color-background-neutral-subtle-hovered);
+  text-decoration: none;
+}
+
+.linkButton:not([aria-disabled='true']):not([data-loading='true']):active {
+  background: var(--color-background-neutral-subtle-pressed);
+}
+
+.linkButton[data-loading='true'],
+.linkButton[data-loading='true']:hover,
+.linkButton[data-loading='true']:active {
+  cursor: progress;
+}
+
+.size_xs {
+  min-block-size: var(--component-button-min-height-xs);
+  padding-inline: var(--spacing-100);
+}
+
+.size_sm {
+  --button-border-radius: var(--border-radius-lg);
+  min-block-size: var(--component-button-min-height-sm);
+  padding-inline: var(--spacing-100);
+}
+
+.size_md {
+  --button-border-radius: var(--border-radius-lg);
+  min-block-size: var(--component-button-min-height-md);
+  padding-inline: var(--spacing-150);
+}
+
+.size_lg {
+  --button-border-radius: var(--border-radius-xl);
+  min-block-size: var(--component-button-min-height-lg);
+  padding-inline: var(--spacing-200);
+
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+  text-transform: var(--typography-heading-sm-text-transform);
+}
+
+.appearance_default {
+  border-color: var(--color-border-default);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+}
+
+.appearance_primary {
+  border-color: var(--color-background-brand-bold-default);
+  background: var(--color-background-brand-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.appearance_primary:not([aria-disabled='true']):not([data-loading='true']):hover {
+  border-color: var(--color-background-brand-bold-hovered);
+  background: var(--color-background-brand-bold-hovered);
+}
+
+.appearance_primary:not([aria-disabled='true']):not([data-loading='true']):active {
+  border-color: var(--color-background-brand-bold-pressed);
+  background: var(--color-background-brand-bold-pressed);
+}
+
+.appearance_primary.tone_warning {
+  border-color: var(--color-background-warning-bold-default);
+  background: var(--color-background-warning-bold-default);
+  color: var(--color-content-warning-inverse);
+}
+
+.appearance_primary.tone_warning:not([aria-disabled='true']):not([data-loading='true']):hover {
+  border-color: var(--color-background-warning-bold-hovered);
+  background: var(--color-background-warning-bold-hovered);
+}
+
+.appearance_primary.tone_warning:not([aria-disabled='true']):not([data-loading='true']):active {
+  border-color: var(--color-background-warning-bold-pressed);
+  background: var(--color-background-warning-bold-pressed);
+}
+
+.appearance_primary.tone_error {
+  border-color: var(--color-background-error-bold-default);
+  background: var(--color-background-error-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.appearance_primary.tone_error:not([aria-disabled='true']):not([data-loading='true']):hover {
+  border-color: var(--color-background-error-bold-hovered);
+  background: var(--color-background-error-bold-hovered);
+}
+
+.appearance_primary.tone_error:not([aria-disabled='true']):not([data-loading='true']):active {
+  border-color: var(--color-background-error-bold-pressed);
+  background: var(--color-background-error-bold-pressed);
+}
+
+.appearance_primary.tone_discovery {
+  border-color: var(--color-background-discovery-bold-default);
+  background: var(--color-background-discovery-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.appearance_primary.tone_discovery:not([aria-disabled='true']):not([data-loading='true']):hover {
+  border-color: var(--color-background-discovery-bold-hovered);
+  background: var(--color-background-discovery-bold-hovered);
+}
+
+.appearance_primary.tone_discovery:not([aria-disabled='true']):not([data-loading='true']):active {
+  border-color: var(--color-background-discovery-bold-pressed);
+  background: var(--color-background-discovery-bold-pressed);
+}
+
+.appearance_subtle {
+  border-color: var(--color-background-neutral-subtle-default);
+  background: var(--color-background-neutral-subtle-default);
+  color: var(--color-content-subtle);
+}
+
+.linkButton[aria-disabled='true'],
+.linkButton[aria-disabled='true']:hover,
+.linkButton[aria-disabled='true']:active,
+.linkButton[aria-disabled='true'].tone_warning,
+.linkButton[aria-disabled='true'].tone_error,
+.linkButton[aria-disabled='true'].tone_discovery {
+  border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.leading,
+.trailing,
+.content {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 0;
+}
+
+.content {
+  flex-shrink: 1;
+}
+
+.leading,
+.trailing {
+  color: inherit;
+}
+
+.leading :global([data-color]),
+.trailing :global([data-color]) {
+  color: inherit;
+}
+
+.spinner {
+  color: inherit;
+}

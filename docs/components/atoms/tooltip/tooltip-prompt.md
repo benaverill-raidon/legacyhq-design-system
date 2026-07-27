@@ -128,7 +128,7 @@ wrapped max-width: 240px
 truncated max-width: 420px
 ```
 
-Use actual generated token names.
+Use actual generated token names for semantic properties. Keep the unbound width constraints private to Tooltip.
 
 ## Truncation
 

@@ -15,31 +15,60 @@
   "anatomy": [
     "anchor",
     "content",
-    "optional icons"
+    "automatic external-link icon"
   ],
-  "props": {},
+  "props": {
+    "href": {
+      "type": "string",
+      "required": true
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": true
+    },
+    "appearance": {
+      "type": "enum",
+      "values": ["default", "subtle", "inverse"],
+      "default": "default",
+      "required": false
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md",
+      "required": false
+    },
+    "target": {
+      "type": "string",
+      "default": "_self",
+      "required": false
+    },
+    "rel": {
+      "type": "string",
+      "default": null,
+      "required": false
+    }
+  },
   "variants": {
     "appearance": [
       "default",
-      "subtle"
+      "subtle",
+      "inverse"
     ]
   },
   "sizes": [
     "sm",
-    "md",
-    "lg"
+    "md"
   ],
   "states": [
     "default",
     "hover",
+    "pressed",
     "focus",
-    "visited",
-    "disabled"
+    "visited"
   ],
   "slots": [
-    "iconBefore",
-    "children",
-    "iconAfter"
+    "children"
   ],
   "tokens": {},
   "accessibility": {

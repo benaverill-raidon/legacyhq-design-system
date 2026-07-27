@@ -129,8 +129,8 @@ Use existing semantic tokens for:
 
 From Figma default tone examples:
 
-- `xs`: horizontal padding `spacing-100`, min-height `24px`
-- `sm`: horizontal padding `spacing-100`, min-height `32px`
+- `xs`: horizontal padding `spacing-sm`, min-height `24px`
+- `sm`: horizontal padding `spacing-sm`, min-height `32px`
 - `md`: horizontal padding `spacing-150`, min-height `40px`
 - `lg`: horizontal padding `spacing-200`, min-height `48px`
 - icon/content gap: `spacing-075`

@@ -43,7 +43,7 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
 ## Token usage
 
 - [ ] Use semantic tokens for color, typography, spacing, and radius.
-- [ ] Use component tokens for tooltip-specific z-index and max widths.
+- [ ] Keep Figma's tooltip-specific z-index and max widths private to the component.
 
 ## Examples to document
 

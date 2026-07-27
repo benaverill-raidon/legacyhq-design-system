@@ -1,0 +1,96 @@
+.root {
+  --progress-indicator-dot-container-size: var(--component-progress-indicator-dot-container-size-sm);
+  --progress-indicator-dot-size: var(--size-marker-sm);
+  --progress-indicator-selected-color: var(--color-content-default);
+  --progress-indicator-unselected-border-color: var(--color-border-bold);
+
+  display: inline-flex;
+  min-inline-size: 0;
+  overflow: visible;
+}
+
+.size_sm {
+  --progress-indicator-dot-container-size: var(--component-progress-indicator-dot-container-size-sm);
+  --progress-indicator-dot-size: var(--size-marker-sm);
+}
+
+.size_md {
+  --progress-indicator-dot-container-size: var(--component-progress-indicator-dot-container-size-md);
+  --progress-indicator-dot-size: var(--size-marker-md);
+}
+
+.appearance_default {
+  --progress-indicator-selected-color: var(--color-content-default);
+}
+
+.appearance_primary {
+  --progress-indicator-selected-color: var(--color-content-brand-primary);
+}
+
+.appearance_discovery {
+  --progress-indicator-selected-color: var(--color-content-discovery);
+}
+
+.appearance_inverted {
+  --progress-indicator-selected-color: var(--color-content-inverse);
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-none);
+  overflow: visible;
+}
+
+.dotTarget {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--progress-indicator-dot-container-size);
+  block-size: var(--progress-indicator-dot-container-size);
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius-full-round);
+  background: transparent;
+}
+
+.dotInteractive {
+  margin: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  --focus-ring-offset: var(--spacing-none);
+}
+
+.dotInteractive:hover {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.dotInteractive:active {
+  background: var(--color-background-neutral-overlay-pressed);
+}
+
+.dotVisual {
+  display: block;
+  inline-size: var(--progress-indicator-dot-size);
+  block-size: var(--progress-indicator-dot-size);
+  border: var(--border-width-sm) solid transparent;
+  border-radius: var(--border-radius-full-round);
+  box-sizing: border-box;
+}
+
+.dotSelected {
+  border-color: var(--progress-indicator-selected-color);
+  background: var(--progress-indicator-selected-color);
+}
+
+.dotUnselected {
+  border-color: var(--progress-indicator-unselected-border-color);
+  background: transparent;
+}
+
+
+
+

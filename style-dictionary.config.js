@@ -8,8 +8,15 @@ const TOKEN_ROOT = fs.existsSync("packages/ui/src/tokens/src/primitives/primitiv
     : "packages/ui/tokens";
 
 const GENERATED_PATH = "packages/ui/src/tokens/generated/";
-const MODE_WRAPPERS = new Set(["Value", "Light", "Dark", "Mode 1"]);
-const THEME_MODE_WRAPPERS = new Set(["Light", "Dark", "Mode 1"]);
+const MODE_WRAPPERS = new Set(["Value", "Light", "Dark"]);
+const COLLECTION_WRAPPERS = new Set([
+  "Primitive",
+  "Semantic: Border",
+  "Semantic: Color",
+  "Semantic: Dimension",
+  "Semantic: Typography"
+]);
+const THEME_MODE_WRAPPERS = new Set(["Light", "Dark"]);
 
 function normalizeNameSegment(segment) {
   return String(segment)
@@ -19,15 +26,23 @@ function normalizeNameSegment(segment) {
     .toLowerCase();
 }
 
+function stripWrapperSegments(pathParts) {
+  return pathParts.filter((part) => !MODE_WRAPPERS.has(part) && !COLLECTION_WRAPPERS.has(part));
+}
+
+function themeSegment(token) {
+  return token.path.find((part) => THEME_MODE_WRAPPERS.has(part));
+}
+
 function tokenName(token) {
-  return token.path.filter((part) => !MODE_WRAPPERS.has(part)).map(normalizeNameSegment).join("-");
+  return stripWrapperSegments(token.path).map(normalizeNameSegment).join("-");
 }
 
 function collectPrimitiveValues(node, pathParts = [], acc = new Map()) {
   if (!node || typeof node !== "object") return acc;
 
   if (Object.prototype.hasOwnProperty.call(node, "value")) {
-    const name = pathParts.filter((part) => !MODE_WRAPPERS.has(part)).map(normalizeNameSegment).join("-");
+    const name = stripWrapperSegments(pathParts).map(normalizeNameSegment).join("-");
     acc.set(name, node.value);
     return acc;
   }
@@ -44,7 +59,7 @@ function normalizedFilePath(token) {
 }
 
 function isPrimitive(token) {
-  return normalizedFilePath(token).includes("/primitives/") && token.path[0] === "Value";
+  return normalizedFilePath(token).includes("/primitives/") && token.path.includes("Value");
 }
 
 function isResponsive(token) {
@@ -55,8 +70,12 @@ function isComponent(token) {
   return normalizedFilePath(token).includes("/component/");
 }
 
+function isSemantic(token) {
+  return normalizedFilePath(token).includes("/semantic/");
+}
+
 function isThemeWrappedToken(token) {
-  return THEME_MODE_WRAPPERS.has(token.path[0]);
+  return token.path.some((part) => THEME_MODE_WRAPPERS.has(part));
 }
 
 function isComponentModeToken(token) {
@@ -64,22 +83,26 @@ function isComponentModeToken(token) {
 }
 
 function isBaseToken(token) {
-  return isPrimitive(token) || isResponsive(token) || (isComponent(token) && !isThemeWrappedToken(token));
+  return (
+    isPrimitive(token) ||
+    isResponsive(token) ||
+    ((isComponent(token) || isSemantic(token)) && !isThemeWrappedToken(token))
+  );
 }
 
 function isLightSemantic(token) {
+  const mode = themeSegment(token);
   return (
-    (normalizedFilePath(token).includes("/semantic/") &&
-      (token.path[0] === "Light" || token.path[0] === "Mode 1")) ||
-    isComponentModeToken(token) && (token.path[0] === "Light" || token.path[0] === "Mode 1")
+    (normalizedFilePath(token).includes("/semantic/") && mode === "Light") ||
+    (isComponentModeToken(token) && mode === "Light")
   );
 }
 
 function isDarkSemantic(token) {
+  const mode = themeSegment(token);
   return (
-    (normalizedFilePath(token).includes("/semantic/") &&
-      (token.path[0] === "Dark" || token.path[0] === "Mode 1")) ||
-    isComponentModeToken(token) && (token.path[0] === "Dark" || token.path[0] === "Mode 1")
+    (normalizedFilePath(token).includes("/semantic/") && mode === "Dark") ||
+    (isComponentModeToken(token) && mode === "Dark")
   );
 }
 

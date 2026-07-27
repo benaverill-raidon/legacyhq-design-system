@@ -208,14 +208,14 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use selected semantic tokens.
+Use the semantic brand mappings bound in Figma.
 
 Recommended selected styling:
 
 ```txt
-background: var(--color-background-selected-default)
-content: var(--color-content-selected)
-border: var(--color-border-selected)
+background: var(--color-background-brand-primary-default-default)
+content: var(--color-content-brand-primary)
+border: var(--color-border-brand-primary)
 ```
 
 Use actual generated token names in code.
@@ -291,9 +291,9 @@ Use semantic tokens for:
 - disabled state
 - selected state
 
-Use component tokens only for anatomy if needed.
+Use shared semantic, dimension, spacing, and radius tokens directly.
 
-Prefer reusing Icon Button and Toggle Button component tokens/classes where available.
+Reuse established Icon Button and Toggle Button layout patterns where available.
 
 ## Storybook
 

@@ -1,7 +1,7 @@
 .root {
-  --toggle-icon-button-size: var(--component-button-min-height-md);
+  --toggle-icon-button-size: var(--size-control-md);
   --toggle-icon-button-radius: var(--border-radius-lg);
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
 
   display: inline-flex;
   align-items: center;
@@ -9,10 +9,10 @@
   box-sizing: border-box;
   inline-size: var(--toggle-icon-button-size);
   block-size: var(--toggle-icon-button-size);
-  padding: var(--spacing-0);
-  border: var(--border-width-default) solid var(--color-border-default);
+  padding: var(--spacing-none);
+  border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--toggle-icon-button-radius);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
   cursor: pointer;
   flex: 0 0 auto;
@@ -22,50 +22,50 @@
 }
 
 .root:not(:disabled):not(.selected):hover {
-  background: var(--color-background-neutral-subtle-hovered);
+  background: var(--color-background-neutral-overlay-hovered);
 }
 
 .root:not(:disabled):not(.selected):active {
-  background: var(--color-background-neutral-subtle-pressed);
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .tone_default {
   border-color: var(--color-border-default);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
 .tone_subtle {
-  border-color: var(--color-background-neutral-subtle-default);
-  background: var(--color-background-neutral-subtle-default);
+  border-color: transparent;
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
 .selected,
 .selected:hover,
 .selected:active {
-  border-color: var(--color-border-selected);
-  background: var(--color-background-selected-default);
-  color: var(--color-content-selected);
+  border-color: var(--color-border-brand-primary);
+  background: var(--color-background-brand-primary-default-default);
+  color: var(--color-content-brand-primary);
 }
 
 .size_xs {
-  --toggle-icon-button-size: var(--component-button-min-height-xs);
+  --toggle-icon-button-size: var(--size-control-xs);
   --toggle-icon-button-radius: var(--border-radius-sm);
 }
 
 .size_sm {
-  --toggle-icon-button-size: var(--component-button-min-height-sm);
+  --toggle-icon-button-size: var(--size-control-sm);
   --toggle-icon-button-radius: var(--border-radius-lg);
 }
 
 .size_md {
-  --toggle-icon-button-size: var(--component-button-min-height-md);
+  --toggle-icon-button-size: var(--size-control-md);
   --toggle-icon-button-radius: var(--border-radius-lg);
 }
 
 .size_lg {
-  --toggle-icon-button-size: var(--component-button-min-height-lg);
+  --toggle-icon-button-size: var(--size-control-lg);
   --toggle-icon-button-radius: var(--border-radius-xl);
 }
 

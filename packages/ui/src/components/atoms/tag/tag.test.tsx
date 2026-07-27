@@ -278,16 +278,17 @@ describe('tag helpers', () => {
 
 describe('tag CSS contract', () => {
   it('maps standard and accent tones to semantic Figma-backed tokens', () => {
-    expect(tagCss).toContain('--tag-background: var(--color-background-input-default);');
+    expect(tagCss).toContain('--tag-background: var(--color-elevation-surface-raised-default);');
     expect(tagCss).toContain('--tag-border: var(--color-border-bold);');
     expect(tagCss).toContain('--tag-color: var(--color-content-default);');
-    expect(tagCss).toContain('--tag-background-hovered: var(--color-background-neutral-subtle-hovered);');
-    expect(tagCss).toContain('--tag-background: var(--color-background-accent-blue-subtlest-default);');
+    expect(tagCss).toContain('--color-background-neutral-overlay-hovered');
+    expect(tagCss).toContain('--color-background-neutral-overlay-pressed');
+    expect(tagCss).toContain('--tag-background: var(--color-background-accent-blue-subtle-default);');
     expect(tagCss).toContain('--tag-border: var(--color-border-accent-blue);');
     expect(tagCss).toContain('--tag-color: var(--color-content-accent-blue-bolder);');
-    expect(tagCss).toContain('--tag-background: var(--color-background-brand-subtle-default);');
-    expect(tagCss).toContain('--tag-border: var(--color-border-brand);');
-    expect(tagCss).toContain('--tag-color: var(--color-content-brand);');
+    expect(tagCss).toContain('--tag-background: var(--color-background-brand-primary-subtle-default);');
+    expect(tagCss).toContain('--tag-border: var(--color-border-brand-primary);');
+    expect(tagCss).toContain('--tag-color: var(--color-content-brand-primary);');
   });
 
   it('resets link styling so anchors inherit tag presentation', () => {
@@ -314,20 +315,23 @@ describe('tag CSS contract', () => {
     expect(tagCss).toContain('.removeIcon :global([data-size]) {');
   });
 
-  it('uses Tag-specific anatomy tokens for sizing and semantic tokens for spacing and radius', () => {
-    expect(tagCss).toContain('--tag-min-height: var(--component-tag-min-height-md);');
-    expect(tagCss).toContain('--tag-remove-size: var(--component-tag-remove-size-md);');
-    expect(tagCss).toContain('--tag-icon-size: var(--component-tag-icon-size-md);');
-    expect(tagCss).toContain('--tag-min-height: var(--component-tag-min-height-sm);');
-    expect(tagCss).toContain('--tag-remove-size: var(--component-tag-remove-size-sm);');
-    expect(tagCss).toContain('--tag-icon-size: var(--component-tag-icon-size-sm);');
-    expect(tagCss).toContain('--tag-gap: var(--spacing-050);');
+  it('uses shared geometry tokens without component aliases', () => {
+    expect(tagCss).toContain('--tag-min-height: var(--size-control-sm);');
+    expect(tagCss).toContain('--tag-remove-size: var(--size-control-sm);');
+    expect(tagCss).toContain('--tag-icon-size: var(--size-icon-md);');
+    expect(tagCss).toContain('--tag-min-height: var(--size-control-xs);');
+    expect(tagCss).toContain('--tag-remove-size: var(--size-control-xs);');
+    expect(tagCss).toContain('--tag-icon-size: var(--size-icon-sm);');
+    expect(tagCss).toContain('--tag-gap: var(--spacing-xs);');
     expect(tagCss).toContain('border-start-end-radius: 0;');
     expect(tagCss).toContain('border-end-end-radius: 0;');
     expect(tagCss).toContain('border-start-start-radius: 0;');
     expect(tagCss).toContain('border-end-start-radius: 0;');
     expect(tagCss).toContain('--tag-radius: var(--border-radius-sm);');
     expect(tagCss).toContain('--tag-radius: var(--border-radius-lg);');
+    expect(tagCss).toContain('padding-inline-end: var(--spacing-none);');
+    expect(tagCss).not.toContain('--component-tag-');
+    expect(tagCss).not.toContain('-subtlest-');
     expect(tagCss).not.toContain('component-button-min-height');
     expect(tagCss).toContain('font-family: var(--typography-body-md-font-family);');
     expect(tagCss).not.toContain('--tag-surface');

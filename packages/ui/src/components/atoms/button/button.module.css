@@ -1,17 +1,17 @@
 .button {
   --button-border-radius: var(--border-radius-sm);
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   min-inline-size: 0;
-  min-block-size: var(--component-button-min-height-md);
-  padding-block: var(--spacing-0);
-  padding-inline: var(--spacing-150);
-  border: var(--border-width-default) solid var(--color-border-default);
+  min-block-size: var(--size-control-md);
+  padding-block: var(--spacing-none);
+  padding-inline: var(--spacing-md);
+  border: var(--border-width-sm) solid transparent;
   border-radius: var(--button-border-radius);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
   font-family: var(--typography-heading-xs-font-family);
   font-size: var(--typography-heading-xs-font-size);
@@ -19,19 +19,12 @@
   line-height: var(--typography-heading-xs-line-height);
   letter-spacing: var(--typography-heading-xs-letter-spacing);
   text-transform: var(--typography-heading-xs-text-transform);
-  gap: var(--spacing-075);
+  gap: var(--spacing-sm);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
-}
-
-.button:not(:disabled):not([data-loading='true']):hover {
-  background: var(--color-background-neutral-subtle-hovered);
-}
-
-.button:not(:disabled):not([data-loading='true']):active {
-  background: var(--color-background-neutral-subtle-pressed);
+  overflow: visible;
 }
 
 .button[data-loading='true'],
@@ -41,26 +34,26 @@
 }
 
 .size_xs {
-  min-block-size: var(--component-button-min-height-xs);
-  padding-inline: var(--spacing-075);
+  min-block-size: var(--size-control-xs);
+  padding-inline: var(--spacing-sm);
 }
 
 .size_sm {
   --button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--component-button-min-height-sm);
-  padding-inline: var(--spacing-100);
+  min-block-size: var(--size-control-sm);
+  padding-inline: var(--spacing-sm);
 }
 
 .size_md {
   --button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--component-button-min-height-md);
-  padding-inline: var(--spacing-150);
+  min-block-size: var(--size-control-md);
+  padding-inline: var(--spacing-md);
 }
 
 .size_lg {
   --button-border-radius: var(--border-radius-xl);
-  min-block-size: var(--component-button-min-height-lg);
-  padding-inline: var(--spacing-200);
+  min-block-size: var(--size-control-lg);
+  padding-inline: var(--spacing-lg);
 
   font-family: var(--typography-heading-sm-font-family);
   font-size: var(--typography-heading-sm-font-size);
@@ -70,80 +63,122 @@
   text-transform: var(--typography-heading-sm-text-transform);
 }
 
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover / focus /
+ * pressed as a static regression reference. It is documentation-only, not part of the public API.
+ * Focus is grouped into the same rule as hover - focus-visible shows the hover fill in addition to
+ * the outline ring from the shared focus-ring primitive, so focus and hover read as one treatment.
+ */
 .appearance_default {
   border-color: var(--color-border-default);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
+.appearance_default:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  border-color: var(--color-border-default);
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  border-color: var(--color-border-default);
+  background: var(--color-background-neutral-overlay-pressed);
+}
+
 .appearance_primary {
-  border-color: var(--color-background-brand-bold-default);
-  background: var(--color-background-brand-bold-default);
+  background: var(--color-background-brand-primary-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):hover {
-  border-color: var(--color-background-brand-bold-hovered);
-  background: var(--color-background-brand-bold-hovered);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  background: var(--color-background-brand-primary-bold-hovered);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):active {
-  border-color: var(--color-background-brand-bold-pressed);
-  background: var(--color-background-brand-bold-pressed);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  background: var(--color-background-brand-primary-bold-pressed);
 }
 
 .appearance_primary.tone_warning {
-  border-color: var(--color-background-warning-bold-default);
   background: var(--color-background-warning-bold-default);
-  color: var(--color-content-warning-inverse);
+  color: var(--color-content-warning-bold);
 }
 
-.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):hover {
-  border-color: var(--color-background-warning-bold-hovered);
+.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
   background: var(--color-background-warning-bold-hovered);
 }
 
-.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):active {
-  border-color: var(--color-background-warning-bold-pressed);
+.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
   background: var(--color-background-warning-bold-pressed);
 }
 
 .appearance_primary.tone_error {
-  border-color: var(--color-background-error-bold-default);
   background: var(--color-background-error-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):hover {
-  border-color: var(--color-background-error-bold-hovered);
+.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
   background: var(--color-background-error-bold-hovered);
 }
 
-.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):active {
-  border-color: var(--color-background-error-bold-pressed);
+.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
   background: var(--color-background-error-bold-pressed);
 }
 
 .appearance_primary.tone_discovery {
-  border-color: var(--color-background-discovery-bold-default);
   background: var(--color-background-discovery-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):hover {
-  border-color: var(--color-background-discovery-bold-hovered);
+.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
   background: var(--color-background-discovery-bold-hovered);
 }
 
-.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):active {
-  border-color: var(--color-background-discovery-bold-pressed);
+.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
   background: var(--color-background-discovery-bold-pressed);
 }
 
 .appearance_subtle {
-  border-color: var(--color-background-neutral-subtle-default);
-  background: var(--color-background-neutral-subtle-default);
+  border-color: transparent;
+  background: transparent;
   color: var(--color-content-subtle);
+}
+
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .button:disabled,

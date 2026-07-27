@@ -345,7 +345,7 @@ Generated CSS variables should be equivalent to:
 --component-slider-handle-height-md
 --component-slider-track-radius
 --component-slider-stop-size
---component-slider-value-indicator-offset
+--spacing-sm
 ```
 
 If exact Figma values are available through the Figma plugin, use those values as component tokens rather than hardcoding them in CSS.

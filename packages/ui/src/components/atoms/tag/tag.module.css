@@ -1,15 +1,17 @@
 .root {
   block-size: var(--tag-min-height);
-  --tag-background: var(--color-background-input-default);
-  --tag-background-hovered: var(--color-background-neutral-subtle-hovered);
-  --tag-background-pressed: var(--color-background-neutral-subtle-pressed);
+  --tag-background: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered: var(--color-elevation-surface-raised-default);
+  --tag-background-pressed: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered-layer: none;
+  --tag-background-pressed-layer: none;
   --tag-border: var(--color-border-bold);
   --tag-color: var(--color-content-default);
-  --tag-min-height: var(--component-tag-min-height-md);
-  --tag-padding-inline: var(--spacing-100);
-  --tag-gap: var(--spacing-050);
-  --tag-icon-size: var(--component-tag-icon-size-md);
-  --tag-remove-size: var(--component-tag-remove-size-md);
+  --tag-min-height: var(--size-control-sm);
+  --tag-padding-inline: var(--spacing-sm);
+  --tag-gap: var(--spacing-xs);
+  --tag-icon-size: var(--size-icon-md);
+  --tag-remove-size: var(--size-control-sm);
   --tag-radius: var(--border-radius-lg);
 
   display: inline-flex;
@@ -35,7 +37,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border: var(--border-width-default) solid var(--tag-border);
+  border: var(--border-width-sm) solid var(--tag-border);
   border-radius: var(--tag-radius);
   z-index: 3;
 }
@@ -52,10 +54,11 @@
   align-items: center;
   min-inline-size: 0;
   min-block-size: var(--tag-min-height);
-  padding-block: var(--spacing-0);
+  padding-block: var(--spacing-none);
   padding-inline: var(--tag-padding-inline);
   gap: var(--tag-gap);
   background-color: var(--tag-background);
+  background-image: none;
   color: inherit;
   font-family: var(--typography-body-md-font-family);
   font-size: var(--typography-body-md-font-size);
@@ -86,6 +89,7 @@
   border-end-start-radius: var(--tag-radius);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
+  padding-inline-end: var(--spacing-none);
   position: relative;
   z-index: 1;
 }
@@ -94,7 +98,7 @@
   cursor: pointer;
   color: inherit;
   text-decoration: none;
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
 }
 
 .contentInteractive:visited {
@@ -104,10 +108,12 @@
 .contentInteractive:not([aria-disabled='true']):hover,
 .contentInteractive:not([aria-disabled='true']):focus-visible {
   background-color: var(--tag-background-hovered);
+  background-image: var(--tag-background-hovered-layer, none);
 }
 
 .contentInteractive:not([aria-disabled='true']):active {
   background-color: var(--tag-background-pressed);
+  background-image: var(--tag-background-pressed-layer, none);
 }
 
 
@@ -162,19 +168,22 @@
   border-start-end-radius: var(--tag-radius);
   border-end-end-radius: var(--tag-radius);
   background-color: var(--tag-background);
+  background-image: none;
   color: inherit;
   cursor: pointer;
   text-decoration: none;
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
 }
 
 .removeButton:not(:disabled):hover,
 .removeButton:not(:disabled):focus-visible {
   background-color: var(--tag-background-hovered);
+  background-image: var(--tag-background-hovered-layer, none);
 }
 
 .removeButton:not(:disabled):active {
   background-color: var(--tag-background-pressed);
+  background-image: var(--tag-background-pressed-layer, none);
 }
 
 .contentInteractive:focus-visible,
@@ -196,101 +205,109 @@
 }
 
 .size_sm {
-  --tag-min-height: var(--component-tag-min-height-sm);
-  --tag-padding-inline: var(--spacing-050);
-  --tag-gap: var(--spacing-050);
-  --tag-icon-size: var(--component-tag-icon-size-sm);
-  --tag-remove-size: var(--component-tag-remove-size-sm);
+  --tag-min-height: var(--size-control-xs);
+  --tag-padding-inline: var(--spacing-xs);
+  --tag-gap: var(--spacing-xs);
+  --tag-icon-size: var(--size-icon-sm);
+  --tag-remove-size: var(--size-control-xs);
   --tag-radius: var(--border-radius-sm);
 }
 
 .size_md {
-  --tag-min-height: var(--component-tag-min-height-md);
-  --tag-padding-inline: var(--spacing-100);
-  --tag-gap: var(--spacing-050);
-  --tag-icon-size: var(--component-tag-icon-size-md);
-  --tag-remove-size: var(--component-tag-remove-size-md);
+  --tag-min-height: var(--size-control-sm);
+  --tag-padding-inline: var(--spacing-sm);
+  --tag-gap: var(--spacing-xs);
+  --tag-icon-size: var(--size-icon-md);
+  --tag-remove-size: var(--size-control-sm);
   --tag-radius: var(--border-radius-lg);
 }
 
 .tone_standard {
-  --tag-background: var(--color-background-input-default);
-  --tag-background-hovered: var(--color-background-neutral-subtle-hovered);
-  --tag-background-pressed: var(--color-background-neutral-subtle-pressed);
+  --tag-background: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered-layer: linear-gradient(
+    var(--color-background-neutral-overlay-hovered),
+    var(--color-background-neutral-overlay-hovered)
+  );
+  --tag-background-pressed: var(--color-elevation-surface-raised-default);
+  --tag-background-pressed-layer: linear-gradient(
+    var(--color-background-neutral-overlay-pressed),
+    var(--color-background-neutral-overlay-pressed)
+  );
   --tag-border: var(--color-border-bold);
   --tag-color: var(--color-content-default);
 }
 
 .tone_blue {
-  --tag-background: var(--color-background-accent-blue-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-blue-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-blue-subtlest-pressed);
+  --tag-background: var(--color-background-accent-blue-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-blue-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-blue-subtle-pressed);
   --tag-border: var(--color-border-accent-blue);
   --tag-color: var(--color-content-accent-blue-bolder);
 }
 
 .tone_green {
-  --tag-background: var(--color-background-accent-green-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-green-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-green-subtlest-pressed);
+  --tag-background: var(--color-background-accent-green-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-green-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-green-subtle-pressed);
   --tag-border: var(--color-border-accent-green);
   --tag-color: var(--color-content-accent-green-bolder);
 }
 
 .tone_purple {
-  --tag-background: var(--color-background-accent-purple-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-purple-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-purple-subtlest-pressed);
+  --tag-background: var(--color-background-accent-purple-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-purple-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-purple-subtle-pressed);
   --tag-border: var(--color-border-accent-purple);
   --tag-color: var(--color-content-accent-purple-bolder);
 }
 
 .tone_red {
-  --tag-background: var(--color-background-accent-red-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-red-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-red-subtlest-pressed);
+  --tag-background: var(--color-background-accent-red-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-red-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-red-subtle-pressed);
   --tag-border: var(--color-border-accent-red);
   --tag-color: var(--color-content-accent-red-bolder);
 }
 
 .tone_teal {
-  --tag-background: var(--color-background-accent-teal-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-teal-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-teal-subtlest-pressed);
+  --tag-background: var(--color-background-accent-teal-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-teal-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-teal-subtle-pressed);
   --tag-border: var(--color-border-accent-teal);
   --tag-color: var(--color-content-accent-teal-bolder);
 }
 
 .tone_yellow {
-  --tag-background: var(--color-background-accent-yellow-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-yellow-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-yellow-subtlest-pressed);
+  --tag-background: var(--color-background-accent-yellow-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-yellow-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-yellow-subtle-pressed);
   --tag-border: var(--color-border-accent-yellow);
   --tag-color: var(--color-content-accent-yellow-bolder);
 }
 
 .tone_orange {
-  --tag-background: var(--color-background-accent-orange-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-orange-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-orange-subtlest-pressed);
+  --tag-background: var(--color-background-accent-orange-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-orange-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-orange-subtle-pressed);
   --tag-border: var(--color-border-accent-orange);
   --tag-color: var(--color-content-accent-orange-bolder);
 }
 
 .tone_magenta {
-  --tag-background: var(--color-background-accent-magenta-subtlest-default);
-  --tag-background-hovered: var(--color-background-accent-magenta-subtlest-hovered);
-  --tag-background-pressed: var(--color-background-accent-magenta-subtlest-pressed);
+  --tag-background: var(--color-background-accent-magenta-subtle-default);
+  --tag-background-hovered: var(--color-background-accent-magenta-subtle-hovered);
+  --tag-background-pressed: var(--color-background-accent-magenta-subtle-pressed);
   --tag-border: var(--color-border-accent-magenta);
   --tag-color: var(--color-content-accent-magenta-bolder);
 }
 
 .tone_brand {
-  --tag-background: var(--color-background-brand-subtle-default);
-  --tag-background-hovered: var(--color-background-brand-subtle-hovered);
-  --tag-background-pressed: var(--color-background-brand-subtle-pressed);
-  --tag-border: var(--color-border-brand);
-  --tag-color: var(--color-content-brand);
+  --tag-background: var(--color-background-brand-primary-subtle-default);
+  --tag-background-hovered: var(--color-background-brand-primary-subtle-hovered);
+  --tag-background-pressed: var(--color-background-brand-primary-subtle-pressed);
+  --tag-border: var(--color-border-brand-primary);
+  --tag-color: var(--color-content-brand-primary);
 }
 
 .root,
@@ -314,9 +331,11 @@
 .disabled .removeButton:hover,
 .disabled .removeButton:active,
 .disabled .removeButton:focus-visible {
-  --tag-background: var(--color-background-disabled);
-  --tag-background-hovered: var(--color-background-disabled);
-  --tag-background-pressed: var(--color-background-disabled);
+  --tag-background: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered: var(--color-elevation-surface-raised-default);
+  --tag-background-pressed: var(--color-elevation-surface-raised-default);
+  --tag-background-hovered-layer: none;
+  --tag-background-pressed-layer: none;
   --tag-border: var(--color-border-disabled);
   --tag-color: var(--color-content-disabled);
 }

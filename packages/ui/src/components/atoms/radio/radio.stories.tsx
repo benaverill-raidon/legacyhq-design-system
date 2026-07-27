@@ -34,7 +34,7 @@ type Story = StoryObj<typeof Radio>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
@@ -42,14 +42,14 @@ const rowStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-300)',
+  gap: 'var(--spacing-2xl)',
 } satisfies CSSProperties;
 
 const cardStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
@@ -57,8 +57,8 @@ const cardStyle = {
 
 const darkSurfaceStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse)',
@@ -70,8 +70,8 @@ const tableStyle = {
 } satisfies CSSProperties;
 
 const cellStyle = {
-  padding: 'var(--spacing-100)',
-  borderBlockEnd: 'var(--border-width-default) solid var(--color-border-default)',
+  padding: 'var(--spacing-sm)',
+  borderBlockEnd: 'var(--border-width-sm) solid var(--color-border-default)',
   textAlign: 'start',
 } satisfies CSSProperties;
 

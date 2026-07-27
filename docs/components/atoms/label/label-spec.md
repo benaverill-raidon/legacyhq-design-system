@@ -112,10 +112,10 @@ emphasis = 'subtle'
 
 | Property | Token |
 |---|---|
-| `sm` padding-block | `--spacing-025` |
-| `sm` padding-inline | `--spacing-050` |
-| `md` padding-block | `--spacing-025` |
-| `md` padding-inline | `--spacing-075` |
+| `sm` padding-block | `--spacing-xxs` |
+| `sm` padding-inline | `--spacing-xs` |
+| `md` padding-block | `--spacing-xxs` |
+| `md` padding-inline | `--spacing-sm` |
 | Border radius | `--border-radius-xs` |
 
 ### Typography Tokens

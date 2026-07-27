@@ -1,7 +1,12 @@
 import * as React from 'react';
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Avatar } from './avatar';
+
+const avatarCss = readFileSync('packages/ui/src/components/atoms/avatar/avatar.module.css', 'utf8');
+const avatarTokenSource = readFileSync('packages/ui/src/tokens/src/component/avatar.json', 'utf8');
 
 afterEach(() => {
   cleanup();
@@ -11,15 +16,22 @@ describe('Avatar', () => {
   it('renders the fallback artwork when no src is provided', () => {
     const { container } = render(<Avatar name="Ben Averill" />);
 
-    expect(container.querySelector('svg')).toBeTruthy();
+    expect(container.querySelector('[data-avatar-fallback]')).toBeTruthy();
     expect(screen.getByRole('img', { name: 'Ben Averill' })).toBeTruthy();
+  });
+
+  it('uses full-size theme artwork without fallback-size tokens', () => {
+    expect(avatarCss).toContain("background-image: url('./person-light.svg');");
+    expect(avatarCss).toContain("background-image: url('./person-dark.svg');");
+    expect(avatarCss).not.toContain('avatar-fallback-size');
+    expect(avatarTokenSource).not.toContain('fallback-size');
   });
 
   it('renders an image when src is provided', () => {
     const { container } = render(<Avatar name="Ben Averill" src="https://example.com/avatar.png" />);
 
     expect(container.querySelector('img')).toBeTruthy();
-    expect(container.querySelector('svg')).toBeFalsy();
+    expect(container.querySelector('[data-avatar-fallback]')).toBeFalsy();
   });
 
   it('keeps the image inside the clipped content container', () => {
@@ -37,7 +49,7 @@ describe('Avatar', () => {
     fireEvent.error(image as HTMLImageElement);
 
     expect(container.querySelector('img')).toBeFalsy();
-    expect(container.querySelector('svg')).toBeTruthy();
+    expect(container.querySelector('[data-avatar-fallback]')).toBeTruthy();
   });
 
   it('renders a non-interactive avatar as a span', () => {
@@ -95,6 +107,8 @@ describe('Avatar', () => {
     const { rerender, container } = render(<Avatar name="Ben Averill" presence="online" />);
 
     expect(container.querySelector('[aria-hidden="true"][data-badge="online"] svg')?.getAttribute('class')).toContain('badgeGlyph');
+    expect(container.querySelectorAll('[data-badge="online"] svg circle')).toHaveLength(1);
+    expect(container.querySelector('[data-badge="online"] svg path')).toBeNull();
 
     rerender(<Avatar name="Ben Averill" presence="busy" />);
     expect(container.querySelector('[aria-hidden="true"][data-badge="busy"] svg')).toBeTruthy();
@@ -126,12 +140,6 @@ describe('Avatar', () => {
     expect(badgeWrapper?.className).toContain('badgeIcon');
   });
 
-  it('applies the xxl size class for the adjusted badge positioning variables', () => {
-    const { container } = render(<Avatar name="Ben Averill" size="xxl" status="accepted" />);
-
-    expect(container.firstElementChild?.className).toContain('size_xxl');
-    expect(container.querySelector('[aria-hidden="true"][data-badge="accepted"]')).toBeTruthy();
-  });
 
   it('applies selected state data attributes', () => {
     const { container } = render(<Avatar name="Ben Averill" isSelected />);

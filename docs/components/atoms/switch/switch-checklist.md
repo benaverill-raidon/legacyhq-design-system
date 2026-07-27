@@ -74,15 +74,10 @@ Atom component.
 - Vitest
 - React Testing Library
 
-## Open Validation Items
+## Validated Figma Details
 
-- Confirm exact Figma dimensions from plugin inspection:
-  - track width
-  - track height
-  - thumb size
-  - thumb travel distance
-  - focus ring radius/offset
-- Confirm whether internal check/X marks are drawn with CSS pseudo-elements or private inline SVG.
-- Confirm whether component-level geometry tokens need to be added after Figma values are extracted.
-
-
+- `md`: 40px by 20px track, 16px thumb, 20px thumb travel.
+- `sm`: 32px by 16px track, 12px thumb, 16px thumb travel.
+- Both sizes use a 2px thumb inset and 12px private check/X marks.
+- Focus Ring remains the shared 2px utility treatment.
+- Shared geometry tokens are used directly; no component token aliases are required.

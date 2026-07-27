@@ -1,5 +1,5 @@
 {
-  "Mode 1": {
+  "Semantic: Typography": {
     "typography-display-lg-font-family": {
       "value": "var(--typography-font-family-merriweather)",
       "type": "string",
@@ -104,41 +104,6 @@
       "value": "var(--typography-text-transform-none)",
       "type": "string",
       "originalName": "typography/display/sm/text-transform"
-    },
-    "typography-display-xs-font-family": {
-      "value": "var(--typography-font-family-merriweather)",
-      "type": "string",
-      "originalName": "typography/display/xs/font-family"
-    },
-    "typography-display-xs-font-weight": {
-      "value": "var(--typography-font-weight-600)",
-      "type": "float",
-      "originalName": "typography/display/xs/font-weight"
-    },
-    "typography-display-xs-font-size": {
-      "value": "var(--typography-font-size-24)",
-      "type": "float",
-      "originalName": "typography/display/xs/font-size"
-    },
-    "typography-display-xs-line-height": {
-      "value": "var(--typography-line-height-28)",
-      "type": "float",
-      "originalName": "typography/display/xs/line-height"
-    },
-    "typography-display-xs-letter-spacing": {
-      "value": "var(--typography-letter-spacing-0)",
-      "type": "float",
-      "originalName": "typography/display/xs/letter-spacing"
-    },
-    "typography-display-xs-paragraph-spacing": {
-      "value": "var(--typography-paragraph-spacing-0)",
-      "type": "float",
-      "originalName": "typography/display/xs/paragraph-spacing"
-    },
-    "typography-display-xs-text-transform": {
-      "value": "var(--typography-text-transform-none)",
-      "type": "string",
-      "originalName": "typography/display/xs/text-transform"
     },
     "typography-heading-xxl-font-family": {
       "value": "var(--typography-font-family-public-sans)",
@@ -629,6 +594,41 @@
       "value": "var(--typography-text-transform-uppercase)",
       "type": "string",
       "originalName": "typography/overline/sm/text-transform"
+    },
+    "typography-display-xs-font-family": {
+      "value": "var(--typography-font-family-merriweather)",
+      "type": "string",
+      "originalName": "typography/display/xs/font-family"
+    },
+    "typography-display-xs-font-weight": {
+      "value": "var(--typography-font-weight-600)",
+      "type": "float",
+      "originalName": "typography/display/xs/font-weight"
+    },
+    "typography-display-xs-font-size": {
+      "value": "var(--typography-font-size-24)",
+      "type": "float",
+      "originalName": "typography/display/xs/font-size"
+    },
+    "typography-display-xs-line-height": {
+      "value": "var(--typography-line-height-28)",
+      "type": "float",
+      "originalName": "typography/display/xs/line-height"
+    },
+    "typography-display-xs-letter-spacing": {
+      "value": "var(--typography-letter-spacing-0)",
+      "type": "float",
+      "originalName": "typography/display/xs/letter-spacing"
+    },
+    "typography-display-xs-paragraph-spacing": {
+      "value": "var(--typography-paragraph-spacing-0)",
+      "type": "float",
+      "originalName": "typography/display/xs/paragraph-spacing"
+    },
+    "typography-display-xs-text-transform": {
+      "value": "var(--typography-text-transform-none)",
+      "type": "string",
+      "originalName": "typography/display/xs/text-transform"
     }
   }
 }

@@ -38,7 +38,7 @@ type Story = StoryObj<typeof Tooltip>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
@@ -46,14 +46,14 @@ const rowStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
 } satisfies CSSProperties;
 
 const cardStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',

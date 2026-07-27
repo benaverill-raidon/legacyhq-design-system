@@ -65,37 +65,37 @@ type Story = StoryObj<typeof AddIcon>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
 const sectionStyle = {
   display: 'grid',
-  gap: 'var(--spacing-100)',
+  gap: 'var(--spacing-sm)',
 } satisfies CSSProperties;
 
 const rowStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-150)',
+  gap: 'var(--spacing-md)',
 } satisfies CSSProperties;
 
 const galleryStyle = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-  gap: 'var(--spacing-100)',
+  gap: 'var(--spacing-sm)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
 const itemStyle = {
   display: 'grid',
-  gridTemplateColumns: 'var(--spacing-300) 1fr',
+  gridTemplateColumns: 'var(--spacing-2xl) 1fr',
   alignItems: 'center',
-  gap: 'var(--spacing-100)',
+  gap: 'var(--spacing-sm)',
   minInlineSize: 0,
-  padding: 'var(--spacing-075)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  padding: 'var(--spacing-sm)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-sm)',
   background: 'var(--color-elevation-surface-default)',
 } satisfies CSSProperties;
@@ -113,9 +113,9 @@ const labelStyle = {
 const inverseSurfaceStyle = {
   display: 'flex',
   flexWrap: 'wrap',
-  gap: 'var(--spacing-150)',
+  gap: 'var(--spacing-md)',
   alignItems: 'center',
-  padding: 'var(--spacing-200)',
+  padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse)',

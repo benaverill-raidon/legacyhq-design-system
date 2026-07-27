@@ -1,0 +1,35 @@
+{
+  "component": "ProgressIndicator",
+  "examples": [
+    {
+      "name": "Client onboarding",
+      "description": "Shows the current position in a five-step onboarding journey.",
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" />"
+    },
+    {
+      "name": "Primary account setup",
+      "description": "Uses the brand appearance for a primary setup flow.",
+      "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />"
+    },
+    {
+      "name": "Discovery journey",
+      "description": "Uses the discovery appearance for guided assistance.",
+      "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} appearance=\"discovery\" label=\"Guided setup\" />"
+    },
+    {
+      "name": "Inverted",
+      "description": "Appears on a dark or bold surface.",
+      "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverted\" label=\"Document setup\" />"
+    },
+    {
+      "name": "Custom value text",
+      "description": "Uses domain-specific accessible value language.",
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={4} label=\"Estate plan setup\" getValueText={(step, total) => `Section ${step} of ${total}`} />"
+    },
+    {
+      "name": "Interactive dots",
+      "description": "Allows direct one-based step selection while remaining controlled from outside the component.",
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />"
+    }
+  ]
+}

@@ -1,13 +1,21 @@
 .root {
-  --link-color: var(--color-link-default);
-  --link-color-pressed: var(--color-link-pressed);
-  --link-color-visited: var(--color-link-visited-default);
-  --link-color-visited-pressed: var(--color-link-visited-pressed);
-  --link-icon-size: var(--dimension-16);
+  --link-color: var(--color-content-accent-blue-default);
+  --link-color-pressed: var(--color-content-accent-blue-bolder);
+  --link-color-visited: var(--color-content-accent-purple-default);
+  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
+  --link-icon-size: var(--size-icon-md);
+
+  /*
+   * The shared focus-ring primitive sets `border-radius: inherit`, which otherwise pulls from
+   * whatever ambient parent happens to wrap this link - producing an inconsistent (or occasionally
+   * huge) outline shape depending on where Link is rendered. Link has no background or border of
+   * its own, so this radius exists purely to shape the focus outline consistently everywhere.
+   */
+  border-radius: var(--border-radius-xs);
 
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-050);
+  gap: var(--spacing-xs);
   width: fit-content;
   color: var(--link-color);
   font-family: var(--typography-heading-xs-font-family);
@@ -20,12 +28,19 @@
   cursor: pointer;
 }
 
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover / pressed
+ * as a static regression reference. It is documentation-only, not part of the public API.
+ */
 .root:hover,
-.root:active {
+.root:active,
+.root[data-force-state='hover'],
+.root[data-force-state='active'] {
   text-decoration-line: underline;
 }
 
-.root:active {
+.root:active,
+.root[data-force-state='active'] {
   color: var(--link-color-pressed);
 }
 
@@ -38,17 +53,17 @@
 }
 
 .appearance_default {
-  --link-color: var(--color-link-default);
-  --link-color-pressed: var(--color-link-pressed);
-  --link-color-visited: var(--color-link-visited-default);
-  --link-color-visited-pressed: var(--color-link-visited-pressed);
+  --link-color: var(--color-content-accent-blue-default);
+  --link-color-pressed: var(--color-content-accent-blue-bolder);
+  --link-color-visited: var(--color-content-accent-purple-default);
+  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
 }
 
 .appearance_subtle {
   --link-color: var(--color-content-subtle);
   --link-color-pressed: var(--color-content-default);
-  --link-color-visited: var(--color-link-visited-default);
-  --link-color-visited-pressed: var(--color-link-visited-pressed);
+  --link-color-visited: var(--color-content-accent-purple-default);
+  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
 }
 
 .appearance_inverse {
@@ -63,12 +78,15 @@
 .appearance_inverse:hover,
 .appearance_inverse:active,
 .appearance_inverse:focus-visible,
-.appearance_inverse:visited {
+.appearance_inverse:visited,
+.appearance_inverse[data-force-state='hover'],
+.appearance_inverse[data-force-state='active'],
+.appearance_inverse[data-force-state='focus'] {
   color: var(--color-content-inverse);
 }
 
 .size_sm {
-  --link-icon-size: var(--dimension-12);
+  --link-icon-size: var(--size-icon-sm);
 
   font-family: var(--typography-heading-xxs-font-family);
   font-size: var(--typography-heading-xxs-font-size);
@@ -79,7 +97,7 @@
 }
 
 .size_md {
-  --link-icon-size: var(--dimension-16);
+  --link-icon-size: var(--size-icon-md);
 }
 
 .content {
@@ -94,7 +112,7 @@
   inline-size: var(--link-icon-size);
   block-size: var(--link-icon-size);
   color: inherit;
-  line-height: var(--spacing-0);
+  line-height: var(--spacing-none);
 }
 
 .iconSvg {

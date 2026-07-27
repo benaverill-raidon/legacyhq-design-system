@@ -122,14 +122,14 @@ The parent owns the selected value.
 
 ## Selected token mapping
 
-Selected state should use semantic selected tokens.
+Selected state should use the semantic brand mappings bound in Figma.
 
 Expected mapping:
 
 ```txt
-background: color/background/selected/default
-content: color/content/selected
-border: color/border/selected
+background: color/background/brand/primary/default/default
+content: color/content/brand
+border: color/border/brand
 ```
 
 Use actual generated token names.
@@ -158,7 +158,7 @@ md
 lg
 ```
 
-Use Button size tokens and visual dimensions.
+Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry.
 
 ## Icon support
 

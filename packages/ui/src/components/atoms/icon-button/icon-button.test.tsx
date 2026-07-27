@@ -337,17 +337,35 @@ describe('IconButton', () => {
 
 describe('icon button CSS contract', () => {
   it('maps fixed square sizing to button min-height tokens', () => {
-    expect(iconButtonCss).toContain('--icon-button-size: var(--component-button-min-height-md);');
+    expect(iconButtonCss).toContain('--icon-button-size: var(--size-control-md);');
     expect(iconButtonCss).toContain('.size_xs {');
-    expect(iconButtonCss).toContain('--icon-button-size: var(--component-button-min-height-xs);');
-    expect(iconButtonCss).toContain('--icon-button-size: var(--component-button-min-height-sm);');
-    expect(iconButtonCss).toContain('--icon-button-size: var(--component-button-min-height-lg);');
+    expect(iconButtonCss).toContain('--icon-button-size: var(--size-control-xs);');
+    expect(iconButtonCss).toContain('--icon-button-size: var(--size-control-sm);');
+    expect(iconButtonCss).toContain('--icon-button-size: var(--size-control-lg);');
   });
 
   it('uses button-family radius tokens and full-round for round shape', () => {
     expect(iconButtonCss).toContain('--icon-button-radius: var(--border-radius-lg);');
     expect(iconButtonCss).toContain('--icon-button-radius: var(--border-radius-xl);');
     expect(iconButtonCss).toContain('border-radius: var(--border-radius-full-round);');
+  });
+
+  it('matches Figma rest-state color mappings for default, primary, and subtle', () => {
+    expect(iconButtonCss).toContain('.appearance_default {');
+    expect(iconButtonCss).toContain('border-color: var(--color-border-default);');
+    expect(iconButtonCss).toContain('background: transparent;');
+    expect(iconButtonCss).toContain('.appearance_primary {');
+    expect(iconButtonCss).toContain('border-color: var(--color-background-brand-primary-bold-default);');
+    expect(iconButtonCss).toContain('background: var(--color-background-brand-primary-bold-default);');
+    expect(iconButtonCss).toContain('.appearance_subtle {');
+    expect(iconButtonCss).toContain('border-color: transparent;');
+  });
+
+  it('keeps expanded state appearance-specific instead of overriding all tones globally', () => {
+    expect(iconButtonCss).toContain(".appearance_default[data-expanded='true']");
+    expect(iconButtonCss).toContain(".appearance_primary[data-expanded='true']");
+    expect(iconButtonCss).toContain(".appearance_subtle[data-expanded='true']");
+    expect(iconButtonCss).not.toContain(".root[data-expanded='true']");
   });
 
   it('keeps icon and spinner color inheritance token-driven', () => {

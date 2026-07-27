@@ -4,6 +4,7 @@ import styles from './slider.module.css';
 import type { SliderOrientation, SliderProps, SliderSize } from './slider.types';
 
 type SliderFillMode = 'standard' | 'centered';
+type SliderTrackBounds = Pick<DOMRect, 'bottom' | 'height' | 'left' | 'right' | 'top' | 'width'>;
 
 type SliderStyle = React.CSSProperties & {
   '--slider-active-end'?: string;
@@ -54,6 +55,17 @@ export function clampValue(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+export function roundValueToStep(value: number, min: number, step: number) {
+  if (!Number.isFinite(step) || step <= 0) {
+    return value;
+  }
+
+  const decimalPlaces = `${step}`.includes('.') ? `${step}`.split('.')[1]?.length ?? 0 : 0;
+  const roundedValue = Math.round((value - min) / step) * step + min;
+
+  return Number(roundedValue.toFixed(decimalPlaces));
+}
+
 export function getPercent(value: number, min: number, max: number) {
   if (max === min) {
     return 0;
@@ -96,23 +108,33 @@ export function getDerivedSteps(showSteps: boolean, steps: number[] | undefined,
 }
 
 function beforeSegmentBoundary(position: string) {
-  return `calc(${position} - var(--slider-current-handle-half-width) - var(--slider-current-gap))`;
+  return `calc(${position} - var(--component-slider-handle-half-width) - var(--slider-internal-gap))`;
 }
 
 function afterSegmentBoundary(position: string) {
-  return `calc(${position} + var(--slider-current-handle-half-width) + var(--slider-current-gap))`;
+  return `calc(${position} + var(--component-slider-handle-half-width) + var(--slider-internal-gap))`;
+}
+
+function getSegmentStartBoundary(position: string, percent: number) {
+  return percent <= 0 ? minPositionVariable : afterSegmentBoundary(position);
+}
+
+function getSegmentEndBoundary(position: string, percent: number) {
+  return percent >= 100 ? maxPositionVariable : beforeSegmentBoundary(position);
 }
 
 function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, originPercent: number) {
   if (fillMode === 'standard') {
     return {
-      activeShape: 'edge',
+      activeTouchesStart: true,
+      activeTouchesEnd: valuePercent >= 100,
+      inactiveEndFull: valuePercent <= 0,
       segmentStyles: {
         '--slider-inactive-start-start': minPositionVariable,
         '--slider-inactive-start-end': minPositionVariable,
         '--slider-active-start': minPositionVariable,
-        '--slider-active-end': beforeSegmentBoundary(valuePositionVariable),
-        '--slider-inactive-end-start': afterSegmentBoundary(valuePositionVariable),
+        '--slider-active-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
+        '--slider-inactive-end-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
         '--slider-inactive-end-end': maxPositionVariable,
       },
     };
@@ -120,26 +142,30 @@ function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, 
 
   if (valuePercent >= originPercent) {
     return {
-      activeShape: 'middle',
+      activeTouchesStart: originPercent <= 0,
+      activeTouchesEnd: valuePercent >= 100,
+      inactiveEndFull: false,
       segmentStyles: {
         '--slider-inactive-start-start': minPositionVariable,
-        '--slider-inactive-start-end': beforeSegmentBoundary(originPositionVariable),
-        '--slider-active-start': afterSegmentBoundary(originPositionVariable),
-        '--slider-active-end': beforeSegmentBoundary(valuePositionVariable),
-        '--slider-inactive-end-start': afterSegmentBoundary(valuePositionVariable),
+        '--slider-inactive-start-end': getSegmentEndBoundary(originPositionVariable, originPercent),
+        '--slider-active-start': getSegmentStartBoundary(originPositionVariable, originPercent),
+        '--slider-active-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
+        '--slider-inactive-end-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
         '--slider-inactive-end-end': maxPositionVariable,
       },
     };
   }
 
   return {
-    activeShape: 'middle',
+    activeTouchesStart: valuePercent <= 0,
+    activeTouchesEnd: originPercent >= 100,
+    inactiveEndFull: false,
     segmentStyles: {
       '--slider-inactive-start-start': minPositionVariable,
-      '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
-      '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
-      '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
-      '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
+      '--slider-inactive-start-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
+      '--slider-active-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
+      '--slider-active-end': getSegmentEndBoundary(originPositionVariable, originPercent),
+      '--slider-inactive-end-start': getSegmentStartBoundary(originPositionVariable, originPercent),
       '--slider-inactive-end-end': maxPositionVariable,
     },
   };
@@ -169,6 +195,55 @@ export function getStepModels(
       placement,
     };
   });
+}
+
+export function getSliderRatioFromPointer(
+  clientX: number,
+  clientY: number,
+  bounds: SliderTrackBounds,
+  orientation: SliderOrientation,
+) {
+  if (orientation === 'vertical') {
+    if (bounds.height <= 0) {
+      return 0;
+    }
+
+    return clampValue((bounds.bottom - clientY) / bounds.height, 0, 1);
+  }
+
+  if (bounds.width <= 0) {
+    return 0;
+  }
+
+  return clampValue((clientX - bounds.left) / bounds.width, 0, 1);
+}
+
+export function getSliderValueFromPointer(
+  clientX: number,
+  clientY: number,
+  bounds: SliderTrackBounds,
+  orientation: SliderOrientation,
+  min: number,
+  max: number,
+  step: number,
+) {
+  const ratio = getSliderRatioFromPointer(clientX, clientY, bounds, orientation);
+  const rawValue = min + ratio * (max - min);
+
+  return clampValue(roundValueToStep(rawValue, min, step), min, max);
+}
+
+function dispatchSliderInputValue(input: HTMLInputElement, nextValue: number) {
+  const nextValueString = `${nextValue}`;
+
+  if (input.value === nextValueString) {
+    return;
+  }
+
+  const valueSetter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set;
+
+  valueSetter?.call(input, nextValueString);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
 export function useSliderDragState() {
@@ -253,8 +328,18 @@ export function SliderBaseComponent(
   const startPosition = getVisualPosition(startPercent);
   const endPosition = getVisualPosition(endPercent);
   const stepModels = getStepModels(showSteps, steps, min, max, step, startPercent, endPercent);
-  const { activeShape, segmentStyles } = getSingleSegmentStyles(fillMode, valuePercent, originPercent);
+  const { activeTouchesEnd, activeTouchesStart, inactiveEndFull, segmentStyles } = getSingleSegmentStyles(
+    fillMode,
+    valuePercent,
+    originPercent,
+  );
   const { isDragging, startDragging, stopDragging } = useSliderDragState();
+  const controlRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const dragPointerIdRef = React.useRef<number | null>(null);
+
+  React.useImperativeHandle(forwardedRef, () => inputRef.current as HTMLInputElement);
 
   const handleChange = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -267,6 +352,71 @@ export function SliderBaseComponent(
       onValueChange?.(nextValue, event);
     },
     [isControlled, max, min, onValueChange],
+  );
+
+  const updateFromPointer = React.useCallback(
+    (clientX: number, clientY: number) => {
+      const bounds = trackRef.current?.getBoundingClientRect();
+      const input = inputRef.current;
+
+      if (!bounds || !input) {
+        return;
+      }
+
+      const nextValue = getSliderValueFromPointer(clientX, clientY, bounds, orientation, min, max, step);
+      dispatchSliderInputValue(input, nextValue);
+    },
+    [max, min, orientation, step],
+  );
+
+  const stopPointerDrag = React.useCallback(
+    (pointerId: number) => {
+      if (dragPointerIdRef.current !== pointerId) {
+        return;
+      }
+
+      if (controlRef.current?.hasPointerCapture?.(pointerId)) {
+        controlRef.current.releasePointerCapture(pointerId);
+      }
+
+      dragPointerIdRef.current = null;
+      stopDragging();
+    },
+    [stopDragging],
+  );
+
+  const handleControlPointerDown = React.useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (disabled || (event.pointerType === 'mouse' && event.button !== 0)) {
+        return;
+      }
+
+      dragPointerIdRef.current = event.pointerId;
+      controlRef.current?.setPointerCapture?.(event.pointerId);
+      inputRef.current?.focus();
+      startDragging();
+      onPointerDown?.(event as unknown as React.PointerEvent<HTMLInputElement>);
+
+      const handleTarget = (event.target as HTMLElement | null)?.closest('[data-slider-handle]');
+
+      if (!handleTarget) {
+        updateFromPointer(event.clientX, event.clientY);
+      }
+
+      event.preventDefault();
+    },
+    [disabled, onPointerDown, startDragging, updateFromPointer],
+  );
+
+  const handleControlPointerMove = React.useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (dragPointerIdRef.current !== event.pointerId || !isDragging) {
+        return;
+      }
+
+      updateFromPointer(event.clientX, event.clientY);
+    },
+    [isDragging, updateFromPointer],
   );
 
   return (
@@ -284,9 +434,22 @@ export function SliderBaseComponent(
       ) : null}
 
       <div
+        ref={controlRef}
         className={styles.control}
-        data-active-shape={activeShape}
+        data-active-touches-end={activeTouchesEnd ? 'true' : undefined}
+        data-active-touches-start={activeTouchesStart ? 'true' : undefined}
         data-has-steps={stepModels.length ? 'true' : undefined}
+        data-inactive-end-full={inactiveEndFull ? 'true' : undefined}
+        onPointerCancel={(event) => {
+          stopPointerDrag(event.pointerId);
+          onPointerCancel?.(event as unknown as React.PointerEvent<HTMLInputElement>);
+        }}
+        onPointerDown={handleControlPointerDown}
+        onPointerMove={handleControlPointerMove}
+        onPointerUp={(event) => {
+          stopPointerDrag(event.pointerId);
+          onPointerUp?.(event as unknown as React.PointerEvent<HTMLInputElement>);
+        }}
         style={
           {
             ...segmentStyles,
@@ -302,7 +465,7 @@ export function SliderBaseComponent(
           } as SliderStyle
         }
       >
-        <div className={styles.track} aria-hidden="true">
+        <div className={styles.track} aria-hidden="true" ref={trackRef}>
           <div className={styles.inactiveTrackStart} />
           <div className={styles.activeTrack} />
           <div className={styles.inactiveTrackEnd} />
@@ -335,14 +498,14 @@ export function SliderBaseComponent(
         </div>
 
         <div className={styles.handles} aria-hidden="true">
-          <span className={mergeClassNames(styles.handle, styles.handleSingle)}>
+          <span className={mergeClassNames(styles.handle, styles.handleSingle)} data-slider-handle="single">
             <span className={styles.handleVisual} />
           </span>
         </div>
 
         <input
           {...rest}
-          ref={forwardedRef}
+          ref={inputRef}
           id={inputId}
           className={mergeClassNames(
             styles.input,
@@ -359,22 +522,16 @@ export function SliderBaseComponent(
           defaultValue={isControlled ? undefined : defaultValue}
           disabled={disabled}
           onBlur={(event) => {
-            stopDragging();
+            if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {
+              stopDragging();
+            }
+
             onBlur?.(event);
           }}
           onChange={handleChange}
-          onPointerCancel={(event) => {
-            stopDragging();
-            onPointerCancel?.(event);
-          }}
-          onPointerDown={(event) => {
-            startDragging();
-            onPointerDown?.(event);
-          }}
-          onPointerUp={(event) => {
-            stopDragging();
-            onPointerUp?.(event);
-          }}
+          onPointerCancel={() => stopDragging()}
+          onPointerDown={() => startDragging()}
+          onPointerUp={() => stopDragging()}
         />
       </div>
     </div>
@@ -399,3 +556,20 @@ export const Slider = React.memo(
 );
 
 Slider.displayName = 'Slider';
+
+export const SliderCentered = React.memo(
+  React.forwardRef<HTMLInputElement, SliderProps>(function SliderCentered(props, forwardedRef) {
+    return (
+      <SliderBase
+        {...props}
+        ref={forwardedRef}
+        fillMode="centered"
+        defaultMin={-100}
+        defaultMax={100}
+        defaultDefaultValue={0}
+      />
+    );
+  }),
+);
+
+SliderCentered.displayName = 'SliderCentered';

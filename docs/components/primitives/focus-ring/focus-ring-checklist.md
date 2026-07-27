@@ -89,8 +89,8 @@ Example:
 - compact
 
 ### Token Mapping
-- default = `--border-width-bold` / 2px
-- compact = `--border-width-default` / 1px
+- default = `--border-width-md` / 2px
+- compact = `--border-width-sm` / 1px
 
 ### Color
 Both variants use:

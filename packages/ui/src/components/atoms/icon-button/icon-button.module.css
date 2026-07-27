@@ -1,7 +1,7 @@
 .root {
-  --icon-button-size: var(--component-button-min-height-md);
+  --icon-button-size: var(--size-control-md);
   --icon-button-radius: var(--border-radius-lg);
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
 
   display: inline-flex;
   align-items: center;
@@ -9,10 +9,10 @@
   box-sizing: border-box;
   inline-size: var(--icon-button-size);
   block-size: var(--icon-button-size);
-  padding: var(--spacing-0);
-  border: var(--border-width-default) solid var(--color-border-default);
+  padding: var(--spacing-none);
+  border: var(--border-width-sm) solid transparent;
   border-radius: var(--icon-button-radius);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
   cursor: pointer;
   flex: 0 0 auto;
@@ -21,69 +21,97 @@
   vertical-align: middle;
 }
 
-.root:not(:disabled):not([data-loading='true']):hover {
-  background: var(--color-background-neutral-subtle-hovered);
-}
-
-.root:not(:disabled):not([data-loading='true']):active {
-  background: var(--color-background-neutral-subtle-pressed);
-}
-
 .root[data-loading='true'],
 .root[data-loading='true']:hover,
 .root[data-loading='true']:active {
   cursor: progress;
 }
 
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover / focus /
+ * pressed as a static regression reference. It is documentation-only, not part of the public API.
+ * Focus is grouped into the same rule as hover - focus-visible shows the hover fill in addition to
+ * the outline ring from the shared focus-ring primitive, matching Button's convention.
+ */
 .appearance_default {
   border-color: var(--color-border-default);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
+}
+
+.appearance_default:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ),
+.appearance_default[data-expanded='true']:not(:disabled):not([data-loading='true']) {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .appearance_primary {
-  border-color: var(--color-background-brand-bold-default);
-  background: var(--color-background-brand-bold-default);
+  border-color: var(--color-background-brand-primary-bold-default);
+  background: var(--color-background-brand-primary-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):hover {
-  border-color: var(--color-background-brand-bold-hovered);
-  background: var(--color-background-brand-bold-hovered);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ),
+.appearance_primary[data-expanded='true']:not(:disabled):not([data-loading='true']) {
+  border-color: var(--color-background-brand-primary-bold-hovered);
+  background: var(--color-background-brand-primary-bold-hovered);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):active {
-  border-color: var(--color-background-brand-bold-pressed);
-  background: var(--color-background-brand-bold-pressed);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  border-color: var(--color-background-brand-primary-bold-pressed);
+  background: var(--color-background-brand-primary-bold-pressed);
 }
 
 .appearance_subtle {
-  border-color: var(--color-background-neutral-subtle-default);
-  background: var(--color-background-neutral-subtle-default);
+  border-color: transparent;
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
-.root[data-expanded='true'] {
-  background: var(--color-background-neutral-subtle-hovered);
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ),
+.appearance_subtle[data-expanded='true']:not(:disabled):not([data-loading='true']) {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .size_xs {
-  --icon-button-size: var(--component-button-min-height-xs);
+  --icon-button-size: var(--size-control-xs);
   --icon-button-radius: var(--border-radius-sm);
 }
 
 .size_sm {
-  --icon-button-size: var(--component-button-min-height-sm);
+  --icon-button-size: var(--size-control-sm);
   --icon-button-radius: var(--border-radius-lg);
 }
 
 .size_md {
-  --icon-button-size: var(--component-button-min-height-md);
+  --icon-button-size: var(--size-control-md);
   --icon-button-radius: var(--border-radius-lg);
 }
 
 .size_lg {
-  --icon-button-size: var(--component-button-min-height-lg);
+  --icon-button-size: var(--size-control-lg);
   --icon-button-radius: var(--border-radius-xl);
 }
 
@@ -95,10 +123,22 @@
   border-radius: var(--border-radius-full-round);
 }
 
-.root:disabled,
-.root:disabled:hover,
-.root:disabled:active {
+.appearance_default:disabled,
+.appearance_default:disabled:hover,
+.appearance_default:disabled:active,
+.appearance_primary:disabled,
+.appearance_primary:disabled:hover,
+.appearance_primary:disabled:active {
   border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.appearance_subtle:disabled,
+.appearance_subtle:disabled:hover,
+.appearance_subtle:disabled:active {
+  border-color: transparent;
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;

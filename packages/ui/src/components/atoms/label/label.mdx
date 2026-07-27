@@ -1,0 +1,152 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LabelStories from './Label.stories';
+
+<Meta of={LabelStories} name="Docs" />
+
+# Label
+
+Label is a compact, non-interactive marker for an item's status, category, or classification -
+built for fast scanning, not for action.
+
+<Canvas of={LabelStories.Playground} />
+
+## When to use
+
+- A status indicator - active, at risk, blocked, complete.
+- A classification or category tag on a card, table row, or list item.
+- A small metadata marker, including domain-specific ones like `law` or `wealth`.
+
+## When not to use
+
+- **As a button, link, or dropdown trigger.** Label is deliberately non-interactive and must never
+  be keyboard-focusable.
+- **As a removable tag or a user-entered chip.** Use `Tag` for anything the user adds or removes.
+- **As a filter or selectable value.** If it needs to be clicked or toggled, it isn't a Label.
+- **As the only source of meaning for something critical.** Color and a tone name aren't enough on
+  their own - pair Label with a heading, column name, or adjacent text that gives it context.
+
+## Anatomy
+
+<Canvas of={LabelStories.Content} />
+
+Label has one part: a `span` that renders its `children` directly, uppercased visually. There is no
+icon slot, no dismiss control, and no separate container - the text *is* the label.
+
+## Usage guidance
+
+### Tone versus emphasis
+
+`tone` carries the semantic meaning (`default`, `information`, `warning`, `discovery`, `error`,
+`success`, plus the domain-specific `law` and `wealth`); `emphasis` (`subtle` or `bold`) is purely a
+visual weight independent of that meaning. `bold` always uses an inverse-content fill; `subtle`
+always keeps a softer background with tone-colored text. Choose emphasis for visual hierarchy in the
+surrounding layout, not to change what the tone communicates.
+
+### Content length
+
+Keep text to 1-3 words - a status or category name, not a sentence. Label sets `white-space: nowrap`
+and applies no ellipsis, so longer content overflows visibly rather than wrapping or truncating.
+Treat visible overflow as a signal to shorten the text, not something to style around - truncation
+beyond normal inline layout is intentionally out of scope for this component. See Edge Cases.
+
+### Case handling
+
+Pass normal-cased text. The uppercase transform is applied by the component's typography, not
+expected of the caller - don't pre-uppercase strings before passing them as `children`.
+
+## Do / Don't
+
+**Do** pass normal-cased, concise text.
+
+```tsx
+<Label tone="success">Active</Label>
+```
+
+**Don't** pre-uppercase the string yourself - the component already does this visually.
+
+```tsx
+<Label tone="success">ACTIVE</Label>
+```
+
+---
+
+**Do** pair Label with adjacent text so tone isn't the only signal.
+
+```tsx
+<span>
+  Compliance task <Label tone="warning">At risk</Label>
+</span>
+```
+
+**Don't** let a bare Label stand in for a status column or heading.
+
+```tsx
+<Label tone="warning">At risk</Label>
+```
+
+---
+
+**Do** use `Tag` when the value is user-entered or removable.
+
+```tsx
+<Tag onRemove={handleRemove}>Custom filter</Tag>
+```
+
+**Don't** reach for Label when the content needs to be interactive.
+
+```tsx
+<Label onClick={handleRemove}>Custom filter</Label>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. Label text - 1 to 3 words recommended.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md'</code></td>
+      <td><code>'md'</code></td>
+      <td>Padding and typography scale.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'default' | 'information' | 'warning' | 'discovery' | 'error' | 'success' | 'law' | 'wealth'</code></td>
+      <td><code>'default'</code></td>
+      <td>Semantic meaning.</td>
+    </tr>
+    <tr>
+      <td><code>emphasis</code></td>
+      <td><code>'subtle' | 'bold'</code></td>
+      <td><code>'subtle'</code></td>
+      <td>Visual weight, independent of tone.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `span` attribute is forwarded to the root element. Label has no `isDisabled` or
+interactive state - it is non-interactive by design, so this Docs page has no States section.
+
+## Related components
+
+- **Badge** - for a bare numeric count rather than a text classification.
+- **Tag** - for a removable or user-entered value.

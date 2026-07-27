@@ -1,0 +1,206 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} name="Docs" />
+
+# Button
+
+Button triggers a user-initiated action - submitting a form, confirming a decision, opening a
+dialog, starting a workflow. Visual emphasis (`appearance`) and semantic intent (`tone`) are
+separate props, so a matter's severity doesn't dictate how loud it looks.
+
+<Canvas of={ButtonStories.Playground} />
+
+## When to use
+
+- Submitting or saving a form.
+- Continuing to the next step in a flow.
+- Opening a dialog or a menu.
+- Confirming or cancelling a decision.
+- Warning, destructive/error, or discovery-oriented actions.
+
+## When not to use
+
+- **For navigation.** Use `LinkButton` - it looks like a button but behaves like a link (right-click,
+  open in new tab, no `preventDefault` on click).
+- **For an icon-only control.** Button always requires a visible label. Use `IconButton`.
+- **For a toggleable selected state.** Use `ToggleButton` or `ToggleIconButton`.
+- **As a bare loading indicator with no user action attached.** Use `Spinner` directly.
+- **To recreate button behavior with ARIA roles on a non-button element.** Render a native `button`.
+
+## Anatomy
+
+<Canvas of={ButtonStories.Content} />
+
+1. **Root** - a native `button`. Always required.
+2. **Leading** - either `iconBefore`, or the loading `Spinner` when `isLoading` is true. The two
+   never appear together; loading replaces the leading icon rather than sitting beside it.
+3. **Content** - the visible label. Required, and always stays visible - even while loading.
+4. **Trailing** - `iconAfter`, unaffected by loading.
+
+## Usage guidance
+
+### Appearance versus tone
+
+`appearance` sets emphasis (`default`, `primary`, `subtle`); `tone` sets semantic intent (`neutral`,
+`warning`, `error`, `discovery`). They're independent props, but **tone only changes Button's
+appearance when `appearance="primary"`** - `default` and `subtle` render identically across every
+tone value. Setting `tone="error"` on a `default` button is valid but has no visual effect; if a
+non-primary action needs to look different, that's a signal to reconsider the appearance, not to
+expect tone to carry it. See Variants.
+
+### Icon usage
+
+Icons render at one fixed size regardless of `size` - Button intentionally has no icon-size prop.
+Use `iconBefore` and `iconAfter` for a labelled button with a supporting icon; never as a
+replacement for the label. See Edge Cases for why an icon-only Button breaks accessibility.
+
+### Loading behaviour
+
+Setting `isLoading` swaps the leading icon for a `Spinner`, keeps the label visible so the action
+stays legible, sets `aria-busy`, and suppresses `onClick` - all without changing the button's width.
+Don't pair `isLoading` with a separate disabled-looking treatment; the loading state already
+communicates "don't click this again."
+
+### Full width
+
+Set `isFullWidth` when a button must fill its container - a form footer, a mobile action bar. It's a
+layout escape hatch, not a default; most buttons should size to their label.
+
+### Focus and hover
+
+Keyboard focus shows the same background fill as hover, on top of the outline ring from the shared
+`FocusRing` primitive - a keyboard user sees both signals together rather than a ring on an
+otherwise-unchanged button. This is consistent with how Avatar and Checkbox tie focus into their
+hover-equivalent treatment; don't add a focus style that looks unrelated to hover.
+
+## Do / Don't
+
+**Do** use `tone` together with `appearance="primary"` for warning or destructive actions.
+
+```tsx
+<Button appearance="primary" tone="error">
+  Delete matter
+</Button>
+```
+
+**Don't** set `tone` on a `default` or `subtle` button expecting it to change how it looks.
+
+```tsx
+<Button tone="error">Delete matter</Button>
+```
+
+---
+
+**Do** keep the label visible through a loading state.
+
+```tsx
+<Button appearance="primary" isLoading>
+  Save matter
+</Button>
+```
+
+**Don't** strip the label down to an icon or a spinner alone.
+
+```tsx
+<Button appearance="primary" isLoading aria-label="Save" />
+```
+
+---
+
+**Do** use `LinkButton` when the control navigates.
+
+```tsx
+<LinkButton href="/matters/new">Start a new matter</LinkButton>
+```
+
+**Don't** wire a `Button` to navigation with `onClick`.
+
+```tsx
+<Button onClick={() => navigate('/matters/new')}>Start a new matter</Button>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The visible label. Stays visible while loading.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Control height, padding, and (at <code>lg</code>) typography scale.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'primary' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Visual emphasis. Only <code>primary</code> responds to <code>tone</code>.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'neutral' | 'warning' | 'error' | 'discovery'</code></td>
+      <td><code>'neutral'</code></td>
+      <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Maps to the native <code>disabled</code> attribute. Flattens <code>tone</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isLoading</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Shows a leading <code>Spinner</code>, sets <code>aria-busy</code>, suppresses clicks.</td>
+    </tr>
+    <tr>
+      <td><code>isFullWidth</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>inline-size: 100%</code>.</td>
+    </tr>
+    <tr>
+      <td><code>iconBefore</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Replaced by the spinner while loading.</td>
+    </tr>
+    <tr>
+      <td><code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Unaffected by loading.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td><code>'button' | 'submit' | 'reset'</code></td>
+      <td><code>'button'</code></td>
+      <td>Defaults to <code>button</code> to avoid accidental form submission.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `button` prop is forwarded to the root element.
+
+## Related components
+
+- **IconButton** - for icon-only actions.
+- **LinkButton** - for navigation styled as a button.
+- **ToggleButton** / **ToggleIconButton** - for a selected/unselected state.
+- **Spinner** - the primitive Button renders internally while loading.
+- **FocusRing** - the shared focus treatment Button composes rather than styling its own.

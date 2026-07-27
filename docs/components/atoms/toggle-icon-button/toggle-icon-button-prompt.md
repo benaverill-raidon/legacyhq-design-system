@@ -133,14 +133,14 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use selected semantic tokens.
+Use the semantic brand mappings bound in Figma.
 
 Expected selected styling:
 
 ```txt
-background: var(--color-background-selected-default)
-content: var(--color-content-selected)
-border: var(--color-border-selected)
+background: var(--color-background-brand-primary-default-default)
+content: var(--color-content-brand-primary)
+border: var(--color-border-brand-primary)
 ```
 
 Use actual generated token names.

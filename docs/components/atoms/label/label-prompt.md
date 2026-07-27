@@ -121,14 +121,14 @@ Size mapping:
 
 - `sm`
   - typography: `overline-sm`
-  - padding-block: `--spacing-025`
-  - padding-inline: `--spacing-050`
+  - padding-block: `--spacing-xxs`
+  - padding-inline: `--spacing-xs`
   - border-radius: `--border-radius-xs`
 
 - `md`
   - typography: `overline-md`
-  - padding-block: `--spacing-025`
-  - padding-inline: `--spacing-075`
+  - padding-block: `--spacing-xxs`
+  - padding-inline: `--spacing-sm`
   - border-radius: `--border-radius-xs`
 
 Typography details if `overline-sm` and `overline-md` variables/classes do not exist yet:

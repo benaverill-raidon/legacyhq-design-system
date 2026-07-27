@@ -1,0 +1,202 @@
+{
+  "name": "ProgressBar",
+  "category": "atom",
+  "status": "specified",
+  "purpose": "Communicate determinate process completion from 0 to 100.",
+  "intent": "Provide linear and circular visualizations driven by one read-only value model.",
+  "useCases": [
+    "Document generation",
+    "File upload",
+    "Data import",
+    "Onboarding completion",
+    "Background process completion"
+  ],
+  "antiPatterns": [
+    "Indeterminate loading",
+    "Interactive value selection",
+    "Data visualization",
+    "Step navigation",
+    "Decorative percentage display"
+  ],
+  "anatomy": {
+    "shared": [
+      "root"
+    ],
+    "linear": [
+      "track",
+      "progressSegment",
+      "remainingTrack",
+      "startStop",
+      "endStop"
+    ],
+    "circular": [
+      "svg",
+      "trackCircle",
+      "progressCircle",
+      "startStop"
+    ]
+  },
+  "props": {
+    "value": {
+      "type": "number",
+      "required": true,
+      "constraints": {
+        "renderedMin": 0,
+        "renderedMax": 100
+      }
+    },
+    "variant": {
+      "type": "enum",
+      "values": [
+        "linear",
+        "circular"
+      ],
+      "default": "linear"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "label": {
+      "type": "string",
+      "required": false
+    },
+    "getValueText": {
+      "type": "(value: number) => string",
+      "required": false
+    }
+  },
+  "variants": {
+    "linear": {
+      "width": "fluid",
+      "direction": "inline-start-to-inline-end"
+    },
+    "circular": {
+      "diameter": "72px",
+      "startAngle": -90,
+      "direction": "clockwise",
+      "implementation": "inline-svg"
+    }
+  },
+  "sizes": {
+    "md": {
+      "linearRoot": "24px",
+      "trackThickness": "12px",
+      "stopContainer": "12px",
+      "circularDiameter": "72px"
+    },
+    "lg": {
+      "linearRoot": "40px",
+      "trackThickness": "24px",
+      "stopContainer": "24px",
+      "circularDiameter": "72px"
+    }
+  },
+  "states": [
+    "determinate"
+  ],
+  "slots": [],
+  "tokens": {
+    "semantic": {
+      "progress": "chart/sequence/brand/900 or generated semantic equivalent",
+      "track": "chart/sequence/brand/300 or generated semantic equivalent",
+      "trackBorder": "color-border-brand",
+      "radius": "border-radius-full-round",
+      "borderWidth": "border-width-default"
+    },
+    "componentAllowed": [
+      "linear root size",
+      "track thickness",
+      "circular diameter",
+      "stop container size",
+      "stop shape size"
+    ],
+    "componentForbidden": [
+      "color aliases",
+      "radius aliases",
+      "border color aliases"
+    ]
+  },
+  "accessibility": {
+    "role": "progressbar",
+    "ariaValueMin": 0,
+    "ariaValueMax": 100,
+    "ariaValueNow": "clamped value",
+    "nameSources": [
+      "aria-label",
+      "aria-labelledby",
+      "label"
+    ],
+    "ariaValueText": "getValueText(clampedValue) when provided",
+    "focusable": false,
+    "interactive": false,
+    "decorativeSvgHidden": true
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Clamp rendered and announced value to 0\u2013100.",
+    "Support arbitrary numeric values.",
+    "Do not add indeterminate behavior.",
+    "Do not add animation unless explicitly specified.",
+    "Linear width is controlled by the parent.",
+    "Circular progress starts at 12 o'clock and advances clockwise."
+  ],
+  "compositionRules": [
+    "May appear beside process labels or status summaries.",
+    "Do not expose Figma-only segment and stop parts as public components.",
+    "Do not compose with interactive thumbs or controls."
+  ],
+  "contentRules": [
+    "Accessible labels identify the process, not only the percentage.",
+    "Visible percentage text is supplied by surrounding composition, not built into the component."
+  ],
+  "responsiveRules": [
+    "Linear variant fills available inline width.",
+    "Circular diameter remains fixed at the current tokenized size."
+  ],
+  "themeRules": [
+    "Use generated semantic tokens.",
+    "Do not use primitive color values in component CSS.",
+    "Both variants must work in light and dark themes."
+  ],
+  "implementationNotes": [
+    "React and TypeScript.",
+    "CSS Modules.",
+    "Linear uses CSS geometry.",
+    "Circular uses inline SVG.",
+    "No Figma-exported image assets.",
+    "Forward root ref."
+  ],
+  "relatedComponents": [
+    "Spinner",
+    "Slider",
+    "ProgressIndicator"
+  ],
+  "do": [
+    "Use for determinate system progress.",
+    "Provide an accessible process name.",
+    "Use linear for available horizontal space.",
+    "Use circular for compact summaries."
+  ],
+  "dont": [
+    "Use as a slider.",
+    "Use for indeterminate loading.",
+    "Use as a chart.",
+    "Copy Figma raster donut assets.",
+    "Make the component keyboard-focusable."
+  ],
+  "acceptanceCriteria": [
+    "Linear and circular variants render from one numeric value API.",
+    "Values clamp to 0\u2013100.",
+    "Both sizes match the documented anatomy.",
+    "Linear progress is fluid width.",
+    "Circular progress uses vector geometry.",
+    "Progress semantics and accessible naming are correct.",
+    "No hardcoded colors.",
+    "Storybook and tests compile."
+  ]
+}

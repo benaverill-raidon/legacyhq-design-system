@@ -11,10 +11,10 @@
 .content {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-050);
+  gap: var(--spacing-xs);
   box-sizing: border-box;
-  padding-block: var(--spacing-025);
-  padding-inline: var(--spacing-075);
+  padding-block: var(--spacing-xxs);
+  padding-inline: var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse);

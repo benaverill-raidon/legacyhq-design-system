@@ -1,0 +1,289 @@
+{
+  "Semantic: Dimension": {
+    "overlap-xs": {
+      "value": "var(--measurement-minus-2)",
+      "type": "float",
+      "originalName": "overlap/xs"
+    },
+    "overlap-sm": {
+      "value": "var(--measurement-minus-4)",
+      "type": "float",
+      "originalName": "overlap/sm"
+    },
+    "overlap-md": {
+      "value": "var(--measurement-minus-8)",
+      "type": "float",
+      "originalName": "overlap/md"
+    },
+    "overlap-lg": {
+      "value": "var(--measurement-minus-12)",
+      "type": "float",
+      "originalName": "overlap/lg"
+    },
+    "overlap-xl": {
+      "value": "var(--measurement-minus-16)",
+      "type": "float",
+      "originalName": "overlap/xl"
+    },
+    "size-avatar-xxs": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/avatar/xxs"
+    },
+    "size-avatar-xs": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "size/avatar/xs"
+    },
+    "size-avatar-sm": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "size/avatar/sm"
+    },
+    "size-avatar-md": {
+      "value": "var(--measurement-40)",
+      "type": "float",
+      "originalName": "size/avatar/md"
+    },
+    "size-avatar-lg": {
+      "value": "var(--measurement-48)",
+      "type": "float",
+      "originalName": "size/avatar/lg"
+    },
+    "size-avatar-xl": {
+      "value": "var(--measurement-72)",
+      "type": "float",
+      "originalName": "size/avatar/xl"
+    },
+    "size-choice-row": {
+      "value": "var(--measurement-28)",
+      "type": "float",
+      "originalName": "size/choice/row"
+    },
+    "size-choice-target": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "size/choice/target"
+    },
+    "size-choice-indicator": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/choice/indicator"
+    },
+    "size-control-xs": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "size/control/xs"
+    },
+    "size-control-sm": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "size/control/sm"
+    },
+    "size-control-md": {
+      "value": "var(--measurement-40)",
+      "type": "float",
+      "originalName": "size/control/md"
+    },
+    "size-control-lg": {
+      "value": "var(--measurement-48)",
+      "type": "float",
+      "originalName": "size/control/lg"
+    },
+    "size-025": {
+      "value": "var(--measurement-2)",
+      "type": "float",
+      "originalName": "size/025"
+    },
+    "size-050": {
+      "value": "var(--measurement-4)",
+      "type": "float",
+      "originalName": "size/050"
+    },
+    "size-075": {
+      "value": "var(--measurement-6)",
+      "type": "float",
+      "originalName": "size/075"
+    },
+    "size-100": {
+      "value": "var(--measurement-8)",
+      "type": "float",
+      "originalName": "size/100"
+    },
+    "size-150": {
+      "value": "var(--measurement-12)",
+      "type": "float",
+      "originalName": "size/150"
+    },
+    "size-200": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/200"
+    },
+    "size-225": {
+      "value": "var(--measurement-18)",
+      "type": "float",
+      "originalName": "size/225"
+    },
+    "size-250": {
+      "value": "var(--measurement-20)",
+      "type": "float",
+      "originalName": "size/250"
+    },
+    "size-300": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "size/300"
+    },
+    "size-400": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "size/400"
+    },
+    "size-500": {
+      "value": "var(--measurement-40)",
+      "type": "float",
+      "originalName": "size/500"
+    },
+    "size-600": {
+      "value": "var(--measurement-48)",
+      "type": "float",
+      "originalName": "size/600"
+    },
+    "size-800": {
+      "value": "var(--measurement-64)",
+      "type": "float",
+      "originalName": "size/800"
+    },
+    "size-1000": {
+      "value": "var(--measurement-80)",
+      "type": "float",
+      "originalName": "size/1000"
+    },
+    "size-1250": {
+      "value": "var(--measurement-104)",
+      "type": "float",
+      "originalName": "size/1250"
+    },
+    "spacing-none": {
+      "value": "var(--measurement-0)",
+      "type": "float",
+      "originalName": "spacing/none"
+    },
+    "spacing-xxs": {
+      "value": "var(--measurement-2)",
+      "type": "float",
+      "originalName": "spacing/xxs"
+    },
+    "spacing-xs": {
+      "value": "var(--measurement-4)",
+      "type": "float",
+      "originalName": "spacing/xs"
+    },
+    "spacing-sm": {
+      "value": "var(--measurement-8)",
+      "type": "float",
+      "originalName": "spacing/sm"
+    },
+    "spacing-md": {
+      "value": "var(--measurement-12)",
+      "type": "float",
+      "originalName": "spacing/md"
+    },
+    "spacing-lg": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "spacing/lg"
+    },
+    "spacing-xl": {
+      "value": "var(--measurement-20)",
+      "type": "float",
+      "originalName": "spacing/xl"
+    },
+    "spacing-2xl": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "spacing/2xl"
+    },
+    "spacing-3xl": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "spacing/3xl"
+    },
+    "spacing-4xl": {
+      "value": "var(--measurement-40)",
+      "type": "float",
+      "originalName": "spacing/4xl"
+    },
+    "size-icon-sm": {
+      "value": "var(--measurement-12)",
+      "type": "float",
+      "originalName": "size/icon/sm"
+    },
+    "size-logo-xxs": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/logo/xxs"
+    },
+    "size-logo-xs": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "size/logo/xs"
+    },
+    "size-logo-sm": {
+      "value": "var(--measurement-32)",
+      "type": "float",
+      "originalName": "size/logo/sm"
+    },
+    "size-logo-md": {
+      "value": "var(--measurement-40)",
+      "type": "float",
+      "originalName": "size/logo/md"
+    },
+    "size-logo-lg": {
+      "value": "var(--measurement-48)",
+      "type": "float",
+      "originalName": "size/logo/lg"
+    },
+    "size-marker-xs": {
+      "value": "var(--measurement-4)",
+      "type": "float",
+      "originalName": "size/marker/xs"
+    },
+    "size-marker-sm": {
+      "value": "var(--measurement-8)",
+      "type": "float",
+      "originalName": "size/marker/sm"
+    },
+    "size-marker-md": {
+      "value": "var(--measurement-12)",
+      "type": "float",
+      "originalName": "size/marker/md"
+    },
+    "size-icon-md": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/icon/md"
+    },
+    "size-spinner-sm": {
+      "value": "var(--measurement-12)",
+      "type": "float",
+      "originalName": "size/spinner/sm"
+    },
+    "size-spinner-md": {
+      "value": "var(--measurement-16)",
+      "type": "float",
+      "originalName": "size/spinner/md"
+    },
+    "size-spinner-lg": {
+      "value": "var(--measurement-24)",
+      "type": "float",
+      "originalName": "size/spinner/lg"
+    },
+    "size-spinner-xl": {
+      "value": "var(--measurement-48)",
+      "type": "float",
+      "originalName": "size/spinner/xl"
+    }
+  }
+}

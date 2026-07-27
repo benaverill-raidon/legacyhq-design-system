@@ -95,17 +95,12 @@ Use semantic color tokens:
 - default content: `--color-content-default`
 - disabled content: `--color-content-disabled`
 
-Use component-scoped geometry tokens where needed:
+Use the current shared dimension, spacing, and radius tokens directly for geometry.
+Do not introduce component-scoped Switch token aliases.
 
-- `--component-switch-track-width`
-- `--component-switch-track-height`
-- `--component-switch-thumb-size`
-- `--component-switch-thumb-offset`
-- `--component-switch-thumb-translate-x`
-
-Codex should inspect the Figma component via plugin access to determine the exact geometry values.
-
-Do not use semantic spacing tokens directly for width/height of the track or thumb unless the component token maps to them.
+- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius
+- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius
+- internal marks: 12px
 
 ## Animation
 
@@ -174,6 +169,3 @@ After implementation, summarize:
 5. Missing tokens
 6. Files changed
 7. Spec compliance confirmation
-
-
-

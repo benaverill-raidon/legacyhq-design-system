@@ -158,7 +158,7 @@ describe('RadioGroup', () => {
     expect(first).toHaveFocus();
   });
   it('uses zero group gap for compact radio groups', () => {
-    expect(radioCss).toMatch(/\.options \{[^}]*gap: var\(--spacing-0\);/);
+    expect(radioCss).toMatch(/\.options \{[^}]*gap: var\(--spacing-none\);/);
     expect(radioCss).not.toContain('gap: -');
   });
 });

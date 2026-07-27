@@ -130,23 +130,34 @@ describe('Radio', () => {
 
     expect(screen.getByRole('radio', { name: 'Native' }).tagName).toBe('INPUT');
   });
+
+  it('matches the current figma token mappings for target, icon, and focus treatments', () => {
+    expect(radioCss).toMatch(/\.indicatorTarget \{[^}]*background: transparent;/s);
+    expect(radioCss).toMatch(/\.indicatorIcon \{[^}]*color: var\(--color-content-subtle\);/s);
+    expect(radioCss).toMatch(/\.checkedIcon \{[^}]*color: var\(--color-content-brand-primary\);/s);
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hovered);');
+    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-pressed);');
+    expect(radioCss).toMatch(/\.radio\[data-invalid='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-error\);/s);
+    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \.labelText,\s*\.radio\[data-disabled='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);[^}]*opacity: 0\.32;/s);
+    expect(radioCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus::after');
+    expect(radioCss).toContain('inline-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
+    expect(radioCss).toContain('block-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
+    expect(radioCss).toContain('border: var(--border-width-md) solid var(--color-border-focused);');
+  });
+
   it('uses compact density tokens for item, target, and focus anatomy', () => {
-    expect(radioCss).toMatch(/\.radio \{[^}]*gap: var\(--spacing-025\);/);
-    expect(radioCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/);
-    expect(radioCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus {');
-    expect(radioCss).not.toContain('.input:focus-visible + .indicatorTarget {');
-    expect(radioCss).not.toMatch(/\.indicatorTarget \{[^}]*outline:/);
-    expect(radioCss).toContain('min-block-size: var(--component-radio-item-min-height);');
-    expect(radioCss).toContain('block-size: var(--component-radio-item-min-height);');
-    expect(radioCss).toContain('inline-size: var(--component-radio-hit-area-size);');
-    expect(radioCss).toContain('block-size: var(--component-radio-hit-area-size);');
-    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-size);');
-    expect(radioCss).toContain('block-size: var(--component-radio-indicator-size);');
-    expect(radioCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-full-round\);/);
+    expect(radioCss).toMatch(/\.radio \{[^}]*gap: var\(--spacing-xxs\);/s);
+    expect(radioCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/s);
+    expect(radioCss).toContain('min-block-size: var(--size-choice-row);');
+    expect(radioCss).toContain('block-size: var(--size-choice-row);');
+    expect(radioCss).toContain('inline-size: var(--size-choice-target);');
+    expect(radioCss).toContain('block-size: var(--size-choice-target);');
+    expect(radioCss).toContain('inline-size: var(--size-choice-indicator);');
+    expect(radioCss).toContain('block-size: var(--size-choice-indicator);');
+    expect(radioCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-full-round\);/s);
     expect(tokenCss).not.toContain('--component-radio-indicator-focus-size:');
-    expect(radioCss).toContain('inline-size: var(--component-radio-indicator-size);');
-    expect(radioCss).toContain('block-size: var(--component-radio-indicator-size);');
-    expect(radioCss).toContain('outline-offset: var(--spacing-0);');
   });
 });
 

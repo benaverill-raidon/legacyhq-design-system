@@ -98,11 +98,11 @@ Tooltip therefore uses a small local fixed-position portal implementation that:
 
 Tooltip uses semantic color, typography, spacing, and radius tokens.
 
-Tooltip-specific component tokens own:
+Tooltip-specific layout constraints remain private implementation values:
 
-- `--component-tooltip-z-index`
-- `--component-tooltip-max-width-truncated`
-- `--component-tooltip-max-width-wrapped`
+- z-index: `1`
+- truncated max width: `420px`
+- wrapped max width: `240px`
 
 ## Icon-only controls
 

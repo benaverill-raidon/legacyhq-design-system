@@ -1,6 +1,6 @@
 .logo {
-  --logo-height: 40px;
-  --logo-mark-color: var(--color-content-brand);
+  --logo-height: var(--size-logo-md);
+  --logo-mark-color: var(--color-content-brand-primary);
 
   display: inline-flex;
   align-items: center;
@@ -13,23 +13,23 @@
 }
 
 .size_xxs {
-  --logo-height: 16px;
+  --logo-height: var(--size-logo-xxs);
 }
 
 .size_xs {
-  --logo-height: 24px;
+  --logo-height: var(--size-logo-xs);
 }
 
 .size_sm {
-  --logo-height: 32px;
+  --logo-height: var(--size-logo-sm);
 }
 
 .size_md {
-  --logo-height: 40px;
+  --logo-height: var(--size-logo-md);
 }
 
 .size_lg {
-  --logo-height: 48px;
+  --logo-height: var(--size-logo-lg);
 }
 
 .svg {
@@ -45,5 +45,5 @@
 }
 
 [data-theme='dark'] .logo {
-  --logo-mark-color: var(--color-content-brand);
+  --logo-mark-color: var(--color-content-brand-primary);
 }

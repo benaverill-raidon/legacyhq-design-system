@@ -3,11 +3,16 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { focusRingClassNames } from '../../primitives/focus-ring';
 import { Checkbox } from './checkbox';
 import styles from './checkbox.module.css';
 
 const checkboxCss = readFileSync('packages/ui/src/components/atoms/checkbox/checkbox.module.css', 'utf8');
 const tokenCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
+const focusRingCss = readFileSync(
+  'packages/ui/src/components/primitives/focus-ring/focus-ring.module.css',
+  'utf8',
+);
 
 afterEach(cleanup);
 
@@ -186,24 +191,81 @@ describe('Checkbox', () => {
     expect(container.querySelector(`.${styles.indicatorTarget}`)).toBeInTheDocument();
     expect(container.querySelector(`.${styles.indicatorFocus}`)).toBeInTheDocument();
   });
+
   it('uses compact density tokens for item, target, and focus anatomy', () => {
-    expect(checkboxCss).toMatch(/\.root \{[^}]*gap: var\(--spacing-025\);/);
-    expect(checkboxCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/);
-    expect(checkboxCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus {');
-    expect(checkboxCss).not.toContain('.input:focus-visible + .indicatorTarget {');
+    expect(checkboxCss).toMatch(/\.root \{[^}]*gap: var\(--spacing-xxs\);/);
     expect(checkboxCss).not.toMatch(/\.indicatorTarget \{[^}]*outline:/);
-    expect(checkboxCss).toContain('min-block-size: var(--component-checkbox-item-min-height);');
-    expect(checkboxCss).toContain('block-size: var(--component-checkbox-item-min-height);');
-    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-hit-area-size);');
-    expect(checkboxCss).toContain('block-size: var(--component-checkbox-hit-area-size);');
-    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-size);');
-    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-size);');
-    expect(checkboxCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-sm\);/);
+    expect(checkboxCss).not.toMatch(/\.indicatorFocus \{[^}]*outline:/);
+    expect(checkboxCss).toContain('min-block-size: var(--size-choice-row);');
+    expect(checkboxCss).toContain('block-size: var(--size-choice-row);');
+    expect(checkboxCss).toContain('inline-size: var(--size-choice-target);');
+    expect(checkboxCss).toContain('block-size: var(--size-choice-target);');
+    expect(checkboxCss).toContain('inline-size: var(--size-choice-indicator);');
+    expect(checkboxCss).toContain('block-size: var(--size-choice-indicator);');
+    expect(checkboxCss).toMatch(/\.indicatorFocus \{[^}]*border-radius: var\(--border-radius-xs\);/);
     expect(tokenCss).not.toContain('--component-checkbox-indicator-focus-size:');
-    expect(checkboxCss).toContain('inline-size: var(--component-checkbox-indicator-size);');
-    expect(checkboxCss).toContain('block-size: var(--component-checkbox-indicator-size);');
-    expect(checkboxCss).toContain('outline-offset: var(--spacing-0);');
+  });
+
+  it('uses the shared focus ring primitive on the input, offset inward to the visible indicator', () => {
+    render(<Checkbox label="Focusable" />);
+
+    expect(screen.getByRole('checkbox', { name: 'Focusable' })).toHaveClass(
+      focusRingClassNames.focusRing,
+      focusRingClassNames.focusRingDefault,
+    );
+    // The ring must land on the 16px visible indicator, not the 32px hit target it sits inside -
+    // this insets it inward by exactly half the gap between the two.
+    expect(checkboxCss).toContain(
+      '--focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);',
+    );
+    // A negative outline-offset deflates the rendered corner radius by the same amount, so the
+    // declared radius is inflated by that inset - it must deflate back down to exactly
+    // border-radius-xs once the offset is applied, not to a square corner.
+    expect(checkboxCss).toContain(
+      'border-radius: calc(var(--border-radius-xs) + (var(--size-choice-target) - var(--size-choice-indicator)) / 2);',
+    );
+    expect(checkboxCss).not.toContain('.input:focus-visible + .indicatorTarget .indicatorFocus');
+  });
+
+  it('forwards data-force-state to both the root label and the input for a single force-state convention', () => {
+    render(<Checkbox label="Forced" data-force-state="hover" />);
+
+    const input = screen.getByRole('checkbox', { name: 'Forced' });
+    expect(input).toHaveAttribute('data-force-state', 'hover');
+    expect(input.closest('label')).toHaveAttribute('data-force-state', 'hover');
   });
 });
 
+describe('checkbox CSS contract', () => {
+  it('matches Figma target and glyph token mappings', () => {
+    expect(checkboxCss).toContain('.indicatorTarget {');
+    expect(checkboxCss).toContain('background: transparent;');
+    expect(checkboxCss).toContain('color: var(--color-content-subtle);');
+    expect(checkboxCss).toContain('.selectedIcon {');
+    expect(checkboxCss).toContain('color: var(--color-content-brand-primary);');
+    expect(checkboxCss).not.toContain('background: var(--color-content-inverse);');
+  });
 
+  it('uses neutral and brand overlay tokens with invalid overriding to neutral', () => {
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-hovered);');
+    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-pressed);');
+    expect(checkboxCss).toContain(".root[data-invalid='true'] .input:focus-visible + .indicatorTarget {");
+    expect(checkboxCss).toContain(".root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,");
+  });
+
+  it('uses error and disabled content tokens for glyphs and labels', () => {
+    expect(checkboxCss).toContain(".root[data-invalid='true'] .indicatorIcon {");
+    expect(checkboxCss).toContain('color: var(--color-content-error);');
+    expect(checkboxCss).toContain(".root[data-disabled='true'] .indicatorIcon {");
+    expect(checkboxCss).toContain('color: var(--color-content-disabled);');
+  });
+
+  it('uses the Figma focus ring width and radius tokens', () => {
+    // Width and color come from the shared focus-ring primitive, not a checkbox-local rule.
+    expect(focusRingCss).toContain('--focus-ring-color: var(--color-border-focused);');
+    expect(focusRingCss).toContain('--focus-ring-width: var(--border-width-md);');
+    expect(checkboxCss).toContain('border-radius: var(--border-radius-xs);');
+  });
+});

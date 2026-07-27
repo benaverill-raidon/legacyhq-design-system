@@ -1,9 +1,13 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { Switch } from './switch';
 import styles from './switch.module.css';
+
+const switchCss = readFileSync('packages/ui/src/components/atoms/switch/switch.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -155,6 +159,20 @@ describe('Switch', () => {
     expect(indicator).toBeInTheDocument();
     expect(indicator).toHaveAttribute('aria-hidden', 'true');
     expect(container.querySelector('svg')).not.toBeInTheDocument();
+  });
+  it('maps Switch anatomy and state colors to the current Figma tokens', () => {
+    expect(switchCss).toMatch(
+      /\.size_md \{[\s\S]*?--switch-track-width: var\(--component-switch-md-track-width\);[\s\S]*?--switch-track-height: var\(--component-switch-md-track-height\);[\s\S]*?--switch-thumb-size: var\(--component-switch-md-thumb-size\);[\s\S]*?--switch-thumb-offset: var\(--component-switch-md-thumb-inset\);[\s\S]*?--switch-thumb-translate-x: var\(--component-switch-md-thumb-translation\);/,
+    );
+    expect(switchCss).toMatch(
+      /\.size_sm \{[\s\S]*?--switch-track-width: var\(--component-switch-sm-track-width\);[\s\S]*?--switch-track-height: var\(--component-switch-sm-track-height\);[\s\S]*?--switch-thumb-size: var\(--component-switch-sm-thumb-size\);[\s\S]*?--switch-thumb-offset: var\(--component-switch-sm-thumb-inset\);[\s\S]*?--switch-thumb-translate-x: var\(--component-switch-sm-thumb-translation\);/,
+    );
+    expect(switchCss).toContain('--switch-icon-size: var(--size-icon-sm);');
+    expect(switchCss).toContain('background: var(--color-background-neutral-bold-default);');
+    expect(switchCss).toContain('background: var(--color-background-success-bold-default);');
+    expect(switchCss).toContain('background: var(--color-background-disabled);');
+    expect(switchCss).toContain('color: var(--color-content-inverse);');
+    expect(switchCss).not.toContain(".root[data-disabled='true'] .icon");
   });
 });
 

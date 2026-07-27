@@ -80,12 +80,12 @@ Do not add internal selected state.
 
 ## Selected styling
 
-Use selected semantic tokens:
+Use the semantic brand mappings bound in Figma:
 
 ```txt
-background: color/background/selected/default
-content: color/content/selected
-border: color/border/selected
+background: color/background/brand/primary/default/default
+content: color/content/brand
+border: color/border/brand
 ```
 
 Use actual generated token names.
@@ -112,7 +112,7 @@ md
 lg
 ```
 
-Use Button size tokens/classes.
+Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry.
 
 ## Icons
 

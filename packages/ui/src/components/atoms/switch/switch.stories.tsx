@@ -26,7 +26,7 @@ type Story = StoryObj<typeof Switch>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
@@ -34,14 +34,14 @@ const rowStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-300)',
+  gap: 'var(--spacing-2xl)',
 } satisfies CSSProperties;
 
 const cardStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
@@ -49,8 +49,8 @@ const cardStyle = {
 
 const darkSurfaceStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse)',
@@ -60,12 +60,12 @@ const settingRowStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
 } satisfies CSSProperties;
 
 const settingTextStyle = {
   display: 'grid',
-  gap: 'var(--spacing-025)',
+  gap: 'var(--spacing-xxs)',
 } satisfies CSSProperties;
 
 const subtleTextStyle = {

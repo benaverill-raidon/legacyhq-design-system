@@ -1,0 +1,149 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as BadgeStories from './Badge.stories';
+
+<Meta of={BadgeStories} name="Docs" />
+
+# Badge
+
+Badge is a small, non-interactive indicator for a short numeric value - a count, a total, or a
+delta. It carries no action and no status semantics of its own.
+
+<Canvas of={BadgeStories.Playground} />
+
+## When to use
+
+- Notification or unread counts.
+- Small totals in navigation, tables, lists, or cards.
+- Score deltas (`+1`, `-1`).
+- A lightweight numeric indicator next to a button or icon.
+
+## When not to use
+
+- **For a text label or a status that needs explaining.** Use `Tag` or `Label` - Badge's content
+  rules cap it at 1-4 characters and forbid multi-line text.
+- **As a clickable control.** Badge has no interactive states by design - no hover, focus, press,
+  disabled, or loading. If the count needs to be actionable, put a `Button` or `IconButton` around
+  it, don't make Badge itself respond to input.
+- **To show progress or a loading state.** Use `Spinner` or `ProgressIndicator`.
+- **With an icon.** Badge has no icon slot; it is text-only by design.
+
+## Anatomy
+
+Badge has a single part: a `span` root that renders its `children` directly. There is no separate
+icon, label, or container to compose - the root *is* the visible chip.
+
+## Usage guidance
+
+### Content length
+
+Keep content to 1-4 characters - a count, `+1`/`-1`, or `99+`. Badge does not wrap or truncate: its
+CSS sets `white-space: nowrap`, so longer content overflows its box visibly rather than shrinking
+to fit. Treat that overflow as a signal to reduce the value (`99+`) rather than as something to
+style around. See Edge Cases.
+
+### Choosing a tone
+
+- `default` and `inverse` are neutral - use `inverse` on a dark or bold surface where `default`
+  would lack contrast.
+- `brand` calls attention without implying good or bad.
+- `success` and `error` are for deltas and should track a real increase or decrease, not general
+  emphasis.
+
+### Accessible labelling
+
+Badge's visible content is exactly what gets announced unless `ariaLabel` is set. Reach for
+`ariaLabel` when the bare number is ambiguous out of context - "1" inside a notification icon reads
+better as "1 unread notification" - but skip it when adjacent visible text already disambiguates the
+count (a badge next to the word "Unread").
+
+## Do / Don't
+
+**Do** keep Badge content short and numeric.
+
+```tsx
+<Badge tone="success">+1</Badge>
+```
+
+**Don't** put a status phrase inside Badge - it isn't built to wrap or explain itself.
+
+```tsx
+<Badge tone="success">Increased this week</Badge>
+```
+
+---
+
+**Do** add `ariaLabel` when the number alone is ambiguous.
+
+```tsx
+<Badge ariaLabel="3 unread messages">3</Badge>
+```
+
+**Don't** make Badge interactive to work around a missing affordance.
+
+```tsx
+<Badge onClick={openInbox}>3</Badge>
+```
+
+---
+
+**Do** cap large counts rather than letting them overflow.
+
+```tsx
+<Badge>99+</Badge>
+```
+
+**Don't** pass an unbounded number and rely on the container to hide the overflow.
+
+```tsx
+<Badge>{unreadCount}</Badge>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. Short numeric value - 1 to 4 characters recommended.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'default' | 'inverse' | 'brand' | 'success' | 'error'</code></td>
+      <td><code>'default'</code></td>
+      <td>Visual tone. <code>success</code>/<code>error</code> are for deltas.</td>
+    </tr>
+    <tr>
+      <td><code>ariaLabel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Overrides the announced value when the visible content is ambiguous.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Badge has no `size` prop - it has one size, driven by its typography and padding tokens - and no
+interactive states, so this Docs page has no Sizes or States section.
+
+## Related components
+
+- **Tag** - for a labelled status or category, rather than a bare number.
+- **Label** - for identifying text that needs more than 1-4 characters.
+- **Tooltip** - to explain a badge's meaning on demand instead of via `ariaLabel` alone.
+- **Button** / **IconButton** - when the count needs to be clickable, wrap it rather than making
+  Badge interactive.

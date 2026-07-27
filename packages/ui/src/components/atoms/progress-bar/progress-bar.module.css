@@ -1,0 +1,152 @@
+.root {
+  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-md);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-md);
+  --progress-bar-stop-container-size: var(--component-progress-bar-stop-container-size-md);
+  --progress-bar-circular-size: var(--component-progress-bar-circular-size);
+  --progress-bar-stop-size: var(--size-marker-xs);
+
+  position: relative;
+  min-inline-size: 0;
+  color: var(--color-content-default);
+}
+
+.size_md {
+  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-md);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-md);
+  --progress-bar-stop-container-size: var(--component-progress-bar-stop-container-size-md);
+}
+
+.size_lg {
+  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-lg);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-lg);
+  --progress-bar-stop-container-size: var(--component-progress-bar-stop-container-size-lg);
+}
+
+.variant_linear {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--progress-bar-linear-root-size);
+  overflow: visible;
+}
+
+.variant_circular {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--progress-bar-circular-size);
+  block-size: var(--progress-bar-circular-size);
+}
+
+.track {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline: 0;
+  block-size: var(--progress-bar-track-size);
+  transform: translateY(-50%);
+}
+
+.remainingTrack,
+.progressSegment {
+  position: absolute;
+  inset-block: 0;
+  border: var(--border-width-sm) solid var(--color-data-viz-sequence-prussian-900);
+}
+
+.remainingTrack {
+  inset-inline: 0;
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-data-viz-sequence-prussian-300);
+}
+
+.progressSegment {
+  inset-inline-start: 0;
+  inline-size: var(--progress-bar-value);
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
+  background: var(--color-data-viz-sequence-prussian-900);
+}
+
+.variant_linear[data-complete='true'] .progressSegment {
+  border-start-end-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
+}
+
+.variant_linear[data-empty='true'] .progressSegment {
+  inline-size: 0;
+  /*
+   * At zero width the segment's own border still paints around a zero-width box - a thin sliver of
+   * its dark border color rendered on its own, with no fill behind it. Removing the border here
+   * (rather than only collapsing the width) is what actually makes an empty bar render nothing.
+   */
+  border-width: 0;
+}
+
+.stopContainer {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  inline-size: var(--progress-bar-stop-container-size);
+  block-size: var(--progress-bar-stop-container-size);
+}
+
+.stopShape {
+  inline-size: var(--progress-bar-stop-size);
+  block-size: var(--progress-bar-stop-size);
+  border: var(--border-width-sm) solid var(--color-data-viz-sequence-prussian-300);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-data-viz-sequence-prussian-900);
+  box-sizing: border-box;
+}
+
+.stopStart {
+  inset-inline-start: 0;
+  inset-block-start: 50%;
+  transform: translate(-4%, -50%);
+}
+
+.stopEnd {
+  inset-inline-end: 0;
+  inset-block-start: 50%;
+  transform: translate(4%, -50%);
+}
+
+.circularViewport {
+  position: relative;
+  inline-size: var(--progress-bar-circular-size);
+  block-size: var(--progress-bar-circular-size);
+}
+
+.circularSvg {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  overflow: visible;
+}
+
+.circularTrackBorder,
+.circularTrack,
+.circularProgressBorder,
+.circularProgress {
+  fill: none;
+  transform-origin: center;
+  transform: rotate(-90deg);
+}
+
+.circularTrackBorder,
+.circularProgressBorder {
+  stroke: var(--color-data-viz-sequence-prussian-900);
+}
+
+.circularTrack {
+  stroke: var(--color-data-viz-sequence-prussian-300);
+}
+
+.circularProgress {
+  stroke: var(--color-data-viz-sequence-prussian-900);
+  stroke-linecap: butt;
+}
+
+.stopTop {
+  inset-inline-start: 50%;
+  inset-block-start: 0;
+  transform: translate(-50%, 0);
+}

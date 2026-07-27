@@ -1,17 +1,17 @@
 .toggleButton {
   --toggle-button-border-radius: var(--border-radius-sm);
-  --focus-ring-offset: var(--spacing-025);
+  --focus-ring-offset: var(--spacing-xxs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   min-inline-size: 0;
-  min-block-size: var(--component-button-min-height-md);
-  padding-block: var(--spacing-0);
-  padding-inline: var(--spacing-150);
-  border: var(--border-width-default) solid var(--color-border-default);
+  min-block-size: var(--size-control-md);
+  padding-block: var(--spacing-none);
+  padding-inline: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--toggle-button-border-radius);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
   font-family: var(--typography-heading-xs-font-family);
   font-size: var(--typography-heading-xs-font-size);
@@ -19,7 +19,7 @@
   line-height: var(--typography-heading-xs-line-height);
   letter-spacing: var(--typography-heading-xs-letter-spacing);
   text-transform: var(--typography-heading-xs-text-transform);
-  gap: var(--spacing-075);
+  gap: var(--spacing-sm);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
@@ -27,34 +27,34 @@
 }
 
 .toggleButton:not(:disabled):not(.selected):hover {
-  background: var(--color-background-neutral-subtle-hovered);
+  background: var(--color-background-neutral-overlay-hovered);
 }
 
 .toggleButton:not(:disabled):not(.selected):active {
-  background: var(--color-background-neutral-subtle-pressed);
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .size_xs {
-  min-block-size: var(--component-button-min-height-xs);
-  padding-inline: var(--spacing-075);
+  min-block-size: var(--size-control-xs);
+  padding-inline: var(--spacing-sm);
 }
 
 .size_sm {
   --toggle-button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--component-button-min-height-sm);
-  padding-inline: var(--spacing-100);
+  min-block-size: var(--size-control-sm);
+  padding-inline: var(--spacing-sm);
 }
 
 .size_md {
   --toggle-button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--component-button-min-height-md);
-  padding-inline: var(--spacing-150);
+  min-block-size: var(--size-control-md);
+  padding-inline: var(--spacing-md);
 }
 
 .size_lg {
   --toggle-button-border-radius: var(--border-radius-xl);
-  min-block-size: var(--component-button-min-height-lg);
-  padding-inline: var(--spacing-200);
+  min-block-size: var(--size-control-lg);
+  padding-inline: var(--spacing-lg);
   font-family: var(--typography-heading-sm-font-family);
   font-size: var(--typography-heading-sm-font-size);
   font-weight: var(--typography-heading-sm-font-weight);
@@ -65,22 +65,22 @@
 
 .tone_default {
   border-color: var(--color-border-default);
-  background: var(--color-background-neutral-subtle-default);
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
 .tone_subtle {
-  border-color: var(--color-background-neutral-subtle-default);
-  background: var(--color-background-neutral-subtle-default);
+  border-color: transparent;
+  background: transparent;
   color: var(--color-content-subtle);
 }
 
 .selected,
 .selected:hover,
 .selected:active {
-  border-color: var(--color-border-selected);
-  background: var(--color-background-selected-default);
-  color: var(--color-content-selected);
+  border-color: var(--color-border-brand-primary);
+  background: var(--color-background-brand-primary-default-default);
+  color: var(--color-content-brand-primary);
 }
 
 .toggleButton:disabled,

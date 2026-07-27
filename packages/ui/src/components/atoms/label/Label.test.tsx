@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { Label } from './label';
 import styles from './label.module.css';
 
-const labelCss = readFileSync('packages/ui/src/components/atoms/label/Label.module.css', 'utf8');
+const labelCss = readFileSync('packages/ui/src/components/atoms/label/label.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -85,3 +85,26 @@ describe('Label', () => {
   });
 });
 
+describe('label CSS contract', () => {
+  it('matches the current Figma subtle semantic mappings', () => {
+    expect(labelCss).toContain('--label-background: var(--color-background-neutral-subtle-default);');
+    expect(labelCss).toContain('--label-color: var(--color-content-subtle);');
+    expect(labelCss).toContain('--label-background: var(--color-background-information-subtle-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-warning-subtle-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-discovery-subtle-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-error-subtle-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-success-subtle-default);');
+  });
+
+  it('matches the current Figma bold semantic mappings', () => {
+    expect(labelCss).toContain('--label-background: var(--color-background-accent-gray-bold-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-brand-primary-bold-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-accent-green-bold-default);');
+    expect(labelCss).toContain('--label-color: var(--color-content-warning-bold);');
+  });
+
+  it('uses the current law and wealth subtle semantic mappings', () => {
+    expect(labelCss).toContain('--label-background: var(--color-background-brand-primary-default-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-accent-green-default-default);');
+  });
+});

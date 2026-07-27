@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
@@ -6,6 +8,8 @@ import { ArrowRightIcon, CheckIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { LinkButton, getLinkButtonRel } from './link-button';
 import styles from './link-button.module.css';
+
+const linkButtonCss = readFileSync('packages/ui/src/components/atoms/link-button/link-button.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -204,6 +208,35 @@ describe('LinkButton', () => {
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );
+  });
+});
+
+describe('LinkButton token mappings', () => {
+  it('uses transparent rest backgrounds for default and subtle appearances', () => {
+    expect(linkButtonCss).toContain('.appearance_default {');
+    expect(linkButtonCss).toContain('border-color: var(--color-border-default);');
+    expect(linkButtonCss).toContain('background: transparent;');
+    expect(linkButtonCss).toContain('.appearance_subtle {');
+    expect(linkButtonCss).toContain('border-color: transparent;');
+  });
+
+  it('uses neutral overlay tokens for default and subtle hover and press states', () => {
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-hovered)');
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-pressed)');
+  });
+
+  it('uses the brand-primary bold token for primary rest state', () => {
+    expect(linkButtonCss).toContain('var(--color-background-brand-primary-bold-default)');
+  });
+
+  it('uses the warning bold content token for warning primary text', () => {
+    expect(linkButtonCss).toContain('color: var(--color-content-warning-bold);');
+  });
+
+  it('keeps the default disabled border token while using disabled surface and content tokens', () => {
+    expect(linkButtonCss).toContain('.appearance_default[aria-disabled=\'true\']');
+    expect(linkButtonCss).toContain('background: var(--color-background-disabled);');
+    expect(linkButtonCss).toContain('color: var(--color-content-disabled);');
   });
 });
 

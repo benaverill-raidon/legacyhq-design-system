@@ -1,6 +1,7 @@
 .spinner {
-  --spinner-size: var(--spacing-300);
-  --spinner-stroke-width: var(--component-spinner-border-width-lg);
+  --spinner-size: var(--size-spinner-lg);
+  --spinner-graphic-size: 100%;
+  --spinner-stroke-width: var(--border-width-md);
   --spinner-rotation-duration: 860ms;
   --spinner-rotation-easing: cubic-bezier(0.4, 0.15, 0.6, 0.85);
 
@@ -15,29 +16,30 @@
 }
 
 .size_sm {
-  --spinner-size: var(--spacing-150);
-  --spinner-stroke-width: var(--component-spinner-border-width-sm);
+  --spinner-size: var(--size-spinner-sm);
+  --spinner-stroke-width: var(--border-width-sm);
 }
 
 .size_md {
-  --spinner-size: var(--spacing-200);
-  --spinner-stroke-width: var(--component-spinner-border-width-md);
+  --spinner-size: var(--size-spinner-md);
+  --spinner-stroke-width: var(--border-width-md);
 }
 
 .size_lg {
-  --spinner-size: var(--spacing-300);
-  --spinner-stroke-width: var(--component-spinner-border-width-lg);
+  --spinner-size: var(--size-spinner-lg);
+  --spinner-stroke-width: var(--border-width-md);
 }
 
 .size_xl {
-  --spinner-size: var(--spacing-600);
-  --spinner-stroke-width: var(--component-spinner-border-width-xl);
+  --spinner-size: var(--size-spinner-xl);
+  --spinner-graphic-size: calc(var(--measurement-32) / var(--size-spinner-xl) * 100%);
+  --spinner-stroke-width: var(--border-width-lg);
 }
 
 .svg {
   display: block;
-  inline-size: 100%;
-  block-size: 100%;
+  inline-size: var(--spinner-graphic-size);
+  block-size: var(--spinner-graphic-size);
   overflow: visible;
   animation: spinner-rotate var(--spinner-rotation-duration) var(--spinner-rotation-easing) infinite;
   transform-origin: center;

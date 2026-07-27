@@ -6,7 +6,7 @@
     },
     {
       "name": "Selected",
-      "jsx": "<ToggleButton pressed>Bold</ToggleButton>"
+      "jsx": "<ToggleButton isSelected>Bold</ToggleButton>"
     },
     {
       "name": "With icon",

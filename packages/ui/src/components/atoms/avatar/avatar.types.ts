@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+export type AvatarSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarPresence = 'none' | 'online' | 'offline' | 'busy';
 export type AvatarStatus = 'none' | 'accepted' | 'declined';
 

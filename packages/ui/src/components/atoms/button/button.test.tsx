@@ -183,7 +183,11 @@ describe('Button', () => {
 
   it('maps button radii by size and tokenizes the focus ring offset', () => {
     expect(buttonCss).toContain('--button-border-radius: var(--border-radius-sm);');
-    expect(buttonCss).toContain('--focus-ring-offset: var(--spacing-025);');
+    expect(buttonCss).toContain('--focus-ring-offset: var(--spacing-xxs);');
+    expect(buttonCss).toContain('border: var(--border-width-sm) solid transparent;');
+    expect(buttonCss).toMatch(/\.appearance_default \{[\s\S]*?border-color: var\(--color-border-default\);/);
+    expect(buttonCss).toContain('background: transparent;');
+    expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
     expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
     expect(buttonCss).toMatch(/\.size_md \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
     expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?--button-border-radius: var\(--border-radius-xl\);/);

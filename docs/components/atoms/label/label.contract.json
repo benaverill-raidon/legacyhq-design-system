@@ -17,15 +17,47 @@
     "container",
     "text"
   ],
-  "props": {},
+  "props": {
+    "children": {
+      "type": "React.ReactNode",
+      "required": true
+    },
+    "size": {
+      "type": "enum",
+      "values": ["sm", "md"],
+      "default": "md",
+      "required": false
+    },
+    "tone": {
+      "type": "enum",
+      "values": ["default", "information", "warning", "discovery", "error", "success", "law", "wealth"],
+      "default": "default",
+      "required": false
+    },
+    "emphasis": {
+      "type": "enum",
+      "values": ["subtle", "bold"],
+      "default": "subtle",
+      "required": false
+    },
+    "className": {
+      "type": "string",
+      "default": null,
+      "required": false
+    }
+  },
   "variants": {
-    "appearance": [
+    "emphasis": [
       "subtle",
       "bold"
     ],
     "tone": [
       "default",
-      "brand",
+      "information",
+      "warning",
+      "discovery",
+      "error",
+      "success",
       "law",
       "wealth"
     ]
@@ -35,8 +67,7 @@
     "md"
   ],
   "states": [
-    "default",
-    "disabled"
+    "default"
   ],
   "slots": [
     "children"

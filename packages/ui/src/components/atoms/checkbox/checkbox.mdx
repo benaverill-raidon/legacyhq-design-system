@@ -1,0 +1,184 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as CheckboxStories from './checkbox.stories';
+
+<Meta of={CheckboxStories} name="Docs" />
+
+# Checkbox
+
+Checkbox is a native, label-inclusive control for selecting one or more independent options. It
+supports a partial-selection (indeterminate) state alongside the usual checked/unchecked value.
+
+<Canvas of={CheckboxStories.Playground} />
+
+## When to use
+
+- Selecting one or more independent options from a set.
+- Toggling an item in a list or a table.
+- Confirming agreement or acceptance.
+- Selecting multiple rows in a table, including a "select all" control in an indeterminate state.
+
+## When not to use
+
+- **When only one option can be selected from a set.** Use `Radio`.
+- **When the choice immediately changes a system setting**, rather than marking a selection for a
+  later action. Consider `Switch`.
+- **As a purely decorative control** with no real selection behind it.
+
+## Anatomy
+
+<Canvas of={CheckboxStories.Content} />
+
+1. **Root** - a `label` wrapping the whole control, so clicking the label text toggles the input.
+2. **Input** - the native `input[type="checkbox"]`, visually hidden but present and focusable.
+3. **Indicator** - the visible box: empty, filled, or a dash for indeterminate.
+4. **Label text** - optional. When absent, `aria-label` or `aria-labelledby` is required.
+
+## Usage guidance
+
+### Checked, unchecked, and indeterminate
+
+Indeterminate is a distinct value, not a visual overlay on checked - it's meant for a "select all"
+control whose children are partially selected. Set `indeterminate` explicitly; it doesn't derive
+from `checked`, and the two combine (a checkbox can be `checked` and rendered `indeterminate` at
+the same time) exactly as controlled forms need. See States.
+
+### Controlled and uncontrolled usage
+
+Checkbox works either way: pass `checked` for a controlled value, or `defaultChecked` to let the
+native input own its state. `onCheckedChange` receives the next boolean value alongside the native
+change event, so you don't need to read `event.target.checked` yourself.
+
+### Labelling
+
+A visible `label` is the default and preferred path. Omit it only in a dense context - a table row,
+a compact toolbar - where an adjacent visible label already exists, and supply `aria-label` or
+`aria-labelledby` instead. Checkbox has no dev-time warning for a missing accessible name today, so
+this is easy to get wrong silently - see Edge Cases.
+
+### Invalid state
+
+`invalid` sets `aria-invalid` and switches the hover/pressed treatment, but color alone doesn't
+carry the meaning - pair it with a visible message via `aria-describedby`, as in Edge Cases.
+
+## Do / Don't
+
+**Do** set `indeterminate` explicitly for a "select all" control over a partial selection.
+
+```tsx
+<Checkbox aria-label="Select all rows" indeterminate />
+```
+
+**Don't** rely on `checked` alone to represent a partial selection - it isn't the same state.
+
+```tsx
+<Checkbox aria-label="Select all rows" checked={someButNotAllSelected} />
+```
+
+---
+
+**Do** supply `aria-label` when a visible label isn't rendered.
+
+```tsx
+<Checkbox aria-label="Select current row" />
+```
+
+**Don't** omit both the label and `aria-label` - the control becomes unnamed for assistive technology.
+
+```tsx
+<Checkbox />
+```
+
+---
+
+**Do** pair `invalid` with a visible, described error.
+
+```tsx
+<Checkbox invalid aria-describedby="checkbox-error" label="I agree" />
+```
+
+**Don't** rely on the invalid color alone to communicate the problem.
+
+```tsx
+<Checkbox invalid label="I agree" />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>checked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Controlled checked value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultChecked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>indeterminate</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Partial-selection value. Independent of <code>checked</code>.</td>
+    </tr>
+    <tr>
+      <td><code>invalid</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-invalid</code> and the invalid visual treatment.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>disabled</code> - the control is not interactive.</td>
+    </tr>
+    <tr>
+      <td><code>required</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>required</code>. Appends a visible indicator after the label.</td>
+    </tr>
+    <tr>
+      <td><code>onCheckedChange</code></td>
+      <td><code>(checked: boolean, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
+      <td>-</td>
+      <td>Fires on toggle with the next value already resolved.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>label</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `input` prop (`name`, `value`, `aria-describedby`, and so on) is forwarded to the
+underlying input.
+
+Checkbox has no `size` prop - its visual size and interaction target are fixed - so this Docs page
+has no Sizes section, and no Variants section since it has no visual style axis like an appearance
+or tone.
+
+## Related components
+
+- **Radio** - for mutually exclusive choices.
+- **Switch** - when a choice takes effect immediately rather than marking a selection.

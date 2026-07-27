@@ -1,19 +1,20 @@
 .root {
   --slider-track-height: var(--component-slider-track-height-md);
+  --slider-stop-container-size: var(--component-slider-stop-container-size-md);
   --slider-handle-width: var(--component-slider-handle-width-md);
-  --slider-handle-width-pressed: var(--dimension-2);
+  --slider-handle-width-pressed: var(--measurement-2);
   --slider-handle-height: var(--component-slider-handle-height-md);
-  --slider-scale-inset: var(--component-slider-handle-half-width);
-  --slider-value-scale-inset: var(--slider-scale-inset);
-  --slider-internal-gap: var(--spacing-075);
-  --slider-interactive-gap: var(--spacing-050);
-  --slider-current-gap: var(--slider-internal-gap);
-  --slider-current-handle-width: var(--slider-handle-width);
-  --slider-current-handle-half-width: calc(var(--slider-current-handle-width) / 2);
-  --slider-handle-visual-color: var(--color-background-selected-bold-default);
+  --slider-endpoint-inset: var(--component-slider-handle-half-width);
+  --slider-track-span: calc(100% - var(--slider-endpoint-inset) - var(--slider-endpoint-inset));
+  --slider-value-scale-inset: var(--slider-endpoint-inset);
+  --slider-internal-gap: var(--spacing-sm);
+  --slider-handle-visual-color: var(--color-background-brand-primary-bold-default);
+  --slider-track-active-color: var(--color-data-viz-sequence-prussian-900);
+  --slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);
+  --slider-step-color: var(--color-content-brand-primary);
 
   display: grid;
-  gap: var(--spacing-075);
+  gap: var(--spacing-sm);
   inline-size: 100%;
   color: var(--color-content-default);
   font-family: var(--typography-body-md-font-family);
@@ -26,18 +27,21 @@
 
 .size_xs {
   --slider-track-height: var(--component-slider-track-height-xs);
+  --slider-stop-container-size: var(--component-slider-stop-container-size-xs);
   --slider-handle-width: var(--component-slider-handle-width-xs);
   --slider-handle-height: var(--component-slider-handle-height-xs);
 }
 
 .size_sm {
   --slider-track-height: var(--component-slider-track-height-sm);
+  --slider-stop-container-size: var(--component-slider-stop-container-size-sm);
   --slider-handle-width: var(--component-slider-handle-width-sm);
   --slider-handle-height: var(--component-slider-handle-height-sm);
 }
 
 .size_md {
   --slider-track-height: var(--component-slider-track-height-md);
+  --slider-stop-container-size: var(--component-slider-stop-container-size-md);
   --slider-handle-width: var(--component-slider-handle-width-md);
   --slider-handle-height: var(--component-slider-handle-height-md);
 }
@@ -50,6 +54,8 @@
   position: relative;
   inline-size: 100%;
   block-size: var(--slider-handle-height);
+  cursor: pointer;
+  touch-action: none;
 }
 
 .orientation_vertical {
@@ -58,7 +64,7 @@
 
 .orientation_vertical .control {
   inline-size: var(--slider-handle-height);
-  block-size: var(--spacing-104);
+  block-size: var(--component-slider-vertical-control-length);
 }
 
 .track {
@@ -74,47 +80,38 @@
 .inactiveTrackEnd {
   position: absolute;
   inset-block: 0;
+  box-sizing: border-box;
 }
 
 .inactiveTrackStart {
   inset-inline-start: var(--slider-inactive-start-start);
   inline-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
-  border-start-start-radius: var(--border-radius-xl);
-  border-end-start-radius: var(--border-radius-xl);
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
   border-start-end-radius: var(--border-radius-sm);
   border-end-end-radius: var(--border-radius-sm);
-  background: var(--color-background-brand-subtle-default);
+  background: var(--slider-track-inactive-color);
 }
 
 .activeTrack {
   inset-inline-start: var(--slider-active-start);
   inline-size: max(0px, calc(var(--slider-active-end) - var(--slider-active-start)));
-  background: var(--color-background-selected-bold-default);
+  border-radius: var(--border-radius-sm);
+  background: var(--slider-track-active-color);
 }
 
-.control[data-active-shape='edge'] .activeTrack {
-  border-start-start-radius: var(--border-radius-xl);
-  border-end-start-radius: var(--border-radius-xl);
-  border-start-end-radius: var(--border-radius-sm);
-  border-end-end-radius: var(--border-radius-sm);
+.control[data-active-touches-start='true'] .activeTrack {
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
+}
+
+.control[data-active-touches-end='true'] .activeTrack {
+  border-start-end-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
 }
 
 .control[data-has-steps='true'] {
-  --slider-value-scale-inset: calc(var(--component-slider-stop-container-size) / 2);
-}
-
-
-.root:not([data-disabled='true']):active .control,
-.root[data-dragging='true'] .control,
-.control:has(.input[data-preview-state='press']) {
-  --slider-current-gap: var(--slider-interactive-gap);
-  --slider-current-handle-width: var(--slider-handle-width-pressed);
-}
-
-
-
-.control[data-active-shape='middle'] .activeTrack {
-  border-radius: var(--border-radius-sm);
+  --slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);
 }
 
 .inactiveTrackEnd {
@@ -122,25 +119,30 @@
   inline-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
   border-start-start-radius: var(--border-radius-sm);
   border-end-start-radius: var(--border-radius-sm);
-  border-start-end-radius: var(--border-radius-xl);
-  border-end-end-radius: var(--border-radius-xl);
-  background: var(--color-background-brand-subtle-default);
+  border-start-end-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
+  background: var(--slider-track-inactive-color);
+}
+
+.control[data-inactive-end-full='true'] .inactiveTrackEnd {
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
 }
 
 .input {
   position: absolute;
-  inset-block: 0;
-  inset-inline: var(--slider-value-scale-inset);
+  inset: 0;
   z-index: 5;
-  inline-size: calc(100% - var(--slider-value-scale-inset) - var(--slider-value-scale-inset));
+  inline-size: 100%;
   block-size: 100%;
-  margin: var(--spacing-0);
+  margin: var(--spacing-none);
   border: 0;
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
-  color: var(--color-content-selected);
-  cursor: pointer;
+  color: var(--color-content-brand-primary);
+  cursor: inherit;
+  pointer-events: none;
 }
 
 .input:focus-visible {
@@ -203,11 +205,12 @@
   inline-size: var(--slider-handle-width);
   block-size: var(--slider-handle-height);
   border-radius: var(--border-radius-full-round);
+  pointer-events: auto;
   transform: translate(-50%, -50%);
 }
 
 .handleVisual {
-  inline-size: var(--slider-current-handle-width);
+  inline-size: var(--slider-handle-width);
   block-size: var(--slider-handle-height);
   border-radius: var(--border-radius-full-round);
   background: var(--slider-handle-visual-color);
@@ -225,14 +228,22 @@
   inset-inline-start: var(--slider-upper-position);
 }
 
-.root:not([data-disabled='true']):hover .handle,
-.control:has(.input[data-preview-state='hover']) .handle {
-  --slider-handle-visual-color: var(--color-background-selected-bold-hovered);
+.root:not(.rangeRoot):not([data-disabled='true']):hover .handleSingle,
+.control:has(.singleInput[data-preview-state='hover']) .handleSingle,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):hover .handleLower,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):hover .handleUpper,
+.control:has(.rangeInputLower[data-preview-state='hover']) .handleLower,
+.control:has(.rangeInputUpper[data-preview-state='hover']) .handleUpper {
+  --slider-handle-visual-color: var(--color-background-brand-primary-bold-hovered);
 }
 
-.root:not([data-disabled='true']):active .handle,
-.control:has(.input[data-preview-state='press']) .handle {
-  --slider-handle-visual-color: var(--color-background-selected-bold-pressed);
+.root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle,
+.control:has(.singleInput[data-preview-state='press']) .handleSingle,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):active .handleLower,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):active .handleUpper,
+.control:has(.rangeInputLower[data-preview-state='press']) .handleLower,
+.control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper {
+  --slider-handle-visual-color: var(--color-background-brand-primary-bold-pressed);
 }
 
 .root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle .handleVisual,
@@ -241,7 +252,7 @@
 .control:has(.singleInput[data-preview-state='press']) .handleSingle .handleVisual,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower .handleVisual,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper .handleVisual {
-  inline-size: var(--slider-current-handle-width);
+  inline-size: var(--slider-handle-width-pressed);
 }
 
 .control:has(.singleInput:focus-visible) .handleSingle,
@@ -250,8 +261,8 @@
 .control:has(.rangeInputLower[data-preview-state='focus']) .handleLower,
 .control:has(.rangeInputUpper:focus-visible) .handleUpper,
 .control:has(.rangeInputUpper[data-preview-state='focus']) .handleUpper {
-  outline: var(--border-width-bold) solid var(--color-border-focused);
-  outline-offset: var(--spacing-050);
+  outline: var(--border-width-md) solid var(--color-border-focused);
+  outline-offset: var(--spacing-xs);
 }
 
 .root[data-disabled='true'] {
@@ -275,10 +286,6 @@
   background: var(--color-content-disabled);
 }
 
-.rangeInput {
-  pointer-events: none;
-}
-
 .rangeInputLower {
   z-index: 4;
 }
@@ -300,14 +307,6 @@
   z-index: 2;
 }
 
-.rangeInput::-webkit-slider-thumb {
-  pointer-events: auto;
-}
-
-.rangeInput::-moz-range-thumb {
-  pointer-events: auto;
-}
-
 .steps {
   z-index: 1;
   box-sizing: border-box;
@@ -319,8 +318,8 @@
   inset-inline-start: var(--slider-step-position);
   display: grid;
   place-items: center;
-  inline-size: var(--component-slider-stop-container-size);
-  block-size: var(--component-slider-stop-container-size);
+  inline-size: var(--slider-stop-container-size);
+  block-size: var(--slider-stop-container-size);
   transform: translate(-50%, -50%);
 }
 
@@ -333,23 +332,20 @@
 }
 
 .stepDot {
-  inline-size: var(--component-slider-stop-dot-size);
-  block-size: var(--component-slider-stop-dot-size);
+  inline-size: var(--size-marker-xs);
+  block-size: var(--size-marker-xs);
+  box-sizing: border-box;
   border-radius: var(--border-radius-full-round);
-  background: var(--color-content-subtle);
-}
-
-.step[data-active='true'] .stepDot {
-  background: var(--color-content-selected);
+  background: var(--slider-step-color);
 }
 
 .valueIndicator {
   position: absolute;
-  inset-block-end: calc(100% + var(--component-slider-value-indicator-offset));
+  inset-block-end: calc(100% + var(--spacing-sm));
   inset-inline-start: var(--slider-value-position);
   z-index: 4;
-  padding-block: var(--spacing-050);
-  padding-inline: var(--spacing-100);
+  padding-block: var(--spacing-xs);
+  padding-inline: var(--spacing-sm);
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse);
@@ -399,8 +395,8 @@
   block-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
   border-start-start-radius: var(--border-radius-sm);
   border-start-end-radius: var(--border-radius-sm);
-  border-end-start-radius: var(--border-radius-xl);
-  border-end-end-radius: var(--border-radius-xl);
+  border-end-start-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
 }
 
 .orientation_vertical .activeTrack {
@@ -408,36 +404,38 @@
   block-size: max(0px, calc(var(--slider-active-end) - var(--slider-active-start)));
 }
 
-.orientation_vertical .control[data-active-shape='edge'] .activeTrack {
-  border-start-start-radius: var(--border-radius-sm);
-  border-start-end-radius: var(--border-radius-sm);
-  border-end-start-radius: var(--border-radius-xl);
-  border-end-end-radius: var(--border-radius-xl);
+.orientation_vertical .control[data-active-touches-start='true'] .activeTrack {
+  border-end-start-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
+}
+
+.orientation_vertical .control[data-active-touches-end='true'] .activeTrack {
+  border-start-start-radius: var(--border-radius-full-round);
+  border-start-end-radius: var(--border-radius-full-round);
 }
 
 .orientation_vertical .control[data-has-steps='true'] {
-  --slider-value-scale-inset: calc(var(--component-slider-stop-container-size) / 2);
-}
-
-
-.control[data-active-shape='middle'] .activeTrack {
-  border-radius: var(--border-radius-sm);
+  --slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);
 }
 
 .orientation_vertical .inactiveTrackEnd {
   inset-block-start: calc(100% - var(--slider-inactive-end-end));
   block-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
-  border-start-start-radius: var(--border-radius-xl);
-  border-start-end-radius: var(--border-radius-xl);
+  border-start-start-radius: var(--border-radius-full-round);
+  border-start-end-radius: var(--border-radius-full-round);
   border-end-start-radius: var(--border-radius-sm);
   border-end-end-radius: var(--border-radius-sm);
 }
 
+.orientation_vertical .control[data-inactive-end-full='true'] .inactiveTrackEnd {
+  border-end-start-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
+}
+
 .orientation_vertical .input {
-  inset-block: var(--slider-value-scale-inset);
-  inset-inline: 0;
+  inset: 0;
   inline-size: 100%;
-  block-size: calc(100% - var(--slider-value-scale-inset) - var(--slider-value-scale-inset));
+  block-size: 100%;
   writing-mode: vertical-lr;
   direction: rtl;
 }
@@ -491,7 +489,7 @@
 .orientation_vertical .valueIndicator {
   inset-block-start: calc(100% - var(--slider-value-position));
   inset-block-end: auto;
-  inset-inline-start: calc(100% + var(--component-slider-value-indicator-offset));
+  inset-inline-start: calc(100% + var(--spacing-sm));
   transform: translateY(-50%);
 }
 
@@ -505,11 +503,9 @@
 
 .visuallyHidden {
   position: absolute;
-  inline-size: var(--border-width-default);
-  block-size: var(--border-width-default);
+  inline-size: var(--border-width-sm);
+  block-size: var(--border-width-sm);
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
 }
-
-

@@ -40,21 +40,21 @@ type Story = StoryObj<typeof Logo>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
 const matrixStyle = {
   display: 'grid',
   gridTemplateColumns: 'max-content repeat(3, minmax(120px, max-content))',
-  gap: 'var(--spacing-150) var(--spacing-300)',
+  gap: 'var(--spacing-md) var(--spacing-2xl)',
   alignItems: 'center',
 } satisfies CSSProperties;
 
 const rowStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--spacing-150)',
+  gap: 'var(--spacing-md)',
   flexWrap: 'wrap',
 } satisfies CSSProperties;
 
@@ -62,10 +62,10 @@ const headerStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 'var(--spacing-200)',
-  paddingBlock: 'var(--spacing-100)',
-  paddingInline: 'var(--spacing-150)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-lg)',
+  paddingBlock: 'var(--spacing-sm)',
+  paddingInline: 'var(--spacing-md)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
@@ -74,8 +74,8 @@ const headerStyle = {
 const navStyle = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 'var(--spacing-100)',
-  padding: 'var(--spacing-100)',
+  gap: 'var(--spacing-sm)',
+  padding: 'var(--spacing-sm)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-raised-default)',
   color: 'var(--color-content-default)',
@@ -83,9 +83,9 @@ const navStyle = {
 
 const surfaceStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',

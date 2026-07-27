@@ -1,0 +1,206 @@
+{
+  "name": "ProgressIndicator",
+  "category": "atom",
+  "status": "specified",
+  "purpose": "Show the user current position within a finite sequence of steps.",
+  "intent": "Provide a compact representation of relative journey position, with optional direct step selection.",
+  "useCases": [
+    "Client onboarding",
+    "Multi-step account setup",
+    "Guided forms",
+    "Carousel position",
+    "Setup flows"
+  ],
+  "antiPatterns": [
+    "Percentage-based system progress",
+    "Indeterminate loading",
+    "Tabs",
+    "Completed-step tracking",
+    "Labeled stepper"
+  ],
+  "anatomy": {
+    "root": "Owns progress semantics and layout.",
+    "dots": "Sequence of selected and unselected dots.",
+    "selectedDot": "Represents the current step.",
+    "unselectedDot": "Represents every other step."
+  },
+  "props": {
+    "currentStep": {
+      "type": "number",
+      "required": true,
+      "indexing": "one-based",
+      "constraints": "clamped to 1-totalSteps"
+    },
+    "totalSteps": {
+      "type": "number",
+      "required": true,
+      "constraints": "normalized to at least 1"
+    },
+    "appearance": {
+      "type": "enum",
+      "values": [
+        "default",
+        "primary",
+        "discovery",
+        "inverted"
+      ],
+      "default": "default"
+    },
+    "size": {
+      "type": "enum",
+      "values": [
+        "sm",
+        "md"
+      ],
+      "default": "sm"
+    },
+    "label": {
+      "type": "string",
+      "required": false
+    },
+    "getValueText": {
+      "type": "(currentStep: number, totalSteps: number) => string",
+      "required": false
+    },
+    "onStepChange": {
+      "type": "(step: number) => void",
+      "required": false
+    }
+  },
+  "variants": {
+    "appearance": [
+      "default",
+      "primary",
+      "discovery",
+      "inverted"
+    ],
+    "size": [
+      "sm",
+      "md"
+    ]
+  },
+  "sizes": {
+    "sm": {
+      "container": "16px",
+      "dot": "8px"
+    },
+    "md": {
+      "container": "20px",
+      "dot": "12px"
+    }
+  },
+  "states": [
+    "selected",
+    "unselected",
+    "hovered",
+    "pressed",
+    "focused"
+  ],
+  "slots": [],
+  "tokens": {
+    "semantic": {
+      "defaultSelected": "color-content-default",
+      "primarySelected": "color-content-brand",
+      "discoverySelected": "color-content-discovery",
+      "invertedSelected": "color-content-inverse",
+      "unselectedBorder": "color-border-bold",
+      "interactiveHover": "color-background-neutral-subtle-hovered",
+      "interactivePressed": "color-background-neutral-subtle-pressed",
+      "radius": "border-radius-full-round",
+      "spacing": "spacing-0"
+    },
+    "componentAllowed": [
+      "dot container size",
+      "visible dot size"
+    ],
+    "componentForbidden": [
+      "color aliases",
+      "radius aliases",
+      "border width aliases",
+      "spacing aliases"
+    ]
+  },
+  "accessibility": {
+    "role": "progressbar",
+    "ariaValueMin": 1,
+    "ariaValueMax": "normalized totalSteps",
+    "ariaValueNow": "normalized currentStep",
+    "defaultAriaValueText": "Step {currentStep} of {totalSteps}",
+    "nameSources": [
+      "aria-label",
+      "aria-labelledby",
+      "label"
+    ],
+    "focusable": false,
+    "interactive": "optional via onStepChange",
+    "dotsHidden": "passive only"
+  },
+  "keyboardInteraction": [
+    "Enter and Space use native button behavior when onStepChange is provided."
+  ],
+  "behaviorRules": [
+    "Render exactly normalized totalSteps dots.",
+    "Render exactly one selected dot.",
+    "Clamp currentStep to the valid one-based range.",
+    "Dots become interactive only when onStepChange is provided.",
+    "Do not add completed-step styling.",
+    "Do not add animation unless specified later."
+  ],
+  "compositionRules": [
+    "May appear near a journey title or surrounding step content.",
+    "Indicator Dot remains private anatomy.",
+    "External Previous and Next buttons belong to surrounding composition, not the component."
+  ],
+  "contentRules": [
+    "Accessible label identifies the journey.",
+    "Visible step labels belong to surrounding composition.",
+    "The component does not render numbers or text."
+  ],
+  "responsiveRules": [
+    "The component keeps intrinsic width based on totalSteps.",
+    "Dots do not wrap.",
+    "Use surrounding layout to handle narrow spaces."
+  ],
+  "themeRules": [
+    "Use semantic tokens only.",
+    "Inverted appearance must remain visible on dark surfaces.",
+    "Do not reference primitive colors directly."
+  ],
+  "implementationNotes": [
+    "React and TypeScript.",
+    "CSS Modules.",
+    "CSS-rendered dots.",
+    "No Figma image assets.",
+    "Forward root ref.",
+    "Use the shared Focus Ring implementation for interactive dots."
+  ],
+  "relatedComponents": [
+    "ProgressBar",
+    "Spinner",
+    "Button"
+  ],
+  "do": [
+    "Use for relative position in a finite journey.",
+    "Provide an accessible journey name.",
+    "Render a dynamic number of dots.",
+    "Use inverted appearance on dark surfaces.",
+    "Use onStepChange when direct dot selection is helpful."
+  ],
+  "dont": [
+    "Use for system process percentage.",
+    "Add internal previous or next buttons.",
+    "Use as a labeled stepper.",
+    "Expose Indicator Dot publicly.",
+    "Expose a public interaction state prop."
+  ],
+  "acceptanceCriteria": [
+    "Dynamic dot count matches totalSteps.",
+    "Exactly one dot is selected.",
+    "Current step and total steps normalize safely.",
+    "All appearances and sizes match Figma intent.",
+    "Passive and interactive progress semantics are correct.",
+    "Interactive dots use native buttons and the shared Focus Ring.",
+    "No hardcoded colors or Figma image assets.",
+    "Storybook and tests compile."
+  ]
+}

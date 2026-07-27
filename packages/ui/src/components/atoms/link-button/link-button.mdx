@@ -1,0 +1,195 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LinkButtonStories from './link-button.stories';
+
+<Meta of={LinkButtonStories} name="Docs" />
+
+# Link Button
+
+LinkButton is navigation that looks like a button. It renders a native anchor with Button's visual
+system - `appearance`, `tone`, `size`, icons, loading - so a page can style a navigational action
+identically to a triggered one without giving up anchor semantics (right-click, open in new tab,
+middle-click to open in a background tab).
+
+<Canvas of={LinkButtonStories.Playground} />
+
+## When to use
+
+- Primary or secondary navigation styled with the same visual weight as an action button.
+- A call-to-action that takes the user to a new page or route.
+- External links that need Button-family styling.
+
+## When not to use
+
+- **For a page-local action that doesn't navigate.** Use `Button` - an anchor with no real
+  destination is a keyboard-trap and screen-reader trust problem waiting to happen.
+- **For submitting a form or changing state.** Use `Button type="submit"` or a plain `Button`.
+- **For an icon-only control.** LinkButton always requires a visible label; there's no icon-only
+  variant, matching Button.
+
+## Anatomy
+
+<Canvas of={LinkButtonStories.Content} />
+
+1. **Root** - a native `a`, always requiring `href`.
+2. **Leading** - either `iconBefore`, or the loading `Spinner` when `isLoading` is true, exactly like
+   Button.
+3. **Content** - the visible label. Required, and stays visible while loading.
+4. **Trailing** - `iconAfter`, unaffected by loading.
+
+## Usage guidance
+
+### It shares Button's visual system, not its element
+
+`appearance`, `tone`, `size`, `iconBefore`/`iconAfter`, and `isLoading` all behave exactly as they do
+on `Button` - including the same rule that **`tone` only changes anything when
+`appearance="primary"`**. See Variants, and see Button's Docs for the full explanation.
+
+### Disabled is simulated, not native
+
+Anchors have no `disabled` attribute. Setting `isDisabled` instead applies `aria-disabled="true"`,
+`tabindex="-1"`, and suppresses the click handler - but the `href` itself is still present in the
+DOM. Don't treat a disabled LinkButton as equivalent to a disabled native `button`; anything that
+reads raw markup instead of respecting ARIA state can still navigate through it. See Edge Cases.
+
+### `rel` is filled in automatically for `target="_blank"`
+
+When `target="_blank"` is set and no `rel` is provided, LinkButton adds `rel="noopener noreferrer"`
+for you. Pass `rel` explicitly only when you need something different - you don't need to add the
+security defaults yourself.
+
+## Do / Don't
+
+**Do** let `rel` default when opening in a new tab.
+
+```tsx
+<LinkButton href="https://example.com" target="_blank">
+  External site
+</LinkButton>
+```
+
+**Don't** manually re-add the same defaults - it's redundant, and if you overwrite `rel` you may
+accidentally drop them.
+
+```tsx
+<LinkButton href="https://example.com" target="_blank" rel="noopener noreferrer">
+  External site
+</LinkButton>
+```
+
+---
+
+**Do** use `Button` for an action that doesn't navigate anywhere.
+
+```tsx
+<Button onClick={openDialog}>Add note</Button>
+```
+
+**Don't** give a non-navigating action an `href` just to reuse LinkButton's styling.
+
+```tsx
+<LinkButton href="#" onClick={openDialog}>
+  Add note
+</LinkButton>
+```
+
+---
+
+**Do** treat a disabled LinkButton as a visual/interactive state layered on a real link.
+
+```tsx
+<LinkButton href="/clients" isDisabled>
+  Open client
+</LinkButton>
+```
+
+**Don't** assume `isDisabled` removes the destination - the `href` is still there. Remove or guard
+the route server-side if it truly must be unreachable.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>href</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Required. The destination.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The visible label. Stays visible while loading.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Shared scale with <code>Button</code>.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'primary' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Visual emphasis. Only <code>primary</code> responds to <code>tone</code>.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'neutral' | 'warning' | 'error' | 'discovery'</code></td>
+      <td><code>'neutral'</code></td>
+      <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Simulated via <code>aria-disabled</code> and <code>tabindex="-1"</code> - see Usage guidance.</td>
+    </tr>
+    <tr>
+      <td><code>isLoading</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Shows a leading <code>Spinner</code>, sets <code>aria-busy</code>, suppresses clicks.</td>
+    </tr>
+    <tr>
+      <td><code>iconBefore</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Replaced by the spinner while loading.</td>
+    </tr>
+    <tr>
+      <td><code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Unaffected by loading.</td>
+    </tr>
+    <tr>
+      <td><code>target</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Native anchor target. <code>rel</code> defaults to <code>noopener noreferrer</code> when this is <code>_blank</code>.</td>
+    </tr>
+    <tr>
+      <td><code>rel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Overrides the automatic <code>_blank</code> default.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `a` prop is forwarded to the root element.
+
+## Related components
+
+- **Button** - shares this component's entire visual system; use it when there's no navigation.
+- **Link** - for inline, text-level navigation without Button styling.
+- **IconButton** - for an icon-only action.

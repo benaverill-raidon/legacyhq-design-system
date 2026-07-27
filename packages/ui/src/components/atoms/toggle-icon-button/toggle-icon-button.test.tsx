@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
@@ -6,6 +8,11 @@ import { CloseIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { ToggleIconButton } from './toggle-icon-button';
 import styles from './toggle-icon-button.module.css';
+
+const toggleIconButtonCss = readFileSync(
+  'packages/ui/src/components/atoms/toggle-icon-button/toggle-icon-button.module.css',
+  'utf8',
+);
 
 afterEach(cleanup);
 
@@ -219,5 +226,25 @@ describe('ToggleIconButton', () => {
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );
+  });
+
+  it('maps Figma states, shapes, and geometry to shared tokens', () => {
+    expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-xs);');
+    expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-sm);');
+    expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-md);');
+    expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-lg);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
+    expect(toggleIconButtonCss).toContain('border-color: var(--color-border-brand-primary);');
+    expect(toggleIconButtonCss).toContain('color: var(--color-content-brand-primary);');
+    expect(toggleIconButtonCss).toContain('border-radius: var(--border-radius-full-round);');
+    expect(toggleIconButtonCss).toMatch(/\.tone_default \{[\s\S]*?background: transparent;/);
+    expect(toggleIconButtonCss).toMatch(
+      /\.tone_subtle \{[\s\S]*?border-color: transparent;[\s\S]*?background: transparent;/,
+    );
+    expect(toggleIconButtonCss).not.toContain('--component-button-');
+    expect(toggleIconButtonCss).not.toContain('--color-background-selected-');
+    expect(toggleIconButtonCss).not.toContain('--color-border-selected');
   });
 });

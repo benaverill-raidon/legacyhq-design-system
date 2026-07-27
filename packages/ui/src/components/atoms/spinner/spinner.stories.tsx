@@ -24,7 +24,7 @@ type Story = StoryObj<typeof Spinner>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-200)',
+  gap: 'var(--spacing-lg)',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
@@ -32,14 +32,14 @@ const rowStyle = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-150)',
+  gap: 'var(--spacing-md)',
 } satisfies CSSProperties;
 
 const exampleCardStyle = {
   display: 'grid',
-  gap: 'var(--spacing-100)',
-  padding: 'var(--spacing-200)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  gap: 'var(--spacing-sm)',
+  padding: 'var(--spacing-lg)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
@@ -48,8 +48,8 @@ const exampleCardStyle = {
 const darkSurfaceStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--spacing-100)',
-  padding: 'var(--spacing-200)',
+  gap: 'var(--spacing-sm)',
+  padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse)',
@@ -58,18 +58,18 @@ const darkSurfaceStyle = {
 const inlineTextStyle = {
   display: 'inline-flex',
   alignItems: 'center',
-  gap: 'var(--spacing-075)',
+  gap: 'var(--spacing-sm)',
 } satisfies CSSProperties;
 
 const buttonStyle = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: 'var(--spacing-075)',
+  gap: 'var(--spacing-sm)',
   width: 'fit-content',
-  paddingBlock: 'var(--spacing-075)',
-  paddingInline: 'var(--spacing-150)',
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  paddingBlock: 'var(--spacing-sm)',
+  paddingInline: 'var(--spacing-md)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-raised-default)',
   color: 'var(--color-content-default)',

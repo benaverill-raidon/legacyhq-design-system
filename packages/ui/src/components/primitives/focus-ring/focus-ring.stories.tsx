@@ -25,7 +25,7 @@ type Story = StoryObj<typeof FocusRing>;
 
 const stackStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
+  gap: 'var(--spacing-md)',
   justifyItems: 'start',
   color: 'var(--color-content-default)',
 } satisfies CSSProperties;
@@ -33,32 +33,32 @@ const stackStyle = {
 const rowStyle = {
   display: 'flex',
   alignItems: 'center',
-  gap: 'var(--spacing-100)',
+  gap: 'var(--spacing-sm)',
   flexWrap: 'wrap',
 } satisfies CSSProperties;
 
 const buttonStyle = {
-  border: 'var(--border-width-default) solid var(--color-border-default)',
+  border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-default)',
   color: 'var(--color-content-default)',
-  padding: 'var(--spacing-050) var(--spacing-100)',
+  padding: 'var(--spacing-xs) var(--spacing-sm)',
   font: 'inherit',
 } satisfies CSSProperties;
 
 const inputStyle = {
-  border: 'var(--border-width-default) solid var(--color-border-input)',
+  border: 'var(--border-width-sm) solid var(--color-border-input)',
   borderRadius: 'var(--border-radius-sm)',
   background: 'var(--color-background-input-default)',
   color: 'var(--color-content-default)',
-  padding: 'var(--spacing-050) var(--spacing-100)',
+  padding: 'var(--spacing-xs) var(--spacing-sm)',
   font: 'inherit',
 } satisfies CSSProperties;
 
 const surfaceStyle = {
   display: 'grid',
-  gap: 'var(--spacing-150)',
-  padding: 'var(--spacing-200)',
+  gap: 'var(--spacing-md)',
+  padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',

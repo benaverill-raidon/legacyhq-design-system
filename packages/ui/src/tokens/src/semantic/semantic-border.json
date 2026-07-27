@@ -1,5 +1,5 @@
 {
-  "Mode 1": {
+  "Semantic: Border": {
     "border-radius-xs": {
       "value": "var(--border-radius-2)",
       "type": "float",
@@ -35,15 +35,20 @@
       "type": "float",
       "originalName": "border/radius/full-round"
     },
-    "border-width-default": {
+    "border-width-sm": {
       "value": "var(--border-width-1)",
       "type": "float",
-      "originalName": "border/width/default"
+      "originalName": "border/width/sm"
     },
-    "border-width-bold": {
+    "border-width-md": {
       "value": "var(--border-width-2)",
       "type": "float",
-      "originalName": "border/width/bold"
+      "originalName": "border/width/md"
+    },
+    "border-width-lg": {
+      "value": "var(--border-width-3)",
+      "type": "float",
+      "originalName": "border/width/lg"
     }
   }
 }

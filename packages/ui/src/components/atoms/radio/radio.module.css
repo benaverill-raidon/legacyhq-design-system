@@ -1,8 +1,8 @@
 .radio {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-025);
-  min-block-size: var(--component-radio-item-min-height);
+  gap: var(--spacing-xxs);
+  min-block-size: var(--size-choice-row);
   overflow: visible;
   width: fit-content;
   color: var(--color-content-default);
@@ -21,8 +21,8 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-radio-hit-area-size);
-  block-size: var(--component-radio-item-min-height);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-row);
   border-radius: var(--border-radius-full-round);
   overflow: visible;
 }
@@ -32,9 +32,9 @@
   inset-block-start: 50%;
   inset-inline-start: 50%;
   z-index: 1;
-  inline-size: var(--component-radio-hit-area-size);
-  block-size: var(--component-radio-hit-area-size);
-  margin: var(--spacing-0);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-target);
+  margin: var(--spacing-none);
   border: 0;
   border-radius: var(--border-radius-full-round);
   appearance: none;
@@ -56,33 +56,42 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-radio-hit-area-size);
-  block-size: var(--component-radio-hit-area-size);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-target);
   border-radius: var(--border-radius-full-round);
-  background: var(--color-background-selected-subtle-default);
+  background: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
 }
 
 .indicatorFocus {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-radio-indicator-size);
-  block-size: var(--component-radio-indicator-size);
+  inline-size: var(--size-choice-indicator);
+  block-size: var(--size-choice-indicator);
   border-radius: var(--border-radius-full-round);
 }
 
-.input:focus-visible + .indicatorTarget .indicatorFocus {
-  outline: var(--border-width-bold) solid var(--color-border-focused);
-  outline-offset: var(--spacing-0);
+.input:focus-visible + .indicatorTarget .indicatorFocus::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: calc(var(--size-choice-indicator) + var(--border-width-md));
+  block-size: calc(var(--size-choice-indicator) + var(--border-width-md));
+  border: var(--border-width-md) solid var(--color-border-focused);
+  border-radius: var(--border-radius-full-round);
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
 }
 
 .indicatorIcon {
   display: none;
-  inline-size: var(--component-radio-indicator-size);
-  block-size: var(--component-radio-indicator-size);
-  color: var(--color-border-input);
+  inline-size: var(--size-choice-indicator);
+  block-size: var(--size-choice-indicator);
+  color: var(--color-content-subtle);
 }
 
 .uncheckedIcon {
@@ -90,7 +99,7 @@
 }
 
 .checkedIcon {
-  color: var(--color-content-selected);
+  color: var(--color-content-brand-primary);
 }
 
 .input:checked + .indicatorTarget .uncheckedIcon {
@@ -108,45 +117,62 @@
 }
 
 .requiredIndicator {
-  margin-inline-start: var(--spacing-025);
+  margin-inline-start: var(--spacing-xxs);
   color: var(--color-content-error);
 }
 
 .radio:not([data-disabled='true']):hover .indicatorTarget,
-.radio:global(.previewHover):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-selected-subtle-hovered);
+.radio:global(.previewHover):not([data-disabled='true']) .indicatorTarget,
+.radio:not([data-disabled='true']) .input:focus-visible + .indicatorTarget,
+.radio:global(.previewFocus):not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.radio:not([data-disabled='true']):hover .input:checked + .indicatorTarget,
+.radio:global(.previewHover):not([data-disabled='true']) .input:checked + .indicatorTarget,
+.radio:not([data-disabled='true']) .input:checked:focus-visible + .indicatorTarget,
+.radio:global(.previewFocus):not([data-disabled='true']) .input:checked + .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-hovered);
 }
 
 .radio:not([data-disabled='true']):active .indicatorTarget,
 .radio:global(.previewPress):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-selected-subtle-pressed);
+  background: var(--color-background-neutral-overlay-pressed);
+}
+
+.radio:not([data-disabled='true']):active .input:checked + .indicatorTarget,
+.radio:global(.previewPress):not([data-disabled='true']) .input:checked + .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-pressed);
 }
 
 .radio[data-invalid='true'] .indicatorIcon {
-  color: var(--color-border-error);
+  color: var(--color-content-error);
 }
 
 .radio[data-disabled='true'] {
-  color: var(--color-content-disabled);
+  color: var(--color-content-default);
   cursor: not-allowed;
+}
+
+.radio[data-disabled='true'] .labelText,
+.radio[data-disabled='true'] .indicatorIcon {
+  color: var(--color-content-disabled);
+  opacity: 0.32;
 }
 
 .radio[data-disabled='true'] .indicatorTarget,
 .radio[data-disabled='true']:hover .indicatorTarget,
 .radio[data-disabled='true']:active .indicatorTarget,
 .radio:global(.previewHover)[data-disabled='true'] .indicatorTarget,
-.radio:global(.previewPress)[data-disabled='true'] .indicatorTarget {
-  background: var(--color-background-selected-subtle-default);
-}
-
-.radio[data-disabled='true'] .indicatorIcon {
-  color: var(--color-content-disabled);
+.radio:global(.previewPress)[data-disabled='true'] .indicatorTarget,
+.radio:global(.previewFocus)[data-disabled='true'] .indicatorTarget {
+  background: transparent;
 }
 
 .group {
   min-inline-size: 0;
-  margin: var(--spacing-0);
-  padding: var(--spacing-0);
+  margin: var(--spacing-none);
+  padding: var(--spacing-none);
   border: 0;
   color: var(--color-content-default);
 }
@@ -154,7 +180,7 @@
 .legend {
   display: inline-flex;
   align-items: baseline;
-  padding: var(--spacing-0);
+  padding: var(--spacing-none);
   color: var(--color-content-default);
   font-family: var(--typography-body-md-font-family);
   font-size: var(--typography-body-md-font-size);
@@ -165,7 +191,7 @@
 }
 
 .description {
-  margin-block-start: var(--spacing-050);
+  margin-block-start: var(--spacing-xs);
   color: var(--color-content-subtle);
   font-family: var(--typography-body-md-font-family);
   font-size: var(--typography-body-md-font-size);
@@ -176,8 +202,8 @@
 
 .options {
   display: flex;
-  gap: var(--spacing-0);
-  margin-block-start: var(--spacing-0);
+  gap: var(--spacing-none);
+  margin-block-start: var(--spacing-none);
   overflow: visible;
 }
 
@@ -191,7 +217,7 @@
 }
 
 .errorMessage {
-  margin-block-start: var(--spacing-050);
+  margin-block-start: var(--spacing-xs);
   color: var(--color-content-error);
   font-family: var(--typography-body-md-font-family);
   font-size: var(--typography-body-md-font-size);

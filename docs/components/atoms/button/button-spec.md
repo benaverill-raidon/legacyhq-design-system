@@ -75,8 +75,8 @@ isFullWidth = false
 
 | Size | Min height | Horizontal padding | Radius | Border width |
 |---|---:|---|---|---|
-| xs | 24px | `spacing-100` | `border-radius-sm` | `border-width-default` |
-| sm | 32px | `spacing-100` | `border-radius-sm` | `border-width-default` |
+| xs | 24px | `spacing-sm` | `border-radius-sm` | `border-width-default` |
+| sm | 32px | `spacing-sm` | `border-radius-sm` | `border-width-default` |
 | md | 40px | `spacing-150` | `border-radius-sm` | `border-width-default` |
 | lg | 48px | `spacing-200` | `border-radius-sm` | `border-width-default` |
 
@@ -217,10 +217,10 @@ Create component-level tokens for min-height:
 Expected CSS variables:
 
 ```css
---component-button-min-height-xs
---component-button-min-height-sm
---component-button-min-height-md
---component-button-min-height-lg
+--size-control-xs
+--size-control-sm
+--size-control-md
+--size-control-lg
 ```
 
 ### Existing Tokens
@@ -238,28 +238,28 @@ Use existing semantic tokens for:
 
 ```css
 /* xs */
-min-height: var(--component-button-min-height-xs);
-padding-inline: var(--spacing-100);
+min-height: var(--size-control-xs);
+padding-inline: var(--spacing-sm);
 
 /* sm */
-min-height: var(--component-button-min-height-sm);
-padding-inline: var(--spacing-100);
+min-height: var(--size-control-sm);
+padding-inline: var(--spacing-sm);
 
 /* md */
-min-height: var(--component-button-min-height-md);
-padding-inline: var(--spacing-150);
+min-height: var(--size-control-md);
+padding-inline: var(--spacing-md);
 
 /* lg */
-min-height: var(--component-button-min-height-lg);
-padding-inline: var(--spacing-200);
+min-height: var(--size-control-lg);
+padding-inline: var(--spacing-lg);
 ```
 
 Common values:
 
 ```css
 border-radius: var(--border-radius-sm);
-border-width: var(--border-width-default);
-gap: var(--spacing-075);
+border-width: var(--border-width-sm);
+gap: var(--spacing-sm);
 ```
 
 ## Color Token Intent

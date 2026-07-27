@@ -1,76 +1,30 @@
 {
   "component": {
     "slider": {
-      "track": {
-        "height": {
-          "xs": {
-            "value": "var(--dimension-16)",
-            "type": "dimension"
-          },
-          "sm": {
-            "value": "var(--dimension-24)",
-            "type": "dimension"
-          },
-          "md": {
-            "value": "var(--dimension-40)",
-            "type": "dimension"
-          }
-        }
-      },
+      "track": { "height": {
+        "xs": { "value": "var(--measurement-16)", "type": "dimension" },
+        "sm": { "value": "var(--measurement-24)", "type": "dimension" },
+        "md": { "value": "var(--measurement-40)", "type": "dimension" }
+      } },
       "handle": {
-        "half-width": {
-          "value": "var(--dimension-2)",
-          "type": "dimension"
-        },
+        "half-width": { "value": "var(--measurement-2)", "type": "dimension" },
         "width": {
-          "xs": {
-            "value": "var(--dimension-4)",
-            "type": "dimension"
-          },
-          "sm": {
-            "value": "var(--dimension-4)",
-            "type": "dimension"
-          },
-          "md": {
-            "value": "var(--dimension-4)",
-            "type": "dimension"
-          }
+          "xs": { "value": "var(--measurement-4)", "type": "dimension" },
+          "sm": { "value": "var(--measurement-4)", "type": "dimension" },
+          "md": { "value": "var(--measurement-4)", "type": "dimension" }
         },
         "height": {
-          "xs": {
-            "value": "44px",
-            "type": "dimension"
-          },
-          "sm": {
-            "value": "44px",
-            "type": "dimension"
-          },
-          "md": {
-            "value": "44px",
-            "type": "dimension"
-          }
+          "xs": { "value": "var(--measurement-44)", "type": "dimension" },
+          "sm": { "value": "var(--measurement-44)", "type": "dimension" },
+          "md": { "value": "var(--measurement-44)", "type": "dimension" }
         }
       },
-      "stop": {
-        "container": {
-          "size": {
-            "value": "var(--dimension-16)",
-            "type": "dimension"
-          }
-        },
-        "dot": {
-          "size": {
-            "value": "var(--dimension-4)",
-            "type": "dimension"
-          }
-        }
-      },
-      "value-indicator": {
-        "offset": {
-          "value": "var(--spacing-075)",
-          "type": "dimension"
-        }
-      }
+      "stop": { "container": { "size": {
+        "xs": { "value": "var(--component-slider-track-height-xs)", "type": "dimension" },
+        "sm": { "value": "var(--component-slider-track-height-sm)", "type": "dimension" },
+        "md": { "value": "var(--component-slider-track-height-md)", "type": "dimension" }
+      } } },
+      "vertical": { "control-length": { "value": "var(--measurement-104)", "type": "dimension" } }
     }
   }
 }

@@ -1,0 +1,165 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LinkStories from './link.stories';
+
+<Meta of={LinkStories} name="Docs" />
+
+# Link
+
+Link is inline, text-level navigation - built to sit inside a sentence or a list, not to carry the
+visual weight of a button. For navigation styled like a button, use `LinkButton`.
+
+<Canvas of={LinkStories.Playground} />
+
+## When to use
+
+- A hyperlink inside body text or a sentence.
+- A secondary navigation item in a list, card, or footer.
+- An external reference that should visually match inline text rather than stand out as a control.
+
+## When not to use
+
+- **When the navigation should look like a button.** Use `LinkButton` - same destination semantics,
+  Button's visual weight.
+- **For a page-local action that doesn't navigate.** Use `Button`.
+- **On a light surface with `appearance="inverse"`.** Inverse hardcodes an inverse-content color for
+  use on a dark or bold background - on a light surface it loses contrast entirely. See Edge Cases.
+
+## Anatomy
+
+<Canvas of={LinkStories.Content} />
+
+1. **Root** - a native `a`, requiring `href`.
+2. **Content** - the visible text.
+3. **External-link icon** - appended automatically when `target="_blank"`. There's no `iconBefore`
+   or `iconAfter` prop; this icon is the only one Link ever renders, and it isn't configurable.
+
+## Usage guidance
+
+### Appearance is about surface, not emphasis
+
+Unlike `Button`, Link's `appearance` doesn't set visual weight - it sets which surface the link is
+readable on. `default` and `subtle` differ only in resting color (subtle is quieter); `inverse`
+exists specifically for dark or bold backgrounds and keeps a constant inverse color through every
+state, including `:visited`. Pick `inverse` because of where the link sits, not because you want it
+to stand out more.
+
+### The external-link icon and `rel` are automatic
+
+Setting `target="_blank"` does two things without any extra prop: it appends a small external-link
+icon after the text, and it adds `rel="noopener noreferrer"` (merged with anything you already pass
+in `rel`, not overwriting it). You don't need to add either yourself.
+
+### Visited links use real browser history
+
+`:visited` styling comes from the browser, not from Link's own state - it can't be previewed
+statically in Storybook the way hover or focus can, and it can't be read by JavaScript. Trust the
+browser's native behavior rather than trying to simulate it.
+
+## Do / Don't
+
+**Do** let a sentence carry the link inline.
+
+```tsx
+<p>
+  Review the <Link href="/clients">client profile</Link> before continuing.
+</p>
+```
+
+**Don't** reach for Link when the action needs Button's visual weight - use `LinkButton`.
+
+```tsx
+<Link href="/clients/new">Start a new client</Link>
+```
+
+---
+
+**Do** trust the automatic `_blank` behavior.
+
+```tsx
+<Link href="https://example.com" target="_blank">
+  External site
+</Link>
+```
+
+**Don't** re-add the icon or `rel` yourself - there's no `iconAfter` prop to override with, and the
+`rel` default is already merged in for you.
+
+---
+
+**Do** use `inverse` only on a dark or bold surface.
+
+```tsx
+<div data-theme="dark">
+  <Link href="/clients" appearance="inverse">
+    Client profile
+  </Link>
+</div>
+```
+
+**Don't** use `inverse` on a light surface expecting normal contrast.
+
+```tsx
+<Link href="/clients" appearance="inverse">
+  Client profile
+</Link>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>href</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Required. The destination.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The visible link text.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'subtle' | 'inverse'</code></td>
+      <td><code>'default'</code></td>
+      <td>Which surface the link is readable on - not a visual-weight control.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md'</code></td>
+      <td><code>'md'</code></td>
+      <td>Typography and icon scale.</td>
+    </tr>
+    <tr>
+      <td><code>target</code></td>
+      <td><code>string</code></td>
+      <td><code>'_self'</code></td>
+      <td><code>'_blank'</code> adds the external-link icon and defaults <code>rel</code>.</td>
+    </tr>
+    <tr>
+      <td><code>rel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Merged with, not replaced by, the automatic <code>_blank</code> default.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `a` prop is forwarded to the root element. Link has no `isDisabled` or `isLoading`
+prop.
+
+## Related components
+
+- **LinkButton** - the same destination semantics, styled with Button's visual weight.
+- **Button** - for an action that doesn't navigate.
+- **Tooltip** - to add supplementary explanation without changing the link's text.

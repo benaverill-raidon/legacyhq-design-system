@@ -116,10 +116,10 @@
   ],
   "tokens": {
     "layout": {
-      "minInlineSize": "--spacing-200",
-      "blockSize": "--spacing-200",
-      "paddingBlock": "--spacing-0",
-      "paddingInline": "--spacing-050"
+      "minInlineSize": "--spacing-lg",
+      "blockSize": "--spacing-lg",
+      "paddingBlock": "--spacing-none",
+      "paddingInline": "--spacing-xs"
     },
     "radius": {
       "root": "--border-radius-sm"

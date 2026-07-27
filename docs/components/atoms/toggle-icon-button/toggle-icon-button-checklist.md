@@ -204,12 +204,12 @@ When `isSelected` is true:
 - Preserve button dimensions.
 - Keep icon centered.
 
-Recommended selected tokens:
+Selected mappings bound in Figma:
 
 ```txt
-background: color/background/selected/default
-content: color/content/selected
-border: color/border/selected
+background: color/background/brand/primary/default/default
+content: color/content/brand
+border: color/border/brand
 ```
 
 Use actual generated token names in code.
@@ -248,7 +248,7 @@ Tab: focuses
 
 Use semantic tokens where available.
 
-Use component tokens for anatomy only if Button/Icon Button tokens cannot be reused cleanly.
+Use shared semantic, dimension, spacing, and radius tokens directly.
 
 Do not hardcode:
 

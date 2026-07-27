@@ -1,0 +1,140 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ProgressBarStories from './progress-bar.stories';
+
+<Meta of={ProgressBarStories} name="Docs" />
+
+# ProgressBar
+
+ProgressBar shows determinate completion of a known process, from 0 to 100, as either a fluid-width
+linear track or a fixed-diameter circular ring - both driven by the same numeric `value`.
+
+<Canvas of={ProgressBarStories.Playground} />
+
+## When to use
+
+- Document generation, file upload, or data import with a known total.
+- Onboarding or setup completion.
+- A background process where you can compute a real percentage.
+
+## When not to use
+
+- **For indeterminate loading**, where there's no known percentage. Use `Spinner`.
+- **As an interactive control.** ProgressBar is read-only and not keyboard-focusable - use `Slider`
+  if the user needs to set a value.
+- **As a chart or data visualization.** It communicates one process's completion, not a dataset.
+- **As a decorative percentage display** unconnected to a real process.
+
+## Anatomy
+
+<Canvas of={ProgressBarStories.Content} />
+
+- **Linear** - a fluid-width track with a filled segment, bounded by a start and end stop marker.
+  Width is controlled entirely by the parent; ProgressBar never sets its own width.
+- **Circular** - a fixed 72px SVG ring for both sizes, starting at 12 o'clock and advancing
+  clockwise, with a single stop marker at the top.
+
+Neither variant renders visible percentage text - pair ProgressBar with your own label or number in
+the surrounding composition, as in the examples above.
+
+## Usage guidance
+
+### Value clamping
+
+`value` accepts any number - out-of-range and non-finite values are clamped for both the rendered
+fill and the announced `aria-valuenow`: negative values render as 0%, values above 100 render as
+100%, and `NaN` (or any non-finite value) renders as 0%. See Edge Cases.
+
+### Custom announced text
+
+`getValueText` overrides the default "N%" screen-reader announcement with domain-specific wording
+(e.g. "6 of 10 documents prepared") without changing what's visually filled - the fill always
+reflects the raw `value`, only the announcement changes.
+
+### Choosing linear vs circular
+
+Use linear when you have horizontal space to fill - a card, a form step, a list row. Use circular
+for a compact summary where a small fixed-size ring fits better than a bar, such as a dashboard tile
+or a roadmap-completion badge.
+
+## Do / Don't
+
+**Do** clamp your own upstream data if it might exceed 0-100, but trust ProgressBar to clamp too.
+
+```tsx
+<ProgressBar value={rawValue} label="Upload progress" />
+```
+
+**Don't** use ProgressBar for a process with no real percentage.
+
+```tsx
+<ProgressBar value={100} label="Loading" />
+```
+
+---
+
+**Do** give ProgressBar a real accessible name that identifies the process.
+
+```tsx
+<ProgressBar value={42} label="Generating document package" />
+```
+
+**Don't** rely on visible percentage text alone - screen reader users need `label` regardless of
+what's shown nearby.
+
+```tsx
+<ProgressBar value={42} aria-hidden="true" />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. Clamped to 0-100 for both the fill and the announced value.</td>
+    </tr>
+    <tr>
+      <td><code>variant</code></td>
+      <td><code>'linear' | 'circular'</code></td>
+      <td><code>'linear'</code></td>
+      <td>The two designed forms.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Track thickness and stroke width. Circular diameter is fixed at 72px for both.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible name, used unless <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>getValueText</code></td>
+      <td><code>(value: number) =&gt; string</code></td>
+      <td>-</td>
+      <td>Overrides the default percentage announcement.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `div` attribute is forwarded to the root element. ProgressBar is not
+keyboard-focusable and has no interactive or disabled state.
+
+## Related components
+
+- **Spinner** - for indeterminate loading with no known percentage.
+- **Slider** - when the value needs to be user-adjustable rather than read-only.
+- **ProgressIndicator** - for step-based, rather than percentage-based, progress.

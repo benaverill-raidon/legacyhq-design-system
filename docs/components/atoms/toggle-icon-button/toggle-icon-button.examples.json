@@ -6,7 +6,7 @@
     },
     {
       "name": "Selected",
-      "jsx": "<ToggleIconButton pressed aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+      "jsx": "<ToggleIconButton isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
     },
     {
       "name": "With Tooltip",

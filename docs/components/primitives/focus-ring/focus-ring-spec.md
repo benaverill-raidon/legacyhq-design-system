@@ -73,8 +73,8 @@ Focus Ring
 
 | Variant | Token | Width | Description |
 |----------|-------|-------|-------------|
-| default | `--border-width-bold` | 2px | Standard focus ring |
-| compact | `--border-width-default` | 1px | Tighter focus ring for compact controls |
+| default | `--border-width-md` | 2px | Standard focus ring |
+| compact | `--border-width-sm` | 1px | Tighter focus ring for compact controls |
 
 ### Variant Rules
 - Use `default` for most components.
@@ -178,16 +178,16 @@ Both variants use this token.
 Required tokens:
 
 ```css
---border-width-bold
---border-width-default
+--border-width-md
+--border-width-sm
 ```
 
 Mapping:
 
 | Variant | Token |
 |----------|-------|
-| default | `--border-width-bold` |
-| compact | `--border-width-default` |
+| default | `--border-width-md` |
+| compact | `--border-width-sm` |
 
 ### Radius
 Focus Ring should inherit or align with the focused element radius where possible.
@@ -251,8 +251,8 @@ None.
 ### Implementation Requirements
 - Use CSS variables from generated token CSS.
 - Use `--color-border-focused` for ring color.
-- Use `--border-width-bold` for default.
-- Use `--border-width-default` for compact.
+- Use `--border-width-md` for default.
+- Use `--border-width-sm` for compact.
 - Use `:focus-visible`.
 - Use an outset ring.
 - Use `2px` outline offset.
@@ -272,11 +272,11 @@ None.
 }
 
 .focusRingDefault:focus-visible {
-  outline-width: var(--border-width-bold);
+  outline-width: var(--border-width-md);
 }
 
 .focusRingCompact:focus-visible {
-  outline-width: var(--border-width-default);
+  outline-width: var(--border-width-sm);
 }
 ```
 

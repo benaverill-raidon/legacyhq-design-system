@@ -1,8 +1,8 @@
 .root {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-025);
-  min-block-size: var(--component-checkbox-item-min-height);
+  gap: var(--spacing-xxs);
+  min-block-size: var(--size-choice-row);
   overflow: visible;
   width: fit-content;
   color: var(--color-content-default);
@@ -21,32 +21,40 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-checkbox-hit-area-size);
-  block-size: var(--component-checkbox-item-min-height);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-row);
   border-radius: var(--border-radius-full-round);
   overflow: visible;
 }
 
+/*
+ * The focus ring should wrap the visible indicator (size-choice-indicator), not this element's own
+ * larger hit target (size-choice-target) - `--focus-ring-offset` insets the shared primitive's
+ * outline inward by exactly the gap between the two.
+ *
+ * A negative outline-offset also deflates the rendered corner radius by the same amount (per the
+ * CSS outline model, effective radius = declared radius + offset), so a plain `border-radius-xs`
+ * here would be flattened to a square corner by the -8px inset. `border-radius` is set larger by
+ * exactly that inset so it deflates back down to `border-radius-xs` once the offset is applied -
+ * this element has no visible fill/border of its own, so the larger declared value has no other
+ * effect.
+ */
 .input {
   position: absolute;
   inset-block-start: 50%;
   inset-inline-start: 50%;
   z-index: 1;
-  inline-size: var(--component-checkbox-hit-area-size);
-  block-size: var(--component-checkbox-hit-area-size);
-  margin: var(--spacing-0);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-target);
+  margin: var(--spacing-none);
   border: 0;
-  border-radius: var(--border-radius-full-round);
+  border-radius: calc(var(--border-radius-xs) + (var(--size-choice-target) - var(--size-choice-indicator)) / 2);
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
   cursor: inherit;
   transform: translate(-50%, -50%);
-}
-
-.input:focus,
-.input:focus-visible {
-  outline: none;
+  --focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);
 }
 
 .indicatorTarget {
@@ -56,10 +64,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-checkbox-hit-area-size);
-  block-size: var(--component-checkbox-hit-area-size);
+  inline-size: var(--size-choice-target);
+  block-size: var(--size-choice-target);
   border-radius: var(--border-radius-full-round);
-  background: var(--color-background-selected-subtle-default);
+  background: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
 }
@@ -68,21 +76,48 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--component-checkbox-indicator-size);
-  block-size: var(--component-checkbox-indicator-size);
-  border-radius: var(--border-radius-sm);
+  inline-size: var(--size-choice-indicator);
+  block-size: var(--size-choice-indicator);
+  border-radius: var(--border-radius-xs);
 }
 
-.input:focus-visible + .indicatorTarget .indicatorFocus {
-  outline: var(--border-width-bold) solid var(--color-border-focused);
-  outline-offset: var(--spacing-0);
+.input:focus-visible + .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.input:checked:focus-visible + .indicatorTarget,
+.root[data-indeterminate='true'] .input:focus-visible + .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-hovered);
+}
+
+.root[data-invalid='true'] .input:focus-visible + .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover / focus /
+ * pressed as a static regression reference. It is documentation-only, not part of the public API.
+ * The focus outline itself is not repeated here - it comes from the shared focus-ring primitive
+ * applied to `.input` above, which already reacts to `[data-force-state='focus']`.
+ */
+.input[data-force-state='focus'] + .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.input[data-force-state='focus']:checked + .indicatorTarget,
+.root[data-indeterminate='true'] .input[data-force-state='focus'] + .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-hovered);
+}
+
+.root[data-invalid='true'] .input[data-force-state='focus'] + .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
 }
 
 .indicatorIcon {
   display: none;
-  inline-size: var(--component-checkbox-indicator-size);
-  block-size: var(--component-checkbox-indicator-size);
-  color: var(--color-border-input);
+  inline-size: var(--size-choice-indicator);
+  block-size: var(--size-choice-indicator);
+  color: var(--color-content-subtle);
 }
 
 .uncheckedIcon {
@@ -90,9 +125,7 @@
 }
 
 .selectedIcon {
-  border-radius: var(--border-radius-xs);
-  background: var(--color-content-inverse);
-  color: var(--color-content-selected);
+  color: var(--color-content-brand-primary);
 }
 
 .input:checked + .indicatorTarget .uncheckedIcon,
@@ -113,26 +146,46 @@
 }
 
 .requiredIndicator {
-  margin-inline-start: var(--spacing-025);
+  margin-inline-start: var(--spacing-xxs);
   color: var(--color-content-error);
 }
 
-.root:not([data-disabled='true']):hover .indicatorTarget,
-.root:global(.previewHover):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-selected-subtle-hovered);
+.root:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
+.root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
 }
 
-.root:not([data-disabled='true']):active .indicatorTarget,
-.root:global(.previewPress):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-selected-subtle-pressed);
+.root:not([data-disabled='true']):not([data-invalid='true']):hover .input:checked + .indicatorTarget,
+.root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
+.root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
+.root[data-force-state='hover'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-hovered);
+}
+
+.root:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
+.root[data-force-state='active']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-pressed);
+}
+
+.root:not([data-disabled='true']):not([data-invalid='true']):active .input:checked + .indicatorTarget,
+.root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
+.root[data-force-state='active']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
+.root[data-force-state='active'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-pressed);
+}
+
+.root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,
+.root[data-force-state='hover'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.root[data-invalid='true']:not([data-disabled='true']):active .indicatorTarget,
+.root[data-force-state='active'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-pressed);
 }
 
 .root[data-invalid='true'] .indicatorIcon {
-  color: var(--color-border-error);
-}
-
-.root[data-invalid='true'] .selectedIcon {
-  background: var(--color-content-inverse);
+  color: var(--color-content-error);
 }
 
 .root[data-disabled='true'] {
@@ -143,16 +196,11 @@
 .root[data-disabled='true'] .indicatorTarget,
 .root[data-disabled='true']:hover .indicatorTarget,
 .root[data-disabled='true']:active .indicatorTarget,
-.root:global(.previewHover)[data-disabled='true'] .indicatorTarget,
-.root:global(.previewPress)[data-disabled='true'] .indicatorTarget {
-  background: var(--color-background-selected-subtle-default);
+.root[data-force-state='hover'][data-disabled='true'] .indicatorTarget,
+.root[data-force-state='active'][data-disabled='true'] .indicatorTarget {
+  background: transparent;
 }
 
 .root[data-disabled='true'] .indicatorIcon {
   color: var(--color-content-disabled);
 }
-
-.root[data-disabled='true'] .selectedIcon {
-  background: var(--color-background-disabled);
-}
-

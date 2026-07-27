@@ -13,10 +13,14 @@
   },
   "states": ["hidden", "visible", "disabled"],
   "tokens": {
-    "component": [
-      "--component-tooltip-z-index",
-      "--component-tooltip-max-width-truncated",
-      "--component-tooltip-max-width-wrapped"
+    "semantic": [
+      "--color-background-neutral-bold-default",
+      "--color-content-inverse",
+      "--typography-body-sm-font-family",
+      "--spacing-xxs",
+      "--spacing-xs",
+      "--spacing-sm",
+      "--border-radius-sm"
     ]
   },
   "accessibility": {

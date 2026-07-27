@@ -141,26 +141,26 @@
   "sizes": [
     {
       "name": "xs",
-      "minHeightToken": "--component-button-min-height-xs",
-      "paddingInlineToken": "--spacing-075",
+      "minHeightToken": "--size-control-xs",
+      "paddingInlineToken": "--spacing-sm",
       "radiusToken": "--border-radius-sm"
     },
     {
       "name": "sm",
-      "minHeightToken": "--component-button-min-height-sm",
-      "paddingInlineToken": "--spacing-100",
+      "minHeightToken": "--size-control-sm",
+      "paddingInlineToken": "--spacing-sm",
       "radiusToken": "--border-radius-lg"
     },
     {
       "name": "md",
-      "minHeightToken": "--component-button-min-height-md",
-      "paddingInlineToken": "--spacing-150",
+      "minHeightToken": "--size-control-md",
+      "paddingInlineToken": "--spacing-md",
       "radiusToken": "--border-radius-lg"
     },
     {
       "name": "lg",
-      "minHeightToken": "--component-button-min-height-lg",
-      "paddingInlineToken": "--spacing-200",
+      "minHeightToken": "--size-control-lg",
+      "paddingInlineToken": "--spacing-lg",
       "radiusToken": "--border-radius-xl"
     }
   ],
@@ -194,23 +194,23 @@
   "tokens": {
     "component": {
       "minHeight": {
-        "xs": "--component-button-min-height-xs",
-        "sm": "--component-button-min-height-sm",
-        "md": "--component-button-min-height-md",
-        "lg": "--component-button-min-height-lg"
+        "xs": "--size-control-xs",
+        "sm": "--size-control-sm",
+        "md": "--size-control-md",
+        "lg": "--size-control-lg"
       }
     },
     "semantic": {
       "spacing": {
-        "xsPaddingInline": "--spacing-075",
-        "smPaddingInline": "--spacing-100",
-        "mdPaddingInline": "--spacing-150",
-        "lgPaddingInline": "--spacing-200",
-        "gap": "--spacing-075",
-        "focusRingOffset": "--spacing-025"
+        "xsPaddingInline": "--spacing-sm",
+        "smPaddingInline": "--spacing-sm",
+        "mdPaddingInline": "--spacing-md",
+        "lgPaddingInline": "--spacing-lg",
+        "gap": "--spacing-sm",
+        "focusRingOffset": "--spacing-xxs"
       },
       "border": {
-        "width": "--border-width-default",
+        "width": "--border-width-sm",
         "radiusDefault": "--border-radius-sm",
         "radiusSmMd": "--border-radius-lg",
         "radiusLg": "--border-radius-xl"

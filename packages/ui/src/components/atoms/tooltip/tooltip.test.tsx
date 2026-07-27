@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import * as React from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
@@ -6,6 +8,9 @@ import { EditIcon } from '../../../assets/icons';
 import { Button } from '../button';
 import { IconButton } from '../icon-button';
 import { Tooltip } from './tooltip';
+
+const tooltipCss = readFileSync('packages/ui/src/components/atoms/tooltip/tooltip.module.css', 'utf8');
+const tooltipSource = readFileSync('packages/ui/src/components/atoms/tooltip/tooltip.tsx', 'utf8');
 
 afterEach(cleanup);
 
@@ -418,5 +423,19 @@ describe('Tooltip', () => {
 
     expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+  });
+
+  it('maps Figma visual tokens and private anatomy constraints', () => {
+    expect(tooltipCss).toContain('background: var(--color-background-neutral-bold-default);');
+    expect(tooltipCss).toContain('color: var(--color-content-inverse);');
+    expect(tooltipCss).toContain('padding-block: var(--spacing-xxs);');
+    expect(tooltipCss).toContain('padding-inline: var(--spacing-sm);');
+    expect(tooltipCss).toContain('gap: var(--spacing-xs);');
+    expect(tooltipCss).toContain('border-radius: var(--border-radius-sm);');
+    expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-truncated);');
+    expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-wrapped);');
+    expect(tooltipCss).toContain('z-index: var(--component-tooltip-z-index);');
+    expect(tooltipSource).toContain("getTokenPixels('--spacing-xs')");
+    expect(tooltipSource).not.toContain("getTokenPixels('--spacing-xs',");
   });
 });

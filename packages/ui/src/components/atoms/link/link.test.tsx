@@ -167,3 +167,20 @@ describe('Link', () => {
     expect(linkCss).toContain('.appearance_inverse:visited');
   });
 });
+
+describe('link CSS contract', () => {
+  it('matches the current Figma default and visited semantic mappings', () => {
+    expect(linkCss).toContain('--link-color: var(--color-content-accent-blue-default);');
+    expect(linkCss).toContain('--link-color-pressed: var(--color-content-accent-blue-bolder);');
+    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-default);');
+    expect(linkCss).toContain('--link-color-visited-pressed: var(--color-content-accent-purple-bolder);');
+  });
+
+  it('matches the current Figma subtle semantic mappings', () => {
+    expect(linkCss).toContain('.appearance_subtle {');
+    expect(linkCss).toContain('--link-color: var(--color-content-subtle);');
+    expect(linkCss).toContain('--link-color-pressed: var(--color-content-default);');
+    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-default);');
+    expect(linkCss).toContain('--link-color-visited-pressed: var(--color-content-accent-purple-bolder);');
+  });
+});

@@ -1,0 +1,30 @@
+{
+  "component": "ProgressBar",
+  "examples": [
+    {
+      "name": "Linear document generation",
+      "description": "Shows determinate progress for a document package.",
+      "jsx": "<ProgressBar value={42} label=\"Generating document package\" />"
+    },
+    {
+      "name": "Large linear upload",
+      "description": "Uses the larger track for a prominent upload process.",
+      "jsx": "<ProgressBar value={68} size=\"lg\" label=\"Uploading client files\" />"
+    },
+    {
+      "name": "Circular summary",
+      "description": "Uses a compact circular visualization.",
+      "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />"
+    },
+    {
+      "name": "Domain-specific value text",
+      "description": "Announces completed items instead of only a percentage.",
+      "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />"
+    },
+    {
+      "name": "Complete",
+      "description": "Shows a completed process.",
+      "jsx": "<ProgressBar value={100} label=\"Import complete\" />"
+    }
+  ]
+}

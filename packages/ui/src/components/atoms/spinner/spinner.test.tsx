@@ -1,9 +1,13 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Spinner } from './spinner';
 import styles from './spinner.module.css';
 import type { SpinnerSize } from './spinner.types';
+
+const spinnerCss = readFileSync('packages/ui/src/components/atoms/spinner/spinner.module.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -83,5 +87,20 @@ describe('Spinner', () => {
     render(<Spinner size="md" data-testid="spinner" />);
 
     expect(screen.getByTestId('spinner')).toHaveClass(styles.spinner, styles.size_md);
+  });
+
+  it('maps spinner sizing and stroke widths to the current token model', () => {
+    expect(spinnerCss).toContain('--spinner-size: var(--size-spinner-sm);');
+    expect(spinnerCss).toContain('--spinner-size: var(--size-spinner-md);');
+    expect(spinnerCss).toContain('--spinner-size: var(--size-spinner-lg);');
+    expect(spinnerCss).toContain('--spinner-size: var(--size-spinner-xl);');
+    expect(spinnerCss).toContain('--spinner-stroke-width: var(--border-width-sm);');
+    expect(spinnerCss).toContain('--spinner-stroke-width: var(--border-width-md);');
+    expect(spinnerCss).toContain('--spinner-stroke-width: var(--border-width-lg);');
+    expect(spinnerCss).toContain('--spinner-graphic-size: 100%;');
+    expect(spinnerCss).toContain('--spinner-graphic-size: calc(var(--measurement-32) / var(--size-spinner-xl) * 100%);');
+    expect(spinnerCss).toContain('inline-size: var(--spinner-graphic-size);');
+    expect(spinnerCss).toContain('block-size: var(--spinner-graphic-size);');
+    expect(spinnerCss).toContain('color: var(--color-border-bold);');
   });
 });

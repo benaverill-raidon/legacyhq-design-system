@@ -6,7 +6,7 @@
 Avatar root
 +- surface
    +- content
-   ¦  +- image | fallback icon
+   ï¿½  +- image | fallback artwork
    +- badge container
       +- badge icon
 ```
@@ -30,8 +30,10 @@ Status takes priority over presence.
 | `lg` | 16px | 16px |
 | `xl` | 20px | 18px |
 
-Use the same structure at all sizes. Keep XS positioned at the block-end and inline-end with a `-2px` offset. Preserve the existing `xxs` and `xxl` public sizes while matching the same anatomy, and keep the visible badge circle bordered with the inverse border token.
+Use the same structure at all sizes. Keep XS positioned at the block-end and inline-end with a `-2px` offset. Preserve the existing size anatomy, and keep the visible badge circle bordered with the inverse border token.
+
+The online presence badge is a solid semantic success-green circle with no interior glyph.
 
 ## Token guidance
 
-Keep component tokens only for avatar-specific anatomy such as avatar size, fallback size, badge container size, and badge icon size. Prefer semantic tokens directly for badge color, selected border, badge border, hover and pressed overlays, border width, radius, and offline subtle content color.
+Keep component tokens only for avatar-specific anatomy such as avatar size, badge container size, and badge icon size. Prefer semantic tokens directly for badge color, selected border, badge border, hover and pressed overlays, border width, radius, and offline subtle content color.

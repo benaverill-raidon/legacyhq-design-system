@@ -1,5 +1,5 @@
 .root {
-  --icon-size: 16px;
+  --icon-size: var(--size-icon-md);
   --icon-container-size: var(--icon-size);
 
   display: inline-flex;
@@ -14,11 +14,11 @@
 }
 
 .size_sm {
-  --icon-size: 12px;
+  --icon-size: var(--size-icon-sm);
 }
 
 .size_md {
-  --icon-size: 16px;
+  --icon-size: var(--size-icon-md);
 }
 
 .spacing_none {
@@ -26,7 +26,7 @@
 }
 
 .spacing_spacious {
-  --icon-container-size: 24px;
+  --icon-container-size: var(--size-300);
 }
 
 .color_default {
@@ -42,7 +42,7 @@
 }
 
 .color_brand {
-  color: var(--color-content-brand);
+  color: var(--color-content-brand-primary);
 }
 
 .color_success {

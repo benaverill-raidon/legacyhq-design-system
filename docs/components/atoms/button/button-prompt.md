@@ -146,8 +146,8 @@ Implement sizes:
 
 | Size | Min height | Padding inline |
 |---|---:|---|
-| xs | 24px | spacing-100 |
-| sm | 32px | spacing-100 |
+| xs | 24px | spacing-sm |
+| sm | 32px | spacing-sm |
 | md | 40px | spacing-150 |
 | lg | 48px | spacing-200 |
 
@@ -170,10 +170,10 @@ component.button.min-height.lg = 48px
 Generated CSS variables should include:
 
 ```css
---component-button-min-height-xs
---component-button-min-height-sm
---component-button-min-height-md
---component-button-min-height-lg
+--size-control-xs
+--size-control-sm
+--size-control-md
+--size-control-lg
 ```
 
 Use existing semantic spacing tokens for padding and gap.

@@ -101,15 +101,8 @@ function warnForMissingAccessibleName(
   console.warn('Avatar requires `name`, `alt`, `aria-label`, or `aria-labelledby` unless it is decorative.');
 }
 
-function AvatarFallbackIcon() {
-  return (
-    <svg className={styles.fallbackIcon} viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-      <path
-        d="M8.00002 3.93317C8.77335 3.93317 9.40002 4.55984 9.40002 5.33317C9.40002 6.1065 8.77335 6.73317 8.00002 6.73317C7.22669 6.73317 6.60002 6.1065 6.60002 5.33317C6.60002 4.55984 7.22669 3.93317 8.00002 3.93317ZM8.00002 9.93317C9.98002 9.93317 12.0667 10.9065 12.0667 11.3332V12.0665H3.93335V11.3332C3.93335 10.9065 6.02002 9.93317 8.00002 9.93317ZM8.00002 2.6665C6.52669 2.6665 5.33335 3.85984 5.33335 5.33317C5.33335 6.8065 6.52669 7.99984 8.00002 7.99984C9.47335 7.99984 10.6667 6.8065 10.6667 5.33317C10.6667 3.85984 9.47335 2.6665 8.00002 2.6665ZM8.00002 8.6665C6.22002 8.6665 2.66669 9.55984 2.66669 11.3332V13.3332H13.3334V11.3332C13.3334 9.55984 9.78002 8.6665 8.00002 8.6665Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
+function AvatarFallbackArtwork() {
+  return <span className={styles.fallbackArtwork} data-avatar-fallback aria-hidden="true" />;
 }
 
 function AvatarBadgeIcon({ badge }: { badge: Exclude<AvatarPresence | AvatarStatus, 'none'> }) {
@@ -194,7 +187,7 @@ export const Avatar = React.memo(
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <AvatarFallbackIcon />
+            <AvatarFallbackArtwork />
           )}
         </span>
         {visibleBadge !== 'none' ? (

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { CheckboxEmptyIcon, CheckboxFillIcon, CheckboxIndeterminateIcon } from '../../../assets/icons';
+import { focusRingClassNames } from '../../primitives/focus-ring';
 import styles from './checkbox.module.css';
 import type { CheckboxProps } from './checkbox.types';
 
@@ -39,6 +40,9 @@ export const Checkbox = React.memo(
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
     const inputRef = React.useRef<HTMLInputElement | null>(null);
+    // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
+    // it to the root label, since hover/pressed styling keys off the label rather than the input.
+    const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
 
     React.useEffect(() => {
       if (inputRef.current) {
@@ -59,13 +63,18 @@ export const Checkbox = React.memo(
         data-disabled={disabled ? 'true' : undefined}
         data-indeterminate={indeterminate ? 'true' : undefined}
         data-invalid={invalid ? 'true' : undefined}
+        data-force-state={dataForceState}
       >
         <span className={styles.control}>
           <input
             {...rest}
             ref={(node) => setRefs(node, inputRef, forwardedRef)}
             id={inputId}
-            className={styles.input}
+            className={mergeClassNames(
+              styles.input,
+              focusRingClassNames.focusRing,
+              focusRingClassNames.focusRingDefault,
+            )}
             type="checkbox"
             checked={checked}
             defaultChecked={defaultChecked}

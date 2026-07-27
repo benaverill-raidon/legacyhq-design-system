@@ -1,11 +1,12 @@
 .root {
-  --switch-gap: var(--component-switch-md-gap);
+  --switch-gap: var(--spacing-sm);
   --switch-track-width: var(--component-switch-md-track-width);
   --switch-track-height: var(--component-switch-md-track-height);
+  --switch-track-radius: var(--border-radius-xxl);
   --switch-thumb-size: var(--component-switch-md-thumb-size);
-  --switch-thumb-offset: var(--component-switch-md-thumb-offset);
-  --switch-thumb-translate-x: var(--component-switch-md-thumb-translate-x);
-  --switch-icon-size: var(--component-switch-md-icon-size);
+  --switch-thumb-offset: var(--component-switch-md-thumb-inset);
+  --switch-thumb-translate-x: var(--component-switch-md-thumb-translation);
+  --switch-icon-size: var(--size-icon-sm);
   --switch-icon-offset: var(--component-switch-md-icon-offset);
 
   display: inline-flex;
@@ -23,24 +24,26 @@
 }
 
 .size_md {
-  --switch-gap: var(--component-switch-md-gap);
+  --switch-gap: var(--spacing-sm);
   --switch-track-width: var(--component-switch-md-track-width);
   --switch-track-height: var(--component-switch-md-track-height);
+  --switch-track-radius: var(--border-radius-xxl);
   --switch-thumb-size: var(--component-switch-md-thumb-size);
-  --switch-thumb-offset: var(--component-switch-md-thumb-offset);
-  --switch-thumb-translate-x: var(--component-switch-md-thumb-translate-x);
-  --switch-icon-size: var(--component-switch-md-icon-size);
+  --switch-thumb-offset: var(--component-switch-md-thumb-inset);
+  --switch-thumb-translate-x: var(--component-switch-md-thumb-translation);
+  --switch-icon-size: var(--size-icon-sm);
   --switch-icon-offset: var(--component-switch-md-icon-offset);
 }
 
 .size_sm {
-  --switch-gap: var(--component-switch-sm-gap);
+  --switch-gap: var(--spacing-sm);
   --switch-track-width: var(--component-switch-sm-track-width);
   --switch-track-height: var(--component-switch-sm-track-height);
+  --switch-track-radius: var(--border-radius-lg);
   --switch-thumb-size: var(--component-switch-sm-thumb-size);
-  --switch-thumb-offset: var(--component-switch-sm-thumb-offset);
-  --switch-thumb-translate-x: var(--component-switch-sm-thumb-translate-x);
-  --switch-icon-size: var(--component-switch-sm-icon-size);
+  --switch-thumb-offset: var(--component-switch-sm-thumb-inset);
+  --switch-thumb-translate-x: var(--component-switch-sm-thumb-translation);
+  --switch-icon-size: var(--size-icon-sm);
   --switch-icon-offset: var(--component-switch-sm-icon-offset);
 
   font-family: var(--typography-body-sm-font-family);
@@ -59,7 +62,7 @@
   justify-content: center;
   inline-size: var(--switch-track-width);
   block-size: var(--switch-track-height);
-  border-radius: var(--border-radius-full-round);
+  border-radius: var(--switch-track-radius);
 }
 
 .input {
@@ -68,7 +71,7 @@
   z-index: 1;
   inline-size: 100%;
   block-size: 100%;
-  margin: var(--spacing-0);
+  margin: var(--spacing-none);
   border: 0;
   border-radius: inherit;
   appearance: none;
@@ -84,11 +87,11 @@
   inline-size: var(--switch-track-width);
   block-size: var(--switch-track-height);
   overflow: hidden;
-  border-radius: var(--border-radius-full-round);
+  border-radius: var(--switch-track-radius);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse);
   pointer-events: none;
-  transition: background-color var(--component-switch-motion-duration) var(--component-switch-motion-easing);
+  transition: background-color 180ms ease-out;
 }
 
 .thumb {
@@ -100,9 +103,9 @@
   block-size: var(--switch-thumb-size);
   border-radius: var(--border-radius-full-round);
   background: var(--color-content-inverse);
-  transform: translateX(var(--spacing-0));
+  transform: translateX(var(--spacing-none));
   transform-origin: left center;
-  transition: transform var(--component-switch-motion-duration) var(--component-switch-motion-easing);
+  transition: transform 180ms ease-out;
 }
 
 .icon {
@@ -132,7 +135,7 @@
   block-size: calc(var(--switch-icon-size) - var(--switch-thumb-offset));
   border-color: currentColor;
   border-style: solid;
-  border-width: 0 var(--border-width-bold) var(--border-width-bold) 0;
+  border-width: 0 var(--border-width-md) var(--border-width-md) 0;
   content: '';
   transform: translate(-50%, -60%) rotate(45deg);
 }
@@ -143,7 +146,7 @@
   inset-block-start: 50%;
   inset-inline-start: 50%;
   inline-size: var(--switch-icon-size);
-  block-size: var(--border-width-bold);
+  block-size: var(--border-width-md);
   border-radius: var(--border-radius-full-round);
   background: currentColor;
   content: '';
@@ -164,7 +167,7 @@
 }
 
 .requiredIndicator {
-  margin-inline-start: var(--spacing-025);
+  margin-inline-start: var(--component-switch-md-thumb-inset);
   color: var(--color-content-error);
 }
 
@@ -177,7 +180,7 @@
 }
 
 .root:not([data-disabled='true']):active .thumb {
-  transform: scaleX(var(--component-switch-thumb-pressed-scale-x));
+  transform: scaleX(1.16);
 }
 
 .input:checked + .indicator {
@@ -198,7 +201,7 @@
 }
 
 .root:not([data-disabled='true']):active .input:checked + .indicator .thumb {
-  transform: translateX(var(--switch-thumb-translate-x)) scaleX(var(--component-switch-thumb-pressed-scale-x));
+  transform: translateX(var(--switch-thumb-translate-x)) scaleX(1.16);
 }
 
 .input:checked + .indicator .iconOn {
@@ -221,14 +224,10 @@
   background: var(--color-background-disabled);
 }
 
-.root[data-disabled='true'] .icon {
-  color: var(--color-content-disabled);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .indicator,
   .thumb {
-    transition-duration: var(--component-switch-motion-reduced-duration);
+    transition-duration: 0ms;
   }
 }
 

@@ -1,0 +1,205 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as IconButtonStories from './icon-button.stories';
+
+<Meta of={IconButtonStories} name="Docs" />
+
+# Icon Button
+
+IconButton is an icon-only action control for when the action is recognizable from its icon and
+space is limited. It carries its own accessible name and, by default, its own tooltip - there is no
+visible label slot.
+
+<Canvas of={IconButtonStories.Playground} />
+
+## When to use
+
+- A recognizable, single-purpose action where a label would be redundant - search, close, edit.
+- A disclosure trigger for a menu or panel, using `isExpanded`.
+- A compact action in a toolbar, table row, or card where horizontal space is limited.
+
+## When not to use
+
+- **When the action isn't obvious from the icon alone.** Use `Button` with a visible label instead
+  of hoping a tooltip will carry the meaning.
+- **For a toggleable selected state.** Use `ToggleIconButton`.
+- **As a bare loading indicator with no user action attached.** Use `Spinner` directly.
+
+## Anatomy
+
+<Canvas of={IconButtonStories.Content} />
+
+1. **Root** - a native `button`, sized to a fixed square per `size`.
+2. **Content** - the icon, or the loading `Spinner` when `isLoading` is true. IconButton has no
+   separate leading/trailing slots - one icon fills the whole button.
+3. **Tooltip** - rendered automatically around the button unless suppressed. See Usage guidance.
+
+## Usage guidance
+
+### The accessible name is required, and doubles as the tooltip
+
+IconButton warns in development when both `aria-label` and `aria-labelledby` are missing - there is
+no visible text to fall back on. When `aria-label` is a non-empty string and `tooltip` is not set,
+that same string becomes the visible tooltip content automatically. `aria-labelledby` does **not**
+feed the tooltip this way - pass `tooltip` explicitly (or `tooltip={false}`) whenever you use
+`aria-labelledby`, or you'll get a second dev warning. See Edge Cases for both anti-patterns.
+
+### Suppressing or replacing the tooltip
+
+Set `tooltip={false}` to render no internal tooltip at all - typically because you're wrapping the
+button in your own `Tooltip` externally. IconButton detects when it's already inside a `Tooltip`
+(via `useTooltipScope`) and skips its own internal one automatically, so nesting doesn't double up
+even if you forget `tooltip={false}`.
+
+### Appearance versus tone
+
+IconButton has no `tone` prop - unlike `Button`, its three appearances (`default`, `primary`,
+`subtle`) don't cross with a semantic tone axis. Reach for `Button` if a warning/error/discovery
+distinction is required.
+
+### Focus and hover
+
+Keyboard focus shows the same background fill as hover, on top of the outline ring from the shared
+`FocusRing` primitive - the same convention as `Button`, `Avatar`, and `Checkbox`. `isExpanded` also
+shares that same fill, so an open disclosure trigger reads consistently with its own hover state.
+
+### Shape
+
+`shape="round"` is a full circle regardless of `size`; `shape="square"` uses the same radius scale as
+`Button`. Pick one shape per context and stay consistent - don't mix square and round icon buttons
+in the same toolbar.
+
+## Do / Don't
+
+**Do** let a non-empty `aria-label` double as the tooltip.
+
+```tsx
+<IconButton aria-label="Search">
+  <SearchIcon />
+</IconButton>
+```
+
+**Don't** add a redundant explicit `tooltip` that just repeats the label.
+
+```tsx
+<IconButton aria-label="Search" tooltip="Search">
+  <SearchIcon />
+</IconButton>
+```
+
+---
+
+**Do** pass `tooltip` explicitly when using `aria-labelledby`.
+
+```tsx
+<IconButton aria-labelledby="menu-label" tooltip="More actions menu" aria-haspopup="menu">
+  <MoreHorizIcon />
+</IconButton>
+```
+
+**Don't** rely on `aria-labelledby` alone and expect a tooltip to appear.
+
+```tsx
+<IconButton aria-labelledby="menu-label" aria-haspopup="menu">
+  <MoreHorizIcon />
+</IconButton>
+```
+
+---
+
+**Do** use `Button` when the action isn't self-evident from an icon.
+
+```tsx
+<Button iconBefore={<ArchiveIcon />}>Archive matter</Button>
+```
+
+**Don't** reach for an unlabelled icon when the meaning needs a word.
+
+```tsx
+<IconButton aria-label="Archive matter">
+  <ArchiveIcon />
+</IconButton>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The icon. Replaced by a <code>Spinner</code> while loading.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Square footprint and radius, shared scale with <code>Button</code>.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'primary' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Visual emphasis. No <code>tone</code> axis.</td>
+    </tr>
+    <tr>
+      <td><code>shape</code></td>
+      <td><code>'square' | 'round'</code></td>
+      <td><code>'square'</code></td>
+      <td>Corner treatment.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Maps to the native <code>disabled</code> attribute.</td>
+    </tr>
+    <tr>
+      <td><code>isLoading</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Shows a <code>Spinner</code> in place of the icon, sets <code>aria-busy</code>, suppresses clicks.</td>
+    </tr>
+    <tr>
+      <td><code>isExpanded</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-expanded</code> and applies the hover-equivalent fill.</td>
+    </tr>
+    <tr>
+      <td><code>tooltip</code></td>
+      <td><code>React.ReactNode | false</code></td>
+      <td>-</td>
+      <td>Overrides the default (<code>aria-label</code>-derived) tooltip content, or suppresses it.</td>
+    </tr>
+    <tr>
+      <td><code>tooltipPlacement</code></td>
+      <td><code>'top' | 'right' | 'bottom' | 'left'</code></td>
+      <td><code>'top'</code></td>
+      <td>Passed straight to the internal <code>Tooltip</code>.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Required for an accessible name. <code>aria-label</code> also seeds the default tooltip.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `button` prop is forwarded to the root element.
+
+## Related components
+
+- **Button** - when the action needs a visible label.
+- **ToggleIconButton** - for a selected/unselected icon-only control.
+- **Tooltip** - the primitive IconButton composes internally.
+- **Spinner** - rendered in place of the icon while loading.

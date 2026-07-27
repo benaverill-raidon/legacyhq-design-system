@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getVisualPosition } from './slider';
+import { getSliderRatioFromPointer, getSliderValueFromPointer, getVisualPosition } from './slider';
 import * as sliderExports from './index';
 import { Slider, SliderCentered, SliderRange } from './index';
 import styles from './slider.module.css';
@@ -20,11 +20,18 @@ function expectInsetPosition(styleValue: string | null | undefined, multiplier: 
   expect(styleValue).toContain(`* ${multiplier}`);
 }
 
-function expectStandardSegmentGap(styleValue: string | null | undefined) {
-  expect(styleValue).toContain('--slider-active-end: calc(var(--slider-value-position) - var(--slider-current-handle-half-width) - var(--slider-current-gap))');
-  expect(styleValue).toContain(
-    '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--slider-current-handle-half-width) + var(--slider-current-gap))',
-  );
+function expectStandardSegmentGap(styleValue: string | null | undefined, valuePercent: number) {
+  const activeEnd =
+    valuePercent >= 100
+      ? '--slider-active-end: var(--slider-max-position)'
+      : '--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))';
+  const inactiveEndStart =
+    valuePercent <= 0
+      ? '--slider-inactive-end-start: var(--slider-min-position)'
+      : '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))';
+
+  expect(styleValue).toContain(activeEnd);
+  expect(styleValue).toContain(inactiveEndStart);
 }
 
 function getCustomProperty(element: Element | null | undefined, property: string) {
@@ -259,12 +266,12 @@ describe('Slider', () => {
     expectInsetPosition(control?.getAttribute('style'), 0);
     expect(control?.getAttribute('style')).toContain('--slider-min-position: calc(var(--slider-value-scale-inset)');
     expect(control?.getAttribute('style')).toContain('--slider-max-position: calc(var(--slider-value-scale-inset)');
-    expectStandardSegmentGap(control?.getAttribute('style'));
+    expect(control?.getAttribute('style')).toContain('--slider-inactive-end-start: var(--slider-min-position)');
 
     rerender(<Slider aria-label="Endpoint" value={100} onValueChange={() => undefined} />);
 
     expectInsetPosition(control?.getAttribute('style'), 1);
-    expectStandardSegmentGap(control?.getAttribute('style'));
+    expect(control?.getAttribute('style')).toContain('--slider-active-end: var(--slider-max-position)');
   });
 
   it('positions the visual handle on the same inset variable as value-based visuals', () => {
@@ -295,17 +302,18 @@ describe('Slider', () => {
     const control = container.querySelector(`.${styles.control}`);
 
     expectInsetPosition(control?.getAttribute('style'), 0);
-    expectStandardSegmentGap(control?.getAttribute('style'));
+    expect(control?.getAttribute('style')).toContain('--slider-inactive-end-start: var(--slider-min-position)');
 
     rerender(<Slider aria-label="Scale" value={50} onValueChange={() => undefined} />);
 
     expectInsetPosition(control?.getAttribute('style'), 0.5);
-    expectStandardSegmentGap(control?.getAttribute('style'));
+    expect(control?.getAttribute('style')).toContain('--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))');
+    expect(control?.getAttribute('style')).toContain('--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))');
 
     rerender(<Slider aria-label="Scale" value={100} onValueChange={() => undefined} />);
 
     expectInsetPosition(control?.getAttribute('style'), 1);
-    expectStandardSegmentGap(control?.getAttribute('style'));
+    expect(control?.getAttribute('style')).toContain('--slider-active-end: var(--slider-max-position)');
   });
 
   it('derives handle and step positions from the shared visual position helper', () => {
@@ -380,10 +388,10 @@ describe('SliderCentered', () => {
     expect(control?.getAttribute('style')).toContain('--slider-fill-start: 25%');
     expect(control?.getAttribute('style')).toContain('--slider-fill-end: 50%');
     expect(control?.getAttribute('style')).toContain(
-      '--slider-active-start: calc(var(--slider-value-position) + var(--slider-current-handle-half-width) + var(--slider-current-gap))',
+      '--slider-active-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
     );
     expect(control?.getAttribute('style')).toContain(
-      '--slider-active-end: calc(var(--slider-origin-position) - var(--slider-current-handle-half-width) - var(--slider-current-gap))',
+      '--slider-active-end: calc(var(--slider-origin-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
     );
     expectInsetPosition(control?.getAttribute('style'), 0.5);
     expectInsetPosition(control?.getAttribute('style'), 0.25);
@@ -640,10 +648,10 @@ describe('SliderRange', () => {
     expectInsetPosition(control?.getAttribute('style'), 0.25);
     expectInsetPosition(control?.getAttribute('style'), 0.75);
     expect(control?.getAttribute('style')).toContain(
-      '--slider-active-start: calc(var(--slider-lower-position) + var(--slider-current-handle-half-width) + var(--slider-current-gap))',
+      '--slider-active-start: calc(var(--slider-lower-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
     );
     expect(control?.getAttribute('style')).toContain(
-      '--slider-active-end: calc(var(--slider-upper-position) - var(--slider-current-handle-half-width) - var(--slider-current-gap))',
+      '--slider-active-end: calc(var(--slider-upper-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
     );
   });
 
@@ -745,10 +753,10 @@ describe('SliderRange', () => {
     const lower = screen.getByRole('slider', { name: /Minimum value/ });
     const upper = screen.getByRole('slider', { name: /Maximum value/ });
 
-    fireEvent.pointerDown(lower);
+    fireEvent.focus(lower);
     expect(root).toHaveAttribute('data-active-handle', 'lower');
 
-    fireEvent.pointerDown(upper);
+    fireEvent.focus(upper);
     expect(root).toHaveAttribute('data-active-handle', 'upper');
   });
 });
@@ -766,46 +774,76 @@ describe('slider CSS contract', () => {
   it('maps generated border radius xl and xxl to the latest semantic values', () => {
     expect(tokensCss).toContain('--border-radius-12: 12px;');
     expect(tokensCss).toContain('--border-radius-16: 16px;');
-    expect(lightCss).toContain('--border-radius-xl: var(--border-radius-12);');
-    expect(lightCss).toContain('--border-radius-xxl: var(--border-radius-16);');
-    expect(darkCss).toContain('--border-radius-xl: var(--border-radius-12);');
-    expect(darkCss).toContain('--border-radius-xxl: var(--border-radius-16);');
+    expect(tokensCss).toContain('--border-radius-xl: var(--border-radius-12);');
+    expect(tokensCss).toContain('--border-radius-xxl: var(--border-radius-16);');
   });
 
   it('uses semantic radius tokens directly for slider track corners', () => {
     expect(tokensCss).not.toContain('--component-slider-track-radius:');
     expect(tokensCss).not.toContain('--component-slider-track-adjacent-radius:');
-    expect(sliderCss).toContain('border-start-start-radius: var(--border-radius-xl);');
+    expect(sliderCss).toContain('border-start-start-radius: var(--border-radius-full-round);');
     expect(sliderCss).toContain('border-start-end-radius: var(--border-radius-sm);');
+    expect(sliderCss).toContain('border-radius: var(--border-radius-sm);');
   });
-  it('uses the canonical visual scale and interactive gap variables', () => {
-    expect(sliderCss).toContain('--slider-scale-inset: var(--component-slider-handle-half-width);');
-    expect(sliderCss).toContain('--slider-value-scale-inset: var(--slider-scale-inset);');
+
+  it('uses a shared endpoint inset and track span for slider positioning', () => {
+    expect(sliderCss).toContain('--slider-endpoint-inset: var(--component-slider-handle-half-width);');
+    expect(sliderCss).toContain(
+      '--slider-track-span: calc(100% - var(--slider-endpoint-inset) - var(--slider-endpoint-inset));',
+    );
+    expect(sliderCss).toContain('--slider-value-scale-inset: var(--slider-endpoint-inset);');
     expect(sliderCss).toContain(".control[data-has-steps='true']");
-    expect(sliderCss).toContain('--slider-value-scale-inset: calc(var(--component-slider-stop-container-size) / 2);');
-    expect(sliderCss).toContain('--slider-internal-gap: var(--spacing-075);');
-    expect(sliderCss).toContain('--slider-interactive-gap: var(--spacing-050);');
-    expect(sliderCss).toContain('--slider-current-gap: var(--slider-internal-gap);');
-    expect(sliderCss).toContain('--slider-current-handle-width: var(--slider-handle-width);');
-    expect(sliderCss).toContain('--slider-current-handle-half-width: calc(var(--slider-current-handle-width) / 2);');
-    expect(sliderCss).not.toContain(".root:not([data-disabled='true']):hover .control,");
-    expect(sliderCss).not.toContain(".root:has(.input:focus-visible) .control,");
-    expect(sliderCss).toContain(".root[data-dragging='true'] .control,");
-    expect(sliderCss).toContain(".root:not([data-disabled='true']):active .control,");
-    expect(sliderCss).toContain('--slider-current-handle-width: var(--slider-handle-width-pressed);');
-    expect(sliderCss).toContain('.handle {');
-    expect(sliderCss).toContain('inline-size: var(--slider-handle-width);');
-    expect(sliderCss).toContain('inset-inline: 0;');
-    expect(sliderCss).toContain('inset-block: 0;');
+    expect(sliderCss).toContain('--slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);');
+    expect(sliderCss).toContain('inset: 0;');
+    expect(sliderCss).toContain('inline-size: 100%;');
+    expect(sliderCss).toContain('block-size: 100%;');
+    expect(sliderCss).toContain('--slider-internal-gap: var(--spacing-sm);');
+    expect(sliderCss).toContain('cursor: pointer;');
+    expect(sliderCss).toContain('touch-action: none;');
+    expect(sliderCss).toContain('pointer-events: none;');
+    expect(sliderCss).toContain('pointer-events: auto;');
+    expect(sliderCss).not.toContain(".root:not([data-disabled='true']):active .control,");
+    expect(sliderCss).not.toContain('--slider-current-handle-width: var(--slider-handle-width-pressed);');
     expect(sliderCss).not.toContain('slider-track-boundary-inset');
-    expect(sliderCss).not.toContain('8px');
-    expect(sliderCss).not.toContain('16px');
+  });
+
+  it('uses sized stop containers that stay aligned with the track anatomy', () => {
+    expect(tokensCss).toContain('--component-slider-stop-container-size-xs: var(--component-slider-track-height-xs);');
+    expect(tokensCss).toContain('--component-slider-stop-container-size-sm: var(--component-slider-track-height-sm);');
+    expect(tokensCss).toContain('--component-slider-stop-container-size-md: var(--component-slider-track-height-md);');
+    expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-md);');
+    expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-xs);');
+    expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-sm);');
+    expect(sliderCss).toContain('inline-size: var(--slider-stop-container-size);');
+    expect(sliderCss).toContain('block-size: var(--slider-stop-container-size);');
+    expect(sliderCss).toContain('inline-size: var(--size-marker-xs);');
+    expect(sliderCss).toContain('block-size: var(--size-marker-xs);');
+    expect(tokensCss).toContain('--size-marker-xs: var(--measurement-4);');
+  });
+
+  it('maps slider track and stop colors to chart semantic tokens', () => {
+    expect(sliderCss).toContain('--slider-track-active-color: var(--color-data-viz-sequence-prussian-900);');
+    expect(sliderCss).toContain('--slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);');
+    expect(sliderCss).toContain('--slider-step-color: var(--color-content-brand-primary);');
+    expect(sliderCss).not.toContain('--slider-step-outline-color');
+    expect(sliderCss).not.toContain('box-shadow: 0 0 0 var(--border-width-sm)');
+  });
+
+  it('generates the expanded chart semantic token groups', () => {
+    expect(lightCss).toContain('--color-data-viz-sequence-green-900: var(--color-green-solid-900);');
+    expect(darkCss).toContain('--color-data-viz-sequence-green-900: var(--color-green-solid-200);');
+    expect(lightCss).toContain('--color-data-viz-catergory-subtler-prussian: var(--color-brand-prussian-solid-300);');
+    expect(lightCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-500);');
+    expect(lightCss).toContain('--color-data-viz-catergory-bolder-prussian: var(--color-brand-prussian-solid-700);');
+    expect(darkCss).toContain('--color-data-viz-catergory-subtler-prussian: var(--color-brand-prussian-solid-800);');
+    expect(darkCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-700);');
+    expect(darkCss).toContain('--color-data-viz-catergory-bolder-prussian: var(--color-brand-prussian-solid-500);');
   });
 
   it('uses the focus ring token mapping on the private visual handle', () => {
-    expect(sliderCss).toContain('outline: var(--border-width-bold) solid var(--color-border-focused);');
-    expect(sliderCss).toContain('outline-offset: var(--spacing-050);');
-    expect(sliderCss).not.toContain('outline-offset: var(--spacing-0);');
+    expect(sliderCss).toContain('outline: var(--border-width-md) solid var(--color-border-focused);');
+    expect(sliderCss).toContain('outline-offset: var(--spacing-xs);');
+    expect(sliderCss).not.toContain('outline-offset: var(--spacing-none);');
   });
 
   it('makes the native thumb transparent and uses a custom visual handle', () => {
@@ -813,18 +851,26 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('.handle {');
     expect(sliderCss).toContain('.handleVisual {');
     expect(sliderCss).toContain('background: var(--slider-handle-visual-color);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-default);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-hovered);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-pressed);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-lower-position);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-upper-position);');
   });
 
   it('shrinks only the inner visual handle to the pressed width without changing positioning rules', () => {
-    expect(sliderCss).toContain('--slider-handle-width-pressed: var(--dimension-2);');
+    expect(sliderCss).toContain('--slider-handle-width-pressed: var(--measurement-2);');
     expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\']):active .handleSingle .handleVisual');
     expect(sliderCss).toContain(
       '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):active .handleLower .handleVisual',
     );
     expect(sliderCss).toContain('.control:has(.singleInput[data-preview-state=\'press\']) .handleSingle .handleVisual');
-    expect(sliderCss).toContain('--slider-current-handle-width: var(--slider-handle-width-pressed);');
+    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):hover .handleLower');
+    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'upper\']:not([data-disabled=\'true\']):hover .handleUpper');
+    expect(sliderCss).toContain('.control:has(.rangeInputLower[data-preview-state=\'hover\']) .handleLower');
+    expect(sliderCss).toContain('.control:has(.rangeInputUpper[data-preview-state=\'hover\']) .handleUpper');
+    expect(sliderCss).not.toContain('.root:not([data-disabled=\'true\']):hover .handle,');
+    expect(sliderCss).not.toContain('.root:not([data-disabled=\'true\']):active .handle,');
     expect(sliderCss).toContain('.handle {');
     expect(sliderCss).toContain('inline-size: var(--slider-handle-width);');
     expect(sliderCss).toContain('transform: translate(-50%, -50%);');
@@ -841,6 +887,7 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain(".orientation_vertical .step[data-placement='end'] {");
     expect(sliderCss).toContain('transform: translate(-50%, 0);');
   });
+
   it('does not use stop-layer padding or transparent handle extensions', () => {
     expect(sliderCss).not.toContain('--slider-stop-layer-padding');
     expect(sliderCss).not.toContain('--slider-handle-hit-area-extension');
@@ -857,12 +904,4 @@ describe('slider CSS contract', () => {
     expect(sliderCss).not.toContain('padding-inline: var(--slider-stop-layer-padding)');
     expect(sliderCss).not.toContain('padding-block: var(--slider-stop-layer-padding)');
   });
-
-  it('keeps inactive track on the brand subtle background token', () => {
-    expect(sliderCss).toContain('background: var(--color-background-brand-subtle-default);');
-  });
 });
-
-
-
-

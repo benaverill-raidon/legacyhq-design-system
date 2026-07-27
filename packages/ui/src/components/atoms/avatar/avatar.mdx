@@ -1,0 +1,234 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as AvatarStories from './avatar.stories';
+
+<Meta of={AvatarStories} name="Docs" />
+
+# Avatar
+
+Avatar represents a person or organisation as a circular image. It shows a photograph when one is
+available, falls back to shared artwork when one is not, and can carry a single presence or status
+badge.
+
+<Canvas of={AvatarStories.Playground} />
+
+## When to use
+
+- Identifying the person attached to a record — an estate owner, trustee, beneficiary, or advisor.
+- Showing who performed an action in an activity feed, comment, or audit trail.
+- Representing collaborators on a shared matter, as a group of overlapping avatars.
+- As a compact interactive target that selects or filters by person.
+
+## When not to use
+
+- **For non-person entities that need a symbol rather than a likeness.** Use `Icon`.
+- **To convey state that is not about a person.** Use `Badge` or `Tag` directly.
+- **As the only label for a person.** Pair it with a name; an avatar alone is a weak identifier.
+- **As a general-purpose button.** Use `IconButton` unless the affordance really is the person.
+- **To show more than one condition at once.** Avatar renders a single badge — see Anatomy.
+
+## Anatomy
+
+<Canvas of={AvatarStories.Variants} />
+
+1. **Root** — `span` by default, or a `button` when `isInteractive` is set or `onClick` is supplied.
+2. **Surface** — the circular plate. Owns the selected ring and the hover / pressed overlay.
+3. **Content** — the image, or the fallback artwork when no usable image exists. Clipped to the circle.
+4. **Badge container** — a surface-coloured disc that separates the badge from the image beneath it.
+5. **Badge icon** — the presence or status glyph.
+
+The surface paints in a fixed order: content, then the state overlay, then the selected ring, then
+the badge. The overlay deliberately sits **above** the image so hover and pressed tint the
+photograph rather than disappearing behind it.
+
+## Usage guidance
+
+### Image versus fallback
+
+Pass `src` whenever a usable image exists. Avatar has no initials variant — when `src` is absent,
+empty, or fails to load, it renders shared person artwork that follows the active theme. Do not
+build your own initials plate on top of Avatar; if initials are a requirement, raise it as a design
+change rather than working around the component.
+
+### Fallback behaviour
+
+Image loading failure is handled internally: an `onError` on the image swaps in the fallback
+artwork, and the swap resets whenever `src` changes. You do not need to pre-validate URLs or track
+load state yourself. Because the fallback is decorative, it never contributes to the accessible
+name — always supply `name` (or `alt` / `aria-label`) so the avatar is identifiable when the image
+is missing.
+
+### Presence versus status
+
+`status` and `presence` share one badge slot and **`status` wins** when both are set. Presence
+(`online`, `offline`, `busy`) describes availability; status (`accepted`, `declined`) describes a
+decision on a record. Setting both is usually a modelling mistake — pick the one the user needs.
+
+### Group usage
+
+Overlap avatars with the semantic `--overlap-*` tokens and give each one a ring in the surrounding
+surface colour so the stack reads clearly. Cap the visible count and add a trailing `+n` counter
+rather than rendering an unbounded row. See the Content story.
+
+### Accessible labelling
+
+- Supply `name`, `alt`, `aria-label`, or `aria-labelledby` for every meaningful avatar. In
+  development, Avatar warns when an accessible name is missing.
+- Avatar appends `selected` and the active badge to the accessible name, so `name="Ben Averill"`
+  with `isSelected` and `presence="busy"` announces "Ben Averill, selected, busy". Do not repeat
+  that state in `name` yourself.
+- Set `decorative` **only** when the avatar is redundant next to a visible name. A decorative,
+  non-interactive avatar is hidden from assistive technology entirely.
+- `decorative` is ignored when the avatar is interactive — a button always needs a name.
+
+## Do / Don't
+
+**Do** supply a name even when an image is present — it carries the fallback case.
+
+```tsx
+<Avatar src={photo} name="Ben Averill" />
+```
+
+**Don't** rely on the image alone; a failed load leaves an unlabelled circle.
+
+```tsx
+<Avatar src={photo} />
+```
+
+---
+
+**Do** let Avatar compose the state into the accessible name.
+
+```tsx
+<Avatar name="Ben Averill" presence="busy" isSelected isInteractive onClick={select} />
+```
+
+**Don't** hand-write state into `name` — it will be announced twice.
+
+```tsx
+<Avatar name="Ben Averill, selected, busy" presence="busy" isSelected isInteractive />
+```
+
+---
+
+**Do** hide the avatar when an adjacent visible name already identifies the person.
+
+```tsx
+<span>
+  <Avatar src={photo} decorative />
+  Ben Averill
+</span>
+```
+
+**Don't** mark an interactive avatar decorative — the control loses its name.
+
+```tsx
+<Avatar src={photo} decorative isInteractive onClick={select} />
+```
+
+## API
+
+{
+  /*
+    The live ArgTypes/Controls doc-blocks are not rendering in this Storybook build - they stay on
+    their loading skeleton regardless of the `of` target (component, story, or module), even though
+    Canvas blocks and the Controls addon panel on Playground both resolve correctly. This looks like
+    an addon-docs / react-vite wiring gap, not something specific to Avatar. Tracked as a follow-up;
+    this table is the interim source of truth and mirrors avatar.types.ts.
+  */
+}
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xxs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl'</code></td>
+      <td><code>'md'</code></td>
+      <td>Diameter, badge size, and badge inset.</td>
+    </tr>
+    <tr>
+      <td><code>src</code></td>
+      <td><code>string</code></td>
+      <td>—</td>
+      <td>Image URL. Falls back to shared artwork when absent or on load failure.</td>
+    </tr>
+    <tr>
+      <td><code>alt</code></td>
+      <td><code>string</code></td>
+      <td>—</td>
+      <td>Accessible-name fallback. The <code>img</code> itself is always decorative.</td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td><code>string</code></td>
+      <td>—</td>
+      <td>Preferred accessible-name source.</td>
+    </tr>
+    <tr>
+      <td><code>presence</code></td>
+      <td><code>'none' | 'online' | 'offline' | 'busy'</code></td>
+      <td><code>'none'</code></td>
+      <td>Availability badge. Overridden by <code>status</code>.</td>
+    </tr>
+    <tr>
+      <td><code>status</code></td>
+      <td><code>'none' | 'accepted' | 'declined'</code></td>
+      <td><code>'none'</code></td>
+      <td>Decision badge. Takes precedence over <code>presence</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isSelected</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Shows the brand-primary ring. Meaningful only when <code>isInteractive</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Disables the button and dims the avatar. Requires <code>isInteractive</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isInteractive</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Renders a <code>button</code> instead of a <code>span</code>. Implied by passing <code>onClick</code>.</td>
+    </tr>
+    <tr>
+      <td><code>decorative</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Hides a non-interactive avatar from assistive technology. Ignored when interactive.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
+      <td><code>string</code></td>
+      <td>—</td>
+      <td>Overrides the computed accessible name.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other prop is forwarded to the rendered `button` or `span`.
+
+## States
+
+Hover, focus, and pressed are pinned in the States story via a documentation-only
+`data-force-state` attribute so they can be reviewed statically. It is not part of the public API —
+use real interaction in application code.
+
+<Canvas of={AvatarStories.States} />
+
+## Related components
+
+- **Badge** — the standalone status indicator used inside Avatar's badge slot.
+- **Icon** — for representing non-person entities.
+- **IconButton** — when the affordance is an action rather than a person.
+- **Tag** — for labelling a record with a status in flowing content.

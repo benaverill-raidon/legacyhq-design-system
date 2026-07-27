@@ -155,19 +155,12 @@ Use shared Focus Ring utility classes and tokens.
 
 ### Geometry Tokens
 
-Do not use semantic spacing tokens directly for component anatomy if exact values are needed.
+Use the shared dimension, spacing, and radius tokens directly. Do not create
+component-scoped Switch aliases.
 
-Preferred approach:
-
-```css
---component-switch-track-width
---component-switch-track-height
---component-switch-thumb-size
---component-switch-thumb-offset
---component-switch-thumb-translate-x
-```
-
-These may map to primitive values or existing spacing tokens after Figma dimensions are confirmed.
+- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius
+- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius
+- internal marks: 12px
 
 ## Accessibility
 
@@ -276,8 +269,6 @@ Test:
 - Component uses `role="switch"`.
 - Component uses Focus Ring utilities.
 - Component uses semantic color tokens.
-- Component uses component-scoped geometry tokens where needed.
+- Component uses the current shared geometry tokens without component aliases.
 - No shared icon-library switch assets are introduced.
 - Motion respects `prefers-reduced-motion`.
-
-

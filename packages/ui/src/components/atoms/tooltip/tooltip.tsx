@@ -63,14 +63,9 @@ function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
   };
 }
 
-function getTokenPixels(tokenName: string, fallback: number) {
-  if (typeof window === 'undefined') {
-    return fallback;
-  }
-
+function getTokenPixels(tokenName: string) {
   const value = window.getComputedStyle(document.documentElement).getPropertyValue(tokenName).trim();
-  const parsed = Number.parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
+  return Number.parseFloat(value);
 }
 
 function isDisabledTrigger(
@@ -217,7 +212,7 @@ export const Tooltip = React.memo(function Tooltip({
 
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
-    const gap = getTokenPixels('--spacing-050', 4);
+    const gap = getTokenPixels('--spacing-xs');
     const viewportPadding = gap;
 
     const bestCandidate = getPlacementOrder(placement)

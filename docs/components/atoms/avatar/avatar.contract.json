@@ -7,7 +7,7 @@
     },
     {
       "part": "surface",
-      "description": "Painted circular surface that owns background, radius, and selected or interaction overlays."
+      "description": "Painted circular surface that owns radius, the full-size light or dark fallback SVG, and selected or interaction overlays."
     },
     {
       "part": "badgeContainer",
@@ -28,34 +28,24 @@
   },
   "tokens": {
     "component": [
-      "--component-avatar-size-xxs",
-      "--component-avatar-size-xs",
-      "--component-avatar-size-sm",
-      "--component-avatar-size-md",
-      "--component-avatar-size-lg",
-      "--component-avatar-size-xl",
-      "--component-avatar-size-xxl",
-      "--component-avatar-fallback-size-xxs",
-      "--component-avatar-fallback-size-xs",
-      "--component-avatar-fallback-size-sm",
-      "--component-avatar-fallback-size-md",
-      "--component-avatar-fallback-size-lg",
-      "--component-avatar-fallback-size-xl",
-      "--component-avatar-fallback-size-xxl",
+      "--size-avatar-xxs",
+      "--size-avatar-xs",
+      "--size-avatar-sm",
+      "--size-avatar-md",
+      "--size-avatar-lg",
+      "--size-avatar-xl",
       "--component-avatar-badge-size-xxs",
       "--component-avatar-badge-size-xs",
       "--component-avatar-badge-size-sm",
       "--component-avatar-badge-size-md",
       "--component-avatar-badge-size-lg",
       "--component-avatar-badge-size-xl",
-      "--component-avatar-badge-size-xxl",
       "--component-avatar-badge-icon-size-xxs",
       "--component-avatar-badge-icon-size-xs",
       "--component-avatar-badge-icon-size-sm",
       "--component-avatar-badge-icon-size-md",
       "--component-avatar-badge-icon-size-lg",
-      "--component-avatar-badge-icon-size-xl",
-      "--component-avatar-badge-icon-size-xxl"
+      "--component-avatar-badge-icon-size-xl"
     ],
     "semantic": {
       "offlineBadge": "--color-content-subtle",

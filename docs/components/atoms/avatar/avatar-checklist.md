@@ -34,7 +34,7 @@ Status values:
 ```txt
 Avatar root
 +- surface
-   +- image | fallback icon
+   +- image | fallback artwork
    +- badge container
       +- badge icon
 ```
@@ -43,10 +43,11 @@ Use the same badge container and badge icon structure for every size. XL keeps v
 
 ## Implementation checklist
 
-- [ ] Preserve image, fallback icon, selected, loading-safe image fallback, and disabled behavior.
+- [ ] Preserve image, full-size theme-aware fallback artwork, selected, loading-safe image fallback, and disabled behavior.
 - [ ] Use the dedicated badge container and badge icon anatomy across all sizes.
 - [ ] Keep status higher priority than presence.
 - [ ] Map `offline` to the semantic subtle content color token rather than a primitive neutral color.
+- [ ] Render online as a solid semantic success-green circle without an interior glyph.
 - [ ] Keep the visible badge icon bordered with the inverse border token and tokenized bold border width.
 - [ ] Remove the deprecated `focus` presence variant from stories, tests, and docs.
 - [ ] Do not add disabled plus badge combinations back into examples.

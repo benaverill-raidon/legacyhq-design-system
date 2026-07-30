@@ -337,6 +337,12 @@
   --color-brand-umber-alpha-1100-16: rgba(42, 35, 32, 0.16);
   --color-brand-umber-alpha-1100-24: rgba(42, 35, 32, 0.24);
   --color-brand-umber-alpha-1100-32: rgba(42, 35, 32, 0.32);
+  --duration-fast: 150ms;
+  --duration-slow: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-loop: 860ms;
+  --ease-loop: cubic-bezier(0.4, 0.15, 0.6, 0.85);
   --component-avatar-badge-size-xxs: var(--measurement-8);
   --component-avatar-badge-size-xs: var(--measurement-12);
   --component-avatar-badge-size-sm: var(--measurement-12);
@@ -454,6 +460,11 @@
   --size-spinner-md: var(--measurement-16);
   --size-spinner-lg: var(--measurement-24);
   --size-spinner-xl: var(--measurement-48);
+  --fade-quick: var(--duration-fast) var(--ease-standard);
+  --fade-long: var(--duration-slow) var(--ease-standard);
+  --move-quick: var(--duration-fast) var(--ease-spring);
+  --move-long: var(--duration-slow) var(--ease-spring);
+  --spin-loop: var(--duration-loop) var(--ease-loop);
   --typography-display-lg-font-family: var(--typography-font-family-merriweather);
   --typography-display-lg-font-weight: var(--typography-font-weight-600);
   --typography-display-lg-font-size: var(--typography-font-size-48);

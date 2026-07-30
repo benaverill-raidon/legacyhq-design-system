@@ -91,7 +91,7 @@
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse);
   pointer-events: none;
-  transition: background-color 180ms ease-out;
+  transition: background-color var(--fade-quick);
 }
 
 .thumb {
@@ -105,7 +105,7 @@
   background: var(--color-content-inverse);
   transform: translateX(var(--spacing-none));
   transform-origin: left center;
-  transition: transform 180ms ease-out;
+  transition: transform var(--move-quick);
 }
 
 .icon {

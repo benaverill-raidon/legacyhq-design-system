@@ -41,7 +41,7 @@ export const Tag = React.memo(
   React.forwardRef<HTMLElement, TagProps>(function Tag(
     {
       size = 'md',
-      tone = 'standard',
+      tone = 'default',
       href,
       target,
       rel,

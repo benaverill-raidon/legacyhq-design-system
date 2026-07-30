@@ -2,8 +2,6 @@
   --spinner-size: var(--size-spinner-lg);
   --spinner-graphic-size: 100%;
   --spinner-stroke-width: var(--border-width-md);
-  --spinner-rotation-duration: 860ms;
-  --spinner-rotation-easing: cubic-bezier(0.4, 0.15, 0.6, 0.85);
 
   display: inline-flex;
   align-items: center;
@@ -44,7 +42,7 @@
   inline-size: var(--spinner-graphic-size);
   block-size: var(--spinner-graphic-size);
   overflow: visible;
-  animation: spinner-rotate var(--spinner-rotation-duration) var(--spinner-rotation-easing) infinite;
+  animation: spinner-rotate var(--spin-loop) infinite;
   transform-origin: center;
 }
 

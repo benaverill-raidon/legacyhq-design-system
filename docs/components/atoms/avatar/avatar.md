@@ -19,3 +19,5 @@ Avatar root
 Static meaningful avatars should expose an accessible name through `name`, `alt`, `aria-label`, or `aria-labelledby`. Decorative avatars should be hidden from assistive technology. Interactive avatars render as native buttons and must have an accessible label. When relevant, selected, presence, and status information should be included in the accessible label.
 
 Implementation should preserve native semantics, avoid tooltip or group behavior, avoid invalid interactive nesting, use the shared Focus Ring pattern for interactive focus-visible styling, and keep hover and pressed styles limited to interactive avatars. Image load failure must fall back to the theme-aware person artwork without changing the public API.
+
+The interactive hover/pressed overlay fades in using `fade-quick`. The selected-state ring grows in using `move-quick` (the spring-eased motion token) rather than snapping to full width instantly, since it's a physical ring appearing/growing rather than a plain color change.

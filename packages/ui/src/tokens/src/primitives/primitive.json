@@ -1670,6 +1670,36 @@
         "value": "rgba(42, 35, 32, 0.32)",
         "type": "color",
         "originalName": "color/brand/umber/alpha/1100/32"
+      },
+      "duration-fast": {
+        "value": "150ms",
+        "type": "duration",
+        "originalName": "duration/fast"
+      },
+      "duration-slow": {
+        "value": "300ms",
+        "type": "duration",
+        "originalName": "duration/slow"
+      },
+      "ease-standard": {
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "type": "cubicBezier",
+        "originalName": "ease/standard"
+      },
+      "ease-spring": {
+        "value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "type": "cubicBezier",
+        "originalName": "ease/spring"
+      },
+      "duration-loop": {
+        "value": "860ms",
+        "type": "duration",
+        "originalName": "duration/loop"
+      },
+      "ease-loop": {
+        "value": "cubic-bezier(0.4, 0.15, 0.6, 0.85)",
+        "type": "cubicBezier",
+        "originalName": "ease/loop"
       }
     }
   }

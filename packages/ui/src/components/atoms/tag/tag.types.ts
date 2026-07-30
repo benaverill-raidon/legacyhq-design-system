@@ -1,7 +1,7 @@
 import type * as React from 'react';
 
 export type TagTone =
-  | 'standard'
+  | 'default'
   | 'blue'
   | 'green'
   | 'purple'

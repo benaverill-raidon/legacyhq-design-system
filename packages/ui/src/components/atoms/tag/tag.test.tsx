@@ -277,12 +277,12 @@ describe('tag helpers', () => {
 });
 
 describe('tag CSS contract', () => {
-  it('maps standard and accent tones to semantic Figma-backed tokens', () => {
-    expect(tagCss).toContain('--tag-background: var(--color-elevation-surface-raised-default);');
+  it('maps default and accent tones to semantic Figma-backed tokens', () => {
+    expect(tagCss).toContain('--tag-background: var(--color-background-neutral-subtle-default);');
+    expect(tagCss).toContain('--tag-background-hovered: var(--color-background-neutral-subtle-hovered);');
+    expect(tagCss).toContain('--tag-background-pressed: var(--color-background-neutral-subtle-pressed);');
     expect(tagCss).toContain('--tag-border: var(--color-border-bold);');
     expect(tagCss).toContain('--tag-color: var(--color-content-default);');
-    expect(tagCss).toContain('--color-background-neutral-overlay-hovered');
-    expect(tagCss).toContain('--color-background-neutral-overlay-pressed');
     expect(tagCss).toContain('--tag-background: var(--color-background-accent-blue-subtle-default);');
     expect(tagCss).toContain('--tag-border: var(--color-border-accent-blue);');
     expect(tagCss).toContain('--tag-color: var(--color-content-accent-blue-bolder);');

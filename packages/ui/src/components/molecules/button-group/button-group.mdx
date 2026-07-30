@@ -1,0 +1,138 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ButtonGroupStories from './ButtonGroup.stories';
+
+<Meta of={ButtonGroupStories} name="Docs" />
+
+# Button Group
+
+Button Group gives users access to a set of frequently performed, related actions, laid out with
+consistent spacing in a row or a column. It is a layout wrapper, not a control - it adds no visual
+styling of its own and does not manage selection or focus between its children.
+
+<Canvas of={ButtonGroupStories.Playground} />
+
+## When to use
+
+- A toolbar of related, independent actions.
+- A dialog's primary/secondary/tertiary action row.
+- A form's action buttons.
+
+## When not to use
+
+- **For mutually exclusive selection.** Button Group does not manage selection state or
+  exclusivity - it's a layout wrapper, not a segmented control.
+- **For a single button.** Button Group adds no value over a bare `Button`.
+- **To visually join/connect buttons.** Figma's source keeps every button fully rounded and
+  separated by a consistent gap, never seamlessly merged.
+
+## Anatomy
+
+Button Group has one part: a `div` root that lays out its `children` - typically `Button` and/or
+`IconButton` elements - with a consistent 4px gap. There is no owned button styling; every color,
+radius, and typography value comes from the children themselves.
+
+## Usage guidance
+
+### Choosing an orientation
+
+`orientation="horizontal"` (the default) lays buttons out in a row. `orientation="vertical"` stacks
+them in a column. Figma calls these `inline`/`stacked`; the component renames them to
+`horizontal`/`vertical` to match `RadioGroup`'s existing orientation vocabulary, so every
+"group of controls" component in this library uses the same two words.
+
+<Canvas of={ButtonGroupStories.Variants} />
+
+### Accessible labelling
+
+Button Group adds no keyboard behavior of its own - each child button keeps its native Tab order,
+exactly as if it weren't wrapped. Add `aria-label` or `aria-labelledby` only when the set of
+actions needs a name that isn't already obvious from context (a heading, a dialog title); doing so
+automatically adds `role="group"` so the set is announced together.
+
+<Canvas of={ButtonGroupStories.Composition} />
+
+## Do / Don't
+
+**Do** set size, appearance, and tone directly on each child `Button`.
+
+```tsx
+<ButtonGroup>
+  <Button appearance="primary">Save</Button>
+  <Button appearance="subtle">Cancel</Button>
+</ButtonGroup>
+```
+
+**Don't** expect Button Group to restyle or join its children into one shape.
+
+```tsx
+{
+  /* Button Group will not merge these into a single segmented control. */
+}
+<ButtonGroup>
+  <Button>List</Button>
+  <Button>Grid</Button>
+</ButtonGroup>;
+```
+
+---
+
+**Do** add `aria-label` when the group's purpose isn't obvious from context.
+
+```tsx
+<ButtonGroup aria-label="Document actions">
+  <Button appearance="primary">Save</Button>
+  <Button appearance="subtle">Cancel</Button>
+</ButtonGroup>
+```
+
+**Don't** wrap a single button in Button Group.
+
+```tsx
+<ButtonGroup>
+  <Button>Save</Button>
+</ButtonGroup>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. Typically <code>Button</code>/<code>IconButton</code> elements.</td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td><code>'horizontal' | 'vertical'</code></td>
+      <td><code>'horizontal'</code></td>
+      <td>Layout direction.</td>
+    </tr>
+    <tr>
+      <td>...rest</td>
+      <td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td>
+      <td>-</td>
+      <td>
+        Forwarded to the root <code>div</code>, including <code>aria-label</code> /
+        <code>aria-labelledby</code> and <code>className</code>.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Button Group has no `size`, `appearance`, or `tone` prop - those belong on each child button
+directly, since Button Group contributes only spacing and direction.
+
+## Related components
+
+- **Button** / **Icon Button** - the atoms Button Group always wraps.
+- **Toggle Button** - for a persistent-selection control instead of a set of independent actions.

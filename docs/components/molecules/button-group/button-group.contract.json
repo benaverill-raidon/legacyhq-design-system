@@ -1,0 +1,174 @@
+{
+  "name": "ButtonGroup",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Lay out a set of related, independent action buttons with consistent spacing and direction.",
+  "intent": "Centralize the recurring 'N buttons, one gap, one direction' layout without introducing any new visual treatment - all color/radius/typography comes from the Button/IconButton children.",
+  "nativeElement": "div",
+  "sourceFiles": {
+    "component": "button-group.tsx",
+    "types": "button-group.types.ts",
+    "styles": "button-group.module.css",
+    "stories": "ButtonGroup.stories.tsx",
+    "tests": "ButtonGroup.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1690:7026",
+    "componentSetName": "button-group",
+    "variantCount": 6,
+    "figmaVariantAxes": {
+      "count": ["2", "3", "4"],
+      "orientation": ["inline", "stacked"]
+    },
+    "figmaLayoutData": {
+      "itemSpacing": 4,
+      "layoutWrap": "NO_WRAP",
+      "primaryAxisSizingMode": "AUTO",
+      "counterAxisSizingMode": "AUTO",
+      "counterAxisAlignItems": "MIN",
+      "childInstanceExample": "Each child is a real button-atom instance (size=sm, tone=primary), independently rounded (8px corner radius) - no shared/joined border between buttons."
+    },
+    "apiAdaptationNotes": [
+      "Figma's `count` (2/3/4) variant axis is not a real prop - it only demonstrates the pattern with different numbers of example buttons. The component accepts any number of children.",
+      "Figma's `inline`/`stacked` orientation values were renamed to `horizontal`/`vertical` to match this system's existing RadioGroup.orientation vocabulary.",
+      "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention."
+    ]
+  },
+  "useCases": [
+    "toolbar of related actions",
+    "dialog primary/secondary/tertiary action row",
+    "form action row"
+  ],
+  "antiPatterns": [
+    "mutually exclusive selection / segmented control",
+    "a single button",
+    "visually joined/connected buttons"
+  ],
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div",
+      "required": true,
+      "description": "Flex layout container that spaces and directs its children; owns no button styling."
+    },
+    {
+      "part": "children",
+      "element": "ReactNode",
+      "required": true,
+      "description": "Typically Button and/or IconButton elements, laid out with a consistent 4px gap."
+    }
+  ],
+  "props": {
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "The buttons (or other controls) to lay out."
+    },
+    "orientation": {
+      "type": "ButtonGroupOrientation",
+      "required": false,
+      "default": "horizontal",
+      "enum": ["horizontal", "vertical"],
+      "description": "Layout direction - horizontal (row) or vertical (column)."
+    }
+  },
+  "variants": {
+    "orientation": {
+      "horizontal": { "purpose": "Row layout (Figma inline).", "className": "orientation_horizontal" },
+      "vertical": { "purpose": "Column layout (Figma stacked).", "className": "orientation_vertical" }
+    }
+  },
+  "sizes": [],
+  "states": ["default"],
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "supports": ["Button elements", "IconButton elements", "any native-focusable control"]
+    }
+  ],
+  "tokens": {
+    "layout": {
+      "gap": "--spacing-xs"
+    }
+  },
+  "accessibility": {
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "group": {
+      "supported": true,
+      "appliedWhen": "aria-label or aria-labelledby is present",
+      "value": "group"
+    },
+    "requirements": [
+      "Do not add roving tabindex or arrow-key navigation - children keep native Tab order.",
+      "Do not add a role without an accompanying accessible name.",
+      "Ensure each child button remains independently focusable."
+    ]
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Render a non-interactive div.",
+    "Do not restyle or override child button appearance.",
+    "Default orientation is horizontal.",
+    "Apply data-orientation equal to the selected orientation.",
+    "Add role=group only when aria-label or aria-labelledby is provided.",
+    "Forward all other native div attributes via rest props."
+  ],
+  "compositionRules": [
+    "Button Group may wrap Button and/or IconButton elements.",
+    "Use a selection-oriented pattern instead of Button Group for mutually exclusive choices.",
+    "Do not use Button Group merely to visually join/connect buttons into one shape."
+  ],
+  "contentRules": [
+    "Any number of children (Figma demonstrates 2-4).",
+    "No text content owned by Button Group itself."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes - inherited entirely from the Button/IconButton children, since Button Group owns no color tokens."
+  ],
+  "implementationNotes": [
+    "Use React.memo + React.forwardRef<HTMLDivElement> for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded spacing - gap comes from --spacing-xs.",
+    "align-items: flex-start on the root, matching Figma's MIN counter-axis alignment, so children keep their own width/height instead of stretching to match a sibling."
+  ],
+  "relatedComponents": ["Button", "IconButton", "ToggleButton"],
+  "do": [
+    "Use for a toolbar or action row of related, independent buttons.",
+    "Set size/appearance/tone directly on each child Button.",
+    "Add aria-label when the group's purpose isn't obvious from context."
+  ],
+  "dont": [
+    "Do not use for exclusive/segmented selection.",
+    "Do not use for a single button.",
+    "Do not expect Button Group to restyle or join its children."
+  ],
+  "acceptanceCriteria": [
+    "Renders children in order.",
+    "Defaults to orientation=horizontal.",
+    "Supports orientation=vertical.",
+    "Applies data-orientation for the selected orientation.",
+    "No role when unlabeled; role=group when aria-label/aria-labelledby is present.",
+    "Forwards native div attributes (className, data-*, etc.) via rest props.",
+    "Uses --spacing-xs for the gap between children in both orientations.",
+    "Works with 2, 3, 4, or more children.",
+    "Storybook includes Playground, Variants, and Composition.",
+    "Tests cover children ordering, orientation, aria/role behavior, and native attribute forwarding."
+  ],
+  "knownLimitations": [
+    "No fullWidth/stretched-children variant (Figma source has none).",
+    "Does not validate that children are Button/IconButton instances."
+  ],
+  "futureEnhancements": [
+    "A fullWidth-style stretched variant if Figma adds one"
+  ]
+}

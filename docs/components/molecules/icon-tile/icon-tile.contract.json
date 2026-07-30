@@ -1,0 +1,286 @@
+{
+  "name": "IconTile",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
+  "intent": "Provide a non-interactive, scannable colored icon container distinct from Icon Button (interactive) and Badge/Tag (text content).",
+  "nativeElement": "div",
+  "sourceFiles": {
+    "component": "icon-tile.tsx",
+    "types": "icon-tile.types.ts",
+    "styles": "icon-tile.module.css",
+    "stories": "IconTile.stories.tsx",
+    "tests": "IconTile.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1555:3436",
+    "componentSetName": "icon-tile",
+    "variantCount": 200,
+    "figmaVariantAxes": {
+      "size": ["xxs (16px)", "xs (24px)", "sm (32px)", "md (40px)", "lg (48px)"],
+      "shape": ["square", "circle"],
+      "appearance": [
+        "red", "redBold", "orange", "orangeBold", "yellow", "yellowBold",
+        "green", "greenBold", "teal", "tealBold", "blue", "blueBold",
+        "purple", "purpleBold", "magenta", "magentaBold", "gray", "grayBold",
+        "brand", "brandBold"
+      ]
+    },
+    "figmaIconProperty": {
+      "name": "icon",
+      "type": "INSTANCE_SWAP",
+      "note": "Exposed as a component property, not a Figma slot (slots array was empty)."
+    },
+    "apiAdaptationNotes": [
+      "Figma's flattened 20-value `appearance` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
+      "Figma's `circle` shape value was renamed to `round` to match Icon Button's existing `shape` prop naming (`square` | `round`).",
+      "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
+    ]
+  },
+  "useCases": [
+    "feature or benefit call-outs",
+    "empty-state graphics",
+    "leading visual in a card",
+    "leading visual in a list item",
+    "category or type indicators"
+  ],
+  "antiPatterns": [
+    "clickable actions",
+    "count or text indicators",
+    "hover, focus, pressed, or disabled behavior",
+    "multiple icons in one tile"
+  ],
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div",
+      "required": true,
+      "description": "Sized, colored, rounded container."
+    },
+    {
+      "part": "icon",
+      "element": "ReactNode children",
+      "required": true,
+      "description": "Single centered icon; inherits the root's color and fills the computed icon-size box."
+    }
+  ],
+  "props": {
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "The icon element to render, centered inside the tile."
+    },
+    "tone": {
+      "type": "IconTileTone",
+      "required": false,
+      "default": "brand",
+      "enum": ["gray", "brand", "red", "orange", "yellow", "green", "teal", "blue", "purple", "magenta"],
+      "description": "Hue/semantic meaning of the tile."
+    },
+    "appearance": {
+      "type": "IconTileAppearance",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "bold"],
+      "description": "Visual weight - default is a subtle tint, bold is a solid saturated fill with an inverse icon."
+    },
+    "shape": {
+      "type": "IconTileShape",
+      "required": false,
+      "default": "square",
+      "enum": ["square", "round"],
+      "description": "Container shape - rounded-square or fully round."
+    },
+    "size": {
+      "type": "IconTileSize",
+      "required": false,
+      "default": "md",
+      "enum": ["xxs", "xs", "sm", "md", "lg"],
+      "description": "Overall tile size; icon size is derived as 2/3 of the tile size."
+    },
+    "decorative": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "When true, the tile is aria-hidden. When false, renders role=img with ariaLabel."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible label used only when decorative is false."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Optional custom class name."
+    }
+  },
+  "variants": {
+    "tone": {
+      "gray": { "purpose": "Neutral emphasis.", "className": "tone_gray" },
+      "brand": { "purpose": "Brand emphasis.", "className": "tone_brand" },
+      "red": { "purpose": "Red accent hue.", "className": "tone_red" },
+      "orange": { "purpose": "Orange accent hue.", "className": "tone_orange" },
+      "yellow": { "purpose": "Yellow accent hue.", "className": "tone_yellow" },
+      "green": { "purpose": "Green accent hue.", "className": "tone_green" },
+      "teal": { "purpose": "Teal accent hue.", "className": "tone_teal" },
+      "blue": { "purpose": "Blue accent hue.", "className": "tone_blue" },
+      "purple": { "purpose": "Purple accent hue.", "className": "tone_purple" },
+      "magenta": { "purpose": "Magenta accent hue.", "className": "tone_magenta" }
+    },
+    "appearance": {
+      "default": { "purpose": "Subtle tint background with a tinted icon.", "className": "appearance_default" },
+      "bold": { "purpose": "Solid saturated background with an inverse (white) icon.", "className": "appearance_bold" }
+    },
+    "shape": {
+      "square": { "purpose": "Rounded-square container.", "className": "shape_square" },
+      "round": { "purpose": "Fully round container.", "className": "shape_round" }
+    }
+  },
+  "sizes": [
+    { "name": "xxs", "containerSize": "size-200 (16px)", "iconSize": "calc(container * 2/3)", "radius": "border-radius-sm" },
+    { "name": "xs", "containerSize": "size-300 (24px)", "iconSize": "calc(container * 2/3)", "radius": "border-radius-sm" },
+    { "name": "sm", "containerSize": "size-400 (32px)", "iconSize": "calc(container * 2/3)", "radius": "border-radius-lg" },
+    { "name": "md", "containerSize": "size-500 (40px)", "iconSize": "calc(container * 2/3)", "radius": "border-radius-lg" },
+    { "name": "lg", "containerSize": "size-600 (48px)", "iconSize": "calc(container * 2/3)", "radius": "border-radius-xl" }
+  ],
+  "states": ["default"],
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "supports": ["a single icon from the generated icon set", "any currentColor-based SVG element"]
+    }
+  ],
+  "tokens": {
+    "layout": {
+      "size_xxs": "--size-200",
+      "size_xs": "--size-300",
+      "size_sm": "--size-400",
+      "size_md": "--size-500",
+      "size_lg": "--size-600"
+    },
+    "radius": {
+      "xxs_xs": "--border-radius-sm",
+      "sm_md": "--border-radius-lg",
+      "lg": "--border-radius-xl",
+      "round": "--border-radius-full-round"
+    },
+    "color": {
+      "gray_default": { "background": "--color-background-accent-gray-default-default", "content": "--color-content-default" },
+      "gray_bold": { "background": "--color-background-accent-gray-bold-default", "content": "--color-content-inverse" },
+      "brand_default": { "background": "--color-background-brand-primary-default-default", "content": "--color-content-brand-primary-default" },
+      "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse" },
+      "red_default": { "background": "--color-background-accent-red-default-default", "content": "--color-content-accent-red-default" },
+      "red_bold": { "background": "--color-background-accent-red-bold-default", "content": "--color-content-inverse" },
+      "orange_default": { "background": "--color-background-accent-orange-default-default", "content": "--color-content-accent-orange-default" },
+      "orange_bold": { "background": "--color-background-accent-orange-bold-default", "content": "--color-content-inverse" },
+      "yellow_default": { "background": "--color-background-accent-yellow-default-default", "content": "--color-content-accent-yellow-default" },
+      "yellow_bold": { "background": "--color-background-accent-yellow-bold-default", "content": "--color-content-inverse" },
+      "green_default": { "background": "--color-background-accent-green-default-default", "content": "--color-content-accent-green-default" },
+      "green_bold": { "background": "--color-background-accent-green-bold-default", "content": "--color-content-inverse" },
+      "teal_default": { "background": "--color-background-accent-teal-default-default", "content": "--color-content-accent-teal-default" },
+      "teal_bold": { "background": "--color-background-accent-teal-bold-default", "content": "--color-content-inverse" },
+      "blue_default": { "background": "--color-background-accent-blue-default-default", "content": "--color-content-accent-blue-default" },
+      "blue_bold": { "background": "--color-background-accent-blue-bold-default", "content": "--color-content-inverse" },
+      "purple_default": { "background": "--color-background-accent-purple-default-default", "content": "--color-content-accent-purple-default" },
+      "purple_bold": { "background": "--color-background-accent-purple-bold-default", "content": "--color-content-inverse" },
+      "magenta_default": { "background": "--color-background-accent-magenta-default-default", "content": "--color-content-accent-magenta-default" },
+      "magenta_bold": { "background": "--color-background-accent-magenta-bold-default", "content": "--color-content-inverse" }
+    }
+  },
+  "accessibility": {
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "decorative": {
+      "supported": true,
+      "prop": "decorative",
+      "default": true,
+      "whenTrue": "aria-hidden=true, no role",
+      "whenFalse": "role=img, aria-label from ariaLabel"
+    },
+    "requirements": [
+      "Do not add button behavior.",
+      "Do not add keyboard interaction.",
+      "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
+      "Ensure color contrast meets requirements for all tone/appearance combinations."
+    ]
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Render a non-interactive div.",
+    "Do not make Icon Tile focusable.",
+    "Do not add hover, pressed, active, loading, or disabled states.",
+    "Default tone is brand, default appearance is default, default shape is square, default size is md.",
+    "Apply data-tone, data-appearance, data-shape, and data-size equal to the selected values.",
+    "Force the passed-in icon to inherit color and fill the computed icon-size box by overriding its own data-color/data-size attributes.",
+    "Support className composition."
+  ],
+  "compositionRules": [
+    "Icon Tile may appear in feature sections, empty states, cards, and list items.",
+    "Use Icon Button instead if the icon needs to be clickable.",
+    "Use Badge or Tag instead of Icon Tile for text/count content.",
+    "Pass any icon from the generated icon set as children; it does not need its own color or size props set."
+  ],
+  "contentRules": [
+    "Exactly one icon as children.",
+    "No text content.",
+    "No multiple icons."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes.",
+    "All background/content colors use semantic CSS variables that already resolve per-theme."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, radius, or typography when tokens exist.",
+    "Icon size is derived via calc() as 2/3 of the container size rather than five separate icon-size tokens, since the Figma source data confirms an exact 2/3 ratio at every size.",
+    "The icon color/size override uses a compound CSS Modules + :global() attribute selector against the icon's own data-color/data-size attributes, mirroring Icon Button's existing `.content :global([data-color])` pattern - this reliably wins specificity over the icon's own single-class color/size rules without needing !important."
+  ],
+  "relatedComponents": ["Icon", "Avatar", "IconButton", "Badge", "Tag"],
+  "do": [
+    "Use for feature call-outs and empty states.",
+    "Use bold appearance for stronger visual weight.",
+    "Use round shape to match nearby circular elements like Avatar.",
+    "Keep implementation simple - one icon, no text."
+  ],
+  "dont": [
+    "Do not use for clickable actions.",
+    "Do not use for count/text content.",
+    "Do not add interactive states.",
+    "Do not pass more than one icon."
+  ],
+  "acceptanceCriteria": [
+    "Renders children (the icon).",
+    "Defaults to tone=brand, appearance=default, shape=square, size=md.",
+    "Supports all IconTileTone, IconTileAppearance, IconTileShape, and IconTileSize values.",
+    "Applies data-tone, data-appearance, data-shape, and data-size for the selected values.",
+    "decorative=true (default) renders aria-hidden with no role.",
+    "decorative=false renders role=img with aria-label from ariaLabel.",
+    "Supports className.",
+    "Uses tokenized sizing, radius, and colors for every tone/appearance/shape/size combination.",
+    "Icon inherits tile color and fills the computed icon-size box regardless of the icon's own defaults.",
+    "Storybook includes Playground, Variants, Sizes, Shapes, and Composition.",
+    "Tests cover children, defaults, each prop, decorative behavior, className, and token usage."
+  ],
+  "knownLimitations": [
+    "No xl size (Figma source has none).",
+    "No border/outline variant.",
+    "Icon color/size override relies on the icon's data-color/data-size attributes existing, which is only guaranteed for icons built on the shared Icon primitive."
+  ],
+  "futureEnhancements": [
+    "xl size if Figma adds one",
+    "Border/outline variant for low-contrast surfaces"
+  ]
+}

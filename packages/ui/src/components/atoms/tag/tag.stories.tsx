@@ -12,7 +12,7 @@ const elemBeforeOptions = {
   calendar: <CalendarIcon size="sm" />,
 } as const;
 
-const tones: TagTone[] = ['standard', 'blue', 'green', 'purple', 'red', 'teal', 'yellow', 'orange', 'magenta', 'brand'];
+const tones: TagTone[] = ['default', 'blue', 'green', 'purple', 'red', 'teal', 'yellow', 'orange', 'magenta', 'brand'];
 
 const meta = {
   title: 'UI/Atoms/Tag',
@@ -20,7 +20,7 @@ const meta = {
   args: {
     children: 'Averill Family Living Trust',
     size: 'md',
-    tone: 'standard',
+    tone: 'default',
     href: undefined,
     target: '_self',
     isRemovable: false,
@@ -111,7 +111,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * Tone is a broad enumeration (not a paired emphasis/meaning split like Button) - `standard` is the
+ * Tone is a broad enumeration (not a paired emphasis/meaning split like Button) - `default` is the
  * neutral default, `brand` ties to the product's own color, and the rest are general-purpose accent
  * tones with no fixed semantic meaning of their own. The four rows below are the fundamentally
  * different rendered forms: plain text, a native anchor, a wrapper with a remove button, and both

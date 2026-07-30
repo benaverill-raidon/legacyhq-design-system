@@ -14,7 +14,8 @@ const COLLECTION_WRAPPERS = new Set([
   "Semantic: Border",
   "Semantic: Color",
   "Semantic: Dimension",
-  "Semantic: Typography"
+  "Semantic: Typography",
+  "Semantic: Motion"
 ]);
 const THEME_MODE_WRAPPERS = new Set(["Light", "Dark"]);
 

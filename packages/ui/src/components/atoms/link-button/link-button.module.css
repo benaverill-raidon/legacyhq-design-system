@@ -26,12 +26,24 @@
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick),
+    transform var(--move-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .linkButton {
+    transition-duration: 0ms;
+  }
 }
 
 .linkButton[data-loading='true'],
 .linkButton[data-loading='true']:hover,
 .linkButton[data-loading='true']:active {
   cursor: progress;
+}
+
+.linkButton:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  transform: scale(0.98);
 }
 
 .size_xs {

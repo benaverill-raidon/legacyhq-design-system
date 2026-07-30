@@ -1,0 +1,195 @@
+{
+  "name": "Breadcrumbs",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Show a user's location in a nested/hierarchical section via an ordered trail of ancestor links ending in the current page.",
+  "intent": "Provide a consistent, accessible 'you are here' trail composed from the existing Link atom, rather than every page reinventing separators and spacing.",
+  "nativeElement": "nav",
+  "sourceFiles": {
+    "component": "breadcrumbs.tsx",
+    "types": "breadcrumbs.types.ts",
+    "styles": "breadcrumbs.module.css",
+    "stories": "Breadcrumbs.stories.tsx",
+    "tests": "Breadcrumbs.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentNodeId": "2026:746",
+    "componentName": "breadcrumbs",
+    "isVariantSet": false,
+    "note": "A single component (not a variant set) showing 8 repeated breadcrumb-item instances - no size/tone axis to capture.",
+    "itemPartNodeId": "2022:861",
+    "itemPartName": "code-parts / <breadcrumb-item>/default",
+    "itemComponentProperties": {
+      "text": { "type": "TEXT", "value": "Crumb" },
+      "iconBefore": { "type": "BOOLEAN", "value": false },
+      "iconAfter": { "type": "BOOLEAN", "value": false }
+    },
+    "figmaLayoutData": {
+      "rootItemSpacing": 8,
+      "rootItemSpacingToken": "space/100",
+      "itemInternalSpacing": 8,
+      "itemInternalSpacingToken": "space/100",
+      "separatorHiddenOnFirstItem": true,
+      "separatorCharacter": "/",
+      "separatorTypographyToken": "typography/body/md",
+      "separatorColorToken": "color/content/subtle",
+      "linkInstanceProps": { "appearance": "subtle", "size": "md", "state": "default" }
+    },
+    "apiAdaptationNotes": [
+      "Figma's 8-item demo renders every crumb - including the last - as an identical Link instance with no distinct 'current page' treatment. The component deliberately renders the last item in `items` as non-interactive text with aria-current=\"page\" instead, per the WAI-ARIA Breadcrumb Pattern - documented here as an intentional adaptation, not a literal 1:1 reproduction.",
+      "Whether an item is 'current' is derived from the absence of `href`, not a separate isCurrent flag - simplest possible rule, consistent with Link's own required `href`.",
+      "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part."
+    ]
+  },
+  "useCases": [
+    "multi-level settings pages",
+    "nested folder/category browsing",
+    "any page needing a location trail back to ancestor levels"
+  ],
+  "antiPatterns": [
+    "primary navigation for a shallow/single-level app",
+    "linear flow progress with unvisited future steps",
+    "more than one trail per page"
+  ],
+  "anatomy": [
+    { "part": "root", "element": "nav", "required": true, "description": "Landmark with an accessible name (default 'Breadcrumb')." },
+    { "part": "list", "element": "ol", "required": true, "description": "Ordered list of breadcrumb items." },
+    { "part": "item", "element": "li", "required": true, "description": "One per entry in `items`, in order." },
+    { "part": "separator", "element": "span (aria-hidden)", "required": false, "description": "A literal '/' character before every item except the first." },
+    { "part": "link", "element": "Link (atom)", "required": false, "description": "Rendered for every item that has an href." },
+    { "part": "current", "element": "span[aria-current=page]", "required": false, "description": "Rendered for the item without an href - always the last item in practice." }
+  ],
+  "props": {
+    "items": {
+      "type": "BreadcrumbItem[]",
+      "required": true,
+      "default": null,
+      "description": "Ordered list of trail entries, root first, current page last."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Breadcrumb",
+      "description": "Accessible name for the nav landmark."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Optional custom class name for the root nav."
+    }
+  },
+  "itemProps": {
+    "label": { "type": "React.ReactNode", "required": true, "description": "The visible text/content for this level." },
+    "href": { "type": "string", "required": false, "description": "Presence makes the item a Link; absence marks it as the current page." },
+    "target": { "type": "React.HTMLAttributeAnchorTarget", "required": false, "default": "_self", "description": "Forwarded to Link." },
+    "iconBefore": { "type": "React.ReactNode", "required": false, "description": "Optional icon rendered before the label." },
+    "iconAfter": { "type": "React.ReactNode", "required": false, "description": "Optional icon rendered after the label." },
+    "onClick": { "type": "React.MouseEventHandler<HTMLAnchorElement>", "required": false, "description": "Forwarded to Link; only applicable to non-current items." }
+  },
+  "variants": {},
+  "sizes": [],
+  "states": ["default", "current"],
+  "slots": [
+    {
+      "name": "items[].label",
+      "required": true,
+      "supports": ["short text", "short inline elements"]
+    },
+    {
+      "name": "items[].iconBefore / items[].iconAfter",
+      "required": false,
+      "supports": ["a small icon from the generated icon set"]
+    }
+  ],
+  "tokens": {
+    "spacing": {
+      "betweenItems": "--spacing-sm",
+      "separatorToLabel": "--spacing-sm",
+      "iconToLabel": "--spacing-xs"
+    },
+    "typography": {
+      "link": "inherited from Link size=md (--typography-heading-xs-*)",
+      "current": "--typography-heading-xs-*",
+      "separator": "--typography-body-md-*"
+    },
+    "color": {
+      "link": "inherited from Link appearance=subtle",
+      "current": "--color-content-default",
+      "separator": "--color-content-subtle"
+    }
+  },
+  "accessibility": {
+    "interactive": true,
+    "focusable": "each non-current item (via Link)",
+    "role": null,
+    "landmark": "nav",
+    "requirements": [
+      "nav must always have an accessible name (aria-label, default 'Breadcrumb').",
+      "The current (last, href-less) item must carry aria-current=\"page\".",
+      "Separators must be aria-hidden.",
+      "Do not add role=list/listitem manually - ol/li already carry the correct implicit roles."
+    ]
+  },
+  "keyboardInteraction": ["Tab moves through each ancestor Link in order; the current item is not focusable."],
+  "behaviorRules": [
+    "Render items in the given order, one li per item.",
+    "Render a '/' separator before every item except the first.",
+    "Render an item with href as the Link atom (appearance=subtle, size=md).",
+    "Render an item without href as non-interactive text with aria-current=\"page\".",
+    "Render iconBefore/iconAfter around the label when provided.",
+    "Default ariaLabel to 'Breadcrumb'."
+  ],
+  "compositionRules": [
+    "Breadcrumbs always renders Link for ancestor items - do not restyle or reimplement Link's own hover/focus/pressed treatment locally.",
+    "Use Progress Indicator instead of Breadcrumbs for step-based flow progress."
+  ],
+  "contentRules": [
+    "Keep labels short - no truncation or wrapping is built in.",
+    "The last item in `items` should not have an href."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes - all color comes from semantic tokens (Link's own tokens, plus --color-content-default/--color-content-subtle)."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, or typography.",
+    "Reuse the Link atom directly for every ancestor item rather than reimplementing anchor styling."
+  ],
+  "relatedComponents": ["Link", "ProgressIndicator"],
+  "do": [
+    "Use for a real hierarchical location trail.",
+    "Omit href on the current (last) item so it renders as aria-current text.",
+    "Keep labels short."
+  ],
+  "dont": [
+    "Do not use for shallow/single-level navigation.",
+    "Do not use for linear flow progress with unvisited steps.",
+    "Do not add href to the current/last item unless it should actually be a link."
+  ],
+  "acceptanceCriteria": [
+    "Renders one li per item, in order.",
+    "No separator before the first item; a separator before every subsequent item.",
+    "Items with href render as Link.",
+    "The item without href renders as non-interactive text with aria-current=\"page\".",
+    "iconBefore/iconAfter render when provided.",
+    "nav has an accessible name, defaulting to 'Breadcrumb'.",
+    "Supports className on the root.",
+    "Uses --spacing-sm between items and --spacing-xs between an icon and its label.",
+    "Storybook includes Playground and Composition.",
+    "Tests cover ordering, separator placement, link vs current rendering, icons, ariaLabel, and className."
+  ],
+  "knownLimitations": [
+    "No truncation, wrapping, or collapsed/overflow behavior for long trails or narrow containers."
+  ],
+  "futureEnhancements": [
+    "A collapsed/overflow variant (e.g. 'Home / ... / Security') for long trails"
+  ]
+}

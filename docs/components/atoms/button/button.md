@@ -36,5 +36,6 @@ Pressed state also scales down to `0.98` using the `move-quick` token (the sprin
 - Link Button
 - Toggle Button
 - Toggle Icon Button
+- Button Group (for laying out two or more related Buttons with consistent spacing)
 - Spinner
 - Focus Ring

@@ -1,0 +1,13 @@
+.root {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.orientation_horizontal {
+  flex-direction: row;
+}
+
+.orientation_vertical {
+  flex-direction: column;
+}

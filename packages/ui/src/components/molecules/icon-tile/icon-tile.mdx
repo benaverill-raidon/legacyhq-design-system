@@ -1,0 +1,174 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as IconTileStories from './IconTile.stories';
+
+<Meta of={IconTileStories} name="Docs" />
+
+# Icon Tile
+
+Icon Tile pairs a single icon with a colored, sized background shape. It gives an icon more visual
+emphasis than a bare icon or an Icon Button affords - use it where an icon should read as a small
+piece of imagery, not as a clickable control.
+
+<Canvas of={IconTileStories.Playground} />
+
+## When to use
+
+- A feature or benefit needs a small, colored icon graphic.
+- A list or card needs a leading visual that categorizes its content by color/hue.
+- An empty state needs a single colored icon as its illustration.
+
+## When not to use
+
+- **As a clickable control.** Icon Tile has no interactive states and no `onClick` - use
+  `IconButton` if the icon needs to respond to input.
+- **For a count or short text value.** Use `Badge` or `Tag` - Icon Tile has no text slot.
+- **With more than one icon.** Icon Tile centers exactly one icon.
+
+## Anatomy
+
+Icon Tile has two parts: a sized, colored `div` root, and a single icon (`children`) centered
+inside it. There is no text slot and no border by default.
+
+## Usage guidance
+
+### Tone vs. appearance
+
+The Figma source models hue and boldness as one flattened 20-value `appearance` property (for
+example `red`, `redBold`). This component splits that into two independent props, matching this
+system's existing convention of separating visual weight from meaning (see `Button`):
+
+- **`tone`** - the hue/semantic meaning: `gray`, `brand`, or one of eight accent hues.
+- **`appearance`** - the visual weight: `default` (a subtle tint) or `bold` (a solid, saturated
+  fill with an inverse/white icon).
+
+<Canvas of={IconTileStories.Variants} />
+
+### Choosing a shape
+
+`shape="square"` (the default) is a rounded-square container. `shape="round"` is fully circular -
+reach for it when the tile sits next to circular elements like `Avatar`.
+
+<Canvas of={IconTileStories.Shapes} />
+
+### Choosing a size
+
+Icon Tile has five sizes, `xxs` through `lg`. The icon inside is always sized to two-thirds of the
+tile - there's no separate icon-size prop to keep in sync.
+
+<Canvas of={IconTileStories.Sizes} />
+
+### Accessible labelling
+
+Icon Tile is `decorative` (aria-hidden) by default, because in most compositions the icon
+reinforces meaning that adjacent text already conveys - a feature title, a list label. Set
+`decorative={false}` with `ariaLabel` only when the tile is the *only* carrier of that meaning.
+
+<Canvas of={IconTileStories.Composition} />
+
+## Do / Don't
+
+**Do** let adjacent text carry the meaning and leave Icon Tile decorative.
+
+```tsx
+<div>
+  <IconTile tone="brand">
+    <CheckIcon />
+  </IconTile>
+  <span>Automated backups</span>
+</div>
+```
+
+**Don't** wrap Icon Tile in a click handler to make it interactive.
+
+```tsx
+<IconTile onClick={openDetails}>
+  <CheckIcon />
+</IconTile>
+```
+
+---
+
+**Do** use `decorative={false}` and `ariaLabel` when the tile stands alone.
+
+```tsx
+<IconTile decorative={false} ariaLabel="Error">
+  <CloseIcon />
+</IconTile>
+```
+
+**Don't** put text content inside Icon Tile.
+
+```tsx
+<IconTile>3</IconTile>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. A single icon element, e.g. <code>&lt;CheckIcon /&gt;</code>.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'gray' | 'brand' | 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple' | 'magenta'</code></td>
+      <td><code>'brand'</code></td>
+      <td>Hue/semantic meaning of the tile.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'bold'</code></td>
+      <td><code>'default'</code></td>
+      <td>Visual weight - <code>bold</code> is a solid fill with an inverse icon.</td>
+    </tr>
+    <tr>
+      <td><code>shape</code></td>
+      <td><code>'square' | 'round'</code></td>
+      <td><code>'square'</code></td>
+      <td>Container shape.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xxs' | 'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Overall tile size. Icon size is always two-thirds of this.</td>
+    </tr>
+    <tr>
+      <td><code>decorative</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>When <code>true</code>, the tile is <code>aria-hidden</code>. When <code>false</code>, renders <code>role="img"</code> with <code>ariaLabel</code>.</td>
+    </tr>
+    <tr>
+      <td><code>ariaLabel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible label, used only when <code>decorative</code> is <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Icon** - the primitive Icon Tile always wraps as `children`.
+- **Avatar** - a similarly sized, similarly shaped container, but for a person/entity rather than a
+  symbol.
+- **Icon Button** - when the icon needs to be a clickable action instead of a static visual.
+- **Badge** / **Tag** - for numeric or text content instead of a standalone icon.

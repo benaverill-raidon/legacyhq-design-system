@@ -1,0 +1,51 @@
+{
+  "component": "ButtonGroup",
+  "examples": [
+    {
+      "name": "Default horizontal group",
+      "description": "Two related actions in a row.",
+      "jsx": "<ButtonGroup>\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+      "props": {}
+    },
+    {
+      "name": "Three actions",
+      "description": "A toolbar-style row of independent actions.",
+      "jsx": "<ButtonGroup>\n  <Button size=\"sm\">Button 1</Button>\n  <Button size=\"sm\">Button 2</Button>\n  <Button size=\"sm\">Button 3</Button>\n</ButtonGroup>",
+      "props": {}
+    },
+    {
+      "name": "Vertical orientation",
+      "description": "Stacked actions in a compact layout.",
+      "jsx": "<ButtonGroup orientation=\"vertical\">\n  <Button size=\"sm\">Button 1</Button>\n  <Button size=\"sm\">Button 2</Button>\n</ButtonGroup>",
+      "props": {
+        "orientation": "vertical"
+      }
+    },
+    {
+      "name": "Labelled group",
+      "description": "role=group is added automatically once aria-label is present.",
+      "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+      "props": {
+        "aria-label": "Document actions"
+      }
+    },
+    {
+      "name": "Mixed Button and IconButton",
+      "description": "IconButton composes into the same group as Button.",
+      "jsx": "<ButtonGroup aria-label=\"Row actions\">\n  <IconButton aria-label=\"Edit\"><EditIcon /></IconButton>\n  <IconButton aria-label=\"Delete\"><DeleteIcon /></IconButton>\n</ButtonGroup>",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Single button",
+      "jsx": "<ButtonGroup>\n  <Button>Save</Button>\n</ButtonGroup>",
+      "reason": "Button Group adds no value with only one child; render the Button directly."
+    },
+    {
+      "name": "Segmented/exclusive selection",
+      "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
+      "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+    }
+  ]
+}

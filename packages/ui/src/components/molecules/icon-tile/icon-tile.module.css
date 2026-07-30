@@ -1,0 +1,174 @@
+.root {
+  --icon-tile-size: var(--size-500);
+  --icon-tile-radius: var(--border-radius-lg);
+  --icon-tile-icon-size: calc(var(--icon-tile-size) * 2 / 3);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: var(--icon-tile-size);
+  block-size: var(--icon-tile-size);
+  border-radius: var(--icon-tile-radius);
+  flex: 0 0 auto;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-tile-icon-size);
+  block-size: var(--icon-tile-icon-size);
+  color: inherit;
+  flex: 0 0 auto;
+}
+
+/*
+ * The passed-in icon (an Icon-primitive-based component) sets its own explicit color/size via
+ * its own CSS Module classes. This compound selector - a local class plus a global attribute
+ * selector - has higher specificity than the icon's own single-class rules, so it reliably wins
+ * without !important. Same technique as Icon Button's `.content :global([data-color])` rule.
+ */
+.icon :global([data-size]) {
+  --icon-size: 100%;
+  --icon-container-size: 100%;
+}
+
+.icon :global([data-color]) {
+  color: inherit;
+}
+
+.size_xxs {
+  --icon-tile-size: var(--size-200);
+  --icon-tile-radius: var(--border-radius-sm);
+}
+
+.size_xs {
+  --icon-tile-size: var(--size-300);
+  --icon-tile-radius: var(--border-radius-sm);
+}
+
+.size_sm {
+  --icon-tile-size: var(--size-400);
+  --icon-tile-radius: var(--border-radius-lg);
+}
+
+.size_md {
+  --icon-tile-size: var(--size-500);
+  --icon-tile-radius: var(--border-radius-lg);
+}
+
+.size_lg {
+  --icon-tile-size: var(--size-600);
+  --icon-tile-radius: var(--border-radius-xl);
+}
+
+.shape_square {
+  border-radius: var(--icon-tile-radius);
+}
+
+.shape_round {
+  border-radius: var(--border-radius-full-round);
+}
+
+.tone_gray.appearance_default {
+  background: var(--color-background-accent-gray-default-default);
+  color: var(--color-content-default);
+}
+
+.tone_gray.appearance_bold {
+  background: var(--color-background-accent-gray-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_brand.appearance_default {
+  background: var(--color-background-brand-primary-default-default);
+  color: var(--color-content-brand-primary-default);
+}
+
+.tone_brand.appearance_bold {
+  background: var(--color-background-brand-primary-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_red.appearance_default {
+  background: var(--color-background-accent-red-default-default);
+  color: var(--color-content-accent-red-default);
+}
+
+.tone_red.appearance_bold {
+  background: var(--color-background-accent-red-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_orange.appearance_default {
+  background: var(--color-background-accent-orange-default-default);
+  color: var(--color-content-accent-orange-default);
+}
+
+.tone_orange.appearance_bold {
+  background: var(--color-background-accent-orange-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_yellow.appearance_default {
+  background: var(--color-background-accent-yellow-default-default);
+  color: var(--color-content-accent-yellow-default);
+}
+
+.tone_yellow.appearance_bold {
+  background: var(--color-background-accent-yellow-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_green.appearance_default {
+  background: var(--color-background-accent-green-default-default);
+  color: var(--color-content-accent-green-default);
+}
+
+.tone_green.appearance_bold {
+  background: var(--color-background-accent-green-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_teal.appearance_default {
+  background: var(--color-background-accent-teal-default-default);
+  color: var(--color-content-accent-teal-default);
+}
+
+.tone_teal.appearance_bold {
+  background: var(--color-background-accent-teal-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_blue.appearance_default {
+  background: var(--color-background-accent-blue-default-default);
+  color: var(--color-content-accent-blue-default);
+}
+
+.tone_blue.appearance_bold {
+  background: var(--color-background-accent-blue-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_purple.appearance_default {
+  background: var(--color-background-accent-purple-default-default);
+  color: var(--color-content-accent-purple-default);
+}
+
+.tone_purple.appearance_bold {
+  background: var(--color-background-accent-purple-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.tone_magenta.appearance_default {
+  background: var(--color-background-accent-magenta-default-default);
+  color: var(--color-content-accent-magenta-default);
+}
+
+.tone_magenta.appearance_bold {
+  background: var(--color-background-accent-magenta-bold-default);
+  color: var(--color-content-inverse);
+}

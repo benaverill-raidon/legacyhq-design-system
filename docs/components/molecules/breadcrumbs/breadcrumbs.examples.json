@@ -1,0 +1,54 @@
+{
+  "component": "Breadcrumbs",
+  "examples": [
+    {
+      "name": "Two-level trail",
+      "description": "One ancestor link, current page last.",
+      "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account' },\n  ]}\n/>",
+      "props": {
+        "items": [
+          { "label": "Settings", "href": "/settings" },
+          { "label": "Account" }
+        ]
+      }
+    },
+    {
+      "name": "Deep trail",
+      "description": "Several ancestor links.",
+      "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account', href: '/settings/account' },\n    { label: 'Security' },\n  ]}\n/>",
+      "props": {}
+    },
+    {
+      "name": "With a leading icon",
+      "description": "A home icon before the first crumb's label.",
+      "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Home', href: '/', iconBefore: <HomeIcon size=\"sm\" /> },\n    { label: 'Reports', href: '/reports' },\n    { label: 'Q3 Summary' },\n  ]}\n/>",
+      "props": {}
+    },
+    {
+      "name": "Custom accessible name",
+      "description": "Overriding the default 'Breadcrumb' nav label.",
+      "jsx": "<Breadcrumbs\n  ariaLabel=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
+      "props": {
+        "ariaLabel": "You are here"
+      }
+    },
+    {
+      "name": "Single item (current page only)",
+      "description": "A top-level page with no ancestors - renders as plain current-page text, no separator.",
+      "jsx": "<Breadcrumbs items={[{ label: 'Dashboard' }]} />",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Current item with an href",
+      "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account', href: '/settings/account' },\n  ]}\n/>",
+      "reason": "Giving the last item an href makes it render as a clickable Link instead of the aria-current=\"page\" current-page marker - omit href on the last item unless it should genuinely be a link."
+    },
+    {
+      "name": "Progress through an unvisited flow",
+      "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Step 1' },\n    { label: 'Step 2' },\n    { label: 'Step 3' },\n  ]}\n/>",
+      "reason": "Breadcrumbs shows a location trail of visited/navigable ancestors, not linear progress through unvisited steps - use Progress Indicator instead."
+    }
+  ]
+}

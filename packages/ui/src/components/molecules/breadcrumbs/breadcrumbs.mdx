@@ -1,0 +1,171 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as BreadcrumbsStories from './Breadcrumbs.stories';
+
+<Meta of={BreadcrumbsStories} name="Docs" />
+
+# Breadcrumbs
+
+Breadcrumbs are a navigation system used to show a user's location in a site or app - an ordered
+trail from a root section down to the current page, letting people jump back to any ancestor in
+one step.
+
+<Canvas of={BreadcrumbsStories.Playground} />
+
+## When to use
+
+- Deep or nested sections - multi-level settings, nested folders/categories.
+- Anywhere "how did I get here, and how do I go back" is a real question.
+
+## When not to use
+
+- **For a shallow or single-level app.** Breadcrumbs adds hierarchy signal that doesn't exist.
+- **For linear flow progress with unvisited future steps.** Use `ProgressIndicator` instead - that's
+  progress through a sequence, not a location trail.
+- **More than once per page.**
+
+## Anatomy
+
+Breadcrumbs renders a `nav` landmark containing an `ol` of `li` items. A `/` separator precedes
+every item except the first. Every item with an `href` renders as the real `Link` atom; the item
+without one - always the last - renders as non-interactive text carrying `aria-current="page"`.
+
+## Usage guidance
+
+### The current page isn't a link
+
+The Figma source demo renders all 8 example crumbs identically, as `Link` instances. This component
+deliberately diverges from that literal sample: whichever item in `items` has no `href` renders as
+plain, non-interactive text instead - matching the WAI-ARIA Breadcrumb Pattern, where the current
+page is announced (`aria-current="page"`) but not clickable. In practice, that's always the last
+item - omit `href` there and the component takes care of the rest.
+
+<Canvas of={BreadcrumbsStories.Composition} />
+
+### Adding icons
+
+`iconBefore` and `iconAfter` accept any `ReactNode` - typically a small icon from the generated icon
+set (`size="sm"` reads well against the trail's text size).
+
+## Do / Don't
+
+**Do** omit `href` on the current (last) item.
+
+```tsx
+<Breadcrumbs
+  items={[
+    { label: 'Settings', href: '/settings' },
+    { label: 'Account' },
+  ]}
+/>
+```
+
+**Don't** give every item an href, including the current page.
+
+```tsx
+<Breadcrumbs
+  items={[
+    { label: 'Settings', href: '/settings' },
+    { label: 'Account', href: '/settings/account' },
+  ]}
+/>
+```
+
+---
+
+**Do** use Breadcrumbs for a real hierarchy.
+
+```tsx
+<Breadcrumbs items={[{ label: 'Docs', href: '/docs' }, { label: 'Components' }]} />
+```
+
+**Don't** use Breadcrumbs to show progress through a linear, not-yet-visited flow.
+
+```tsx
+{
+  /* Use ProgressIndicator instead. */
+}
+<Breadcrumbs items={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]} />;
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>items</code></td>
+      <td><code>BreadcrumbItem[]</code></td>
+      <td>-</td>
+      <td>Required. Ordered trail, root first, current page last.</td>
+    </tr>
+    <tr>
+      <td><code>ariaLabel</code></td>
+      <td><code>string</code></td>
+      <td><code>'Breadcrumb'</code></td>
+      <td>Accessible name for the <code>nav</code> landmark.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>nav</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+### `BreadcrumbItem`
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The visible content for this level.</td>
+    </tr>
+    <tr>
+      <td><code>href</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Presence makes the item a <code>Link</code>; absence marks it as the current page.</td>
+    </tr>
+    <tr>
+      <td><code>target</code></td>
+      <td><code>React.HTMLAttributeAnchorTarget</code></td>
+      <td><code>'_self'</code></td>
+      <td>Forwarded to <code>Link</code>.</td>
+    </tr>
+    <tr>
+      <td><code>iconBefore</code> / <code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional icon rendered before/after the label.</td>
+    </tr>
+    <tr>
+      <td><code>onClick</code></td>
+      <td><code>React.MouseEventHandler&lt;HTMLAnchorElement&gt;</code></td>
+      <td>-</td>
+      <td>Forwarded to <code>Link</code>; only applies to non-current items.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Link** - the atom every non-current crumb wraps.
+- **Progress Indicator** - for step-based progress through a flow, rather than a location trail.

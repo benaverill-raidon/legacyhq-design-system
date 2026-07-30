@@ -1,0 +1,73 @@
+{
+  "component": "IconTile",
+  "examples": [
+    {
+      "name": "Default brand tile",
+      "description": "Default tone, appearance, shape, and size.",
+      "jsx": "<IconTile><CheckIcon /></IconTile>",
+      "props": {}
+    },
+    {
+      "name": "Bold brand tile",
+      "description": "Bold appearance for stronger visual weight.",
+      "jsx": "<IconTile appearance=\"bold\"><CheckIcon /></IconTile>",
+      "props": {
+        "appearance": "bold"
+      }
+    },
+    {
+      "name": "Accent hue tile",
+      "description": "A chromatic accent tone for category coding.",
+      "jsx": "<IconTile tone=\"teal\"><StarStarredIcon /></IconTile>",
+      "props": {
+        "tone": "teal"
+      }
+    },
+    {
+      "name": "Round shape",
+      "description": "Fully rounded container, matching a nearby Avatar.",
+      "jsx": "<IconTile shape=\"round\" tone=\"purple\"><StarStarredIcon /></IconTile>",
+      "props": {
+        "shape": "round",
+        "tone": "purple"
+      }
+    },
+    {
+      "name": "Small size in a list item",
+      "description": "A compact tile leading a list row.",
+      "jsx": "<IconTile size=\"sm\" tone=\"green\"><CheckIcon /></IconTile>",
+      "props": {
+        "size": "sm",
+        "tone": "green"
+      }
+    },
+    {
+      "name": "Large size with accessible label",
+      "description": "Tile is the sole carrier of meaning, so decorative is turned off.",
+      "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} ariaLabel=\"Error\"><CheckIcon /></IconTile>",
+      "props": {
+        "size": "lg",
+        "tone": "red",
+        "decorative": false,
+        "ariaLabel": "Error"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Clickable icon tile",
+      "jsx": "<IconTile onClick={handleClick}><CheckIcon /></IconTile>",
+      "reason": "Icon Tile is non-interactive and has no onClick prop; use Icon Button for a clickable icon."
+    },
+    {
+      "name": "Text content",
+      "jsx": "<IconTile>3</IconTile>",
+      "reason": "Icon Tile expects an icon element, not text. Use Badge for a numeric value."
+    },
+    {
+      "name": "Multiple icons",
+      "jsx": "<IconTile><CheckIcon /><StarStarredIcon /></IconTile>",
+      "reason": "Icon Tile supports exactly one icon."
+    }
+  ]
+}

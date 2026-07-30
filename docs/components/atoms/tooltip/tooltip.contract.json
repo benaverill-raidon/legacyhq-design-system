@@ -19,9 +19,9 @@
       "--typography-body-sm-font-family",
       "--spacing-xxs",
       "--spacing-xs",
-      "--spacing-sm",
       "--border-radius-sm"
-    ]
+    ],
+    "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale."
   },
   "accessibility": {
     "triggeredBy": ["pointer", "focus"],

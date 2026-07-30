@@ -237,7 +237,7 @@ describe('ToggleIconButton', () => {
     expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
     expect(toggleIconButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
     expect(toggleIconButtonCss).toContain('border-color: var(--color-border-brand-primary);');
-    expect(toggleIconButtonCss).toContain('color: var(--color-content-brand-primary);');
+    expect(toggleIconButtonCss).toContain('color: var(--color-content-brand-primary-default);');
     expect(toggleIconButtonCss).toContain('border-radius: var(--border-radius-full-round);');
     expect(toggleIconButtonCss).toMatch(/\.tone_default \{[\s\S]*?background: transparent;/);
     expect(toggleIconButtonCss).toMatch(
@@ -246,5 +246,16 @@ describe('ToggleIconButton', () => {
     expect(toggleIconButtonCss).not.toContain('--component-button-');
     expect(toggleIconButtonCss).not.toContain('--color-background-selected-');
     expect(toggleIconButtonCss).not.toContain('--color-border-selected');
+  });
+
+  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+    expect(toggleIconButtonCss).toContain("[data-force-state='hover']");
+    expect(toggleIconButtonCss).toContain("[data-force-state='active']");
+  });
+
+  it('shows the hover fill on focus-visible too, matching Button', () => {
+    expect(toggleIconButtonCss).toMatch(
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
+    );
   });
 });

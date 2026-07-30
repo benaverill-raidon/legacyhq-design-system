@@ -151,7 +151,7 @@ Map to semantic content tokens:
 default     -> --color-content-default
 subtle      -> --color-content-subtle
 inverse     -> --color-content-inverse
-brand       -> --color-content-brand-primary
+brand       -> --color-content-brand-primary-default
 success     -> --color-content-success
 warning     -> --color-content-warning
 error       -> --color-content-error

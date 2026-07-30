@@ -22,7 +22,7 @@ Use Icon Button when the action is recognizable from an icon and available space
 
 ## Disabled and loading behavior
 
-- [ ] `isDisabled` keeps the button natively disabled.
+- [ ] `disabled` keeps the button natively disabled.
 - [ ] Disabled Icon Button may still show a pointer-triggered tooltip explanation.
 - [ ] Disabled tooltip support must not add an extra tab stop.
 - [ ] `isLoading` replaces the icon with Spinner.

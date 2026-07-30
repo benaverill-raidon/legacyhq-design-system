@@ -405,31 +405,45 @@ For `SliderRange`:
 
 ## Storybook Structure
 
-Use atom story structure:
+Use atom documentation structure:
 
 ```txt
 Slider
+├─ Docs
 ├─ Playground
 ├─ Variants
-└─ Examples
+├─ Sizes
+├─ States
+├─ Content
+└─ Edge Cases
 ```
 
-Stories should include:
+### Variants
 
-- Playground
-- Slider default
-- SliderCentered default
-- SliderRange default
-- Horizontal orientation
-- Vertical orientation
-- xs / sm / md sizes
-- 0 / 50 / 100 values
-- -50 / 0 / 50 centered values
-- showStops
-- showValue
-- Disabled
-- Custom min/max/step
-- Dark surface example
+Show the three designed forms - `Slider`, `SliderCentered`, `SliderRange` - and orientation
+(horizontal/vertical), which every form shares.
+
+### Sizes
+
+Show `xs`/`sm`/`md`, plus a callout that the handle and track-stop dots are a constant size at
+every size - only the track thickness scales, and the handle must still land exactly on the
+endpoint dot at 0 and 100 regardless of size.
+
+### States
+
+Show enabled/hovered/pressed/focused/disabled matching Figma's variants, pinned with
+`data-preview-state`, plus a live example to verify by hand that clicking or dragging the handle
+never shows a focus ring on its own - only real keyboard focus does.
+
+### Content
+
+Show track-stop/step behavior (auto-derived and explicit), the value indicator (default and
+`showValue`), custom min/max/step, and realistic compositions including controlled examples.
+
+### Edge Cases
+
+Show overlapping range handles, `minDistance`/`disableSwap`, a narrow container, vertical
+orientation in a constrained space, and a dark surface example.
 
 ## Tests
 

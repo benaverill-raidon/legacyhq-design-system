@@ -28,7 +28,7 @@ Do not use Toggle Button for:
 - navigation; use Link Button
 - normal actions; use Button
 - settings that turn something on/off; use Switch
-- icon-only selected controls; use Toggle Icon Button later
+- icon-only selected controls; use Toggle Icon Button
 - mutually exclusive groups; use ToggleButtonGroup later
 
 ## Core principle
@@ -158,7 +158,13 @@ md
 lg
 ```
 
-Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry.
+Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry:
+24/32/40/48px tall, 4/8/8/12px corner radius, 6/8/12/16px inline padding - verified against Figma.
+
+The icon-to-text gap is a constant 6px (`--measurement-6`) at every size - verified by measuring
+Figma's own auto-layout itemSpacing, which is identical across xs/sm/md/lg. This isn't one of the
+named spacing tokens (4/8/12/16px), so it's aliased directly to the raw 6px measurement rather than
+a semantic spacing token.
 
 ## Icon support
 
@@ -263,15 +269,18 @@ Do not use Switch styles.
 
 ## Storybook
 
-Create:
+Unified story structure, matching the rest of the library:
 
 ```txt
-Toggle Button / Playground
-Toggle Button / Variants
-Toggle Button / Examples
+Toggle Button
+├─ Docs (.mdx)
+├─ Playground
+├─ Variants
+├─ Sizes
+├─ States
+├─ Content
+└─ EdgeCases
 ```
-
-Do not create separate States or Accessibility pages.
 
 ### Playground controls
 
@@ -287,24 +296,35 @@ iconAfter
 
 ### Variants story
 
-Show:
+Show `tone` (`default`/`subtle`) crossed with `isSelected` - the two designed forms and the state
+that overrides both - plus icon-before/icon-after examples.
 
-```txt
-sizes: xs | sm | md | lg
-tones: default | subtle
-selected: false | true
-icons: none | before | after
-disabled
-```
+### Sizes story
 
-### Examples story
+Show `xs`/`sm`/`md`/`lg` side by side.
+
+### States story
+
+`data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
+API) so hover/pressed render as a static regression reference - the same convention Button and
+Checkbox use. Focus preview needs no extra CSS: the shared Focus Ring primitive already reacts to
+`data-force-state="focus"` directly on this element. Cross unselected/selected with
+default/hover/focus/pressed/disabled, and include a live click-to-toggle example.
+
+### Content story
 
 Show:
 
 - text formatting toolbar
 - view mode toggle
 - filter button pair
-- selected and unselected examples
+
+### EdgeCases story
+
+Show:
+
+- long label wrapping in a narrow container
+- dark surface
 
 Do not build ToggleButtonGroup yet.
 
@@ -329,6 +349,8 @@ disabled sets native disabled
 disabled prevents click
 custom className works
 forwards ref
+uses a 6px icon-to-text gap at every size
+supports data-force-state hover/pressed preview
 ```
 
 ## Future considerations
@@ -336,6 +358,5 @@ forwards ref
 Future components:
 
 - ToggleButtonGroup
-- Toggle Icon Button
 
-Do not implement either in this pass.
+Do not implement in this pass.

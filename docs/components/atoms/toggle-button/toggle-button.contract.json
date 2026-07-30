@@ -21,10 +21,9 @@
   ],
   "props": {},
   "variants": {
-    "appearance": [
+    "tone": [
       "default",
-      "subtle",
-      "bold"
+      "subtle"
     ]
   },
   "sizes": [
@@ -39,8 +38,7 @@
     "pressed",
     "focus",
     "selected",
-    "disabled",
-    "loading"
+    "disabled"
   ],
   "slots": [
     "iconBefore",
@@ -60,7 +58,7 @@
     "Shares sizing and visual language with Button."
   ],
   "compositionRules": [
-    "May include icons and spinner."
+    "May include a leading and/or trailing icon. No loading state."
   ],
   "contentRules": [
     "Use concise action labels."

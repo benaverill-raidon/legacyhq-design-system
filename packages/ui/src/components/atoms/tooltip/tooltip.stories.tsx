@@ -1,12 +1,16 @@
 import * as React from 'react';
-import type { CSSProperties } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { CSSProperties, ReactNode } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EditIcon, SearchIcon, StarStarredIcon } from '../../../assets/icons';
+import { Button } from '../button';
 import { IconButton } from '../icon-button';
 import { ToggleIconButton } from '../toggle-icon-button';
 import { Tooltip } from './tooltip';
+import type { TooltipPlacement } from './tooltip.types';
 
-const meta: Meta<typeof Tooltip> = {
+const placements: TooltipPlacement[] = ['top', 'right', 'bottom', 'left'];
+
+const meta = {
   title: 'UI/Atoms/Tooltip',
   component: Tooltip,
   args: {
@@ -23,33 +27,34 @@ const meta: Meta<typeof Tooltip> = {
   },
   argTypes: {
     content: { control: 'text' },
-    placement: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
+    placement: { control: 'inline-radio', options: placements },
     truncate: { control: 'boolean' },
     disabled: { control: 'boolean' },
     delay: { control: 'number' },
     children: { control: false },
     className: { control: false },
   },
-};
+} satisfies Meta<typeof Tooltip>;
 
 export default meta;
 
-type Story = StoryObj<typeof Tooltip>;
+type Story = StoryObj<typeof meta>;
 
-const stackStyle = {
-  display: 'grid',
-  gap: 'var(--spacing-lg)',
-  color: 'var(--color-content-default)',
-} satisfies CSSProperties;
+const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)', color: 'var(--color-content-default)' };
 
-const rowStyle = {
+const row: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
   gap: 'var(--spacing-lg)',
-} satisfies CSSProperties;
+};
 
-const cardStyle = {
+const captionStyle: CSSProperties = {
+  font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
+  color: 'var(--color-content-subtle)',
+};
+
+const cardStyle: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-md)',
   padding: 'var(--spacing-lg)',
@@ -57,23 +62,41 @@ const cardStyle = {
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
-} satisfies CSSProperties;
+};
 
-const noteStyle = {
+const darkSurfaceStyle: CSSProperties = {
+  ...cardStyle,
+  background: 'var(--color-background-neutral-bold-default)',
+  color: 'var(--color-content-inverse)',
+};
+
+const headingStyle: CSSProperties = {
   margin: 0,
-  color: 'var(--color-content-subtle)',
-  fontFamily: 'var(--typography-body-sm-font-family)',
-  fontSize: 'var(--typography-body-sm-font-size)',
-  fontWeight: 'var(--typography-body-sm-font-weight)',
-  lineHeight: 'var(--typography-body-sm-line-height)',
-} satisfies CSSProperties;
+  font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
+  color: 'var(--color-content-default)',
+};
 
+function Group({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+      <h3 style={headingStyle}>{title}</h3>
+      <div style={row}>{children}</div>
+    </section>
+  );
+}
+
+/** Prop exploration. Every supported prop is wired to a control. Hover or focus the trigger to see it. */
 export const Playground: Story = {};
 
+/**
+ * The two independent axes - `placement` (with automatic viewport-edge fallback, see EdgeCases)
+ * and `truncate` (single ellipsized line vs. wrapped) - plus `disabled`, which suppresses the
+ * tooltip behavior entirely rather than just hiding it visually.
+ */
 export const Variants: Story = {
   render: () => (
-    <div style={stackStyle}>
-      <div style={rowStyle}>
+    <div style={stack}>
+      <Group title="Placement">
         <Tooltip content="Edit item" placement="top">
           <IconButton aria-label="Edit" tooltip={false}>
             <EditIcon />
@@ -94,9 +117,9 @@ export const Variants: Story = {
             <EditIcon />
           </IconButton>
         </Tooltip>
-      </div>
+      </Group>
 
-      <div style={rowStyle}>
+      <Group title="Truncate">
         <Tooltip content="Short supplemental hint" truncate>
           <IconButton aria-label="Edit" tooltip={false}>
             <EditIcon />
@@ -110,11 +133,11 @@ export const Variants: Story = {
             <SearchIcon />
           </IconButton>
         </Tooltip>
-      </div>
+      </Group>
 
-      <div style={rowStyle}>
+      <Group title="Disabled">
         <Tooltip content="Disabled because nothing is selected">
-          <IconButton aria-label="Edit" isDisabled tooltip={false}>
+          <IconButton aria-label="Edit" disabled tooltip={false}>
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -123,40 +146,43 @@ export const Variants: Story = {
             <SearchIcon />
           </IconButton>
         </Tooltip>
-      </div>
+      </Group>
     </div>
   ),
 };
 
-export const Examples: Story = {
+/** How Tooltip behaves inside the compositions it's designed for. */
+export const Content: Story = {
   render: () => (
-    <div style={stackStyle}>
+    <div style={stack}>
       <div style={cardStyle}>
-        <div style={rowStyle}>
+        <h3 style={headingStyle}>Icon-only actions</h3>
+        <div style={row}>
           <Tooltip content="Edit">
             <IconButton aria-label="Edit" tooltip={false}>
               <EditIcon />
             </IconButton>
           </Tooltip>
-
           <Tooltip content="Search">
             <IconButton aria-label="Search" tooltip={false}>
               <SearchIcon />
             </IconButton>
           </Tooltip>
         </div>
-
-        <p style={noteStyle}>Use external composition when the tooltip message intentionally differs from the control name.</p>
+        <p style={captionStyle}>
+          Use external composition when the tooltip message intentionally differs from the
+          control&apos;s own accessible name.
+        </p>
       </div>
 
       <div style={cardStyle}>
-        <div style={rowStyle}>
+        <h3 style={headingStyle}>Toggle icon buttons</h3>
+        <div style={row}>
           <Tooltip content="Save to favorites">
             <ToggleIconButton aria-label="Save to favorites" isSelected>
               <StarStarredIcon />
             </ToggleIconButton>
           </Tooltip>
-
           <Tooltip content="Change view mode">
             <ToggleIconButton aria-label="Change view mode">
               <EditIcon />
@@ -166,13 +192,13 @@ export const Examples: Story = {
       </div>
 
       <div style={cardStyle}>
-        <div style={rowStyle}>
+        <h3 style={headingStyle}>Explaining a disabled control</h3>
+        <div style={row}>
           <Tooltip content="Disabled until a record is selected">
-            <IconButton aria-label="Edit" isDisabled tooltip={false}>
+            <IconButton aria-label="Edit" disabled tooltip={false}>
               <EditIcon />
             </IconButton>
           </Tooltip>
-
           <Tooltip
             content="This tooltip clarifies a potentially ambiguous control, but it is still supplemental and not essential to understanding the action."
             truncate={false}
@@ -184,6 +210,65 @@ export const Examples: Story = {
           </Tooltip>
         </div>
       </div>
+
+      <div style={cardStyle}>
+        <h3 style={headingStyle}>Text button trigger</h3>
+        <Tooltip content="Saves all pending changes to the current matter">
+          <Button>Save</Button>
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
+function EdgeTooltip({ label, placement }: { label: string; placement: TooltipPlacement }) {
+  return (
+    <Tooltip content={`${label} (${placement})`} placement={placement}>
+      <IconButton aria-label={label} tooltip={false}>
+        <EditIcon />
+      </IconButton>
+    </Tooltip>
+  );
+}
+
+/** Difficult states made reproducible outside the application. */
+export const EdgeCases: Story = {
+  render: () => (
+    <div style={stack}>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Falls back when the preferred placement would overflow</h3>
+        <p style={captionStyle}>
+          Each trigger below prefers a placement that would clip against the viewport edge it sits
+          near - hover one to see it reposition to whichever side actually fits.
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <EdgeTooltip label="Top-left corner" placement="left" />
+          <EdgeTooltip label="Top-right corner" placement="right" />
+        </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Keyboard focus shows the tooltip too</h3>
+        <p style={captionStyle}>Tab to this button - the tooltip opens on focus, not just hover.</p>
+        <Tooltip content="Shown on keyboard focus">
+          <IconButton aria-label="Edit" tooltip={false}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      </section>
+
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Dark surface</h3>
+        <div data-theme="dark" style={darkSurfaceStyle}>
+          <div style={row}>
+            <Tooltip content="Dark surface tooltip">
+              <IconButton aria-label="Edit" tooltip={false}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </div>
+      </section>
     </div>
   ),
 };

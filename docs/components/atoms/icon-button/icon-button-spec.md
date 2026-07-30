@@ -27,11 +27,10 @@ type IconButtonShape = 'square' | 'round';
 type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left';
 
 interface IconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   appearance?: IconButtonAppearance;
   size?: IconButtonSize;
   shape?: IconButtonShape;
-  isDisabled?: boolean;
   isLoading?: boolean;
   isExpanded?: boolean;
   tooltip?: React.ReactNode | false;
@@ -108,7 +107,7 @@ aria-labelledby only -> do not infer tooltip text from the DOM
 
 ## Disabled behavior
 
-When `isDisabled` is true:
+When `disabled` is true:
 
 - render a natively disabled button
 - suppress click behavior

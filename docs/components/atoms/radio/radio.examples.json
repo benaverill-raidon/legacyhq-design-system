@@ -1,12 +1,55 @@
 {
+  "component": "Radio",
   "examples": [
     {
-      "name": "Basic",
-      "jsx": "<RadioGroup><Radio value='a'>Option A</Radio><Radio value='b'>Option B</Radio></RadioGroup>"
+      "name": "Standalone radio",
+      "description": "A single labeled radio outside a group.",
+      "jsx": "<Radio label=\"Email\" name=\"contact-method\" value=\"email\" />"
+    },
+    {
+      "name": "Label-less table radio",
+      "description": "Row selection where the row content already provides visible context, described instead by aria-label.",
+      "jsx": "<Radio aria-label=\"Select primary matter\" name=\"matter-radio\" value=\"primary\" defaultChecked />"
     },
     {
       "name": "Disabled",
-      "jsx": "<Radio disabled>Option</Radio>"
+      "description": "A non-interactive option.",
+      "jsx": "<Radio label=\"Overnight\" name=\"delivery-speed\" value=\"overnight\" disabled />"
+    },
+    {
+      "name": "Controlled RadioGroup",
+      "description": "Single selection driven by external state via the options API.",
+      "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" value={value} onValueChange={setValue} options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }, { value: 'mail', label: 'Mail' }]} />"
+    },
+    {
+      "name": "Uncontrolled RadioGroup",
+      "description": "Single selection with an initial value, owned by the native fieldset.",
+      "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />"
+    },
+    {
+      "name": "RadioGroup with children composition",
+      "description": "A custom layout of manually-wired Radio instances, used instead of the options API.",
+      "jsx": "<RadioGroup label=\"Status\" name=\"status\" description=\"Grouped manually instead of using the options API\"><Radio label=\"Draft\" name=\"status\" value=\"draft\" defaultChecked /><Radio label=\"In review\" name=\"status\" value=\"in-review\" /><Radio label=\"Final\" name=\"status\" value=\"final\" /></RadioGroup>"
+    },
+    {
+      "name": "Horizontal orientation",
+      "description": "Options laid out in a row that wraps rather than overflowing.",
+      "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" orientation=\"horizontal\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />"
+    },
+    {
+      "name": "Required RadioGroup",
+      "description": "A required group-level question, with the indicator shown after the legend.",
+      "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" required options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />"
+    },
+    {
+      "name": "Invalid RadioGroup with error message",
+      "description": "Invalid state paired with a visible, described error rather than color alone.",
+      "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" invalid errorMessage=\"Choose one option before continuing.\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />"
+    },
+    {
+      "name": "Disabled RadioGroup",
+      "description": "Every generated option is disabled together.",
+      "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" disabled defaultValue=\"email\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />"
     }
   ]
 }

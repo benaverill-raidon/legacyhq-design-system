@@ -354,7 +354,7 @@ describe('Tooltip', () => {
   it('shows a tooltip for a disabled native IconButton on pointer hover', () => {
     render(
       <Tooltip content="Unavailable until saved">
-        <IconButton aria-label="Edit" isDisabled tooltip={false}>
+        <IconButton aria-label="Edit" disabled tooltip={false}>
           <EditIcon />
         </IconButton>
       </Tooltip>,
@@ -377,7 +377,7 @@ describe('Tooltip', () => {
   it('does not create an extra tab stop for disabled controls', () => {
     render(
       <Tooltip content="Unavailable until saved">
-        <IconButton aria-label="Edit" isDisabled tooltip={false}>
+        <IconButton aria-label="Edit" disabled tooltip={false}>
           <EditIcon />
         </IconButton>
       </Tooltip>,
@@ -429,7 +429,7 @@ describe('Tooltip', () => {
     expect(tooltipCss).toContain('background: var(--color-background-neutral-bold-default);');
     expect(tooltipCss).toContain('color: var(--color-content-inverse);');
     expect(tooltipCss).toContain('padding-block: var(--spacing-xxs);');
-    expect(tooltipCss).toContain('padding-inline: var(--spacing-sm);');
+    expect(tooltipCss).toContain('padding-inline: var(--measurement-6);');
     expect(tooltipCss).toContain('gap: var(--spacing-xs);');
     expect(tooltipCss).toContain('border-radius: var(--border-radius-sm);');
     expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-truncated);');
@@ -437,5 +437,12 @@ describe('Tooltip', () => {
     expect(tooltipCss).toContain('z-index: var(--component-tooltip-z-index);');
     expect(tooltipSource).toContain("getTokenPixels('--spacing-xs')");
     expect(tooltipSource).not.toContain("getTokenPixels('--spacing-xs',");
+  });
+
+  it('uses 6px horizontal padding, matching Figma - not the 8px --spacing-sm token', () => {
+    // Regression guard: the tooltip-primitive component in Figma measures 6px left/right padding
+    // (paddingLeft/paddingRight on its auto-layout frame) at every content length; --spacing-sm
+    // (8px) was 2px too wide.
+    expect(tooltipCss).not.toContain('padding-inline: var(--spacing-sm);');
   });
 });

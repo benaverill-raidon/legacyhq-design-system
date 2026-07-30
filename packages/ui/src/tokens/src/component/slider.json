@@ -20,9 +20,9 @@
         }
       },
       "stop": { "container": { "size": {
-        "xs": { "value": "var(--component-slider-track-height-xs)", "type": "dimension" },
-        "sm": { "value": "var(--component-slider-track-height-sm)", "type": "dimension" },
-        "md": { "value": "var(--component-slider-track-height-md)", "type": "dimension" }
+        "xs": { "value": "var(--measurement-16)", "type": "dimension" },
+        "sm": { "value": "var(--measurement-16)", "type": "dimension" },
+        "md": { "value": "var(--measurement-16)", "type": "dimension" }
       } } },
       "vertical": { "control-length": { "value": "var(--measurement-104)", "type": "dimension" } }
     }

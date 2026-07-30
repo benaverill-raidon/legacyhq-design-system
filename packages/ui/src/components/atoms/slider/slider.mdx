@@ -1,0 +1,199 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SliderStories from './slider.stories';
+
+<Meta of={SliderStories} name="Docs" />
+
+# Slider
+
+Slider is an atom family for selecting one or more numeric values from a bounded range by
+dragging a handle. It covers three forms that share one visual system: `Slider` (fill runs from
+the minimum), `SliderCentered` (fill runs from a center origin), and `SliderRange` (two handles,
+selecting a min/max pair).
+
+<Canvas of={SliderStories.Playground} />
+
+## When to use
+
+- Adjusting a value where the user benefits from seeing it visually, relative to its range.
+- Volume, brightness, or zoom-style continuous controls.
+- Filtering by a numeric range (`SliderRange`) - price, distance, date offsets.
+- An adjustment relative to a neutral midpoint (`SliderCentered`) - contrast, balance, offset.
+
+## When not to use
+
+- **For precise numeric entry.** A slider is imprecise by nature - use a number input when the
+  exact value matters more than the gesture of adjusting it.
+- **For a small, fixed set of discrete named options.** Consider a segmented control or radio
+  group instead of steps on a slider.
+
+## Anatomy
+
+<Canvas of={SliderStories.Content} />
+
+1. **Root** - includes the optional `label`.
+2. **Control** - the draggable surface; owns all pointer/keyboard interaction.
+3. **Track** - inactive and active segments, meeting exactly at the current value(s).
+4. **Track-stop** - decorative dots marking `min`/`max` (and any `steps`). A constant size at every
+   `size`, so the handle lands exactly on the endpoint dot at value 0 and 100.
+5. **Handle** - the draggable native `input[type="range"]`, rendered with a private visual handle
+   since the native thumb is made transparent.
+6. **Value indicator** - an optional floating bubble showing the current value.
+
+## Usage guidance
+
+### Three forms, one visual system
+
+`Slider`, `SliderCentered`, and `SliderRange` share the same track, handle, track-stop, and
+value-indicator styling - only where the fill starts, and how many handles there are, differs. See
+Variants.
+
+### Handle and track-stop alignment
+
+The handle and every track-stop dot resolve to the exact same position formula, so at `value = 0`
+or `value = 100` the handle sits precisely on top of the endpoint dot rather than beside it. This
+holds at every `size` - the handle and track-stop dot are a constant size; only the track's own
+thickness scales. See Sizes.
+
+### Steps are always present at the endpoints
+
+`min` and `max` render as track-stop dots even when `showSteps` is false - they're structural, not
+optional. `showSteps` (or an explicit `steps` array) adds dots in between. See Content.
+
+### Verifying interaction states
+
+The native input has `pointer-events: none` (the control div owns dragging), so clicking or
+dragging the handle focuses it through an explicit `.focus()` call rather than the browser's own
+click-to-focus behavior. That mismatch between the clicked element and the focused element used to
+confuse the browser's `:focus-visible` heuristic, which showed a focus ring on a plain click - the
+component now tracks pointer-vs-keyboard focus itself so the ring only ever appears for real
+keyboard use. See States for a live example to verify this by hand.
+
+## Do / Don't
+
+**Do** use `SliderRange` for a min/max filter with two handles.
+
+```tsx
+<SliderRange label="Price range" defaultValue={[25, 75]} onValueChange={setRange} />
+```
+
+**Don't** wire two independent `Slider` instances to approximate a range - handle-crossing and
+minimum-distance behavior won't be enforced.
+
+---
+
+**Do** let `min`/`max` render their track-stop dots on their own - they're always there.
+
+```tsx
+<Slider label="Volume" defaultValue={50} />
+```
+
+**Don't** pass `showSteps` expecting it to be the only way to see the endpoints - it adds
+additional dots in between, it doesn't create the endpoint dots.
+
+---
+
+**Do** use `showValue` when the numeric value needs to stay visible, not just while dragging.
+
+```tsx
+<Slider label="Volume" defaultValue={50} showValue />
+```
+
+**Don't** expect the value bubble to appear persistently by default - it's hover/focus/drag-only
+unless `showValue` is set.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Controlled value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultValue</code></td>
+      <td><code>number</code></td>
+      <td><code>0</code> (<code>SliderCentered</code>: <code>0</code>)</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>min</code> / <code>max</code></td>
+      <td><code>number</code></td>
+      <td><code>0</code> / <code>100</code> (<code>SliderCentered</code>: <code>-100</code> / <code>100</code>)</td>
+      <td>Bounds. <code>SliderCentered</code>'s origin is <code>0</code>, clamped into range.</td>
+    </tr>
+    <tr>
+      <td><code>step</code></td>
+      <td><code>number</code></td>
+      <td><code>1</code></td>
+      <td>Value increment.</td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td><code>'horizontal' | 'vertical'</code></td>
+      <td><code>'horizontal'</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md'</code></td>
+      <td><code>'md'</code></td>
+      <td>Scales track thickness only - the handle and track-stop dots stay constant.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><code>showSteps</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Adds dots between the always-present <code>min</code>/<code>max</code> endpoints.</td>
+    </tr>
+    <tr>
+      <td><code>steps</code></td>
+      <td><code>number[]</code></td>
+      <td>-</td>
+      <td>Explicit stop values. Derived automatically from <code>step</code> when omitted and reasonable in count.</td>
+    </tr>
+    <tr>
+      <td><code>showValue</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Keeps the value indicator visible persistently, instead of only on hover/focus/drag.</td>
+    </tr>
+    <tr>
+      <td><code>onValueChange</code></td>
+      <td><code>(value: number, event) =&gt; void</code></td>
+      <td>-</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
+`SliderRange` takes `value`/`defaultValue` as a `[number, number]` tuple, plus `minDistance`,
+`disableSwap`, `minLabel`, and `maxLabel` (accessible names for the two handles - default
+"Minimum value" / "Maximum value") in place of the single-value props above.
+
+Any other native `input` prop is forwarded to the underlying range input(s).
+
+## Related components
+
+- **ProgressBar** - for read-only, non-interactive determinate progress instead of a user-adjustable value.

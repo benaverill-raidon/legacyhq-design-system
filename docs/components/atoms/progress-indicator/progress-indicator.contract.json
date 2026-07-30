@@ -100,7 +100,7 @@
   "tokens": {
     "semantic": {
       "defaultSelected": "color-content-default",
-      "primarySelected": "color-content-brand",
+      "primarySelected": "color-content-brand-primary-default",
       "discoverySelected": "color-content-discovery",
       "invertedSelected": "color-content-inverse",
       "unselectedBorder": "color-border-bold",

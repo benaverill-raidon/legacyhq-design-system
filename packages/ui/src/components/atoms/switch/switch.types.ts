@@ -10,6 +10,7 @@ export interface SwitchProps
   defaultChecked?: boolean;
   disabled?: boolean;
   required?: boolean;
+  isLoading?: boolean;
   onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }

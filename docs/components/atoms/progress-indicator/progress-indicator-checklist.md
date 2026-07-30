@@ -68,14 +68,17 @@
 
 ## Storybook
 
-- [ ] Playground, Variants, and Examples exist.
-- [ ] All appearances and both sizes are shown.
-- [ ] Passive and interactive examples are shown.
-- [ ] First, middle, and final steps are shown.
-- [ ] Different totals are demonstrated.
-- [ ] Inverted appearance is shown on a dark surface.
-- [ ] External previous/next composition is shown only in Storybook examples.
-- [ ] Realistic LegacyHQ journey examples are included.
+- [ ] Docs, Playground, Variants, Sizes, States, Content, and Edge Cases exist.
+- [ ] Docs embeds Playground and Content canvases and documents when to use / when not to use.
+- [ ] Variants shows `default`, `primary`, and `discovery` together, with `inverted` shown
+      separately on a dark surface.
+- [ ] Sizes shows `sm` and `md`, including that the interactive hit target scales too.
+- [ ] States shows first/middle/final dot position, passive versus interactive rendering, and a
+      live interactive example (hover/focus/pressed have no `data-force-state` pinning here).
+- [ ] Content shows different totals, custom `getValueText`, and realistic LegacyHQ compositions
+      including externally-controlled Previous/Next pagination.
+- [ ] Edge Cases shows a single-step journey, out-of-range value clamping, many steps in a narrow
+      container, and appearances together on a dark surface.
 
 ## Testing
 

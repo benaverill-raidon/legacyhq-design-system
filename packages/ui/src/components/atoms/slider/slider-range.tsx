@@ -8,6 +8,7 @@ import {
   getVisualPosition,
   mergeClassNames,
   useSliderDragState,
+  usePointerFocusRing,
 } from './slider';
 import styles from './slider.module.css';
 import type { SliderOrientation, SliderRangeProps, SliderSize } from './slider.types';
@@ -135,14 +136,6 @@ function afterSegmentBoundary(position: string) {
   return `calc(${position} + var(--component-slider-handle-half-width) + var(--slider-internal-gap))`;
 }
 
-function getSegmentStartBoundary(position: string, percent: number) {
-  return percent <= 0 ? minPositionVariable : afterSegmentBoundary(position);
-}
-
-function getSegmentEndBoundary(position: string, percent: number) {
-  return percent >= 100 ? maxPositionVariable : beforeSegmentBoundary(position);
-}
-
 function getNearestActiveThumb(nextValue: number, currentValue: [number, number], preferredThumb?: ActiveThumb | null) {
   const [lowerValue, upperValue] = currentValue;
   const lowerDistance = Math.abs(nextValue - lowerValue);
@@ -221,14 +214,19 @@ export const SliderRange = React.memo(
     const [lowerValue, upperValue] = currentValue;
     const lowerPercent = getPercent(lowerValue, min, max);
     const upperPercent = getPercent(upperValue, min, max);
-    const minPosition = getVisualPosition(0);
-    const maxPosition = getVisualPosition(100);
+    // The track's own fill is flush with the control's true edges (matching Figma) - only the
+    // handles and dots use the inset value-scale, so min/max position stay at the raw 0%/100%
+    // here rather than reusing getVisualPosition.
+    const minPosition = '0%';
+    const maxPosition = '100%';
     const lowerPosition = getVisualPosition(lowerPercent);
     const upperPosition = getVisualPosition(upperPercent);
     const stepModels = getStepModels(showSteps, steps, min, max, step, lowerPercent, upperPercent);
     const ariaLabelledByMin = label !== undefined ? `${labelId} ${minHandleLabelId}` : minHandleLabelId;
     const ariaLabelledByMax = label !== undefined ? `${labelId} ${maxHandleLabelId}` : maxHandleLabelId;
     const { isDragging, startDragging, stopDragging } = useSliderDragState();
+    const lowerFocusRing = usePointerFocusRing();
+    const upperFocusRing = usePointerFocusRing();
     const isOverlapping = lowerValue === upperValue;
     const controlRef = React.useRef<HTMLDivElement>(null);
     const trackRef = React.useRef<HTMLDivElement>(null);
@@ -300,10 +298,11 @@ export const SliderRange = React.memo(
         }
 
         setActiveThumb(nextActiveThumb);
+        (nextActiveThumb === 0 ? lowerFocusRing : upperFocusRing).markPointerFocusPending();
         input.focus();
         dispatchSliderInputValue(input, nextValue);
       },
-      [activeThumb, currentValue, max, min, orientation, step],
+      [activeThumb, currentValue, lowerFocusRing, max, min, orientation, step, upperFocusRing],
     );
 
     const stopPointerDrag = React.useCallback(
@@ -338,6 +337,7 @@ export const SliderRange = React.memo(
           const nextActiveThumb = handleTarget.dataset.sliderHandle === 'upper' ? 1 : 0;
 
           setActiveThumb(nextActiveThumb);
+          (nextActiveThumb === 0 ? lowerFocusRing : upperFocusRing).markPointerFocusPending();
           (nextActiveThumb === 0 ? lowerInputRef.current : upperInputRef.current)?.focus();
         } else {
           updateFromPointer(event.clientX, event.clientY);
@@ -345,7 +345,7 @@ export const SliderRange = React.memo(
 
         event.preventDefault();
       },
-      [disabled, startDragging, updateFromPointer],
+      [disabled, lowerFocusRing, startDragging, updateFromPointer, upperFocusRing],
     );
 
     const handleControlPointerMove = React.useCallback(
@@ -385,8 +385,6 @@ export const SliderRange = React.memo(
         <div
           ref={controlRef}
           className={styles.control}
-          data-active-touches-end={upperPercent >= 100 ? 'true' : undefined}
-          data-active-touches-start={lowerPercent <= 0 ? 'true' : undefined}
           data-has-steps={stepModels.length ? 'true' : undefined}
           onPointerCancel={(event) => stopPointerDrag(event.pointerId)}
           onPointerDown={handleControlPointerDown}
@@ -395,10 +393,10 @@ export const SliderRange = React.memo(
           style={
             {
               '--slider-inactive-start-start': minPositionVariable,
-              '--slider-inactive-start-end': getSegmentEndBoundary(lowerPositionVariable, lowerPercent),
-              '--slider-active-start': getSegmentStartBoundary(lowerPositionVariable, lowerPercent),
-              '--slider-active-end': getSegmentEndBoundary(upperPositionVariable, upperPercent),
-              '--slider-inactive-end-start': getSegmentStartBoundary(upperPositionVariable, upperPercent),
+              '--slider-inactive-start-end': beforeSegmentBoundary(lowerPositionVariable),
+              '--slider-active-start': afterSegmentBoundary(lowerPositionVariable),
+              '--slider-active-end': beforeSegmentBoundary(upperPositionVariable),
+              '--slider-inactive-end-start': afterSegmentBoundary(upperPositionVariable),
               '--slider-inactive-end-end': maxPositionVariable,
               '--slider-fill-start': `${lowerPercent}%`,
               '--slider-fill-end': `${upperPercent}%`,
@@ -475,14 +473,21 @@ export const SliderRange = React.memo(
             value={lowerValue}
             disabled={disabled}
             name={name}
+            data-pointer-focus={lowerFocusRing.isPointerFocused ? 'true' : undefined}
             onBlur={(event) => {
               if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {
                 setActiveThumb(null);
                 stopDragging();
               }
+
+              lowerFocusRing.handleBlur();
             }}
             onChange={handleLowerChange}
-            onFocus={() => setActiveThumb(0)}
+            onFocus={() => {
+              setActiveThumb(0);
+              lowerFocusRing.handleFocus();
+            }}
+            onKeyDown={lowerFocusRing.handleKeyDown}
             onPointerCancel={() => stopDragging()}
             onPointerDown={() => {
               setActiveThumb(0);
@@ -508,14 +513,21 @@ export const SliderRange = React.memo(
             value={upperValue}
             disabled={disabled}
             name={name ? `${name}Max` : undefined}
+            data-pointer-focus={upperFocusRing.isPointerFocused ? 'true' : undefined}
             onBlur={(event) => {
               if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {
                 setActiveThumb(null);
                 stopDragging();
               }
+
+              upperFocusRing.handleBlur();
             }}
             onChange={handleUpperChange}
-            onFocus={() => setActiveThumb(1)}
+            onFocus={() => {
+              setActiveThumb(1);
+              upperFocusRing.handleFocus();
+            }}
+            onKeyDown={upperFocusRing.handleKeyDown}
             onPointerCancel={() => stopDragging()}
             onPointerDown={() => {
               setActiveThumb(1);

@@ -10,7 +10,7 @@ Use Tags to represent linked entities, categories, filters, or contextual metada
 Do not use Tags as primary actions or for long-form content.
 
 ## Design intent
-Provide a compact, recognizable representation of an entity while supporting independent navigation and removal interactions.
+Provide a compact, recognizable representation of an entity while supporting independent navigation and removal interactions. The leading and remove-button icons stay a constant 16px regardless of `size` - only the tag's height, padding, and the remove button's own container scale.
 
 ## Accessibility
 Interactive areas must expose accessible names, support keyboard interaction, and maintain visible focus. Navigation and removal remain independent interactive targets.

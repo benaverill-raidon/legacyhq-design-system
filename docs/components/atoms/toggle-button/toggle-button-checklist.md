@@ -20,7 +20,7 @@ Atom
 
 - Button
 - Icon Button
-- Toggle Icon Button, future component
+- Toggle Icon Button
 - Toggle Button Group, future component
 
 ## Purpose
@@ -217,27 +217,51 @@ Do not include expanded behavior.
 
 Do not build ToggleButtonGroup in this pass.
 
+## Validated Figma Details
+
+- Root fill/border tokens (resting `color-border-default`/`color-content-subtle`, selected
+  `color-background-brand-primary-default-default`/`color-border-brand-primary`/
+  `color-content-brand-primary-default`, disabled `color-background-disabled`/`color-border-disabled`/
+  `color-content-disabled`, hover/pressed overlays `color-background-neutral-overlay-hovered`/
+  `-pressed`, focus ring `color-border-focused`) all matched the existing implementation exactly.
+  One Components-file swatch (the untouched resting-state fill) resolved to an orphaned variable
+  name (`color/background/neutral/overlay/default`) that no longer exists in the live Tokens file -
+  a stale library-cache artifact, not a real color. The implementation's `background: transparent`
+  at rest is correct.
+- `xs`/`sm`/`md`/`lg` = 24/32/40/48px tall, 4/8/8/12px corner radius, 6/8/12/16px inline padding -
+  all already correct.
+- Fixed a real bug: the icon-to-text gap was `--spacing-sm` (8px); Figma's own auto-layout
+  itemSpacing measures a constant 6px at every size. Fixed to `--measurement-6`.
+- The icon glyph itself is never resized by this component (no CSS icon-size override, matching
+  Button, which also doesn't resize its icons - both just render whatever default size the icon
+  itself uses).
+- Figma's own default `size` variant is `lg`; the code default stays `md`, consistent with Button
+  and every other sized atom in this library.
+- Figma has no unique visual treatment for selected+disabled - disabled fully overrides selected,
+  matching the existing implementation and this doc's own "State priority" guidance.
+
 ## Storybook requirements
 
-Use the current simplified story structure:
+Create the library's unified structure:
 
-- Playground
-- Variants
-- Examples
-
-Do not create separate States or Accessibility pages.
+- Toggle Button / Docs (.mdx)
+- Toggle Button / Playground
+- Toggle Button / Variants
+- Toggle Button / Sizes
+- Toggle Button / States
+- Toggle Button / Content
+- Toggle Button / EdgeCases
 
 Show:
 
-- all sizes
-- both tones
-- selected and unselected
-- disabled
-- selected + disabled
-- icon before
-- icon after
-- toolbar example
-- view-mode example
+- both tones crossed with selected/unselected (Variants)
+- all sizes (Sizes)
+- hover/pressed previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
+  focus previews via the same mechanism - the shared Focus Ring primitive already reacts to
+  `data-force-state="focus"` directly on this element, so no extra CSS is needed (States)
+- disabled, selected + disabled, and a live click-to-toggle example (States)
+- toolbar example, view-mode example, filter pair (Content)
+- long label wrapping, dark surface (EdgeCases)
 
 ## Test requirements
 
@@ -257,6 +281,8 @@ Test:
 - disabled prevents click
 - supports custom `className`
 - forwards ref
+- uses a 6px icon-to-text gap at every size
+- supports data-force-state hover/pressed preview
 
 ## Do not include
 
@@ -277,5 +303,3 @@ Do not add loading.
 Do not add `asChild`.
 
 Do not add ToggleButtonGroup.
-
-Do not add Toggle Icon Button.

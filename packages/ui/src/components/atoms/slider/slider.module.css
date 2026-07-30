@@ -4,14 +4,12 @@
   --slider-handle-width: var(--component-slider-handle-width-md);
   --slider-handle-width-pressed: var(--measurement-2);
   --slider-handle-height: var(--component-slider-handle-height-md);
-  --slider-endpoint-inset: var(--component-slider-handle-half-width);
-  --slider-track-span: calc(100% - var(--slider-endpoint-inset) - var(--slider-endpoint-inset));
-  --slider-value-scale-inset: var(--slider-endpoint-inset);
+  --slider-value-scale-inset: var(--component-slider-handle-half-width);
   --slider-internal-gap: var(--spacing-sm);
   --slider-handle-visual-color: var(--color-background-brand-primary-bold-default);
   --slider-track-active-color: var(--color-data-viz-sequence-prussian-900);
   --slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);
-  --slider-step-color: var(--color-content-brand-primary);
+  --slider-step-color: var(--color-content-brand-primary-default);
 
   display: grid;
   gap: var(--spacing-sm);
@@ -86,47 +84,26 @@
 .inactiveTrackStart {
   inset-inline-start: var(--slider-inactive-start-start);
   inline-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
-  border-start-start-radius: var(--border-radius-full-round);
-  border-end-start-radius: var(--border-radius-full-round);
-  border-start-end-radius: var(--border-radius-sm);
-  border-end-end-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-lg);
   background: var(--slider-track-inactive-color);
 }
 
 .activeTrack {
   inset-inline-start: var(--slider-active-start);
   inline-size: max(0px, calc(var(--slider-active-end) - var(--slider-active-start)));
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-lg);
   background: var(--slider-track-active-color);
 }
 
-.control[data-active-touches-start='true'] .activeTrack {
-  border-start-start-radius: var(--border-radius-full-round);
-  border-end-start-radius: var(--border-radius-full-round);
-}
-
-.control[data-active-touches-end='true'] .activeTrack {
-  border-start-end-radius: var(--border-radius-full-round);
-  border-end-end-radius: var(--border-radius-full-round);
-}
-
 .control[data-has-steps='true'] {
-  --slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);
+  --slider-value-scale-inset: calc(var(--slider-stop-container-size) / 2);
 }
 
 .inactiveTrackEnd {
   inset-inline-start: var(--slider-inactive-end-start);
   inline-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
-  border-start-start-radius: var(--border-radius-sm);
-  border-end-start-radius: var(--border-radius-sm);
-  border-start-end-radius: var(--border-radius-full-round);
-  border-end-end-radius: var(--border-radius-full-round);
+  border-radius: var(--border-radius-lg);
   background: var(--slider-track-inactive-color);
-}
-
-.control[data-inactive-end-full='true'] .inactiveTrackEnd {
-  border-start-start-radius: var(--border-radius-full-round);
-  border-end-start-radius: var(--border-radius-full-round);
 }
 
 .input {
@@ -140,7 +117,7 @@
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
-  color: var(--color-content-brand-primary);
+  color: var(--color-content-brand-primary-default);
   cursor: inherit;
   pointer-events: none;
 }
@@ -255,11 +232,16 @@
   inline-size: var(--slider-handle-width-pressed);
 }
 
-.control:has(.singleInput:focus-visible) .handleSingle,
+/*
+ * `:not([data-pointer-focus='true'])` excludes focus that landed on the input as a side effect of
+ * our own pointerdown/drag handling (see usePointerFocusRing in slider.tsx) - clicking or dragging
+ * the handle must not show a focus ring, only real keyboard focus should.
+ */
+.control:has(.singleInput:focus-visible:not([data-pointer-focus='true'])) .handleSingle,
 .control:has(.singleInput[data-preview-state='focus']) .handleSingle,
-.control:has(.rangeInputLower:focus-visible) .handleLower,
+.control:has(.rangeInputLower:focus-visible:not([data-pointer-focus='true'])) .handleLower,
 .control:has(.rangeInputLower[data-preview-state='focus']) .handleLower,
-.control:has(.rangeInputUpper:focus-visible) .handleUpper,
+.control:has(.rangeInputUpper:focus-visible:not([data-pointer-focus='true'])) .handleUpper,
 .control:has(.rangeInputUpper[data-preview-state='focus']) .handleUpper {
   outline: var(--border-width-md) solid var(--color-border-focused);
   outline-offset: var(--spacing-xs);
@@ -323,20 +305,22 @@
   transform: translate(-50%, -50%);
 }
 
-.step[data-placement='start'] {
-  transform: translate(0, -50%);
-}
-
-.step[data-placement='end'] {
-  transform: translate(-100%, -50%);
-}
-
 .stepDot {
   inline-size: var(--size-marker-xs);
   block-size: var(--size-marker-xs);
   box-sizing: border-box;
   border-radius: var(--border-radius-full-round);
   background: var(--slider-step-color);
+}
+
+/*
+ * A track-stop dot on the active (bold-filled) segment needs the subtle/light brand color for
+ * contrast against that dark fill, the same segment-aware swap Progress Bar's track-stop uses -
+ * `data-active` already reflects whether this dot falls within the active fill. `:not(disabled)`
+ * keeps this from tying in specificity with the disabled-state stepDot color below.
+ */
+.root:not([data-disabled='true']) .step[data-active='true'] .stepDot {
+  background: var(--color-content-brand-primary-subtle);
 }
 
 .valueIndicator {
@@ -393,10 +377,6 @@
 .orientation_vertical .inactiveTrackStart {
   inset-block-start: calc(100% - var(--slider-inactive-start-end));
   block-size: max(0px, calc(var(--slider-inactive-start-end) - var(--slider-inactive-start-start)));
-  border-start-start-radius: var(--border-radius-sm);
-  border-start-end-radius: var(--border-radius-sm);
-  border-end-start-radius: var(--border-radius-full-round);
-  border-end-end-radius: var(--border-radius-full-round);
 }
 
 .orientation_vertical .activeTrack {
@@ -404,32 +384,13 @@
   block-size: max(0px, calc(var(--slider-active-end) - var(--slider-active-start)));
 }
 
-.orientation_vertical .control[data-active-touches-start='true'] .activeTrack {
-  border-end-start-radius: var(--border-radius-full-round);
-  border-end-end-radius: var(--border-radius-full-round);
-}
-
-.orientation_vertical .control[data-active-touches-end='true'] .activeTrack {
-  border-start-start-radius: var(--border-radius-full-round);
-  border-start-end-radius: var(--border-radius-full-round);
-}
-
 .orientation_vertical .control[data-has-steps='true'] {
-  --slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);
+  --slider-value-scale-inset: calc(var(--slider-stop-container-size) / 2);
 }
 
 .orientation_vertical .inactiveTrackEnd {
   inset-block-start: calc(100% - var(--slider-inactive-end-end));
   block-size: max(0px, calc(var(--slider-inactive-end-end) - var(--slider-inactive-end-start)));
-  border-start-start-radius: var(--border-radius-full-round);
-  border-start-end-radius: var(--border-radius-full-round);
-  border-end-start-radius: var(--border-radius-sm);
-  border-end-end-radius: var(--border-radius-sm);
-}
-
-.orientation_vertical .control[data-inactive-end-full='true'] .inactiveTrackEnd {
-  border-end-start-radius: var(--border-radius-full-round);
-  border-end-end-radius: var(--border-radius-full-round);
 }
 
 .orientation_vertical .input {
@@ -471,14 +432,6 @@
   inset-block-start: calc(100% - var(--slider-step-position));
   inset-inline-start: 50%;
   transform: translate(-50%, -50%);
-}
-
-.orientation_vertical .step[data-placement='start'] {
-  transform: translate(-50%, -100%);
-}
-
-.orientation_vertical .step[data-placement='end'] {
-  transform: translate(-50%, 0);
 }
 
 .orientation_vertical .valueIndicators {

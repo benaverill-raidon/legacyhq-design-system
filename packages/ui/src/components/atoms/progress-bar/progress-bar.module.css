@@ -91,10 +91,22 @@
 .stopShape {
   inline-size: var(--progress-bar-stop-size);
   block-size: var(--progress-bar-stop-size);
-  border: var(--border-width-sm) solid var(--color-data-viz-sequence-prussian-300);
   border-radius: var(--border-radius-full-round);
-  background: var(--color-data-viz-sequence-prussian-900);
   box-sizing: border-box;
+}
+
+/*
+ * A track-stop mark always sits on top of one specific segment, so its fill borrows the *other*
+ * segment's color for contrast rather than using one fixed color everywhere: on top of the light
+ * remaining track it renders progress-dark, and on top of the dark progress fill it renders
+ * track-light. Matches the segment-specific track-stop variants added in Figma.
+ */
+.stopSegment_track {
+  background: var(--color-data-viz-sequence-prussian-900);
+}
+
+.stopSegment_progress {
+  background: var(--color-data-viz-sequence-prussian-300);
 }
 
 .stopStart {

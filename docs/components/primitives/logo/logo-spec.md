@@ -243,7 +243,7 @@ If SVGs support CSS coloring, use theme-aware CSS variables.
 Suggested tokens:
 - `--color-content-default`
 - `--color-content-inverse`
-- `--color-content-brand-primary`
+- `--color-content-brand-primary-default`
 
 Final color token usage depends on SVG implementation.
 

@@ -10,7 +10,10 @@
   justify-content: center;
   inline-size: var(--spinner-size);
   block-size: var(--spinner-size);
-  color: var(--color-border-bold);
+  /* Spinner has no color of its own in Figma - it always takes the current text color of whatever
+     it sits inside (a Button's per-appearance/tone color, a colored heading, plain body text), so
+     this stays `inherit` rather than a fixed token. */
+  color: inherit;
   flex: 0 0 auto;
   vertical-align: middle;
 }

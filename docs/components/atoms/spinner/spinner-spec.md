@@ -100,10 +100,11 @@ Use CSS variables only.
 
 ### Color
 
-Spinner color:
+Spinner has no color of its own - it always inherits the current text color of whatever it sits
+inside (a Button's per-appearance/tone color, a colored heading, plain body text):
 
 ```css
-color: var(--color-border-bold);
+color: inherit;
 ```
 
 SVG path should use:
@@ -111,6 +112,10 @@ SVG path should use:
 ```css
 stroke: currentColor;
 ```
+
+Consumers that compose Spinner (Button, IconButton, LinkButton) do not need their own
+`color: inherit` override for it - Spinner's own base style already inherits, and adding a
+same-named override in a different CSS Module just races it on source order for no benefit.
 
 ### Size Tokens
 
@@ -134,13 +139,10 @@ lg: var(--component-spinner-border-width-lg);
 xl: var(--component-spinner-border-width-xl);
 ```
 
-Spinner stroke color:
+Spinner stroke color: `currentColor`, resolved from the inherited `color` - see Color above. Spinner
+does not own a color token.
 
-```css
-color: var(--color-border-bold);
-```
-
-These values should be component modifier tokens, not global semantic border-width tokens. This keeps `1.5px` available as a primitive, but prevents it from becoming a broad semantic border-width option.
+These stroke-width values should be component modifier tokens, not global semantic border-width tokens. This keeps `1.5px` available as a primitive, but prevents it from becoming a broad semantic border-width option.
 
 ## Figma-Derived Values
 
@@ -163,7 +165,7 @@ Root should:
 - use `align-items: center`
 - use `justify-content: center`
 - use tokenized width and height
-- use `color: var(--color-border-bold)`
+- use `color: inherit` (no fixed color token - see Color above)
 - not set layout-affecting margins
 - not include pointer styles
 
@@ -211,24 +213,27 @@ Do not use `aria-label` alone if the implementation can render visually hidden t
 
 ## Storybook Structure
 
-Primitive story structure:
+Unified story structure, matching the rest of the library:
 
 ```txt
 Spinner
+├─ Docs (.mdx)
 ├─ Playground
-└─ Examples
+├─ Sizes
+├─ Content
+└─ EdgeCases
 ```
 
-Stories to include:
+Variants and States are intentionally omitted: Spinner has one visual style (no variant axis
+beyond size) and no interactive states (non-interactive, decorative by default) - the Docs API
+section documents why.
 
-- Playground
-- Sizes
-- Standalone accessible loading state
-- Inline with text
-- Button loading example
-- Card or panel loading example
-- Dark surface example
-- Reduced motion note or demo if feasible
+- **Playground** - every prop wired to a control.
+- **Sizes** - `sm` / `md` / `lg` / `xl` side by side (replaces a Variants page).
+- **Content** - standalone decorative and labeled loading, inline with text, button loading, and a
+  card/panel loading composition.
+- **EdgeCases** - reduced motion (documented, since Storybook can't force the media query for one
+  story) and a dark surface example.
 
 ## Testing Requirements
 
@@ -277,7 +282,7 @@ Do not use:
 - Component exports from `index.ts`.
 - All sizes render correctly.
 - Default size is `lg`.
-- Spinner uses `--color-border-bold`.
+- Spinner has no color of its own - it inherits from context (`color: inherit`).
 - Spinner uses component-specific size and stroke tokens.
 - Normal animation works.
 - Reduced-motion behavior works.

@@ -8,12 +8,11 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
     "strict": false,
-    "baseUrl": ".",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "types": ["vite/client"]
   },
-  "include": ["src/**/*", "packages/**/*", ".storybook/**/*"],
+  "include": ["packages/**/*", ".storybook/**/*"],
   "exclude": ["node_modules", "dist", "storybook-static"]
 }

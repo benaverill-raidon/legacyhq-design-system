@@ -10,7 +10,9 @@ Use to clarify icons, controls, or truncated content.
 Do not place critical information or required actions inside a tooltip.
 
 ## Design intent
-Tooltips are supplemental, non-interactive overlays triggered by hover or keyboard focus.
+Tooltips are supplemental, non-interactive overlays triggered by hover or keyboard focus. There's no
+arrow pointing at the trigger - it's a plain rounded rectangle, positioned to whichever side of the
+trigger actually fits the viewport.
 
 ## Accessibility
 Appear on hover and focus, are announced appropriately, and never receive focus themselves.

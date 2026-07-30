@@ -24,7 +24,8 @@
   "sizes": [
     "sm",
     "md",
-    "lg"
+    "lg",
+    "xl"
   ],
   "states": [
     "default"

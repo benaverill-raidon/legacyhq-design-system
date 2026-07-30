@@ -79,11 +79,10 @@
       "default": "neutral",
       "required": false
     },
-    "isDisabled": {
+    "disabled": {
       "type": "boolean",
       "default": false,
-      "required": false,
-      "mapsTo": "disabled"
+      "required": false
     },
     "isLoading": {
       "type": "boolean",
@@ -266,7 +265,7 @@
   "behaviorRules": [
     "Render a native button element.",
     "Default type must be button.",
-    "Suppress onClick when isDisabled is true.",
+    "Suppress onClick when disabled is true.",
     "Suppress onClick when isLoading is true.",
     "Set aria-busy when isLoading is true.",
     "Set data-loading when isLoading is true.",

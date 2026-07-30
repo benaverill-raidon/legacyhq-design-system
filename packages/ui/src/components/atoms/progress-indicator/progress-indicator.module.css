@@ -24,7 +24,7 @@
 }
 
 .appearance_primary {
-  --progress-indicator-selected-color: var(--color-content-brand-primary);
+  --progress-indicator-selected-color: var(--color-content-brand-primary-default);
 }
 
 .appearance_discovery {

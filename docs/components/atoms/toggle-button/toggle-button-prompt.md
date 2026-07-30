@@ -184,15 +184,21 @@ Add Toggle Button to atom/component barrel exports.
 
 ## Storybook
 
-Create:
+Create the library's unified structure:
 
 ```txt
+Toggle Button / Docs (.mdx)
 Toggle Button / Playground
 Toggle Button / Variants
-Toggle Button / Examples
+Toggle Button / Sizes
+Toggle Button / States
+Toggle Button / Content
+Toggle Button / EdgeCases
 ```
 
-Do not create separate States or Accessibility pages.
+States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+convention as Button/Checkbox) - focus preview needs no extra CSS, since the shared Focus Ring
+primitive already reacts to `data-force-state="focus"` directly on this element.
 
 ## Testing
 
@@ -212,6 +218,8 @@ Test:
 - ref forwarding
 - custom className
 - click behavior
+- 6px icon-to-text gap at every size
+- data-force-state hover/pressed preview
 
 ## Do not
 
@@ -234,6 +242,4 @@ Do not add loading.
 Do not add `asChild`.
 
 Do not add ToggleButtonGroup.
-
-Do not add Toggle Icon Button.
 

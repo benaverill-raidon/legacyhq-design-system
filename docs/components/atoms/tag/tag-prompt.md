@@ -26,7 +26,8 @@ type TagTone =
   | 'teal'
   | 'yellow'
   | 'orange'
-  | 'magenta';
+  | 'magenta'
+  | 'brand';
 
 type TagSize = 'sm' | 'md';
 
@@ -180,12 +181,15 @@ Support:
 
 ```txt
 size: sm | md
-tone: standard | blue | green | purple | red | teal | yellow | orange | magenta
+tone: standard | blue | green | purple | red | teal | yellow | orange | magenta | brand
 state: default | hover | press | focus
 isRemovable: false | true
 elemBefore: false | true
 isDisabled: false | true
 ```
+
+The `elemBefore` and remove-button icon glyphs are a constant 16px at both `sm` and `md` - only the
+tag height, padding, and remove-button container scale with size.
 
 ## Token rules
 
@@ -202,15 +206,23 @@ Do not hardcode:
 
 ## Storybook
 
-Create:
+Create the library's unified structure:
 
 ```txt
+Tag / Docs (.mdx)
 Tag / Playground
 Tag / Variants
-Tag / Examples
+Tag / Sizes
+Tag / States
+Tag / Content
+Tag / EdgeCases
 ```
 
-Do not create separate States or Accessibility pages.
+States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+convention as Button/Checkbox) and real `autoFocus` for focus preview, since content and the remove
+button are two independently-focusable elements, each with their own ring - not one ring around the
+whole tag, despite Figma's single combined focus swatch (it can't represent "content focused" vs
+"remove button focused" as separate variants).
 
 ## Testing
 
@@ -220,6 +232,8 @@ Important test:
 
 ```txt
 Clicking remove does not trigger navigation or the tag link click handler.
+Icon size stays a constant 16px regardless of tag size.
+data-force-state hover/pressed preview applies to both the content and remove areas.
 ```
 
 ## Do not

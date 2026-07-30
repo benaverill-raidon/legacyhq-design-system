@@ -7,7 +7,7 @@
         "thumb-size": { "value": "var(--measurement-16)", "type": "dimension" },
         "thumb-inset": { "value": "var(--measurement-2)", "type": "dimension" },
         "thumb-translation": { "value": "var(--measurement-20)", "type": "dimension" },
-        "icon-offset": { "value": "var(--spacing-sm)", "type": "dimension" }
+        "icon-offset": { "value": "var(--measurement-6)", "type": "dimension" }
       },
       "sm": {
         "track-width": { "value": "var(--measurement-32)", "type": "dimension" },

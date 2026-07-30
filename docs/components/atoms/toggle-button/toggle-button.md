@@ -10,7 +10,8 @@ Use for persistent on/off formatting, filtering, or view options.
 Do not use for navigation or momentary actions.
 
 ## Design intent
-Combine the familiarity of a button with a persistent selected state.
+Combine the familiarity of a button with a persistent selected state. The icon-to-text gap is a
+constant 6px at every size, and the icon itself is never resized by the component, matching Button.
 
 ## Accessibility
 Expose pressed state using `aria-pressed`, support keyboard interaction, and provide visible focus.

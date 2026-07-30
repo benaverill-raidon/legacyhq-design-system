@@ -36,6 +36,9 @@
 - [ ] `lg`: 40px root / 24px track.
 - [ ] Stop shape is 4px.
 - [ ] Track uses full-round geometry.
+- [ ] Start stop uses the track-contrast color at value 0, and the progress-contrast color for any value above 0.
+- [ ] End stop uses the track-contrast color below 100, and the progress-contrast color at value 100.
+- [ ] Stop shape has no border - a single flat fill only.
 
 ## Circular
 
@@ -48,6 +51,7 @@
 - [ ] Progress advances clockwise.
 - [ ] Start stop is aligned at 12 o'clock.
 - [ ] Circular geometry scales without raster artifacts.
+- [ ] Top stop uses the track-contrast color below 100, and the progress-contrast color at value 100.
 
 ## Tokens
 

@@ -1,0 +1,184 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ProgressIndicatorStories from './progress-indicator.stories';
+
+<Meta of={ProgressIndicatorStories} name="Docs" />
+
+# Progress Indicator
+
+Progress Indicator shows a user where they are within a finite sequence of steps - a row of dots
+with exactly one dot selected. The dot count comes from `totalSteps`; it isn't limited to a fixed
+number of steps.
+
+<Canvas of={ProgressIndicatorStories.Playground} />
+
+## When to use
+
+- Client onboarding and guided setup flows.
+- Multi-step forms.
+- Carousel position.
+- Any journey where relative position matters more than percentage complete.
+
+## When not to use
+
+- **For percentage-based system progress.** Use `ProgressBar`.
+- **For indeterminate loading.** Use `Spinner`.
+- **For tab selection.** Progress Indicator has no concept of independently navigable panels.
+- **As a labeled, navigable stepper.** Progress Indicator has no per-step labels or built-in
+  navigation - a future Stepper pattern covers that.
+- **For a persistent selected/unselected control.** Use `ToggleButton`.
+
+## Anatomy
+
+<Canvas of={ProgressIndicatorStories.Content} />
+
+1. **Root** - owns progress semantics (`role="progressbar"` with one-based min/max/current values).
+   Always required.
+2. **Dot list** - a row of dots, one per normalized `totalSteps`, laid out with no gap between dot
+   containers.
+3. **Dot** - a passive, `aria-hidden` `span` when `onStepChange` is omitted, or a native `button`
+   with an accessible `Go to step N` label when it's provided. Exactly one dot is selected at a
+   time; the Figma-only `indicator-dot` part stays private anatomy and isn't exported.
+
+## Usage guidance
+
+### Controlled by currentStep and totalSteps
+
+`currentStep` is one-based and clamps to `1-totalSteps`; `totalSteps` normalizes to at least `1`.
+Previous/Next controls belong to the surrounding composition, not to Progress Indicator itself -
+see Content for an externally-controlled pagination example.
+
+### Passive by default, interactive on request
+
+Dots render as non-focusable, `aria-hidden` spans unless `onStepChange` is provided. Providing it
+turns each dot into a native `button` with the shared `FocusRing`, and the selected dot gains
+`aria-current="step"`. Only add direct step selection when jumping to an arbitrary step is actually
+useful in that flow - don't add it just because the callback exists.
+
+### Appearance versus size
+
+`appearance` (`default`, `primary`, `discovery`, `inverted`) and `size` (`sm`, `md`) are independent
+axes - see Variants and Sizes. `inverted` is the one appearance that requires a dark or bold
+surface: its selected dot uses `color-content-inverse` (white), which is invisible on a light
+background.
+
+### Value text
+
+The root exposes `aria-valuetext` as `Step X of Y` by default. Pass `getValueText` when the journey
+has more specific vocabulary than "step" - see Content.
+
+### Verifying interaction states
+
+Progress Indicator has no interactive state of its own to pin with `data-force-state` the way
+Button or Avatar do - hover, focus, and pressed apply per dot, not to the root. See States for the
+live example to tab through and click instead.
+
+## Do / Don't
+
+**Do** let `currentStep` and `totalSteps` come from state the surrounding flow owns.
+
+```tsx
+<ProgressIndicator currentStep={step} totalSteps={5} label="Client onboarding" onStepChange={setStep} />
+```
+
+**Don't** track completed-step styling inside Progress Indicator - it only knows the current step.
+
+```tsx
+<ProgressIndicator currentStep={step} totalSteps={5} completedSteps={[1, 2]} />
+```
+
+---
+
+**Do** use the `inverted` appearance only on a dark or bold surface.
+
+```tsx
+<div data-theme="dark">
+  <ProgressIndicator appearance="inverted" currentStep={4} totalSteps={5} label="Document setup" />
+</div>
+```
+
+**Don't** use `inverted` on a light surface - the selected dot disappears.
+
+```tsx
+<ProgressIndicator appearance="inverted" currentStep={4} totalSteps={5} label="Document setup" />
+```
+
+---
+
+**Do** provide external Previous/Next controls when the journey needs them.
+
+```tsx
+<Button onClick={() => setStep((value) => value - 1)}>Previous</Button>
+<ProgressIndicator currentStep={step} totalSteps={5} onStepChange={setStep} />
+<Button onClick={() => setStep((value) => value + 1)}>Next</Button>
+```
+
+**Don't** expect Progress Indicator to render its own Previous/Next buttons - it doesn't.
+
+```tsx
+<ProgressIndicator currentStep={step} totalSteps={5} showNavigation />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>currentStep</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. One-based. Clamped to <code>1-totalSteps</code>.</td>
+    </tr>
+    <tr>
+      <td><code>totalSteps</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. Normalized to at least <code>1</code>. Determines the dot count.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'primary' | 'discovery' | 'inverted'</code></td>
+      <td><code>'default'</code></td>
+      <td>Selected-dot color. <code>inverted</code> requires a dark or bold surface.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md'</code></td>
+      <td><code>'sm'</code></td>
+      <td>16px or 20px dot container; also the interactive hit target size.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible journey name, used when <code>aria-label</code>/<code>aria-labelledby</code> are absent.</td>
+    </tr>
+    <tr>
+      <td><code>getValueText</code></td>
+      <td><code>(currentStep: number, totalSteps: number) =&gt; string</code></td>
+      <td>-</td>
+      <td>Overrides the default <code>Step X of Y</code> announced value text.</td>
+    </tr>
+    <tr>
+      <td><code>onStepChange</code></td>
+      <td><code>(step: number) =&gt; void</code></td>
+      <td>-</td>
+      <td>Provide to make dots interactive native buttons. Progress Indicator stays controlled - it doesn't manage its own step state.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `div` prop is forwarded to the root element.
+
+## Related components
+
+- **ProgressBar** - for determinate, percentage-based system progress.
+- **Spinner** - for indeterminate loading.
+- **Button** - for the external Previous/Next controls in a composed journey.

@@ -1,0 +1,76 @@
+{
+    "id": "component-api-governance",
+    "designSystem": "LegacyHQ",
+    "artifact": "component-api-governance",
+    "version": "1.0.0",
+    "status": "draft",
+    "owner": "LegacyHQ Design System",
+    "lastReviewed": "2026-07-27",
+    "appliesTo": [
+        "components"
+    ],
+    "overview": {
+        "description": "Cross-cutting conventions for component prop APIs, so prop names and shapes are predictable across the whole library instead of decided fresh per component."
+    },
+    "rules": [
+        {
+            "id": "disabled-prop",
+            "name": "Use native `disabled`, not `isDisabled`",
+            "status": "enforced",
+            "description": "Disabled state must be exposed as the native `disabled` prop/attribute, not a custom `isDisabled` boolean.",
+            "rationale": [
+                "`disabled` is a real HTML attribute: it works with forms, the `:disabled` CSS pseudo-class, and testing-library's toBeDisabled() out of the box.",
+                "Re-typing a custom `isDisabled` prop after Omit-ing the native `disabled` attribute is extra code for no behavioral gain.",
+                "Checkbox, Switch, and Radio already use `disabled` directly; it is the majority pattern, not the exception."
+            ],
+            "correct": {
+                "prop": "disabled",
+                "example": "Checkbox, Switch, Radio"
+            },
+            "knownViolations": [
+                {
+                    "component": "Button",
+                    "prop": "isDisabled",
+                    "resolution": "migrate to `disabled` next time Button is touched"
+                },
+                {
+                    "component": "IconButton",
+                    "prop": "isDisabled",
+                    "resolution": "migrate to `disabled` next time IconButton is touched"
+                }
+            ]
+        },
+        {
+            "id": "is-prefix-scope",
+            "name": "Reserve `is*` prefix for component-owned state",
+            "status": "enforced",
+            "description": "The `is*` boolean prop prefix (e.g. isLoading, isFullWidth, isExpanded) should only be used for state that is custom to the component's own visual/behavioral logic — not for anything that maps directly to a native HTML attribute.",
+            "rationale": [
+                "Native attributes (disabled, checked, required, readOnly) already have an established name; renaming them with an `is*` prefix adds a translation layer with no benefit.",
+                "Custom component state (loading, full width, expanded) has no native equivalent, so an `is*` prop is the clearest way to name it."
+            ],
+            "correct": {
+                "examples": [
+                    "isLoading (Button, IconButton) — no native equivalent",
+                    "isFullWidth (Button) — no native equivalent",
+                    "disabled (Checkbox, Switch, Radio) — native attribute, not isDisabled"
+                ]
+            }
+        }
+    ],
+    "decisionFramework": {
+        "questions": [
+            "Does this prop correspond to a native HTML attribute?",
+            "If yes: use the native name as-is.",
+            "If no: is this state genuinely specific to this component's own behavior?",
+            "If yes: an `is*`-prefixed boolean is appropriate."
+        ],
+        "defaultDecision": "Prefer the native attribute name whenever one exists.",
+        "principle": "Don't invent a prop name where HTML already has one."
+    },
+    "defaults": {
+        "preferNativeAttributeNames": true,
+        "allowIsPrefixForNativeAttributes": false,
+        "requireDocumentedExceptionForViolations": true
+    }
+}

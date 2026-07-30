@@ -44,7 +44,7 @@ Tags may be display-only, navigational, removable, or both navigational and remo
 ```txt
 size: sm | md
 state: default | hover | press | focus
-tone: standard | blue | green | purple | red | teal | yellow | orange | magenta
+tone: standard | blue | green | purple | red | teal | yellow | orange | magenta | brand
 isRemovable: false | true
 elemBefore: false | true
 isDisabled: false | true
@@ -63,7 +63,8 @@ type TagTone =
   | 'teal'
   | 'yellow'
   | 'orange'
-  | 'magenta';
+  | 'magenta'
+  | 'brand';
 
 type TagSize = 'sm' | 'md';
 
@@ -224,25 +225,51 @@ Do not hardcode:
 - focus ring values
 - radius values
 
+## Validated Figma Details
+
+- Root fill (`color-elevation-surface-raised-default`), border (`color-border-bold`), hover/pressed
+  overlay layers (`color-background-neutral-overlay-hovered`/`-pressed`), disabled border/content
+  (`color-border-disabled`/`color-content-disabled`), and the focus ring color
+  (`color-border-focused`, `#003655`) all matched the existing implementation exactly - no color
+  drift found.
+- `sm` = 24px tall, 4px corner radius; `md` = 32px tall, 8px corner radius; remove-button container
+  scales 24px/32px alongside - all already correct.
+- Fixed a real bug: the `elemBefore` and remove-button icon glyphs are a constant 16px in Figma at
+  both `sm` and `md` - the implementation incorrectly shrank the icon to 12px at `sm` via a
+  component-token override. Fixed by letting `sm` inherit the constant 16px.
+- Figma's `tone` variant options (`standard`, `blue`, `green`, `purple`, `red`, `teal`, `yellow`,
+  `orange`, `magenta`, `brand`) match the implementation's `TagTone` type exactly - this doc's
+  earlier `TagTone`/Figma-properties lists were missing `brand`, which has been corrected.
+- Figma's single `state=focus` swatch shows a ring wrapping the entire tag, not a tight ring around
+  just the focused sub-element - but Figma has only one `state` axis and can't represent "content
+  focused" vs "remove button focused" as distinct variants. Decision: keep independent per-control
+  focus rings (the existing, standard behavior for two separately-focusable native elements) rather
+  than treat the single combined swatch as firm intent.
+- Figma's own default `size` variant is `sm`; the code default stays `md`, consistent with every
+  other sized atom in this library.
+
 ## Storybook requirements
 
-Create:
+Create the library's unified structure:
 
+- Tag / Docs (.mdx)
 - Tag / Playground
 - Tag / Variants
-- Tag / Examples
+- Tag / Sizes
+- Tag / States
+- Tag / Content
+- Tag / EdgeCases
 
 Show:
 
-- all sizes
 - all tones
-- display-only tags
-- navigational tags
-- removable tags
-- navigational + removable tags
-- leading icon/avatar examples
+- the four fundamentally different rendered forms (display-only, navigational, removable,
+  navigational + removable)
+- `sm`/`md` side by side, confirming the icon glyph stays visually the same size at both
 - disabled tags
-- focus/hover/press preview states if current story conventions support them
+- hover/pressed previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
+  focus previews via real `autoFocus`, since content and remove are independently focusable
+- a live example verifying hover/focus/remove independence by hand
 
 ## Test requirements
 
@@ -263,6 +290,8 @@ Test:
 - applies size classes
 - forwards ref if supported
 - custom className works
+- keeps the elemBefore/remove icon a constant 16px regardless of size
+- supports data-force-state hover/pressed preview on both the content and remove areas
 
 ## Do not include
 

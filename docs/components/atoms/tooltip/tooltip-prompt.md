@@ -120,15 +120,18 @@ Use Figma values through existing project tokens:
 background: color/background/neutral/bold/default
 content: color/content/inverse
 typography: body-sm
-radius: 4px
-padding-x: spacing-075
-padding-y: spacing-025
-gap: spacing-050
+radius: 4px (border-radius-sm)
+padding-x: 6px (a raw measurement - doesn't land on the 4/8/12/16px spacing scale)
+padding-y: 2px (spacing-xxs)
+gap: 4px (spacing-xs)
 wrapped max-width: 240px
 truncated max-width: 420px
 ```
 
-Use actual generated token names for semantic properties. Keep the unbound width constraints private to Tooltip.
+Use actual generated token names for semantic properties. Keep the unbound width constraints private
+to Tooltip. Verified directly against Figma's own tooltip-primitive frame - the only surprise was
+horizontal padding, which measures 6px rather than the 8px `spacing-sm` a previous implementation
+used.
 
 ## Truncation
 
@@ -174,15 +177,18 @@ Use actual project naming conventions.
 
 ## Storybook
 
-Create:
+Create the library's unified structure, minus Sizes/States - Tooltip has no `size` prop and no
+static interactive-state axis (Figma's own variant properties are only `truncate` and
+`showTooltip`); the only "state" is shown/hidden, already demonstrated live by hovering/focusing
+the Playground trigger:
 
 ```txt
+Tooltip / Docs (.mdx)
 Tooltip / Playground
 Tooltip / Variants
-Tooltip / Examples
+Tooltip / Content
+Tooltip / EdgeCases
 ```
-
-Do not create separate States or Accessibility pages.
 
 ## Tests
 
@@ -202,6 +208,7 @@ disabled prevents display
 placement classes/states
 truncate classes/states
 preserves child event handlers
+uses 6px horizontal padding, not the 8px spacing-sm token
 ```
 
 ## Do not

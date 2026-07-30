@@ -14,7 +14,7 @@ const meta = {
     appearance: 'default',
     tone: 'neutral',
     size: 'md',
-    isDisabled: false,
+    disabled: false,
     isLoading: false,
     isFullWidth: false,
   },
@@ -22,7 +22,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
     tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error', 'discovery'] },
     size: { control: 'inline-radio', options: sizes },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     isFullWidth: { control: 'boolean' },
     iconBefore: { control: false },
@@ -198,7 +198,7 @@ export const States: Story = {
           <Button data-force-state="active">Save changes</Button>
         </Cell>
         <Cell label="Disabled">
-          <Button isDisabled>Save changes</Button>
+          <Button disabled>Save changes</Button>
         </Cell>
         <Cell label="Loading">
           <Button isLoading>Save changes</Button>
@@ -225,7 +225,7 @@ export const States: Story = {
           </Button>
         </Cell>
         <Cell label="Disabled">
-          <Button appearance="primary" isDisabled>
+          <Button appearance="primary" disabled>
             Save changes
           </Button>
         </Cell>
@@ -238,12 +238,12 @@ export const States: Story = {
 
       <Group title="Disabled flattens tone">
         <Cell label="warning, disabled">
-          <Button appearance="primary" tone="warning" isDisabled>
+          <Button appearance="primary" tone="warning" disabled>
             Archive
           </Button>
         </Cell>
         <Cell label="error, disabled">
-          <Button appearance="primary" tone="error" isDisabled>
+          <Button appearance="primary" tone="error" disabled>
             Delete
           </Button>
         </Cell>

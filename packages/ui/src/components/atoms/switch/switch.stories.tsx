@@ -1,43 +1,48 @@
 import * as React from 'react';
-import type { CSSProperties } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { CSSProperties, ReactNode } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Switch } from './switch';
+import type { SwitchSize } from './switch.types';
 
-const meta: Meta<typeof Switch> = {
+const sizes: SwitchSize[] = ['md', 'sm'];
+
+const meta = {
   title: 'UI/Atoms/Switch',
   component: Switch,
   args: {
     label: 'Label',
   },
   argTypes: {
-    size: { control: 'inline-radio', options: ['md', 'sm'] },
+    size: { control: 'inline-radio', options: sizes },
     checked: { control: 'boolean' },
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
+    isLoading: { control: 'boolean' },
     label: { control: 'text' },
     className: { control: false },
     onCheckedChange: { control: false },
   },
-};
+} satisfies Meta<typeof Switch>;
 
 export default meta;
 
-type Story = StoryObj<typeof Switch>;
+type Story = StoryObj<typeof meta>;
 
-const stackStyle = {
-  display: 'grid',
-  gap: 'var(--spacing-lg)',
-  color: 'var(--color-content-default)',
-} satisfies CSSProperties;
+const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)', color: 'var(--color-content-default)' };
 
-const rowStyle = {
+const row: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
-  gap: 'var(--spacing-2xl)',
-} satisfies CSSProperties;
+  gap: 'var(--spacing-lg)',
+};
 
-const cardStyle = {
+const captionStyle: CSSProperties = {
+  font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
+  color: 'var(--color-content-subtle)',
+};
+
+const cardStyle: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-md)',
   padding: 'var(--spacing-lg)',
@@ -45,115 +50,236 @@ const cardStyle = {
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
-} satisfies CSSProperties;
+};
 
-const darkSurfaceStyle = {
+const darkSurfaceStyle: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-md)',
   padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse)',
-} satisfies CSSProperties;
+};
 
-const settingRowStyle = {
+const settingRowStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   gap: 'var(--spacing-lg)',
-} satisfies CSSProperties;
+};
 
-const settingTextStyle = {
-  display: 'grid',
-  gap: 'var(--spacing-xxs)',
-} satisfies CSSProperties;
+const settingTextStyle: CSSProperties = { display: 'grid', gap: 'var(--spacing-xxs)' };
 
-const subtleTextStyle = {
-  color: 'var(--color-content-subtle)',
-} satisfies CSSProperties;
+const headingStyle: CSSProperties = {
+  margin: 0,
+  font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
+  color: 'var(--color-content-default)',
+};
 
-function ControlledSwitchExample() {
+/** A labelled cell so every specimen in a matrix is self-describing. */
+function Cell({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div style={{ display: 'grid', gap: 'var(--spacing-sm)', justifyItems: 'start' }}>
+      {children}
+      <span style={captionStyle}>{label}</span>
+    </div>
+  );
+}
+
+function Group({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+      <h3 style={headingStyle}>{title}</h3>
+      <div style={row}>{children}</div>
+    </section>
+  );
+}
+
+/** Prop exploration. Every supported prop is wired to a control. */
+export const Playground: Story = {};
+
+/** `size` is the only variant-like axis - track thickness, thumb, and travel distance all scale together. */
+export const Sizes: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Unchecked">
+        {sizes.map((size) => (
+          <Cell key={size} label={size}>
+            <Switch aria-label={`${size} unchecked`} size={size} />
+          </Cell>
+        ))}
+      </Group>
+      <Group title="Checked">
+        {sizes.map((size) => (
+          <Cell key={size} label={size}>
+            <Switch aria-label={`${size} checked`} size={size} defaultChecked />
+          </Cell>
+        ))}
+      </Group>
+    </div>
+  ),
+};
+
+function LiveToggleExample() {
   const [enabled, setEnabled] = React.useState(true);
 
   return <Switch label="Auto-archive closed matters" checked={enabled} onCheckedChange={setEnabled} />;
 }
 
-export const Playground: Story = {};
-
-export const Variants: Story = {
+/**
+ * Interaction and system states, crossed with checked. `data-force-state` mirrors the adjacent
+ * pseudo-class so hover/pressed render as a static regression reference (documentation-only, not
+ * part of the public API); focus preview instead uses the shared Focus Ring primitive's own
+ * `data-force-state="focus"` support on the input. Loading blocks toggling and announces
+ * `aria-busy`, but stays focusable - unlike disabled, which removes it from the tab order - see the
+ * Live group to verify both by hand.
+ */
+export const States: Story = {
   render: () => (
-    <div style={stackStyle}>
-      <div style={rowStyle}>
-        <Switch label="Unchecked md" />
-        <Switch label="Checked md" defaultChecked />
-        <Switch label="Focused md" autoFocus />
-      </div>
+    <div style={stack}>
+      <Group title="Unchecked">
+        <Cell label="Default">
+          <Switch label="Label" />
+        </Cell>
+        <Cell label="Hover">
+          <Switch label="Label" data-force-state="hover" />
+        </Cell>
+        <Cell label="Focus visible">
+          <Switch label="Label" data-force-state="focus" />
+        </Cell>
+        <Cell label="Pressed">
+          <Switch label="Label" data-force-state="active" />
+        </Cell>
+        <Cell label="Disabled">
+          <Switch label="Label" disabled />
+        </Cell>
+        <Cell label="Loading">
+          <Switch label="Label" isLoading />
+        </Cell>
+      </Group>
 
-      <div style={rowStyle}>
-        <Switch label="Unchecked sm" size="sm" />
-        <Switch label="Checked sm" size="sm" defaultChecked />
-        <Switch label="Required sm" size="sm" required />
-      </div>
+      <Group title="Checked">
+        <Cell label="Default">
+          <Switch label="Label" defaultChecked />
+        </Cell>
+        <Cell label="Hover">
+          <Switch label="Label" defaultChecked data-force-state="hover" />
+        </Cell>
+        <Cell label="Focus visible">
+          <Switch label="Label" defaultChecked data-force-state="focus" />
+        </Cell>
+        <Cell label="Pressed">
+          <Switch label="Label" defaultChecked data-force-state="active" />
+        </Cell>
+        <Cell label="Disabled">
+          <Switch label="Label" defaultChecked disabled />
+        </Cell>
+        <Cell label="Loading">
+          <Switch label="Label" defaultChecked isLoading />
+        </Cell>
+      </Group>
 
-      <div style={rowStyle}>
-        <Switch label="Disabled md" disabled />
-        <Switch label="Disabled checked md" disabled defaultChecked />
-        <Switch label="Required md" required />
-      </div>
+      <Group title="Required">
+        <Cell label="Required">
+          <Switch label="Label" required />
+        </Cell>
+      </Group>
+
+      <Group title="Live - click, tab to, and toggle this">
+        <LiveToggleExample />
+      </Group>
     </div>
   ),
 };
 
-export const Examples: Story = {
+/** How Switch behaves with realistic content and inside the compositions it's designed for. */
+export const Content: Story = {
   render: () => (
-    <div style={stackStyle}>
-      <div style={cardStyle}>
-        <Switch aria-label="Enable standalone setting" defaultChecked />
-      </div>
+    <div style={stack}>
+      <Group title="Label content">
+        <Cell label="Standard label">
+          <Switch label="Email notifications" defaultChecked />
+        </Cell>
+        <Cell label="No visible label (aria-label only)">
+          <Switch aria-label="Enable standalone setting" />
+        </Cell>
+      </Group>
 
-      <div style={cardStyle}>
-        <Switch label="Email notifications" defaultChecked />
-        <Switch label="Compact notification summary" size="sm" />
-      </div>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>In composition</h3>
 
-      <div style={cardStyle}>
-        <div style={settingRowStyle}>
-          <div style={settingTextStyle}>
-            <strong>Smart reminders</strong>
-            <span style={subtleTextStyle}>Suggest follow-ups for active matters.</span>
-          </div>
-          <Switch aria-label="Smart reminders" defaultChecked />
+        <div style={cardStyle}>
+          <Switch label="Email notifications" defaultChecked />
+          <Switch label="Compact notification summary" size="sm" />
         </div>
-        <div style={settingRowStyle}>
-          <div style={settingTextStyle}>
-            <strong>External sharing</strong>
-            <span style={subtleTextStyle}>Allow client-visible document links.</span>
+
+        <div style={cardStyle}>
+          <div style={settingRowStyle}>
+            <div style={settingTextStyle}>
+              <strong>Smart reminders</strong>
+              <span style={captionStyle}>Suggest follow-ups for active matters.</span>
+            </div>
+            <Switch aria-label="Smart reminders" defaultChecked />
           </div>
-          <Switch aria-label="External sharing" />
+          <div style={settingRowStyle}>
+            <div style={settingTextStyle}>
+              <strong>External sharing</strong>
+              <span style={captionStyle}>Allow client-visible document links.</span>
+            </div>
+            <Switch aria-label="External sharing" />
+          </div>
         </div>
-      </div>
 
-      <form style={cardStyle}>
-        <Switch label="Include archived matters" name="includeArchived" value="yes" />
-        <Switch label="Required preference" name="requiredPreference" required />
-        <button type="submit">Save preferences</button>
-      </form>
+        <form style={cardStyle}>
+          <Switch label="Include archived matters" name="includeArchived" value="yes" />
+          <Switch label="Required preference" name="requiredPreference" required />
+          <button type="submit">Save preferences</button>
+        </form>
 
-      <div style={cardStyle}>
-        <ControlledSwitchExample />
-        <Switch label="Locked setting" disabled />
-      </div>
+        <div style={cardStyle}>
+          <Switch label="Syncing calendar" isLoading defaultChecked />
+          <Switch label="Locked setting" disabled />
+        </div>
 
-      <div data-theme="dark" style={darkSurfaceStyle}>
-        <Switch label="Dark surface unchecked" />
-        <Switch label="Dark surface checked" defaultChecked />
-      </div>
+        <div data-theme="dark" style={darkSurfaceStyle}>
+          <Switch label="Dark surface unchecked" />
+          <Switch label="Dark surface checked" defaultChecked />
+        </div>
+      </section>
+    </div>
+  ),
+};
 
-      <div style={cardStyle}>
-        <span style={subtleTextStyle}>Reduced motion follows the user's system preference.</span>
+/** Difficult states made reproducible outside the application. */
+export const EdgeCases: Story = {
+  render: () => (
+    <div style={stack}>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Reduced motion</h3>
+        <p style={captionStyle}>
+          <code>prefers-reduced-motion: reduce</code> follows the user's system preference and
+          removes the thumb's slide/press animation - toggle it from your OS or browser accessibility
+          settings against this example.
+        </p>
         <Switch label="Motion-aware switch" defaultChecked />
-      </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Long label wraps in a narrow container</h3>
+        <p style={captionStyle}>
+          The control stays anchored to the first line of a wrapped label rather than shrinking.
+        </p>
+        <div
+          style={{
+            inlineSize: '160px',
+            padding: 'var(--spacing-sm)',
+            border: 'var(--border-width-sm) dashed var(--color-border-default)',
+            borderRadius: 'var(--border-radius-sm)',
+          }}
+        >
+          <Switch label="Notify every assigned reviewer whenever this matter changes status" />
+        </div>
+      </section>
     </div>
   ),
 };
-

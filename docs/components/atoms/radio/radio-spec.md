@@ -341,14 +341,20 @@ focusable="false"
 
 ## Storybook Requirements
 
-Use atom story structure:
+Use atom documentation structure:
 
 ```txt
 Radio
+├─ Docs
 ├─ Playground
-├─ Variants
-└─ Examples
+├─ States
+├─ Content
+└─ Edge Cases
 ```
+
+Radio has no `size` prop and no visual-style axis independent of value (unlike Button's appearance
+or tone) - checked/invalid/disabled/required are state, not variant - so there is no Sizes or
+Variants section, the same reasoning Checkbox's Docs page documents.
 
 ### Playground
 
@@ -360,31 +366,27 @@ Controls for:
 - required
 - label
 
-### Variants
+### States
 
-Show:
+Show unchecked, checked, and invalid (unchecked/checked) crossed with default/hover/focus/pressed/
+disabled, plus a live example demonstrating real click-driven, mutually-exclusive selection. Radio
+pins hover/focus/pressed with its own `previewHover`/`previewFocus`/`previewPress` classes rather
+than the shared `data-force-state` convention - document this rather than silently switching to
+`data-force-state`, which Radio's CSS does not read.
 
-- unchecked
-- checked
-- invalid unchecked
-- invalid checked
-- disabled unchecked
-- disabled checked
-- focus example if possible
+### Content
 
-### Examples
+Show label content variations (standard, required, label-less with `aria-label`, long/wrapping),
+a label-less table radio example, RadioGroup with the `options` API, a controlled RadioGroup,
+`orientation="horizontal"`, `children` composition, a required group, and a disabled group.
 
-Show:
+### Edge Cases
 
-- standalone radio
-- label-less table radio example
-- vertical RadioGroup
-- controlled RadioGroup
-- uncontrolled RadioGroup
-- required RadioGroup
-- invalid RadioGroup with error message
-- disabled RadioGroup
-- dark surface example
+Show a label-less standalone Radio (anti-pattern, no dev warning today), an invalid group with an
+error message, a narrow container (label wraps), horizontal orientation wrapping in a narrow
+container, and a dark surface example.
+
+Do not create one story per variant permutation unless necessary.
 
 ## Testing Requirements
 

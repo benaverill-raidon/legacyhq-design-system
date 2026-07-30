@@ -19,7 +19,7 @@ appearance: default | primary | subtle
 size: xs | sm | md | lg
 shape: square | round
 state: default | hover | press | focus
-isDisabled
+disabled
 isLoading
 isExpanded
 ```

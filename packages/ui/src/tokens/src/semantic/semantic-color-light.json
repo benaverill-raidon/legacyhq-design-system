@@ -26,10 +26,15 @@
         "type": "color",
         "originalName": "color/content/loading"
       },
-      "color-content-brand-primary": {
+      "color-content-brand-primary-default": {
         "value": "var(--color-brand-prussian-solid-900)",
         "type": "color",
-        "originalName": "color/content/brand-primary"
+        "originalName": "color/content/brand/primary/default"
+      },
+      "color-content-brand-primary-subtle": {
+        "value": "var(--color-brand-prussian-solid-300)",
+        "type": "color",
+        "originalName": "color/content/brand/primary/subtle"
       },
       "color-content-error": {
         "value": "var(--color-red-solid-800)",
@@ -222,17 +227,17 @@
         "originalName": "color/background/accent/red/subtle/pressed"
       },
       "color-background-accent-red-default-default": {
-        "value": "var(--color-red-solid-200)",
+        "value": "var(--color-red-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/red/default/default"
       },
       "color-background-accent-red-default-hovered": {
-        "value": "var(--color-red-solid-300)",
+        "value": "var(--color-red-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/red/default/hovered"
       },
       "color-background-accent-red-default-pressed": {
-        "value": "var(--color-red-solid-400)",
+        "value": "var(--color-red-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/red/default/pressed"
       },
@@ -267,17 +272,17 @@
         "originalName": "color/background/accent/orange/subtle/pressed"
       },
       "color-background-accent-orange-default-default": {
-        "value": "var(--color-orange-solid-200)",
+        "value": "var(--color-orange-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/orange/default/default"
       },
       "color-background-accent-orange-default-hovered": {
-        "value": "var(--color-orange-solid-300)",
+        "value": "var(--color-orange-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/orange/default/hovered"
       },
       "color-background-accent-orange-default-pressed": {
-        "value": "var(--color-orange-solid-400)",
+        "value": "var(--color-orange-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/orange/default/pressed"
       },
@@ -312,17 +317,17 @@
         "originalName": "color/background/accent/yellow/subtle/pressed"
       },
       "color-background-accent-yellow-default-default": {
-        "value": "var(--color-yellow-solid-200)",
+        "value": "var(--color-yellow-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/yellow/default/default"
       },
       "color-background-accent-yellow-default-hovered": {
-        "value": "var(--color-yellow-solid-300)",
+        "value": "var(--color-yellow-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/yellow/default/hovered"
       },
       "color-background-accent-yellow-default-pressed": {
-        "value": "var(--color-yellow-solid-400)",
+        "value": "var(--color-yellow-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/yellow/default/pressed"
       },
@@ -357,17 +362,17 @@
         "originalName": "color/background/accent/green/subtle/pressed"
       },
       "color-background-accent-green-default-default": {
-        "value": "var(--color-green-solid-200)",
+        "value": "var(--color-green-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/green/default/default"
       },
       "color-background-accent-green-default-hovered": {
-        "value": "var(--color-green-solid-300)",
+        "value": "var(--color-green-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/green/default/hovered"
       },
       "color-background-accent-green-default-pressed": {
-        "value": "var(--color-green-solid-400)",
+        "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/green/default/pressed"
       },
@@ -402,17 +407,17 @@
         "originalName": "color/background/accent/teal/subtle/pressed"
       },
       "color-background-accent-teal-default-default": {
-        "value": "var(--color-teal-solid-200)",
+        "value": "var(--color-teal-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/teal/default/default"
       },
       "color-background-accent-teal-default-hovered": {
-        "value": "var(--color-teal-solid-300)",
+        "value": "var(--color-teal-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/teal/default/hovered"
       },
       "color-background-accent-teal-default-pressed": {
-        "value": "var(--color-teal-solid-400)",
+        "value": "var(--color-teal-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/teal/default/pressed"
       },
@@ -447,17 +452,17 @@
         "originalName": "color/background/accent/blue/subtle/pressed"
       },
       "color-background-accent-blue-default-default": {
-        "value": "var(--color-blue-solid-200)",
+        "value": "var(--color-blue-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/blue/default/default"
       },
       "color-background-accent-blue-default-hovered": {
-        "value": "var(--color-blue-solid-300)",
+        "value": "var(--color-blue-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/blue/default/hovered"
       },
       "color-background-accent-blue-default-pressed": {
-        "value": "var(--color-blue-solid-400)",
+        "value": "var(--color-blue-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/blue/default/pressed"
       },
@@ -492,17 +497,17 @@
         "originalName": "color/background/accent/purple/subtle/pressed"
       },
       "color-background-accent-purple-default-default": {
-        "value": "var(--color-purple-solid-200)",
+        "value": "var(--color-purple-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/purple/default/default"
       },
       "color-background-accent-purple-default-hovered": {
-        "value": "var(--color-purple-solid-300)",
+        "value": "var(--color-purple-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/purple/default/hovered"
       },
       "color-background-accent-purple-default-pressed": {
-        "value": "var(--color-purple-solid-400)",
+        "value": "var(--color-purple-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/purple/default/pressed"
       },
@@ -537,17 +542,17 @@
         "originalName": "color/background/accent/magenta/subtle/pressed"
       },
       "color-background-accent-magenta-default-default": {
-        "value": "var(--color-magenta-solid-200)",
+        "value": "var(--color-magenta-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/magenta/default/default"
       },
       "color-background-accent-magenta-default-hovered": {
-        "value": "var(--color-magenta-solid-300)",
+        "value": "var(--color-magenta-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/magenta/default/hovered"
       },
       "color-background-accent-magenta-default-pressed": {
-        "value": "var(--color-magenta-solid-400)",
+        "value": "var(--color-magenta-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/magenta/default/pressed"
       },
@@ -582,22 +587,22 @@
         "originalName": "color/background/accent/gray/subtle/pressed"
       },
       "color-background-accent-gray-default-default": {
-        "value": "var(--color-neutral-solid-200)",
+        "value": "var(--color-neutral-solid-300)",
         "type": "color",
         "originalName": "color/background/accent/gray/default/default"
       },
       "color-background-accent-gray-default-hovered": {
-        "value": "var(--color-neutral-solid-300)",
+        "value": "var(--color-neutral-solid-400)",
         "type": "color",
         "originalName": "color/background/accent/gray/default/hovered"
       },
       "color-background-accent-gray-default-pressed": {
-        "value": "var(--color-neutral-solid-400)",
+        "value": "var(--color-neutral-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/gray/default/pressed"
       },
       "color-background-accent-gray-bold-default": {
-        "value": "var(--color-neutral-solid-1100)",
+        "value": "var(--color-neutral-solid-1200)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/default"
       },
@@ -612,12 +617,12 @@
         "originalName": "color/background/accent/gray/overlay/pressed"
       },
       "color-background-accent-gray-bold-hovered": {
-        "value": "var(--color-neutral-solid-1000)",
+        "value": "var(--color-neutral-solid-1100)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/hovered"
       },
       "color-background-accent-gray-bold-pressed": {
-        "value": "var(--color-neutral-solid-900)",
+        "value": "var(--color-neutral-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/pressed"
       },
@@ -642,17 +647,17 @@
         "originalName": "color/background/disabled"
       },
       "color-background-error-default-default": {
-        "value": "var(--color-red-solid-200)",
+        "value": "var(--color-red-solid-300)",
         "type": "color",
         "originalName": "color/background/error/default/default"
       },
       "color-background-error-default-hovered": {
-        "value": "var(--color-red-solid-300)",
+        "value": "var(--color-red-solid-400)",
         "type": "color",
         "originalName": "color/background/error/default/hovered"
       },
       "color-background-error-default-pressed": {
-        "value": "var(--color-red-solid-400)",
+        "value": "var(--color-red-solid-500)",
         "type": "color",
         "originalName": "color/background/error/default/pressed"
       },
@@ -687,17 +692,17 @@
         "originalName": "color/background/warning/subtle/pressed"
       },
       "color-background-warning-default-default": {
-        "value": "var(--color-orange-solid-200)",
+        "value": "var(--color-orange-solid-300)",
         "type": "color",
         "originalName": "color/background/warning/default/default"
       },
       "color-background-warning-default-hovered": {
-        "value": "var(--color-orange-solid-300)",
+        "value": "var(--color-orange-solid-400)",
         "type": "color",
         "originalName": "color/background/warning/default/hovered"
       },
       "color-background-warning-default-pressed": {
-        "value": "var(--color-orange-solid-400)",
+        "value": "var(--color-orange-solid-500)",
         "type": "color",
         "originalName": "color/background/warning/default/pressed"
       },
@@ -737,17 +742,17 @@
         "originalName": "color/background/brand/primary/subtle/pressed"
       },
       "color-background-brand-primary-default-default": {
-        "value": "var(--color-brand-prussian-solid-200)",
+        "value": "var(--color-brand-prussian-solid-300)",
         "type": "color",
         "originalName": "color/background/brand/primary/default/default"
       },
       "color-background-brand-primary-default-hovered": {
-        "value": "var(--color-brand-prussian-solid-300)",
+        "value": "var(--color-brand-prussian-solid-400)",
         "type": "color",
         "originalName": "color/background/brand/primary/default/hovered"
       },
       "color-background-brand-primary-default-pressed": {
-        "value": "var(--color-brand-prussian-solid-400)",
+        "value": "var(--color-brand-prussian-solid-500)",
         "type": "color",
         "originalName": "color/background/brand/primary/default/pressed"
       },
@@ -792,17 +797,17 @@
         "originalName": "color/background/brand/secondary/subtle/pressed"
       },
       "color-background-brand-secondary-default-default": {
-        "value": "var(--color-brand-umber-solid-200)",
+        "value": "var(--color-brand-umber-solid-300)",
         "type": "color",
         "originalName": "color/background/brand/secondary/default/default"
       },
       "color-background-brand-secondary-default-hovered": {
-        "value": "var(--color-brand-umber-solid-300)",
+        "value": "var(--color-brand-umber-solid-400)",
         "type": "color",
         "originalName": "color/background/brand/secondary/default/hovered"
       },
       "color-background-brand-secondary-default-pressed": {
-        "value": "var(--color-brand-umber-solid-400)",
+        "value": "var(--color-brand-umber-solid-500)",
         "type": "color",
         "originalName": "color/background/brand/secondary/default/pressed"
       },
@@ -847,17 +852,17 @@
         "originalName": "color/background/information/subtle/pressed"
       },
       "color-background-information-default-default": {
-        "value": "var(--color-blue-solid-200)",
+        "value": "var(--color-blue-solid-300)",
         "type": "color",
         "originalName": "color/background/information/default/default"
       },
       "color-background-information-default-hovered": {
-        "value": "var(--color-blue-solid-300)",
+        "value": "var(--color-blue-solid-400)",
         "type": "color",
         "originalName": "color/background/information/default/hovered"
       },
       "color-background-information-default-pressed": {
-        "value": "var(--color-blue-solid-400)",
+        "value": "var(--color-blue-solid-500)",
         "type": "color",
         "originalName": "color/background/information/default/pressed"
       },
@@ -897,17 +902,17 @@
         "originalName": "color/background/success/subtle/pressed"
       },
       "color-background-success-default-default": {
-        "value": "var(--color-green-solid-200)",
+        "value": "var(--color-green-solid-300)",
         "type": "color",
         "originalName": "color/background/success/default/default"
       },
       "color-background-success-default-hovered": {
-        "value": "var(--color-green-solid-300)",
+        "value": "var(--color-green-solid-400)",
         "type": "color",
         "originalName": "color/background/success/default/hovered"
       },
       "color-background-success-default-pressed": {
-        "value": "var(--color-green-solid-400)",
+        "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/background/success/default/pressed"
       },
@@ -942,17 +947,17 @@
         "originalName": "color/background/discovery/subtle/pressed"
       },
       "color-background-discovery-default-default": {
-        "value": "var(--color-purple-solid-200)",
+        "value": "var(--color-purple-solid-300)",
         "type": "color",
         "originalName": "color/background/discovery/default/default"
       },
       "color-background-discovery-default-hovered": {
-        "value": "var(--color-purple-solid-300)",
+        "value": "var(--color-purple-solid-400)",
         "type": "color",
         "originalName": "color/background/discovery/default/hovered"
       },
       "color-background-discovery-default-pressed": {
-        "value": "var(--color-purple-solid-400)",
+        "value": "var(--color-purple-solid-500)",
         "type": "color",
         "originalName": "color/background/discovery/default/pressed"
       },
@@ -987,32 +992,32 @@
         "originalName": "color/background/neutral/subtle/pressed"
       },
       "color-background-neutral-default-default": {
-        "value": "var(--color-neutral-solid-200)",
+        "value": "var(--color-neutral-solid-300)",
         "type": "color",
         "originalName": "color/background/neutral/default/default"
       },
       "color-background-neutral-default-hovered": {
-        "value": "var(--color-neutral-solid-300)",
+        "value": "var(--color-neutral-solid-400)",
         "type": "color",
         "originalName": "color/background/neutral/default/hovered"
       },
       "color-background-neutral-default-pressed": {
-        "value": "var(--color-neutral-solid-400)",
+        "value": "var(--color-neutral-solid-500)",
         "type": "color",
         "originalName": "color/background/neutral/default/pressed"
       },
       "color-background-neutral-bold-default": {
-        "value": "var(--color-neutral-solid-1100)",
+        "value": "var(--color-neutral-solid-1200)",
         "type": "color",
         "originalName": "color/background/neutral/bold/default"
       },
       "color-background-neutral-bold-hovered": {
-        "value": "var(--color-neutral-solid-1000)",
+        "value": "var(--color-neutral-solid-1100)",
         "type": "color",
         "originalName": "color/background/neutral/bold/hovered"
       },
       "color-background-neutral-bold-pressed": {
-        "value": "var(--color-neutral-solid-900)",
+        "value": "var(--color-neutral-solid-1000)",
         "type": "color",
         "originalName": "color/background/neutral/bold/pressed"
       },

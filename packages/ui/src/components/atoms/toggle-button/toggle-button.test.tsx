@@ -168,12 +168,30 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
     expect(toggleButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
     expect(toggleButtonCss).toContain('border-color: var(--color-border-brand-primary);');
-    expect(toggleButtonCss).toContain('color: var(--color-content-brand-primary);');
+    expect(toggleButtonCss).toContain('color: var(--color-content-brand-primary-default);');
     expect(toggleButtonCss).toContain('background: var(--color-background-disabled);');
     expect(toggleButtonCss).toMatch(/\.tone_default \{[\s\S]*?background: transparent;/);
     expect(toggleButtonCss).toMatch(/\.tone_subtle \{[\s\S]*?border-color: transparent;[\s\S]*?background: transparent;/);
     expect(toggleButtonCss).not.toContain('--component-button-');
     expect(toggleButtonCss).not.toContain('--color-background-selected-');
     expect(toggleButtonCss).not.toContain('--color-border-selected');
+  });
+
+  it('uses a 6px icon-to-text gap, matching Figma at every size', () => {
+    // Regression guard: this was previously --spacing-sm (8px) - measuring Figma's own auto-layout
+    // itemSpacing on the icon/text container shows a constant 6px at xs/sm/md/lg alike.
+    expect(toggleButtonCss).toMatch(/\.toggleButton \{[\s\S]*?gap: var\(--measurement-6\);/);
+    expect(toggleButtonCss).not.toContain('gap: var(--spacing-sm);');
+  });
+
+  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+    expect(toggleButtonCss).toContain("[data-force-state='hover']");
+    expect(toggleButtonCss).toContain("[data-force-state='active']");
+  });
+
+  it('shows the hover fill on focus-visible too, matching Button', () => {
+    expect(toggleButtonCss).toMatch(
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
+    );
   });
 });

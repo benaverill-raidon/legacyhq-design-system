@@ -224,7 +224,7 @@ describe('IconButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <IconButton aria-label="Disabled" isDisabled onClick={handleClick}>
+      <IconButton aria-label="Disabled" disabled onClick={handleClick}>
         <CloseIcon />
       </IconButton>,
     );
@@ -239,7 +239,7 @@ describe('IconButton', () => {
 
   it('disabled IconButton can show a tooltip on hover while remaining disabled', () => {
     render(
-      <IconButton aria-label="Disabled" isDisabled>
+      <IconButton aria-label="Disabled" disabled>
         <CloseIcon />
       </IconButton>,
     );
@@ -266,7 +266,7 @@ describe('IconButton', () => {
     const loadingButton = screen.getByRole('button', { name: 'Loading' });
     expect(loadingButton).toHaveAttribute('aria-busy', 'true');
     expect(loadingButton).toHaveAttribute('aria-disabled', 'true');
-    expect(container.querySelector(`.${styles.spinner}`)).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
   it('expanded sets aria-expanded', () => {
@@ -368,9 +368,11 @@ describe('icon button CSS contract', () => {
     expect(iconButtonCss).not.toContain(".root[data-expanded='true']");
   });
 
-  it('keeps icon and spinner color inheritance token-driven', () => {
+  it('keeps icon color inheritance token-driven', () => {
     expect(iconButtonCss).toContain('.content :global([data-color]) {');
     expect(iconButtonCss).toContain('color: inherit;');
-    expect(iconButtonCss).toContain('.spinner {');
+    // The loading Spinner inherits color from Spinner's own base style now, not a same-named
+    // override here racing it on CSS source order - see spinner.module.css.
+    expect(iconButtonCss).not.toContain('.spinner {');
   });
 });

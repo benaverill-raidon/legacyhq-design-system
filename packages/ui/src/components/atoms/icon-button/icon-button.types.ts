@@ -7,11 +7,10 @@ export type IconButtonSize = ButtonSize;
 export type IconButtonShape = 'square' | 'round';
 
 export interface IconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   appearance?: IconButtonAppearance;
   size?: IconButtonSize;
   shape?: IconButtonShape;
-  isDisabled?: boolean;
   isLoading?: boolean;
   isExpanded?: boolean;
   tooltip?: React.ReactNode | false;

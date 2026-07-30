@@ -21,11 +21,23 @@
   vertical-align: middle;
 }
 
-.root:not(:disabled):not(.selected):hover {
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/focus/
+ * pressed as a static regression reference - documentation-only, not part of the public API. Focus
+ * is grouped into the same rule as hover, matching Button - focus-visible shows the hover fill in
+ * addition to the outline ring from the shared focus-ring primitive, so focus and hover read as one
+ * treatment.
+ */
+.root:not(:disabled):not(.selected):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
   background: var(--color-background-neutral-overlay-hovered);
 }
 
-.root:not(:disabled):not(.selected):active {
+.root:not(:disabled):not(.selected):is(:active, [data-force-state='active']) {
   background: var(--color-background-neutral-overlay-pressed);
 }
 
@@ -46,7 +58,7 @@
 .selected:active {
   border-color: var(--color-border-brand-primary);
   background: var(--color-background-brand-primary-default-default);
-  color: var(--color-content-brand-primary);
+  color: var(--color-content-brand-primary-default);
 }
 
 .size_xs {

@@ -96,7 +96,16 @@ Tooltip therefore uses a small local fixed-position portal implementation that:
 
 ## Styling and tokens
 
-Tooltip uses semantic color, typography, spacing, and radius tokens.
+Tooltip uses semantic color, typography, spacing, and radius tokens: background
+(`color-background-neutral-bold-default`), content color (`color-content-inverse`), corner radius
+(`border-radius-sm`, 4px), vertical padding (`spacing-xxs`, 2px), and content gap (`spacing-xs`,
+4px) - all verified directly against Figma's tooltip-primitive frame.
+
+Horizontal padding is `--measurement-6` (6px) - a raw measurement rather than a named spacing token,
+since Figma's own value doesn't land on the 4/8/12/16px spacing scale. A prior implementation used
+`--spacing-sm` (8px) here, which was 2px too wide.
+
+There is no arrow/caret pointing at the trigger - Figma's tooltip is a plain rounded rectangle.
 
 Tooltip-specific layout constraints remain private implementation values:
 
@@ -123,3 +132,41 @@ External composition remains supported:
   </IconButton>
 </Tooltip>
 ```
+
+## Storybook
+
+Unified story structure, minus Sizes/States - Tooltip has no `size` prop, and Figma's own variant
+properties are only `truncate` and `showTooltip`, so there's no static interactive-state axis to
+pin. The only "state" is shown/hidden, already demonstrated live by hovering/focusing the
+Playground trigger:
+
+```txt
+Tooltip
+├─ Docs (.mdx)
+├─ Playground
+├─ Variants
+├─ Content
+└─ EdgeCases
+```
+
+### Variants story
+
+Show `placement` (`top`/`right`/`bottom`/`left`) crossed with `truncate`, plus `disabled`.
+
+### Content story
+
+Show:
+
+- icon-only actions
+- toggle icon buttons
+- disabled-control explanations
+- a text button trigger
+
+### EdgeCases story
+
+Show:
+
+- placement falling back near a viewport edge (verify the resolved `data-placement` differs from
+  the requested one)
+- keyboard-focus trigger
+- dark surface

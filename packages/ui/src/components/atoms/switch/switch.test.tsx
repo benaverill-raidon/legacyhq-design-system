@@ -8,6 +8,7 @@ import { Switch } from './switch';
 import styles from './switch.module.css';
 
 const switchCss = readFileSync('packages/ui/src/components/atoms/switch/switch.module.css', 'utf8');
+const tokensCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
 
 afterEach(cleanup);
 
@@ -113,6 +114,86 @@ describe('Switch', () => {
     expect(handleCheckedChange).not.toHaveBeenCalled();
   });
 
+  it('supports loading state - blocks toggling but stays focusable, unlike disabled', () => {
+    const handleCheckedChange = vi.fn();
+
+    render(<Switch label="Saving" isLoading onCheckedChange={handleCheckedChange} />);
+
+    const switchInput = screen.getByRole('switch', { name: 'Saving' });
+
+    expect(switchInput).not.toBeDisabled();
+    expect(switchInput).toHaveAttribute('aria-busy', 'true');
+
+    fireEvent.click(switchInput);
+
+    expect(switchInput).not.toBeChecked();
+    expect(handleCheckedChange).not.toHaveBeenCalled();
+
+    switchInput.focus();
+    expect(switchInput).toHaveFocus();
+  });
+
+  it('calls a consumer onClick only when not loading', () => {
+    const handleClick = vi.fn();
+    const { rerender } = render(<Switch label="Notify" isLoading onClick={handleClick} />);
+
+    fireEvent.click(screen.getByRole('switch', { name: 'Notify' }));
+    expect(handleClick).not.toHaveBeenCalled();
+
+    rerender(<Switch label="Notify" onClick={handleClick} />);
+    fireEvent.click(screen.getByRole('switch', { name: 'Notify' }));
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('replaces the on/off mark with a loading Spinner in the same slot, not on the thumb', () => {
+    const { container } = render(<Switch label="Saving" isLoading defaultChecked />);
+
+    const iconOn = container.querySelector(`.${styles.iconOn}`);
+    const iconOff = container.querySelector(`.${styles.iconOff}`);
+    const thumb = container.querySelector(`.${styles.thumb}`);
+
+    expect(iconOn?.querySelector('svg')).toBeInTheDocument();
+    expect(iconOff?.querySelector('svg')).toBeInTheDocument();
+    expect(thumb?.querySelector('svg')).not.toBeInTheDocument();
+  });
+
+  it('inherits the on/off mark color for the loading Spinner - no color override of its own', () => {
+    // The indicator sets color: var(--color-content-inverse) for the check/X marks via
+    // currentColor; the Spinner slots into the same .icon element so it inherits that directly.
+    expect(switchCss).toMatch(/\.icon \{[\s\S]*?color: var\(--color-content-inverse\);/);
+
+    const thumbBlockMatch = switchCss.match(/\.thumb \{[\s\S]*?\n\}/);
+    expect(thumbBlockMatch?.[0]).not.toContain('color:');
+  });
+
+  it('hides the CSS-drawn check/X marks while loading, so only the Spinner shows', () => {
+    expect(switchCss).toContain("[data-loading='true'] .iconOn::before");
+    expect(switchCss).toContain("[data-loading='true'] .iconOff::before");
+    expect(switchCss).toContain("[data-loading='true'] .iconOff::after");
+  });
+
+  it('suppresses the hover/pressed track treatment while loading, matching disabled', () => {
+    expect(switchCss).toContain(
+      ".root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator",
+    );
+    expect(switchCss).toContain(
+      ".root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .indicator",
+    );
+    expect(switchCss).toContain("cursor: progress;");
+  });
+
+  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+    expect(switchCss).toContain("[data-force-state='hover']");
+    expect(switchCss).toContain("[data-force-state='active']");
+  });
+
+  it('forwards data-force-state to the root label, not just the input', () => {
+    const { container } = render(<Switch label="Preview" data-force-state="hover" />);
+
+    expect(container.querySelector('label')).toHaveAttribute('data-force-state', 'hover');
+    expect(screen.getByRole('switch', { name: 'Preview' })).toHaveAttribute('data-force-state', 'hover');
+  });
+
   it('supports required state', () => {
     render(<Switch label="Required" required />);
 
@@ -173,6 +254,13 @@ describe('Switch', () => {
     expect(switchCss).toContain('background: var(--color-background-disabled);');
     expect(switchCss).toContain('color: var(--color-content-inverse);');
     expect(switchCss).not.toContain(".root[data-disabled='true'] .icon");
+  });
+
+  it('positions the on/off mark 6px from the track edge at md, matching Figma', () => {
+    // Regression guard: this token previously aliased --spacing-sm (8px), 2px further toward
+    // center than Figma's actual 6px inset - caught by measuring the live Figma component.
+    expect(tokensCss).toContain('--component-switch-md-icon-offset: var(--measurement-6);');
+    expect(tokensCss).not.toContain('--component-switch-md-icon-offset: var(--spacing-sm);');
   });
 });
 

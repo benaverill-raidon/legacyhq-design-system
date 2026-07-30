@@ -14,7 +14,7 @@ export const Button = React.memo(
       size = 'md',
       appearance = 'default',
       tone = 'neutral',
-      isDisabled = false,
+      disabled = false,
       isLoading = false,
       isFullWidth = false,
       iconBefore,
@@ -27,8 +27,6 @@ export const Button = React.memo(
     },
     forwardedRef,
   ) {
-    const disabled = isDisabled;
-
     const handleClick = React.useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         if (disabled || isLoading) {
@@ -68,7 +66,7 @@ export const Button = React.memo(
       >
         {hasLeading ? (
           <span className={styles.leading} aria-hidden={isLoading ? undefined : true}>
-            {isLoading ? <Spinner size="sm" className={styles.spinner} /> : iconBefore}
+            {isLoading ? <Spinner size="sm" /> : iconBefore}
           </span>
         ) : null}
 

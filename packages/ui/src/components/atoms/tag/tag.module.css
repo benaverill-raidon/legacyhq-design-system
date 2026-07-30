@@ -105,13 +105,25 @@
   color: inherit;
 }
 
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/pressed as
+ * a static regression reference - documentation-only, not part of the public API. It's read both
+ * directly off `.contentInteractive` (the bare-anchor root, when href is set with no remove
+ * button) and off the `.wrapper` ancestor (when a remove button is also present), so one prop on
+ * `<Tag data-force-state="hover">` previews both the content and remove areas together, matching
+ * how Figma's own single combined hover/press swatch shows the whole tag highlighted.
+ */
 .contentInteractive:not([aria-disabled='true']):hover,
-.contentInteractive:not([aria-disabled='true']):focus-visible {
+.contentInteractive:not([aria-disabled='true']):focus-visible,
+.contentInteractive:not([aria-disabled='true'])[data-force-state='hover'],
+.wrapper[data-force-state='hover'] .contentInteractive:not([aria-disabled='true']) {
   background-color: var(--tag-background-hovered);
   background-image: var(--tag-background-hovered-layer, none);
 }
 
-.contentInteractive:not([aria-disabled='true']):active {
+.contentInteractive:not([aria-disabled='true']):active,
+.contentInteractive:not([aria-disabled='true'])[data-force-state='active'],
+.wrapper[data-force-state='active'] .contentInteractive:not([aria-disabled='true']) {
   background-color: var(--tag-background-pressed);
   background-image: var(--tag-background-pressed-layer, none);
 }
@@ -176,12 +188,16 @@
 }
 
 .removeButton:not(:disabled):hover,
-.removeButton:not(:disabled):focus-visible {
+.removeButton:not(:disabled):focus-visible,
+.removeButton:not(:disabled)[data-force-state='hover'],
+.wrapper[data-force-state='hover'] .removeButton:not(:disabled) {
   background-color: var(--tag-background-hovered);
   background-image: var(--tag-background-hovered-layer, none);
 }
 
-.removeButton:not(:disabled):active {
+.removeButton:not(:disabled):active,
+.removeButton:not(:disabled)[data-force-state='active'],
+.wrapper[data-force-state='active'] .removeButton:not(:disabled) {
   background-color: var(--tag-background-pressed);
   background-image: var(--tag-background-pressed-layer, none);
 }
@@ -208,7 +224,6 @@
   --tag-min-height: var(--size-control-xs);
   --tag-padding-inline: var(--spacing-xs);
   --tag-gap: var(--spacing-xs);
-  --tag-icon-size: var(--size-icon-sm);
   --tag-remove-size: var(--size-control-xs);
   --tag-radius: var(--border-radius-sm);
 }
@@ -217,7 +232,6 @@
   --tag-min-height: var(--size-control-sm);
   --tag-padding-inline: var(--spacing-sm);
   --tag-gap: var(--spacing-xs);
-  --tag-icon-size: var(--size-icon-md);
   --tag-remove-size: var(--size-control-sm);
   --tag-radius: var(--border-radius-lg);
 }
@@ -307,7 +321,7 @@
   --tag-background-hovered: var(--color-background-brand-primary-subtle-hovered);
   --tag-background-pressed: var(--color-background-brand-primary-subtle-pressed);
   --tag-border: var(--color-border-brand-primary);
-  --tag-color: var(--color-content-brand-primary);
+  --tag-color: var(--color-content-brand-primary-default);
 }
 
 .root,

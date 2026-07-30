@@ -97,7 +97,7 @@ describe('LinkButton', () => {
     const link = screen.getByRole('link', { name: 'Open client' });
 
     expect(link).toHaveAttribute('aria-busy', 'true');
-    expect(container.querySelector(`.${styles.spinner}`)).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
   });
 
   it('loading prevents click and navigation', () => {

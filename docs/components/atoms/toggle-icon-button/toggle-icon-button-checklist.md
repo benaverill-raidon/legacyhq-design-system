@@ -259,25 +259,44 @@ Do not hardcode:
 - radius values
 - focus ring values
 
+## Validated Figma Details
+
+- Root fill/border/selected/disabled/hover/pressed/focus tokens all matched exactly - identical to
+  the token set already verified for Toggle Button (same underlying pattern), including the one
+  orphaned Components-file reference for the resting-state fill (a stale library-cache artifact
+  pointing at a variable that no longer exists in the live Tokens file - `background: transparent`
+  is correct as implemented).
+- `xs`/`sm`/`md`/`lg` = 24/32/40/48px square, 4/8/8/12px corner radius (`square` shape) - all
+  already correct. `round` shape measures a full circle (`cornerRadius: 999`) at every size,
+  matching `border-radius-full-round`.
+- The icon glyph is a constant 16px at every size in Figma, and this component never resizes it via
+  CSS - matching Icon Button and Toggle Button's own convention of not touching the icon's default
+  size. No bug found here.
+- No unique visual treatment exists for selected+disabled - disabled fully overrides selected,
+  matching this doc's own state-priority guidance.
+
 ## Storybook requirements
 
-Stories should include:
+Create the library's unified structure:
 
-- Playground
-- Variants
-- Examples
-
-Do not create separate States or Accessibility pages.
+- Toggle Icon Button / Docs (.mdx)
+- Toggle Icon Button / Playground
+- Toggle Icon Button / Variants
+- Toggle Icon Button / Sizes
+- Toggle Icon Button / States
+- Toggle Icon Button / Content
+- Toggle Icon Button / EdgeCases
 
 Show:
 
-- all sizes
-- all tones
-- square and round shape
-- selected and unselected
-- disabled
-- tooltip wrapper example if Tooltip exists
-- toolbar/view-mode examples
+- tone crossed with selected, plus the independent shape axis (Variants)
+- all sizes (Sizes)
+- hover/pressed previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
+  focus previews via the same mechanism - the shared Focus Ring primitive already reacts to
+  `data-force-state="focus"` directly on this element, so no extra CSS is needed (States)
+- disabled, selected + disabled, and a live click-to-toggle example (States)
+- view-mode, formatting-toolbar, and favorite/save examples (Content)
+- the missing-accessible-name anti-pattern (logs a dev warning) and dark surface (EdgeCases)
 
 ## Test requirements
 
@@ -300,6 +319,7 @@ Test:
 - applies shape classes
 - supports custom `className`
 - forwards ref
+- supports data-force-state hover/pressed preview
 
 ## Do not include
 

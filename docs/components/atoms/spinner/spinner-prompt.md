@@ -109,10 +109,11 @@ Default: `lg`
 
 Use CSS variables only.
 
-Color:
+Color: Spinner has no color of its own in Figma - it always takes the current text color of
+whatever it sits inside, so the root uses plain CSS inheritance rather than a fixed token:
 
 ```css
-color: var(--color-border-bold);
+color: inherit;
 ```
 
 The SVG path should use:
@@ -144,9 +145,9 @@ Spinner stroke width mapping:
 - lg: `--component-spinner-border-width-lg`
 - xl: `--component-spinner-border-width-xl`
 
-Spinner stroke color:
-
-- `--color-border-bold`
+Spinner stroke color: `currentColor`, resolved from the inherited `color`. Spinner does not own a
+color token, and consumers that compose it (Button, IconButton, LinkButton) don't need their own
+override either - Spinner's own base style already inherits.
 
 If a required token does not exist in `tokens.css`, `light.css`, or `dark.css`, document it in the final output.
 
@@ -168,7 +169,7 @@ The Spinner should:
 - fit its own visual size
 - use tokenized width and height
 - use tokenized stroke width
-- use `--color-border-bold` for color
+- use `color: inherit` - no fixed color token
 - use SVG with `stroke: currentColor`
 - use no border
 - use no shadow
@@ -231,25 +232,25 @@ The consuming component remains responsible for broader loading-state behavior, 
 
 ## Storybook Requirements
 
-Create documentation-style stories.
-
-Use primitive story structure:
+Create documentation-style stories using the library's unified structure:
 
 ```txt
 Spinner
+├─ Docs (.mdx)
 ├─ Playground
-└─ Examples
+├─ Sizes
+├─ Content
+└─ EdgeCases
 ```
 
-Create stories for:
+Omit Variants and States: Spinner has one visual style (only a size axis) and no interactive states
+to preview. Document that omission in the Docs API section rather than leaving it unexplained.
 
-- Playground
-- Sizes
-- Standalone accessible loading state
-- Inline loading with text
-- Button loading example
-- Card or panel loading example
-- Dark surface example
+- **Playground** - every prop wired to a control.
+- **Sizes** - all four sizes side by side.
+- **Content** - standalone decorative and labeled loading, inline with text, button loading, and a
+  card/panel loading composition.
+- **EdgeCases** - reduced motion (documented) and a dark surface example.
 
 Stories should demonstrate real usage patterns.
 

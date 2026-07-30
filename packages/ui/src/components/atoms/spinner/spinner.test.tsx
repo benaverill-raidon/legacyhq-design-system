@@ -101,6 +101,13 @@ describe('Spinner', () => {
     expect(spinnerCss).toContain('--spinner-graphic-size: calc(var(--measurement-32) / var(--size-spinner-xl) * 100%);');
     expect(spinnerCss).toContain('inline-size: var(--spinner-graphic-size);');
     expect(spinnerCss).toContain('block-size: var(--spinner-graphic-size);');
-    expect(spinnerCss).toContain('color: var(--color-border-bold);');
+  });
+
+  it('has no color of its own - it always inherits the surrounding text color', () => {
+    // Regression guard: Spinner must not pin a fixed token (e.g. --color-border-bold) as its own
+    // color, since Figma has it take whatever color context it's placed in (a Button's per
+    // appearance/tone color, a colored heading, plain body text).
+    expect(spinnerCss).toContain('color: inherit;');
+    expect(spinnerCss).not.toContain('--color-border-bold');
   });
 });

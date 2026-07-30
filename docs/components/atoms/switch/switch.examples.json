@@ -11,6 +11,10 @@
     {
       "name": "Disabled",
       "jsx": "<Switch disabled>Automatic updates</Switch>"
+    },
+    {
+      "name": "Loading",
+      "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>"
     }
   ]
 }

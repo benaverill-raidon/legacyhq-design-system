@@ -87,7 +87,6 @@ describe('Label', () => {
 
 describe('label CSS contract', () => {
   it('matches the current Figma subtle semantic mappings', () => {
-    expect(labelCss).toContain('--label-background: var(--color-background-neutral-subtle-default);');
     expect(labelCss).toContain('--label-color: var(--color-content-subtle);');
     expect(labelCss).toContain('--label-background: var(--color-background-information-subtle-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-warning-subtle-default);');
@@ -103,7 +102,8 @@ describe('label CSS contract', () => {
     expect(labelCss).toContain('--label-color: var(--color-content-warning-bold);');
   });
 
-  it('uses the current law and wealth subtle semantic mappings', () => {
+  it('uses the default-tier semantic mappings for default, law, and wealth subtle emphasis', () => {
+    expect(labelCss).toContain('--label-background: var(--color-background-neutral-default-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-brand-primary-default-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-accent-green-default-default);');
   });

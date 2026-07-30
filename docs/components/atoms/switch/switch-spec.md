@@ -50,13 +50,17 @@ export interface SwitchProps
   defaultChecked?: boolean;
   disabled?: boolean;
   required?: boolean;
-  invalid?: boolean;
+  isLoading?: boolean;
   onCheckedChange?: (
     checked: boolean,
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
 ```
+
+There is no `invalid` prop. Figma's `switch` component set has no such variant axis (only `size`,
+`state`, `isChecked`, `isDisabled`, `isLoading`), and the implementation correctly doesn't add one -
+an earlier revision of this spec incorrectly documented `invalid` as if it existed.
 
 ## Default Props
 
@@ -65,7 +69,7 @@ checked = undefined
 defaultChecked = undefined
 disabled = false
 required = false
-invalid = false
+isLoading = false
 ```
 
 ## Behavior
@@ -77,6 +81,14 @@ invalid = false
 - Uses `role="switch"` to communicate switch semantics to assistive technology.
 - Visible label is optional.
 - If no visible label is provided, an accessible label such as `aria-label` must be provided by the consumer.
+- `isLoading` blocks toggling (via `preventDefault` on click, since a native checkbox toggles its
+  own checked state before `onChange` fires) and sets `aria-busy="true"`, but does **not** set the
+  native `disabled` attribute - the control stays focusable and reachable by Tab, unlike `disabled`.
+  Figma's `isLoading=true` artwork is otherwise pixel-identical to the resting state (no visible
+  differentiation); this implementation additionally replaces the visible on/off mark with a small
+  `Spinner` in the same slot (inheriting that slot's own inherited color - no color override of its
+  own) as a usability improvement beyond the literal mockup, and suppresses the hover/pressed track
+  treatment while loading (matching how `disabled` already suppresses it).
 
 ## States
 
@@ -93,7 +105,8 @@ Supported states:
 - disabled
 - disabled checked
 - required
-- invalid, if needed for form validation consistency
+- loading (blocks toggling, `aria-busy`, no visible change from Figma beyond replacing the on/off
+  mark with a Spinner in the same slot)
 
 ## Visual Requirements
 
@@ -158,9 +171,13 @@ Use shared Focus Ring utility classes and tokens.
 Use the shared dimension, spacing, and radius tokens directly. Do not create
 component-scoped Switch aliases.
 
-- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius
-- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius
+- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius, 6px on/off mark inset
+- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius, 4px on/off mark inset
 - internal marks: 12px
+
+The `md` on/off mark inset was previously aliased to `--spacing-sm` (8px) - verified against the
+live Figma component to actually be 6px (`--measurement-6`), 2px tighter than the old value. `sm`'s
+4px inset was already correct.
 
 ## Accessibility
 
@@ -185,14 +202,19 @@ component-scoped Switch aliases.
 
 ## Storybook Structure
 
+Unified story structure, matching the rest of the library:
+
 ```txt
 Switch
+├─ Docs (.mdx)
 ├─ Playground
-├─ Variants
-└─ Examples
+├─ Sizes
+├─ States
+├─ Content
+└─ EdgeCases
 ```
 
-## Storybook Stories
+There's no separate Variants page: `size` is the only variant-like axis, and it's covered by Sizes.
 
 ### Playground
 
@@ -201,32 +223,41 @@ Controls:
 - checked
 - disabled
 - required
-- invalid
+- isLoading
 - label
 
-### Variants
+### Sizes
 
-Show:
+Show `md` and `sm` side by side, unchecked and checked.
 
-- unchecked
-- checked
-- hover, if practical to document visually
-- focus
-- disabled
-- disabled checked
+### States
+
+Show, pinned as a static reference:
+
+- unchecked / checked
+- hover, unchecked / checked
+- focus visible, unchecked / checked
+- disabled, unchecked / checked
+- loading, unchecked / checked
 - required
+- a live, click-driven example
 
-### Examples
+### Content
 
 Show:
 
 - labeled switch
-- switch without visible label
+- switch without visible label (`aria-label` only)
 - setting row usage
 - form usage
-- disabled setting
 - dark theme example
+
+### EdgeCases
+
+Show:
+
 - reduced motion note
+- long label wrapping in a narrow container
 
 ## Engineering Requirements
 
@@ -253,7 +284,9 @@ Test:
 - calls `onCheckedChange`
 - supports disabled
 - supports required
-- supports invalid class/state if implemented
+- supports loading: blocks toggling, sets `aria-busy`, stays focusable (not native `disabled`),
+  replaces the on/off mark with a Spinner in the same slot (not the thumb), inherits that slot's
+  color with no override, suppresses hover/pressed CSS
 - supports custom className
 - forwards native input props
 - renders with `role="switch"`
@@ -272,3 +305,4 @@ Test:
 - Component uses the current shared geometry tokens without component aliases.
 - No shared icon-library switch assets are introduced.
 - Motion respects `prefers-reduced-motion`.
+- `isLoading` doesn't remove the control from the tab order (no native `disabled`).

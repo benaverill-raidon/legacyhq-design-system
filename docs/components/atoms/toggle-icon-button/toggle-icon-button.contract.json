@@ -19,10 +19,13 @@
   ],
   "props": {},
   "variants": {
-    "appearance": [
+    "tone": [
       "default",
-      "subtle",
-      "bold"
+      "subtle"
+    ],
+    "shape": [
+      "square",
+      "round"
     ]
   },
   "sizes": [
@@ -37,8 +40,7 @@
     "pressed",
     "focus",
     "selected",
-    "disabled",
-    "loading"
+    "disabled"
   ],
   "slots": [
     "children(icon)"

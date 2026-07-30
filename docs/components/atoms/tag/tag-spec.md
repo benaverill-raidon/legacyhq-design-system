@@ -95,7 +95,8 @@ type TagTone =
   | 'teal'
   | 'yellow'
   | 'orange'
-  | 'magenta';
+  | 'magenta'
+  | 'brand';
 
 type TagSize = 'sm' | 'md';
 
@@ -273,9 +274,22 @@ teal
 yellow
 orange
 magenta
+brand
 ```
 
-Tone should map to semantic color tokens for background, border, and content.
+Tone should map to semantic color tokens for background, border, and content. `standard` is the
+neutral default and `brand` ties to the product's own color; the rest are general-purpose accent
+tones with no fixed semantic meaning of their own - verified against Figma's own `tone` variant
+options, which match this list exactly.
+
+### Icon size stays constant across `size`
+
+`elemBefore` and the remove button's own icon glyph are a constant 16px regardless of `size` -
+verified by measuring Figma's `elemBefore` and remove-button icon nodes at both `sm` and `md`, which
+are identical (16x16) in both. Only the tag's height, padding, and the remove button's own
+*container* scale with `size` (24px/32px). A prior implementation incorrectly shrank the icon to
+12px at `sm` via a component-token override - fixed by letting `sm` inherit the constant 16px
+instead of overriding it.
 
 ## State
 
@@ -303,6 +317,14 @@ Use shared Focus Ring utility/classes where appropriate.
 
 Do not create a custom focus ring if the system already has one.
 
+Figma's single `state=focus` swatch (for a tag that's both navigational and removable) shows a ring
+wrapping the *entire* tag rather than a tight ring around just the focused sub-element - but Figma
+has only one `state` property and can't represent "content focused" vs "remove button focused" as
+distinct variants, so this reads as an imprecise combined mockup rather than firm intent. Content and
+the remove button remain two independently-focusable native elements, each with its own tight focus
+ring at its own bounds - not a ring around the whole tag - matching how every other multi-target
+component in this library handles focus.
+
 ## Accessibility
 
 Tag must preserve valid HTML and clear keyboard behavior.
@@ -319,15 +341,18 @@ Rules:
 
 ## Storybook
 
-Create:
+Unified story structure, matching the rest of the library:
 
 ```txt
-UI/Atoms/Tag/Playground
-UI/Atoms/Tag/Variants
-UI/Atoms/Tag/Examples
+Tag
+├─ Docs (.mdx)
+├─ Playground
+├─ Variants
+├─ Sizes
+├─ States
+├─ Content
+└─ EdgeCases
 ```
-
-Do not create separate States or Accessibility pages unless the library convention changes.
 
 ### Playground controls
 
@@ -348,16 +373,25 @@ removeLabel
 Show:
 
 - all tones
-- sm and md
-- display-only
-- with elemBefore
-- removable
-- navigational
-- navigational + removable
-- disabled
-- focus/hover/press previews if supported by current story patterns
+- the four fundamentally different rendered forms: display-only (span), navigational (anchor),
+  removable (wrapper + button), navigational + removable
 
-### Examples story
+### Sizes story
+
+Show `sm` and `md` side by side, each with a plain label, a leading icon, and a remove button - the
+icon glyph should read as visually identical in size across both.
+
+### States story
+
+`data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
+API) so hover/pressed render as a static regression reference - the same convention Button and
+Checkbox use. Passing it on a removable tag previews both the content and remove areas together,
+since Figma only documents one combined hover/press swatch. Focus preview uses real `autoFocus`,
+since content and the remove button are two independently-focusable elements with their own rings -
+see Focus above. Include a live example where hovering/focusing/removing each part is verified by
+hand, independently of the other.
+
+### Content story
 
 Show:
 
@@ -367,6 +401,13 @@ Show:
 - asset reference tag
 - trust reference tag with remove button
 - tag row/wrap example
+
+### EdgeCases story
+
+Show:
+
+- long label text truncating in a narrow container
+- dark surface
 
 ## Tests
 
@@ -392,6 +433,8 @@ sets tabIndex -1 for disabled navigational content
 applies tone class
 applies size class
 custom className works
+keeps the elemBefore/remove icon a constant 16px regardless of size
+supports data-force-state hover/pressed preview on both the content and remove areas
 ```
 
 ## Future considerations

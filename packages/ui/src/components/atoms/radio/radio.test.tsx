@@ -134,7 +134,7 @@ describe('Radio', () => {
   it('matches the current figma token mappings for target, icon, and focus treatments', () => {
     expect(radioCss).toMatch(/\.indicatorTarget \{[^}]*background: transparent;/s);
     expect(radioCss).toMatch(/\.indicatorIcon \{[^}]*color: var\(--color-content-subtle\);/s);
-    expect(radioCss).toMatch(/\.checkedIcon \{[^}]*color: var\(--color-content-brand-primary\);/s);
+    expect(radioCss).toMatch(/\.checkedIcon \{[^}]*color: var\(--color-content-brand-primary-default\);/s);
     expect(radioCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
     expect(radioCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
     expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hovered);');

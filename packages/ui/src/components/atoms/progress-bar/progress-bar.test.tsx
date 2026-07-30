@@ -150,6 +150,57 @@ describe('ProgressBar', () => {
     expect(stopShapes).toHaveLength(2);
   });
 
+  it('gives each linear stop the segment color it sits on top of, not one fixed color', () => {
+    function stopSegments(value: number) {
+      const { container, unmount } = render(<ProgressBar value={value} label={`Value ${value}`} />);
+      const startShape = container.querySelector(`.${styles.stopStart} .${styles.stopShape}`);
+      const endShape = container.querySelector(`.${styles.stopEnd} .${styles.stopShape}`);
+      const result = {
+        start: startShape?.classList.contains(styles.stopSegment_progress)
+          ? 'progress'
+          : startShape?.classList.contains(styles.stopSegment_track)
+            ? 'track'
+            : null,
+        end: endShape?.classList.contains(styles.stopSegment_progress)
+          ? 'progress'
+          : endShape?.classList.contains(styles.stopSegment_track)
+            ? 'track'
+            : null,
+      };
+      unmount();
+      return result;
+    }
+
+    expect(stopSegments(0)).toEqual({ start: 'track', end: 'track' });
+    expect(stopSegments(48)).toEqual({ start: 'progress', end: 'track' });
+    expect(stopSegments(100)).toEqual({ start: 'progress', end: 'progress' });
+  });
+
+  it('gives the circular stop the segment color it sits on top of', () => {
+    function circularStopSegment(value: number) {
+      const { container, unmount } = render(
+        <ProgressBar value={value} variant="circular" label={`Circular value ${value}`} />,
+      );
+      const stopShape = container.querySelector(`.${styles.stopTop} .${styles.stopShape}`);
+      const segment = stopShape?.classList.contains(styles.stopSegment_progress)
+        ? 'progress'
+        : stopShape?.classList.contains(styles.stopSegment_track)
+          ? 'track'
+          : null;
+      unmount();
+      return segment;
+    }
+
+    expect(circularStopSegment(0)).toBe('track');
+    expect(circularStopSegment(50)).toBe('track');
+    expect(circularStopSegment(100)).toBe('progress');
+  });
+
+  it('does not hardcode a fixed border/background on the shared stop shape', () => {
+    expect(progressBarCss).not.toMatch(/\.stopShape\s*{[^}]*border:/);
+    expect(progressBarCss).not.toMatch(/\.stopShape\s*{[^}]*background:/);
+  });
+
   it('uses the component stop-size token and renders circular border layers', () => {
     const { container } = render(<ProgressBar value={50} variant="circular" size="lg" label="Bordered circular progress" />);
     const progressBar = screen.getByRole('progressbar', { name: 'Bordered circular progress' });

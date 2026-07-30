@@ -1,0 +1,214 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TagStories from './tag.stories';
+
+<Meta of={TagStories} name="Docs" />
+
+# Tag
+
+Tag labels UI objects for classification and navigation. In LegacyHQ it most often represents a
+referenced entity - a trust, asset, task, note, or person - and can be display-only, navigational,
+removable, or both navigational and removable at once.
+
+<Canvas of={TagStories.Playground} />
+
+## When to use
+
+- A compact labeled reference to an entity (a trust, asset, task, note, or person mention).
+- A classification or category attached to a record.
+- A removable relationship or association between records.
+
+## When not to use
+
+- **A purely informational, non-interactive status label.** Use `Label` or `Badge`.
+- **A primary action.** Use `Button`.
+- **An icon-only action.** Use `IconButton` or `ToggleIconButton`.
+- **A freeform text link.** Use `Link`.
+
+## Anatomy
+
+<Canvas of={TagStories.Content} />
+
+Tag renders one of four different root shapes depending on which props are set - see Variants:
+
+- **Display-only** - a plain `span`, non-interactive.
+- **Navigational** (`href` set) - a native anchor as the root itself.
+- **Removable** (`isRemovable` set) - a wrapper `span` containing a non-interactive content area and
+  a separate native remove `button`. The button is never nested inside an anchor.
+- **Navigational + removable** - the same wrapper, but the content area is an anchor.
+
+Every form shares: an optional `elemBefore` leading icon, the label text (truncates with an ellipsis
+rather than wrapping), and - when removable - the remove button's own icon.
+
+## Usage guidance
+
+### Tone
+
+`tone` is a broad enumeration, not a paired emphasis/meaning split like Button's `appearance`/`tone`.
+`standard` is the neutral default; `brand` ties to the product's own color; the rest are
+general-purpose accent tones with no fixed semantic meaning of their own - pick one for visual
+variety or light categorization, not to encode status. See Variants.
+
+### Sizes
+
+`sm` and `md` scale the tag's height, padding, and the remove button's own container - the
+`elemBefore` and remove-button icon glyphs stay a constant 16px at both sizes. See Sizes.
+
+### Independent focus for content and remove
+
+When a Tag is both navigational and removable, the content anchor and the remove button are two
+separately-focusable native elements, each with its own tight focus ring at its own bounds - not one
+ring around the whole tag. Tab moves between them independently, and hovering or pressing one never
+affects the other's visual state - see States for a live example.
+
+### Removing vs. navigating
+
+Clicking the remove button always calls `onRemove` and never triggers navigation, even when the
+content area is also a link - the two are fully independent interactive targets, and neither is
+nested inside the other in the DOM.
+
+### Disabled
+
+`isDisabled` suppresses hover/pressed styling on both the content area and the remove button,
+prevents navigation, and disables the remove button natively - see States.
+
+## Do / Don't
+
+**Do** give a removable Tag either a plain-text `children` (so a label is derived automatically) or
+an explicit `removeLabel`.
+
+```tsx
+<Tag isRemovable onRemove={handleRemove}>
+  Averill Family Living Trust
+</Tag>
+```
+
+**Don't** rely on the derived label when `children` isn't plain text - it silently falls back to the
+generic "Remove tag", which loses the specific entity name for screen reader users.
+
+```tsx
+<Tag isRemovable onRemove={handleRemove}>
+  <CustomEntityLabel />
+</Tag>
+```
+
+Use `removeLabel` explicitly instead:
+
+```tsx
+<Tag isRemovable onRemove={handleRemove} removeLabel="Remove Averill Family Living Trust">
+  <CustomEntityLabel />
+</Tag>
+```
+
+---
+
+**Do** let Tag derive `rel="noopener noreferrer"` for external links.
+
+```tsx
+<Tag href="https://example.com" target="_blank">
+  External reference
+</Tag>
+```
+
+**Don't** use Tag for a primary call to action - it has no emphasis states designed for that.
+
+```tsx
+<Tag href="/save" tone="brand">
+  Save changes
+</Tag>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The label content.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md'</code></td>
+      <td><code>'md'</code></td>
+      <td>Scales height, padding, and the remove button's container. Icon glyphs stay 16px.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'standard' | 'blue' | 'green' | 'purple' | 'red' | 'teal' | 'yellow' | 'orange' | 'magenta' | 'brand'</code></td>
+      <td><code>'standard'</code></td>
+      <td>Background/border/content color set. No fixed semantic meaning beyond <code>standard</code> and <code>brand</code>.</td>
+    </tr>
+    <tr>
+      <td><code>href</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>When set, the content area renders as a native anchor.</td>
+    </tr>
+    <tr>
+      <td><code>target</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Native anchor <code>target</code>.</td>
+    </tr>
+    <tr>
+      <td><code>rel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Preserved if provided; otherwise <code>noopener noreferrer</code> is added automatically for <code>target="_blank"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isRemovable</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Renders a separate native remove button alongside the content area.</td>
+    </tr>
+    <tr>
+      <td><code>onRemove</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>-</td>
+      <td>Called when the remove button is clicked. Never triggers navigation.</td>
+    </tr>
+    <tr>
+      <td><code>removeLabel</code></td>
+      <td><code>string</code></td>
+      <td>derived from <code>children</code></td>
+      <td>Accessible name for the remove button. Falls back to "Remove tag" when <code>children</code> isn't plain text.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Suppresses hover/pressed styling, blocks navigation, and disables the remove button.</td>
+    </tr>
+    <tr>
+      <td><code>elemBefore</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Leading icon or other compact visual content.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root element's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native attribute for the rendered root element (`span`, `a`, or the wrapper `span`) is
+forwarded via `...rest`.
+
+## Related components
+
+- **Label** - for a purely informational, non-interactive status.
+- **Badge** - for a compact count or status indicator.
+- **Link** - for a freeform text link outside a tag's bounded shape.

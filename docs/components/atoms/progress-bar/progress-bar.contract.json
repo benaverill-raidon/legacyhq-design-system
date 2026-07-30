@@ -105,6 +105,8 @@
       "progress": "chart/sequence/brand/900 or generated semantic equivalent",
       "track": "chart/sequence/brand/300 or generated semantic equivalent",
       "trackBorder": "color-border-brand",
+      "stopOnTrack": "chart/sequence/brand/900 (contrasts with the light remaining track underneath)",
+      "stopOnProgress": "chart/sequence/brand/300 (contrasts with the dark progress fill underneath)",
       "radius": "border-radius-full-round",
       "borderWidth": "border-width-default"
     },
@@ -118,7 +120,8 @@
     "componentForbidden": [
       "color aliases",
       "radius aliases",
-      "border color aliases"
+      "border color aliases",
+      "a fixed border/background pairing on the stop shape - it is a single flat fill that swaps token by segment"
     ]
   },
   "accessibility": {
@@ -143,7 +146,8 @@
     "Do not add indeterminate behavior.",
     "Do not add animation unless explicitly specified.",
     "Linear width is controlled by the parent.",
-    "Circular progress starts at 12 o'clock and advances clockwise."
+    "Circular progress starts at 12 o'clock and advances clockwise.",
+    "Each track-stop mark renders in the color that contrasts with the segment currently underneath it, not one fixed color: the linear start stop uses the track-contrast color only at value = 0 and the progress-contrast color for any value > 0; the linear end stop and the circular top stop use the track-contrast color for value < 100 and the progress-contrast color only at value = 100."
   ],
   "compositionRules": [
     "May appear beside process labels or status summaries.",

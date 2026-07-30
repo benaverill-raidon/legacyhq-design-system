@@ -1,6 +1,6 @@
 .logo {
   --logo-height: var(--size-logo-md);
-  --logo-mark-color: var(--color-content-brand-primary);
+  --logo-mark-color: var(--color-content-brand-primary-default);
 
   display: inline-flex;
   align-items: center;
@@ -45,5 +45,5 @@
 }
 
 [data-theme='dark'] .logo {
-  --logo-mark-color: var(--color-content-brand-primary);
+  --logo-mark-color: var(--color-content-brand-primary-default);
 }

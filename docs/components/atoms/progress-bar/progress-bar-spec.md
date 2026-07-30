@@ -64,6 +64,11 @@ root
 
 The Figma-only `progress-segment`, `track-segment`, and `track-stop` parts should not become public React components. Implement them as private anatomy inside Progress Bar.
 
+Figma models `track-stop` as segment-aware variants (`track-stop-linear` for the linear start/end
+stops, sized `md`/`lg`; the circular top stop uses the equivalent single-stop part) rather than one
+fixed appearance. Each stop variant is colored to contrast with whichever segment it currently sits
+on top of - see Token mapping and Value behavior.
+
 ## Variants
 
 ### `linear`
@@ -129,6 +134,20 @@ At `100`:
 - circular renders a complete progress ring
 - endpoint geometry must not show a gap or overflow
 
+### Track-stop contrast
+
+Each track-stop mark is colored to contrast with whichever segment it currently sits on top of,
+not one fixed color:
+
+- **Linear start stop** (fixed at the inline-start edge): renders in the track-colored variant
+  (contrasts with the remaining track) only at `value = 0`; renders in the progress-colored variant
+  (contrasts with the progress fill) for any `value > 0`, since the fill starts at that edge.
+- **Linear end stop** (fixed at the inline-end edge): renders in the track-colored variant for
+  `value < 100`, since the remaining track still reaches that edge; renders in the progress-colored
+  variant only at `value = 100`, once the progress fill reaches all the way to the end.
+- **Circular top stop** (fixed at 12 o'clock): renders in the track-colored variant for
+  `value < 100`; renders in the progress-colored variant only at `value = 100`.
+
 ## Token mapping
 
 Use existing project token names after verifying them in generated CSS.
@@ -147,8 +166,14 @@ track color:
 track border:
   color-border-brand
 
-stop border:
+stop fill (track-colored variant, contrasts with the progress fill):
+  chart/sequence/brand/900
+
+stop fill (progress-colored variant, contrasts with the remaining track):
   chart/sequence/brand/300
+
+The track-stop shape has no border - it is a single flat fill that swaps between the two tokens
+above depending on which segment it sits on. Do not reintroduce a fixed border/background pairing.
 
 radius:
   border-radius-full-round

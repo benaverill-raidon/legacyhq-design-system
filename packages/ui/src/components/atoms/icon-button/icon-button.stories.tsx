@@ -14,7 +14,7 @@ const meta = {
     appearance: 'default',
     size: 'md',
     shape: 'square',
-    isDisabled: false,
+    disabled: false,
     isLoading: false,
     isExpanded: false,
     tooltipPlacement: 'top',
@@ -25,7 +25,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
     size: { control: 'inline-radio', options: sizes },
     shape: { control: 'inline-radio', options: ['square', 'round'] },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     isExpanded: { control: 'boolean' },
     tooltipPlacement: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
@@ -197,7 +197,7 @@ export const States: Story = {
           </IconButton>
         </Cell>
         <Cell label="Disabled">
-          <IconButton aria-label="Disabled" isDisabled>
+          <IconButton aria-label="Disabled" disabled>
             <MoreHorizIcon />
           </IconButton>
         </Cell>
@@ -235,7 +235,7 @@ export const States: Story = {
           </IconButton>
         </Cell>
         <Cell label="Disabled">
-          <IconButton aria-label="Disabled" appearance="primary" isDisabled>
+          <IconButton aria-label="Disabled" appearance="primary" disabled>
             <MoreHorizIcon />
           </IconButton>
         </Cell>
@@ -345,7 +345,7 @@ export const EdgeCases: Story = {
 
       <Group title="Disabled with an explanation">
         <Cell label="Tooltip still available on a disabled button">
-          <IconButton aria-label="Locked" tooltip="This matter is locked for editing" isDisabled>
+          <IconButton aria-label="Locked" tooltip="This matter is locked for editing" disabled>
             <EditIcon />
           </IconButton>
         </Cell>

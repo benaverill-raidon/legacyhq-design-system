@@ -62,13 +62,16 @@ export interface SwitchProps
   defaultChecked?: boolean;
   disabled?: boolean;
   required?: boolean;
-  invalid?: boolean;
+  isLoading?: boolean;
   onCheckedChange?: (
     checked: boolean,
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
 ```
+
+There is no `invalid` prop - Figma's `switch` component set has no such variant (only `size`,
+`state`, `isChecked`, `isDisabled`, `isLoading`).
 
 ## Accessibility
 
@@ -78,6 +81,13 @@ export interface SwitchProps
 - If no visible label is provided, consumer must provide `aria-label`.
 - Disabled uses native `disabled`.
 - Required uses native `required` where valid and a visible asterisk after the label.
+- `isLoading` sets `aria-busy="true"` and blocks toggling via `preventDefault` on click (a native
+  checkbox toggles before `onChange` fires) - it does NOT set native `disabled`, so the control
+  stays focusable, unlike `disabled`. Figma's `isLoading=true` artwork is pixel-identical to the
+  resting state; replace the visible on/off mark with a small `Spinner` (in the same `.icon` slot,
+  inheriting that slot's own color - no color override needed) as a usability improvement beyond
+  the literal mockup, and suppress hover/pressed CSS while loading, the same way disabled already
+  does.
 - Use shared Focus Ring utilities.
 - Do not create custom ARIA roles beyond switch semantics.
 - Do not recreate native keyboard behavior.
@@ -98,8 +108,8 @@ Use semantic color tokens:
 Use the current shared dimension, spacing, and radius tokens directly for geometry.
 Do not introduce component-scoped Switch token aliases.
 
-- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius
-- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius
+- `md`: 40px by 20px track, 16px thumb, 2px inset, 16px radius, 6px on/off mark inset
+- `sm`: 32px by 16px track, 12px thumb, 2px inset, 8px radius, 4px on/off mark inset
 - internal marks: 12px
 
 ## Animation
@@ -114,28 +124,27 @@ Respect `prefers-reduced-motion`.
 
 ## Storybook
 
-Use:
+Use the library's unified structure:
 
 ```txt
 Switch
+├─ Docs (.mdx)
 ├─ Playground
-├─ Variants
-└─ Examples
+├─ Sizes
+├─ States
+├─ Content
+└─ EdgeCases
 ```
+
+Omit a separate Variants page - `size` is the only variant-like axis and Sizes covers it.
 
 Include:
 
 - Playground
-- unchecked
-- checked
-- disabled
-- disabled checked
-- required
-- no visible label with aria-label
-- form example
-- settings row example
-- dark theme example
-- reduced motion note
+- Sizes: `md` and `sm` side by side
+- States: unchecked/checked crossed with hover/focus/disabled/loading, required, and a live example
+- Content: no visible label with aria-label, form example, settings row example, dark theme example
+- EdgeCases: reduced motion note, long label wrapping in a narrow container
 
 ## Tests
 
@@ -151,6 +160,8 @@ Test:
 - uncontrolled usage
 - disabled state
 - required state
+- loading state: blocks toggling, sets `aria-busy`, stays focusable (not native `disabled`),
+  replaces the on/off mark with a Spinner in the same slot, suppresses hover/pressed CSS
 - `role="switch"`
 - `onCheckedChange`
 - custom className

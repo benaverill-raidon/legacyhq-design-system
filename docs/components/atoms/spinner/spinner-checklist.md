@@ -89,13 +89,9 @@ Recommended component modifier tokens:
 --spinner-stroke-width-xl: 3px;
 ```
 
-Color should use the semantic token requested for the component:
-
-```css
---color-border-bold
-```
-
-If `--color-border-bold` does not exist in the current generated token CSS, document it as missing rather than replacing it silently.
+Spinner does not own a color token - it inherits the ambient text color (`color: inherit`), matching
+Figma, where the component has no fixed fill and always takes the color of whatever it's placed
+inside (a Button's per-appearance/tone color, a colored heading, plain body text).
 
 ## Design Decisions
 
@@ -119,7 +115,7 @@ If `--color-border-bold` does not exist in the current generated token CSS, docu
 
 - Renders at all supported sizes.
 - Default size is `lg`.
-- Uses `--color-border-bold` for color.
+- Has no fixed color of its own - always inherits the surrounding text color.
 - Uses component-level size/stroke tokens.
 - Animation works in normal motion mode.
 - Animation stops or is reduced when `prefers-reduced-motion` is enabled.

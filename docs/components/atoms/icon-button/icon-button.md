@@ -13,7 +13,7 @@ Do not use when text is necessary to clarify the action.
 Matches Button sizing and appearance while using only an icon.
 
 ## Accessibility
-Requires an accessible name and should display a tooltip on hover/focus.
+Requires an accessible name and should display a tooltip on hover/focus. The public prop is named `disabled`, matching the native `button` attribute directly, not a custom `isDisabled` prop.
 
 ## Related
 Button, Link Button, Toggle Icon Button, Tooltip, Icon.

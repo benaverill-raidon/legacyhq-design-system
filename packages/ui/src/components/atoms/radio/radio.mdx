@@ -1,0 +1,310 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as RadioStories from './radio.stories';
+
+<Meta of={RadioStories} name="Docs" />
+
+# Radio
+
+Radio lets a user select exactly one option from a mutually exclusive set. It's almost always used
+inside `RadioGroup`, which owns the shared `name`, single-selection value, and accessible group
+labelling - a standalone `Radio` outside a group has nothing to be mutually exclusive with.
+
+<Canvas of={RadioStories.Playground} />
+
+## When to use
+
+- Selecting one option from a short, fully-visible set of mutually exclusive choices.
+- Form questions with a single correct answer.
+- Settings and preferences where only one choice applies.
+
+## When not to use
+
+- **When more than one option can be selected.** Use `Checkbox`.
+- **When the list is long enough to need scrolling or search.** Consider a Select or Combobox.
+- **When the choice is a single, immediate on/off setting** rather than one of several named
+  options. Use `Switch`.
+
+## Anatomy
+
+<Canvas of={RadioStories.Content} />
+
+This component has two exports - `Radio` and `RadioGroup` - each with its own anatomy.
+
+### Radio
+
+1. **Root** - a `label` wrapping the whole control, so clicking the label text toggles the input.
+2. **Input** - the native `input[type="radio"]`, visually hidden but present and focusable.
+3. **Indicator** - decorative unchecked/checked icons, swapped by CSS off `:checked`.
+4. **Label text** - optional. When absent, `aria-label` or `aria-labelledby` is required.
+
+### RadioGroup
+
+1. **Root** - a native `fieldset`.
+2. **Legend** - the group's accessible name, when `label` is provided.
+3. **Description** - optional helper text under the legend.
+4. **Options** - `Radio` instances, either generated from the `options` prop or passed as `children`.
+5. **Error message** - optional, connected to the fieldset with `aria-describedby` when `invalid`.
+
+## Usage guidance
+
+### Almost always inside RadioGroup
+
+Radio only manages its own checked value - single-selection behavior (one shared `name`, mutual
+exclusivity, group labelling) is `RadioGroup`'s job. Use the `options` API for a straightforward
+list it renders for you, or `children` when the layout needs to be more custom - see Content for
+both.
+
+### Controlled and uncontrolled, at both levels
+
+`Radio` takes `checked`/`defaultChecked`; `RadioGroup` takes `value`/`defaultValue`. Pick one pair
+per group and stay consistent - `RadioGroup` decides whether it's controlled based on whether
+`value` is passed, and threads the right prop down to each generated `Radio`.
+
+### Orientation
+
+`RadioGroup`'s `orientation` defaults to `vertical` with no gap between options. `horizontal` lays
+options out in a row that wraps via `flex-wrap` once the container runs out of room, rather than
+overflowing - see Edge Cases.
+
+### Labelling
+
+A visible `label` is the default and preferred path for both `Radio` and `RadioGroup`. Omit it only
+in a dense context - a table row, a compact toolbar - where an adjacent visible label already
+exists, and supply `aria-label` or `aria-labelledby` instead. Radio has no dev-time warning for a
+missing accessible name today, so this is easy to get wrong silently - see Edge Cases.
+
+### Invalid state
+
+`invalid` sets `aria-invalid` on the input (or the fieldset, for `RadioGroup`) and switches the
+hover/pressed treatment, but color alone doesn't carry the meaning - pair it with a visible message
+via `errorMessage` (on `RadioGroup`) or `aria-describedby` (on a standalone `Radio`).
+
+### Verifying interaction states
+
+Radio predates the shared `data-force-state` convention that Checkbox, Button, and Avatar use -
+its own CSS pins hover, pressed, and focus with `previewHover` / `previewPress` / `previewFocus`
+classes instead. See States for both the pinned reference states and a live, click-driven example.
+
+## Do / Don't
+
+**Do** use `RadioGroup`'s `options` API for a straightforward list.
+
+```tsx
+<RadioGroup
+  label="Preferred contact method"
+  name="contact-method"
+  options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]}
+  onValueChange={setValue}
+/>
+```
+
+**Don't** hand-wire a shared `name` and selection state across standalone `Radio` instances when
+`options` already does it.
+
+```tsx
+<Radio name="contact-method" value="email" label="Email" checked={value === 'email'} onCheckedChange={() => setValue('email')} />
+<Radio name="contact-method" value="phone" label="Phone" checked={value === 'phone'} onCheckedChange={() => setValue('phone')} />
+```
+
+---
+
+**Do** give a `RadioGroup` an accessible group name via `label`.
+
+```tsx
+<RadioGroup label="Preferred contact method" name="contact-method" options={options} />
+```
+
+**Don't** omit both `label` and an `aria-label`/`aria-labelledby` override - the group becomes
+unnamed for assistive technology.
+
+```tsx
+<RadioGroup name="contact-method" options={options} />
+```
+
+---
+
+**Do** pair `invalid` on `RadioGroup` with a visible `errorMessage`.
+
+```tsx
+<RadioGroup label="Preferred contact method" invalid errorMessage="Choose one option before continuing." options={options} />
+```
+
+**Don't** rely on the invalid color alone to communicate the problem.
+
+```tsx
+<RadioGroup label="Preferred contact method" invalid options={options} />
+```
+
+## API
+
+### Radio
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>checked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Controlled checked value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultChecked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>invalid</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-invalid</code> and the invalid visual treatment.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>disabled</code> - the control is not interactive.</td>
+    </tr>
+    <tr>
+      <td><code>required</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>required</code>. Appends a visible indicator after the label.</td>
+    </tr>
+    <tr>
+      <td><code>onCheckedChange</code></td>
+      <td><code>(checked: boolean, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
+      <td>-</td>
+      <td>Fires on change with the next value already resolved.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>label</code>'s class list.</td>
+    </tr>
+    <tr>
+      <td><code>inputClassName</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the native input's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `input` prop (`name`, `value`, `aria-describedby`, and so on) is forwarded to the
+underlying input.
+
+### RadioGroup
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Rendered as the fieldset's <code>legend</code>; the group's accessible name.</td>
+    </tr>
+    <tr>
+      <td><code>description</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional helper text under the legend.</td>
+    </tr>
+    <tr>
+      <td><code>errorMessage</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Connected to the fieldset with <code>aria-describedby</code> when present.</td>
+    </tr>
+    <tr>
+      <td><code>name</code></td>
+      <td><code>string</code></td>
+      <td>auto-generated</td>
+      <td>Shared across every option generated from <code>options</code>.</td>
+    </tr>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Controlled selected value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultValue</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>options</code></td>
+      <td><code>RadioGroupOption[]</code></td>
+      <td>-</td>
+      <td>Generates one <code>Radio</code> per entry. Use instead of <code>children</code> for a standard list.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Custom layout of manually-wired <code>Radio</code> instances. Ignored when <code>options</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>orientation</code></td>
+      <td><code>'vertical' | 'horizontal'</code></td>
+      <td><code>'vertical'</code></td>
+      <td><code>horizontal</code> wraps via <code>flex-wrap</code> rather than overflowing.</td>
+    </tr>
+    <tr>
+      <td><code>required</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Group-level required indicator, shown after the legend.</td>
+    </tr>
+    <tr>
+      <td><code>invalid</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-invalid</code> on the fieldset and every generated option.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Disables the fieldset and every generated option.</td>
+    </tr>
+    <tr>
+      <td><code>onValueChange</code></td>
+      <td><code>(value: string, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
+      <td>-</td>
+      <td>Fires with the newly-selected option's value.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `fieldset` prop is forwarded to the root element.
+
+## Related components
+
+- **Checkbox** - for independent, multi-select choices.
+- **Switch** - for a single, immediate on/off setting.

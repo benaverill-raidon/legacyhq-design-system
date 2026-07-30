@@ -42,7 +42,7 @@
 }
 
 .color_brand {
-  color: var(--color-content-brand-primary);
+  color: var(--color-content-brand-primary-default);
 }
 
 .color_success {

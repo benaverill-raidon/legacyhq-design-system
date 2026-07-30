@@ -115,59 +115,36 @@ function afterSegmentBoundary(position: string) {
   return `calc(${position} + var(--component-slider-handle-half-width) + var(--slider-internal-gap))`;
 }
 
-function getSegmentStartBoundary(position: string, percent: number) {
-  return percent <= 0 ? minPositionVariable : afterSegmentBoundary(position);
-}
-
-function getSegmentEndBoundary(position: string, percent: number) {
-  return percent >= 100 ? maxPositionVariable : beforeSegmentBoundary(position);
-}
-
 function getSingleSegmentStyles(fillMode: SliderFillMode, valuePercent: number, originPercent: number) {
   if (fillMode === 'standard') {
     return {
-      activeTouchesStart: true,
-      activeTouchesEnd: valuePercent >= 100,
-      inactiveEndFull: valuePercent <= 0,
-      segmentStyles: {
-        '--slider-inactive-start-start': minPositionVariable,
-        '--slider-inactive-start-end': minPositionVariable,
-        '--slider-active-start': minPositionVariable,
-        '--slider-active-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
-        '--slider-inactive-end-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
-        '--slider-inactive-end-end': maxPositionVariable,
-      },
+      '--slider-inactive-start-start': minPositionVariable,
+      '--slider-inactive-start-end': minPositionVariable,
+      '--slider-active-start': minPositionVariable,
+      '--slider-active-end': beforeSegmentBoundary(valuePositionVariable),
+      '--slider-inactive-end-start': afterSegmentBoundary(valuePositionVariable),
+      '--slider-inactive-end-end': maxPositionVariable,
     };
   }
 
   if (valuePercent >= originPercent) {
     return {
-      activeTouchesStart: originPercent <= 0,
-      activeTouchesEnd: valuePercent >= 100,
-      inactiveEndFull: false,
-      segmentStyles: {
-        '--slider-inactive-start-start': minPositionVariable,
-        '--slider-inactive-start-end': getSegmentEndBoundary(originPositionVariable, originPercent),
-        '--slider-active-start': getSegmentStartBoundary(originPositionVariable, originPercent),
-        '--slider-active-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
-        '--slider-inactive-end-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
-        '--slider-inactive-end-end': maxPositionVariable,
-      },
+      '--slider-inactive-start-start': minPositionVariable,
+      '--slider-inactive-start-end': beforeSegmentBoundary(originPositionVariable),
+      '--slider-active-start': afterSegmentBoundary(originPositionVariable),
+      '--slider-active-end': beforeSegmentBoundary(valuePositionVariable),
+      '--slider-inactive-end-start': afterSegmentBoundary(valuePositionVariable),
+      '--slider-inactive-end-end': maxPositionVariable,
     };
   }
 
   return {
-    activeTouchesStart: valuePercent <= 0,
-    activeTouchesEnd: originPercent >= 100,
-    inactiveEndFull: false,
-    segmentStyles: {
-      '--slider-inactive-start-start': minPositionVariable,
-      '--slider-inactive-start-end': getSegmentEndBoundary(valuePositionVariable, valuePercent),
-      '--slider-active-start': getSegmentStartBoundary(valuePositionVariable, valuePercent),
-      '--slider-active-end': getSegmentEndBoundary(originPositionVariable, originPercent),
-      '--slider-inactive-end-start': getSegmentStartBoundary(originPositionVariable, originPercent),
-      '--slider-inactive-end-end': maxPositionVariable,
-    },
+    '--slider-inactive-start-start': minPositionVariable,
+    '--slider-inactive-start-end': beforeSegmentBoundary(valuePositionVariable),
+    '--slider-active-start': afterSegmentBoundary(valuePositionVariable),
+    '--slider-active-end': beforeSegmentBoundary(originPositionVariable),
+    '--slider-inactive-end-start': afterSegmentBoundary(originPositionVariable),
+    '--slider-inactive-end-end': maxPositionVariable,
   };
 }
 
@@ -272,6 +249,46 @@ export function useSliderDragState() {
   };
 }
 
+/*
+ * The native range input has `pointer-events: none` (the outer `.control` owns all pointer/drag
+ * handling), so dragging or clicking the handle focuses the input via an explicit `.focus()` call
+ * rather than the browser's own click-to-focus behavior. Because the clicked element and the
+ * focused element are never the same node, Chromium's `:focus-visible` heuristic can't recognize
+ * this as an ordinary mouse-focused control and defaults to treating it as keyboard-style focus -
+ * showing a focus ring on a plain click or drag. `markPointerFocusPending` records that the next
+ * focus event on this input originated from our own pointer handling, so the ring can be
+ * suppressed for that session; any real keyduwn while focused clears it again, since the user is
+ * now clearly driving the handle by keyboard.
+ */
+export function usePointerFocusRing() {
+  const pendingRef = React.useRef(false);
+  const [isPointerFocused, setIsPointerFocused] = React.useState(false);
+
+  const markPointerFocusPending = React.useCallback(() => {
+    pendingRef.current = true;
+  }, []);
+
+  const handleFocus = React.useCallback(() => {
+    if (pendingRef.current) {
+      pendingRef.current = false;
+      setIsPointerFocused(true);
+    } else {
+      setIsPointerFocused(false);
+    }
+  }, []);
+
+  const handleBlur = React.useCallback(() => {
+    pendingRef.current = false;
+    setIsPointerFocused(false);
+  }, []);
+
+  const handleKeyDown = React.useCallback(() => {
+    setIsPointerFocused(false);
+  }, []);
+
+  return { isPointerFocused, markPointerFocusPending, handleFocus, handleBlur, handleKeyDown };
+}
+
 function getRootClasses(orientation: SliderOrientation, size: SliderSize, className?: string) {
   return mergeClassNames(
     styles.root,
@@ -303,6 +320,8 @@ export function SliderBaseComponent(
     id,
     onValueChange,
     onBlur,
+    onFocus,
+    onKeyDown,
     onPointerCancel,
     onPointerDown,
     onPointerUp,
@@ -317,8 +336,11 @@ export function SliderBaseComponent(
   const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
   const currentValue = clampValue(isControlled ? value : uncontrolledValue, min, max);
   const valuePercent = getPercent(currentValue, min, max);
-  const minPosition = getVisualPosition(0);
-  const maxPosition = getVisualPosition(100);
+  // The track's own fill is flush with the control's true edges (matching Figma) - only the
+  // handle, dots, and origin position use the inset value-scale, so min/max position stay at the
+  // raw 0%/100% here rather than reusing getVisualPosition.
+  const minPosition = '0%';
+  const maxPosition = '100%';
   const valuePosition = getVisualPosition(valuePercent);
   const origin = clampValue(0, min, max);
   const originPercent = getPercent(origin, min, max);
@@ -328,12 +350,9 @@ export function SliderBaseComponent(
   const startPosition = getVisualPosition(startPercent);
   const endPosition = getVisualPosition(endPercent);
   const stepModels = getStepModels(showSteps, steps, min, max, step, startPercent, endPercent);
-  const { activeTouchesEnd, activeTouchesStart, inactiveEndFull, segmentStyles } = getSingleSegmentStyles(
-    fillMode,
-    valuePercent,
-    originPercent,
-  );
+  const segmentStyles = getSingleSegmentStyles(fillMode, valuePercent, originPercent);
   const { isDragging, startDragging, stopDragging } = useSliderDragState();
+  const pointerFocusRing = usePointerFocusRing();
   const controlRef = React.useRef<HTMLDivElement>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const trackRef = React.useRef<HTMLDivElement>(null);
@@ -393,6 +412,7 @@ export function SliderBaseComponent(
 
       dragPointerIdRef.current = event.pointerId;
       controlRef.current?.setPointerCapture?.(event.pointerId);
+      pointerFocusRing.markPointerFocusPending();
       inputRef.current?.focus();
       startDragging();
       onPointerDown?.(event as unknown as React.PointerEvent<HTMLInputElement>);
@@ -405,7 +425,7 @@ export function SliderBaseComponent(
 
       event.preventDefault();
     },
-    [disabled, onPointerDown, startDragging, updateFromPointer],
+    [disabled, onPointerDown, pointerFocusRing, startDragging, updateFromPointer],
   );
 
   const handleControlPointerMove = React.useCallback(
@@ -436,10 +456,7 @@ export function SliderBaseComponent(
       <div
         ref={controlRef}
         className={styles.control}
-        data-active-touches-end={activeTouchesEnd ? 'true' : undefined}
-        data-active-touches-start={activeTouchesStart ? 'true' : undefined}
         data-has-steps={stepModels.length ? 'true' : undefined}
-        data-inactive-end-full={inactiveEndFull ? 'true' : undefined}
         onPointerCancel={(event) => {
           stopPointerDrag(event.pointerId);
           onPointerCancel?.(event as unknown as React.PointerEvent<HTMLInputElement>);
@@ -521,14 +538,24 @@ export function SliderBaseComponent(
           value={isControlled ? currentValue : undefined}
           defaultValue={isControlled ? undefined : defaultValue}
           disabled={disabled}
+          data-pointer-focus={pointerFocusRing.isPointerFocused ? 'true' : undefined}
           onBlur={(event) => {
             if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {
               stopDragging();
             }
 
+            pointerFocusRing.handleBlur();
             onBlur?.(event);
           }}
           onChange={handleChange}
+          onFocus={(event) => {
+            pointerFocusRing.handleFocus();
+            onFocus?.(event);
+          }}
+          onKeyDown={(event) => {
+            pointerFocusRing.handleKeyDown();
+            onKeyDown?.(event);
+          }}
           onPointerCancel={() => stopDragging()}
           onPointerDown={() => startDragging()}
           onPointerUp={() => stopDragging()}

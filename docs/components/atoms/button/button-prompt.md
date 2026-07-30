@@ -62,12 +62,10 @@ export type ButtonAppearance = 'default' | 'primary' | 'subtle';
 
 export type ButtonTone = 'neutral' | 'warning' | 'error' | 'discovery';
 
-export interface ButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled'> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   tone?: ButtonTone;
-  isDisabled?: boolean;
   isLoading?: boolean;
   isFullWidth?: boolean;
   iconBefore?: React.ReactNode;
@@ -83,7 +81,7 @@ size = 'md'
 appearance = 'default'
 tone = 'neutral'
 type = 'button'
-isDisabled = false
+disabled = false
 isLoading = false
 isFullWidth = false
 ```

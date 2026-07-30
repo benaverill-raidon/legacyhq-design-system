@@ -125,7 +125,7 @@
 }
 
 .selectedIcon {
-  color: var(--color-content-brand-primary);
+  color: var(--color-content-brand-primary-default);
 }
 
 .input:checked + .indicatorTarget .uncheckedIcon,

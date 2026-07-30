@@ -288,7 +288,7 @@ describe('tag CSS contract', () => {
     expect(tagCss).toContain('--tag-color: var(--color-content-accent-blue-bolder);');
     expect(tagCss).toContain('--tag-background: var(--color-background-brand-primary-subtle-default);');
     expect(tagCss).toContain('--tag-border: var(--color-border-brand-primary);');
-    expect(tagCss).toContain('--tag-color: var(--color-content-brand-primary);');
+    expect(tagCss).toContain('--tag-color: var(--color-content-brand-primary-default);');
   });
 
   it('resets link styling so anchors inherit tag presentation', () => {
@@ -318,10 +318,8 @@ describe('tag CSS contract', () => {
   it('uses shared geometry tokens without component aliases', () => {
     expect(tagCss).toContain('--tag-min-height: var(--size-control-sm);');
     expect(tagCss).toContain('--tag-remove-size: var(--size-control-sm);');
-    expect(tagCss).toContain('--tag-icon-size: var(--size-icon-md);');
     expect(tagCss).toContain('--tag-min-height: var(--size-control-xs);');
     expect(tagCss).toContain('--tag-remove-size: var(--size-control-xs);');
-    expect(tagCss).toContain('--tag-icon-size: var(--size-icon-sm);');
     expect(tagCss).toContain('--tag-gap: var(--spacing-xs);');
     expect(tagCss).toContain('border-start-end-radius: 0;');
     expect(tagCss).toContain('border-end-end-radius: 0;');
@@ -336,6 +334,27 @@ describe('tag CSS contract', () => {
     expect(tagCss).toContain('font-family: var(--typography-body-md-font-family);');
     expect(tagCss).not.toContain('--tag-surface');
     expect(tagCss).not.toContain('--tag-overlay');
+  });
+
+  it('keeps the elemBefore/remove icon a constant 16px regardless of tag size, matching Figma', () => {
+    // Regression guard: size_sm previously overrode --tag-icon-size to --size-icon-sm (12px), but
+    // Figma's elemBefore and remove-button icon glyphs measure a constant 16px at both sm and md -
+    // only the tag height, padding, and remove-button container scale with size.
+    expect(tagCss).toMatch(/\.root \{[\s\S]*?--tag-icon-size: var\(--size-icon-md\);/);
+    expect(tagCss).not.toContain('--tag-icon-size: var(--size-icon-sm)');
+
+    const sizeSmBlock = tagCss.match(/\.size_sm \{[\s\S]*?\n\}/)?.[0];
+    const sizeMdBlock = tagCss.match(/\.size_md \{[\s\S]*?\n\}/)?.[0];
+
+    expect(sizeSmBlock).not.toContain('--tag-icon-size');
+    expect(sizeMdBlock).not.toContain('--tag-icon-size');
+  });
+
+  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+    expect(tagCss).toContain("[data-force-state='hover']");
+    expect(tagCss).toContain("[data-force-state='active']");
+    expect(tagCss).toContain(".wrapper[data-force-state='hover'] .contentInteractive");
+    expect(tagCss).toContain(".wrapper[data-force-state='hover'] .removeButton");
   });
 });
 

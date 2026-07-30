@@ -1,0 +1,177 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TooltipStories from './tooltip.stories';
+
+<Meta of={TooltipStories} name="Docs" />
+
+# Tooltip
+
+Tooltip is a floating, non-actionable label that explains a UI element or feature. It wraps a
+single trigger element and shows supplemental content on hover or keyboard focus.
+
+<Canvas of={TooltipStories.Playground} />
+
+## When to use
+
+- Explaining an icon-only control whose meaning isn't obvious from its accessible name alone.
+- Clarifying why a control is disabled.
+- Short supplemental context that isn't essential to completing the task.
+
+## When not to use
+
+- **Essential information the user needs to complete a task.** Tooltips have low discoverability
+  and don't work on touch-only devices - put anything essential in visible UI instead.
+- **As the only accessible name for a control.** The trigger still needs its own `aria-label` or
+  visible text; Tooltip content supplements it, and never replaces it.
+- **Interactive content.** Tooltip content is non-actionable - it can't contain a button, link, or
+  form control.
+
+## Anatomy
+
+<Canvas of={TooltipStories.Content} />
+
+- **Trigger** - the single child element `Tooltip` wraps. It's cloned to receive pointer/focus
+  handlers and `aria-describedby`, without changing its own rendered output.
+- **Content layer** - a `role="tooltip"` element rendered in a portal at `document.body`, positioned
+  with a small local fixed-position implementation (this repo has no shared floating-position
+  utility yet) rather than being laid out inline near the trigger.
+
+There's no arrow/caret pointing at the trigger - Figma's own tooltip is a plain rounded rectangle.
+
+## Usage guidance
+
+### No Sizes or States pages
+
+Tooltip has no `size` prop - it sizes itself to its content, up to `truncate`'s max width. There's
+also no static States page: the only "state" is shown/hidden, which is exactly what hovering or
+focusing the Playground trigger already demonstrates live - a pinned static reference wouldn't show
+anything a screenshot of the box itself doesn't already.
+
+### Placement and fallback
+
+`placement` (`top`, `right`, `bottom`, `left`) is a preference, not a guarantee - if the preferred
+side would overflow the viewport, Tooltip measures all four candidates and picks whichever actually
+fits with the least overflow, recalculating on scroll/resize. See EdgeCases for it visibly
+repositioning near a viewport edge.
+
+### Truncate vs. wrap
+
+`truncate` (default `true`) keeps content to a single ellipsized line up to 420px wide. Set it to
+`false` for content long enough to need wrapping, up to 240px wide before it wraps - see Variants.
+
+### Disabled controls still get an explanation
+
+A disabled native control (`<button disabled>`, or a component's `isDisabled`) can't receive pointer
+events itself, so hovering it directly would never trigger a tooltip. Tooltip detects this and wraps
+the trigger in a non-focusable pointer-only wrapper instead, so hovering still reveals the
+explanation without creating an extra keyboard tab stop or making the control appear interactive to
+screen reader users - see Content.
+
+### External composition with icon buttons
+
+`IconButton` and `ToggleIconButton` can render their own internal tooltip, or be wrapped externally
+when the tooltip message should say something different from the accessible name - pass
+`tooltip={false}` to suppress the internal one and avoid rendering two. See Content.
+
+## Do / Don't
+
+**Do** give the trigger its own accessible name, independent of the tooltip content.
+
+```tsx
+<Tooltip content="Edit this matter's details">
+  <IconButton aria-label="Edit" tooltip={false}>
+    <EditIcon />
+  </IconButton>
+</Tooltip>
+```
+
+**Don't** rely on tooltip content as the only description of what a control does.
+
+```tsx
+<Tooltip content="Edit">
+  <IconButton tooltip={false}>
+    <EditIcon />
+  </IconButton>
+</Tooltip>
+```
+
+---
+
+**Do** let a disabled control still explain itself via Tooltip.
+
+```tsx
+<Tooltip content="Disabled until a record is selected">
+  <IconButton aria-label="Edit" disabled tooltip={false}>
+    <EditIcon />
+  </IconButton>
+</Tooltip>
+```
+
+**Don't** put content in a tooltip that the user needs in order to proceed - use visible UI instead.
+
+```tsx
+<Tooltip content="You must accept the terms before continuing">
+  <Button disabled>Continue</Button>
+</Tooltip>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>content</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. No tooltip behavior is attached at all when this is empty (<code>null</code>, <code>undefined</code>, or a blank string).</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactElement</code></td>
+      <td>-</td>
+      <td>Required. A single trigger element - cloned to add the pointer/focus handlers and <code>aria-describedby</code>.</td>
+    </tr>
+    <tr>
+      <td><code>placement</code></td>
+      <td><code>'top' | 'right' | 'bottom' | 'left'</code></td>
+      <td><code>'top'</code></td>
+      <td>Preferred side. Falls back to whichever side actually fits when this would overflow.</td>
+    </tr>
+    <tr>
+      <td><code>truncate</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Single ellipsized line (420px max) vs. wrapped text (240px max before wrapping).</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Suppresses the tooltip entirely - not just visually hidden.</td>
+    </tr>
+    <tr>
+      <td><code>delay</code></td>
+      <td><code>number</code></td>
+      <td><code>300</code></td>
+      <td>Milliseconds of hover/focus before the tooltip appears.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the tooltip content element's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **IconButton** / **ToggleIconButton** - can render an internal tooltip, or be wrapped externally.
+- **Label** - for a persistent, always-visible description instead of a hover-revealed one.

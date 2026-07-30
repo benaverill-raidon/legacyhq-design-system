@@ -72,7 +72,7 @@ describe('Button', () => {
     const handleClick = vi.fn();
 
     render(
-      <Button isDisabled onClick={handleClick}>
+      <Button disabled onClick={handleClick}>
         Disabled
       </Button>,
     );
@@ -88,7 +88,7 @@ describe('Button', () => {
 
   it('applies disabled behavior to primary semantic tone buttons', () => {
     render(
-      <Button appearance="primary" tone="error" isDisabled>
+      <Button appearance="primary" tone="error" disabled>
         Delete
       </Button>,
     );
@@ -113,7 +113,7 @@ describe('Button', () => {
     expect(button).toHaveAttribute('aria-busy', 'true');
     expect(button).toHaveAttribute('aria-disabled', 'true');
     expect(screen.getByText('Save changes')).toBeVisible();
-    expect(container.querySelector(`.${styles.spinner}`)).toBeInTheDocument();
+    expect(container.querySelector('svg')).toBeInTheDocument();
 
     fireEvent.click(button);
 

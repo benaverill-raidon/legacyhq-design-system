@@ -1,0 +1,162 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ToggleIconButtonStories from './toggle-icon-button.stories';
+
+<Meta of={ToggleIconButtonStories} name="Docs" />
+
+# Toggle Icon Button
+
+Toggle Icon Button is an icon-only Button-family atom that represents a persistent
+selected/unselected state where space is limited - it combines Icon Button's layout with Toggle
+Button's selection semantics.
+
+<Canvas of={ToggleIconButtonStories.Playground} />
+
+## When to use
+
+- View mode selection.
+- Favorite/saved or pinned/unpinned state.
+- Formatting toolbar controls with no room for a text label.
+- Compact filter state.
+
+## When not to use
+
+- **A one-time action.** Use `IconButton`.
+- **The action benefits from a visible text label.** Use `ToggleButton`.
+- **A setting that turns something on/off**, outside a toolbar context. Use `Switch`.
+- **Opening a menu or popover.** Use `IconButton` with `isExpanded`.
+- **Navigation.** Use `LinkButton` or `Link`.
+
+## Anatomy
+
+<Canvas of={ToggleIconButtonStories.Content} />
+
+- **Root** - a native `<button type="button">`, exposing `aria-pressed` rather than
+  `aria-selected`, `aria-expanded`, or `role="switch"`.
+- **Icon slot** - `children`, decorative (`aria-hidden`) since the accessible name comes from
+  `aria-label`/`aria-labelledby`, not the icon itself.
+
+## Usage guidance
+
+### Always needs an accessible name
+
+Since there's no visible label, every instance must have `aria-label` or `aria-labelledby` - the
+component logs a dev-time console warning when both are missing. Tooltip content is not a
+substitute: wrap in `Tooltip` externally for a visible hint, but keep the accessible name on the
+button itself - see EdgeCases for the warning in practice.
+
+### The parent owns selection
+
+`isSelected` is fully controlled, the same as `ToggleButton` - see Content for single-choice
+(view mode) and multi-choice (formatting toolbar) patterns.
+
+### Tone, size, and shape
+
+`tone` (`default`/`subtle`) and `size` (`xs`/`sm`/`md`/`lg`) work exactly like `ToggleButton` - see
+Variants and Sizes. `shape` is independent of both: `square` (the default) uses the size's own
+corner radius, `round` is always a full circle regardless of size.
+
+### Disabled always wins over selected
+
+Figma has no unique visual treatment for "selected and disabled" - disabled styling fully overrides
+the selected appearance rather than blending with it. See States.
+
+## Do / Don't
+
+**Do** give every instance an accessible name.
+
+```tsx
+<ToggleIconButton aria-label="Grid view" isSelected={isGridView} onClick={toggleGridView}>
+  <GridIcon />
+</ToggleIconButton>
+```
+
+**Don't** rely on adjacent visible text or a tooltip as the only accessible name.
+
+```tsx
+<Tooltip content="Grid view">
+  <ToggleIconButton onClick={toggleGridView}>
+    <GridIcon />
+  </ToggleIconButton>
+</Tooltip>
+```
+
+---
+
+**Do** use `ToggleButton` once there's room for a label - it reads more clearly than an unlabeled
+icon for anything beyond a very familiar, dense toolbar.
+
+```tsx
+<ToggleButton isSelected={isBold} onClick={toggleBold}>
+  Bold
+</ToggleButton>
+```
+
+**Don't** default to the icon-only form just to save space if the control isn't already a
+well-established icon (bold/italic/underline, grid/list) - an unfamiliar icon with no label is hard
+to identify.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The icon content.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Fixed square footprint: 24/32/40/48px. Icon size stays constant.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Whether the resting state shows a visible border.</td>
+    </tr>
+    <tr>
+      <td><code>shape</code></td>
+      <td><code>'square' | 'round'</code></td>
+      <td><code>'square'</code></td>
+      <td>Independent of size - <code>round</code> is always a full circle.</td>
+    </tr>
+    <tr>
+      <td><code>isSelected</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Fully controlled by the parent. Sets <code>aria-pressed</code> and the selected visual treatment.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>disabled</code>. Overrides selected styling entirely.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>button</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `button` attribute (including `aria-label`, `aria-labelledby`,
+`aria-describedby`) is forwarded to the root element. `type` defaults to `"button"`.
+
+## Related components
+
+- **IconButton** - for a one-time icon-only action with no persistent selected state.
+- **ToggleButton** - for the same selection semantics with a visible text label.
+- **Switch** - for an immediate on/off setting outside a toolbar context.

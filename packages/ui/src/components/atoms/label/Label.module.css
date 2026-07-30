@@ -1,5 +1,5 @@
 .label {
-  --label-background: var(--color-background-neutral-subtle-default);
+  --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
   --label-padding-block: var(--spacing-xxs);
   --label-padding-inline: var(--spacing-sm);
@@ -51,7 +51,7 @@
 }
 
 .tone_default.emphasis_subtle {
-  --label-background: var(--color-background-neutral-subtle-default);
+  --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
 }
 

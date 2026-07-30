@@ -1,11 +1,12 @@
 import * as React from 'react';
-import type { CSSProperties } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { CSSProperties, ReactNode } from 'react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Slider, SliderCentered, SliderRange } from './index';
+import type { SliderSize } from './slider.types';
 
-type SliderSize = 'xs' | 'sm' | 'md';
+const sizes: SliderSize[] = ['xs', 'sm', 'md'];
 
-const meta: Meta<typeof Slider> = {
+const meta = {
   title: 'UI/Atoms/Slider',
   component: Slider,
   args: {
@@ -22,7 +23,7 @@ const meta: Meta<typeof Slider> = {
     max: { control: 'number' },
     step: { control: 'number' },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
-    size: { control: 'inline-radio', options: ['xs', 'sm', 'md'] },
+    size: { control: 'inline-radio', options: sizes },
     disabled: { control: 'boolean' },
     showSteps: { control: 'boolean' },
     steps: { control: 'object' },
@@ -30,24 +31,22 @@ const meta: Meta<typeof Slider> = {
     className: { control: false },
     onValueChange: { control: false },
   },
-};
+} satisfies Meta<typeof Slider>;
 
 export default meta;
 
-type Story = StoryObj<typeof Slider>;
+type Story = StoryObj<typeof meta>;
 
-const stackStyle = {
-  display: 'grid',
-  gap: 'var(--spacing-2xl)',
-  color: 'var(--color-content-default)',
-} satisfies CSSProperties;
+const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)', color: 'var(--color-content-default)' };
 
-const rowStyle = {
-  display: 'grid',
-  gap: 'var(--spacing-md)',
-} satisfies CSSProperties;
+const row: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)' };
 
-const cardStyle = {
+const captionStyle: CSSProperties = {
+  font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
+  color: 'var(--color-content-subtle)',
+};
+
+const cardStyle: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-lg)',
   padding: 'var(--spacing-lg)',
@@ -56,32 +55,123 @@ const cardStyle = {
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
   overflow: 'visible',
-} satisfies CSSProperties;
+};
 
-const darkSurfaceStyle = {
-  ...cardStyle,
-  background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
-} satisfies CSSProperties;
-
-const verticalRowStyle = {
+const verticalRowStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'stretch',
   gap: 'var(--spacing-2xl)',
-  minBlockSize: '320px',
-} satisfies CSSProperties;
+  minBlockSize: '200px',
+};
 
-const sizeLabelStyle = {
-  fontFamily: 'var(--typography-body-sm-font-family)',
-  fontSize: 'var(--typography-body-sm-font-size)',
-  fontWeight: 'var(--typography-body-sm-font-weight)',
-  lineHeight: 'var(--typography-body-sm-line-height)',
-} satisfies CSSProperties;
+const headingStyle: CSSProperties = {
+  margin: 0,
+  font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
+  color: 'var(--color-content-default)',
+};
 
-const sizeToStopContainer: Record<SliderSize, string> = {
-  xs: 'var(--component-slider-stop-container-size-xs)',
-  sm: 'var(--component-slider-stop-container-size-sm)',
-  md: 'var(--component-slider-stop-container-size-md)',
+function Group({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+      <h3 style={headingStyle}>{title}</h3>
+      <div style={row}>{children}</div>
+    </section>
+  );
+}
+
+/** Prop exploration. Every supported prop is wired to a control. */
+export const Playground: Story = {};
+
+/**
+ * The three designed forms - where the fill starts from and how many handles there are - plus
+ * orientation, which every form shares.
+ */
+export const Variants: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Slider family">
+        <Slider label="Standard - fill runs from min" defaultValue={65} showSteps step={25} />
+        <SliderCentered label="Centered - fill runs from the origin" defaultValue={-30} showSteps steps={[-100, -50, 0, 50, 100]} />
+        <SliderRange label="Range - two handles" defaultValue={[25, 75]} showSteps steps={[0, 25, 50, 75, 100]} />
+      </Group>
+
+      <Group title="Orientation">
+        <div style={verticalRowStyle}>
+          <Slider aria-label="Horizontal" defaultValue={65} showSteps step={25} />
+          <Slider aria-label="Vertical" orientation="vertical" defaultValue={65} showSteps step={25} />
+        </div>
+      </Group>
+    </div>
+  ),
+};
+
+/**
+ * `xs` / `sm` / `md` scale the track thickness only - the handle and every track-stop dot stay a
+ * constant size and always sit exactly on the track's endpoints regardless of size.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Sizes">
+        {sizes.map((size) => (
+          <Slider key={size} label={size.toUpperCase()} size={size} defaultValue={65} showSteps step={25} />
+        ))}
+      </Group>
+
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Handle and track-stop size stay constant</h3>
+        <p style={captionStyle}>
+          Only the track thickness scales with size - the handle and the min/max track-stop dots
+          are the same size at every step, so the handle lands exactly on the dot at 0 and 100
+          regardless of <code>size</code>.
+        </p>
+        <div style={row}>
+          {sizes.map((size) => (
+            <Slider key={size} label={`${size.toUpperCase()} at 0`} size={size} defaultValue={0} />
+          ))}
+        </div>
+      </section>
+    </div>
+  ),
+};
+
+function LiveDragExample() {
+  const [value, setValue] = React.useState(50);
+
+  return (
+    <div style={{ display: 'grid', gap: 'var(--spacing-sm)' }}>
+      <Slider label="Interactive focus test" defaultValue={value} onValueChange={setValue} />
+      <span style={captionStyle}>Click or drag the handle (no ring), then use arrow keys (ring appears)</span>
+    </div>
+  );
+}
+
+/**
+ * Interaction and system states, matching Figma's enabled/hovered/pressed/disabled variants.
+ * `data-preview-state` mirrors the real `:hover` / `:active` / `:focus-visible` states so they
+ * render statically as a regression reference. Clicking or dragging the handle must never show a
+ * focus ring on its own - only real keyboard focus does - so this page also has a live example to
+ * verify that by hand rather than only pinning a `focus` snapshot.
+ */
+export const States: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Enabled">
+        <Slider label="Default" defaultValue={65} />
+        <Slider label="Hover" defaultValue={65} data-preview-state="hover" />
+        <Slider label="Pressed" defaultValue={65} data-preview-state="press" />
+        <Slider label="Focus visible (keyboard)" defaultValue={65} data-preview-state="focus" />
+      </Group>
+
+      <Group title="Disabled">
+        <Slider label="Disabled" defaultValue={65} disabled />
+      </Group>
+
+      <Group title="Live - click, drag, and tab to this">
+        <LiveDragExample />
+      </Group>
+    </div>
+  ),
 };
 
 function ControlledSliderExample() {
@@ -96,323 +186,96 @@ function ControlledRangeExample() {
   return <SliderRange label={`Controlled range ${value[0]} to ${value[1]}`} value={value} onValueChange={setValue} />;
 }
 
-function EndpointScale({ size }: { size: SliderSize }) {
-  const stopContainer = sizeToStopContainer[size];
-
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr auto 1fr auto',
-        alignItems: 'center',
-        paddingInline: `calc(${stopContainer} / 2)`,
-        marginBlockStart: 'var(--spacing-sm)',
-        ...sizeLabelStyle,
-      }}
-    >
-      <span>0</span>
-      <span />
-      <span style={{ justifySelf: 'center' }}>50</span>
-      <span />
-      <span style={{ justifySelf: 'end' }}>100</span>
-    </div>
-  );
-}
-
-function EndpointAlignmentExample({ size, value }: { size: SliderSize; value: number }) {
-  return (
-    <div style={rowStyle}>
-      <Slider label={`${size.toUpperCase()} endpoint alignment`} size={size} defaultValue={value} showSteps step={50} />
-      <EndpointScale size={size} />
-    </div>
-  );
-}
-
-function SizeShowcase({ size }: { size: SliderSize }) {
-  return (
-    <div style={rowStyle}>
-      <span style={sizeLabelStyle}>{size.toUpperCase()}</span>
-      <Slider label={`${size.toUpperCase()} standard`} size={size} defaultValue={50} showSteps step={10} />
-      <SliderCentered
-        label={`${size.toUpperCase()} centered`}
-        size={size}
-        defaultValue={0}
-        showSteps
-        steps={[-100, -50, 0, 50, 100]}
-      />
-      <SliderRange
-        label={`${size.toUpperCase()} range`}
-        size={size}
-        defaultValue={[25, 75]}
-        showSteps
-        steps={[0, 25, 50, 75, 100]}
-      />
-    </div>
-  );
-}
-
-export const Playground: Story = {};
-
-export const Variants: Story = {
-  args: {
-    defaultValue: 0,
-  },
+/** Realistic content and the compositions Slider is designed to sit inside. */
+export const Content: Story = {
   render: () => (
-    <div style={stackStyle}>
-      <div style={rowStyle}>
-        <Slider label="Slider default" defaultValue={50} />
-        <Slider label="Auto steps" defaultValue={50} step={5} showSteps />
-        <Slider label="Explicit endpoint steps" defaultValue={50} showSteps steps={[0, 25, 50, 75, 100]} />
-        <SliderCentered label="Centered default" defaultValue={0} showSteps steps={[-100, -50, 0, 50, 100]} />
-        <SliderRange label="Range default" defaultValue={[25, 75]} showSteps steps={[0, 25, 50, 75, 100]} />
-      </div>
+    <div style={stack}>
+      <Group title="Track stops">
+        <Slider label="Auto steps from step={10}" defaultValue={50} step={10} showSteps />
+        <Slider label="Explicit steps" defaultValue={50} showSteps steps={[0, 25, 50, 75, 100]} />
+      </Group>
 
-      <div style={rowStyle}>
-        <SizeShowcase size="xs" />
-        <SizeShowcase size="sm" />
-        <SizeShowcase size="md" />
-      </div>
+      <Group title="Value indicator">
+        <Slider label="Shows on hover, focus, and drag" defaultValue={50} showSteps step={10} />
+        <Slider label="Always visible (showValue)" defaultValue={65} showValue showSteps step={10} />
+      </Group>
 
-      <div style={verticalRowStyle}>
-        <Slider aria-label="Vertical slider" orientation="vertical" defaultValue={50} step={5} showSteps size="xs" />
-        <SliderCentered
-          aria-label="Vertical centered slider"
-          orientation="vertical"
-          defaultValue={-50}
-          showSteps
-          size="sm"
-          steps={[-100, -50, 0, 50, 100]}
-        />
-        <SliderRange
-          aria-label="Vertical range slider"
-          orientation="vertical"
-          defaultValue={[25, 75]}
-          showSteps
-          size="md"
-          steps={[0, 25, 50, 75, 100]}
-        />
-      </div>
+      <Group title="Custom range">
+        <Slider label="Custom min, max, and step" min={10} max={90} step={10} defaultValue={40} showSteps />
+      </Group>
 
-      <div style={rowStyle}>
-        <Slider label="Disabled" defaultValue={50} disabled />
-        <Slider label="Hover preview" defaultValue={50} data-preview-state="hover" showSteps step={10} />
-        <Slider label="Pressed preview" defaultValue={50} data-preview-state="press" showSteps step={10} />
-        <Slider label="Focus preview" defaultValue={50} data-preview-state="focus" showSteps step={10} />
-      </div>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>In composition</h3>
+        <div style={cardStyle}>
+          <Slider label="Volume" defaultValue={70} showValue />
+        </div>
+        <div style={cardStyle}>
+          <SliderRange label="Price range" defaultValue={[25, 75]} showValue showSteps steps={[0, 25, 50, 75, 100]} />
+        </div>
+        <div style={cardStyle}>
+          <ControlledSliderExample />
+          <ControlledRangeExample />
+        </div>
+      </section>
     </div>
   ),
 };
 
-export const Examples: Story = {
+/** Difficult states made reproducible outside the application. */
+export const EdgeCases: Story = {
   render: () => (
-    <div style={stackStyle}>
-      <div style={cardStyle}>
-        <EndpointAlignmentExample size="xs" value={0} />
-        <EndpointAlignmentExample size="sm" value={50} />
-        <EndpointAlignmentExample size="md" value={100} />
-      </div>
-
-      <div style={cardStyle}>
-        <Slider label="0 percent" size="md" defaultValue={0} step={5} showSteps />
-        <Slider label="50 percent" size="md" defaultValue={50} step={5} showSteps />
-        <Slider label="100 percent" size="md" defaultValue={100} step={5} showSteps />
-      </div>
-
-      <div style={cardStyle}>
-        <SliderCentered
-          label="-50 adjustment"
-          size="xs"
-          defaultValue={-50}
-          showValue
-          showSteps
-          steps={[-100, -50, 0, 50, 100]}
-        />
-        <SliderCentered label="0 adjustment" size="sm" defaultValue={0} showSteps steps={[-100, -50, 0, 50, 100]} />
-        <SliderCentered label="50 adjustment" size="md" defaultValue={50} showSteps steps={[-100, -50, 0, 50, 100]} />
-      </div>
-
-      <div style={cardStyle}>
-        <SliderRange label="Budget range" size="xs" defaultValue={[25, 75]} showValue showSteps steps={[0, 25, 50, 75, 100]} />
+    <div style={stack}>
+      <Group title="Overlapping range handles">
         <SliderRange
-          label="Range overlapping handles"
-          size="sm"
+          label="Both handles at 40 (minDistance=0)"
           defaultValue={[40, 40]}
+          minDistance={0}
           showValue
           showSteps
-          steps={[0, 25, 40, 50, 75, 100]}
+          steps={[0, 40, 100]}
         />
+      </Group>
+
+      <Group title="Minimum distance between range handles">
+        <SliderRange label="At least 10 apart" defaultValue={[20, 80]} minDistance={10} showValue />
         <SliderRange
-          label="Range with minimum distance"
-          size="md"
-          defaultValue={[20, 80]}
-          minDistance={10}
-          showValue
-          showSteps
-          steps={[0, 20, 50, 80, 100]}
-        />
-        <SliderRange
-          label="Range with minimum distance and disableSwap"
-          size="md"
+          label="At least 10 apart, no swapping"
           defaultValue={[20, 80]}
           minDistance={10}
           disableSwap
           showValue
-          showSteps
-          steps={[0, 20, 50, 80, 100]}
         />
-      </div>
+      </Group>
 
-      <div style={cardStyle}>
-        <Slider label="Custom min, max, and step" min={10} max={90} step={10} defaultValue={40} showSteps />
-        <Slider aria-label="Unlabeled slider" defaultValue={30} />
-      </div>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Narrow container</h3>
+        <div style={{ inlineSize: '160px', padding: 'var(--spacing-sm)', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
+          <Slider label="Narrow" defaultValue={50} showSteps step={25} />
+        </div>
+      </section>
 
-      <div style={cardStyle}>
-        <ControlledSliderExample />
-        <ControlledRangeExample />
-      </div>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Vertical in a constrained space</h3>
+        <div style={{ ...verticalRowStyle, minBlockSize: '120px' }}>
+          <Slider aria-label="Short vertical" orientation="vertical" size="xs" defaultValue={50} showSteps step={25} />
+          <SliderRange aria-label="Short vertical range" orientation="vertical" size="xs" defaultValue={[25, 75]} />
+        </div>
+      </section>
 
-      <div data-theme="dark" style={darkSurfaceStyle}>
-        <Slider label="Dark surface slider" defaultValue={50} showSteps step={10} />
-        <SliderCentered label="Dark surface centered" defaultValue={-50} showSteps steps={[-100, -50, 0, 50, 100]} />
-        <SliderRange label="Dark surface range" defaultValue={[30, 70]} showSteps steps={[0, 25, 50, 75, 100]} />
-      </div>
-
-      <div style={{ ...cardStyle, ...verticalRowStyle }}>
-        <Slider aria-label="Tall vertical slider" orientation="vertical" size="xs" defaultValue={50} step={5} showSteps />
-        <SliderCentered
-          aria-label="Tall vertical centered slider"
-          orientation="vertical"
-          size="sm"
-          defaultValue={0}
-          showSteps
-          steps={[-100, -50, 0, 50, 100]}
-        />
-        <SliderRange
-          aria-label="Tall vertical range slider"
-          orientation="vertical"
-          size="md"
-          defaultValue={[50, 50]}
-          showValue
-          showSteps
-          steps={[0, 25, 50, 75, 100]}
-        />
-      </div>
-    </div>
-  ),
-};
-
-
-const debugTrackStyle = {
-  ...cardStyle,
-  outline: '1px dashed var(--color-border-subtle)',
-  outlineOffset: '4px',
-} satisfies CSSProperties;
-
-const brandTintedSurfaceStyle = {
-  ...cardStyle,
-  background: 'var(--color-data-viz-sequence-prussian-100)',
-} satisfies CSSProperties;
-
-function DebugStack({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        display: 'grid',
-        gap: 'var(--spacing-md)',
-        padding: 'var(--spacing-md)',
-        borderRadius: 'var(--border-radius-md)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--color-data-viz-sequence-prussian-100) 40%, transparent), transparent)',
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-export const HandleGeometryDebug: Story = {
-  render: () => (
-    <div style={stackStyle}>
-      <div style={debugTrackStyle}>
-        <DebugStack>
-          <Slider label="Standard md" size="md" defaultValue={50} showSteps step={10} showValue />
-          <SliderCentered
-            label="Centered sm"
-            size="sm"
-            defaultValue={-25}
-            showSteps
-            showValue
-            steps={[-100, -50, 0, 50, 100]}
-          />
-          <SliderRange
-            label="Range xs"
-            size="xs"
-            defaultValue={[25, 75]}
-            showSteps
-            showValue
-            steps={[0, 25, 50, 75, 100]}
-          />
-        </DebugStack>
-      </div>
-
-      <div style={{ ...debugTrackStyle, ...verticalRowStyle }}>
-        <Slider aria-label="Debug vertical standard" orientation="vertical" size="xs" defaultValue={50} showSteps step={10} />
-        <SliderCentered
-          aria-label="Debug vertical centered"
-          orientation="vertical"
-          size="sm"
-          defaultValue={25}
-          showSteps
-          steps={[-100, -50, 0, 50, 100]}
-        />
-        <SliderRange
-          aria-label="Debug vertical range"
-          orientation="vertical"
-          size="md"
-          defaultValue={[30, 70]}
-          showSteps
-          steps={[0, 25, 50, 75, 100]}
-        />
-      </div>
-    </div>
-  ),
-};
-
-export const RadiusComparison: Story = {
-  render: () => (
-    <div style={stackStyle}>
-      <div style={cardStyle}>
-        <Slider label="0" defaultValue={0} showSteps step={25} />
-        <Slider label="25" defaultValue={25} showSteps step={25} />
-        <Slider label="50" defaultValue={50} showSteps step={25} />
-        <Slider label="75" defaultValue={75} showSteps step={25} />
-        <Slider label="100" defaultValue={100} showSteps step={25} />
-      </div>
-      <div style={cardStyle}>
-        <SliderCentered label="Centered 0" defaultValue={0} showSteps steps={[-100, -50, 0, 50, 100]} />
-        <SliderCentered label="Centered 100" defaultValue={100} showSteps steps={[-100, -50, 0, 50, 100]} />
-        <SliderRange label="Range full" defaultValue={[0, 100]} showSteps steps={[0, 25, 50, 75, 100]} />
-      </div>
-    </div>
-  ),
-};
-
-export const TrackStopContrast: Story = {
-  render: () => (
-    <div style={stackStyle}>
-      <div style={cardStyle}>
-        <Slider label="Light surface" defaultValue={50} showSteps step={10} />
-        <SliderRange label="Light range" defaultValue={[25, 75]} showSteps steps={[0, 25, 50, 75, 100]} />
-      </div>
-      <div data-theme="dark" style={darkSurfaceStyle}>
-        <Slider label="Dark surface" defaultValue={50} showSteps step={10} />
-        <SliderRange label="Dark range" defaultValue={[25, 75]} showSteps steps={[0, 25, 50, 75, 100]} />
-      </div>
-      <div style={brandTintedSurfaceStyle}>
-        <Slider label="Brand-tinted surface" defaultValue={50} showSteps step={10} />
-        <SliderCentered label="Brand-tinted centered" defaultValue={0} showSteps steps={[-100, -50, 0, 50, 100]} />
-      </div>
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        <h3 style={headingStyle}>Dark surface</h3>
+        <div
+          data-theme="dark"
+          style={{
+            ...cardStyle,
+            background: 'var(--color-background-neutral-bold-default)',
+            color: 'var(--color-content-inverse)',
+          }}
+        >
+          <Slider label="Dark surface slider" defaultValue={50} showSteps step={10} />
+          <SliderRange label="Dark surface range" defaultValue={[30, 70]} showSteps steps={[0, 25, 50, 75, 100]} />
+        </div>
+      </section>
     </div>
   ),
 };

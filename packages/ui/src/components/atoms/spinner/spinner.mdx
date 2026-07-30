@@ -1,0 +1,141 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SpinnerStories from './spinner.stories';
+
+<Meta of={SpinnerStories} name="Docs" />
+
+# Spinner
+
+Spinner is a compact animated indicator that communicates indeterminate loading - work is in
+progress, but there's no known percentage to report.
+
+<Canvas of={SpinnerStories.Playground} />
+
+## When to use
+
+- A small area of the UI is loading and the duration can't be measured.
+- A button or inline form action is processing.
+- A panel, table, card, or async section is waiting on data.
+
+## When not to use
+
+- **When progress can be measured.** Use `ProgressBar` once you know a real percentage, or
+  `ProgressIndicator` for step-based progress.
+- **For a page-level loading state.** Prefer a skeleton or page-level loading pattern instead of a
+  single spinner.
+- **When the wait is so brief that motion adds visual noise rather than clarity.**
+
+## Anatomy
+
+<Canvas of={SpinnerStories.Content} />
+
+- **Root** - an inline `span` sized entirely by the `size` prop. Decorative (`aria-hidden="true"`,
+  no role) by default, or `role="status"` with `aria-live="polite"` when `label` is provided.
+- **SVG arc** - a fixed 90-degree partial circle that rotates continuously. Always
+  `aria-hidden="true"` and `focusable="false"`, regardless of `label`.
+- **Visually hidden label** - rendered only when `label` is provided, giving assistive technology a
+  loading announcement without adding visible text.
+
+## Usage guidance
+
+### Sizes are the only visual axis
+
+Four fixed sizes - `sm` (12px), `md` (16px), `lg` (24px, the default), and `xl` (48px) - see Sizes.
+There's no separate Variants page: Spinner has one appearance, not a set of visual styles. There's
+no States page either: Spinner is non-interactive and has no hover, pressed, focus, or disabled
+state to preview - `label` is the only thing that changes its accessibility tree, and that's covered
+in Content above.
+
+### Decorative vs. accessible loading
+
+Default usage is silent - `aria-hidden="true"` with no role - meant to sit next to visible loading
+text you already provide. Pass `label` only when the Spinner is the sole loading signal, so
+assistive technology gets a status announcement without duplicating visible text.
+
+### Reduced motion
+
+Spinner listens for `prefers-reduced-motion: reduce` and stops the continuous rotation while keeping
+the arc visible, rather than swapping to a different component or disappearing - see Edge Cases.
+
+### Color always inherits
+
+Spinner has no color of its own - the arc is drawn with `stroke: currentColor` and the root uses
+`color: inherit`, so it always takes the current text color of whatever it sits inside: a Button's
+per-appearance/tone color, a colored heading, or plain body text. There's no `color` or `tone` prop
+to set it directly - see Edge Cases for it picking up an arbitrary ambient color.
+
+## Do / Don't
+
+**Do** pair a decorative Spinner with visible loading text.
+
+```tsx
+<p>
+  <Spinner size="sm" />
+  Loading matters
+</p>
+```
+
+**Don't** rely on a decorative Spinner as the only loading signal - screen reader users get nothing.
+
+```tsx
+<Spinner />
+```
+
+---
+
+**Do** give a standalone Spinner a `label` when there's no visible loading text nearby.
+
+```tsx
+<Spinner label="Loading matters" />
+```
+
+**Don't** use Spinner for a process you can actually measure.
+
+```tsx
+<Spinner label="Uploading, 42% complete" />
+```
+
+Use `ProgressBar` instead, so the percentage is both visible and correctly announced.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md' | 'lg' | 'xl'</code></td>
+      <td><code>'lg'</code></td>
+      <td>The only visual axis - controls the rendered diameter and stroke width.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>When set, exposes <code>role="status"</code>/<code>aria-live="polite"</code> and renders
+      the text as a visually hidden accessible name. Omit it when adjacent visible text already
+      announces the loading state.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>span</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `span` attribute is forwarded to the root element. Spinner is not
+keyboard-focusable and has no interactive or disabled state.
+
+## Related components
+
+- **ProgressBar** - for determinate, measurable progress.
+- **ProgressIndicator** - for step-based, rather than percentage-based, progress.
+- **Button** - composes a small decorative Spinner internally for its `isLoading` state.

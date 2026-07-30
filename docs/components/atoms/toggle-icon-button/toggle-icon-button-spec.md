@@ -214,7 +214,7 @@ Recommended selected styling:
 
 ```txt
 background: var(--color-background-brand-primary-default-default)
-content: var(--color-content-brand-primary)
+content: var(--color-content-brand-primary-default)
 border: var(--color-border-brand-primary)
 ```
 
@@ -297,15 +297,18 @@ Reuse established Icon Button and Toggle Button layout patterns where available.
 
 ## Storybook
 
-Create:
+Unified story structure, matching the rest of the library:
 
 ```txt
-Toggle Icon Button / Playground
-Toggle Icon Button / Variants
-Toggle Icon Button / Examples
+Toggle Icon Button
+├─ Docs (.mdx)
+├─ Playground
+├─ Variants
+├─ Sizes
+├─ States
+├─ Content
+└─ EdgeCases
 ```
-
-Do not create separate States or Accessibility pages.
 
 ### Playground controls
 
@@ -320,25 +323,35 @@ aria-label
 
 ### Variants story
 
-Show matrix:
+Show `tone` (`default`/`subtle`) crossed with `isSelected`, plus the independent `shape` axis
+(`square`/`round`).
 
-```txt
-tone: default | subtle
-size: xs | sm | md | lg
-shape: square | round
-selected: false | true
-disabled: false | true
-```
+### Sizes story
 
-### Examples story
+Show `xs`/`sm`/`md`/`lg` side by side.
+
+### States story
+
+`data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
+API) so hover/pressed render as a static regression reference - the same convention Button and
+Checkbox use. Focus preview needs no extra CSS: the shared Focus Ring primitive already reacts to
+`data-force-state="focus"` directly on this element. Cross unselected/selected with
+default/hover/focus/pressed/disabled, and include a live click-to-toggle example.
+
+### Content story
 
 Show:
 
 - view mode toggle
 - formatting toolbar icon
 - favorite/save toggle
-- selected and unselected pair
-- Tooltip-wrapped toggle icon button if Tooltip exists
+
+### EdgeCases story
+
+Show:
+
+- the missing-accessible-name anti-pattern (logs a dev-time console warning)
+- dark surface
 
 ## Tests
 
@@ -362,6 +375,7 @@ applies shape classes
 disabled sets native disabled
 disabled prevents click
 custom className is applied
+supports data-force-state hover/pressed preview
 ```
 
 ## Future considerations

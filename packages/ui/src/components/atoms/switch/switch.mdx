@@ -1,0 +1,183 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SwitchStories from './switch.stories';
+
+<Meta of={SwitchStories} name="Docs" />
+
+# Switch
+
+Switch lets a user immediately toggle a single setting between enabled and disabled - the state
+takes effect right away, with no separate confirmation step.
+
+<Canvas of={SwitchStories.Playground} />
+
+## When to use
+
+- A binary setting that takes effect immediately (notifications, a feature flag, a preference).
+- A persistent on/off state the user can flip directly, without a form submission.
+
+## When not to use
+
+- **Selecting one option from a group of several.** Use `RadioGroup`.
+- **Selecting any number of options from a list.** Use `Checkbox`.
+- **An action that needs confirmation before applying**, or a one-time form choice rather than an
+  immediate state change. Use `Checkbox` instead.
+
+## Anatomy
+
+<Canvas of={SwitchStories.Content} />
+
+- **Root** - a `label` wrapping the whole control, so clicking the label text toggles the switch.
+- **Input** - the native `input[type="checkbox"]` with `role="switch"`, visually hidden but present
+  and focusable.
+- **Indicator** - the track, thumb, and a private check/X mark at each end of the track. These marks
+  are decorative CSS anatomy, not shared icon-library assets.
+- **Label text** - optional. When absent, `aria-label` or `aria-labelledby` is required.
+
+## Usage guidance
+
+### Sizes are the only variant
+
+`md` (the default) and `sm` scale the track, thumb, and travel distance together - see Sizes. The
+on/off marks stay a constant 12px at both sizes.
+
+### Loading
+
+`isLoading` blocks toggling and sets `aria-busy="true"`, but deliberately does **not** set native
+`disabled` - the control stays focusable and reachable by Tab, communicating "busy" rather than
+"unavailable." Figma's `isLoading` artwork has no visible difference from the resting state; this
+implementation additionally replaces the visible on/off mark with a small `Spinner` in the same
+slot - not on the thumb, so it doesn't compete with the thumb's own slide animation - inheriting
+that slot's color with no override of its own. This is a usability improvement beyond the literal
+mockup. Hover/pressed track treatment is also suppressed while loading, the same way `disabled`
+already does - see States.
+
+### Verifying interaction states
+
+`data-force-state` pins hover/pressed as a static Storybook reference (documentation-only, not part
+of the public API) - the same convention Button and Checkbox use. Focus preview instead uses the
+shared Focus Ring primitive's own `data-force-state="focus"` support on the input. See States for
+both the pinned reference states and a live, click-driven example.
+
+### Reduced motion
+
+The thumb's slide and press animation respects `prefers-reduced-motion: reduce` - see Edge Cases.
+
+## Do / Don't
+
+**Do** use a concise, state-neutral label that describes the setting.
+
+```tsx
+<Switch label="Email notifications" />
+```
+
+**Don't** phrase the label as an instruction - the switch itself already communicates the action.
+
+```tsx
+<Switch label="Turn on email notifications" />
+```
+
+---
+
+**Do** give a label-less Switch an accessible name via `aria-label`.
+
+```tsx
+<Switch aria-label="Enable standalone setting" />
+```
+
+**Don't** omit both `label` and `aria-label` - the control becomes unnamed for assistive technology.
+
+```tsx
+<Switch />
+```
+
+---
+
+**Do** use `isLoading` while an async toggle is in flight, so it stays focusable and announces busy.
+
+```tsx
+<Switch label="Syncing calendar" isLoading defaultChecked />
+```
+
+**Don't** use `disabled` for the same purpose - it removes the control from the tab order and reads
+as permanently unavailable, not temporarily busy.
+
+```tsx
+<Switch label="Syncing calendar" disabled defaultChecked />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'md' | 'sm'</code></td>
+      <td><code>'md'</code></td>
+      <td>The only variant-like axis - scales track, thumb, and travel distance together.</td>
+    </tr>
+    <tr>
+      <td><code>checked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Controlled checked value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultChecked</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>disabled</code> - removes the control from the tab order entirely.</td>
+    </tr>
+    <tr>
+      <td><code>required</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>required</code>. Appends a visible indicator after the label.</td>
+    </tr>
+    <tr>
+      <td><code>isLoading</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Blocks toggling and sets <code>aria-busy</code>, but stays focusable - unlike <code>disabled</code>. Replaces the on/off mark with a small Spinner in the same slot.</td>
+    </tr>
+    <tr>
+      <td><code>onCheckedChange</code></td>
+      <td><code>(checked: boolean, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
+      <td>-</td>
+      <td>Fires on change with the next value already resolved.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>label</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `input` prop (`name`, `value`, `aria-describedby`, and so on) is forwarded to the
+underlying input.
+
+## Related components
+
+- **Checkbox** - for multi-select or a one-time form choice rather than an immediate state change.
+- **RadioGroup** - for selecting one option from several named choices.

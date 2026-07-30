@@ -2,79 +2,323 @@
   "name": "Radio",
   "category": "atom",
   "status": "stable",
-  "purpose": "Single selection from a group.",
-  "intent": "Native radio behavior with shared LegacyHQ styling.",
+  "publicExports": [
+    "Radio",
+    "RadioGroup"
+  ],
+  "purpose": "Select exactly one option from a mutually exclusive set.",
+  "intent": "Native radio input behavior with shared LegacyHQ styling, almost always composed through RadioGroup for grouping, shared name management, and accessible labeling.",
   "useCases": [
-    "Mutually exclusive choices"
+    "Selecting one option from a short, fully-visible set of mutually exclusive choices",
+    "Form questions with a single correct answer",
+    "Settings and preferences where only one choice applies",
+    "Label-less row selection in a table, described by an adjacent aria-label"
   ],
   "antiPatterns": [
-    "Multi-select",
-    "Independent toggles"
+    "Multi-select (use Checkbox)",
+    "Independent toggles (use Checkbox)",
+    "Long lists needing scroll or search (use Select or Combobox)",
+    "A single, immediate on/off setting (use Switch)",
+    "Hand-wiring shared name/selection state across standalone Radio instances instead of using RadioGroup"
   ],
-  "anatomy": [
-    "input",
-    "indicator",
-    "label",
-    "helperText"
-  ],
-  "props": {},
+  "radio": {
+    "anatomy": [
+      "root label/wrapper",
+      "native input[type=\"radio\"]",
+      "visual indicator (unchecked/checked icons swapped on :checked)",
+      "label text",
+      "optional required indicator (standalone usage only)"
+    ],
+    "props": {
+      "label": {
+        "type": "React.ReactNode",
+        "required": false,
+        "description": "Visible label. Omit only when aria-label/aria-labelledby is set."
+      },
+      "checked": {
+        "type": "boolean",
+        "required": false,
+        "usage": "controlled"
+      },
+      "defaultChecked": {
+        "type": "boolean",
+        "required": false,
+        "usage": "uncontrolled"
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Maps to native required. Appends a visible required indicator after the label."
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Maps to native disabled."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "description": "Composes with the root label's class list."
+      },
+      "inputClassName": {
+        "type": "string",
+        "required": false,
+        "description": "Composes with the native input's class list."
+      },
+      "onCheckedChange": {
+        "type": "(checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void",
+        "required": false
+      }
+    },
+    "defaults": {
+      "invalid": false,
+      "required": false,
+      "disabled": false
+    }
+  },
+  "radioGroup": {
+    "anatomy": [
+      "fieldset root",
+      "legend / group label (with optional required indicator)",
+      "optional description",
+      "options (from the options prop, or children)",
+      "optional error message"
+    ],
+    "props": {
+      "label": {
+        "type": "React.ReactNode",
+        "required": false,
+        "description": "Rendered as the fieldset legend; the group's accessible name."
+      },
+      "description": {
+        "type": "React.ReactNode",
+        "required": false
+      },
+      "errorMessage": {
+        "type": "React.ReactNode",
+        "required": false,
+        "description": "Connected to the fieldset with aria-describedby when present."
+      },
+      "name": {
+        "type": "string",
+        "required": false,
+        "description": "Shared across every option generated from options. Auto-generated when omitted."
+      },
+      "value": {
+        "type": "string",
+        "required": false,
+        "usage": "controlled"
+      },
+      "defaultValue": {
+        "type": "string",
+        "required": false,
+        "usage": "uncontrolled"
+      },
+      "options": {
+        "type": "RadioGroupOption[]",
+        "required": false,
+        "description": "Generates one Radio per entry. Takes precedence over children when provided."
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted."
+      },
+      "orientation": {
+        "type": "'vertical' | 'horizontal'",
+        "required": false,
+        "default": "vertical",
+        "description": "horizontal wraps via flex-wrap rather than overflowing."
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Group-level required indicator, shown after the legend."
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sets aria-invalid on the fieldset and every generated option."
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Disables the fieldset and every generated option."
+      },
+      "onValueChange": {
+        "type": "(value: string, event: React.ChangeEvent<HTMLInputElement>) => void",
+        "required": false
+      }
+    },
+    "option": {
+      "value": {
+        "type": "string",
+        "required": true
+      },
+      "label": {
+        "type": "React.ReactNode",
+        "required": true
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false
+      },
+      "required": {
+        "type": "boolean",
+        "required": false
+      }
+    },
+    "defaults": {
+      "orientation": "vertical",
+      "required": false,
+      "invalid": false,
+      "disabled": false
+    }
+  },
   "variants": {},
   "sizes": [],
   "states": [
-    "default",
+    "unchecked",
+    "checked",
     "hover",
     "pressed",
     "focused",
-    "selected",
+    "invalid",
     "disabled",
-    "invalid"
+    "required"
   ],
   "slots": [
     "label",
-    "helperText"
+    "description",
+    "errorMessage"
   ],
-  "tokens": {},
+  "tokens": {
+    "semantic": {
+      "defaultContent": "color-content-default",
+      "disabledContent": "color-content-disabled",
+      "errorContent": "color-content-error",
+      "inverseContent": "color-content-inverse",
+      "inputBackgroundDefault": "color-background-input-default",
+      "inputBackgroundHovered": "color-background-neutral-overlay-hovered",
+      "inputBackgroundPressed": "color-background-neutral-overlay-pressed",
+      "selectedBackgroundHovered": "color-background-brand-primary-overlay-hovered",
+      "selectedBackgroundPressed": "color-background-brand-primary-overlay-pressed",
+      "selectedBoldBackground": "color-background-selected-bold-default",
+      "inputBorder": "color-border-input",
+      "focusedBorder": "color-border-focused",
+      "errorBorder": "color-border-error",
+      "disabledBorder": "color-border-disabled",
+      "disabledBackground": "color-background-disabled",
+      "typography": "body-md"
+    },
+    "componentAllowed": [
+      "indicator size (size-choice-indicator)",
+      "interaction target size (size-choice-target)",
+      "row min-height (size-choice-row)"
+    ],
+    "componentForbidden": [
+      "color aliases",
+      "radius aliases",
+      "border width aliases",
+      "spacing aliases"
+    ]
+  },
   "accessibility": {
-    "nativeElement": "input[type=radio]",
-    "grouping": "fieldset/legend recommended"
+    "nativeElement": "input[type=\"radio\"]",
+    "grouping": "fieldset/legend via RadioGroup when a group label is provided",
+    "ariaInvalid": "set on the input (Radio) or the fieldset (RadioGroup) when invalid",
+    "ariaDescribedBy": "connects RadioGroup's description/errorMessage to the fieldset",
+    "nameSources": [
+      "aria-label",
+      "aria-labelledby",
+      "label (Radio) / legend from label (RadioGroup)"
+    ],
+    "focusable": true,
+    "doNotUse": [
+      "role=\"radio\" on a non-native element",
+      "role=\"radiogroup\" in place of a native fieldset",
+      "SVG-only interactive controls"
+    ]
   },
   "keyboardInteraction": [
-    "Tab enters group",
-    "Arrow keys move selection",
-    "Space selects focused option"
+    "Tab moves focus into and out of the group as a single stop",
+    "Arrow keys move selection between options sharing the same name (native browser behavior)",
+    "Space selects the focused option"
   ],
   "behaviorRules": [
-    "Only one option selected within a group."
+    "Only one option is selected within a group of radios sharing the same name.",
+    "Radio's onCheckedChange fires when the input changes; checked enables controlled usage, defaultChecked enables uncontrolled usage.",
+    "RadioGroup passes a shared name to every Radio generated from options.",
+    "RadioGroup is controlled via value/onValueChange and uncontrolled via defaultValue.",
+    "RadioGroup renders generated options from options when provided; otherwise renders children.",
+    "A disabled RadioGroup disables every option generated from options.",
+    "required on RadioGroup applies at the group/question level, not per option."
   ],
   "compositionRules": [
-    "Used within RadioGroup."
+    "Radio is almost always used inside RadioGroup rather than standalone.",
+    "The Figma radio-item part remains private anatomy and is not exported as a public component.",
+    "RadioGroup supports the options API for a standard list, or children for a custom layout of manually-wired Radio instances."
   ],
   "contentRules": [
-    "Labels should be concise and unique."
+    "Labels should be concise and unique within a group.",
+    "Required indicator appears after the label/legend text.",
+    "RadioGroup's label should name the accessible question or prompt, not an individual option."
   ],
-  "responsiveRules": [],
+  "responsiveRules": [
+    "RadioGroup orientation is vertical by default with no gap between options.",
+    "orientation=\"horizontal\" wraps via flex-wrap once the container is too narrow, rather than overflowing."
+  ],
   "themeRules": [
-    "Uses semantic tokens."
+    "Uses semantic tokens only.",
+    "Works in light and dark themes; no primitive color references."
   ],
   "implementationNotes": [
-    "Shared FocusRing",
-    "Shared Indicator primitive",
-    "CSS Modules"
+    "React and TypeScript.",
+    "CSS Modules.",
+    "Decorative RadioCheckedIcon/RadioUncheckedIcon swapped via CSS on the :checked selector, not conditional rendering.",
+    "Shared Focus Ring primitive utility classes for the focus-visible ring.",
+    "Radio predates the shared data-force-state convention used by Checkbox/Button/Avatar - hover, pressed, and focus previews use previewHover/previewPress/previewFocus classes instead.",
+    "Do not add radio control shapes to the shared icon library beyond the existing RadioCheckedIcon/RadioUncheckedIcon.",
+    "Do not use the browser default radio appearance or an SVG-only input."
   ],
   "relatedComponents": [
     "Checkbox",
     "Switch"
   ],
   "do": [
-    "Use for exclusive choices"
+    "Use for mutually exclusive choices, composed inside RadioGroup.",
+    "Use RadioGroup's options API for a straightforward list; children for a custom layout.",
+    "Give RadioGroup an accessible group name via label.",
+    "Pair invalid with a visible errorMessage or aria-describedby."
   ],
   "dont": [
-    "Use for multiple selections"
+    "Use for multiple independent selections - use Checkbox instead.",
+    "Hand-wire shared name/selection state across standalone Radio instances when options already does it.",
+    "Omit both label and aria-label/aria-labelledby.",
+    "Rely on the invalid color alone to communicate a validation problem."
   ],
   "acceptanceCriteria": [
-    "Native semantics",
-    "Keyboard accessible",
-    "Visible focus",
-    "Single selection enforced"
+    "Native input[type=\"radio\"] semantics are preserved - no ARIA role recreation.",
+    "Keyboard accessible through native browser radio-group behavior.",
+    "Visible focus uses the shared Focus Ring primitive.",
+    "Exactly one option is selected within a group sharing the same name.",
+    "RadioGroup supports both controlled and uncontrolled usage.",
+    "RadioGroup supports both the options API and children composition.",
+    "No hardcoded colors, radii, border widths, or spacing values.",
+    "Storybook and tests compile."
   ]
 }

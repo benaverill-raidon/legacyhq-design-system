@@ -78,7 +78,7 @@ export const LinkButton = React.memo(
       >
         {hasLeading ? (
           <span className={styles.leading} aria-hidden={isLoading ? undefined : true}>
-            {isLoading ? <Spinner size="sm" className={styles.spinner} /> : iconBefore}
+            {isLoading ? <Spinner size="sm" /> : iconBefore}
           </span>
         ) : null}
 

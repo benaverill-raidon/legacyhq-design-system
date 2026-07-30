@@ -29,6 +29,26 @@ function clampValue(value: number) {
   return Math.min(100, Math.max(0, value));
 }
 
+type StopSegment = 'track' | 'progress';
+
+/*
+ * Each track-stop mark sits directly on top of either the dark progress fill or the light
+ * remaining track, so it needs to borrow the *other* segment's color to stay visible - a stop on
+ * top of the track uses the progress-dark color, and a stop on top of progress uses the
+ * track-light color. This mirrors the segment-specific track-stop variants added in Figma.
+ */
+function getLinearStopSegment(position: 'start' | 'end', clampedValue: number): StopSegment {
+  if (position === 'start') {
+    return clampedValue > 0 ? 'progress' : 'track';
+  }
+
+  return clampedValue >= 100 ? 'progress' : 'track';
+}
+
+function getCircularStopSegment(clampedValue: number): StopSegment {
+  return clampedValue >= 100 ? 'progress' : 'track';
+}
+
 function getAccessibleNameProps(
   ariaLabel: string | undefined,
   ariaLabelledBy: string | undefined,
@@ -176,17 +196,32 @@ export const ProgressBar = React.memo(
             <span className={styles.remainingTrack} />
             <span className={styles.progressSegment} />
             <span className={mergeClassNames(styles.stopContainer, styles.stopStart)}>
-              <span className={styles.stopShape} />
+              <span
+                className={mergeClassNames(
+                  styles.stopShape,
+                  styles[`stopSegment_${getLinearStopSegment('start', clampedValue)}`],
+                )}
+              />
             </span>
             <span className={mergeClassNames(styles.stopContainer, styles.stopEnd)}>
-              <span className={styles.stopShape} />
+              <span
+                className={mergeClassNames(
+                  styles.stopShape,
+                  styles[`stopSegment_${getLinearStopSegment('end', clampedValue)}`],
+                )}
+              />
             </span>
           </div>
         ) : (
           <div className={styles.circularViewport} aria-hidden="true">
             {renderCircularSvg(size, clampedValue)}
             <span className={mergeClassNames(styles.stopContainer, styles.stopTop)}>
-              <span className={styles.stopShape} />
+              <span
+                className={mergeClassNames(
+                  styles.stopShape,
+                  styles[`stopSegment_${getCircularStopSegment(clampedValue)}`],
+                )}
+              />
             </span>
           </div>
         )}

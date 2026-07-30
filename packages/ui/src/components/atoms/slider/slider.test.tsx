@@ -20,18 +20,15 @@ function expectInsetPosition(styleValue: string | null | undefined, multiplier: 
   expect(styleValue).toContain(`* ${multiplier}`);
 }
 
-function expectStandardSegmentGap(styleValue: string | null | undefined, valuePercent: number) {
-  const activeEnd =
-    valuePercent >= 100
-      ? '--slider-active-end: var(--slider-max-position)'
-      : '--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))';
-  const inactiveEndStart =
-    valuePercent <= 0
-      ? '--slider-inactive-end-start: var(--slider-min-position)'
-      : '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))';
-
-  expect(styleValue).toContain(activeEnd);
-  expect(styleValue).toContain(inactiveEndStart);
+function expectStandardSegmentGap(styleValue: string | null | undefined) {
+  // The gap around the handle must hold at every value, including the 0/100 extremes - the
+  // track fill should never run under the handle just because it's sitting at an endpoint.
+  expect(styleValue).toContain(
+    '--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
+  );
+  expect(styleValue).toContain(
+    '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
+  );
 }
 
 function getCustomProperty(element: Element | null | undefined, property: string) {
@@ -194,6 +191,28 @@ describe('Slider', () => {
     expect(steps[2]).toHaveAttribute('data-placement', 'end');
   });
 
+  it('aligns the handle exactly with the endpoint track-stop dot at value 0 and 100', () => {
+    const { container, rerender } = render(
+      <Slider aria-label="Endpoint alignment" showSteps step={50} value={0} onValueChange={() => undefined} />,
+    );
+    let control = container.querySelector(`.${styles.control}`);
+    let steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(getCustomProperty(steps[0], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-value-position'),
+    );
+
+    rerender(
+      <Slider aria-label="Endpoint alignment" showSteps step={50} value={100} onValueChange={() => undefined} />,
+    );
+    control = container.querySelector(`.${styles.control}`);
+    steps = container.querySelectorAll(`.${styles.step}`);
+
+    expect(getCustomProperty(steps[2], '--slider-step-position')).toBe(
+      getCustomProperty(control, '--slider-value-position'),
+    );
+  });
+
   it('uses the exact value-position string for matching explicit steps', () => {
     const { container } = render(<Slider aria-label="Matching step" showSteps steps={[50]} defaultValue={50} />);
 
@@ -258,20 +277,63 @@ describe('Slider', () => {
     expectSharedCoordinateLayer(container);
   });
 
-  it('exposes inset endpoint position variables for alignment', () => {
+  it('keeps the track fill flush with the control edges, distinct from the inset value scale', () => {
+    // The track's own fill spans the true 0%/100% of the control (matching Figma, where the
+    // track pill is flush with the frame edges) - only the handle, dots, and origin use the
+    // inset value-scale. --slider-min-position/--slider-max-position feed exclusively into the
+    // track segment boundaries, so they stay at the raw edges rather than the inset scale. The
+    // handle-adjacent boundary still keeps its gap even at 0/100, so the fill never runs under
+    // the handle itself.
     const { container, rerender } = render(<Slider aria-label="Endpoint" value={0} onValueChange={() => undefined} />);
 
     const control = container.querySelector(`.${styles.control}`);
 
     expectInsetPosition(control?.getAttribute('style'), 0);
-    expect(control?.getAttribute('style')).toContain('--slider-min-position: calc(var(--slider-value-scale-inset)');
-    expect(control?.getAttribute('style')).toContain('--slider-max-position: calc(var(--slider-value-scale-inset)');
-    expect(control?.getAttribute('style')).toContain('--slider-inactive-end-start: var(--slider-min-position)');
+    expect(control?.getAttribute('style')).toContain('--slider-min-position: 0%');
+    expect(control?.getAttribute('style')).toContain('--slider-max-position: 100%');
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
+    );
 
     rerender(<Slider aria-label="Endpoint" value={100} onValueChange={() => undefined} />);
 
     expectInsetPosition(control?.getAttribute('style'), 1);
-    expect(control?.getAttribute('style')).toContain('--slider-active-end: var(--slider-max-position)');
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
+    );
+  });
+
+  it('keeps a gap between the track fill and the handle at the value extremes, matching mid-track spacing', () => {
+    // Regression guard: the track's own fill boundary must apply the same handle-gap math at
+    // 0 and 100 as it does everywhere else - previously it snapped flush to the raw edge at the
+    // extremes, so the fill ran under/past the handle instead of leaving a gap around it.
+    const { container, rerender } = render(<Slider aria-label="Gap at extremes" value={0} onValueChange={() => undefined} />);
+    const control = container.querySelector(`.${styles.control}`);
+
+    expectStandardSegmentGap(control?.getAttribute('style'));
+
+    rerender(<Slider aria-label="Gap at extremes" value={50} onValueChange={() => undefined} />);
+    expectStandardSegmentGap(control?.getAttribute('style'));
+
+    rerender(<Slider aria-label="Gap at extremes" value={100} onValueChange={() => undefined} />);
+    expectStandardSegmentGap(control?.getAttribute('style'));
+  });
+
+  it('never lets the track-fill boundary vary with size or step count - it always spans the raw 0%-100% control', () => {
+    // A regression guard for a real bug: the track segment's outer boundary must stay pinned to
+    // the control's true edges regardless of --slider-stop-container-size (which varies by size
+    // and drives the *inset* handle/dot scale) - otherwise the visible track fill and the
+    // track-stop container disagree about where the edge of the slider actually is.
+    for (const size of ['xs', 'sm', 'md'] as const) {
+      const { container, unmount } = render(
+        <Slider aria-label={`Track edges ${size}`} size={size} showSteps value={100} onValueChange={() => undefined} />,
+      );
+      const control = container.querySelector(`.${styles.control}`);
+
+      expect(control?.getAttribute('style')).toContain('--slider-min-position: 0%');
+      expect(control?.getAttribute('style')).toContain('--slider-max-position: 100%');
+      unmount();
+    }
   });
 
   it('positions the visual handle on the same inset variable as value-based visuals', () => {
@@ -302,7 +364,9 @@ describe('Slider', () => {
     const control = container.querySelector(`.${styles.control}`);
 
     expectInsetPosition(control?.getAttribute('style'), 0);
-    expect(control?.getAttribute('style')).toContain('--slider-inactive-end-start: var(--slider-min-position)');
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-inactive-end-start: calc(var(--slider-value-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
+    );
 
     rerender(<Slider aria-label="Scale" value={50} onValueChange={() => undefined} />);
 
@@ -313,7 +377,9 @@ describe('Slider', () => {
     rerender(<Slider aria-label="Scale" value={100} onValueChange={() => undefined} />);
 
     expectInsetPosition(control?.getAttribute('style'), 1);
-    expect(control?.getAttribute('style')).toContain('--slider-active-end: var(--slider-max-position)');
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-active-end: calc(var(--slider-value-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
+    );
   });
 
   it('derives handle and step positions from the shared visual position helper', () => {
@@ -355,6 +421,42 @@ describe('Slider', () => {
 
     fireEvent.blur(slider);
     expect(container.firstChild).not.toHaveAttribute('data-dragging');
+  });
+
+  it('marks focus that follows our own pointerdown handling so the CSS can suppress its ring', () => {
+    const { container } = render(<Slider aria-label="Pointer focus" defaultValue={50} />);
+    const slider = screen.getByRole('slider', { name: 'Pointer focus' });
+    const control = container.querySelector(`.${styles.control}`) as HTMLElement;
+
+    // The real handler already calls input.focus() synchronously as part of pointerdown handling
+    // (the input has pointer-events: none, so it never receives - and re-dispatches - focus on
+    // its own); firing pointerdown is enough to reach that focus, without also firing a separate
+    // focus event that a real click sequence would never produce.
+    fireEvent.pointerDown(control);
+
+    expect(slider).toHaveAttribute('data-pointer-focus', 'true');
+  });
+
+  it('clears the pointer-focus marker once the user starts using the keyboard', () => {
+    const { container } = render(<Slider aria-label="Keyboard resumes ring" defaultValue={50} />);
+    const slider = screen.getByRole('slider', { name: 'Keyboard resumes ring' });
+    const control = container.querySelector(`.${styles.control}`) as HTMLElement;
+
+    fireEvent.pointerDown(control);
+    expect(slider).toHaveAttribute('data-pointer-focus', 'true');
+
+    fireEvent.keyDown(slider, { key: 'ArrowRight' });
+
+    expect(slider).not.toHaveAttribute('data-pointer-focus');
+  });
+
+  it('does not mark plain keyboard focus (no preceding pointerdown) as pointer-focused', () => {
+    render(<Slider aria-label="Tab focus" defaultValue={50} />);
+    const slider = screen.getByRole('slider', { name: 'Tab focus' });
+
+    fireEvent.focus(slider);
+
+    expect(slider).not.toHaveAttribute('data-pointer-focus');
   });
 
   it('forwards native input prups and supports custom className', () => {
@@ -655,6 +757,30 @@ describe('SliderRange', () => {
     );
   });
 
+  it('keeps the range track fill flush with the control edges, distinct from the inset value scale', () => {
+    const { container } = render(<SliderRange label="Budget" size="md" showSteps defaultValue={[0, 100]} />);
+
+    const control = container.querySelector(`.${styles.control}`);
+
+    expect(control?.getAttribute('style')).toContain('--slider-min-position: 0%');
+    expect(control?.getAttribute('style')).toContain('--slider-max-position: 100%');
+  });
+
+  it('keeps a gap between the track fill and each handle when the range spans the full 0-100 extremes', () => {
+    // Regression guard: same bug as the single Slider - the lower/upper handle-adjacent
+    // boundaries must keep the handle gap even when a handle sits exactly at 0 or 100.
+    const { container } = render(<SliderRange label="Budget" defaultValue={[0, 100]} />);
+
+    const control = container.querySelector(`.${styles.control}`);
+
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-active-start: calc(var(--slider-lower-position) + var(--component-slider-handle-half-width) + var(--slider-internal-gap))',
+    );
+    expect(control?.getAttribute('style')).toContain(
+      '--slider-active-end: calc(var(--slider-upper-position) - var(--component-slider-handle-half-width) - var(--slider-internal-gap))',
+    );
+  });
+
   it('positions range explicit steps with the shared helper', () => {
     const { container } = render(<SliderRange label="Budget" defaultValue={[25, 75]} showSteps steps={[25, 75]} />);
 
@@ -778,22 +904,29 @@ describe('slider CSS contract', () => {
     expect(tokensCss).toContain('--border-radius-xxl: var(--border-radius-16);');
   });
 
-  it('uses semantic radius tokens directly for slider track corners', () => {
+  it('uses a single uniform corner radius on every track segment, matching Figma', () => {
+    // Figma gives every track segment corner - including the ones where two segments meet
+    // mid-track - the same 8px radius (border-radius-lg), not a full-round pill at the touching
+    // ends and a smaller radius at the inner joints.
     expect(tokensCss).not.toContain('--component-slider-track-radius:');
     expect(tokensCss).not.toContain('--component-slider-track-adjacent-radius:');
-    expect(sliderCss).toContain('border-start-start-radius: var(--border-radius-full-round);');
-    expect(sliderCss).toContain('border-start-end-radius: var(--border-radius-sm);');
-    expect(sliderCss).toContain('border-radius: var(--border-radius-sm);');
+    expect(sliderCss).not.toContain('border-start-start-radius:');
+    expect(sliderCss).not.toContain('data-active-touches');
+    expect(sliderCss).not.toContain('data-inactive-end-full');
+    const radiusCount = (sliderCss.match(/border-radius: var\(--border-radius-lg\);/g) || []).length;
+    expect(radiusCount).toBeGreaterThanOrEqual(3);
   });
 
-  it('uses a shared endpoint inset and track span for slider positioning', () => {
-    expect(sliderCss).toContain('--slider-endpoint-inset: var(--component-slider-handle-half-width);');
-    expect(sliderCss).toContain(
-      '--slider-track-span: calc(100% - var(--slider-endpoint-inset) - var(--slider-endpoint-inset));',
-    );
-    expect(sliderCss).toContain('--slider-value-scale-inset: var(--slider-endpoint-inset);');
+  it('shares one endpoint-inset variable for slider positioning, correctly overridden when steps are present', () => {
+    // `--slider-value-scale-inset` is the single source of truth for where 0%/100% sit (handle,
+    // track-stops, and the track segments' outer edges all read it) - it must be overridden
+    // directly by the has-steps selector, not through a separate `--slider-endpoint-inset` alias
+    // that inheritance never actually threads back through.
+    expect(sliderCss).toContain('--slider-value-scale-inset: var(--component-slider-handle-half-width);');
+    expect(sliderCss).not.toContain('--slider-endpoint-inset');
+    expect(sliderCss).not.toContain('--slider-track-span');
     expect(sliderCss).toContain(".control[data-has-steps='true']");
-    expect(sliderCss).toContain('--slider-endpoint-inset: calc(var(--slider-stop-container-size) / 2);');
+    expect(sliderCss).toContain('--slider-value-scale-inset: calc(var(--slider-stop-container-size) / 2);');
     expect(sliderCss).toContain('inset: 0;');
     expect(sliderCss).toContain('inline-size: 100%;');
     expect(sliderCss).toContain('block-size: 100%;');
@@ -807,10 +940,14 @@ describe('slider CSS contract', () => {
     expect(sliderCss).not.toContain('slider-track-boundary-inset');
   });
 
-  it('uses sized stop containers that stay aligned with the track anatomy', () => {
-    expect(tokensCss).toContain('--component-slider-stop-container-size-xs: var(--component-slider-track-height-xs);');
-    expect(tokensCss).toContain('--component-slider-stop-container-size-sm: var(--component-slider-track-height-sm);');
-    expect(tokensCss).toContain('--component-slider-stop-container-size-md: var(--component-slider-track-height-md);');
+  it('uses a fixed stop container size independent of track thickness, matching the handle geometry', () => {
+    // The stop container (and the handle) stay a constant 16px regardless of size - only the
+    // track thickness scales with size. Aliasing the stop container to track height (the
+    // previous implementation) breaks handle/track-stop alignment at every size except xs, where
+    // track-height-xs happens to equal 16px by coincidence.
+    expect(tokensCss).toContain('--component-slider-stop-container-size-xs: var(--measurement-16);');
+    expect(tokensCss).toContain('--component-slider-stop-container-size-sm: var(--measurement-16);');
+    expect(tokensCss).toContain('--component-slider-stop-container-size-md: var(--measurement-16);');
     expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-md);');
     expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-xs);');
     expect(sliderCss).toContain('--slider-stop-container-size: var(--component-slider-stop-container-size-sm);');
@@ -824,7 +961,7 @@ describe('slider CSS contract', () => {
   it('maps slider track and stop colors to chart semantic tokens', () => {
     expect(sliderCss).toContain('--slider-track-active-color: var(--color-data-viz-sequence-prussian-900);');
     expect(sliderCss).toContain('--slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);');
-    expect(sliderCss).toContain('--slider-step-color: var(--color-content-brand-primary);');
+    expect(sliderCss).toContain('--slider-step-color: var(--color-content-brand-primary-default);');
     expect(sliderCss).not.toContain('--slider-step-outline-color');
     expect(sliderCss).not.toContain('box-shadow: 0 0 0 var(--border-width-sm)');
   });
@@ -844,6 +981,37 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('outline: var(--border-width-md) solid var(--color-border-focused);');
     expect(sliderCss).toContain('outline-offset: var(--spacing-xs);');
     expect(sliderCss).not.toContain('outline-offset: var(--spacing-none);');
+  });
+
+  it('suppresses the handle focus ring for pointer-originated focus, on every handle selector', () => {
+    expect(sliderCss).toContain(".control:has(.singleInput:focus-visible:not([data-pointer-focus='true'])) .handleSingle");
+    expect(sliderCss).toContain(".control:has(.rangeInputLower:focus-visible:not([data-pointer-focus='true'])) .handleLower");
+    expect(sliderCss).toContain(".control:has(.rangeInputUpper:focus-visible:not([data-pointer-focus='true'])) .handleUpper");
+  });
+
+  it('swaps a track-stop dot to the subtle brand color when it sits on the active fill, like Progress Bar', () => {
+    expect(sliderCss).toContain('--slider-step-color: var(--color-content-brand-primary-default);');
+    expect(sliderCss).toContain("[data-active='true'] .stepDot");
+    expect(sliderCss).toContain('background: var(--color-content-brand-primary-subtle);');
+    // The active-color override must out-specificity the disabled-state stepDot rule so a
+    // disabled, active-region dot never renders the brand color instead of the disabled one.
+    expect(sliderCss).toContain(".root:not([data-disabled='true']) .step[data-active='true'] .stepDot");
+  });
+
+  it('marks track-stop dots within the active fill so the CSS can contrast them, at both endpoints and in between', () => {
+    const { container } = render(
+      <Slider aria-label="Active dots" showSteps step={25} defaultValue={60} />,
+    );
+    const steps = container.querySelectorAll(`.${styles.step}`);
+
+    // 0/25/50 fall at or before the 60% fill; 75/100 fall after it.
+    expect(Array.from(steps).map((step) => step.getAttribute('data-active'))).toEqual([
+      'true',
+      'true',
+      'true',
+      null,
+      null,
+    ]);
   });
 
   it('makes the native thumb transparent and uses a custom visual handle', () => {
@@ -877,15 +1045,16 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('transform: translate(-50%, -50%) rotate(90deg);');
   });
 
-  it('uses placement-aware transforms for horizontal and vertical endpoint step containers', () => {
-    expect(sliderCss).toContain(".step[data-placement='start'] {");
-    expect(sliderCss).toContain('transform: translate(0, -50%);');
-    expect(sliderCss).toContain(".step[data-placement='end'] {");
-    expect(sliderCss).toContain('transform: translate(-100%, -50%);');
-    expect(sliderCss).toContain(".orientation_vertical .step[data-placement='start'] {");
-    expect(sliderCss).toContain('transform: translate(-50%, -100%);');
-    expect(sliderCss).toContain(".orientation_vertical .step[data-placement='end'] {");
-    expect(sliderCss).toContain('transform: translate(-50%, 0);');
+  it('centers every step container on its position regardless of placement, so endpoint dots sit exactly under the handle', () => {
+    // Edge-anchoring the start/end step containers (translate(0, -50%) / translate(-100%, -50%))
+    // shifted the visible dot inside them by half the container width away from the shared
+    // position variable the handle uses - the handle and endpoint track-stop must resolve to the
+    // exact same center point at value 0 and 100, so every placement uses the same centered
+    // transform.
+    expect(sliderCss).not.toContain("data-placement='start']");
+    expect(sliderCss).not.toContain("data-placement='end']");
+    expect(sliderCss).toContain('.step {');
+    expect(sliderCss).toContain('transform: translate(-50%, -50%);');
   });
 
   it('does not use stop-layer padding or transparent handle extensions', () => {

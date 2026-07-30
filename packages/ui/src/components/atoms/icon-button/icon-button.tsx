@@ -57,7 +57,7 @@ export const IconButton = React.memo(
       appearance = 'default',
       size = 'md',
       shape = 'square',
-      isDisabled = false,
+      disabled = false,
       isLoading = false,
       isExpanded = false,
       tooltip,
@@ -73,7 +73,6 @@ export const IconButton = React.memo(
     },
     forwardedRef,
   ) {
-    const disabled = isDisabled;
     const insideTooltip = useTooltipScope();
 
     React.useEffect(() => {
@@ -122,7 +121,7 @@ export const IconButton = React.memo(
         onClick={handleClick}
       >
         <span className={styles.content} aria-hidden={isLoading ? undefined : true}>
-          {isLoading ? <Spinner size="sm" className={styles.spinner} /> : children}
+          {isLoading ? <Spinner size="sm" /> : children}
         </span>
       </button>
     );

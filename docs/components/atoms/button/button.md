@@ -20,6 +20,8 @@ Button is text-first. It may include leading or trailing icons, but icon-only us
 
 Button must render a native `<button>`, default to `type="button"`, support native `type="submit"` and `type="reset"`, and use the native `disabled` attribute when disabled. Loading buttons set `aria-busy="true"`, prevent duplicate activation, and expose a non-interactive busy state without removing the action label. Focus must use the shared Focus Ring pattern.
 
+The public prop is named `disabled`, matching the native `button` attribute directly, not a custom `isDisabled` prop.
+
 ## Implementation constraints
 
 Use CSS Modules and design tokens. Use component tokens only for button min-height. Use semantic tokens for colors, spacing, radius, typography, border width, and focus treatment. Do not use MUI, Tailwind, hardcoded colors, hardcoded typography, or an icon-size prop. Icons use the medium icon size for all button sizes.

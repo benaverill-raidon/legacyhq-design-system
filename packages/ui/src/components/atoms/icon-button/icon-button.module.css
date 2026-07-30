@@ -155,7 +155,3 @@
 .content :global([data-color]) {
   color: inherit;
 }
-
-.spinner {
-  color: inherit;
-}

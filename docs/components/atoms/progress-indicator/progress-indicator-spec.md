@@ -113,7 +113,7 @@ Suggested semantic intent:
 
 ```txt
 default selected: color-content-default
-primary selected: color-content-brand
+primary selected: color-content-brand-primary-default
 discovery selected: color-content-discovery
 inverted selected: color-content-inverse
 unselected border: color-border-bold
@@ -178,17 +178,52 @@ When `onStepChange` is provided:
 
 ## Storybook
 
-Use:
+Use atom documentation structure:
 
 ```txt
-Playground
-Variants
-Examples
+Progress Indicator
+├─ Docs
+├─ Playground
+├─ Variants
+├─ Sizes
+├─ States
+├─ Content
+└─ Edge Cases
 ```
 
-Playground controls: `currentStep`, `totalSteps`, `appearance`, `size`, and `label`.
+### Playground
 
-Variants should show all appearances, both sizes, passive and interactive dots, first/middle/final positions, and different totals.
+Controls for `currentStep`, `totalSteps`, `appearance`, `size`, and `label`.
+
+### Variants
+
+Show the appearance axis alone (`default`, `primary`, `discovery`), then `inverted` separately on a
+dark surface - it isn't grouped with the other three because its selected dot is white and
+disappears on a light background.
+
+### Sizes
+
+Show `sm` and `md`, plus a callout that the interactive hit target (dot container) scales with size
+too, not just the visible dot.
+
+### States
+
+Progress Indicator has no root-level interactive state to pin with `data-force-state` - hover,
+focus, and pressed apply per dot. Show dot position instead (first, middle, final), passive versus
+interactive rendering, and a live interactive example to verify hover/focus/pressed by hand.
+
+### Content
+
+Show different totals (dynamic dot count), custom `getValueText`, and realistic LegacyHQ
+compositions - including an externally-controlled Previous/Next pagination example.
+
+### Edge Cases
+
+Show a single-step journey, out-of-range `currentStep`/`totalSteps` values clamping safely, many
+steps in a narrow container (dots do not wrap), and default/primary/discovery/inverted together on
+a dark surface.
+
+Do not create one story per variant permutation unless necessary.
 
 ## Testing
 

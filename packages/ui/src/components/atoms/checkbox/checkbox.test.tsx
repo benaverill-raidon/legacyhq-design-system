@@ -242,7 +242,7 @@ describe('checkbox CSS contract', () => {
     expect(checkboxCss).toContain('background: transparent;');
     expect(checkboxCss).toContain('color: var(--color-content-subtle);');
     expect(checkboxCss).toContain('.selectedIcon {');
-    expect(checkboxCss).toContain('color: var(--color-content-brand-primary);');
+    expect(checkboxCss).toContain('color: var(--color-content-brand-primary-default);');
     expect(checkboxCss).not.toContain('background: var(--color-content-inverse);');
   });
 

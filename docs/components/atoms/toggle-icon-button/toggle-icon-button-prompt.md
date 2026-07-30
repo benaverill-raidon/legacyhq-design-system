@@ -139,7 +139,7 @@ Expected selected styling:
 
 ```txt
 background: var(--color-background-brand-primary-default-default)
-content: var(--color-content-brand-primary)
+content: var(--color-content-brand-primary-default)
 border: var(--color-border-brand-primary)
 ```
 
@@ -287,15 +287,21 @@ Add Toggle Icon Button to atom/component barrel exports.
 
 ## Storybook
 
-Create:
+Create the library's unified structure:
 
 ```txt
+Toggle Icon Button / Docs (.mdx)
 Toggle Icon Button / Playground
 Toggle Icon Button / Variants
-Toggle Icon Button / Examples
+Toggle Icon Button / Sizes
+Toggle Icon Button / States
+Toggle Icon Button / Content
+Toggle Icon Button / EdgeCases
 ```
 
-Do not create separate States or Accessibility pages.
+States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+convention as Button/Checkbox) - focus preview needs no extra CSS, since the shared Focus Ring
+primitive already reacts to `data-force-state="focus"` directly on this element.
 
 ## Testing
 
@@ -315,6 +321,7 @@ Test:
 - shape class
 - custom className
 - click behavior
+- data-force-state hover/pressed preview
 
 ## Do not
 

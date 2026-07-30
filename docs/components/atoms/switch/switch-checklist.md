@@ -62,6 +62,13 @@ Atom component.
 - Hover states use the corresponding hovered semantic tokens.
 - Pressed interaction should include a subtle Material-inspired thumb movement or expansion.
 - Motion must degrade gracefully when reduced motion is preferred.
+- `isLoading` blocks toggling and sets `aria-busy`, but does not set native `disabled` - the control
+  stays focusable, unlike `disabled`. Figma's `isLoading=true` artwork has no visible difference
+  from the resting state; the visible on/off mark is replaced with a small `Spinner` (inheriting the
+  mark's own inherited white color, no color override of its own) as a deliberate usability addition
+  beyond the literal mockup, not something Figma itself specifies - not on the thumb, so it doesn't
+  compete with the thumb's own slide animation. Hover/pressed CSS is suppressed while loading,
+  mirroring how `disabled` already suppresses it.
 
 ## Dependencies
 
@@ -76,8 +83,20 @@ Atom component.
 
 ## Validated Figma Details
 
-- `md`: 40px by 20px track, 16px thumb, 20px thumb travel.
-- `sm`: 32px by 16px track, 12px thumb, 16px thumb travel.
+- `md`: 40px by 20px track, 16px thumb, 20px thumb travel, 6px on/off mark inset.
+- `sm`: 32px by 16px track, 12px thumb, 16px thumb travel, 4px on/off mark inset.
 - Both sizes use a 2px thumb inset and 12px private check/X marks.
-- Focus Ring remains the shared 2px utility treatment.
+- Focus Ring remains the shared 2px utility treatment (`#003655` / `--color-border-focused`,
+  confirmed against the live Figma component).
 - Shared geometry tokens are used directly; no component token aliases are required.
+- All background colors (unchecked/checked default and hovered, disabled) matched the existing
+  token implementation exactly - no color drift found.
+- Fixed a real bug: `md`'s on/off mark inset was aliased to `--spacing-sm` (8px), 2px further
+  toward center than Figma's actual 6px - now `--measurement-6`. `sm`'s 4px inset was already
+  correct.
+- Figma's `switch` component set includes an `isLoading` variant axis with no visible artwork
+  difference from the resting state, and no `invalid` axis at all (contradicting this doc's earlier
+  `invalid` prop, which has been removed).
+- Figma's own default `size` variant is `sm`; the code default stays `md` to match every other
+  sized atom in this library - treated as a Figma-tool artifact (last-edited variant), not a
+  deliberate default.

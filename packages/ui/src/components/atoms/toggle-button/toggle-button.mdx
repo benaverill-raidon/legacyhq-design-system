@@ -1,0 +1,170 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ToggleButtonStories from './toggle-button.stories';
+
+<Meta of={ToggleButtonStories} name="Docs" />
+
+# Toggle Button
+
+Toggle Button is a Button-family atom that lets a user switch a button between selected and
+unselected states, while remaining visible as a button rather than a switch or checkbox.
+
+<Canvas of={ToggleButtonStories.Playground} />
+
+## When to use
+
+- Text formatting controls (bold, italic, underline).
+- View mode or display preference controls.
+- Filter controls that stay visibly toggled on.
+- Editor toolbar options with a persistent pressed state.
+
+## When not to use
+
+- **Navigation.** Use `LinkButton`.
+- **A momentary action with no persistent state.** Use `Button`.
+- **A setting that turns something on/off immediately**, outside a toolbar/toolbar-like context. Use
+  `Switch`.
+- **An icon-only selected control.** Use `ToggleIconButton`.
+- **A mutually exclusive group of options.** Compose multiple Toggle Buttons with your own
+  single-selection logic (see Content), since there's no dedicated group component yet.
+
+## Anatomy
+
+<Canvas of={ToggleButtonStories.Content} />
+
+- **Root** - a native `<button type="button">`, exposing `aria-pressed` rather than `aria-selected`,
+  `aria-expanded`, or `role="switch"`.
+- **Leading icon** - optional, decorative (`aria-hidden`).
+- **Label** - the button's content.
+- **Trailing icon** - optional, decorative (`aria-hidden`).
+
+## Usage guidance
+
+### The parent owns selection
+
+`isSelected` is fully controlled - Toggle Button does not manage its own selected state internally.
+Pair it with your own state (a single boolean, or a small "which one is active" value when several
+buttons represent one choice) - see Content for both patterns.
+
+### Tone
+
+`default` has a visible border at rest; `subtle` has no border until hovered/selected. Both use the
+same `color-content-subtle` resting text color and the same selected/disabled treatment - tone only
+changes the resting-state border, not the meaning of the button.
+
+### Sizes
+
+`xs`, `sm`, `md` (the default), and `lg` scale height, padding, and corner radius together. The
+leading/trailing icon always renders at its own default size regardless of `size` - matching
+Button's convention of a single constant icon size with no separate `iconSize` prop.
+
+### Disabled always wins over selected
+
+Figma has no unique visual treatment for "selected and disabled" - disabled styling fully overrides
+the selected appearance rather than blending with it. See States.
+
+## Do / Don't
+
+**Do** let the parent control `isSelected` from its own state.
+
+```tsx
+const [selected, setSelected] = useState(false);
+
+<ToggleButton isSelected={selected} onClick={() => setSelected((current) => !current)}>
+  Bold
+</ToggleButton>;
+```
+
+**Don't** reach for Toggle Button for a one-off action with no persistent pressed meaning - use
+`Button` instead.
+
+```tsx
+<ToggleButton onClick={handleSave}>Save changes</ToggleButton>
+```
+
+---
+
+**Do** use `Switch` for an immediate on/off setting outside a toolbar context.
+
+```tsx
+<Switch label="Email notifications" />
+```
+
+**Don't** repurpose Toggle Button as a settings switch - it has no `role="switch"` semantics and
+reads to assistive technology as a pressable button, not a binary setting.
+
+```tsx
+<ToggleButton isSelected={notificationsEnabled}>Email notifications</ToggleButton>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The label content.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Scales height, padding, and corner radius. Icon size stays constant.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Whether the resting state shows a visible border.</td>
+    </tr>
+    <tr>
+      <td><code>isSelected</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Fully controlled by the parent. Sets <code>aria-pressed</code> and the selected visual treatment.</td>
+    </tr>
+    <tr>
+      <td><code>isDisabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Native <code>disabled</code>. Overrides selected styling entirely.</td>
+    </tr>
+    <tr>
+      <td><code>iconBefore</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Leading icon.</td>
+    </tr>
+    <tr>
+      <td><code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Trailing icon.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>button</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `button` attribute is forwarded to the root element. `type` defaults to
+`"button"`, so it never accidentally submits a form.
+
+## Related components
+
+- **Button** - for a momentary action with no persistent selected state.
+- **ToggleIconButton** - for an icon-only selected control.
+- **Switch** - for an immediate on/off setting outside a toolbar context.
+- **LinkButton** - for navigation styled as a button.

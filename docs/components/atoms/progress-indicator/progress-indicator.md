@@ -11,3 +11,5 @@ Progress Indicator remains controlled by `currentStep` and `totalSteps`. Externa
 Progress Indicator exposes progress semantics through `role="progressbar"` with one-based minimum, maximum, and current values. It announces `Step X of Y` by default and supports custom value text. In passive mode, dots are decorative and hidden from assistive technology. In interactive mode, each dot becomes a native button with an accessible label and the selected step exposes `aria-current="step"`.
 
 Implementation should use React, TypeScript, CSS Modules, design tokens, and the shared Focus Ring behavior for interactive dots. Dots should be rendered with CSS rather than Figma-exported images. The Figma-only Indicator Dot part remains private component anatomy and should not be exported independently.
+
+The interactive dot's hover/pressed overlay and the selected/unselected color swap both use the `fade-quick` semantic motion token rather than snapping instantly.

@@ -24,7 +24,7 @@
   "props": {},
   "variants": {
     "tone": [
-      "standard",
+      "default",
       "brand",
       "blue",
       "green",

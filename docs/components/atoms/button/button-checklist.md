@@ -33,6 +33,7 @@ Atom
 - Icons use the medium icon size for all button sizes.
 - Icon gap remains consistent across sizes using `spacing-075`.
 - Use shared Focus Ring utility classes instead of component-specific focus styles.
+- Use the `fade-quick` semantic motion token for hover/pressed/focus color transitions instead of a hardcoded duration/easing.
 - Support `isLoading` while preserving the original label width to prevent layout shift.
 - Support `isFullWidth` for layout flexibility.
 - Do not support selected/toggled behavior in the base Button.
@@ -168,5 +169,7 @@ Stories should document behavior, not create one story per variant permutation.
 - No hardcoded colors.
 - No hardcoded spacing except where component token generation requires source values.
 - No hardcoded typography.
+- No hardcoded transition duration/easing.
+- Transitions are disabled under `prefers-reduced-motion: reduce`.
 - No MUI.
 - No Tailwind.

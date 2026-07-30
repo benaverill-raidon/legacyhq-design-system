@@ -25,12 +25,24 @@
   user-select: none;
   vertical-align: middle;
   overflow: visible;
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick),
+    transform var(--move-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition-duration: 0ms;
+  }
 }
 
 .button[data-loading='true'],
 .button[data-loading='true']:hover,
 .button[data-loading='true']:active {
   cursor: progress;
+}
+
+.button:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  transform: scale(0.98);
 }
 
 .size_xs {

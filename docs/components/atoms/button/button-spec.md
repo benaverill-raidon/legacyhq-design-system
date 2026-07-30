@@ -231,6 +231,17 @@ Use existing semantic tokens for:
 - border width
 - typography
 - color
+- motion (transition duration/easing)
+
+### Motion
+
+Background, border, and content color changes across hover/pressed/focus transition using the `fade-quick` semantic motion token (`--duration-fast` + `--ease-standard`):
+
+```css
+transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
+```
+
+Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do not hardcode a duration or easing curve directly on the component — consume the semantic motion token so retiming propagates system-wide.
 
 ### Size Token Mapping
 

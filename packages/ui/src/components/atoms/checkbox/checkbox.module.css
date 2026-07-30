@@ -70,6 +70,7 @@
   background: transparent;
   pointer-events: none;
   transform: translate(-50%, -50%);
+  transition: background-color var(--fade-quick);
 }
 
 .indicatorFocus {
@@ -137,6 +138,23 @@
 .input:checked + .indicatorTarget .checkedIcon,
 .root[data-indeterminate='true'] .indicatorTarget .indeterminateIcon {
   display: inline-flex;
+  animation: checkboxCheckIn var(--move-quick);
+}
+
+@keyframes checkboxCheckIn {
+  from {
+    transform: scale(0.6);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkedIcon,
+  .indeterminateIcon {
+    animation-duration: 0ms;
+  }
 }
 
 .labelText {
@@ -203,4 +221,10 @@
 
 .root[data-disabled='true'] .indicatorIcon {
   color: var(--color-content-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .indicatorTarget {
+    transition-duration: 0ms;
+  }
 }

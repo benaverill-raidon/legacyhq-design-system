@@ -191,6 +191,13 @@
   block-size: var(--slider-handle-height);
   border-radius: var(--border-radius-full-round);
   background: var(--slider-handle-visual-color);
+  transition: inline-size var(--move-quick), background-color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handleVisual {
+    transition-duration: 0ms;
+  }
 }
 
 .handleSingle {

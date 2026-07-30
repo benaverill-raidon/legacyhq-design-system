@@ -44,7 +44,7 @@ Tags may be display-only, navigational, removable, or both navigational and remo
 ```txt
 size: sm | md
 state: default | hover | press | focus
-tone: standard | blue | green | purple | red | teal | yellow | orange | magenta | brand
+tone: default | blue | green | purple | red | teal | yellow | orange | magenta | brand
 isRemovable: false | true
 elemBefore: false | true
 isDisabled: false | true
@@ -55,7 +55,7 @@ tagText: string
 
 ```ts
 type TagTone =
-  | 'standard'
+  | 'default'
   | 'blue'
   | 'green'
   | 'purple'
@@ -87,7 +87,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
 
 ```txt
 size: md
-tone: standard
+tone: default
 isRemovable: false
 isDisabled: false
 removeLabel: Remove tag
@@ -240,6 +240,11 @@ Do not hardcode:
 - Figma's `tone` variant options (`standard`, `blue`, `green`, `purple`, `red`, `teal`, `yellow`,
   `orange`, `magenta`, `brand`) match the implementation's `TagTone` type exactly - this doc's
   earlier `TagTone`/Figma-properties lists were missing `brand`, which has been corrected.
+- Code's `standard` tone value was later renamed to `default` for clarity (this is now an
+  intentional divergence from Figma's own `standard` variant name, not a mismatch to reconcile).
+  Its background/hover/pressed also moved from `color-elevation-surface-raised-default` plus a
+  `background-image` overlay hack to a solid `color-background-neutral-subtle-default/hovered/pressed`
+  swap, so the tone's hover/pressed transition can animate like every other tone.
 - Figma's single `state=focus` swatch shows a ring wrapping the entire tag, not a tight ring around
   just the focused sub-element - but Figma has only one `state` axis and can't represent "content
   focused" vs "remove button focused" as distinct variants. Decision: keep independent per-control

@@ -19,12 +19,24 @@
   line-height: 0;
   user-select: none;
   vertical-align: middle;
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick),
+    transform var(--move-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition-duration: 0ms;
+  }
 }
 
 .root[data-loading='true'],
 .root[data-loading='true']:hover,
 .root[data-loading='true']:active {
   cursor: progress;
+}
+
+.root:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
+  transform: scale(0.98);
 }
 
 /*

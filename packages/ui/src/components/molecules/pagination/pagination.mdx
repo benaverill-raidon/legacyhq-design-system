@@ -1,0 +1,160 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as PaginationStories from './Pagination.stories';
+
+<Meta of={PaginationStories} name="Docs" />
+
+# Pagination
+
+Pagination divides a large amount of content into smaller chunks across multiple pages, and lets
+people jump directly to a specific page rather than only stepping forward or backward one at a
+time.
+
+<Canvas of={PaginationStories.Playground} />
+
+## When to use
+
+- A paged table, list, or search-results view where jumping to a specific page is useful.
+- The total number of pages is known up front.
+
+## When not to use
+
+- **Infinite scroll / "load more" content.** There's no fixed page count to navigate between.
+- **Step-based flows.** Use `ProgressIndicator` for a wizard or onboarding sequence, not Pagination.
+- **Only one or two pages.** The control adds overhead a simple "next" affordance wouldn't.
+
+## Anatomy
+
+Pagination renders a `nav` landmark containing an `ol`: a previous control, the computed page
+range (numbers and, where the range collapses, a non-interactive ellipsis), and a next control.
+Every page number is the real `ToggleButton` atom; previous/next are the real `IconButton` atom -
+Pagination owns no button styling of its own.
+
+## Usage guidance
+
+### It's fully controlled
+
+Pagination takes `currentPage` and `totalPages` and calls `onPageChange` with the page the user
+picked - it never manages page state internally. Store `currentPage` wherever you're already
+tracking it (component state, a query param, etc.) and pass it back in.
+
+```tsx
+const [page, setPage] = useState(1);
+
+<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />;
+```
+
+### How the page range is chosen
+
+Figma's source component is a single fixed sample (`currentPage=1` of `totalPages=20`) that shows
+12 consecutive pages before collapsing into an ellipsis and a page-20 shortcut - a width-fitting
+demo, not a literal algorithm. This component instead uses the standard **sibling + boundary
+count** windowing algorithm: `boundaryCount` pages are always shown at each end, `siblingCount`
+pages are always shown around the current page, and any larger gap collapses into a single
+ellipsis. With the defaults (`siblingCount=1`, `boundaryCount=1`), the same inputs render
+`1 2 … 20` instead of Figma's wider sample - raise `siblingCount` for a wider range.
+
+<Canvas of={PaginationStories.Composition} />
+
+## Do / Don't
+
+**Do** keep Pagination controlled and update `currentPage` from `onPageChange`.
+
+```tsx
+<Pagination currentPage={page} totalPages={total} onPageChange={setPage} />
+```
+
+**Don't** render Pagination when there's nothing to paginate.
+
+```tsx
+<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />
+```
+
+---
+
+**Do** use Pagination for a known, finite set of pages.
+
+```tsx
+<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />
+```
+
+**Don't** use Pagination to show progress through an unvisited, linear flow.
+
+```tsx
+{
+  /* Use ProgressIndicator instead. */
+}
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>currentPage</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. 1-based current page.</td>
+    </tr>
+    <tr>
+      <td><code>totalPages</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. Total number of pages.</td>
+    </tr>
+    <tr>
+      <td><code>onPageChange</code></td>
+      <td><code>(page: number) =&gt; void</code></td>
+      <td>-</td>
+      <td>Required. Called when a page, previous, or next control is activated.</td>
+    </tr>
+    <tr>
+      <td><code>siblingCount</code></td>
+      <td><code>number</code></td>
+      <td><code>1</code></td>
+      <td>Pages always shown on either side of the current page.</td>
+    </tr>
+    <tr>
+      <td><code>boundaryCount</code></td>
+      <td><code>number</code></td>
+      <td><code>1</code></td>
+      <td>Pages always shown at the start and end of the range.</td>
+    </tr>
+    <tr>
+      <td><code>previousLabel</code> / <code>nextLabel</code></td>
+      <td><code>string</code></td>
+      <td><code>'Previous page'</code> / <code>'Next page'</code></td>
+      <td>Accessible names for the previous/next controls.</td>
+    </tr>
+    <tr>
+      <td><code>getPageLabel</code></td>
+      <td><code>(page: number) =&gt; string</code></td>
+      <td><code>(page) =&gt; `Page ${'{'}page{'}'}`</code></td>
+      <td>Accessible name generator for each page button.</td>
+    </tr>
+    <tr>
+      <td><code>ariaLabel</code></td>
+      <td><code>string</code></td>
+      <td><code>'Pagination'</code></td>
+      <td>Accessible name for the <code>nav</code> landmark.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root <code>nav</code>'s class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Toggle Button** / **Icon Button** - the atoms Pagination always wraps.
+- **Progress Indicator** - for step-based flow progress instead of content paging.

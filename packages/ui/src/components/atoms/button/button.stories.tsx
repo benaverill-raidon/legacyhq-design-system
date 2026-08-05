@@ -236,6 +236,37 @@ export const States: Story = {
         </Cell>
       </Group>
 
+      <Group title="Subtle appearance">
+        <Cell label="Default">
+          <Button appearance="subtle">Save changes</Button>
+        </Cell>
+        <Cell label="Hover">
+          <Button appearance="subtle" data-force-state="hover">
+            Save changes
+          </Button>
+        </Cell>
+        <Cell label="Focus visible">
+          <Button appearance="subtle" data-force-state="focus">
+            Save changes
+          </Button>
+        </Cell>
+        <Cell label="Pressed">
+          <Button appearance="subtle" data-force-state="active">
+            Save changes
+          </Button>
+        </Cell>
+        <Cell label="Disabled">
+          <Button appearance="subtle" disabled>
+            Save changes
+          </Button>
+        </Cell>
+        <Cell label="Loading">
+          <Button appearance="subtle" isLoading>
+            Save changes
+          </Button>
+        </Cell>
+      </Group>
+
       <Group title="Disabled flattens tone">
         <Cell label="warning, disabled">
           <Button appearance="primary" tone="warning" disabled>
@@ -408,7 +439,7 @@ export const EdgeCases: Story = {
             ...row,
             padding: 'var(--spacing-lg)',
             borderRadius: 'var(--border-radius-md)',
-            background: 'var(--color-background-neutral-bold-default)',
+            background: 'var(--color-elevation-surface-default)',
           }}
         >
           <Button>Dark default</Button>

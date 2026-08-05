@@ -228,7 +228,7 @@
         "primaryWarningContent": "--color-content-warning-inverse",
         "primaryErrorBackground": "--color-background-error-bold-default",
         "primaryDiscoveryBackground": "--color-background-discovery-bold-default",
-        "disabledBorder": "--color-border-disabled",
+        "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
         "disabledBackground": "--color-background-disabled",
         "disabledContent": "--color-content-disabled"
       }
@@ -274,7 +274,8 @@
     "Use iconBefore only when not loading.",
     "Render iconAfter when provided.",
     "Set inline-size to 100% when isFullWidth is true.",
-    "Apply disabled visual treatment with native disabled attribute."
+    "Apply disabled visual treatment with native disabled attribute.",
+    "Disabled shows a border only for appearance=default (matching its resting border); appearance=primary/subtle stay borderless when disabled, matching their own resting look."
   ],
   "compositionRules": [
     "Use Button for actions, not navigation.",

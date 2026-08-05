@@ -268,8 +268,8 @@ export const EdgeCases: Story = {
           data-theme="dark"
           style={{
             ...cardStyle,
-            background: 'var(--color-background-neutral-bold-default)',
-            color: 'var(--color-content-inverse)',
+            background: 'var(--color-elevation-surface-default)',
+            color: 'var(--color-content-default)',
           }}
         >
           <Slider label="Dark surface slider" defaultValue={50} showSteps step={10} />

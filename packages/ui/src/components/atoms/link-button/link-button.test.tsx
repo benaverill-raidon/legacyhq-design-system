@@ -233,10 +233,28 @@ describe('LinkButton token mappings', () => {
     expect(linkButtonCss).toContain('color: var(--color-content-warning-bold);');
   });
 
-  it('keeps the default disabled border token while using disabled surface and content tokens', () => {
-    expect(linkButtonCss).toContain('.appearance_default[aria-disabled=\'true\']');
-    expect(linkButtonCss).toContain('background: var(--color-background-disabled);');
-    expect(linkButtonCss).toContain('color: var(--color-content-disabled);');
+  it('gives appearance=default a visible disabled border (--color-border-disabled), matching its own resting border', () => {
+    const rule = linkButtonCss.match(/\.appearance_default\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+  });
+
+  it('keeps appearance=primary disabled borderless, matching its own resting border', () => {
+    const rule = linkButtonCss.match(/\.appearance_primary\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+  });
+
+  it('keeps appearance=subtle disabled borderless, matching its own resting border', () => {
+    const rule = linkButtonCss.match(/\.appearance_subtle\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
   });
 });
 

@@ -1,0 +1,72 @@
+{
+  "component": "TextField",
+  "examples": [
+    {
+      "name": "Default with placeholder",
+      "jsx": "<TextField placeholder=\"Enter your name\" aria-label=\"Name\" />",
+      "props": { "placeholder": "Enter your name" }
+    },
+    {
+      "name": "Paired with a native label",
+      "jsx": "<label htmlFor=\"email\">Email</label>\n<TextField id=\"email\" type=\"email\" placeholder=\"you@example.com\" />",
+      "props": { "type": "email" }
+    },
+    {
+      "name": "Subtle appearance (search box)",
+      "jsx": "<TextField appearance=\"subtle\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
+      "props": { "appearance": "subtle", "type": "search" }
+    },
+    {
+      "name": "Text prefix (currency)",
+      "jsx": "<TextField iconBefore=\"$\" type=\"number\" placeholder=\"0.00\" aria-label=\"Amount\" />",
+      "props": { "iconBefore": "$", "type": "number" }
+    },
+    {
+      "name": "Clearable with a real IconButton action",
+      "jsx": "<TextField\n  aria-label=\"Filter\"\n  value={value}\n  onChange={(e) => setValue(e.target.value)}\n  iconAfter={\n    value ? (\n      <IconButton appearance=\"subtle\" shape=\"square\" size=\"xs\" aria-label=\"Clear\" onClick={() => setValue('')}>\n        <CloseIcon />\n      </IconButton>\n    ) : null\n  }\n/>",
+      "props": {}
+    },
+    {
+      "name": "Invalid with an error message",
+      "jsx": "<TextField invalid aria-describedby=\"email-error\" defaultValue=\"not-an-email\" />\n<span id=\"email-error\">Enter a valid email address</span>",
+      "props": { "invalid": true }
+    },
+    {
+      "name": "Disabled",
+      "jsx": "<TextField disabled defaultValue=\"Cannot be edited\" />",
+      "props": { "disabled": true }
+    },
+    {
+      "name": "Small size, subtle appearance (square bottom corners)",
+      "jsx": "<TextField size=\"sm\" appearance=\"subtle\" placeholder=\"Placeholder\" aria-label=\"Small subtle field\" />",
+      "props": { "size": "sm", "appearance": "subtle" }
+    },
+    {
+      "name": "Large size",
+      "jsx": "<TextField size=\"lg\" placeholder=\"Large field\" aria-label=\"Large field\" />",
+      "props": { "size": "lg" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "No accessible name",
+      "jsx": "<TextField placeholder=\"Name\" />",
+      "reason": "Placeholder text is not an accessible label - pair with a native label[htmlFor] or add aria-label."
+    },
+    {
+      "name": "Multi-line content",
+      "jsx": "<TextField defaultValue={longParagraphText} />",
+      "reason": "Text Field has no textarea mode - it's for a single line of text."
+    },
+    {
+      "name": "Fixed set of options",
+      "jsx": "<TextField placeholder=\"Choose a country\" />",
+      "reason": "Use Select when the value comes from a fixed set of options instead of free text."
+    },
+    {
+      "name": "Faking a clear button with a bare icon",
+      "jsx": "<TextField iconAfter={<CloseIcon onClick={handleClear} />} />",
+      "reason": "A bare icon with a click handler is not a real, focusable, labeled control. Use a real IconButton (appearance=subtle, shape=square) instead."
+    }
+  ]
+}

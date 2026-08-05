@@ -44,12 +44,13 @@ Create both:
 Create:
 
 ```txt
-packages/ui/src/components/primitives/FocusRing/
-├─ FocusRing.module.css
-├─ FocusRing.types.ts
-├─ FocusRing.tsx
-├─ FocusRing.test.tsx
-├─ FocusRing.stories.tsx
+packages/ui/src/components/primitives/focus-ring/
+├─ focus-ring.tsx
+├─ focus-ring.types.ts
+├─ focus-ring.module.css
+├─ focus-ring.test.tsx
+├─ focus-ring.stories.tsx
+├─ focus-ring.mdx
 └─ index.ts
 ```
 
@@ -147,12 +148,10 @@ Match the Figma screenshot:
 ## Storybook Requirements
 
 Create stories for:
-- Basic
+- Basic (wrapping a plain custom control - the wrapper's actual use case, since real atoms already apply Focus Ring internally)
 - Default border width
 - Compact border width
-- Button example
-- Checkbox example
-- Text field example
+- Real atoms in context (Button, Checkbox, Switch), rendered unwrapped since they self-apply
 - Dark surface example
 
 ---

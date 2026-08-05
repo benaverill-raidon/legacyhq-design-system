@@ -2,60 +2,172 @@
   "name": "Logo",
   "category": "primitive",
   "status": "stable",
-  "purpose": "Represent the LegacyHQ brand.",
-  "intent": "Consistent branded visual identity.",
+  "purpose": "Render the approved LegacyHQ brand mark, wordmark, or full lockup consistently across the product.",
+  "intent": "Provide the single source for brand artwork so no surface recreates, recolors, or distorts the logo on its own.",
+  "sourceFiles": {
+    "component": "logo.tsx",
+    "types": "logo.types.ts",
+    "styles": "Logo.module.css",
+    "stories": "Logo.stories.tsx",
+    "tests": "Logo.test.tsx",
+    "index": "index.ts",
+    "assets": "packages/ui/src/assets/logos (logoMarkSvg, logoWordmarkSvg, logoFullSvg)"
+  },
   "useCases": [
-    "Application header",
-    "Authentication",
-    "Marketing"
+    "Application headers",
+    "Authentication screens",
+    "Marketing and other branded surfaces",
+    "A compact nav rail or collapsed sidebar (type=\"mark\")"
   ],
   "antiPatterns": [
-    "Stretching",
-    "Changing colors",
-    "Combining with unapproved graphics"
+    "Stretching, cropping, rotating, or adding shadows/effects to the artwork",
+    "Recreating the wordmark in text instead of using the wordmark/full type",
+    "Recoloring outside the approved SVG",
+    "Combining with other graphics outside the mark/wordmark/full variants"
   ],
   "anatomy": [
-    "symbol",
-    "wordmark"
+    { "part": "root", "element": "span (inline SVG via dangerouslySetInnerHTML)", "required": true, "description": "Renders the selected logo SVG asset directly; carries data-logo-type/data-logo-size." }
   ],
-  "props": {},
-  "variants": {},
-  "sizes": [],
-  "states": [],
+  "props": {
+    "type": {
+      "type": "LogoType",
+      "required": false,
+      "default": "full",
+      "enum": ["mark", "wordmark", "full"],
+      "description": "Which lockup to render."
+    },
+    "size": {
+      "type": "LogoSize",
+      "required": false,
+      "default": "md",
+      "enum": ["xxs", "xs", "sm", "md", "lg"],
+      "description": "Rendered size."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible name (and native tooltip via the title attribute); falls back to \"LegacyHQ\" when informative and no ariaLabel is given."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Overrides the accessible name; takes precedence over title."
+    },
+    "decorative": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "When true, aria-hidden with no role. When false (default), role=img with the accessible name."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root's class list."
+    }
+  },
+  "variants": {
+    "type": {
+      "mark": { "purpose": "Icon-only symbol - compact placements.", "className": "type_mark" },
+      "wordmark": { "purpose": "Text-only brand name, no symbol.", "className": "type_wordmark" },
+      "full": { "purpose": "Mark + wordmark together - the primary lockup.", "className": "type_full" }
+    },
+    "size": {
+      "xxs": { "height": "16px", "className": "size_xxs" },
+      "xs": { "height": "24px", "className": "size_xs" },
+      "sm": { "height": "32px", "className": "size_sm" },
+      "md": { "height": "40px", "className": "size_md" },
+      "lg": { "height": "48px", "className": "size_lg" }
+    }
+  },
+  "sizes": ["xxs", "xs", "sm", "md", "lg"],
+  "states": ["default"],
   "slots": [],
-  "tokens": {},
+  "tokens": {
+    "size": {
+      "xxs": "16px",
+      "xs": "24px",
+      "sm": "32px",
+      "md": "40px",
+      "lg": "48px"
+    }
+  },
   "accessibility": {
-    "decorative": "aria-hidden",
-    "informative": "alt text required"
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "decorative": {
+      "supported": true,
+      "prop": "decorative",
+      "default": false,
+      "whenTrue": "aria-hidden=true, no role - use when adjacent content already provides the same accessible name (e.g. a parent link with its own aria-label)",
+      "whenFalse": "role=img with an accessible name from ariaLabel, then title, then \"LegacyHQ\""
+    },
+    "requirements": [
+      "Default is informative (decorative=false), unlike Icon - a logo is usually the accessible name for a link back to home.",
+      "Do not double up the accessible name - if the parent link already has aria-label, mark the Logo decorative.",
+      "Do not add roles beyond role=img."
+    ]
   },
   "keyboardInteraction": [],
   "behaviorRules": [
-    "Preserve aspect ratio.",
-    "Do not modify brand artwork."
+    "Render the SVG asset matching type as inline markup via dangerouslySetInnerHTML.",
+    "Default type=full, size=md, decorative=false.",
+    "Apply data-logo-type and data-logo-size on the root.",
+    "Preserve the source SVG's aspect ratio - never stretch or crop.",
+    "Support className composition."
   ],
   "compositionRules": [
-    "May be used with approved wordmark or symbol."
+    "Wrap Logo in an <a> when it functions as a home link; put the accessible label on whichever of the link or the Logo actually carries it, never both.",
+    "Do not combine Logo with other graphics outside the approved mark/wordmark/full variants."
   ],
   "contentRules": [],
-  "responsiveRules": [],
+  "responsiveRules": [
+    "Prefer type=\"mark\" in constrained navigation (mobile, collapsed sidebars).",
+    "Use type=\"full\" where horizontal space allows, for maximum brand recognition."
+  ],
   "themeRules": [
-    "Supports light and dark themes."
+    "Must work in light and dark themes - the same SVG assets render correctly on either surface."
   ],
   "implementationNotes": [
-    "SVG preferred."
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No recoloring, stretching, or effects applied via CSS beyond size.",
+    "SVG markup is escaped/injected via a small buildLogoSvg helper that sets the correct aria attributes per decorative state - do not bypass it to inject the SVG another way."
   ],
-  "relatedComponents": [
-    "Icon"
-  ],
+  "relatedComponents": ["Icon"],
   "do": [
-    "Use approved assets."
+    "Use type=\"mark\" in a compact nav rail.",
+    "Let Logo provide the accessible name when it's the only content in a link.",
+    "Pick the size token rather than scaling the rendered SVG with CSS transform."
   ],
   "dont": [
-    "Recolor or distort."
+    "Recolor or restyle the rendered SVG.",
+    "Recreate the wordmark in a heading font instead of using type=\"wordmark\"/\"full\".",
+    "Double up the accessible name between Logo and its parent link."
   ],
   "acceptanceCriteria": [
-    "Correct asset",
-    "Correct theme variant",
-    "Maintains aspect ratio"
+    "Renders the correct SVG asset for the selected type.",
+    "Defaults to type=full, size=md, decorative=false.",
+    "Supports all LogoType and LogoSize values.",
+    "decorative=false renders role=img with the correct accessible-name precedence (ariaLabel, then title, then \"LegacyHQ\").",
+    "decorative=true renders aria-hidden with no role.",
+    "Supports className.",
+    "Preserves aspect ratio at every size.",
+    "Works in light and dark themes.",
+    "Storybook includes Playground, a type x size Variants matrix, and realistic composition Examples."
+  ],
+  "knownLimitations": [
+    "All five sizes are technically permitted for all three types - legibility of wordmark/full at xxs is a design judgment call, not enforced by the component."
+  ],
+  "futureEnhancements": [
+    "Additional brand lockups",
+    "Product-specific logo variants",
+    "An animated loading logo",
+    "A tokenized logo color strategy if the SVGs move to CSS-themeable currentColor fills"
   ]
 }

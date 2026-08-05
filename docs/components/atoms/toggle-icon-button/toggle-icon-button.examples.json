@@ -5,8 +5,14 @@
       "jsx": "<ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
     },
     {
-      "name": "Selected",
+      "name": "Selected (tone=default)",
+      "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
       "jsx": "<ToggleIconButton isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+    },
+    {
+      "name": "Selected (tone=subtle)",
+      "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
+      "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
     },
     {
       "name": "With Tooltip",

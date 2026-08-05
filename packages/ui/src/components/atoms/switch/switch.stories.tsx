@@ -57,8 +57,8 @@ const darkSurfaceStyle: CSSProperties = {
   gap: 'var(--spacing-md)',
   padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
-  background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
+  background: 'var(--color-elevation-surface-default)',
+  color: 'var(--color-content-default)',
 };
 
 const settingRowStyle: CSSProperties = {

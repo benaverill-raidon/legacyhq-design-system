@@ -1,12 +1,44 @@
 {
+  "component": "FocusRing",
   "examples": [
     {
-      "name": "Button",
-      "jsx": "<FocusRing><Button>Save</Button></FocusRing>"
+      "name": "Wrapping a button",
+      "description": "The most common usage - wrap the one interactive child that needs a focus indicator.",
+      "jsx": "<FocusRing>\n  <button type=\"button\">Save</button>\n</FocusRing>",
+      "props": {}
     },
     {
-      "name": "Checkbox",
-      "jsx": "<FocusRing><Checkbox /></FocusRing>"
+      "name": "Compact border width",
+      "description": "For small/dense controls where the default width would overwhelm the control.",
+      "jsx": "<FocusRing borderWidth=\"compact\">\n  <button type=\"button\" className={styles.smallToggle}>On</button>\n</FocusRing>",
+      "props": {
+        "borderWidth": "compact"
+      }
+    },
+    {
+      "name": "Suppressing the ring on a disabled control",
+      "jsx": "<FocusRing disabled={isDisabled}>\n  <button type=\"button\" disabled={isDisabled}>Save</button>\n</FocusRing>",
+      "props": {
+        "disabled": true
+      }
+    },
+    {
+      "name": "Composing focusRingClassNames directly",
+      "description": "Used internally by components that need to add other classes to the same element - a raw input inside a custom control, for example.",
+      "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingCompact}`}\n  type=\"checkbox\"\n/>;",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Wrapping a non-focusable element",
+      "jsx": "<FocusRing>\n  <div>Not actually focusable</div>\n</FocusRing>",
+      "reason": "FocusRing only styles :focus-visible - it does not make an element focusable. The child must already be a real native control or carry a tabIndex."
+    },
+    {
+      "name": "A local one-off focus rule",
+      "jsx": "/* Don't write this in a new component's CSS */\n.myControl:focus-visible {\n  outline: 2px solid blue;\n}",
+      "reason": "Every interactive atom reuses this one primitive so the focus treatment is identical everywhere - a local rule fragments that consistency."
     }
   ]
 }

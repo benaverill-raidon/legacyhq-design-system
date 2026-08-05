@@ -1,0 +1,20 @@
+{
+  "component": {
+    "skeleton": {
+      "Light": {
+        "color-subtle": {
+          "value": "var(--color-neutral-alpha-1200-04)",
+          "type": "color",
+          "originalName": "color/skeleton/subtle"
+        }
+      },
+      "Dark": {
+        "color-subtle": {
+          "value": "var(--color-neutral-alpha-100-04)",
+          "type": "color",
+          "originalName": "color/skeleton/subtle"
+        }
+      }
+    }
+  }
+}

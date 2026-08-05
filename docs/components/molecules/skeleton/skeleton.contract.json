@@ -1,0 +1,203 @@
+{
+  "name": "Skeleton",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Render a pulsing placeholder shape in place of content that hasn't finished loading, preserving the layout the real content will fill.",
+  "intent": "Reduce perceived load time and layout shift, distinct from Spinner (no implied layout) and ProgressBar (measurable progress).",
+  "nativeElement": "div",
+  "sourceFiles": {
+    "component": "skeleton.tsx",
+    "types": "skeleton.types.ts",
+    "styles": "skeleton.module.css",
+    "stories": "Skeleton.stories.tsx",
+    "tests": "Skeleton.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1565:3291",
+    "componentSetName": "skeleton",
+    "variantCount": 2,
+    "figmaVariantAxes": {
+      "appearance": ["default", "subtle"]
+    },
+    "figmaDefaultVariant": "subtle",
+    "apiAdaptationNotes": [
+      "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `circle`, following Icon Tile's shape-prop convention) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
+      "Figma's prototype has an AFTER_TIMEOUT reaction smart-animating between the `default` and `subtle` variants every 1.5s as a way to preview a pulse effect inside Figma - the component instead implements the pulse as a self-contained CSS opacity animation on a single variant, so it animates on its own regardless of which `appearance` is selected."
+    ]
+  },
+  "useCases": [
+    "text line placeholder",
+    "avatar-shaped circular placeholder",
+    "image block placeholder",
+    "full card/list-row loading sketch"
+  ],
+  "antiPatterns": [
+    "indeterminate waits with no known final layout (use Spinner)",
+    "quantified/measurable progress (use ProgressBar)",
+    "visible loading copy next to a labelled Skeleton"
+  ],
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div",
+      "required": true,
+      "description": "Sized, colored, rounded placeholder shape that pulses on an infinite loop."
+    },
+    {
+      "part": "label",
+      "element": "visually-hidden span",
+      "required": false,
+      "description": "Rendered only when the `label` prop is set; announces the loading state to assistive technology."
+    }
+  ],
+  "props": {
+    "appearance": {
+      "type": "SkeletonAppearance",
+      "required": false,
+      "default": "subtle",
+      "enum": ["default", "subtle"],
+      "description": "Visual weight of the placeholder fill."
+    },
+    "shape": {
+      "type": "SkeletonShape",
+      "required": false,
+      "default": "rectangle",
+      "enum": ["rectangle", "circle"],
+      "description": "Corner treatment - circle is fully round, for avatar-shaped placeholders."
+    },
+    "label": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible loading announcement. When set, renders role=status/aria-live=polite instead of aria-hidden."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Optional custom class name."
+    }
+  },
+  "variants": {
+    "appearance": {
+      "default": { "purpose": "A more visible placeholder fill for full-page loading states.", "className": "appearance_default" },
+      "subtle": { "purpose": "A lighter placeholder fill for dense layouts (the default).", "className": "appearance_subtle" }
+    },
+    "shape": {
+      "rectangle": { "purpose": "Standard small corner radius for text lines, cards, and blocks.", "className": "shape_rectangle" },
+      "circle": { "purpose": "Fully round radius for avatar-shaped placeholders.", "className": "shape_circle" }
+    }
+  },
+  "sizing": {
+    "defaultInlineSize": "100% (fills container)",
+    "defaultBlockSize": "--size-250 (20px, one text line)",
+    "override": "Forwarded style/className on the root div - no dedicated width/height props."
+  },
+  "states": ["default"],
+  "slots": [],
+  "tokens": {
+    "radius": {
+      "rectangle": "--border-radius-sm",
+      "circle": "--border-radius-full-round"
+    },
+    "sizing": {
+      "blockSizeDefault": "--size-250"
+    },
+    "color": {
+      "default": { "background": "--color-skeleton-default" },
+      "subtle": { "background": "--component-skeleton-color-subtle" }
+    },
+    "motion": {
+      "pulse": "--pulse-loop"
+    }
+  },
+  "accessibility": {
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "labelled": {
+      "supported": true,
+      "prop": "label",
+      "default": null,
+      "whenUnset": "aria-hidden=true, no role",
+      "whenSet": "role=status, aria-live=polite, visually-hidden announcement of the label text"
+    },
+    "requirements": [
+      "Do not add interactive behavior.",
+      "Do not add keyboard interaction.",
+      "Set label only when no adjacent context already conveys that the region is loading.",
+      "Disable the pulse animation under prefers-reduced-motion: reduce."
+    ]
+  },
+  "keyboardInteraction": [],
+  "behaviorRules": [
+    "Render a non-interactive div.",
+    "Do not make Skeleton focusable.",
+    "Do not add hover, pressed, active, or disabled states.",
+    "Default appearance is subtle, default shape is rectangle.",
+    "Apply data-appearance and data-shape equal to the selected values.",
+    "Pulse continuously via CSS animation regardless of which appearance is selected.",
+    "Forward all native div attributes (including style and a ref) via ...rest.",
+    "Support className composition."
+  ],
+  "compositionRules": [
+    "Skeleton has no children slot - compose multiple Skeletons to sketch a loading layout.",
+    "Use Spinner instead if the final layout/shape is unknown.",
+    "Use ProgressBar instead when progress is measurable.",
+    "Pair shape=circle with an equal inlineSize/blockSize in style for a true circle."
+  ],
+  "contentRules": [
+    "No children slot.",
+    "No text content of its own outside the visually-hidden label."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes.",
+    "All fill colors use semantic/component CSS variables that already resolve per-theme."
+  ],
+  "implementationNotes": [
+    "Use React.memo and React.forwardRef for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, radius, or motion timing when tokens exist.",
+    "New tokens added for this component: semantic color-skeleton-default, component color --component-skeleton-color-subtle, primitive duration-loop-slow (1500ms), and semantic motion pulse-loop - all read directly off Figma's boundVariables/reactions, not guessed.",
+    "No dedicated width/height props - forwarded style/className cover arbitrary per-usage sizing, matching ProgressBar's existing convention."
+  ],
+  "relatedComponents": ["Spinner", "ProgressBar"],
+  "do": [
+    "Size each Skeleton to match the content it's replacing.",
+    "Compose multiple Skeletons to sketch a full loading layout.",
+    "Pass label when a Skeleton is the sole loading indicator."
+  ],
+  "dont": [
+    "Do not use for an indeterminate wait with no known layout.",
+    "Do not use for measurable/quantified progress.",
+    "Do not add visible loading copy next to a labelled Skeleton.",
+    "Do not add interactive states."
+  ],
+  "acceptanceCriteria": [
+    "Renders a non-interactive div by default.",
+    "Defaults to appearance=subtle, shape=rectangle.",
+    "Supports all SkeletonAppearance and SkeletonShape values.",
+    "Applies data-appearance and data-shape for the selected values.",
+    "label unset (default) renders aria-hidden with no role.",
+    "label set renders role=status, aria-live=polite, and a visually-hidden announcement.",
+    "Supports className and forwards native div attributes (including style) via ...rest.",
+    "Forwards a ref to the root element.",
+    "Uses tokenized color, radius, sizing, and motion for both appearances and shapes.",
+    "Pulse animation is disabled under prefers-reduced-motion: reduce.",
+    "Storybook includes Playground, Variants, and Composition.",
+    "Tests cover defaults, each prop, className, ref forwarding, style sizing, accessibility, and token usage."
+  ],
+  "knownLimitations": [
+    "No dedicated width/height props - callers must use style/className for sizing.",
+    "No multi-line text preset - compose multiple Skeletons for a paragraph."
+  ],
+  "futureEnhancements": [
+    "A text shape preset rendering multiple lines of varying width in one component, if a recurring multi-line pattern emerges across products"
+  ]
+}

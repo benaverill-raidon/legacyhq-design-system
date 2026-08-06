@@ -264,7 +264,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         {sectionHeading('Long text wraps normally, unlike Button or Label')}
         <p style={captionStyle}>
-          Link has no <code>white-space: nowrap</code> - it's built for inline, sentence-level use,
+          Link has no <code>white-space: nowrap</code> - it&apos;s built for inline, sentence-level use,
           so long link text wraps like any other inline content instead of overflowing.
         </p>
         <div

@@ -257,8 +257,8 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Reduced motion</h3>
         <p style={captionStyle}>
-          <code>prefers-reduced-motion: reduce</code> follows the user's system preference and
-          removes the thumb's slide/press animation - toggle it from your OS or browser accessibility
+          <code>prefers-reduced-motion: reduce</code> follows the user&apos;s system preference and
+          removes the thumb&apos;s slide/press animation - toggle it from your OS or browser accessibility
           settings against this example.
         </p>
         <Switch label="Motion-aware switch" defaultChecked />

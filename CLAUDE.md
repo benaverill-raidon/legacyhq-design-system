@@ -27,11 +27,32 @@ docs/
     <component>-checklist.md   # QA / completion checklist
     <component>.contract.json  # machine-readable prop/anatomy contract
     <component>.examples.json  # usage examples
+
+llms.txt   # per-component index + task→file routing pointer
 ```
 
 Component source files follow: `component-name.tsx`,
 `ComponentName.stories.tsx`, `ComponentName.test.tsx` (lowercase-hyphen for
 the implementation file, PascalCase for stories/tests).
+
+## Context routing
+
+Don't read all 6 doc files for every component task — Button's full set alone
+is ~1360 lines. Match the file(s) to your task shape:
+
+| Task shape | Read | Skip (for now) |
+|---|---|---|
+| Orienting on an untouched component | `.md` | everything else |
+| Adding/changing a prop | `.contract.json`, relevant section of `-spec.md` | `-prompt.md`, `-checklist.md` |
+| Styling/token-only change | `.md`, `token-governance.json` | `-prompt.md`, `-checklist.md` |
+| New variant / new anatomy part | `.md`, `-spec.md`, `.contract.json`, `.examples.json` | `-prompt.md` |
+| Final QA / before `npm run validate` | `-checklist.md` | — |
+| Regenerating a component from scratch | `-prompt.md` | — |
+
+Full component index: [`llms.txt`](llms.txt). Load
+`docs/foundations/token-governance.json` and
+`docs/foundations/component-api-governance.json` once per session, not per
+component — they're cross-cutting, not component-specific.
 
 ## Token architecture (three tiers — this is load-bearing)
 
@@ -98,6 +119,10 @@ Check that file before introducing a new prop name pattern.
 
 ## When building/editing a component
 
+(See "Context routing" above for which files to *read* for your specific
+task — the steps below cover what must stay *in sync* once you've made a
+change.)
+
 1. Check if `docs/components/<tier>/<name>/` already exists — the `.md`,
    `-spec.md`, and `.contract.json` are the source of truth for intended
    behavior, not just documentation to update after the fact.
@@ -106,6 +131,8 @@ Check that file before introducing a new prop name pattern.
    `*.contract.json`/`*.examples.json` as applicable) alongside code changes
    — they're expected to stay in sync, not just describe v1.
 4. Add/update `.stories.tsx` and `.test.tsx` alongside the component.
+5. If this is a new component, add one line for it under the correct tier
+   heading in `llms.txt`.
 
 ## Commands
 

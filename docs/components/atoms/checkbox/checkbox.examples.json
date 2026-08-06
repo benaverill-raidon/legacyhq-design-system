@@ -10,7 +10,7 @@
     },
     {
       "name": "Disabled",
-      "jsx": "<Checkbox isDisabled>Receive updates</Checkbox>"
+      "jsx": "<Checkbox disabled>Receive updates</Checkbox>"
     }
   ]
 }

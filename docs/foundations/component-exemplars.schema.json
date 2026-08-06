@@ -1,0 +1,40 @@
+{
+  "description": "Shape of the generated docs/components/exemplars.json. Interpreted by scripts/lib/validate-schema.mjs's minimal validator, which supports only: type, required, properties, items, enum, additionalProperties. See docs/foundations/component-exemplars-governance.json for the threshold at which a real JSON Schema library would become warranted.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "tier", "path", "examples", "antiExamples", "exemplarCompleteness"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule"] },
+      "path": { "type": "string" },
+      "examples": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name", "jsx", "props"],
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "jsx": { "type": "string" },
+            "props": { "type": "object" }
+          }
+        }
+      },
+      "antiExamples": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name", "jsx"],
+          "properties": {
+            "name": { "type": "string" },
+            "jsx": { "type": "string" },
+            "reason": { "type": "string" }
+          }
+        }
+      },
+      "exemplarCompleteness": { "type": "string", "enum": ["full", "partial", "thin"] }
+    }
+  }
+}

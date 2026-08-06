@@ -181,5 +181,26 @@
         "allowPrimitiveConsumptionByComponents": false,
         "allowComponentTokenForSemanticDuplicate": false,
         "componentTokensRequireDocumentedNeed": true
+    },
+    "enforcement": {
+        "description": "This governance doc is a convention, not a guarantee. Raw-value regressions in component CSS are caught mechanically by stylelint, not by review alone.",
+        "tool": "stylelint",
+        "rule": "scale-unlimited/declaration-strict-value",
+        "config": ".stylelintrc.json",
+        "command": "npm run lint:css",
+        "runsIn": ["npm run validate", "CI (.github/workflows/validate.yml)"],
+        "scope": {
+            "gated": [
+                "color and border/outline/fill/stroke color properties",
+                "font-family, font-size, font-weight, line-height, letter-spacing",
+                "border-radius and its per-corner longhands",
+                "padding, margin, and gap (and their longhands)"
+            ],
+            "notGated": {
+                "properties": ["border-width", "inset-*", "width/height", "inline-size/block-size"],
+                "reason": "These frequently require geometric arithmetic (calc(), negative offsets) that doesn't map onto the token scale; gating them produced false positives against legitimate layout math."
+            },
+            "escapeHatch": "A raw value can still pass via an inline `stylelint-disable-next-line scale-unlimited/declaration-strict-value` comment, but the comment must state why — reviewers should treat an unexplained disable as a rejection, not a pass."
+        }
     }
 }

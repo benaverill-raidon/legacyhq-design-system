@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "status": "draft",
     "owner": "LegacyHQ Design System",
-    "lastReviewed": "2026-07-27",
+    "lastReviewed": "2026-08-06",
     "appliesTo": [
         "components"
     ],
@@ -25,20 +25,9 @@
             ],
             "correct": {
                 "prop": "disabled",
-                "example": "Checkbox, Switch, Radio"
+                "example": "Checkbox, Switch, Radio, Button, IconButton"
             },
-            "knownViolations": [
-                {
-                    "component": "Button",
-                    "prop": "isDisabled",
-                    "resolution": "migrate to `disabled` next time Button is touched"
-                },
-                {
-                    "component": "IconButton",
-                    "prop": "isDisabled",
-                    "resolution": "migrate to `disabled` next time IconButton is touched"
-                }
-            ]
+            "knownViolations": []
         },
         {
             "id": "is-prefix-scope",
@@ -53,7 +42,7 @@
                 "examples": [
                     "isLoading (Button, IconButton) — no native equivalent",
                     "isFullWidth (Button) — no native equivalent",
-                    "disabled (Checkbox, Switch, Radio) — native attribute, not isDisabled"
+                    "disabled (Checkbox, Switch, Radio, Button, IconButton) — native attribute, not isDisabled"
                 ]
             }
         }

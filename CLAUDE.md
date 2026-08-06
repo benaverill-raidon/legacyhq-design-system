@@ -105,9 +105,17 @@ Check that file before introducing a new prop name pattern.
 
 ## Commands
 
+- `npm run validate` — the one command to run after touching a component;
+  runs `typecheck`, then `lint`, then `test`. Run this before considering a
+  change done. Also runs in CI (`.github/workflows/validate.yml`) on every
+  push/PR.
 - `npm run storybook` — dev Storybook on port 6006
-- `npm test` — Vitest
-- `npm run typecheck` — tsc --noEmit
+- `npm test` — Vitest (filter to one component with `npm test -- <name>`,
+  e.g. `npm test -- button`)
+- `npm run typecheck` — tsc --noEmit (repo-wide; no per-component variant)
+- `npm run lint` — ESLint (`eslint.config.mjs`); TypeScript, React Hooks
+  rules, and `jsx-a11y` accessibility rules. Repo-wide; no per-component
+  variant.
 - `npm run build` — Style Dictionary token build
 - `npm run generate:icons` — icon generation script
 

@@ -52,6 +52,17 @@ describe('Avatar', () => {
     expect(container.querySelector('[data-avatar-fallback]')).toBeTruthy();
   });
 
+  it('retries loading a new src after a previous src failed', () => {
+    const { container, rerender } = render(<Avatar name="Ben Averill" src="https://example.com/broken.png" />);
+    fireEvent.error(container.querySelector('img') as HTMLImageElement);
+    expect(container.querySelector('img')).toBeFalsy();
+
+    rerender(<Avatar name="Ben Averill" src="https://example.com/avatar.png" />);
+
+    expect(container.querySelector('img')).toBeTruthy();
+    expect(container.querySelector('[data-avatar-fallback]')).toBeFalsy();
+  });
+
   it('renders a non-interactive avatar as a span', () => {
     const { container } = render(<Avatar name="Ben Averill" />);
 

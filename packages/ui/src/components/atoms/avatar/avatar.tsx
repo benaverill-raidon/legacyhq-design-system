@@ -145,6 +145,11 @@ export const Avatar = React.memo(
     forwardedRef,
   ) {
     const [imageFailed, setImageFailed] = React.useState(false);
+    const [previousSrc, setPreviousSrc] = React.useState(src);
+    if (src !== previousSrc) {
+      setPreviousSrc(src);
+      setImageFailed(false);
+    }
     const isButton = isInteractive || typeof onClick === 'function';
     const decorativeAvatar = decorative && !isButton;
     const visibleBadge = getVisibleBadge(status, presence);
@@ -166,10 +171,6 @@ export const Avatar = React.memo(
       isButton && focusRingClassNames.focusRingDefault,
       className,
     );
-
-    React.useEffect(() => {
-      setImageFailed(false);
-    }, [src]);
 
     React.useEffect(() => {
       warnForMissingAccessibleName(computedLabel, ariaLabelledBy, decorativeAvatar, isButton);

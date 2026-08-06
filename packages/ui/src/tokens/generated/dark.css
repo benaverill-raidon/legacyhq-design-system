@@ -3,11 +3,13 @@
  */
 
 [data-theme="dark"] {
+  --component-skeleton-color-subtle: var(--color-neutral-alpha-100-04);
   --color-content-default: var(--color-neutral-solid-100);
   --color-content-subtle: var(--color-neutral-solid-500);
   --color-content-inverse: var(--color-neutral-solid-1200);
   --color-content-disabled: var(--color-neutral-alpha-100-32);
   --color-content-loading: var(--color-neutral-alpha-100-08);
+  --color-skeleton-default: var(--color-neutral-alpha-100-08);
   --color-content-brand-primary-default: var(--color-brand-prussian-solid-500);
   --color-content-brand-primary-subtle: var(--color-brand-prussian-solid-700);
   --color-content-error: var(--color-red-solid-500);
@@ -33,12 +35,12 @@
   --color-content-information: var(--color-blue-solid-500);
   --color-content-discovery: var(--color-purple-solid-500);
   --color-border-default: var(--color-neutral-alpha-100-08);
-  --color-border-bold: var(--color-neutral-solid-600);
+  --color-border-bold: var(--color-neutral-solid-500);
   --color-border-bolder: var(--color-neutral-solid-100);
   --color-border-inverse: var(--color-neutral-solid-1200);
   --color-border-focused: var(--color-brand-prussian-solid-500);
   --color-border-disabled: var(--color-neutral-alpha-100-08);
-  --color-border-input: var(--color-neutral-solid-1000);
+  --color-border-input: var(--color-neutral-solid-800);
   --color-border-brand-primary: var(--color-brand-prussian-solid-500);
   --color-border-error: var(--color-red-solid-500);
   --color-border-warning: var(--color-orange-solid-500);

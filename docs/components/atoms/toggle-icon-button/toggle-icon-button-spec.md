@@ -208,15 +208,20 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use the semantic brand mappings bound in Figma.
-
-Recommended selected styling:
+Use the semantic brand mappings bound in Figma. Background and content tokens are shared across
+both tones - only the border differs, matching each tone's own resting border visibility:
 
 ```txt
-background: var(--color-background-brand-primary-default-default)
-content: var(--color-content-brand-primary-default)
-border: var(--color-border-brand-primary)
+background: var(--color-background-brand-primary-default-default)   (both tones)
+content: var(--color-content-brand-primary-default)                  (both tones)
+border: var(--color-border-brand-primary)                             (tone=default only)
+border: transparent                                                    (tone=subtle)
 ```
+
+`tone="default"` already shows a visible border at rest, so selected keeps one. `tone="subtle"` is
+borderless at rest - applying the same border there would draw a border that was never part of its
+look, so selected stays borderless too. Confirmed directly from Figma's `tone=subtle,
+isSelected=true` variants (no stroke, same fill/text tokens as `tone=default`'s selected state).
 
 Use actual generated token names in code.
 
@@ -226,7 +231,12 @@ Selected should remain clear in default, hover, press, and focus states.
 
 Support selected + disabled.
 
-Disabled should win for interaction. If the design system has selected-disabled tokens, use them. Otherwise disabled styling may fully override selected visuals.
+Disabled wins for interaction and fully overrides selected visuals (Figma has no unique
+selected+disabled treatment) - but the tone-specific border split still applies within disabled
+itself: `tone="default"` disabled keeps a visible border (`--color-border-disabled`), `tone="subtle"`
+disabled stays borderless, confirmed directly from Figma's `tone=subtle, isDisabled=true` variants
+(no stroke). So a disabled `tone="subtle"` selected button stays borderless while a disabled
+`tone="default"` selected button keeps its border.
 
 Recommended priority:
 

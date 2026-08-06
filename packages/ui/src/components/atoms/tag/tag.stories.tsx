@@ -78,8 +78,8 @@ const cardStyle: CSSProperties = {
 
 const darkSurfaceStyle: CSSProperties = {
   ...cardStyle,
-  background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
+  background: 'var(--color-elevation-surface-default)',
+  color: 'var(--color-content-default)',
 };
 
 const headingStyle: CSSProperties = {

@@ -2,71 +2,152 @@
   "name": "FocusRing",
   "category": "primitive",
   "status": "stable",
-  "purpose": "Shared keyboard focus treatment.",
-  "intent": "Provide one consistent focus indicator across the design system.",
+  "purpose": "Provide one consistent keyboard-focus indicator shared by every interactive component.",
+  "intent": "Centralize :focus-visible styling so no component defines its own one-off focus treatment.",
+  "sourceFiles": {
+    "component": "focus-ring.tsx",
+    "types": "focus-ring.types.ts",
+    "styles": "focus-ring.module.css",
+    "stories": "focus-ring.stories.tsx",
+    "tests": "focus-ring.test.tsx",
+    "index": "index.ts"
+  },
   "useCases": [
-    "Wrap interactive controls",
-    "Shared focus utility"
+    "Wrapping a custom-built interactive element that needs a focus indicator",
+    "Composing focus styling onto an element that already has its own classes (e.g. a raw input inside a custom control)"
   ],
   "antiPatterns": [
-    "Standalone decoration",
-    "Pointer-only hover indicator"
+    "Standalone decoration with no real focusable element",
+    "A pointer/hover-only indicator",
+    "A one-off :focus-visible rule written locally instead of reusing this primitive"
   ],
   "anatomy": [
-    "focus outline"
+    {
+      "part": "wrapped element",
+      "element": "React.ReactElement (via FocusRing) or any element (via focusRingClassNames)",
+      "required": true,
+      "description": "The single focusable element the focus classes are applied to. FocusRing has no DOM node of its own - it clones its child."
+    }
   ],
-  "props": {},
+  "props": {
+    "children": {
+      "type": "React.ReactElement",
+      "required": true,
+      "default": null,
+      "description": "The single focusable element to clone and merge focus classes onto."
+    },
+    "borderWidth": {
+      "type": "FocusRingBorderWidth",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "compact"],
+      "description": "Outline width - compact for small/dense controls."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Suppresses the outline entirely - use only when the wrapped control is itself disabled."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the merged class list."
+    }
+  },
   "variants": {
-    "default": []
+    "borderWidth": {
+      "default": { "purpose": "Standard outline width for most controls.", "className": "focusRingDefault", "token": "--border-width-md" },
+      "compact": { "purpose": "Tighter outline for small/dense controls.", "className": "focusRingCompact", "token": "--border-width-sm" }
+    }
   },
   "sizes": [],
-  "states": [
-    "focused",
-    "unfocused"
+  "states": ["default", "focus-visible", "disabled"],
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "supports": ["a single native or custom focusable element"]
+    }
   ],
-  "slots": [],
   "tokens": {
-    "color": "color-border-focused"
+    "color": {
+      "outline": "--color-border-focused"
+    },
+    "borderWidth": {
+      "default": "--border-width-md",
+      "compact": "--border-width-sm"
+    },
+    "offset": {
+      "value": "2px",
+      "note": "Not yet backed by a dedicated token - see Future Enhancements."
+    }
   },
   "accessibility": {
-    "focusVisibleOnly": true
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "focusVisibleOnly": true,
+    "requirements": [
+      "Only ever appears on :focus-visible, never on plain mouse :hover or :focus.",
+      "Does not make a non-focusable element focusable - the child must already be a real focusable element.",
+      "Does not add ARIA roles or labels - the wrapped element remains responsible for its own accessible name/role/value."
+    ]
   },
-  "keyboardInteraction": [
-    "Appears on :focus-visible"
-  ],
+  "keyboardInteraction": ["Appears automatically whenever the wrapped element receives keyboard focus (:focus-visible)."],
   "behaviorRules": [
-    "Use shared implementation.",
-    "Do not create component-specific focus styles unless documented."
+    "Clone the single child element and merge the focus classes onto its className.",
+    "Default borderWidth is default (--border-width-md).",
+    "disabled=true suppresses the outline via focusRingClassNames.focusRingDisabled instead of the width-specific class.",
+    "border-radius: inherit, so the ring shape always matches whatever element it wraps.",
+    "Support className composition."
   ],
   "compositionRules": [
-    "Applied by interactive components."
+    "Every interactive atom (Button, Icon Button, Link, Checkbox, Radio, Switch, Slider, Tag) consumes this primitive rather than defining its own focus treatment.",
+    "Use the FocusRing component when wrapping exactly one child is straightforward.",
+    "Use the exported focusRingClassNames object directly when a component needs to compose other classes onto the same element (e.g. a custom checkbox's native input)."
   ],
   "contentRules": [],
   "responsiveRules": [],
   "themeRules": [
-    "Uses semantic tokens."
+    "Must be visible with sufficient contrast on both light and dark surfaces via --color-border-focused."
   ],
   "implementationNotes": [
-    "Shared primitive."
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors or widths - use --color-border-focused, --border-width-md, --border-width-sm.",
+    "Exports both a component (FocusRing) and a raw classNames object (focusRingClassNames) as two entry points to the same CSS, not two separate implementations."
   ],
-  "relatedComponents": [
-    "Button",
-    "IconButton",
-    "Link",
-    "Checkbox",
-    "Radio",
-    "Switch",
-    "Slider",
-    "Tag"
-  ],
+  "relatedComponents": ["Button", "IconButton", "Link", "Checkbox", "Radio", "Switch", "Slider", "Tag"],
   "do": [
-    "Reuse everywhere"
+    "Wrap the one interactive child that needs a focus indicator.",
+    "Use focusRingClassNames when a component must compose its own classes onto the same element.",
+    "Use borderWidth=compact only for small/dense controls."
   ],
   "dont": [
-    "Duplicate focus implementations"
+    "Do not apply Focus Ring to a non-interactive element to fake a focus state.",
+    "Do not write a new :focus-visible rule instead of reusing this primitive.",
+    "Do not expect Focus Ring to add keyboard interaction on its own."
   ],
   "acceptanceCriteria": [
-    "Visible on keyboard focus",
-    "Consistent across components"
+    "Renders the child with focus classes merged onto its className.",
+    "Defaults to borderWidth=default.",
+    "Supports borderWidth=compact.",
+    "disabled=true suppresses the outline.",
+    "Supports className composition.",
+    "Outline only appears on :focus-visible, in both light and dark themes.",
+    "focusRingClassNames exposes focusRing, focusRingDefault, focusRingCompact, and focusRingDisabled for direct composition."
+  ],
+  "knownLimitations": [
+    "The 2px outline offset is not yet backed by a dedicated design token.",
+    "Outset ring only - no inset variant."
+  ],
+  "futureEnhancements": [
+    "A dedicated offset token",
+    "An inset focus ring variant",
+    "A documented per-component radius-inheritance strategy for edge cases where border-radius: inherit isn't sufficient"
   ]
 }

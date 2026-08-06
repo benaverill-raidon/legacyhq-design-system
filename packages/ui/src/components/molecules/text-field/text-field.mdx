@@ -1,0 +1,180 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TextFieldStories from './TextField.stories';
+
+<Meta of={TextFieldStories} name="Docs" />
+
+# Text Field
+
+Text Field is a molecule that lets a user write or edit a single line of text. It renders a real
+native `<input>` inside a bordered frame, composes an optional leading icon/text slot and an
+optional trailing icon/action slot around it, and is the foundation for every free-text entry point
+in the product. It's a molecule rather than an atom because its trailing slot can compose a real
+Icon Button or Button.
+
+<Canvas of={TextFieldStories.Playground} />
+
+## When to use
+
+- Any short, single-line text entry - names, emails, search terms, quantities.
+- Use the native `type` attribute (`email`, `password`, `search`, `tel`, `url`, `number`, ...) to
+  get the right keyboard and built-in browser validation for the data being collected.
+
+## When not to use
+
+- **Multi-line content.** There is no textarea mode.
+- **A value chosen from a fixed set of options.** Use Select instead.
+
+## Sizes and appearance
+
+<Canvas of={TextFieldStories.Variants} />
+
+`appearance="default"` (the standard bordered look, rounded on all four corners) is correct for
+nearly every case. `appearance="subtle"` has no visible border or background until it's hovered,
+focused, or invalid, and its bottom corners are always square regardless of size - useful for a
+search box or inline-edit field that shouldn't visually compete with surrounding content until
+someone interacts with it. Confirmed directly from Figma: subtle never shows a full box border,
+even on hover/focus - only a bottom accent line reveals - and its bottom-corner radius is always 0.
+It rests at the same 1px bottom border-width `appearance="default"` uses at rest, at every state -
+focus and invalid paint a thicker look via `box-shadow` only, never a real `border-bottom-width`
+change, so the input text never shifts vertically. Hovering an invalid `appearance="subtle"` field
+keeps the error border color rather than resetting it.
+
+## States
+
+Hover and focus below are pinned via `data-force-state` (documentation-only) so they're visible
+side by side; invalid and disabled are real props.
+
+<Canvas of={TextFieldStories.States} />
+
+Figma models `hover`/`focus`/`typing`/`filled` as if they were variants to pick between. They
+aren't real props here - they all fall out of native `:hover`, `:focus-within`, and the input's own
+placeholder/value, exactly like a plain `<input>` already behaves. `invalid` is the one real
+boolean prop among them, and it renders its thicker error border regardless of focus - confirmed
+directly from Figma's node data, not a focus-only effect.
+
+Focus/typing replaces the resting border color directly - the same pattern `invalid` already uses -
+rather than adding an outline ring around the existing border. Border *width* never literally
+changes, though: `appearance="default"` rests at 1px at every state (rest, hover, focus, invalid),
+painting the "thicker" look on focus/invalid via `box-shadow` only, so the placeholder/value text
+and the typing caret never shift horizontally. Hover is suppressed once the field is focused/typing:
+hover styling is only ever visible on an inactive field.
+
+## Content
+
+<Canvas of={TextFieldStories.Content} />
+
+Text Field has no label of its own - pair it with a native `<label htmlFor>` pointing at the
+input's `id`, or pass `aria-label`/`aria-labelledby` directly, exactly as you would for a bare
+`<input>`.
+
+`iconBefore` and `iconAfter` are not symmetric. `iconBefore` accepts an icon or a short text prefix
+(e.g. a currency symbol) and is always decorative (`aria-hidden`) - it can never carry an
+interactive control. `iconAfter` accepts an icon, or a real interactive control such as an
+`IconButton` (most commonly a clear/dismiss action) or a `Button` - it is never forced
+`aria-hidden`, so an interactive control placed there stays focusable and keeps its own accessible
+name. When building a clearable field, pass a real `IconButton` (`appearance="subtle"`,
+`shape="square"`) rather than a bare icon standing in for a button.
+
+<Canvas of={TextFieldStories.EdgeCases} />
+
+## Do / Don't
+
+**Do** pair Text Field with a real label.
+
+```tsx
+<label htmlFor="email">Email</label>
+<TextField id="email" type="email" />
+```
+
+**Don't** rely on placeholder text as the only accessible name.
+
+```tsx
+<TextField placeholder="Email" />
+```
+
+---
+
+**Do** use the native `type` for the right keyboard and built-in validation.
+
+```tsx
+<TextField type="email" />
+```
+
+**Don't** reach for Text Field when the value comes from a fixed set of options.
+
+```tsx
+{
+  /* Use Select instead. */
+}
+<TextField placeholder="Choose a country" />;
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Frame height, padding, and typography.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Bordered box vs. borderless-until-interacted.</td>
+    </tr>
+    <tr>
+      <td><code>invalid</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-invalid</code> and the error border, regardless of focus.</td>
+    </tr>
+    <tr>
+      <td><code>iconBefore</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional leading icon or short text prefix. Always decorative.</td>
+    </tr>
+    <tr>
+      <td><code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional trailing icon or interactive control (e.g. an IconButton clear action). Never forced <code>aria-hidden</code>.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root frame's class list.</td>
+    </tr>
+    <tr>
+      <td><code>inputClassName</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the native input's class list.</td>
+    </tr>
+    <tr>
+      <td>...rest</td>
+      <td><code>React.InputHTMLAttributes&lt;HTMLInputElement&gt;</code></td>
+      <td>-</td>
+      <td>Forwarded to the native input - <code>type</code>, <code>value</code>, <code>placeholder</code>, <code>disabled</code>, <code>onChange</code>, etc.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Checkbox**, **Radio**, **Switch** - the other native-form-control atoms in this system.
+- **Select** - for choosing from a fixed set of options instead of typing free text.
+- **Icon Button** - the recommended real control for an interactive `iconAfter` clear action.
+- **Button** - for an interactive `iconAfter` action that needs a text label.

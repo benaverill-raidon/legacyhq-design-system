@@ -3,74 +3,195 @@
   "category": "primitive",
   "status": "stable",
   "purpose": "Render standardized icons throughout the design system.",
-  "intent": "Provide consistent iconography with semantic sizing and inherited color.",
+  "intent": "Provide one consistent icon system - sizing, spacing, and color inheritance - that every generated glyph shares, instead of each icon reinventing its own props.",
+  "sourceFiles": {
+    "component": "icon-base.tsx",
+    "types": "icon.types.ts",
+    "styles": "icon.module.css",
+    "stories": "icon.stories.tsx",
+    "tests": "icon.test.tsx",
+    "index": "index.ts",
+    "generatedIcons": "packages/ui/src/assets/icons/generated/*.tsx",
+    "iconMetadata": "packages/ui/src/assets/icons/metadata/icons.json",
+    "generationScript": "npm run generate:icons"
+  },
   "useCases": [
-    "Buttons",
-    "Status",
-    "Navigation",
-    "Supporting labels"
+    "Supporting a text label to speed up recognition",
+    "Representing a known object or entity",
+    "Improving visual scanning in buttons, tables, navigation",
+    "Providing status or feedback cues"
   ],
   "antiPatterns": [
-    "Standalone unlabeled interactive controls",
-    "Conveying critical meaning without accessible text"
+    "Standalone unlabeled interactive controls (wrap in Icon Button instead)",
+    "Conveying critical meaning without an accessible name",
+    "Using an icon as a logo (use Logo)",
+    "Hardcoding an icon's fill/size instead of using the shared props"
   ],
   "anatomy": [
-    "svg"
+    { "part": "root", "element": "span", "required": true, "description": "Sets the icon's container size, spacing box, and color; carries data-size/data-spacing/data-color for downstream CSS overrides." },
+    { "part": "svg", "element": "svg", "required": true, "description": "The glyph itself - fill=\"currentColor\", focusable=\"false\"." },
+    { "part": "title", "element": "title (svg child)", "required": false, "description": "Rendered only when decorative is false and title is provided; referenced via aria-labelledby." }
   ],
-  "props": {},
-  "variants": {},
-  "sizes": [
-    "xs",
-    "sm",
-    "md",
-    "lg"
-  ],
-  "states": [],
+  "props": {
+    "size": {
+      "type": "IconSize",
+      "required": false,
+      "default": "md",
+      "enum": ["sm", "md"],
+      "description": "Visual glyph size."
+    },
+    "spacing": {
+      "type": "IconSpacing",
+      "required": false,
+      "default": "none",
+      "enum": ["none", "spacious"],
+      "description": "Hit-box/container padding around the glyph, independent of its visual size."
+    },
+    "color": {
+      "type": "IconColor",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "subtle", "inverse", "brand", "success", "warning", "error", "information", "disabled"],
+      "description": "Semantic content color."
+    },
+    "title": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible name, used only when decorative is false."
+    },
+    "decorative": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "When true, aria-hidden with no role. When false, role=img with title as the accessible name (via aria-labelledby)."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root's class list."
+    },
+    "testId": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Sets data-testid on the root."
+    }
+  },
+  "variants": {
+    "size": {
+      "sm": { "purpose": "Compact glyph size.", "className": "size_sm", "token": "--size-icon-sm" },
+      "md": { "purpose": "Default glyph size.", "className": "size_md", "token": "--size-icon-md" }
+    },
+    "spacing": {
+      "none": { "purpose": "Container matches the glyph size exactly.", "className": "spacing_none" },
+      "spacious": { "purpose": "Centers the glyph in a larger, fixed touch/click-target box.", "className": "spacing_spacious", "token": "--size-300" }
+    },
+    "color": {
+      "default": { "className": "color_default", "token": "--color-content-default" },
+      "subtle": { "className": "color_subtle", "token": "--color-content-subtle" },
+      "inverse": { "className": "color_inverse", "token": "--color-content-inverse" },
+      "brand": { "className": "color_brand", "token": "--color-content-brand-primary-default" },
+      "success": { "className": "color_success", "token": "--color-content-success" },
+      "warning": { "className": "color_warning", "token": "--color-content-warning" },
+      "error": { "className": "color_error", "token": "--color-content-error" },
+      "information": { "className": "color_information", "token": "--color-content-information" },
+      "disabled": { "className": "color_disabled", "token": "--color-content-disabled" }
+    }
+  },
+  "sizes": ["sm", "md"],
+  "states": ["default"],
   "slots": [],
   "tokens": {
-    "size": "dimension",
-    "color": "inherits parent"
+    "size": {
+      "sm": "--size-icon-sm",
+      "md": "--size-icon-md",
+      "spacious-container": "--size-300"
+    },
+    "color": {
+      "default": "--color-content-default",
+      "subtle": "--color-content-subtle",
+      "inverse": "--color-content-inverse",
+      "brand": "--color-content-brand-primary-default",
+      "success": "--color-content-success",
+      "warning": "--color-content-warning",
+      "error": "--color-content-error",
+      "information": "--color-content-information",
+      "disabled": "--color-content-disabled"
+    }
   },
   "accessibility": {
-    "decorative": "aria-hidden",
-    "informative": "accessible name required"
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "decorative": {
+      "supported": true,
+      "prop": "decorative",
+      "default": true,
+      "whenTrue": "aria-hidden=true on the svg, no role",
+      "whenFalse": "role=img on the svg, aria-labelledby pointing at an internal <title> built from the title prop"
+    },
+    "requirements": [
+      "Default to decorative unless the icon is the sole carrier of meaning.",
+      "Provide title when decorative is false.",
+      "Do not add click handlers or make icons focusable - interactive behavior belongs to the parent (Button, Icon Button, Link).",
+      "Do not rely on an icon alone for critical meaning without an accessible name."
+    ]
   },
   "keyboardInteraction": [],
   "behaviorRules": [
-    "Icons inherit color by default.",
-    "Do not hardcode fills unless explicitly required."
+    "Icons inherit color via currentColor by default; do not hardcode fills.",
+    "svg is always focusable=\"false\" - icons are never independently tabbable.",
+    "Default size=md, spacing=none, color=default, decorative=true.",
+    "Apply data-size/data-spacing/data-color on the root for downstream CSS overrides (the same mechanism Icon Tile and Icon Button use to force color/size inheritance)."
   ],
   "compositionRules": [
-    "Primarily used within other components."
+    "Consumers import the generated per-glyph component (e.g. CheckIcon), not IconBase, directly.",
+    "New glyphs are added via npm run generate:icons from SVG sources, not written by hand.",
+    "Every generated component shares the exact same IconProps - there is no per-icon prop surface."
   ],
   "contentRules": [],
   "responsiveRules": [],
   "themeRules": [
-    "Uses semantic color inheritance."
+    "Color tokens resolve per-theme automatically - no icon-specific dark-mode handling needed."
   ],
   "implementationNotes": [
-    "SVG-based.",
-    "CSS Modules."
+    "Use React.memo for IconBase and every generated icon component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "SVG-based, fill=\"currentColor\".",
+    "Icons are primarily used within other components (Button, Tag, Avatar, etc.), not rendered bare at the page level."
   ],
-  "relatedComponents": [
-    "Button",
-    "IconButton",
-    "Tag",
-    "Checkbox",
-    "Radio",
-    "Tooltip",
-    "Avatar"
-  ],
+  "relatedComponents": ["Button", "IconButton", "Tag", "Checkbox", "Radio", "Tooltip", "Avatar"],
   "do": [
-    "Use semantic sizes",
-    "Inherit parent color"
+    "Pair an icon with a visible label whenever possible.",
+    "Use semantic color values only when the icon itself carries that meaning.",
+    "Give a standalone icon a title and decorative={false} when it's the only content."
   ],
   "dont": [
-    "Use as the only label for controls unless accessible name exists"
+    "Use an icon as the only label for a control without an accessible name.",
+    "Hardcode an icon's fill color.",
+    "Add an iconSize-style prop instead of using the shared size prop."
   ],
   "acceptanceCriteria": [
-    "Consistent sizing",
-    "Accessible behavior",
-    "Theme compatible"
+    "Renders the glyph via a generated component sharing the full IconProps set.",
+    "Defaults to size=md, spacing=none, color=default, decorative=true.",
+    "Supports all IconSize, IconSpacing, and IconColor values.",
+    "decorative=false renders role=img with an accessible name from title.",
+    "Supports className and testId.",
+    "Works in light and dark themes via semantic color tokens.",
+    "Storybook includes a Playground, size/spacing/color Variants, and a generated icon gallery grouped by metadata category."
+  ],
+  "knownLimitations": [
+    "Only two sizes (sm, md) - components needing a different icon size fix it internally rather than exposing an iconSize prop.",
+    "No built-in searchable icon gallery beyond the Storybook Examples story."
+  ],
+  "futureEnhancements": [
+    "Searchable icon gallery",
+    "Automated metadata generation",
+    "SVG linting/optimization in the generation pipeline",
+    "Icon contribution and deprecation process"
   ]
 }

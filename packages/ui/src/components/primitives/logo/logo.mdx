@@ -1,0 +1,140 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as LogoStories from './Logo.stories';
+
+<Meta of={LogoStories} name="Docs" />
+
+# Logo
+
+Logo is the approved LegacyHQ brand primitive - the single source for rendering the brand mark,
+wordmark, or full lockup anywhere in the product, so every surface uses the same approved artwork
+instead of a screenshot, a recreated SVG, or a stretched image.
+
+<Canvas of={LogoStories.Playground} />
+
+## When to use
+
+- Application headers, authentication screens, marketing surfaces, and other branded experiences
+  that need the LegacyHQ identity.
+- A compact nav rail or collapsed sidebar, where `type="mark"` fits without the wordmark.
+
+## When not to use
+
+- **Don't alter proportions, colors, spacing, or crop the artwork.** Logo renders the approved SVG
+  as-is - there is no prop for recoloring, stretching, rotating, or adding shadows/effects.
+- **Don't recreate the wordmark in text.** Use the `wordmark` or `full` type instead of typing
+  "LegacyHQ" in a heading font - the approved artwork is the only correct rendering of the brand
+  name.
+- **Don't combine it with other graphics** outside the approved `mark`/`wordmark`/`full` variants.
+
+## Choosing a type and size
+
+<Canvas of={LogoStories.Variants} />
+
+- **`mark`** - the icon-only symbol. Use where space is tight (a collapsed nav rail, a favicon-like
+  context) and the wordmark isn't needed for recognition.
+- **`wordmark`** - the brand name only, no symbol.
+- **`full`** (default) - mark + wordmark together. Use this whenever there's room for it; it's the
+  primary, most recognizable lockup.
+
+Five sizes (`xxs` through `lg`) cover everything from a compact nav-rail mark to a prominent
+auth-screen lockup - pick the size token, don't scale the rendered SVG with CSS `transform`.
+
+## Decorative vs. informative
+
+Unlike Icon, Logo defaults to **`decorative={false}`** - a logo is usually the accessible name for
+a link back to the product's home, so it renders `role="img"` with an accessible label (`title` or
+`ariaLabel`, falling back to `"LegacyHQ"`) unless you explicitly mark it decorative. Set
+`decorative={true}` only when the logo sits next to other text that already provides the same
+accessible name (for example, inside a link that already has its own `aria-label`), so the logo
+isn't announced twice.
+
+<Canvas of={LogoStories.Examples} />
+
+## Do / Don't
+
+**Do** use the `mark` type in a compact nav rail.
+
+```tsx
+<a href="/" aria-label="LegacyHQ home">
+  <Logo type="mark" size="sm" decorative />
+</a>
+```
+
+**Don't** recolor or restyle the rendered SVG.
+
+```tsx
+<Logo style={{ filter: 'grayscale(1)' }} />
+```
+
+---
+
+**Do** let Logo provide the accessible name when it's the only content in a link.
+
+```tsx
+<a href="/">
+  <Logo type="full" size="md" title="LegacyHQ" />
+</a>
+```
+
+**Don't** double up the accessible name.
+
+```tsx
+<a href="/" aria-label="LegacyHQ home">
+  <Logo type="full" size="md" title="LegacyHQ" /> {/* decorative is missing - announced twice */}
+</a>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>type</code></td>
+      <td><code>'mark' | 'wordmark' | 'full'</code></td>
+      <td><code>'full'</code></td>
+      <td>Which lockup to render.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'xxs' | 'xs' | 'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Rendered size.</td>
+    </tr>
+    <tr>
+      <td><code>title</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible name and native tooltip text; falls back to <code>"LegacyHQ"</code> when informative.</td>
+    </tr>
+    <tr>
+      <td><code>ariaLabel</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Overrides the accessible name; takes precedence over <code>title</code>.</td>
+    </tr>
+    <tr>
+      <td><code>decorative</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>When <code>true</code>, <code>aria-hidden</code> with no role. When <code>false</code> (default), <code>role="img"</code> with the accessible name.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Icon** - the same decorative/informative accessibility pattern, for non-brand glyphs.

@@ -1700,6 +1700,11 @@
         "value": "cubic-bezier(0.4, 0.15, 0.6, 0.85)",
         "type": "cubicBezier",
         "originalName": "ease/loop"
+      },
+      "duration-loop-slow": {
+        "value": "1500ms",
+        "type": "duration",
+        "originalName": "duration/loop-slow"
       }
     }
   }

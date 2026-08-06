@@ -193,13 +193,32 @@
   background: var(--color-background-neutral-overlay-pressed);
 }
 
-.button:disabled,
-.button:disabled:hover,
-.button:disabled:active,
-.button:disabled.tone_warning,
-.button:disabled.tone_error,
-.button:disabled.tone_discovery {
+/*
+ * Two disabled treatments, matching each appearance's own resting border visibility rather than
+ * one shared look: `appearance_default` already shows a visible border at rest, so its disabled
+ * state keeps one (`--color-border-disabled`). `appearance_primary` and `appearance_subtle` are
+ * borderless at rest - applying the same border color there would draw a border that was never
+ * part of their look, so their disabled state stays borderless (`border-color: transparent`).
+ */
+.appearance_default:disabled,
+.appearance_default:disabled:hover,
+.appearance_default:disabled:active {
   border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.appearance_primary:disabled,
+.appearance_primary:disabled:hover,
+.appearance_primary:disabled:active,
+.appearance_primary.tone_warning:disabled,
+.appearance_primary.tone_error:disabled,
+.appearance_primary.tone_discovery:disabled,
+.appearance_subtle:disabled,
+.appearance_subtle:disabled:hover,
+.appearance_subtle:disabled:active {
+  border-color: transparent;
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;

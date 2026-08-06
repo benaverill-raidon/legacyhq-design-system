@@ -9,7 +9,7 @@ Icon provides a consistent, reusable system for rendering SVG symbols across the
 Use Icon components to communicate actions, objects, statuses, and visual cues. Icons should be sized, spaced, colored, and labeled consistently through shared props and generated React components.
 
 ### Category
-Atom / Foundational UI Asset
+Primitive
 
 ### Design Reference
 - Figma Component: Icon
@@ -118,11 +118,13 @@ packages/ui/src/assets/icons/
 Shared icon support files:
 
 ```txt
-packages/ui/src/components/atoms/Icon/
-├─ IconBase.tsx
-├─ Icon.types.ts
-├─ Icon.module.css
-├─ Icon.stories.tsx
+packages/ui/src/components/primitives/icon/
+├─ icon-base.tsx
+├─ icon.types.ts
+├─ icon.module.css
+├─ icon.stories.tsx
+├─ icon.test.tsx
+├─ icon.mdx
 └─ index.ts
 ```
 

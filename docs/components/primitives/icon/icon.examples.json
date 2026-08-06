@@ -1,16 +1,74 @@
 {
+  "component": "Icon",
   "examples": [
     {
-      "name": "Decorative",
-      "jsx": "<Icon name='search' aria-hidden />"
+      "name": "Default decorative icon",
+      "description": "Decorative by default - hidden from assistive technology because a visible label already carries the meaning.",
+      "jsx": "<CheckIcon />",
+      "props": {}
     },
     {
-      "name": "Informative",
-      "jsx": "<Icon name='warning' aria-label='Warning' />"
+      "name": "Paired with a label",
+      "description": "The most common usage - an icon inside a control that already has a visible/accessible label.",
+      "jsx": "<Button iconBefore={<CheckIcon />}>Save</Button>",
+      "props": {}
     },
     {
-      "name": "Button",
-      "jsx": "<Button iconBefore={<Icon name='add' />}>New</Button>"
+      "name": "Informative, standalone icon",
+      "description": "The icon is the only content, so it needs its own accessible name.",
+      "jsx": "<IconButton aria-label=\"Approve\">\n  <CheckIcon decorative={false} title=\"Approved\" />\n</IconButton>",
+      "props": {
+        "decorative": false,
+        "title": "Approved"
+      }
+    },
+    {
+      "name": "Small size",
+      "description": "The compact glyph size, e.g. inline with body-sm text.",
+      "jsx": "<ChevronRightIcon size=\"sm\" />",
+      "props": {
+        "size": "sm"
+      }
+    },
+    {
+      "name": "Spacious hit box",
+      "description": "A visually small icon centered in a larger click/touch target.",
+      "jsx": "<CloseIcon spacing=\"spacious\" />",
+      "props": {
+        "spacing": "spacious"
+      }
+    },
+    {
+      "name": "Semantic color",
+      "description": "Color used because the icon itself carries that meaning (a success confirmation), not just for decoration.",
+      "jsx": "<CheckIcon color=\"success\" />",
+      "props": {
+        "color": "success"
+      }
+    },
+    {
+      "name": "Inverse color on a dark surface",
+      "jsx": "<div data-theme=\"dark\"><CheckIcon color=\"inverse\" /></div>",
+      "props": {
+        "color": "inverse"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Icon alone with no accessible name",
+      "jsx": "<CheckIcon />",
+      "reason": "If this is the only content in an interactive control (no visible text, no aria-label on the control), a screen reader announces nothing - use decorative={false} with a title, or add aria-label to the parent control."
+    },
+    {
+      "name": "Hardcoded fill color",
+      "jsx": "<CheckIcon style={{ color: '#00AA00' }} />",
+      "reason": "Icons must use the semantic color prop, not inline/hardcoded colors - use color=\"success\" instead."
+    },
+    {
+      "name": "Icon used as a logo",
+      "jsx": "<CheckIcon size=\"md\" />",
+      "reason": "Icon is for functional glyphs, not brand identity - use the Logo primitive for brand marks/wordmarks."
     }
   ]
 }

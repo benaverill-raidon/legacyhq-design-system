@@ -1,0 +1,148 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SkeletonStories from './Skeleton.stories';
+
+<Meta of={SkeletonStories} name="Docs" />
+
+# Skeleton
+
+Skeleton is a placeholder shape shown in place of content that hasn't finished loading yet. It
+pulses gently to signal that something is on its way, without committing to layout-shifting spinner
+copy or a blank void.
+
+<Canvas of={SkeletonStories.Playground} />
+
+## When to use
+
+- Content (text, an avatar, an image, a card) is being fetched and its final layout is already
+  known.
+- You want to preserve the shape of a layout while its real content streams in, reducing perceived
+  load time and layout shift.
+
+## When not to use
+
+- **The final shape is unknown.** Use `Spinner` for an indeterminate wait instead of guessing at a
+  layout.
+- **Progress is measurable.** Use `ProgressBar` when you know how far along an operation is.
+- **The content is already available but slow to compute.** Consider a `Spinner` inline instead of
+  reserving a whole layout's worth of placeholder shapes.
+
+## Anatomy
+
+Skeleton is a single rounded `div`. It has no children by default - width, height, and shape are
+set per usage (via `style`, `className`, or the `shape` prop) to match whatever content it stands
+in for: a text line, an avatar circle, an image block.
+
+## Usage guidance
+
+### Appearance
+
+`appearance="subtle"` (the default) is a lighter placeholder, for dense layouts where a stronger
+placeholder would compete with real content elsewhere on the screen. `appearance="default"` is a
+touch more visible - reach for it when the skeleton is the only thing on screen (e.g. a full-page
+loading state).
+
+### Shape
+
+`shape="rectangle"` (the default) uses the standard small corner radius, for text lines, cards, and
+image blocks. `shape="circle"` uses a fully round radius - reach for it for avatar placeholders, and
+pair it with an equal `inlineSize`/`blockSize` in `style`.
+
+<Canvas of={SkeletonStories.Variants} />
+
+### Sizing
+
+Skeleton has no fixed size scale - it fills its container's inline size by default and is exactly
+one line tall (`--size-250`, 20px). Override `style` or `className` per usage to match the content
+it's standing in for.
+
+<Canvas of={SkeletonStories.Composition} />
+
+### Accessible labelling
+
+Skeleton is `aria-hidden` by default, since a loading region typically has its own surrounding
+context (a page heading, a "Loading" state managed elsewhere). Pass `label` when a Skeleton (or
+group of them) is the sole indicator that content is loading - this switches it to
+`role="status"`/`aria-live="polite"` with a visually-hidden announcement, the same pattern `Spinner`
+uses.
+
+```tsx
+<Skeleton label="Loading profile" />
+```
+
+### Reduced motion
+
+The pulse animation is disabled automatically when the user has requested reduced motion
+(`prefers-reduced-motion: reduce`).
+
+## Do / Don't
+
+**Do** size each Skeleton to match the content it's replacing.
+
+```tsx
+<Skeleton shape="circle" style={{ inlineSize: '40px', blockSize: '40px' }} />
+```
+
+**Don't** leave every Skeleton at its default size when replacing content of a very different
+shape - it reads as a rendering bug, not a loading state.
+
+---
+
+**Do** pass `label` when a Skeleton is the only signal that a region is loading.
+
+```tsx
+<Skeleton label="Loading profile" />
+```
+
+**Don't** add visible loading copy next to a Skeleton that already has a `label` - the label is for
+assistive technology, not sighted users.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'subtle'</code></td>
+      <td>Visual weight of the placeholder fill.</td>
+    </tr>
+    <tr>
+      <td><code>shape</code></td>
+      <td><code>'rectangle' | 'circle'</code></td>
+      <td><code>'rectangle'</code></td>
+      <td>Corner treatment - <code>circle</code> is fully round, for avatar-shaped placeholders.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible loading announcement. When set, renders <code>role="status"</code> with
+        <code>aria-live="polite"</code> instead of <code>aria-hidden</code>.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+    <tr>
+      <td>...rest</td>
+      <td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td>
+      <td>-</td>
+      <td>Forwarded to the root <code>div</code>, including <code>style</code> for per-usage sizing.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Spinner** - for an indeterminate wait when the final layout isn't known yet.
+- **ProgressBar** - for a measurable, quantified loading state.

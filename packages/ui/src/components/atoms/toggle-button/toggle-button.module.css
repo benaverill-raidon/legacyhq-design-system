@@ -103,10 +103,24 @@
   color: var(--color-content-subtle);
 }
 
-.selected,
-.selected:hover,
-.selected:active {
+/*
+ * Selected shares the same background/text treatment across tones, but the border only shows for
+ * `tone_default` (matching its own bordered resting look) - `tone_subtle` stays borderless when
+ * selected too, confirmed directly from Figma's `tone=subtle, isSelected=true` variants (same
+ * fill/text tokens as `tone_default`'s selected state, no stroke).
+ */
+.tone_default.selected,
+.tone_default.selected:hover,
+.tone_default.selected:active {
   border-color: var(--color-border-brand-primary);
+  background: var(--color-background-brand-primary-default-default);
+  color: var(--color-content-brand-primary-default);
+}
+
+.tone_subtle.selected,
+.tone_subtle.selected:hover,
+.tone_subtle.selected:active {
+  border-color: transparent;
   background: var(--color-background-brand-primary-default-default);
   color: var(--color-content-brand-primary-default);
 }
@@ -127,13 +141,31 @@
   }
 }
 
-.toggleButton:disabled,
-.toggleButton:disabled:hover,
-.toggleButton:disabled:active,
-.toggleButton:disabled.selected,
-.toggleButton:disabled.selected:hover,
-.toggleButton:disabled.selected:active {
+/*
+ * Two disabled treatments, matching each tone's own resting border visibility - same pattern
+ * Button uses: `tone_default` already shows a visible border at rest, so disabled keeps one
+ * (`--color-border-disabled`); `tone_subtle` is borderless at rest, so disabled stays borderless
+ * too, confirmed directly from Figma's `tone=subtle, isDisabled=true` variants (no stroke).
+ */
+.tone_default:disabled,
+.tone_default:disabled:hover,
+.tone_default:disabled:active,
+.tone_default:disabled.selected,
+.tone_default:disabled.selected:hover,
+.tone_default:disabled.selected:active {
   border-color: var(--color-border-disabled);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.tone_subtle:disabled,
+.tone_subtle:disabled:hover,
+.tone_subtle:disabled:active,
+.tone_subtle:disabled.selected,
+.tone_subtle:disabled.selected:hover,
+.tone_subtle:disabled.selected:active {
+  border-color: transparent;
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;

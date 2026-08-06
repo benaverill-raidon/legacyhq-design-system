@@ -1,0 +1,45 @@
+{
+  "component": "InlineEdit",
+  "examples": [
+    {
+      "name": "Basic click-to-edit text value",
+      "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. A subtle TextField is the recommended child for most cases.",
+      "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField appearance=\"subtle\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
+      "props": {}
+    },
+    {
+      "name": "Read-only display (before any interaction)",
+      "description": "Inline Edit always starts read-only - the confirm/cancel buttons only appear once the field is clicked or focused.",
+      "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+      "props": { "value": "Q3 Planning" }
+    },
+    {
+      "name": "No visible action buttons (Enter/Escape only, once editing)",
+      "description": "actionButtons={false} hides the icon buttons once editing starts; Enter still confirms and Escape still cancels.",
+      "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+      "props": { "actionButtons": false }
+    },
+    {
+      "name": "Custom accessible names for the action buttons",
+      "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+      "props": { "confirmLabel": "Save title", "cancelLabel": "Discard changes" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Multiple fields in one Inline Edit",
+      "jsx": "<InlineEdit value={value}>\n  <TextField aria-label=\"First name\" />\n  <TextField aria-label=\"Last name\" />\n</InlineEdit>",
+      "reason": "Inline Edit clones exactly one child - use a real form for multiple related fields."
+    },
+    {
+      "name": "Expecting an isEditing prop to show the buttons upfront",
+      "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+      "reason": "There is no isEditing prop - editing always starts on click/focus of the field itself, never before."
+    },
+    {
+      "name": "Expecting onConfirm to fire on every keystroke",
+      "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+      "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
+    }
+  ]
+}

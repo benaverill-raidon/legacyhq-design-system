@@ -1,0 +1,164 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as IconStories from './icon.stories';
+
+<Meta of={IconStories} name="Docs" />
+
+# Icon
+
+Icon communicates meaning through a compact visual symbol and supports other components - it's the
+building block behind every icon rendered in this system, from a bare glyph next to a label to the
+icon inside a Button, Tag, or Avatar badge.
+
+<Canvas of={IconStories.Playground} />
+
+## When to use
+
+- Alongside a text label, to speed up recognition of a common action or concept.
+- Wherever a universally recognized glyph improves comprehension without adding text.
+
+## When not to use
+
+- **As the only conveyor of critical information**, unless it has an accessible name
+  (`decorative={false}` + `title`, or an external label). A color or shape alone is not accessible.
+- **As a standalone interactive control.** A bare icon is not a button - wrap it in Icon Button if
+  it needs to be clickable.
+
+## Two layers: IconBase and the generated icon set
+
+`IconBase` is the shared primitive every icon renders through - it owns the sizing, spacing, and
+color logic and wraps a single `<svg>`. You will rarely import `IconBase` directly. Instead, each
+glyph is generated as its own named component (`AddIcon`, `CheckIcon`, `ChevronLeftIcon`, ...) that
+wraps `IconBase` with its own `viewBox` and path data, importable from the shared icon set:
+
+```tsx
+import { CheckIcon } from '../../../assets/icons';
+
+<CheckIcon size="sm" />;
+```
+
+Generated components share `IconBase`'s full prop set (`size`, `spacing`, `color`, `title`,
+`decorative`, `className`, `testId`) - there is nothing extra to learn per icon. New glyphs are
+added via `npm run generate:icons`, not written by hand.
+
+<Canvas of={IconStories.Variants} />
+
+## Usage guidance
+
+### Sizing and spacing
+
+`size` is `sm` or `md` - there is no per-icon size override; components that need a specific icon
+size (Button, Avatar's badge glyph) fix it internally rather than exposing an `iconSize` prop.
+`spacing` controls the icon's own hit-box padding independent of its visual size - `spacious`
+reserves a larger square around a visually small icon, useful when the icon sits alone as a
+touch/click target.
+
+### Choosing a color
+
+Icons inherit `currentColor` by default (`color="default"`). Reach for the semantic color values
+(`brand`, `success`, `warning`, `error`, `information`) only when the icon itself is carrying that
+meaning independently of its surrounding text - not just to "make it colorful." Use `inverse` on
+dark or bold surfaces, and `disabled` to match a disabled control's content color.
+
+### Decorative vs. informative
+
+Icons default to `decorative={true}` (`aria-hidden`, no role) because most icons sit next to a text
+label that already carries the meaning. Set `decorative={false}` and provide `title` only when the
+icon is the *sole* carrier of meaning - it then renders `role="img"` with an accessible name.
+
+<Canvas of={IconStories.Examples} />
+
+## Do / Don't
+
+**Do** pair an icon with a visible label whenever possible.
+
+```tsx
+<Button iconBefore={<CheckIcon />}>Save</Button>
+```
+
+**Don't** rely on an icon alone to convey meaning without an accessible name.
+
+```tsx
+<CheckIcon />
+{
+  /* No visible text, no title, no decorative={false} - a screen reader announces nothing. */
+}
+```
+
+---
+
+**Do** give a standalone icon a `title` and `decorative={false}` when it's the only content.
+
+```tsx
+<IconButton aria-label="Approve">
+  <CheckIcon decorative={false} title="Approved" />
+</IconButton>
+```
+
+**Don't** hardcode an icon's fill color.
+
+```tsx
+<CheckIcon style={{ color: '#00AA00' }} />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md'</code></td>
+      <td><code>'md'</code></td>
+      <td>Visual glyph size.</td>
+    </tr>
+    <tr>
+      <td><code>spacing</code></td>
+      <td><code>'none' | 'spacious'</code></td>
+      <td><code>'none'</code></td>
+      <td>Hit-box padding around the glyph, independent of visual size.</td>
+    </tr>
+    <tr>
+      <td><code>color</code></td>
+      <td><code>'default' | 'subtle' | 'inverse' | 'brand' | 'success' | 'warning' | 'error' | 'information' | 'disabled'</code></td>
+      <td><code>'default'</code></td>
+      <td>Semantic content color.</td>
+    </tr>
+    <tr>
+      <td><code>title</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Accessible name, used only when <code>decorative</code> is <code>false</code>.</td>
+    </tr>
+    <tr>
+      <td><code>decorative</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>When <code>true</code>, <code>aria-hidden</code> with no role. When <code>false</code>, <code>role="img"</code> with <code>title</code> as the accessible name.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+    <tr>
+      <td><code>testId</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Sets <code>data-testid</code> on the root.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Button** / **Icon Button** - the most common place a generated icon is composed.
+- **Tag**, **Tooltip**, **Avatar**, **Checkbox**, **Radio** - each uses generated icons for their
+  own glyphs (chevrons, checkmarks, presence badges).

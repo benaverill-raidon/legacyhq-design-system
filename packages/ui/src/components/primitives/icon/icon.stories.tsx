@@ -1,5 +1,5 @@
 import type { ComponentType, CSSProperties } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import iconMetadata from '../../../assets/icons/metadata/icons.json';
 import * as generatedIcons from '../../../assets/icons/generated';
 import { AddIcon } from '../../../assets/icons';
@@ -110,6 +110,10 @@ const labelStyle = {
   lineHeight: 'var(--typography-body-sm-line-height)',
 } satisfies CSSProperties;
 
+// `color="inverse"` needs a bold/dark backdrop that contrasts with whatever the ambient theme
+// happens to be (like Badge's default chip or a Tooltip bubble), not a full dark-theme preview -
+// so this uses the "boldest contrast for the current theme" tokens directly rather than
+// `data-theme="dark"` + theme-relative tokens.
 const inverseSurfaceStyle = {
   display: 'flex',
   flexWrap: 'wrap',

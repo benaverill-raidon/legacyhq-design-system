@@ -1,0 +1,45 @@
+.root {
+  width: fit-content;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*
+ * ToggleButton normally sizes itself to its label (padding + content), so a two-digit page like
+ * "20" renders wider than a one-digit page like "2". Figma's page slots are a fixed 32x32 square
+ * regardless of digit count, so force it here via the same `:global([data-attr])` compound-selector
+ * technique Icon Button and Icon Tile use to reliably out-specificity a single-class atom rule
+ * without touching ToggleButton's own default (variable-width) behavior for its other consumers.
+ */
+.item :global([data-selected]) {
+  inline-size: var(--size-control-sm);
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--size-control-sm);
+  block-size: var(--size-control-sm);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  user-select: none;
+}

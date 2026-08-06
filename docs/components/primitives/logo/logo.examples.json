@@ -1,12 +1,63 @@
 {
+  "component": "Logo",
   "examples": [
     {
-      "name": "Header",
-      "jsx": "<Logo />"
+      "name": "Default full lockup",
+      "jsx": "<Logo />",
+      "props": {}
     },
     {
-      "name": "Authentication",
-      "jsx": "<Logo size='lg' />"
+      "name": "Compact mark in a nav rail, decorative inside a labelled link",
+      "jsx": "<a href=\"/\" aria-label=\"LegacyHQ home\">\n  <Logo type=\"mark\" size=\"sm\" decorative />\n</a>",
+      "props": {
+        "type": "mark",
+        "size": "sm",
+        "decorative": true
+      }
+    },
+    {
+      "name": "Wordmark only",
+      "description": "When the mark is unnecessary or already visible nearby.",
+      "jsx": "<Logo type=\"wordmark\" size=\"sm\" title=\"LegacyHQ\" />",
+      "props": {
+        "type": "wordmark",
+        "size": "sm"
+      }
+    },
+    {
+      "name": "Large lockup on an authentication screen",
+      "jsx": "<Logo type=\"full\" size=\"lg\" title=\"LegacyHQ\" />",
+      "props": {
+        "size": "lg"
+      }
+    },
+    {
+      "name": "Logo as the accessible name for a home link",
+      "description": "No aria-label on the parent link - Logo itself provides the accessible name.",
+      "jsx": "<a href=\"/\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</a>",
+      "props": {}
+    },
+    {
+      "name": "On a dark surface",
+      "jsx": "<div data-theme=\"dark\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</div>",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Double accessible name",
+      "jsx": "<a href=\"/\" aria-label=\"LegacyHQ home\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</a>",
+      "reason": "Both the link and the Logo expose an accessible name here, so a screen reader announces \"LegacyHQ home, LegacyHQ\" - mark the Logo decorative when the parent link already has aria-label."
+    },
+    {
+      "name": "Recoloring the artwork",
+      "jsx": "<Logo style={{ filter: 'grayscale(1)' }} />",
+      "reason": "Logo renders the approved SVG as-is - there is no supported way to recolor, stretch, or add effects to it."
+    },
+    {
+      "name": "Recreating the wordmark in text",
+      "jsx": "<h1 style={{ fontFamily: 'serif' }}>LegacyHQ</h1>",
+      "reason": "Use type=\"wordmark\" or type=\"full\" instead of typing the brand name - the approved artwork is the only correct rendering."
     }
   ]
 }

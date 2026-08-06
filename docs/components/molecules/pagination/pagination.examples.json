@@ -1,0 +1,73 @@
+{
+  "component": "Pagination",
+  "examples": [
+    {
+      "name": "Small page count (no ellipsis)",
+      "description": "Every page fits within the default sibling/boundary window.",
+      "jsx": "<Pagination currentPage={2} totalPages={5} onPageChange={setPage} />",
+      "props": {
+        "currentPage": 2,
+        "totalPages": 5
+      }
+    },
+    {
+      "name": "Middle of a large range",
+      "description": "Ellipses appear on both sides of the current page.",
+      "jsx": "<Pagination currentPage={10} totalPages={20} onPageChange={setPage} />",
+      "props": {
+        "currentPage": 10,
+        "totalPages": 20
+      }
+    },
+    {
+      "name": "Near the start",
+      "description": "Only the trailing ellipsis appears.",
+      "jsx": "<Pagination currentPage={1} totalPages={20} onPageChange={setPage} />",
+      "props": {
+        "currentPage": 1,
+        "totalPages": 20
+      }
+    },
+    {
+      "name": "Near the end",
+      "description": "Only the leading ellipsis appears.",
+      "jsx": "<Pagination currentPage={20} totalPages={20} onPageChange={setPage} />",
+      "props": {
+        "currentPage": 20,
+        "totalPages": 20
+      }
+    },
+    {
+      "name": "Wider sibling range",
+      "description": "Raising siblingCount shows more pages around the current one, closer to Figma's wide-container sample.",
+      "jsx": "<Pagination currentPage={1} totalPages={20} siblingCount={5} onPageChange={setPage} />",
+      "props": {
+        "currentPage": 1,
+        "totalPages": 20,
+        "siblingCount": 5
+      }
+    },
+    {
+      "name": "Custom accessible labels",
+      "description": "Overriding the default nav/previous/next labels.",
+      "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  ariaLabel=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
+      "props": {
+        "ariaLabel": "Search results pages",
+        "previousLabel": "Previous results",
+        "nextLabel": "Next results"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Single page",
+      "jsx": "<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />",
+      "reason": "Pagination adds navigation overhead with nothing to navigate to - omit it when there's only one page."
+    },
+    {
+      "name": "Infinite scroll content",
+      "jsx": "<Pagination currentPage={page} totalPages={Infinity} onPageChange={setPage} />",
+      "reason": "Pagination expects a known, finite totalPages - use a 'load more' affordance for infinite scroll instead."
+    }
+  ]
+}

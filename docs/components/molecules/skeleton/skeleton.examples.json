@@ -1,0 +1,65 @@
+{
+  "component": "Skeleton",
+  "examples": [
+    {
+      "name": "Default subtle skeleton",
+      "description": "Default appearance, shape, and sizing (fills its container, one text line tall).",
+      "jsx": "<Skeleton />",
+      "props": {}
+    },
+    {
+      "name": "Default appearance",
+      "description": "More visible fill, for a full-page loading state.",
+      "jsx": "<Skeleton appearance=\"default\" />",
+      "props": {
+        "appearance": "default"
+      }
+    },
+    {
+      "name": "Circle for an avatar",
+      "description": "A circular placeholder sized to match an Avatar.",
+      "jsx": "<Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
+      "props": {
+        "shape": "circle",
+        "style": { "inlineSize": "40px", "blockSize": "40px" }
+      }
+    },
+    {
+      "name": "A paragraph of text lines",
+      "description": "Multiple Skeletons of varying width, composed to sketch a paragraph.",
+      "jsx": "<div style={{ display: 'grid', gap: 'var(--spacing-sm)' }}>\n  <Skeleton />\n  <Skeleton style={{ inlineSize: '90%' }} />\n  <Skeleton style={{ inlineSize: '60%' }} />\n</div>",
+      "props": {}
+    },
+    {
+      "name": "List row with avatar",
+      "description": "A circular avatar placeholder next to two text-line placeholders.",
+      "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
+      "props": {}
+    },
+    {
+      "name": "Labelled for screen readers",
+      "description": "The sole loading indicator on screen, announced via label.",
+      "jsx": "<Skeleton label=\"Loading profile\" />",
+      "props": {
+        "label": "Loading profile"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Clickable skeleton",
+      "jsx": "<Skeleton onClick={handleClick} />",
+      "reason": "Skeleton is non-interactive; it has no interactive behavior and is not meant to receive input."
+    },
+    {
+      "name": "Text content",
+      "jsx": "<Skeleton>Loading...</Skeleton>",
+      "reason": "Skeleton has no children slot - it is the placeholder shape itself, not a text container."
+    },
+    {
+      "name": "Visible loading copy next to a labelled Skeleton",
+      "jsx": "<div>\n  <Skeleton label=\"Loading profile\" />\n  <span>Loading profile...</span>\n</div>",
+      "reason": "The label prop already announces the loading state to assistive technology - duplicating it as visible text is redundant and should instead rely on adjacent context or the label alone."
+    }
+  ]
+}

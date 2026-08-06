@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Binary toggle control.",
   "intent": "Immediately enable or disable a setting.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1355:197475",
+    "componentName": "switch",
+    "variantCount": 20,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Settings",
     "Preferences",

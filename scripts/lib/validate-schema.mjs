@@ -9,7 +9,8 @@ export function validateAgainstSchema(value, schema, ctxPath = '$') {
     return;
   }
   if (schema.type === 'object') {
-    if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    if (value === null) return; // nullable, same as the scalar-leaf branch below
+    if (typeof value !== 'object' || Array.isArray(value)) {
       throw new Error(`${ctxPath}: expected object, got ${Array.isArray(value) ? 'array' : typeof value}`);
     }
     for (const key of schema.required ?? []) {

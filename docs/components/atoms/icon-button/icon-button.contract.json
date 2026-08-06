@@ -3,6 +3,14 @@
   "category": "atom",
   "status": "stable",
   "purpose": "Icon-only action button.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "3984:88777",
+    "componentName": "icon-button",
+    "variantCount": 184,
+    "verifiedAt": "2026-08-06"
+  },
   "anatomy": [
     "button",
     "icon",

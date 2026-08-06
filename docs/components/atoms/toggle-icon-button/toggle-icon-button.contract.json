@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Persistent icon-only toggle control.",
   "intent": "Combine compact icon-only presentation with toggle behavior.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "3984:91378",
+    "componentName": "toggle-icon-button",
+    "variantCount": 96,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Toolbar formatting",
     "View toggles",

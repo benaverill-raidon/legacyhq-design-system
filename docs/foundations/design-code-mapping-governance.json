@@ -1,0 +1,68 @@
+{
+  "id": "design-code-mapping-governance",
+  "designSystem": "LegacyHQ",
+  "artifact": "design-code-mapping-governance",
+  "version": "1.0.0",
+  "status": "stable",
+  "owner": "LegacyHQ Design System",
+  "lastReviewed": "2026-08-06",
+  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json"],
+  "overview": {
+    "description": "Links each component's code implementation back to its real Figma component, so an agent (or a developer) can trust that generated/reviewed code targets an actual, verified design source instead of a hallucinated or invented one. 7 of 28 components (the molecules) already carried a `figmaSource` block in their .contract.json with real node IDs. All 28 now do, after a live verification pass against the actual Figma file (fileKey M0eINB6n1BfrXu7ntYqb1i, \"Components v1.0.0\") on 2026-08-06 using the figma-dev-mode MCP tool.",
+    "purpose": "Prevent the design-code-mapping failure mode the field study identifies: code generated or reviewed against an assumed/invented component identity rather than the real Figma source of truth."
+  },
+  "verificationMethod": {
+    "description": "figmaSource data is added by directly calling Figma MCP tools (this session used figma-dev-mode's get_metadata) against the live file, walking each component's page -> \"Components\" frame -> the frame/symbol whose name matches the component (ignoring each page's \"Parts\" frame, which holds internal anatomy pieces, not the component itself). Two of the 7 pre-existing molecule entries (Pagination, Skeleton) were spot-checked this way and confirmed accurate before adding the remaining 21.",
+    "sessionDependent": true,
+    "note": "This CANNOT be mechanically enforced in CI, unlike token-enforcement's stylelint check - Figma access requires a local MCP bridge (figma-console's Desktop Bridge plugin, or figma-dev-mode's local server) connected to a running Figma Desktop app, which isn't available in a CI runner. Re-verify by re-running the same get_metadata walk when a component is next substantively touched, or before a release - not on every commit. A verifiedAt date is recorded per entry so staleness risk is at least visible.",
+    "toolsUsed": ["mcp__figma-dev-mode__get_metadata"],
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "fileName": "Components v1.0.0"
+  },
+  "figmaSourceShapes": [
+    {
+      "shape": "simple",
+      "appliesTo": "The vast majority of components - one component maps to exactly one Figma component or component set.",
+      "fields": "{file, fileKey, componentSetNodeId (or componentNodeId if not a variant set), componentName, variantCount, verifiedAt}",
+      "examples": ["button", "checkbox", "focus-ring"]
+    },
+    {
+      "shape": "multi-variant",
+      "appliesTo": "A component whose own variant/type prop selects between multiple SEPARATE Figma components, rather than one Figma variant set covering all values.",
+      "fields": "{file, fileKey, note, variantComponents: [{variantValue, componentSetNodeId, componentName, variantCount?}], verifiedAt}",
+      "examples": [
+        "progress-bar (variant=linear/circular -> two separate Figma components, progress-bar-linear / progress-bar-circular)",
+        "slider (type=slider/slider-centered/slider-range -> three separate Figma components)"
+      ]
+    },
+    {
+      "shape": "sub-component",
+      "appliesTo": "A single contract.json documenting two related React exports (already an existing pattern - see component-metadata's registry generator handling of Radio/RadioGroup).",
+      "fields": "{file, fileKey, note, subComponents: [{name, componentSetNodeId or componentNodeId, componentName, variantCount?}], verifiedAt}",
+      "examples": ["radio (Radio + RadioGroup, confirmed as two separate Figma nodes matching the same split)"]
+    },
+    {
+      "shape": "no-node exception",
+      "appliesTo": "A component that genuinely has no single Figma component node - documented explicitly rather than left silently absent, so it reads as a deliberate case, not an oversight.",
+      "fields": "{note}",
+      "examples": [
+        "icon (an asset library of many glyph symbols, not one component/variant-set - a direct Figma metadata lookup on its library page returned no resolvable node; real source of truth is packages/ui/src/assets/icons/source/*.svg via npm run generate:icons)",
+        "logo (renders pre-exported SVG assets directly via dangerouslySetInnerHTML, not a live Figma component instance; real source of truth is packages/ui/src/assets/logos)"
+      ]
+    },
+    {
+      "shape": "rich (pre-existing, molecules only)",
+      "appliesTo": "The original 7 molecule entries, authored with deeper design-decision analysis than this pass added.",
+      "fields": "Adds structure/apiAdaptationNotes on top of the simple shape - documents Figma-to-code deviations discovered during implementation (e.g. Pagination's windowing algorithm vs. Figma's single demo state).",
+      "note": "Not retrofitted onto the 21 new entries in this pass - that depth requires real per-component design analysis, not a mechanical node-ID lookup. See knownDepthBacklog below."
+    }
+  ],
+  "registryIntegration": {
+    "description": "docs/components/registry.json passes figmaSource through verbatim (raw.figmaSource ?? null) rather than normalizing it, the same treatment as tokens/accessibility - the shapes above are deliberate structural differences reflecting real Figma relationships, not accidental drift to reconcile.",
+    "schema": "docs/foundations/component-registry.schema.json declares figmaSource as an optional, loosely-typed object (no required sub-fields) for exactly this reason."
+  },
+  "knownDepthBacklog": {
+    "description": "The 21 entries added in this pass (18 atoms + Focus Ring, plus Radio's sub-component split and ProgressBar/Slider's multi-node split) are pointer-level only: file/fileKey/node-id/name/variant-count/verified-date. They do not yet have the structure/apiAdaptationNotes depth the original 7 molecules have (documented deviations between the Figma source and the actual code implementation).",
+    "resolution": "Add structure/apiAdaptationNotes to a component's figmaSource when it's next substantively touched and the real design-vs-code deviations are actually being analyzed - same 'migrate/deepen when next touched' philosophy as component-api-governance.json's knownViolations, component-registry-governance.json's knownContentGaps, and component-exemplars-governance.json's completeness backlog. Do not backfill this in bulk without real per-component design analysis - that risks inventing plausible-sounding but ungrounded deviation notes."
+  }
+}

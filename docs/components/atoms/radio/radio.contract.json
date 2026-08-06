@@ -8,6 +8,25 @@
   ],
   "purpose": "Select exactly one option from a mutually exclusive set.",
   "intent": "Native radio input behavior with shared LegacyHQ styling, almost always composed through RadioGroup for grouping, shared name management, and accessible labeling.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "note": "This file documents two components (Radio, RadioGroup) - Figma confirms the same split, recorded separately below.",
+    "subComponents": [
+      {
+        "name": "Radio",
+        "componentSetNodeId": "1355:199560",
+        "componentName": "radio",
+        "variantCount": 18
+      },
+      {
+        "name": "RadioGroup",
+        "componentNodeId": "1355:200060",
+        "componentName": "radio-group"
+      }
+    ],
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Selecting one option from a short, fully-visible set of mutually exclusive choices",
     "Form questions with a single correct answer",

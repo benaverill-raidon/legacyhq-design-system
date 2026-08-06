@@ -12,6 +12,14 @@
     "tests": "focus-ring.test.tsx",
     "index": "index.ts"
   },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1409:134421",
+    "componentName": "focus-ring",
+    "variantCount": 2,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Wrapping a custom-built interactive element that needs a focus indicator",
     "Composing focus styling onto an element that already has its own classes (e.g. a raw input inside a custom control)"

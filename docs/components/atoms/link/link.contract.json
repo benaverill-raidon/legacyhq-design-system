@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Navigation.",
   "intent": "Hyperlink behavior.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1612:9862",
+    "componentName": "link",
+    "variantCount": 60,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Internal navigation",
     "External links"

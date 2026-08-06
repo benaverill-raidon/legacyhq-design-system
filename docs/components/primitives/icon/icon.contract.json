@@ -15,6 +15,9 @@
     "iconMetadata": "packages/ui/src/assets/icons/metadata/icons.json",
     "generationScript": "npm run generate:icons"
   },
+  "figmaSource": {
+    "note": "Icon has no single Figma component node, unlike every other component in this design system - it's an asset library of many individual icon glyphs (a Figma page of loose symbols), not one component/variant-set. A direct Figma metadata lookup on the icons library page returned no resolvable node (confirmed 2026-08-06). The real source of truth is packages/ui/src/assets/icons/source/*.svg, generated into packages/ui/src/assets/icons/generated/*.tsx via `npm run generate:icons` - not a Figma node reference."
+  },
   "useCases": [
     "Supporting a text label to speed up recognition",
     "Representing a known object or entity",

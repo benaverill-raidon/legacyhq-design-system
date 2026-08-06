@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Indeterminate loading indicator.",
   "intent": "Communicate ongoing work.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1409:135757",
+    "componentName": "spinner",
+    "variantCount": 4,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Loading actions",
     "Loading content"

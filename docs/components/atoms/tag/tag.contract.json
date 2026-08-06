@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Display compact metadata with optional navigation and removal.",
   "intent": "Represent entities and contextual metadata throughout LegacyHQ.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1698:73567",
+    "componentName": "tag",
+    "variantCount": 208,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Entity references",
     "Filters",

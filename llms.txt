@@ -27,6 +27,11 @@ rules, and the task→file routing table that says which of a component's up to
   individual `.examples.json` files. See
   [component-exemplars-governance.json](docs/foundations/component-exemplars-governance.json)
   for normalization rules and the completeness backlog.
+- [design-code-mapping-governance.json](docs/foundations/design-code-mapping-governance.json):
+  the `figmaSource` field every component's `.contract.json` (and
+  `registry.json`) carries — real Figma node IDs, verified live, not
+  invented. Load when tracing a component back to its design source or
+  when re-verifying Figma mapping data.
 
 ## Primitives (3)
 

@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Select one or more independent options.",
   "intent": "Native checkbox control.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1355:200931",
+    "componentName": "checkbox",
+    "variantCount": 27,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Multi-select",
     "Boolean setting"

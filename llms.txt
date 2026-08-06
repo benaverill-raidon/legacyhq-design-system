@@ -1,0 +1,60 @@
+# LegacyHQ Design System
+
+> React component library with a three-tier token architecture (primitive →
+> semantic → component), CSS Modules, Storybook, and Vitest. 28 components
+> across primitives/atoms/molecules.
+
+Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
+rules, and the task→file routing table that says which of a component's up to
+6 doc files to open for your specific task. Don't open all 6 for every task.
+
+## Foundations (load once per session, not per component)
+
+- [CLAUDE.md](CLAUDE.md): conventions, token tiers, routing table. Always first.
+- [token-governance.json](docs/foundations/token-governance.json): token tier
+  rules + stylelint enforcement policy. Load when touching any token/CSS value.
+- [component-api-governance.json](docs/foundations/component-api-governance.json):
+  prop-naming rules. Load when adding/renaming a prop.
+
+## Primitives (3)
+
+- [focus-ring](docs/components/primitives/focus-ring/focus-ring.md)
+- [icon](docs/components/primitives/icon/icon.md)
+- [logo](docs/components/primitives/logo/logo.md)
+
+## Atoms (18)
+
+- [avatar](docs/components/atoms/avatar/avatar.md)
+- [badge](docs/components/atoms/badge/badge.md)
+- [button](docs/components/atoms/button/button.md)
+- [checkbox](docs/components/atoms/checkbox/checkbox.md)
+- [icon-button](docs/components/atoms/icon-button/icon-button.md)
+- [label](docs/components/atoms/label/label.md)
+- [link](docs/components/atoms/link/link.md)
+- [link-button](docs/components/atoms/link-button/link-button.md)
+- [progress-bar](docs/components/atoms/progress-bar/progress-bar.md)
+- [progress-indicator](docs/components/atoms/progress-indicator/progress-indicator.md)
+- [radio](docs/components/atoms/radio/radio.md)
+- [slider](docs/components/atoms/slider/slider.md)
+- [spinner](docs/components/atoms/spinner/spinner.md)
+- [switch](docs/components/atoms/switch/switch.md)
+- [tag](docs/components/atoms/tag/tag.md)
+- [toggle-button](docs/components/atoms/toggle-button/toggle-button.md)
+- [toggle-icon-button](docs/components/atoms/toggle-icon-button/toggle-icon-button.md)
+- [tooltip](docs/components/atoms/tooltip/tooltip.md)
+
+## Molecules (7)
+
+- [breadcrumbs](docs/components/molecules/breadcrumbs/breadcrumbs.md)
+- [button-group](docs/components/molecules/button-group/button-group.md)
+- [icon-tile](docs/components/molecules/icon-tile/icon-tile.md)
+- [inline-edit](docs/components/molecules/inline-edit/inline-edit.md)
+- [pagination](docs/components/molecules/pagination/pagination.md)
+- [skeleton](docs/components/molecules/skeleton/skeleton.md)
+- [text-field](docs/components/molecules/text-field/text-field.md)
+
+## Optional
+
+- `<name>-prompt.md` files (one per component): historical generation
+  prompts. → Only read when regenerating a component from scratch or
+  auditing prompt/output drift — not needed for normal edits.

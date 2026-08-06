@@ -223,6 +223,8 @@ export const States: Story = {
           </Tag>
         </Cell>
         <Cell label="Focus visible">
+          {/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional, documented above:
+              a static focus-visible reference for this story only, not shipped component behavior. */}
           <Tag href="/trusts/123" autoFocus>
             Trust
           </Tag>

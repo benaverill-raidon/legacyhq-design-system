@@ -156,23 +156,6 @@ export const Tooltip = React.memo(function Tooltip({
   const [resolvedPlacement, setResolvedPlacement] = React.useState<TooltipPlacement>(placement);
   const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
 
-  const hasContent = hasTooltipContent(content);
-  const child = React.Children.only(children) as React.ReactElement<
-    React.HTMLAttributes<HTMLElement> & {
-      disabled?: boolean;
-      isDisabled?: boolean;
-      'aria-describedby'?: string;
-    }
-  >;
-
-  if (!hasContent) {
-    return child;
-  }
-
-  const isDisabledChildTrigger = isDisabledTrigger(child);
-  const childProps = child.props;
-  const childRef = (child as React.ReactElement & { ref?: React.Ref<TriggerElement> }).ref;
-
   const clearShowTimer = React.useCallback(() => {
     if (showTimeoutRef.current !== null) {
       window.clearTimeout(showTimeoutRef.current);
@@ -257,6 +240,23 @@ export const Tooltip = React.memo(function Tooltip({
       resizeObserver?.disconnect();
     };
   }, [disabled, isVisible, updatePosition]);
+
+  const hasContent = hasTooltipContent(content);
+  const child = React.Children.only(children) as React.ReactElement<
+    React.HTMLAttributes<HTMLElement> & {
+      disabled?: boolean;
+      isDisabled?: boolean;
+      'aria-describedby'?: string;
+    }
+  >;
+
+  if (!hasContent) {
+    return child;
+  }
+
+  const isDisabledChildTrigger = isDisabledTrigger(child);
+  const childProps = child.props;
+  const childRef = (child as React.ReactElement & { ref?: React.Ref<TriggerElement> }).ref;
 
   const clonedChild = React.cloneElement(child, {
     'aria-describedby': disabled

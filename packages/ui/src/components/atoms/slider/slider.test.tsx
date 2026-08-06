@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { getSliderRatioFromPointer, getSliderValueFromPointer, getVisualPosition } from './slider';
+import { getVisualPosition } from './slider';
 import * as sliderExports from './index';
 import { Slider, SliderCentered, SliderRange } from './index';
 import styles from './slider.module.css';

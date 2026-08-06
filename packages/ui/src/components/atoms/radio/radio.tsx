@@ -57,6 +57,9 @@ export const Radio = React.memo(
         data-invalid={invalid ? 'true' : undefined}
       >
         <span className={styles.control}>
+          {/* eslint-disable-next-line jsx-a11y/role-supports-aria-props -- aria-invalid is a
+              global ARIA state supported on every role since ARIA 1.2; this rule's role/property
+              table predates that and still flags it on role=radio. */}
           <input
             {...rest}
             ref={(node) => setRefs(node, forwardedRef)}

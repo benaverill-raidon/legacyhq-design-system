@@ -102,7 +102,11 @@ export const InlineEdit = React.memo(function InlineEdit({
         onFocus: startEditing,
       });
 
+  // onKeyDown/onBlur below only catch events bubbled up from the always-focusable child clone
+  // (`control`); this div is never itself a focus or interaction target, so it doesn't need a
+  // role or its own key handling.
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       ref={rootRef}
       className={mergeClassNames(styles.root, className)}

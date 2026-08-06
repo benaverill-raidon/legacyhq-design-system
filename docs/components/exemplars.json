@@ -1,0 +1,1463 @@
+[
+  {
+    "id": "focus-ring",
+    "name": "FocusRing",
+    "tier": "primitive",
+    "path": "docs/components/primitives/focus-ring/focus-ring.examples.json",
+    "examples": [
+      {
+        "name": "Wrapping a button",
+        "description": "The most common usage - wrap the one interactive child that needs a focus indicator.",
+        "jsx": "<FocusRing>\n  <button type=\"button\">Save</button>\n</FocusRing>",
+        "props": {}
+      },
+      {
+        "name": "Compact border width",
+        "description": "For small/dense controls where the default width would overwhelm the control.",
+        "jsx": "<FocusRing borderWidth=\"compact\">\n  <button type=\"button\" className={styles.smallToggle}>On</button>\n</FocusRing>",
+        "props": {
+          "borderWidth": "compact"
+        }
+      },
+      {
+        "name": "Suppressing the ring on a disabled control",
+        "description": null,
+        "jsx": "<FocusRing disabled={isDisabled}>\n  <button type=\"button\" disabled={isDisabled}>Save</button>\n</FocusRing>",
+        "props": {
+          "disabled": true
+        }
+      },
+      {
+        "name": "Composing focusRingClassNames directly",
+        "description": "Used internally by components that need to add other classes to the same element - a raw input inside a custom control, for example.",
+        "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingCompact}`}\n  type=\"checkbox\"\n/>;",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Wrapping a non-focusable element",
+        "jsx": "<FocusRing>\n  <div>Not actually focusable</div>\n</FocusRing>",
+        "reason": "FocusRing only styles :focus-visible - it does not make an element focusable. The child must already be a real native control or carry a tabIndex."
+      },
+      {
+        "name": "A local one-off focus rule",
+        "jsx": "/* Don't write this in a new component's CSS */\n.myControl:focus-visible {\n  outline: 2px solid blue;\n}",
+        "reason": "Every interactive atom reuses this one primitive so the focus treatment is identical everywhere - a local rule fragments that consistency."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "icon",
+    "name": "Icon",
+    "tier": "primitive",
+    "path": "docs/components/primitives/icon/icon.examples.json",
+    "examples": [
+      {
+        "name": "Default decorative icon",
+        "description": "Decorative by default - hidden from assistive technology because a visible label already carries the meaning.",
+        "jsx": "<CheckIcon />",
+        "props": {}
+      },
+      {
+        "name": "Paired with a label",
+        "description": "The most common usage - an icon inside a control that already has a visible/accessible label.",
+        "jsx": "<Button iconBefore={<CheckIcon />}>Save</Button>",
+        "props": {}
+      },
+      {
+        "name": "Informative, standalone icon",
+        "description": "The icon is the only content, so it needs its own accessible name.",
+        "jsx": "<IconButton aria-label=\"Approve\">\n  <CheckIcon decorative={false} title=\"Approved\" />\n</IconButton>",
+        "props": {
+          "decorative": false,
+          "title": "Approved"
+        }
+      },
+      {
+        "name": "Small size",
+        "description": "The compact glyph size, e.g. inline with body-sm text.",
+        "jsx": "<ChevronRightIcon size=\"sm\" />",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Spacious hit box",
+        "description": "A visually small icon centered in a larger click/touch target.",
+        "jsx": "<CloseIcon spacing=\"spacious\" />",
+        "props": {
+          "spacing": "spacious"
+        }
+      },
+      {
+        "name": "Semantic color",
+        "description": "Color used because the icon itself carries that meaning (a success confirmation), not just for decoration.",
+        "jsx": "<CheckIcon color=\"success\" />",
+        "props": {
+          "color": "success"
+        }
+      },
+      {
+        "name": "Inverse color on a dark surface",
+        "description": null,
+        "jsx": "<div data-theme=\"dark\"><CheckIcon color=\"inverse\" /></div>",
+        "props": {
+          "color": "inverse"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Icon alone with no accessible name",
+        "jsx": "<CheckIcon />",
+        "reason": "If this is the only content in an interactive control (no visible text, no aria-label on the control), a screen reader announces nothing - use decorative={false} with a title, or add aria-label to the parent control."
+      },
+      {
+        "name": "Hardcoded fill color",
+        "jsx": "<CheckIcon style={{ color: '#00AA00' }} />",
+        "reason": "Icons must use the semantic color prop, not inline/hardcoded colors - use color=\"success\" instead."
+      },
+      {
+        "name": "Icon used as a logo",
+        "jsx": "<CheckIcon size=\"md\" />",
+        "reason": "Icon is for functional glyphs, not brand identity - use the Logo primitive for brand marks/wordmarks."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "logo",
+    "name": "Logo",
+    "tier": "primitive",
+    "path": "docs/components/primitives/logo/logo.examples.json",
+    "examples": [
+      {
+        "name": "Default full lockup",
+        "description": null,
+        "jsx": "<Logo />",
+        "props": {}
+      },
+      {
+        "name": "Compact mark in a nav rail, decorative inside a labelled link",
+        "description": null,
+        "jsx": "<a href=\"/\" aria-label=\"LegacyHQ home\">\n  <Logo type=\"mark\" size=\"sm\" decorative />\n</a>",
+        "props": {
+          "type": "mark",
+          "size": "sm",
+          "decorative": true
+        }
+      },
+      {
+        "name": "Wordmark only",
+        "description": "When the mark is unnecessary or already visible nearby.",
+        "jsx": "<Logo type=\"wordmark\" size=\"sm\" title=\"LegacyHQ\" />",
+        "props": {
+          "type": "wordmark",
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Large lockup on an authentication screen",
+        "description": null,
+        "jsx": "<Logo type=\"full\" size=\"lg\" title=\"LegacyHQ\" />",
+        "props": {
+          "size": "lg"
+        }
+      },
+      {
+        "name": "Logo as the accessible name for a home link",
+        "description": "No aria-label on the parent link - Logo itself provides the accessible name.",
+        "jsx": "<a href=\"/\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</a>",
+        "props": {}
+      },
+      {
+        "name": "On a dark surface",
+        "description": null,
+        "jsx": "<div data-theme=\"dark\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</div>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Double accessible name",
+        "jsx": "<a href=\"/\" aria-label=\"LegacyHQ home\">\n  <Logo type=\"full\" size=\"md\" title=\"LegacyHQ\" />\n</a>",
+        "reason": "Both the link and the Logo expose an accessible name here, so a screen reader announces \"LegacyHQ home, LegacyHQ\" - mark the Logo decorative when the parent link already has aria-label."
+      },
+      {
+        "name": "Recoloring the artwork",
+        "jsx": "<Logo style={{ filter: 'grayscale(1)' }} />",
+        "reason": "Logo renders the approved SVG as-is - there is no supported way to recolor, stretch, or add effects to it."
+      },
+      {
+        "name": "Recreating the wordmark in text",
+        "jsx": "<h1 style={{ fontFamily: 'serif' }}>LegacyHQ</h1>",
+        "reason": "Use type=\"wordmark\" or type=\"full\" instead of typing the brand name - the approved artwork is the only correct rendering."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "avatar",
+    "name": "Avatar",
+    "tier": "atom",
+    "path": "docs/components/atoms/avatar/avatar.examples.json",
+    "examples": [
+      {
+        "name": "Presence badge",
+        "description": "Shows availability when no calendar status is present.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" />",
+        "props": {}
+      },
+      {
+        "name": "Offline badge",
+        "description": "Uses the semantic subtle content color for the offline badge icon.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"offline\" />",
+        "props": {}
+      },
+      {
+        "name": "Calendar status badge",
+        "description": "Shows calendar invite response status.",
+        "jsx": "<Avatar name=\"Ben Averill\" status=\"accepted\" />",
+        "props": {}
+      },
+      {
+        "name": "Status wins over presence",
+        "description": "Renders accepted status badge instead of online presence badge.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" status=\"accepted\" />",
+        "props": {}
+      },
+      {
+        "name": "Disabled interactive avatar",
+        "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
+        "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "badge",
+    "name": "Badge",
+    "tier": "atom",
+    "path": "docs/components/atoms/badge/badge.examples.json",
+    "examples": [
+      {
+        "name": "Default count",
+        "description": "Standard numeric badge.",
+        "jsx": "<Badge>1</Badge>",
+        "props": {
+          "children": "1",
+          "tone": "default"
+        }
+      },
+      {
+        "name": "Unread notification count",
+        "description": "Badge with accessible context for an otherwise ambiguous value.",
+        "jsx": "<Badge ariaLabel=\"1 unread notification\">1</Badge>",
+        "props": {
+          "children": "1",
+          "ariaLabel": "1 unread notification"
+        }
+      },
+      {
+        "name": "Brand badge",
+        "description": "Brand-emphasis numeric badge.",
+        "jsx": "<Badge tone=\"brand\">1</Badge>",
+        "props": {
+          "children": "1",
+          "tone": "brand"
+        }
+      },
+      {
+        "name": "Positive delta",
+        "description": "Success tone for a positive score or count change.",
+        "jsx": "<Badge tone=\"success\">+1</Badge>",
+        "props": {
+          "children": "+1",
+          "tone": "success"
+        }
+      },
+      {
+        "name": "Negative delta",
+        "description": "Error tone for a negative score or count change.",
+        "jsx": "<Badge tone=\"error\">-1</Badge>",
+        "props": {
+          "children": "-1",
+          "tone": "error"
+        }
+      },
+      {
+        "name": "Inverse badge on dark surface",
+        "description": "Inverse tone for badges placed on dark or bold surfaces.",
+        "jsx": "<div data-theme=\"dark\"><Badge tone=\"inverse\">1</Badge></div>",
+        "props": {
+          "children": "1",
+          "tone": "inverse"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Long label",
+        "jsx": "<Badge>Overdue approval required</Badge>",
+        "reason": "Badge is for compact numeric values, not long labels."
+      },
+      {
+        "name": "Interactive badge",
+        "jsx": "<Badge onClick={handleClick}>1</Badge>",
+        "reason": "Badge is non-interactive and does not support action behavior."
+      },
+      {
+        "name": "Status text",
+        "jsx": "<Badge>Active</Badge>",
+        "reason": "Use Tag or Label for status/classification text."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "button",
+    "name": "Button",
+    "tier": "atom",
+    "path": "docs/components/atoms/button/button.examples.json",
+    "examples": [
+      {
+        "name": "Default action",
+        "description": "A standard secondary/neutral action.",
+        "jsx": "<Button>Cancel</Button>",
+        "props": {
+          "children": "Cancel"
+        }
+      },
+      {
+        "name": "Primary action",
+        "description": "The main action in a form, dialog, or workflow.",
+        "jsx": "<Button appearance=\"primary\">Save changes</Button>",
+        "props": {
+          "appearance": "primary",
+          "children": "Save changes"
+        }
+      },
+      {
+        "name": "Subtle action",
+        "description": "A low-emphasis action.",
+        "jsx": "<Button appearance=\"subtle\">Preview</Button>",
+        "props": {
+          "appearance": "subtle",
+          "children": "Preview"
+        }
+      },
+      {
+        "name": "Warning action",
+        "description": "A cautionary action.",
+        "jsx": "<Button appearance=\"primary\" tone=\"warning\">Archive matter</Button>",
+        "props": {
+          "appearance": "primary",
+          "tone": "warning",
+          "children": "Archive matter"
+        }
+      },
+      {
+        "name": "Destructive action",
+        "description": "A high-risk or destructive action.",
+        "jsx": "<Button appearance=\"primary\" tone=\"error\">Delete matter</Button>",
+        "props": {
+          "appearance": "primary",
+          "tone": "error",
+          "children": "Delete matter"
+        }
+      },
+      {
+        "name": "Discovery action",
+        "description": "An action that leads to guidance, education, or setup discovery.",
+        "jsx": "<Button appearance=\"primary\" tone=\"discovery\">Explore setup</Button>",
+        "props": {
+          "appearance": "primary",
+          "tone": "discovery",
+          "children": "Explore setup"
+        }
+      },
+      {
+        "name": "Loading submit",
+        "description": "A loading form submit button that preserves its visible label.",
+        "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
+        "props": {
+          "appearance": "primary",
+          "type": "submit",
+          "isLoading": true,
+          "children": "Save matter"
+        }
+      },
+      {
+        "name": "Icon before",
+        "description": "A button with a leading icon.",
+        "jsx": "<Button iconBefore={<CheckIcon />}>Save changes</Button>",
+        "props": {
+          "iconBefore": "CheckIcon",
+          "children": "Save changes"
+        }
+      },
+      {
+        "name": "Icon after",
+        "description": "A button with a trailing icon.",
+        "jsx": "<Button iconAfter={<ArrowRightIcon />}>Continue</Button>",
+        "props": {
+          "iconAfter": "ArrowRightIcon",
+          "children": "Continue"
+        }
+      },
+      {
+        "name": "Full width",
+        "description": "A button that fills its container.",
+        "jsx": "<Button isFullWidth>Continue</Button>",
+        "props": {
+          "isFullWidth": true,
+          "children": "Continue"
+        }
+      },
+      {
+        "name": "Disabled (default appearance)",
+        "description": "A disabled button using native disabled behavior. appearance=\"default\" keeps a visible border (color-border-disabled), matching its own resting bordered look.",
+        "jsx": "<Button disabled>Disabled</Button>",
+        "props": {
+          "disabled": true,
+          "children": "Disabled"
+        }
+      },
+      {
+        "name": "Disabled (primary/subtle appearance)",
+        "description": "appearance=\"primary\" and appearance=\"subtle\" stay borderless when disabled (border-color: transparent), matching their own resting borderless look - applying the same border color used on appearance=\"default\" here would draw a border that was never part of the design.",
+        "jsx": "<Button appearance=\"primary\" disabled>Disabled</Button>",
+        "props": {
+          "appearance": "primary",
+          "disabled": true,
+          "children": "Disabled"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Icon only",
+        "jsx": "<Button iconBefore={<CheckIcon />} />",
+        "reason": "Use IconButton for icon-only actions."
+      },
+      {
+        "name": "Navigation",
+        "jsx": "<Button onClick={() => navigate('/clients')}>Clients</Button>",
+        "reason": "Use LinkButton or Link for navigation-only behavior."
+      },
+      {
+        "name": "Toggle state",
+        "jsx": "<Button aria-pressed=\"true\">Bold</Button>",
+        "reason": "Use ToggleButton for selected/unselected button state."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "checkbox",
+    "name": "Checkbox",
+    "tier": "atom",
+    "path": "docs/components/atoms/checkbox/checkbox.examples.json",
+    "examples": [
+      {
+        "name": "Basic",
+        "description": null,
+        "jsx": "<Checkbox>Receive updates</Checkbox>",
+        "props": {}
+      },
+      {
+        "name": "Checked",
+        "description": null,
+        "jsx": "<Checkbox defaultChecked>Receive updates</Checkbox>",
+        "props": {}
+      },
+      {
+        "name": "Disabled",
+        "description": null,
+        "jsx": "<Checkbox disabled>Receive updates</Checkbox>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "icon-button",
+    "name": "IconButton",
+    "tier": "atom",
+    "path": "docs/components/atoms/icon-button/icon-button.examples.json",
+    "examples": [
+      {
+        "name": "Default tooltip from aria-label",
+        "description": null,
+        "jsx": "<IconButton aria-label='Search'><Icon name='search' /></IconButton>",
+        "props": {}
+      },
+      {
+        "name": "Custom tooltip content",
+        "description": null,
+        "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><Icon name='edit' /></IconButton>",
+        "props": {}
+      },
+      {
+        "name": "External tooltip composition",
+        "description": null,
+        "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "label",
+    "name": "Label",
+    "tier": "atom",
+    "path": "docs/components/atoms/label/label.examples.json",
+    "examples": [
+      {
+        "name": "Default",
+        "description": null,
+        "jsx": "<Label>Draft</Label>",
+        "props": {}
+      },
+      {
+        "name": "Law",
+        "description": null,
+        "jsx": "<Label tone='law'>Estate</Label>",
+        "props": {}
+      },
+      {
+        "name": "Bold",
+        "description": null,
+        "jsx": "<Label appearance='bold'>Approved</Label>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "link",
+    "name": "Link",
+    "tier": "atom",
+    "path": "docs/components/atoms/link/link.examples.json",
+    "examples": [
+      {
+        "name": "Internal",
+        "description": null,
+        "jsx": "<Link href='/clients'>Clients</Link>",
+        "props": {}
+      },
+      {
+        "name": "External",
+        "description": null,
+        "jsx": "<Link href='https://example.com' external>Documentation</Link>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "link-button",
+    "name": "LinkButton",
+    "tier": "atom",
+    "path": "docs/components/atoms/link-button/link-button.examples.json",
+    "examples": [
+      {
+        "name": "Internal navigation",
+        "description": null,
+        "jsx": "<LinkButton href='/clients'>View clients</LinkButton>",
+        "props": {}
+      },
+      {
+        "name": "External navigation",
+        "description": null,
+        "jsx": "<LinkButton href='https://example.com' external>Documentation</LinkButton>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "progress-bar",
+    "name": "ProgressBar",
+    "tier": "atom",
+    "path": "docs/components/atoms/progress-bar/progress-bar.examples.json",
+    "examples": [
+      {
+        "name": "Linear document generation",
+        "description": "Shows determinate progress for a document package.",
+        "jsx": "<ProgressBar value={42} label=\"Generating document package\" />",
+        "props": {}
+      },
+      {
+        "name": "Large linear upload",
+        "description": "Uses the larger track for a prominent upload process.",
+        "jsx": "<ProgressBar value={68} size=\"lg\" label=\"Uploading client files\" />",
+        "props": {}
+      },
+      {
+        "name": "Circular summary",
+        "description": "Uses a compact circular visualization.",
+        "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />",
+        "props": {}
+      },
+      {
+        "name": "Domain-specific value text",
+        "description": "Announces completed items instead of only a percentage.",
+        "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />",
+        "props": {}
+      },
+      {
+        "name": "Complete",
+        "description": "Shows a completed process.",
+        "jsx": "<ProgressBar value={100} label=\"Import complete\" />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "progress-indicator",
+    "name": "ProgressIndicator",
+    "tier": "atom",
+    "path": "docs/components/atoms/progress-indicator/progress-indicator.examples.json",
+    "examples": [
+      {
+        "name": "Client onboarding",
+        "description": "Shows the current position in a five-step onboarding journey.",
+        "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" />",
+        "props": {}
+      },
+      {
+        "name": "Primary account setup",
+        "description": "Uses the brand appearance for a primary setup flow.",
+        "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />",
+        "props": {}
+      },
+      {
+        "name": "Discovery journey",
+        "description": "Uses the discovery appearance for guided assistance.",
+        "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} appearance=\"discovery\" label=\"Guided setup\" />",
+        "props": {}
+      },
+      {
+        "name": "Inverted",
+        "description": "Appears on a dark or bold surface.",
+        "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverted\" label=\"Document setup\" />",
+        "props": {}
+      },
+      {
+        "name": "Custom value text",
+        "description": "Uses domain-specific accessible value language.",
+        "jsx": "<ProgressIndicator currentStep={2} totalSteps={4} label=\"Estate plan setup\" getValueText={(step, total) => `Section ${step} of ${total}`} />",
+        "props": {}
+      },
+      {
+        "name": "Interactive dots",
+        "description": "Allows direct one-based step selection while remaining controlled from outside the component.",
+        "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "radio",
+    "name": "Radio",
+    "tier": "atom",
+    "path": "docs/components/atoms/radio/radio.examples.json",
+    "examples": [
+      {
+        "name": "Standalone radio",
+        "description": "A single labeled radio outside a group.",
+        "jsx": "<Radio label=\"Email\" name=\"contact-method\" value=\"email\" />",
+        "props": {}
+      },
+      {
+        "name": "Label-less table radio",
+        "description": "Row selection where the row content already provides visible context, described instead by aria-label.",
+        "jsx": "<Radio aria-label=\"Select primary matter\" name=\"matter-radio\" value=\"primary\" defaultChecked />",
+        "props": {}
+      },
+      {
+        "name": "Disabled",
+        "description": "A non-interactive option.",
+        "jsx": "<Radio label=\"Overnight\" name=\"delivery-speed\" value=\"overnight\" disabled />",
+        "props": {}
+      },
+      {
+        "name": "Controlled RadioGroup",
+        "description": "Single selection driven by external state via the options API.",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" value={value} onValueChange={setValue} options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }, { value: 'mail', label: 'Mail' }]} />",
+        "props": {}
+      },
+      {
+        "name": "Uncontrolled RadioGroup",
+        "description": "Single selection with an initial value, owned by the native fieldset.",
+        "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />",
+        "props": {}
+      },
+      {
+        "name": "RadioGroup with children composition",
+        "description": "A custom layout of manually-wired Radio instances, used instead of the options API.",
+        "jsx": "<RadioGroup label=\"Status\" name=\"status\" description=\"Grouped manually instead of using the options API\"><Radio label=\"Draft\" name=\"status\" value=\"draft\" defaultChecked /><Radio label=\"In review\" name=\"status\" value=\"in-review\" /><Radio label=\"Final\" name=\"status\" value=\"final\" /></RadioGroup>",
+        "props": {}
+      },
+      {
+        "name": "Horizontal orientation",
+        "description": "Options laid out in a row that wraps rather than overflowing.",
+        "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" orientation=\"horizontal\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />",
+        "props": {}
+      },
+      {
+        "name": "Required RadioGroup",
+        "description": "A required group-level question, with the indicator shown after the legend.",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" required options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+        "props": {}
+      },
+      {
+        "name": "Invalid RadioGroup with error message",
+        "description": "Invalid state paired with a visible, described error rather than color alone.",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" invalid errorMessage=\"Choose one option before continuing.\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+        "props": {}
+      },
+      {
+        "name": "Disabled RadioGroup",
+        "description": "Every generated option is disabled together.",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" disabled defaultValue=\"email\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "slider",
+    "name": "Slider",
+    "tier": "atom",
+    "path": "docs/components/atoms/slider/slider.examples.json",
+    "examples": [
+      {
+        "name": "Single",
+        "description": null,
+        "jsx": "<Slider value={50} />",
+        "props": {}
+      },
+      {
+        "name": "Range",
+        "description": null,
+        "jsx": "<Slider type='slider-range' value={[25,75]} />",
+        "props": {}
+      },
+      {
+        "name": "Centered",
+        "description": null,
+        "jsx": "<Slider type='slider-centered' value={0} />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "spinner",
+    "name": "Spinner",
+    "tier": "atom",
+    "path": "docs/components/atoms/spinner/spinner.examples.json",
+    "examples": [
+      {
+        "name": "Standalone",
+        "description": null,
+        "jsx": "<Spinner />",
+        "props": {}
+      },
+      {
+        "name": "Button",
+        "description": null,
+        "jsx": "<Button isLoading>Save</Button>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "switch",
+    "name": "Switch",
+    "tier": "atom",
+    "path": "docs/components/atoms/switch/switch.examples.json",
+    "examples": [
+      {
+        "name": "Default",
+        "description": null,
+        "jsx": "<Switch>Notifications</Switch>",
+        "props": {}
+      },
+      {
+        "name": "Checked",
+        "description": null,
+        "jsx": "<Switch defaultChecked>Email alerts</Switch>",
+        "props": {}
+      },
+      {
+        "name": "Disabled",
+        "description": null,
+        "jsx": "<Switch disabled>Automatic updates</Switch>",
+        "props": {}
+      },
+      {
+        "name": "Loading",
+        "description": null,
+        "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "tag",
+    "name": "Tag",
+    "tier": "atom",
+    "path": "docs/components/atoms/tag/tag.examples.json",
+    "examples": [
+      {
+        "name": "Static",
+        "description": null,
+        "jsx": "<Tag>Estate</Tag>",
+        "props": {}
+      },
+      {
+        "name": "Linked",
+        "description": null,
+        "jsx": "<Tag href='/clients/1'>Ben Averill</Tag>",
+        "props": {}
+      },
+      {
+        "name": "Removable",
+        "description": null,
+        "jsx": "<Tag onRemove={() => handleRemove('filter')}>Filter</Tag>",
+        "props": {}
+      },
+      {
+        "name": "Linked & Removable",
+        "description": null,
+        "jsx": "<Tag href='/asset/1' onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "toggle-button",
+    "name": "ToggleButton",
+    "tier": "atom",
+    "path": "docs/components/atoms/toggle-button/toggle-button.examples.json",
+    "examples": [
+      {
+        "name": "Default",
+        "description": null,
+        "jsx": "<ToggleButton>Bold</ToggleButton>",
+        "props": {}
+      },
+      {
+        "name": "Selected (tone=default)",
+        "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
+        "jsx": "<ToggleButton isSelected>Bold</ToggleButton>",
+        "props": {}
+      },
+      {
+        "name": "Selected (tone=subtle)",
+        "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
+        "jsx": "<ToggleButton tone=\"subtle\" isSelected>Bold</ToggleButton>",
+        "props": {}
+      },
+      {
+        "name": "With icon",
+        "description": null,
+        "jsx": "<ToggleButton iconBefore={<Icon name='bold'/>}>Bold</ToggleButton>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "toggle-icon-button",
+    "name": "ToggleIconButton",
+    "tier": "atom",
+    "path": "docs/components/atoms/toggle-icon-button/toggle-icon-button.examples.json",
+    "examples": [
+      {
+        "name": "Default",
+        "description": null,
+        "jsx": "<ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
+        "props": {}
+      },
+      {
+        "name": "Selected (tone=default)",
+        "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
+        "jsx": "<ToggleIconButton isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
+        "props": {}
+      },
+      {
+        "name": "Selected (tone=subtle)",
+        "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
+        "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
+        "props": {}
+      },
+      {
+        "name": "With Tooltip",
+        "description": null,
+        "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton></Tooltip>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "tooltip",
+    "name": "Tooltip",
+    "tier": "atom",
+    "path": "docs/components/atoms/tooltip/tooltip.examples.json",
+    "examples": [
+      {
+        "name": "External icon button composition",
+        "description": null,
+        "jsx": "<Tooltip content='Search'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>",
+        "props": {}
+      },
+      {
+        "name": "Disabled explanation",
+        "description": null,
+        "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>",
+        "props": {}
+      },
+      {
+        "name": "Supplemental clarification",
+        "description": null,
+        "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [],
+    "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "breadcrumbs",
+    "name": "Breadcrumbs",
+    "tier": "molecule",
+    "path": "docs/components/molecules/breadcrumbs/breadcrumbs.examples.json",
+    "examples": [
+      {
+        "name": "Two-level trail",
+        "description": "One ancestor link, current page last.",
+        "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account' },\n  ]}\n/>",
+        "props": {
+          "items": [
+            {
+              "label": "Settings",
+              "href": "/settings"
+            },
+            {
+              "label": "Account"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Deep trail",
+        "description": "Several ancestor links.",
+        "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account', href: '/settings/account' },\n    { label: 'Security' },\n  ]}\n/>",
+        "props": {}
+      },
+      {
+        "name": "With a leading icon",
+        "description": "A home icon before the first crumb's label.",
+        "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Home', href: '/', iconBefore: <HomeIcon size=\"sm\" /> },\n    { label: 'Reports', href: '/reports' },\n    { label: 'Q3 Summary' },\n  ]}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Custom accessible name",
+        "description": "Overriding the default 'Breadcrumb' nav label.",
+        "jsx": "<Breadcrumbs\n  ariaLabel=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
+        "props": {
+          "ariaLabel": "You are here"
+        }
+      },
+      {
+        "name": "Single item (current page only)",
+        "description": "A top-level page with no ancestors - renders as plain current-page text, no separator.",
+        "jsx": "<Breadcrumbs items={[{ label: 'Dashboard' }]} />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Current item with an href",
+        "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Settings', href: '/settings' },\n    { label: 'Account', href: '/settings/account' },\n  ]}\n/>",
+        "reason": "Giving the last item an href makes it render as a clickable Link instead of the aria-current=\"page\" current-page marker - omit href on the last item unless it should genuinely be a link."
+      },
+      {
+        "name": "Progress through an unvisited flow",
+        "jsx": "<Breadcrumbs\n  items={[\n    { label: 'Step 1' },\n    { label: 'Step 2' },\n    { label: 'Step 3' },\n  ]}\n/>",
+        "reason": "Breadcrumbs shows a location trail of visited/navigable ancestors, not linear progress through unvisited steps - use Progress Indicator instead."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "button-group",
+    "name": "ButtonGroup",
+    "tier": "molecule",
+    "path": "docs/components/molecules/button-group/button-group.examples.json",
+    "examples": [
+      {
+        "name": "Default horizontal group",
+        "description": "Two related actions in a row.",
+        "jsx": "<ButtonGroup>\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "props": {}
+      },
+      {
+        "name": "Three actions",
+        "description": "A toolbar-style row of independent actions.",
+        "jsx": "<ButtonGroup>\n  <Button size=\"sm\">Button 1</Button>\n  <Button size=\"sm\">Button 2</Button>\n  <Button size=\"sm\">Button 3</Button>\n</ButtonGroup>",
+        "props": {}
+      },
+      {
+        "name": "Vertical orientation",
+        "description": "Stacked actions in a compact layout.",
+        "jsx": "<ButtonGroup orientation=\"vertical\">\n  <Button size=\"sm\">Button 1</Button>\n  <Button size=\"sm\">Button 2</Button>\n</ButtonGroup>",
+        "props": {
+          "orientation": "vertical"
+        }
+      },
+      {
+        "name": "Labelled group",
+        "description": "role=group is added automatically once aria-label is present.",
+        "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "props": {
+          "aria-label": "Document actions"
+        }
+      },
+      {
+        "name": "Mixed Button and IconButton",
+        "description": "IconButton composes into the same group as Button.",
+        "jsx": "<ButtonGroup aria-label=\"Row actions\">\n  <IconButton aria-label=\"Edit\"><EditIcon /></IconButton>\n  <IconButton aria-label=\"Delete\"><DeleteIcon /></IconButton>\n</ButtonGroup>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Single button",
+        "jsx": "<ButtonGroup>\n  <Button>Save</Button>\n</ButtonGroup>",
+        "reason": "Button Group adds no value with only one child; render the Button directly."
+      },
+      {
+        "name": "Segmented/exclusive selection",
+        "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
+        "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "icon-tile",
+    "name": "IconTile",
+    "tier": "molecule",
+    "path": "docs/components/molecules/icon-tile/icon-tile.examples.json",
+    "examples": [
+      {
+        "name": "Default brand tile",
+        "description": "Default tone, appearance, shape, and size.",
+        "jsx": "<IconTile><CheckIcon /></IconTile>",
+        "props": {}
+      },
+      {
+        "name": "Bold brand tile",
+        "description": "Bold appearance for stronger visual weight.",
+        "jsx": "<IconTile appearance=\"bold\"><CheckIcon /></IconTile>",
+        "props": {
+          "appearance": "bold"
+        }
+      },
+      {
+        "name": "Accent hue tile",
+        "description": "A chromatic accent tone for category coding.",
+        "jsx": "<IconTile tone=\"teal\"><StarStarredIcon /></IconTile>",
+        "props": {
+          "tone": "teal"
+        }
+      },
+      {
+        "name": "Round shape",
+        "description": "Fully rounded container, matching a nearby Avatar.",
+        "jsx": "<IconTile shape=\"round\" tone=\"purple\"><StarStarredIcon /></IconTile>",
+        "props": {
+          "shape": "round",
+          "tone": "purple"
+        }
+      },
+      {
+        "name": "Small size in a list item",
+        "description": "A compact tile leading a list row.",
+        "jsx": "<IconTile size=\"sm\" tone=\"green\"><CheckIcon /></IconTile>",
+        "props": {
+          "size": "sm",
+          "tone": "green"
+        }
+      },
+      {
+        "name": "Large size with accessible label",
+        "description": "Tile is the sole carrier of meaning, so decorative is turned off.",
+        "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} ariaLabel=\"Error\"><CheckIcon /></IconTile>",
+        "props": {
+          "size": "lg",
+          "tone": "red",
+          "decorative": false,
+          "ariaLabel": "Error"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Clickable icon tile",
+        "jsx": "<IconTile onClick={handleClick}><CheckIcon /></IconTile>",
+        "reason": "Icon Tile is non-interactive and has no onClick prop; use Icon Button for a clickable icon."
+      },
+      {
+        "name": "Text content",
+        "jsx": "<IconTile>3</IconTile>",
+        "reason": "Icon Tile expects an icon element, not text. Use Badge for a numeric value."
+      },
+      {
+        "name": "Multiple icons",
+        "jsx": "<IconTile><CheckIcon /><StarStarredIcon /></IconTile>",
+        "reason": "Icon Tile supports exactly one icon."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "inline-edit",
+    "name": "InlineEdit",
+    "tier": "molecule",
+    "path": "docs/components/molecules/inline-edit/inline-edit.examples.json",
+    "examples": [
+      {
+        "name": "Basic click-to-edit text value",
+        "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. A subtle TextField is the recommended child for most cases.",
+        "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField appearance=\"subtle\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
+        "props": {}
+      },
+      {
+        "name": "Read-only display (before any interaction)",
+        "description": "Inline Edit always starts read-only - the confirm/cancel buttons only appear once the field is clicked or focused.",
+        "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "props": {
+          "value": "Q3 Planning"
+        }
+      },
+      {
+        "name": "No visible action buttons (Enter/Escape only, once editing)",
+        "description": "actionButtons={false} hides the icon buttons once editing starts; Enter still confirms and Escape still cancels.",
+        "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "props": {
+          "actionButtons": false
+        }
+      },
+      {
+        "name": "Custom accessible names for the action buttons",
+        "description": null,
+        "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "props": {
+          "confirmLabel": "Save title",
+          "cancelLabel": "Discard changes"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Multiple fields in one Inline Edit",
+        "jsx": "<InlineEdit value={value}>\n  <TextField aria-label=\"First name\" />\n  <TextField aria-label=\"Last name\" />\n</InlineEdit>",
+        "reason": "Inline Edit clones exactly one child - use a real form for multiple related fields."
+      },
+      {
+        "name": "Expecting an isEditing prop to show the buttons upfront",
+        "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "reason": "There is no isEditing prop - editing always starts on click/focus of the field itself, never before."
+      },
+      {
+        "name": "Expecting onConfirm to fire on every keystroke",
+        "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "pagination",
+    "name": "Pagination",
+    "tier": "molecule",
+    "path": "docs/components/molecules/pagination/pagination.examples.json",
+    "examples": [
+      {
+        "name": "Small page count (no ellipsis)",
+        "description": "Every page fits within the default sibling/boundary window.",
+        "jsx": "<Pagination currentPage={2} totalPages={5} onPageChange={setPage} />",
+        "props": {
+          "currentPage": 2,
+          "totalPages": 5
+        }
+      },
+      {
+        "name": "Middle of a large range",
+        "description": "Ellipses appear on both sides of the current page.",
+        "jsx": "<Pagination currentPage={10} totalPages={20} onPageChange={setPage} />",
+        "props": {
+          "currentPage": 10,
+          "totalPages": 20
+        }
+      },
+      {
+        "name": "Near the start",
+        "description": "Only the trailing ellipsis appears.",
+        "jsx": "<Pagination currentPage={1} totalPages={20} onPageChange={setPage} />",
+        "props": {
+          "currentPage": 1,
+          "totalPages": 20
+        }
+      },
+      {
+        "name": "Near the end",
+        "description": "Only the leading ellipsis appears.",
+        "jsx": "<Pagination currentPage={20} totalPages={20} onPageChange={setPage} />",
+        "props": {
+          "currentPage": 20,
+          "totalPages": 20
+        }
+      },
+      {
+        "name": "Wider sibling range",
+        "description": "Raising siblingCount shows more pages around the current one, closer to Figma's wide-container sample.",
+        "jsx": "<Pagination currentPage={1} totalPages={20} siblingCount={5} onPageChange={setPage} />",
+        "props": {
+          "currentPage": 1,
+          "totalPages": 20,
+          "siblingCount": 5
+        }
+      },
+      {
+        "name": "Custom accessible labels",
+        "description": "Overriding the default nav/previous/next labels.",
+        "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  ariaLabel=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
+        "props": {
+          "ariaLabel": "Search results pages",
+          "previousLabel": "Previous results",
+          "nextLabel": "Next results"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Single page",
+        "jsx": "<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />",
+        "reason": "Pagination adds navigation overhead with nothing to navigate to - omit it when there's only one page."
+      },
+      {
+        "name": "Infinite scroll content",
+        "jsx": "<Pagination currentPage={page} totalPages={Infinity} onPageChange={setPage} />",
+        "reason": "Pagination expects a known, finite totalPages - use a 'load more' affordance for infinite scroll instead."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "skeleton",
+    "name": "Skeleton",
+    "tier": "molecule",
+    "path": "docs/components/molecules/skeleton/skeleton.examples.json",
+    "examples": [
+      {
+        "name": "Default subtle skeleton",
+        "description": "Default appearance, shape, and sizing (fills its container, one text line tall).",
+        "jsx": "<Skeleton />",
+        "props": {}
+      },
+      {
+        "name": "Default appearance",
+        "description": "More visible fill, for a full-page loading state.",
+        "jsx": "<Skeleton appearance=\"default\" />",
+        "props": {
+          "appearance": "default"
+        }
+      },
+      {
+        "name": "Circle for an avatar",
+        "description": "A circular placeholder sized to match an Avatar.",
+        "jsx": "<Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
+        "props": {
+          "shape": "circle",
+          "style": {
+            "inlineSize": "40px",
+            "blockSize": "40px"
+          }
+        }
+      },
+      {
+        "name": "A paragraph of text lines",
+        "description": "Multiple Skeletons of varying width, composed to sketch a paragraph.",
+        "jsx": "<div style={{ display: 'grid', gap: 'var(--spacing-sm)' }}>\n  <Skeleton />\n  <Skeleton style={{ inlineSize: '90%' }} />\n  <Skeleton style={{ inlineSize: '60%' }} />\n</div>",
+        "props": {}
+      },
+      {
+        "name": "List row with avatar",
+        "description": "A circular avatar placeholder next to two text-line placeholders.",
+        "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
+        "props": {}
+      },
+      {
+        "name": "Labelled for screen readers",
+        "description": "The sole loading indicator on screen, announced via label.",
+        "jsx": "<Skeleton label=\"Loading profile\" />",
+        "props": {
+          "label": "Loading profile"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Clickable skeleton",
+        "jsx": "<Skeleton onClick={handleClick} />",
+        "reason": "Skeleton is non-interactive; it has no interactive behavior and is not meant to receive input."
+      },
+      {
+        "name": "Text content",
+        "jsx": "<Skeleton>Loading...</Skeleton>",
+        "reason": "Skeleton has no children slot - it is the placeholder shape itself, not a text container."
+      },
+      {
+        "name": "Visible loading copy next to a labelled Skeleton",
+        "jsx": "<div>\n  <Skeleton label=\"Loading profile\" />\n  <span>Loading profile...</span>\n</div>",
+        "reason": "The label prop already announces the loading state to assistive technology - duplicating it as visible text is redundant and should instead rely on adjacent context or the label alone."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "text-field",
+    "name": "TextField",
+    "tier": "molecule",
+    "path": "docs/components/molecules/text-field/text-field.examples.json",
+    "examples": [
+      {
+        "name": "Default with placeholder",
+        "description": null,
+        "jsx": "<TextField placeholder=\"Enter your name\" aria-label=\"Name\" />",
+        "props": {
+          "placeholder": "Enter your name"
+        }
+      },
+      {
+        "name": "Paired with a native label",
+        "description": null,
+        "jsx": "<label htmlFor=\"email\">Email</label>\n<TextField id=\"email\" type=\"email\" placeholder=\"you@example.com\" />",
+        "props": {
+          "type": "email"
+        }
+      },
+      {
+        "name": "Subtle appearance (search box)",
+        "description": null,
+        "jsx": "<TextField appearance=\"subtle\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
+        "props": {
+          "appearance": "subtle",
+          "type": "search"
+        }
+      },
+      {
+        "name": "Text prefix (currency)",
+        "description": null,
+        "jsx": "<TextField iconBefore=\"$\" type=\"number\" placeholder=\"0.00\" aria-label=\"Amount\" />",
+        "props": {
+          "iconBefore": "$",
+          "type": "number"
+        }
+      },
+      {
+        "name": "Clearable with a real IconButton action",
+        "description": null,
+        "jsx": "<TextField\n  aria-label=\"Filter\"\n  value={value}\n  onChange={(e) => setValue(e.target.value)}\n  iconAfter={\n    value ? (\n      <IconButton appearance=\"subtle\" shape=\"square\" size=\"xs\" aria-label=\"Clear\" onClick={() => setValue('')}>\n        <CloseIcon />\n      </IconButton>\n    ) : null\n  }\n/>",
+        "props": {}
+      },
+      {
+        "name": "Invalid with an error message",
+        "description": null,
+        "jsx": "<TextField invalid aria-describedby=\"email-error\" defaultValue=\"not-an-email\" />\n<span id=\"email-error\">Enter a valid email address</span>",
+        "props": {
+          "invalid": true
+        }
+      },
+      {
+        "name": "Disabled",
+        "description": null,
+        "jsx": "<TextField disabled defaultValue=\"Cannot be edited\" />",
+        "props": {
+          "disabled": true
+        }
+      },
+      {
+        "name": "Small size, subtle appearance (square bottom corners)",
+        "description": null,
+        "jsx": "<TextField size=\"sm\" appearance=\"subtle\" placeholder=\"Placeholder\" aria-label=\"Small subtle field\" />",
+        "props": {
+          "size": "sm",
+          "appearance": "subtle"
+        }
+      },
+      {
+        "name": "Large size",
+        "description": null,
+        "jsx": "<TextField size=\"lg\" placeholder=\"Large field\" aria-label=\"Large field\" />",
+        "props": {
+          "size": "lg"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "No accessible name",
+        "jsx": "<TextField placeholder=\"Name\" />",
+        "reason": "Placeholder text is not an accessible label - pair with a native label[htmlFor] or add aria-label."
+      },
+      {
+        "name": "Multi-line content",
+        "jsx": "<TextField defaultValue={longParagraphText} />",
+        "reason": "Text Field has no textarea mode - it's for a single line of text."
+      },
+      {
+        "name": "Fixed set of options",
+        "jsx": "<TextField placeholder=\"Choose a country\" />",
+        "reason": "Use Select when the value comes from a fixed set of options instead of free text."
+      },
+      {
+        "name": "Faking a clear button with a bare icon",
+        "jsx": "<TextField iconAfter={<CloseIcon onClick={handleClear} />} />",
+        "reason": "A bare icon with a click handler is not a real, focusable, labeled control. Use a real IconButton (appearance=subtle, shape=square) instead."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  }
+]

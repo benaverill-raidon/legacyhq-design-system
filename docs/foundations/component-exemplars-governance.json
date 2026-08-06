@@ -1,0 +1,89 @@
+{
+  "id": "component-exemplars-governance",
+  "designSystem": "LegacyHQ",
+  "artifact": "component-exemplars-governance",
+  "version": "1.0.0",
+  "status": "stable",
+  "owner": "LegacyHQ Design System",
+  "lastReviewed": "2026-08-06",
+  "appliesTo": ["components", "docs/components/*/*/*.examples.json", "docs/components/exemplars.json"],
+  "overview": {
+    "description": "Every component has a hand-authored <name>.examples.json meant to be a concrete, runnable few-shot reference (correct usage plus anti-patterns) that anchors an agent's generated code to real, verified examples instead of hallucinated training-data patterns. An audit found the corpus split cleanly in two: 12 of 28 files have the full component/examples/antiExamples shape with a props map per example; the other 16 drop antiExamples and props entirely. Three entries were also found to be actively wrong (a literal placeholder, and two using a prop name the real component no longer has) and were fixed directly - see knownFixedDefects below. docs/components/exemplars.json is generated from these files by scripts/generate-component-exemplars.mjs, which normalizes presence (fills in missing antiExamples/props defaults) and validates the result against docs/foundations/component-exemplars.schema.json.",
+    "purpose": "Give an agent runnable, verified usage code for any component in one place, and make the completeness gap (which components have real anti-pattern guidance vs none) a queryable fact instead of something only discoverable by reading 28 differently-shaped files."
+  },
+  "normalizationRules": [
+    {
+      "field": "component",
+      "rule": "Defaults to the PascalCase form of the directory id when the source file omits it (12 of 28 files omit it).",
+      "dataInvented": "none - this is a mechanical derivation from the directory name, not a guess about content."
+    },
+    {
+      "field": "antiExamples",
+      "rule": "Defaults to an empty array when the source file omits it entirely (16 of 28 files).",
+      "dataInvented": "none - an empty array is honest about absence; no anti-pattern is fabricated."
+    },
+    {
+      "field": "examples[].description / examples[].props",
+      "rule": "description defaults to null, props defaults to {} when absent.",
+      "dataInvented": "none - missing sub-fields become null/empty, never a guessed value."
+    },
+    {
+      "field": "antiExamples[].reason",
+      "rule": "Defaults to null when absent.",
+      "dataInvented": "none"
+    }
+  ],
+  "exemplarCompleteness": {
+    "description": "Each registry entry gets a structurally-derived exemplarCompleteness: full | partial | thin. full = every example has a non-empty props map AND at least one antiExample exists. thin = no example has a props map AND no antiExample exists. partial = anything in between.",
+    "purpose": "Surfaces the real 12-vs-16 completeness split as a queryable signal instead of only living in prose a reader might skip.",
+    "knownThinComponents": [
+      "checkbox", "icon-button", "label", "link-button", "link", "slider", "spinner", "switch",
+      "tag", "toggle-button", "toggle-icon-button", "tooltip", "avatar", "progress-bar",
+      "progress-indicator", "radio"
+    ],
+    "resolution": "When a component's examples.json is next substantively touched, add at least one antiExample (a real anti-pattern with a reason, not an invented one) and a props map per example. Same 'migrate when next touched' philosophy as component-api-governance.json's knownViolations and component-registry-governance.json's knownContentGaps - not something to backfill in bulk without real domain review of what's actually wrong for each component."
+  },
+  "knownFixedDefects": [
+    {
+      "component": "Tag",
+      "file": "docs/components/atoms/tag/tag.examples.json",
+      "issue": "Two examples used a literal placeholder `onRemove={...}` - not copy-paste runnable.",
+      "fix": "Replaced with a concrete inline handler (`onRemove={() => handleRemove('filter')}`), matching the corpus's existing convention for self-contained handler examples."
+    },
+    {
+      "component": "Checkbox",
+      "file": "docs/components/atoms/checkbox/checkbox.examples.json",
+      "issue": "Used `<Checkbox isDisabled>` - Checkbox's real prop (checkbox.tsx) is native `disabled`. This taught a prop that doesn't exist on the component.",
+      "fix": "Changed to `<Checkbox disabled>`."
+    },
+    {
+      "component": "Tooltip",
+      "file": "docs/components/atoms/tooltip/tooltip.examples.json",
+      "issue": "One example used `<IconButton ... isDisabled ...>` - IconButton's real prop (icon-button.tsx) is also native `disabled` now.",
+      "fix": "Changed to `<IconButton ... disabled ...>`.",
+      "note": "This is the same isDisabled->disabled migration that component-api-governance.json's knownViolations entry and CLAUDE.md still describe as open drift for Button/IconButton - that governance text is itself stale (the migration already happened in source) and is tracked as a separate fix, not part of this artifact."
+    }
+  ],
+  "qualityChecklist": {
+    "description": "A lightweight bar for authoring a new exemplar entry or completing a thin one - not a scored rubric, proportionate to this repo's scale.",
+    "items": [
+      "Real values only - no `{...}`, `TODO`, or truncation. Every jsx string must be copy-paste runnable.",
+      "At least one antiExample with a concrete reason - what's wrong and why, not just 'don't do this'.",
+      "A props map on every example - the exact prop/value combination the jsx demonstrates.",
+      "Verify every prop name against the component's actual current .tsx/.types.ts source, not against component-api-governance.json or CLAUDE.md prose alone - those can go stale (see the Tooltip/Checkbox fixes above, both caused by exactly this)."
+    ]
+  },
+  "validationApproach": {
+    "tool": "shared hand-rolled validator: scripts/lib/validate-schema.mjs (extracted from the component-metadata work, reused here rather than duplicated)",
+    "supports": ["type", "required", "properties", "items", "enum", "additionalProperties"],
+    "revisitThreshold": "Add a real JSON Schema library (e.g. ajv) only if a schema needs features the mini-interpreter doesn't support (oneOf, $ref, conditional if/then) - not before."
+  },
+  "generation": {
+    "command": "npm run generate:exemplars",
+    "script": "scripts/generate-component-exemplars.mjs",
+    "output": "docs/components/exemplars.json",
+    "committed": true,
+    "wiredIntoValidate": false,
+    "rationale": "Same convention as docs/components/registry.json and packages/ui/src/tokens/generated - committed generated output, regenerated on demand, not auto-run or staleness-checked in CI (matching the existing npm run generate:icons precedent)."
+  }
+}

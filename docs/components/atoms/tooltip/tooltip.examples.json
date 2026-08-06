@@ -6,7 +6,7 @@
     },
     {
       "name": "Disabled explanation",
-      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' isDisabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
+      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
     },
     {
       "name": "Supplemental clarification",

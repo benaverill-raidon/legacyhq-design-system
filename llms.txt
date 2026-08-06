@@ -21,6 +21,12 @@ rules, and the task→file routing table that says which of a component's up to
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.
+- [exemplars.json](docs/components/exemplars.json): generated, normalized
+  cross-component runnable usage examples + anti-patterns for all 28
+  components. Load for a quick, verified code example instead of reading
+  individual `.examples.json` files. See
+  [component-exemplars-governance.json](docs/foundations/component-exemplars-governance.json)
+  for normalization rules and the completeness backlog.
 
 ## Primitives (3)
 

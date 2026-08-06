@@ -21,7 +21,10 @@ docs/
   foundations/token-governance.json   # token architecture rules (see below)
   foundations/component-registry-governance.json  # registry.json normalization rules
   foundations/component-registry.schema.json       # shape of registry.json
-  components/registry.json   # generated, normalized cross-component index (see below)
+  foundations/component-exemplars-governance.json  # exemplars.json normalization rules
+  foundations/component-exemplars.schema.json      # shape of exemplars.json
+  components/registry.json    # generated, normalized cross-component index (see below)
+  components/exemplars.json   # generated, normalized cross-component exemplar index
   components/{primitives,atoms,molecules}/<component>/
     <component>.md             # usage doc: when to use, design intent,
                                 # a11y expectations, implementation constraints
@@ -52,6 +55,7 @@ is ~1360 lines. Match the file(s) to your task shape:
 | Final QA / before `npm run validate` | `-checklist.md` | — |
 | Regenerating a component from scratch | `-prompt.md` | — |
 | Structural query across many components (e.g. "which components support a `tone` prop") | `docs/components/registry.json` | individual `.contract.json` files |
+| Need a runnable usage example for a component | `docs/components/exemplars.json` | individual `.examples.json` (unless you need the full antiExample/props detail it may not carry) |
 
 Full component index: [`llms.txt`](llms.txt). Load
 `docs/foundations/token-governance.json` and
@@ -66,6 +70,14 @@ reliable cross-component structure. See
 `docs/foundations/component-registry-governance.json` for the normalization
 rules and known content gaps (Avatar, Tooltip, IconButton have real missing
 content, not just reshaped data).
+
+`docs/components/exemplars.json` is generated from every component's
+`.examples.json` (`npm run generate:exemplars`) and normalizes presence
+(fills in missing `antiExamples`/`props` defaults, never fabricates values).
+Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — 16
+of 28 components are `thin` (no anti-pattern examples, no per-example props
+map yet). See `docs/foundations/component-exemplars-governance.json` for the
+completeness backlog and the quality bar for filling one in.
 
 ## Token architecture (three tiers — this is load-bearing)
 
@@ -170,6 +182,9 @@ change.)
 - `npm run generate:icons` — icon generation script
 - `npm run generate:registry` — regenerates `docs/components/registry.json`
   from every component's `.contract.json`; re-run when a contract.json
+  changes. Not wired into `npm run validate`/CI, same as `generate:icons`.
+- `npm run generate:exemplars` — regenerates `docs/components/exemplars.json`
+  from every component's `.examples.json`; re-run when an examples.json
   changes. Not wired into `npm run validate`/CI, same as `generate:icons`.
 
 ## Notes

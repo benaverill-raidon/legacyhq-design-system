@@ -10,11 +10,11 @@
     },
     {
       "name": "Removable",
-      "jsx": "<Tag onRemove={...}>Filter</Tag>"
+      "jsx": "<Tag onRemove={() => handleRemove('filter')}>Filter</Tag>"
     },
     {
       "name": "Linked & Removable",
-      "jsx": "<Tag href='/asset/1' onRemove={...}>Vacation Home</Tag>"
+      "jsx": "<Tag href='/asset/1' onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>"
     }
   ]
 }

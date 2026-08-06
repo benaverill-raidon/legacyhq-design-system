@@ -4,6 +4,14 @@
   "status": "specified",
   "purpose": "Show the user current position within a finite sequence of steps.",
   "intent": "Provide a compact representation of relative journey position, with optional direct step selection.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1612:1592",
+    "componentName": "progress-indicator",
+    "variantCount": 8,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Client onboarding",
     "Multi-step account setup",

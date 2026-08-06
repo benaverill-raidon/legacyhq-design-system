@@ -87,7 +87,15 @@
       "Slider",
       "Tag"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1409:134421",
+      "componentName": "focus-ring",
+      "variantCount": 2,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "icon",
@@ -245,7 +253,10 @@
       "Tooltip",
       "Avatar"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "note": "Icon has no single Figma component node, unlike every other component in this design system - it's an asset library of many individual icon glyphs (a Figma page of loose symbols), not one component/variant-set. A direct Figma metadata lookup on the icons library page returned no resolvable node (confirmed 2026-08-06). The real source of truth is packages/ui/src/assets/icons/source/*.svg, generated into packages/ui/src/assets/icons/generated/*.tsx via `npm run generate:icons` - not a Figma node reference."
+    }
   },
   {
     "id": "logo",
@@ -362,7 +373,10 @@
     "relatedComponents": [
       "Icon"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "note": "Logo has no single Figma component node in the same sense as other primitives/atoms - it renders pre-exported SVG assets (packages/ui/src/assets/logos) directly via dangerouslySetInnerHTML, not a live Figma component instance. No node reference is recorded (checked alongside Icon, 2026-08-06); treat the checked-in SVG assets as the source of truth."
+    }
   },
   {
     "id": "avatar",
@@ -449,7 +463,15 @@
     },
     "accessibility": {},
     "relatedComponents": [],
-    "contentCompleteness": "stub"
+    "contentCompleteness": "stub",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1333:143482",
+      "componentName": "avatar",
+      "variantCount": 254,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "badge",
@@ -581,7 +603,15 @@
       "Button",
       "IconButton"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1511:12038",
+      "componentName": "badge",
+      "variantCount": 5,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "button",
@@ -789,7 +819,15 @@
       "Spinner",
       "FocusRing"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1408:7990",
+      "componentName": "button",
+      "variantCount": 176,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "checkbox",
@@ -828,7 +866,15 @@
       "Radio",
       "Switch"
     ],
-    "contentCompleteness": "partial"
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1355:200931",
+      "componentName": "checkbox",
+      "variantCount": 27,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "icon-button",
@@ -905,7 +951,15 @@
       "ToggleIconButton",
       "Spinner"
     ],
-    "contentCompleteness": "partial"
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "3984:88777",
+      "componentName": "icon-button",
+      "variantCount": 184,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "label",
@@ -1004,7 +1058,15 @@
       "Badge",
       "Tag"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1565:8122",
+      "componentName": "label",
+      "variantCount": 32,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "link",
@@ -1096,7 +1158,15 @@
       "LinkButton",
       "Tooltip"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1612:9862",
+      "componentName": "link",
+      "variantCount": 60,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "link-button",
@@ -1149,7 +1219,15 @@
       "Link",
       "IconButton"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "3984:82757",
+      "componentName": "link-button",
+      "variantCount": 200,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "progress-bar",
@@ -1302,7 +1380,27 @@
       "Slider",
       "ProgressIndicator"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "note": "This component's variant prop selects between two separate Figma component sets, not one - each recorded separately below.",
+      "variantComponents": [
+        {
+          "variantValue": "linear",
+          "componentSetNodeId": "3978:81552",
+          "componentName": "progress-bar-linear",
+          "variantCount": 12
+        },
+        {
+          "variantValue": "circular",
+          "componentSetNodeId": "4217:98931",
+          "componentName": "progress-bar-circular",
+          "variantCount": 12
+        }
+      ],
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "progress-indicator",
@@ -1444,7 +1542,15 @@
       "Spinner",
       "Button"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1612:1592",
+      "componentName": "progress-indicator",
+      "variantCount": 8,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "radio",
@@ -1692,7 +1798,26 @@
       "Checkbox",
       "Switch"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "note": "This file documents two components (Radio, RadioGroup) - Figma confirms the same split, recorded separately below.",
+      "subComponents": [
+        {
+          "name": "Radio",
+          "componentSetNodeId": "1355:199560",
+          "componentName": "radio",
+          "variantCount": 18
+        },
+        {
+          "name": "RadioGroup",
+          "componentNodeId": "1355:200060",
+          "componentName": "radio-group"
+        }
+      ],
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "slider",
@@ -1735,7 +1860,31 @@
     "relatedComponents": [
       "Text Field"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "note": "This component's type prop selects between three separate Figma components, not one - each recorded separately below.",
+      "variantComponents": [
+        {
+          "variantValue": "slider",
+          "componentSetNodeId": "3883:23861",
+          "componentName": "slider",
+          "variantCount": 72
+        },
+        {
+          "variantValue": "slider-centered",
+          "componentSetNodeId": "3860:78027",
+          "componentName": "slider-centered"
+        },
+        {
+          "variantValue": "slider-range",
+          "componentSetNodeId": "3860:75046",
+          "componentName": "slider-range"
+        }
+      ],
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "spinner",
@@ -1774,7 +1923,15 @@
       "Button",
       "Progress Indicator"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1409:135757",
+      "componentName": "spinner",
+      "variantCount": 4,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "switch",
@@ -1817,7 +1974,15 @@
       "Checkbox",
       "Radio"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1355:197475",
+      "componentName": "switch",
+      "variantCount": 20,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "tag",
@@ -1875,7 +2040,15 @@
       "Badge",
       "Link"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1698:73567",
+      "componentName": "tag",
+      "variantCount": 208,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "toggle-button",
@@ -1935,7 +2108,15 @@
       "IconButton",
       "ToggleIconButton"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "3860:71354",
+      "componentName": "toggle-button",
+      "variantCount": 48,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "toggle-icon-button",
@@ -1993,7 +2174,15 @@
       "IconButton",
       "Tooltip"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "3984:91378",
+      "componentName": "toggle-icon-button",
+      "variantCount": 96,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "tooltip",
@@ -2049,7 +2238,15 @@
       "ToggleIconButton",
       "Button"
     ],
-    "contentCompleteness": "partial"
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1354:55011",
+      "componentName": "tooltip",
+      "variantCount": 2,
+      "verifiedAt": "2026-08-06"
+    }
   },
   {
     "id": "breadcrumbs",
@@ -2144,7 +2341,51 @@
       "Link",
       "ProgressIndicator"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentNodeId": "2026:746",
+      "componentName": "breadcrumbs",
+      "isVariantSet": false,
+      "note": "A single component (not a variant set) showing 8 repeated breadcrumb-item instances - no size/tone axis to capture.",
+      "itemPartNodeId": "2022:861",
+      "itemPartName": "code-parts / <breadcrumb-item>/default",
+      "itemComponentProperties": {
+        "text": {
+          "type": "TEXT",
+          "value": "Crumb"
+        },
+        "iconBefore": {
+          "type": "BOOLEAN",
+          "value": false
+        },
+        "iconAfter": {
+          "type": "BOOLEAN",
+          "value": false
+        }
+      },
+      "figmaLayoutData": {
+        "rootItemSpacing": 8,
+        "rootItemSpacingToken": "space/100",
+        "itemInternalSpacing": 8,
+        "itemInternalSpacingToken": "space/100",
+        "separatorHiddenOnFirstItem": true,
+        "separatorCharacter": "/",
+        "separatorTypographyToken": "typography/body/md",
+        "separatorColorToken": "color/content/subtle",
+        "linkInstanceProps": {
+          "appearance": "subtle",
+          "size": "md",
+          "state": "default"
+        }
+      },
+      "apiAdaptationNotes": [
+        "Figma's 8-item demo renders every crumb - including the last - as an identical Link instance with no distinct 'current page' treatment. The component deliberately renders the last item in `items` as non-interactive text with aria-current=\"page\" instead, per the WAI-ARIA Breadcrumb Pattern - documented here as an intentional adaptation, not a literal 1:1 reproduction.",
+        "Whether an item is 'current' is derived from the absence of `href`, not a separate isCurrent flag - simplest possible rule, consistent with Link's own required `href`.",
+        "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part."
+      ]
+    }
   },
   {
     "id": "button-group",
@@ -2217,7 +2458,38 @@
       "IconButton",
       "ToggleButton"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1690:7026",
+      "componentSetName": "button-group",
+      "variantCount": 6,
+      "figmaVariantAxes": {
+        "count": [
+          "2",
+          "3",
+          "4"
+        ],
+        "orientation": [
+          "inline",
+          "stacked"
+        ]
+      },
+      "figmaLayoutData": {
+        "itemSpacing": 4,
+        "layoutWrap": "NO_WRAP",
+        "primaryAxisSizingMode": "AUTO",
+        "counterAxisSizingMode": "AUTO",
+        "counterAxisAlignItems": "MIN",
+        "childInstanceExample": "Each child is a real button-atom instance (size=sm, tone=primary), independently rounded (8px corner radius) - no shared/joined border between buttons."
+      },
+      "apiAdaptationNotes": [
+        "Figma's `count` (2/3/4) variant axis is not a real prop - it only demonstrates the pattern with different numbers of example buttons. The component accepts any number of children.",
+        "Figma's `inline`/`stacked` orientation values were renamed to `horizontal`/`vertical` to match this system's existing RadioGroup.orientation vocabulary.",
+        "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention."
+      ]
+    }
   },
   {
     "id": "icon-tile",
@@ -2468,7 +2740,59 @@
       "Badge",
       "Tag"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1555:3436",
+      "componentSetName": "icon-tile",
+      "variantCount": 200,
+      "figmaVariantAxes": {
+        "size": [
+          "xxs (16px)",
+          "xs (24px)",
+          "sm (32px)",
+          "md (40px)",
+          "lg (48px)"
+        ],
+        "shape": [
+          "square",
+          "circle"
+        ],
+        "appearance": [
+          "red",
+          "redBold",
+          "orange",
+          "orangeBold",
+          "yellow",
+          "yellowBold",
+          "green",
+          "greenBold",
+          "teal",
+          "tealBold",
+          "blue",
+          "blueBold",
+          "purple",
+          "purpleBold",
+          "magenta",
+          "magentaBold",
+          "gray",
+          "grayBold",
+          "brand",
+          "brandBold"
+        ]
+      },
+      "figmaIconProperty": {
+        "name": "icon",
+        "type": "INSTANCE_SWAP",
+        "note": "Exposed as a component property, not a Figma slot (slots array was empty)."
+      },
+      "apiAdaptationNotes": [
+        "Figma's flattened 20-value `appearance` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
+        "Figma's `circle` shape value was renamed to `round` to match Icon Button's existing `shape` prop naming (`square` | `round`).",
+        "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
+      ]
+    }
   },
   {
     "id": "inline-edit",
@@ -2571,7 +2895,52 @@
       "IconButton",
       "ButtonGroup"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2067:94618",
+      "componentSetName": "inline-edit",
+      "variantCount": 2,
+      "figmaVariantAxes": {
+        "state": [
+          "default",
+          "edit"
+        ]
+      },
+      "figmaComponentProps": {
+        "slot": {
+          "type": "SLOT",
+          "preferredValues": [
+            "code-parts/<field>",
+            "text-field",
+            "select",
+            "time-picker",
+            "date-picker",
+            "date-time-picker"
+          ]
+        },
+        "actionButtons": {
+          "type": "BOOLEAN",
+          "defaultValue": true
+        }
+      },
+      "figmaLayoutData": {
+        "itemSpacing": 4,
+        "rootFillOpacity": 0,
+        "counterAxisAlignItems": "CENTER",
+        "layoutSizingHorizontal": "FILL",
+        "actionButtonGroup": "size=sm, shape=square, tone=default icon-buttons, cancel/close first then confirm/check, confirmed via screenshot of the state=edit variant"
+      },
+      "apiAdaptationNotes": [
+        "Figma's 'state' axis (default/edit) is not implemented as a state or isEditing prop at all - editing state and the in-progress draft are owned entirely inside the component. Two earlier passes exposed isEditing externally (first fully controlled by the parent, then still controlled but toggleable); both were reverted after explicit design feedback that no real use case shows the confirm/cancel buttons before the field has been interacted with - editing must always start on click/focus.",
+        "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
+        "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
+        "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
+        "children is expected to be a single controlled input-like element (TextField today, typically appearance=subtle so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
+        "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
+      ]
+    }
   },
   {
     "id": "pagination",
@@ -2701,7 +3070,28 @@
       "IconButton",
       "ProgressIndicator"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentNodeId": "2152:14872",
+      "componentName": "pagination",
+      "isVariantSet": false,
+      "note": "A single component (not a variant set), 512x32, demonstrating currentPage=1 of totalPages=20.",
+      "structure": {
+        "navigatorPartNodeId": "4472:372771",
+        "navigatorWraps": "icon-button (shape=square, size=sm, tone=subtle) with chevron_left/chevron_right",
+        "pagePartWraps": "toggle-button (size=sm (32), tone=subtle when unselected, isSelected true/false)",
+        "ellipsisPartNodeId": "2152:14771",
+        "ellipsisIsNonInteractive": true,
+        "ellipsisNote": "Plain '...' text at color/content/subtle, no button wrapper - confirmed from the actual node tree, despite the component-search metadata describing it as a subtle Button."
+      },
+      "apiAdaptationNotes": [
+        "Figma's one demo (currentPage=1, totalPages=20) shows 12 consecutive pages before collapsing to an ellipsis + page 20 - a width-fitting demo, not a literal algorithm. The component instead implements the standard sibling+boundary-count windowing algorithm (getPaginationRange), which with default siblingCount=1/boundaryCount=1 renders '1 2 … 20' for the same inputs. A consumer can raise siblingCount to get a wider range closer to Figma's sample.",
+        "Figma's per-item VARIANT prop name 'tone' on both toggle-button and icon-button instances maps to this codebase's existing ToggleButtonTone/IconButtonAppearance prop values ('subtle'), not a new prop Pagination needs to invent.",
+        "aria-current=\"page\" is added on top of ToggleButton's own isSelected/aria-pressed, since ToggleButton alone has no concept of 'current page in a sequence'."
+      ]
+    }
   },
   {
     "id": "skeleton",
@@ -2810,6 +3200,24 @@
       "ProgressBar"
     ],
     "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1565:3291",
+      "componentSetName": "skeleton",
+      "variantCount": 2,
+      "figmaVariantAxes": {
+        "appearance": [
+          "default",
+          "subtle"
+        ]
+      },
+      "figmaDefaultVariant": "subtle",
+      "apiAdaptationNotes": [
+        "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `circle`, following Icon Tile's shape-prop convention) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
+        "Figma's prototype has an AFTER_TIMEOUT reaction smart-animating between the `default` and `subtle` variants every 1.5s as a way to preview a pulse effect inside Figma - the component instead implements the pulse as a self-contained CSS opacity animation on a single variant, so it animates on its own regardless of which `appearance` is selected."
+      ]
+    },
     "sizingDetail": {
       "defaultInlineSize": "100% (fills container)",
       "defaultBlockSize": "--size-250 (20px, one text line)",
@@ -2973,6 +3381,98 @@
       "Icon Button",
       "Button"
     ],
-    "contentCompleteness": "full"
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1690:14129",
+      "componentSetName": "text-field",
+      "variantCount": 42,
+      "figmaVariantAxes": {
+        "size": [
+          "lg",
+          "md",
+          "sm"
+        ],
+        "tone": [
+          "standard",
+          "subtle"
+        ],
+        "state": [
+          "default",
+          "hover",
+          "focus",
+          "typing",
+          "filled"
+        ],
+        "isDisabled": [
+          "false",
+          "true"
+        ],
+        "isInvalid": [
+          "false",
+          "true"
+        ]
+      },
+      "figmaComponentProps": {
+        "placeholderText": {
+          "type": "TEXT",
+          "defaultValue": "Placeholder"
+        },
+        "value": {
+          "type": "TEXT",
+          "defaultValue": "Value"
+        },
+        "elemBeforeInput": {
+          "type": "BOOLEAN",
+          "defaultValue": false
+        },
+        "elemAfterInput": {
+          "type": "BOOLEAN",
+          "defaultValue": false
+        },
+        "slot <elemAfterInput>": {
+          "type": "INSTANCE_SWAP"
+        },
+        "showCaret": {
+          "type": "BOOLEAN",
+          "defaultValue": true,
+          "note": "Figma mockup-only, not a real prop."
+        },
+        "placeholder": {
+          "type": "BOOLEAN",
+          "defaultValue": true,
+          "note": "Figma mockup-only toggle between placeholder/value text, not a real prop."
+        }
+      },
+      "elemBeforeInputComponent": {
+        "type": [
+          "icon",
+          "text"
+        ],
+        "note": "Separate Figma component for the leading slot. Never interactive. The text case (e.g. a '$' currency prefix) is bound to fixed body-lg typography at every field size."
+      },
+      "elemAfterInputComponent": {
+        "type": [
+          "icon-button",
+          "button"
+        ],
+        "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square."
+      },
+      "apiAdaptationNotes": [
+        "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focused+empty (:focus-within + :placeholder-shown), typing=focused+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
+        "Figma's 'tone' axis (standard/subtle) is renamed to 'appearance' (default/subtle) - a pure visual-weight distinction, matching this system's existing appearance vocabulary (see Button) rather than the semantic-meaning 'tone' word.",
+        "isInvalid renders with strokeWeight=2 even when not focused, confirmed directly from node data - invalid's thicker border is not a focus-only effect.",
+        "Figma's literal focus treatment thickens the frame's own border 1px->2px and swaps its color to --color-border-focused. Focus/typing replaces the resting border's color directly - the same pattern invalid already uses - rather than adding an outline ring around it, per explicit design feedback. Border width does not literally change to 2px, though: an earlier pass changed the real border-width on appearance=default's focus AND invalid, matching Figma directly, but that shifts the content box (and the placeholder/value text and typing caret) on every side, reported directly against the component from a side-by-side screenshot - both now paint the extra pixel via box-shadow: inset 0 0 0 1px <color> instead, keeping border-width a constant 1px in the box model with zero layout impact.",
+        "Hover is suppressed once the field is focused/typing (:focus-within, or the pinned data-force-state='focus' reference) - hover should only ever be visible on an inactive field, per explicit design feedback.",
+        "showCaret and placeholder (BOOLEAN) component properties exist only to drive Figma's own mockup and have no code equivalent - a real input shows its own caret and switches placeholder/value automatically.",
+        "appearance=subtle's bottom corners are always square (border-bottom-{left,right}-radius: 0), confirmed directly from Figma's per-corner radius data on the subtle variants - only the top corners share appearance=default's radius.",
+        "appearance=subtle rests at the same 1px bottom border-width appearance=default uses at rest, per explicit design feedback (an earlier pass reserved a constant 2px transparent border specifically to avoid a layout shift; that reservation was reverted). Reverting it reintroduced the shift a real border-width change causes (the vertically-centered text visibly nudges by a pixel), so focus/invalid on appearance=subtle now paint the thicker look via box-shadow (inset 0 -1px 0 0 <color>) instead, keeping border-bottom-width a constant 1px in the box model at every state - zero layout impact. appearance.default's own invalid/focus still uses a real border-width change (a whole-box change on all four sides is a much smaller relative shift there), so this technique is specific to appearance=subtle.",
+        "`.root[data-invalid='true']` sets the border-width shorthand (all four sides) to 2px; `.appearance_subtle[data-invalid='true']` overrides border-top/right/left-width back to 0 and must also explicitly reset border-bottom-width back to 1px, or that side silently inherits the shorthand's leftover 2px and reintroduces the same text shift.",
+        "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
+        "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
+        "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables."
+      ]
+    }
   }
 ]

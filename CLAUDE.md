@@ -23,6 +23,7 @@ docs/
   foundations/component-registry.schema.json       # shape of registry.json
   foundations/component-exemplars-governance.json  # exemplars.json normalization rules
   foundations/component-exemplars.schema.json      # shape of exemplars.json
+  foundations/design-code-mapping-governance.json  # figmaSource shapes + verification method
   components/registry.json    # generated, normalized cross-component index (see below)
   components/exemplars.json   # generated, normalized cross-component exemplar index
   components/{primitives,atoms,molecules}/<component>/
@@ -55,6 +56,7 @@ is ~1360 lines. Match the file(s) to your task shape:
 | Final QA / before `npm run validate` | `-checklist.md` | — |
 | Regenerating a component from scratch | `-prompt.md` | — |
 | Structural query across many components (e.g. "which components support a `tone` prop") | `docs/components/registry.json` | individual `.contract.json` files |
+| Trace a component back to its Figma source | `figmaSource` in the component's `.contract.json` or `registry.json` | — |
 | Need a runnable usage example for a component | `docs/components/exemplars.json` | individual `.examples.json` (unless you need the full antiExample/props detail it may not carry) |
 
 Full component index: [`llms.txt`](llms.txt). Load
@@ -78,6 +80,16 @@ Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — 16
 of 28 components are `thin` (no anti-pattern examples, no per-example props
 map yet). See `docs/foundations/component-exemplars-governance.json` for the
 completeness backlog and the quality bar for filling one in.
+
+Every component's `.contract.json` carries a `figmaSource` block linking it
+to its real Figma component (fileKey `M0eINB6n1BfrXu7ntYqb1i`, "Components
+v1.0.0") — verified live against Figma, not invented. `registry.json` passes
+this through unchanged. See
+`docs/foundations/design-code-mapping-governance.json` for the four
+`figmaSource` shapes (simple/multi-variant/sub-component/no-node-exception),
+why Figma verification can't be enforced in CI, and the depth backlog (new
+entries are pointer-level; the 7 original molecule entries have deeper
+design-deviation notes).
 
 ## Token architecture (three tiers — this is load-bearing)
 

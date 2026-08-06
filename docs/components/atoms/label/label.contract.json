@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Display short metadata.",
   "intent": "Compact semantic annotation.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1565:8122",
+    "componentName": "label",
+    "variantCount": 32,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Status",
     "Category",

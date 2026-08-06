@@ -4,6 +4,30 @@
   "status": "stable",
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "note": "This component's type prop selects between three separate Figma components, not one - each recorded separately below.",
+    "variantComponents": [
+      {
+        "variantValue": "slider",
+        "componentSetNodeId": "3883:23861",
+        "componentName": "slider",
+        "variantCount": 72
+      },
+      {
+        "variantValue": "slider-centered",
+        "componentSetNodeId": "3860:78027",
+        "componentName": "slider-centered"
+      },
+      {
+        "variantValue": "slider-range",
+        "componentSetNodeId": "3860:75046",
+        "componentName": "slider-range"
+      }
+    ],
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Single",
     "Range",

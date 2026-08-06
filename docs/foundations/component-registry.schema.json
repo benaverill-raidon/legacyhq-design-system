@@ -77,7 +77,11 @@
       "tokens": { "type": "object" },
       "accessibility": { "type": "object" },
       "relatedComponents": { "type": "array", "items": { "type": "string" } },
-      "contentCompleteness": { "type": "string", "enum": ["full", "partial", "stub"] }
+      "contentCompleteness": { "type": "string", "enum": ["full", "partial", "stub"] },
+      "figmaSource": {
+        "type": "object",
+        "description": "Passthrough, not schema-enforced - deliberately supports several shapes (single node, multi-variant-node, sub-component, or a documented no-node exception). See docs/foundations/design-code-mapping-governance.json. Nullable for components with no Figma mapping recorded yet."
+      }
     }
   }
 }

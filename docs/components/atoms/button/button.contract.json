@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Trigger a user-initiated action.",
   "intent": "Provide a consistent native action control with separate visual emphasis and semantic tone.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1408:7990",
+    "componentName": "button",
+    "variantCount": 176,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "submit a form",
     "save changes",

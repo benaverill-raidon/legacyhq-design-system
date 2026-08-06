@@ -13,6 +13,9 @@
     "index": "index.ts",
     "assets": "packages/ui/src/assets/logos (logoMarkSvg, logoWordmarkSvg, logoFullSvg)"
   },
+  "figmaSource": {
+    "note": "Logo has no single Figma component node in the same sense as other primitives/atoms - it renders pre-exported SVG assets (packages/ui/src/assets/logos) directly via dangerouslySetInnerHTML, not a live Figma component instance. No node reference is recorded (checked alongside Icon, 2026-08-06); treat the checked-in SVG assets as the source of truth."
+  },
   "useCases": [
     "Application headers",
     "Authentication screens",

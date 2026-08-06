@@ -4,6 +4,14 @@
   "status": "stable",
   "purpose": "Navigation styled as a button.",
   "intent": "Combine anchor semantics with Button visuals.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "3984:82757",
+    "componentName": "link-button",
+    "variantCount": 200,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Primary navigation",
     "External links",

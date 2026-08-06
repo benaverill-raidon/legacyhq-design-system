@@ -4,6 +4,26 @@
   "status": "specified",
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "note": "This component's variant prop selects between two separate Figma component sets, not one - each recorded separately below.",
+    "variantComponents": [
+      {
+        "variantValue": "linear",
+        "componentSetNodeId": "3978:81552",
+        "componentName": "progress-bar-linear",
+        "variantCount": 12
+      },
+      {
+        "variantValue": "circular",
+        "componentSetNodeId": "4217:98931",
+        "componentName": "progress-bar-circular",
+        "variantCount": 12
+      }
+    ],
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "Document generation",
     "File upload",

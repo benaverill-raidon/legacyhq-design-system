@@ -212,6 +212,10 @@ function normalizeComponent({ id, tier, raw, relPath }) {
     accessibility: raw.accessibility ?? {},
     relatedComponents: raw.relatedComponents ?? [],
     contentCompleteness: computeContentCompleteness(raw),
+    // Passthrough, not normalized - deliberately supports several shapes (single node,
+    // multi-variant-node, sub-component, or a documented no-node exception like Icon/Logo).
+    // See docs/foundations/design-code-mapping-governance.json.
+    figmaSource: raw.figmaSource ?? null,
   };
 
   // Skeleton-style free-size components use a singular `sizing` object instead of a `sizes`

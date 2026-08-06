@@ -13,6 +13,14 @@
     "tests": "Badge.test.tsx",
     "index": "index.ts"
   },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1511:12038",
+    "componentName": "badge",
+    "variantCount": 5,
+    "verifiedAt": "2026-08-06"
+  },
   "useCases": [
     "notification counts",
     "small totals",

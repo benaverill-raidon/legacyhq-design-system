@@ -35,7 +35,11 @@ the implementation file, PascalCase for stories/tests).
 
 ## Token architecture (three tiers — this is load-bearing)
 
-From `docs/foundations/token-governance.json`:
+From `docs/foundations/token-governance.json`. The "components must never
+consume primitives directly" / "no raw values" rules below are enforced
+mechanically by `npm run lint:css` (stylelint), not just by convention or
+review — see the `enforcement` block in that file and the Commands section
+below.
 
 1. **Primitive** — raw values only, no intent. `color.blue.500`,
    `spacing.4`. **Components must never consume these directly.**
@@ -106,9 +110,16 @@ Check that file before introducing a new prop name pattern.
 ## Commands
 
 - `npm run validate` — the one command to run after touching a component;
-  runs `typecheck`, then `lint`, then `test`. Run this before considering a
-  change done. Also runs in CI (`.github/workflows/validate.yml`) on every
-  push/PR.
+  runs `typecheck`, then `lint`, then `lint:css`, then `test`. Run this before
+  considering a change done. Also runs in CI (`.github/workflows/validate.yml`)
+  on every push/PR.
+- `npm run lint:css` — stylelint over `packages/ui/src/components/**/*.module.css`.
+  Enforces the token architecture mechanically: raw values for color,
+  typography, radius, and spacing properties fail the build instead of relying
+  on review to catch them. Config lives in `.stylelintrc.json`; the policy
+  (what's gated, what's intentionally excluded, and how to use the escape
+  hatch) is documented in `docs/foundations/token-governance.json`'s
+  `enforcement` block.
 - `npm run storybook` — dev Storybook on port 6006
 - `npm test` — Vitest (filter to one component with `npm test -- <name>`,
   e.g. `npm test -- button`)

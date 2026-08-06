@@ -200,7 +200,7 @@ export const Content: Story = {
       <div style={cardStyle}>
         {sectionHeading('Custom value text overrides the announced percentage')}
         <p style={captionStyle}>
-          <code>getValueText</code> replaces the default "N%" announcement with domain-specific
+          <code>getValueText</code> replaces the default &quot;N%&quot; announcement with domain-specific
           wording, while the visible fill still reflects the raw <code>value</code>.
         </p>
         <div style={linearFrameStyle}>

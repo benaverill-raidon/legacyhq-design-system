@@ -3,12 +3,8 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../button';
 import { ProgressIndicator } from './progress-indicator';
-import type {
-  ProgressIndicatorAppearance,
-  ProgressIndicatorSize,
-} from './progress-indicator.types';
+import type { ProgressIndicatorSize } from './progress-indicator.types';
 
-const appearances: ProgressIndicatorAppearance[] = ['default', 'primary', 'discovery'];
 const sizes: ProgressIndicatorSize[] = ['sm', 'md'];
 const totals = [3, 5, 8];
 

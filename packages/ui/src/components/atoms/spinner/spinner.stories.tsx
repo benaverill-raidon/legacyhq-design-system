@@ -139,7 +139,7 @@ export const Content: Story = {
         </div>
         <div style={cardStyle}>
           <strong>Accessible loading status</strong>
-          <span style={captionStyle}><code>label</code> announces the status when there's no adjacent visible text.</span>
+          <span style={captionStyle}><code>label</code> announces the status when there&apos;s no adjacent visible text.</span>
           <Spinner label="Loading matters" />
         </div>
       </Group>
@@ -188,7 +188,7 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Color always inherits from context</h3>
         <p style={captionStyle}>
           Spinner has no color of its own - it takes whatever <code>color</code> is in effect where
-          it's rendered, the same way a Button's loading Spinner picks up that instance's own
+          it&apos;s rendered, the same way a Button&apos;s loading Spinner picks up that instance&apos;s own
           appearance/tone color.
         </p>
         <div style={row}>

@@ -28,7 +28,7 @@ export interface SliderProps
   onValueChange?: (value: number, event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface SliderCenteredProps extends SliderProps {}
+export type SliderCenteredProps = SliderProps;
 
 export interface SliderRangeProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>,

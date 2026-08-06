@@ -368,12 +368,12 @@ export const EdgeCases: Story = {
         {sectionHeading('Disabled keeps its href')}
         <p style={captionStyle}>
           Unlike a native <code>button</code>, an anchor has no <code>disabled</code> attribute.
-          LinkButton simulates it with <code>aria-disabled</code>, <code>tabindex="-1"</code>, and a
+          LinkButton simulates it with <code>aria-disabled</code>, <code>tabindex=&quot;-1&quot;</code>, and a
           suppressed click handler - the <code>href</code> is still present in the DOM, so anything
           that reads raw anchor markup rather than respecting ARIA state could still navigate.
         </p>
         <LinkButton href="/clients" isDisabled>
-          Disabled, but href is still "/clients"
+          Disabled, but href is still &quot;/clients&quot;
         </LinkButton>
       </section>
 

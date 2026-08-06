@@ -1,0 +1,2978 @@
+[
+  {
+    "id": "focus-ring",
+    "name": "FocusRing",
+    "tier": "primitive",
+    "category": "primitive",
+    "status": "stable",
+    "path": "docs/components/primitives/focus-ring/focus-ring.contract.json",
+    "anatomy": [
+      {
+        "name": "wrapped element",
+        "description": "The single focusable element the focus classes are applied to. FocusRing has no DOM node of its own - it clones its child."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "The single focusable element to clone and merge focus classes onto."
+      },
+      "borderWidth": {
+        "type": "FocusRingBorderWidth",
+        "required": false,
+        "default": "default",
+        "description": "Outline width - compact for small/dense controls.",
+        "enum": [
+          "default",
+          "compact"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Suppresses the outline entirely - use only when the wrapped control is itself disabled."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the merged class list."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "borderWidth": [
+        "default",
+        "compact"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "outline": "--color-border-focused"
+      },
+      "borderWidth": {
+        "default": "--border-width-md",
+        "compact": "--border-width-sm"
+      },
+      "offset": {
+        "value": "2px",
+        "note": "Not yet backed by a dedicated token - see Future Enhancements."
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "focusVisibleOnly": true,
+      "requirements": [
+        "Only ever appears on :focus-visible, never on plain mouse :hover or :focus.",
+        "Does not make a non-focusable element focusable - the child must already be a real focusable element.",
+        "Does not add ARIA roles or labels - the wrapped element remains responsible for its own accessible name/role/value."
+      ]
+    },
+    "relatedComponents": [
+      "Button",
+      "IconButton",
+      "Link",
+      "Checkbox",
+      "Radio",
+      "Switch",
+      "Slider",
+      "Tag"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "icon",
+    "name": "Icon",
+    "tier": "primitive",
+    "category": "primitive",
+    "status": "stable",
+    "path": "docs/components/primitives/icon/icon.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Sets the icon's container size, spacing box, and color; carries data-size/data-spacing/data-color for downstream CSS overrides."
+      },
+      {
+        "name": "svg",
+        "description": "The glyph itself - fill=\"currentColor\", focusable=\"false\"."
+      },
+      {
+        "name": "title",
+        "description": "Rendered only when decorative is false and title is provided; referenced via aria-labelledby."
+      }
+    ],
+    "props": {
+      "size": {
+        "type": "IconSize",
+        "required": false,
+        "default": "md",
+        "description": "Visual glyph size.",
+        "enum": [
+          "sm",
+          "md"
+        ]
+      },
+      "spacing": {
+        "type": "IconSpacing",
+        "required": false,
+        "default": "none",
+        "description": "Hit-box/container padding around the glyph, independent of its visual size.",
+        "enum": [
+          "none",
+          "spacious"
+        ]
+      },
+      "color": {
+        "type": "IconColor",
+        "required": false,
+        "default": "default",
+        "description": "Semantic content color.",
+        "enum": [
+          "default",
+          "subtle",
+          "inverse",
+          "brand",
+          "success",
+          "warning",
+          "error",
+          "information",
+          "disabled"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name, used only when decorative is false."
+      },
+      "decorative": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "When true, aria-hidden with no role. When false, role=img with title as the accessible name (via aria-labelledby)."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root's class list."
+      },
+      "testId": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Sets data-testid on the root."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [],
+    "variants": {
+      "size": [
+        "sm",
+        "md"
+      ],
+      "spacing": [
+        "none",
+        "spacious"
+      ],
+      "color": [
+        "default",
+        "subtle",
+        "inverse",
+        "brand",
+        "success",
+        "warning",
+        "error",
+        "information",
+        "disabled"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "size": {
+        "sm": "--size-icon-sm",
+        "md": "--size-icon-md",
+        "spacious-container": "--size-300"
+      },
+      "color": {
+        "default": "--color-content-default",
+        "subtle": "--color-content-subtle",
+        "inverse": "--color-content-inverse",
+        "brand": "--color-content-brand-primary-default",
+        "success": "--color-content-success",
+        "warning": "--color-content-warning",
+        "error": "--color-content-error",
+        "information": "--color-content-information",
+        "disabled": "--color-content-disabled"
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "decorative": {
+        "supported": true,
+        "prop": "decorative",
+        "default": true,
+        "whenTrue": "aria-hidden=true on the svg, no role",
+        "whenFalse": "role=img on the svg, aria-labelledby pointing at an internal <title> built from the title prop"
+      },
+      "requirements": [
+        "Default to decorative unless the icon is the sole carrier of meaning.",
+        "Provide title when decorative is false.",
+        "Do not add click handlers or make icons focusable - interactive behavior belongs to the parent (Button, Icon Button, Link).",
+        "Do not rely on an icon alone for critical meaning without an accessible name."
+      ]
+    },
+    "relatedComponents": [
+      "Button",
+      "IconButton",
+      "Tag",
+      "Checkbox",
+      "Radio",
+      "Tooltip",
+      "Avatar"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "logo",
+    "name": "Logo",
+    "tier": "primitive",
+    "category": "primitive",
+    "status": "stable",
+    "path": "docs/components/primitives/logo/logo.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Renders the selected logo SVG asset directly; carries data-logo-type/data-logo-size."
+      }
+    ],
+    "props": {
+      "type": {
+        "type": "LogoType",
+        "required": false,
+        "default": "full",
+        "description": "Which lockup to render.",
+        "enum": [
+          "mark",
+          "wordmark",
+          "full"
+        ]
+      },
+      "size": {
+        "type": "LogoSize",
+        "required": false,
+        "default": "md",
+        "description": "Rendered size.",
+        "enum": [
+          "xxs",
+          "xs",
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "title": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name (and native tooltip via the title attribute); falls back to \"LegacyHQ\" when informative and no ariaLabel is given."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Overrides the accessible name; takes precedence over title."
+      },
+      "decorative": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "When true, aria-hidden with no role. When false (default), role=img with the accessible name."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root's class list."
+      }
+    },
+    "sizes": [
+      "xxs",
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "type": [
+        "mark",
+        "wordmark",
+        "full"
+      ],
+      "size": [
+        "xxs",
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "size": {
+        "xxs": "16px",
+        "xs": "24px",
+        "sm": "32px",
+        "md": "40px",
+        "lg": "48px"
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "decorative": {
+        "supported": true,
+        "prop": "decorative",
+        "default": false,
+        "whenTrue": "aria-hidden=true, no role - use when adjacent content already provides the same accessible name (e.g. a parent link with its own aria-label)",
+        "whenFalse": "role=img with an accessible name from ariaLabel, then title, then \"LegacyHQ\""
+      },
+      "requirements": [
+        "Default is informative (decorative=false), unlike Icon - a logo is usually the accessible name for a link back to home.",
+        "Do not double up the accessible name - if the parent link already has aria-label, mark the Logo decorative.",
+        "Do not add roles beyond role=img."
+      ]
+    },
+    "relatedComponents": [
+      "Icon"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "avatar",
+    "name": "Avatar",
+    "tier": "atom",
+    "category": null,
+    "status": "undocumented",
+    "path": "docs/components/atoms/avatar/avatar.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Owns size, data attributes, focus ring classes, and accessibility attributes."
+      },
+      {
+        "name": "surface",
+        "description": "Painted circular surface that owns radius, the full-size light or dark fallback SVG, and selected or interaction overlays."
+      },
+      {
+        "name": "badgeContainer",
+        "description": "Dedicated placement container for presence or status."
+      },
+      {
+        "name": "badgeIcon",
+        "description": "The actual presence dot or status icon inside the badge container, including the inverse border."
+      }
+    ],
+    "props": {
+      "presence": {
+        "type": null,
+        "required": false,
+        "default": null,
+        "description": null,
+        "enum": [
+          "none",
+          "online",
+          "offline",
+          "busy"
+        ]
+      },
+      "status": {
+        "type": null,
+        "required": false,
+        "default": null,
+        "description": null,
+        "enum": [
+          "none",
+          "accepted",
+          "declined"
+        ]
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "component": [
+        "--size-avatar-xxs",
+        "--size-avatar-xs",
+        "--size-avatar-sm",
+        "--size-avatar-md",
+        "--size-avatar-lg",
+        "--size-avatar-xl",
+        "--component-avatar-badge-size-xxs",
+        "--component-avatar-badge-size-xs",
+        "--component-avatar-badge-size-sm",
+        "--component-avatar-badge-size-md",
+        "--component-avatar-badge-size-lg",
+        "--component-avatar-badge-size-xl",
+        "--component-avatar-badge-icon-size-xxs",
+        "--component-avatar-badge-icon-size-xs",
+        "--component-avatar-badge-icon-size-sm",
+        "--component-avatar-badge-icon-size-md",
+        "--component-avatar-badge-icon-size-lg",
+        "--component-avatar-badge-icon-size-xl"
+      ],
+      "semantic": {
+        "offlineBadge": "--color-content-subtle",
+        "selectedBorder": "--color-border-selected",
+        "badgeBorder": "--color-border-inverse",
+        "hovered": "--color-interaction-hovered",
+        "pressed": "--color-interaction-pressed"
+      }
+    },
+    "accessibility": {},
+    "relatedComponents": [],
+    "contentCompleteness": "stub"
+  },
+  {
+    "id": "badge",
+    "name": "Badge",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/badge/badge.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Single visual container for the badge value."
+      },
+      {
+        "name": "text",
+        "description": "Short visible numeric value."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "Visible badge content. Intended for short numeric values."
+      },
+      "tone": {
+        "type": "BadgeTone",
+        "required": false,
+        "default": "default",
+        "description": "Visual tone for badge emphasis or semantic meaning.",
+        "enum": [
+          "default",
+          "inverse",
+          "brand",
+          "success",
+          "error"
+        ]
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label when the visible value needs additional context."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Optional custom class name."
+      }
+    },
+    "sizes": [
+      "default"
+    ],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "inverse",
+        "brand",
+        "success",
+        "error"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "minInlineSize": "--spacing-lg",
+        "blockSize": "--spacing-lg",
+        "paddingBlock": "--spacing-none",
+        "paddingInline": "--spacing-xs"
+      },
+      "radius": {
+        "root": "--border-radius-sm"
+      },
+      "typography": {
+        "fontFamily": "--typography-overline-sm-font-family",
+        "fontSize": "--typography-overline-sm-font-size",
+        "fontWeight": "--typography-overline-sm-font-weight",
+        "lineHeight": "--typography-overline-sm-line-height",
+        "letterSpacing": "--typography-overline-sm-letter-spacing"
+      },
+      "color": {
+        "default": {
+          "background": "--color-elevation-surface-default",
+          "content": "--color-content-default"
+        },
+        "inverse": {
+          "background": "--color-background-neutral-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "brand": {
+          "background": "--color-background-brand-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "success": {
+          "background": "--color-background-success-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "error": {
+          "background": "--color-background-error-bold-default",
+          "content": "--color-content-inverse"
+        }
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "ariaLabel": {
+        "supported": true,
+        "prop": "ariaLabel",
+        "mapsTo": "aria-label",
+        "useWhen": "Visible numeric value needs additional context."
+      },
+      "requirements": [
+        "Do not add button behavior.",
+        "Do not add keyboard interaction.",
+        "Use ariaLabel when the visible value is ambiguous.",
+        "Ensure color contrast meets requirements for all tones."
+      ]
+    },
+    "relatedComponents": [
+      "Tag",
+      "Label",
+      "Tooltip",
+      "Button",
+      "IconButton"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "button",
+    "name": "Button",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/button/button.contract.json",
+    "anatomy": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "leading",
+        "description": "leading icon slot or loading spinner"
+      },
+      {
+        "name": "content",
+        "description": "visible button label/content"
+      },
+      {
+        "name": "trailing",
+        "description": "trailing icon slot"
+      }
+    ],
+    "props": {
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "xs",
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "primary",
+          "subtle"
+        ]
+      },
+      "tone": {
+        "type": "enum",
+        "required": false,
+        "default": "neutral",
+        "description": null,
+        "enum": [
+          "neutral",
+          "warning",
+          "error",
+          "discovery"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "isLoading": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "isFullWidth": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "iconBefore": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "iconAfter": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "type": {
+        "type": "button | submit | reset",
+        "required": false,
+        "default": "button",
+        "description": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onClick": {
+        "type": "React.MouseEventHandler<HTMLButtonElement>",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "iconBefore",
+      "children",
+      "iconAfter"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "primary",
+        "subtle"
+      ],
+      "tone": [
+        "neutral",
+        "warning",
+        "error",
+        "discovery"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "component": {
+        "minHeight": {
+          "xs": "--size-control-xs",
+          "sm": "--size-control-sm",
+          "md": "--size-control-md",
+          "lg": "--size-control-lg"
+        }
+      },
+      "semantic": {
+        "spacing": {
+          "xsPaddingInline": "--spacing-sm",
+          "smPaddingInline": "--spacing-sm",
+          "mdPaddingInline": "--spacing-md",
+          "lgPaddingInline": "--spacing-lg",
+          "gap": "--spacing-sm",
+          "focusRingOffset": "--spacing-xxs"
+        },
+        "border": {
+          "width": "--border-width-sm",
+          "radiusDefault": "--border-radius-sm",
+          "radiusSmMd": "--border-radius-lg",
+          "radiusLg": "--border-radius-xl"
+        },
+        "typography": {
+          "default": "heading-xs",
+          "lg": "heading-sm"
+        },
+        "color": {
+          "defaultBorder": "--color-border-default",
+          "defaultBackground": "--color-background-neutral-subtle-default",
+          "defaultContent": "--color-content-subtle",
+          "primaryNeutralBackground": "--color-background-brand-bold-default",
+          "primaryNeutralContent": "--color-content-inverse",
+          "primaryWarningBackground": "--color-background-warning-bold-default",
+          "primaryWarningContent": "--color-content-warning-inverse",
+          "primaryErrorBackground": "--color-background-error-bold-default",
+          "primaryDiscoveryBackground": "--color-background-discovery-bold-default",
+          "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
+          "disabledBackground": "--color-background-disabled",
+          "disabledContent": "--color-content-disabled"
+        }
+      }
+    },
+    "accessibility": {
+      "nativeElement": "button",
+      "defaultType": "button",
+      "supportsSubmit": true,
+      "supportsReset": true,
+      "disabledMechanism": "native disabled attribute",
+      "loadingAria": {
+        "ariaBusy": true,
+        "ariaDisabled": true
+      },
+      "focus": "shared Focus Ring primitive/utilities",
+      "requiresVisibleLabel": true,
+      "roleOverrideAllowed": false
+    },
+    "relatedComponents": [
+      "IconButton",
+      "LinkButton",
+      "ToggleButton",
+      "ToggleIconButton",
+      "Spinner",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "checkbox",
+    "name": "Checkbox",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/checkbox/checkbox.contract.json",
+    "anatomy": [
+      {
+        "name": "input"
+      },
+      {
+        "name": "indicator"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "helperText"
+      }
+    ],
+    "props": {},
+    "sizes": [],
+    "slots": [
+      "label",
+      "helperText"
+    ],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "nativeElement": "input[type=checkbox]"
+    },
+    "relatedComponents": [
+      "Radio",
+      "Switch"
+    ],
+    "contentCompleteness": "partial"
+  },
+  {
+    "id": "icon-button",
+    "name": "IconButton",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/icon-button/icon-button.contract.json",
+    "anatomy": [
+      {
+        "name": "button"
+      },
+      {
+        "name": "icon"
+      },
+      {
+        "name": "spinner(optional)"
+      },
+      {
+        "name": "tooltip(optional)"
+      }
+    ],
+    "props": {
+      "tooltip": {
+        "type": null,
+        "required": false,
+        "default": null,
+        "description": null,
+        "enum": [
+          "ReactNode",
+          false
+        ]
+      },
+      "tooltipPlacement": {
+        "type": null,
+        "required": false,
+        "default": null,
+        "description": null,
+        "enum": [
+          "top",
+          "right",
+          "bottom",
+          "left"
+        ]
+      }
+    },
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default",
+        "primary",
+        "subtle"
+      ],
+      "shape": [
+        "square",
+        "round"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "accessibleNameRequired": true,
+      "tooltipUsesAccessibleNameByDefault": true
+    },
+    "relatedComponents": [
+      "Button",
+      "Tooltip",
+      "ToggleIconButton",
+      "Spinner"
+    ],
+    "contentCompleteness": "partial"
+  },
+  {
+    "id": "label",
+    "name": "Label",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/label/label.contract.json",
+    "anatomy": [
+      {
+        "name": "container"
+      },
+      {
+        "name": "text"
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "sm",
+          "md"
+        ]
+      },
+      "tone": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "information",
+          "warning",
+          "discovery",
+          "error",
+          "success",
+          "law",
+          "wealth"
+        ]
+      },
+      "emphasis": {
+        "type": "enum",
+        "required": false,
+        "default": "subtle",
+        "description": null,
+        "enum": [
+          "subtle",
+          "bold"
+        ]
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "emphasis": [
+        "subtle",
+        "bold"
+      ],
+      "tone": [
+        "default",
+        "information",
+        "warning",
+        "discovery",
+        "error",
+        "success",
+        "law",
+        "wealth"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "interactive": false
+    },
+    "relatedComponents": [
+      "Badge",
+      "Tag"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "link",
+    "name": "Link",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/link/link.contract.json",
+    "anatomy": [
+      {
+        "name": "anchor"
+      },
+      {
+        "name": "content"
+      },
+      {
+        "name": "automatic external-link icon"
+      }
+    ],
+    "props": {
+      "href": {
+        "type": "string",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "subtle",
+          "inverse"
+        ]
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "sm",
+          "md"
+        ]
+      },
+      "target": {
+        "type": "string",
+        "required": false,
+        "default": "_self",
+        "description": null
+      },
+      "rel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "subtle",
+        "inverse"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "nativeElement": "a",
+      "accessibleNameRequired": true
+    },
+    "relatedComponents": [
+      "Button",
+      "LinkButton",
+      "Tooltip"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "link-button",
+    "name": "LinkButton",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/link-button/link-button.contract.json",
+    "anatomy": [
+      {
+        "name": "anchor"
+      },
+      {
+        "name": "optional leading icon"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "optional trailing icon"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "iconBefore",
+      "children",
+      "iconAfter"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "subtle",
+        "bold"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "nativeElement": "a",
+      "accessibleNameRequired": true
+    },
+    "relatedComponents": [
+      "Button",
+      "Link",
+      "IconButton"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "progress-bar",
+    "name": "ProgressBar",
+    "tier": "atom",
+    "category": "atom",
+    "status": "specified",
+    "path": "docs/components/atoms/progress-bar/progress-bar.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "group": "shared"
+      },
+      {
+        "name": "track",
+        "group": "linear"
+      },
+      {
+        "name": "progressSegment",
+        "group": "linear"
+      },
+      {
+        "name": "remainingTrack",
+        "group": "linear"
+      },
+      {
+        "name": "startStop",
+        "group": "linear"
+      },
+      {
+        "name": "endStop",
+        "group": "linear"
+      },
+      {
+        "name": "svg",
+        "group": "circular"
+      },
+      {
+        "name": "trackCircle",
+        "group": "circular"
+      },
+      {
+        "name": "progressCircle",
+        "group": "circular"
+      },
+      {
+        "name": "startStop",
+        "group": "circular"
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "variant": {
+        "type": "enum",
+        "required": false,
+        "default": "linear",
+        "description": null,
+        "enum": [
+          "linear",
+          "circular"
+        ]
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "md",
+          "lg"
+        ]
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "getValueText": {
+        "type": "(value: number) => string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "linear": [
+        "width",
+        "direction"
+      ],
+      "circular": [
+        "diameter",
+        "startAngle",
+        "direction",
+        "implementation"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "progress": "chart/sequence/brand/900 or generated semantic equivalent",
+        "track": "chart/sequence/brand/300 or generated semantic equivalent",
+        "trackBorder": "color-border-brand",
+        "stopOnTrack": "chart/sequence/brand/900 (contrasts with the light remaining track underneath)",
+        "stopOnProgress": "chart/sequence/brand/300 (contrasts with the dark progress fill underneath)",
+        "radius": "border-radius-full-round",
+        "borderWidth": "border-width-default"
+      },
+      "componentAllowed": [
+        "linear root size",
+        "track thickness",
+        "circular diameter",
+        "stop container size",
+        "stop shape size"
+      ],
+      "componentForbidden": [
+        "color aliases",
+        "radius aliases",
+        "border color aliases",
+        "a fixed border/background pairing on the stop shape - it is a single flat fill that swaps token by segment"
+      ]
+    },
+    "accessibility": {
+      "role": "progressbar",
+      "ariaValueMin": 0,
+      "ariaValueMax": 100,
+      "ariaValueNow": "clamped value",
+      "nameSources": [
+        "aria-label",
+        "aria-labelledby",
+        "label"
+      ],
+      "ariaValueText": "getValueText(clampedValue) when provided",
+      "focusable": false,
+      "interactive": false,
+      "decorativeSvgHidden": true
+    },
+    "relatedComponents": [
+      "Spinner",
+      "Slider",
+      "ProgressIndicator"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "progress-indicator",
+    "name": "ProgressIndicator",
+    "tier": "atom",
+    "category": "atom",
+    "status": "specified",
+    "path": "docs/components/atoms/progress-indicator/progress-indicator.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Owns progress semantics and layout."
+      },
+      {
+        "name": "dots",
+        "description": "Sequence of selected and unselected dots."
+      },
+      {
+        "name": "selectedDot",
+        "description": "Represents the current step."
+      },
+      {
+        "name": "unselectedDot",
+        "description": "Represents every other step."
+      }
+    ],
+    "props": {
+      "currentStep": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "totalSteps": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "primary",
+          "discovery",
+          "inverted"
+        ]
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "sm",
+        "description": null,
+        "enum": [
+          "sm",
+          "md"
+        ]
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "getValueText": {
+        "type": "(currentStep: number, totalSteps: number) => string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onStepChange": {
+        "type": "(step: number) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default",
+        "primary",
+        "discovery",
+        "inverted"
+      ],
+      "size": [
+        "sm",
+        "md"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "defaultSelected": "color-content-default",
+        "primarySelected": "color-content-brand-primary-default",
+        "discoverySelected": "color-content-discovery",
+        "invertedSelected": "color-content-inverse",
+        "unselectedBorder": "color-border-bold",
+        "interactiveHover": "color-background-neutral-subtle-hovered",
+        "interactivePressed": "color-background-neutral-subtle-pressed",
+        "radius": "border-radius-full-round",
+        "spacing": "spacing-0"
+      },
+      "componentAllowed": [
+        "dot container size",
+        "visible dot size"
+      ],
+      "componentForbidden": [
+        "color aliases",
+        "radius aliases",
+        "border width aliases",
+        "spacing aliases"
+      ]
+    },
+    "accessibility": {
+      "role": "progressbar",
+      "ariaValueMin": 1,
+      "ariaValueMax": "normalized totalSteps",
+      "ariaValueNow": "normalized currentStep",
+      "defaultAriaValueText": "Step {currentStep} of {totalSteps}",
+      "nameSources": [
+        "aria-label",
+        "aria-labelledby",
+        "label"
+      ],
+      "focusable": false,
+      "interactive": "optional via onStepChange",
+      "dotsHidden": "passive only"
+    },
+    "relatedComponents": [
+      "ProgressBar",
+      "Spinner",
+      "Button"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "radio",
+    "name": "Radio",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/radio/radio.contract.json",
+    "anatomy": [],
+    "props": {},
+    "sizes": [],
+    "slots": [
+      "label",
+      "description",
+      "errorMessage"
+    ],
+    "variants": {},
+    "subComponents": [
+      {
+        "name": "Radio",
+        "anatomy": [
+          {
+            "name": "root label/wrapper"
+          },
+          {
+            "name": "native input[type=\"radio\"]"
+          },
+          {
+            "name": "visual indicator (unchecked/checked icons swapped on :checked)"
+          },
+          {
+            "name": "label text"
+          },
+          {
+            "name": "optional required indicator (standalone usage only)"
+          }
+        ],
+        "props": {
+          "label": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Visible label. Omit only when aria-label/aria-labelledby is set."
+          },
+          "checked": {
+            "type": "boolean",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "defaultChecked": {
+            "type": "boolean",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "invalid": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": null
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Maps to native required. Appends a visible required indicator after the label."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Maps to native disabled."
+          },
+          "className": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Composes with the root label's class list."
+          },
+          "inputClassName": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Composes with the native input's class list."
+          },
+          "onCheckedChange": {
+            "type": "(checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void",
+            "required": false,
+            "default": null,
+            "description": null
+          }
+        }
+      },
+      {
+        "name": "RadioGroup",
+        "anatomy": [
+          {
+            "name": "fieldset root"
+          },
+          {
+            "name": "legend / group label (with optional required indicator)"
+          },
+          {
+            "name": "optional description"
+          },
+          {
+            "name": "options (from the options prop, or children)"
+          },
+          {
+            "name": "optional error message"
+          }
+        ],
+        "props": {
+          "label": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Rendered as the fieldset legend; the group's accessible name."
+          },
+          "description": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "errorMessage": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Connected to the fieldset with aria-describedby when present."
+          },
+          "name": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Shared across every option generated from options. Auto-generated when omitted."
+          },
+          "value": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "defaultValue": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "options": {
+            "type": "RadioGroupOption[]",
+            "required": false,
+            "default": null,
+            "description": "Generates one Radio per entry. Takes precedence over children when provided."
+          },
+          "children": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted."
+          },
+          "orientation": {
+            "type": "'vertical' | 'horizontal'",
+            "required": false,
+            "default": "vertical",
+            "description": "horizontal wraps via flex-wrap rather than overflowing."
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Group-level required indicator, shown after the legend."
+          },
+          "invalid": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Sets aria-invalid on the fieldset and every generated option."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Disables the fieldset and every generated option."
+          },
+          "onValueChange": {
+            "type": "(value: string, event: React.ChangeEvent<HTMLInputElement>) => void",
+            "required": false,
+            "default": null,
+            "description": null
+          }
+        }
+      }
+    ],
+    "tokens": {
+      "semantic": {
+        "defaultContent": "color-content-default",
+        "disabledContent": "color-content-disabled",
+        "errorContent": "color-content-error",
+        "inverseContent": "color-content-inverse",
+        "inputBackgroundDefault": "color-background-input-default",
+        "inputBackgroundHovered": "color-background-neutral-overlay-hovered",
+        "inputBackgroundPressed": "color-background-neutral-overlay-pressed",
+        "selectedBackgroundHovered": "color-background-brand-primary-overlay-hovered",
+        "selectedBackgroundPressed": "color-background-brand-primary-overlay-pressed",
+        "selectedBoldBackground": "color-background-selected-bold-default",
+        "inputBorder": "color-border-input",
+        "focusedBorder": "color-border-focused",
+        "errorBorder": "color-border-error",
+        "disabledBorder": "color-border-disabled",
+        "disabledBackground": "color-background-disabled",
+        "typography": "body-md"
+      },
+      "componentAllowed": [
+        "indicator size (size-choice-indicator)",
+        "interaction target size (size-choice-target)",
+        "row min-height (size-choice-row)"
+      ],
+      "componentForbidden": [
+        "color aliases",
+        "radius aliases",
+        "border width aliases",
+        "spacing aliases"
+      ]
+    },
+    "accessibility": {
+      "nativeElement": "input[type=\"radio\"]",
+      "grouping": "fieldset/legend via RadioGroup when a group label is provided",
+      "ariaInvalid": "set on the input (Radio) or the fieldset (RadioGroup) when invalid",
+      "ariaDescribedBy": "connects RadioGroup's description/errorMessage to the fieldset",
+      "nameSources": [
+        "aria-label",
+        "aria-labelledby",
+        "label (Radio) / legend from label (RadioGroup)"
+      ],
+      "focusable": true,
+      "doNotUse": [
+        "role=\"radio\" on a non-native element",
+        "role=\"radiogroup\" in place of a native fieldset",
+        "SVG-only interactive controls"
+      ]
+    },
+    "relatedComponents": [
+      "Checkbox",
+      "Switch"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "slider",
+    "name": "Slider",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/slider/slider.contract.json",
+    "anatomy": [
+      {
+        "name": "track"
+      },
+      {
+        "name": "thumb"
+      },
+      {
+        "name": "steps"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "md"
+    ],
+    "slots": [
+      "label",
+      "helperText"
+    ],
+    "variants": {
+      "type": [
+        "slider",
+        "slider-centered",
+        "slider-range"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "role": "slider"
+    },
+    "relatedComponents": [
+      "Text Field"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "spinner",
+    "name": "Spinner",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/spinner/spinner.contract.json",
+    "anatomy": [
+      {
+        "name": "container"
+      },
+      {
+        "name": "indicator"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "ariaLive": "optional"
+    },
+    "relatedComponents": [
+      "Button",
+      "Progress Indicator"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "switch",
+    "name": "Switch",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/switch/switch.contract.json",
+    "anatomy": [
+      {
+        "name": "track"
+      },
+      {
+        "name": "thumb"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "helperText"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [
+      "label",
+      "helperText"
+    ],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "nativeElement": "input[type=checkbox]",
+      "role": "switch"
+    },
+    "relatedComponents": [
+      "Checkbox",
+      "Radio"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "tag",
+    "name": "Tag",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/tag/tag.contract.json",
+    "anatomy": [
+      {
+        "name": "container"
+      },
+      {
+        "name": "optional leading icon"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "optional remove button"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "sm",
+      "md"
+    ],
+    "slots": [
+      "icon",
+      "children",
+      "removeButton"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "brand",
+        "blue",
+        "green",
+        "purple",
+        "red",
+        "teal",
+        "yellow",
+        "orange",
+        "magenta"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "navigationAndRemovalIndependent": true,
+      "accessibleNameRequired": true
+    },
+    "relatedComponents": [
+      "Label",
+      "Badge",
+      "Link"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "toggle-button",
+    "name": "ToggleButton",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/toggle-button/toggle-button.contract.json",
+    "anatomy": [
+      {
+        "name": "button"
+      },
+      {
+        "name": "optional leading icon"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "optional trailing icon"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "iconBefore",
+      "children",
+      "iconAfter"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "subtle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "selectedBackground": "--color-background-brand-primary-default-default (both tones)",
+        "selectedContent": "--color-content-brand-primary-default (both tones)",
+        "selectedBorder": "--color-border-brand-primary (tone=default only - tone=subtle stays border-color: transparent, matching its own resting borderless look)",
+        "disabledBackground": "--color-background-disabled",
+        "disabledContent": "--color-content-disabled",
+        "disabledBorder": "--color-border-disabled (tone=default only - tone=subtle stays border-color: transparent)"
+      }
+    },
+    "accessibility": {
+      "ariaPressed": true
+    },
+    "relatedComponents": [
+      "Button",
+      "IconButton",
+      "ToggleIconButton"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "toggle-icon-button",
+    "name": "ToggleIconButton",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/toggle-icon-button/toggle-icon-button.contract.json",
+    "anatomy": [
+      {
+        "name": "button"
+      },
+      {
+        "name": "icon"
+      }
+    ],
+    "props": {},
+    "sizes": [
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "children(icon)"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "subtle"
+      ],
+      "shape": [
+        "square",
+        "round"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "selectedBackground": "--color-background-brand-primary-default-default (both tones)",
+        "selectedContent": "--color-content-brand-primary-default (both tones)",
+        "selectedBorder": "--color-border-brand-primary (tone=default only - tone=subtle stays border-color: transparent, matching its own resting borderless look)",
+        "disabledBackground": "--color-background-disabled",
+        "disabledContent": "--color-content-disabled",
+        "disabledBorder": "--color-border-disabled (tone=default only - tone=subtle stays border-color: transparent)"
+      }
+    },
+    "accessibility": {
+      "ariaPressed": true,
+      "accessibleNameRequired": true,
+      "tooltipRecommended": true
+    },
+    "relatedComponents": [
+      "ToggleButton",
+      "IconButton",
+      "Tooltip"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "tooltip",
+    "name": "Tooltip",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/tooltip/tooltip.contract.json",
+    "anatomy": [
+      {
+        "name": "trigger"
+      },
+      {
+        "name": "disabled-pointer-wrapper(optional)"
+      },
+      {
+        "name": "content"
+      }
+    ],
+    "props": {},
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "placement": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": [
+        "--color-background-neutral-bold-default",
+        "--color-content-inverse",
+        "--typography-body-sm-font-family",
+        "--spacing-xxs",
+        "--spacing-xs",
+        "--border-radius-sm"
+      ],
+      "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale."
+    },
+    "accessibility": {
+      "triggeredBy": [
+        "pointer",
+        "focus"
+      ],
+      "focusable": false,
+      "describedByWhileVisible": true
+    },
+    "relatedComponents": [
+      "IconButton",
+      "ToggleIconButton",
+      "Button"
+    ],
+    "contentCompleteness": "partial"
+  },
+  {
+    "id": "breadcrumbs",
+    "name": "Breadcrumbs",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/breadcrumbs/breadcrumbs.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Landmark with an accessible name (default 'Breadcrumb')."
+      },
+      {
+        "name": "list",
+        "description": "Ordered list of breadcrumb items."
+      },
+      {
+        "name": "item",
+        "description": "One per entry in `items`, in order."
+      },
+      {
+        "name": "separator",
+        "description": "A literal '/' character before every item except the first."
+      },
+      {
+        "name": "link",
+        "description": "Rendered for every item that has an href."
+      },
+      {
+        "name": "current",
+        "description": "Rendered for the item without an href - always the last item in practice."
+      }
+    ],
+    "props": {
+      "items": {
+        "type": "BreadcrumbItem[]",
+        "required": true,
+        "default": null,
+        "description": "Ordered list of trail entries, root first, current page last."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Breadcrumb",
+        "description": "Accessible name for the nav landmark."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Optional custom class name for the root nav."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "items[].label",
+      "items[].iconBefore / items[].iconAfter"
+    ],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "spacing": {
+        "betweenItems": "--spacing-sm",
+        "separatorToLabel": "--spacing-sm",
+        "iconToLabel": "--spacing-xs"
+      },
+      "typography": {
+        "link": "inherited from Link size=md (--typography-heading-xs-*)",
+        "current": "--typography-heading-xs-*",
+        "separator": "--typography-body-md-*"
+      },
+      "color": {
+        "link": "inherited from Link appearance=subtle",
+        "current": "--color-content-default",
+        "separator": "--color-content-subtle"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": "each non-current item (via Link)",
+      "role": null,
+      "landmark": "nav",
+      "requirements": [
+        "nav must always have an accessible name (aria-label, default 'Breadcrumb').",
+        "The current (last, href-less) item must carry aria-current=\"page\".",
+        "Separators must be aria-hidden.",
+        "Do not add role=list/listitem manually - ol/li already carry the correct implicit roles."
+      ]
+    },
+    "relatedComponents": [
+      "Link",
+      "ProgressIndicator"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "button-group",
+    "name": "ButtonGroup",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/button-group/button-group.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Flex layout container that spaces and directs its children; owns no button styling."
+      },
+      {
+        "name": "children",
+        "description": "Typically Button and/or IconButton elements, laid out with a consistent 4px gap."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "The buttons (or other controls) to lay out."
+      },
+      "orientation": {
+        "type": "ButtonGroupOrientation",
+        "required": false,
+        "default": "horizontal",
+        "description": "Layout direction - horizontal (row) or vertical (column).",
+        "enum": [
+          "horizontal",
+          "vertical"
+        ]
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "orientation": [
+        "horizontal",
+        "vertical"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "gap": "--spacing-xs"
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "group": {
+        "supported": true,
+        "appliedWhen": "aria-label or aria-labelledby is present",
+        "value": "group"
+      },
+      "requirements": [
+        "Do not add roving tabindex or arrow-key navigation - children keep native Tab order.",
+        "Do not add a role without an accompanying accessible name.",
+        "Ensure each child button remains independently focusable."
+      ]
+    },
+    "relatedComponents": [
+      "Button",
+      "IconButton",
+      "ToggleButton"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "icon-tile",
+    "name": "IconTile",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/icon-tile/icon-tile.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Sized, colored, rounded container."
+      },
+      {
+        "name": "icon",
+        "description": "Single centered icon; inherits the root's color and fills the computed icon-size box."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "The icon element to render, centered inside the tile."
+      },
+      "tone": {
+        "type": "IconTileTone",
+        "required": false,
+        "default": "brand",
+        "description": "Hue/semantic meaning of the tile.",
+        "enum": [
+          "gray",
+          "brand",
+          "red",
+          "orange",
+          "yellow",
+          "green",
+          "teal",
+          "blue",
+          "purple",
+          "magenta"
+        ]
+      },
+      "appearance": {
+        "type": "IconTileAppearance",
+        "required": false,
+        "default": "default",
+        "description": "Visual weight - default is a subtle tint, bold is a solid saturated fill with an inverse icon.",
+        "enum": [
+          "default",
+          "bold"
+        ]
+      },
+      "shape": {
+        "type": "IconTileShape",
+        "required": false,
+        "default": "square",
+        "description": "Container shape - rounded-square or fully round.",
+        "enum": [
+          "square",
+          "round"
+        ]
+      },
+      "size": {
+        "type": "IconTileSize",
+        "required": false,
+        "default": "md",
+        "description": "Overall tile size; icon size is derived as 2/3 of the tile size.",
+        "enum": [
+          "xxs",
+          "xs",
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "decorative": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "When true, the tile is aria-hidden. When false, renders role=img with ariaLabel."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label used only when decorative is false."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Optional custom class name."
+      }
+    },
+    "sizes": [
+      "xxs",
+      "xs",
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "tone": [
+        "gray",
+        "brand",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "teal",
+        "blue",
+        "purple",
+        "magenta"
+      ],
+      "appearance": [
+        "default",
+        "bold"
+      ],
+      "shape": [
+        "square",
+        "round"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "size_xxs": "--size-200",
+        "size_xs": "--size-300",
+        "size_sm": "--size-400",
+        "size_md": "--size-500",
+        "size_lg": "--size-600"
+      },
+      "radius": {
+        "xxs_xs": "--border-radius-sm",
+        "sm_md": "--border-radius-lg",
+        "lg": "--border-radius-xl",
+        "round": "--border-radius-full-round"
+      },
+      "color": {
+        "gray_default": {
+          "background": "--color-background-accent-gray-default-default",
+          "content": "--color-content-default"
+        },
+        "gray_bold": {
+          "background": "--color-background-accent-gray-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "brand_default": {
+          "background": "--color-background-brand-primary-default-default",
+          "content": "--color-content-brand-primary-default"
+        },
+        "brand_bold": {
+          "background": "--color-background-brand-primary-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "red_default": {
+          "background": "--color-background-accent-red-default-default",
+          "content": "--color-content-accent-red-default"
+        },
+        "red_bold": {
+          "background": "--color-background-accent-red-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "orange_default": {
+          "background": "--color-background-accent-orange-default-default",
+          "content": "--color-content-accent-orange-default"
+        },
+        "orange_bold": {
+          "background": "--color-background-accent-orange-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "yellow_default": {
+          "background": "--color-background-accent-yellow-default-default",
+          "content": "--color-content-accent-yellow-default"
+        },
+        "yellow_bold": {
+          "background": "--color-background-accent-yellow-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "green_default": {
+          "background": "--color-background-accent-green-default-default",
+          "content": "--color-content-accent-green-default"
+        },
+        "green_bold": {
+          "background": "--color-background-accent-green-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "teal_default": {
+          "background": "--color-background-accent-teal-default-default",
+          "content": "--color-content-accent-teal-default"
+        },
+        "teal_bold": {
+          "background": "--color-background-accent-teal-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "blue_default": {
+          "background": "--color-background-accent-blue-default-default",
+          "content": "--color-content-accent-blue-default"
+        },
+        "blue_bold": {
+          "background": "--color-background-accent-blue-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "purple_default": {
+          "background": "--color-background-accent-purple-default-default",
+          "content": "--color-content-accent-purple-default"
+        },
+        "purple_bold": {
+          "background": "--color-background-accent-purple-bold-default",
+          "content": "--color-content-inverse"
+        },
+        "magenta_default": {
+          "background": "--color-background-accent-magenta-default-default",
+          "content": "--color-content-accent-magenta-default"
+        },
+        "magenta_bold": {
+          "background": "--color-background-accent-magenta-bold-default",
+          "content": "--color-content-inverse"
+        }
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "decorative": {
+        "supported": true,
+        "prop": "decorative",
+        "default": true,
+        "whenTrue": "aria-hidden=true, no role",
+        "whenFalse": "role=img, aria-label from ariaLabel"
+      },
+      "requirements": [
+        "Do not add button behavior.",
+        "Do not add keyboard interaction.",
+        "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
+        "Ensure color contrast meets requirements for all tone/appearance combinations."
+      ]
+    },
+    "relatedComponents": [
+      "Icon",
+      "Avatar",
+      "IconButton",
+      "Badge",
+      "Tag"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "inline-edit",
+    "name": "InlineEdit",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/inline-edit/inline-edit.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Transparent layout wrapper - flex row, no color/border tokens of its own."
+      },
+      {
+        "name": "content",
+        "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing."
+      },
+      {
+        "name": "actions",
+        "description": "Trailing cancel/confirm IconButton pair; renders only once editing has started, when actionButtons is not false."
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "string",
+        "required": true,
+        "default": null,
+        "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft."
+      },
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "A single controlled input-like element (e.g. a subtle TextField) InlineEdit clones for both the read-only display and the editable control."
+      },
+      "onConfirm": {
+        "type": "(value: string) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with the draft value when the confirm button (or Enter) commits the edit."
+      },
+      "onCancel": {
+        "type": "() => void",
+        "required": false,
+        "default": null,
+        "description": "Called when the cancel button (or Escape) discards the draft and reverts to value."
+      },
+      "actionButtons": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false."
+      },
+      "confirmLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Confirm",
+        "description": "Accessible name (aria-label) for the confirm IconButton."
+      },
+      "cancelLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Cancel",
+        "description": "Accessible name (aria-label) for the cancel IconButton."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root's class list."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children"
+    ],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
+        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons themselves)"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": true,
+      "role": null,
+      "requirements": [
+        "No role or accessible name of its own - a transparent wrapper around the cloned child.",
+        "confirmLabel/cancelLabel always set an aria-label on the internal IconButtons.",
+        "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
+        "Enter calls onConfirm (with the draft, and preventDefault) while editing; Escape calls onCancel while editing. Neither fires before editing starts.",
+        "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur); moving focus to the cancel/confirm buttons themselves does not.",
+        "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
+      ]
+    },
+    "relatedComponents": [
+      "TextField",
+      "IconButton",
+      "ButtonGroup"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "pagination",
+    "name": "Pagination",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/pagination/pagination.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Landmark with an accessible name (default 'Pagination')."
+      },
+      {
+        "name": "list",
+        "description": "Ordered list of pagination controls."
+      },
+      {
+        "name": "previous",
+        "description": "Chevron-left control, disabled on the first page."
+      },
+      {
+        "name": "page",
+        "description": "One per visible page number; isSelected + aria-current=\"page\" on the current page."
+      },
+      {
+        "name": "ellipsis",
+        "description": "Non-interactive '...' text wherever the range algorithm collapses a gap."
+      },
+      {
+        "name": "next",
+        "description": "Chevron-right control, disabled on the last page."
+      }
+    ],
+    "props": {
+      "currentPage": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": "1-based current page."
+      },
+      "totalPages": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": "Total number of pages."
+      },
+      "onPageChange": {
+        "type": "(page: number) => void",
+        "required": true,
+        "default": null,
+        "description": "Called with the target page when a page/previous/next control is activated."
+      },
+      "siblingCount": {
+        "type": "number",
+        "required": false,
+        "default": 1,
+        "description": "Pages shown on either side of the current page."
+      },
+      "boundaryCount": {
+        "type": "number",
+        "required": false,
+        "default": 1,
+        "description": "Pages always shown at the start and end of the range."
+      },
+      "previousLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous page",
+        "description": "aria-label for the previous control."
+      },
+      "nextLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next page",
+        "description": "aria-label for the next control."
+      },
+      "getPageLabel": {
+        "type": "(page: number) => string",
+        "required": false,
+        "default": "(page) => `Page ${page}`",
+        "description": "aria-label generator for each page button."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Pagination",
+        "description": "Accessible name for the nav landmark."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Optional custom class name for the root nav."
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "controlSize": "--size-control-sm",
+        "gap": "--spacing-xs"
+      },
+      "color": {
+        "ellipsis": "--color-content-subtle"
+      },
+      "typography": {
+        "ellipsis": "--typography-body-md-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": "every previous/next/page control",
+      "role": null,
+      "landmark": "nav",
+      "requirements": [
+        "nav must always have an accessible name (ariaLabel, default 'Pagination').",
+        "The current page control must carry aria-current=\"page\".",
+        "Previous/next must have accessible names and must be disabled at the first/last page.",
+        "The ellipsis must be aria-hidden and non-interactive."
+      ]
+    },
+    "relatedComponents": [
+      "ToggleButton",
+      "IconButton",
+      "ProgressIndicator"
+    ],
+    "contentCompleteness": "full"
+  },
+  {
+    "id": "skeleton",
+    "name": "Skeleton",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/skeleton/skeleton.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Sized, colored, rounded placeholder shape that pulses on an infinite loop."
+      },
+      {
+        "name": "label",
+        "description": "Rendered only when the `label` prop is set; announces the loading state to assistive technology."
+      }
+    ],
+    "props": {
+      "appearance": {
+        "type": "SkeletonAppearance",
+        "required": false,
+        "default": "subtle",
+        "description": "Visual weight of the placeholder fill.",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "shape": {
+        "type": "SkeletonShape",
+        "required": false,
+        "default": "rectangle",
+        "description": "Corner treatment - circle is fully round, for avatar-shaped placeholders.",
+        "enum": [
+          "rectangle",
+          "circle"
+        ]
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible loading announcement. When set, renders role=status/aria-live=polite instead of aria-hidden."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Optional custom class name."
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default",
+        "subtle"
+      ],
+      "shape": [
+        "rectangle",
+        "circle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "radius": {
+        "rectangle": "--border-radius-sm",
+        "circle": "--border-radius-full-round"
+      },
+      "sizing": {
+        "blockSizeDefault": "--size-250"
+      },
+      "color": {
+        "default": {
+          "background": "--color-skeleton-default"
+        },
+        "subtle": {
+          "background": "--component-skeleton-color-subtle"
+        }
+      },
+      "motion": {
+        "pulse": "--pulse-loop"
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "labelled": {
+        "supported": true,
+        "prop": "label",
+        "default": null,
+        "whenUnset": "aria-hidden=true, no role",
+        "whenSet": "role=status, aria-live=polite, visually-hidden announcement of the label text"
+      },
+      "requirements": [
+        "Do not add interactive behavior.",
+        "Do not add keyboard interaction.",
+        "Set label only when no adjacent context already conveys that the region is loading.",
+        "Disable the pulse animation under prefers-reduced-motion: reduce."
+      ]
+    },
+    "relatedComponents": [
+      "Spinner",
+      "ProgressBar"
+    ],
+    "contentCompleteness": "full",
+    "sizingDetail": {
+      "defaultInlineSize": "100% (fills container)",
+      "defaultBlockSize": "--size-250 (20px, one text line)",
+      "override": "Forwarded style/className on the root div - no dedicated width/height props."
+    }
+  },
+  {
+    "id": "text-field",
+    "name": "TextField",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/text-field/text-field.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Bordered frame holding the optional before/action slots and the input; reacts to :hover and :focus-within."
+      },
+      {
+        "name": "iconBefore",
+        "description": "Optional leading icon or short text prefix. Always decorative - never interactive."
+      },
+      {
+        "name": "input",
+        "description": "The real native text input; carries all forwarded native attributes."
+      },
+      {
+        "name": "iconAfter",
+        "description": "Optional trailing icon or interactive action (e.g. an IconButton clear button). Never forced aria-hidden."
+      }
+    ],
+    "props": {
+      "size": {
+        "type": "TextFieldSize",
+        "required": false,
+        "default": "md",
+        "description": "Frame height, padding, gap, and typography.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "appearance": {
+        "type": "TextFieldAppearance",
+        "required": false,
+        "default": "default",
+        "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners.",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sets aria-invalid and the error border (thicker, regardless of focus)."
+      },
+      "iconBefore": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional leading icon or short text prefix. Always decorative (aria-hidden)."
+      },
+      "iconAfter": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional trailing icon or interactive control (typically an IconButton clear action, or a Button). Never forced aria-hidden."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root frame's class list."
+      },
+      "inputClassName": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the native input's class list."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "iconBefore",
+      "iconAfter"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "appearance": [
+        "default",
+        "subtle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "height_sm": "--size-control-sm",
+        "height_md": "--size-control-md",
+        "height_lg": "--size-control-lg",
+        "radius_sm_md": "--border-radius-lg",
+        "radius_lg": "--border-radius-xl",
+        "radius_subtle_bottom_corners": "0 (always, every size)",
+        "paddingInlineStart_sm": "--spacing-sm",
+        "paddingInlineEnd_sm": "--spacing-xs",
+        "paddingInlineStart_md": "--spacing-sm",
+        "paddingInlineEnd_md": "--spacing-sm",
+        "paddingInlineStart_lg": "--spacing-md",
+        "paddingInlineEnd_lg": "--spacing-sm",
+        "paddingBlock_sm": "--measurement-6",
+        "paddingBlock_md": "--spacing-sm",
+        "paddingBlock_lg": "--spacing-md",
+        "gap_sm": "--spacing-xs",
+        "gap_md": "--measurement-6",
+        "gap_lg": "--spacing-sm"
+      },
+      "color": {
+        "default_background": "--color-elevation-surface-raised-default",
+        "hover_background": "--color-elevation-surface-raised-hovered",
+        "border_default": "--color-border-input",
+        "border_focused": "--color-border-focused",
+        "border_error": "--color-border-error",
+        "border_disabled": "--color-border-disabled",
+        "background_disabled": "--color-background-disabled",
+        "text_placeholder": "--color-content-subtle",
+        "text_value": "--color-content-default",
+        "text_disabled": "--color-content-disabled"
+      },
+      "typography": {
+        "sm_md": "--typography-body-md-*",
+        "lg": "--typography-body-lg-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": true,
+      "role": null,
+      "requirements": [
+        "Render a real native <input> - never fake one.",
+        "Set aria-invalid on the input when invalid is true.",
+        "iconBefore is aria-hidden - decorative only, never interactive.",
+        "iconAfter is never forced aria-hidden - it may hold a real interactive control (e.g. an IconButton clear action) which must keep its own accessible name and stay keyboard-reachable.",
+        "Text Field does not manage labelling - pair with a native label[htmlFor] or aria-label/aria-labelledby."
+      ]
+    },
+    "relatedComponents": [
+      "Checkbox",
+      "Radio",
+      "Switch",
+      "Select",
+      "Icon Button",
+      "Button"
+    ],
+    "contentCompleteness": "full"
+  }
+]

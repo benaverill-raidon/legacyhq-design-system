@@ -15,6 +15,12 @@ rules, and the task→file routing table that says which of a component's up to
   rules + stylelint enforcement policy. Load when touching any token/CSS value.
 - [component-api-governance.json](docs/foundations/component-api-governance.json):
   prop-naming rules. Load when adding/renaming a prop.
+- [registry.json](docs/components/registry.json): generated, normalized
+  cross-component index (props/anatomy/sizes/slots/variants for all 28
+  components in one consistent shape). Load for structural queries across
+  many components instead of reading individual `.contract.json` files. See
+  [component-registry-governance.json](docs/foundations/component-registry-governance.json)
+  for normalization rules and known content gaps.
 
 ## Primitives (3)
 

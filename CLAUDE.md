@@ -19,6 +19,9 @@ packages/ui/src/components/
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
+  foundations/component-registry-governance.json  # registry.json normalization rules
+  foundations/component-registry.schema.json       # shape of registry.json
+  components/registry.json   # generated, normalized cross-component index (see below)
   components/{primitives,atoms,molecules}/<component>/
     <component>.md             # usage doc: when to use, design intent,
                                 # a11y expectations, implementation constraints
@@ -48,11 +51,21 @@ is ~1360 lines. Match the file(s) to your task shape:
 | New variant / new anatomy part | `.md`, `-spec.md`, `.contract.json`, `.examples.json` | `-prompt.md` |
 | Final QA / before `npm run validate` | `-checklist.md` | — |
 | Regenerating a component from scratch | `-prompt.md` | — |
+| Structural query across many components (e.g. "which components support a `tone` prop") | `docs/components/registry.json` | individual `.contract.json` files |
 
 Full component index: [`llms.txt`](llms.txt). Load
 `docs/foundations/token-governance.json` and
 `docs/foundations/component-api-governance.json` once per session, not per
 component — they're cross-cutting, not component-specific.
+
+`docs/components/registry.json` is generated from every component's
+`.contract.json` (`npm run generate:registry`) and normalizes their
+inconsistent raw shapes into one consistent, machine-readable structure — it
+trades per-component nuance (exact per-size/per-variant token detail) for
+reliable cross-component structure. See
+`docs/foundations/component-registry-governance.json` for the normalization
+rules and known content gaps (Avatar, Tooltip, IconButton have real missing
+content, not just reshaped data).
 
 ## Token architecture (three tiers — this is load-bearing)
 
@@ -156,6 +169,9 @@ change.)
   variant.
 - `npm run build` — Style Dictionary token build
 - `npm run generate:icons` — icon generation script
+- `npm run generate:registry` — regenerates `docs/components/registry.json`
+  from every component's `.contract.json`; re-run when a contract.json
+  changes. Not wired into `npm run validate`/CI, same as `generate:icons`.
 
 ## Notes
 

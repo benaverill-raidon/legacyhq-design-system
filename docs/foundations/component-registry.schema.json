@@ -1,0 +1,83 @@
+{
+  "description": "Shape of the generated docs/components/registry.json. Interpreted by the minimal validator in scripts/generate-component-registry.mjs, which supports only: type, required, properties, items, enum, additionalProperties. See docs/foundations/component-registry-governance.json for the threshold at which a real JSON Schema library would become warranted.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": [
+      "id",
+      "name",
+      "tier",
+      "category",
+      "status",
+      "path",
+      "anatomy",
+      "props",
+      "sizes",
+      "slots",
+      "variants",
+      "subComponents",
+      "tokens",
+      "accessibility",
+      "relatedComponents",
+      "contentCompleteness"
+    ],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule"] },
+      "category": { "type": "string" },
+      "status": { "type": "string" },
+      "path": { "type": "string" },
+      "anatomy": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "group": { "type": "string" }
+          }
+        }
+      },
+      "props": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "required": { "type": "boolean" },
+            "description": { "type": "string" },
+            "enum": { "type": "array" }
+          }
+        }
+      },
+      "sizes": { "type": "array", "items": { "type": "string" } },
+      "slots": { "type": "array", "items": { "type": "string" } },
+      "variants": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "subComponents": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["name", "anatomy", "props"],
+          "properties": {
+            "name": { "type": "string" },
+            "anatomy": { "type": "array" },
+            "props": { "type": "object" }
+          }
+        }
+      },
+      "sizingDetail": { "type": "object" },
+      "tokens": { "type": "object" },
+      "accessibility": { "type": "object" },
+      "relatedComponents": { "type": "array", "items": { "type": "string" } },
+      "contentCompleteness": { "type": "string", "enum": ["full", "partial", "stub"] }
+    }
+  }
+}

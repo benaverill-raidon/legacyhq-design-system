@@ -1,0 +1,127 @@
+{
+  "id": "component-registry-governance",
+  "designSystem": "LegacyHQ",
+  "artifact": "component-registry-governance",
+  "version": "1.0.0",
+  "status": "stable",
+  "owner": "LegacyHQ Design System",
+  "lastReviewed": "2026-08-06",
+  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json"],
+  "overview": {
+    "description": "Every component has a hand-authored <name>.contract.json meant to be a machine-readable contract (props, anatomy, tokens, a11y, behavior rules). An audit found severe shape inconsistency across the 28 files - not just missing fields, but genuinely incompatible JSON shapes for the same field name. docs/components/registry.json is generated from these files by scripts/generate-component-registry.mjs, which normalizes every field to one canonical shape and validates the result against docs/foundations/component-registry.schema.json. This is the reliable, single-fetch, machine-consumable view; the source contract.json files remain the deep-dive reference for one component's full, un-normalized detail.",
+    "purpose": "Let an agent or tool query structural facts (props, anatomy, sizes, slots, variants) across many components at once without reading 28 differently-shaped files, while never fabricating content the source files don't actually contain."
+  },
+  "normalizationRules": [
+    {
+      "field": "anatomy",
+      "canonicalShape": "Array<{name, description?, group?}>",
+      "rawShapesHandled": [
+        "array of {name, ...}",
+        "array of {part, ...} (part renamed to name)",
+        "flat array of strings (wrapped as {name})",
+        "object keyed by group -> array of strings (flattened, group preserved on each entry)",
+        "object keyed by part -> description string ({name: key, description: value})"
+      ],
+      "dataDropped": "Button-style per-part {element, required} detail is not carried into the registry - read the source contract.json for that."
+    },
+    {
+      "field": "props",
+      "canonicalShape": "Record<propName, {type, required, default, description, enum?}>",
+      "rawShapesHandled": [
+        "empty {}",
+        "full {type,default,required,description,enum|values} map",
+        "sparse {values}-only map",
+        "absent entirely"
+      ],
+      "dataDropped": "none - missing sub-fields become null/false, never a fabricated value"
+    },
+    {
+      "field": "sizes",
+      "canonicalShape": "string[] of size names",
+      "rawShapesHandled": [
+        "array of size-detail objects (reduced to .name)",
+        "empty array",
+        "flat string array",
+        "object keyed by size name -> dimension detail (reduced to Object.keys())",
+        "absent - see the sizingDetail escape hatch below for the Skeleton-style free-size case"
+      ],
+      "dataDropped": "per-size token/dimension detail (e.g. exact height/padding/radius per size) - read the source contract.json for that."
+    },
+    {
+      "field": "sizingDetail",
+      "canonicalShape": "passthrough object, only present when the source file has a `sizing` key and no `sizes` key",
+      "note": "Free-size components (e.g. Skeleton) don't have a size enum - detected structurally (has sizing, lacks sizes), not by component name, so a future component reusing this pattern is handled automatically."
+    },
+    {
+      "field": "slots",
+      "canonicalShape": "string[] of slot names",
+      "rawShapesHandled": [
+        "populated array of {name, ...} objects (reduced to .name)",
+        "flat string array",
+        "empty array",
+        "absent"
+      ],
+      "dataDropped": "per-slot supports/interactive detail - read the source contract.json for that."
+    },
+    {
+      "field": "variants",
+      "canonicalShape": "Record<axis, string[]>",
+      "rawShapesHandled": [
+        "axis -> array of strings",
+        "axis -> object of {value: {purpose, className}}",
+        "axis -> object of arbitrary per-value detail",
+        "empty {}",
+        "absent",
+        "mixed shapes across a single file's own axes (dispatched per-axis, not per-file)"
+      ],
+      "dataDropped": "per-variant purpose/className/dimension detail - read the source contract.json for that."
+    },
+    {
+      "field": "subComponents",
+      "canonicalShape": "Array<{name, anatomy, props}>, always present ([] when unused)",
+      "note": "Handles the Radio contract.json, which documents Radio and RadioGroup in one file (no top-level anatomy/props, nested under radio/radioGroup keys instead). Detected structurally so a future multi-component file is handled the same way."
+    }
+  ],
+  "contentCompleteness": {
+    "description": "Each registry entry gets a structurally-derived contentCompleteness: full | partial | stub, based on how many of 8 near-universal substantive sections (purpose, useCases, states, accessibility, behaviorRules, do, dont, acceptanceCriteria) are present and non-empty in the source file.",
+    "purpose": "Surfaces real content gaps (not shape drift) as a queryable signal instead of only living in prose a reader might skip.",
+    "knownContentGaps": [
+      {
+        "component": "Avatar",
+        "file": "docs/components/atoms/avatar/avatar.contract.json",
+        "issue": "4 top-level keys only (name, anatomy, props, tokens) - missing purpose, useCases, states, accessibility, behaviorRules, do/dont, acceptanceCriteria entirely.",
+        "resolution": "Author the missing sections from the real avatar.tsx behavior next time Avatar is substantively touched. Not something the registry generator can or should paper over - filling this in requires real component analysis, not normalization."
+      },
+      {
+        "component": "Tooltip",
+        "file": "docs/components/atoms/tooltip/tooltip.contract.json",
+        "issue": "11 top-level keys - missing useCases, props (!), sizes, slots, do/dont, acceptanceCriteria.",
+        "resolution": "Same as Avatar - author when next substantively touched."
+      },
+      {
+        "component": "IconButton",
+        "file": "docs/components/atoms/icon-button/icon-button.contract.json",
+        "issue": "12 top-level keys - missing tokens entirely, plus useCases, do/dont, acceptanceCriteria.",
+        "resolution": "Same as Avatar - author when next substantively touched."
+      }
+    ]
+  },
+  "knownShapeDrift": {
+    "description": "Contract.json files authored before this normalization convention existed may use any of the rawShapesHandled variants documented above per field. This is expected and handled automatically by the generator - it is not a per-file violations ledger (roughly 24 of 28 files deviate from a single canonical shape in at least one field, which would make an enumerated list unwieldy and low-value).",
+    "resolution": "When a component's contract.json is next substantively touched, converge its anatomy/props/sizes/slots/variants directly to the canonical shapes documented above, reducing reliance on generator-side normalization over time. Same 'migrate when next touched' philosophy as component-api-governance.json's knownViolations for Button/IconButton's isDisabled prop - applied at the shape level instead of enumerated per file."
+  },
+  "validationApproach": {
+    "tool": "hand-rolled ~50-line JSON-Schema-subset interpreter in scripts/generate-component-registry.mjs",
+    "supports": ["type", "required", "properties", "items", "enum", "additionalProperties"],
+    "rationale": "One source of truth (component-registry.schema.json) instead of a second hardcoded shadow-copy of the shape in validator code. No new runtime dependency, consistent with this repo's narrowly-scoped-tooling precedent (stylelint-declaration-strict-value is a single-purpose plugin, not a general rule engine).",
+    "revisitThreshold": "Add a real JSON Schema library (e.g. ajv) only if the schema needs features the mini-interpreter doesn't support (oneOf, $ref, conditional if/then) - not before. This is a conscious future decision point, not something to reach for preemptively."
+  },
+  "generation": {
+    "command": "npm run generate:registry",
+    "script": "scripts/generate-component-registry.mjs",
+    "output": "docs/components/registry.json",
+    "committed": true,
+    "wiredIntoValidate": false,
+    "rationale": "docs/components/registry.json is committed generated output, colocated with its source data - same convention as packages/ui/src/tokens/generated (Style Dictionary build output, also committed, not gitignored). Not wired into `npm run validate` or CI, matching the existing npm run generate:icons precedent (also a manual, on-demand command, not auto-run or staleness-checked in CI)."
+  }
+}

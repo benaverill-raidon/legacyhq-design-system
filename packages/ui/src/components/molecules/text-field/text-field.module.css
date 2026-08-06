@@ -1,0 +1,251 @@
+.root {
+  --text-field-radius: var(--border-radius-lg);
+  --text-field-height: var(--size-control-md);
+  --text-field-padding-inline-start: var(--spacing-sm);
+  --text-field-padding-inline-end: var(--spacing-sm);
+  --text-field-padding-block: var(--spacing-sm);
+  --text-field-gap: var(--measurement-6);
+
+  display: flex;
+  align-items: center;
+  gap: var(--text-field-gap);
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--text-field-height);
+  padding-block: var(--text-field-padding-block);
+  padding-inline-start: var(--text-field-padding-inline-start);
+  padding-inline-end: var(--text-field-padding-inline-end);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  border-top-left-radius: var(--text-field-radius);
+  border-top-right-radius: var(--text-field-radius);
+  border-bottom-left-radius: var(--text-field-radius);
+  border-bottom-right-radius: var(--text-field-radius);
+  background: var(--color-elevation-surface-raised-default);
+  transition: background-color var(--fade-quick), border-color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition-duration: 0ms;
+  }
+}
+
+/*
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/focus as a
+ * static regression reference - documentation-only, not part of the public API, the same
+ * convention Button and Checkbox use. Hover is suppressed once the field is focused/typing (real
+ * `:focus-within`, or the pinned `data-force-state='focus'` reference) - hover only ever shows on
+ * an inactive field, per explicit design feedback.
+ */
+.root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  background: var(--color-elevation-surface-raised-hovered);
+}
+
+/*
+ * The focused-frame indicator directly replaces the resting border color - same pattern `invalid`
+ * uses below - rather than adding an outline ring around it, per explicit design feedback. Border
+ * *width* stays a constant 1px in the box model, though: an earlier pass changed the real
+ * `border-width` to 2px here (matching Figma's literal 1px->2px treatment), but that shrinks the
+ * content box on every side - including the left - which visibly nudges the placeholder/value text
+ * and caret to the right, reported directly against this component from a side-by-side screenshot.
+ * `box-shadow: inset 0 0 0 1px <color>` paints the extra pixel as a ring layered against the real
+ * border instead, with zero layout impact, the same technique `appearance_subtle` uses for its own
+ * bottom-only version of this problem (see below). Scoped to `appearance_default` only -
+ * `appearance_subtle` gets its own focus indicator below (a colored bottom border, confirmed from
+ * Figma).
+ */
+.appearance_default:is(:focus-within, [data-force-state='focus']) {
+  border-color: var(--color-border-focused);
+  box-shadow: inset 0 0 0 1px var(--color-border-focused);
+}
+
+/*
+ * Same box-shadow-instead-of-border-width technique as focus above, and for the same reason: a
+ * real `border-width` change here shifts the content box (and the text inside it) on every side.
+ */
+.root[data-invalid='true'] {
+  border-color: var(--color-border-error);
+  box-shadow: inset 0 0 0 1px var(--color-border-error);
+}
+
+.root[data-disabled='true'] {
+  background: var(--color-background-disabled);
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+
+/*
+ * Padding, gap, and radius all confirmed per size directly from Figma's bound variables - inline
+ * padding is asymmetric (the end side is tighter to hug a trailing icon-button/button action) and
+ * the icon/text gap is no longer a flat 6px at every size the way the initial pass assumed.
+ */
+.size_sm {
+  --text-field-height: var(--size-control-sm);
+  --text-field-padding-inline-start: var(--spacing-sm);
+  --text-field-padding-inline-end: var(--spacing-xs);
+  --text-field-padding-block: var(--measurement-6);
+  --text-field-gap: var(--spacing-xs);
+  --text-field-radius: var(--border-radius-lg);
+}
+
+.size_md {
+  --text-field-height: var(--size-control-md);
+  --text-field-padding-inline-start: var(--spacing-sm);
+  --text-field-padding-inline-end: var(--spacing-sm);
+  --text-field-padding-block: var(--spacing-sm);
+  --text-field-gap: var(--measurement-6);
+  --text-field-radius: var(--border-radius-lg);
+}
+
+.size_lg {
+  --text-field-height: var(--size-control-lg);
+  --text-field-padding-inline-start: var(--spacing-md);
+  --text-field-padding-inline-end: var(--spacing-sm);
+  --text-field-padding-block: var(--spacing-md);
+  --text-field-gap: var(--spacing-sm);
+  --text-field-radius: var(--border-radius-xl);
+}
+
+.size_lg .input {
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+/*
+ * Subtle has no box border/background at rest - only a bottom accent line reveals on hover,
+ * focus, or invalid. The bottom border is a constant 1px in the box model at every state, the same
+ * resting width the default/standard appearance uses (per explicit design feedback) - focus and
+ * invalid below both paint an extra pixel via box-shadow rather than growing the real border, so
+ * the field's content box never resizes and the input text never shifts. Confirmed directly from
+ * Figma's per-side stroke weights (top/right/left are always 0; only the bottom edge ever carries a
+ * stroke), not assumed from the flattened "tone" variant name. The bottom corners are square
+ * (radius 0) at every size, confirmed directly from Figma's per-corner radius - only the top
+ * corners share the standard/default appearance's radius.
+ */
+.appearance_subtle {
+  border-color: transparent;
+  background: transparent;
+  border-width: 0 0 var(--border-width-sm) 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.appearance_subtle:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  background: var(--color-elevation-surface-raised-hovered);
+}
+
+/*
+ * Scoped to `:not([data-invalid='true'])` so hovering an invalid field keeps the error border
+ * (see below) instead of this rule overwriting it back to `--color-border-input` - per explicit
+ * design feedback, hover should never mask the invalid state, the same way the default/standard
+ * appearance's hover (background-only, no border-color touch) never does.
+ */
+.appearance_subtle:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  border-bottom-color: var(--color-border-input);
+}
+
+/*
+ * The bottom border stays a constant 1px in the box model at every state - only its *painted*
+ * thickness grows to look like 2px, via an inset box-shadow layered directly against the real
+ * border rather than an actual `border-bottom-width` change. A real width change shrinks the
+ * content box by 1px, which visibly nudges the vertically-centered placeholder/value text by a
+ * pixel on every focus/blur or invalid toggle - reported directly against this component. The
+ * box-shadow is purely paint, so it adds zero layout impact while still reading as a thicker line.
+ */
+.appearance_subtle:is(:focus-within, [data-force-state='focus']) {
+  border-bottom-color: var(--color-border-focused);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focused);
+}
+
+/*
+ * Border widths here just restate what `.appearance_subtle` already set (0/0/1px/0) - `.root`'s own
+ * `[data-invalid='true']` rule no longer touches border-width at all (it uses the same box-shadow
+ * technique above), so there's no leftover shorthand value left to override.
+ */
+.appearance_subtle[data-invalid='true'] {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--color-border-error);
+  border-left-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--color-border-error);
+}
+
+.appearance_subtle[data-disabled='true'] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/*
+ * The leading slot is icon-or-text only (never interactive - confirmed from Figma's own
+ * elemBeforeInput component, whose only two `type` values are icon and text), so it always stays
+ * aria-hidden in the markup. The text example ("$", a currency-style prefix) is bound to body-lg
+ * typography at every field size, confirmed directly from Figma rather than assumed to scale with
+ * the field's own size - this rule intentionally does not vary per `.size_*`.
+ */
+.before {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+.before :global([data-color]) {
+  color: inherit;
+}
+
+/*
+ * The trailing slot is icon-or-button (confirmed from Figma's elemAfterInput component: an
+ * IconButton for a clear/reveal-style action, or a full Button) - unlike `.before`, this is
+ * frequently a real interactive control, so it is never forced aria-hidden here. A plain
+ * decorative icon passed on its own already defaults to aria-hidden through the Icon primitive
+ * itself; an IconButton/Button passed here manages its own accessibility and must stay focusable.
+ */
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  color: var(--color-content-subtle);
+}
+
+.action :global([data-color]) {
+  color: inherit;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.input::placeholder {
+  color: var(--color-content-subtle);
+}
+
+.input:disabled {
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.input:disabled::placeholder {
+  color: var(--color-content-disabled);
+}

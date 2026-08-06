@@ -5,8 +5,14 @@
       "jsx": "<ToggleButton>Bold</ToggleButton>"
     },
     {
-      "name": "Selected",
+      "name": "Selected (tone=default)",
+      "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
       "jsx": "<ToggleButton isSelected>Bold</ToggleButton>"
+    },
+    {
+      "name": "Selected (tone=subtle)",
+      "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
+      "jsx": "<ToggleButton tone=\"subtle\" isSelected>Bold</ToggleButton>"
     },
     {
       "name": "With icon",

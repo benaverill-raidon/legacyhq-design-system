@@ -1,0 +1,52 @@
+.root {
+  --skeleton-color: var(--color-skeleton-default);
+  --skeleton-radius: var(--border-radius-sm);
+
+  display: block;
+  inline-size: 100%;
+  block-size: var(--size-250);
+  border-radius: var(--skeleton-radius);
+  background-color: var(--skeleton-color);
+  animation: skeleton-pulse var(--pulse-loop) infinite;
+}
+
+.appearance_subtle {
+  --skeleton-color: var(--component-skeleton-color-subtle);
+}
+
+.shape_rectangle {
+  border-radius: var(--skeleton-radius);
+}
+
+.shape_circle {
+  border-radius: var(--border-radius-full-round);
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    animation: none;
+  }
+}

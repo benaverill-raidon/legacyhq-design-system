@@ -258,4 +258,32 @@ describe('ToggleIconButton', () => {
       /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
     );
   });
+
+  it('gives tone=default a visible border when selected, matching its own resting border', () => {
+    const rule = toggleIconButtonCss.match(/\.tone_default\.selected[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: var(--color-border-brand-primary);');
+    expect(rule?.[1]).toContain('background: var(--color-background-brand-primary-default-default);');
+  });
+
+  it('keeps tone=subtle borderless when selected, matching its own resting border', () => {
+    const rule = toggleIconButtonCss.match(/\.tone_subtle\.selected[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-brand-primary-default-default);');
+  });
+
+  it('gives tone=default a visible disabled border, matching its own resting border', () => {
+    const rule = toggleIconButtonCss.match(/\.tone_default:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+  });
+
+  it('keeps tone=subtle disabled borderless, matching its own resting border', () => {
+    const rule = toggleIconButtonCss.match(/\.tone_subtle:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+  });
 });

@@ -96,11 +96,21 @@
       }
     },
     {
-      "name": "Disabled",
-      "description": "A disabled button using native disabled behavior.",
-      "jsx": "<Button isDisabled>Disabled</Button>",
+      "name": "Disabled (default appearance)",
+      "description": "A disabled button using native disabled behavior. appearance=\"default\" keeps a visible border (color-border-disabled), matching its own resting bordered look.",
+      "jsx": "<Button disabled>Disabled</Button>",
       "props": {
-        "isDisabled": true,
+        "disabled": true,
+        "children": "Disabled"
+      }
+    },
+    {
+      "name": "Disabled (primary/subtle appearance)",
+      "description": "appearance=\"primary\" and appearance=\"subtle\" stay borderless when disabled (border-color: transparent), matching their own resting borderless look - applying the same border color used on appearance=\"default\" here would draw a border that was never part of the design.",
+      "jsx": "<Button appearance=\"primary\" disabled>Disabled</Button>",
+      "props": {
+        "appearance": "primary",
+        "disabled": true,
         "children": "Disabled"
       }
     }

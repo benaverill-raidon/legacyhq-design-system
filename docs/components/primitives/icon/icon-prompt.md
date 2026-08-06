@@ -83,11 +83,13 @@ packages/ui/src/assets/icons/
 Use shared Icon support files here:
 
 ```txt
-packages/ui/src/components/atoms/Icon/
-├─ IconBase.tsx
-├─ Icon.types.ts
-├─ Icon.module.css
-├─ Icon.stories.tsx
+packages/ui/src/components/primitives/icon/
+├─ icon-base.tsx
+├─ icon.types.ts
+├─ icon.module.css
+├─ icon.stories.tsx
+├─ icon.test.tsx
+├─ icon.mdx
 └─ index.ts
 ```
 

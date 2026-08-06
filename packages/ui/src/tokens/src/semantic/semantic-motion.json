@@ -24,6 +24,11 @@
       "value": "var(--duration-loop) var(--ease-loop)",
       "type": "string",
       "originalName": "spin/loop"
+    },
+    "pulse-loop": {
+      "value": "var(--duration-loop-slow) linear",
+      "type": "string",
+      "originalName": "pulse/loop"
     }
   }
 }

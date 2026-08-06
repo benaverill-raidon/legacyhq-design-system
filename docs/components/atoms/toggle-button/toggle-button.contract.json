@@ -45,7 +45,16 @@
     "children",
     "iconAfter"
   ],
-  "tokens": {},
+  "tokens": {
+    "color": {
+      "selectedBackground": "--color-background-brand-primary-default-default (both tones)",
+      "selectedContent": "--color-content-brand-primary-default (both tones)",
+      "selectedBorder": "--color-border-brand-primary (tone=default only - tone=subtle stays border-color: transparent, matching its own resting borderless look)",
+      "disabledBackground": "--color-background-disabled",
+      "disabledContent": "--color-content-disabled",
+      "disabledBorder": "--color-border-disabled (tone=default only - tone=subtle stays border-color: transparent)"
+    }
+  },
   "accessibility": {
     "ariaPressed": true
   },
@@ -55,7 +64,8 @@
   ],
   "behaviorRules": [
     "Selected state persists until toggled.",
-    "Shares sizing and visual language with Button."
+    "Shares sizing and visual language with Button.",
+    "Selected and disabled both show a border only for tone=default; tone=subtle stays borderless in both states, matching its own resting look (same pattern Button uses for disabled)."
   ],
   "compositionRules": [
     "May include a leading and/or trailing icon. No loading state."

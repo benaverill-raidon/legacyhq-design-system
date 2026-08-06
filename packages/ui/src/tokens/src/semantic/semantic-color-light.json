@@ -26,6 +26,11 @@
         "type": "color",
         "originalName": "color/content/loading"
       },
+      "color-skeleton-default": {
+        "value": "var(--color-neutral-alpha-1200-08)",
+        "type": "color",
+        "originalName": "color/skeleton/default"
+      },
       "color-content-brand-primary-default": {
         "value": "var(--color-brand-prussian-solid-900)",
         "type": "color",
@@ -1057,12 +1062,12 @@
         "originalName": "color/elevation/surface/raised/default"
       },
       "color-elevation-surface-raised-hovered": {
-        "value": "var(--color-neutral-solid-200)",
+        "value": "var(--color-brand-umber-solid-200)",
         "type": "color",
         "originalName": "color/elevation/surface/raised/hovered"
       },
       "color-elevation-surface-raised-pressed": {
-        "value": "var(--color-neutral-solid-300)",
+        "value": "var(--color-brand-umber-solid-300)",
         "type": "color",
         "originalName": "color/elevation/surface/raised/pressed"
       },

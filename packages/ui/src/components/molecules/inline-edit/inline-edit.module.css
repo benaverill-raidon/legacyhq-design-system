@@ -1,0 +1,22 @@
+/*
+ * Column layout: the confirm/cancel row sits below the field, not beside it, so the field never
+ * has to shrink to make room for the actions while editing - per explicit design feedback.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-sm);
+  inline-size: 100%;
+}
+
+.content {
+  inline-size: 100%;
+}
+
+.actions {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: var(--spacing-xs);
+}

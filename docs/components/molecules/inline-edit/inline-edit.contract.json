@@ -1,0 +1,167 @@
+{
+  "name": "InlineEdit",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Let a single displayed value switch between a read-only display and an editable control in place, starting on click, with an explicit confirm/cancel step.",
+  "intent": "Provide the shared click-to-edit trigger, draft tracking, trailing confirm/cancel chrome, and keyboard shortcuts for 'click a value to edit it' UIs, so every call site doesn't reimplement read/edit state and draft-vs-confirmed-value tracking itself.",
+  "nativeElement": "div",
+  "sourceFiles": {
+    "component": "inline-edit.tsx",
+    "types": "inline-edit.types.ts",
+    "styles": "inline-edit.module.css",
+    "stories": "InlineEdit.stories.tsx",
+    "tests": "InlineEdit.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2067:94618",
+    "componentSetName": "inline-edit",
+    "variantCount": 2,
+    "figmaVariantAxes": {
+      "state": ["default", "edit"]
+    },
+    "figmaComponentProps": {
+      "slot": { "type": "SLOT", "preferredValues": ["code-parts/<field>", "text-field", "select", "time-picker", "date-picker", "date-time-picker"] },
+      "actionButtons": { "type": "BOOLEAN", "defaultValue": true }
+    },
+    "figmaLayoutData": {
+      "itemSpacing": 4,
+      "rootFillOpacity": 0,
+      "counterAxisAlignItems": "CENTER",
+      "layoutSizingHorizontal": "FILL",
+      "actionButtonGroup": "size=sm, shape=square, tone=default icon-buttons, cancel/close first then confirm/check, confirmed via screenshot of the state=edit variant"
+    },
+    "apiAdaptationNotes": [
+      "Figma's 'state' axis (default/edit) is not implemented as a state or isEditing prop at all - editing state and the in-progress draft are owned entirely inside the component. Two earlier passes exposed isEditing externally (first fully controlled by the parent, then still controlled but toggleable); both were reverted after explicit design feedback that no real use case shows the confirm/cancel buttons before the field has been interacted with - editing must always start on click/focus.",
+      "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
+      "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
+      "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
+      "children is expected to be a single controlled input-like element (TextField today, typically appearance=subtle so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
+      "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
+    ]
+  },
+  "useCases": [
+    "editable name/title fields",
+    "inline quantity/value editors",
+    "any single-value 'click to edit' UI"
+  ],
+  "antiPatterns": [
+    "editing multiple related fields together",
+    "an edit that needs its own dedicated space (dialog or separate screen)"
+  ],
+  "anatomy": [
+    { "part": "root", "element": "div", "required": true, "description": "Transparent layout wrapper - flex row, no color/border tokens of its own." },
+    { "part": "content", "element": "div", "required": true, "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing." },
+    { "part": "actions", "element": "span", "required": false, "description": "Trailing cancel/confirm IconButton pair; renders only once editing has started, when actionButtons is not false." }
+  ],
+  "props": {
+    "value": { "type": "string", "required": true, "default": null, "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft." },
+    "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "A single controlled input-like element (e.g. a subtle TextField) InlineEdit clones for both the read-only display and the editable control." },
+    "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit." },
+    "onCancel": { "type": "() => void", "required": false, "default": null, "description": "Called when the cancel button (or Escape) discards the draft and reverts to value." },
+    "actionButtons": { "type": "boolean", "required": false, "default": true, "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false." },
+    "confirmLabel": { "type": "string", "required": false, "default": "Confirm", "description": "Accessible name (aria-label) for the confirm IconButton." },
+    "cancelLabel": { "type": "string", "required": false, "default": "Cancel", "description": "Accessible name (aria-label) for the cancel IconButton." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root's class list." }
+  },
+  "variants": {},
+  "sizes": [],
+  "states": ["read-only (not editing)", "editing"],
+  "slots": [
+    { "name": "children", "required": true, "supports": ["TextField (today, typically appearance=subtle)", "Select/DatePicker/TimePicker/DateTimePicker (once built, if they accept value/onChange/readOnly)"] }
+  ],
+  "tokens": {
+    "layout": {
+      "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
+      "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons themselves)"
+    }
+  },
+  "accessibility": {
+    "interactive": true,
+    "focusable": true,
+    "role": null,
+    "requirements": [
+      "No role or accessible name of its own - a transparent wrapper around the cloned child.",
+      "confirmLabel/cancelLabel always set an aria-label on the internal IconButtons.",
+      "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
+      "Enter calls onConfirm (with the draft, and preventDefault) while editing; Escape calls onCancel while editing. Neither fires before editing starts.",
+      "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur); moving focus to the cancel/confirm buttons themselves does not.",
+      "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
+    ]
+  },
+  "keyboardInteraction": [
+    { "key": "Tab", "behavior": "Reaches the cloned child (readOnly, focusable), then, once editing, cancel, then confirm, in native DOM order. Tab-ing past confirm to outside the root calls onConfirm (auto-save on blur)." },
+    { "key": "Enter", "behavior": "Calls onConfirm with the draft and preventDefault, then blurs the field (deselecting it), only while editing." },
+    { "key": "Escape", "behavior": "Calls onCancel and reverts to value, then blurs the field (deselecting it), only while editing." }
+  ],
+  "behaviorRules": [
+    "Own isEditing and the in-progress draft internally - no external isEditing/state prop.",
+    "Clone children via React.cloneElement for both states so the underlying DOM node (and focus) persists across the transition.",
+    "Not editing: clone with value, readOnly=true, onFocus starts editing and seeds the draft from value.",
+    "Editing: clone with the draft value and an onChange that updates it.",
+    "Render the confirm/cancel IconButton pair only once editing has started && actionButtons is not false.",
+    "Default actionButtons=true, confirmLabel='Confirm', cancelLabel='Cancel'.",
+    "Confirm calls onConfirm(draft) and returns to not-editing. Cancel calls onCancel() and returns to not-editing, showing value again.",
+    "Enter/Escape key handling is scoped to the internal editing state and does nothing before editing starts.",
+    "Enter and Escape both blur the field after calling onConfirm/onCancel, deselecting it the same way clicking either action button does; the mousedown-set ref flag also suppresses the auto-confirm handleBlur would otherwise re-fire from this same-tick blur.",
+    "onBlur on the root: if the newly-focused element (event.relatedTarget) is outside the root, or unavailable, call confirm(); if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
+    "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button)."
+  ],
+  "compositionRules": [
+    "Clone a single controlled input-like child appropriate for editing one value - TextField today (typically appearance=subtle), Select/DatePicker/TimePicker/DateTimePicker once built.",
+    "Do not use for multiple related fields - use a real form instead."
+  ],
+  "contentRules": [
+    "Exactly one value/control at a time - no multi-field composition.",
+    "The child must accept value, onChange, and readOnly props for cloning to work correctly."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes - Inline Edit owns no color tokens itself; all color comes from the cloned child and the IconButton actions."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded spacing - gaps come from --spacing-sm (root) and --spacing-xs (between action buttons).",
+    "flex-direction: column on the root, action row align-self: flex-end - deviates from Figma's own single-row layout so the field never shrinks to make room for the action buttons.",
+    "Use React.cloneElement, not a render-prop or two separate elements, so focus persists across the read/edit transition."
+  ],
+  "relatedComponents": ["TextField", "IconButton", "ButtonGroup"],
+  "do": [
+    "Pass a single subtle-appearance TextField (or similar controlled input) as children most of the time.",
+    "Control value from the parent and update it in onConfirm.",
+    "Use actionButtons=false only when you have another confirm/cancel mechanism (Enter/Escape still work)."
+  ],
+  "dont": [
+    "Do not use for multiple related fields - use a real form.",
+    "Do not expect an isEditing/state prop - editing always starts on click/focus.",
+    "Do not expect onConfirm to fire on every keystroke - only on commit."
+  ],
+  "acceptanceCriteria": [
+    "Renders the child read-only (no action row) before any interaction.",
+    "Focusing/clicking the read-only child starts editing and shows the confirm/cancel IconButton pair (unless actionButtons is false).",
+    "actionButtons=false hides the buttons while still editing.",
+    "Clicking confirm calls onConfirm with the typed draft and returns to read-only.",
+    "Clicking cancel calls onCancel, reverts to value, and returns to read-only.",
+    "Enter calls onConfirm (with preventDefault) while editing, then blurs the field; Escape calls onCancel while editing, then blurs the field.",
+    "Enter/Escape do nothing before editing starts.",
+    "Clicking/Tab-ing focus outside the root while editing calls onConfirm with the draft and returns to read-only.",
+    "Clicking cancel or confirm never also triggers an auto-confirm from the blur clicking them causes.",
+    "confirmLabel/cancelLabel set the accessible names of the action buttons.",
+    "className applies to the root.",
+    "Works in light and dark themes.",
+    "Storybook includes Playground, Variants, Content, and Edge Cases, every example using a subtle TextField.",
+    "Tests cover read-only rendering, starting to edit, actionButtons, confirm/cancel behavior including revert-on-cancel, blur-to-confirm, keyboard shortcuts, and accessible names."
+  ],
+  "knownLimitations": [
+    "No value/validation handling beyond confirm/cancel - only a transient draft while editing; the confirmed value is entirely owned by the parent.",
+    "Only TextField exists as a real clonable-control implementation today."
+  ],
+  "futureEnhancements": [
+    "Slot support for Select/DatePicker/TimePicker/DateTimePicker once those components exist and accept the same value/onChange/readOnly shape"
+  ]
+}

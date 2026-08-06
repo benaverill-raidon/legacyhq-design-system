@@ -6,7 +6,7 @@
 Icon
 
 ### Category
-Atom / Foundational UI Asset
+Primitive
 
 ### Related Components
 - Button

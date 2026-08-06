@@ -258,7 +258,7 @@ export const EdgeCases: Story = {
             ...row,
             padding: 'var(--spacing-lg)',
             borderRadius: 'var(--border-radius-md)',
-            background: 'var(--color-background-neutral-bold-default)',
+            background: 'var(--color-elevation-surface-default)',
           }}
         >
           <Label tone="default" emphasis="bold">

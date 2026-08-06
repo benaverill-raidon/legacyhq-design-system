@@ -204,12 +204,13 @@ When `isSelected` is true:
 - Preserve button dimensions.
 - Keep icon centered.
 
-Selected mappings bound in Figma:
+Selected mappings bound in Figma. Background/content are shared across tones - border is not:
 
 ```txt
-background: color/background/brand/primary/default/default
-content: color/content/brand
-border: color/border/brand
+background: color/background/brand/primary/default/default   (both tones)
+content: color/content/brand/primary/default                  (both tones)
+border: color/border/brand/primary/default                     (tone=default only)
+border: transparent                                             (tone=subtle)
 ```
 
 Use actual generated token names in code.
@@ -221,7 +222,8 @@ When disabled:
 - Use native `disabled`.
 - Suppress hover/press styles.
 - Suppress click behavior.
-- Use disabled semantic color tokens.
+- Use disabled semantic color tokens, with the same tone-specific border split as selected:
+  `tone=default` keeps a border (`color-border-disabled`), `tone=subtle` stays borderless.
 - Maintain accessible disabled semantics.
 
 Disabled should win over selected for interaction.
@@ -274,6 +276,13 @@ Do not hardcode:
   size. No bug found here.
 - No unique visual treatment exists for selected+disabled - disabled fully overrides selected,
   matching this doc's own state-priority guidance.
+- Follow-up review (after Figma added `tone=subtle, isSelected=true` variants): fixed a real bug -
+  `.selected` and `.root:disabled` were single, tone-agnostic rules that always drew a border, so a
+  subtle selected/disabled icon button incorrectly got a border it should never have. Figma's
+  `tone=subtle` selected/disabled variants share the exact same fill/text tokens as `tone=default`'s
+  but have no stroke at all. Split both rules by tone (`.tone_default.selected`/`.tone_subtle.selected`,
+  `.tone_default:disabled`/`.tone_subtle:disabled`) so `tone=subtle` stays borderless in both states,
+  matching its own resting look - the same bordered/borderless split Button already uses for disabled.
 
 ## Storybook requirements
 

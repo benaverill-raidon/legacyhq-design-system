@@ -143,7 +143,8 @@ When `disabled` is true:
 
 - pass the native `disabled` attribute
 - prevent activation
-- apply disabled visual treatment
+- apply disabled visual treatment - bordered for `appearance="default"`, borderless for
+  `appearance="primary"`/`appearance="subtle"` (see Color Token Intent > Disabled below)
 
 ### Loading
 
@@ -314,6 +315,20 @@ Use available semantic color tokens from the theme CSS.
 Use neutral or semantic subtle background tokens for hover/pressed states, with default transparent/no-fill base where appropriate.
 
 If an exact semantic token is missing, document it and use the closest existing approved token from the generated theme files.
+
+### Disabled
+
+Two disabled treatments, matching each appearance's own resting border visibility rather than one
+shared look applied uniformly:
+
+- **`appearance="default"`** already shows a visible border at rest - disabled keeps a border,
+  using `color-border-disabled`.
+- **`appearance="primary"` and `appearance="subtle"`** (any tone) are borderless at rest - applying
+  `color-border-disabled` there would draw a border that was never part of their resting look, so
+  disabled stays borderless (`border-color: transparent`) instead.
+
+Background (`color-background-disabled`) and content (`color-content-disabled`) are shared by both
+treatments - only the border differs.
 
 ## Accessibility
 

@@ -3,11 +3,13 @@
  */
 
 :root {
+  --component-skeleton-color-subtle: var(--color-neutral-alpha-1200-04);
   --color-content-default: var(--color-neutral-solid-1200);
   --color-content-subtle: var(--color-neutral-solid-800);
   --color-content-inverse: var(--color-neutral-solid-0);
   --color-content-disabled: var(--color-neutral-alpha-1200-32);
   --color-content-loading: var(--color-neutral-alpha-1200-08);
+  --color-skeleton-default: var(--color-neutral-alpha-1200-08);
   --color-content-brand-primary-default: var(--color-brand-prussian-solid-900);
   --color-content-brand-primary-subtle: var(--color-brand-prussian-solid-300);
   --color-content-error: var(--color-red-solid-800);
@@ -214,8 +216,8 @@
   --color-elevation-surface-hovered: var(--color-brand-umber-solid-200);
   --color-elevation-surface-pressed: var(--color-brand-umber-solid-300);
   --color-elevation-surface-raised-default: var(--color-neutral-solid-0);
-  --color-elevation-surface-raised-hovered: var(--color-neutral-solid-200);
-  --color-elevation-surface-raised-pressed: var(--color-neutral-solid-300);
+  --color-elevation-surface-raised-hovered: var(--color-brand-umber-solid-200);
+  --color-elevation-surface-raised-pressed: var(--color-brand-umber-solid-300);
   --color-elevation-surface-sunken-default: var(--color-brand-umber-solid-200);
   --color-elevation-surface-sunken-hovered: var(--color-brand-umber-solid-300);
   --color-elevation-surface-sunken-pressed: var(--color-brand-umber-solid-400);

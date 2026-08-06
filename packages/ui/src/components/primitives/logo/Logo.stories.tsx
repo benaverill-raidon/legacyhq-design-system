@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { Fragment } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Logo } from './logo';
 import type { LogoSize, LogoType } from './logo.types';
 
@@ -93,8 +93,8 @@ const surfaceStyle = {
 
 const darkSurfaceStyle = {
   ...surfaceStyle,
-  background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
+  background: 'var(--color-elevation-surface-default)',
+  color: 'var(--color-content-default)',
 } satisfies CSSProperties;
 
 const linkStyle = {

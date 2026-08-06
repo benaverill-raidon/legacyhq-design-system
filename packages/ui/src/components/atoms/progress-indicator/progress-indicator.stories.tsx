@@ -67,8 +67,8 @@ const cardStyle: CSSProperties = {
 const darkCardStyle: CSSProperties = {
   ...cardStyle,
   borderColor: 'var(--color-border-inverse)',
-  background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
+  background: 'var(--color-elevation-surface-default)',
+  color: 'var(--color-content-default)',
 };
 
 const headingStyle: CSSProperties = {
@@ -132,7 +132,7 @@ export const Variants: Story = {
             ...row,
             padding: 'var(--spacing-lg)',
             borderRadius: 'var(--border-radius-md)',
-            background: 'var(--color-background-neutral-bold-default)',
+            background: 'var(--color-elevation-surface-default)',
           }}
         >
           <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Inverted journey" />
@@ -377,7 +377,7 @@ export const EdgeCases: Story = {
             ...row,
             padding: 'var(--spacing-lg)',
             borderRadius: 'var(--border-radius-md)',
-            background: 'var(--color-background-neutral-bold-default)',
+            background: 'var(--color-elevation-surface-default)',
           }}
         >
           <ProgressIndicator currentStep={2} totalSteps={4} label="Dark default" />

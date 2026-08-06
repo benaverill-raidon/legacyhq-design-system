@@ -60,6 +60,10 @@ const cardStyle: CSSProperties = {
   color: 'var(--color-content-default)',
 };
 
+// `appearance="inverse"` needs a bold/dark backdrop that contrasts with whatever the ambient
+// theme happens to be (like Badge's default chip or a Tooltip bubble), not a full dark-theme
+// preview - so this uses the "boldest contrast for the current theme" tokens directly rather
+// than `data-theme="dark"` + theme-relative tokens.
 const darkSurfaceStyle: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-md)',

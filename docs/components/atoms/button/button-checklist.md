@@ -77,6 +77,9 @@ Atom
 - Support `type="submit"` and `type="reset"` when provided.
 - Do not use ARIA roles to recreate native button behavior.
 - Disabled buttons should use the native `disabled` attribute.
+- Disabled visual treatment must match the appearance's own resting border: bordered
+  (`color-border-disabled`) for `appearance="default"`; borderless (`border-color: transparent`) for
+  `appearance="primary"`/`appearance="subtle"`, at every tone.
 - Loading buttons should prevent repeated activation.
 - Loading buttons should expose loading state accessibly.
 - Focus must be visible with keyboard navigation.

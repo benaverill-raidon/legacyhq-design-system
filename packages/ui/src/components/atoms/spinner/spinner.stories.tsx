@@ -46,6 +46,10 @@ const cardStyle: CSSProperties = {
   color: 'var(--color-content-default)',
 };
 
+// Spinner has no tone/appearance prop - it always renders via `currentColor`, so this demo needs
+// a backdrop that contrasts with whatever the ambient theme happens to be (like Badge's default
+// chip), not a full dark-theme preview - hence the "boldest contrast for the current theme"
+// tokens directly rather than `data-theme="dark"` + theme-relative tokens.
 const darkSurfaceStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',

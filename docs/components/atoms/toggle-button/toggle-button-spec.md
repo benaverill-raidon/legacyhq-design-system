@@ -122,15 +122,21 @@ The parent owns the selected value.
 
 ## Selected token mapping
 
-Selected state should use the semantic brand mappings bound in Figma.
-
-Expected mapping:
+Selected state should use the semantic brand mappings bound in Figma. Background and content
+tokens are shared across both tones - only the border differs, matching each tone's own resting
+border visibility:
 
 ```txt
-background: color/background/brand/primary/default/default
-content: color/content/brand
-border: color/border/brand
+background: color/background/brand/primary/default/default   (both tones)
+content: color/content/brand/primary/default                  (both tones)
+border: color/border/brand/primary/default                     (tone=default only)
+border: transparent                                             (tone=subtle)
 ```
+
+`tone="default"` already shows a visible border at rest, so selected keeps one. `tone="subtle"` is
+borderless at rest - applying the same border there would draw a border that was never part of its
+look, so selected stays borderless too. Confirmed directly from Figma's `tone=subtle,
+isSelected=true` variants (no stroke, same fill/text tokens as `tone=default`'s selected state).
 
 Use actual generated token names.
 
@@ -204,7 +210,10 @@ Expected:
 
 - click is suppressed by native behavior
 - hover/press styles are suppressed
-- disabled semantic tokens are used
+- disabled semantic tokens are used, with the same tone-specific border split selected uses:
+  `tone="default"` disabled keeps a visible border (`color/border/disabled`), `tone="subtle"`
+  disabled stays borderless (confirmed directly from Figma's `tone=subtle, isDisabled=true`
+  variants - no stroke)
 
 ## State priority
 
@@ -214,7 +223,10 @@ Recommended priority:
 disabled > selected > press > hover > default
 ```
 
-If selected + disabled has no unique design treatment, disabled styling may fully override selected visuals.
+Figma has no unique selected+disabled treatment, so disabled styling fully overrides selected
+visuals - but the tone-specific border split still applies within disabled itself (see above), so a
+disabled `tone="subtle"` selected button stays borderless while a disabled `tone="default"`
+selected button keeps its border.
 
 ## Loading
 

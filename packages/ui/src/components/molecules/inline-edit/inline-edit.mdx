@@ -1,0 +1,189 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as InlineEditStories from './InlineEdit.stories';
+
+<Meta of={InlineEditStories} name="Docs" />
+
+# Inline Edit
+
+Inline Edit lets a single displayed value switch between a read-only display and an editable
+control in place, with an explicit confirm/cancel step. Editing always starts on click (or Tab-in) -
+there is no state where the confirm/cancel buttons show before the field has been interacted with.
+
+<Canvas of={InlineEditStories.Playground} />
+
+## When to use
+
+- A single value (a name, a title, a quantity) should be editable directly where it's displayed.
+- The edit is simple enough to fit in the same space the read value occupies.
+
+## When not to use
+
+- **Multiple related fields.** Inline Edit wraps exactly one value/control at a time - use a real
+  form instead.
+- **An edit that needs its own space.** A dialog or a separate screen fits a multi-step or
+  many-field edit better.
+
+## Anatomy
+
+Inline Edit takes a single child - typically a `TextField` with `appearance="subtle"` - and clones
+it for both states: read-only (not editable, but still focusable, showing the last confirmed
+`value`) and editable (showing the in-progress draft). A confirm/cancel `IconButton` pair appears
+below the field, anchored to its trailing/right edge, only once editing has started - the field
+keeps its full width in both states, since the action row never shares space with it.
+
+## Usage guidance
+
+### `value` is controlled like a normal input
+
+Inline Edit's outer contract mirrors `TextField`'s own `value`/`onChange` pattern: the parent
+supplies `value` (the last confirmed value) and receives it back via `onConfirm` only when the user
+commits an edit - not on every keystroke. Internally, Inline Edit tracks its own in-progress draft
+while editing, and discards it on cancel, reverting the field to `value`.
+
+```tsx
+const [value, setValue] = useState('Q3 Planning');
+
+<InlineEdit value={value} onConfirm={setValue}>
+  <TextField appearance="subtle" aria-label="Title" />
+</InlineEdit>;
+```
+
+<Canvas of={InlineEditStories.Content} />
+
+### Editing always starts on click or focus
+
+There's no prop that shows the confirm/cancel buttons before the field has been interacted with -
+every real use case starts read-only. Clicking the field, or tabbing to it with the keyboard, both
+start editing (the child is cloned `readOnly` until then, so it stays focusable and keeps showing
+`value`, but isn't editable).
+
+<Canvas of={InlineEditStories.Variants} />
+
+### Keyboard shortcuts
+
+Once editing has started, `Enter` calls `onConfirm` with the current draft (in addition to the
+visible confirm button) and `Escape` calls `onCancel` and reverts to `value` (in addition to the
+visible cancel button). Both then blur the field, deselecting it the same way clicking either action
+button already does. Both still work when `actionButtons` is `false` and the buttons themselves
+aren't rendered.
+
+### Clicking or tabbing away always saves
+
+Clicking (or Tab-ing) away from the field while editing - anywhere other than the cancel/confirm
+buttons themselves - commits the draft, the same as clicking confirm. Only clicking cancel (or
+pressing Escape) discards it. This means there's no way to accidentally lose an edit by clicking
+somewhere else on the page; the only way to discard is explicit.
+
+<Canvas of={InlineEditStories.EdgeCases} />
+
+## Do / Don't
+
+**Do** pass a single controlled-input-like child, typically a subtle `TextField`.
+
+```tsx
+<InlineEdit value={value} onConfirm={setValue}>
+  <TextField appearance="subtle" aria-label="Title" />
+</InlineEdit>
+```
+
+**Don't** expect Inline Edit to show its action buttons before the field is interacted with.
+
+```tsx
+{
+  /* There is no prop for this - editing always starts on click/focus. */
+}
+<InlineEdit value="Q3 Planning" startEditing />;
+```
+
+---
+
+**Do** use `actionButtons={false}` when you have another confirm/cancel mechanism - `Enter`/`Escape`
+still work.
+
+```tsx
+<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>
+  <TextField appearance="subtle" aria-label="Title" />
+</InlineEdit>
+```
+
+**Don't** wrap more than one field in a single Inline Edit.
+
+```tsx
+{
+  /* Use a real form for multiple related fields instead. */
+}
+<InlineEdit value={value}>
+  <TextField aria-label="First name" />
+</InlineEdit>;
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Required. The last confirmed value.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactElement</code></td>
+      <td>-</td>
+      <td>Required. A single controlled input-like element (e.g. a subtle <code>TextField</code>) Inline Edit clones for both states.</td>
+    </tr>
+    <tr>
+      <td><code>onConfirm</code></td>
+      <td><code>(value: string) =&gt; void</code></td>
+      <td>-</td>
+      <td>Called with the draft value when the confirm button (or Enter) commits the edit.</td>
+    </tr>
+    <tr>
+      <td><code>onCancel</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>-</td>
+      <td>Called when the cancel button (or Escape) discards the draft and reverts to <code>value</code>.</td>
+    </tr>
+    <tr>
+      <td><code>actionButtons</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether to render the confirm/cancel buttons while editing. Enter/Escape still work when false.</td>
+    </tr>
+    <tr>
+      <td><code>confirmLabel</code></td>
+      <td><code>string</code></td>
+      <td><code>'Confirm'</code></td>
+      <td>Accessible name for the confirm button.</td>
+    </tr>
+    <tr>
+      <td><code>cancelLabel</code></td>
+      <td><code>string</code></td>
+      <td><code>'Cancel'</code></td>
+      <td>Accessible name for the cancel button.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Text Field** - the control Inline Edit clones, typically with `appearance="subtle"` so it reads
+  as plain text until interacted with.
+- **Icon Button** - the confirm/cancel actions Inline Edit renders internally.
+- **Button Group** - a similarly thin "compose atoms into a named layout" molecule, though Button
+  Group has no state of its own while Inline Edit does.

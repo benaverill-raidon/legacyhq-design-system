@@ -195,4 +195,21 @@ describe('Button', () => {
     expect(buttonCss).not.toContain('border-radius: 12px;');
     expect(buttonCss).not.toContain('border-radius: 14px;');
   });
+
+  it('gives appearance=default a visible disabled border, matching its own resting border', () => {
+    const rule = buttonCss.match(/\.appearance_default:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+  });
+
+  it('keeps appearance=primary/subtle disabled borderless, matching their own resting border', () => {
+    const rule = buttonCss.match(/\.appearance_primary:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+    expect(rule?.[0]).toContain('.appearance_subtle:disabled');
+  });
 });

@@ -343,6 +343,7 @@
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --duration-loop: 860ms;
   --ease-loop: cubic-bezier(0.4, 0.15, 0.6, 0.85);
+  --duration-loop-slow: 1500ms;
   --component-avatar-badge-size-xxs: var(--measurement-8);
   --component-avatar-badge-size-xs: var(--measurement-12);
   --component-avatar-badge-size-sm: var(--measurement-12);
@@ -465,6 +466,7 @@
   --move-quick: var(--duration-fast) var(--ease-spring);
   --move-long: var(--duration-slow) var(--ease-spring);
   --spin-loop: var(--duration-loop) var(--ease-loop);
+  --pulse-loop: var(--duration-loop-slow) linear;
   --typography-display-lg-font-family: var(--typography-font-family-merriweather);
   --typography-display-lg-font-weight: var(--typography-font-weight-600);
   --typography-display-lg-font-size: var(--typography-font-size-48);

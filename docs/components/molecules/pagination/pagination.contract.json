@@ -1,0 +1,158 @@
+{
+  "name": "Pagination",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Divide a large amount of content into pages and let users jump directly to any page, or step forward/backward.",
+  "intent": "Provide a controlled, accessible page-range control composed from ToggleButton (page numbers) and IconButton (previous/next), with a reusable sibling/boundary-count windowing algorithm.",
+  "nativeElement": "nav",
+  "sourceFiles": {
+    "component": "pagination.tsx",
+    "types": "pagination.types.ts",
+    "styles": "pagination.module.css",
+    "stories": "Pagination.stories.tsx",
+    "tests": "Pagination.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentNodeId": "2152:14872",
+    "componentName": "pagination",
+    "isVariantSet": false,
+    "note": "A single component (not a variant set), 512x32, demonstrating currentPage=1 of totalPages=20.",
+    "structure": {
+      "navigatorPartNodeId": "4472:372771",
+      "navigatorWraps": "icon-button (shape=square, size=sm, tone=subtle) with chevron_left/chevron_right",
+      "pagePartWraps": "toggle-button (size=sm (32), tone=subtle when unselected, isSelected true/false)",
+      "ellipsisPartNodeId": "2152:14771",
+      "ellipsisIsNonInteractive": true,
+      "ellipsisNote": "Plain '...' text at color/content/subtle, no button wrapper - confirmed from the actual node tree, despite the component-search metadata describing it as a subtle Button."
+    },
+    "apiAdaptationNotes": [
+      "Figma's one demo (currentPage=1, totalPages=20) shows 12 consecutive pages before collapsing to an ellipsis + page 20 - a width-fitting demo, not a literal algorithm. The component instead implements the standard sibling+boundary-count windowing algorithm (getPaginationRange), which with default siblingCount=1/boundaryCount=1 renders '1 2 … 20' for the same inputs. A consumer can raise siblingCount to get a wider range closer to Figma's sample.",
+      "Figma's per-item VARIANT prop name 'tone' on both toggle-button and icon-button instances maps to this codebase's existing ToggleButtonTone/IconButtonAppearance prop values ('subtle'), not a new prop Pagination needs to invent.",
+      "aria-current=\"page\" is added on top of ToggleButton's own isSelected/aria-pressed, since ToggleButton alone has no concept of 'current page in a sequence'."
+    ]
+  },
+  "useCases": [
+    "paged tables",
+    "search results",
+    "any paged list view"
+  ],
+  "antiPatterns": [
+    "infinite scroll / load more content",
+    "step-based flow progress",
+    "only one or two total pages"
+  ],
+  "anatomy": [
+    { "part": "root", "element": "nav", "required": true, "description": "Landmark with an accessible name (default 'Pagination')." },
+    { "part": "list", "element": "ol", "required": true, "description": "Ordered list of pagination controls." },
+    { "part": "previous", "element": "IconButton", "required": true, "description": "Chevron-left control, disabled on the first page." },
+    { "part": "page", "element": "ToggleButton", "required": true, "description": "One per visible page number; isSelected + aria-current=\"page\" on the current page." },
+    { "part": "ellipsis", "element": "span (aria-hidden)", "required": false, "description": "Non-interactive '...' text wherever the range algorithm collapses a gap." },
+    { "part": "next", "element": "IconButton", "required": true, "description": "Chevron-right control, disabled on the last page." }
+  ],
+  "props": {
+    "currentPage": { "type": "number", "required": true, "default": null, "description": "1-based current page." },
+    "totalPages": { "type": "number", "required": true, "default": null, "description": "Total number of pages." },
+    "onPageChange": { "type": "(page: number) => void", "required": true, "default": null, "description": "Called with the target page when a page/previous/next control is activated." },
+    "siblingCount": { "type": "number", "required": false, "default": 1, "description": "Pages shown on either side of the current page." },
+    "boundaryCount": { "type": "number", "required": false, "default": 1, "description": "Pages always shown at the start and end of the range." },
+    "previousLabel": { "type": "string", "required": false, "default": "Previous page", "description": "aria-label for the previous control." },
+    "nextLabel": { "type": "string", "required": false, "default": "Next page", "description": "aria-label for the next control." },
+    "getPageLabel": { "type": "(page: number) => string", "required": false, "default": "(page) => `Page ${page}`", "description": "aria-label generator for each page button." },
+    "ariaLabel": { "type": "string", "required": false, "default": "Pagination", "description": "Accessible name for the nav landmark." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Optional custom class name for the root nav." }
+  },
+  "variants": {},
+  "sizes": [],
+  "states": ["default", "selected", "disabled"],
+  "slots": [],
+  "tokens": {
+    "layout": {
+      "controlSize": "--size-control-sm",
+      "gap": "--spacing-xs"
+    },
+    "color": {
+      "ellipsis": "--color-content-subtle"
+    },
+    "typography": {
+      "ellipsis": "--typography-body-md-*"
+    }
+  },
+  "accessibility": {
+    "interactive": true,
+    "focusable": "every previous/next/page control",
+    "role": null,
+    "landmark": "nav",
+    "requirements": [
+      "nav must always have an accessible name (ariaLabel, default 'Pagination').",
+      "The current page control must carry aria-current=\"page\".",
+      "Previous/next must have accessible names and must be disabled at the first/last page.",
+      "The ellipsis must be aria-hidden and non-interactive."
+    ]
+  },
+  "keyboardInteraction": ["Tab moves through previous, each visible page, and next in order; Enter/Space activates the focused control."],
+  "behaviorRules": [
+    "Render exactly one IconButton for previous and one for next.",
+    "Render one ToggleButton per page number returned by getPaginationRange, plus a non-interactive ellipsis wherever the algorithm returns 'ellipsis'.",
+    "Mark the ToggleButton matching currentPage with isSelected and aria-current=\"page\".",
+    "Disable previous when currentPage <= 1; disable next when currentPage >= totalPages.",
+    "Call onPageChange with the clicked page number, or currentPage -1 / currentPage + 1 for previous/next.",
+    "Default siblingCount=1, boundaryCount=1, ariaLabel='Pagination', previousLabel='Previous page', nextLabel='Next page'."
+  ],
+  "compositionRules": [
+    "Pagination always renders ToggleButton for page numbers and IconButton for previous/next - do not reimplement their visual states locally.",
+    "Use Progress Indicator instead of Pagination for step-based flow progress."
+  ],
+  "contentRules": [
+    "Page numbers only - no custom per-page labels.",
+    "currentPage should be within [1, totalPages]."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Must work in light and dark themes - all color comes from ToggleButton/IconButton's own semantic tokens plus --color-content-subtle for the ellipsis."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, or typography.",
+    "getPaginationRange must be a pure function, exported for independent unit testing.",
+    "Reuse ToggleButton and IconButton directly rather than reimplementing their styling.",
+    "Page buttons are forced to a fixed --size-control-sm square (overriding ToggleButton's own variable, content-based width) via a `.item :global([data-selected])` compound selector - the same higher-specificity :global() attribute-selector technique Icon Button and Icon Tile use, so ToggleButton's default width behavior for its other consumers is untouched."
+  ],
+  "relatedComponents": ["ToggleButton", "IconButton", "ProgressIndicator"],
+  "do": [
+    "Use for a paged table, list, or search-results view.",
+    "Keep the consumer in control of currentPage via onPageChange.",
+    "Raise siblingCount/boundaryCount for a wider visible range."
+  ],
+  "dont": [
+    "Do not use for infinite scroll / load more content.",
+    "Do not use for step-based flow progress.",
+    "Do not use with only one or two total pages."
+  ],
+  "acceptanceCriteria": [
+    "Renders previous, the computed page range (with ellipses), and next.",
+    "getPaginationRange produces the documented output for small ranges, middle-of-range, near-start, and near-end cases.",
+    "Clicking a page number calls onPageChange with that page.",
+    "Clicking previous/next calls onPageChange with currentPage -1/+1.",
+    "Previous is disabled on page 1; next is disabled on the last page.",
+    "The current page has aria-current=\"page\".",
+    "nav has an accessible name, defaulting to 'Pagination'.",
+    "Supports className on the root.",
+    "Storybook includes Playground and Composition.",
+    "Tests cover the range algorithm directly plus rendering/interaction/accessibility."
+  ],
+  "knownLimitations": [
+    "No built-in 'jump to page' input.",
+    "The ellipsis is not interactive - matches the literal Figma node, and does not yet expose which pages it collapsed.",
+    "Does not measure container width to decide how many pages to show."
+  ],
+  "futureEnhancements": [
+    "A 'jump to page' input variant",
+    "The ellipsis becomes a Dropdown Menu (organism) trigger listing the hidden page numbers - intentionally deferred until Dropdown Menu exists in this design system, so Pagination doesn't depend on an unbuilt organism. getPaginationRange will need to return which pages each 'ellipsis' collapsed, not just the marker, to support this."
+  ]
+}

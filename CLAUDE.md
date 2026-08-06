@@ -122,8 +122,7 @@ Cross-cutting prop-naming rules live in
 token-governance.json). Current rules:
 
 - Use native `disabled`, not a custom `isDisabled` boolean. Checkbox, Switch,
-  and Radio already follow this. Button and IconButton currently use
-  `isDisabled` — documented as known drift, to be migrated when next touched.
+  Radio, Button, and IconButton all follow this.
 - Reserve the `is*` prefix (`isLoading`, `isFullWidth`, `isExpanded`) for
   state with no native HTML equivalent — not for anything a native attribute
   already covers.

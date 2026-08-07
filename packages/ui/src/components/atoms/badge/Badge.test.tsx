@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Badge } from './badge';
 
-const badgeCss = readFileSync('packages/ui/src/components/atoms/badge/Badge.module.css', 'utf8');
+const badgeCss = readFileSync('packages/ui/src/components/atoms/badge/badge.module.css', 'utf8');
 
 afterEach(cleanup);
 

@@ -222,7 +222,7 @@ Do not build ToggleButtonGroup in this pass.
 
 ## Validated Figma Details
 
-- Root fill/border tokens (resting `color-border-default`/`color-content-subtle`, selected
+- Root fill/border tokens (resting `color-border-input`/`color-content-subtle`, selected
   `color-background-brand-primary-default-default`/`color-border-brand-primary`/
   `color-content-brand-primary-default`, disabled `color-background-disabled`/`color-border-disabled`/
   `color-content-disabled`, hover/pressed overlays `color-background-neutral-overlay-hovered`/

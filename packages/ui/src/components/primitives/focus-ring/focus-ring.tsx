@@ -5,12 +5,11 @@ import type { FocusRingBorderWidth, FocusRingProps } from './focus-ring.types';
 export const focusRingClassNames = {
   focusRing: styles.focusRing,
   focusRingDefault: styles.focusRingDefault,
-  focusRingCompact: styles.focusRingCompact,
   focusRingDisabled: styles.focusRingDisabled,
 } as const;
 
-function getBorderWidthClassName(borderWidth: FocusRingBorderWidth) {
-  return borderWidth === 'compact' ? styles.focusRingCompact : styles.focusRingDefault;
+function getBorderWidthClassName(_borderWidth: FocusRingBorderWidth) {
+  return styles.focusRingDefault;
 }
 
 function mergeClassNames(...classNames: Array<string | undefined>) {

@@ -45,15 +45,6 @@
         "children": "-1",
         "tone": "error"
       }
-    },
-    {
-      "name": "Inverse badge on dark surface",
-      "description": "Inverse tone for badges placed on dark or bold surfaces.",
-      "jsx": "<div data-theme=\"dark\"><Badge tone=\"inverse\">1</Badge></div>",
-      "props": {
-        "children": "1",
-        "tone": "inverse"
-      }
     }
   ],
   "antiExamples": [

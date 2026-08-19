@@ -58,9 +58,26 @@ of the public API) - the same convention Button and Checkbox use. Focus preview 
 shared Focus Ring primitive's own `data-force-state="focus"` support on the input. See States for
 both the pinned reference states and a live, click-driven example.
 
+### Thumb expansion on hover
+
+The thumb expands slightly (`scaleX(1.16)`) on hover as well as press, not press alone - the cue
+starts as soon as the pointer arrives rather than waiting for an actual click.
+
 ### Reduced motion
 
-The thumb's slide and press animation respects `prefers-reduced-motion: reduce` - see Edge Cases.
+The thumb's slide, hover, and press animation respects `prefers-reduced-motion: reduce` - see Edge
+Cases.
+
+### Hiding the icons
+
+`showIcons={false}` renders a bare track/thumb with no check/X mark - use it where the track's own
+color (neutral vs. success) already reads clearly and the mark would just add visual noise. This is
+independent of `isLoading`: the loading Spinner is a functional status signal, not decoration, so it
+still renders in the same slot even when `showIcons` is `false`.
+
+```tsx
+<Switch label="Compact setting" showIcons={false} />
+```
 
 ## Do / Don't
 
@@ -158,6 +175,12 @@ as permanently unavailable, not temporarily busy.
       <td><code>boolean</code></td>
       <td><code>false</code></td>
       <td>Blocks toggling and sets <code>aria-busy</code>, but stays focusable - unlike <code>disabled</code>. Replaces the on/off mark with a small Spinner in the same slot.</td>
+    </tr>
+    <tr>
+      <td><code>showIcons</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Set to <code>false</code> to hide the decorative check/X marks. Does not affect the <code>isLoading</code> Spinner.</td>
     </tr>
     <tr>
       <td><code>onCheckedChange</code></td>

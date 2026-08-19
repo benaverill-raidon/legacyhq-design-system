@@ -138,23 +138,6 @@
 .input:checked + .indicatorTarget .checkedIcon,
 .root[data-indeterminate='true'] .indicatorTarget .indeterminateIcon {
   display: inline-flex;
-  animation: checkboxCheckIn var(--move-quick);
-}
-
-@keyframes checkboxCheckIn {
-  from {
-    transform: scale(0.6);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .checkedIcon,
-  .indeterminateIcon {
-    animation-duration: 0ms;
-  }
 }
 
 .labelText {

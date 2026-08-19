@@ -125,11 +125,11 @@
   --color-background-accent-gray-default-default: var(--color-neutral-solid-300);
   --color-background-accent-gray-default-hovered: var(--color-neutral-solid-400);
   --color-background-accent-gray-default-pressed: var(--color-neutral-solid-500);
-  --color-background-accent-gray-bold-default: var(--color-neutral-solid-1200);
+  --color-background-accent-gray-bold-default: var(--color-neutral-solid-1100);
   --color-background-accent-gray-overlay-hovered: var(--color-neutral-alpha-1200-08);
   --color-background-accent-gray-overlay-pressed: var(--color-neutral-alpha-1200-16);
-  --color-background-accent-gray-bold-hovered: var(--color-neutral-solid-1100);
-  --color-background-accent-gray-bold-pressed: var(--color-neutral-solid-1000);
+  --color-background-accent-gray-bold-hovered: var(--color-neutral-solid-1200);
+  --color-background-accent-gray-bold-pressed: var(--color-neutral-solid-1300);
   --color-background-error-subtle-default: var(--color-red-solid-100);
   --color-background-error-subtle-hovered: var(--color-red-solid-200);
   --color-background-error-subtle-pressed: var(--color-red-solid-300);
@@ -206,9 +206,9 @@
   --color-background-neutral-default-default: var(--color-neutral-solid-300);
   --color-background-neutral-default-hovered: var(--color-neutral-solid-400);
   --color-background-neutral-default-pressed: var(--color-neutral-solid-500);
-  --color-background-neutral-bold-default: var(--color-neutral-solid-1200);
-  --color-background-neutral-bold-hovered: var(--color-neutral-solid-1100);
-  --color-background-neutral-bold-pressed: var(--color-neutral-solid-1000);
+  --color-background-neutral-bold-default: var(--color-neutral-solid-1100);
+  --color-background-neutral-bold-hovered: var(--color-neutral-solid-1200);
+  --color-background-neutral-bold-pressed: var(--color-neutral-solid-1300);
   --color-background-neutral-overlay-hovered: var(--color-neutral-alpha-1200-08);
   --color-background-neutral-overlay-pressed: var(--color-neutral-alpha-1200-16);
   --color-background-neutral-overlay-blanket: var(--color-neutral-alpha-1200-48);

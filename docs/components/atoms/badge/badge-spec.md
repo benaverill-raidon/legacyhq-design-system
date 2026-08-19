@@ -15,7 +15,6 @@ Atom
 - Figma Component: Badge
 - Variants:
   - default
-  - inverse
   - brand
   - success
   - error
@@ -57,7 +56,6 @@ Badge
 | Tone | Description |
 |--------|-------------|
 | default | Standard badge |
-| inverse | For dark surfaces |
 | brand | Brand emphasis |
 | success | Positive values |
 | error | Negative values |
@@ -85,7 +83,7 @@ Badge content should never wrap.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
-| tone | 'default' \| 'inverse' \| 'brand' \| 'success' \| 'error' | No | 'default' |
+| tone | 'default' \| 'brand' \| 'success' \| 'error' | No | 'default' |
 | ariaLabel | string | No | undefined |
 | className | string | No | undefined |
 
@@ -124,7 +122,6 @@ Suggested mappings:
 | Tone | Background Token | Text Token |
 |---------|------------------|-------------|
 | default | surface/default | content/default |
-| inverse | surface/inverse | content/inverse |
 | brand | background/brand | content/inverse |
 | success | background/success | content/inverse |
 | error | background/error | content/inverse |

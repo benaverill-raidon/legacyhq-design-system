@@ -607,7 +607,7 @@
         "originalName": "color/background/accent/gray/default/pressed"
       },
       "color-background-accent-gray-bold-default": {
-        "value": "var(--color-neutral-solid-100)",
+        "value": "var(--color-neutral-solid-200)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/default"
       },
@@ -622,14 +622,14 @@
         "originalName": "color/background/accent/gray/overlay/pressed"
       },
       "color-background-accent-gray-bold-hovered": {
-        "value": "var(--color-neutral-solid-200)",
+        "value": "var(--color-neutral-solid-100)",
         "type": "color",
-        "originalName": "color/background/accent/gray/bold/hovered"
+        "originalName": "color/background/accent/gray/bold/hover"
       },
       "color-background-accent-gray-bold-pressed": {
-        "value": "var(--color-neutral-solid-300)",
+        "value": "var(--color-neutral-solid-0)",
         "type": "color",
-        "originalName": "color/background/accent/gray/bold/pressed"
+        "originalName": "color/background/accent/gray/bold/press"
       },
       "color-background-error-subtle-default": {
         "value": "var(--color-red-solid-1000)",
@@ -1012,19 +1012,19 @@
         "originalName": "color/background/neutral/default/pressed"
       },
       "color-background-neutral-bold-default": {
-        "value": "var(--color-neutral-solid-100)",
+        "value": "var(--color-neutral-solid-200)",
         "type": "color",
         "originalName": "color/background/neutral/bold/default"
       },
       "color-background-neutral-bold-hovered": {
-        "value": "var(--color-neutral-solid-200)",
+        "value": "var(--color-neutral-solid-100)",
         "type": "color",
-        "originalName": "color/background/neutral/bold/hovered"
+        "originalName": "color/background/neutral/bold/hover"
       },
       "color-background-neutral-bold-pressed": {
-        "value": "var(--color-neutral-solid-300)",
+        "value": "var(--color-neutral-solid-0)",
         "type": "color",
-        "originalName": "color/background/neutral/bold/pressed"
+        "originalName": "color/background/neutral/bold/press"
       },
       "color-background-neutral-overlay-hovered": {
         "value": "var(--color-neutral-alpha-100-08)",

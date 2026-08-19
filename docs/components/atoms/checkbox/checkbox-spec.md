@@ -129,8 +129,9 @@ Use CSS variables only. Do not use hardcoded colors, spacing, typography, or bor
 
 ### Size
 
-- Indicator size: `16px`, use a component token if available or document as missing.
-- Interaction target: minimum `24px`, use spacing/component sizing token if available or document as missing.
+- Indicator size: `24px` (`size-choice-indicator`).
+- Interaction target: `32px` (`size-choice-target`).
+- Row min-height: `32px` (`size-choice-row`).
 - Label gap: use semantic spacing token.
 - Label typography: `body-md`.
 
@@ -164,8 +165,8 @@ Recommended mappings, subject to available token names:
 - Root should be inline-flex.
 - Root should align items center.
 - Native input should remain accessible while visually hidden.
-- Visual indicator should be 16px square.
-- Interaction target should be at least 24px.
+- Visual indicator should be 24px square (`size-choice-indicator`).
+- Interaction target should be 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
 - Indicator should use tokenized border radius.
 - Indicator should use tokenized border width.
 - Indicator should use tokenized colors.

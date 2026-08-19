@@ -223,6 +223,7 @@ export type IconColor =
   | 'warning'
   | 'error'
   | 'information'
+  | 'discovery'
   | 'disabled';
 
 export interface IconProps {

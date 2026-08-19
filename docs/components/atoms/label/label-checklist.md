@@ -39,8 +39,8 @@ Future interactivity, such as dropdown-trigger behavior, should be handled by a 
 - Keep text short, ideally 1 to 3 words.
 - Avoid full sentences.
 - Avoid using labels as the only way to communicate meaning when color is involved.
-- Label text is visually uppercase through typography styling.
-- Consumers may pass normal-cased text; the component applies the uppercase transform.
+- Label renders text as-passed - it no longer applies an uppercase transform. Pass text already in
+  the case you want displayed.
 - Avoid punctuation unless it is part of a known code or abbreviation.
 
 ## Variants
@@ -73,7 +73,7 @@ Future interactivity, such as dropdown-trigger behavior, should be handled by a 
 - Label should not include `aria-label` unless additional context is needed.
 - Color alone must not be the only source of meaning in critical workflows.
 - Visible text should communicate the meaning clearly.
-- Text/background combinations must meet applicable contrast expectations for small uppercase text.
+- Text/background combinations must meet applicable contrast expectations for small text.
 - If used in a table or status-heavy interface, nearby labels, headings, or column names should provide context.
 
 ## Dependencies

@@ -27,11 +27,6 @@
   color: var(--color-content-inverse);
 }
 
-.tone_inverse {
-  background: var(--color-elevation-surface-default);
-  color: var(--color-content-default);
-}
-
 .tone_brand {
   background: var(--color-background-brand-primary-bold-default);
   color: var(--color-content-inverse);

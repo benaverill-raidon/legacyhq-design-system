@@ -14,6 +14,7 @@ const colors: IconColor[] = [
   'warning',
   'error',
   'information',
+  'discovery',
   'disabled',
 ];
 

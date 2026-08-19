@@ -148,12 +148,12 @@ export const Content: Story = {
   render: () => (
     <div style={stack}>
       <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        {sectionHeading('Text is transformed to uppercase visually')}
+        {sectionHeading('Renders text as-passed, no case transform')}
         <p style={captionStyle}>
-          Pass normal-cased text - the uppercase transform is applied by the component, not
-          expected of the caller.
+          Label no longer applies an uppercase transform - pass text already in the case you want
+          displayed.
         </p>
-        <Label tone="default">lowercase input renders uppercase</Label>
+        <Label tone="default">Renders exactly as passed</Label>
       </div>
 
       <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>

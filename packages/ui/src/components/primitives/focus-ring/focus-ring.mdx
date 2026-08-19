@@ -53,13 +53,12 @@ This is exactly how Button, Icon Button, Avatar, and every other interactive ato
 apply it internally - `FocusRing` the component and `focusRingClassNames` the object are two
 entry points to the same CSS, not two different implementations.
 
-<Canvas of={FocusRingStories.Variants} />
+## Border width
 
-## Choosing a border width
-
-`borderWidth="default"` is correct for nearly everything. Reach for `borderWidth="compact"` only on
-already-dense or small-target controls (like a checkbox's 16px indicator) where the default width
-would visually overwhelm the control it's ringing.
+`borderWidth="default"` is the only width Figma's focus-ring component currently defines - a
+1px/`compact` option existed previously but has since been removed there, and no component in this
+codebase ever consumed it. The prop stays in the API for forward compatibility in case a future
+dense-control variant is introduced, rather than being deleted outright.
 
 Button, Checkbox, and Switch below are the real atoms, rendered unwrapped - they already apply
 Focus Ring internally, so this shows the actual result of that shared treatment across real
@@ -123,9 +122,9 @@ className={mergeClassNames(styles.root, focusRingClassNames.focusRing, focusRing
     </tr>
     <tr>
       <td><code>borderWidth</code></td>
-      <td><code>'default' | 'compact'</code></td>
       <td><code>'default'</code></td>
-      <td>Outline width - <code>compact</code> for small/dense controls.</td>
+      <td><code>'default'</code></td>
+      <td>Outline width. Only one value exists today; kept for forward compatibility.</td>
     </tr>
     <tr>
       <td><code>disabled</code></td>
@@ -143,8 +142,8 @@ className={mergeClassNames(styles.root, focusRingClassNames.focusRing, focusRing
 </table>
 
 `focusRingClassNames` exports the same underlying classes for direct composition:
-`focusRing` (the base rule), `focusRingDefault` / `focusRingCompact` (the two border widths), and
-`focusRingDisabled` (suppresses the outline).
+`focusRing` (the base rule), `focusRingDefault` (the border width), and `focusRingDisabled`
+(suppresses the outline).
 
 ## Related components
 

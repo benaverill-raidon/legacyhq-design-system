@@ -12,14 +12,6 @@
         "props": {}
       },
       {
-        "name": "Compact border width",
-        "description": "For small/dense controls where the default width would overwhelm the control.",
-        "jsx": "<FocusRing borderWidth=\"compact\">\n  <button type=\"button\" className={styles.smallToggle}>On</button>\n</FocusRing>",
-        "props": {
-          "borderWidth": "compact"
-        }
-      },
-      {
         "name": "Suppressing the ring on a disabled control",
         "description": null,
         "jsx": "<FocusRing disabled={isDisabled}>\n  <button type=\"button\" disabled={isDisabled}>Save</button>\n</FocusRing>",
@@ -30,7 +22,7 @@
       {
         "name": "Composing focusRingClassNames directly",
         "description": "Used internally by components that need to add other classes to the same element - a raw input inside a custom control, for example.",
-        "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingCompact}`}\n  type=\"checkbox\"\n/>;",
+        "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingDefault}`}\n  type=\"checkbox\"\n/>;",
         "props": {}
       }
     ],
@@ -336,15 +328,6 @@
           "children": "-1",
           "tone": "error"
         }
-      },
-      {
-        "name": "Inverse badge on dark surface",
-        "description": "Inverse tone for badges placed on dark or bold surfaces.",
-        "jsx": "<div data-theme=\"dark\"><Badge tone=\"inverse\">1</Badge></div>",
-        "props": {
-          "children": "1",
-          "tone": "inverse"
-        }
       }
     ],
     "antiExamples": [
@@ -560,6 +543,51 @@
     ],
     "antiExamples": [],
     "exemplarCompleteness": "thin"
+  },
+  {
+    "id": "inline-message",
+    "name": "InlineMessage",
+    "tier": "atom",
+    "path": "docs/components/atoms/inline-message/inline-message.examples.json",
+    "examples": [
+      {
+        "name": "Plain status row, no detail",
+        "description": "Omitting content renders a non-interactive row with no button and no popup.",
+        "jsx": "<InlineMessage title=\"Synced\" secondaryText=\"All changes saved\" tone=\"success\" />",
+        "props": {
+          "tone": "success"
+        }
+      },
+      {
+        "name": "Click to reveal detail",
+        "description": "Providing content renders a real button; clicking toggles the popup below the row.",
+        "jsx": "<InlineMessage title=\"3 documents pending review\" secondaryText=\"Last updated 2 hours ago\" tone=\"warning\" content=\"Review each document before the filing deadline on Friday.\" />",
+        "props": {
+          "tone": "warning"
+        }
+      },
+      {
+        "name": "Controlled, opened programmatically",
+        "description": "Reveal the detail automatically right after an action completes, via open/onOpenChange.",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<InlineMessage title=\"Saved\" tone=\"success\" open={open} onOpenChange={setOpen} content=\"All changes saved.\" />",
+        "props": {
+          "tone": "success"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Hover-only reveal",
+        "jsx": "/* Don't build a hover-triggered version of this component */\n<InlineMessage title=\"Hint\" onMouseEnter={showDetail} />",
+        "reason": "Popup's own guidance reserves hover-only reveals for Tooltip. Inline Message is click/keyboard-activated by design, so its detail stays reachable by touch and keyboard users too."
+      },
+      {
+        "name": "Wrapping trivial content in a popup",
+        "jsx": "<InlineMessage title=\"Synced\" tone=\"success\" content=\"Synced.\" />",
+        "reason": "Don't add an expand affordance nobody needs - omit content entirely for a message that has nothing more to say."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "label",
@@ -867,6 +895,12 @@
         "name": "Loading",
         "description": null,
         "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>",
+        "props": {}
+      },
+      {
+        "name": "Icons hidden",
+        "description": null,
+        "jsx": "<Switch label=\"Compact setting\" showIcons={false} />",
         "props": {}
       }
     ],

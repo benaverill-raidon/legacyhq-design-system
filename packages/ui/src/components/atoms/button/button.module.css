@@ -25,8 +25,7 @@
   user-select: none;
   vertical-align: middle;
   overflow: visible;
-  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick),
-    transform var(--move-quick);
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -39,10 +38,6 @@
 .button[data-loading='true']:hover,
 .button[data-loading='true']:active {
   cursor: progress;
-}
-
-.button:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  transform: scale(0.98);
 }
 
 .size_xs {
@@ -82,7 +77,7 @@
  * the outline ring from the shared focus-ring primitive, so focus and hover read as one treatment.
  */
 .appearance_default {
-  border-color: var(--color-border-default);
+  border-color: var(--color-border-input);
   background: transparent;
   color: var(--color-content-subtle);
 }
@@ -93,12 +88,12 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  border-color: var(--color-border-default);
+  border-color: var(--color-border-input);
   background: var(--color-background-neutral-overlay-hovered);
 }
 
 .appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  border-color: var(--color-border-default);
+  border-color: var(--color-border-input);
   background: var(--color-background-neutral-overlay-pressed);
 }
 

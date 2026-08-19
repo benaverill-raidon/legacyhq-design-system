@@ -3,7 +3,7 @@
   "category": "primitive",
   "status": "stable",
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
-  "intent": "Give components that need a positioned, dismissible floating panel (Dropdown Menu, Inline Message, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
+  "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
   "sourceFiles": {
     "component": "popup.tsx",
     "types": "popup.types.ts",
@@ -238,7 +238,7 @@
     "No hardcoded colors, spacing, or radius - use the tokens listed above.",
     "Popup is now the shared floating-position implementation - Tooltip renders through it (unstyled, alignment=topCenter) rather than maintaining its own local positioning/portal code, which it did before Popup existed."
   ],
-  "relatedComponents": ["Tooltip"],
+  "relatedComponents": ["Tooltip", "InlineMessage"],
   "do": [
     "Keep open state in the consumer and pass it down.",
     "Provide onOpenChange when relying on default dismissal behavior.",

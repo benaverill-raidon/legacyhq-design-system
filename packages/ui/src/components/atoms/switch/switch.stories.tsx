@@ -18,6 +18,7 @@ const meta = {
     disabled: { control: 'boolean' },
     required: { control: 'boolean' },
     isLoading: { control: 'boolean' },
+    showIcons: { control: 'boolean' },
     label: { control: 'text' },
     className: { control: false },
     onCheckedChange: { control: false },
@@ -182,6 +183,18 @@ export const States: Story = {
       <Group title="Required">
         <Cell label="Required">
           <Switch label="Label" required />
+        </Cell>
+      </Group>
+
+      <Group title="Icons hidden (showIcons=false) - independent of loading">
+        <Cell label="Unchecked">
+          <Switch label="Label" showIcons={false} />
+        </Cell>
+        <Cell label="Checked">
+          <Switch label="Label" defaultChecked showIcons={false} />
+        </Cell>
+        <Cell label="Loading (Spinner still shows)">
+          <Switch label="Label" defaultChecked isLoading showIcons={false} />
         </Cell>
       </Group>
 

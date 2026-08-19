@@ -227,7 +227,7 @@
         "lg": "heading-sm"
       },
       "color": {
-        "defaultBorder": "--color-border-default",
+        "defaultBorder": "--color-border-input",
         "defaultBackground": "--color-background-neutral-subtle-default",
         "defaultContent": "--color-content-subtle",
         "primaryNeutralBackground": "--color-background-brand-bold-default",

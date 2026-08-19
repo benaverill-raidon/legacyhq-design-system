@@ -112,10 +112,10 @@ Use semantic tokens for selected colors, unselected borders, full-round radius, 
 Suggested semantic intent:
 
 ```txt
-default selected: color-content-default
-primary selected: color-content-brand-primary-default
-discovery selected: color-content-discovery
-inverted selected: color-content-inverse
+default selected: color-background-neutral-bold-default
+primary selected: color-background-brand-primary-bold-default
+discovery selected: color-background-discovery-bold-default
+inverted selected: color-background-neutral-subtle-default
 unselected border: color-border-bold
 interactive hover: color-background-neutral-subtle-hovered
 interactive pressed: color-background-neutral-subtle-pressed

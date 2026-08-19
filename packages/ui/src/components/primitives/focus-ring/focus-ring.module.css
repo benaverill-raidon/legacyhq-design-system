@@ -18,10 +18,6 @@
   --focus-ring-width: var(--border-width-md);
 }
 
-.focusRingCompact {
-  --focus-ring-width: var(--border-width-sm);
-}
-
 .focusRingDisabled:focus-visible {
   outline: none;
 }

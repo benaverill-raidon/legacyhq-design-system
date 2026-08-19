@@ -29,8 +29,9 @@ built for fast scanning, not for action.
 
 <Canvas of={LabelStories.Content} />
 
-Label has one part: a `span` that renders its `children` directly, uppercased visually. There is no
-icon slot, no dismiss control, and no separate container - the text *is* the label.
+Label has one part: a `span` that renders its `children` directly, in whatever case the caller
+passes. There is no icon slot, no dismiss control, and no separate container - the text *is* the
+label.
 
 ## Usage guidance
 
@@ -51,21 +52,15 @@ beyond normal inline layout is intentionally out of scope for this component. Se
 
 ### Case handling
 
-Pass normal-cased text. The uppercase transform is applied by the component's typography, not
-expected of the caller - don't pre-uppercase strings before passing them as `children`.
+Label no longer applies an uppercase transform - its overline typography now renders in whatever
+case the caller passes. Pass text already in the case you want it displayed.
 
 ## Do / Don't
 
-**Do** pass normal-cased, concise text.
+**Do** pass concise text already in the case you want displayed.
 
 ```tsx
 <Label tone="success">Active</Label>
-```
-
-**Don't** pre-uppercase the string yourself - the component already does this visually.
-
-```tsx
-<Label tone="success">ACTIVE</Label>
 ```
 
 ---

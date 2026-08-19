@@ -90,8 +90,8 @@ export interface CheckboxProps
 
 ## Visual Requirements
 
-- Checkbox indicator is 16px by 16px.
-- Interaction/focus target is at least 24px by 24px.
+- Checkbox indicator is 24px by 24px (`size-choice-indicator`).
+- Interaction/focus target is 32px by 32px (`size-choice-target`), with a 32px row min-height (`size-choice-row`).
 - Label typography uses `body-md`.
 - Required asterisk appears after the label.
 - Checked and indeterminate use the same selected fill token.

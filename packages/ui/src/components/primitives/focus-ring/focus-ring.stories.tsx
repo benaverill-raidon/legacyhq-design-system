@@ -14,7 +14,7 @@ const meta: Meta<typeof FocusRing> = {
   argTypes: {
     borderWidth: {
       control: 'radio',
-      options: ['default', 'compact'],
+      options: ['default'],
     },
     className: { control: false },
     children: { control: false },
@@ -66,19 +66,6 @@ export const Playground: Story = {
     <FocusRing {...args}>
       <Button>Custom control</Button>
     </FocusRing>
-  ),
-};
-
-export const Variants: Story = {
-  render: () => (
-    <div style={rowStyle}>
-      <FocusRing borderWidth="default">
-        <Button>Default</Button>
-      </FocusRing>
-      <FocusRing borderWidth="compact">
-        <Button>Compact</Button>
-      </FocusRing>
-    </div>
   ),
 };
 

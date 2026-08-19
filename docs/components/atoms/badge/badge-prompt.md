@@ -48,7 +48,6 @@ export interface BadgeProps {
 
   tone?:
     | 'default'
-    | 'inverse'
     | 'brand'
     | 'success'
     | 'error';
@@ -79,7 +78,6 @@ tone = 'default'
 
 Create:
 - Default
-- Inverse
 - Brand
 - Success
 - Error

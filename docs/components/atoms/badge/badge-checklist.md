@@ -76,7 +76,6 @@ Examples:
 
 ### Tone
 - default
-- inverse
 - brand
 - success
 - error

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type FocusRingBorderWidth = 'default' | 'compact';
+export type FocusRingBorderWidth = 'default';
 
 export interface FocusRingProps {
   children: React.ReactElement;

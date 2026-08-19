@@ -73,6 +73,22 @@ out here rather than silently diverging from the visual sample.
 Whether an item is "current" is driven entirely by the presence of `href` - there is no separate
 `isCurrent` flag. An item without an `href` is the current page; every other item must have one.
 
+Per explicit design feedback, the current-page item does not use a visually distinct ("default")
+text color to set it apart from ancestor links - it uses the same `--color-content-subtle` as
+Link's `appearance="subtle"`, so every item in the trail reads at the same visual weight. `href`
+presence/absence and the last item's non-interactive `aria-current="page"` treatment already
+communicate "you are here" without a color difference on top.
+
+Link's own `:visited` treatment - a real, browser-history-driven color swap to purple - is
+intentionally overridden for every breadcrumb ancestor, back to whatever color Link's resting/
+pressed state would otherwise use. Per explicit design feedback, "have you visited this URL
+before" isn't a signal breadcrumbs should surface: it makes the trail read as an arbitrary list of
+hyperlinks rather than a location path. This is the one documented exception to "do not reimplement
+Link's hover/focus/pressed treatment locally" (see Engineering Notes below) - it targets `:visited`
+specifically, is implemented via a higher-specificity selector (`.item .link:visited`, one more
+class than Link's own `.root:visited`) rather than `!important`, and does not touch hover, focus,
+or pressed, which remain entirely Link's own.
+
 ---
 
 ## Variants
@@ -156,13 +172,14 @@ Example:
 ### Typography
 - Link items: inherited from the `Link` atom at `size="md"` (`--typography-heading-xs-*`).
 - Current-page item: `--typography-heading-xs-*` (matches Link's metrics so the trail reads as one
-  line) with `--color-content-default` instead of Link's subtle color.
+  line, now including color - see Design Decisions above).
 - Separator: `--typography-body-md-*` (confirmed from Figma's bound variables - a deliberately
   lighter weight than the heading-xs crumb labels).
 
 ### Colors
-- Link items: `Link`'s own `appearance="subtle"` tokens (`--color-content-subtle`, etc.)
-- Current-page item: `--color-content-default`
+- Link items: `Link`'s own `appearance="subtle"` tokens (`--color-content-subtle`, etc.), with
+  `:visited` overridden back to the resting/pressed color - see Design Decisions above
+- Current-page item: `--color-content-subtle` (matches Link's resting color - no differentiation)
 - Separator: `--color-content-subtle`
 
 ### Spacing
@@ -202,7 +219,9 @@ pressed behavior (owned entirely by the `Link` atom, not reimplemented here).
 - No hardcoded colors, spacing, or typography
 - No MUI dependency
 - No Tailwind dependency
-- Do not reimplement Link's hover/focus/pressed treatment locally - render the actual `Link` atom
+- Do not reimplement Link's hover/focus/pressed treatment locally - render the actual `Link` atom.
+  `:visited` is the one deliberate exception - overridden via a higher-specificity selector
+  (`.item .link:visited`), not `!important` - see Design Decisions above.
 
 ---
 
@@ -211,6 +230,8 @@ pressed behavior (owned entirely by the `Link` atom, not reimplemented here).
 ### Visual
 - [ ] Matches Figma spacing (8px between items, 4px icon-to-label)
 - [ ] Separator uses body-md weight, distinct from the heading-xs crumb labels
+- [ ] The current-page item and ancestor links render in the same color (no differentiation)
+- [ ] A visited ancestor link does not turn purple/visited-colored - it matches the resting color
 - [ ] Light mode works
 - [ ] Dark mode works
 

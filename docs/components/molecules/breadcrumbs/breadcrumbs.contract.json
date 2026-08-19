@@ -41,7 +41,9 @@
     "apiAdaptationNotes": [
       "Figma's 8-item demo renders every crumb - including the last - as an identical Link instance with no distinct 'current page' treatment. The component deliberately renders the last item in `items` as non-interactive text with aria-current=\"page\" instead, per the WAI-ARIA Breadcrumb Pattern - documented here as an intentional adaptation, not a literal 1:1 reproduction.",
       "Whether an item is 'current' is derived from the absence of `href`, not a separate isCurrent flag - simplest possible rule, consistent with Link's own required `href`.",
-      "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part."
+      "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part.",
+      "The current-page item no longer uses --color-content-default to visually distinguish it from ancestor links - per explicit design feedback, that differentiation wasn't wanted; it now uses the same --color-content-subtle as Link's own appearance=subtle, so every item in the trail reads at the same visual weight.",
+      "Link's own :visited treatment (a real browser-history-driven purple color swap) is intentionally overridden back to Link's normal resting/pressed color for every breadcrumb ancestor - per explicit design feedback, 'have you visited this URL before' isn't a signal breadcrumbs should surface, since it makes the trail read as a list of arbitrary hyperlinks rather than a location path. This is a documented, deliberate exception to the 'do not restyle Link's own hover/focus/pressed treatment' compositionRule below - it targets :visited specifically, not those states."
     ]
   },
   "useCases": [
@@ -117,8 +119,8 @@
       "separator": "--typography-body-md-*"
     },
     "color": {
-      "link": "inherited from Link appearance=subtle",
-      "current": "--color-content-default",
+      "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/pressed color (see compositionRules)",
+      "current": "--color-content-subtle",
       "separator": "--color-content-subtle"
     }
   },
@@ -145,6 +147,7 @@
   ],
   "compositionRules": [
     "Breadcrumbs always renders Link for ancestor items - do not restyle or reimplement Link's own hover/focus/pressed treatment locally.",
+    "The one documented exception: Breadcrumbs overrides Link's :visited color back to its normal resting/pressed color, via a higher-specificity selector scoped to .item .link (no !important) - a visited-URL signal doesn't belong in a location trail. Hover/focus/pressed remain entirely Link's own.",
     "Use Progress Indicator instead of Breadcrumbs for step-based flow progress."
   ],
   "contentRules": [

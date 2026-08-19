@@ -56,7 +56,7 @@
       "originalName": "size/avatar/xl"
     },
     "size-choice-row": {
-      "value": "var(--measurement-28)",
+      "value": "var(--measurement-32)",
       "type": "float",
       "originalName": "size/choice/row"
     },
@@ -66,7 +66,7 @@
       "originalName": "size/choice/target"
     },
     "size-choice-indicator": {
-      "value": "var(--measurement-16)",
+      "value": "var(--measurement-24)",
       "type": "float",
       "originalName": "size/choice/indicator"
     },

@@ -94,8 +94,8 @@ RadioGroup:
 - Label typography: `body-md`.
 - Default RadioGroup layout: vertical.
 - Default RadioGroup gap: `0`.
-- Radio visual size: 16px.
-- Interaction target: 24px.
+- Radio visual size: 24px (`size-choice-indicator`).
+- Interaction target: 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
 - Required indicator appears after the group label/legend.
 - Selected radio uses selected bold background and inverse content for the inner mark.
 - Figma uses shapes; implementation should draw the private indicator with CSS anatomy.

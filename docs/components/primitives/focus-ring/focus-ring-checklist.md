@@ -85,12 +85,10 @@ Example:
 ## Variants
 
 ### Size / Density
-- default
-- compact
+- default (the only variant Figma currently defines - the 1px/compact option was removed there)
 
 ### Token Mapping
 - default = `--border-width-md` / 2px
-- compact = `--border-width-sm` / 1px
 
 ### Color
 Both variants use:
@@ -164,6 +162,5 @@ Final implementation decisions:
 - Use 2px outline offset.
 - Radius should inherit from the focused element where possible.
 - Default variant uses 2px.
-- Compact variant uses 1px.
 - Use `:focus-visible`.
-- Use `--color-border-focused` for both variants.
+- Use `--color-border-focused`.

@@ -1,0 +1,191 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as InlineMessageStories from './InlineMessage.stories';
+
+<Meta of={InlineMessageStories} name="Docs" />
+
+# Inline Message
+
+Inline Message is a compact, tone-colored status row - an icon, a bold title, and optional
+secondary text - that can optionally reveal additional detail in a popup when clicked.
+
+<Canvas of={InlineMessageStories.Playground} />
+
+## When to use
+
+- A short status line inline in the page (a save confirmation, a validation summary, a sync state)
+  that sometimes needs more explanation than fits in one line.
+- Anywhere a click-to-expand detail panel, anchored to the message itself, is more appropriate than
+  a full banner or a separate dialog.
+
+## When not to use
+
+- **For a hover-only supplemental hint.** That's Tooltip - non-interactive, shown on hover/focus,
+  and never contains its own trigger affordance. Inline Message is click-triggered by design (see
+  Usage guidance below).
+- **For content essential to completing a task with no fallback.** The detail panel is optional and
+  collapsed by default - don't put something the user can't afford to miss inside it.
+- **As a page-level banner or toast.** Inline Message is inline with surrounding content, not a
+  persistent top-of-page or corner notification.
+
+## Anatomy
+
+<Canvas of={InlineMessageStories.Content} />
+
+- **Icon** - a tone-mapped status icon (`StatusInformationIcon`, `StatusSuccessIcon`,
+  `StatusWarningIcon`, `StatusErrorIcon`, `StatusDiscoveryIcon`). `tone="default"` falls back to a
+  plain dot - Figma has no dedicated status icon for it either, confirmed absent from the generated
+  icon set.
+- **Title** - required bold lead text (`heading-xs` typography).
+- **Secondary text** - optional muted trailing text (`body-md` typography), shown only when
+  provided.
+- **Detail panel** - rendered through [Popup](../../primitives/popup/popup.md) (its default styled
+  skin, not `unstyled`) when `content` is provided. Omit `content` and the whole row renders as a
+  plain, non-interactive `div` with no button and no popup.
+
+## Usage guidance
+
+### Click-to-toggle, not hover
+
+Popup's own guidance is explicit: hover-only reveals belong to Tooltip, not to a Popup-based
+component. Inline Message's row renders as a real `<button>` when `content` is provided - clicking
+(or Enter/Space) toggles the detail panel, which is keyboard-accessible and works for touch users,
+unlike a hover-only reveal. The button applies the shared Focus Ring primitive for its
+`:focus-visible` outline, and keyboard focus shows the same tint as hover rather than a separate
+treatment - the same convention Button, IconButton, and Toggle Button already use.
+
+```tsx
+<InlineMessage title="3 documents pending review" tone="warning" content="Review each document before Friday." />
+```
+
+### Uncontrolled and controlled
+
+Works out of the box with just a click (uncontrolled), and also accepts `open`/`onOpenChange` for
+programmatic control - e.g. showing the detail automatically right after an action completes.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<InlineMessage title="Saved" tone="success" open={open} onOpenChange={setOpen} content="All changes saved." />;
+```
+
+### The detail panel does not dismiss on Escape or an outside click
+
+Unlike a generic popover, `closeOnEscape` and `closeOnOutsideClick` are both set to `false` on the
+underlying Popup - the detail persists until the row is clicked again. This was Popup's own
+documented prediction for how Inline Message would likely behave, now implemented: the message and
+its detail are meant to stay visible once opened, not disappear the moment focus moves elsewhere.
+
+<Canvas of={InlineMessageStories.EdgeCases} />
+
+### No `content`, no button
+
+If there's nothing to expand, don't force an interactive affordance. Omitting `content` renders a
+plain status row - no button, no `aria-expanded`, no popup - for the common case of a message with
+nothing more to say.
+
+```tsx
+<InlineMessage title="Synced" secondaryText="All changes saved" tone="success" />
+```
+
+## Do / Don't
+
+**Do** omit `content` for a message that has nothing more to say.
+
+```tsx
+<InlineMessage title="Synced" tone="success" />
+```
+
+**Don't** wrap trivial content in a popup just to add an expand affordance nobody needs.
+
+```tsx
+<InlineMessage title="Synced" tone="success" content="Synced." />
+```
+
+---
+
+**Do** use `open`/`onOpenChange` to reveal detail programmatically after an action completes.
+
+```tsx
+<InlineMessage title="Saved" tone="success" open={justSaved} onOpenChange={setJustSaved} content="Saved at 3:41 PM." />
+```
+
+**Don't** reach for Inline Message as a hover-only hint - that's Tooltip's job.
+
+```tsx
+{
+  /* Use Tooltip instead - Inline Message is click-triggered by design. */
+}
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>title</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. Bold lead text.</td>
+    </tr>
+    <tr>
+      <td><code>secondaryText</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional muted trailing text.</td>
+    </tr>
+    <tr>
+      <td><code>tone</code></td>
+      <td><code>'default' | 'info' | 'success' | 'warning' | 'error' | 'discovery'</code></td>
+      <td><code>'default'</code></td>
+      <td>Selects the status icon and the tint shown on hover/open.</td>
+    </tr>
+    <tr>
+      <td><code>content</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row.</td>
+    </tr>
+    <tr>
+      <td><code>open</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Controlled open state for the detail popup.</td>
+    </tr>
+    <tr>
+      <td><code>defaultOpen</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Initial open state for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>onOpenChange</code></td>
+      <td><code>(open: boolean) =&gt; void</code></td>
+      <td>-</td>
+      <td>Called with the next value whenever the row is clicked.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the root row's class list.</td>
+    </tr>
+  </tbody>
+</table>
+
+`data-force-state` pins hover/focus as a static Storybook reference (documentation-only, not part
+of the public API) - the same convention Button, Checkbox, and Switch use.
+
+## Related components
+
+- **Popup** - owns positioning, the portal, dismissal, and (unlike Tooltip) the visual skin the
+  detail panel uses directly.
+- **Focus Ring** - supplies the trigger button's `:focus-visible` outline.
+- **Tooltip** - the hover/focus-triggered, non-interactive counterpart.

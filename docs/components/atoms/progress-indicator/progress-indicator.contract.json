@@ -107,10 +107,10 @@
   "slots": [],
   "tokens": {
     "semantic": {
-      "defaultSelected": "color-content-default",
-      "primarySelected": "color-content-brand-primary-default",
-      "discoverySelected": "color-content-discovery",
-      "invertedSelected": "color-content-inverse",
+      "defaultSelected": "color-background-neutral-bold-default",
+      "primarySelected": "color-background-brand-primary-bold-default",
+      "discoverySelected": "color-background-discovery-bold-default",
+      "invertedSelected": "color-background-neutral-subtle-default",
       "unselectedBorder": "color-border-bold",
       "interactiveHover": "color-background-neutral-subtle-hovered",
       "interactivePressed": "color-background-neutral-subtle-pressed",

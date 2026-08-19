@@ -203,11 +203,12 @@
 }
 
 /*
- * The trailing slot is icon-or-button (confirmed from Figma's elemAfterInput component: an
- * IconButton for a clear/reveal-style action, or a full Button) - unlike `.before`, this is
- * frequently a real interactive control, so it is never forced aria-hidden here. A plain
- * decorative icon passed on its own already defaults to aria-hidden through the Icon primitive
- * itself; an IconButton/Button passed here manages its own accessibility and must stay focusable.
+ * The trailing slot is icon-or-button-or-label (confirmed from Figma's elemAfterInput component:
+ * an IconButton for a clear/reveal-style action, a full Button, or a Label pill for compact
+ * metadata/status) - unlike `.before`, this frequently holds a real interactive control, so it is
+ * never forced aria-hidden here. A plain decorative icon or a Label passed on its own already
+ * defaults to non-focusable through its own component; an IconButton/Button passed here manages
+ * its own accessibility and must stay focusable.
  */
 .action {
   display: inline-flex;

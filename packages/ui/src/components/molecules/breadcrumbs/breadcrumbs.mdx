@@ -46,6 +46,17 @@ item - omit `href` there and the component takes care of the rest.
 `iconBefore` and `iconAfter` accept any `ReactNode` - typically a small icon from the generated icon
 set (`size="sm"` reads well against the trail's text size).
 
+### No visited-link color, no current-item color difference
+
+Every item in the trail - ancestor links and the current page - renders in the same subtle color.
+Two deliberate departures from `Link`'s default look, both per explicit design feedback:
+
+- The current-page item does not use a bolder "default" text color to set it apart - `href`
+  presence/absence and `aria-current="page"` already say "you are here" without a color cue on top.
+- An ancestor link's `:visited` state (the real, browser-history-driven purple swap `Link` applies
+  elsewhere) is suppressed - whether you've clicked a URL before isn't a signal a location trail
+  should surface.
+
 ## Do / Don't
 
 **Do** omit `href` on the current (last) item.

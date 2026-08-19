@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CloseIcon, SearchIcon } from '../../../assets/icons';
 import { IconButton } from '../../atoms/icon-button';
+import { Label } from '../../atoms/label';
 import { TextField } from './text-field';
 import type { TextFieldAppearance, TextFieldSize } from './text-field.types';
 
@@ -192,9 +193,20 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="iconAfter: icon-button or button (can be interactive)">
+      <Group title="iconAfter: icon-button, button, or a Label pill (icon-button/button are interactive, Label is not)">
         <Cell label="IconButton action (clear)">
           <ClearableField />
+        </Cell>
+        <Cell label="Label pill (unit)">
+          <TextField
+            defaultValue="12"
+            aria-label="Weight"
+            iconAfter={
+              <Label size="sm" tone="default">
+                kg
+              </Label>
+            }
+          />
         </Cell>
       </Group>
 

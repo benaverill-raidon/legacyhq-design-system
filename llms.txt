@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 29 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 30 components
 > across primitives/atoms/molecules.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -47,6 +47,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [button](docs/components/atoms/button/button.md)
 - [checkbox](docs/components/atoms/checkbox/checkbox.md)
 - [icon-button](docs/components/atoms/icon-button/icon-button.md)
+- [inline-message](docs/components/atoms/inline-message/inline-message.md)
 - [label](docs/components/atoms/label/label.md)
 - [link](docs/components/atoms/link/link.md)
 - [link-button](docs/components/atoms/link-button/link-button.md)

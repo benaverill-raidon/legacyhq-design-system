@@ -17,8 +17,8 @@
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "1409:134421",
     "componentName": "focus-ring",
-    "variantCount": 2,
-    "verifiedAt": "2026-08-06"
+    "variantCount": 1,
+    "verifiedAt": "2026-08-19"
   },
   "useCases": [
     "Wrapping a custom-built interactive element that needs a focus indicator",
@@ -48,8 +48,8 @@
       "type": "FocusRingBorderWidth",
       "required": false,
       "default": "default",
-      "enum": ["default", "compact"],
-      "description": "Outline width - compact for small/dense controls."
+      "enum": ["default"],
+      "description": "Outline width. Figma's focus-ring component currently has only one width (2px) - the prop is kept for forward compatibility if a denser variant is introduced later."
     },
     "disabled": {
       "type": "boolean",
@@ -66,8 +66,7 @@
   },
   "variants": {
     "borderWidth": {
-      "default": { "purpose": "Standard outline width for most controls.", "className": "focusRingDefault", "token": "--border-width-md" },
-      "compact": { "purpose": "Tighter outline for small/dense controls.", "className": "focusRingCompact", "token": "--border-width-sm" }
+      "default": { "purpose": "Standard outline width for all controls.", "className": "focusRingDefault", "token": "--border-width-md" }
     }
   },
   "sizes": [],
@@ -84,8 +83,7 @@
       "outline": "--color-border-focused"
     },
     "borderWidth": {
-      "default": "--border-width-md",
-      "compact": "--border-width-sm"
+      "default": "--border-width-md"
     },
     "offset": {
       "value": "2px",
@@ -126,14 +124,13 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colors or widths - use --color-border-focused, --border-width-md, --border-width-sm.",
+    "No hardcoded colors or widths - use --color-border-focused, --border-width-md.",
     "Exports both a component (FocusRing) and a raw classNames object (focusRingClassNames) as two entry points to the same CSS, not two separate implementations."
   ],
   "relatedComponents": ["Button", "IconButton", "Link", "Checkbox", "Radio", "Switch", "Slider", "Tag"],
   "do": [
     "Wrap the one interactive child that needs a focus indicator.",
-    "Use focusRingClassNames when a component must compose its own classes onto the same element.",
-    "Use borderWidth=compact only for small/dense controls."
+    "Use focusRingClassNames when a component must compose its own classes onto the same element."
   ],
   "dont": [
     "Do not apply Focus Ring to a non-interactive element to fake a focus state.",
@@ -143,15 +140,15 @@
   "acceptanceCriteria": [
     "Renders the child with focus classes merged onto its className.",
     "Defaults to borderWidth=default.",
-    "Supports borderWidth=compact.",
     "disabled=true suppresses the outline.",
     "Supports className composition.",
     "Outline only appears on :focus-visible, in both light and dark themes.",
-    "focusRingClassNames exposes focusRing, focusRingDefault, focusRingCompact, and focusRingDisabled for direct composition."
+    "focusRingClassNames exposes focusRing, focusRingDefault, and focusRingDisabled for direct composition."
   ],
   "knownLimitations": [
     "The 2px outline offset is not yet backed by a dedicated design token.",
-    "Outset ring only - no inset variant."
+    "Outset ring only - no inset variant.",
+    "borderWidth currently accepts only 'default' - Figma removed the 1px/compact option, and no component in the codebase ever consumed it. The prop is kept (rather than removed) in case a future dense-control variant is introduced."
   ],
   "futureEnhancements": [
     "A dedicated offset token",

@@ -22,9 +22,10 @@ classes need to be composed onto the same element at the same time) import the r
 same CSS, not two different implementations - this is exactly how Button, Icon Button, and every
 other interactive atom apply it internally.
 
-`borderWidth="default"` is correct for nearly everything. Reach for `borderWidth="compact"` only on
-already-dense or small-target controls (a checkbox's 16px indicator, for example) where the default
-width would visually overwhelm the control it's ringing.
+`borderWidth="default"` is the only width Figma's focus-ring component currently defines - the
+1px/`compact` option that used to exist there has been removed. The prop is kept in the API (rather
+than deleted outright) in case a future dense-control variant is introduced, but there is nothing to
+choose between today.
 
 Related components and patterns: every interactive atom in this system - Button, Icon Button, Link,
 Checkbox, Radio, Switch, Slider, Tag.

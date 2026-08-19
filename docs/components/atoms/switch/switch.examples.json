@@ -15,6 +15,10 @@
     {
       "name": "Loading",
       "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>"
+    },
+    {
+      "name": "Icons hidden",
+      "jsx": "<Switch label=\"Compact setting\" showIcons={false} />"
     }
   ]
 }

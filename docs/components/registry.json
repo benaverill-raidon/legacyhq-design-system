@@ -23,10 +23,9 @@
         "type": "FocusRingBorderWidth",
         "required": false,
         "default": "default",
-        "description": "Outline width - compact for small/dense controls.",
+        "description": "Outline width. Figma's focus-ring component currently has only one width (2px) - the prop is kept for forward compatibility if a denser variant is introduced later.",
         "enum": [
-          "default",
-          "compact"
+          "default"
         ]
       },
       "disabled": {
@@ -48,8 +47,7 @@
     ],
     "variants": {
       "borderWidth": [
-        "default",
-        "compact"
+        "default"
       ]
     },
     "subComponents": [],
@@ -58,8 +56,7 @@
         "outline": "--color-border-focused"
       },
       "borderWidth": {
-        "default": "--border-width-md",
-        "compact": "--border-width-sm"
+        "default": "--border-width-md"
       },
       "offset": {
         "value": "2px",
@@ -93,8 +90,8 @@
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
       "componentSetNodeId": "1409:134421",
       "componentName": "focus-ring",
-      "variantCount": 2,
-      "verifiedAt": "2026-08-06"
+      "variantCount": 1,
+      "verifiedAt": "2026-08-19"
     }
   },
   {
@@ -153,6 +150,7 @@
           "warning",
           "error",
           "information",
+          "discovery",
           "disabled"
         ]
       },
@@ -204,6 +202,7 @@
         "warning",
         "error",
         "information",
+        "discovery",
         "disabled"
       ]
     },
@@ -223,6 +222,7 @@
         "warning": "--color-content-warning",
         "error": "--color-content-error",
         "information": "--color-content-information",
+        "discovery": "--color-content-discovery",
         "disabled": "--color-content-disabled"
       }
     },
@@ -548,7 +548,8 @@
       ]
     },
     "relatedComponents": [
-      "Tooltip"
+      "Tooltip",
+      "InlineMessage"
     ],
     "contentCompleteness": "full",
     "figmaSource": {
@@ -692,7 +693,6 @@
         "description": "Visual tone for badge emphasis or semantic meaning.",
         "enum": [
           "default",
-          "inverse",
           "brand",
           "success",
           "error"
@@ -720,7 +720,6 @@
     "variants": {
       "tone": [
         "default",
-        "inverse",
         "brand",
         "success",
         "error"
@@ -748,10 +747,6 @@
         "default": {
           "background": "--color-elevation-surface-default",
           "content": "--color-content-default"
-        },
-        "inverse": {
-          "background": "--color-background-neutral-bold-default",
-          "content": "--color-content-inverse"
         },
         "brand": {
           "background": "--color-background-brand-bold-default",
@@ -1135,6 +1130,158 @@
       "componentName": "icon-button",
       "variantCount": 184,
       "verifiedAt": "2026-08-06"
+    }
+  },
+  {
+    "id": "inline-message",
+    "name": "InlineMessage",
+    "tier": "atom",
+    "category": "atom",
+    "status": "stable",
+    "path": "docs/components/atoms/inline-message/inline-message.contract.json",
+    "anatomy": [
+      {
+        "name": "icon",
+        "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
+      },
+      {
+        "name": "title",
+        "description": "Required bold lead text (heading-xs typography)."
+      },
+      {
+        "name": "secondaryText",
+        "description": "Optional muted trailing text (body-md typography), rendered only when provided."
+      },
+      {
+        "name": "content",
+        "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal."
+      }
+    ],
+    "props": {
+      "title": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "Bold lead text."
+      },
+      "secondaryText": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional muted trailing text, shown only when provided - no separate show/hide toggle."
+      },
+      "tone": {
+        "type": "InlineMessageTone",
+        "required": false,
+        "default": "default",
+        "description": "Selects the status icon, icon color, and the tint shown on hover/open.",
+        "enum": [
+          "default",
+          "info",
+          "success",
+          "warning",
+          "error",
+          "discovery"
+        ]
+      },
+      "content": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row with no button and no popup."
+      },
+      "open": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Controlled open state for the detail popup."
+      },
+      "defaultOpen": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Initial open state for uncontrolled usage."
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with the next open value whenever the row is clicked."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root row's class list."
+      },
+      "data-force-state": {
+        "type": "'hover' | 'focus' | 'active'",
+        "required": false,
+        "default": null,
+        "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "content"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "info",
+        "success",
+        "warning",
+        "error",
+        "discovery"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "titleColor": "--color-content-default",
+        "secondaryTextColor": "--color-content-subtle",
+        "titleTypography": "heading-xs",
+        "secondaryTextTypography": "body-md",
+        "iconContainer": "--size-300",
+        "rowPadding": "--spacing-none (the row itself carries no padding - see textGroupPadding)",
+        "textGroupPadding": "--spacing-xs on both sides - covers the icon-to-title gap and the row's own trailing space",
+        "titleToSecondaryTextGap": "--spacing-sm"
+      },
+      "note": "Tone-specific icon color and hover/open tint tokens are documented per tone in the `variants.tone` block above, not duplicated here."
+    },
+    "accessibility": {
+      "triggeredBy": [
+        "pointer click",
+        "Enter/Space when content is provided"
+      ],
+      "focusable": "only when content is provided (renders a real button)",
+      "role": null,
+      "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
+      "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
+    },
+    "relatedComponents": [
+      "Popup",
+      "Tooltip",
+      "Icon",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4589:2519",
+      "componentName": "inline-message",
+      "variantCount": 12,
+      "verifiedAt": "2026-08-19",
+      "note": "12 raw Figma variants (tone x isOpen) but only 2 real states per tone - most of the outer isOpen variant values are garbage auto-generated strings (isOpen3..isOpen12), not real booleans, except for the info tone. The reliable signal is the nested `popup` instance's own isOpen component property.",
+      "subComponents": [
+        {
+          "name": "inline-message-trigger",
+          "componentSetNodeId": "2448:72904",
+          "componentName": "figma-parts / inline-message-trigger",
+          "note": "The row itself - icon, titleText, secondaryText - nested inside the inline-message component's own `popup` instance as its trigger slot."
+        }
+      ]
     }
   },
   {
@@ -2124,13 +2271,23 @@
         "name": "thumb"
       },
       {
+        "name": "icon"
+      },
+      {
         "name": "label"
       },
       {
         "name": "helperText"
       }
     ],
-    "props": {},
+    "props": {
+      "showIcons": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "When false, hides the decorative check/X marks drawn inside the track. Does not affect the isLoading Spinner, which is a functional status signal rather than decoration and still renders regardless."
+      }
+    },
     "sizes": [
       "sm",
       "md"
@@ -2532,8 +2689,8 @@
         "separator": "--typography-body-md-*"
       },
       "color": {
-        "link": "inherited from Link appearance=subtle",
-        "current": "--color-content-default",
+        "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/pressed color (see compositionRules)",
+        "current": "--color-content-subtle",
         "separator": "--color-content-subtle"
       }
     },
@@ -2595,7 +2752,9 @@
       "apiAdaptationNotes": [
         "Figma's 8-item demo renders every crumb - including the last - as an identical Link instance with no distinct 'current page' treatment. The component deliberately renders the last item in `items` as non-interactive text with aria-current=\"page\" instead, per the WAI-ARIA Breadcrumb Pattern - documented here as an intentional adaptation, not a literal 1:1 reproduction.",
         "Whether an item is 'current' is derived from the absence of `href`, not a separate isCurrent flag - simplest possible rule, consistent with Link's own required `href`.",
-        "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part."
+        "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part.",
+        "The current-page item no longer uses --color-content-default to visually distinguish it from ancestor links - per explicit design feedback, that differentiation wasn't wanted; it now uses the same --color-content-subtle as Link's own appearance=subtle, so every item in the trail reads at the same visual weight.",
+        "Link's own :visited treatment (a real browser-history-driven purple color swap) is intentionally overridden back to Link's normal resting/pressed color for every breadcrumb ancestor - per explicit design feedback, 'have you visited this URL before' isn't a signal breadcrumbs should surface, since it makes the trail read as a list of arbitrary hyperlinks rather than a location path. This is a documented, deliberate exception to the 'do not restyle Link's own hover/focus/pressed treatment' compositionRule below - it targets :visited specifically, not those states."
       ]
     }
   },
@@ -3667,9 +3826,10 @@
       "elemAfterInputComponent": {
         "type": [
           "icon-button",
-          "button"
+          "button",
+          "label"
         ],
-        "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square."
+        "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square. A third `label` type was added later, nesting a real Label atom instance (tone=default, emphasis=subtle) for compact metadata/status after the input (e.g. a unit or status pill) - confirmed directly from the component's own nested instance properties, not assumed. iconAfter is already typed React.ReactNode and .action is a plain centered flex wrapper, so a Label already renders correctly there with no component code changes."
       },
       "apiAdaptationNotes": [
         "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focused+empty (:focus-within + :placeholder-shown), typing=focused+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
@@ -3683,7 +3843,8 @@
         "`.root[data-invalid='true']` sets the border-width shorthand (all four sides) to 2px; `.appearance_subtle[data-invalid='true']` overrides border-top/right/left-width back to 0 and must also explicitly reset border-bottom-width back to 1px, or that side silently inherits the shorthand's leftover 2px and reintroduces the same text shift.",
         "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
         "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
-        "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables."
+        "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
+        "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type."
       ]
     }
   }

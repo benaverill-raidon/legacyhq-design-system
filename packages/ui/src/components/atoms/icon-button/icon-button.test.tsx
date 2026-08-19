@@ -352,7 +352,7 @@ describe('icon button CSS contract', () => {
 
   it('matches Figma rest-state color mappings for default, primary, and subtle', () => {
     expect(iconButtonCss).toContain('.appearance_default {');
-    expect(iconButtonCss).toContain('border-color: var(--color-border-default);');
+    expect(iconButtonCss).toContain('border-color: var(--color-border-input);');
     expect(iconButtonCss).toContain('background: transparent;');
     expect(iconButtonCss).toContain('.appearance_primary {');
     expect(iconButtonCss).toContain('border-color: var(--color-background-brand-primary-bold-default);');

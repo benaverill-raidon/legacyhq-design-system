@@ -521,7 +521,7 @@
       "originalName": "typography/overline/lg/paragraph-spacing"
     },
     "typography-overline-lg-text-transform": {
-      "value": "var(--typography-text-transform-uppercase)",
+      "value": "var(--typography-text-transform-none)",
       "type": "string",
       "originalName": "typography/overline/lg/text-transform"
     },
@@ -556,7 +556,7 @@
       "originalName": "typography/overline/md/paragraph-spacing"
     },
     "typography-overline-md-text-transform": {
-      "value": "var(--typography-text-transform-uppercase)",
+      "value": "var(--typography-text-transform-none)",
       "type": "string",
       "originalName": "typography/overline/md/text-transform"
     },
@@ -591,7 +591,7 @@
       "originalName": "typography/overline/sm/paragraph-spacing"
     },
     "typography-overline-sm-text-transform": {
-      "value": "var(--typography-text-transform-uppercase)",
+      "value": "var(--typography-text-transform-none)",
       "type": "string",
       "originalName": "typography/overline/sm/text-transform"
     },

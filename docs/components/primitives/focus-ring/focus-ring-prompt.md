@@ -59,7 +59,7 @@ packages/ui/src/components/primitives/focus-ring/
 ## Component API
 
 ```ts
-export type FocusRingBorderWidth = 'default' | 'compact';
+export type FocusRingBorderWidth = 'default';
 
 export interface FocusRingProps {
   children: React.ReactElement;
@@ -88,8 +88,7 @@ Required token mapping:
 
 ```txt
 default → --border-width-md
-compact → --border-width-sm
-both → --color-border-focused
+color → --color-border-focused
 ```
 
 Preferred CSS behavior:
@@ -103,10 +102,6 @@ Preferred CSS behavior:
 
 .focusRingDefault:focus-visible {
   outline-width: var(--border-width-md);
-}
-
-.focusRingCompact:focus-visible {
-  outline-width: var(--border-width-sm);
 }
 ```
 
@@ -128,8 +123,7 @@ Important:
 Match the Figma screenshot:
 - visible outline around focused controls
 - supports light and dark surfaces
-- `default` variant appears as 2px
-- `compact` variant appears as 1px
+- `default` variant appears as 2px (the only variant Figma currently defines)
 - works on buttons, checkboxes, text fields, and range/slider controls
 
 ---
@@ -150,7 +144,6 @@ Match the Figma screenshot:
 Create stories for:
 - Basic (wrapping a plain custom control - the wrapper's actual use case, since real atoms already apply Focus Ring internally)
 - Default border width
-- Compact border width
 - Real atoms in context (Button, Checkbox, Switch), rendered unwrapped since they self-apply
 - Dark surface example
 
@@ -161,7 +154,6 @@ Create stories for:
 Create tests for:
 - Renders child
 - Applies default border width
-- Applies compact border width
 - Applies custom className
 - Does not apply focus ring styling when disabled
 
@@ -172,13 +164,12 @@ Create tests for:
 1. Follow `focus-ring-spec.md` exactly.
 2. Use `--color-border-focused` for color.
 3. Use `--border-width-md` for default.
-4. Use `--border-width-sm` for compact.
-5. Use `:focus-visible`.
-6. No MUI.
-7. No Tailwind.
-8. Do not hardcode design values when a token exists.
-9. Keep implementation small.
-10. Export component and types.
+4. Use `:focus-visible`.
+5. No MUI.
+6. No Tailwind.
+7. Do not hardcode design values when a token exists.
+8. Keep implementation small.
+9. Export component and types.
 
 ---
 

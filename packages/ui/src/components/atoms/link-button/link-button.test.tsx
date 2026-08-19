@@ -214,7 +214,7 @@ describe('LinkButton', () => {
 describe('LinkButton token mappings', () => {
   it('uses transparent rest backgrounds for default and subtle appearances', () => {
     expect(linkButtonCss).toContain('.appearance_default {');
-    expect(linkButtonCss).toContain('border-color: var(--color-border-default);');
+    expect(linkButtonCss).toContain('border-color: var(--color-border-input);');
     expect(linkButtonCss).toContain('background: transparent;');
     expect(linkButtonCss).toContain('.appearance_subtle {');
     expect(linkButtonCss).toContain('border-color: transparent;');

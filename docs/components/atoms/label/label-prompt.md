@@ -101,7 +101,8 @@ Usage example:
 - Forward standard span attributes.
 - Merge consumer `className` with internal CSS Module classes.
 - Use `children` for label content.
-- Apply uppercase visually through CSS, not by transforming the React value.
+- Do not apply any case transform - render text exactly as passed (the overline typography tokens
+  no longer include an uppercase transform).
 - Use semantic CSS variables from generated token files.
 - Do not use borders.
 - Do not include icons.
@@ -115,7 +116,6 @@ Base class should use:
 - `width: fit-content`
 - `white-space: nowrap`
 - `border: none`
-- `text-transform: uppercase`
 
 Size mapping:
 
@@ -139,7 +139,7 @@ Typography details if `overline-sm` and `overline-md` variables/classes do not e
   - font size 12px via token
   - line height 16px via token
   - letter spacing 0.5px via token
-  - uppercase
+  - no text-transform
 
 - `overline-md`
   - Public Sans
@@ -147,7 +147,7 @@ Typography details if `overline-sm` and `overline-md` variables/classes do not e
   - font size 14px via token
   - line height 20px via token
   - letter spacing 1px via token
-  - uppercase
+  - no text-transform
 
 Before implementation, inspect:
 

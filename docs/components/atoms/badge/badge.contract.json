@@ -66,7 +66,7 @@
       "type": "BadgeTone",
       "required": false,
       "default": "default",
-      "enum": ["default", "inverse", "brand", "success", "error"],
+      "enum": ["default", "brand", "success", "error"],
       "description": "Visual tone for badge emphasis or semantic meaning."
     },
     "ariaLabel": {
@@ -87,10 +87,6 @@
       "default": {
         "purpose": "Standard badge value.",
         "className": "tone_default"
-      },
-      "inverse": {
-        "purpose": "Badge for dark or bold surfaces.",
-        "className": "tone_inverse"
       },
       "brand": {
         "purpose": "Brand-emphasis badge.",
@@ -143,10 +139,6 @@
       "default": {
         "background": "--color-elevation-surface-default",
         "content": "--color-content-default"
-      },
-      "inverse": {
-        "background": "--color-background-neutral-bold-default",
-        "content": "--color-content-inverse"
       },
       "brand": {
         "background": "--color-background-brand-bold-default",
@@ -204,8 +196,7 @@
   "responsiveRules": [],
   "themeRules": [
     "Must work in light and dark themes.",
-    "Tone colors must use semantic CSS variables.",
-    "Inverse tone is intended for dark or bold surfaces."
+    "Tone colors must use semantic CSS variables."
   ],
   "implementationNotes": [
     "Use React.memo for the exported component.",

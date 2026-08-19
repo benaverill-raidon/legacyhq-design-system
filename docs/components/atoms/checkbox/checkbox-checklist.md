@@ -68,8 +68,8 @@ onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>)
 
 - Checkbox includes its label by default.
 - Label typography uses `body-md`.
-- Checkbox visual size is 16px.
-- Interaction/focus target is at least 24px.
+- Checkbox visual size is 24px (`size-choice-indicator`).
+- Interaction/focus target is 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
 - Required indicator appears after the label.
 - Checked and indeterminate states use the same selected fill token.
 - Invalid checked and invalid indeterminate states use invalid border treatment while preserving selected/dark fill behavior.

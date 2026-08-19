@@ -128,6 +128,16 @@
   content: none;
 }
 
+/*
+ * showIcons={false} hides only the decorative check/X marks - the loading Spinner is a functional
+ * status signal, not decoration, so it's unaffected and still renders even with icons hidden.
+ */
+.root[data-hide-icons='true'] .iconOn::before,
+.root[data-hide-icons='true'] .iconOff::before,
+.root[data-hide-icons='true'] .iconOff::after {
+  content: none;
+}
+
 .iconOn {
   inset-inline-start: var(--switch-icon-offset);
   opacity: 0;
@@ -196,7 +206,12 @@
   background: var(--color-background-neutral-bold-pressed);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .thumb {
+.root:not([data-disabled='true']):not([data-loading='true']):is(
+    :hover,
+    :active,
+    [data-force-state='hover'],
+    [data-force-state='active']
+  ) .thumb {
   transform: scaleX(1.16);
 }
 
@@ -217,7 +232,12 @@
   transform-origin: right center;
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .input:checked + .indicator .thumb {
+.root:not([data-disabled='true']):not([data-loading='true']):is(
+    :hover,
+    :active,
+    [data-force-state='hover'],
+    [data-force-state='active']
+  ) .input:checked + .indicator .thumb {
   transform: translateX(var(--switch-thumb-translate-x)) scaleX(1.16);
 }
 

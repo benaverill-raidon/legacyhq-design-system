@@ -1,7 +1,7 @@
 .root {
   --progress-indicator-dot-container-size: var(--component-progress-indicator-dot-container-size-sm);
   --progress-indicator-dot-size: var(--size-marker-sm);
-  --progress-indicator-selected-color: var(--color-content-default);
+  --progress-indicator-selected-color: var(--color-background-neutral-bold-default);
   --progress-indicator-unselected-border-color: var(--color-border-bold);
 
   display: inline-flex;
@@ -20,19 +20,19 @@
 }
 
 .appearance_default {
-  --progress-indicator-selected-color: var(--color-content-default);
+  --progress-indicator-selected-color: var(--color-background-neutral-bold-default);
 }
 
 .appearance_primary {
-  --progress-indicator-selected-color: var(--color-content-brand-primary-default);
+  --progress-indicator-selected-color: var(--color-background-brand-primary-bold-default);
 }
 
 .appearance_discovery {
-  --progress-indicator-selected-color: var(--color-content-discovery);
+  --progress-indicator-selected-color: var(--color-background-discovery-bold-default);
 }
 
 .appearance_inverted {
-  --progress-indicator-selected-color: var(--color-content-inverse);
+  --progress-indicator-selected-color: var(--color-background-neutral-subtle-default);
 }
 
 .dots {

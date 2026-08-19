@@ -7,10 +7,10 @@ import * as PopupStories from './popup.stories';
 
 Popup is the shared floating-panel primitive: it anchors a panel of arbitrary content to a trigger
 element, positions it so it doesn't clip the viewport, and dismisses on Escape/outside click. Its
-own visual skin (matching Figma's `popup` component) is optional (`unstyled`) - Tooltip already
-renders through Popup with a completely different visual design of its own, and Dropdown Menu,
-Inline Message, and other floating components are built on top of it rather than each hand-rolling
-their own positioning and dismissal logic.
+own visual skin (matching Figma's `popup` component) is optional (`unstyled`) - Tooltip renders
+through Popup with a completely different visual design of its own, Inline Message renders through
+Popup using that default skin directly, and Dropdown Menu and other floating components are planned
+to build on top of it too, rather than each hand-rolling their own positioning and dismissal logic.
 
 <Canvas of={PopupStories.Playground} />
 
@@ -48,9 +48,10 @@ their own positioning and dismissal logic.
 ### Popup is controlled, not self-triggering
 
 Unlike Tooltip, Popup doesn't decide when it opens - `open` is a required, fully controlled prop, and
-the consumer's own trigger interaction (a click, typically) is what flips it. This is deliberate:
-Dropdown Menu opens on click, Inline Message might open programmatically after an action completes,
-and baking in one trigger behavior would fight the other.
+the consumer's own trigger interaction is what flips it. This is deliberate: Inline Message opens on
+a click to its own trigger row, and also supports being opened programmatically via
+`open`/`onOpenChange` (e.g. right after an action completes); Dropdown Menu is planned to open on
+click too. Baking in one trigger behavior at the Popup level would fight either of these.
 
 ```tsx
 const [open, setOpen] = useState(false);
@@ -75,7 +76,8 @@ scroll/resize. See EdgeCases for it visibly repositioning near a viewport edge. 
 `closeOnEscape` and `closeOnOutsideClick` both default to `true` - Popup calls
 `onOpenChange(false)` for you so most consumers (Dropdown Menu, a generic popover) get standard
 dismiss behavior for free. Set either to `false` for content that should persist regardless of a
-stray click or Escape press, which is closer to what Inline Message will likely want.
+stray click or Escape press - Inline Message sets both to `false`, since its detail panel is meant
+to stay open until its own trigger row is clicked again, not dismiss on the first stray interaction.
 
 <Canvas of={PopupStories.EdgeCases} />
 
@@ -248,4 +250,6 @@ owns hover/focus triggering and non-interactive content rules.
 
 - **Tooltip** - the non-interactive, hover/focus-triggered counterpart. Renders through Popup
   internally (`unstyled`, `manageTriggerAria={false}`) rather than duplicating positioning logic.
-- **Dropdown Menu**, **Inline Message** - planned components built on top of Popup.
+- **Inline Message** - a click-triggered status row with detail revealed through Popup's own
+  default styled skin (not `unstyled`) and `manageTriggerAria` left at its default.
+- **Dropdown Menu** - planned, also built on top of Popup.

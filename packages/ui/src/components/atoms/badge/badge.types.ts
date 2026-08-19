@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export type BadgeTone = 'default' | 'inverse' | 'brand' | 'success' | 'error';
+export type BadgeTone = 'default' | 'brand' | 'success' | 'error';
 
 export interface BadgeProps {
   children: React.ReactNode;

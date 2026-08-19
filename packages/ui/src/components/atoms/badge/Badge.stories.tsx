@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Badge } from './badge';
 import type { BadgeTone } from './badge.types';
 
-const tones: BadgeTone[] = ['default', 'inverse', 'brand', 'success', 'error'];
+const tones: BadgeTone[] = ['default', 'brand', 'success', 'error'];
 
 const meta = {
   title: 'UI/Atoms/Badge',
@@ -213,7 +213,6 @@ export const EdgeCases: Story = {
           }}
         >
           <Badge>1</Badge>
-          <Badge tone="inverse">1</Badge>
           <Badge tone="brand">1</Badge>
         </div>
       </section>

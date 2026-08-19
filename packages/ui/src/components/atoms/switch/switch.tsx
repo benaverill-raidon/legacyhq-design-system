@@ -18,6 +18,7 @@ export const Switch = React.memo(
       disabled = false,
       required = false,
       isLoading = false,
+      showIcons = true,
       className,
       onCheckedChange,
       onClick,
@@ -67,6 +68,7 @@ export const Switch = React.memo(
         htmlFor={inputId}
         data-disabled={disabled ? 'true' : undefined}
         data-loading={isLoading ? 'true' : undefined}
+        data-hide-icons={showIcons ? undefined : 'true'}
         data-force-state={dataForceState}
       >
         <span className={styles.control}>

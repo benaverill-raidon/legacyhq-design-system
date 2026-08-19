@@ -185,7 +185,7 @@ describe('Button', () => {
     expect(buttonCss).toContain('--button-border-radius: var(--border-radius-sm);');
     expect(buttonCss).toContain('--focus-ring-offset: var(--spacing-xxs);');
     expect(buttonCss).toContain('border: var(--border-width-sm) solid transparent;');
-    expect(buttonCss).toMatch(/\.appearance_default \{[\s\S]*?border-color: var\(--color-border-default\);/);
+    expect(buttonCss).toMatch(/\.appearance_default \{[\s\S]*?border-color: var\(--color-border-input\);/);
     expect(buttonCss).toContain('background: transparent;');
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
     expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);

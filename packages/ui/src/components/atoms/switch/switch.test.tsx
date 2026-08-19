@@ -172,6 +172,31 @@ describe('Switch', () => {
     expect(switchCss).toContain("[data-loading='true'] .iconOff::after");
   });
 
+  it('shows icons by default', () => {
+    const { container } = render(<Switch label="Default icons" />);
+
+    expect(container.querySelector('label')).not.toHaveAttribute('data-hide-icons');
+  });
+
+  it('hides the CSS-drawn check/X marks when showIcons is false', () => {
+    const { container } = render(<Switch label="No icons" showIcons={false} />);
+
+    expect(container.querySelector('label')).toHaveAttribute('data-hide-icons', 'true');
+    expect(switchCss).toContain("[data-hide-icons='true'] .iconOn::before");
+    expect(switchCss).toContain("[data-hide-icons='true'] .iconOff::before");
+    expect(switchCss).toContain("[data-hide-icons='true'] .iconOff::after");
+  });
+
+  it('still renders the loading Spinner when showIcons is false', () => {
+    const { container } = render(<Switch label="Loading, no icons" isLoading showIcons={false} />);
+
+    const iconOn = container.querySelector(`.${styles.iconOn}`);
+    const iconOff = container.querySelector(`.${styles.iconOff}`);
+
+    expect(iconOn?.querySelector('svg')).toBeInTheDocument();
+    expect(iconOff?.querySelector('svg')).toBeInTheDocument();
+  });
+
   it('suppresses the hover/pressed track treatment while loading, matching disabled', () => {
     expect(switchCss).toContain(
       ".root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator",
@@ -180,6 +205,15 @@ describe('Switch', () => {
       ".root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .indicator",
     );
     expect(switchCss).toContain("cursor: progress;");
+  });
+
+  it('expands the thumb on hover as well as press, not press alone', () => {
+    expect(switchCss).toMatch(
+      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='active'\]\s*\)\s*\.thumb\s*\{\s*transform: scaleX\(1\.16\);/,
+    );
+    expect(switchCss).toMatch(
+      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='active'\]\s*\)\s*\.input:checked \+ \.indicator \.thumb\s*\{\s*transform: translateX\(var\(--switch-thumb-translate-x\)\) scaleX\(1\.16\);/,
+    );
   });
 
   it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {

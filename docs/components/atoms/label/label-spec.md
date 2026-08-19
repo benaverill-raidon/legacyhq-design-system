@@ -129,7 +129,8 @@ Overline typography should apply:
 
 - Public Sans
 - Font weight 600
-- Uppercase transform
+- No text-transform (the uppercase transform previously applied here has been removed from the
+  overline typography tokens - text now renders in whatever case the caller passes)
 - `sm`: 12px font size, 16px line height, 0.5 letter spacing
 - `md`: 14px font size, 20px line height, 1px letter spacing
 
@@ -179,7 +180,7 @@ Important implementation note: the current generated theme may use `--color-text
 ## Behavior
 
 - Render children as text/content inside the label.
-- Apply uppercase transform visually through CSS.
+- Do not apply any case transform - render text exactly as passed.
 - Preserve the original `children` value in React output.
 - Forward valid span HTML attributes.
 - Merge external `className` with internal classes.

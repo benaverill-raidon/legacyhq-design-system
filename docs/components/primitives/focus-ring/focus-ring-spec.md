@@ -14,7 +14,7 @@ Primitive
 ### Design Reference
 - Figma Component: Focus Ring
 - Figma Variant:
-  - `borderWidth`: `default`, `compact`
+  - `borderWidth`: `default` (the 1px/`compact` option that used to exist has been removed in Figma)
 - Visual examples include focus rings applied to:
   - Button
   - Checkbox
@@ -73,13 +73,11 @@ Focus Ring
 
 | Variant | Token | Width | Description |
 |----------|-------|-------|-------------|
-| default | `--border-width-md` | 2px | Standard focus ring |
-| compact | `--border-width-sm` | 1px | Tighter focus ring for compact controls |
+| default | `--border-width-md` | 2px | Standard focus ring, the only width Figma currently defines |
 
 ### Variant Rules
-- Use `default` for most components.
-- Use `compact` for smaller or tighter controls.
-- Both variants use `--color-border-focused`.
+- Use `default` for all components.
+- Uses `--color-border-focused`.
 - Do not use discovery, brand, or status colors for Focus Ring in v1.
 
 ---
@@ -110,14 +108,14 @@ Recommended v1 React wrapper API:
 | Property | Type | Required | Default | Description |
 |-----------|--------|----------|---------|-------------|
 | children | ReactElement | Yes | - | Focusable child element |
-| borderWidth | `'default' \| 'compact'` | No | `'default'` | Visual ring thickness |
+| borderWidth | `'default'` | No | `'default'` | Visual ring thickness. Only one value exists today - kept for forward compatibility |
 | className | string | No | undefined | Optional class name for the wrapper |
 | disabled | boolean | No | false | Prevents focus ring styling when true |
 
 Recommended TypeScript:
 
 ```ts
-export type FocusRingBorderWidth = 'default' | 'compact';
+export type FocusRingBorderWidth = 'default';
 
 export interface FocusRingProps {
   children: React.ReactElement;
@@ -133,7 +131,6 @@ Also expose reusable CSS classes for internal component styling.
 Recommended classes:
 - `focusRing`
 - `focusRingDefault`
-- `focusRingCompact`
 
 ---
 
@@ -179,7 +176,6 @@ Required tokens:
 
 ```css
 --border-width-md
---border-width-sm
 ```
 
 Mapping:
@@ -187,7 +183,6 @@ Mapping:
 | Variant | Token |
 |----------|-------|
 | default | `--border-width-md` |
-| compact | `--border-width-sm` |
 
 ### Radius
 Focus Ring should inherit or align with the focused element radius where possible.
@@ -252,7 +247,6 @@ None.
 - Use CSS variables from generated token CSS.
 - Use `--color-border-focused` for ring color.
 - Use `--border-width-md` for default.
-- Use `--border-width-sm` for compact.
 - Use `:focus-visible`.
 - Use an outset ring.
 - Use `2px` outline offset.
@@ -274,10 +268,6 @@ None.
 .focusRingDefault:focus-visible {
   outline-width: var(--border-width-md);
 }
-
-.focusRingCompact:focus-visible {
-  outline-width: var(--border-width-sm);
-}
 ```
 
 ### Technical Constraints
@@ -292,7 +282,6 @@ None.
 ### Visual
 - [ ] Ring matches Figma examples
 - [ ] Default variant uses 2px
-- [ ] Compact variant uses 1px
 - [ ] Light mode works
 - [ ] Dark mode works
 - [ ] Ring does not shift layout

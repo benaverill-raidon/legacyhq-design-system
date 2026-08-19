@@ -24,10 +24,18 @@
   "anatomy": [
     "track",
     "thumb",
+    "icon",
     "label",
     "helperText"
   ],
-  "props": {},
+  "props": {
+    "showIcons": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "When false, hides the decorative check/X marks drawn inside the track. Does not affect the isLoading Spinner, which is a functional status signal rather than decoration and still renders regardless."
+    }
+  },
   "variants": {},
   "sizes": [
     "sm",
@@ -57,7 +65,8 @@
   ],
   "behaviorRules": [
     "State changes immediately.",
-    "Supports controlled and uncontrolled usage."
+    "Supports controlled and uncontrolled usage.",
+    "showIcons defaults to true, preserving the existing check/X marks; set to false to render a bare track/thumb with no internal icon."
   ],
   "compositionRules": [
     "Can be used with helper text."

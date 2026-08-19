@@ -109,22 +109,6 @@
 
 .input:checked + .indicatorTarget .checkedIcon {
   display: inline-flex;
-  animation: radioCheckIn var(--move-quick);
-}
-
-@keyframes radioCheckIn {
-  from {
-    transform: scale(0.6);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .checkedIcon {
-    animation-duration: 0ms;
-  }
 }
 
 .labelText {

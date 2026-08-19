@@ -8,14 +8,6 @@
       "props": {}
     },
     {
-      "name": "Compact border width",
-      "description": "For small/dense controls where the default width would overwhelm the control.",
-      "jsx": "<FocusRing borderWidth=\"compact\">\n  <button type=\"button\" className={styles.smallToggle}>On</button>\n</FocusRing>",
-      "props": {
-        "borderWidth": "compact"
-      }
-    },
-    {
       "name": "Suppressing the ring on a disabled control",
       "jsx": "<FocusRing disabled={isDisabled}>\n  <button type=\"button\" disabled={isDisabled}>Save</button>\n</FocusRing>",
       "props": {
@@ -25,7 +17,7 @@
     {
       "name": "Composing focusRingClassNames directly",
       "description": "Used internally by components that need to add other classes to the same element - a raw input inside a custom control, for example.",
-      "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingCompact}`}\n  type=\"checkbox\"\n/>;",
+      "jsx": "import { focusRingClassNames } from '../../primitives/focus-ring';\n\n<input\n  className={`${styles.checkboxInput} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingDefault}`}\n  type=\"checkbox\"\n/>;",
       "props": {}
     }
   ],

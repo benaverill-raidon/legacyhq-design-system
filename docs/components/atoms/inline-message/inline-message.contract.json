@@ -1,0 +1,197 @@
+{
+  "name": "InlineMessage",
+  "category": "atom",
+  "status": "stable",
+  "purpose": "Short, tone-colored inline status line with optional click-revealed detail.",
+  "intent": "Give a short status message a place to reveal supplemental detail without a full banner or dialog, built on the Popup primitive.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4589:2519",
+    "componentName": "inline-message",
+    "variantCount": 12,
+    "verifiedAt": "2026-08-19",
+    "note": "12 raw Figma variants (tone x isOpen) but only 2 real states per tone - most of the outer isOpen variant values are garbage auto-generated strings (isOpen3..isOpen12), not real booleans, except for the info tone. The reliable signal is the nested `popup` instance's own isOpen component property.",
+    "subComponents": [
+      {
+        "name": "inline-message-trigger",
+        "componentSetNodeId": "2448:72904",
+        "componentName": "figma-parts / inline-message-trigger",
+        "note": "The row itself - icon, titleText, secondaryText - nested inside the inline-message component's own `popup` instance as its trigger slot."
+      }
+    ]
+  },
+  "useCases": [
+    "Save/sync confirmations",
+    "Form validation summaries",
+    "Any short inline status line that sometimes needs more explanation"
+  ],
+  "antiPatterns": [
+    "A hover-only supplemental hint (use Tooltip)",
+    "Content essential to completing a task with no fallback if the panel is never opened",
+    "A page-level banner or toast"
+  ],
+  "anatomy": [
+    { "name": "icon", "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set." },
+    { "name": "title", "description": "Required bold lead text (heading-xs typography)." },
+    { "name": "secondaryText", "description": "Optional muted trailing text (body-md typography), rendered only when provided.", "group": "optional" },
+    { "name": "content", "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal.", "group": "optional" }
+  ],
+  "props": {
+    "title": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "Bold lead text."
+    },
+    "secondaryText": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Optional muted trailing text, shown only when provided - no separate show/hide toggle."
+    },
+    "tone": {
+      "type": "InlineMessageTone",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "info", "success", "warning", "error", "discovery"],
+      "description": "Selects the status icon, icon color, and the tint shown on hover/open."
+    },
+    "content": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row with no button and no popup."
+    },
+    "open": {
+      "type": "boolean",
+      "required": false,
+      "default": null,
+      "description": "Controlled open state for the detail popup."
+    },
+    "defaultOpen": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Initial open state for uncontrolled usage."
+    },
+    "onOpenChange": {
+      "type": "(open: boolean) => void",
+      "required": false,
+      "default": null,
+      "description": "Called with the next open value whenever the row is clicked."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root row's class list."
+    },
+    "data-force-state": {
+      "type": "'hover' | 'focus' | 'active'",
+      "required": false,
+      "default": null,
+      "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
+    }
+  },
+  "sizes": [],
+  "slots": [
+    { "name": "content", "required": false, "supports": ["short supplemental detail text or elements, rendered inside Popup's default panel"] }
+  ],
+  "variants": {
+    "tone": {
+      "default": { "icon": "plain CSS dot (no matching status icon exists)", "iconColorToken": "--color-content-default", "tintToken": "--color-background-neutral-overlay-hovered" },
+      "info": { "icon": "StatusInformationIcon", "iconColorToken": "--color-content-information", "tintToken": "--color-background-information-overlay-hovered" },
+      "success": { "icon": "StatusSuccessIcon", "iconColorToken": "--color-content-success", "tintToken": "--color-background-success-overlay-hovered" },
+      "warning": { "icon": "StatusWarningIcon", "iconColorToken": "--color-content-warning", "tintToken": "--color-background-warning-overlay-hovered" },
+      "error": { "icon": "StatusErrorIcon", "iconColorToken": "--color-content-error", "tintToken": "--color-background-error-overlay-hovered" },
+      "discovery": { "icon": "StatusDiscoveryIcon", "iconColorToken": "--color-content-discovery", "tintToken": "--color-background-discovery-overlay-hovered" }
+    }
+  },
+  "states": ["default", "hover", "open", "disabled-row-when-no-content"],
+  "tokens": {
+    "semantic": {
+      "titleColor": "--color-content-default",
+      "secondaryTextColor": "--color-content-subtle",
+      "titleTypography": "heading-xs",
+      "secondaryTextTypography": "body-md",
+      "iconContainer": "--size-300",
+      "rowPadding": "--spacing-none (the row itself carries no padding - see textGroupPadding)",
+      "textGroupPadding": "--spacing-xs on both sides - covers the icon-to-title gap and the row's own trailing space",
+      "titleToSecondaryTextGap": "--spacing-sm"
+    },
+    "note": "Tone-specific icon color and hover/open tint tokens are documented per tone in the `variants.tone` block above, not duplicated here."
+  },
+  "accessibility": {
+    "triggeredBy": ["pointer click", "Enter/Space when content is provided"],
+    "focusable": "only when content is provided (renders a real button)",
+    "role": null,
+    "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
+    "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
+  },
+  "behaviorRules": [
+    "Renders a plain, non-interactive div (no button, no aria-expanded, no Popup mounted) when content is absent.",
+    "Renders a real <button type=\"button\"> when content is provided; clicking toggles the popup.",
+    "Does not open on hover or focus - click/keyboard-activation only, per Popup's own guidance that hover-only reveals are Tooltip's job.",
+    "Supports controlled (open/onOpenChange) and uncontrolled (defaultOpen) usage - the standard React pattern, since there is no native form element to delegate this to.",
+    "Renders through Popup with its default styled skin (not unstyled) - the first component in the system to exercise that code path.",
+    "Requests alignment=\"bottomLeft\", matching Figma's own popup instance property on every variant.",
+    "Sets closeOnEscape={false} and closeOnOutsideClick={false} on Popup - the detail persists until the row is clicked again, per Popup's own documented prediction for this component.",
+    "Leaves manageTriggerAria at Popup's default (true) - aria-expanded/aria-controls is the correct pattern for a click-to-reveal disclosure.",
+    "Styles the hover/open tint off Popup's own aria-expanded attribute rather than a redundant custom data-open attribute.",
+    "Applies the shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) to the trigger button, and groups :focus-visible into the same tint rule as :hover - the same convention Button/IconButton/ToggleButton use - rather than a one-off local focus style.",
+    "The row itself (.root) carries no padding - a native <button> otherwise inherits the UA stylesheet's own default button padding (1px block / 6px inline in Chrome), so .root resets padding to --spacing-none explicitly and the text group (.text) carries the real --spacing-xs padding on both sides instead."
+  ],
+  "compositionRules": [
+    "Built on top of Popup - do not reimplement positioning, the portal, or Escape/outside-click handling locally.",
+    "Use Tooltip instead for a hover-only, non-interactive supplemental hint."
+  ],
+  "contentRules": [
+    "Keep title and secondaryText short enough for one line - neither has built-in truncation.",
+    "content wraps inside Popup's own default panel width."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Uses semantic tokens only - works in light and dark themes."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, or typography.",
+    "Required extending the shared Icon primitive with a 'discovery' IconColor value/class - a real, pre-existing gap confirmed absent before this component needed it, not invented locally."
+  ],
+  "relatedComponents": ["Popup", "Tooltip", "Icon", "FocusRing"],
+  "do": [
+    "Omit content for a message that has nothing more to say.",
+    "Use open/onOpenChange to reveal detail programmatically after an action completes."
+  ],
+  "dont": [
+    "Do not wrap trivial content in a popup just to add an expand affordance nobody needs.",
+    "Do not reach for this component as a hover-only hint - use Tooltip.",
+    "Do not fabricate a status icon for tone=\"default\" - use the plain dot."
+  ],
+  "acceptanceCriteria": [
+    "Renders title; renders/omits secondaryText correctly.",
+    "Renders a real status icon for a non-default tone; renders a plain dot for tone=\"default\".",
+    "Renders a plain row (no button) when content is omitted.",
+    "Renders a real button, with aria-expanded, when content is provided.",
+    "Applies the shared Focus Ring primitive to the trigger button; :focus-visible shows the same tint as :hover.",
+    "Toggles the popup open/closed on click (uncontrolled).",
+    "Supports defaultOpen and controlled open/onOpenChange.",
+    "Does not close on Escape or an outside click.",
+    "Supports className on the root row.",
+    "Maps every tone to its own overlay/hovered tint token.",
+    "Delegates positioning/portal/dismissal to Popup rather than a local implementation.",
+    "Storybook includes Playground, Variants, Content, and EdgeCases.",
+    "Tests cover title/secondaryText rendering, tone icons, open/close toggling, controlled/uncontrolled usage, dismissal behavior, and className."
+  ],
+  "knownLimitations": [
+    "No disabled prop - not evidenced in Figma's own component set.",
+    "No built-in truncation for title/secondaryText."
+  ],
+  "futureEnhancements": [
+    "A disabled prop if a real product need for it emerges."
+  ]
+}

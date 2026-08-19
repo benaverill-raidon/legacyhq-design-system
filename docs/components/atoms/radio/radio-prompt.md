@@ -79,9 +79,9 @@ The indicator must not be the interactive control.
 
 ### Sizing
 
-- Visual indicator: 16px
-- Interaction target: 24px
-- Center the 16px indicator inside the 24px target
+- Visual indicator: 24px (`size-choice-indicator`)
+- Interaction target: 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`)
+- Center the 24px indicator inside the 32px target
 - Label typography: body-md
 
 Use tokens/CSS variables wherever available.

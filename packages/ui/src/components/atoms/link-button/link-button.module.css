@@ -26,8 +26,7 @@
   cursor: pointer;
   user-select: none;
   vertical-align: middle;
-  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick),
-    transform var(--move-quick);
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -40,10 +39,6 @@
 .linkButton[data-loading='true']:hover,
 .linkButton[data-loading='true']:active {
   cursor: progress;
-}
-
-.linkButton:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  transform: scale(0.98);
 }
 
 .size_xs {
@@ -83,7 +78,7 @@
  * the outline ring from the shared focus-ring primitive, matching Button's convention.
  */
 .appearance_default {
-  border-color: var(--color-border-default);
+  border-color: var(--color-border-input);
   background: transparent;
   color: var(--color-content-subtle);
 }

@@ -29,19 +29,6 @@ describe('FocusRing', () => {
     );
   });
 
-  it('applies the compact border width class', () => {
-    render(
-      <FocusRing borderWidth="compact">
-        <button type="button">Button</button>
-      </FocusRing>,
-    );
-
-    expect(screen.getByRole('button', { name: 'Button' })).toHaveClass(
-      focusRingClassNames.focusRing,
-      focusRingClassNames.focusRingCompact,
-    );
-  });
-
   it('applies custom className', () => {
     render(
       <FocusRing className="custom-focus-ring">
@@ -62,13 +49,11 @@ describe('FocusRing', () => {
     expect(screen.getByRole('button', { name: 'Button' })).not.toHaveClass(
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
-      focusRingClassNames.focusRingCompact,
     );
   });
 
   it('exports utility class names', () => {
     expect(focusRingClassNames.focusRing).toEqual(expect.any(String));
     expect(focusRingClassNames.focusRingDefault).toEqual(expect.any(String));
-    expect(focusRingClassNames.focusRingCompact).toEqual(expect.any(String));
   });
 });

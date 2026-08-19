@@ -60,7 +60,8 @@ Atom component.
 - Checked state uses success bold background tokens.
 - Unchecked state uses neutral bold background tokens.
 - Hover states use the corresponding hovered semantic tokens.
-- Pressed interaction should include a subtle Material-inspired thumb movement or expansion.
+- Hover and pressed interaction should both include a subtle Material-inspired thumb expansion -
+  hover triggers it a beat earlier than pressed alone would.
 - Motion must degrade gracefully when reduced motion is preferred.
 - `isLoading` blocks toggling and sets `aria-busy`, but does not set native `disabled` - the control
   stays focusable, unlike `disabled`. Figma's `isLoading=true` artwork has no visible difference

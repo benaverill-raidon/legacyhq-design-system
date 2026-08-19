@@ -51,7 +51,7 @@
 .current {
   display: inline-flex;
   align-items: center;
-  color: var(--color-content-default);
+  color: var(--color-content-subtle);
   font-family: var(--typography-heading-xs-font-family);
   font-size: var(--typography-heading-xs-font-size);
   font-weight: var(--typography-heading-xs-font-weight);
@@ -61,4 +61,22 @@
 
 .link {
   min-inline-size: 0;
+}
+
+/*
+ * A breadcrumb ancestor is a step in a location trail, not a link a visitor "has or hasn't been
+ * to" - Link's own `:visited` treatment (a real, purple, browser-history-driven color swap) reads
+ * as an unrelated visited-link signal here rather than location. Overridden back to the same
+ * color the resting/pressed state already uses via Link's own custom properties, so it tracks
+ * whatever appearance Link is using rather than hardcoding a duplicate value. The `.item` ancestor
+ * class gives this selector one more class than Link's own `.root:visited` (and
+ * `.root:visited:active`), which is what reliably wins here regardless of CSS Modules class-name
+ * order - same technique as Icon Tile's `.icon :global([data-size])` override, no `!important`.
+ */
+.item .link:visited {
+  color: var(--link-color);
+}
+
+.item .link:visited:active {
+  color: var(--link-color-pressed);
 }

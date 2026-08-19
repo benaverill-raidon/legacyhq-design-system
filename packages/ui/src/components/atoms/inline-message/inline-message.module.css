@@ -1,0 +1,116 @@
+/*
+ * Layout matches Figma's `inline-message-trigger` part exactly: no padding of its own - the row
+ * starts flush with the icon's own edge, and the trailing --spacing-xs gap lives on `.text` (see
+ * below), not here. Zeroed explicitly rather than left implicit, since a native `<button>` (the
+ * `content`-provided case) otherwise inherits the UA stylesheet's own default button padding
+ * (1px block / 6px inline in Chrome) - `.text`'s own padding would just be added on top of that
+ * unless this resets it first.
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-none);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  cursor: default;
+}
+
+.trigger {
+  --focus-ring-offset: var(--spacing-xxs);
+
+  cursor: pointer;
+  transition: background-color var(--fade-quick);
+}
+
+/*
+ * The tint uses each tone's own `overlay/hovered` token - the same token Figma's `isOpen=true`
+ * trigger is bound to - applied on hover, keyboard focus, and while the popup is open
+ * (`aria-expanded`, set automatically by Popup's default `manageTriggerAria`, not a custom
+ * attribute of this component's own). Focus-visible reads identically to hover here, the same
+ * pattern Button/IconButton/ToggleButton already use, and the shared Focus Ring primitive (applied
+ * alongside these classes in inline-message.tsx) supplies the actual outline on top of this tint.
+ * `[data-force-state]` mirrors the adjacent pseudo-classes so Storybook can present hover/focus as
+ * a static regression reference - documentation-only, not part of the public API. `default` reuses
+ * the neutral overlay token shared by every non-tone-specific hover treatment elsewhere in this
+ * system.
+ */
+.tone_default.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.tone_info.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-information-overlay-hovered);
+}
+
+.tone_success.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-success-overlay-hovered);
+}
+
+.tone_warning.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-warning-overlay-hovered);
+}
+
+.tone_error.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-error-overlay-hovered);
+}
+
+.tone_discovery.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-discovery-overlay-hovered);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger {
+    transition-duration: 0ms;
+  }
+}
+
+/* Sized to match the Icon primitive's own `spacing="spacious"` container (--size-300, 24px) so the
+   default tone's plain dot lines up identically with every real status icon. */
+.iconSlot {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+}
+
+.dot {
+  inline-size: var(--size-marker-sm);
+  block-size: var(--size-marker-sm);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-content-default);
+}
+
+.text {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-inline: var(--spacing-xs);
+  min-inline-size: 0;
+}
+
+.title {
+  min-inline-size: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  white-space: nowrap;
+}
+
+.secondaryText {
+  min-inline-size: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  white-space: nowrap;
+}

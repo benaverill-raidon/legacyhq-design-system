@@ -63,6 +63,7 @@ export interface SwitchProps
   disabled?: boolean;
   required?: boolean;
   isLoading?: boolean;
+  showIcons?: boolean;
   onCheckedChange?: (
     checked: boolean,
     event: React.ChangeEvent<HTMLInputElement>
@@ -88,6 +89,8 @@ There is no `invalid` prop - Figma's `switch` component set has no such variant 
   inheriting that slot's own color - no color override needed) as a usability improvement beyond
   the literal mockup, and suppress hover/pressed CSS while loading, the same way disabled already
   does.
+- `showIcons` (default `true`) toggles only the decorative check/X marks - `false` renders a bare
+  track/thumb. Does not affect the `isLoading` Spinner, which is a functional signal, not decoration.
 - Use shared Focus Ring utilities.
 - Do not create custom ARIA roles beyond switch semantics.
 - Do not recreate native keyboard behavior.
@@ -118,7 +121,8 @@ Implement a smooth state transition.
 
 The thumb should move between unchecked and checked positions.
 
-Add a subtle Material-inspired pressed interaction, such as thumb expansion or slight compression.
+Add a subtle Material-inspired thumb expansion, triggered on both hover and pressed (not pressed
+alone) so the cue starts as soon as the pointer arrives rather than only on click.
 
 Respect `prefers-reduced-motion`.
 

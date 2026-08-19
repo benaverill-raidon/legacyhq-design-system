@@ -51,6 +51,7 @@ export interface SwitchProps
   disabled?: boolean;
   required?: boolean;
   isLoading?: boolean;
+  showIcons?: boolean;
   onCheckedChange?: (
     checked: boolean,
     event: React.ChangeEvent<HTMLInputElement>
@@ -70,6 +71,7 @@ defaultChecked = undefined
 disabled = false
 required = false
 isLoading = false
+showIcons = true
 ```
 
 ## Behavior
@@ -89,6 +91,10 @@ isLoading = false
   `Spinner` in the same slot (inheriting that slot's own inherited color - no color override of its
   own) as a usability improvement beyond the literal mockup, and suppresses the hover/pressed track
   treatment while loading (matching how `disabled` already suppresses it).
+- `showIcons` (default `true`) toggles only the decorative check/X marks drawn inside the track.
+  Setting it to `false` renders a bare track/thumb with no internal icon. It does not affect the
+  `isLoading` Spinner, which is a functional status signal rather than decoration and still renders
+  in the same slot regardless of `showIcons`.
 
 ## States
 
@@ -107,6 +113,7 @@ Supported states:
 - required
 - loading (blocks toggling, `aria-busy`, no visible change from Figma beyond replacing the on/off
   mark with a Spinner in the same slot)
+- icons hidden (`showIcons={false}` - a bare track/thumb, no check/X mark; independent of loading)
 
 ## Visual Requirements
 
@@ -195,7 +202,9 @@ live Figma component to actually be 6px (`--measurement-6`), 2px tighter than th
 ## Animation Requirements
 
 - Animate thumb position between off and on states.
-- Support a subtle Material-inspired pressed interaction, such as temporary thumb expansion or compression.
+- Support a subtle Material-inspired thumb expansion (`scaleX(1.16)`), triggered on both hover and
+  pressed - not pressed alone - so the cue starts as soon as the pointer arrives rather than only
+  on click.
 - Use CSS transitions.
 - Respect `prefers-reduced-motion` by reducing or removing movement.
 - Animation should feel smooth but not decorative enough to delay interaction feedback.
@@ -224,6 +233,7 @@ Controls:
 - disabled
 - required
 - isLoading
+- showIcons
 - label
 
 ### Sizes
@@ -287,6 +297,8 @@ Test:
 - supports loading: blocks toggling, sets `aria-busy`, stays focusable (not native `disabled`),
   replaces the on/off mark with a Spinner in the same slot (not the thumb), inherits that slot's
   color with no override, suppresses hover/pressed CSS
+- supports `showIcons={false}`: hides the decorative check/X marks; the loading Spinner still
+  renders even when `showIcons` is false
 - supports custom className
 - forwards native input props
 - renders with `role="switch"`

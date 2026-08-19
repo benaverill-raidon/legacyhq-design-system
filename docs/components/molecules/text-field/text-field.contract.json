@@ -40,8 +40,8 @@
       "note": "Separate Figma component for the leading slot. Never interactive. The text case (e.g. a '$' currency prefix) is bound to fixed body-lg typography at every field size."
     },
     "elemAfterInputComponent": {
-      "type": ["icon-button", "button"],
-      "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square."
+      "type": ["icon-button", "button", "label"],
+      "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square. A third `label` type was added later, nesting a real Label atom instance (tone=default, emphasis=subtle) for compact metadata/status after the input (e.g. a unit or status pill) - confirmed directly from the component's own nested instance properties, not assumed. iconAfter is already typed React.ReactNode and .action is a plain centered flex wrapper, so a Label already renders correctly there with no component code changes."
     },
     "apiAdaptationNotes": [
       "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focused+empty (:focus-within + :placeholder-shown), typing=focused+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
@@ -55,7 +55,8 @@
       "`.root[data-invalid='true']` sets the border-width shorthand (all four sides) to 2px; `.appearance_subtle[data-invalid='true']` overrides border-top/right/left-width back to 0 and must also explicitly reset border-bottom-width back to 1px, or that side silently inherits the shorthand's leftover 2px and reintroduces the same text shift.",
       "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
       "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
-      "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables."
+      "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
+      "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type."
     ]
   },
   "useCases": [
@@ -98,7 +99,7 @@
   "states": ["default", "hover", "focus", "invalid", "disabled"],
   "slots": [
     { "name": "iconBefore", "required": false, "supports": ["a small icon from the generated icon set", "a short text prefix, e.g. '$'"], "interactive": false },
-    { "name": "iconAfter", "required": false, "supports": ["a small icon from the generated icon set", "an IconButton (appearance=subtle, shape=square) for a clear/dismiss action", "a Button for a labeled action"], "interactive": true }
+    { "name": "iconAfter", "required": false, "supports": ["a small icon from the generated icon set", "an IconButton (appearance=subtle, shape=square) for a clear/dismiss action", "a Button for a labeled action", "a Label pill for compact metadata/status after the input (e.g. a unit or status tag)"], "interactive": true }
   ],
   "tokens": {
     "layout": {

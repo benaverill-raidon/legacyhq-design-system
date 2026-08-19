@@ -278,7 +278,7 @@ Use available semantic color tokens from the theme CSS.
 
 ### Default + Neutral
 
-- border: `color-border-default`
+- border: `color-border-input`
 - content: `color-content-subtle` or existing text/content subtle token
 - background: transparent or surface/input token based on Figma
 

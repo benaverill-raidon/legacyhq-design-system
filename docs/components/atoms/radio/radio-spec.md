@@ -188,9 +188,9 @@ RadioGroup default spacing should be vertical with no visible gap between radio 
 
 ### Radio Indicator
 
-- Visual indicator size: 16px by 16px.
-- Interaction target: 24px by 24px.
-- The 16px indicator should be centered inside the 24px target.
+- Visual indicator size: 24px by 24px (`size-choice-indicator`).
+- Interaction target: 32px by 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
+- The 24px indicator should be centered inside the 32px target.
 - Draw checked and unchecked states with private CSS indicator anatomy.
 - Do not add radio control shapes to the shared icon library.
 - Do not use the browser default checkbox/radio appearance.
@@ -207,7 +207,7 @@ RadioGroup default spacing should be vertical with no visible gap between radio 
 
 - Use Focus Ring primitive utility classes.
 - Do not recreate focus ring styles locally.
-- Focus should appear around the 24px interaction target / visual indicator area.
+- Focus should appear around the 32px interaction target / visual indicator area.
 - Use `:focus-visible` behavior through the Focus Ring primitive.
 
 ## Token Mapping
@@ -216,8 +216,9 @@ Use semantic CSS variables only. Do not hardcode visual design values unless a t
 
 ### Size
 
-- Indicator size: token equivalent of 16px.
-- Interaction target: token equivalent of 24px.
+- Indicator size: `size-choice-indicator` (24px).
+- Interaction target: `size-choice-target` (32px).
+- Row min-height: `size-choice-row` (32px).
 - Label gap: token equivalent of 8px or closest existing component spacing from the spec.
 - RadioGroup option gap: 0.
 

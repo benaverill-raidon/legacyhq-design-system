@@ -1146,11 +1146,6 @@
         "type": "string",
         "originalName": "typography/text-transform/none"
       },
-      "typography-text-transform-uppercase": {
-        "value": "\"uppercase\"",
-        "type": "string",
-        "originalName": "typography/text-transform/uppercase"
-      },
       "typography-font-family-public-sans": {
         "value": "\"Public Sans\"",
         "type": "string",

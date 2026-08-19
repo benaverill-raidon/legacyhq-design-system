@@ -23,8 +23,9 @@ bare input, so it doesn't belong at the atom tier.
   are not real component props (see Design Decisions below)
 - `elemBeforeInput` and `elemAfterInput` are separate Figma components (added after the initial
   pass): `elemBeforeInput` has a `type` property of `icon | text`; `elemAfterInput` has a `type`
-  property of `icon-button | button`. Confirmed directly from their node data, not assumed
-  symmetric with the leading slot.
+  property of `icon | button | label`. Confirmed directly from their node data, not assumed
+  symmetric with the leading slot. The `label` case nests a real Label atom instance
+  (tone=default, emphasis=subtle) for compact metadata/status after the input.
 
 ---
 
@@ -48,16 +49,17 @@ TextField
 └─ div (bordered frame)
    ├─ span.before (optional, iconBefore - icon or text, always aria-hidden)
    ├─ input (native, flex: 1)
-   └─ span.action (optional, iconAfter - icon or an interactive IconButton/Button, never forced aria-hidden)
+   └─ span.action (optional, iconAfter - icon, an interactive IconButton/Button, or a non-interactive Label pill, never forced aria-hidden)
 ```
 
 ### Structure Notes
 - Single bordered frame wrapping the actual `<input>`
 - The leading slot (`iconBefore`) is icon-or-text only, and is always decorative - it is always
   wrapped `aria-hidden`, matching Figma's `elemBeforeInput` component (`type: icon | text`)
-- The trailing slot (`iconAfter`) is icon-or-action - matching Figma's `elemAfterInput` component
-  (`type: icon-button | button`) - and is never forced `aria-hidden`, since it frequently holds a
-  real focusable control (most commonly a clear action)
+- The trailing slot (`iconAfter`) is icon-or-action-or-label - matching Figma's `elemAfterInput`
+  component (`type: icon | button | label`) - and is never forced `aria-hidden`, since it
+  frequently holds a real focusable control (most commonly a clear action). The `label` case is
+  non-interactive, like a Label pill for a unit or status tag.
 - No label, no helper text, no error message - Figma's source component is the bare input frame
   only (see Design Decisions)
 
@@ -156,11 +158,13 @@ mirror each other:
   React implementation always wraps it `aria-hidden`. The `text` case (e.g. a `$` currency prefix)
   is bound to fixed `body-lg` typography in Figma at every field size - it does not scale down with
   a `sm` field the way the input's own typography does.
-- `elemAfterInput`'s `type` property is `icon-button | button` - it is frequently interactive
+- `elemAfterInput`'s `type` property is `icon | button | label` - it is frequently interactive
   (most commonly a clear action), so the React implementation never forces `aria-hidden` on this
   slot. When it's a clear/dismiss-style action, use a real `IconButton` with `appearance="subtle"`
   and `shape="square"` - confirmed from Figma's screenshot of the clear icon-button in its hover
-  state - not a bare icon standing in for a button.
+  state - not a bare icon standing in for a button. The `label` case nests a real `Label` atom
+  (`tone="default"`, `emphasis="subtle"`) for compact, non-interactive metadata/status after the
+  input - confirmed directly from the nested instance's own component properties.
 
 ---
 
@@ -201,9 +205,10 @@ Any single-line text value appropriate to the native `type` in use.
 
 - `iconBefore`: an icon from the generated icon set, or a short text prefix (e.g. `$`). Always
   decorative.
-- `iconAfter`: an icon from the generated icon set, or an interactive control - typically an
+- `iconAfter`: an icon from the generated icon set, an interactive control - typically an
   `IconButton` (`appearance="subtle"`, `shape="square"`) for a clear/dismiss action, or a `Button`
-  when the trailing action needs a text label.
+  when the trailing action needs a text label - or a non-interactive `Label` pill for compact
+  metadata/status (e.g. a unit or status tag).
 
 ### Content Length
 No fixed limit - native `maxLength` applies if set.
@@ -298,6 +303,7 @@ boolean prop.
 - Icon Button (atom) - the recommended real control for an interactive `iconAfter` clear/dismiss
   action (`appearance="subtle"`, `shape="square"`)
 - Button (atom) - for an interactive `iconAfter` action that needs a text label
+- Label (atom) - for a non-interactive `iconAfter` metadata/status pill
 
 ### Used By
 - Forms

@@ -106,4 +106,14 @@ describe('Breadcrumbs', () => {
   it('uses the semantic sm spacing token between items', () => {
     expect(breadcrumbsCss).toContain('gap: var(--spacing-sm);');
   });
+
+  it('does not give the current item a visually distinct default text color', () => {
+    expect(breadcrumbsCss).toMatch(/\.current \{[\s\S]*?color: var\(--color-content-subtle\);/);
+    expect(breadcrumbsCss).not.toMatch(/\.current \{[\s\S]*?color: var\(--color-content-default\);/);
+  });
+
+  it("overrides Link's :visited color back to its normal resting/pressed color", () => {
+    expect(breadcrumbsCss).toMatch(/\.item \.link:visited \{[\s\S]*?color: var\(--link-color\);/);
+    expect(breadcrumbsCss).toMatch(/\.item \.link:visited:active \{[\s\S]*?color: var\(--link-color-pressed\);/);
+  });
 });

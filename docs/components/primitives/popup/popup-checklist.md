@@ -10,8 +10,8 @@ Primitive
 
 ### Related Components
 - Tooltip (renders through Popup with `unstyled` + `manageTriggerAria={false}`)
+- Inline Message (renders through Popup with its default styled skin + `manageTriggerAria` at its default)
 - Dropdown Menu (planned, built on Popup)
-- Inline Message (planned, built on Popup)
 
 ---
 
@@ -38,8 +38,8 @@ dismissal semantics) instead of maintaining a second copy.
 ## Usage
 
 ### Where will this primitive be used?
+- Inline Message
 - Dropdown Menu (planned)
-- Inline Message (planned)
 - Any future component needing an anchored, dismissible floating panel
 
 ### What are the most common use cases?
@@ -146,7 +146,7 @@ Alignment falls back automatically near a viewport edge rather than clipping.
 None.
 
 ### What components depend on it?
-Tooltip. Dropdown Menu and Inline Message are planned to build on it too.
+Tooltip and Inline Message. Dropdown Menu is planned to build on it too.
 
 ---
 

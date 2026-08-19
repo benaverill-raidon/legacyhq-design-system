@@ -11,12 +11,14 @@ Do not place critical information or required actions inside a tooltip.
 
 ## Design intent
 Tooltips are supplemental, non-interactive overlays triggered by hover or keyboard focus. There's no
-arrow pointing at the trigger - it's a plain rounded rectangle, positioned to whichever side of the
-trigger actually fits the viewport.
+arrow pointing at the trigger - it's a plain rounded rectangle, positioned by Popup to whichever
+alignment actually fits the viewport (Tooltip always prefers `topCenter`).
 
-The tooltip fades in on mount using the `fade-quick` semantic motion token via a CSS `@keyframes`
-animation (not `transition`, since the element mounts/unmounts rather than toggling a class). There
-is currently no matching fade-out: React removes the node immediately when it hides, so exit is
+Tooltip renders its content through [Popup](../../primitives/popup/popup.md) with `unstyled` set -
+Popup owns positioning, the portal, and the mount fade-in (`fade-quick`); Tooltip owns only its own
+visual skin (a small dark pill) and its hover/focus/blur/Escape-driven show/hide timing, which
+predates Popup and stays independent of Popup's own (unused, here) dismissal behavior. There is
+currently no matching fade-out: React removes the node immediately when it hides, so exit is
 instant. Animating the exit would require deferring unmount until the animation finishes, which is a
 behavior change beyond what this pass covers.
 
@@ -24,4 +26,4 @@ behavior change beyond what this pass covers.
 Appear on hover and focus, are announced appropriately, and never receive focus themselves.
 
 ## Related
-Icon Button, Toggle Icon Button, Button.
+Popup, Icon Button, Toggle Icon Button, Button.

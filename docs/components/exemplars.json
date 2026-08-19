@@ -199,6 +199,54 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "popup",
+    "name": "Popup",
+    "tier": "primitive",
+    "path": "docs/components/primitives/popup/popup.examples.json",
+    "examples": [
+      {
+        "name": "Click-to-open action menu",
+        "description": "The shape Dropdown Menu will build on - a click-triggered, role=\"menu\" panel.",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<Popup\n  open={open}\n  onOpenChange={setOpen}\n  role=\"menu\"\n  content={\n    <>\n      <button type=\"button\" role=\"menuitem\">Rename</button>\n      <button type=\"button\" role=\"menuitem\">Delete</button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</Popup>",
+        "props": {
+          "role": "menu"
+        }
+      },
+      {
+        "name": "Programmatically shown status message",
+        "description": "The shape Inline Message will build on - shown after an action completes, not on a direct trigger click.",
+        "jsx": "const [open, setOpen] = useState(false);\n\nasync function handleSave() {\n  await save();\n  setOpen(true);\n}\n\n<Popup open={open} onOpenChange={setOpen} role=\"status\" alignment=\"bottomLeft\" content={<span>Saved</span>}>\n  <Button onClick={handleSave}>Save</Button>\n</Popup>",
+        "props": {
+          "role": "status",
+          "alignment": "bottomLeft"
+        }
+      },
+      {
+        "name": "Persistent confirmation, dismissal opted out",
+        "description": "Turns off both default dismissal behaviors so only an explicit action in the content can close it.",
+        "jsx": "<Popup\n  open={open}\n  onOpenChange={setOpen}\n  closeOnEscape={false}\n  closeOnOutsideClick={false}\n  role=\"dialog\"\n  content={\n    <>\n      <p>Delete this record?</p>\n      <Button appearance=\"primary\" onClick={() => { confirmDelete(); setOpen(false); }}>Delete</Button>\n      <Button onClick={() => setOpen(false)}>Cancel</Button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen(true)}>Delete</Button>\n</Popup>",
+        "props": {
+          "closeOnEscape": false,
+          "closeOnOutsideClick": false,
+          "role": "dialog"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Non-interactive hover hint",
+        "jsx": "<Popup open={isHovered} content={<span>Edit this item</span>}>\n  <IconButton aria-label=\"Edit\" onPointerEnter={() => setIsHovered(true)} onPointerLeave={() => setIsHovered(false)}>\n    <EditIcon />\n  </IconButton>\n</Popup>",
+        "reason": "This duplicates Tooltip, which already owns hover/focus triggering, non-interactive content rules, and the describedby wiring a hover hint needs. Use Tooltip for supplemental, non-actionable hints."
+      },
+      {
+        "name": "Expecting Popup to manage its own visibility",
+        "jsx": "<Popup content={<Menu />}>\n  <Button>Actions</Button>\n</Popup>",
+        "reason": "open is required and fully controlled - Popup has no internal state and no defaultOpen. This example won't compile, and even if open were made optional it still wouldn't open on its own."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "avatar",
     "name": "Avatar",
     "tier": "atom",

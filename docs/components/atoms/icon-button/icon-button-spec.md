@@ -24,8 +24,6 @@ type IconButtonAppearance = 'default' | 'primary' | 'subtle';
 type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 type IconButtonShape = 'square' | 'round';
 
-type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left';
-
 interface IconButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   appearance?: IconButtonAppearance;
@@ -34,7 +32,6 @@ interface IconButtonProps
   isLoading?: boolean;
   isExpanded?: boolean;
   tooltip?: React.ReactNode | false;
-  tooltipPlacement?: TooltipPlacement;
   children: React.ReactNode;
 }
 ```

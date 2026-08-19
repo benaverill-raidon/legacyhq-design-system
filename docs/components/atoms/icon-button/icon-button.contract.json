@@ -20,9 +20,6 @@
   "props": {
     "tooltip": {
       "values": ["ReactNode", false]
-    },
-    "tooltipPlacement": {
-      "values": ["top", "right", "bottom", "left"]
     }
   },
   "variants": {

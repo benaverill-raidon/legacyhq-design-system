@@ -1131,6 +1131,16 @@
         "type": "color",
         "originalName": "color/elevation/shadow/overlay/default"
       },
+      "color-elevation-shadow-overlay-spread": {
+        "value": "var(--color-neutral-alpha-1300-16)",
+        "type": "color",
+        "originalName": "color/elevation/shadow/overlay/spread"
+      },
+      "color-elevation-shadow-overlay-perimeter": {
+        "value": "var(--color-neutral-alpha-1300-32)",
+        "type": "color",
+        "originalName": "color/elevation/shadow/overlay/perimeter"
+      },
       "color-elevation-shadow-overlay-inner": {
         "value": "var(--color-neutral-solid-500)",
         "type": "color",

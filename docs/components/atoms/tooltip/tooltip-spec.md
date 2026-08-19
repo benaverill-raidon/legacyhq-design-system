@@ -10,18 +10,16 @@ Tooltip is a reusable standalone component that displays short, non-interactive 
 Tooltip
 +- trigger child
 +- optional pointer wrapper for disabled controls
-+- tooltip content layer
++- Popup (unstyled, alignment="topCenter")
+   +- tooltip content layer (role="tooltip", Tooltip's own visual skin)
 ```
 
 ## Public API
 
 ```ts
-type TooltipPlacement = 'top' | 'right' | 'bottom' | 'left';
-
 interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactElement;
-  placement?: TooltipPlacement;
   truncate?: boolean;
   disabled?: boolean;
   delay?: number;
@@ -32,11 +30,14 @@ interface TooltipProps {
 ## Defaults
 
 ```txt
-placement: top
 truncate: true
 disabled: false
 delay: 300
 ```
+
+There is no `placement` prop. Tooltip always requests Popup's `topCenter` alignment and relies on
+Popup's own viewport-fit fallback across all six of its alignments instead of exposing manual
+per-instance placement control - see Positioning below.
 
 ## Trigger behavior
 
@@ -85,14 +86,27 @@ Requirements:
 
 ## Positioning
 
-This repository does not currently expose a shared overlay or floating-position utility.
+Tooltip renders through `Popup` (`packages/ui/src/components/primitives/popup`) with `unstyled` set,
+passing `alignment="topCenter"`, `role="tooltip"`, `manageTriggerAria={false}`, and both
+`closeOnEscape`/`closeOnOutsideClick` set to `false`. Popup owns:
 
-Tooltip therefore uses a small local fixed-position portal implementation that:
+- the portal at `document.body`, avoiding clipping inside overflow containers
+- positioning relative to the trigger, and falling back across its six alignments (starting with
+  `topCenter`, then `bottomCenter`, matching Popup's same-alignment-opposite-side fallback
+  preference) when the preferred one would overflow
+- recalculating on trigger/panel resize, window resize, and scroll
+- the mount fade animation
 
-- avoids clipping inside overflow containers
-- supports `top`, `right`, `bottom`, and `left` preferred placements
-- shifts or falls back when the preferred placement would overflow
-- recalculates when trigger, tooltip, scroll, resize, or viewport geometry changes
+Tooltip does not use Popup's own dismissal (`closeOnEscape`/`closeOnOutsideClick` are both `false`)
+because Tooltip already owns dismissal itself via hover/focus/blur/Escape-on-the-trigger, which
+predates Popup and has different semantics (a hover-triggered hint has no "outside click" concept).
+Tooltip also does not use Popup's `aria-expanded`/`aria-controls` wiring (`manageTriggerAria={false}`)
+since those are disclosure-widget attributes that don't apply to a supplemental hint - Tooltip's own
+`aria-describedby` wiring, unchanged, is the correct ARIA pattern here.
+
+One visible consequence of centralizing on Popup: the gap between trigger and tooltip is now
+Popup's fixed `--spacing-sm` (8px), not Tooltip's previous `--spacing-xs` (4px) - a deliberate
+tradeoff for having positioning logic originate from one place across every Popup-based component.
 
 ## Styling and tokens
 
@@ -151,7 +165,7 @@ Tooltip
 
 ### Variants story
 
-Show `placement` (`top`/`right`/`bottom`/`left`) crossed with `truncate`, plus `disabled`.
+Show `truncate`, plus `disabled`. No placement axis - see "Positioning is entirely Popup's job" above.
 
 ### Content story
 
@@ -166,7 +180,7 @@ Show:
 
 Show:
 
-- placement falling back near a viewport edge (verify the resolved `data-placement` differs from
-  the requested one)
+- alignment falling back near a viewport edge (verify the resolved `data-alignment` on the Popup
+  panel differs from `topCenter`)
 - keyboard-focus trigger
 - dark surface

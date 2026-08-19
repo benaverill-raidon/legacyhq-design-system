@@ -3,22 +3,72 @@
   "category": "atom",
   "status": "stable",
   "purpose": "Supplemental contextual information.",
+  "intent": "Give a trigger element a short, non-interactive, hover/focus-revealed explanation without requiring it to carry its own accessible name.",
   "figmaSource": {
     "file": "Components v1.0.0",
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "1354:55011",
     "componentName": "tooltip",
     "variantCount": 2,
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-08-06",
+    "note": "Figma's tooltip-primitive frame has no placement/positioning variant at all (only truncate and showTooltip) - the topCenter default and viewport-fit fallback are entirely a code-side decision, delegated to Popup rather than modeled in Tooltip's own Figma source."
   },
-  "anatomy": [
-    "trigger",
-    "disabled-pointer-wrapper(optional)",
-    "content"
+  "useCases": [
+    "Clarifying an icon-only control whose meaning isn't obvious from its accessible name alone",
+    "Explaining why a control is disabled",
+    "Short supplemental context that isn't essential to completing the task"
   ],
-  "variants": {
-    "placement": ["top", "right", "bottom", "left"]
+  "antiPatterns": [
+    "Essential information the user needs to complete a task",
+    "The only accessible name for a control",
+    "Interactive content (buttons, links, form controls) inside the tooltip"
+  ],
+  "anatomy": [
+    { "name": "trigger", "description": "The single child element Tooltip wraps. Cloned to receive pointer/focus handlers and aria-describedby." },
+    { "name": "disabled-pointer-wrapper", "description": "A non-focusable span wrapping a disabled native trigger, so hover still works without creating an extra tab stop.", "group": "optional" },
+    { "name": "content", "description": "Rendered through Popup (unstyled, alignment=topCenter, role=tooltip) - Popup owns positioning/portal/animation, Tooltip owns its own visual skin." }
+  ],
+  "props": {
+    "content": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "No tooltip behavior is attached at all when this is empty (null, undefined, or a blank string)."
+    },
+    "children": {
+      "type": "React.ReactElement",
+      "required": true,
+      "default": null,
+      "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby."
+    },
+    "truncate": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Single ellipsized line (420px max) vs. wrapped text (240px max before wrapping)."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Suppresses the tooltip entirely - not just visually hidden."
+    },
+    "delay": {
+      "type": "number",
+      "required": false,
+      "default": 300,
+      "description": "Milliseconds of hover/focus before the tooltip appears."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the tooltip content element's class list."
+    }
   },
+  "sizes": [],
+  "slots": [],
+  "variants": {},
   "states": ["hidden", "visible", "disabled"],
   "tokens": {
     "semantic": [
@@ -29,18 +79,60 @@
       "--spacing-xs",
       "--border-radius-sm"
     ],
-    "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale."
+    "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
   },
   "accessibility": {
     "triggeredBy": ["pointer", "focus"],
     "focusable": false,
+    "role": "tooltip",
     "describedByWhileVisible": true
   },
   "behaviorRules": [
-    "Owns trigger behavior via composition.",
+    "Owns trigger behavior via composition (hover, focus, blur, pointer leave, Escape).",
     "Supports disabled native controls with a non-focusable pointer wrapper.",
     "Does not render or attach behavior when content is absent.",
-    "Skips internal behavior when consumer handlers prevent default."
+    "Skips internal behavior when consumer handlers prevent default.",
+    "Renders through Popup with unstyled set - Popup owns positioning, the portal, and the mount animation; Tooltip owns its own visual skin.",
+    "Always requests Popup's topCenter alignment - no placement prop; Popup's own viewport-fit fallback (topCenter -> bottomCenter -> the remaining four) handles the rest.",
+    "Sets manageTriggerAria={false} on Popup - Tooltip's own aria-describedby is the correct ARIA pattern here, not Popup's disclosure-widget aria-expanded/aria-controls.",
+    "Sets closeOnEscape={false} and closeOnOutsideClick={false} on Popup - Tooltip's own hover/focus/blur/Escape-on-trigger dismissal predates Popup and has different semantics than a generic dismissible popup."
   ],
-  "relatedComponents": ["IconButton", "ToggleIconButton", "Button"]
+  "compositionRules": [
+    "Give the trigger its own accessible name, independent of the tooltip content.",
+    "Use external composition (IconButton/ToggleIconButton's own tooltip={false}) when the tooltip message should differ from the accessible name."
+  ],
+  "contentRules": [
+    "Tooltip content must remain non-interactive.",
+    "Tooltip content must not replace the trigger's accessible name."
+  ],
+  "responsiveRules": [],
+  "themeRules": [
+    "Visible with sufficient contrast on both light and dark surfaces."
+  ],
+  "relatedComponents": ["Popup", "IconButton", "ToggleIconButton", "Button"],
+  "do": [
+    "Give the trigger its own accessible name, independent of the tooltip content.",
+    "Let a disabled control still explain itself via Tooltip."
+  ],
+  "dont": [
+    "Do not rely on tooltip content as the only description of what a control does.",
+    "Do not put content in a tooltip that the user needs in order to proceed - use visible UI instead.",
+    "Do not expect a placement prop - positioning is Popup's fallback, not manual per-instance control."
+  ],
+  "acceptanceCriteria": [
+    "Renders the trigger child; attaches no behavior when content is empty.",
+    "Shows on hover (after delay) and keyboard focus; hides on pointer leave, blur, and Escape.",
+    "Sets role=tooltip and wires aria-describedby only while visible, preserving any existing value.",
+    "Supports disabled native controls via a non-focusable pointer wrapper with no extra tab stop.",
+    "Preserves consumer event handlers and honors preventDefault().",
+    "disabled=true suppresses the tooltip entirely.",
+    "Always resolves to topCenter alignment unless the viewport requires Popup's fallback."
+  ],
+  "knownLimitations": [
+    "No fade-out on hide - React removes the node immediately, so exit is instant.",
+    "The trigger-to-tooltip gap is Popup's fixed 8px (--spacing-sm), not Tooltip's previous 4px (--spacing-xs) - accepted as part of centralizing positioning in Popup."
+  ],
+  "futureEnhancements": [
+    "A matching fade-out, which would require deferring unmount until the animation finishes."
+  ]
 }

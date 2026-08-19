@@ -8,6 +8,12 @@
   vertical-align: middle;
 }
 
+/*
+ * Positioning (fixed placement, viewport-fit fallback, content-hugging size) and the mount
+ * animation come from Popup, rendered with `unstyled` - this class only carries Tooltip's own
+ * visual skin, which is deliberately different from Popup's default one (a small dark pill vs.
+ * Popup's default raised card).
+ */
 .content {
   display: inline-flex;
   align-items: center;
@@ -23,25 +29,7 @@
   font-weight: var(--typography-body-sm-font-weight);
   line-height: var(--typography-body-sm-line-height);
   letter-spacing: var(--typography-body-sm-letter-spacing);
-  position: fixed;
-  z-index: var(--component-tooltip-z-index);
   pointer-events: none;
-  animation: tooltipFadeIn var(--fade-quick);
-}
-
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .content {
-    animation-duration: 0ms;
-  }
 }
 
 .contentText {
@@ -66,16 +54,4 @@
 .wrap .contentText {
   white-space: normal;
   word-break: break-word;
-}
-
-.placement_top {
-}
-
-.placement_right {
-}
-
-.placement_bottom {
-}
-
-.placement_left {
 }

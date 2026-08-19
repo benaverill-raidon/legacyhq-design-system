@@ -1,0 +1,276 @@
+{
+  "name": "Popup",
+  "category": "primitive",
+  "status": "stable",
+  "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
+  "intent": "Give components that need a positioned, dismissible floating panel (Dropdown Menu, Inline Message, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
+  "sourceFiles": {
+    "component": "popup.tsx",
+    "types": "popup.types.ts",
+    "styles": "popup.module.css",
+    "stories": "popup.stories.tsx",
+    "tests": "popup.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2152:9257",
+    "componentName": "popup",
+    "variantCount": 12,
+    "verifiedAt": "2026-08-07",
+    "structure": "Two component properties beyond the variant axes: an exposed SLOT (the anchor/trigger region) and an internal, unpromoted Slot inside the nested `figma-parts / popup` panel instance (the content region). Code models this as `children` (trigger) + `content` (panel content) rather than two Figma-shaped slot props, since the inner slot was never promoted to the outer component set's own property list.",
+    "apiAdaptationNotes": [
+      "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
+      "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+      "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free."
+    ]
+  },
+  "useCases": [
+    "Foundation for a click-to-open action menu anchored to a button",
+    "Foundation for a short confirmation or status message anchored to the action that triggered it",
+    "Any future component needing a positioned, dismissible floating panel",
+    "Foundation for a hover-triggered, non-interactive hint with its own visual skin and dismissal semantics (Tooltip, via `unstyled` and `manageTriggerAria={false}`)"
+  ],
+  "antiPatterns": [
+    "Non-interactive hover/focus hints (use Tooltip instead)",
+    "Using Popup directly as a user-facing component - it has no visual identity of its own",
+    "Content essential to task completion that the user can't afford to have scroll out of view"
+  ],
+  "anatomy": [
+    {
+      "part": "trigger",
+      "element": "React.ReactElement (children)",
+      "required": true,
+      "description": "The single trigger element. Cloned to receive a measurement ref, and (unless manageTriggerAria is false) aria-expanded/aria-controls - Popup attaches no open/close event handlers to it."
+    },
+    {
+      "part": "panel",
+      "element": "div (portal at document.body)",
+      "required": true,
+      "description": "The floating, position: fixed panel. Rendered only while `open` is true."
+    },
+    {
+      "part": "content",
+      "element": "React.ReactNode (content prop)",
+      "required": true,
+      "description": "Arbitrary, potentially interactive content rendered inside the panel."
+    }
+  ],
+  "props": {
+    "children": {
+      "type": "React.ReactElement",
+      "required": true,
+      "default": null,
+      "description": "The single trigger element to clone and attach a measurement ref and aria attributes to."
+    },
+    "content": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "Rendered inside the floating panel while open is true."
+    },
+    "open": {
+      "type": "boolean",
+      "required": true,
+      "default": null,
+      "description": "Controlled visibility. Popup has no internal open state and no defaultOpen."
+    },
+    "onOpenChange": {
+      "type": "(open: boolean) => void",
+      "required": false,
+      "default": null,
+      "description": "Called with false on Escape or an outside click. Popup does not change its own visibility."
+    },
+    "alignment": {
+      "type": "PopupAlignment",
+      "required": false,
+      "default": "topLeft",
+      "enum": ["topLeft", "topRight", "topCenter", "bottomLeft", "bottomRight", "bottomCenter"],
+      "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least."
+    },
+    "closeOnEscape": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Calls onOpenChange(false) on Escape."
+    },
+    "closeOnOutsideClick": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Calls onOpenChange(false) on a pointer press outside the trigger and panel."
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Id applied to the panel and to the trigger's aria-controls while open. Generated via React.useId when omitted."
+    },
+    "role": {
+      "type": "React.AriaRole",
+      "required": false,
+      "default": null,
+      "description": "ARIA role for the panel. No default - depends on what the consumer is building."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the panel's class list."
+    },
+    "unstyled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Skips Popup's own visual skin (background, border, padding, radius, shadow), leaving only structural positioning and the mount animation. Set this when a consumer has an entirely different visual design of its own - e.g. Tooltip."
+    },
+    "padding": {
+      "type": "PopupPadding",
+      "required": false,
+      "default": "lg",
+      "enum": ["sm", "md", "lg"],
+      "description": "Padding for Popup's own visual skin, mapped to the spacing scale (sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows) while still sharing background/border/radius/shadow. Ignored when unstyled is true."
+    },
+    "manageTriggerAria": {
+      "type": "boolean",
+      "required": false,
+      "default": true,
+      "description": "Sets aria-expanded/aria-controls on the trigger while true. Set to false when the consumer already manages the trigger's own ARIA relationship to the panel content (e.g. Tooltip's aria-describedby) - aria-expanded/aria-controls are disclosure-widget attributes and don't apply to a supplemental hint."
+    }
+  },
+  "variants": {
+    "alignment": {
+      "topLeft": { "purpose": "Opens above the trigger, left edges aligned." },
+      "topRight": { "purpose": "Opens above the trigger, right edges aligned." },
+      "topCenter": { "purpose": "Opens above the trigger, horizontally centered on it." },
+      "bottomLeft": { "purpose": "Opens below the trigger, left edges aligned." },
+      "bottomRight": { "purpose": "Opens below the trigger, right edges aligned." },
+      "bottomCenter": { "purpose": "Opens below the trigger, horizontally centered on it." }
+    },
+    "padding": {
+      "sm": { "purpose": "Denser skin padding (--spacing-sm) - e.g. a menu's rows.", "token": "--spacing-sm" },
+      "md": { "purpose": "Medium skin padding (--spacing-md).", "token": "--spacing-md" },
+      "lg": { "purpose": "Default skin padding (--spacing-lg), matching Figma's popup component.", "token": "--spacing-lg" }
+    }
+  },
+  "sizes": [],
+  "states": ["closed", "open"],
+  "slots": [
+    {
+      "name": "content",
+      "required": true,
+      "supports": ["any React.ReactNode, including interactive elements"]
+    }
+  ],
+  "tokens": {
+    "color": {
+      "background": "--color-elevation-surface-raised-default",
+      "border": "--color-border-default",
+      "shadowInner": "--color-elevation-shadow-overlay-inner",
+      "shadowSpread": "--color-elevation-shadow-overlay-spread",
+      "shadowPerimeter": "--color-elevation-shadow-overlay-perimeter"
+    },
+    "borderWidth": "--border-width-sm",
+    "spacing": {
+      "padding": "--spacing-sm | --spacing-md | --spacing-lg (via the padding prop, default lg)",
+      "contentGap": "--spacing-xs",
+      "triggerToPanelGap": "--spacing-sm"
+    },
+    "radius": "--border-radius-lg",
+    "motion": "--fade-quick",
+    "note": "--color-elevation-shadow-overlay-spread and -perimeter were added alongside this component - they mirror the existing --color-elevation-shadow-raised-* family's shape, using the exact alpha values (16%, 32%) read from Figma's Light/elevation.shadow.overlay effect style. The dark-theme values mirror elevation.shadow.raised's light-to-dark base-hue swap at the same percentages rather than an independently re-verified dark effect."
+  },
+  "accessibility": {
+    "triggeredBy": ["consumer-controlled - Popup attaches no open/close handler itself"],
+    "focusable": false,
+    "role": null,
+    "ariaExpanded": "set on the trigger, reflecting open, unless manageTriggerAria is false",
+    "ariaControls": "set on the trigger to the panel id only while open, unless manageTriggerAria is false; preserves an existing value while closed",
+    "focusManagement": "left to the consumer - Popup does not move focus into or out of the panel",
+    "requirements": [
+      "aria-expanded reflects open on the trigger by default (manageTriggerAria=true).",
+      "aria-controls points at the panel id only while open, by default.",
+      "manageTriggerAria=false skips both attributes entirely, for consumers with their own trigger ARIA relationship (e.g. aria-describedby).",
+      "No default role is added to the panel - the consumer supplies one appropriate to its content.",
+      "Popup does not make the trigger focusable or change its semantics beyond the two aria attributes above."
+    ]
+  },
+  "keyboardInteraction": [
+    "Escape calls onOpenChange(false) when closeOnEscape is true (default).",
+    "No other keyboard behavior is owned by Popup - content-specific navigation (e.g. arrow keys in a menu) belongs to the consumer."
+  ],
+  "behaviorRules": [
+    "open is a required, fully controlled prop - no internal open state, no defaultOpen.",
+    "Popup never changes its own visibility on dismissal - it only calls onOpenChange(false).",
+    "Clones the trigger to attach a measurement ref, and (unless manageTriggerAria is false) aria-expanded/aria-controls; attaches no click/hover handlers.",
+    "Positions via a portal at document.body with position: fixed, recalculating on trigger/panel resize, window resize, and scroll.",
+    "Tries the preferred alignment first, then the same alignment on the opposite side, then the remaining four, and resolves to whichever overflows the viewport least, exposed via data-alignment.",
+    "Escape (document keydown) and outside pointer press (document pointerdown, capture phase) both gate on their respective closeOn* prop before calling onOpenChange.",
+    "A pointer press inside the panel or on the trigger itself never triggers outside-click dismissal.",
+    "Renders nothing but the cloned trigger when open is false - no empty portal node stays mounted.",
+    "unstyled=true omits Popup's own visual skin class (and the padding class) from the panel entirely, leaving only structural positioning and the mount animation - the base .panel class never carries visual styling, so there's no cross-module CSS override needed.",
+    "padding selects one of three dedicated classes (padding_sm/md/lg), kept separate from panelSurface's other properties (background/border/radius/shadow/gap) so a consumer can size the skin without needing to override or duplicate the rest of it."
+  ],
+  "compositionRules": [
+    "Consumers own trigger interaction entirely - wire the trigger's own onClick (or other handler) to flip the open state passed into Popup.",
+    "Provide onOpenChange whenever closeOnEscape or closeOnOutsideClick are left at their default true - otherwise dismissal has no visible effect.",
+    "Pass role matching what's being built on top of Popup (menu, dialog, status, ...) - Popup does not infer one.",
+    "Set unstyled when the consumer supplies its own complete visual design (background, border, padding, radius, shadow) via className, rather than fighting Popup's default skin with CSS overrides.",
+    "Prefer padding over unstyled when only the padding needs to differ - it keeps background/border/radius/shadow shared from one source instead of duplicating those token references per consumer.",
+    "Set manageTriggerAria={false} when the consumer already manages the trigger's ARIA relationship to the panel (e.g. aria-describedby for a hint) - Popup's aria-expanded/aria-controls are for disclosure widgets specifically."
+  ],
+  "contentRules": [
+    "content may be any React.ReactNode, including interactive elements - unlike Tooltip, Popup content is not restricted to non-interactive material."
+  ],
+  "responsiveRules": [
+    "Positioning recalculates on resize/scroll identically across breakpoints.",
+    "Outside-click dismissal uses pointerdown, which fires for touch as well as mouse/pen."
+  ],
+  "themeRules": [
+    "All panel tokens (background, border, shadow) resolve correctly on both light and dark surfaces via the semantic color layer - no component-level light/dark branching."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colors, spacing, or radius - use the tokens listed above.",
+    "Popup is now the shared floating-position implementation - Tooltip renders through it (unstyled, alignment=topCenter) rather than maintaining its own local positioning/portal code, which it did before Popup existed."
+  ],
+  "relatedComponents": ["Tooltip"],
+  "do": [
+    "Keep open state in the consumer and pass it down.",
+    "Provide onOpenChange when relying on default dismissal behavior.",
+    "Pass role matching the content being built on top of Popup.",
+    "Turn off closeOnEscape/closeOnOutsideClick for content that must persist until the consumer explicitly closes it."
+  ],
+  "dont": [
+    "Do not expect Popup to manage its own open state.",
+    "Do not use Popup for non-interactive hover hints - use Tooltip.",
+    "Do not rely on Popup to move focus into or out of the panel.",
+    "Do not attach open/close handlers to the trigger expecting Popup to call them - Popup only clones ref and aria attributes onto it."
+  ],
+  "acceptanceCriteria": [
+    "Renders only the cloned trigger when open is false.",
+    "Renders content inside a portal panel when open is true.",
+    "Sets aria-expanded/aria-controls on the trigger reflecting open, unless manageTriggerAria is false.",
+    "Applies the requested role to the panel; no role by default.",
+    "Calls onOpenChange(false) on Escape when closeOnEscape is true (default).",
+    "Calls onOpenChange(false) on an outside pointer press when closeOnOutsideClick is true (default).",
+    "Does not call onOpenChange for a pointer press inside the panel or on the trigger.",
+    "Resolves to a fitting alignment (preferring the same alignment on the opposite side before an unrelated one) and exposes it via data-alignment.",
+    "Supports a custom id and className.",
+    "Applies its own visual skin by default; omits it entirely when unstyled is true.",
+    "Defaults padding to lg; applies sm/md/lg padding classes per the padding prop; applies none when unstyled is true.",
+    "Panel styling maps to the required tokens and hugs its content rather than stretching."
+  ],
+  "knownLimitations": [
+    "No built-in focus management - focus trapping/restoration is left entirely to the consumer.",
+    "Dark-theme shadow alpha values mirror the elevation.shadow.raised family's percentages rather than an independently re-verified dark Figma effect."
+  ],
+  "futureEnhancements": [
+    "Optional built-in focus-trap behavior for consumers that want it without implementing their own.",
+    "A documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists."
+  ]
+}

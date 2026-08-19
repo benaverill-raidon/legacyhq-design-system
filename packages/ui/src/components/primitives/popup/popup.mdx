@@ -1,0 +1,251 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as PopupStories from './popup.stories';
+
+<Meta of={PopupStories} name="Docs" />
+
+# Popup
+
+Popup is the shared floating-panel primitive: it anchors a panel of arbitrary content to a trigger
+element, positions it so it doesn't clip the viewport, and dismisses on Escape/outside click. Its
+own visual skin (matching Figma's `popup` component) is optional (`unstyled`) - Tooltip already
+renders through Popup with a completely different visual design of its own, and Dropdown Menu,
+Inline Message, and other floating components are built on top of it rather than each hand-rolling
+their own positioning and dismissal logic.
+
+<Canvas of={PopupStories.Playground} />
+
+## When to use
+
+- As the foundation for a component that shows floating, dismissible content anchored to a trigger
+  (a menu, a popover, an inline confirmation).
+- Any time you'd otherwise be tempted to hand-roll `getBoundingClientRect` positioning and
+  document-level Escape/outside-click listeners for a new floating component.
+
+## When not to use
+
+- **For non-interactive supplemental hints.** That's Tooltip - shown on hover/focus, non-actionable,
+  and never contains a button, link, or form control. It already renders through Popup internally
+  (with `unstyled`), so reaching for Popup directly here would just duplicate Tooltip's own
+  trigger/content rules for no benefit.
+- **For content essential to the page that must always be visible.** A floating panel can be
+  scrolled out of view of its trigger; don't put something the user can't afford to miss inside one.
+
+## Anatomy
+
+<Canvas of={PopupStories.Content} />
+
+- **Trigger** - the single child element `Popup` wraps. It's cloned to receive a measurement ref and
+  (unless `manageTriggerAria` is `false`) `aria-expanded`/`aria-controls`, without changing its own
+  rendered output or behavior. Popup does not attach any click/hover handler to it - opening and
+  closing is entirely up to the consumer.
+- **Panel** - rendered in a portal at `document.body`, positioned with `position: fixed` next to the
+  trigger. It hugs its content on both axes (matching the Figma component's `slot`, which is set to
+  hug rather than fill) instead of stretching to some ambient container width. Its default visual
+  skin (background, border, padding, radius, shadow) is skippable via `unstyled`.
+
+## Usage guidance
+
+### Popup is controlled, not self-triggering
+
+Unlike Tooltip, Popup doesn't decide when it opens - `open` is a required, fully controlled prop, and
+the consumer's own trigger interaction (a click, typically) is what flips it. This is deliberate:
+Dropdown Menu opens on click, Inline Message might open programmatically after an action completes,
+and baking in one trigger behavior would fight the other.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Popup open={open} onOpenChange={setOpen} content={<Menu />}>
+  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>
+</Popup>;
+```
+
+### Alignment and fallback
+
+`alignment` (`topLeft`, `topRight`, `topCenter`, `bottomLeft`, `bottomRight`, `bottomCenter`) is a
+preference, not a guarantee - if the preferred alignment would overflow the viewport, Popup measures
+all six candidates and picks whichever actually fits with the least overflow, recalculating on
+scroll/resize. See EdgeCases for it visibly repositioning near a viewport edge. The default,
+`topLeft`, matches the Figma component's own default variant.
+
+<Canvas of={PopupStories.Variants} />
+
+### Dismissal is opt-out, not opt-in
+
+`closeOnEscape` and `closeOnOutsideClick` both default to `true` - Popup calls
+`onOpenChange(false)` for you so most consumers (Dropdown Menu, a generic popover) get standard
+dismiss behavior for free. Set either to `false` for content that should persist regardless of a
+stray click or Escape press, which is closer to what Inline Message will likely want.
+
+<Canvas of={PopupStories.EdgeCases} />
+
+### No implicit ARIA role
+
+Popup doesn't assume what its content is, so it doesn't set a `role` on the panel by default. Pass
+`role="menu"`, `role="dialog"`, `role="status"`, or whatever fits what's actually being built on top
+of it.
+
+### Building a different visual design on top of Popup
+
+Popup's default visual skin matches its Figma source (a raised card with border/shadow). A consumer
+that needs Popup's positioning/dismissal but has an entirely different design of its own - Tooltip's
+small dark pill, for instance - sets `unstyled` to skip that skin entirely, then supplies its own
+via `className`. Because the base structural class never carries visual styling, there's no
+competing CSS to override:
+
+```tsx
+<Popup unstyled className={styles.myOwnSkin} content={<span>Hint text</span>} open={open}>
+  <IconButton aria-label="Edit" />
+</Popup>
+```
+
+### Sizing the default skin's padding without redeclaring it
+
+Reach for `unstyled` only when the whole visual design differs. When a consumer shares Popup's
+default skin (background/border/radius/shadow) but needs different padding - a menu's denser rows,
+say - use `padding` (`'sm' | 'md' | 'lg'`, default `'lg'`) instead. It's a separate class from the
+rest of the skin, so it composes cleanly without touching or duplicating the other tokens:
+
+```tsx
+<Popup padding="sm" role="menu" content={<Menu />} open={open}>
+  <Button onClick={() => setOpen(true)}>Actions</Button>
+</Popup>
+```
+
+### When the trigger already has its own ARIA relationship to the content
+
+Popup's `aria-expanded`/`aria-controls` wiring assumes a disclosure-widget relationship (a trigger
+that "expands" to reveal the panel) - correct for a menu or popover, but wrong for a trigger that
+already describes itself another way. Tooltip's trigger uses `aria-describedby` instead, so it sets
+`manageTriggerAria={false}` to avoid layering on a second, conflicting ARIA relationship:
+
+```tsx
+<Popup manageTriggerAria={false} role="tooltip" content={<span>Hint text</span>} open={open}>
+  {triggerWithItsOwnAriaDescribedby}
+</Popup>
+```
+
+## Do / Don't
+
+**Do** keep `open` state in the consumer and pass it down.
+
+```tsx
+<Popup open={open} onOpenChange={setOpen} content={<Menu />}>
+  <Button onClick={() => setOpen(true)}>Actions</Button>
+</Popup>
+```
+
+**Don't** expect Popup to manage its own open state - there is no internal toggle, and no
+`defaultOpen` escape hatch.
+
+---
+
+**Do** turn off dismissal for content that must persist until the consumer explicitly closes it.
+
+```tsx
+<Popup open={open} onOpenChange={setOpen} closeOnEscape={false} closeOnOutsideClick={false} content={<Confirmation />}>
+  <Button onClick={() => setOpen(true)}>Delete</Button>
+</Popup>
+```
+
+**Don't** rely on Popup for non-interactive hover hints - that duplicates Tooltip, which already
+owns hover/focus triggering and non-interactive content rules.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactElement</code></td>
+      <td>-</td>
+      <td>Required. The single trigger element - cloned to add a measurement ref and <code>aria-expanded</code>/<code>aria-controls</code>.</td>
+    </tr>
+    <tr>
+      <td><code>content</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. Rendered inside the floating panel while <code>open</code> is true.</td>
+    </tr>
+    <tr>
+      <td><code>open</code></td>
+      <td><code>boolean</code></td>
+      <td>-</td>
+      <td>Required. Controlled visibility - Popup renders nothing but the trigger when false.</td>
+    </tr>
+    <tr>
+      <td><code>onOpenChange</code></td>
+      <td><code>(open: boolean) =&gt; void</code></td>
+      <td>-</td>
+      <td>Called with <code>false</code> on Escape or an outside click. Popup does not change its own visibility - provide this for dismissal to have any effect.</td>
+    </tr>
+    <tr>
+      <td><code>alignment</code></td>
+      <td><code>'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft' | 'bottomRight' | 'bottomCenter'</code></td>
+      <td><code>'topLeft'</code></td>
+      <td>Preferred side and edge alignment. Falls back to whichever alignment actually fits when this would overflow.</td>
+    </tr>
+    <tr>
+      <td><code>closeOnEscape</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Calls <code>onOpenChange(false)</code> on Escape.</td>
+    </tr>
+    <tr>
+      <td><code>closeOnOutsideClick</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Calls <code>onOpenChange(false)</code> on a pointer press outside the trigger and panel.</td>
+    </tr>
+    <tr>
+      <td><code>id</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Id applied to the panel, and to the trigger's <code>aria-controls</code> while open. Generated when omitted.</td>
+    </tr>
+    <tr>
+      <td><code>role</code></td>
+      <td><code>React.AriaRole</code></td>
+      <td>-</td>
+      <td>ARIA role for the panel. No default - depends on what's being built on top of Popup.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the panel's class list.</td>
+    </tr>
+    <tr>
+      <td><code>unstyled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Skips Popup's own visual skin (background, border, padding, radius, shadow), leaving only structural positioning and the mount animation.</td>
+    </tr>
+    <tr>
+      <td><code>padding</code></td>
+      <td><code>'sm' | 'md' | 'lg'</code></td>
+      <td><code>'lg'</code></td>
+      <td>Padding for Popup's own visual skin. Lets a consumer size just the padding while still sharing background/border/radius/shadow. Ignored when <code>unstyled</code> is true.</td>
+    </tr>
+    <tr>
+      <td><code>manageTriggerAria</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Sets <code>aria-expanded</code>/<code>aria-controls</code> on the trigger. Set to <code>false</code> when the consumer already manages its own trigger ARIA relationship (e.g. <code>aria-describedby</code>).</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Tooltip** - the non-interactive, hover/focus-triggered counterpart. Renders through Popup
+  internally (`unstyled`, `manageTriggerAria={false}`) rather than duplicating positioning logic.
+- **Dropdown Menu**, **Inline Message** - planned components built on top of Popup.

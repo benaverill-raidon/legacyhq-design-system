@@ -1,14 +1,12 @@
 import * as React from 'react';
-import { createPortal } from 'react-dom';
+import { Popup } from '../../primitives/popup';
 import styles from './tooltip.module.css';
 import { TooltipScopeContext } from './tooltip-context';
-import type { TooltipPlacement, TooltipProps } from './tooltip.types';
+import type { TooltipProps } from './tooltip.types';
 
-type TriggerElement = HTMLElement;
 type MeasurableEvent = { defaultPrevented?: boolean };
 
 const DISABLED_NATIVE_TRIGGER_TYPES = new Set(['button', 'input', 'select', 'textarea', 'option', 'optgroup', 'fieldset']);
-const PLACEMENT_FALLBACKS: TooltipPlacement[] = ['top', 'right', 'bottom', 'left'];
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -46,28 +44,6 @@ function callHandler<EventType extends MeasurableEvent>(
   return !event.defaultPrevented;
 }
 
-function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
-  return (value: T | null) => {
-    refs.forEach((ref) => {
-      if (!ref) {
-        return;
-      }
-
-      if (typeof ref === 'function') {
-        ref(value);
-        return;
-      }
-
-      (ref as React.MutableRefObject<T | null>).current = value;
-    });
-  };
-}
-
-function getTokenPixels(tokenName: string) {
-  const value = window.getComputedStyle(document.documentElement).getPropertyValue(tokenName).trim();
-  return Number.parseFloat(value);
-}
-
 function isDisabledTrigger(
   element: React.ReactElement<{
     disabled?: boolean;
@@ -81,80 +57,17 @@ function isDisabledTrigger(
   return Boolean(element.props.disabled || element.props.isDisabled);
 }
 
-function getPlacementOrder(preferred: TooltipPlacement) {
-  return [preferred, ...PLACEMENT_FALLBACKS.filter((placement) => placement !== preferred)];
-}
-
-function getCandidatePosition(
-  placement: TooltipPlacement,
-  triggerRect: DOMRect,
-  tooltipRect: DOMRect,
-  gap: number,
-  viewportPadding: number,
-) {
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-
-  let top = 0;
-  let left = 0;
-
-  switch (placement) {
-    case 'top':
-      top = triggerRect.top - tooltipRect.height - gap;
-      left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-      break;
-    case 'right':
-      top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-      left = triggerRect.right + gap;
-      break;
-    case 'bottom':
-      top = triggerRect.bottom + gap;
-      left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
-      break;
-    case 'left':
-      top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
-      left = triggerRect.left - tooltipRect.width - gap;
-      break;
-  }
-
-  const overflowTop = Math.max(0, viewportPadding - top);
-  const overflowLeft = Math.max(0, viewportPadding - left);
-  const overflowBottom = Math.max(0, top + tooltipRect.height - (viewportHeight - viewportPadding));
-  const overflowRight = Math.max(0, left + tooltipRect.width - (viewportWidth - viewportPadding));
-
-  const clampedTop = Math.min(
-    Math.max(top, viewportPadding),
-    Math.max(viewportPadding, viewportHeight - tooltipRect.height - viewportPadding),
-  );
-  const clampedLeft = Math.min(
-    Math.max(left, viewportPadding),
-    Math.max(viewportPadding, viewportWidth - tooltipRect.width - viewportPadding),
-  );
-
-  return {
-    placement,
-    top: clampedTop,
-    left: clampedLeft,
-    overflow: overflowTop + overflowLeft + overflowBottom + overflowRight,
-  };
-}
-
 export const Tooltip = React.memo(function Tooltip({
   content,
   children,
-  placement = 'top',
   truncate = true,
   disabled = false,
   delay = 300,
   className,
 }: TooltipProps) {
   const tooltipId = React.useId();
-  const triggerRef = React.useRef<TriggerElement | null>(null);
-  const tooltipRef = React.useRef<HTMLSpanElement | null>(null);
   const showTimeoutRef = React.useRef<number | null>(null);
   const [isVisible, setIsVisible] = React.useState(false);
-  const [resolvedPlacement, setResolvedPlacement] = React.useState<TooltipPlacement>(placement);
-  const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
 
   const clearShowTimer = React.useCallback(() => {
     if (showTimeoutRef.current !== null) {
@@ -188,59 +101,6 @@ export const Tooltip = React.memo(function Tooltip({
 
   React.useEffect(() => () => clearShowTimer(), [clearShowTimer]);
 
-  const updatePosition = React.useCallback(() => {
-    if (!triggerRef.current || !tooltipRef.current) {
-      return;
-    }
-
-    const triggerRect = triggerRef.current.getBoundingClientRect();
-    const tooltipRect = tooltipRef.current.getBoundingClientRect();
-    const gap = getTokenPixels('--spacing-xs');
-    const viewportPadding = gap;
-
-    const bestCandidate = getPlacementOrder(placement)
-      .map((candidatePlacement) =>
-        getCandidatePosition(candidatePlacement, triggerRect, tooltipRect, gap, viewportPadding),
-      )
-      .sort((left, right) => left.overflow - right.overflow)[0];
-
-    if (!bestCandidate) {
-      return;
-    }
-
-    setResolvedPlacement(bestCandidate.placement);
-    setPosition({ top: bestCandidate.top, left: bestCandidate.left });
-  }, [placement]);
-
-  React.useLayoutEffect(() => {
-    if (!isVisible || disabled || typeof window === 'undefined') {
-      return;
-    }
-
-    updatePosition();
-
-    const handleWindowUpdate = () => {
-      updatePosition();
-    };
-
-    window.addEventListener('resize', handleWindowUpdate);
-    window.addEventListener('scroll', handleWindowUpdate, true);
-
-    const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(handleWindowUpdate) : null;
-    if (resizeObserver && triggerRef.current) {
-      resizeObserver.observe(triggerRef.current);
-    }
-    if (resizeObserver && tooltipRef.current) {
-      resizeObserver.observe(tooltipRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleWindowUpdate);
-      window.removeEventListener('scroll', handleWindowUpdate, true);
-      resizeObserver?.disconnect();
-    };
-  }, [disabled, isVisible, updatePosition]);
-
   const hasContent = hasTooltipContent(content);
   const child = React.Children.only(children) as React.ReactElement<
     React.HTMLAttributes<HTMLElement> & {
@@ -256,7 +116,6 @@ export const Tooltip = React.memo(function Tooltip({
 
   const isDisabledChildTrigger = isDisabledTrigger(child);
   const childProps = child.props;
-  const childRef = (child as React.ReactElement & { ref?: React.Ref<TriggerElement> }).ref;
 
   const clonedChild = React.cloneElement(child, {
     'aria-describedby': disabled
@@ -265,7 +124,6 @@ export const Tooltip = React.memo(function Tooltip({
     ...(isDisabledChildTrigger
       ? {}
       : {
-          ref: mergeRefs(childRef, triggerRef),
           onPointerEnter: (event: React.PointerEvent<HTMLElement>) => {
             if (!callHandler(childProps.onPointerEnter, event)) {
               return;
@@ -303,7 +161,6 @@ export const Tooltip = React.memo(function Tooltip({
 
   const trigger = isDisabledChildTrigger ? (
     <span
-      ref={triggerRef as React.RefObject<HTMLSpanElement>}
       className={styles.triggerWrapper}
       onPointerEnter={() => {
         scheduleShow();
@@ -320,37 +177,20 @@ export const Tooltip = React.memo(function Tooltip({
 
   return (
     <TooltipScopeContext.Provider value={true}>
-      {trigger}
-      {isVisible && !disabled && typeof document !== 'undefined'
-        ? createPortal(
-            <span
-              ref={tooltipRef}
-              id={tooltipId}
-              role="tooltip"
-              className={mergeClassNames(
-                styles.content,
-                styles[`placement_${resolvedPlacement}`],
-                truncate ? styles.truncate : styles.wrap,
-                className,
-              )}
-              data-placement={resolvedPlacement}
-              data-truncate={truncate ? 'true' : 'false'}
-              style={
-                position
-                  ? {
-                      top: `${position.top}px`,
-                      left: `${position.left}px`,
-                    }
-                  : {
-                      visibility: 'hidden',
-                    }
-              }
-            >
-              <span className={styles.contentText}>{content}</span>
-            </span>,
-            document.body,
-          )
-        : null}
+      <Popup
+        open={isVisible && !disabled}
+        alignment="topCenter"
+        role="tooltip"
+        id={tooltipId}
+        manageTriggerAria={false}
+        closeOnEscape={false}
+        closeOnOutsideClick={false}
+        unstyled
+        className={mergeClassNames(styles.content, truncate ? styles.truncate : styles.wrap, className)}
+        content={<span className={styles.contentText}>{content}</span>}
+      >
+        {trigger}
+      </Popup>
     </TooltipScopeContext.Provider>
   );
 });

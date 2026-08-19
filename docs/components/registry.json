@@ -379,6 +379,194 @@
     }
   },
   {
+    "id": "popup",
+    "name": "Popup",
+    "tier": "primitive",
+    "category": "primitive",
+    "status": "stable",
+    "path": "docs/components/primitives/popup/popup.contract.json",
+    "anatomy": [
+      {
+        "name": "trigger",
+        "description": "The single trigger element. Cloned to receive a measurement ref, and (unless manageTriggerAria is false) aria-expanded/aria-controls - Popup attaches no open/close event handlers to it."
+      },
+      {
+        "name": "panel",
+        "description": "The floating, position: fixed panel. Rendered only while `open` is true."
+      },
+      {
+        "name": "content",
+        "description": "Arbitrary, potentially interactive content rendered inside the panel."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "The single trigger element to clone and attach a measurement ref and aria attributes to."
+      },
+      "content": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "Rendered inside the floating panel while open is true."
+      },
+      "open": {
+        "type": "boolean",
+        "required": true,
+        "default": null,
+        "description": "Controlled visibility. Popup has no internal open state and no defaultOpen."
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with false on Escape or an outside click. Popup does not change its own visibility."
+      },
+      "alignment": {
+        "type": "PopupAlignment",
+        "required": false,
+        "default": "topLeft",
+        "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least.",
+        "enum": [
+          "topLeft",
+          "topRight",
+          "topCenter",
+          "bottomLeft",
+          "bottomRight",
+          "bottomCenter"
+        ]
+      },
+      "closeOnEscape": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Calls onOpenChange(false) on Escape."
+      },
+      "closeOnOutsideClick": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Calls onOpenChange(false) on a pointer press outside the trigger and panel."
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Id applied to the panel and to the trigger's aria-controls while open. Generated via React.useId when omitted."
+      },
+      "role": {
+        "type": "React.AriaRole",
+        "required": false,
+        "default": null,
+        "description": "ARIA role for the panel. No default - depends on what the consumer is building."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the panel's class list."
+      },
+      "unstyled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Skips Popup's own visual skin (background, border, padding, radius, shadow), leaving only structural positioning and the mount animation. Set this when a consumer has an entirely different visual design of its own - e.g. Tooltip."
+      },
+      "padding": {
+        "type": "PopupPadding",
+        "required": false,
+        "default": "lg",
+        "description": "Padding for Popup's own visual skin, mapped to the spacing scale (sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows) while still sharing background/border/radius/shadow. Ignored when unstyled is true.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "manageTriggerAria": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Sets aria-expanded/aria-controls on the trigger while true. Set to false when the consumer already manages the trigger's own ARIA relationship to the panel content (e.g. Tooltip's aria-describedby) - aria-expanded/aria-controls are disclosure-widget attributes and don't apply to a supplemental hint."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "content"
+    ],
+    "variants": {
+      "alignment": [
+        "topLeft",
+        "topRight",
+        "topCenter",
+        "bottomLeft",
+        "bottomRight",
+        "bottomCenter"
+      ],
+      "padding": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "background": "--color-elevation-surface-raised-default",
+        "border": "--color-border-default",
+        "shadowInner": "--color-elevation-shadow-overlay-inner",
+        "shadowSpread": "--color-elevation-shadow-overlay-spread",
+        "shadowPerimeter": "--color-elevation-shadow-overlay-perimeter"
+      },
+      "borderWidth": "--border-width-sm",
+      "spacing": {
+        "padding": "--spacing-sm | --spacing-md | --spacing-lg (via the padding prop, default lg)",
+        "contentGap": "--spacing-xs",
+        "triggerToPanelGap": "--spacing-sm"
+      },
+      "radius": "--border-radius-lg",
+      "motion": "--fade-quick",
+      "note": "--color-elevation-shadow-overlay-spread and -perimeter were added alongside this component - they mirror the existing --color-elevation-shadow-raised-* family's shape, using the exact alpha values (16%, 32%) read from Figma's Light/elevation.shadow.overlay effect style. The dark-theme values mirror elevation.shadow.raised's light-to-dark base-hue swap at the same percentages rather than an independently re-verified dark effect."
+    },
+    "accessibility": {
+      "triggeredBy": [
+        "consumer-controlled - Popup attaches no open/close handler itself"
+      ],
+      "focusable": false,
+      "role": null,
+      "ariaExpanded": "set on the trigger, reflecting open, unless manageTriggerAria is false",
+      "ariaControls": "set on the trigger to the panel id only while open, unless manageTriggerAria is false; preserves an existing value while closed",
+      "focusManagement": "left to the consumer - Popup does not move focus into or out of the panel",
+      "requirements": [
+        "aria-expanded reflects open on the trigger by default (manageTriggerAria=true).",
+        "aria-controls points at the panel id only while open, by default.",
+        "manageTriggerAria=false skips both attributes entirely, for consumers with their own trigger ARIA relationship (e.g. aria-describedby).",
+        "No default role is added to the panel - the consumer supplies one appropriate to its content.",
+        "Popup does not make the trigger focusable or change its semantics beyond the two aria attributes above."
+      ]
+    },
+    "relatedComponents": [
+      "Tooltip"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2152:9257",
+      "componentName": "popup",
+      "variantCount": 12,
+      "verifiedAt": "2026-08-07",
+      "structure": "Two component properties beyond the variant axes: an exposed SLOT (the anchor/trigger region) and an internal, unpromoted Slot inside the nested `figma-parts / popup` panel instance (the content region). Code models this as `children` (trigger) + `content` (panel content) rather than two Figma-shaped slot props, since the inner slot was never promoted to the outer component set's own property list.",
+      "apiAdaptationNotes": [
+        "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
+        "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+        "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free."
+      ]
+    }
+  },
+  {
     "id": "avatar",
     "name": "Avatar",
     "tier": "atom",
@@ -906,18 +1094,6 @@
         "enum": [
           "ReactNode",
           false
-        ]
-      },
-      "tooltipPlacement": {
-        "type": null,
-        "required": false,
-        "default": null,
-        "description": null,
-        "enum": [
-          "top",
-          "right",
-          "bottom",
-          "left"
         ]
       }
     },
@@ -2193,26 +2369,59 @@
     "path": "docs/components/atoms/tooltip/tooltip.contract.json",
     "anatomy": [
       {
-        "name": "trigger"
+        "name": "trigger",
+        "description": "The single child element Tooltip wraps. Cloned to receive pointer/focus handlers and aria-describedby."
       },
       {
-        "name": "disabled-pointer-wrapper(optional)"
+        "name": "disabled-pointer-wrapper",
+        "description": "A non-focusable span wrapping a disabled native trigger, so hover still works without creating an extra tab stop."
       },
       {
-        "name": "content"
+        "name": "content",
+        "description": "Rendered through Popup (unstyled, alignment=topCenter, role=tooltip) - Popup owns positioning/portal/animation, Tooltip owns its own visual skin."
       }
     ],
-    "props": {},
+    "props": {
+      "content": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "No tooltip behavior is attached at all when this is empty (null, undefined, or a blank string)."
+      },
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby."
+      },
+      "truncate": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Single ellipsized line (420px max) vs. wrapped text (240px max before wrapping)."
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Suppresses the tooltip entirely - not just visually hidden."
+      },
+      "delay": {
+        "type": "number",
+        "required": false,
+        "default": 300,
+        "description": "Milliseconds of hover/focus before the tooltip appears."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the tooltip content element's class list."
+      }
+    },
     "sizes": [],
     "slots": [],
-    "variants": {
-      "placement": [
-        "top",
-        "right",
-        "bottom",
-        "left"
-      ]
-    },
+    "variants": {},
     "subComponents": [],
     "tokens": {
       "semantic": [
@@ -2223,7 +2432,7 @@
         "--spacing-xs",
         "--border-radius-sm"
       ],
-      "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale."
+      "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
     },
     "accessibility": {
       "triggeredBy": [
@@ -2231,21 +2440,24 @@
         "focus"
       ],
       "focusable": false,
+      "role": "tooltip",
       "describedByWhileVisible": true
     },
     "relatedComponents": [
+      "Popup",
       "IconButton",
       "ToggleIconButton",
       "Button"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
       "componentSetNodeId": "1354:55011",
       "componentName": "tooltip",
       "variantCount": 2,
-      "verifiedAt": "2026-08-06"
+      "verifiedAt": "2026-08-06",
+      "note": "Figma's tooltip-primitive frame has no placement/positioning variant at all (only truncate and showTooltip) - the topCenter default and viewport-fit fallback are entirely a code-side decision, delegated to Popup rather than modeled in Tooltip's own Figma source."
     }
   },
   {

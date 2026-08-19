@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 28 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 29 components
 > across primitives/atoms/molecules.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -33,11 +33,12 @@ rules, and the task→file routing table that says which of a component's up to
   invented. Load when tracing a component back to its design source or
   when re-verifying Figma mapping data.
 
-## Primitives (3)
+## Primitives (4)
 
 - [focus-ring](docs/components/primitives/focus-ring/focus-ring.md)
 - [icon](docs/components/primitives/icon/icon.md)
 - [logo](docs/components/primitives/logo/logo.md)
+- [popup](docs/components/primitives/popup/popup.md)
 
 ## Atoms (18)
 

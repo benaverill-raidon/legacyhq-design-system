@@ -61,7 +61,6 @@ export const IconButton = React.memo(
       isLoading = false,
       isExpanded = false,
       tooltip,
-      tooltipPlacement = 'top',
       className,
       children,
       type = 'button',
@@ -143,7 +142,7 @@ export const IconButton = React.memo(
     }
 
     return (
-      <Tooltip content={resolvedTooltipContent} placement={tooltipPlacement}>
+      <Tooltip content={resolvedTooltipContent}>
         {button}
       </Tooltip>
     );

@@ -6,16 +6,12 @@ import { Button } from '../button';
 import { IconButton } from '../icon-button';
 import { ToggleIconButton } from '../toggle-icon-button';
 import { Tooltip } from './tooltip';
-import type { TooltipPlacement } from './tooltip.types';
-
-const placements: TooltipPlacement[] = ['top', 'right', 'bottom', 'left'];
 
 const meta = {
   title: 'UI/Atoms/Tooltip',
   component: Tooltip,
   args: {
     content: 'Edit',
-    placement: 'top',
     truncate: true,
     disabled: false,
     delay: 300,
@@ -27,7 +23,6 @@ const meta = {
   },
   argTypes: {
     content: { control: 'text' },
-    placement: { control: 'inline-radio', options: placements },
     truncate: { control: 'boolean' },
     disabled: { control: 'boolean' },
     delay: { control: 'number' },
@@ -89,36 +84,14 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * The two independent axes - `placement` (with automatic viewport-edge fallback, see EdgeCases)
- * and `truncate` (single ellipsized line vs. wrapped) - plus `disabled`, which suppresses the
- * tooltip behavior entirely rather than just hiding it visually.
+ * `truncate` (single ellipsized line vs. wrapped) and `disabled` (suppresses the tooltip behavior
+ * entirely rather than just hiding it visually) - the only two axes Tooltip exposes. Positioning
+ * itself isn't one of them: Tooltip always prefers `topCenter` and leaves viewport-edge fallback to
+ * Popup, see EdgeCases.
  */
 export const Variants: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Placement">
-        <Tooltip content="Edit item" placement="top">
-          <IconButton aria-label="Edit" tooltip={false}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Search library" placement="right">
-          <IconButton aria-label="Search" tooltip={false}>
-            <SearchIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip content="Open favorites" placement="bottom">
-          <ToggleIconButton aria-label="Open favorites">
-            <StarStarredIcon />
-          </ToggleIconButton>
-        </Tooltip>
-        <Tooltip content="Close panel" placement="left">
-          <IconButton aria-label="Close" tooltip={false}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      </Group>
-
       <Group title="Truncate">
         <Tooltip content="Short supplemental hint" truncate>
           <IconButton aria-label="Edit" tooltip={false}>
@@ -202,7 +175,6 @@ export const Content: Story = {
           <Tooltip
             content="This tooltip clarifies a potentially ambiguous control, but it is still supplemental and not essential to understanding the action."
             truncate={false}
-            placement="bottom"
           >
             <IconButton aria-label="Search" tooltip={false}>
               <SearchIcon />
@@ -221,9 +193,9 @@ export const Content: Story = {
   ),
 };
 
-function EdgeTooltip({ label, placement }: { label: string; placement: TooltipPlacement }) {
+function EdgeTooltip({ label }: { label: string }) {
   return (
-    <Tooltip content={`${label} (${placement})`} placement={placement}>
+    <Tooltip content={`${label} - repositioned automatically`}>
       <IconButton aria-label={label} tooltip={false}>
         <EditIcon />
       </IconButton>
@@ -236,14 +208,15 @@ export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Falls back when the preferred placement would overflow</h3>
+        <h3 style={headingStyle}>Falls back automatically near a viewport edge</h3>
         <p style={captionStyle}>
-          Each trigger below prefers a placement that would clip against the viewport edge it sits
-          near - hover one to see it reposition to whichever side actually fits.
+          Tooltip always prefers `topCenter` and delegates viewport-fit fallback to Popup - no
+          manual placement choice needed. Hover a trigger pinned to this row&apos;s edge to see it
+          reposition on its own.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <EdgeTooltip label="Top-left corner" placement="left" />
-          <EdgeTooltip label="Top-right corner" placement="right" />
+          <EdgeTooltip label="Top-left corner" />
+          <EdgeTooltip label="Top-right corner" />
         </div>
       </section>
 

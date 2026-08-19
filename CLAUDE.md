@@ -12,7 +12,7 @@ tokens (Style Dictionary), CSS Modules, Storybook, and Vitest.
 
 ```
 packages/ui/src/components/
-  primitives/   # logo, focus-ring, icon — lowest-level building blocks
+  primitives/   # logo, focus-ring, icon, popup — lowest-level building blocks
   atoms/        # button, badge, checkbox, switch, slider, avatar, link,
                 # tag, tooltip, radio, progress-bar, spinner, label, ...
   molecules/    # composed from atoms/primitives

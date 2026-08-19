@@ -230,6 +230,8 @@
   --color-elevation-shadow-raised-perimeter: var(--color-neutral-alpha-1300-32);
   --color-elevation-shadow-raised-inner: var(--color-brand-prussian-solid-1000);
   --color-elevation-shadow-overlay-default: var(--color-neutral-solid-1300);
+  --color-elevation-shadow-overlay-spread: var(--color-neutral-alpha-1300-16);
+  --color-elevation-shadow-overlay-perimeter: var(--color-neutral-alpha-1300-32);
   --color-elevation-shadow-overlay-inner: var(--color-neutral-solid-500);
   --color-background-discovery-overlay-hovered: var(--color-purple-alpha-500-08);
   --color-background-discovery-overlay-pressed: var(--color-purple-alpha-500-16);

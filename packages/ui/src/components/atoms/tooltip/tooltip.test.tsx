@@ -8,6 +8,7 @@ import { EditIcon } from '../../../assets/icons';
 import { Button } from '../button';
 import { IconButton } from '../icon-button';
 import { Tooltip } from './tooltip';
+import styles from './tooltip.module.css';
 
 const tooltipCss = readFileSync('packages/ui/src/components/atoms/tooltip/tooltip.module.css', 'utf8');
 const tooltipSource = readFileSync('packages/ui/src/components/atoms/tooltip/tooltip.tsx', 'utf8');
@@ -252,9 +253,9 @@ describe('Tooltip', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('applies placement state', () => {
+  it('always prefers topCenter alignment, delegated to Popup for viewport-fit fallback', () => {
     render(
-      <Tooltip content="Edit" placement="right">
+      <Tooltip content="Edit">
         <button type="button">Trigger</button>
       </Tooltip>,
     );
@@ -265,10 +266,25 @@ describe('Tooltip', () => {
     });
 
     const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveAttribute('data-placement', 'right');
+    expect(tooltip).toHaveAttribute('data-alignment', 'topCenter');
   });
 
   it('applies truncate state', () => {
+    render(
+      <Tooltip content="Edit" truncate>
+        <button type="button">Trigger</button>
+      </Tooltip>,
+    );
+
+    fireEvent.pointerEnter(screen.getByRole('button', { name: 'Trigger' }));
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByRole('tooltip')).toHaveClass(styles.truncate);
+  });
+
+  it('applies wrap state when truncate is false', () => {
     render(
       <Tooltip content="Edit" truncate={false}>
         <button type="button">Trigger</button>
@@ -280,8 +296,7 @@ describe('Tooltip', () => {
       vi.advanceTimersByTime(300);
     });
 
-    const tooltip = screen.getByRole('tooltip');
-    expect(tooltip).toHaveAttribute('data-truncate', 'false');
+    expect(screen.getByRole('tooltip')).toHaveClass(styles.wrap);
   });
 
   it('preserves child event handlers', () => {
@@ -434,9 +449,12 @@ describe('Tooltip', () => {
     expect(tooltipCss).toContain('border-radius: var(--border-radius-sm);');
     expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-truncated);');
     expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-wrapped);');
-    expect(tooltipCss).toContain('z-index: var(--component-tooltip-z-index);');
-    expect(tooltipSource).toContain("getTokenPixels('--spacing-xs')");
-    expect(tooltipSource).not.toContain("getTokenPixels('--spacing-xs',");
+  });
+
+  it('delegates positioning, portal rendering, and dismissal to Popup instead of a local implementation', () => {
+    expect(tooltipSource).toContain("from '../../primitives/popup'");
+    expect(tooltipSource).not.toContain('getBoundingClientRect');
+    expect(tooltipSource).not.toContain('createPortal');
   });
 
   it('uses 6px horizontal padding, matching Figma - not the 8px --spacing-sm token', () => {

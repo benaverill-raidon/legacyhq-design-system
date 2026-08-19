@@ -230,6 +230,8 @@
   --color-elevation-shadow-raised-perimeter: var(--color-brand-umber-alpha-1100-32);
   --color-elevation-shadow-raised-inner: var(--color-brand-umber-solid-1100);
   --color-elevation-shadow-overlay-default: var(--color-brand-umber-solid-1100);
+  --color-elevation-shadow-overlay-spread: var(--color-brand-umber-alpha-1100-16);
+  --color-elevation-shadow-overlay-perimeter: var(--color-brand-umber-alpha-1100-32);
   --color-elevation-shadow-overlay-inner: rgba(0, 0, 0, 0);
   --color-background-discovery-overlay-hovered: var(--color-purple-alpha-800-08);
   --color-background-discovery-overlay-pressed: var(--color-purple-alpha-800-16);

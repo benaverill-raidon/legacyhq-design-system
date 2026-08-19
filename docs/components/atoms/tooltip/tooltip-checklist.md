@@ -35,10 +35,10 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
 
 ## Positioning
 
-- [ ] Support preferred `top`, `right`, `bottom`, and `left` placement.
-- [ ] Shift or fall back when the preferred placement would overflow.
-- [ ] Recalculate on viewport, scroll, trigger, and tooltip geometry changes.
-- [ ] Avoid clipping inside overflow containers.
+- [ ] Delegate positioning, the portal, and viewport-fit fallback to Popup (`unstyled`, `alignment="topCenter"`) instead of a local implementation.
+- [ ] No manual placement prop - Tooltip always prefers `topCenter` and trusts Popup's fallback across all six alignments.
+- [ ] Recalculation on viewport, scroll, trigger, and tooltip geometry changes is Popup's responsibility, verified by Popup's own test suite.
+- [ ] Avoid clipping inside overflow containers (via Popup's portal at `document.body`).
 
 ## Token usage
 
@@ -81,8 +81,9 @@ Tooltip / Content
 Tooltip / EdgeCases
 ```
 
-- **Variants** - `placement` crossed with `truncate`, plus `disabled`.
+- **Variants** - `truncate` plus `disabled`. No placement axis - Tooltip has no `placement` prop.
 - **Content** - icon-only actions, toggle icon buttons, disabled-control explanations, a text button
   trigger.
-- **EdgeCases** - placement fallback near a viewport edge (verify the resolved `data-placement`
-  differs from the requested one), keyboard-focus trigger, dark surface.
+- **EdgeCases** - automatic alignment fallback near a viewport edge (verify the resolved
+  `data-alignment` on the Popup panel differs from `topCenter`), keyboard-focus trigger, dark
+  surface.

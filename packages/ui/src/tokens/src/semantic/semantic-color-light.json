@@ -1131,6 +1131,16 @@
         "type": "color",
         "originalName": "color/elevation/shadow/overlay/default"
       },
+      "color-elevation-shadow-overlay-spread": {
+        "value": "var(--color-brand-umber-alpha-1100-16)",
+        "type": "color",
+        "originalName": "color/elevation/shadow/overlay/spread"
+      },
+      "color-elevation-shadow-overlay-perimeter": {
+        "value": "var(--color-brand-umber-alpha-1100-32)",
+        "type": "color",
+        "originalName": "color/elevation/shadow/overlay/perimeter"
+      },
       "color-elevation-shadow-overlay-inner": {
         "value": "transparent",
         "type": "color",

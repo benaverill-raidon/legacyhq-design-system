@@ -31,9 +31,9 @@ single trigger element and shows supplemental content on hover or keyboard focus
 
 - **Trigger** - the single child element `Tooltip` wraps. It's cloned to receive pointer/focus
   handlers and `aria-describedby`, without changing its own rendered output.
-- **Content layer** - a `role="tooltip"` element rendered in a portal at `document.body`, positioned
-  with a small local fixed-position implementation (this repo has no shared floating-position
-  utility yet) rather than being laid out inline near the trigger.
+- **Content layer** - a `role="tooltip"` element rendered by [Popup](?path=/docs/ui-primitives-popup--docs)
+  with `unstyled` set, so Tooltip supplies its own visual skin (a small dark pill) while Popup owns
+  positioning, the portal, and the mount animation.
 
 There's no arrow/caret pointing at the trigger - Figma's own tooltip is a plain rounded rectangle.
 
@@ -46,12 +46,14 @@ also no static States page: the only "state" is shown/hidden, which is exactly w
 focusing the Playground trigger already demonstrates live - a pinned static reference wouldn't show
 anything a screenshot of the box itself doesn't already.
 
-### Placement and fallback
+### Positioning is entirely Popup's job
 
-`placement` (`top`, `right`, `bottom`, `left`) is a preference, not a guarantee - if the preferred
-side would overflow the viewport, Tooltip measures all four candidates and picks whichever actually
-fits with the least overflow, recalculating on scroll/resize. See EdgeCases for it visibly
-repositioning near a viewport edge.
+Tooltip has no `placement` prop anymore. It always requests Popup's `topCenter` alignment and lets
+Popup's own viewport-fit fallback (the same mechanism every Popup-based component gets) reposition
+it when that would overflow - see EdgeCases for it visibly repositioning near a viewport edge. This
+is a deliberate simplification: previously `placement` let a caller manually pick one of four sides,
+but centralizing positioning in Popup means most callers get sensible viewport-fit behavior for
+free instead of needing to pick a side themselves.
 
 ### Truncate vs. wrap
 
@@ -139,12 +141,6 @@ when the tooltip message should say something different from the accessible name
       <td>Required. A single trigger element - cloned to add the pointer/focus handlers and <code>aria-describedby</code>.</td>
     </tr>
     <tr>
-      <td><code>placement</code></td>
-      <td><code>'top' | 'right' | 'bottom' | 'left'</code></td>
-      <td><code>'top'</code></td>
-      <td>Preferred side. Falls back to whichever side actually fits when this would overflow.</td>
-    </tr>
-    <tr>
       <td><code>truncate</code></td>
       <td><code>boolean</code></td>
       <td><code>true</code></td>
@@ -173,5 +169,8 @@ when the tooltip message should say something different from the accessible name
 
 ## Related components
 
+- **Popup** - the shared floating-panel primitive Tooltip renders through for positioning, the
+  portal, and dismissal. Reach for Popup directly when building something interactive/dismissible
+  rather than a non-interactive hint.
 - **IconButton** / **ToggleIconButton** - can render an internal tooltip, or be wrapped externally.
 - **Label** - for a persistent, always-visible description instead of a hover-revealed one.

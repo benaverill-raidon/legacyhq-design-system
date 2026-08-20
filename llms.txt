@@ -47,7 +47,6 @@ rules, and the task→file routing table that says which of a component's up to
 - [button](docs/components/atoms/button/button.md)
 - [checkbox](docs/components/atoms/checkbox/checkbox.md)
 - [icon-button](docs/components/atoms/icon-button/icon-button.md)
-- [inline-message](docs/components/atoms/inline-message/inline-message.md)
 - [label](docs/components/atoms/label/label.md)
 - [link](docs/components/atoms/link/link.md)
 - [link-button](docs/components/atoms/link-button/link-button.md)
@@ -62,12 +61,13 @@ rules, and the task→file routing table that says which of a component's up to
 - [toggle-icon-button](docs/components/atoms/toggle-icon-button/toggle-icon-button.md)
 - [tooltip](docs/components/atoms/tooltip/tooltip.md)
 
-## Molecules (7)
+## Molecules (8)
 
 - [breadcrumbs](docs/components/molecules/breadcrumbs/breadcrumbs.md)
 - [button-group](docs/components/molecules/button-group/button-group.md)
 - [icon-tile](docs/components/molecules/icon-tile/icon-tile.md)
 - [inline-edit](docs/components/molecules/inline-edit/inline-edit.md)
+- [inline-message](docs/components/molecules/inline-message/inline-message.md)
 - [pagination](docs/components/molecules/pagination/pagination.md)
 - [skeleton](docs/components/molecules/skeleton/skeleton.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Inline Message is a reusable atom that shows a short, tone-colored status row - an icon, a bold
+Inline Message is a reusable molecule that shows a short, tone-colored status row - an icon, a bold
 title, and optional secondary text - with optional additional detail revealed in a popup on click.
 
 ## Anatomy
@@ -166,7 +166,7 @@ trigger and panel for every Popup-based component, the same way it does for Tool
 - The trigger button gets `aria-expanded`/`aria-controls` from Popup automatically.
 - The trigger button applies the shared Focus Ring primitive (`focusRingClassNames.focusRing` +
   `focusRingDefault`) for its `:focus-visible` outline - the same pattern every other interactive
-  atom in this system uses, rather than a one-off focus style local to this component.
+  component in this system uses, rather than a one-off focus style local to this component.
 - No ARIA role is set on the detail panel - a plain click-to-reveal disclosure needs none beyond
   the trigger's own `aria-expanded`/`aria-controls`, the same reasoning Popup's own docs give for
   not assuming a role by default.

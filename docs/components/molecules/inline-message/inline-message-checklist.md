@@ -6,7 +6,7 @@
 Inline Message
 
 ### Category
-Atom
+Molecule
 
 ### Related Components
 - Popup

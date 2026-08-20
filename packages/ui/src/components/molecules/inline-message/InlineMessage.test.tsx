@@ -7,8 +7,8 @@ import { focusRingClassNames } from '../../primitives/focus-ring';
 import { InlineMessage } from './inline-message';
 import styles from './inline-message.module.css';
 
-const inlineMessageCss = readFileSync('packages/ui/src/components/atoms/inline-message/inline-message.module.css', 'utf8');
-const inlineMessageSource = readFileSync('packages/ui/src/components/atoms/inline-message/inline-message.tsx', 'utf8');
+const inlineMessageCss = readFileSync('packages/ui/src/components/molecules/inline-message/inline-message.module.css', 'utf8');
+const inlineMessageSource = readFileSync('packages/ui/src/components/molecules/inline-message/inline-message.tsx', 'utf8');
 
 afterEach(cleanup);
 

@@ -1,6 +1,6 @@
 {
   "name": "InlineMessage",
-  "category": "atom",
+  "category": "molecule",
   "status": "stable",
   "purpose": "Short, tone-colored inline status line with optional click-revealed detail.",
   "intent": "Give a short status message a place to reveal supplemental detail without a full banner or dialog, built on the Popup primitive.",

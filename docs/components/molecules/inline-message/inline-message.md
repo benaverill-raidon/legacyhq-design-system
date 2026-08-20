@@ -32,7 +32,7 @@ icon exists in the generated icon set.
 ## Accessibility
 The row is a real, focusable `<button>` when `content` is provided, with `aria-expanded`/
 `aria-controls` managed automatically by Popup, and the shared Focus Ring primitive supplying its
-`:focus-visible` outline - the same pattern every other interactive atom in this system uses.
+`:focus-visible` outline - the same pattern every other interactive component in this system uses.
 Keyboard focus shows the same tint as hover, not a separate treatment. Omit `content` and the row
 renders as plain, non-interactive text with no button at all.
 

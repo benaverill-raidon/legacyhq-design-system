@@ -965,7 +965,7 @@
           "lg": "heading-sm"
         },
         "color": {
-          "defaultBorder": "--color-border-default",
+          "defaultBorder": "--color-border-input",
           "defaultBackground": "--color-background-neutral-subtle-default",
           "defaultContent": "--color-content-subtle",
           "primaryNeutralBackground": "--color-background-brand-bold-default",
@@ -1130,158 +1130,6 @@
       "componentName": "icon-button",
       "variantCount": 184,
       "verifiedAt": "2026-08-06"
-    }
-  },
-  {
-    "id": "inline-message",
-    "name": "InlineMessage",
-    "tier": "atom",
-    "category": "atom",
-    "status": "stable",
-    "path": "docs/components/atoms/inline-message/inline-message.contract.json",
-    "anatomy": [
-      {
-        "name": "icon",
-        "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
-      },
-      {
-        "name": "title",
-        "description": "Required bold lead text (heading-xs typography)."
-      },
-      {
-        "name": "secondaryText",
-        "description": "Optional muted trailing text (body-md typography), rendered only when provided."
-      },
-      {
-        "name": "content",
-        "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal."
-      }
-    ],
-    "props": {
-      "title": {
-        "type": "React.ReactNode",
-        "required": true,
-        "default": null,
-        "description": "Bold lead text."
-      },
-      "secondaryText": {
-        "type": "React.ReactNode",
-        "required": false,
-        "default": null,
-        "description": "Optional muted trailing text, shown only when provided - no separate show/hide toggle."
-      },
-      "tone": {
-        "type": "InlineMessageTone",
-        "required": false,
-        "default": "default",
-        "description": "Selects the status icon, icon color, and the tint shown on hover/open.",
-        "enum": [
-          "default",
-          "info",
-          "success",
-          "warning",
-          "error",
-          "discovery"
-        ]
-      },
-      "content": {
-        "type": "React.ReactNode",
-        "required": false,
-        "default": null,
-        "description": "Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row with no button and no popup."
-      },
-      "open": {
-        "type": "boolean",
-        "required": false,
-        "default": null,
-        "description": "Controlled open state for the detail popup."
-      },
-      "defaultOpen": {
-        "type": "boolean",
-        "required": false,
-        "default": false,
-        "description": "Initial open state for uncontrolled usage."
-      },
-      "onOpenChange": {
-        "type": "(open: boolean) => void",
-        "required": false,
-        "default": null,
-        "description": "Called with the next open value whenever the row is clicked."
-      },
-      "className": {
-        "type": "string",
-        "required": false,
-        "default": null,
-        "description": "Composes with the root row's class list."
-      },
-      "data-force-state": {
-        "type": "'hover' | 'focus' | 'active'",
-        "required": false,
-        "default": null,
-        "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
-      }
-    },
-    "sizes": [],
-    "slots": [
-      "content"
-    ],
-    "variants": {
-      "tone": [
-        "default",
-        "info",
-        "success",
-        "warning",
-        "error",
-        "discovery"
-      ]
-    },
-    "subComponents": [],
-    "tokens": {
-      "semantic": {
-        "titleColor": "--color-content-default",
-        "secondaryTextColor": "--color-content-subtle",
-        "titleTypography": "heading-xs",
-        "secondaryTextTypography": "body-md",
-        "iconContainer": "--size-300",
-        "rowPadding": "--spacing-none (the row itself carries no padding - see textGroupPadding)",
-        "textGroupPadding": "--spacing-xs on both sides - covers the icon-to-title gap and the row's own trailing space",
-        "titleToSecondaryTextGap": "--spacing-sm"
-      },
-      "note": "Tone-specific icon color and hover/open tint tokens are documented per tone in the `variants.tone` block above, not duplicated here."
-    },
-    "accessibility": {
-      "triggeredBy": [
-        "pointer click",
-        "Enter/Space when content is provided"
-      ],
-      "focusable": "only when content is provided (renders a real button)",
-      "role": null,
-      "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
-      "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
-    },
-    "relatedComponents": [
-      "Popup",
-      "Tooltip",
-      "Icon",
-      "FocusRing"
-    ],
-    "contentCompleteness": "full",
-    "figmaSource": {
-      "file": "Components v1.0.0",
-      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
-      "componentSetNodeId": "4589:2519",
-      "componentName": "inline-message",
-      "variantCount": 12,
-      "verifiedAt": "2026-08-19",
-      "note": "12 raw Figma variants (tone x isOpen) but only 2 real states per tone - most of the outer isOpen variant values are garbage auto-generated strings (isOpen3..isOpen12), not real booleans, except for the info tone. The reliable signal is the nested `popup` instance's own isOpen component property.",
-      "subComponents": [
-        {
-          "name": "inline-message-trigger",
-          "componentSetNodeId": "2448:72904",
-          "componentName": "figma-parts / inline-message-trigger",
-          "note": "The row itself - icon, titleText, secondaryText - nested inside the inline-message component's own `popup` instance as its trigger slot."
-        }
-      ]
     }
   },
   {
@@ -1824,10 +1672,10 @@
     "subComponents": [],
     "tokens": {
       "semantic": {
-        "defaultSelected": "color-content-default",
-        "primarySelected": "color-content-brand-primary-default",
-        "discoverySelected": "color-content-discovery",
-        "invertedSelected": "color-content-inverse",
+        "defaultSelected": "color-background-neutral-bold-default",
+        "primarySelected": "color-background-brand-primary-bold-default",
+        "discoverySelected": "color-background-discovery-bold-default",
+        "invertedSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
         "interactiveHover": "color-background-neutral-subtle-hovered",
         "interactivePressed": "color-background-neutral-subtle-pressed",
@@ -3310,6 +3158,158 @@
         "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
         "children is expected to be a single controlled input-like element (TextField today, typically appearance=subtle so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
         "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
+      ]
+    }
+  },
+  {
+    "id": "inline-message",
+    "name": "InlineMessage",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/inline-message/inline-message.contract.json",
+    "anatomy": [
+      {
+        "name": "icon",
+        "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
+      },
+      {
+        "name": "title",
+        "description": "Required bold lead text (heading-xs typography)."
+      },
+      {
+        "name": "secondaryText",
+        "description": "Optional muted trailing text (body-md typography), rendered only when provided."
+      },
+      {
+        "name": "content",
+        "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal."
+      }
+    ],
+    "props": {
+      "title": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "Bold lead text."
+      },
+      "secondaryText": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional muted trailing text, shown only when provided - no separate show/hide toggle."
+      },
+      "tone": {
+        "type": "InlineMessageTone",
+        "required": false,
+        "default": "default",
+        "description": "Selects the status icon, icon color, and the tint shown on hover/open.",
+        "enum": [
+          "default",
+          "info",
+          "success",
+          "warning",
+          "error",
+          "discovery"
+        ]
+      },
+      "content": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row with no button and no popup."
+      },
+      "open": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Controlled open state for the detail popup."
+      },
+      "defaultOpen": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Initial open state for uncontrolled usage."
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with the next open value whenever the row is clicked."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root row's class list."
+      },
+      "data-force-state": {
+        "type": "'hover' | 'focus' | 'active'",
+        "required": false,
+        "default": null,
+        "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "content"
+    ],
+    "variants": {
+      "tone": [
+        "default",
+        "info",
+        "success",
+        "warning",
+        "error",
+        "discovery"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "titleColor": "--color-content-default",
+        "secondaryTextColor": "--color-content-subtle",
+        "titleTypography": "heading-xs",
+        "secondaryTextTypography": "body-md",
+        "iconContainer": "--size-300",
+        "rowPadding": "--spacing-none (the row itself carries no padding - see textGroupPadding)",
+        "textGroupPadding": "--spacing-xs on both sides - covers the icon-to-title gap and the row's own trailing space",
+        "titleToSecondaryTextGap": "--spacing-sm"
+      },
+      "note": "Tone-specific icon color and hover/open tint tokens are documented per tone in the `variants.tone` block above, not duplicated here."
+    },
+    "accessibility": {
+      "triggeredBy": [
+        "pointer click",
+        "Enter/Space when content is provided"
+      ],
+      "focusable": "only when content is provided (renders a real button)",
+      "role": null,
+      "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
+      "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
+    },
+    "relatedComponents": [
+      "Popup",
+      "Tooltip",
+      "Icon",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4589:2519",
+      "componentName": "inline-message",
+      "variantCount": 12,
+      "verifiedAt": "2026-08-19",
+      "note": "12 raw Figma variants (tone x isOpen) but only 2 real states per tone - most of the outer isOpen variant values are garbage auto-generated strings (isOpen3..isOpen12), not real booleans, except for the info tone. The reliable signal is the nested `popup` instance's own isOpen component property.",
+      "subComponents": [
+        {
+          "name": "inline-message-trigger",
+          "componentSetNodeId": "2448:72904",
+          "componentName": "figma-parts / inline-message-trigger",
+          "note": "The row itself - icon, titleText, secondaryText - nested inside the inline-message component's own `popup` instance as its trigger slot."
+        }
       ]
     }
   },

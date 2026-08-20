@@ -4,7 +4,7 @@ Use `inline-message-spec.md` as the source of truth.
 
 ## Goal
 
-Build Inline Message as an atom that shows a short, tone-colored status row and optionally reveals
+Build Inline Message as a molecule that shows a short, tone-colored status row and optionally reveals
 additional detail in a popup when clicked. Build it on top of the `Popup` primitive
 (`packages/ui/src/components/primitives/popup`) rather than a local positioning implementation.
 
@@ -49,7 +49,7 @@ defaultOpen: false
 Create:
 
 ```txt
-packages/ui/src/components/atoms/inline-message/
+packages/ui/src/components/molecules/inline-message/
 ├── inline-message.tsx
 ├── inline-message.types.ts
 ├── inline-message.module.css

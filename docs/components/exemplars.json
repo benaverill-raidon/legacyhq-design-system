@@ -545,51 +545,6 @@
     "exemplarCompleteness": "thin"
   },
   {
-    "id": "inline-message",
-    "name": "InlineMessage",
-    "tier": "atom",
-    "path": "docs/components/atoms/inline-message/inline-message.examples.json",
-    "examples": [
-      {
-        "name": "Plain status row, no detail",
-        "description": "Omitting content renders a non-interactive row with no button and no popup.",
-        "jsx": "<InlineMessage title=\"Synced\" secondaryText=\"All changes saved\" tone=\"success\" />",
-        "props": {
-          "tone": "success"
-        }
-      },
-      {
-        "name": "Click to reveal detail",
-        "description": "Providing content renders a real button; clicking toggles the popup below the row.",
-        "jsx": "<InlineMessage title=\"3 documents pending review\" secondaryText=\"Last updated 2 hours ago\" tone=\"warning\" content=\"Review each document before the filing deadline on Friday.\" />",
-        "props": {
-          "tone": "warning"
-        }
-      },
-      {
-        "name": "Controlled, opened programmatically",
-        "description": "Reveal the detail automatically right after an action completes, via open/onOpenChange.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<InlineMessage title=\"Saved\" tone=\"success\" open={open} onOpenChange={setOpen} content=\"All changes saved.\" />",
-        "props": {
-          "tone": "success"
-        }
-      }
-    ],
-    "antiExamples": [
-      {
-        "name": "Hover-only reveal",
-        "jsx": "/* Don't build a hover-triggered version of this component */\n<InlineMessage title=\"Hint\" onMouseEnter={showDetail} />",
-        "reason": "Popup's own guidance reserves hover-only reveals for Tooltip. Inline Message is click/keyboard-activated by design, so its detail stays reachable by touch and keyboard users too."
-      },
-      {
-        "name": "Wrapping trivial content in a popup",
-        "jsx": "<InlineMessage title=\"Synced\" tone=\"success\" content=\"Synced.\" />",
-        "reason": "Don't add an expand affordance nobody needs - omit content entirely for a message that has nothing more to say."
-      }
-    ],
-    "exemplarCompleteness": "full"
-  },
-  {
     "id": "label",
     "name": "Label",
     "tier": "atom",
@@ -1285,6 +1240,51 @@
         "name": "Expecting onConfirm to fire on every keystroke",
         "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
         "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "inline-message",
+    "name": "InlineMessage",
+    "tier": "molecule",
+    "path": "docs/components/molecules/inline-message/inline-message.examples.json",
+    "examples": [
+      {
+        "name": "Plain status row, no detail",
+        "description": "Omitting content renders a non-interactive row with no button and no popup.",
+        "jsx": "<InlineMessage title=\"Synced\" secondaryText=\"All changes saved\" tone=\"success\" />",
+        "props": {
+          "tone": "success"
+        }
+      },
+      {
+        "name": "Click to reveal detail",
+        "description": "Providing content renders a real button; clicking toggles the popup below the row.",
+        "jsx": "<InlineMessage title=\"3 documents pending review\" secondaryText=\"Last updated 2 hours ago\" tone=\"warning\" content=\"Review each document before the filing deadline on Friday.\" />",
+        "props": {
+          "tone": "warning"
+        }
+      },
+      {
+        "name": "Controlled, opened programmatically",
+        "description": "Reveal the detail automatically right after an action completes, via open/onOpenChange.",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<InlineMessage title=\"Saved\" tone=\"success\" open={open} onOpenChange={setOpen} content=\"All changes saved.\" />",
+        "props": {
+          "tone": "success"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Hover-only reveal",
+        "jsx": "/* Don't build a hover-triggered version of this component */\n<InlineMessage title=\"Hint\" onMouseEnter={showDetail} />",
+        "reason": "Popup's own guidance reserves hover-only reveals for Tooltip. Inline Message is click/keyboard-activated by design, so its detail stays reachable by touch and keyboard users too."
+      },
+      {
+        "name": "Wrapping trivial content in a popup",
+        "jsx": "<InlineMessage title=\"Synced\" tone=\"success\" content=\"Synced.\" />",
+        "reason": "Don't add an expand affordance nobody needs - omit content entirely for a message that has nothing more to say."
       }
     ],
     "exemplarCompleteness": "full"

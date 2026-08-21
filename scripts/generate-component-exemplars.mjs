@@ -7,7 +7,7 @@ const componentsDir = path.join(rootDir, 'docs/components');
 const schemaPath = path.join(rootDir, 'docs/foundations/component-exemplars.schema.json');
 const outputPath = path.join(componentsDir, 'exemplars.json');
 
-const TIER_DIRS = ['primitives', 'atoms', 'molecules'];
+const TIER_DIRS = ['primitives', 'atoms', 'molecules', 'organisms'];
 
 function toPascalCase(id) {
   return id
@@ -86,7 +86,7 @@ function normalizeComponent({ id, tier, raw, relPath }) {
 
 async function main() {
   const exemplars = [];
-  const counts = { primitive: 0, atom: 0, molecule: 0 };
+  const counts = { primitive: 0, atom: 0, molecule: 0, organism: 0 };
 
   for (const tierDir of TIER_DIRS) {
     const tier = tierDir.slice(0, -1);
@@ -112,7 +112,7 @@ async function main() {
 
   console.log(
     `Generated exemplars for ${exemplars.length} components ` +
-      `(${counts.primitive} primitives, ${counts.atom} atoms, ${counts.molecule} molecules).`,
+      `(${counts.primitive} primitives, ${counts.atom} atoms, ${counts.molecule} molecules, ${counts.organism} organisms).`,
   );
 }
 

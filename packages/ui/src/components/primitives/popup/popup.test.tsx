@@ -178,6 +178,46 @@ describe('Popup', () => {
     document.documentElement.style.removeProperty('--spacing-sm');
   });
 
+  it('hides the panel (visibility: hidden, data-trigger-out-of-view) once the trigger scrolls fully out of the viewport', () => {
+    // Regression guard: without this, the panel clamps to the nearest viewport edge and stays
+    // visibly "stuck" there once the trigger scrolls away entirely, floating with no visible
+    // anchor - hiding it is the correct behavior instead.
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.tagName === 'BUTTON') {
+          return { top: -100, bottom: -60, left: 10, right: 110, width: 100, height: 40 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    render(<ControlledPopup open />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel).toHaveAttribute('data-trigger-out-of-view', 'true');
+    expect(panel).toHaveStyle({ visibility: 'hidden' });
+
+    getBoundingClientRectSpy.mockRestore();
+  });
+
+  it('does not hide the panel when the trigger is still (even partially) within the viewport', () => {
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.tagName === 'BUTTON') {
+          return { top: 4, bottom: 24, left: 10, right: 110, width: 100, height: 20 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    render(<ControlledPopup open />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel).not.toHaveAttribute('data-trigger-out-of-view');
+
+    getBoundingClientRectSpy.mockRestore();
+  });
+
   it('preserves an existing aria-controls value while closed', () => {
     render(
       <Popup content={<span>Popup content</span>} open={false}>
@@ -241,8 +281,11 @@ describe('Popup', () => {
     expect(screen.getByText('Popup content').parentElement).toHaveClass(styles.padding_lg);
   });
 
-  it('applies sm/md padding classes when requested', () => {
-    const { rerender } = render(<ControlledPopup open padding="sm" />);
+  it('applies none/sm/md padding classes when requested', () => {
+    const { rerender } = render(<ControlledPopup open padding="none" />);
+    expect(screen.getByText('Popup content').parentElement).toHaveClass(styles.padding_none);
+
+    rerender(<ControlledPopup open padding="sm" />);
     expect(screen.getByText('Popup content').parentElement).toHaveClass(styles.padding_sm);
 
     rerender(<ControlledPopup open padding="md" />);

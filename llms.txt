@@ -1,8 +1,8 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 30 components
-> across primitives/atoms/molecules.
+> semantic → component), CSS Modules, Storybook, and Vitest. 32 components
+> across primitives/atoms/molecules/organisms.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
 rules, and the task→file routing table that says which of a component's up to
@@ -16,13 +16,13 @@ rules, and the task→file routing table that says which of a component's up to
 - [component-api-governance.json](docs/foundations/component-api-governance.json):
   prop-naming rules. Load when adding/renaming a prop.
 - [registry.json](docs/components/registry.json): generated, normalized
-  cross-component index (props/anatomy/sizes/slots/variants for all 28
+  cross-component index (props/anatomy/sizes/slots/variants for all 32
   components in one consistent shape). Load for structural queries across
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.
 - [exemplars.json](docs/components/exemplars.json): generated, normalized
-  cross-component runnable usage examples + anti-patterns for all 28
+  cross-component runnable usage examples + anti-patterns for all 32
   components. Load for a quick, verified code example instead of reading
   individual `.examples.json` files. See
   [component-exemplars-governance.json](docs/foundations/component-exemplars-governance.json)
@@ -40,7 +40,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [logo](docs/components/primitives/logo/logo.md)
 - [popup](docs/components/primitives/popup/popup.md)
 
-## Atoms (18)
+## Atoms (19)
 
 - [avatar](docs/components/atoms/avatar/avatar.md)
 - [badge](docs/components/atoms/badge/badge.md)
@@ -71,6 +71,11 @@ rules, and the task→file routing table that says which of a component's up to
 - [pagination](docs/components/molecules/pagination/pagination.md)
 - [skeleton](docs/components/molecules/skeleton/skeleton.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
+
+## Organisms (2)
+
+- [dropdown-menu](docs/components/organisms/dropdown-menu/dropdown-menu.md)
+- [menu](docs/components/organisms/menu/menu.md)
 
 ## Optional
 

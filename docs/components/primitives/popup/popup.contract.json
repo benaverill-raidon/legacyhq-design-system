@@ -23,7 +23,8 @@
     "apiAdaptationNotes": [
       "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
       "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
-      "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free."
+      "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free.",
+      "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
     ]
   },
   "useCases": [
@@ -129,8 +130,8 @@
       "type": "PopupPadding",
       "required": false,
       "default": "lg",
-      "enum": ["sm", "md", "lg"],
-      "description": "Padding for Popup's own visual skin, mapped to the spacing scale (sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows) while still sharing background/border/radius/shadow. Ignored when unstyled is true."
+      "enum": ["none", "sm", "md", "lg"],
+      "description": "Padding for Popup's own visual skin, mapped to the spacing scale (none=0, sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows, or a consumer whose own content manages all edge padding) while still sharing background/border/radius/shadow. Ignored when unstyled is true."
     },
     "manageTriggerAria": {
       "type": "boolean",
@@ -149,6 +150,7 @@
       "bottomCenter": { "purpose": "Opens below the trigger, horizontally centered on it." }
     },
     "padding": {
+      "none": { "purpose": "Zero padding - the consumer's own content manages all edge padding (e.g. Dropdown Menu's Menu panel, whose search field and rows already carry their own insets).", "token": "0" },
       "sm": { "purpose": "Denser skin padding (--spacing-sm) - e.g. a menu's rows.", "token": "--spacing-sm" },
       "md": { "purpose": "Medium skin padding (--spacing-md).", "token": "--spacing-md" },
       "lg": { "purpose": "Default skin padding (--spacing-lg), matching Figma's popup component.", "token": "--spacing-lg" }
@@ -210,7 +212,8 @@
     "A pointer press inside the panel or on the trigger itself never triggers outside-click dismissal.",
     "Renders nothing but the cloned trigger when open is false - no empty portal node stays mounted.",
     "unstyled=true omits Popup's own visual skin class (and the padding class) from the panel entirely, leaving only structural positioning and the mount animation - the base .panel class never carries visual styling, so there's no cross-module CSS override needed.",
-    "padding selects one of three dedicated classes (padding_sm/md/lg), kept separate from panelSurface's other properties (background/border/radius/shadow/gap) so a consumer can size the skin without needing to override or duplicate the rest of it."
+    "padding selects one of four dedicated classes (padding_none/sm/md/lg), kept separate from panelSurface's other properties (background/border/radius/shadow/gap) so a consumer can size the skin without needing to override or duplicate the rest of it.",
+    "When the trigger scrolls fully out of the viewport (all four edges checked - top/bottom/left/right), the panel is hidden (visibility: hidden, data-trigger-out-of-view=\"true\") rather than clamped to the nearest viewport edge - clamping left it visibly stuck at that edge with no visible anchor once the trigger was no longer on screen at all. Resumes normal positioning automatically once the trigger scrolls back into view (even partially). Gated on the trigger having a measured, nonzero size, so an unlaid-out element (e.g. a test that doesn't mock layout) is never treated as out of view."
   ],
   "compositionRules": [
     "Consumers own trigger interaction entirely - wire the trigger's own onClick (or other handler) to flip the open state passed into Popup.",
@@ -238,7 +241,7 @@
     "No hardcoded colors, spacing, or radius - use the tokens listed above.",
     "Popup is now the shared floating-position implementation - Tooltip renders through it (unstyled, alignment=topCenter) rather than maintaining its own local positioning/portal code, which it did before Popup existed."
   ],
-  "relatedComponents": ["Tooltip", "InlineMessage"],
+  "relatedComponents": ["Tooltip", "InlineMessage", "Menu", "DropdownMenu"],
   "do": [
     "Keep open state in the consumer and pass it down.",
     "Provide onOpenChange when relying on default dismissal behavior.",
@@ -262,15 +265,15 @@
     "Resolves to a fitting alignment (preferring the same alignment on the opposite side before an unrelated one) and exposes it via data-alignment.",
     "Supports a custom id and className.",
     "Applies its own visual skin by default; omits it entirely when unstyled is true.",
-    "Defaults padding to lg; applies sm/md/lg padding classes per the padding prop; applies none when unstyled is true.",
-    "Panel styling maps to the required tokens and hugs its content rather than stretching."
+    "Defaults padding to lg; applies none/sm/md/lg padding classes per the padding prop; applies none when unstyled is true.",
+    "Panel styling maps to the required tokens and hugs its content rather than stretching.",
+    "Hides the panel (visibility: hidden) once the trigger's bounding rect is fully outside the viewport on any edge, without changing open or clamping to that edge; shows it again, correctly positioned, once the trigger is back in view."
   ],
   "knownLimitations": [
     "No built-in focus management - focus trapping/restoration is left entirely to the consumer.",
     "Dark-theme shadow alpha values mirror the elevation.shadow.raised family's percentages rather than an independently re-verified dark Figma effect."
   ],
   "futureEnhancements": [
-    "Optional built-in focus-trap behavior for consumers that want it without implementing their own.",
-    "A documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists."
+    "Optional built-in focus-trap behavior for consumers that want it without implementing their own."
   ]
 }

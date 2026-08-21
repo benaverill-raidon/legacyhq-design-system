@@ -1,0 +1,139 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as DropdownMenuStories from './DropdownMenu.stories';
+
+<Meta of={DropdownMenuStories} name="Docs" />
+
+# Dropdown Menu
+
+Dropdown Menu pairs any trigger element with a Menu panel, floated and dismissed via Popup. It is
+deliberately thin: positioning and dismissal come entirely from Popup (`padding="none"`, so Menu's
+own search field and rows sit flush against Popup's card skin), and search/sectioning/selection/
+keyboard navigation come entirely from Menu. Dropdown Menu itself adds exactly one thing neither of
+those already provides: a fixed, always-opens-below alignment vocabulary
+(`'left' | 'center' | 'right'`) matching Figma's own `dropdown-menu` component exactly.
+
+<Canvas of={DropdownMenuStories.Playground} />
+
+## When to use
+
+- A click-to-open action menu anchored to a button, icon button, avatar, tag, or any other trigger.
+- Anywhere Figma's `dropdown-menu` component set is the design source - it always pairs a trigger
+  with a `menu` instance, which is exactly this composition.
+
+## When not to use
+
+- **A non-interactive hover hint.** Use Tooltip.
+- **Content that isn't a list of actions/options.** Use Popup directly with your own `content` for
+  anything that isn't Menu-shaped (a confirmation, a status message) - Dropdown Menu always renders
+  a Menu, by design.
+
+## Anatomy
+
+- **Trigger** (`children`) - any single focusable element. Figma's own component set demonstrates
+  nine trigger types (button, icon-button, avatar, link-button, several chip variants, tag, a page
+  selector) - none of them are modeled as a variant prop in code. Compose whatever trigger fits;
+  Popup clones it to attach a measurement ref and `aria-expanded`/`aria-controls`.
+- **Panel** - Popup's own default visual skin (background, border, radius, shadow), with
+  `padding="none"` so Menu's search field and rows carry all of their own edge padding, matching the
+  Figma source's dropdown-menu instance exactly (its `panelSurface`/`content`/`menu` node chain
+  measures zero outer padding).
+- **Menu** - every other prop on `DropdownMenu` (`sections`, `size`, `showSearch`,
+  `searchValue`/`onSearchChange`, `showScrollbar`, `maxHeight`, `loading`, `emptyMessage`, ...) is
+  Menu's own prop, forwarded unchanged.
+
+## Usage guidance
+
+### Just pass Menu's props directly
+
+`DropdownMenuProps` extends `MenuProps` (minus `id`/`className`, which apply to Popup's panel
+instead) - you don't construct a `<Menu>` yourself:
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<DropdownMenu
+  aria-label="Matter actions"
+  open={open}
+  onOpenChange={setOpen}
+  sections={[{ id: 'actions', items: [{ id: 'rename', label: 'Rename', onSelect: handleRename }] }]}
+>
+  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>
+</DropdownMenu>;
+```
+
+### Dropdown Menu doesn't close itself on selection
+
+Same rule as Menu: wire `onOpenChange(false)` from the selected item's own `onSelect`, since neither
+Menu nor Dropdown Menu assumes a selection should close the panel.
+
+```tsx
+sections={[{
+  id: 'actions',
+  items: [{
+    id: 'delete',
+    label: 'Delete',
+    onSelect: () => {
+      handleDelete();
+      setOpen(false);
+    },
+  }],
+}]}
+```
+
+### Alignment always opens below the trigger
+
+`alignment` (`'left' | 'center' | 'right'`, default `'left'`) maps to Popup's `bottomLeft` /
+`bottomCenter` / `bottomRight` - matching Figma's `dropdown-menu` component, which has no
+top/bottom axis at all, only left/center/right. Popup's own viewport-fit fallback still applies
+underneath: if there's no room below, it measures the remaining alignments (starting with the
+`top*` counterpart) and resolves to whichever overflows the viewport least - a capability Figma
+doesn't model, inherited for free from Popup.
+
+<Canvas of={DropdownMenuStories.Alignment} />
+
+### Any trigger works
+
+<Canvas of={DropdownMenuStories.Content} />
+
+<Canvas of={DropdownMenuStories.EdgeCases} />
+
+## Do / Don't
+
+**Do** pass Menu's own props (`sections`, `showSearch`, ...) directly to `DropdownMenu`.
+
+**Don't** try to pass arbitrary `content` the way Popup allows - Dropdown Menu always renders a
+Menu; use Popup directly for non-Menu-shaped floating content.
+
+---
+
+**Do** close the dropdown from the selected item's own `onSelect`.
+
+**Don't** expect selecting an item to close the dropdown automatically - neither Menu nor Dropdown
+Menu assumes that.
+
+## API
+
+`DropdownMenuProps` = `MenuProps` (minus `id`/`className`) plus:
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>children</code></td><td><code>React.ReactElement</code></td><td>-</td><td>Required. The single trigger element.</td></tr>
+    <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Required. Controlled visibility.</td></tr>
+    <tr><td><code>onOpenChange</code></td><td><code>(open: boolean) =&gt; void</code></td><td>-</td><td>Called with <code>false</code> on Escape or an outside click.</td></tr>
+    <tr><td><code>alignment</code></td><td><code>'left' | 'center' | 'right'</code></td><td><code>'left'</code></td><td>Maps to Popup's bottomLeft/bottomCenter/bottomRight.</td></tr>
+    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Apply to Popup's floating panel, not to Menu's root.</td></tr>
+  </tbody>
+</table>
+
+Every other prop (`sections`, `size`, `showSearch`, `searchValue`, `onSearchChange`,
+`searchPlaceholder`, `showScrollbar`, `maxHeight`, `loading`, `loadingLabel`, `emptyMessage`,
+`aria-label`, `aria-labelledby`) is `MenuProps`, forwarded to the Menu rendered inside the panel -
+see Menu's own docs.
+
+## Related components
+
+- **Popup** - the floating-panel primitive underneath, used with `padding="none"`.
+- **Menu** - the panel content, with every one of its own props forwarded through.

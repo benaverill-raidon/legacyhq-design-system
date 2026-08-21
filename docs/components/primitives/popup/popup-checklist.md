@@ -11,7 +11,8 @@ Primitive
 ### Related Components
 - Tooltip (renders through Popup with `unstyled` + `manageTriggerAria={false}`)
 - Inline Message (renders through Popup with its default styled skin + `manageTriggerAria` at its default)
-- Dropdown Menu (planned, built on Popup)
+- Menu (the panel content Dropdown Menu renders through Popup)
+- Dropdown Menu (built on Popup with `padding="none"`, wrapping a Menu panel)
 
 ---
 
@@ -39,7 +40,7 @@ dismissal semantics) instead of maintaining a second copy.
 
 ### Where will this primitive be used?
 - Inline Message
-- Dropdown Menu (planned)
+- Dropdown Menu (wraps a Menu panel, `padding="none"`)
 - Any future component needing an anchored, dismissible floating panel
 
 ### What are the most common use cases?
@@ -75,6 +76,7 @@ Yes - `children` is the single trigger element, cloned to receive a measurement 
 - bottomCenter
 
 ### Padding
+- none (0 - the consumer's own content manages all edge padding, e.g. Dropdown Menu's Menu panel)
 - sm (`--spacing-sm`)
 - md (`--spacing-md`)
 - lg (`--spacing-lg`, default, matches Figma)
@@ -100,6 +102,7 @@ the mount animation.
 Required:
 - Closed (default)
 - Open
+- Open, but hidden because the trigger has scrolled fully outside the viewport
 
 Not required:
 - Hover, active, loading - Popup is not itself interactive; the trigger and content own their own
@@ -146,7 +149,7 @@ Alignment falls back automatically near a viewport edge rather than clipping.
 None.
 
 ### What components depend on it?
-Tooltip and Inline Message. Dropdown Menu is planned to build on it too.
+Tooltip, Inline Message, and Dropdown Menu (which wraps a Menu panel).
 
 ---
 
@@ -162,7 +165,11 @@ Final implementation decisions:
 - `unstyled` (default `false`) skips Popup's own visual skin entirely, for a consumer with a
   different visual design (Tooltip).
 - `padding` (default `'lg'`) sizes just the skin's padding without touching background/border/
-  radius/shadow - for a consumer that shares Popup's skin but needs denser content (a menu's rows).
-  Ignored when `unstyled` is true.
+  radius/shadow - for a consumer that shares Popup's skin but needs denser content (a menu's rows)
+  or none at all (`'none'`, for a consumer whose content manages its own edge padding, e.g. Dropdown
+  Menu). Ignored when `unstyled` is true.
 - `manageTriggerAria` (default `true`) skips `aria-expanded`/`aria-controls` when a consumer already
   manages its own trigger ARIA (Tooltip's `aria-describedby`).
+- The panel hides itself (not `open`) once the trigger scrolls fully outside the viewport, rather
+  than clamping to the nearest edge - added after review found a dropdown menu visibly "stuck" at
+  the viewport edge once its trigger scrolled out of view entirely.

@@ -24,7 +24,7 @@
     "properties": {
       "id": { "type": "string" },
       "name": { "type": "string" },
-      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule"] },
+      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule", "organism"] },
       "category": { "type": "string" },
       "status": { "type": "string" },
       "path": { "type": "string" },

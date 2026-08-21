@@ -16,6 +16,8 @@ packages/ui/src/components/
   atoms/        # button, badge, checkbox, switch, slider, avatar, link,
                 # tag, tooltip, radio, progress-bar, spinner, label, ...
   molecules/    # composed from atoms/primitives
+  organisms/    # composed from molecules/atoms/primitives — larger, more
+                # complete UI sections (menu, dropdown-menu, ...)
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
@@ -26,7 +28,7 @@ docs/
   foundations/design-code-mapping-governance.json  # figmaSource shapes + verification method
   components/registry.json    # generated, normalized cross-component index (see below)
   components/exemplars.json   # generated, normalized cross-component exemplar index
-  components/{primitives,atoms,molecules}/<component>/
+  components/{primitives,atoms,molecules,organisms}/<component>/
     <component>.md             # usage doc: when to use, design intent,
                                 # a11y expectations, implementation constraints
     <component>-spec.md        # detailed spec
@@ -77,7 +79,7 @@ content, not just reshaped data).
 `.examples.json` (`npm run generate:exemplars`) and normalizes presence
 (fills in missing `antiExamples`/`props` defaults, never fabricates values).
 Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — 16
-of 28 components are `thin` (no anti-pattern examples, no per-example props
+of 32 components are `thin` (no anti-pattern examples, no per-example props
 map yet). See `docs/foundations/component-exemplars-governance.json` for the
 completeness backlog and the quality bar for filling one in.
 

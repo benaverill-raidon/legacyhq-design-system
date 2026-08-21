@@ -26,6 +26,10 @@
 }
 
 /* `padding` prop - separate from .panelSurface so a consumer can size Popup's own skin without touching background/border/radius/shadow. */
+.padding_none {
+  padding: 0;
+}
+
 .padding_sm {
   padding: var(--spacing-sm);
 }

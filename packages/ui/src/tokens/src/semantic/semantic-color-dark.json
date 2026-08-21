@@ -36,6 +36,11 @@
         "type": "color",
         "originalName": "color/content/brand/primary/default"
       },
+      "color-content-selected": {
+        "value": "var(--color-brand-prussian-solid-500)",
+        "type": "color",
+        "originalName": "color/content/selected"
+      },
       "color-content-brand-primary-subtle": {
         "value": "var(--color-brand-prussian-solid-700)",
         "type": "color",

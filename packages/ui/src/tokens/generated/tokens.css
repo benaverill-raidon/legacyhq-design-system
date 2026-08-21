@@ -355,6 +355,9 @@
   --component-avatar-badge-icon-size-md: var(--measurement-14);
   --component-avatar-badge-icon-size-lg: var(--measurement-16);
   --component-avatar-badge-icon-size-xl: var(--measurement-18);
+  --component-menu-width-sm: 192px;
+  --component-menu-width-md: 240px;
+  --component-menu-width-lg: 288px;
   --component-progress-bar-linear-root-size-md: var(--measurement-24);
   --component-progress-bar-linear-root-size-lg: var(--measurement-40);
   --component-progress-bar-track-size-md: var(--measurement-12);

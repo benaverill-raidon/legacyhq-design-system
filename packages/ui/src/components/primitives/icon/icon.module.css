@@ -45,6 +45,10 @@
   color: var(--color-content-brand-primary-default);
 }
 
+.color_selected {
+  color: var(--color-content-selected);
+}
+
 .color_success {
   color: var(--color-content-success);
 }

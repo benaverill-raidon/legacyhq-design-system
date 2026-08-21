@@ -1,0 +1,240 @@
+/*
+ * Menu has no background/border/shadow of its own, matching Figma's `menu` component (an empty
+ * fills/strokes array on the root) - it's pure content, meant to sit inside a surface a consumer
+ * supplies (Popup's own skin, for Dropdown Menu; a card, a sidebar panel, ...).
+ */
+.menu {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.size_sm {
+  width: var(--component-menu-width-sm);
+}
+
+.size_md {
+  width: var(--component-menu-width-md);
+}
+
+.size_lg {
+  width: var(--component-menu-width-lg);
+}
+
+.search {
+  padding: var(--spacing-none) var(--spacing-xs);
+}
+
+/*
+ * Menu's search field has no hover or focus styling at all in Figma - no underline, no background
+ * tint, just the native text cursor (menu-search's own component set only has default/focus/typing
+ * variants, no hover variant, and its text-field instance's fills/strokes are empty in every one of
+ * them). TextField's own `appearance="subtle"` still paints a colored bottom border on focus and a
+ * background tint on hover (correct for TextField generally, just not what this specific Figma
+ * instance does) - neutralized here rather than by changing TextField itself.
+ *
+ * TextField's own hover rule is `.appearance_subtle:not([data-disabled]):not(:focus-within):
+ * not([data-force-state='focus']):is(:hover, [data-force-state='hover'])` - specificity (0,5,0)
+ * (1 class + 3 :not() + 1 :is()), higher than a plain `.search [data-appearance='subtle']:hover`
+ * (0,3,0) would reach, so that alone loses regardless of CSS source order. Matching
+ * `[data-size='md']` (real - Menu's search field is always size="md") alongside two `:not()`
+ * clauses mirroring TextField's own conditions brings this to (0,6,0), which reliably wins without
+ * `!important` - same "local class plus global attribute selector" technique as Icon Tile's
+ * `.icon :global([data-size])` override, just with enough terms to clear this particular rule's
+ * unusually high specificity.
+ */
+.search
+  :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):hover {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+.search
+  :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):focus-within {
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+/* `showScrollbar` - enables scrolling once content exceeds `maxHeight`. A plain native scrollbar
+   stands in for Figma's decorative custom scrollbar thumb graphic. */
+.scrollable {
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Every section carries a leading divider, matching Figma's `<section>/list` component exactly -
+   except the very first section when there's no search field above it (see menu.tsx), which would
+   otherwise leave a border floating at the top edge with nothing above it to divide from. */
+.divider {
+  flex-shrink: 0;
+  block-size: var(--border-width-sm);
+  background: var(--color-border-default);
+}
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--spacing-xs);
+  padding-bottom: var(--spacing-sm);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-sizing: border-box;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.headingIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border: none;
+  background: transparent;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  text-align: left;
+  cursor: pointer;
+}
+
+.item:hover:not(:disabled) {
+  background: var(--color-background-neutral-overlay-hovered);
+}
+
+.item:active:not(:disabled) {
+  background: var(--color-background-neutral-overlay-pressed);
+}
+
+.item:disabled {
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+/*
+ * Selected state maps to the same brand-primary-subtle family Figma's isSelected fills resolved
+ * to exactly (#e5f6ff / #ccecff / #b3e3ff = brand.prussian.solid.100/200/300, already aliased by
+ * these semantic tokens) - no new color tokens needed.
+ *
+ * The 2px left indicator uses an inset box-shadow, not `border-left` - Figma's own stroke on this
+ * state is `strokeAlign: INSIDE` with `paddingLeft` unchanged (still spacing/md, the same as every
+ * other row), meaning the indicator paints inside the existing padding rather than adding to the
+ * row's box size. A real `border-left` would do the latter and shift content 2px to the right
+ * relative to unselected rows - `--color-border-brand-primary` resolves to the exact same primitive
+ * (brand.prussian.solid.900) Figma's stroke variable does.
+ */
+.item_selected {
+  background: var(--color-background-brand-primary-subtle-default);
+  color: var(--color-content-selected);
+  box-shadow: inset var(--border-width-md) 0 0 0 var(--color-border-brand-primary);
+}
+
+.item_selected:hover:not(:disabled) {
+  background: var(--color-background-brand-primary-subtle-hovered);
+}
+
+.item_selected:active:not(:disabled) {
+  background: var(--color-background-brand-primary-subtle-pressed);
+}
+
+/* Fixed 24px slot (--size-300), matching Figma's <elemBefore>/<elemAfter> container exactly -
+   independent of whatever's inside, so row alignment stays consistent regardless of what a
+   consumer passes as leadingElement/trailingElement. */
+.elemBefore,
+.elemAfter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  flex-grow: 1;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.titleIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  overflow: hidden;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item_selected .description {
+  color: var(--color-content-selected);
+}
+
+.item:disabled .description {
+  color: var(--color-content-disabled);
+}
+
+.loadingRow,
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  box-sizing: border-box;
+  padding: var(--spacing-lg) var(--spacing-md);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  text-align: center;
+}

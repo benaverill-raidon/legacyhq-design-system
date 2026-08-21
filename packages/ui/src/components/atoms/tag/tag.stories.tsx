@@ -25,6 +25,7 @@ const meta = {
     target: '_self',
     isRemovable: false,
     isDisabled: false,
+    isInteractive: false,
     elemBefore: undefined,
     removeLabel: undefined,
   },
@@ -36,6 +37,7 @@ const meta = {
     target: { control: 'inline-radio', options: ['_self', '_blank'] },
     isRemovable: { control: 'boolean' },
     isDisabled: { control: 'boolean' },
+    isInteractive: { control: 'boolean' },
     elemBefore: {
       control: 'select',
       options: Object.keys(elemBeforeOptions),
@@ -113,9 +115,10 @@ export const Playground: Story = {};
 /**
  * Tone is a broad enumeration (not a paired emphasis/meaning split like Button) - `default` is the
  * neutral default, `brand` ties to the product's own color, and the rest are general-purpose accent
- * tones with no fixed semantic meaning of their own. The four rows below are the fundamentally
- * different rendered forms: plain text, a native anchor, a wrapper with a remove button, and both
- * combined.
+ * tones with no fixed semantic meaning of their own. The rows below are the fundamentally different
+ * rendered forms: plain text, a native anchor, a wrapper with a remove button, both combined, and an
+ * interactive button (no Figma variant of its own - a code-only affordance for composing Tag as a
+ * focusable trigger, e.g. Tag Group's overflow indicator).
  */
 export const Variants: Story = {
   render: () => (
@@ -147,6 +150,12 @@ export const Variants: Story = {
       <Group title="Navigational + removable">
         <Tag href="/trusts/123" isRemovable onRemove={() => undefined}>
           Link + remove
+        </Tag>
+      </Group>
+
+      <Group title="Interactive (button)">
+        <Tag isInteractive onClick={() => undefined}>
+          +5 more
         </Tag>
       </Group>
     </div>
@@ -260,6 +269,36 @@ export const States: Story = {
         <Cell label="Disabled">
           <Tag isRemovable isDisabled onRemove={() => undefined}>
             Trust
+          </Tag>
+        </Cell>
+      </Group>
+
+      <Group title="Interactive (button)">
+        <Cell label="Default">
+          <Tag isInteractive onClick={() => undefined}>
+            +5 more
+          </Tag>
+        </Cell>
+        <Cell label="Hover">
+          <Tag isInteractive onClick={() => undefined} data-force-state="hover">
+            +5 more
+          </Tag>
+        </Cell>
+        <Cell label="Focus visible">
+          {/* eslint-disable-next-line jsx-a11y/no-autofocus -- intentional, documented above:
+              a static focus-visible reference for this story only, not shipped component behavior. */}
+          <Tag isInteractive onClick={() => undefined} autoFocus>
+            +5 more
+          </Tag>
+        </Cell>
+        <Cell label="Pressed">
+          <Tag isInteractive onClick={() => undefined} data-force-state="active">
+            +5 more
+          </Tag>
+        </Cell>
+        <Cell label="Disabled">
+          <Tag isInteractive isDisabled onClick={() => undefined}>
+            +5 more
           </Tag>
         </Cell>
       </Group>

@@ -47,6 +47,7 @@ export const Tag = React.memo(
       rel,
       isRemovable = false,
       isDisabled = false,
+      isInteractive = false,
       elemBefore,
       onRemove,
       removeLabel,
@@ -74,6 +75,7 @@ export const Tag = React.memo(
     );
     const sharedContent = renderTagInnerContent(elemBefore, children);
     const computedRemoveLabel = getTagRemoveLabel(removeLabel, children);
+    const isButton = isInteractive || typeof onClick === 'function';
 
     const handleNavigateClick = React.useCallback(
       (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -103,6 +105,32 @@ export const Tag = React.memo(
     );
 
     if (!href && !isRemovable) {
+      if (isButton) {
+        return (
+          <button
+            {...rest}
+            ref={forwardedRef as React.ForwardedRef<HTMLButtonElement>}
+            type="button"
+            className={mergeClassNames(
+              rootClassName,
+              styles.standalone,
+              styles.contentInteractive,
+              focusRingClassNames.focusRing,
+              focusRingClassNames.focusRingDefault,
+            )}
+            disabled={isDisabled}
+            aria-describedby={ariaDescribedBy}
+            tabIndex={tabIndex}
+            data-disabled={isDisabled ? 'true' : undefined}
+            data-size={size}
+            data-tone={tone}
+            onClick={onClick}
+          >
+            {sharedContent}
+          </button>
+        );
+      }
+
       return (
         <span
           {...rest}

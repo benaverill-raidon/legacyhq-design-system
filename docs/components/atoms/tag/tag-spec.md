@@ -83,6 +83,24 @@ A tag that links to an entity and can also be removed from the current context.
 
 This is important for LegacyHQ task and note references, where the tag body opens the entity and the remove control removes the reference.
 
+### Interactive Tag (button)
+
+A plain clickable trigger with no navigation and no remove affordance - e.g. Tag Group's overflow
+indicator, which opens a Dropdown Menu. Has no Figma variant of its own; it exists purely so Tag can
+be composed as a focusable trigger elsewhere in the system, the same reason Avatar exposes
+`isInteractive`.
+
+```tsx
+<Tag isInteractive onClick={() => setOpen(true)}>
+  +5 more
+</Tag>
+```
+
+`isInteractive` is optional - passing a plain `onClick` with no `href`/`isRemovable` is sufficient on
+its own to render the button form, matching Avatar's `isButton = isInteractive || typeof onClick ===
+'function'` gate. Set `isInteractive` explicitly when the button form is wanted independent of
+whether `onClick` is wired yet.
+
 ## Public API
 
 ```ts
@@ -108,6 +126,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
   rel?: string;
   isRemovable?: boolean;
   isDisabled?: boolean;
+  isInteractive?: boolean;
   elemBefore?: React.ReactNode;
   onRemove?: () => void;
   removeLabel?: string;
@@ -122,6 +141,7 @@ size: md
 tone: default
 isRemovable: false
 isDisabled: false
+isInteractive: false
 removeLabel: Remove tag
 ```
 
@@ -129,7 +149,7 @@ removeLabel: Remove tag
 
 The rendered semantic structure depends on props.
 
-### No href and not removable
+### No href and not removable, and not interactive
 
 Render non-interactive content.
 
@@ -137,6 +157,14 @@ Recommended root:
 
 ```tsx
 <span className={styles.root}>...</span>
+```
+
+### No href and not removable, but interactive (`isInteractive` or `onClick` provided)
+
+Render a native button - no navigation, no remove affordance, just a focusable click target.
+
+```tsx
+<button type="button" className={styles.root} onClick={onClick}>...</button>
 ```
 
 ### href and not removable
@@ -442,6 +470,11 @@ applies size class
 custom className works
 keeps the elemBefore/remove icon a constant 16px regardless of size
 supports data-force-state hover/pressed preview on both the content and remove areas
+renders a button when isInteractive is set with no href/isRemovable
+renders a button when onClick is provided with no href/isRemovable, even without isInteractive
+calls onClick when the interactive tag button is activated
+disables the interactive tag button natively when isDisabled is true
+uses the shared focus ring classes for the interactive tag button
 ```
 
 ## Future considerations
@@ -451,7 +484,11 @@ Potential future support:
 - `asChild` for router links
 - richer entity metadata
 - avatar-specific sizing rules
-- tag groups
 - max-width/truncation behavior
 
 Do not implement these unless requested.
+
+Resolved: tag groups with overflow truncation are implemented as their own organism - see
+`docs/components/organisms/tag-group/tag-group.md`. It composes Tag (including the `isInteractive`
+button form added here for its overflow trigger) and Dropdown Menu; it does not add anything to
+Tag's own props beyond `isInteractive`.

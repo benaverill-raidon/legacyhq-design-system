@@ -1,0 +1,134 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TagGroupStories from './TagGroup.stories';
+
+<Meta of={TagGroupStories} name="Docs" />
+
+# Tag Group
+
+Tag Group lays out a row of Tags that wraps as it fills, with an optional overflow tag - a "+N more"
+Tag that opens a Dropdown Menu holding whichever tags got truncated. It composes Tag and Dropdown
+Menu directly; it adds no visual styling of its own beyond the wrapping row layout.
+
+<Canvas of={TagGroupStories.Playground} />
+
+## When to use
+
+- A list of entity references, classifications, or filters that may not all fit on one line.
+- Anywhere a fixed number of tags should show inline, with the rest reachable through a "+N more"
+  affordance instead of silently overflowing or wrapping indefinitely.
+
+## When not to use
+
+- **A single tag.** Use Tag directly.
+- **A fixed, small set of tags that always fits.** `maxVisible` is optional for exactly this reason -
+  omit it and every tag renders, wrapping onto new lines as needed with no overflow tag at all.
+- **A group of Buttons.** Use Button Group.
+
+## Anatomy
+
+- **Visible tags** - the first `maxVisible` tags (or all of them, when `maxVisible` is omitted),
+  each rendered as a real `Tag` with every one of its own props (`tone`, `href`, `isRemovable`,
+  `elemBefore`, ...) forwarded through unchanged, except `size`, which Tag Group applies uniformly.
+- **Overflow tag** - present only when `tags.length` exceeds `maxVisible`. A `Tag` with
+  `isInteractive` (a plain focusable button, no navigation or remove affordance of its own) reading
+  `+${hiddenCount} more` by default, wrapped in a Dropdown Menu.
+- **Overflow panel** - a Dropdown Menu's Menu, listing every truncated tag as a row (`label` and a
+  decorative `leadingElement` from that tag's own `elemBefore`).
+
+## Usage guidance
+
+### `maxVisible` is optional - so is the overflow tag
+
+```tsx
+<TagGroup tags={tags} />
+```
+
+With no `maxVisible`, every tag renders and wraps onto new lines as the row fills - there is no
+overflow tag at all. This is the common case for a short, bounded list.
+
+```tsx
+<TagGroup tags={tags} maxVisible={10} />
+```
+
+Once `tags.length` exceeds 10, the first 10 render as tags and the rest collapse behind a
+`+${hiddenCount} more` tag.
+
+### `alignment` controls where the overflow tag sits, not which tags are visible
+
+Matches the real Figma component exactly (filed under the "Tag Group" page, though the component
+itself is named `tab-group` in Figma - a naming typo verified directly against the file, not a
+mismatch to reconcile).
+
+```tsx
+<TagGroup tags={tags} maxVisible={10} alignment="right" />
+```
+
+`left` (default) renders the overflow tag trailing, after the visible tags. `right` renders it
+leading, before them. Either way the same tags are visible and the same tags are truncated -
+`alignment` only changes render order.
+
+<Canvas of={TagGroupStories.Overflow} />
+
+### Tag Group never assumes what selecting a truncated tag means
+
+Same "never assume" rule Menu and Dropdown Menu already follow. Selecting a row in the overflow
+panel calls `onOverflowTagSelect(tag, event)` with that tag's own data - Tag Group does not
+navigate, call `onRemove`, or close the panel on its own:
+
+```tsx
+<TagGroup
+  tags={tags}
+  maxVisible={10}
+  onOverflowTagSelect={(tag) => {
+    if (tag.href) {
+      router.push(tag.href);
+    }
+  }}
+/>
+```
+
+<Canvas of={TagGroupStories.EdgeCases} />
+
+### Realistic content
+
+<Canvas of={TagGroupStories.Content} />
+
+## Do / Don't
+
+**Do** pass every tag's own props (`tone`, `href`, `isRemovable`, `onRemove`, `elemBefore`, ...)
+directly on each `TagGroupItem` - they forward straight to the rendered `Tag`.
+
+**Don't** set `size` per item - Tag Group applies one `size` uniformly, including to the overflow
+tag, matching Figma (which has no per-tag size mixing within one group).
+
+---
+
+**Do** wire `onOverflowTagSelect` when truncated tags need to be reachable (navigate, remove, etc.).
+
+**Don't** expect selecting a truncated tag to do anything on its own - same rule as a Menu item's
+`onSelect`.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>tags</code></td><td><code>TagGroupItem[]</code></td><td>-</td><td>Required. Each item is every one of Tag's own props (minus <code>size</code>/<code>children</code>/<code>isInteractive</code>) plus a required <code>id</code> and a <code>label</code> (forwarded to Tag as <code>children</code>).</td></tr>
+    <tr><td><code>maxVisible</code></td><td><code>number</code></td><td>-</td><td>Once exceeded, only the first <code>maxVisible</code> tags render - the rest are truncated behind the overflow tag. No truncation when omitted.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'sm'</code></td><td>Applied uniformly to every tag, including the overflow tag.</td></tr>
+    <tr><td><code>alignment</code></td><td><code>'left' | 'right'</code></td><td><code>'left'</code></td><td>Where the overflow tag renders - trailing (<code>left</code>) or leading (<code>right</code>). Does not change which tags are visible.</td></tr>
+    <tr><td><code>overflowLabel</code></td><td><code>(hiddenCount: number) =&gt; ReactNode</code></td><td><code>(n) =&gt; `+${n} more`</code></td><td>The overflow tag's text.</td></tr>
+    <tr><td><code>overflowMenuAriaLabel</code></td><td><code>string</code></td><td><code>`${hiddenCount} more tags`</code></td><td>Accessible name for the overflow Menu panel.</td></tr>
+    <tr><td><code>onOverflowTagSelect</code></td><td><code>(tag: TagGroupItem, event) =&gt; void</code></td><td>-</td><td>Called when a truncated tag is selected from the overflow panel.</td></tr>
+    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Applied to the root row element.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Tag** - every visible tag and the overflow tag itself; the overflow tag's `isInteractive`
+  button form was added to Tag specifically to support this composition.
+- **Dropdown Menu** - the overflow tag's floating panel.
+- **Menu** - the overflow panel's content, one row per truncated tag.

@@ -10,7 +10,10 @@
     "componentSetNodeId": "1698:73567",
     "componentName": "tag",
     "variantCount": 208,
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-08-06",
+    "apiAdaptationNotes": [
+      "isInteractive has no corresponding Figma variant - added 2026-08-20 so Tag can be composed as a plain focusable button trigger (no navigation, no remove affordance) elsewhere in the system. Gated as isInteractive || typeof onClick === 'function', the same pattern Avatar already uses for its own isInteractive prop. First consumer: Tag Group's '+N more' overflow tag, which opens a Dropdown Menu on click."
+    ]
   },
   "useCases": [
     "Entity references",
@@ -68,12 +71,14 @@
   "keyboardInteraction": [
     "Enter activates link",
     "Space/Enter activates remove button",
-    "Tab navigates independently between link and remove button"
+    "Tab navigates independently between link and remove button",
+    "Space/Enter activates the interactive tag button when isInteractive (or onClick with no href/isRemovable) is set - native button behavior, no custom key handling"
   ],
   "behaviorRules": [
     "Navigation and removal are separate interactive regions.",
     "Remove button uses independent hover, press, and focus states.",
-    "Tag body uses tone-specific interaction states."
+    "Tag body uses tone-specific interaction states.",
+    "When there is no href and isRemovable is false, isInteractive (or a plain onClick) renders a native button instead of a non-interactive span - no navigation, no remove affordance, just a focusable click target."
   ],
   "compositionRules": [
     "May contain icon.",
@@ -110,6 +115,7 @@
     "Correct tone mapping",
     "Correct sizing",
     "Visible focus",
-    "Independent interaction states"
+    "Independent interaction states",
+    "Renders a native button (not a span) when isInteractive or onClick is set with no href/isRemovable"
   ]
 }

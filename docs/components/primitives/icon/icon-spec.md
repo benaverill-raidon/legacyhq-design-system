@@ -180,6 +180,7 @@ Generated icon components should:
 | subtle | `--color-content-subtle` |
 | inverse | `--color-content-inverse` |
 | brand | `--color-content-brand-primary-default` |
+| selected | `--color-content-selected` |
 | success | `--color-content-success` |
 | warning | `--color-content-warning` |
 | error | `--color-content-error` |
@@ -219,6 +220,7 @@ export type IconColor =
   | 'subtle'
   | 'inverse'
   | 'brand'
+  | 'selected'
   | 'success'
   | 'warning'
   | 'error'

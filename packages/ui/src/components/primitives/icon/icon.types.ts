@@ -8,6 +8,7 @@ export type IconColor =
   | 'subtle'
   | 'inverse'
   | 'brand'
+  | 'selected'
   | 'success'
   | 'warning'
   | 'error'

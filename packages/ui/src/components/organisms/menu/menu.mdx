@@ -1,0 +1,228 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as MenuStories from './Menu.stories';
+
+<Meta of={MenuStories} name="Docs" />
+
+# Menu
+
+Menu is a searchable, sectioned list of interactive rows - the panel content Dropdown Menu renders
+through Popup, but usable on its own anywhere a floating or embedded list of actions/options is
+needed. It has no background, border, or shadow of its own (matching Figma's `menu` component
+exactly, which has empty `fills`/`strokes`) - it's pure content, meant to sit inside a surface the
+consumer supplies.
+
+<Canvas of={MenuStories.Playground} />
+
+## When to use
+
+- The content of a Dropdown Menu's floating panel.
+- A standalone list of actions or options embedded in a sidebar, card, or other surface you already
+  control.
+
+## When not to use
+
+- **As a floating panel by itself.** Menu has no positioning or dismissal logic - pair it with
+  Popup (directly, or via Dropdown Menu) for a floating menu anchored to a trigger.
+- **For a persistent navigation list with its own always-visible surface and active-route
+  highlighting.** That's a different, still-unbuilt component - Menu's selection model is
+  transient/action-oriented, not route-based.
+
+## Anatomy
+
+- **Search** (`showSearch`, default `true`) - a `size="md"`, `appearance="subtle"` `TextField`
+  with no leading icon and a trailing clear button once there's a value - matching Figma's
+  `menu-search` instance exactly (`size: md`, `tone: subtle`, no `elemBeforeInput`). `subtle`
+  alone still shows a colored focus underline and hover background; Menu additionally strips both
+  in CSS to match this specific instance, which has neither in any state. Filters items by a
+  case-insensitive substring match against each item's `label` and `description` (only when
+  they're plain strings). Autofocused whenever it's rendered.
+- **Sections** - each with an optional `heading`, and a leading divider above it - including the
+  first section, matching Figma's `<section>/list` component exactly (every section carries its own
+  leading separator).
+- **Items** - a row per `MenuItem`: an optional `leadingElement`, the label (with an optional
+  smaller `titleLeadingElement` right before it), an optional `description` below the label, and an
+  optional `trailingElement`.
+
+## Usage guidance
+
+### Data-driven, not a compound component
+
+Unlike some menu implementations, Menu takes a `sections` prop (an array of `{ id, heading?, items
+}`), not `<Menu.Item>` children. Each `MenuItem` describes exactly one row:
+
+```tsx
+<Menu
+  aria-label="Matter actions"
+  sections={[
+    {
+      id: 'actions',
+      heading: 'Actions',
+      items: [
+        { id: 'rename', label: 'Rename', leadingElement: <EditIcon spacing="spacious" decorative />, onSelect: handleRename },
+        { id: 'delete', label: 'Delete', leadingElement: <DeleteIcon spacing="spacious" decorative />, onSelect: handleDelete },
+      ],
+    },
+  ]}
+/>
+```
+
+### Rows are native buttons - keep `leadingElement` decorative
+
+Each row renders as a real `<button role="menuitem">` (or `menuitemcheckbox`/`menuitemradio` - see
+below). Never pass a genuinely interactive control (a real `Checkbox`, `Radio`, or another button)
+as `leadingElement` or `trailingElement` - nesting a focusable `<input>`/`<button>` inside another
+`<button>` is invalid HTML, and it would create a second, conflicting way to activate the row. Use a
+plain icon, or a purely decorative glyph (`aria-hidden`, no `tabIndex`) instead - the row's own
+`selected`/`selectionType` already carries the real ARIA semantics. This matches Figma exactly, not
+just a code-side workaround: its own checkbox/radio row demos swap in icon glyphs
+(`CheckboxFillIcon`/`CheckboxEmptyIcon`, `RadioCheckedIcon`/`RadioUncheckedIcon`), never a real form
+control.
+
+Every `leadingElement`/`trailingElement` icon should carry `spacing="spacious"` (size stays at
+Icon's own `md` default) - Menu's `elemBefore`/`elemAfter` slot is a fixed 24px box regardless of
+content, and `spacing="spacious"` is what centers a 16px icon inside it. Without it, the icon
+renders undersized and pinned to one corner instead of filling the slot the way Figma's own icon
+(`Size: md`, `spacing: spacious (24px)`) does:
+
+```tsx
+leadingElement: item.selected
+  ? <CheckboxFillIcon spacing="spacious" color="selected" decorative />
+  : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />
+```
+
+This isn't specific to checkbox/radio rows: **any** `leadingElement` icon should track `selected`
+the same way - `color="selected"` when the row is selected, `color="default"` when it isn't -
+verified directly against Figma on a plain, non-checkbox icon (it binds to the exact same
+`color/content/selected` variable the row's own text does under `isSelected=true`):
+
+```tsx
+leadingElement: <EditIcon spacing="spacious" color={item.selected ? 'selected' : 'default'} decorative />
+```
+
+<Canvas of={MenuStories.Content} />
+
+### Selection is per-item, not a menu-level mode
+
+There's no `selectionMode` prop on `Menu` itself. Each `MenuItem` independently carries `selected`
+and, optionally, `selectionType` (`'checkbox' | 'radio'`):
+
+- Omit both for a plain action row (`role="menuitem"`, no `aria-checked`) - most rows.
+- Set `selected` with `selectionType` for a row that's part of a checkbox-style (multi) or
+  radio-style (single) choice - the row's role becomes `menuitemcheckbox`/`menuitemradio` and
+  `aria-checked` reflects `selected`. Enforcing single-selection across a radio-style group (only one
+  `selected: true` at a time) is the consumer's responsibility - Menu renders exactly what it's
+  given.
+- Set `selected` alone (no `selectionType`) to just apply the selected visual treatment to a plain
+  action row, with no `aria-checked` implication.
+
+Every selected row's visual treatment - background tint, brand-colored text, and a 2px left
+indicator - is fixed and matches Figma exactly; it isn't configurable per instance. The indicator
+is painted as an inset `box-shadow`, not a real border, so it doesn't add to the row's box size or
+shift its padding relative to unselected rows.
+
+### Menu does not close itself
+
+Like Popup, Menu has no idea whether it's inside a Dropdown Menu, a sidebar, or somewhere else - it
+never closes anything on `onSelect`. If you need the containing Dropdown Menu to close after a
+selection, do that from the item's own `onSelect`:
+
+```tsx
+onSelect: () => {
+  handleRename();
+  setOpen(false);
+}
+```
+
+### Keyboard navigation
+
+Arrow Up/Down move a roving `tabIndex` (and DOM focus) between enabled, visible rows, wrapping at
+either end; Home/End jump to the first/last. Only one row is ever a tab stop at a time - the rest
+are `tabIndex={-1}`, the standard roving-tabindex pattern for composite ARIA widgets. A disabled row
+is skipped entirely, the same way `enabledIds` excludes it from the list arrow navigation cycles
+through. Enter/Space activate a focused row for free, since it's a real `<button>`.
+
+Search filtering can reorder or remove the roving tab stop entirely - Menu falls back to the first
+remaining enabled row automatically rather than leaving focus tracking pointed at a row that's no
+longer visible.
+
+<Canvas of={MenuStories.EdgeCases} />
+
+### Sizing
+
+`size` (`'sm' | 'md' | 'lg'`, default `'sm'`) sets the panel's fixed width only
+(`--component-menu-width-sm/md/lg`: 192/240/288px, matching Figma exactly) - row height always
+follows its content, never `size`.
+
+<Canvas of={MenuStories.Sizes} />
+
+## Do / Don't
+
+**Do** keep `leadingElement`/`trailingElement` decorative and let `selected`/`selectionType` carry
+the real state.
+
+```tsx
+{
+  id: 'a',
+  label: 'Show drafts',
+  selectionType: 'checkbox',
+  selected: checked,
+  leadingElement: checked
+    ? <CheckboxFillIcon spacing="spacious" color="selected" decorative />
+    : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />,
+}
+```
+
+**Don't** nest a real `Checkbox`/`Radio`/`Button` inside a row - it renders a focusable control
+inside another one, which is invalid HTML and creates two conflicting activation paths.
+
+---
+
+**Do** close a containing Dropdown Menu from the item's own `onSelect`, not from Menu.
+
+**Don't** expect Menu to manage open/close state on selection - it has no idea it's inside a
+Dropdown Menu at all.
+
+## API
+
+### `MenuProps`
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>sections</code></td><td><code>MenuSection[]</code></td><td>-</td><td>Required. Rendered top to bottom, each with a leading divider.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'sm'</code></td><td>Panel width only - row height follows content.</td></tr>
+    <tr><td><code>showSearch</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Shows the search field, matching Figma's own default.</td></tr>
+    <tr><td><code>searchValue</code> / <code>onSearchChange</code></td><td><code>string</code> / <code>(value: string) =&gt; void</code></td><td>-</td><td>Controlled search text. Filters by a substring match on plain-string <code>label</code>/<code>description</code>.</td></tr>
+    <tr><td><code>searchPlaceholder</code></td><td><code>string</code></td><td>-</td><td>Also used as the search field's <code>aria-label</code> when set.</td></tr>
+    <tr><td><code>showScrollbar</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Enables scrolling (native scrollbar) once content exceeds <code>maxHeight</code>.</td></tr>
+    <tr><td><code>maxHeight</code></td><td><code>number | string</code></td><td>-</td><td>Caps the sections area's height before it scrolls.</td></tr>
+    <tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Replaces sections with a loading row. Search stays visible/interactive.</td></tr>
+    <tr><td><code>emptyMessage</code></td><td><code>React.ReactNode</code></td><td><code>'No results'</code></td><td>Shown when search filters out every item.</td></tr>
+  </tbody>
+</table>
+
+### `MenuItem`
+
+<table>
+  <thead>
+    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>id</code></td><td><code>string</code></td><td>Required. React key and roving-tabindex identity.</td></tr>
+    <tr><td><code>label</code></td><td><code>React.ReactNode</code></td><td>Required. Searchable when a plain string.</td></tr>
+    <tr><td><code>description</code></td><td><code>React.ReactNode</code></td><td>Searchable when a plain string.</td></tr>
+    <tr><td><code>leadingElement</code> / <code>trailingElement</code></td><td><code>React.ReactNode</code></td><td>Decorative only - see Do/Don't above.</td></tr>
+    <tr><td><code>titleLeadingElement</code></td><td><code>React.ReactNode</code></td><td>A smaller icon immediately before the label, distinct from <code>leadingElement</code>. Rare.</td></tr>
+    <tr><td><code>selected</code> / <code>selectionType</code></td><td><code>boolean</code> / <code>'checkbox' | 'radio'</code></td><td>See Selection above.</td></tr>
+    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td>Native <code>disabled</code> on the row's <code>&lt;button&gt;</code>; excluded from keyboard navigation.</td></tr>
+    <tr><td><code>onSelect</code></td><td><code>(event) =&gt; void</code></td><td>Called on click or Enter/Space (free, via the native button). Never called when <code>disabled</code>.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Popup** - the floating-panel primitive Dropdown Menu renders Menu through.
+- **Dropdown Menu** - a trigger paired with a Menu panel, via Popup.
+- **TextField** - composed directly for the search field.

@@ -6,7 +6,7 @@ import { Popup } from './popup';
 import type { PopupAlignment, PopupPadding } from './popup.types';
 
 const alignments: PopupAlignment[] = ['topLeft', 'topRight', 'topCenter', 'bottomLeft', 'bottomRight', 'bottomCenter'];
-const paddings: PopupPadding[] = ['sm', 'md', 'lg'];
+const paddings: PopupPadding[] = ['none', 'sm', 'md', 'lg'];
 
 const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)', color: 'var(--color-content-default)' };
 

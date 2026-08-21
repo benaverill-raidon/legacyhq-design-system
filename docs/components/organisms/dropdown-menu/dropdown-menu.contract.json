@@ -1,0 +1,124 @@
+{
+  "name": "DropdownMenu",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Pairs any trigger element with a floating Menu panel.",
+  "intent": "A thin composition of Popup (positioning/dismissal) and Menu (search/sectioning/selection/keyboard nav) preconfigured for the click-to-open action-menu use case, rather than a third independent implementation of either concern.",
+  "sourceFiles": {
+    "component": "dropdown-menu.tsx",
+    "types": "dropdown-menu.types.ts",
+    "stories": "DropdownMenu.stories.tsx",
+    "tests": "DropdownMenu.test.tsx",
+    "index": "index.ts",
+    "note": "No dropdown-menu.module.css - the component has no visual styling of its own; every visible pixel comes from Popup's panel skin (padding=\"none\") and Menu's own row/section styles."
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4580:56762",
+    "componentName": "dropdown-menu",
+    "variantCount": 35,
+    "verifiedAt": "2026-08-19",
+    "structure": "Variants cross `trigger` (avatar/icon-button/button/link-button/chip-base/chip-operator/chip-value/tag/page-selector - 9 distinct trigger types, default avatar) x `alignment` (left/center/right, default left) x `isOpen` (true/false, not fully crossed with alignment). Every variant instantiates the same `popup` component (the exact component set Popup wraps) with a `trigger` SLOT holding the trigger instance, and a `surface` SLOT holding `figma-parts / panelSurface` (Popup's own skin) whose own `content` SLOT holds a `menu` instance. The measured padding around that nested menu instance is 0 on every axis.",
+    "apiAdaptationNotes": [
+      "Figma's 9-value `trigger` variant became a generic `children: React.ReactElement` prop, not a variant enum - matching Popup's own `children` model (\"the single trigger element\") rather than hardcoding a closed set of trigger shapes. Any focusable element works; the 9 Figma values are demonstrated in Storybook's Content story as examples, not enforced as an allowed list.",
+      "Figma's `alignment` (left/center/right) maps to Popup's `bottomLeft`/`bottomCenter`/`bottomRight` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
+      "`isOpen` became the existing `open`/`onOpenChange` controlled pair (Popup's own prop names), not a new prop - same native-attribute-first reasoning as Popup's own isOpen->open adaptation.",
+      "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
+      "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
+    ]
+  },
+  "useCases": [
+    "A click-to-open action menu anchored to a button, icon button, avatar, tag, chip, or other trigger"
+  ],
+  "antiPatterns": [
+    "A non-interactive hover hint - use Tooltip",
+    "Floating content that isn't a list of actions/options - use Popup directly with your own content"
+  ],
+  "anatomy": [
+    { "name": "trigger", "description": "The single child element (children) - any focusable control. Cloned by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls." },
+    { "name": "panel", "description": "Popup's own default visual skin (background/border/radius/shadow), rendered with padding=\"none\"." },
+    { "name": "menu", "description": "A Menu, rendered with every DropdownMenu prop besides children/open/onOpenChange/alignment/id/className forwarded to it unchanged." }
+  ],
+  "props": {
+    "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "The single trigger element." },
+    "open": { "type": "boolean", "required": true, "default": null, "description": "Controlled visibility." },
+    "onOpenChange": { "type": "(open: boolean) => void", "required": false, "default": null, "description": "Called with false on Escape or an outside click." },
+    "alignment": { "type": "DropdownMenuAlignment", "required": false, "default": "left", "enum": ["left", "center", "right"], "description": "Maps to Popup's bottomLeft/bottomCenter/bottomRight - always opens below the trigger." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to Popup's floating panel, not to Menu's root." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with Popup's panel class list, not with Menu's root." },
+    "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "Forwarded to Menu unchanged - see menu.contract.json." },
+    "size": { "type": "MenuSize", "required": false, "default": "sm", "enum": ["sm", "md", "lg"], "description": "Forwarded to Menu." },
+    "showSearch": { "type": "boolean", "required": false, "default": true, "description": "Forwarded to Menu." },
+    "searchValue": { "type": "string", "required": false, "default": null, "description": "Forwarded to Menu." },
+    "onSearchChange": { "type": "(value: string) => void", "required": false, "default": null, "description": "Forwarded to Menu." },
+    "searchPlaceholder": { "type": "string", "required": false, "default": null, "description": "Forwarded to Menu." },
+    "showScrollbar": { "type": "boolean", "required": false, "default": true, "description": "Forwarded to Menu." },
+    "maxHeight": { "type": "number | string", "required": false, "default": null, "description": "Forwarded to Menu." },
+    "loading": { "type": "boolean", "required": false, "default": false, "description": "Forwarded to Menu." },
+    "loadingLabel": { "type": "React.ReactNode", "required": false, "default": "Loading…", "description": "Forwarded to Menu." },
+    "emptyMessage": { "type": "React.ReactNode", "required": false, "default": "No results", "description": "Forwarded to Menu." },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "Forwarded to Menu's role=\"menu\" container." },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Forwarded to Menu's role=\"menu\" container." }
+  },
+  "sizes": ["sm", "md", "lg"],
+  "slots": [],
+  "variants": {
+    "alignment": { "left": { "purpose": "Opens below the trigger, left edges aligned - matches Figma's default." }, "center": { "purpose": "Opens below the trigger, horizontally centered." }, "right": { "purpose": "Opens below the trigger, right edges aligned." } }
+  },
+  "states": ["closed", "open"],
+  "accessibility": {
+    "triggeredBy": ["consumer-controlled - same as Popup, Dropdown Menu attaches no open/close handler itself"],
+    "ariaExpanded": "set on the trigger by Popup, reflecting open",
+    "ariaControls": "set on the trigger by Popup, pointing at the panel id while open",
+    "role": "menu (set by the inner Menu, not by DropdownMenu/Popup directly)",
+    "focusManagement": "left to the consumer, same as Popup and Menu - neither moves focus into the panel on open"
+  },
+  "behaviorRules": [
+    "open is a required, fully controlled prop, inherited from Popup - no internal open state, no defaultOpen.",
+    "Always renders a Menu as Popup's content - there is no way to pass arbitrary non-Menu content (use Popup directly for that).",
+    "alignment only ever resolves to a bottom* Popup alignment as the preference - Popup's own top*/opposite-side fallback still applies if that overflows the viewport.",
+    "Never calls onOpenChange from a Menu item's onSelect - selection closing the dropdown is entirely the consumer's responsibility, wired from within each item's own onSelect.",
+    "Renders nothing but the trigger when open is false, identical to Popup."
+  ],
+  "compositionRules": [
+    "Pass Menu's own props (sections, showSearch, etc.) directly to DropdownMenu - do not construct a separate <Menu> and try to pass it as content.",
+    "Wire onOpenChange(false) from inside a selected item's own onSelect when a selection should close the dropdown."
+  ],
+  "contentRules": [],
+  "responsiveRules": [
+    "Inherits Popup's resize/scroll-driven repositioning identically across breakpoints.",
+    "Storybook-preview caveat, not a component defect: scrolling Storybook's OUTER docs/canvas page (rather than the story iframe's own content) will not reposition an open panel, because `position: fixed` is fixed to the iframe's own viewport - that iframe's `window` never receives a scroll event for the outer page's scroll, so Popup's listener (correctly implemented - verified directly by dispatching a scroll event and observing it recalculate) has no signal to respond to. Affects Tooltip/Inline Message identically, since all three share Popup's mechanism. Does not occur in the real app, which isn't iframe-embedded."
+  ],
+  "themeRules": [
+    "Inherits Popup's and Menu's token-driven theming - no component-level light/dark branching of its own."
+  ],
+  "tokens": {
+    "note": "DropdownMenu introduces no tokens of its own - every visible value comes from Popup (background/border/radius/shadow) and Menu (row/section/selection colors, spacing, typography, per-size width). See popup.contract.json and menu.contract.json."
+  },
+  "relatedComponents": ["Popup", "Menu"],
+  "do": [
+    "Pass Menu's own props directly to DropdownMenu rather than constructing a separate Menu element.",
+    "Close the dropdown from a selected item's own onSelect."
+  ],
+  "dont": [
+    "Do not expect a content prop for non-Menu floating content - use Popup directly instead.",
+    "Do not expect selecting an item to close the dropdown automatically."
+  ],
+  "acceptanceCriteria": [
+    "Renders only the trigger when open is false; renders the trigger plus a role=\"menu\" panel when open is true.",
+    "Sets aria-expanded/aria-controls on the trigger, reflecting open (inherited from Popup).",
+    "Maps alignment left/center/right to Popup's bottomLeft/bottomCenter/bottomRight exactly, defaulting to left.",
+    "Calls onOpenChange(false) on Escape and on an outside click by default (inherited from Popup); does not call it for a click on a menu item itself.",
+    "Forwards every Menu prop (sections, size, showSearch, searchValue/onSearchChange, searchPlaceholder, showScrollbar, maxHeight, loading, loadingLabel, emptyMessage, aria-label, aria-labelledby) to the rendered Menu unchanged.",
+    "Renders the panel with Popup's default visual skin and padding=\"none\", so Menu sits flush against it.",
+    "Supports a custom id/className on the panel (Popup's, not Menu's root)."
+  ],
+  "knownLimitations": [
+    "No support for non-Menu panel content - a consumer needing that composes Popup directly instead.",
+    "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead, no built-in focus-first-item-on-open)."
+  ],
+  "futureEnhancements": [
+    "An optional built-in 'focus the first Menu item on open' behavior, once Menu itself grows an imperative or prop-driven way to request it."
+  ]
+}

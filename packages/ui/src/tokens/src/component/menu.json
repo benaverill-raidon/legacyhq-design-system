@@ -1,0 +1,11 @@
+{
+  "component": {
+    "menu": {
+      "width": {
+        "sm": { "value": "192px", "type": "dimension" },
+        "md": { "value": "240px", "type": "dimension" },
+        "lg": { "value": "288px", "type": "dimension" }
+      }
+    }
+  }
+}

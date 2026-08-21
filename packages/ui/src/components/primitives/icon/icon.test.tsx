@@ -10,6 +10,7 @@ const colors: IconColor[] = [
   'subtle',
   'inverse',
   'brand',
+  'selected',
   'success',
   'warning',
   'error',

@@ -1,0 +1,204 @@
+{
+  "name": "Menu",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "A searchable, sectioned list of interactive rows.",
+  "intent": "Give Dropdown Menu (and any other floating or embedded action/option list) a shared, data-driven list implementation instead of each hand-rolling row markup, search filtering, and roving-tabindex keyboard navigation independently.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1700:35137",
+    "componentName": "menu",
+    "variantCount": 9,
+    "verifiedAt": "2026-08-19",
+    "structure": "Variants cross `menus` (1/2/3 - number of sections shown in the design canvas) with `size` (sm/md/lg - panel width only, 192/240/288px; row height is unaffected). Two boolean component properties, `showSearch` and `showScrollbar`, both default true. Each section is a `code-parts / <section>/list` instance with its own leading `separator` (a divider) and a `Slot` filled by `code-parts / <menu-item>` instances - code renders that leading divider above every section except the very first when showSearch is false, a design-review correction (a divider with nothing above it to divide from otherwise). The section's own Container padding is asymmetric - spacing/xs (4px) top, spacing/sm (8px) bottom, not a uniform padding-block - confirmed directly against a live-edited Figma instance. The root `menu` component has empty `fills`/`strokes` - no background/border/shadow of its own.",
+    "subComponentsVerified": [
+      {
+        "name": "menu-item",
+        "componentSetNodeId": "1700:34589",
+        "note": "state (default/hover/press/focus) x isSelected (false/true) x isDisabled (false/true), 9 of 16 combinations modeled. Component properties: descriptionText, showDescription, showElemBefore, showElemAfter, optionText, showTitleElemBefore."
+      },
+      {
+        "name": "menu-search",
+        "componentSetNodeId": "3628:17489",
+        "note": "A `text-field` instance, `size=\"md\"` and `tone=\"subtle\"` - mapped to code as a composed TextField with `size=\"md\"` `appearance=\"subtle\"` (TextField's own prop names for the same concepts), not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `appearance=\"subtle\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override, no `!important`) rather than relying on `appearance=\"subtle\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
+      },
+      {
+        "name": "heading-item",
+        "componentNodeId": "1700:34323",
+        "note": "elemBefore slot + {title} text - mapped to code as `section.headingLeadingElement` + `section.heading`."
+      }
+    ],
+    "apiAdaptationNotes": [
+      "Figma models menu-item content as free-floating slots inside a component-set variant grid (state x isSelected x isDisabled), not a data structure. Code inverts this into a `sections: MenuSection[]` prop - each item a plain object (`MenuItem`) - so a real list of N items doesn't require N manually-composed component instances.",
+      "leadingElement/trailingElement are typed as arbitrary React.ReactNode but are documented as decorative-only in code: a real interactive Checkbox/Radio/Button nested inside the row's own <button> would be invalid HTML. This matches Figma exactly, not just a code-side precaution - the file's own 'checkboxes'/'radios' slot-content demos (menu-item Parts group) swap elemBefore's nested icon INSTANCE_SWAP property to the icon components `checkbox_fill`/`checkbox-empty`/`radio_checked`/`radio_unchecked` (colored `color/content/brand/primary/default` when checked, `color/content/subtle` when not - i.e. IconColor `brand`/`subtle`), never to a real Checkbox/Radio component. Selection semantics are carried by the row's own `selected`/`selectionType`, not by whatever's rendered in the slot. Every elemBefore icon (including plain, non-selectable action rows) uses the icon wrapper's `Size: md` + `spacing: spacious (24px)` component properties - code maps this to Icon's `spacing=\"spacious\"` (size=\"md\" is already Icon's own default).",
+      "selectionType ('checkbox' | 'radio') is a code-level addition with no direct Figma component property - inferred from the same 'checkboxes'/'radios' slot-content demos above, which show real-world compositions where isSelected pairs with a checkbox/radio-shaped row. Modeled per-item rather than as a menu-level 'selectionMode' so a single menu can mix plain action rows with a selectable group.",
+      "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-brand-primary`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
+      "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
+      "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
+    ]
+  },
+  "useCases": [
+    "The floating panel content of a Dropdown Menu",
+    "A standalone list of actions or options embedded in a sidebar, card, or other surface the consumer already controls"
+  ],
+  "antiPatterns": [
+    "Using Menu as a floating panel by itself - it has no positioning/dismissal logic of its own; pair it with Popup (directly, or via Dropdown Menu)",
+    "A persistent navigation list with route-based active-state highlighting - Menu's selection model is transient/action-oriented",
+    "Nesting a real interactive control (Checkbox, Radio, Button) inside leadingElement/trailingElement"
+  ],
+  "anatomy": [
+    { "name": "search", "description": "Optional TextField (size=\"md\", appearance=\"subtle\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)." },
+    { "name": "section", "description": "One per entry in `sections` - a leading divider, an optional heading row, and its list of items." },
+    { "name": "divider", "description": "Renders above every section, matching Figma's per-section leading separator - except the very first section when showSearch is false, since a divider there would float at the top edge with nothing above it to divide from.", "group": "section" },
+    { "name": "heading", "description": "Optional section label with an optional leading icon.", "group": "section" },
+    { "name": "item", "description": "One per entry in a section's `items` - a native button row with optional leading/title-leading/trailing slots, a label, and an optional description." },
+    { "name": "loading-row", "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel." },
+    { "name": "empty-message", "description": "Shown in place of sections when search filters out every item." }
+  ],
+  "props": {
+    "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "Rendered top to bottom." },
+    "size": { "type": "MenuSize", "required": false, "default": "sm", "enum": ["sm", "md", "lg"], "description": "Panel width only (192/240/288px) - row height always follows content." },
+    "showSearch": { "type": "boolean", "required": false, "default": true, "description": "Matches Figma's own declared default. When true, the search field is autoFocused on mount - since Popup only mounts Menu while a Dropdown Menu is open, this focuses the search field every time the containing menu opens, with no extra wiring needed." },
+    "searchValue": { "type": "string", "required": false, "default": null, "description": "Controlled search text." },
+    "onSearchChange": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called on every search field change." },
+    "searchPlaceholder": { "type": "string", "required": false, "default": null, "description": "Also used as the search field's aria-label when set." },
+    "showScrollbar": { "type": "boolean", "required": false, "default": true, "description": "Matches Figma's own declared default. Maps to native overflow, not a custom scrollbar widget." },
+    "maxHeight": { "type": "number | string", "required": false, "default": null, "description": "Caps the sections area's height before it scrolls." },
+    "loading": { "type": "boolean", "required": false, "default": false, "description": "Replaces sections with a loading row." },
+    "loadingLabel": { "type": "React.ReactNode", "required": false, "default": "Loading…", "description": "" },
+    "emptyMessage": { "type": "React.ReactNode", "required": false, "default": "No results", "description": "Shown when search filters out every item." },
+    "id": { "type": "string", "required": false, "default": null, "description": "" },
+    "className": { "type": "string", "required": false, "default": null, "description": "" },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "" },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "" }
+  },
+  "sizes": ["sm", "md", "lg"],
+  "slots": [
+    { "name": "leadingElement", "supports": ["decorative icon or glyph only - never a real interactive control"] },
+    { "name": "titleLeadingElement", "supports": ["decorative icon only"] },
+    { "name": "trailingElement", "supports": ["decorative icon or glyph only - never a real interactive control"] },
+    { "name": "headingLeadingElement", "supports": ["decorative icon only"] }
+  ],
+  "variants": {
+    "size": { "sm": { "purpose": "192px panel width, matching Figma's default variant." }, "md": { "purpose": "240px panel width." }, "lg": { "purpose": "288px panel width." } }
+  },
+  "states": ["default", "hover", "press", "focus", "selected", "disabled", "loading", "empty"],
+  "accessibility": {
+    "role": "menu (on the sections container)",
+    "itemRoles": ["menuitem (default)", "menuitemcheckbox (selectionType: 'checkbox')", "menuitemradio (selectionType: 'radio')"],
+    "keyboardInteraction": [
+      "ArrowDown/ArrowUp move a roving tabIndex (and DOM focus) between enabled, visible items, wrapping at either end.",
+      "Home/End jump to the first/last enabled, visible item.",
+      "Enter/Space activate the focused item for free - it's a real <button>.",
+      "A disabled item is excluded entirely from the roving-tabindex cycle."
+    ],
+    "requirements": [
+      "Every rendered item is a real <button role=\"menuitem\" | \"menuitemcheckbox\" | \"menuitemradio\">, so Enter/Space activation and :disabled semantics are native, not simulated.",
+      "aria-checked is set only when selectionType is provided - plain action rows with just `selected` never get a stray aria-checked.",
+      "Only one item at a time carries tabIndex={0}; every other item is tabIndex={-1} (roving-tabindex pattern) - the container itself carries tabIndex={-1} as a non-tab-reachable fallback focus target.",
+      "leadingElement/trailingElement/titleLeadingElement/headingLeadingElement are always rendered with aria-hidden=\"true\" - the row's own accessible name comes from its text content, never from these slots."
+    ]
+  },
+  "behaviorRules": [
+    "sections is required - Menu renders an empty (but structurally valid) menu container when given an empty array, rather than refusing to render.",
+    "Search filtering is controlled: Menu computes the filtered view from searchValue on every render, but never mutates or owns search state itself - the consumer wires onSearchChange.",
+    "An item is only filtered out when its label (and description, if present) are plain strings that fail a case-insensitive substring match against searchValue - an item with non-string content for both is always kept visible rather than silently disappearing from a search Menu has no way to evaluate.",
+    "A section with zero visible items after filtering is omitted entirely (heading and divider included), not rendered empty.",
+    "Menu never closes anything or manages any 'open' state - onSelect is the only signal it gives back; a containing Dropdown Menu closes itself from the item's own onSelect, not from Menu.",
+    "The roving-tabindex active id falls back to the first remaining enabled, visible item automatically whenever the previously-active one is filtered out, disabled, or removed - derived from render, not synced via an effect.",
+    "The search field is autoFocused whenever it's rendered (showSearch=true) - since it only ever mounts while the containing Dropdown Menu is open (Popup unmounts its content while closed), this is equivalent to focusing search every time the menu opens, without Menu needing to know anything about 'open' itself."
+  ],
+  "compositionRules": [
+    "Compose leadingElement/trailingElement from icons or plain decorative glyphs only - never a real Checkbox/Radio/Button/IconButton, which would nest a focusable control inside the row's own <button>.",
+    "Pass `spacing=\"spacious\"` on every elemBefore/elemAfter icon (size defaults to `md` already) so it renders as a 16px glyph centered in Menu's fixed 24px (--size-300) slot, matching Figma's own elemBefore/elemAfter component exactly - a bare Icon with no spacing prop renders undersized and off-center in the slot.",
+    "For a checkbox-style row, use `CheckboxFillIcon`/`CheckboxEmptyIcon` (color=\"selected\" when selected, \"subtle\" when not); for a radio-style row, use `RadioCheckedIcon`/`RadioUncheckedIcon` the same way - these are the exact icons Figma's own menu-item uses for these states, not a generic checkmark.",
+    "This isn't specific to checkbox/radio: whenever an item's leadingElement icon should track `selected` at all (any icon, not just a checkbox/radio glyph), set color=\"selected\" when selected is true and color=\"default\" (Icon's own default) when it's not - verified directly on a plain, non-checkbox elemBefore icon, which binds to the same color/content/selected variable as the row's own text under isSelected=true.",
+    "Use selected+selectionType per item for a checkbox- or radio-style row rather than reaching for a menu-level selection mode - a single Menu can mix plain action rows with a selectable group this way.",
+    "Wire a containing Dropdown Menu's onOpenChange(false) from inside each item's own onSelect when a selection should close the menu - Menu itself never assumes this."
+  ],
+  "contentRules": [
+    "label is required per item; description, when present, renders as a second, visually subordinate line - not a tooltip or truncated-elsewhere value.",
+    "Only plain-string label/description participate in search filtering."
+  ],
+  "responsiveRules": [
+    "Sizing is a fixed per-`size` panel width, not responsive to viewport - a consumer needing a different width at different breakpoints supplies its own className override."
+  ],
+  "themeRules": [
+    "All row tokens (default/hover/press/selected/disabled) resolve correctly on both light and dark surfaces via the semantic color layer - no component-level light/dark branching."
+  ],
+  "tokens": {
+    "width": {
+      "sm": "--component-menu-width-sm (192px)",
+      "md": "--component-menu-width-md (240px)",
+      "lg": "--component-menu-width-lg (288px)"
+    },
+    "color": {
+      "labelDefault": "--color-content-default",
+      "descriptionDefault": "--color-content-subtle",
+      "disabled": "--color-content-disabled",
+      "rowHover": "--color-background-neutral-overlay-hovered",
+      "rowPress": "--color-background-neutral-overlay-pressed",
+      "selectedBackground": "--color-background-brand-primary-subtle-default",
+      "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hovered",
+      "selectedBackgroundPressed": "--color-background-brand-primary-subtle-pressed",
+      "selectedText": "--color-content-selected",
+      "selectedIndicator": "--color-border-brand-primary (2px inset left box-shadow, --border-width-md - see behaviorRules)",
+      "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
+      "iconUnselected": "IconColor \"default\" (--color-content-default) for a plain unselected action row's icon; IconColor \"subtle\" (--color-content-subtle) specifically for the checkbox-empty/radio-unchecked glyphs, which are their own distinct low-emphasis indicator - both verified directly on their respective vector fills.",
+      "divider": "--color-border-default"
+    },
+    "spacing": {
+      "rowGap": "--spacing-sm",
+      "rowPaddingInline": "--spacing-md",
+      "rowPaddingBlock": "--spacing-xs",
+      "titleRowGap": "--spacing-sm (gap between titleLeadingElement and label, inside the title row)",
+      "elemBeforeAfterSize": "--size-300 (fixed 24px box, independent of content)",
+      "sectionPaddingTop": "--spacing-xs",
+      "sectionPaddingBottom": "--spacing-sm",
+      "headingPadding": "--spacing-sm / --spacing-md"
+    },
+    "typography": {
+      "label": "--typography-body-md-* (14px)",
+      "description": "--typography-body-sm-* (12px)",
+      "heading": "--typography-body-sm-*"
+    },
+    "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hovered/-pressed, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+  },
+  "relatedComponents": ["Popup", "DropdownMenu", "TextField", "IconButton", "Spinner"],
+  "do": [
+    "Keep leadingElement/trailingElement decorative and let selected/selectionType carry the real ARIA state.",
+    "Close a containing Dropdown Menu from the item's own onSelect, not by expecting Menu to do it.",
+    "Provide aria-label or aria-labelledby - Menu sets no default accessible name for the menu role."
+  ],
+  "dont": [
+    "Do not nest a real interactive control inside leadingElement/trailingElement.",
+    "Do not expect Menu to manage open/close state - it has no idea it's inside a Dropdown Menu at all.",
+    "Do not rely on a menu-level selection mode - selection is per-item (selected + selectionType)."
+  ],
+  "acceptanceCriteria": [
+    "Renders every item as a real <button> with role menuitem/menuitemcheckbox/menuitemradio per its selectionType.",
+    "Renders a divider before every section, except the very first when showSearch is false.",
+    "Filters items by a case-insensitive substring match on plain-string label/description; omits a section entirely once every one of its items is filtered out.",
+    "Shows emptyMessage when filtering removes every item across every section.",
+    "Shows a loading row (Spinner + loadingLabel) instead of sections when loading is true.",
+    "Exactly one enabled, visible item has tabIndex 0 at a time; the rest are -1; a disabled item never becomes the roving tab stop.",
+    "ArrowDown/ArrowUp move the roving tab stop and DOM focus, wrapping at either end; Home/End jump to the first/last.",
+    "aria-checked is present only when selectionType is set.",
+    "Calls onSelect on click, and never for a disabled item.",
+    "Applies the size-specific width class (--component-menu-width-sm/md/lg); row height is unaffected by size.",
+    "Renders a 2px inset left indicator (not border-left) on a selected row, without shifting its padding relative to unselected rows.",
+    "Selected row text and its leadingElement/trailingElement icon (when colored via IconColor \"selected\") use --color-content-selected, not --color-content-brand-primary-default.",
+    "Renders the search field as size=\"md\" with TextField's subtle appearance (data-appearance=\"subtle\", data-size=\"md\"), no leading icon, no visible hover background or focus underline of its own, and autoFocused whenever it's rendered."
+  ],
+  "knownLimitations": [
+    "showScrollbar maps to native overflow, not Figma's decorative custom scrollbar-thumb graphic.",
+    "No typeahead (type-to-jump-to-item) keyboard support - only arrow/Home/End navigation.",
+    "Search filtering can't evaluate non-string label/description content, so such items are always kept visible during a search rather than being intelligently matched or excluded.",
+    "No built-in focus management for items on mount - the search field autoFocuses itself when shown, but a consumer wanting the first item focused instead (e.g. when showSearch is false) implements that itself."
+  ],
+  "futureEnhancements": [
+    "Typeahead keyboard navigation (jump to the next item starting with a typed character).",
+    "An optional built-in 'focus first item on mount' behavior for consumers that want it without implementing their own."
+  ]
+}

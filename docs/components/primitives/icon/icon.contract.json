@@ -54,7 +54,7 @@
       "type": "IconColor",
       "required": false,
       "default": "default",
-      "enum": ["default", "subtle", "inverse", "brand", "success", "warning", "error", "information", "discovery", "disabled"],
+      "enum": ["default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "discovery", "disabled"],
       "description": "Semantic content color."
     },
     "title": {
@@ -96,6 +96,7 @@
       "subtle": { "className": "color_subtle", "token": "--color-content-subtle" },
       "inverse": { "className": "color_inverse", "token": "--color-content-inverse" },
       "brand": { "className": "color_brand", "token": "--color-content-brand-primary-default" },
+      "selected": { "className": "color_selected", "token": "--color-content-selected" },
       "success": { "className": "color_success", "token": "--color-content-success" },
       "warning": { "className": "color_warning", "token": "--color-content-warning" },
       "error": { "className": "color_error", "token": "--color-content-error" },
@@ -118,6 +119,7 @@
       "subtle": "--color-content-subtle",
       "inverse": "--color-content-inverse",
       "brand": "--color-content-brand-primary-default",
+      "selected": "--color-content-selected",
       "success": "--color-content-success",
       "warning": "--color-content-warning",
       "error": "--color-content-error",
@@ -167,7 +169,8 @@
     "No MUI.",
     "No Tailwind.",
     "SVG-based, fill=\"currentColor\".",
-    "Icons are primarily used within other components (Button, Tag, Avatar, etc.), not rendered bare at the page level."
+    "Icons are primarily used within other components (Button, Tag, Avatar, etc.), not rendered bare at the page level.",
+    "IconColor values are added when a real, verified Figma variable needs one that doesn't map to an existing value - 'discovery' (for Inline Message) and 'selected' (for Menu's selected-row icon, --color-content-selected, matching Figma's own color/content/selected variable) were both added this way, not invented speculatively."
   ],
   "relatedComponents": ["Button", "IconButton", "Tag", "Checkbox", "Radio", "Tooltip", "Avatar"],
   "do": [

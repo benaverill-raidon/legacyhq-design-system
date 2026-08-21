@@ -76,6 +76,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
   rel?: string;
   isRemovable?: boolean;
   isDisabled?: boolean;
+  isInteractive?: boolean;
   elemBefore?: React.ReactNode;
   onRemove?: () => void;
   removeLabel?: string;
@@ -90,6 +91,7 @@ size: md
 tone: default
 isRemovable: false
 isDisabled: false
+isInteractive: false
 removeLabel: Remove tag
 ```
 
@@ -252,6 +254,10 @@ Do not hardcode:
   than treat the single combined swatch as firm intent.
 - Figma's own default `size` variant is `sm`; the code default stays `md`, consistent with every
   other sized atom in this library.
+- `isInteractive` has no corresponding Figma variant - added so Tag can be composed as a plain
+  focusable trigger (no navigation, no remove) elsewhere in the system. Tag Group's "+N more"
+  overflow tag is the first consumer; it opens a Dropdown Menu on click. Same
+  `isInteractive || typeof onClick === 'function'` gate Avatar already uses for the same purpose.
 
 ## Storybook requirements
 
@@ -297,6 +303,8 @@ Test:
 - custom className works
 - keeps the elemBefore/remove icon a constant 16px regardless of size
 - supports data-force-state hover/pressed preview on both the content and remove areas
+- renders a button (not a span) when isInteractive or onClick is provided with no href/isRemovable
+- interactive tag button is natively disabled and uses the shared focus ring classes
 
 ## Do not include
 

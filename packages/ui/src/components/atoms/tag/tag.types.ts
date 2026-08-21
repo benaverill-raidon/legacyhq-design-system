@@ -22,6 +22,7 @@ export interface TagProps extends React.HTMLAttributes<HTMLElement> {
   rel?: string;
   isRemovable?: boolean;
   isDisabled?: boolean;
+  isInteractive?: boolean;
   elemBefore?: React.ReactNode;
   onRemove?: () => void;
   removeLabel?: string;

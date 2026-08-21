@@ -1439,6 +1439,64 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "tag-group",
+    "name": "TagGroup",
+    "tier": "molecule",
+    "path": "docs/components/molecules/tag-group/tag-group.examples.json",
+    "examples": [
+      {
+        "name": "Unbounded list, no overflow",
+        "description": "maxVisible omitted - every tag renders, wrapping onto new lines as the row fills.",
+        "jsx": "<TagGroup\n  tags={[\n    { id: 'trust', label: 'Averill Family Living Trust', tone: 'green', href: '/trusts/1' },\n    { id: 'asset', label: \"Ben's Investments\", tone: 'blue', href: '/assets/1' },\n    { id: 'task', label: 'Follow-up task', tone: 'teal', href: '/tasks/12' },\n  ]}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Truncated list with a '+N more' overflow tag",
+        "description": "The common case - once tags.length exceeds maxVisible, the rest collapse behind an overflow tag that opens a Dropdown Menu.",
+        "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} />",
+        "props": {
+          "maxVisible": 10
+        }
+      },
+      {
+        "name": "Overflow tag leading instead of trailing",
+        "description": "alignment='right' matches Figma's alignment=right variant - the overflow tag renders before the visible tags, same tags visible either way.",
+        "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} alignment=\"right\" />",
+        "props": {
+          "maxVisible": 10,
+          "alignment": "right"
+        }
+      },
+      {
+        "name": "Acting on a selected truncated tag",
+        "description": "Tag Group never assumes what selection means - wire onOverflowTagSelect to navigate, remove, or anything else.",
+        "jsx": "<TagGroup\n  tags={entityTags}\n  maxVisible={10}\n  onOverflowTagSelect={(tag) => {\n    if (tag.href) {\n      router.push(tag.href);\n    }\n  }}\n/>",
+        "props": {
+          "maxVisible": 10
+        }
+      },
+      {
+        "name": "Removable tags in a bounded group",
+        "description": "Each TagGroupItem's own isRemovable/onRemove forwards straight to the rendered Tag, unaffected by truncation.",
+        "jsx": "<TagGroup\n  tags={[\n    { id: 'vacation-home', label: 'Vacation Home', isRemovable: true, onRemove: () => handleRemove('vacation-home') },\n    { id: 'rental', label: 'Rental Property', isRemovable: true, onRemove: () => handleRemove('rental') },\n  ]}\n/>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Setting size on an individual tag item",
+        "jsx": "<TagGroup tags={[{ id: 't1', label: 'Trust', size: 'lg' }]} />",
+        "reason": "TagGroupItem omits size from Tag's own props - Tag Group applies one size uniformly via TagGroupProps.size, including to the overflow tag. There is no per-item size mixing, matching Figma's own tab-group example."
+      },
+      {
+        "name": "Expecting a truncated tag's selection to navigate automatically",
+        "jsx": "<TagGroup tags={[{ id: 'trust', label: 'Trust', href: '/trusts/1' }]} maxVisible={0} />",
+        "reason": "Selecting a truncated tag from the overflow panel only calls onOverflowTagSelect(tag, event) - Tag Group does not read the tag's own href and navigate for you, the same 'never assume' rule Menu's own onSelect follows."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "text-field",
     "name": "TextField",
     "tier": "molecule",

@@ -227,6 +227,56 @@ describe('Tag', () => {
     expect(screen.getByTestId('tag')).toHaveClass(styles.root, 'custom-tag');
   });
 
+  it('renders a display-only span when isInteractive and isRemovable are both absent', () => {
+    render(<Tag isInteractive={false}>Estate plan</Tag>);
+
+    expect(screen.getByText('Estate plan').tagName).toBe('SPAN');
+  });
+
+  it('renders a button when isInteractive is set with no href or isRemovable', () => {
+    render(<Tag isInteractive>Filter</Tag>);
+
+    expect(screen.getByRole('button', { name: 'Filter' })).toBeInTheDocument();
+  });
+
+  it('renders a button when onClick is provided with no href or isRemovable, even without isInteractive', () => {
+    render(<Tag onClick={() => undefined}>Filter</Tag>);
+
+    expect(screen.getByRole('button', { name: 'Filter' })).toBeInTheDocument();
+  });
+
+  it('calls onClick when the interactive tag button is activated', () => {
+    const handleClick = vi.fn();
+    render(
+      <Tag isInteractive onClick={handleClick}>
+        Filter
+      </Tag>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Filter' }));
+
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('disables the interactive tag button natively when isDisabled is true', () => {
+    render(
+      <Tag isInteractive isDisabled onClick={() => undefined}>
+        Filter
+      </Tag>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Filter' })).toBeDisabled();
+  });
+
+  it('uses the shared focus ring classes for the interactive tag button', () => {
+    render(<Tag isInteractive onClick={() => undefined}>Filter</Tag>);
+
+    expect(screen.getByRole('button', { name: 'Filter' })).toHaveClass(
+      focusRingClassNames.focusRing,
+      focusRingClassNames.focusRingDefault,
+    );
+  });
+
   it('forwards refs to the rendered root element', () => {
     const ref = React.createRef<HTMLElement>();
 

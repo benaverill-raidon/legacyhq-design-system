@@ -69,6 +69,12 @@ all six candidates and picks whichever actually fits with the least overflow, re
 scroll/resize. See EdgeCases for it visibly repositioning near a viewport edge. The default,
 `topLeft`, matches the Figma component's own default variant.
 
+If the trigger itself scrolls fully outside the viewport, Popup hides the panel entirely
+(`visibility: hidden`) instead of clamping it to whichever edge is closest - a panel pinned to the
+viewport edge with no trigger left on screen just reads as a stray floating box. `open` doesn't
+change because of this; it's purely a positioning detail, and the panel reappears correctly
+positioned the moment the trigger scrolls back into view.
+
 <Canvas of={PopupStories.Variants} />
 
 ### Dismissal is opt-out, not opt-in
@@ -105,8 +111,9 @@ competing CSS to override:
 
 Reach for `unstyled` only when the whole visual design differs. When a consumer shares Popup's
 default skin (background/border/radius/shadow) but needs different padding - a menu's denser rows,
-say - use `padding` (`'sm' | 'md' | 'lg'`, default `'lg'`) instead. It's a separate class from the
-rest of the skin, so it composes cleanly without touching or duplicating the other tokens:
+or none at all - use `padding` (`'none' | 'sm' | 'md' | 'lg'`, default `'lg'`) instead. It's a
+separate class from the rest of the skin, so it composes cleanly without touching or duplicating the
+other tokens:
 
 ```tsx
 <Popup padding="sm" role="menu" content={<Menu />} open={open}>
@@ -233,9 +240,9 @@ owns hover/focus triggering and non-interactive content rules.
     </tr>
     <tr>
       <td><code>padding</code></td>
-      <td><code>'sm' | 'md' | 'lg'</code></td>
+      <td><code>'none' | 'sm' | 'md' | 'lg'</code></td>
       <td><code>'lg'</code></td>
-      <td>Padding for Popup's own visual skin. Lets a consumer size just the padding while still sharing background/border/radius/shadow. Ignored when <code>unstyled</code> is true.</td>
+      <td>Padding for Popup's own visual skin. Lets a consumer size just the padding while still sharing background/border/radius/shadow, down to <code>'none'</code> for a consumer whose own content manages all of its edge padding (e.g. Dropdown Menu). Ignored when <code>unstyled</code> is true.</td>
     </tr>
     <tr>
       <td><code>manageTriggerAria</code></td>
@@ -252,4 +259,5 @@ owns hover/focus triggering and non-interactive content rules.
   internally (`unstyled`, `manageTriggerAria={false}`) rather than duplicating positioning logic.
 - **Inline Message** - a click-triggered status row with detail revealed through Popup's own
   default styled skin (not `unstyled`) and `manageTriggerAria` left at its default.
-- **Dropdown Menu** - planned, also built on top of Popup.
+- **Dropdown Menu** - a trigger paired with a Menu panel, rendered through Popup's own default
+  skin with `padding="none"` (Menu's search field and rows already carry their own insets).

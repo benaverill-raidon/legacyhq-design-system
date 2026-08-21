@@ -20,7 +20,7 @@ Popup
 
 ```ts
 type PopupAlignment = 'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft' | 'bottomRight' | 'bottomCenter';
-type PopupPadding = 'sm' | 'md' | 'lg';
+type PopupPadding = 'none' | 'sm' | 'md' | 'lg';
 
 interface PopupProps {
   children: React.ReactElement;
@@ -113,6 +113,15 @@ own copy, which it did before Popup existed:
 - Recalculates on trigger/panel resize (via `ResizeObserver`), window resize, and scroll.
 - The gap between trigger and panel is a fixed `--spacing-sm` (8px), matching the Figma component's
   own `itemSpacing` - not exposed as a prop.
+- When the trigger's bounding rect ends up fully outside the viewport on any one of its four edges
+  (checked every time position recalculates), the panel is hidden (`visibility: hidden`,
+  `data-trigger-out-of-view="true"`) instead of being clamped to the nearest viewport edge.
+  Clamping alone left the panel visibly stuck at that edge once the trigger scrolled away entirely
+  - floating with no visible anchor, since nothing was actually pointing at it anymore. The check
+  is gated on the trigger having a measured, nonzero width or height, so an element that hasn't
+  been laid out at all (e.g. a test that doesn't mock `getBoundingClientRect`) is never
+  misidentified as "out of view" at `(0,0,0,0)`. Normal positioning resumes automatically, with no
+  extra state to reset, the next time the trigger is back in view (even partially).
 
 ## Styling and tokens
 
@@ -125,15 +134,18 @@ Figma's `elevation.shadow.overlay` effect style (`--color-elevation-shadow-overl
 
 ### Padding
 
-`padding` (`'sm' | 'md' | 'lg'`, default `'lg'`) maps to `--spacing-sm`/`--spacing-md`/`--spacing-lg`
-and is applied via its own dedicated class (`padding_sm`/`padding_md`/`padding_lg`), separate from
-`panelSurface`'s other properties (background/border/radius/shadow/gap). This lets a consumer with
-denser content - a menu's rows, for instance - size just the padding while still sharing the rest of
-the skin from one source, rather than either fighting `panelSurface`'s padding with a CSS override
-or reaching for `unstyled` and redeclaring the entire skin (background/border/radius/shadow) itself.
-Reserve `unstyled` for a consumer with a genuinely different visual design (Tooltip); reach for
-`padding` when only the padding needs to differ. Ignored when `unstyled` is `true` - there's no skin
-to size in the first place.
+`padding` (`'none' | 'sm' | 'md' | 'lg'`, default `'lg'`) maps to
+`0`/`--spacing-sm`/`--spacing-md`/`--spacing-lg` and is applied via its own dedicated class
+(`padding_none`/`padding_sm`/`padding_md`/`padding_lg`), separate from `panelSurface`'s other
+properties (background/border/radius/shadow/gap). This lets a consumer with denser content - a
+menu's rows, for instance - size just the padding while still sharing the rest of the skin from one
+source, rather than either fighting `panelSurface`'s padding with a CSS override or reaching for
+`unstyled` and redeclaring the entire skin (background/border/radius/shadow) itself. `none` covers a
+consumer whose own content already carries all of its edge padding - Dropdown Menu's Menu panel,
+added 2026-08-19, is the first: its search field and rows already have their own insets, so any
+nonzero Popup padding would double them up. Reserve `unstyled` for a consumer with a genuinely
+different visual design (Tooltip); reach for `padding` when only the padding needs to differ.
+Ignored when `unstyled` is `true` - there's no skin to size in the first place.
 
 `-spread` and `-perimeter` are two semantic color tokens added alongside this component -
 `color-elevation-shadow-overlay-default`/`-inner` already existed, but the alpha-blended layers

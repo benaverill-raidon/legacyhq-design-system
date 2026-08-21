@@ -30,17 +30,26 @@ consumers get that behavior for free instead of re-deriving it.
 The panel fades in on mount using the `fade-quick` semantic motion token via a CSS `@keyframes`
 animation (not `transition`, since the element mounts/unmounts rather than toggling a class).
 
+If the trigger scrolls fully outside the viewport while open, the panel hides itself
+(`visibility: hidden`) rather than clamping to the nearest viewport edge - a clamped panel with no
+visible trigger anchoring it just reads as a floating, disconnected box. It reappears, correctly
+positioned, as soon as the trigger scrolls back into view. `open` itself never changes because of
+this - it's purely a positioning/visibility detail, the same category of thing as alignment
+fallback.
+
 Popup's own visual skin (background, border, padding, radius, shadow - matching its Figma source
 exactly) is applied by default, but skippable via `unstyled` for a consumer that needs Popup's
 positioning/dismissal with a completely different visual design of its own. Tooltip is the first
 consumer of this: it sets `unstyled` and layers its own dark-pill styling on top, while still
 getting positioning, the portal, and the mount animation from Popup for free.
 
-Padding is the one piece of the skin broken out as its own prop (`padding`, `'sm' | 'md' | 'lg'`,
-default `'lg'`) rather than bundled with the rest. A consumer with denser content - a menu's rows,
-say - can size just the padding while still sharing background/border/radius/shadow from Popup
-directly, instead of either fighting the default padding with a CSS override or reaching for
-`unstyled` and redeclaring the whole skin just to change one property.
+Padding is the one piece of the skin broken out as its own prop (`padding`,
+`'none' | 'sm' | 'md' | 'lg'`, default `'lg'`) rather than bundled with the rest. A consumer with
+denser content - a menu's rows, say - can size just the padding while still sharing
+background/border/radius/shadow from Popup directly, instead of either fighting the default padding
+with a CSS override or reaching for `unstyled` and redeclaring the whole skin just to change one
+property. `none` covers a consumer whose own content manages all of its edge padding already -
+Dropdown Menu's Menu panel, for instance.
 
 ## Accessibility
 By default (`manageTriggerAria`, default `true`) the trigger receives `aria-expanded` reflecting
@@ -52,5 +61,6 @@ itself - it doesn't know what's being built on top of it, so the consumer passes
 `dialog`, `status`, `tooltip`, ...) to match.
 
 ## Related
-Tooltip (renders through Popup with `unstyled` and its own dismissal semantics), Dropdown Menu and
-Inline Message (planned components built on top of this primitive).
+Tooltip (renders through Popup with `unstyled` and its own dismissal semantics), Inline Message
+(renders through Popup's default styled skin), and Dropdown Menu (renders through Popup with
+`padding="none"`, wrapping a Menu panel).

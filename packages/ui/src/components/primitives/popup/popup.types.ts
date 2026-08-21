@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export type PopupAlignment = 'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft' | 'bottomRight' | 'bottomCenter';
 
-export type PopupPadding = 'sm' | 'md' | 'lg';
+export type PopupPadding = 'none' | 'sm' | 'md' | 'lg';
 
 export interface PopupProps {
   /** The single trigger element the popup is anchored to. Cloned to attach a measurement ref and `aria-expanded`/`aria-controls`. */
@@ -35,8 +35,9 @@ export interface PopupProps {
   /**
    * Padding for Popup's own visual skin, mapped to the spacing scale. Defaults to `'lg'`
    * (`--spacing-lg`), matching Figma's `popup` component. Use `'sm'`/`'md'` for denser content
-   * (e.g. a menu's rows) while still sharing Popup's background/border/radius/shadow. Ignored when
-   * `unstyled` is true.
+   * (e.g. a menu's rows), or `'none'` for a consumer whose content manages its own edge padding
+   * entirely (e.g. Dropdown Menu's Menu panel) - all three still share Popup's
+   * background/border/radius/shadow. Ignored when `unstyled` is true.
    */
   padding?: PopupPadding;
   /**

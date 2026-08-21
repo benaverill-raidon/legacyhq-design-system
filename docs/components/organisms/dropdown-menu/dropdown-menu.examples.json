@@ -1,0 +1,35 @@
+{
+  "component": "DropdownMenu",
+  "examples": [
+    {
+      "name": "Basic action menu from a button",
+      "description": "The common case - a button trigger opening a searchable action list.",
+      "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Matter actions\"\n  open={open}\n  onOpenChange={setOpen}\n  searchPlaceholder=\"Search actions\"\n  sections={[{\n    id: 'actions',\n    heading: 'Actions',\n    items: [\n      { id: 'rename', label: 'Rename', onSelect: () => { handleRename(); setOpen(false); } },\n      { id: 'delete', label: 'Delete', onSelect: () => { handleDelete(); setOpen(false); } },\n    ],\n  }]}\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</DropdownMenu>",
+      "props": { "searchPlaceholder": "Search actions" }
+    },
+    {
+      "name": "Icon-button row menu, no search",
+      "description": "A dense row-level '...' menu - showSearch is false since a 3-4 item list doesn't need filtering.",
+      "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  showSearch={false}\n  sections={[{ id: 'actions', items: [{ id: 'archive', label: 'Archive', onSelect: () => setOpen(false) }] }]}\n>\n  <IconButton aria-label=\"Row actions\" appearance=\"subtle\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+      "props": { "showSearch": false }
+    },
+    {
+      "name": "Right-aligned menu from a trailing trigger",
+      "description": "alignment='right' keeps the panel from overflowing past the trigger's right edge when the trigger sits near the end of a row.",
+      "jsx": "<DropdownMenu\n  aria-label=\"Table row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  alignment=\"right\"\n  showSearch={false}\n  sections={[{ id: 'actions', items: rowActionItems }]}\n>\n  <IconButton aria-label=\"Row actions\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+      "props": { "alignment": "right", "showSearch": false }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Passing a content prop the way Popup allows",
+      "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} content={<div>Custom panel</div>}>\n  <Button>Actions</Button>\n</DropdownMenu>",
+      "reason": "DropdownMenu has no content prop - it always renders a Menu built from sections. For arbitrary non-Menu floating content, compose Popup directly instead of forcing it through DropdownMenu."
+    },
+    {
+      "name": "Expecting a selection to close the dropdown automatically",
+      "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]}>\n  <Button onClick={() => setOpen(true)}>Actions</Button>\n</DropdownMenu>",
+      "reason": "Neither Menu nor DropdownMenu calls onOpenChange on selection. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+    }
+  ]
+}

@@ -11,6 +11,7 @@
   --color-content-loading: var(--color-neutral-alpha-1200-08);
   --color-skeleton-default: var(--color-neutral-alpha-1200-08);
   --color-content-brand-primary-default: var(--color-brand-prussian-solid-900);
+  --color-content-selected: var(--color-brand-prussian-solid-900);
   --color-content-brand-primary-subtle: var(--color-brand-prussian-solid-300);
   --color-content-error: var(--color-red-solid-800);
   --color-content-warning: var(--color-orange-solid-800);

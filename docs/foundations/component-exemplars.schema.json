@@ -7,7 +7,7 @@
     "properties": {
       "id": { "type": "string" },
       "name": { "type": "string" },
-      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule"] },
+      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule", "organism"] },
       "path": { "type": "string" },
       "examples": {
         "type": "array",

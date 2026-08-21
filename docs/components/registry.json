@@ -146,6 +146,7 @@
           "subtle",
           "inverse",
           "brand",
+          "selected",
           "success",
           "warning",
           "error",
@@ -198,6 +199,7 @@
         "subtle",
         "inverse",
         "brand",
+        "selected",
         "success",
         "warning",
         "error",
@@ -218,6 +220,7 @@
         "subtle": "--color-content-subtle",
         "inverse": "--color-content-inverse",
         "brand": "--color-content-brand-primary-default",
+        "selected": "--color-content-selected",
         "success": "--color-content-success",
         "warning": "--color-content-warning",
         "error": "--color-content-error",
@@ -478,8 +481,9 @@
         "type": "PopupPadding",
         "required": false,
         "default": "lg",
-        "description": "Padding for Popup's own visual skin, mapped to the spacing scale (sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows) while still sharing background/border/radius/shadow. Ignored when unstyled is true.",
+        "description": "Padding for Popup's own visual skin, mapped to the spacing scale (none=0, sm=--spacing-sm, md=--spacing-md, lg=--spacing-lg). Lets a consumer size the skin (e.g. a menu's denser rows, or a consumer whose own content manages all edge padding) while still sharing background/border/radius/shadow. Ignored when unstyled is true.",
         "enum": [
+          "none",
           "sm",
           "md",
           "lg"
@@ -506,6 +510,7 @@
         "bottomCenter"
       ],
       "padding": [
+        "none",
         "sm",
         "md",
         "lg"
@@ -549,7 +554,9 @@
     },
     "relatedComponents": [
       "Tooltip",
-      "InlineMessage"
+      "InlineMessage",
+      "Menu",
+      "DropdownMenu"
     ],
     "contentCompleteness": "full",
     "figmaSource": {
@@ -563,7 +570,8 @@
       "apiAdaptationNotes": [
         "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
         "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
-        "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free."
+        "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free.",
+        "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
       ]
     }
   },
@@ -965,7 +973,7 @@
           "lg": "heading-sm"
         },
         "color": {
-          "defaultBorder": "--color-border-default",
+          "defaultBorder": "--color-border-input",
           "defaultBackground": "--color-background-neutral-subtle-default",
           "defaultContent": "--color-content-subtle",
           "primaryNeutralBackground": "--color-background-brand-bold-default",
@@ -1824,10 +1832,10 @@
     "subComponents": [],
     "tokens": {
       "semantic": {
-        "defaultSelected": "color-content-default",
-        "primarySelected": "color-content-brand-primary-default",
-        "discoverySelected": "color-content-discovery",
-        "invertedSelected": "color-content-inverse",
+        "defaultSelected": "color-background-neutral-bold-default",
+        "primarySelected": "color-background-brand-primary-bold-default",
+        "discoverySelected": "color-background-discovery-bold-default",
+        "invertedSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
         "interactiveHover": "color-background-neutral-subtle-hovered",
         "interactivePressed": "color-background-neutral-subtle-pressed",
@@ -3845,6 +3853,455 @@
         "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
         "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
         "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type."
+      ]
+    }
+  },
+  {
+    "id": "dropdown-menu",
+    "name": "DropdownMenu",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/dropdown-menu/dropdown-menu.contract.json",
+    "anatomy": [
+      {
+        "name": "trigger",
+        "description": "The single child element (children) - any focusable control. Cloned by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls."
+      },
+      {
+        "name": "panel",
+        "description": "Popup's own default visual skin (background/border/radius/shadow), rendered with padding=\"none\"."
+      },
+      {
+        "name": "menu",
+        "description": "A Menu, rendered with every DropdownMenu prop besides children/open/onOpenChange/alignment/id/className forwarded to it unchanged."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "The single trigger element."
+      },
+      "open": {
+        "type": "boolean",
+        "required": true,
+        "default": null,
+        "description": "Controlled visibility."
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with false on Escape or an outside click."
+      },
+      "alignment": {
+        "type": "DropdownMenuAlignment",
+        "required": false,
+        "default": "left",
+        "description": "Maps to Popup's bottomLeft/bottomCenter/bottomRight - always opens below the trigger.",
+        "enum": [
+          "left",
+          "center",
+          "right"
+        ]
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Applied to Popup's floating panel, not to Menu's root."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with Popup's panel class list, not with Menu's root."
+      },
+      "sections": {
+        "type": "MenuSection[]",
+        "required": true,
+        "default": null,
+        "description": "Forwarded to Menu unchanged - see menu.contract.json."
+      },
+      "size": {
+        "type": "MenuSize",
+        "required": false,
+        "default": "sm",
+        "description": "Forwarded to Menu.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "showSearch": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Forwarded to Menu."
+      },
+      "searchValue": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu."
+      },
+      "onSearchChange": {
+        "type": "(value: string) => void",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu."
+      },
+      "searchPlaceholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu."
+      },
+      "showScrollbar": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Forwarded to Menu."
+      },
+      "maxHeight": {
+        "type": "number | string",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu."
+      },
+      "loading": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Forwarded to Menu."
+      },
+      "loadingLabel": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "Loading…",
+        "description": "Forwarded to Menu."
+      },
+      "emptyMessage": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "No results",
+        "description": "Forwarded to Menu."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu's role=\"menu\" container."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to Menu's role=\"menu\" container."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "alignment": [
+        "left",
+        "center",
+        "right"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "note": "DropdownMenu introduces no tokens of its own - every visible value comes from Popup (background/border/radius/shadow) and Menu (row/section/selection colors, spacing, typography, per-size width). See popup.contract.json and menu.contract.json."
+    },
+    "accessibility": {
+      "triggeredBy": [
+        "consumer-controlled - same as Popup, Dropdown Menu attaches no open/close handler itself"
+      ],
+      "ariaExpanded": "set on the trigger by Popup, reflecting open",
+      "ariaControls": "set on the trigger by Popup, pointing at the panel id while open",
+      "role": "menu (set by the inner Menu, not by DropdownMenu/Popup directly)",
+      "focusManagement": "left to the consumer, same as Popup and Menu - neither moves focus into the panel on open"
+    },
+    "relatedComponents": [
+      "Popup",
+      "Menu"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4580:56762",
+      "componentName": "dropdown-menu",
+      "variantCount": 35,
+      "verifiedAt": "2026-08-19",
+      "structure": "Variants cross `trigger` (avatar/icon-button/button/link-button/chip-base/chip-operator/chip-value/tag/page-selector - 9 distinct trigger types, default avatar) x `alignment` (left/center/right, default left) x `isOpen` (true/false, not fully crossed with alignment). Every variant instantiates the same `popup` component (the exact component set Popup wraps) with a `trigger` SLOT holding the trigger instance, and a `surface` SLOT holding `figma-parts / panelSurface` (Popup's own skin) whose own `content` SLOT holds a `menu` instance. The measured padding around that nested menu instance is 0 on every axis.",
+      "apiAdaptationNotes": [
+        "Figma's 9-value `trigger` variant became a generic `children: React.ReactElement` prop, not a variant enum - matching Popup's own `children` model (\"the single trigger element\") rather than hardcoding a closed set of trigger shapes. Any focusable element works; the 9 Figma values are demonstrated in Storybook's Content story as examples, not enforced as an allowed list.",
+        "Figma's `alignment` (left/center/right) maps to Popup's `bottomLeft`/`bottomCenter`/`bottomRight` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
+        "`isOpen` became the existing `open`/`onOpenChange` controlled pair (Popup's own prop names), not a new prop - same native-attribute-first reasoning as Popup's own isOpen->open adaptation.",
+        "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
+        "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
+      ]
+    }
+  },
+  {
+    "id": "menu",
+    "name": "Menu",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/menu/menu.contract.json",
+    "anatomy": [
+      {
+        "name": "search",
+        "description": "Optional TextField (size=\"md\", appearance=\"subtle\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)."
+      },
+      {
+        "name": "section",
+        "description": "One per entry in `sections` - a leading divider, an optional heading row, and its list of items."
+      },
+      {
+        "name": "divider",
+        "description": "Renders above every section, matching Figma's per-section leading separator - except the very first section when showSearch is false, since a divider there would float at the top edge with nothing above it to divide from."
+      },
+      {
+        "name": "heading",
+        "description": "Optional section label with an optional leading icon."
+      },
+      {
+        "name": "item",
+        "description": "One per entry in a section's `items` - a native button row with optional leading/title-leading/trailing slots, a label, and an optional description."
+      },
+      {
+        "name": "loading-row",
+        "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel."
+      },
+      {
+        "name": "empty-message",
+        "description": "Shown in place of sections when search filters out every item."
+      }
+    ],
+    "props": {
+      "sections": {
+        "type": "MenuSection[]",
+        "required": true,
+        "default": null,
+        "description": "Rendered top to bottom."
+      },
+      "size": {
+        "type": "MenuSize",
+        "required": false,
+        "default": "sm",
+        "description": "Panel width only (192/240/288px) - row height always follows content.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "showSearch": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Matches Figma's own declared default. When true, the search field is autoFocused on mount - since Popup only mounts Menu while a Dropdown Menu is open, this focuses the search field every time the containing menu opens, with no extra wiring needed."
+      },
+      "searchValue": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Controlled search text."
+      },
+      "onSearchChange": {
+        "type": "(value: string) => void",
+        "required": false,
+        "default": null,
+        "description": "Called on every search field change."
+      },
+      "searchPlaceholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Also used as the search field's aria-label when set."
+      },
+      "showScrollbar": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Matches Figma's own declared default. Maps to native overflow, not a custom scrollbar widget."
+      },
+      "maxHeight": {
+        "type": "number | string",
+        "required": false,
+        "default": null,
+        "description": "Caps the sections area's height before it scrolls."
+      },
+      "loading": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Replaces sections with a loading row."
+      },
+      "loadingLabel": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "Loading…",
+        "description": ""
+      },
+      "emptyMessage": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "No results",
+        "description": "Shown when search filters out every item."
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": ""
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": ""
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": ""
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": ""
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "leadingElement",
+      "titleLeadingElement",
+      "trailingElement",
+      "headingLeadingElement"
+    ],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "width": {
+        "sm": "--component-menu-width-sm (192px)",
+        "md": "--component-menu-width-md (240px)",
+        "lg": "--component-menu-width-lg (288px)"
+      },
+      "color": {
+        "labelDefault": "--color-content-default",
+        "descriptionDefault": "--color-content-subtle",
+        "disabled": "--color-content-disabled",
+        "rowHover": "--color-background-neutral-overlay-hovered",
+        "rowPress": "--color-background-neutral-overlay-pressed",
+        "selectedBackground": "--color-background-brand-primary-subtle-default",
+        "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hovered",
+        "selectedBackgroundPressed": "--color-background-brand-primary-subtle-pressed",
+        "selectedText": "--color-content-selected",
+        "selectedIndicator": "--color-border-brand-primary (2px inset left box-shadow, --border-width-md - see behaviorRules)",
+        "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
+        "iconUnselected": "IconColor \"default\" (--color-content-default) for a plain unselected action row's icon; IconColor \"subtle\" (--color-content-subtle) specifically for the checkbox-empty/radio-unchecked glyphs, which are their own distinct low-emphasis indicator - both verified directly on their respective vector fills.",
+        "divider": "--color-border-default"
+      },
+      "spacing": {
+        "rowGap": "--spacing-sm",
+        "rowPaddingInline": "--spacing-md",
+        "rowPaddingBlock": "--spacing-xs",
+        "titleRowGap": "--spacing-sm (gap between titleLeadingElement and label, inside the title row)",
+        "elemBeforeAfterSize": "--size-300 (fixed 24px box, independent of content)",
+        "sectionPaddingTop": "--spacing-xs",
+        "sectionPaddingBottom": "--spacing-sm",
+        "headingPadding": "--spacing-sm / --spacing-md"
+      },
+      "typography": {
+        "label": "--typography-body-md-* (14px)",
+        "description": "--typography-body-sm-* (12px)",
+        "heading": "--typography-body-sm-*"
+      },
+      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hovered/-pressed, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+    },
+    "accessibility": {
+      "role": "menu (on the sections container)",
+      "itemRoles": [
+        "menuitem (default)",
+        "menuitemcheckbox (selectionType: 'checkbox')",
+        "menuitemradio (selectionType: 'radio')"
+      ],
+      "keyboardInteraction": [
+        "ArrowDown/ArrowUp move a roving tabIndex (and DOM focus) between enabled, visible items, wrapping at either end.",
+        "Home/End jump to the first/last enabled, visible item.",
+        "Enter/Space activate the focused item for free - it's a real <button>.",
+        "A disabled item is excluded entirely from the roving-tabindex cycle."
+      ],
+      "requirements": [
+        "Every rendered item is a real <button role=\"menuitem\" | \"menuitemcheckbox\" | \"menuitemradio\">, so Enter/Space activation and :disabled semantics are native, not simulated.",
+        "aria-checked is set only when selectionType is provided - plain action rows with just `selected` never get a stray aria-checked.",
+        "Only one item at a time carries tabIndex={0}; every other item is tabIndex={-1} (roving-tabindex pattern) - the container itself carries tabIndex={-1} as a non-tab-reachable fallback focus target.",
+        "leadingElement/trailingElement/titleLeadingElement/headingLeadingElement are always rendered with aria-hidden=\"true\" - the row's own accessible name comes from its text content, never from these slots."
+      ]
+    },
+    "relatedComponents": [
+      "Popup",
+      "DropdownMenu",
+      "TextField",
+      "IconButton",
+      "Spinner"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1700:35137",
+      "componentName": "menu",
+      "variantCount": 9,
+      "verifiedAt": "2026-08-19",
+      "structure": "Variants cross `menus` (1/2/3 - number of sections shown in the design canvas) with `size` (sm/md/lg - panel width only, 192/240/288px; row height is unaffected). Two boolean component properties, `showSearch` and `showScrollbar`, both default true. Each section is a `code-parts / <section>/list` instance with its own leading `separator` (a divider) and a `Slot` filled by `code-parts / <menu-item>` instances - code renders that leading divider above every section except the very first when showSearch is false, a design-review correction (a divider with nothing above it to divide from otherwise). The section's own Container padding is asymmetric - spacing/xs (4px) top, spacing/sm (8px) bottom, not a uniform padding-block - confirmed directly against a live-edited Figma instance. The root `menu` component has empty `fills`/`strokes` - no background/border/shadow of its own.",
+      "subComponentsVerified": [
+        {
+          "name": "menu-item",
+          "componentSetNodeId": "1700:34589",
+          "note": "state (default/hover/press/focus) x isSelected (false/true) x isDisabled (false/true), 9 of 16 combinations modeled. Component properties: descriptionText, showDescription, showElemBefore, showElemAfter, optionText, showTitleElemBefore."
+        },
+        {
+          "name": "menu-search",
+          "componentSetNodeId": "3628:17489",
+          "note": "A `text-field` instance, `size=\"md\"` and `tone=\"subtle\"` - mapped to code as a composed TextField with `size=\"md\"` `appearance=\"subtle\"` (TextField's own prop names for the same concepts), not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `appearance=\"subtle\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override, no `!important`) rather than relying on `appearance=\"subtle\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
+        },
+        {
+          "name": "heading-item",
+          "componentNodeId": "1700:34323",
+          "note": "elemBefore slot + {title} text - mapped to code as `section.headingLeadingElement` + `section.heading`."
+        }
+      ],
+      "apiAdaptationNotes": [
+        "Figma models menu-item content as free-floating slots inside a component-set variant grid (state x isSelected x isDisabled), not a data structure. Code inverts this into a `sections: MenuSection[]` prop - each item a plain object (`MenuItem`) - so a real list of N items doesn't require N manually-composed component instances.",
+        "leadingElement/trailingElement are typed as arbitrary React.ReactNode but are documented as decorative-only in code: a real interactive Checkbox/Radio/Button nested inside the row's own <button> would be invalid HTML. This matches Figma exactly, not just a code-side precaution - the file's own 'checkboxes'/'radios' slot-content demos (menu-item Parts group) swap elemBefore's nested icon INSTANCE_SWAP property to the icon components `checkbox_fill`/`checkbox-empty`/`radio_checked`/`radio_unchecked` (colored `color/content/brand/primary/default` when checked, `color/content/subtle` when not - i.e. IconColor `brand`/`subtle`), never to a real Checkbox/Radio component. Selection semantics are carried by the row's own `selected`/`selectionType`, not by whatever's rendered in the slot. Every elemBefore icon (including plain, non-selectable action rows) uses the icon wrapper's `Size: md` + `spacing: spacious (24px)` component properties - code maps this to Icon's `spacing=\"spacious\"` (size=\"md\" is already Icon's own default).",
+        "selectionType ('checkbox' | 'radio') is a code-level addition with no direct Figma component property - inferred from the same 'checkboxes'/'radios' slot-content demos above, which show real-world compositions where isSelected pairs with a checkbox/radio-shaped row. Modeled per-item rather than as a menu-level 'selectionMode' so a single menu can mix plain action rows with a selectable group.",
+        "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-brand-primary`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
+        "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
+        "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
       ]
     }
   }

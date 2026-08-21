@@ -20,6 +20,9 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 }
 
 function getPaddingClassName(padding: PopupPadding) {
+  if (padding === 'none') {
+    return styles.padding_none;
+  }
   if (padding === 'sm') {
     return styles.padding_sm;
   }
@@ -138,6 +141,7 @@ export const Popup = React.memo(function Popup({
   const panelRef = React.useRef<HTMLDivElement | null>(null);
   const [resolvedAlignment, setResolvedAlignment] = React.useState<PopupAlignment>(alignment);
   const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
+  const [triggerOutOfView, setTriggerOutOfView] = React.useState(false);
 
   const updatePosition = React.useCallback(() => {
     if (!triggerRef.current || !panelRef.current) {
@@ -148,6 +152,21 @@ export const Popup = React.memo(function Popup({
     const panelRect = panelRef.current.getBoundingClientRect();
     const gap = getTokenPixels('--spacing-sm');
     const viewportPadding = gap;
+
+    // Without this, clamping the panel to stay fully on-screen (below) leaves it visibly "stuck"
+    // at the viewport edge once the trigger scrolls out of view entirely, floating with no visible
+    // anchor. Hiding it instead - rather than clamping to an edge - until the trigger scrolls back
+    // into view at least partially. Gated on the trigger actually having a measured size - an
+    // unlaid-out trigger (e.g. jsdom's default zero-rect in tests that don't mock layout) would
+    // otherwise always read as "out of view" at (0,0,0,0).
+    const hasMeasuredSize = triggerRect.width > 0 || triggerRect.height > 0;
+    const isTriggerOutOfView =
+      hasMeasuredSize &&
+      (triggerRect.bottom <= 0 ||
+        triggerRect.top >= window.innerHeight ||
+        triggerRect.right <= 0 ||
+        triggerRect.left >= window.innerWidth);
+    setTriggerOutOfView(isTriggerOutOfView);
 
     const bestCandidate = getAlignmentOrder(alignment)
       .map((candidateAlignment) => getCandidatePosition(candidateAlignment, triggerRect, panelRect, gap, viewportPadding))
@@ -255,7 +274,12 @@ export const Popup = React.memo(function Popup({
                 className,
               )}
               data-alignment={resolvedAlignment}
-              style={position ? { top: `${position.top}px`, left: `${position.left}px` } : { visibility: 'hidden' }}
+              data-trigger-out-of-view={triggerOutOfView ? 'true' : undefined}
+              style={
+                triggerOutOfView || !position
+                  ? { visibility: 'hidden' }
+                  : { top: `${position.top}px`, left: `${position.left}px` }
+              }
             >
               {content}
             </div>,

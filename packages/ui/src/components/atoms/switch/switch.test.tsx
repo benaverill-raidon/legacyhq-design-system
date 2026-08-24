@@ -197,28 +197,28 @@ describe('Switch', () => {
     expect(iconOff?.querySelector('svg')).toBeInTheDocument();
   });
 
-  it('suppresses the hover/pressed track treatment while loading, matching disabled', () => {
+  it('suppresses the hover/press track treatment while loading, matching disabled', () => {
     expect(switchCss).toContain(
       ".root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator",
     );
     expect(switchCss).toContain(
-      ".root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .indicator",
+      ".root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator",
     );
     expect(switchCss).toContain("cursor: progress;");
   });
 
   it('expands the thumb on hover as well as press, not press alone', () => {
     expect(switchCss).toMatch(
-      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='active'\]\s*\)\s*\.thumb\s*\{\s*transform: scaleX\(1\.16\);/,
+      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='press'\]\s*\)\s*\.thumb\s*\{\s*transform: scaleX\(1\.16\);/,
     );
     expect(switchCss).toMatch(
-      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='active'\]\s*\)\s*\.input:checked \+ \.indicator \.thumb\s*\{\s*transform: translateX\(var\(--switch-thumb-translate-x\)\) scaleX\(1\.16\);/,
+      /:is\(\s*:hover,\s*:active,\s*\[data-force-state='hover'\],\s*\[data-force-state='press'\]\s*\)\s*\.input:checked \+ \.indicator \.thumb\s*\{\s*transform: translateX\(var\(--switch-thumb-translate-x\)\) scaleX\(1\.16\);/,
     );
   });
 
-  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+  it('supports pinning hover/press as a static Storybook reference via data-force-state', () => {
     expect(switchCss).toContain("[data-force-state='hover']");
-    expect(switchCss).toContain("[data-force-state='active']");
+    expect(switchCss).toContain("[data-force-state='press']");
   });
 
   it('forwards data-force-state to the root label, not just the input', () => {

@@ -44,7 +44,7 @@
 
 - [ ] Passive mode is non-interactive.
 - [ ] Dots are buttons only when `onStepChange` is provided.
-- [ ] Interactive mode uses native hover, pressed, and focus-visible behavior.
+- [ ] Interactive mode uses native hover, press, and focus-visible behavior.
 - [ ] Shared Focus Ring is used for interactive dots.
 - [ ] No `tabIndex` is added manually.
 
@@ -74,7 +74,7 @@
       separately on a dark surface.
 - [ ] Sizes shows `sm` and `md`, including that the interactive hit target scales too.
 - [ ] States shows first/middle/final dot position, passive versus interactive rendering, and a
-      live interactive example (hover/focus/pressed have no `data-force-state` pinning here).
+      live interactive example (hover/focus/press have no `data-force-state` pinning here).
 - [ ] Content shows different totals, custom `getValueText`, and realistic LegacyHQ compositions
       including externally-controlled Previous/Next pagination.
 - [ ] Edge Cases shows a single-step journey, out-of-range value clamping, many steps in a narrow

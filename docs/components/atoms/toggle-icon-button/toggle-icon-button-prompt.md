@@ -111,7 +111,7 @@ Toggle Icon Button should be compatible with external Tooltip usage:
 
 ## Selected state
 
-`isSelected` controls the selected/pressed visual state.
+`isSelected` controls the selected/press visual state.
 
 This should be controlled by the parent.
 
@@ -299,7 +299,7 @@ Toggle Icon Button / Content
 Toggle Icon Button / EdgeCases
 ```
 
-States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+States uses `data-force-state` to pin hover/press as a static reference (documentation-only, same
 convention as Button/Checkbox) - focus preview needs no extra CSS, since the shared Focus Ring
 primitive already reacts to `data-force-state="focus"` directly on this element.
 
@@ -321,7 +321,7 @@ Test:
 - shape class
 - custom className
 - click behavior
-- data-force-state hover/pressed preview
+- data-force-state hover/press preview
 
 ## Do not
 

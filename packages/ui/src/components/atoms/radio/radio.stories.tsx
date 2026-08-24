@@ -125,8 +125,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Radio label="Label" name="state-unchecked" value="focus" className="previewFocus" />
         </Cell>
-        <Cell label="Pressed">
-          <Radio label="Label" name="state-unchecked" value="pressed" className="previewPress" />
+        <Cell label="Press">
+          <Radio label="Label" name="state-unchecked" value="press" className="previewPress" />
         </Cell>
         <Cell label="Disabled">
           <Radio label="Label" name="state-unchecked" value="disabled" disabled />
@@ -143,8 +143,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Radio label="Label" name="state-checked" value="focus" className="previewFocus" defaultChecked />
         </Cell>
-        <Cell label="Pressed">
-          <Radio label="Label" name="state-checked" value="pressed" className="previewPress" defaultChecked />
+        <Cell label="Press">
+          <Radio label="Label" name="state-checked" value="press" className="previewPress" defaultChecked />
         </Cell>
         <Cell label="Disabled">
           <Radio label="Label" name="state-checked" value="disabled" disabled defaultChecked />
@@ -161,8 +161,8 @@ export const States: Story = {
         <Cell label="Hover">
           <Radio label="Label" name="state-invalid" value="hover" invalid className="previewHover" />
         </Cell>
-        <Cell label="Pressed">
-          <Radio label="Label" name="state-invalid" value="pressed" invalid className="previewPress" />
+        <Cell label="Press">
+          <Radio label="Label" name="state-invalid" value="press" invalid className="previewPress" />
         </Cell>
       </Group>
 

@@ -135,16 +135,16 @@ describe('Radio', () => {
     expect(radioCss).toMatch(/\.indicatorTarget \{[^}]*background: transparent;/s);
     expect(radioCss).toMatch(/\.indicatorIcon \{[^}]*color: var\(--color-content-subtle\);/s);
     expect(radioCss).toMatch(/\.checkedIcon \{[^}]*color: var\(--color-content-brand-primary-default\);/s);
-    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
-    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hovered);');
-    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-pressed);');
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
+    expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(radioCss).toMatch(/\.radio\[data-invalid='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-error\);/s);
     expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \.labelText,\s*\.radio\[data-disabled='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);[^}]*opacity: 0\.32;/s);
     expect(radioCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus::after');
     expect(radioCss).toContain('inline-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
     expect(radioCss).toContain('block-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
-    expect(radioCss).toContain('border: var(--border-width-md) solid var(--color-border-focused);');
+    expect(radioCss).toContain('border: var(--border-width-md) solid var(--color-border-focus);');
   });
 
   it('uses compact density tokens for item, target, and focus anatomy', () => {

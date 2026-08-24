@@ -131,9 +131,9 @@ width (per size)        → --component-menu-width-sm / -md / -lg (new component
 label text               → --color-content-default
 description text         → --color-content-subtle
 disabled text             → --color-content-disabled
-row hover background     → --color-background-neutral-overlay-hovered
-row press background     → --color-background-neutral-overlay-pressed
-selected background      → --color-background-brand-primary-subtle-default (+ -hovered/-pressed)
+row hover background     → --color-background-neutral-overlay-hover
+row press background     → --color-background-neutral-overlay-press
+selected background      → --color-background-brand-primary-subtle-default (+ -hover/-press)
 selected text             → --color-content-brand-primary-default
 divider                  → --color-border-default
 row gap                  → --spacing-sm
@@ -148,7 +148,7 @@ Important:
   `fills`/`strokes`) - do not add a card-like skin to `.menu`.
 - Selected-row colors already exist as semantic tokens (verified: Figma's `isSelected` fills
   resolve to exactly `brand.prussian.solid.100/200/300`, already aliased by
-  `color-background-brand-primary-subtle-default/-hovered/-pressed` and
+  `color-background-brand-primary-subtle-default/-hover/-press` and
   `color-content-brand-primary-default`) - do not invent new "selected" tokens.
 - Do not hardcode colors, spacing, radius, or the per-size widths.
 - Do not import MUI or Tailwind.

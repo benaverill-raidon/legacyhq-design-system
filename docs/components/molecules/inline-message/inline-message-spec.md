@@ -52,10 +52,10 @@ There is no `disabled` prop - not evidenced anywhere in Figma's `inline-message`
 
 Figma's `inline-message` component set (node `4589:2519`, file `Components v1.0.0`) wraps a real
 `popup` instance around a `figma-parts / inline-message-trigger` sub-component (node `2448:72904`).
-The trigger's own `state` variant includes `default`, `hovered/open`, `focus`, and `pressed` - a
-single merged `hovered/open` state name, not two separately demonstrated ones. Read literally this
+The trigger's own `state` variant includes `default`, `hover/open`, `focus`, and `press` - a
+single merged `hover/open` state name, not two separately demonstrated ones. Read literally this
 is ambiguous between "hover reveals the panel" (mirroring Tooltip) and "click toggles it, and the
-open/hovered tint happens to share one visual treatment." This was resolved in favor of
+open/hover tint happens to share one visual treatment." This was resolved in favor of
 **click-to-toggle**, not hover, because:
 
 - Popup's own documentation is explicit that hover-only reveals belong to Tooltip, not to a
@@ -89,12 +89,12 @@ pattern from one sample:
 
 | Tone | Icon | Icon color | Hover/open tint |
 |------|------|------------|------------------|
-| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-hovered` |
-| `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hovered` |
-| `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hovered` |
-| `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hovered` |
-| `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hovered` |
-| `discovery` | `StatusDiscoveryIcon` | `--color-content-discovery` | `--color-background-discovery-overlay-hovered` |
+| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-hover` |
+| `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hover` |
+| `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hover` |
+| `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hover` |
+| `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hover` |
+| `discovery` | `StatusDiscoveryIcon` | `--color-content-discovery` | `--color-background-discovery-overlay-hover` |
 
 Figma's `default`-tone icon resolves to a component literally named `node` in the shared icon
 library - a generic, unrelated placeholder rather than a real status glyph. No `StatusDefaultIcon`
@@ -220,7 +220,7 @@ All six tones side by side, each with `content` provided.
 - Supports controlled `open`/`onOpenChange`
 - Does not close on Escape or an outside click
 - Applies `className` to the root row
-- Maps every tone to its own `overlay/hovered` tint token
+- Maps every tone to its own `overlay/hover` tint token
 - Delegates positioning/portal/dismissal to Popup rather than a local implementation
 - Reuses Popup's own `aria-expanded` wiring rather than a custom open attribute
 

@@ -208,8 +208,8 @@ export const States: Story = {
             Open client
           </LinkButton>
         </Cell>
-        <Cell label="Pressed">
-          <LinkButton href="/clients" data-force-state="active">
+        <Cell label="Press">
+          <LinkButton href="/clients" data-force-state="press">
             Open client
           </LinkButton>
         </Cell>
@@ -241,8 +241,8 @@ export const States: Story = {
             Open client
           </LinkButton>
         </Cell>
-        <Cell label="Pressed">
-          <LinkButton href="/clients" appearance="primary" data-force-state="active">
+        <Cell label="Press">
+          <LinkButton href="/clients" appearance="primary" data-force-state="press">
             Open client
           </LinkButton>
         </Cell>

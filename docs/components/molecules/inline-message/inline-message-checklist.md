@@ -94,7 +94,7 @@ inside Popup's default panel width.
   component in the system to do so; Tooltip only exercises `unstyled`.
 - Click-to-toggle, not hover - resolved this way specifically because Popup's own docs reserve
   hover-only reveals for Tooltip. See "Design Decisions Beyond the Literal Figma Sample" in
-  `inline-message-spec.md` for the full reasoning against Figma's ambiguous `hovered/open` state
+  `inline-message-spec.md` for the full reasoning against Figma's ambiguous `hover/open` state
   naming.
 - `tone="default"` renders a plain CSS dot, not a fabricated status icon - no matching icon exists
   in the generated set, and Figma's own `default`-tone trigger uses an unrelated placeholder glyph
@@ -129,7 +129,7 @@ inside Popup's default panel width.
   (discovery/default/info/success/warning/error) x `isOpen`.
 - `figma-parts / inline-message-trigger` sub-component: node `2448:72904`, properties `titleText`,
   `showTitle`, `secondaryText`, `showSecondaryText`, `tone`, `state`
-  (default/hovered-open/focus/pressed).
+  (default/hover-open/focus/press).
 - Each tone's icon, icon color, and hover/open background tint verified directly from Figma's bound
   variables per tone (not assumed to generalize from the `info` sample) - see the Tone Mapping
   table in `inline-message-spec.md`.

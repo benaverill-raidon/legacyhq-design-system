@@ -246,8 +246,8 @@ Default is false.
 
 When true, show value indicator only while:
 
-- hovered
-- focused
+- hover
+- focus
 - dragging / active
 
 For `SliderRange`, show the value indicator for the active handle.

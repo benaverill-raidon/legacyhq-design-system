@@ -189,8 +189,8 @@ export const States: Story = {
             <MoreHorizIcon />
           </IconButton>
         </Cell>
-        <Cell label="Pressed">
-          <IconButton aria-label="Pressed" data-force-state="active">
+        <Cell label="Press">
+          <IconButton aria-label="Press" data-force-state="press">
             <MoreHorizIcon />
           </IconButton>
         </Cell>
@@ -227,8 +227,8 @@ export const States: Story = {
             <MoreHorizIcon />
           </IconButton>
         </Cell>
-        <Cell label="Pressed">
-          <IconButton aria-label="Pressed" appearance="primary" data-force-state="active">
+        <Cell label="Press">
+          <IconButton aria-label="Press" appearance="primary" data-force-state="press">
             <MoreHorizIcon />
           </IconButton>
         </Cell>

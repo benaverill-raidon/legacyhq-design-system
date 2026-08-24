@@ -61,7 +61,7 @@ The component does not include:
 
 ## States
 
-Label is non-interactive and does not support hover, pressed, selected, loading, focus, or disabled states.
+Label is non-interactive and does not support hover, press, selected, loading, focus, or disabled states.
 
 If future requirements introduce interaction, create an explicit interactive component or wrapper rather than adding hidden button-like behavior to this component.
 

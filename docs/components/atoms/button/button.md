@@ -26,7 +26,7 @@ The public prop is named `disabled`, matching the native `button` attribute dire
 
 Use CSS Modules and design tokens. Use component tokens only for button min-height. Use semantic tokens for colors, spacing, radius, typography, border width, and focus treatment. Do not use MUI, Tailwind, hardcoded colors, hardcoded typography, or an icon-size prop. Icons use the medium icon size for all button sizes.
 
-State transitions (hover, pressed, focus) use the `fade-quick` semantic motion token rather than a hardcoded duration/easing pair, and are disabled under `prefers-reduced-motion: reduce`. Button has no pressed-state scale or other transform-based motion - pressed feedback is color-only.
+State transitions (hover, press, focus) use the `fade-quick` semantic motion token rather than a hardcoded duration/easing pair, and are disabled under `prefers-reduced-motion: reduce`. Button has no press-state scale or other transform-based motion - press feedback is color-only.
 
 ## Related components
 

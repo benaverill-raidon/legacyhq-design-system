@@ -121,13 +121,13 @@ describe('InlineMessage', () => {
     expect(container.firstElementChild).toHaveClass('custom-inline-message');
   });
 
-  it('maps each tone to its own overlay/hovered tint token, matching Figma', () => {
-    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-information-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-error-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-discovery-overlay-hovered);');
+  it('maps each tone to its own overlay/hover tint token, matching Figma', () => {
+    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-information-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-error-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-discovery-overlay-hover);');
   });
 
   it('delegates positioning, the portal, and dismissal to Popup instead of a local implementation', () => {

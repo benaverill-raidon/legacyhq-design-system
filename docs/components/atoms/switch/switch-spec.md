@@ -89,7 +89,7 @@ showIcons = true
   Figma's `isLoading=true` artwork is otherwise pixel-identical to the resting state (no visible
   differentiation); this implementation additionally replaces the visible on/off mark with a small
   `Spinner` in the same slot (inheriting that slot's own inherited color - no color override of its
-  own) as a usability improvement beyond the literal mockup, and suppresses the hover/pressed track
+  own) as a usability improvement beyond the literal mockup, and suppresses the hover/press track
   treatment while loading (matching how `disabled` already suppresses it).
 - `showIcons` (default `true`) toggles only the decorative check/X marks drawn inside the track.
   Setting it to `false` renders a bare track/thumb with no internal icon. It does not affect the
@@ -104,8 +104,8 @@ Supported states:
 - checked
 - hover
 - checked hover
-- pressed
-- checked pressed
+- press
+- checked press
 - focus
 - checked focus
 - disabled
@@ -140,7 +140,7 @@ Unchecked default:
 Unchecked hover:
 
 ```css
---color-background-neutral-bold-hovered
+--color-background-neutral-bold-hover
 ```
 
 Checked default:
@@ -152,7 +152,7 @@ Checked default:
 Checked hover:
 
 ```css
---color-background-success-bold-hovered
+--color-background-success-bold-hover
 ```
 
 Disabled:
@@ -296,7 +296,7 @@ Test:
 - supports required
 - supports loading: blocks toggling, sets `aria-busy`, stays focusable (not native `disabled`),
   replaces the on/off mark with a Spinner in the same slot (not the thumb), inherits that slot's
-  color with no override, suppresses hover/pressed CSS
+  color with no override, suppresses hover/press CSS
 - supports `showIcons={false}`: hides the decorative check/X marks; the loading Spinner still
   renders even when `showIcons` is false
 - supports custom className

@@ -129,7 +129,7 @@ function LiveToggleExample() {
 
 /**
  * Interaction and system states, crossed with checked. `data-force-state` mirrors the adjacent
- * pseudo-class so hover/pressed render as a static regression reference (documentation-only, not
+ * pseudo-class so hover/press render as a static regression reference (documentation-only, not
  * part of the public API); focus preview instead uses the shared Focus Ring primitive's own
  * `data-force-state="focus"` support on the input. Loading blocks toggling and announces
  * `aria-busy`, but stays focusable - unlike disabled, which removes it from the tab order - see the
@@ -148,8 +148,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Switch label="Label" data-force-state="focus" />
         </Cell>
-        <Cell label="Pressed">
-          <Switch label="Label" data-force-state="active" />
+        <Cell label="Press">
+          <Switch label="Label" data-force-state="press" />
         </Cell>
         <Cell label="Disabled">
           <Switch label="Label" disabled />
@@ -169,8 +169,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Switch label="Label" defaultChecked data-force-state="focus" />
         </Cell>
-        <Cell label="Pressed">
-          <Switch label="Label" defaultChecked data-force-state="active" />
+        <Cell label="Press">
+          <Switch label="Label" defaultChecked data-force-state="press" />
         </Cell>
         <Cell label="Disabled">
           <Switch label="Label" defaultChecked disabled />

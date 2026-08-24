@@ -131,7 +131,7 @@ describe('TextField', () => {
   it('replaces the border color on focus, the same way invalid does, instead of adding an outline', () => {
     expect(textFieldCss).not.toContain('outline-offset');
     expect(textFieldCss).not.toMatch(/outline:\s*var\(--border-width/);
-    expect(textFieldCss).toContain('border-color: var(--color-border-focused);');
+    expect(textFieldCss).toContain('border-color: var(--color-border-focus);');
   });
 
   it('paints focus/invalid on appearance=default via box-shadow, not a real border-width change (avoids shifting the text/caret)', () => {
@@ -140,8 +140,8 @@ describe('TextField', () => {
     );
     const invalidRuleMatch = textFieldCss.match(/\.root\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
-    expect(focusRuleMatch?.[1]).toContain('border-color: var(--color-border-focused);');
-    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 1px var(--color-border-focused);');
+    expect(focusRuleMatch?.[1]).toContain('border-color: var(--color-border-focus);');
+    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 1px var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).not.toContain('border-width');
 
     expect(invalidRuleMatch?.[1]).toContain('border-color: var(--color-border-error);');
@@ -178,8 +178,8 @@ describe('TextField', () => {
     );
     const invalidRuleMatch = textFieldCss.match(/\.appearance_subtle\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
-    expect(focusRuleMatch?.[1]).toContain('border-bottom-color: var(--color-border-focused);');
-    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 -1px 0 0 var(--color-border-focused);');
+    expect(focusRuleMatch?.[1]).toContain('border-bottom-color: var(--color-border-focus);');
+    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 -1px 0 0 var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).not.toContain('border-bottom-width');
 
     expect(invalidRuleMatch?.[1]).toContain('box-shadow: inset 0 -1px 0 0 var(--color-border-error);');

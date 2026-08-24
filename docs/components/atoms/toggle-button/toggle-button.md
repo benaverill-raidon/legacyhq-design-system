@@ -13,7 +13,7 @@ Do not use for navigation or momentary actions.
 Combine the familiarity of a button with a persistent selected state. The icon-to-text gap is a
 constant 6px at every size, and the icon itself is never resized by the component, matching Button.
 
-Shares Button's hover/pressed/focus `fade-quick` color transitions. No pressed-state scale, and
+Shares Button's hover/press/focus `fade-quick` color transitions. No press-state scale, and
 becoming selected is a plain color change with no pop/scale motion - transform-based feedback has
 been removed from this component.
 

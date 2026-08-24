@@ -2,7 +2,7 @@
 
 Avatar is an atom that visually represents a person. It can render a profile image, fall back to full-size light or dark person artwork, and show one optional badge for either presence or calendar reply status.
 
-Use Avatar for people in profile headers, participant lists, assignee rows, comments, activity records, and selectable people-focused UI. Use it when the visual identity marker supports nearby person-related content or acts as a compact interactive identity control.
+Use Avatar for people in profile headers, participant lists, assignee rows, comments, activity records, and selectable people-focus UI. Use it when the visual identity marker supports nearby person-related content or acts as a compact interactive identity control.
 
 Do not use Avatar for families, firms, trusts, accounts, or other non-person entities. Do not use it for avatar groups, initials fallback, square entity icons, internal tooltips, or selected/toggled controls that need more complex composition. Use Avatar Group or a future Entity Avatar pattern instead.
 
@@ -18,6 +18,6 @@ Avatar root
 
 Static meaningful avatars should expose an accessible name through `name`, `alt`, `aria-label`, or `aria-labelledby`. Decorative avatars should be hidden from assistive technology. Interactive avatars render as native buttons and must have an accessible label. When relevant, selected, presence, and status information should be included in the accessible label.
 
-Implementation should preserve native semantics, avoid tooltip or group behavior, avoid invalid interactive nesting, use the shared Focus Ring pattern for interactive focus-visible styling, and keep hover and pressed styles limited to interactive avatars. Image load failure must fall back to the theme-aware person artwork without changing the public API.
+Implementation should preserve native semantics, avoid tooltip or group behavior, avoid invalid interactive nesting, use the shared Focus Ring pattern for interactive focus-visible styling, and keep hover and press styles limited to interactive avatars. Image load failure must fall back to the theme-aware person artwork without changing the public API.
 
-The interactive hover/pressed overlay fades in using `fade-quick`. The selected-state ring grows in using `move-quick` (the spring-eased motion token) rather than snapping to full width instantly, since it's a physical ring appearing/growing rather than a plain color change.
+The interactive hover/press overlay fades in using `fade-quick`. The selected-state ring grows in using `move-quick` (the spring-eased motion token) rather than snapping to full width instantly, since it's a physical ring appearing/growing rather than a plain color change.

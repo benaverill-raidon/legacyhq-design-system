@@ -53,7 +53,7 @@
     "subComponents": [],
     "tokens": {
       "color": {
-        "outline": "--color-border-focused"
+        "outline": "--color-border-focus"
       },
       "borderWidth": {
         "default": "--border-width-md"
@@ -654,8 +654,8 @@
         "offlineBadge": "--color-content-subtle",
         "selectedBorder": "--color-border-selected",
         "badgeBorder": "--color-border-inverse",
-        "hovered": "--color-interaction-hovered",
-        "pressed": "--color-interaction-pressed"
+        "hover": "--color-interaction-hover",
+        "press": "--color-interaction-press"
       }
     },
     "accessibility": {},
@@ -1685,8 +1685,8 @@
         "discoverySelected": "color-background-discovery-bold-default",
         "invertedSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
-        "interactiveHover": "color-background-neutral-subtle-hovered",
-        "interactivePressed": "color-background-neutral-subtle-pressed",
+        "interactiveHover": "color-background-neutral-subtle-hover",
+        "interactivePressed": "color-background-neutral-subtle-press",
         "radius": "border-radius-full-round",
         "spacing": "spacing-0"
       },
@@ -1932,13 +1932,13 @@
         "errorContent": "color-content-error",
         "inverseContent": "color-content-inverse",
         "inputBackgroundDefault": "color-background-input-default",
-        "inputBackgroundHovered": "color-background-neutral-overlay-hovered",
-        "inputBackgroundPressed": "color-background-neutral-overlay-pressed",
-        "selectedBackgroundHovered": "color-background-brand-primary-overlay-hovered",
-        "selectedBackgroundPressed": "color-background-brand-primary-overlay-pressed",
+        "inputBackgroundHovered": "color-background-neutral-overlay-hover",
+        "inputBackgroundPressed": "color-background-neutral-overlay-press",
+        "selectedBackgroundHovered": "color-background-brand-primary-overlay-hover",
+        "selectedBackgroundPressed": "color-background-brand-primary-overlay-press",
         "selectedBoldBackground": "color-background-selected-bold-default",
         "inputBorder": "color-border-input",
-        "focusedBorder": "color-border-focused",
+        "focusedBorder": "color-border-focus",
         "errorBorder": "color-border-error",
         "disabledBorder": "color-border-disabled",
         "disabledBackground": "color-background-disabled",
@@ -2548,7 +2548,7 @@
         "separator": "--typography-body-md-*"
       },
       "color": {
-        "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/pressed color (see compositionRules)",
+        "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/press color (see compositionRules)",
         "current": "--color-content-subtle",
         "separator": "--color-content-subtle"
       }
@@ -2613,7 +2613,7 @@
         "Whether an item is 'current' is derived from the absence of `href`, not a separate isCurrent flag - simplest possible rule, consistent with Link's own required `href`.",
         "iconBefore/iconAfter are exposed as arbitrary ReactNode, matching the BOOLEAN toggle properties Figma exposes on the breadcrumb-item part.",
         "The current-page item no longer uses --color-content-default to visually distinguish it from ancestor links - per explicit design feedback, that differentiation wasn't wanted; it now uses the same --color-content-subtle as Link's own appearance=subtle, so every item in the trail reads at the same visual weight.",
-        "Link's own :visited treatment (a real browser-history-driven purple color swap) is intentionally overridden back to Link's normal resting/pressed color for every breadcrumb ancestor - per explicit design feedback, 'have you visited this URL before' isn't a signal breadcrumbs should surface, since it makes the trail read as a list of arbitrary hyperlinks rather than a location path. This is a documented, deliberate exception to the 'do not restyle Link's own hover/focus/pressed treatment' compositionRule below - it targets :visited specifically, not those states."
+        "Link's own :visited treatment (a real browser-history-driven purple color swap) is intentionally overridden back to Link's normal resting/press color for every breadcrumb ancestor - per explicit design feedback, 'have you visited this URL before' isn't a signal breadcrumbs should surface, since it makes the trail read as a list of arbitrary hyperlinks rather than a location path. This is a documented, deliberate exception to the 'do not restyle Link's own hover/focus/press treatment' compositionRule below - it targets :visited specifically, not those states."
       ]
     }
   },
@@ -3255,7 +3255,7 @@
         "description": "Composes with the root row's class list."
       },
       "data-force-state": {
-        "type": "'hover' | 'focus' | 'active'",
+        "type": "'hover' | 'focus' | 'press'",
         "required": false,
         "default": null,
         "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
@@ -3864,9 +3864,9 @@
       },
       "color": {
         "default_background": "--color-elevation-surface-raised-default",
-        "hover_background": "--color-elevation-surface-raised-hovered",
+        "hover_background": "--color-elevation-surface-raised-hover",
         "border_default": "--color-border-input",
-        "border_focused": "--color-border-focused",
+        "border_focused": "--color-border-focus",
         "border_error": "--color-border-error",
         "border_disabled": "--color-border-disabled",
         "background_disabled": "--color-background-disabled",
@@ -3979,11 +3979,11 @@
         "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square. A third `label` type was added later, nesting a real Label atom instance (tone=default, emphasis=subtle) for compact metadata/status after the input (e.g. a unit or status pill) - confirmed directly from the component's own nested instance properties, not assumed. iconAfter is already typed React.ReactNode and .action is a plain centered flex wrapper, so a Label already renders correctly there with no component code changes."
       },
       "apiAdaptationNotes": [
-        "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focused+empty (:focus-within + :placeholder-shown), typing=focused+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
+        "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focus+empty (:focus-within + :placeholder-shown), typing=focus+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
         "Figma's 'tone' axis (standard/subtle) is renamed to 'appearance' (default/subtle) - a pure visual-weight distinction, matching this system's existing appearance vocabulary (see Button) rather than the semantic-meaning 'tone' word.",
         "isInvalid renders with strokeWeight=2 even when not focused, confirmed directly from node data - invalid's thicker border is not a focus-only effect.",
-        "Figma's literal focus treatment thickens the frame's own border 1px->2px and swaps its color to --color-border-focused. Focus/typing replaces the resting border's color directly - the same pattern invalid already uses - rather than adding an outline ring around it, per explicit design feedback. Border width does not literally change to 2px, though: an earlier pass changed the real border-width on appearance=default's focus AND invalid, matching Figma directly, but that shifts the content box (and the placeholder/value text and typing caret) on every side, reported directly against the component from a side-by-side screenshot - both now paint the extra pixel via box-shadow: inset 0 0 0 1px <color> instead, keeping border-width a constant 1px in the box model with zero layout impact.",
-        "Hover is suppressed once the field is focused/typing (:focus-within, or the pinned data-force-state='focus' reference) - hover should only ever be visible on an inactive field, per explicit design feedback.",
+        "Figma's literal focus treatment thickens the frame's own border 1px->2px and swaps its color to --color-border-focus. Focus/typing replaces the resting border's color directly - the same pattern invalid already uses - rather than adding an outline ring around it, per explicit design feedback. Border width does not literally change to 2px, though: an earlier pass changed the real border-width on appearance=default's focus AND invalid, matching Figma directly, but that shifts the content box (and the placeholder/value text and typing caret) on every side, reported directly against the component from a side-by-side screenshot - both now paint the extra pixel via box-shadow: inset 0 0 0 1px <color> instead, keeping border-width a constant 1px in the box model with zero layout impact.",
+        "Hover is suppressed once the field is focus/typing (:focus-within, or the pinned data-force-state='focus' reference) - hover should only ever be visible on an inactive field, per explicit design feedback.",
         "showCaret and placeholder (BOOLEAN) component properties exist only to drive Figma's own mockup and have no code equivalent - a real input shows its own caret and switches placeholder/value automatically.",
         "appearance=subtle's bottom corners are always square (border-bottom-{left,right}-radius: 0), confirmed directly from Figma's per-corner radius data on the subtle variants - only the top corners share appearance=default's radius.",
         "appearance=subtle rests at the same 1px bottom border-width appearance=default uses at rest, per explicit design feedback (an earlier pass reserved a constant 2px transparent border specifically to avoid a layout shift; that reservation was reverted). Reverting it reintroduced the shift a real border-width change causes (the vertically-centered text visibly nudges by a pixel), so focus/invalid on appearance=subtle now paint the thicker look via box-shadow (inset 0 -1px 0 0 <color>) instead, keeping border-bottom-width a constant 1px in the box model at every state - zero layout impact. appearance.default's own invalid/focus still uses a real border-width change (a whole-box change on all four sides is a much smaller relative shift there), so this technique is specific to appearance=subtle.",
@@ -4353,11 +4353,11 @@
         "labelDefault": "--color-content-default",
         "descriptionDefault": "--color-content-subtle",
         "disabled": "--color-content-disabled",
-        "rowHover": "--color-background-neutral-overlay-hovered",
-        "rowPress": "--color-background-neutral-overlay-pressed",
+        "rowHover": "--color-background-neutral-overlay-hover",
+        "rowPress": "--color-background-neutral-overlay-press",
         "selectedBackground": "--color-background-brand-primary-subtle-default",
-        "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hovered",
-        "selectedBackgroundPressed": "--color-background-brand-primary-subtle-pressed",
+        "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hover",
+        "selectedBackgroundPressed": "--color-background-brand-primary-subtle-press",
         "selectedText": "--color-content-selected",
         "selectedIndicator": "--color-border-brand-primary (2px inset left box-shadow, --border-width-md - see behaviorRules)",
         "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
@@ -4379,7 +4379,7 @@
         "description": "--typography-body-sm-* (12px)",
         "heading": "--typography-body-sm-*"
       },
-      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hovered/-pressed, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hover/-press, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
     },
     "accessibility": {
       "role": "menu (on the sections container)",

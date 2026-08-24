@@ -33,7 +33,7 @@ Atom
 - Icons use the medium icon size for all button sizes.
 - Icon gap remains consistent across sizes using `spacing-075`.
 - Use shared Focus Ring utility classes instead of component-specific focus styles.
-- Use the `fade-quick` semantic motion token for hover/pressed/focus color transitions instead of a hardcoded duration/easing.
+- Use the `fade-quick` semantic motion token for hover/press/focus color transitions instead of a hardcoded duration/easing.
 - Support `isLoading` while preserving the original label width to prevent layout shift.
 - Support `isFullWidth` for layout flexibility.
 - Do not support selected/toggled behavior in the base Button.
@@ -64,7 +64,7 @@ Atom
 
 - default
 - hover
-- pressed
+- press
 - focus
 - disabled
 - loading
@@ -160,7 +160,7 @@ Stories should document behavior, not create one story per variant permutation.
 - Button supports all sizes.
 - Button supports all appearances.
 - Button supports all tones.
-- Button supports hover, pressed, focus, disabled, and loading states.
+- Button supports hover, press, focus, disabled, and loading states.
 - Loading state preserves width.
 - Loading state prevents duplicate activation.
 - Full-width button fills its container.

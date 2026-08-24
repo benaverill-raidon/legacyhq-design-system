@@ -136,7 +136,7 @@
   "behaviorRules": [
     "Render a non-interactive div.",
     "Do not make Skeleton focusable.",
-    "Do not add hover, pressed, active, or disabled states.",
+    "Do not add hover, press, active, or disabled states.",
     "Default appearance is subtle, default shape is rectangle.",
     "Apply data-appearance and data-shape equal to the selected values.",
     "Pulse continuously via CSS animation regardless of which appearance is selected.",

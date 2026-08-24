@@ -313,8 +313,8 @@ every other atom in this system calls its neutral/no-emphasis option (Button's `
 Toggle Button's `tone`, etc.). This is an intentional naming divergence from Figma, not a mismatch
 to reconcile.
 
-`default` maps to `color-background-neutral-subtle-default`/`hovered`/`pressed` for its background
-across default/hover/pressed, `color-border-bold` for its border, and `color-content-default` for
+`default` maps to `color-background-neutral-subtle-default`/`hover`/`press` for its background
+across default/hover/press, `color-border-bold` for its border, and `color-content-default` for
 its text - a solid color swap like every other tone, rather than a `background-image` overlay.
 
 ### Icon size stays constant across `size`
@@ -419,7 +419,7 @@ icon glyph should read as visually identical in size across both.
 ### States story
 
 `data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
-API) so hover/pressed render as a static regression reference - the same convention Button and
+API) so hover/press render as a static regression reference - the same convention Button and
 Checkbox use. Passing it on a removable tag previews both the content and remove areas together,
 since Figma only documents one combined hover/press swatch. Focus preview uses real `autoFocus`,
 since content and the remove button are two independently-focusable elements with their own rings -
@@ -469,7 +469,7 @@ applies tone class
 applies size class
 custom className works
 keeps the elemBefore/remove icon a constant 16px regardless of size
-supports data-force-state hover/pressed preview on both the content and remove areas
+supports data-force-state hover/press preview on both the content and remove areas
 renders a button when isInteractive is set with no href/isRemovable
 renders a button when onClick is provided with no href/isRemovable, even without isInteractive
 calls onClick when the interactive tag button is activated

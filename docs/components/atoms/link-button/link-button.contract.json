@@ -44,7 +44,7 @@
   "states": [
     "default",
     "hover",
-    "pressed",
+    "press",
     "focus",
     "disabled"
   ],

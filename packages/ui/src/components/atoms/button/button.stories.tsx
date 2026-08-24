@@ -194,8 +194,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Button data-force-state="focus">Save changes</Button>
         </Cell>
-        <Cell label="Pressed">
-          <Button data-force-state="active">Save changes</Button>
+        <Cell label="Press">
+          <Button data-force-state="press">Save changes</Button>
         </Cell>
         <Cell label="Disabled">
           <Button disabled>Save changes</Button>
@@ -219,8 +219,8 @@ export const States: Story = {
             Save changes
           </Button>
         </Cell>
-        <Cell label="Pressed">
-          <Button appearance="primary" data-force-state="active">
+        <Cell label="Press">
+          <Button appearance="primary" data-force-state="press">
             Save changes
           </Button>
         </Cell>
@@ -250,8 +250,8 @@ export const States: Story = {
             Save changes
           </Button>
         </Cell>
-        <Cell label="Pressed">
-          <Button appearance="subtle" data-force-state="active">
+        <Cell label="Press">
+          <Button appearance="subtle" data-force-state="press">
             Save changes
           </Button>
         </Cell>

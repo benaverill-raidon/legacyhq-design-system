@@ -121,8 +121,8 @@ Create tests for:
 6. Export component and types.
 7. Do not add a `state` prop - hover/focus/typing/filled all derive from native pseudo-classes and
    the input's own value, not a controlled prop.
-8. Implement the focused-frame indicator via `:focus-within` using Focus Ring's own token values
-   (`--color-border-focused`, `--border-width-md`, `2px` offset) rather than a literal
+8. Implement the focus-frame indicator via `:focus-within` using Focus Ring's own token values
+   (`--color-border-focus`, `--border-width-md`, `2px` offset) rather than a literal
    border-width change, to avoid a layout shift on focus/blur.
 
 ---

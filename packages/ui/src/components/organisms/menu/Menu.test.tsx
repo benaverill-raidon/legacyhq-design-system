@@ -282,8 +282,8 @@ describe('Menu', () => {
     expect(menuCss).toContain('var(--component-menu-width-sm)');
     expect(menuCss).toContain('var(--component-menu-width-md)');
     expect(menuCss).toContain('var(--component-menu-width-lg)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-hovered)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-pressed)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-hover)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-press)');
     expect(menuCss).toContain('var(--color-background-brand-primary-subtle-default)');
     expect(menuCss).toContain('var(--color-content-selected)');
   });

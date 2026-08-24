@@ -54,8 +54,8 @@
   "states": [
     "default",
     "hover",
-    "pressed",
-    "focused",
+    "press",
+    "focus",
     "disabled"
   ],
   "slots": [

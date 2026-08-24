@@ -175,7 +175,7 @@
   "behaviorRules": [
     "Render a non-interactive span.",
     "Do not make Badge focusable.",
-    "Do not add hover, pressed, active, loading, or disabled states.",
+    "Do not add hover, press, active, loading, or disabled states.",
     "Default tone is default.",
     "Apply data-tone equal to the selected tone.",
     "Support className composition."

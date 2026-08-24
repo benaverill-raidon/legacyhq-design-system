@@ -36,4 +36,4 @@ The online presence badge is a solid semantic success-green circle with no inter
 
 ## Token guidance
 
-Keep component tokens only for avatar-specific anatomy such as avatar size, badge container size, and badge icon size. Prefer semantic tokens directly for badge color, selected border, badge border, hover and pressed overlays, border width, radius, and offline subtle content color.
+Keep component tokens only for avatar-specific anatomy such as avatar size, badge container size, and badge icon size. Prefer semantic tokens directly for badge color, selected border, badge border, hover and press overlays, border width, radius, and offline subtle content color.

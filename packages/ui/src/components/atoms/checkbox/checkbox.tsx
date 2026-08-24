@@ -41,7 +41,7 @@ export const Checkbox = React.memo(
     const inputId = id ?? generatedId;
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
-    // it to the root label, since hover/pressed styling keys off the label rather than the input.
+    // it to the root label, since hover/press styling keys off the label rather than the input.
     const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
 
     React.useEffect(() => {

@@ -30,7 +30,7 @@ export const Switch = React.memo(
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
     // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
-    // it to the root label, since hover/pressed styling keys off the label rather than the input.
+    // it to the root label, since hover/press styling keys off the label rather than the input.
     const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
 
     const handleChange = React.useCallback(

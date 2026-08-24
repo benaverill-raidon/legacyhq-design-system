@@ -88,7 +88,7 @@
       "description": "Composes with the root row's class list."
     },
     "data-force-state": {
-      "type": "'hover' | 'focus' | 'active'",
+      "type": "'hover' | 'focus' | 'press'",
       "required": false,
       "default": null,
       "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
@@ -100,12 +100,12 @@
   ],
   "variants": {
     "tone": {
-      "default": { "icon": "plain CSS dot (no matching status icon exists)", "iconColorToken": "--color-content-default", "tintToken": "--color-background-neutral-overlay-hovered" },
-      "info": { "icon": "StatusInformationIcon", "iconColorToken": "--color-content-information", "tintToken": "--color-background-information-overlay-hovered" },
-      "success": { "icon": "StatusSuccessIcon", "iconColorToken": "--color-content-success", "tintToken": "--color-background-success-overlay-hovered" },
-      "warning": { "icon": "StatusWarningIcon", "iconColorToken": "--color-content-warning", "tintToken": "--color-background-warning-overlay-hovered" },
-      "error": { "icon": "StatusErrorIcon", "iconColorToken": "--color-content-error", "tintToken": "--color-background-error-overlay-hovered" },
-      "discovery": { "icon": "StatusDiscoveryIcon", "iconColorToken": "--color-content-discovery", "tintToken": "--color-background-discovery-overlay-hovered" }
+      "default": { "icon": "plain CSS dot (no matching status icon exists)", "iconColorToken": "--color-content-default", "tintToken": "--color-background-neutral-overlay-hover" },
+      "info": { "icon": "StatusInformationIcon", "iconColorToken": "--color-content-information", "tintToken": "--color-background-information-overlay-hover" },
+      "success": { "icon": "StatusSuccessIcon", "iconColorToken": "--color-content-success", "tintToken": "--color-background-success-overlay-hover" },
+      "warning": { "icon": "StatusWarningIcon", "iconColorToken": "--color-content-warning", "tintToken": "--color-background-warning-overlay-hover" },
+      "error": { "icon": "StatusErrorIcon", "iconColorToken": "--color-content-error", "tintToken": "--color-background-error-overlay-hover" },
+      "discovery": { "icon": "StatusDiscoveryIcon", "iconColorToken": "--color-content-discovery", "tintToken": "--color-background-discovery-overlay-hover" }
     }
   },
   "states": ["default", "hover", "open", "disabled-row-when-no-content"],
@@ -182,7 +182,7 @@
     "Supports defaultOpen and controlled open/onOpenChange.",
     "Does not close on Escape or an outside click.",
     "Supports className on the root row.",
-    "Maps every tone to its own overlay/hovered tint token.",
+    "Maps every tone to its own overlay/hover tint token.",
     "Delegates positioning/portal/dismissal to Popup rather than a local implementation.",
     "Storybook includes Playground, Variants, Content, and EdgeCases.",
     "Tests cover title/secondaryText rendering, tone icons, open/close toggling, controlled/uncontrolled usage, dismissal behavior, and className."

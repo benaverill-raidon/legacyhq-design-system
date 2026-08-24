@@ -329,8 +329,8 @@ describe('tag helpers', () => {
 describe('tag CSS contract', () => {
   it('maps default and accent tones to semantic Figma-backed tokens', () => {
     expect(tagCss).toContain('--tag-background: var(--color-background-neutral-subtle-default);');
-    expect(tagCss).toContain('--tag-background-hovered: var(--color-background-neutral-subtle-hovered);');
-    expect(tagCss).toContain('--tag-background-pressed: var(--color-background-neutral-subtle-pressed);');
+    expect(tagCss).toContain('--tag-background-hover: var(--color-background-neutral-subtle-hover);');
+    expect(tagCss).toContain('--tag-background-press: var(--color-background-neutral-subtle-press);');
     expect(tagCss).toContain('--tag-border: var(--color-border-bold);');
     expect(tagCss).toContain('--tag-color: var(--color-content-default);');
     expect(tagCss).toContain('--tag-background: var(--color-background-accent-blue-subtle-default);');
@@ -400,9 +400,9 @@ describe('tag CSS contract', () => {
     expect(sizeMdBlock).not.toContain('--tag-icon-size');
   });
 
-  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+  it('supports pinning hover/press as a static Storybook reference via data-force-state', () => {
     expect(tagCss).toContain("[data-force-state='hover']");
-    expect(tagCss).toContain("[data-force-state='active']");
+    expect(tagCss).toContain("[data-force-state='press']");
     expect(tagCss).toContain(".wrapper[data-force-state='hover'] .contentInteractive");
     expect(tagCss).toContain(".wrapper[data-force-state='hover'] .removeButton");
   });

@@ -23,7 +23,7 @@ Primitive
 ## Purpose
 
 ### What problem does this primitive solve?
-Focus Ring provides a visible focus indicator for focused interactive elements.
+Focus Ring provides a visible focus indicator for focus interactive elements.
 
 ### Why does it need to exist?
 Keyboard users need a clear visual indication of which interactive element currently has focus.
@@ -94,7 +94,7 @@ Example:
 Both variants use:
 
 ```css
---color-border-focused
+--color-border-focus
 ```
 
 ---
@@ -163,4 +163,4 @@ Final implementation decisions:
 - Radius should inherit from the focused element where possible.
 - Default variant uses 2px.
 - Use `:focus-visible`.
-- Use `--color-border-focused`.
+- Use `--color-border-focus`.

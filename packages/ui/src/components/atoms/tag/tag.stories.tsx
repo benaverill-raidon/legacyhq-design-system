@@ -212,7 +212,7 @@ function LiveInteractionExample() {
 
 /**
  * Interaction and system states. `data-force-state` mirrors the adjacent pseudo-class so
- * hover/pressed render as a static regression reference (documentation-only, not part of the
+ * hover/press render as a static regression reference (documentation-only, not part of the
  * public API) - the same convention Button and Checkbox use; passing it on a removable Tag previews
  * both the content and remove areas together, matching Figma's single combined hover/press swatch.
  * Focus preview uses real `autoFocus`, since content and the remove button are two independently
@@ -238,8 +238,8 @@ export const States: Story = {
             Trust
           </Tag>
         </Cell>
-        <Cell label="Pressed">
-          <Tag href="/trusts/123" data-force-state="active">
+        <Cell label="Press">
+          <Tag href="/trusts/123" data-force-state="press">
             Trust
           </Tag>
         </Cell>
@@ -261,8 +261,8 @@ export const States: Story = {
             Trust
           </Tag>
         </Cell>
-        <Cell label="Pressed">
-          <Tag isRemovable onRemove={() => undefined} data-force-state="active">
+        <Cell label="Press">
+          <Tag isRemovable onRemove={() => undefined} data-force-state="press">
             Trust
           </Tag>
         </Cell>
@@ -291,8 +291,8 @@ export const States: Story = {
             +5 more
           </Tag>
         </Cell>
-        <Cell label="Pressed">
-          <Tag isInteractive onClick={() => undefined} data-force-state="active">
+        <Cell label="Press">
+          <Tag isInteractive onClick={() => undefined} data-force-state="press">
             +5 more
           </Tag>
         </Cell>

@@ -318,10 +318,10 @@ Show `xs`/`sm`/`md`/`lg` side by side.
 ### States story
 
 `data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
-API) so hover/pressed render as a static regression reference - the same convention Button and
+API) so hover/press render as a static regression reference - the same convention Button and
 Checkbox use. Focus preview needs no extra CSS: the shared Focus Ring primitive already reacts to
 `data-force-state="focus"` directly on this element. Cross unselected/selected with
-default/hover/focus/pressed/disabled, and include a live click-to-toggle example.
+default/hover/focus/press/disabled, and include a live click-to-toggle example.
 
 ### Content story
 
@@ -362,7 +362,7 @@ disabled prevents click
 custom className works
 forwards ref
 uses a 6px icon-to-text gap at every size
-supports data-force-state hover/pressed preview
+supports data-force-state hover/press preview
 ```
 
 ## Future considerations

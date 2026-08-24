@@ -80,12 +80,12 @@ Map each tone to its own status icon, icon color, and hover/open tint token - ve
 directly from Figma, not assumed to generalize from one sample:
 
 ```txt
-default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-hovered
-info     -> StatusInformationIcon (information)     | --color-background-information-overlay-hovered
-success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hovered
-warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hovered
-error    -> StatusErrorIcon (error)                  | --color-background-error-overlay-hovered
-discovery -> StatusDiscoveryIcon (discovery)         | --color-background-discovery-overlay-hovered
+default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-hover
+info     -> StatusInformationIcon (information)     | --color-background-information-overlay-hover
+success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hover
+warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hover
+error    -> StatusErrorIcon (error)                  | --color-background-error-overlay-hover
+discovery -> StatusDiscoveryIcon (discovery)         | --color-background-discovery-overlay-hover
 ```
 
 `default` has no matching status icon in the generated icon set (Figma's own `default`-tone trigger
@@ -152,7 +152,7 @@ supports defaultOpen
 supports controlled open/onOpenChange
 does not close on Escape or an outside click
 applies className to the root row
-maps every tone to its own overlay/hovered tint token
+maps every tone to its own overlay/hover tint token
 delegates positioning/portal/dismissal to Popup, not a local implementation
 reuses Popup's own aria-expanded wiring instead of a custom attribute
 ```

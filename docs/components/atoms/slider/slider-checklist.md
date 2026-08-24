@@ -80,7 +80,7 @@ SliderRange:
 
 - orientation: `horizontal`, `vertical`
 - size: `xs`, `sm`, `md`
-- state: default, hovered, pressed, focused, disabled
+- state: default, hover, press, focus, disabled
 - showStops: boolean
 - showValue: boolean
 
@@ -139,7 +139,7 @@ Do not hardcode:
 - Dragging handle updates value.
 - Clicking track updates value through native range behavior.
 - Keyboard arrows update value.
-- Hover/pressed states affect handle and active track.
+- Hover/press states affect handle and active track.
 - Focus-visible uses the shared Focus Ring primitive/pattern.
 - Vertical orientation works with keyboard and pointer input.
 

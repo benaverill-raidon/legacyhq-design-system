@@ -27,7 +27,7 @@
     "shape": ["square", "round"]
   },
   "sizes": ["xs", "sm", "md", "lg"],
-  "states": ["default", "hover", "pressed", "focus", "disabled", "loading", "expanded"],
+  "states": ["default", "hover", "press", "focus", "disabled", "loading", "expanded"],
   "accessibility": {
     "accessibleNameRequired": true,
     "tooltipUsesAccessibleNameByDefault": true

@@ -76,13 +76,13 @@ missing accessible name today, so this is easy to get wrong silently - see Edge 
 ### Invalid state
 
 `invalid` sets `aria-invalid` on the input (or the fieldset, for `RadioGroup`) and switches the
-hover/pressed treatment, but color alone doesn't carry the meaning - pair it with a visible message
+hover/press treatment, but color alone doesn't carry the meaning - pair it with a visible message
 via `errorMessage` (on `RadioGroup`) or `aria-describedby` (on a standalone `Radio`).
 
 ### Verifying interaction states
 
 Radio predates the shared `data-force-state` convention that Checkbox, Button, and Avatar use -
-its own CSS pins hover, pressed, and focus with `previewHover` / `previewPress` / `previewFocus`
+its own CSS pins hover, press, and focus with `previewHover` / `previewPress` / `previewFocus`
 classes instead. See States for both the pinned reference states and a live, click-driven example.
 
 ## Do / Don't

@@ -233,8 +233,8 @@ describe('ToggleIconButton', () => {
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-sm);');
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-md);');
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-lg);');
-    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-press);');
     expect(toggleIconButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
     expect(toggleIconButtonCss).toContain('border-color: var(--color-border-brand-primary);');
     expect(toggleIconButtonCss).toContain('color: var(--color-content-brand-primary-default);');
@@ -248,14 +248,14 @@ describe('ToggleIconButton', () => {
     expect(toggleIconButtonCss).not.toContain('--color-border-selected');
   });
 
-  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+  it('supports pinning hover/press as a static Storybook reference via data-force-state', () => {
     expect(toggleIconButtonCss).toContain("[data-force-state='hover']");
-    expect(toggleIconButtonCss).toContain("[data-force-state='active']");
+    expect(toggleIconButtonCss).toContain("[data-force-state='press']");
   });
 
   it('shows the hover fill on focus-visible too, matching Button', () => {
     expect(toggleIconButtonCss).toMatch(
-      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hover\);/,
     );
   });
 

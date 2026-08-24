@@ -59,8 +59,8 @@
       "offlineBadge": "--color-content-subtle",
       "selectedBorder": "--color-border-selected",
       "badgeBorder": "--color-border-inverse",
-      "hovered": "--color-interaction-hovered",
-      "pressed": "--color-interaction-pressed"
+      "hover": "--color-interaction-hover",
+      "press": "--color-interaction-press"
     }
   }
 }

@@ -71,7 +71,7 @@
   "states": [
     "default",
     "hover",
-    "pressed",
+    "press",
     "focus",
     "visited"
   ],

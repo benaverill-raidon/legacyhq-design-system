@@ -172,10 +172,10 @@ Menu itself carries no background/border/shadow - verified directly against Figm
 introducing new ones:
 
 - Default row text: `--color-content-default` (label), `--color-content-subtle` (description).
-- Hover/press row background: `--color-background-neutral-overlay-hovered` /
-  `-overlay-pressed`.
+- Hover/press row background: `--color-background-neutral-overlay-hover` /
+  `-overlay-press`.
 - Selected row background: `--color-background-brand-primary-subtle-default` (and the
-  `-hovered`/`-pressed` variants on interaction) - Figma's `isSelected` fills
+  `-hover`/`-press` variants on interaction) - Figma's `isSelected` fills
   (`#e5f6ff`/`#ccecff`/`#b3e3ff`) resolved exactly to these already-existing tokens
   (`brand.prussian.solid.100/200/300`), so no new color token was needed for the background.
 - Selected row text and icon: `--color-content-selected` - a genuinely distinct Figma variable

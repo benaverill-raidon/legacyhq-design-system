@@ -329,8 +329,8 @@ describe('ProgressIndicator', () => {
 
 describe('ProgressIndicator CSS contract', () => {
   it('uses neutral overlay tokens for interactive target hover and pressed states', () => {
-    expect(progressIndicatorCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(progressIndicatorCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(progressIndicatorCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(progressIndicatorCss).toContain('background: var(--color-background-neutral-overlay-press);');
   });
 
   it('keeps the target and visible dot fully rounded', () => {

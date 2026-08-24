@@ -72,7 +72,7 @@ separate variants to choose between. Read against the actual bound tokens, they 
 browser behavior, not real props:
 
 - `hover` → `:hover`
-- `focus` → an empty, focused input (`:focus-within` on the frame, `:placeholder-shown` still true
+- `focus` → an empty, focus input (`:focus-within` on the frame, `:placeholder-shown` still true
   on the input since there's no value yet)
 - `typing` → a focused input that now has a value (`:focus-within` + `:placeholder-shown` no longer
   matching)
@@ -98,7 +98,7 @@ therefore always renders `invalid`'s thicker border while the invalid state is o
 focus - it is not a focus-only effect.
 
 Figma's literal focus treatment thickens the frame's own border from 1px to 2px and swaps its color
-to `--color-border-focused`. The focused-frame indicator directly replaces the resting border's
+to `--color-border-focus`. The focused-frame indicator directly replaces the resting border's
 color - the exact same pattern `invalid` already uses (see above) - rather than adding an outline
 ring around the existing border. (An earlier pass used an `outline` here specifically to avoid a
 layout shift; per explicit design feedback, the border should replace `border-input` the same way
@@ -118,7 +118,7 @@ border - a box-shadow is pure paint with zero layout impact, so the frame reads 
 the content box (or the text/caret inside it) ever resizing. This is the same technique
 `appearance="subtle"` uses for its own bottom-only version of this problem (see below).
 
-Hover is suppressed once the field is focused/typing (`:focus-within`, or the pinned
+Hover is suppressed once the field is focus/typing (`:focus-within`, or the pinned
 `data-force-state='focus'` reference used for the static Storybook state) - hover should only ever
 be visible on an inactive field, per explicit design feedback. This applies to both appearances.
 
@@ -270,12 +270,12 @@ sibling button - Text Field does not manage focus order beyond native DOM order.
 | State | Background | Border | Text |
 |-------|-----------|--------|------|
 | default | `--color-elevation-surface-raised-default` | `--color-border-input`, 1px | `--color-content-subtle` (placeholder) / `--color-content-default` (value) |
-| hover (not focused) | `--color-elevation-surface-raised-hovered` | `--color-border-input`, 1px | (unchanged) |
-| focus/typing | (unchanged) | `--color-border-focused`, 1px + a matching inset box-shadow ring to look thicker, see Design Decisions | (unchanged) |
+| hover (not focus) | `--color-elevation-surface-raised-hover` | `--color-border-input`, 1px | (unchanged) |
+| focus/typing | (unchanged) | `--color-border-focus`, 1px + a matching inset box-shadow ring to look thicker, see Design Decisions | (unchanged) |
 | invalid | (unchanged) | `--color-border-error`, 1px + a matching inset box-shadow ring | (unchanged) |
 | disabled | `--color-background-disabled` | `--color-border-disabled` | `--color-content-disabled` |
 
-Hover only ever shows on an inactive field - once the field is focused/typing, the hover background
+Hover only ever shows on an inactive field - once the field is focus/typing, the hover background
 is suppressed regardless of pointer position, so focus/typing and hover styling never compete.
 
 `appearance="subtle"` starts from a transparent background and border at rest, then uses the exact

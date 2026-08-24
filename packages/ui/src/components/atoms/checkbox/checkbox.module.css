@@ -83,16 +83,16 @@
 }
 
 .input:focus-visible + .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .input:checked:focus-visible + .indicatorTarget,
 .root[data-indeterminate='true'] .input:focus-visible + .indicatorTarget {
-  background: var(--color-background-brand-primary-overlay-hovered);
+  background: var(--color-background-brand-primary-overlay-hover);
 }
 
 .root[data-invalid='true'] .input:focus-visible + .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 /*
@@ -102,16 +102,16 @@
  * applied to `.input` above, which already reacts to `[data-force-state='focus']`.
  */
 .input[data-force-state='focus'] + .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .input[data-force-state='focus']:checked + .indicatorTarget,
 .root[data-indeterminate='true'] .input[data-force-state='focus'] + .indicatorTarget {
-  background: var(--color-background-brand-primary-overlay-hovered);
+  background: var(--color-background-brand-primary-overlay-hover);
 }
 
 .root[data-invalid='true'] .input[data-force-state='focus'] + .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .indicatorIcon {
@@ -153,36 +153,36 @@
 
 .root:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
 .root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .root:not([data-disabled='true']):not([data-invalid='true']):hover .input:checked + .indicatorTarget,
 .root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
 .root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
 .root[data-force-state='hover'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
-  background: var(--color-background-brand-primary-overlay-hovered);
+  background: var(--color-background-brand-primary-overlay-hover);
 }
 
 .root:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
-.root[data-force-state='active']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-pressed);
+.root[data-force-state='press']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .root:not([data-disabled='true']):not([data-invalid='true']):active .input:checked + .indicatorTarget,
 .root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
-.root[data-force-state='active']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
-.root[data-force-state='active'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
-  background: var(--color-background-brand-primary-overlay-pressed);
+.root[data-force-state='press']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
+.root[data-force-state='press'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+  background: var(--color-background-brand-primary-overlay-press);
 }
 
 .root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,
 .root[data-force-state='hover'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .root[data-invalid='true']:not([data-disabled='true']):active .indicatorTarget,
-.root[data-force-state='active'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-pressed);
+.root[data-force-state='press'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .root[data-invalid='true'] .indicatorIcon {
@@ -198,7 +198,7 @@
 .root[data-disabled='true']:hover .indicatorTarget,
 .root[data-disabled='true']:active .indicatorTarget,
 .root[data-force-state='hover'][data-disabled='true'] .indicatorTarget,
-.root[data-force-state='active'][data-disabled='true'] .indicatorTarget {
+.root[data-force-state='press'][data-disabled='true'] .indicatorTarget {
   background: transparent;
 }
 

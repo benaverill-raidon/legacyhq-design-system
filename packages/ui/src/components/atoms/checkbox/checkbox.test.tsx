@@ -247,10 +247,10 @@ describe('checkbox CSS contract', () => {
   });
 
   it('uses neutral and brand overlay tokens with invalid overriding to neutral', () => {
-    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
-    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-hovered);');
-    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-pressed);');
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
+    expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(checkboxCss).toContain(".root[data-invalid='true'] .input:focus-visible + .indicatorTarget {");
     expect(checkboxCss).toContain(".root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,");
   });
@@ -264,7 +264,7 @@ describe('checkbox CSS contract', () => {
 
   it('uses the Figma focus ring width and radius tokens', () => {
     // Width and color come from the shared focus-ring primitive, not a checkbox-local rule.
-    expect(focusRingCss).toContain('--focus-ring-color: var(--color-border-focused);');
+    expect(focusRingCss).toContain('--focus-ring-color: var(--color-border-focus);');
     expect(focusRingCss).toContain('--focus-ring-width: var(--border-width-md);');
     expect(checkboxCss).toContain('border-radius: var(--border-radius-xs);');
   });

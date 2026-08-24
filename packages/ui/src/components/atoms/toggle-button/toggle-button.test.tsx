@@ -164,8 +164,8 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-sm);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-md);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-lg);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-press);');
     expect(toggleButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
     expect(toggleButtonCss).toContain('border-color: var(--color-border-brand-primary);');
     expect(toggleButtonCss).toContain('color: var(--color-content-brand-primary-default);');
@@ -184,14 +184,14 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).not.toContain('gap: var(--spacing-sm);');
   });
 
-  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+  it('supports pinning hover/press as a static Storybook reference via data-force-state', () => {
     expect(toggleButtonCss).toContain("[data-force-state='hover']");
-    expect(toggleButtonCss).toContain("[data-force-state='active']");
+    expect(toggleButtonCss).toContain("[data-force-state='press']");
   });
 
   it('shows the hover fill on focus-visible too, matching Button', () => {
     expect(toggleButtonCss).toMatch(
-      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hover\);/,
     );
   });
 

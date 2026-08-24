@@ -221,8 +221,8 @@ describe('LinkButton token mappings', () => {
   });
 
   it('uses neutral overlay tokens for default and subtle hover and press states', () => {
-    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-hovered)');
-    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-pressed)');
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-hover)');
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-press)');
   });
 
   it('uses the brand-primary bold token for primary rest state', () => {

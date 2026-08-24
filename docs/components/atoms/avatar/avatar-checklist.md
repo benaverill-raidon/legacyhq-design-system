@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Avatar is an atom component used to visually represent a person in the interface. It may appear as a static identity marker, an interactive identity control, or a selectable item in people-focused UI.
+Avatar is an atom component used to visually represent a person in the interface. It may appear as a static identity marker, an interactive identity control, or a selectable item in people-focus UI.
 
 ## Badge behavior
 

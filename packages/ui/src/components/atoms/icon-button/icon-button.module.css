@@ -53,11 +53,11 @@
     [data-force-state='focus']
   ),
 .appearance_default[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
-.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  background: var(--color-background-neutral-overlay-pressed);
+.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .appearance_primary {
@@ -73,13 +73,13 @@
     [data-force-state='focus']
   ),
 .appearance_primary[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  border-color: var(--color-background-brand-primary-bold-hovered);
-  background: var(--color-background-brand-primary-bold-hovered);
+  border-color: var(--color-background-brand-primary-bold-hover);
+  background: var(--color-background-brand-primary-bold-hover);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  border-color: var(--color-background-brand-primary-bold-pressed);
-  background: var(--color-background-brand-primary-bold-pressed);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: var(--color-background-brand-primary-bold-press);
+  background: var(--color-background-brand-primary-bold-press);
 }
 
 .appearance_subtle {
@@ -95,11 +95,11 @@
     [data-force-state='focus']
   ),
 .appearance_subtle[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
-.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  background: var(--color-background-neutral-overlay-pressed);
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .size_xs {

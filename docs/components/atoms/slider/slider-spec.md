@@ -227,9 +227,9 @@ showValue = false
 ### States
 
 - default / enabled
-- hovered
-- pressed
-- focused
+- hover
+- press
+- focus
 - disabled
 
 ## Stops
@@ -248,8 +248,8 @@ Do not render excessive stops that would harm performance or visual clarity.
 
 When true, show the value indicator while:
 
-- hovered
-- focused
+- hover
+- focus
 - dragging / active
 
 Do not show persistent value bubbles by default.
@@ -431,7 +431,7 @@ endpoint dot at 0 and 100 regardless of size.
 
 ### States
 
-Show enabled/hovered/pressed/focused/disabled matching Figma's variants, pinned with
+Show enabled/hover/press/focus/disabled matching Figma's variants, pinned with
 `data-preview-state`, plus a live example to verify by hand that clicking or dragging the handle
 never shows a focus ring on its own - only real keyboard focus does.
 

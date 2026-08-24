@@ -130,11 +130,11 @@
 }
 
 .item:hover:not(:disabled) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .item:active:not(:disabled) {
-  background: var(--color-background-neutral-overlay-pressed);
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .item:disabled {
@@ -161,11 +161,11 @@
 }
 
 .item_selected:hover:not(:disabled) {
-  background: var(--color-background-brand-primary-subtle-hovered);
+  background: var(--color-background-brand-primary-subtle-hover);
 }
 
 .item_selected:active:not(:disabled) {
-  background: var(--color-background-brand-primary-subtle-pressed);
+  background: var(--color-background-brand-primary-subtle-press);
 }
 
 /* Fixed 24px slot (--size-300), matching Figma's <elemBefore>/<elemAfter> container exactly -

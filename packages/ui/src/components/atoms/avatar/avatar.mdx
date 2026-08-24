@@ -31,7 +31,7 @@ badge.
 <Canvas of={AvatarStories.Variants} />
 
 1. **Root** — `span` by default, or a `button` when `isInteractive` is set or `onClick` is supplied.
-2. **Surface** — the circular plate. Owns the selected ring and the hover / pressed overlay.
+2. **Surface** — the circular plate. Owns the selected ring and the hover / press overlay.
 3. **Content** — the image, or the fallback artwork when no usable image exists. Clipped to the circle.
 4. **Badge container** — a surface-coloured disc that separates the badge from the image beneath it.
 5. **Badge icon** — the presence or status glyph.
@@ -220,7 +220,7 @@ Any other prop is forwarded to the rendered `button` or `span`.
 
 ## States
 
-Hover, focus, and pressed are pinned in the States story via a documentation-only
+Hover, focus, and press are pinned in the States story via a documentation-only
 `data-force-state` attribute so they can be reviewed statically. It is not part of the public API —
 use real interaction in application code.
 

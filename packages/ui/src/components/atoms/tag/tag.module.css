@@ -1,10 +1,10 @@
 .root {
   block-size: var(--tag-min-height);
   --tag-background: var(--color-elevation-surface-raised-default);
-  --tag-background-hovered: var(--color-elevation-surface-raised-default);
-  --tag-background-pressed: var(--color-elevation-surface-raised-default);
-  --tag-background-hovered-layer: none;
-  --tag-background-pressed-layer: none;
+  --tag-background-hover: var(--color-elevation-surface-raised-default);
+  --tag-background-press: var(--color-elevation-surface-raised-default);
+  --tag-background-hover-layer: none;
+  --tag-background-press-layer: none;
   --tag-border: var(--color-border-bold);
   --tag-color: var(--color-content-default);
   --tag-min-height: var(--size-control-sm);
@@ -110,7 +110,7 @@
 }
 
 /*
- * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/pressed as
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/press as
  * a static regression reference - documentation-only, not part of the public API. It's read both
  * directly off `.contentInteractive` (the bare-anchor root, when href is set with no remove
  * button) and off the `.wrapper` ancestor (when a remove button is also present), so one prop on
@@ -121,15 +121,15 @@
 .contentInteractive:not([aria-disabled='true']):focus-visible,
 .contentInteractive:not([aria-disabled='true'])[data-force-state='hover'],
 .wrapper[data-force-state='hover'] .contentInteractive:not([aria-disabled='true']) {
-  background-color: var(--tag-background-hovered);
-  background-image: var(--tag-background-hovered-layer, none);
+  background-color: var(--tag-background-hover);
+  background-image: var(--tag-background-hover-layer, none);
 }
 
 .contentInteractive:not([aria-disabled='true']):active,
-.contentInteractive:not([aria-disabled='true'])[data-force-state='active'],
-.wrapper[data-force-state='active'] .contentInteractive:not([aria-disabled='true']) {
-  background-color: var(--tag-background-pressed);
-  background-image: var(--tag-background-pressed-layer, none);
+.contentInteractive:not([aria-disabled='true'])[data-force-state='press'],
+.wrapper[data-force-state='press'] .contentInteractive:not([aria-disabled='true']) {
+  background-color: var(--tag-background-press);
+  background-image: var(--tag-background-press-layer, none);
 }
 
 
@@ -196,15 +196,15 @@
 .removeButton:not(:disabled):focus-visible,
 .removeButton:not(:disabled)[data-force-state='hover'],
 .wrapper[data-force-state='hover'] .removeButton:not(:disabled) {
-  background-color: var(--tag-background-hovered);
-  background-image: var(--tag-background-hovered-layer, none);
+  background-color: var(--tag-background-hover);
+  background-image: var(--tag-background-hover-layer, none);
 }
 
 .removeButton:not(:disabled):active,
-.removeButton:not(:disabled)[data-force-state='active'],
-.wrapper[data-force-state='active'] .removeButton:not(:disabled) {
-  background-color: var(--tag-background-pressed);
-  background-image: var(--tag-background-pressed-layer, none);
+.removeButton:not(:disabled)[data-force-state='press'],
+.wrapper[data-force-state='press'] .removeButton:not(:disabled) {
+  background-color: var(--tag-background-press);
+  background-image: var(--tag-background-press-layer, none);
 }
 
 .contentInteractive:focus-visible,
@@ -244,80 +244,80 @@
 
 .tone_default {
   --tag-background: var(--color-background-neutral-subtle-default);
-  --tag-background-hovered: var(--color-background-neutral-subtle-hovered);
-  --tag-background-pressed: var(--color-background-neutral-subtle-pressed);
+  --tag-background-hover: var(--color-background-neutral-subtle-hover);
+  --tag-background-press: var(--color-background-neutral-subtle-press);
   --tag-border: var(--color-border-bold);
   --tag-color: var(--color-content-default);
 }
 
 .tone_blue {
   --tag-background: var(--color-background-accent-blue-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-blue-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-blue-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-blue-subtle-hover);
+  --tag-background-press: var(--color-background-accent-blue-subtle-press);
   --tag-border: var(--color-border-accent-blue);
   --tag-color: var(--color-content-accent-blue-bolder);
 }
 
 .tone_green {
   --tag-background: var(--color-background-accent-green-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-green-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-green-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-green-subtle-hover);
+  --tag-background-press: var(--color-background-accent-green-subtle-press);
   --tag-border: var(--color-border-accent-green);
   --tag-color: var(--color-content-accent-green-bolder);
 }
 
 .tone_purple {
   --tag-background: var(--color-background-accent-purple-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-purple-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-purple-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-purple-subtle-hover);
+  --tag-background-press: var(--color-background-accent-purple-subtle-press);
   --tag-border: var(--color-border-accent-purple);
   --tag-color: var(--color-content-accent-purple-bolder);
 }
 
 .tone_red {
   --tag-background: var(--color-background-accent-red-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-red-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-red-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-red-subtle-hover);
+  --tag-background-press: var(--color-background-accent-red-subtle-press);
   --tag-border: var(--color-border-accent-red);
   --tag-color: var(--color-content-accent-red-bolder);
 }
 
 .tone_teal {
   --tag-background: var(--color-background-accent-teal-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-teal-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-teal-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-teal-subtle-hover);
+  --tag-background-press: var(--color-background-accent-teal-subtle-press);
   --tag-border: var(--color-border-accent-teal);
   --tag-color: var(--color-content-accent-teal-bolder);
 }
 
 .tone_yellow {
   --tag-background: var(--color-background-accent-yellow-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-yellow-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-yellow-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-yellow-subtle-hover);
+  --tag-background-press: var(--color-background-accent-yellow-subtle-press);
   --tag-border: var(--color-border-accent-yellow);
   --tag-color: var(--color-content-accent-yellow-bolder);
 }
 
 .tone_orange {
   --tag-background: var(--color-background-accent-orange-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-orange-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-orange-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-orange-subtle-hover);
+  --tag-background-press: var(--color-background-accent-orange-subtle-press);
   --tag-border: var(--color-border-accent-orange);
   --tag-color: var(--color-content-accent-orange-bolder);
 }
 
 .tone_magenta {
   --tag-background: var(--color-background-accent-magenta-subtle-default);
-  --tag-background-hovered: var(--color-background-accent-magenta-subtle-hovered);
-  --tag-background-pressed: var(--color-background-accent-magenta-subtle-pressed);
+  --tag-background-hover: var(--color-background-accent-magenta-subtle-hover);
+  --tag-background-press: var(--color-background-accent-magenta-subtle-press);
   --tag-border: var(--color-border-accent-magenta);
   --tag-color: var(--color-content-accent-magenta-bolder);
 }
 
 .tone_brand {
   --tag-background: var(--color-background-brand-primary-subtle-default);
-  --tag-background-hovered: var(--color-background-brand-primary-subtle-hovered);
-  --tag-background-pressed: var(--color-background-brand-primary-subtle-pressed);
+  --tag-background-hover: var(--color-background-brand-primary-subtle-hover);
+  --tag-background-press: var(--color-background-brand-primary-subtle-press);
   --tag-border: var(--color-border-brand-primary);
   --tag-color: var(--color-content-brand-primary-default);
 }
@@ -344,10 +344,10 @@
 .disabled .removeButton:active,
 .disabled .removeButton:focus-visible {
   --tag-background: var(--color-elevation-surface-raised-default);
-  --tag-background-hovered: var(--color-elevation-surface-raised-default);
-  --tag-background-pressed: var(--color-elevation-surface-raised-default);
-  --tag-background-hovered-layer: none;
-  --tag-background-pressed-layer: none;
+  --tag-background-hover: var(--color-elevation-surface-raised-default);
+  --tag-background-press: var(--color-elevation-surface-raised-default);
+  --tag-background-hover-layer: none;
+  --tag-background-press-layer: none;
   --tag-border: var(--color-border-disabled);
   --tag-color: var(--color-content-disabled);
 }

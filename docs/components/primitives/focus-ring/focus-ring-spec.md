@@ -77,7 +77,7 @@ Focus Ring
 
 ### Variant Rules
 - Use `default` for all components.
-- Uses `--color-border-focused`.
+- Uses `--color-border-focus`.
 - Do not use discovery, brand, or status colors for Focus Ring in v1.
 
 ---
@@ -166,7 +166,7 @@ Focus indicators support focus visibility requirements. The indicator should be 
 Required token:
 
 ```css
---color-border-focused
+--color-border-focus
 ```
 
 Both variants use this token.
@@ -245,7 +245,7 @@ None.
 
 ### Implementation Requirements
 - Use CSS variables from generated token CSS.
-- Use `--color-border-focused` for ring color.
+- Use `--color-border-focus` for ring color.
 - Use `--border-width-md` for default.
 - Use `:focus-visible`.
 - Use an outset ring.
@@ -261,7 +261,7 @@ None.
 ```css
 .focusRing:focus-visible {
   outline-style: solid;
-  outline-color: var(--color-border-focused);
+  outline-color: var(--color-border-focus);
   outline-offset: 2px;
 }
 

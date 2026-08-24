@@ -209,7 +209,7 @@ export const Sizes: Story = {
 };
 
 /**
- * Interaction and system states. Hover, focus and pressed are pinned via
+ * Interaction and system states. Hover, focus and press are pinned via
  * `data-force-state` so they render statically as a regression reference; the
  * last row stays live so real pointer and keyboard behaviour is verifiable.
  */
@@ -238,13 +238,13 @@ export const States: Story = {
             data-force-state="focus"
           />
         </Cell>
-        <Cell label="Pressed">
+        <Cell label="Press">
           <Avatar
             src={photoA}
             name="Pressed"
             isInteractive
             onClick={() => undefined}
-            data-force-state="active"
+            data-force-state="press"
           />
         </Cell>
         <Cell label="Disabled">
@@ -276,14 +276,14 @@ export const States: Story = {
             data-force-state="focus"
           />
         </Cell>
-        <Cell label="Pressed">
+        <Cell label="Press">
           <Avatar
             src={photoA}
             name="Selected pressed"
             isInteractive
             isSelected
             onClick={() => undefined}
-            data-force-state="active"
+            data-force-state="press"
           />
         </Cell>
         <Cell label="Disabled">
@@ -311,13 +311,13 @@ export const States: Story = {
             data-force-state="hover"
           />
         </Cell>
-        <Cell label="Pressed">
+        <Cell label="Press">
           <Avatar
             name="Fallback selected pressed"
             isInteractive
             isSelected
             onClick={() => undefined}
-            data-force-state="active"
+            data-force-state="press"
           />
         </Cell>
       </Group>

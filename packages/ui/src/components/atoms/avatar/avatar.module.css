@@ -182,6 +182,14 @@
   background-image: url('./person-dark.svg');
 }
 
+.fallbackArtwork[data-entity-type='team'] {
+  background-image: url('./team-light.svg');
+}
+
+:global([data-theme='dark']) .fallbackArtwork[data-entity-type='team'] {
+  background-image: url('./team-dark.svg');
+}
+
 .badgeContainer {
   position: absolute;
   inset-inline-end: var(--avatar-badge-inset-inline-end);

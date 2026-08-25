@@ -1,0 +1,69 @@
+{
+  "component": "Chip",
+  "examples": [
+    {
+      "name": "An active filter",
+      "description": "The common case - a property name plus its current value, editable in place via the value segment's own menu.",
+      "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Status\"\n  elemBefore={<TaskNotStartedIcon decorative />}\n  value={{\n    label: '2 statuses',\n    sections: [\n      {\n        id: 'statuses',\n        items: [\n          { id: 'not-started', label: 'Not started', onSelect: () => toggleStatus('not-started') },\n          { id: 'in-progress', label: 'In progress', onSelect: () => toggleStatus('in-progress') },\n        ],\n      },\n    ],\n  }}\n  onRemove={() => clearFilter('status')}\n/>",
+      "props": { "mode": "filter" }
+    },
+    {
+      "name": "A filter with a comparison operator",
+      "description": "An optional operator segment sits between the label and the value. Figma only shows this on its due date filter, but nothing about it is date-specific.",
+      "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Due date\"\n  elemBefore={<CalendarIcon decorative />}\n  operator={{\n    label: 'before',\n    sections: [{ id: 'ops', items: [{ id: 'on', label: 'on' }, { id: 'before', label: 'before' }, { id: 'after', label: 'after' }] }],\n  }}\n  value={{ label: 'April 15', sections: dateSections }}\n  onRemove={() => clearFilter('due')}\n/>",
+      "props": { "mode": "filter" }
+    },
+    {
+      "name": "A filter whose value has a preview",
+      "description": "valuePreview renders before the value text - an Avatar, an Avatar Group, status icons. Decorative only; the value text carries the meaning.",
+      "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Assignee\"\n  value={{ label: '3 people', sections: peopleSections }}\n  valuePreview={\n    <AvatarGroup\n      size=\"xs\"\n      maxVisible={3}\n      avatars={[\n        { id: 'a', name: 'Jordan Ellis' },\n        { id: 'b', name: 'Priya Nair' },\n        { id: 'c', name: 'Sam Okafor' },\n      ]}\n    />\n  }\n  onRemove={() => clearFilter('assignee')}\n/>",
+      "props": { "mode": "filter" }
+    },
+    {
+      "name": "An applied property",
+      "description": "The value is the label, so there is nothing to open - the only affordance is removing it.",
+      "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
+      "props": { "mode": "property" }
+    },
+    {
+      "name": "A selectable search scope",
+      "description": "scope is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
+      "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"scope\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
+      "props": { "mode": "scope" }
+    },
+    {
+      "name": "Smaller size for a dense filter bar",
+      "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing.",
+      "jsx": "<Chip\n  mode=\"filter\"\n  size=\"sm\"\n  label=\"Status\"\n  value={{ label: 'Any', sections: statusSections }}\n  onRemove={() => clearFilter('status')}\n/>",
+      "props": { "mode": "filter", "size": "sm" }
+    },
+    {
+      "name": "Naming a panel explicitly",
+      "description": "Panels default to `${label} value` / `${label} operator`. Override when the composed name would read poorly, or when label is not a plain string.",
+      "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
+      "props": { "mode": "filter" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Using Chip as a plain label",
+      "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => {}} />",
+      "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for scope), and `onRemove` is required for property/filter precisely because every verified Figma variant has one."
+    },
+    {
+      "name": "Passing filter props to a scope chip",
+      "jsx": "<Chip mode=\"scope\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
+      "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the scope branch, so TypeScript rejects this at compile time rather than silently ignoring them."
+    },
+    {
+      "name": "Putting an interactive control in elemBefore or valuePreview",
+      "jsx": "<Chip mode=\"scope\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
+      "reason": "Both slots are decorative and aria-hidden. In scope mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
+    },
+    {
+      "name": "Expecting a tone prop",
+      "jsx": "<Chip mode=\"property\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
+      "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
+    }
+  ]
+}

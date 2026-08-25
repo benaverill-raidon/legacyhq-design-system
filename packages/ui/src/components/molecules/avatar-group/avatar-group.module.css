@@ -1,0 +1,112 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+}
+
+.root > * + * {
+  margin-inline-start: var(--avatar-group-overlap);
+}
+
+/*
+ * `position: relative` on both is deliberate, not decorative: Avatar's own root already renders
+ * `position: relative`, which (since this wrapper creates no stacking context of its own) promotes
+ * it into the "positioned" paint tier of `.root`'s stacking order - a tier that always paints above
+ * plain static content, regardless of DOM order. Button's own root is `position: static`, so
+ * without this, the overflow trigger (last in DOM, meant to be on top) would always lose to the
+ * avatar before it. Setting `position: relative` here puts every child in the same tier, so DOM
+ * order (later = on top) governs consistently across every junction, not just avatar-to-avatar.
+ */
+.avatarRing {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  border-radius: var(--border-radius-full-round);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-elevation-surface-raised-default);
+}
+
+.overflowTrigger {
+  --button-border-radius: var(--border-radius-full-round);
+
+  position: relative;
+  flex: none;
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-border-inverse);
+}
+
+/*
+ * `.root` prefix deliberately matches (and outweighs) button.module.css's own
+ * `.appearance_subtle`/`:hover`/`:active` selector specificity, so this wins regardless of CSS
+ * module import order rather than relying on a same-specificity source-order tie.
+ */
+.root .overflowTrigger {
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.root .overflowTrigger:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  background: var(--color-elevation-surface-sunken-hover);
+}
+
+.root .overflowTrigger:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-elevation-surface-sunken-press);
+}
+
+.size_xs {
+  --avatar-group-overlap: var(--overlap-sm);
+}
+
+.size_sm {
+  --avatar-group-overlap: var(--overlap-sm);
+}
+
+.size_md {
+  --avatar-group-overlap: var(--overlap-md);
+}
+
+.size_lg {
+  --avatar-group-overlap: var(--overlap-lg);
+}
+
+/*
+ * Overflow trigger text uses Body/S, M, L, L (xs/sm/md/lg) - measured directly against Figma - not
+ * Button's own heading-based per-size type scale (Button's size=lg even reuses Body/L rather than
+ * stepping up to a larger body size, matching size=md exactly).
+ */
+.size_xs .overflowTrigger {
+  inline-size: var(--size-control-xs);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.size_sm .overflowTrigger {
+  inline-size: var(--size-control-sm);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.size_md .overflowTrigger {
+  inline-size: var(--size-control-md);
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+.size_lg .overflowTrigger {
+  inline-size: var(--size-control-lg);
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}

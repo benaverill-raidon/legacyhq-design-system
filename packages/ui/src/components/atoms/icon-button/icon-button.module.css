@@ -130,18 +130,27 @@
   border-radius: var(--border-radius-full-round);
 }
 
+/*
+ * Two disabled treatments, matching each appearance's own resting border visibility rather than
+ * one shared look - mirrors Button's own disabled rule split. appearance_default already shows a
+ * visible border at rest, so its disabled state keeps one (--color-border-disabled).
+ * appearance_primary and appearance_subtle are borderless at rest (primary's border-color equals
+ * its own background at rest, subtle's is transparent) - Figma's own disabled variants confirm
+ * primary drops its stroke entirely rather than switching to a gray one, so it stays borderless here
+ * too.
+ */
 .appearance_default:disabled,
 .appearance_default:disabled:hover,
-.appearance_default:disabled:active,
-.appearance_primary:disabled,
-.appearance_primary:disabled:hover,
-.appearance_primary:disabled:active {
+.appearance_default:disabled:active {
   border-color: var(--color-border-disabled);
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
+.appearance_primary:disabled,
+.appearance_primary:disabled:hover,
+.appearance_primary:disabled:active,
 .appearance_subtle:disabled,
 .appearance_subtle:disabled:hover,
 .appearance_subtle:disabled:active {

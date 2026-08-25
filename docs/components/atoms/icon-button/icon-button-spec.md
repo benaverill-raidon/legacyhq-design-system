@@ -112,6 +112,18 @@ When `disabled` is true:
 - allow pointer-triggered tooltip explanation through Tooltip's non-focusable wrapper behavior
 - do not imply keyboard interactivity
 
+Disabled border color follows each appearance's own resting border visibility, matching Button's
+own disabled rule split exactly (verified directly against Figma's disabled variants, which use the
+same fill token regardless of tone but drop the stroke entirely for primary/subtle):
+
+- `appearance="default"` keeps a visible border (`--color-border-disabled`) - it already shows one
+  at rest.
+- `appearance="primary"` and `appearance="subtle"` stay borderless (`border-color: transparent`) -
+  neither shows a border at rest, and Figma's own disabled variants confirm primary drops its stroke
+  entirely rather than switching to a gray one.
+- Background (`--color-background-disabled`) and text (`--color-content-disabled`) are identical
+  across every appearance when disabled - only border visibility differs.
+
 ## Loading behavior
 
 When `isLoading` is true:

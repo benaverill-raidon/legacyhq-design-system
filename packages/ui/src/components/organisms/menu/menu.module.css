@@ -81,11 +81,15 @@
   background: var(--color-border-default);
 }
 
+/*
+ * Symmetric 4px padding-block. This was previously asymmetric (xs top / sm bottom) - Figma's own
+ * `<section>/list` Container now measures paddingTop: 4, paddingBottom: 4 on every instance, so the
+ * two collapse into one `padding-block` rather than staying split.
+ */
 .sectionBody {
   display: flex;
   flex-direction: column;
-  padding-top: var(--spacing-xs);
-  padding-bottom: var(--spacing-sm);
+  padding-block: var(--spacing-xs);
 }
 
 .heading {
@@ -111,7 +115,24 @@
   flex-direction: column;
 }
 
+/*
+ * `--focus-ring-offset` is negative so the shared focus ring paints *inside* the row instead of
+ * outside it - the same inset technique Checkbox already uses for its own oversized hit target.
+ * Two independent reasons the primitive's default (outward, +2px) can't work here:
+ *
+ * 1. A menu item is `width: 100%` of the menu panel, so an outward ring has literally no horizontal
+ *    room - it would extend past the panel's own edge.
+ * 2. `.sections` sets only `overflow-y`, but per CSS, when one axis is non-`visible` and the other is
+ *    `visible`, that `visible` computes to `auto` - so `.sections` clips horizontally too (verified
+ *    in the browser: computed `overflow-x` really is `auto`, not `visible`). An outward ring was
+ *    getting shaved off on the left and right edges by that clip.
+ *
+ * Offsetting inward by exactly the ring's own width puts its outer edge flush with the row's edge,
+ * so all four sides render fully at full thickness with no layout shift.
+ */
 .item {
+  --focus-ring-offset: calc(-1 * var(--border-width-md));
+
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-sm);
@@ -143,29 +164,35 @@
 }
 
 /*
- * Selected state maps to the same brand-primary-subtle family Figma's isSelected fills resolved
- * to exactly (#e5f6ff / #ccecff / #b3e3ff = brand.prussian.solid.100/200/300, already aliased by
- * these semantic tokens) - no new color tokens needed.
+ * Selected consumes the dedicated `selected` semantic family, re-verified against Figma's own
+ * menu-item bindings: `color/background/selected/default/{default,hover,press}` for the fill,
+ * `color/border/selected` for the left indicator, `color/content/selected` for the text. It
+ * previously borrowed the `brand-primary-subtle` family, which was the closest match before a
+ * `selected` family existed.
  *
  * The 2px left indicator uses an inset box-shadow, not `border-left` - Figma's own stroke on this
- * state is `strokeAlign: INSIDE` with `paddingLeft` unchanged (still spacing/md, the same as every
- * other row), meaning the indicator paints inside the existing padding rather than adding to the
- * row's box size. A real `border-left` would do the latter and shift content 2px to the right
- * relative to unselected rows - `--color-border-brand-primary` resolves to the exact same primitive
- * (brand.prussian.solid.900) Figma's stroke variable does.
+ * state is `strokeAlign: INSIDE` (on the inner Container, `strokeLeftWeight: 2`) with `paddingLeft`
+ * unchanged (still spacing/md, the same as every other row), meaning the indicator paints inside the
+ * existing padding rather than adding to the row's box size. A real `border-left` would do the latter
+ * and shift content 2px to the right relative to unselected rows.
+ *
+ * Focus shares the hover fill, matching Figma's `state=focus, isSelected=true` variant (which binds
+ * the hover fill, not a distinct one) and the same focus/hover grouping the toggle components use.
+ * Unselected rows get no focus fill at all - Figma's unselected focus variant has an empty fill, so
+ * only the focus ring marks them.
  */
 .item_selected {
-  background: var(--color-background-brand-primary-subtle-default);
+  background: var(--color-background-selected-default-default);
   color: var(--color-content-selected);
-  box-shadow: inset var(--border-width-md) 0 0 0 var(--color-border-brand-primary);
+  box-shadow: inset var(--border-width-md) 0 0 0 var(--color-border-selected);
 }
 
-.item_selected:hover:not(:disabled) {
-  background: var(--color-background-brand-primary-subtle-hover);
+.item.item_selected:not(:disabled):is(:hover, :focus-visible) {
+  background: var(--color-background-selected-default-hover);
 }
 
-.item_selected:active:not(:disabled) {
-  background: var(--color-background-brand-primary-subtle-press);
+.item.item_selected:not(:disabled):active {
+  background: var(--color-background-selected-default-press);
 }
 
 /* Fixed 24px slot (--size-300), matching Figma's <elemBefore>/<elemAfter> container exactly -
@@ -179,6 +206,29 @@
   flex-shrink: 0;
   inline-size: var(--size-300);
   block-size: var(--size-300);
+}
+
+/*
+ * A standalone Avatar in the leading slot carries a 1px inverse ring, separating it from the row's
+ * own fill (especially the tinted selected/hover fills) - matching Figma's `type=avatar` elemBefore
+ * instance, whose stroke is `color/border/inverse` at weight 1, `strokeAlign: OUTSIDE`. `box-shadow`
+ * rather than `border`, so the ring paints outside the 24px slot box without resizing the avatar or
+ * shifting row alignment.
+ *
+ * `[data-entity-type]` is Avatar's own attribute (emitted by both its interactive and static root
+ * branches) and nothing else in the system uses it. The direct-child combinator is load-bearing for
+ * two separate reasons:
+ *
+ * 1. Avatar also puts `data-entity-type` on its *inner* fallback-artwork span, so a descendant
+ *    selector would ring that inner element too, drawing a second ring inside the first.
+ * 2. It keeps this rule off an AvatarGroup placed in the same slot - the group's root is a plain
+ *    wrapper carrying no such attribute, and the avatars inside it sit within its own `.avatarRing`
+ *    spans rather than being direct children here. Those keep AvatarGroup's own
+ *    `elevation/surface/raised` ring, which is what Figma binds for the `type=avatar group` variant.
+ */
+.elemBefore > :global([data-entity-type]) {
+  border-radius: var(--border-radius-full-round);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-border-inverse);
 }
 
 .content {

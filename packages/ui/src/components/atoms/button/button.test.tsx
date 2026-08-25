@@ -196,6 +196,14 @@ describe('Button', () => {
     expect(buttonCss).not.toContain('border-radius: 14px;');
   });
 
+  it('pins block-size per size instead of a min- floor, so the border never inflates height past the token', () => {
+    expect(buttonCss).not.toContain('min-block-size:');
+    expect(buttonCss).toMatch(/\.button \{[\s\S]*?block-size: var\(--size-control-md\);/);
+    expect(buttonCss).toMatch(/\.size_xs \{[\s\S]*?block-size: var\(--size-control-xs\);/);
+    expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?block-size: var\(--size-control-sm\);/);
+    expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?block-size: var\(--size-control-lg\);/);
+  });
+
   it('gives appearance=default a visible disabled border, matching its own resting border', () => {
     const rule = buttonCss.match(/\.appearance_default:disabled[^{]*\{([^}]*)\}/);
 

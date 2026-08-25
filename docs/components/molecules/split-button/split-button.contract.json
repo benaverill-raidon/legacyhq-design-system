@@ -1,0 +1,143 @@
+{
+  "name": "SplitButton",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Lets people perform a primary action, or choose from a small group of similar actions via an attached Dropdown Menu.",
+  "intent": "A thin composition of Button (the primary action), IconButton (the secondary, caret-only action), and Dropdown Menu (the secondary action's floating panel), preconfigured for the primary-action-with-close-alternatives use case, rather than a third independent implementation of any of them.",
+  "tierNote": "Classified as a molecule, but its secondary action's dropdown panel composes Dropdown Menu (an organism, itself built from Menu + Popup) - the same deliberate, documented exception Tag Group and Avatar Group already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here.",
+  "sourceFiles": {
+    "component": "split-button.tsx",
+    "types": "split-button.types.ts",
+    "styles": "split-button.module.css",
+    "stories": "SplitButton.stories.tsx",
+    "tests": "SplitButton.test.tsx",
+    "index": "index.ts",
+    "note": "split-button.module.css contains no raw values other than 0 (squared corners - 'no radius' has no meaningful token to reference)."
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4620:101467",
+    "componentName": "split-button",
+    "variantCount": 24,
+    "verifiedAt": "2026-08-22",
+    "note": "Correctly named in Figma - filed on the file's own \"✅⏲️ Split Button\" page, verified directly against the file via the Desktop Bridge plugin.",
+    "structure": "24 variants cross `tone` (default/primary - code calls this `appearance`) x `size` (xs/sm/md/lg, matching Button's own four sizes exactly) x `isDisabled` x `isOpen`, with isOpen never crossed with isDisabled=true (8 tone x size combinations x 3 states [isDisabled=false+isOpen=false, isDisabled=false+isOpen=true, isDisabled=true] = 24). Each variant is layoutMode HORIZONTAL, itemSpacing 0, containing: a real `button` (Button) instance whose trailing corners are squared to 0 (leading corners keep Button's own per-size radius - measured topLeft/bottomLeft: 12, topRight/bottomRight: 0 at size=lg) AND whose trailing-edge stroke is individually zeroed (measured strokeTopWeight/strokeBottomWeight/strokeLeftWeight: 1, strokeRightWeight: 0); a `figma-parts / split-button / divider` instance (a single 1px VECTOR, height matching the button, fill color keyed to tone); and a `popup` instance (alignment=\"bottom right\") whose trigger slot holds a `figma-parts / secondary-action` instance - traced one level deeper, a real `icon-button` (IconButton) instance (shape=square) with a single `caret_down` icon child, whose leading corners are squared to 0 (trailing corners keep IconButton's own radius, the exact mirror of the primary action) AND whose leading-edge stroke is individually zeroed (measured strokeLeftWeight: 0, the exact mirror of the primary action's strokeRightWeight: 0). The popup's own surface slot holds the generic `figma-parts/panelSurface` with an empty content slot in the static file (isOpen=false examples) or also empty even where isOpen=true (same 'static mockup, real content is a code decision' pattern as Tag Group/Avatar Group's own dropdown-menu instances).",
+    "apiAdaptationNotes": [
+      "Figma's own reference instance for the open panel is a raw `popup` instance, not a `dropdown-menu` instance - but the panel's real purpose (\"choose from a small group of similar actions\", per the component's own Figma description) is exactly Dropdown Menu's established use case. Code reuses Dropdown Menu directly (children=the secondary-action IconButton, sections=the small group of actions) rather than hand-assembling Popup and Menu a second time, matching Tag Group/Avatar Group's own precedent rather than literally mirroring this one instance's authoring shortcut.",
+      "appearance is deliberately narrower than Button's own (`'default' | 'primary'` only, omitting `'subtle'`) - every one of the 24 verified split-button variants uses only default/primary; Figma never shows a subtle split button, so code doesn't invent one.",
+      "secondaryActionLabel is a required prop, not auto-derived from the primary action's own label - the caret segment has no visible text to derive a name from, and an auto-generated label (e.g. `${children} options`) could read oddly for non-string labels.",
+      "The figma-parts / split-button / divider part is not implemented as a new exported primitive - it's namespaced as component-specific in Figma (unlike figma-parts / secondary-action, which is reused across other components), and no existing shared Divider component exists in this codebase to reuse instead. Implemented as a single internal <span>.",
+      "IconButton's own isExpanded prop is not passed to the secondary action - verified directly in code that it only sets aria-expanded/data-expanded with no corresponding CSS (no visual effect today), and Popup (via Dropdown Menu) already overwrites aria-expanded via its own trigger-cloning regardless of whatever IconButton would set internally.",
+      "Verified directly that IconButton's own tooltip-auto-wrapping (triggered by passing an explicit aria-label, IconButton's own pre-existing behavior unrelated to Split Button) does not interfere with the outer Popup's (Dropdown Menu's) own trigger-cloning - ref and aria-expanded/aria-controls are injected as props on the authored <IconButton> element itself and correctly routed to its real internal <button> via IconButton's own forwardRef and prop-destructuring, regardless of what IconButton renders around it internally. This exact combination already exists, unremarked, in Dropdown Menu's own Content story.",
+      "alignment is hardcoded to 'right' on the internal DropdownMenu call, not exposed as a SplitButtonProps prop - Figma's own split-button variant set has no alignment axis at all; every one of the 24 variants opens \"bottom right\". This is a preferred alignment only, not a forced one - it maps to Popup's own 'bottomRight' (via Dropdown Menu's ALIGNMENT_MAP), and Popup's own collision detection already flips to an alternate alignment (then clamps to the viewport) when there isn't room, with no extra logic needed in Split Button.",
+      "isFullWidth is omitted from the Button props Split Button inherits (Omit<ButtonProps, 'appearance' | 'isFullWidth'>) - no verified Figma variant for a full-width split button exists.",
+      "Each segment suppresses its own border on the interior edge (border-inline-end-width: 0 on .primaryAction, border-inline-start-width: 0 on .secondaryAction) - Figma's own button/icon-button instances measure strokeRightWeight/strokeLeftWeight: 0 on that exact edge, so the divider is the only thing drawing that seam. Caught live in Storybook: without this, Button's/IconButton's own 1px border on that edge stacked with the 1px divider into a visibly wide line instead of one clean 1px seam.",
+      "IconButton's own appearance_primary:disabled (and appearance_subtle:disabled) was fixed to stay borderless (border-color: transparent), matching Button's own disabled rule split and Figma's own disabled variants (identical fill regardless of tone, but primary/subtle drop the stroke entirely - verified directly against Figma's disabled component variants). It previously shared the same visible-border rule as appearance_default:disabled, so a disabled primary secondary action looked identical to a disabled default one. This is an IconButton-atom fix (icon-button.module.css), not Split-Button-specific, but Split Button's primary+disabled secondary action is what surfaced it.",
+      "The primary-appearance divider's fill is bound to a Figma variable named color/border/brand/primary/subtle. That variable name has no code-side counterpart, and neither does its obvious-looking non-subtle sibling color-border-brand-primary actually work here - it resolves to the same prussian-900 primitive as the primary button's own background (color-background-brand-primary-bold-default), so a divider painted in it disappears against an identical-colored surface. Resolving Figma's fill node directly (not just the variable name) gives prussian-300, a light tint, not a darker/duller shade of prussian-900. No color-border-* token exists at that step, but color-content-brand-primary-subtle already aliases exactly prussian-300 - reused here on a background-color the same way Slider's own active track-stop dot already reuses it for contrast against a bold fill (see slider.module.css's own comment). Caught live in Storybook twice: first the mistyped -subtle name resolved to nothing (fully transparent); after that fix, the syntactically-valid color-border-brand-primary substitute was present but exactly camouflaged against both buttons' own background."
+    ]
+  },
+  "useCases": [
+    "A primary action with a small number of closely related alternatives (Save / Save as... / Save a copy)",
+    "A primary action paired with alternate framings of the same task (Send for signature / Send as draft / Preview before sending)"
+  ],
+  "antiPatterns": [
+    "A single action with no alternatives - use Button directly",
+    "An icon-only trigger with no separate primary action - compose Icon Button with Dropdown Menu directly",
+    "More than a small group of similar actions, or actions unrelated to the primary one - use Dropdown Menu on its own, or Button Group"
+  ],
+  "anatomy": [
+    { "name": "primary action", "description": "A real Button with every one of its own props forwarded, except appearance (narrowed) and isFullWidth (unsupported). Trailing corners squared to 0." },
+    { "name": "divider", "description": "A 1px internal <span>, not its own exported component. Height matches the button height per size; color keyed to appearance, overridden when disabled." },
+    { "name": "secondary action", "description": "A real IconButton (shape=\"square\") showing a caret, wrapped in a DropdownMenu. Leading corners squared to 0. Accessible name and tooltip both come from secondaryActionLabel." },
+    { "name": "panel", "description": "Dropdown Menu's Menu, rendering the given sections - the small group of related actions." }
+  ],
+  "props": {
+    "children": { "type": "React.ReactNode", "required": true, "default": null, "description": "The primary action's own label, forwarded to Button as its own children." },
+    "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "The small group of related actions shown when the secondary segment opens." },
+    "secondaryActionLabel": { "type": "string", "required": true, "default": null, "description": "Accessible name (and tooltip) for the secondary segment and its panel." },
+    "appearance": { "type": "SplitButtonAppearance", "required": false, "default": "default", "enum": ["default", "primary"], "description": "Applied to both segments. Narrower than Button's own appearance - no 'subtle', matching every verified Figma variant." },
+    "size": { "type": "ButtonSize", "required": false, "default": "md", "enum": ["xs", "sm", "md", "lg"], "description": "Applied to both segments." },
+    "disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables both segments together." },
+    "isLoading": { "type": "boolean", "required": false, "default": false, "description": "Applies Button's own loading treatment to the primary action only; also disables the secondary action." },
+    "onClick": { "type": "(event) => void", "required": false, "default": null, "description": "The primary action's own click handler." },
+    "tone": { "type": "ButtonTone", "required": false, "default": "neutral", "description": "Forwarded to the primary action, unchanged from Button's own prop." },
+    "iconBefore": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
+    "iconAfter": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root element." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root element's class list." }
+  },
+  "sizes": ["xs", "sm", "md", "lg"],
+  "slots": [],
+  "variants": {
+    "appearance": {
+      "default": { "purpose": "Neutral visual weight - matches Figma's own default." },
+      "primary": { "purpose": "Bold, brand-forward visual weight." }
+    }
+  },
+  "states": ["default", "loading", "disabled", "open", "closed"],
+  "accessibility": {
+    "primaryActionRole": "button (Button, unmodified)",
+    "secondaryActionRole": "button (IconButton, unmodified)",
+    "ariaExpanded": "set on the secondary action by Popup (via Dropdown Menu), reflecting the panel's open state",
+    "ariaControls": "set on the secondary action by Popup, pointing at the panel id while open",
+    "panelRole": "menu (set by Menu, via Dropdown Menu), named by secondaryActionLabel",
+    "loadingBehavior": "aria-busy/aria-disabled on the primary action (Button's own existing behavior) - not native disabled, so it stays focusable"
+  },
+  "keyboardInteraction": [
+    "Tab moves between the primary action and the secondary action, in DOM order",
+    "Enter/Space activates either segment (native button behavior)",
+    "Escape closes the open panel (inherited from Popup, via Dropdown Menu)",
+    "Arrow keys/Home/End/Enter navigate and activate rows inside the open panel (inherited from Menu)"
+  ],
+  "behaviorRules": [
+    "Holds exactly one piece of state (open) to drive the secondary action's DropdownMenu, which is itself fully controlled.",
+    "disabled disables both segments together (native disabled on both).",
+    "isLoading applies only to the primary action (Button's own loading treatment) but additionally sets the secondary action's own disabled to disabled || isLoading.",
+    "appearance and size are applied uniformly to both segments - there is no per-segment mixing in Figma's own variant set.",
+    "showSearch is hardcoded to false and alignment to 'right' on the internal DropdownMenu - neither is exposed as a SplitButtonProps prop.",
+    "Does not pass isExpanded to the secondary action's IconButton - redundant, since Popup already manages aria-expanded via trigger-cloning."
+  ],
+  "compositionRules": [
+    "Pass every other Button prop (tone, iconBefore, iconAfter, any native button attribute) directly on SplitButtonProps - they forward straight to the primary action via {...rest}.",
+    "Provide secondaryActionLabel explicitly - it is not derived from children.",
+    "Provide sections for the small group of related actions - Split Button does not accept arbitrary panel content, matching Dropdown Menu's own 'always renders a Menu' rule."
+  ],
+  "contentRules": [],
+  "responsiveRules": [
+    "The root hugs its own content width at any container size, identical to a plain inline-flex layout.",
+    "The panel inherits Popup's resize/scroll-driven repositioning and touch-friendly outside-dismissal identically to Dropdown Menu."
+  ],
+  "themeRules": [
+    "Inherits Button's, IconButton's, and Dropdown Menu/Menu's token-driven theming - no component-level light/dark branching of its own."
+  ],
+  "tokens": {
+    "note": "split-button.module.css declares no raw values other than 0 (squared corners). The divider uses border-width-sm, size-control-xs/sm/md/lg, color-border-input/color-content-brand-primary-subtle/color-border-disabled. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
+  },
+  "relatedComponents": ["Button", "IconButton", "DropdownMenu", "Menu", "TagGroup", "AvatarGroup"],
+  "do": [
+    "Pass every other Button prop directly on SplitButtonProps rather than constructing a separate Button element.",
+    "Provide a specific, real secondaryActionLabel (e.g. \"More Save options\"), not a generic placeholder."
+  ],
+  "dont": [
+    "Do not expect a 'subtle' appearance - only 'default' and 'primary' are supported.",
+    "Do not expect the secondary action to derive its own accessible name automatically - secondaryActionLabel is required."
+  ],
+  "acceptanceCriteria": [
+    "Renders the primary action with its own label and the secondary action with secondaryActionLabel as its accessible name.",
+    "Activating the secondary action opens a role=\"menu\" panel listing every item from sections, named by secondaryActionLabel.",
+    "Selecting a panel item calls that item's own onSelect - Split Button does not intercept or assume anything about the selection.",
+    "disabled disables both segments (native disabled on both); isLoading applies Button's own loading treatment to the primary action and also disables the secondary action.",
+    "Applies appearance and size uniformly to both segments.",
+    "Forwards a ref to the primary action's underlying button element.",
+    "Supports a custom id/className on the root."
+  ],
+  "knownLimitations": [
+    "No built-in support for more than a small, static list of actions - very large sections arrays inherit Menu's own eager-rendering behavior (no virtualization).",
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead, no built-in focus-first-item-on-open)."
+  ],
+  "futureEnhancements": [
+    "A renderSecondaryAction/custom-icon escape hatch, if a real use case needs something other than the caret.",
+    "Exposing alignment, if a real layout ever needs the panel to open left instead of right."
+  ]
+}

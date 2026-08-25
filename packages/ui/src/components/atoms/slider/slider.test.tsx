@@ -450,7 +450,7 @@ describe('Slider', () => {
     expect(slider).not.toHaveAttribute('data-pointer-focus');
   });
 
-  it('does not mark plain keyboard focus (no preceding pointerdown) as pointer-focus', () => {
+  it('does not set data-pointer-focus for plain keyboard focus (no preceding pointerdown)', () => {
     render(<Slider aria-label="Tab focus" defaultValue={50} />);
     const slider = screen.getByRole('slider', { name: 'Tab focus' });
 

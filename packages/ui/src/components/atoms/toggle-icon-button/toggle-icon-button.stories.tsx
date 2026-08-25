@@ -215,8 +215,18 @@ export const States: Story = {
             <LayoutTwoColumnsSidebarLeftIcon />
           </ToggleIconButton>
         </Cell>
+        <Cell label="Hover">
+          <ToggleIconButton aria-label="Grid view" isSelected data-force-state="hover">
+            <LayoutTwoColumnsSidebarLeftIcon />
+          </ToggleIconButton>
+        </Cell>
         <Cell label="Focus visible">
           <ToggleIconButton aria-label="Grid view" isSelected data-force-state="focus">
+            <LayoutTwoColumnsSidebarLeftIcon />
+          </ToggleIconButton>
+        </Cell>
+        <Cell label="Press">
+          <ToggleIconButton aria-label="Grid view" isSelected data-force-state="press">
             <LayoutTwoColumnsSidebarLeftIcon />
           </ToggleIconButton>
         </Cell>

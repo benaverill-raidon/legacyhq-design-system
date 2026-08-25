@@ -69,8 +69,9 @@ packages/ui/src/components/molecules/inline-message/
   Message is click/keyboard-activated only.
 - Support both controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
 - Render the popup through `Popup` with its **default styled skin** (not `unstyled`),
-  `alignment="bottomLeft"`, `closeOnEscape={false}`, `closeOnOutsideClick={false}`, and
-  `manageTriggerAria` left at its default (`true`).
+  `alignment="bottomLeft"`, and `manageTriggerAria` left at its default (`true`). Do not pass
+  `closeOnEscape`/`closeOnOutsideClick` - leave both at Popup's own default (`true`), so the detail
+  dismisses on Escape or an outside click like any other Popup consumer.
 - Style the hover/open tint off Popup's own `aria-expanded` attribute on the trigger - do not add a
   redundant custom `data-open` attribute.
 
@@ -135,8 +136,7 @@ Inline Message
 
 - **Variants** - all six tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content` (plain row), a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, Escape/outside
-  click not dismissing, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.
 
 ## Test Requirements
 
@@ -150,7 +150,7 @@ renders a real button with aria-expanded when content is provided
 toggles the popup open/closed on click (uncontrolled)
 supports defaultOpen
 supports controlled open/onOpenChange
-does not close on Escape or an outside click
+closes on Escape and on an outside click, inherited from Popup
 applies className to the root row
 maps every tone to its own overlay/hover tint token
 delegates positioning/portal/dismissal to Popup, not a local implementation

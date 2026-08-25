@@ -15,9 +15,10 @@ packages/ui/src/components/
   primitives/   # logo, focus-ring, icon, popup — lowest-level building blocks
   atoms/        # button, badge, checkbox, switch, slider, avatar, link,
                 # tag, tooltip, radio, progress-bar, spinner, label, ...
-  molecules/    # composed from atoms/primitives (one documented exception:
-                # tag-group also composes the dropdown-menu organism — see
-                # its tag-group-spec.md "Tier exception" note)
+  molecules/    # composed from atoms/primitives (documented exceptions:
+                # tag-group, avatar-group, split-button, and chip also compose
+                # the dropdown-menu organism — see each one's own "Tier
+                # exception" note)
   organisms/    # composed from molecules/atoms/primitives — larger, more
                 # complete UI sections (menu, dropdown-menu, ...)
 
@@ -81,7 +82,7 @@ content, not just reshaped data).
 `.examples.json` (`npm run generate:exemplars`) and normalizes presence
 (fills in missing `antiExamples`/`props` defaults, never fabricates values).
 Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — 16
-of 33 components are `thin` (no anti-pattern examples, no per-example props
+of 34 components are `thin` (no anti-pattern examples, no per-example props
 map yet). See `docs/foundations/component-exemplars-governance.json` for the
 completeness backlog and the quality bar for filling one in.
 

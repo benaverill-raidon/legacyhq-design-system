@@ -273,6 +273,12 @@
         "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
         "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />",
         "props": {}
+      },
+      {
+        "name": "Team/partner entity, no image",
+        "description": "entityType=\"team\" swaps the fallback artwork to a two-person silhouette instead of the default individual one, for a firm or partner entity appearing alongside people.",
+        "jsx": "<Avatar name=\"Averill & Partners\" entityType=\"team\" />",
+        "props": {}
       }
     ],
     "antiExamples": [],
@@ -993,6 +999,64 @@
     "exemplarCompleteness": "thin"
   },
   {
+    "id": "avatar-group",
+    "name": "AvatarGroup",
+    "tier": "molecule",
+    "path": "docs/components/molecules/avatar-group/avatar-group.examples.json",
+    "examples": [
+      {
+        "name": "Unbounded stack, no overflow",
+        "description": "maxVisible omitted - every avatar renders as one overlapping stack.",
+        "jsx": "<AvatarGroup\n  avatars={[\n    { id: 'p1', name: 'Ben Averill', src: benPhoto },\n    { id: 'p2', name: 'Jordan Ellis', src: jordanPhoto },\n    { id: 'p3', name: 'Priya Natarajan', src: priyaPhoto },\n  ]}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Truncated stack with a '+N' overflow trigger",
+        "description": "The common case - once avatars.length exceeds maxVisible, the rest collapse behind an overflow trigger that opens a Dropdown Menu.",
+        "jsx": "<AvatarGroup avatars={nineTeamMembers} maxVisible={5} />",
+        "props": {
+          "maxVisible": 5
+        }
+      },
+      {
+        "name": "Smaller size for a dense row",
+        "description": "size applies uniformly to every avatar, including the overflow trigger.",
+        "jsx": "<AvatarGroup avatars={teamMembers} maxVisible={4} size=\"sm\" />",
+        "props": {
+          "maxVisible": 4,
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Acting on a selected truncated person",
+        "description": "Avatar Group never assumes what selection means - wire onOverflowAvatarSelect to navigate or anything else.",
+        "jsx": "<AvatarGroup\n  avatars={teamMembers}\n  maxVisible={4}\n  onOverflowAvatarSelect={(avatar) => {\n    router.push(`/people/${avatar.id}`);\n  }}\n/>",
+        "props": {
+          "maxVisible": 4
+        }
+      },
+      {
+        "name": "Individually interactive avatars",
+        "description": "Each AvatarGroupItem's own isInteractive/onClick forwards straight to the rendered Avatar, unaffected by truncation.",
+        "jsx": "<AvatarGroup\n  avatars={[\n    { id: 'p1', name: 'Ben Averill', isInteractive: true, onClick: () => openProfile('p1') },\n    { id: 'p2', name: 'Jordan Ellis', isInteractive: true, onClick: () => openProfile('p2') },\n  ]}\n/>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Setting size on an individual avatar item",
+        "jsx": "<AvatarGroup avatars={[{ id: 'p1', name: 'Ben Averill', size: 'xl' }]} />",
+        "reason": "AvatarGroupItem omits size from Avatar's own props - Avatar Group applies one size uniformly via AvatarGroupProps.size, including to the overflow trigger. There is no per-avatar size mixing, matching Figma's own avatar-group example."
+      },
+      {
+        "name": "Expecting a truncated avatar's selection to navigate automatically",
+        "jsx": "<AvatarGroup avatars={[{ id: 'p1', name: 'Ben Averill' }]} maxVisible={0} />",
+        "reason": "Selecting a truncated avatar from the overflow panel only calls onOverflowAvatarSelect(avatar, event) - Avatar Group does not read the avatar's own data and navigate for you, the same 'never assume' rule Menu's own onSelect follows."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "breadcrumbs",
     "name": "Breadcrumbs",
     "tier": "molecule",
@@ -1106,6 +1170,174 @@
         "name": "Segmented/exclusive selection",
         "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
         "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "chip",
+    "name": "Chip",
+    "tier": "molecule",
+    "path": "docs/components/molecules/chip/chip.examples.json",
+    "examples": [
+      {
+        "name": "An active filter",
+        "description": "The common case - a property name plus its current value, editable in place via the value segment's own menu.",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Status\"\n  elemBefore={<TaskNotStartedIcon decorative />}\n  value={{\n    label: '2 statuses',\n    sections: [\n      {\n        id: 'statuses',\n        items: [\n          { id: 'not-started', label: 'Not started', onSelect: () => toggleStatus('not-started') },\n          { id: 'in-progress', label: 'In progress', onSelect: () => toggleStatus('in-progress') },\n        ],\n      },\n    ],\n  }}\n  onRemove={() => clearFilter('status')}\n/>",
+        "props": {
+          "mode": "filter"
+        }
+      },
+      {
+        "name": "A filter with a comparison operator",
+        "description": "An optional operator segment sits between the label and the value. Figma only shows this on its due date filter, but nothing about it is date-specific.",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Due date\"\n  elemBefore={<CalendarIcon decorative />}\n  operator={{\n    label: 'before',\n    sections: [{ id: 'ops', items: [{ id: 'on', label: 'on' }, { id: 'before', label: 'before' }, { id: 'after', label: 'after' }] }],\n  }}\n  value={{ label: 'April 15', sections: dateSections }}\n  onRemove={() => clearFilter('due')}\n/>",
+        "props": {
+          "mode": "filter"
+        }
+      },
+      {
+        "name": "A filter whose value has a preview",
+        "description": "valuePreview renders before the value text - an Avatar, an Avatar Group, status icons. Decorative only; the value text carries the meaning.",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label=\"Assignee\"\n  value={{ label: '3 people', sections: peopleSections }}\n  valuePreview={\n    <AvatarGroup\n      size=\"xs\"\n      maxVisible={3}\n      avatars={[\n        { id: 'a', name: 'Jordan Ellis' },\n        { id: 'b', name: 'Priya Nair' },\n        { id: 'c', name: 'Sam Okafor' },\n      ]}\n    />\n  }\n  onRemove={() => clearFilter('assignee')}\n/>",
+        "props": {
+          "mode": "filter"
+        }
+      },
+      {
+        "name": "An applied property",
+        "description": "The value is the label, so there is nothing to open - the only affordance is removing it.",
+        "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
+        "props": {
+          "mode": "property"
+        }
+      },
+      {
+        "name": "A selectable search scope",
+        "description": "scope is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
+        "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"scope\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
+        "props": {
+          "mode": "scope"
+        }
+      },
+      {
+        "name": "Smaller size for a dense filter bar",
+        "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing.",
+        "jsx": "<Chip\n  mode=\"filter\"\n  size=\"sm\"\n  label=\"Status\"\n  value={{ label: 'Any', sections: statusSections }}\n  onRemove={() => clearFilter('status')}\n/>",
+        "props": {
+          "mode": "filter",
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Naming a panel explicitly",
+        "description": "Panels default to `${label} value` / `${label} operator`. Override when the composed name would read poorly, or when label is not a plain string.",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
+        "props": {
+          "mode": "filter"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Using Chip as a plain label",
+        "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => {}} />",
+        "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for scope), and `onRemove` is required for property/filter precisely because every verified Figma variant has one."
+      },
+      {
+        "name": "Passing filter props to a scope chip",
+        "jsx": "<Chip mode=\"scope\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
+        "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the scope branch, so TypeScript rejects this at compile time rather than silently ignoring them."
+      },
+      {
+        "name": "Putting an interactive control in elemBefore or valuePreview",
+        "jsx": "<Chip mode=\"scope\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
+        "reason": "Both slots are decorative and aria-hidden. In scope mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
+      },
+      {
+        "name": "Expecting a tone prop",
+        "jsx": "<Chip mode=\"property\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
+        "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "chip-group",
+    "name": "ChipGroup",
+    "tier": "molecule",
+    "path": "docs/components/molecules/chip-group/chip-group.examples.json",
+    "examples": [
+      {
+        "name": "A scope selector",
+        "description": "The common case - independent on/off scope chips sharing one size. Chip Group lays them out; the consumer holds which are on.",
+        "jsx": "const [scopes, setScopes] = useState(() => new Set(['matters']));\nconst toggle = (id) =>\n  setScopes((current) => {\n    const next = new Set(current);\n    next.has(id) ? next.delete(id) : next.add(id);\n    return next;\n  });\n\n<ChipGroup size=\"sm\" aria-label=\"Search scopes\">\n  {options.map((option) => (\n    <Chip\n      key={option.id}\n      mode=\"scope\"\n      label={option.label}\n      elemBefore={<SearchIcon decorative />}\n      isSelected={scopes.has(option.id)}\n      onSelectedChange={() => toggle(option.id)}\n    />\n  ))}\n</ChipGroup>",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "An active filter bar",
+        "description": "Filter chips share the group's size; removing one is the consumer's job.",
+        "jsx": "<ChipGroup size=\"md\" aria-label=\"Active filters\">\n  <Chip\n    mode=\"filter\"\n    label=\"Status\"\n    elemBefore={<TaskNotStartedIcon decorative />}\n    value={{ label: '2 statuses', sections: statusSections }}\n    onRemove={() => dropFilter('status')}\n  />\n  <Chip\n    mode=\"filter\"\n    label=\"Due date\"\n    elemBefore={<CalendarIcon decorative />}\n    operator={{ label: 'before', sections: operatorSections }}\n    value={{ label: 'April 15', sections: dateSections }}\n    onRemove={() => dropFilter('due')}\n  />\n</ChipGroup>",
+        "props": {
+          "size": "md"
+        }
+      },
+      {
+        "name": "Packing chips against the trailing edge",
+        "description": "alignment maps to justify-content - which edge the chips pack against. Note this is not Tag Group's alignment, which places an overflow tag.",
+        "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"scope\" label=\"Documents\" />\n</ChipGroup>",
+        "props": {
+          "alignment": "right",
+          "size": "md"
+        }
+      },
+      {
+        "name": "One chip opting out of the group's size",
+        "description": "An explicit size on an individual Chip wins, because Chip resolves size ?? groupSize ?? 'md'.",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Inherits sm\" />\n  <Chip mode=\"scope\" label=\"Explicitly md\" size=\"md\" />\n</ChipGroup>",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Size reaching a wrapped chip",
+        "description": "Size travels by context, so it still reaches a Chip behind a Tooltip, a fragment, or a conditional - which cloning children would not.",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Tooltip content=\"Only matters you own\">\n    <Chip mode=\"scope\" label=\"My matters\" />\n  </Tooltip>\n  {showArchived ? <Chip mode=\"scope\" label=\"Archived\" /> : null}\n</ChipGroup>",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Mixed modes in one group",
+        "description": "Any Chip mode can share a row - the group only lays them out and shares a size.",
+        "jsx": "<ChipGroup size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"property\" label=\"Trusts\" onRemove={detachTrusts} />\n  <Chip mode=\"filter\" label=\"Status\" value={{ label: 'Any', sections: statusSections }} onRemove={clearStatus} />\n</ChipGroup>",
+        "props": {
+          "size": "md"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Expecting overflow truncation",
+        "jsx": "<ChipGroup size=\"md\" maxVisible={5}>{chips}</ChipGroup>",
+        "reason": "Chip Group has no truncation - Figma models none, so all chips wrap onto new lines instead of collapsing behind a \"+N more\" affordance. `maxVisible` does not exist; use Tag Group (with Tags) when you need that behaviour. TypeScript rejects the prop."
+      },
+      {
+        "name": "Expecting the group to manage selection",
+        "jsx": "<ChipGroup size=\"sm\" selectedId=\"matters\">{scopeChips}</ChipGroup>",
+        "reason": "Chip Group is layout only. Scope chips are independent on/off toggles, so which are selected is the consumer's state - pass isSelected/onSelectedChange to each Chip, exactly as with Toggle Button."
+      },
+      {
+        "name": "Repeating size on every chip inside a sized group",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Matters\" size=\"sm\" />\n  <Chip mode=\"scope\" label=\"Documents\" size=\"sm\" />\n</ChipGroup>",
+        "reason": "Redundant - the group already shares its size through context. Setting it per-chip is only for deliberately opting one chip out, and repeating it invites the exact bug the group exists to prevent: one chip missed, breaking the line it wraps onto."
+      },
+      {
+        "name": "Adding padding or a background to the group",
+        "jsx": "<ChipGroup className=\"my-padded-surface\">{chips}</ChipGroup>",
+        "reason": "Chip Group is pure layout - Figma's own container has zero padding and no fill or stroke. Put the surface on a wrapper you own, so the group keeps hugging its chips."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1434,6 +1666,78 @@
         "name": "Visible loading copy next to a labelled Skeleton",
         "jsx": "<div>\n  <Skeleton label=\"Loading profile\" />\n  <span>Loading profile...</span>\n</div>",
         "reason": "The label prop already announces the loading state to assistive technology - duplicating it as visible text is redundant and should instead rely on adjacent context or the label alone."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "split-button",
+    "name": "SplitButton",
+    "tier": "molecule",
+    "path": "docs/components/molecules/split-button/split-button.examples.json",
+    "examples": [
+      {
+        "name": "Primary action with closely related alternatives",
+        "description": "The common case - a labeled primary action plus a small group of alternatives reachable from the caret segment.",
+        "jsx": "<SplitButton\n  secondaryActionLabel=\"More save options\"\n  sections={[\n    {\n      id: 'save-options',\n      items: [\n        { id: 'save-as', label: 'Save as...', onSelect: () => saveAs() },\n        { id: 'save-copy', label: 'Save a copy', onSelect: () => saveCopy() },\n      ],\n    },\n  ]}\n  onClick={() => save()}\n>\n  Save\n</SplitButton>",
+        "props": {}
+      },
+      {
+        "name": "Primary appearance",
+        "description": "appearance applies uniformly to both segments, matching every verified Figma variant.",
+        "jsx": "<SplitButton\n  appearance=\"primary\"\n  secondaryActionLabel=\"More send options\"\n  sections={sendAlternatives}\n  onClick={() => sendForSignature()}\n>\n  Send for signature\n</SplitButton>",
+        "props": {
+          "appearance": "primary"
+        }
+      },
+      {
+        "name": "Smaller size for a dense toolbar",
+        "description": "size applies uniformly to both segments, matching Button's own four sizes exactly.",
+        "jsx": "<SplitButton size=\"sm\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Loading primary action",
+        "description": "isLoading applies Button's own loading treatment to the primary action and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
+        "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Saving...\n</SplitButton>",
+        "props": {
+          "isLoading": true
+        }
+      },
+      {
+        "name": "Disabling both segments together",
+        "description": "disabled disables both segments together (native disabled on both), matching how Figma's own isDisabled axis covers the whole component, not one segment.",
+        "jsx": "<SplitButton disabled secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+        "props": {
+          "disabled": true
+        }
+      },
+      {
+        "name": "Forwarding other Button props",
+        "description": "Every other ButtonProps prop (tone, iconBefore, iconAfter, any native button attribute) forwards straight to the primary action via {...rest}.",
+        "jsx": "<SplitButton\n  tone=\"warning\"\n  iconBefore={<AlertIcon decorative />}\n  secondaryActionLabel=\"More options\"\n  sections={alternatives}\n  onClick={() => flagForReview()}\n>\n  Flag for review\n</SplitButton>",
+        "props": {
+          "tone": "warning"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Using Split Button for a single action with no alternatives",
+        "jsx": "<SplitButton secondaryActionLabel=\"Options\" sections={[]} onClick={() => submit()}>\n  Submit\n</SplitButton>",
+        "reason": "sections is meant for a small group of closely related alternatives, not an empty placeholder - a single action with no alternatives should use Button directly instead of carrying an unused caret segment."
+      },
+      {
+        "name": "Expecting an auto-derived secondary action label",
+        "jsx": "<SplitButton sections={alternatives} onClick={() => save()}>\n  Save\n</SplitButton>",
+        "reason": "secondaryActionLabel is required, not derived from children - the caret segment has no visible text of its own to derive an accessible name from. TypeScript rejects this at compile time."
+      },
+      {
+        "name": "Expecting a 'subtle' appearance",
+        "jsx": "<SplitButton appearance=\"subtle\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+        "reason": "appearance is deliberately narrower than Button's own ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
       }
     ],
     "exemplarCompleteness": "full"

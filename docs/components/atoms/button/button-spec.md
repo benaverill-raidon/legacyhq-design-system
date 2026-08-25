@@ -248,21 +248,28 @@ Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do no
 
 ```css
 /* xs */
-min-height: var(--size-control-xs);
+block-size: var(--size-control-xs);
 padding-inline: var(--spacing-sm);
 
 /* sm */
-min-height: var(--size-control-sm);
+block-size: var(--size-control-sm);
 padding-inline: var(--spacing-sm);
 
 /* md */
-min-height: var(--size-control-md);
+block-size: var(--size-control-md);
 padding-inline: var(--spacing-md);
 
 /* lg */
-min-height: var(--size-control-lg);
+block-size: var(--size-control-lg);
 padding-inline: var(--spacing-lg);
 ```
+
+A fixed `block-size`, not a `min-block-size` floor: at `xs`, the `heading-xs` line-height (24px)
+plus the 1px top/bottom border already sums to 26px, so a floor never actually constrains anything
+and the button rendered 2px taller than `--size-control-xs` (`sm`/`md`/`lg` never showed this, since
+their own token values comfortably exceed 26px). Fixing the size pins the box at exactly the token
+value regardless - `overflow: visible` lets a sliver of the line-box spill silently, matching
+IconButton's own already-fixed-size convention (`inline-size`/`block-size`, not `min-`).
 
 Common values:
 
@@ -452,9 +459,9 @@ Test:
 
 Button should be built to allow future adjacent components without breaking changes:
 
-- IconButton
-- ToggleButton
-- SplitButton
-- ButtonGroup
+- IconButton (built)
+- ToggleButton (built)
+- SplitButton (built)
+- ButtonGroup (built)
 
 Do not implement these in the base Button.

@@ -9,7 +9,7 @@ Use Focus Ring on any custom-built interactive element, and anywhere you'd other
 write a one-off `outline` or `box-shadow` rule for `:focus-visible`.
 
 Do not use Focus Ring as a standalone visual element - it has no appearance until the wrapped
-element is keyboard-focus. Do not use it as a substitute for native focusability - it only styles
+element receives keyboard focus. Do not use it as a substitute for native focusability - it only styles
 focus, it does not make an element focusable; the element still needs to be a real native control
 (`button`, `a[href]`, `input`) or carry a `tabIndex`. Do not expect it to appear on pointer hover or
 plain `:focus` from a mouse click - it only reacts to `:focus-visible`, by design.

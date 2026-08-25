@@ -246,7 +246,7 @@ Do not render excessive stops that would harm performance or visual clarity.
 
 `showValue` is false by default.
 
-When true, show the value indicator while:
+When true, show the value indicator in these states:
 
 - hover
 - focus

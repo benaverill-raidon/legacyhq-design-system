@@ -6,7 +6,10 @@
     "componentSetNodeId": "1333:143482",
     "componentName": "avatar",
     "variantCount": 254,
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-08-06",
+    "apiAdaptationNotes": [
+      "entityType has no corresponding Figma variant - added 2026-08-21 (re-verified against the avatar component set's own componentPropertyDefinitions, which only defines size/status/state/presence/isInteractive/isDisabled/selected - no team/entity axis) so Avatar's fallback artwork can distinguish an individual (the existing person silhouette) from a team/partner entity (a new two-person silhouette) when there is no src. The team silhouette is not invented art - it's the real, already-shipped team-and-partners icon glyph (packages/ui/src/assets/icons/source/team-and-partners.svg), rescaled and recolored to exactly match the person fallback's own template (a 200x200 flat-color square with a centered glyph, same two light/dark color pairs) rather than drawn from scratch."
+    ]
   },
   "anatomy": [
     {
@@ -32,6 +35,11 @@
     },
     "status": {
       "values": ["none", "accepted", "declined"]
+    },
+    "entityType": {
+      "values": ["person", "team"],
+      "default": "person",
+      "note": "No Figma variant - see figmaSource.apiAdaptationNotes. Selects which fallback artwork renders when there is no src (or it fails to load)."
     }
   },
   "tokens": {

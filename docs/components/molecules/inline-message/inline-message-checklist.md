@@ -85,8 +85,8 @@ inside Popup's default panel width.
 
 - [ ] Clicking the row toggles the detail popup open/closed.
 - [ ] Supports controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
-- [ ] The detail panel does not dismiss on Escape or an outside click - only clicking the row again
-      closes it.
+- [ ] The detail panel dismisses on Escape and on an outside click, inherited from Popup's own
+      defaults - the same as clicking the row again.
 
 ## Design Decisions
 
@@ -94,7 +94,7 @@ inside Popup's default panel width.
   component in the system to do so; Tooltip only exercises `unstyled`.
 - Click-to-toggle, not hover - resolved this way specifically because Popup's own docs reserve
   hover-only reveals for Tooltip. See "Design Decisions Beyond the Literal Figma Sample" in
-  `inline-message-spec.md` for the full reasoning against Figma's ambiguous `hover/open` state
+  `inline-message-spec.md` for the full reasoning against Figma's ambiguous `hovered/open` state
   naming.
 - `tone="default"` renders a plain CSS dot, not a fabricated status icon - no matching icon exists
   in the generated set, and Figma's own `default`-tone trigger uses an unrelated placeholder glyph
@@ -119,9 +119,6 @@ inside Popup's default panel width.
 
 - No `disabled` prop exists - if a real product need for one emerges, verify against Figma first
   rather than inventing behavior.
-- The detail panel's Escape/outside-click-proof persistence is an unusual pattern relative to most
-  popovers - make sure consumers understand it must be dismissed by re-clicking the row (or via
-  `onOpenChange` if controlled).
 
 ## Validated Figma Details
 
@@ -167,5 +164,4 @@ Inline Message / EdgeCases
 
 - **Variants** - all six tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content`, a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content,
-  Escape/outside-click not dismissing, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.

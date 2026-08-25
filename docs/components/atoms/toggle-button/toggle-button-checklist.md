@@ -223,10 +223,19 @@ Do not build ToggleButtonGroup in this pass.
 ## Validated Figma Details
 
 - Root fill/border tokens (resting `color-border-input`/`color-content-subtle`, selected
-  `color-background-brand-primary-default-default`/`color-border-brand-primary`/
-  `color-content-brand-primary-default`, disabled `color-background-disabled`/`color-border-disabled`/
+  `color-background-selected-default-default`/`color-border-selected`/`color-content-selected`,
+  disabled `color-background-disabled`/`color-border-disabled`/
   `color-content-disabled`, hover/press overlays `color-background-neutral-overlay-hover`/
   `-press`, focus ring `color-border-focus`) all matched the existing implementation exactly.
+- Selected now consumes the dedicated `selected` semantic family rather than the `brand-primary`
+  family it originally borrowed, and gained real interaction states: all 32 `isSelected=true`
+  variants bind `color/background/selected/default/{default,hover,press}`, `color/border/selected`,
+  and `color/content/selected`. Border and text hold steady across all four selected states; only
+  the fill steps. `state=focus` binds the *hover* fill, not a distinct one, so focus and hover stay
+  grouped exactly as they already are for the unselected states. The resting values are unchanged in
+  both themes (each new token aliases the same primitive its predecessor did), so this is a semantic
+  correction plus genuinely new hover/press feedback - previously selected `:hover`/`:active` were
+  pinned to the resting fill, giving a selected toggle no interaction feedback at all.
   One Components-file swatch (the untouched resting-state fill) resolved to an orphaned variable
   name (`color/background/neutral/overlay/default`) that no longer exists in the live Tokens file -
   a stale library-cache artifact, not a real color. The implementation's `background: transparent`

@@ -43,6 +43,7 @@
   --color-border-disabled: var(--color-neutral-alpha-1200-08);
   --color-border-input: var(--color-neutral-solid-500);
   --color-border-brand-primary: var(--color-brand-prussian-solid-900);
+  --color-border-selected: var(--color-brand-prussian-solid-900);
   --color-border-error: var(--color-red-solid-800);
   --color-border-warning: var(--color-orange-solid-800);
   --color-border-success: var(--color-green-solid-800);
@@ -162,6 +163,11 @@
   --color-background-brand-primary-bold-press: var(--color-brand-prussian-solid-1100);
   --color-background-brand-primary-overlay-hover: var(--color-brand-prussian-alpha-900-08);
   --color-background-brand-primary-overlay-press: var(--color-brand-prussian-alpha-900-16);
+  --color-background-selected-default-default: var(--color-brand-prussian-solid-300);
+  --color-background-selected-default-hover: var(--color-brand-prussian-solid-400);
+  --color-background-selected-default-press: var(--color-brand-prussian-solid-500);
+  --color-background-selected-overlay-hover: var(--color-brand-prussian-alpha-900-08);
+  --color-background-selected-overlay-press: var(--color-brand-prussian-alpha-900-16);
   --color-background-brand-secondary-subtle-default: var(--color-brand-umber-solid-100);
   --color-background-brand-secondary-subtle-hover: var(--color-brand-umber-solid-200);
   --color-background-brand-secondary-subtle-press: var(--color-brand-umber-solid-300);

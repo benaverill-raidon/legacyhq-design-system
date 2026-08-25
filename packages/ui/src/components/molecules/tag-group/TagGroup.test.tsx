@@ -119,11 +119,26 @@ describe('TagGroup', () => {
     expect(screen.getByRole('menu', { name: 'Hidden matters' })).toBeInTheDocument();
   });
 
-  it('applies size uniformly to every visible tag and the overflow tag', () => {
-    render(<TagGroup tags={makeTags(11)} maxVisible={10} size="md" />);
+  it.each(['sm', 'md'] as const)(
+    'applies size=%s uniformly to every visible tag and the overflow tag',
+    (size) => {
+      // Figma's size axis is sm (24) / md (32), and within any one variant all eleven tag
+      // instances - the ten visible plus the overflow trigger's - carry that variant's own size.
+      render(<TagGroup tags={makeTags(11)} maxVisible={10} size={size} />);
 
-    expect(screen.getByText('Tag 1').closest('[data-size]')).toHaveAttribute('data-size', 'md');
-    expect(screen.getByRole('button', { name: '+1 more' })).toHaveAttribute('data-size', 'md');
+      for (const label of ['Tag 1', 'Tag 5', 'Tag 10']) {
+        expect(screen.getByText(label).closest('[data-size]')).toHaveAttribute('data-size', size);
+      }
+      expect(screen.getByRole('button', { name: '+1 more' })).toHaveAttribute('data-size', size);
+    },
+  );
+
+  it("defaults to sm, not Tag's own md default", () => {
+    // Matches the first variant in Figma's grid (size=sm (24)), deliberately diverging from Tag.
+    render(<TagGroup tags={makeTags(11)} maxVisible={10} />);
+
+    expect(screen.getByText('Tag 1').closest('[data-size]')).toHaveAttribute('data-size', 'sm');
+    expect(screen.getByRole('button', { name: '+1 more' })).toHaveAttribute('data-size', 'sm');
   });
 
   it('forwards each tag item\'s own props (tone, href, isRemovable) to the rendered Tag', () => {

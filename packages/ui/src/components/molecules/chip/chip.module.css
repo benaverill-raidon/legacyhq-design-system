@@ -1,0 +1,200 @@
+/*
+ * Chip is a segmented pill: a label segment, optional dropdown-backed operator/value segments, and
+ * an optional remove button, joined into one continuous shape. Same construction as Split Button -
+ * outer corners round, interior corners squared - but the seam is handled differently. Figma gives
+ * every segment its own 1px stroke and suppresses only the *leading* segment's trailing stroke, so
+ * each following segment's own leading stroke draws the junction line.
+ */
+.root {
+  display: inline-flex;
+  align-items: stretch;
+  vertical-align: middle;
+}
+
+/*
+ * `position: relative` on every segment so the focused one can be lifted above its neighbours (see
+ * the z-index rule below). No offsets, so nothing moves - it only establishes the paint tier.
+ */
+.segment {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--spacing-xs);
+  margin: var(--spacing-none);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  background: var(--color-background-neutral-subtle-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  white-space: nowrap;
+  transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment {
+    transition-duration: 0ms;
+  }
+}
+
+/*
+ * Exactly one 1px line per junction: each segment drops its own trailing border and the next
+ * segment's leading border becomes the seam. Figma applies this only to the leading segment, which
+ * leaves a doubled 2px line between two *middle* segments (visible on its `due date` filter, where
+ * an operator and a value segment sit side by side). Normalized here so every junction reads 1px.
+ */
+.segment:not(:last-child) {
+  border-inline-end-width: 0;
+}
+
+/* Outer corners round, interior corners square - measured 999 / 0 per side on every variant. */
+.segment:first-child {
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
+}
+
+.segment:last-child {
+  border-start-end-radius: var(--border-radius-full-round);
+  border-end-end-radius: var(--border-radius-full-round);
+}
+
+/*
+ * The label names the property; it does not act on it. Only `scope` makes this segment a control
+ * (see .selected below), so its resting text is the subtler `content/subtle` while the value and
+ * operator segments - which do act - use `content/default`.
+ */
+.labelSegment {
+  color: var(--color-content-subtle);
+}
+
+.operatorSegment,
+.valueSegment {
+  color: var(--color-content-default);
+  cursor: pointer;
+}
+
+.removeButton {
+  color: var(--color-content-subtle);
+  cursor: pointer;
+}
+
+/* Figma pulls the close icon slightly toward the seam: padding-left is 2px less than padding-right. */
+.size_sm .segment {
+  block-size: var(--size-control-xs);
+  padding-inline: var(--measurement-6);
+}
+
+.size_md .segment {
+  block-size: var(--size-control-sm);
+  padding-inline: var(--spacing-sm);
+}
+
+.size_sm .removeButton {
+  padding-inline: var(--spacing-xs) var(--measurement-6);
+}
+
+.size_md .removeButton {
+  padding-inline: var(--measurement-6) var(--spacing-sm);
+}
+
+/*
+ * A scope chip is a single segment, so it takes the full round on both ends from the :first-child /
+ * :last-child rules above - no extra radius handling needed. Deliberately sets only `cursor` here:
+ * an earlier revision also set `color`, which at (0,2,0) outweighed `.selected`'s own (0,1,0) and
+ * silently kept selected scope chips on `content/subtle` text. `.labelSegment` already supplies the
+ * unselected color, and `.selected` (declared after it, same specificity) correctly overrides it.
+ */
+.mode_scope .segment {
+  cursor: pointer;
+}
+
+/*
+ * The focus ring is an outline drawn *outside* the segment box, and segments sit flush against each
+ * other - so without this the next segment paints over the ring's trailing edge and clips it. Every
+ * segment is already `position: relative`, which puts them all in one paint tier where DOM order
+ * decides; lifting the focused one above that resolves it on both sides at once. Same paint-tier
+ * reasoning as Avatar Group's overlapping stack, applied to an outline instead of a fill.
+ */
+.segment:is(:focus-visible, [data-force-state='focus']) {
+  z-index: 1;
+}
+
+/*
+ * Interaction fills belong to the segments that actually *do* something - the operator, the value,
+ * and remove. The label segment (Figma's chip-base) deliberately has none, in any mode: in
+ * filter/property it is a passive `<span>` that names the property, and even in scope - where it is
+ * the toggle - selection is the feedback, with the focus ring covering keyboard affordance. Figma
+ * does model a hover/press/focus axis on chip-base; skipping it is a deliberate product decision, not
+ * an oversight. A consequence worth knowing: nothing in Chip consumes
+ * `--color-background-selected-default-hover`/`-press` as a result.
+ */
+.operatorSegment:not(:disabled):is(:hover, [data-force-state='hover']),
+.valueSegment:not(:disabled):is(:hover, [data-force-state='hover']),
+.removeButton:not(:disabled):is(:hover, [data-force-state='hover']) {
+  background: var(--color-background-neutral-subtle-hover);
+}
+
+.operatorSegment:not(:disabled):is(:active, [data-force-state='press']),
+.valueSegment:not(:disabled):is(:active, [data-force-state='press']),
+.removeButton:not(:disabled):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-subtle-press);
+}
+
+/*
+ * Selected only exists for `scope` - the one mode Figma gives an unselected state. It is a selection
+ * state, not an interaction state, so it survives the "no chip-base interaction states" decision
+ * above: a scope chip reads as selected or not, with no hover/press ramp on top of either.
+ */
+.selected {
+  border-color: var(--color-border-selected);
+  background: var(--color-background-selected-default-default);
+  color: var(--color-content-selected);
+}
+
+/*
+ * Disabled fully overrides selected, including resetting the border back to `color/border/input`.
+ * Figma models no selected+disabled chip-base variant at all, so rather than invent a blended
+ * treatment this follows the precedent Toggle Button and Toggle Icon Button already set for the same
+ * gap: disabled wins outright.
+ */
+.root[data-disabled='true'] .segment,
+.segment:disabled {
+  border-color: var(--color-border-input);
+  background: var(--color-background-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+/* Fixed 16px boxes, matching Figma's own elemBefore / property-value containers. */
+.elemBefore,
+.preview {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  block-size: var(--size-200);
+}
+
+.elemBefore {
+  inline-size: var(--size-200);
+  color: inherit;
+}
+
+/*
+ * The label's icon tracks the label's own colour rather than keeping whatever Icon default it was
+ * given, so it moves through subtle -> selected -> disabled with the text instead of staying put.
+ * Same `:global([data-color])` override Button uses for its own leading/trailing icon slots.
+ *
+ * Deliberately NOT applied to `.preview`: a value preview carries real per-item meaning (task-status
+ * colours, an avatar's own image), so forcing it to inherit would destroy information.
+ */
+.elemBefore :global([data-color]) {
+  color: inherit;
+}
+
+.label,
+.segmentLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

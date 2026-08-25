@@ -177,8 +177,18 @@ export const States: Story = {
         <Cell label="Default">
           <ToggleButton isSelected>Label</ToggleButton>
         </Cell>
+        <Cell label="Hover">
+          <ToggleButton isSelected data-force-state="hover">
+            Label
+          </ToggleButton>
+        </Cell>
         <Cell label="Focus visible">
           <ToggleButton isSelected data-force-state="focus">
+            Label
+          </ToggleButton>
+        </Cell>
+        <Cell label="Press">
+          <ToggleButton isSelected data-force-state="press">
             Label
           </ToggleButton>
         </Cell>

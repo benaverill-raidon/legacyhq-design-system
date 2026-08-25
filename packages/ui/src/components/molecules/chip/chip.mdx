@@ -1,0 +1,180 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ChipStories from './Chip.stories';
+
+<Meta of={ChipStories} name="Docs" />
+
+# Chip
+
+Chip is a compact segmented pill covering three closely-related jobs: showing and editing an active
+**filter**, showing an applied **property**, and selecting a search **scope**.
+
+<Canvas of={ChipStories.Playground} />
+
+## When to use
+
+- **`mode="filter"`** — an active filter across one property, editable in place. Most often several
+  sit in a row above a task list: status, assignee, due date.
+- **`mode="property"`** — a single already-applied property. The value *is* the label, so there is
+  nothing to open; the only affordance is removing it.
+- **`mode="scope"`** — narrowing a search to a broader category than a single property
+  (Everything / Matters / Documents / People). Selectable rather than removable.
+
+## When not to use
+
+- **A plain, non-removable label.** That's Tag. Chip always carries an affordance.
+- **A group needing overflow truncation.** That's Tag Group, or a wrapping row of Chips.
+- **A primary action.** That's Button, or Split Button when it has close alternatives.
+- **A persistent on/off setting** (Switch) or **a bordered text toggle** (Toggle Button).
+
+## The three modes
+
+They genuinely differ in shape, which is why the props are a discriminated union on `mode`:
+
+| mode | segments | interactive parts |
+|---|---|---|
+| `filter` | label + optional operator + value + remove | operator, value, remove |
+| `property` | label + remove | remove |
+| `scope` | label only | the label itself |
+
+<Canvas of={ChipStories.Modes} />
+
+## Usage guidance
+
+### Props are typed per mode
+
+`ChipProps` is a discriminated union, so props that only make sense for one use are rejected for the
+others — `sections` cannot reach a scope chip, `onSelectedChange` cannot reach a property chip, and
+`value` is required exactly where it means something.
+
+```tsx
+<Chip mode="scope" label="Matters" isSelected onSelectedChange={setSelected} />
+{/* Type error: `value` is not part of the scope branch. */}
+```
+
+### An operator is just a segment, not a filter category
+
+Figma has a `filter type` axis (status / context / assignee / due date), but those four differ only
+in their data — with one structural exception: `due date` has a comparison segment. That fact is
+exposed directly as an optional `operator`, so any filter can carry a comparison and a fifth product
+category never needs a code change.
+
+```tsx
+<Chip
+  mode="filter"
+  label="Due date"
+  operator={{ label: 'before', sections: operatorSections }}
+  value={{ label: 'April 15', sections: dateSections }}
+  onRemove={clearDueDate}
+/>
+```
+
+<Canvas of={ChipStories.WithOperator} />
+
+### Chip never changes its own state
+
+Selecting a row calls that row's own `onSelect`; selecting a scope calls `onSelectedChange`. Chip
+does not filter, remove, or re-label anything itself — the same "never assume" rule Menu and Dropdown
+Menu follow. Each dropdown segment owns its own open state, so an operator menu and a value menu are
+always independent.
+
+### One size per chip
+
+`size` (`'sm'` | `'md'`, default `'md'`) applies to every segment together — Figma has no per-segment
+size mixing.
+
+<Canvas of={ChipStories.Sizes} />
+
+### Selected belongs to `scope`
+
+`scope` is the only mode Figma gives an unselected state, and the only one whose label segment is
+itself a control — so it renders as a real `<button>` with `aria-pressed`, the same semantics Toggle
+Button uses. Each chip is an **independent on/off toggle**: several can be on at once, and Chip never
+coordinates siblings. Any one-of-N behaviour belongs to whoever holds the state.
+
+```tsx
+const [scopes, setScopes] = useState(new Set(['matters']));
+
+<Chip mode="scope" label="Matters" isSelected={scopes.has('matters')} onSelectedChange={() => toggle('matters')} />
+```
+
+### The label segment has no hover or press treatment
+
+Figma models a hover/press/focus axis on `chip-base`, but skipping it is deliberate: in
+`filter`/`property` the label is a passive span that shouldn't light up as though it acts, and in
+`scope` the selected/unselected distinction is already the feedback. Interaction fills belong to the
+segments that *do* act — the operator, the value, and remove.
+
+Two consequences: `data-force-state` accepts only `'focus'` on a scope chip (a `'hover'` value would
+render identically to the default and mislead), and the label's icon inherits the label's own colour
+so it tracks subtle → selected → disabled with the text.
+
+<Canvas of={ChipStories.States} />
+
+## Do / Don't
+
+**Do** keep `elemBefore` and `valuePreview` decorative — both are `aria-hidden`, and in scope mode the
+segment is already a button.
+
+```tsx
+<Chip mode="filter" label="Assignee" valuePreview={<Avatar name="Jordan Ellis" size="xs" decorative />} value={value} onRemove={clear} />
+```
+
+**Don't** nest a focusable control in either slot — that's invalid HTML inside a scope chip's button.
+
+```tsx
+<Chip mode="scope" label="Matters" elemBefore={<Button size="xs">Go</Button>} />
+```
+
+---
+
+**Do** name a panel explicitly when the composed default would read poorly.
+
+```tsx
+<Chip mode="filter" label="Status" value={{ label: '2 statuses', sections, menuAriaLabel: 'Choose statuses' }} onRemove={clear} />
+```
+
+**Don't** rely on the segment's own label naming the panel — it's the current *value*, so a panel
+called "on" or "March 2" says nothing about what choosing from it does. Chip composes
+`` `${label} operator` `` / `` `${label} value` `` for exactly this reason.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>mode</code></td><td><code>'filter' | 'property' | 'scope'</code></td><td>-</td><td>Required. Discriminates the union — determines which other props are valid.</td></tr>
+    <tr><td><code>label</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The leading segment's text: the property name, or the scope name.</td></tr>
+    <tr><td><code>elemBefore</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Decorative Icon or Avatar in a fixed 16px box.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td><td>Applied to every segment together.</td></tr>
+    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables every control in the chip at once.</td></tr>
+    <tr><td><code>isSelected</code></td><td><code>boolean</code></td><td><code>false</code></td><td><code>scope</code> only. Drives <code>aria-pressed</code> and the selected tokens.</td></tr>
+    <tr><td><code>onSelectedChange</code></td><td><code>(isSelected: boolean) =&gt; void</code></td><td>-</td><td><code>scope</code> only. Called with the next selected value.</td></tr>
+    <tr><td><code>value</code></td><td><code>ChipSegment</code></td><td>-</td><td><code>filter</code> only, required. The current value and the menu it opens.</td></tr>
+    <tr><td><code>operator</code></td><td><code>ChipSegment</code></td><td>-</td><td><code>filter</code> only. Adds a comparison segment before the value.</td></tr>
+    <tr><td><code>valuePreview</code></td><td><code>React.ReactNode</code></td><td>-</td><td><code>filter</code> only. Decorative preview before the value text.</td></tr>
+    <tr><td><code>onRemove</code></td><td><code>(event) =&gt; void</code></td><td>-</td><td><code>filter</code> and <code>property</code>, required.</td></tr>
+    <tr><td><code>removeAriaLabel</code></td><td><code>string</code></td><td><code>Remove ${'{'}label{'}'}</code></td><td>Accessible name for the remove button.</td></tr>
+    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the root's class list.</td></tr>
+  </tbody>
+</table>
+
+`ChipSegment` is `{ label, sections, menuAriaLabel? }` — `sections` is Menu's own
+`MenuSection[]`.
+
+`data-force-state` pins hover/focus/press as a static Storybook reference (documentation-only, not
+part of the public API) and is accepted on `scope` only, since it is the only mode whose label
+segment is a control.
+
+## Edge cases
+
+<Canvas of={ChipStories.EdgeCases} />
+
+## Related components
+
+- **Tag** — the plain, non-removable label Chip should not replace.
+- **Tag Group** — a truncating group of tags.
+- **Dropdown Menu / Menu** — the operator and value panels.
+- **Toggle Button** — the same `aria-pressed` selection semantics `scope` uses.
+- **Split Button** — the same segmented-pill construction.

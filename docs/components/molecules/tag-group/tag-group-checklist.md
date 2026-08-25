@@ -158,9 +158,15 @@ considered and rejected:
 
 Final implementation decisions:
 - Figma's component set is literally named `tab-group`, not `tag-group` - a naming typo, verified
-  directly against the file (filed on the "✅ Tag Group" page; both variants are unambiguously rows
-  of `tag` instances with a `tag`-triggered `dropdown-menu` for overflow, not tabs). Code follows the
-  real structure under the correct name, `TagGroup`.
+  directly against the file (filed on the "✅ Tag Group" page; all four variants are unambiguously
+  rows of `tag` instances with a `tag`-triggered `dropdown-menu` for overflow, not tabs). Code follows
+  the real structure under the correct name, `TagGroup`.
+- Figma's variant grid crosses `size` (`sm (24)` / `md (32)`) with `alignment`, giving four variants -
+  not the two originally recorded. `size` maps to `TagGroupProps.size` and applies uniformly to every
+  visible tag and to the overflow tag, matching Figma exactly; `sm` is the default. Figma's own
+  `alignment` axis additionally reports two auto-generated placeholder values (`alignment3` /
+  `alignment4`) which are really the `size=md` row of `left`/`right` - the same class of authoring
+  artifact as inline-message's `isOpen3`-`isOpen12`. Worth renaming in Figma.
 - `maxVisible` is optional and unbounded when omitted - Figma's own example is a fixed illustrative
   count (10 visible + "+5 more"), adapted into an open, data-driven prop the same way Menu's own
   `sections` replaced Figma's per-variant row instances.

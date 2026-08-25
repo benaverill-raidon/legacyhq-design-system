@@ -25,6 +25,11 @@
       "name": "Disabled interactive avatar",
       "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
       "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />"
+    },
+    {
+      "name": "Team/partner entity, no image",
+      "description": "entityType=\"team\" swaps the fallback artwork to a two-person silhouette instead of the default individual one, for a firm or partner entity appearing alongside people.",
+      "jsx": "<Avatar name=\"Averill & Partners\" entityType=\"team\" />"
     }
   ]
 }

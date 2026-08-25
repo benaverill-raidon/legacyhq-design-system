@@ -60,7 +60,7 @@ open/hover tint happens to share one visual treatment." This was resolved in fav
 
 - Popup's own documentation is explicit that hover-only reveals belong to Tooltip, not to a
   Popup-based component - reusing that pattern here would just duplicate Tooltip's territory.
-- The `pressed` state only makes sense for a real, clickable control, not a hover-only trigger.
+- The `press` state only makes sense for a real, clickable control, not a hover-only trigger.
 - Hover-only reveals exclude keyboard and touch users from ever seeing the detail; a real button
   does not.
 
@@ -147,8 +147,12 @@ trigger and panel for every Popup-based component, the same way it does for Tool
   panelSurface` instance inside the popup exactly (a raised card with border/shadow). This is the
   first component in the system to exercise that code path; Tooltip only exercises `unstyled`.
 - `alignment="bottomLeft"`, matching Figma's own `popup` instance property on every variant.
-- `closeOnEscape={false}` and `closeOnOutsideClick={false}` - the detail persists until the row is
-  clicked again, per Popup's own documented prediction for Inline Message's likely needs.
+- Leaves `closeOnEscape`/`closeOnOutsideClick` at Popup's own defaults (both `true`) - the detail
+  dismisses on Escape or an outside click, the same as any other Popup consumer. Popup's own docs
+  originally predicted Inline Message would want persistent-until-explicit-toggle behavior, and an
+  earlier revision opted out of both to match that prediction - reversed on direct product
+  feedback: a status/validation detail row should dismiss like any other transient disclosure, not
+  stay pinned open once the user has moved on.
 - Leaves `manageTriggerAria` at Popup's default (`true`) - `aria-expanded`/`aria-controls` is the
   correct ARIA pattern for a click-to-reveal disclosure, unlike Tooltip's `aria-describedby` case.
   This is the first component to exercise that default path; Tooltip sets it to `false`.
@@ -206,7 +210,6 @@ All six tones side by side, each with `content` provided.
 
 - Alignment falling back automatically near a viewport edge
 - Long detail content wrapping inside Popup's default width
-- Escape and outside clicks do not dismiss the open panel
 - Dark surface
 
 ## Testing Requirements
@@ -218,7 +221,7 @@ All six tones side by side, each with `content` provided.
 - Toggles the popup open/closed on click (uncontrolled)
 - Supports `defaultOpen`
 - Supports controlled `open`/`onOpenChange`
-- Does not close on Escape or an outside click
+- Closes on Escape and on an outside click, inherited from Popup
 - Applies `className` to the root row
 - Maps every tone to its own `overlay/hover` tint token
 - Delegates positioning/portal/dismissal to Popup rather than a local implementation

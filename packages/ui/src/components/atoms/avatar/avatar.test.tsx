@@ -3,6 +3,7 @@ import * as React from 'react';
 import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 import { Avatar } from './avatar';
 
 const avatarCss = readFileSync('packages/ui/src/components/atoms/avatar/avatar.module.css', 'utf8');
@@ -25,6 +26,33 @@ describe('Avatar', () => {
     expect(avatarCss).toContain("background-image: url('./person-dark.svg');");
     expect(avatarCss).not.toContain('avatar-fallback-size');
     expect(avatarTokenSource).not.toContain('fallback-size');
+  });
+
+  it('defaults entityType to person and reflects it on the fallback artwork and root', () => {
+    const { container } = render(<Avatar name="Ben Averill" />);
+
+    expect(container.querySelector('[data-avatar-fallback]')).toHaveAttribute('data-entity-type', 'person');
+    expect(screen.getByRole('img', { name: 'Ben Averill' })).toHaveAttribute('data-entity-type', 'person');
+  });
+
+  it('renders the team fallback artwork when entityType is team', () => {
+    const { container } = render(<Avatar name="Averill & Partners" entityType="team" />);
+
+    expect(container.querySelector('[data-avatar-fallback]')).toHaveAttribute('data-entity-type', 'team');
+    expect(screen.getByRole('img', { name: 'Averill & Partners' })).toHaveAttribute('data-entity-type', 'team');
+  });
+
+  it('uses team-specific fallback artwork for both themes, distinct from the person artwork', () => {
+    expect(avatarCss).toContain("[data-entity-type='team']");
+    expect(avatarCss).toContain("background-image: url('./team-light.svg');");
+    expect(avatarCss).toContain("background-image: url('./team-dark.svg');");
+  });
+
+  it('entityType has no effect once src loads successfully', () => {
+    const { container } = render(<Avatar name="Ben Averill" src="https://example.com/avatar.png" entityType="team" />);
+
+    expect(container.querySelector('img')).toBeTruthy();
+    expect(container.querySelector('[data-avatar-fallback]')).toBeFalsy();
   });
 
   it('renders an image when src is provided', () => {

@@ -101,6 +101,7 @@ const meta = {
     isDisabled: false,
     isInteractive: false,
     decorative: false,
+    entityType: 'person',
   },
   argTypes: {
     size: { control: 'inline-radio', options: SIZES },
@@ -109,6 +110,7 @@ const meta = {
     name: { control: 'text' },
     presence: { control: 'select', options: ['none', 'online', 'offline', 'busy'] },
     status: { control: 'select', options: ['none', 'accepted', 'declined'] },
+    entityType: { control: 'inline-radio', options: ['person', 'team'] },
     onClick: { control: false },
     className: { control: false },
   },

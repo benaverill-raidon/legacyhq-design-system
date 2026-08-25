@@ -17,13 +17,14 @@ Inline Message renders through [Popup](../../primitives/popup/popup.md) with its
 skin (a raised card, not `unstyled` like Tooltip) when `content` is provided - this is the first
 component in the system to exercise Popup's own visual skin rather than substituting a custom one.
 The row is a real `<button>`, not a hover target: Popup's own guidance is that hover-only reveals
-belong to Tooltip, so Inline Message opens on click (or Enter/Space), matching Figma's `pressed`
+belong to Tooltip, so Inline Message opens on click (or Enter/Space), matching Figma's `press`
 trigger state and staying accessible to keyboard and touch users alike.
 
-`closeOnEscape` and `closeOnOutsideClick` are both `false` on the underlying Popup - the detail
-panel persists until the row is clicked again, rather than dismissing on a stray click or Escape
-press. This was Popup's own documented prediction for Inline Message's likely behavior, now
-implemented directly.
+The detail panel dismisses on Escape or an outside click, same as clicking the row again -
+`closeOnEscape`/`closeOnOutsideClick` are left at Popup's own defaults (both `true`), not
+overridden. An earlier revision turned both off, matching a prediction in Popup's own docs that
+Inline Message would want persistent-until-explicit-toggle behavior; reversed on direct product
+feedback, since a status/validation detail row should dismiss like any other transient disclosure.
 
 `tone="default"` falls back to a plain CSS dot in place of a status icon - Figma's own `default`
 tone trigger uses an unrelated generic placeholder glyph rather than a real one, and no matching

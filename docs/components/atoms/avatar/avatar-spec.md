@@ -16,9 +16,16 @@ Avatar root
 ```ts
 type AvatarPresence = 'none' | 'online' | 'offline' | 'busy';
 type AvatarStatus = 'none' | 'accepted' | 'declined';
+type AvatarEntityType = 'person' | 'team';
 ```
 
 Status takes priority over presence.
+
+`entityType` (default `'person'`) has no Figma variant - Avatar's own component set only defines
+size/status/state/presence/isInteractive/isDisabled/selected, verified directly. It selects which
+fallback artwork renders when there is no `src` (or it fails to load): the existing person
+silhouette, or a two-person silhouette for a team/partner entity. Purely a fallback-art switch - it
+has no effect once an image loads successfully, and does not change accessible-name computation.
 
 ## Badge sizing
 

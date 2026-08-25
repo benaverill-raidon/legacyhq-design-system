@@ -361,6 +361,23 @@ describe('icon button CSS contract', () => {
     expect(iconButtonCss).toContain('border-color: transparent;');
   });
 
+  it('gives appearance=default a visible disabled border, matching its own resting border', () => {
+    const rule = iconButtonCss.match(/\.appearance_default:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+  });
+
+  it('keeps appearance=primary/subtle disabled borderless, matching Figma (no stroke on the disabled primary/subtle variants)', () => {
+    const rule = iconButtonCss.match(/\.appearance_primary:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('border-color: transparent;');
+    expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
+    expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
+    expect(rule?.[0]).toContain('.appearance_subtle:disabled');
+  });
+
   it('keeps expanded state appearance-specific instead of overriding all tones globally', () => {
     expect(iconButtonCss).toContain(".appearance_default[data-expanded='true']");
     expect(iconButtonCss).toContain(".appearance_primary[data-expanded='true']");

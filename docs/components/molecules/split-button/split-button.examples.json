@@ -1,0 +1,58 @@
+{
+  "component": "SplitButton",
+  "examples": [
+    {
+      "name": "Primary action with closely related alternatives",
+      "description": "The common case - a labeled primary action plus a small group of alternatives reachable from the caret segment.",
+      "jsx": "<SplitButton\n  secondaryActionLabel=\"More save options\"\n  sections={[\n    {\n      id: 'save-options',\n      items: [\n        { id: 'save-as', label: 'Save as...', onSelect: () => saveAs() },\n        { id: 'save-copy', label: 'Save a copy', onSelect: () => saveCopy() },\n      ],\n    },\n  ]}\n  onClick={() => save()}\n>\n  Save\n</SplitButton>",
+      "props": {}
+    },
+    {
+      "name": "Primary appearance",
+      "description": "appearance applies uniformly to both segments, matching every verified Figma variant.",
+      "jsx": "<SplitButton\n  appearance=\"primary\"\n  secondaryActionLabel=\"More send options\"\n  sections={sendAlternatives}\n  onClick={() => sendForSignature()}\n>\n  Send for signature\n</SplitButton>",
+      "props": { "appearance": "primary" }
+    },
+    {
+      "name": "Smaller size for a dense toolbar",
+      "description": "size applies uniformly to both segments, matching Button's own four sizes exactly.",
+      "jsx": "<SplitButton size=\"sm\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+      "props": { "size": "sm" }
+    },
+    {
+      "name": "Loading primary action",
+      "description": "isLoading applies Button's own loading treatment to the primary action and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
+      "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Saving...\n</SplitButton>",
+      "props": { "isLoading": true }
+    },
+    {
+      "name": "Disabling both segments together",
+      "description": "disabled disables both segments together (native disabled on both), matching how Figma's own isDisabled axis covers the whole component, not one segment.",
+      "jsx": "<SplitButton disabled secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+      "props": { "disabled": true }
+    },
+    {
+      "name": "Forwarding other Button props",
+      "description": "Every other ButtonProps prop (tone, iconBefore, iconAfter, any native button attribute) forwards straight to the primary action via {...rest}.",
+      "jsx": "<SplitButton\n  tone=\"warning\"\n  iconBefore={<AlertIcon decorative />}\n  secondaryActionLabel=\"More options\"\n  sections={alternatives}\n  onClick={() => flagForReview()}\n>\n  Flag for review\n</SplitButton>",
+      "props": { "tone": "warning" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Using Split Button for a single action with no alternatives",
+      "jsx": "<SplitButton secondaryActionLabel=\"Options\" sections={[]} onClick={() => submit()}>\n  Submit\n</SplitButton>",
+      "reason": "sections is meant for a small group of closely related alternatives, not an empty placeholder - a single action with no alternatives should use Button directly instead of carrying an unused caret segment."
+    },
+    {
+      "name": "Expecting an auto-derived secondary action label",
+      "jsx": "<SplitButton sections={alternatives} onClick={() => save()}>\n  Save\n</SplitButton>",
+      "reason": "secondaryActionLabel is required, not derived from children - the caret segment has no visible text of its own to derive an accessible name from. TypeScript rejects this at compile time."
+    },
+    {
+      "name": "Expecting a 'subtle' appearance",
+      "jsx": "<SplitButton appearance=\"subtle\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
+      "reason": "appearance is deliberately narrower than Button's own ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
+    }
+  ]
+}

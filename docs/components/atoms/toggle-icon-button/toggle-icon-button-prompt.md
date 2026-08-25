@@ -133,15 +133,21 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use the semantic brand mappings bound in Figma.
+Use the dedicated `selected` semantic family bound in Figma - not the `brand-primary` family (which
+resolves to the same primitives but is the wrong intent, and carries no hover/press steps).
 
 Expected selected styling:
 
 ```txt
-background: var(--color-background-brand-primary-default-default)
-content: var(--color-content-brand-primary-default)
-border: var(--color-border-brand-primary)
+background: var(--color-background-selected-default-default)   /* resting */
+background: var(--color-background-selected-default-hover)     /* hover + focus-visible */
+background: var(--color-background-selected-default-press)     /* active */
+content: var(--color-content-selected)                         /* all states */
+border: var(--color-border-selected)                           /* all states, tone=default only */
 ```
+
+Only the fill steps across selected states; border and icon color hold steady. Group focus with
+hover, matching both Figma and the unselected states.
 
 Use actual generated token names.
 

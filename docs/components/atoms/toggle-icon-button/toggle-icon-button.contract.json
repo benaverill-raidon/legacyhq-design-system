@@ -55,9 +55,9 @@
   ],
   "tokens": {
     "color": {
-      "selectedBackground": "--color-background-brand-primary-default-default (both tones)",
-      "selectedContent": "--color-content-brand-primary-default (both tones)",
-      "selectedBorder": "--color-border-brand-primary (tone=default only - tone=subtle stays border-color: transparent, matching its own resting borderless look)",
+      "selectedBackground": "--color-background-selected-default-default (both tones), stepping to --color-background-selected-default-hover on hover/focus-visible and --color-background-selected-default-press on active",
+      "selectedContent": "--color-content-selected (both tones, unchanged across all four selected states)",
+      "selectedBorder": "--color-border-selected (tone=default only, unchanged across all four selected states - tone=subtle stays border-color: transparent, matching its own resting borderless look)",
       "disabledBackground": "--color-background-disabled",
       "disabledContent": "--color-content-disabled",
       "disabledBorder": "--color-border-disabled (tone=default only - tone=subtle stays border-color: transparent)"

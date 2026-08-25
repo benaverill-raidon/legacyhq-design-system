@@ -99,21 +99,43 @@
  * `tone_default` (matching its own bordered resting look) - `tone_subtle` stays borderless when
  * selected too, confirmed directly from Figma's `tone=subtle, isSelected=true` variants (same
  * fill/text tokens as `tone_default`'s selected state, no stroke).
+ *
+ * These consume the dedicated `selected` semantic family rather than the `brand-primary` family they
+ * previously borrowed - all 32 `isSelected=true` variants bind `color/background/selected/default/*`,
+ * `color/border/selected`, and `color/content/selected`. The resting values are unchanged in both
+ * themes (each new token aliases the same primitive its brand-primary predecessor did); the real
+ * gain is that selected now has its own hover/press steps to consume, below.
  */
-.tone_default.selected,
-.tone_default.selected:hover,
-.tone_default.selected:active {
-  border-color: var(--color-border-brand-primary);
-  background: var(--color-background-brand-primary-default-default);
-  color: var(--color-content-brand-primary-default);
+.tone_default.selected {
+  border-color: var(--color-border-selected);
+  background: var(--color-background-selected-default-default);
+  color: var(--color-content-selected);
 }
 
-.tone_subtle.selected,
-.tone_subtle.selected:hover,
-.tone_subtle.selected:active {
+.tone_subtle.selected {
   border-color: transparent;
-  background: var(--color-background-brand-primary-default-default);
-  color: var(--color-content-brand-primary-default);
+  background: var(--color-background-selected-default-default);
+  color: var(--color-content-selected);
+}
+
+/*
+ * Selected interaction states - previously absent entirely (selected `:hover`/`:active` were pinned
+ * to the resting fill, so a selected toggle gave no feedback at all). Border and text hold steady
+ * across all four states; only the fill steps, matching Figma exactly. Focus shares the hover fill,
+ * the same grouping the unselected rules above use - Figma's own `state=focus, isSelected=true`
+ * variants bind the hover fill, not a distinct one.
+ */
+.toggleButton.selected:not(:disabled):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  background: var(--color-background-selected-default-hover);
+}
+
+.toggleButton.selected:not(:disabled):is(:active, [data-force-state='press']) {
+  background: var(--color-background-selected-default-press);
 }
 
 /*

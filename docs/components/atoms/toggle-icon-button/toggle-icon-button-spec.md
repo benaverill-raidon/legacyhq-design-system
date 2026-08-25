@@ -208,15 +208,23 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use the semantic brand mappings bound in Figma. Background and content tokens are shared across
-both tones - only the border differs, matching each tone's own resting border visibility:
+Use the dedicated `selected` semantic family bound in Figma - not the `brand-primary` family, which
+this component originally borrowed before `selected` tokens existed. Background and content tokens
+are shared across both tones - only the border differs, matching each tone's own resting border
+visibility:
 
 ```txt
-background: var(--color-background-brand-primary-default-default)   (both tones)
-content: var(--color-content-brand-primary-default)                  (both tones)
-border: var(--color-border-brand-primary)                             (tone=default only)
-border: transparent                                                    (tone=subtle)
+background: var(--color-background-selected-default-default)   (both tones, resting)
+background: var(--color-background-selected-default-hover)     (both tones, hover + focus-visible)
+background: var(--color-background-selected-default-press)     (both tones, active)
+content: var(--color-content-selected)                         (both tones, all states)
+border: var(--color-border-selected)                           (tone=default only, all states)
+border: transparent                                            (tone=subtle)
 ```
+
+Only the fill steps across the four selected states; border and icon color hold steady.
+`state=focus` binds the *hover* fill in Figma rather than a distinct one, so focus and hover stay
+grouped as a single treatment - the same convention the unselected states already use.
 
 `tone="default"` already shows a visible border at rest, so selected keeps one. `tone="subtle"` is
 borderless at rest - applying the same border there would draw a border that was never part of its

@@ -196,6 +196,11 @@
         "type": "color",
         "originalName": "color/border/brand-primary"
       },
+      "color-border-selected": {
+        "value": "var(--color-brand-prussian-solid-900)",
+        "type": "color",
+        "originalName": "color/border/selected"
+      },
       "color-border-error": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
@@ -790,6 +795,31 @@
         "value": "var(--color-brand-prussian-alpha-900-16)",
         "type": "color",
         "originalName": "color/background/brand/primary/overlay/press"
+      },
+      "color-background-selected-default-default": {
+        "value": "var(--color-brand-prussian-solid-300)",
+        "type": "color",
+        "originalName": "color/background/selected/default/default"
+      },
+      "color-background-selected-default-hover": {
+        "value": "var(--color-brand-prussian-solid-400)",
+        "type": "color",
+        "originalName": "color/background/selected/default/hover"
+      },
+      "color-background-selected-default-press": {
+        "value": "var(--color-brand-prussian-solid-500)",
+        "type": "color",
+        "originalName": "color/background/selected/default/press"
+      },
+      "color-background-selected-overlay-hover": {
+        "value": "var(--color-brand-prussian-alpha-900-08)",
+        "type": "color",
+        "originalName": "color/background/selected/overlay/hover"
+      },
+      "color-background-selected-overlay-press": {
+        "value": "var(--color-brand-prussian-alpha-900-16)",
+        "type": "color",
+        "originalName": "color/background/selected/overlay/press"
       },
       "color-background-brand-secondary-subtle-default": {
         "value": "var(--color-brand-umber-solid-100)",

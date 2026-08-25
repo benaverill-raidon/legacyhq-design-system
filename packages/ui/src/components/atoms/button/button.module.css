@@ -6,7 +6,14 @@
   justify-content: center;
   box-sizing: border-box;
   min-inline-size: 0;
-  min-block-size: var(--size-control-md);
+  /*
+   * A fixed size rather than a floor: at xs, the heading-xs line-height (24px) plus the 1px
+   * top/bottom border already sums to 26px, so a floor never actually constrains anything and the
+   * button renders 2px taller than --size-control-xs. Fixing the size pins the box at exactly the
+   * token value regardless (overflow: visible lets a fraction of the line-box spill silently,
+   * matching IconButton's own already-fixed-size convention).
+   */
+  block-size: var(--size-control-md);
   padding-block: var(--spacing-none);
   padding-inline: var(--spacing-md);
   border: var(--border-width-sm) solid transparent;
@@ -41,25 +48,25 @@
 }
 
 .size_xs {
-  min-block-size: var(--size-control-xs);
+  block-size: var(--size-control-xs);
   padding-inline: var(--spacing-sm);
 }
 
 .size_sm {
   --button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--size-control-sm);
+  block-size: var(--size-control-sm);
   padding-inline: var(--spacing-sm);
 }
 
 .size_md {
   --button-border-radius: var(--border-radius-lg);
-  min-block-size: var(--size-control-md);
+  block-size: var(--size-control-md);
   padding-inline: var(--spacing-md);
 }
 
 .size_lg {
   --button-border-radius: var(--border-radius-xl);
-  min-block-size: var(--size-control-lg);
+  block-size: var(--size-control-lg);
   padding-inline: var(--spacing-lg);
 
   font-family: var(--typography-heading-sm-font-family);

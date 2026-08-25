@@ -1,0 +1,63 @@
+{
+  "component": "ChipGroup",
+  "examples": [
+    {
+      "name": "A scope selector",
+      "description": "The common case - independent on/off scope chips sharing one size. Chip Group lays them out; the consumer holds which are on.",
+      "jsx": "const [scopes, setScopes] = useState(() => new Set(['matters']));\nconst toggle = (id) =>\n  setScopes((current) => {\n    const next = new Set(current);\n    next.has(id) ? next.delete(id) : next.add(id);\n    return next;\n  });\n\n<ChipGroup size=\"sm\" aria-label=\"Search scopes\">\n  {options.map((option) => (\n    <Chip\n      key={option.id}\n      mode=\"scope\"\n      label={option.label}\n      elemBefore={<SearchIcon decorative />}\n      isSelected={scopes.has(option.id)}\n      onSelectedChange={() => toggle(option.id)}\n    />\n  ))}\n</ChipGroup>",
+      "props": { "size": "sm" }
+    },
+    {
+      "name": "An active filter bar",
+      "description": "Filter chips share the group's size; removing one is the consumer's job.",
+      "jsx": "<ChipGroup size=\"md\" aria-label=\"Active filters\">\n  <Chip\n    mode=\"filter\"\n    label=\"Status\"\n    elemBefore={<TaskNotStartedIcon decorative />}\n    value={{ label: '2 statuses', sections: statusSections }}\n    onRemove={() => dropFilter('status')}\n  />\n  <Chip\n    mode=\"filter\"\n    label=\"Due date\"\n    elemBefore={<CalendarIcon decorative />}\n    operator={{ label: 'before', sections: operatorSections }}\n    value={{ label: 'April 15', sections: dateSections }}\n    onRemove={() => dropFilter('due')}\n  />\n</ChipGroup>",
+      "props": { "size": "md" }
+    },
+    {
+      "name": "Packing chips against the trailing edge",
+      "description": "alignment maps to justify-content - which edge the chips pack against. Note this is not Tag Group's alignment, which places an overflow tag.",
+      "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"scope\" label=\"Documents\" />\n</ChipGroup>",
+      "props": { "alignment": "right", "size": "md" }
+    },
+    {
+      "name": "One chip opting out of the group's size",
+      "description": "An explicit size on an individual Chip wins, because Chip resolves size ?? groupSize ?? 'md'.",
+      "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Inherits sm\" />\n  <Chip mode=\"scope\" label=\"Explicitly md\" size=\"md\" />\n</ChipGroup>",
+      "props": { "size": "sm" }
+    },
+    {
+      "name": "Size reaching a wrapped chip",
+      "description": "Size travels by context, so it still reaches a Chip behind a Tooltip, a fragment, or a conditional - which cloning children would not.",
+      "jsx": "<ChipGroup size=\"sm\">\n  <Tooltip content=\"Only matters you own\">\n    <Chip mode=\"scope\" label=\"My matters\" />\n  </Tooltip>\n  {showArchived ? <Chip mode=\"scope\" label=\"Archived\" /> : null}\n</ChipGroup>",
+      "props": { "size": "sm" }
+    },
+    {
+      "name": "Mixed modes in one group",
+      "description": "Any Chip mode can share a row - the group only lays them out and shares a size.",
+      "jsx": "<ChipGroup size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"property\" label=\"Trusts\" onRemove={detachTrusts} />\n  <Chip mode=\"filter\" label=\"Status\" value={{ label: 'Any', sections: statusSections }} onRemove={clearStatus} />\n</ChipGroup>",
+      "props": { "size": "md" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Expecting overflow truncation",
+      "jsx": "<ChipGroup size=\"md\" maxVisible={5}>{chips}</ChipGroup>",
+      "reason": "Chip Group has no truncation - Figma models none, so all chips wrap onto new lines instead of collapsing behind a \"+N more\" affordance. `maxVisible` does not exist; use Tag Group (with Tags) when you need that behaviour. TypeScript rejects the prop."
+    },
+    {
+      "name": "Expecting the group to manage selection",
+      "jsx": "<ChipGroup size=\"sm\" selectedId=\"matters\">{scopeChips}</ChipGroup>",
+      "reason": "Chip Group is layout only. Scope chips are independent on/off toggles, so which are selected is the consumer's state - pass isSelected/onSelectedChange to each Chip, exactly as with Toggle Button."
+    },
+    {
+      "name": "Repeating size on every chip inside a sized group",
+      "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Matters\" size=\"sm\" />\n  <Chip mode=\"scope\" label=\"Documents\" size=\"sm\" />\n</ChipGroup>",
+      "reason": "Redundant - the group already shares its size through context. Setting it per-chip is only for deliberately opting one chip out, and repeating it invites the exact bug the group exists to prevent: one chip missed, breaking the line it wraps onto."
+    },
+    {
+      "name": "Adding padding or a background to the group",
+      "jsx": "<ChipGroup className=\"my-padded-surface\">{chips}</ChipGroup>",
+      "reason": "Chip Group is pure layout - Figma's own container has zero padding and no fill or stroke. Put the surface on a wrapper you own, so the group keeps hugging its chips."
+    }
+  ]
+}

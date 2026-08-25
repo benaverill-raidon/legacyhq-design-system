@@ -244,7 +244,7 @@ showValue
 
 Default is false.
 
-When true, show value indicator only while:
+When true, show the value indicator only in these states:
 
 - hover
 - focus

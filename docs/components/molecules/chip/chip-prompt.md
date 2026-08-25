@@ -123,9 +123,9 @@ isSelected = false // scope only
   `body-md` typography, `gap: var(--spacing-xs)`, `white-space: nowrap`, and the `fade-quick`
   transition (zeroed under `prefers-reduced-motion: reduce`).
 - **The seam:** `.segment:not(:last-child) { border-inline-end-width: 0; }` so each following
-  segment's own leading border draws the junction - a uniform 1px everywhere. Figma suppresses only
-  the *leading* segment's trailing stroke, which leaves a doubled 2px line wherever two middle
-  segments meet (visible on its own `due date` filter); generalize the rule rather than copying it.
+  segment's own leading border draws the junction - a uniform 1px everywhere. Apply it to every
+  segment, not just the leading one: that is what keeps the line 1px where two middle segments meet
+  (an operator and a value side by side, as on a due-date filter).
 - **Corners:** round only the outer ones, via `.segment:first-child` (leading) and
   `.segment:last-child` (trailing), using CSS logical properties. A one-segment scope chip then takes
   the full round on both ends with no special case.

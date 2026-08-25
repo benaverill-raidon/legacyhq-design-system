@@ -152,10 +152,9 @@ Final implementation decisions:
   from the segment label, which is the current value ("on", "March 2") and names a panel poorly.
 - **`tone` is unexposed.** chip-base supports five tones but all 14 chip variants use
   `tone=default`, so a chip-level mapping would be extrapolated rather than verified.
-- **The seam rule was generalized.** Figma suppresses only the leading segment's trailing stroke,
-  which leaves a doubled 2px line wherever two middle segments meet - visible on its own `due date`
-  filter. Code drops every segment's trailing border so each following segment's leading border draws
-  the seam, giving a uniform 1px at every junction.
+- **The seam rule applies to every segment, not just the leading one.** Each segment drops its own
+  trailing border so the next segment's leading border draws the junction - which is what keeps the
+  line a uniform 1px where two middle segments meet, as on a due-date filter.
 - **No interaction states on the label segment (chip-base), in any mode.** Figma models a
   hover/press/focus axis there; skipping it is a deliberate product decision. Interaction fills belong
   to the segments that act - operator, value, remove. Consequences: nothing in Chip consumes

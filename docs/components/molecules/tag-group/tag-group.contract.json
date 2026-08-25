@@ -23,7 +23,6 @@
     "verifiedAt": "2026-08-24",
     "note": "The real Figma component set is named tab-group, not tag-group - a naming typo, verified directly against the file via the Desktop Bridge plugin. It is filed on the file's own \"✅ Tag Group\" page, and every variant is unambiguously a wrapping row of `tag` instances plus an eleventh `tag` (reading \"+5 more\") nested inside a `dropdown-menu` instance's trigger slot - not tabs. Code follows the real, verified structure under the correct name, TagGroup.",
     "structure": "Four variants cross two axes: `size` (`sm (24)` / `md (32)`) x `alignment`. Each variant is an auto-layout frame (layoutWrap: WRAP, itemSpacing: 8, counterAxisSpacing: 8, counterAxisAlignItems: CENTER) containing ten `tag` instances (tone=standard/default, isRemovable=false, elemBefore=false, text \"Tag\") plus one `dropdown-menu` instance (trigger=tag, alignment=left, isOpen=false) whose trigger slot holds an eleventh `tag` instance reading \"+5 more\" (same variant shape as the others: tone=standard, isRemovable=false). Every `tag` instance inside a variant - the ten visible ones and the overflow trigger's - carries that variant's own size, so size is uniform per group with no per-tag mixing. Measured frame heights match the size axis exactly (sm: 24, md: 32). In `alignment=left`, the dropdown-menu instance is the last child (trailing); in `alignment=right`, it is the first child (leading). The nested dropdown-menu's own `alignment` property measures `left` in every case - it does not flip with the outer variant.",
-    "figmaAuthoringArtifacts": "The `alignment` axis reports four values rather than two - `left`, `right`, and two auto-generated placeholders, `alignment3` and `alignment4`. The two placeholders are the `size=md` row: their child order is identical to `left` and `right` respectively (`alignment3` = dropdown-menu last, `alignment4` = dropdown-menu first), so the real axis is size x alignment(left|right) = 4 variants. Same class of Figma authoring artifact already recorded for inline-message's `isOpen3`-`isOpen12` values; code models the two real alignment values only. Worth renaming in Figma - until then, `size=md` variants are addressable only by those placeholder names.",
     "apiAdaptationNotes": [
       "Figma's example is a fixed illustrative count (10 visible tags + a \"+5 more\" overflow tag = 15 total, with no exposed count/list-editing property). Code generalizes this into an open, data-driven `tags: TagGroupItem[]` array plus a `maxVisible` number, the same 'closed demo becomes an open prop' adaptation Menu made for its own `sections` versus Figma's per-variant row instances.",
       "Figma's `alignment` variant (left/right) became TagGroupProps.alignment directly, unchanged in name or values - it controls only where the overflow tag renders (trailing vs. leading), not which tags are visible or truncated, matching the fact that every Figma variant shows the identical placeholder tag set.",
@@ -43,31 +42,107 @@
     "A group of Buttons - use Button Group"
   ],
   "anatomy": [
-    { "name": "root", "description": "A wrapping flex row (gap: spacing-sm) - the only styling Tag Group owns." },
-    { "name": "visible tags", "description": "tags.slice(0, maxVisible) (or every tag, when maxVisible is omitted), each a real Tag with every one of its own props forwarded, size applied uniformly." },
-    { "name": "overflow tag", "description": "Present only when tags.length > maxVisible. A Tag with isInteractive (Tag's plain-button form) reading overflowLabel(hiddenTags.length), wrapped in a DropdownMenu." },
-    { "name": "overflow panel", "description": "Dropdown Menu's Menu, one section (id: 'overflow') with one MenuItem per truncated tag - label, a decorative leadingElement from that tag's own elemBefore, and disabled mirroring that tag's own isDisabled." }
+    {
+      "name": "root",
+      "description": "A wrapping flex row (gap: spacing-sm) - the only styling Tag Group owns."
+    },
+    {
+      "name": "visible tags",
+      "description": "tags.slice(0, maxVisible) (or every tag, when maxVisible is omitted), each a real Tag with every one of its own props forwarded, size applied uniformly."
+    },
+    {
+      "name": "overflow tag",
+      "description": "Present only when tags.length > maxVisible. A Tag with isInteractive (Tag's plain-button form) reading overflowLabel(hiddenTags.length), wrapped in a DropdownMenu."
+    },
+    {
+      "name": "overflow panel",
+      "description": "Dropdown Menu's Menu, one section (id: 'overflow') with one MenuItem per truncated tag - label, a decorative leadingElement from that tag's own elemBefore, and disabled mirroring that tag's own isDisabled."
+    }
   ],
   "props": {
-    "tags": { "type": "TagGroupItem[]", "required": true, "default": null, "description": "Every tag, visible and truncated. Each item is Tag's own props (minus size/children/isInteractive) plus a required id and a label (forwarded to Tag as children)." },
-    "maxVisible": { "type": "number", "required": false, "default": null, "description": "Once tags.length exceeds this, only the first maxVisible tags render - the rest are truncated behind the overflow tag. No truncation, and no overflow tag, when omitted." },
-    "size": { "type": "TagSize", "required": false, "default": "sm", "enum": ["sm", "md"], "description": "Applied uniformly to every rendered tag, including the overflow tag." },
-    "alignment": { "type": "TagGroupAlignment", "required": false, "default": "left", "enum": ["left", "right"], "description": "Where the overflow tag renders relative to the visible tags - trailing (left) or leading (right). Does not change which tags are visible or truncated." },
-    "overflowLabel": { "type": "(hiddenCount: number) => React.ReactNode", "required": false, "default": "(n) => `+${n} more`", "description": "The overflow tag's text, given the truncated count." },
-    "overflowMenuAriaLabel": { "type": "string", "required": false, "default": "`${hiddenCount} more tags`", "description": "Accessible name for the overflow panel (forwarded to Dropdown Menu's aria-label, then to Menu's role=\"menu\" container)." },
-    "onOverflowTagSelect": { "type": "(tag: TagGroupItem, event) => void", "required": false, "default": null, "description": "Called when a truncated tag is selected from the overflow panel. Tag Group does not navigate, remove, or close the panel on its own." },
-    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root row element." },
-    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root row element's class list." }
+    "tags": {
+      "type": "TagGroupItem[]",
+      "required": true,
+      "default": null,
+      "description": "Every tag, visible and truncated. Each item is Tag's own props (minus size/children/isInteractive) plus a required id and a label (forwarded to Tag as children)."
+    },
+    "maxVisible": {
+      "type": "number",
+      "required": false,
+      "default": null,
+      "description": "Once tags.length exceeds this, only the first maxVisible tags render - the rest are truncated behind the overflow tag. No truncation, and no overflow tag, when omitted."
+    },
+    "size": {
+      "type": "TagSize",
+      "required": false,
+      "default": "sm",
+      "enum": [
+        "sm",
+        "md"
+      ],
+      "description": "Applied uniformly to every rendered tag, including the overflow tag."
+    },
+    "alignment": {
+      "type": "TagGroupAlignment",
+      "required": false,
+      "default": "left",
+      "enum": [
+        "left",
+        "right"
+      ],
+      "description": "Where the overflow tag renders relative to the visible tags - trailing (left) or leading (right). Does not change which tags are visible or truncated."
+    },
+    "overflowLabel": {
+      "type": "(hiddenCount: number) => React.ReactNode",
+      "required": false,
+      "default": "(n) => `+${n} more`",
+      "description": "The overflow tag's text, given the truncated count."
+    },
+    "overflowMenuAriaLabel": {
+      "type": "string",
+      "required": false,
+      "default": "`${hiddenCount} more tags`",
+      "description": "Accessible name for the overflow panel (forwarded to Dropdown Menu's aria-label, then to Menu's role=\"menu\" container)."
+    },
+    "onOverflowTagSelect": {
+      "type": "(tag: TagGroupItem, event) => void",
+      "required": false,
+      "default": null,
+      "description": "Called when a truncated tag is selected from the overflow panel. Tag Group does not navigate, remove, or close the panel on its own."
+    },
+    "id": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Applied to the root row element."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root row element's class list."
+    }
   },
-  "sizes": ["sm", "md"],
+  "sizes": [
+    "sm",
+    "md"
+  ],
   "slots": [],
   "variants": {
     "alignment": {
-      "left": { "purpose": "Visible tags first, overflow tag trailing - matches Figma's default." },
-      "right": { "purpose": "Overflow tag first (leading), then the visible tags." }
+      "left": {
+        "purpose": "Visible tags first, overflow tag trailing - matches Figma's default."
+      },
+      "right": {
+        "purpose": "Overflow tag first (leading), then the visible tags."
+      }
     }
   },
-  "states": ["no-overflow", "overflow-closed", "overflow-open"],
+  "states": [
+    "no-overflow",
+    "overflow-closed",
+    "overflow-open"
+  ],
   "accessibility": {
     "overflowTagRole": "button (Tag's isInteractive form - a real <button>)",
     "ariaExpanded": "set on the overflow tag by Popup (via Dropdown Menu), reflecting the panel's open state",
@@ -105,7 +180,12 @@
   "tokens": {
     "note": "tag-group.module.css declares exactly one token reference - gap: var(--spacing-sm), matching Figma's measured 8px itemSpacing/counterAxisSpacing on both axes of the wrap layout. Every other value is Tag's own tone/size tokens or Dropdown Menu/Menu's own panel/row tokens - see their respective contract.json files."
   },
-  "relatedComponents": ["Tag", "DropdownMenu", "Menu", "ButtonGroup"],
+  "relatedComponents": [
+    "Tag",
+    "DropdownMenu",
+    "Menu",
+    "ButtonGroup"
+  ],
   "do": [
     "Pass every tag's own props directly on each TagGroupItem rather than constructing a separate Tag element.",
     "Wire onOverflowTagSelect when a truncated tag needs to do something when selected."

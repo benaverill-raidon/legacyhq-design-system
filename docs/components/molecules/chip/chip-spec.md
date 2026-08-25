@@ -155,13 +155,11 @@ leading segment `[999, 0, 0, 999]`, middle segments `[0, 0, 0, 0]`, trailing seg
 `[0, 999, 999, 0]`. Implemented with `:first-child` / `:last-child` and CSS logical properties, so a
 scope chip (one segment) takes the full round on both ends with no special case.
 
-**One 1px line per junction.** Figma gives every segment its own 1px inside stroke and suppresses only
-the *leading* segment's trailing stroke (measured `[1, 0, 1, 1]` on chip-base, all-1 on every
-following segment). That works for the first junction but leaves a doubled 2px line wherever two
-*middle* segments meet - visible on Figma's own `due date` filter, where an operator segment and a
-value segment sit side by side. Code generalizes the rule instead: every segment drops its trailing
-border (`.segment:not(:last-child)`), so each following segment's own leading border draws the seam
-and every junction reads a uniform 1px.
+**One 1px line per junction.** Every segment carries its own 1px inside stroke, and every segment
+except the last drops its *trailing* border (`.segment:not(:last-child)`), so the next segment's own
+leading border draws the seam. Applying the rule to every segment rather than only the leading one is
+what keeps the line a uniform 1px where two *middle* segments meet - an operator and a value sitting
+side by side, as on a due-date filter.
 
 ## Token mapping
 

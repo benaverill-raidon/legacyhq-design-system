@@ -43,9 +43,7 @@ matching the first variant in Figma's grid.
 `alignment` (`'left' | 'right'`, default `'left'`) controls only where the overflow tag renders -
 trailing (`left`) or leading (`right`) - not which tags are visible or truncated. The nested Dropdown
 Menu's own panel alignment stays `left` in every Figma variant (measured directly, not assumed), so
-Tag Group does not flip it based on its own `alignment` prop. Figma's `alignment` axis also reports
-two auto-generated placeholder values (`alignment3`/`alignment4`) that are really just the `size=md`
-row of `left`/`right`; code models the two real values only.
+Tag Group does not flip it based on its own `alignment` prop.
 
 Figma's example is a fixed illustrative count (10 visible + "+5 more" = 15 total) with no exposed
 `count`/list-editing property of its own - the same "closed demo becomes an open, data-driven prop"

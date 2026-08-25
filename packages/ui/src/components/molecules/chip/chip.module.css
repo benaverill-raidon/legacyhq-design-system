@@ -39,10 +39,10 @@
 }
 
 /*
- * Exactly one 1px line per junction: each segment drops its own trailing border and the next
- * segment's leading border becomes the seam. Figma applies this only to the leading segment, which
- * leaves a doubled 2px line between two *middle* segments (visible on its `due date` filter, where
- * an operator and a value segment sit side by side). Normalized here so every junction reads 1px.
+ * Exactly one 1px line per junction: each segment drops its own trailing border, so the next
+ * segment's leading border becomes the seam. Applied to every segment rather than just the leading
+ * one, which is what keeps the line a uniform 1px even where two middle segments meet (an operator
+ * and a value sitting side by side, as on a due-date filter).
  */
 .segment:not(:last-child) {
   border-inline-end-width: 0;

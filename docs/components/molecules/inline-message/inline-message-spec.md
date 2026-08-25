@@ -71,15 +71,9 @@ matching `showTitle` toggle since every real-world example provides one, consist
 system always uses presence/absence rather than a parallel boolean flag for optional content
 (compare Radio's `label`).
 
-Figma's own `tone` variant on the trigger sub-component is misspelled `succes` (missing a second
-"s") - not replicated; the parent `inline-message` component set and every other tone-bearing
-component in this system spell it `success`.
-
-`isOpen`'s outer Figma variant values are largely garbage auto-generated strings (`isOpen3` through
-`isOpen12`) rather than real booleans, for every tone except `info` - a known Figma authoring
-artifact from duplicating the `info` variant to create the other five tones. The real signal used
-throughout data extraction was the **nested** `popup` instance's own `isOpen` component property
-(a genuine `"true"`/`"false"` string), not the outer variant name.
+Open state maps from the **nested** `popup` instance's own `isOpen` component property, not from the
+outer variant name - the outer set crosses `tone` with `isOpen`, so the nested property is what
+actually distinguishes an open trigger from a closed one within a single tone.
 
 ## Tone Mapping
 

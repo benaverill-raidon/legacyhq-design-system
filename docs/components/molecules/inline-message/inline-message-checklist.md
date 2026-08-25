@@ -137,10 +137,8 @@ inside Popup's default panel width.
   inline in Chrome), so `.root` resets `padding` to `--spacing-none` explicitly.
 - The popup's `alignment` property reads `"bottom left"` on every variant, mapping directly to
   Popup's `alignment="bottomLeft"`.
-- Figma's `tone` variant on the trigger sub-component is misspelled `succes` - not replicated.
-- Most of Figma's outer `isOpen` variant values are garbage auto-generated strings (`isOpen3`
-  through `isOpen12`), not real booleans, except for the `info` tone - the real, reliable signal is
-  the nested `popup` instance's own `isOpen` component property.
+- Open state is read from the nested `popup` instance's own `isOpen` component property, not from the
+  outer variant name.
 
 ## Examples to document
 

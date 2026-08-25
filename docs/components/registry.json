@@ -3722,7 +3722,7 @@
         "description": "Composes with the root row's class list."
       },
       "data-force-state": {
-        "type": "'hover' | 'focus' | 'active'",
+        "type": "'hover' | 'focus' | 'press'",
         "required": false,
         "default": null,
         "description": "Documentation-only: mirrors :hover/:focus-visible as a static Storybook regression reference, the same convention Button/Checkbox/Switch use. Not part of the public API."
@@ -3780,7 +3780,7 @@
       "componentName": "inline-message",
       "variantCount": 12,
       "verifiedAt": "2026-08-19",
-      "note": "12 raw Figma variants (tone x isOpen) but only 2 real states per tone - most of the outer isOpen variant values are garbage auto-generated strings (isOpen3..isOpen12), not real booleans, except for the info tone. The reliable signal is the nested `popup` instance's own isOpen component property.",
+      "note": "12 raw Figma variants cross tone with isOpen, resolving to 2 real states per tone. Open state maps from the nested popup instance own isOpen component property rather than the outer variant name.",
       "subComponents": [
         {
           "name": "inline-message-trigger",

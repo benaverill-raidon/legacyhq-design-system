@@ -84,7 +84,7 @@ intentionally overridden for every breadcrumb ancestor, back to whatever color L
 pressed state would otherwise use. Per explicit design feedback, "have you visited this URL
 before" isn't a signal breadcrumbs should surface: it makes the trail read as an arbitrary list of
 hyperlinks rather than a location path. This is the one documented exception to "do not reimplement
-Link's hover/focus/pressed treatment locally" (see Engineering Notes below) - it targets `:visited`
+Link's hover/focus/press treatment locally" (see Engineering Notes below) - it targets `:visited`
 specifically, is implemented via a higher-specificity selector (`.item .link:visited`, one more
 class than Link's own `.root:visited`) rather than `!important`, and does not touch hover, focus,
 or pressed, which remain entirely Link's own.
@@ -178,7 +178,7 @@ Example:
 
 ### Colors
 - Link items: `Link`'s own `appearance="subtle"` tokens (`--color-content-subtle`, etc.), with
-  `:visited` overridden back to the resting/pressed color - see Design Decisions above
+  `:visited` overridden back to the resting/press color - see Design Decisions above
 - Current-page item: `--color-content-subtle` (matches Link's resting color - no differentiation)
 - Separator: `--color-content-subtle`
 
@@ -219,7 +219,7 @@ pressed behavior (owned entirely by the `Link` atom, not reimplemented here).
 - No hardcoded colors, spacing, or typography
 - No MUI dependency
 - No Tailwind dependency
-- Do not reimplement Link's hover/focus/pressed treatment locally - render the actual `Link` atom.
+- Do not reimplement Link's hover/focus/press treatment locally - render the actual `Link` atom.
   `:visited` is the one deliberate exception - overridden via a higher-specificity selector
   (`.item .link:visited`), not `!important` - see Design Decisions above.
 

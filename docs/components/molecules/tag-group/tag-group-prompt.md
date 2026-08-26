@@ -80,7 +80,7 @@ In `Tag`, compute `const isButton = isInteractive || typeof onClick === 'functio
 Avatar already uses for its own `isInteractive`). When there is no `href` and `isRemovable` is
 false:
 - `isButton` true: render a real `<button type="button">` reusing `.standalone`/`.contentInteractive`
-  (the same classes the navigational-anchor form already uses for its hover/pressed treatment and
+  (the same classes the navigational-anchor form already uses for its hover/press treatment and
   focus ring), with the native `disabled` attribute driven by `isDisabled`.
 - `isButton` false: render the existing plain `<span>`, unchanged.
 

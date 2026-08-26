@@ -68,12 +68,10 @@ const [open, setOpen] = useState(false);
 <InlineMessage title="Saved" tone="success" open={open} onOpenChange={setOpen} content="All changes saved." />;
 ```
 
-### The detail panel does not dismiss on Escape or an outside click
+### Viewport-edge alignment and long content
 
-Unlike a generic popover, `closeOnEscape` and `closeOnOutsideClick` are both set to `false` on the
-underlying Popup - the detail persists until the row is clicked again. This was Popup's own
-documented prediction for how Inline Message would likely behave, now implemented: the message and
-its detail are meant to stay visible once opened, not disappear the moment focus moves elsewhere.
+Alignment fallback and content wrapping are both delegated to Popup rather than reimplemented
+locally.
 
 <Canvas of={InlineMessageStories.EdgeCases} />
 

@@ -11,6 +11,7 @@ import {
   RadioCheckedIcon,
   RadioUncheckedIcon,
 } from '../../../assets/icons';
+import { Avatar } from '../../atoms/avatar';
 import { Menu } from './menu';
 import type { MenuItem, MenuSize } from './menu.types';
 
@@ -211,6 +212,47 @@ export const Content: Story = {
                     { id: 'jordan', label: 'Jordan Ellis', description: 'Trusts & estates' },
                     { id: 'priya', label: 'Priya Nair', description: 'Probate' },
                     { id: 'sam', label: 'Sam Okafor', description: 'Out of office', disabled: true },
+                  ],
+                },
+              ]}
+            />
+          </div>
+        </Group>
+
+        {/*
+          An Avatar in the leading slot carries a 1px inverse ring (matching Figma's own `type=avatar`
+          elemBefore instance), which is what keeps it legible against the tinted selected and hover
+          fills rather than blending into them - hence the deliberately selected row here.
+        */}
+        <Group title="Avatar rows">
+          <div style={surfaceStyle}>
+            <Menu
+              aria-label="Reassign matter"
+              showSearch={false}
+              sections={[
+                {
+                  id: 'people',
+                  heading: 'Reassign to',
+                  items: [
+                    {
+                      id: 'jordan',
+                      label: 'Jordan Ellis',
+                      description: 'Trusts & estates',
+                      selected: true,
+                      leadingElement: <Avatar name="Jordan Ellis" size="xs" decorative />,
+                    },
+                    {
+                      id: 'priya',
+                      label: 'Priya Nair',
+                      description: 'Probate',
+                      leadingElement: <Avatar name="Priya Nair" size="xs" decorative />,
+                    },
+                    {
+                      id: 'estates-team',
+                      label: 'Estates team',
+                      description: '6 members',
+                      leadingElement: <Avatar name="Estates team" entityType="team" size="xs" decorative />,
+                    },
                   ],
                 },
               ]}

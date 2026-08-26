@@ -50,7 +50,7 @@
   "antiPatterns": [
     "clickable actions",
     "count or text indicators",
-    "hover, focus, pressed, or disabled behavior",
+    "hover, focus, press, or disabled behavior",
     "multiple icons in one tile"
   ],
   "anatomy": [
@@ -217,7 +217,7 @@
   "behaviorRules": [
     "Render a non-interactive div.",
     "Do not make Icon Tile focusable.",
-    "Do not add hover, pressed, active, loading, or disabled states.",
+    "Do not add hover, press, active, loading, or disabled states.",
     "Default tone is brand, default appearance is default, default shape is square, default size is md.",
     "Apply data-tone, data-appearance, data-shape, and data-size equal to the selected values.",
     "Force the passed-in icon to inherit color and fill the computed icon-size box by overriding its own data-color/data-size attributes.",

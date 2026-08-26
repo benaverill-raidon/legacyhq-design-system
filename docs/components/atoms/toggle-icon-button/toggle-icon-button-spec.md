@@ -188,7 +188,7 @@ Do not add warning, error, discovery, or primary in the initial pass.
 
 ## Selected state
 
-`isSelected` controls the selected/pressed visual state.
+`isSelected` controls the selected/press visual state.
 
 This should be controlled by the parent. Do not add internal uncontrolled selected state.
 
@@ -208,15 +208,23 @@ default visual styling is applied
 
 ## Selected token mapping
 
-Use the semantic brand mappings bound in Figma. Background and content tokens are shared across
-both tones - only the border differs, matching each tone's own resting border visibility:
+Use the dedicated `selected` semantic family bound in Figma - not the `brand-primary` family, which
+this component originally borrowed before `selected` tokens existed. Background and content tokens
+are shared across both tones - only the border differs, matching each tone's own resting border
+visibility:
 
 ```txt
-background: var(--color-background-brand-primary-default-default)   (both tones)
-content: var(--color-content-brand-primary-default)                  (both tones)
-border: var(--color-border-brand-primary)                             (tone=default only)
-border: transparent                                                    (tone=subtle)
+background: var(--color-background-selected-default-default)   (both tones, resting)
+background: var(--color-background-selected-default-hover)     (both tones, hover + focus-visible)
+background: var(--color-background-selected-default-press)     (both tones, active)
+content: var(--color-content-selected)                         (both tones, all states)
+border: var(--color-border-selected)                           (tone=default only, all states)
+border: transparent                                            (tone=subtle)
 ```
+
+Only the fill steps across the four selected states; border and icon color hold steady.
+`state=focus` binds the *hover* fill in Figma rather than a distinct one, so focus and hover stay
+grouped as a single treatment - the same convention the unselected states already use.
 
 `tone="default"` already shows a visible border at rest, so selected keeps one. `tone="subtle"` is
 borderless at rest - applying the same border there would draw a border that was never part of its
@@ -343,10 +351,10 @@ Show `xs`/`sm`/`md`/`lg` side by side.
 ### States story
 
 `data-force-state` mirrors the adjacent pseudo-class (documentation-only, not part of the public
-API) so hover/pressed render as a static regression reference - the same convention Button and
+API) so hover/press render as a static regression reference - the same convention Button and
 Checkbox use. Focus preview needs no extra CSS: the shared Focus Ring primitive already reacts to
 `data-force-state="focus"` directly on this element. Cross unselected/selected with
-default/hover/focus/pressed/disabled, and include a live click-to-toggle example.
+default/hover/focus/press/disabled, and include a live click-to-toggle example.
 
 ### Content story
 
@@ -385,7 +393,7 @@ applies shape classes
 disabled sets native disabled
 disabled prevents click
 custom className is applied
-supports data-force-state hover/pressed preview
+supports data-force-state hover/press preview
 ```
 
 ## Future considerations

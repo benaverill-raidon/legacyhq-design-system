@@ -263,7 +263,7 @@ Do not hardcode:
 
 ## Validated Figma Details
 
-- Root fill/border/selected/disabled/hover/pressed/focus tokens all matched exactly - identical to
+- Root fill/border/selected/disabled/hover/press/focus tokens all matched exactly - identical to
   the token set already verified for Toggle Button (same underlying pattern), including the one
   orphaned Components-file reference for the resting-state fill (a stale library-cache artifact
   pointing at a variable that no longer exists in the live Tokens file - `background: transparent`
@@ -300,7 +300,7 @@ Show:
 
 - tone crossed with selected, plus the independent shape axis (Variants)
 - all sizes (Sizes)
-- hover/pressed previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
+- hover/press previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
   focus previews via the same mechanism - the shared Focus Ring primitive already reacts to
   `data-force-state="focus"` directly on this element, so no extra CSS is needed (States)
 - disabled, selected + disabled, and a live click-to-toggle example (States)
@@ -328,7 +328,7 @@ Test:
 - applies shape classes
 - supports custom `className`
 - forwards ref
-- supports data-force-state hover/pressed preview
+- supports data-force-state hover/press preview
 
 ## Do not include
 

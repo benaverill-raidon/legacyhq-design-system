@@ -2,7 +2,7 @@
   --slider-track-height: var(--component-slider-track-height-md);
   --slider-stop-container-size: var(--component-slider-stop-container-size-md);
   --slider-handle-width: var(--component-slider-handle-width-md);
-  --slider-handle-width-pressed: var(--measurement-2);
+  --slider-handle-width-press: var(--measurement-2);
   --slider-handle-height: var(--component-slider-handle-height-md);
   --slider-value-scale-inset: var(--component-slider-handle-half-width);
   --slider-internal-gap: var(--spacing-sm);
@@ -218,7 +218,7 @@
 .rangeRoot[data-active-handle='upper']:not([data-disabled='true']):hover .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='hover']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='hover']) .handleUpper {
-  --slider-handle-visual-color: var(--color-background-brand-primary-bold-hovered);
+  --slider-handle-visual-color: var(--color-background-brand-primary-bold-hover);
 }
 
 .root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle,
@@ -227,7 +227,7 @@
 .rangeRoot[data-active-handle='upper']:not([data-disabled='true']):active .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper {
-  --slider-handle-visual-color: var(--color-background-brand-primary-bold-pressed);
+  --slider-handle-visual-color: var(--color-background-brand-primary-bold-press);
 }
 
 .root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle .handleVisual,
@@ -236,7 +236,7 @@
 .control:has(.singleInput[data-preview-state='press']) .handleSingle .handleVisual,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower .handleVisual,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper .handleVisual {
-  inline-size: var(--slider-handle-width-pressed);
+  inline-size: var(--slider-handle-width-press);
 }
 
 /*
@@ -250,7 +250,7 @@
 .control:has(.rangeInputLower[data-preview-state='focus']) .handleLower,
 .control:has(.rangeInputUpper:focus-visible:not([data-pointer-focus='true'])) .handleUpper,
 .control:has(.rangeInputUpper[data-preview-state='focus']) .handleUpper {
-  outline: var(--border-width-md) solid var(--color-border-focused);
+  outline: var(--border-width-md) solid var(--color-border-focus);
   outline-offset: var(--spacing-xs);
 }
 

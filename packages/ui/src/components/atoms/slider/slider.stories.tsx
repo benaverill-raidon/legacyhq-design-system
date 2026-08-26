@@ -147,7 +147,7 @@ function LiveDragExample() {
 }
 
 /**
- * Interaction and system states, matching Figma's enabled/hovered/pressed/disabled variants.
+ * Interaction and system states, matching Figma's enabled/hover/press/disabled variants.
  * `data-preview-state` mirrors the real `:hover` / `:active` / `:focus-visible` states so they
  * render statically as a regression reference. Clicking or dragging the handle must never show a
  * focus ring on its own - only real keyboard focus does - so this page also has a live example to
@@ -159,7 +159,7 @@ export const States: Story = {
       <Group title="Enabled">
         <Slider label="Default" defaultValue={65} />
         <Slider label="Hover" defaultValue={65} data-preview-state="hover" />
-        <Slider label="Pressed" defaultValue={65} data-preview-state="press" />
+        <Slider label="Press" defaultValue={65} data-preview-state="press" />
         <Slider label="Focus visible (keyboard)" defaultValue={65} data-preview-state="focus" />
       </Group>
 

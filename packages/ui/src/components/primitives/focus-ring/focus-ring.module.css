@@ -1,5 +1,5 @@
 .focusRing {
-  --focus-ring-color: var(--color-border-focused);
+  --focus-ring-color: var(--color-border-focus);
   --focus-ring-width: var(--border-width-md);
   --focus-ring-offset: 2px;
 

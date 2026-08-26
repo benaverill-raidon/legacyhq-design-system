@@ -29,16 +29,21 @@ and Dropdown Menu down to molecules to make the dependency tier-consistent was c
 rejected as a larger, separate change unrelated to this component.
 
 The real Figma source lives on the file's "✅ Tag Group" page, but the component set itself is named
-`tab-group` - a naming typo, verified directly against the file (two variants, `alignment=left` and
-`alignment=right`, each a wrapping row of ten `tag` instances plus one `dropdown-menu` instance whose
+`tab-group` - a naming typo, verified directly against the file (four variants crossing `size` and
+`alignment`, each a wrapping row of ten `tag` instances plus one `dropdown-menu` instance whose
 trigger slot holds an eleventh `tag` reading "+5 more"). Code follows the real structure, not the
 mislabeled name.
 
-`alignment` (`'left' | 'right'`, default `'left'`) maps directly to Figma's own two variants and
-controls only where the overflow tag renders - trailing (`left`) or leading (`right`) - not which
-tags are visible or truncated. The nested Dropdown Menu's own panel alignment stays `left` in both
-Figma variants (measured directly, not assumed), so Tag Group does not flip it based on its own
-`alignment` prop.
+`size` (`'sm' | 'md'`, default `'sm'`) maps to Figma's own `size` axis (`sm (24)` / `md (32)`) and
+applies uniformly to every visible tag and to the overflow tag - Figma gives every `tag` instance
+inside a variant that variant's own size, so there is no per-tag size mixing and `TagGroupItem`
+omits `size` entirely. The `sm` default is a deliberate divergence from Tag's own `md` default,
+matching the first variant in Figma's grid.
+
+`alignment` (`'left' | 'right'`, default `'left'`) controls only where the overflow tag renders -
+trailing (`left`) or leading (`right`) - not which tags are visible or truncated. The nested Dropdown
+Menu's own panel alignment stays `left` in every Figma variant (measured directly, not assumed), so
+Tag Group does not flip it based on its own `alignment` prop.
 
 Figma's example is a fixed illustrative count (10 visible + "+5 more" = 15 total) with no exposed
 `count`/list-editing property of its own - the same "closed demo becomes an open, data-driven prop"

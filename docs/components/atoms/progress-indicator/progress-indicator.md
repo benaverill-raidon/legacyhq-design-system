@@ -12,4 +12,4 @@ Progress Indicator exposes progress semantics through `role="progressbar"` with 
 
 Implementation should use React, TypeScript, CSS Modules, design tokens, and the shared Focus Ring behavior for interactive dots. Dots should be rendered with CSS rather than Figma-exported images. The Figma-only Indicator Dot part remains private component anatomy and should not be exported independently.
 
-The interactive dot's hover/pressed overlay and the selected/unselected color swap both use the `fade-quick` semantic motion token rather than snapping instantly.
+The interactive dot's hover/press overlay and the selected/unselected color swap both use the `fade-quick` semantic motion token rather than snapping instantly.

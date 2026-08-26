@@ -110,7 +110,7 @@ Underline:
 default: no underline
 hover: underline
 press: underline
-visited: color change only unless hovered/pressed
+visited: color change only in the hover/press states
 ```
 
 ## External link behavior

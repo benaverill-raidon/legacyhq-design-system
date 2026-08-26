@@ -11,7 +11,7 @@
     "componentName": "menu",
     "variantCount": 9,
     "verifiedAt": "2026-08-19",
-    "structure": "Variants cross `menus` (1/2/3 - number of sections shown in the design canvas) with `size` (sm/md/lg - panel width only, 192/240/288px; row height is unaffected). Two boolean component properties, `showSearch` and `showScrollbar`, both default true. Each section is a `code-parts / <section>/list` instance with its own leading `separator` (a divider) and a `Slot` filled by `code-parts / <menu-item>` instances - code renders that leading divider above every section except the very first when showSearch is false, a design-review correction (a divider with nothing above it to divide from otherwise). The section's own Container padding is asymmetric - spacing/xs (4px) top, spacing/sm (8px) bottom, not a uniform padding-block - confirmed directly against a live-edited Figma instance. The root `menu` component has empty `fills`/`strokes` - no background/border/shadow of its own.",
+    "structure": "Variants cross `menus` (1/2/3 - number of sections shown in the design canvas) with `size` (sm/md/lg - panel width only, 192/240/288px; row height is unaffected). Two boolean component properties, `showSearch` and `showScrollbar`, both default true. Each section is a `code-parts / <section>/list` instance with its own leading `separator` (a divider) and a `Slot` filled by `code-parts / <menu-item>` instances - code renders that leading divider above every section except the very first when showSearch is false, a design-review correction (a divider with nothing above it to divide from otherwise). The section's own Container padding is a symmetric spacing/xs (4px) padding-block - re-measured against every `<section>/list` instance (paddingTop: 4, paddingBottom: 4). It was previously asymmetric (4px top / 8px bottom); the bottom was tightened to 4px in Figma, so code collapsed the two longhands into one `padding-block`. The root `menu` component has empty `fills`/`strokes` - no background/border/shadow of its own.",
     "subComponentsVerified": [
       {
         "name": "menu-item",
@@ -137,11 +137,11 @@
       "labelDefault": "--color-content-default",
       "descriptionDefault": "--color-content-subtle",
       "disabled": "--color-content-disabled",
-      "rowHover": "--color-background-neutral-overlay-hovered",
-      "rowPress": "--color-background-neutral-overlay-pressed",
+      "rowHover": "--color-background-neutral-overlay-hover",
+      "rowPress": "--color-background-neutral-overlay-press",
       "selectedBackground": "--color-background-brand-primary-subtle-default",
-      "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hovered",
-      "selectedBackgroundPressed": "--color-background-brand-primary-subtle-pressed",
+      "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hover",
+      "selectedBackgroundPressed": "--color-background-brand-primary-subtle-press",
       "selectedText": "--color-content-selected",
       "selectedIndicator": "--color-border-brand-primary (2px inset left box-shadow, --border-width-md - see behaviorRules)",
       "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
@@ -163,7 +163,7 @@
       "description": "--typography-body-sm-* (12px)",
       "heading": "--typography-body-sm-*"
     },
-    "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hovered/-pressed, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+    "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hover/-press, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
   },
   "relatedComponents": ["Popup", "DropdownMenu", "TextField", "IconButton", "Spinner"],
   "do": [

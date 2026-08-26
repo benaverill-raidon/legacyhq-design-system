@@ -13,7 +13,7 @@ Do not use for navigation or when the action cannot be understood without text.
 Provide the compact footprint of an Icon Button while maintaining a persistent pressed state. The
 icon itself is never resized by the component, and `shape="round"` is a full circle at every size.
 
-Shares Icon Button's hover/pressed/focus `fade-quick` color transitions. No pressed-state scale, and
+Shares Icon Button's hover/press/focus `fade-quick` color transitions. No press-state scale, and
 becoming selected is a plain color change with no pop/scale motion - transform-based feedback has
 been removed from this component, matching Toggle Button.
 

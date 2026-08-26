@@ -112,8 +112,8 @@ describe('Breadcrumbs', () => {
     expect(breadcrumbsCss).not.toMatch(/\.current \{[\s\S]*?color: var\(--color-content-default\);/);
   });
 
-  it("overrides Link's :visited color back to its normal resting/pressed color", () => {
+  it("overrides Link's :visited color back to its normal resting/press color", () => {
     expect(breadcrumbsCss).toMatch(/\.item \.link:visited \{[\s\S]*?color: var\(--link-color\);/);
-    expect(breadcrumbsCss).toMatch(/\.item \.link:visited:active \{[\s\S]*?color: var\(--link-color-pressed\);/);
+    expect(breadcrumbsCss).toMatch(/\.item \.link:visited:active \{[\s\S]*?color: var\(--link-color-press\);/);
   });
 });

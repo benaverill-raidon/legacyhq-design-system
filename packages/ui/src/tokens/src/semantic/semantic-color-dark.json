@@ -176,10 +176,10 @@
         "type": "color",
         "originalName": "color/border/inverse"
       },
-      "color-border-focused": {
+      "color-border-focus": {
         "value": "var(--color-brand-prussian-solid-500)",
         "type": "color",
-        "originalName": "color/border/focused"
+        "originalName": "color/border/focus"
       },
       "color-border-disabled": {
         "value": "var(--color-neutral-alpha-100-08)",
@@ -195,6 +195,11 @@
         "value": "var(--color-brand-prussian-solid-500)",
         "type": "color",
         "originalName": "color/border/brand-primary"
+      },
+      "color-border-selected": {
+        "value": "var(--color-brand-prussian-solid-500)",
+        "type": "color",
+        "originalName": "color/border/selected"
       },
       "color-border-error": {
         "value": "var(--color-red-solid-500)",
@@ -226,412 +231,412 @@
         "type": "color",
         "originalName": "color/background/accent/red/subtle/default"
       },
-      "color-background-accent-red-subtle-hovered": {
+      "color-background-accent-red-subtle-hover": {
         "value": "var(--color-red-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/red/subtle/hovered"
+        "originalName": "color/background/accent/red/subtle/hover"
       },
-      "color-background-accent-red-subtle-pressed": {
+      "color-background-accent-red-subtle-press": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/red/subtle/pressed"
+        "originalName": "color/background/accent/red/subtle/press"
       },
       "color-background-accent-red-default-default": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/red/default/default"
       },
-      "color-background-accent-red-default-hovered": {
+      "color-background-accent-red-default-hover": {
         "value": "var(--color-red-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/red/default/hovered"
+        "originalName": "color/background/accent/red/default/hover"
       },
-      "color-background-accent-red-default-pressed": {
+      "color-background-accent-red-default-press": {
         "value": "var(--color-red-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/red/default/pressed"
+        "originalName": "color/background/accent/red/default/press"
       },
       "color-background-accent-red-bold-default": {
         "value": "var(--color-red-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/red/bold/default"
       },
-      "color-background-accent-red-bold-hovered": {
+      "color-background-accent-red-bold-hover": {
         "value": "var(--color-red-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/red/bold/hovered"
+        "originalName": "color/background/accent/red/bold/hover"
       },
-      "color-background-accent-red-bold-pressed": {
+      "color-background-accent-red-bold-press": {
         "value": "var(--color-red-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/red/bold/pressed"
+        "originalName": "color/background/accent/red/bold/press"
       },
       "color-background-accent-orange-subtle-default": {
         "value": "var(--color-orange-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/orange/subtle/default"
       },
-      "color-background-accent-orange-subtle-hovered": {
+      "color-background-accent-orange-subtle-hover": {
         "value": "var(--color-orange-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/orange/subtle/hovered"
+        "originalName": "color/background/accent/orange/subtle/hover"
       },
-      "color-background-accent-orange-subtle-pressed": {
+      "color-background-accent-orange-subtle-press": {
         "value": "var(--color-orange-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/orange/subtle/pressed"
+        "originalName": "color/background/accent/orange/subtle/press"
       },
       "color-background-accent-orange-default-default": {
         "value": "var(--color-orange-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/orange/default/default"
       },
-      "color-background-accent-orange-default-hovered": {
+      "color-background-accent-orange-default-hover": {
         "value": "var(--color-orange-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/orange/default/hovered"
+        "originalName": "color/background/accent/orange/default/hover"
       },
-      "color-background-accent-orange-default-pressed": {
+      "color-background-accent-orange-default-press": {
         "value": "var(--color-orange-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/orange/default/pressed"
+        "originalName": "color/background/accent/orange/default/press"
       },
       "color-background-accent-orange-bold-default": {
         "value": "var(--color-orange-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/orange/bold/default"
       },
-      "color-background-accent-orange-bold-hovered": {
+      "color-background-accent-orange-bold-hover": {
         "value": "var(--color-orange-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/orange/bold/hovered"
+        "originalName": "color/background/accent/orange/bold/hover"
       },
-      "color-background-accent-orange-bold-pressed": {
+      "color-background-accent-orange-bold-press": {
         "value": "var(--color-orange-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/orange/bold/pressed"
+        "originalName": "color/background/accent/orange/bold/press"
       },
       "color-background-accent-yellow-subtle-default": {
         "value": "var(--color-yellow-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/yellow/subtle/default"
       },
-      "color-background-accent-yellow-subtle-hovered": {
+      "color-background-accent-yellow-subtle-hover": {
         "value": "var(--color-yellow-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/subtle/hovered"
+        "originalName": "color/background/accent/yellow/subtle/hover"
       },
-      "color-background-accent-yellow-subtle-pressed": {
+      "color-background-accent-yellow-subtle-press": {
         "value": "var(--color-yellow-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/subtle/pressed"
+        "originalName": "color/background/accent/yellow/subtle/press"
       },
       "color-background-accent-yellow-default-default": {
         "value": "var(--color-yellow-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/yellow/default/default"
       },
-      "color-background-accent-yellow-default-hovered": {
+      "color-background-accent-yellow-default-hover": {
         "value": "var(--color-yellow-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/default/hovered"
+        "originalName": "color/background/accent/yellow/default/hover"
       },
-      "color-background-accent-yellow-default-pressed": {
+      "color-background-accent-yellow-default-press": {
         "value": "var(--color-yellow-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/default/pressed"
+        "originalName": "color/background/accent/yellow/default/press"
       },
       "color-background-accent-yellow-bold-default": {
         "value": "var(--color-yellow-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/yellow/bold/default"
       },
-      "color-background-accent-yellow-bold-hovered": {
+      "color-background-accent-yellow-bold-hover": {
         "value": "var(--color-yellow-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/bold/hovered"
+        "originalName": "color/background/accent/yellow/bold/hover"
       },
-      "color-background-accent-yellow-bold-pressed": {
+      "color-background-accent-yellow-bold-press": {
         "value": "var(--color-yellow-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/bold/pressed"
+        "originalName": "color/background/accent/yellow/bold/press"
       },
       "color-background-accent-green-subtle-default": {
         "value": "var(--color-green-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/green/subtle/default"
       },
-      "color-background-accent-green-subtle-hovered": {
+      "color-background-accent-green-subtle-hover": {
         "value": "var(--color-green-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/green/subtle/hovered"
+        "originalName": "color/background/accent/green/subtle/hover"
       },
-      "color-background-accent-green-subtle-pressed": {
+      "color-background-accent-green-subtle-press": {
         "value": "var(--color-green-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/green/subtle/pressed"
+        "originalName": "color/background/accent/green/subtle/press"
       },
       "color-background-accent-green-default-default": {
         "value": "var(--color-green-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/green/default/default"
       },
-      "color-background-accent-green-default-hovered": {
+      "color-background-accent-green-default-hover": {
         "value": "var(--color-green-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/green/default/hovered"
+        "originalName": "color/background/accent/green/default/hover"
       },
-      "color-background-accent-green-default-pressed": {
+      "color-background-accent-green-default-press": {
         "value": "var(--color-green-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/green/default/pressed"
+        "originalName": "color/background/accent/green/default/press"
       },
       "color-background-accent-green-bold-default": {
         "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/green/bold/default"
       },
-      "color-background-accent-green-bold-hovered": {
+      "color-background-accent-green-bold-hover": {
         "value": "var(--color-green-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/green/bold/hovered"
+        "originalName": "color/background/accent/green/bold/hover"
       },
-      "color-background-accent-green-bold-pressed": {
+      "color-background-accent-green-bold-press": {
         "value": "var(--color-green-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/green/bold/pressed"
+        "originalName": "color/background/accent/green/bold/press"
       },
       "color-background-accent-teal-subtle-default": {
         "value": "var(--color-teal-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/teal/subtle/default"
       },
-      "color-background-accent-teal-subtle-hovered": {
+      "color-background-accent-teal-subtle-hover": {
         "value": "var(--color-teal-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/teal/subtle/hovered"
+        "originalName": "color/background/accent/teal/subtle/hover"
       },
-      "color-background-accent-teal-subtle-pressed": {
+      "color-background-accent-teal-subtle-press": {
         "value": "var(--color-teal-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/teal/subtle/pressed"
+        "originalName": "color/background/accent/teal/subtle/press"
       },
       "color-background-accent-teal-default-default": {
         "value": "var(--color-teal-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/teal/default/default"
       },
-      "color-background-accent-teal-default-hovered": {
+      "color-background-accent-teal-default-hover": {
         "value": "var(--color-teal-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/teal/default/hovered"
+        "originalName": "color/background/accent/teal/default/hover"
       },
-      "color-background-accent-teal-default-pressed": {
+      "color-background-accent-teal-default-press": {
         "value": "var(--color-teal-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/teal/default/pressed"
+        "originalName": "color/background/accent/teal/default/press"
       },
       "color-background-accent-teal-bold-default": {
         "value": "var(--color-teal-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/teal/bold/default"
       },
-      "color-background-accent-teal-bold-hovered": {
+      "color-background-accent-teal-bold-hover": {
         "value": "var(--color-teal-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/teal/bold/hovered"
+        "originalName": "color/background/accent/teal/bold/hover"
       },
-      "color-background-accent-teal-bold-pressed": {
+      "color-background-accent-teal-bold-press": {
         "value": "var(--color-teal-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/teal/bold/pressed"
+        "originalName": "color/background/accent/teal/bold/press"
       },
       "color-background-accent-blue-subtle-default": {
         "value": "var(--color-blue-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/blue/subtle/default"
       },
-      "color-background-accent-blue-subtle-hovered": {
+      "color-background-accent-blue-subtle-hover": {
         "value": "var(--color-blue-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/blue/subtle/hovered"
+        "originalName": "color/background/accent/blue/subtle/hover"
       },
-      "color-background-accent-blue-subtle-pressed": {
+      "color-background-accent-blue-subtle-press": {
         "value": "var(--color-blue-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/blue/subtle/pressed"
+        "originalName": "color/background/accent/blue/subtle/press"
       },
       "color-background-accent-blue-default-default": {
         "value": "var(--color-blue-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/blue/default/default"
       },
-      "color-background-accent-blue-default-hovered": {
+      "color-background-accent-blue-default-hover": {
         "value": "var(--color-blue-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/blue/default/hovered"
+        "originalName": "color/background/accent/blue/default/hover"
       },
-      "color-background-accent-blue-default-pressed": {
+      "color-background-accent-blue-default-press": {
         "value": "var(--color-blue-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/blue/default/pressed"
+        "originalName": "color/background/accent/blue/default/press"
       },
       "color-background-accent-blue-bold-default": {
         "value": "var(--color-blue-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/blue/bold/default"
       },
-      "color-background-accent-blue-bold-hovered": {
+      "color-background-accent-blue-bold-hover": {
         "value": "var(--color-blue-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/blue/bold/hovered"
+        "originalName": "color/background/accent/blue/bold/hover"
       },
-      "color-background-accent-blue-bold-pressed": {
+      "color-background-accent-blue-bold-press": {
         "value": "var(--color-blue-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/blue/bold/pressed"
+        "originalName": "color/background/accent/blue/bold/press"
       },
       "color-background-accent-purple-subtle-default": {
         "value": "var(--color-purple-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/purple/subtle/default"
       },
-      "color-background-accent-purple-subtle-hovered": {
+      "color-background-accent-purple-subtle-hover": {
         "value": "var(--color-purple-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/purple/subtle/hovered"
+        "originalName": "color/background/accent/purple/subtle/hover"
       },
-      "color-background-accent-purple-subtle-pressed": {
+      "color-background-accent-purple-subtle-press": {
         "value": "var(--color-purple-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/purple/subtle/pressed"
+        "originalName": "color/background/accent/purple/subtle/press"
       },
       "color-background-accent-purple-default-default": {
         "value": "var(--color-purple-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/purple/default/default"
       },
-      "color-background-accent-purple-default-hovered": {
+      "color-background-accent-purple-default-hover": {
         "value": "var(--color-purple-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/purple/default/hovered"
+        "originalName": "color/background/accent/purple/default/hover"
       },
-      "color-background-accent-purple-default-pressed": {
+      "color-background-accent-purple-default-press": {
         "value": "var(--color-purple-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/purple/default/pressed"
+        "originalName": "color/background/accent/purple/default/press"
       },
       "color-background-accent-purple-bold-default": {
         "value": "var(--color-purple-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/purple/bold/default"
       },
-      "color-background-accent-purple-bold-hovered": {
+      "color-background-accent-purple-bold-hover": {
         "value": "var(--color-purple-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/purple/bold/hovered"
+        "originalName": "color/background/accent/purple/bold/hover"
       },
-      "color-background-accent-purple-bold-pressed": {
+      "color-background-accent-purple-bold-press": {
         "value": "var(--color-purple-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/purple/bold/pressed"
+        "originalName": "color/background/accent/purple/bold/press"
       },
       "color-background-accent-magenta-subtle-default": {
         "value": "var(--color-magenta-solid-1000)",
         "type": "color",
         "originalName": "color/background/accent/magenta/subtle/default"
       },
-      "color-background-accent-magenta-subtle-hovered": {
+      "color-background-accent-magenta-subtle-hover": {
         "value": "var(--color-magenta-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/subtle/hovered"
+        "originalName": "color/background/accent/magenta/subtle/hover"
       },
-      "color-background-accent-magenta-subtle-pressed": {
+      "color-background-accent-magenta-subtle-press": {
         "value": "var(--color-magenta-solid-800)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/subtle/pressed"
+        "originalName": "color/background/accent/magenta/subtle/press"
       },
       "color-background-accent-magenta-default-default": {
         "value": "var(--color-magenta-solid-800)",
         "type": "color",
         "originalName": "color/background/accent/magenta/default/default"
       },
-      "color-background-accent-magenta-default-hovered": {
+      "color-background-accent-magenta-default-hover": {
         "value": "var(--color-magenta-solid-700)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/default/hovered"
+        "originalName": "color/background/accent/magenta/default/hover"
       },
-      "color-background-accent-magenta-default-pressed": {
+      "color-background-accent-magenta-default-press": {
         "value": "var(--color-magenta-solid-600)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/default/pressed"
+        "originalName": "color/background/accent/magenta/default/press"
       },
       "color-background-accent-magenta-bold-default": {
         "value": "var(--color-magenta-solid-500)",
         "type": "color",
         "originalName": "color/background/accent/magenta/bold/default"
       },
-      "color-background-accent-magenta-bold-hovered": {
+      "color-background-accent-magenta-bold-hover": {
         "value": "var(--color-magenta-solid-400)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/bold/hovered"
+        "originalName": "color/background/accent/magenta/bold/hover"
       },
-      "color-background-accent-magenta-bold-pressed": {
+      "color-background-accent-magenta-bold-press": {
         "value": "var(--color-magenta-solid-300)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/bold/pressed"
+        "originalName": "color/background/accent/magenta/bold/press"
       },
       "color-background-accent-gray-subtle-default": {
         "value": "var(--color-neutral-solid-1200)",
         "type": "color",
         "originalName": "color/background/accent/gray/subtle/default"
       },
-      "color-background-accent-gray-subtle-hovered": {
+      "color-background-accent-gray-subtle-hover": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
-        "originalName": "color/background/accent/gray/subtle/hovered"
+        "originalName": "color/background/accent/gray/subtle/hover"
       },
-      "color-background-accent-gray-subtle-pressed": {
+      "color-background-accent-gray-subtle-press": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/background/accent/gray/subtle/pressed"
+        "originalName": "color/background/accent/gray/subtle/press"
       },
       "color-background-accent-gray-default-default": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
         "originalName": "color/background/accent/gray/default/default"
       },
-      "color-background-accent-gray-default-hovered": {
+      "color-background-accent-gray-default-hover": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/background/accent/gray/default/hovered"
+        "originalName": "color/background/accent/gray/default/hover"
       },
-      "color-background-accent-gray-default-pressed": {
+      "color-background-accent-gray-default-press": {
         "value": "var(--color-neutral-solid-900)",
         "type": "color",
-        "originalName": "color/background/accent/gray/default/pressed"
+        "originalName": "color/background/accent/gray/default/press"
       },
       "color-background-accent-gray-bold-default": {
         "value": "var(--color-neutral-solid-200)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/default"
       },
-      "color-background-accent-gray-overlay-hovered": {
+      "color-background-accent-gray-overlay-hover": {
         "value": "var(--color-neutral-alpha-100-08)",
         "type": "color",
-        "originalName": "color/background/accent/gray/overlay/hovered"
+        "originalName": "color/background/accent/gray/overlay/hover"
       },
-      "color-background-accent-gray-overlay-pressed": {
+      "color-background-accent-gray-overlay-press": {
         "value": "var(--color-neutral-alpha-100-16)",
         "type": "color",
-        "originalName": "color/background/accent/gray/overlay/pressed"
+        "originalName": "color/background/accent/gray/overlay/press"
       },
-      "color-background-accent-gray-bold-hovered": {
+      "color-background-accent-gray-bold-hover": {
         "value": "var(--color-neutral-solid-100)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/hover"
       },
-      "color-background-accent-gray-bold-pressed": {
+      "color-background-accent-gray-bold-press": {
         "value": "var(--color-neutral-solid-0)",
         "type": "color",
         "originalName": "color/background/accent/gray/bold/press"
@@ -641,15 +646,15 @@
         "type": "color",
         "originalName": "color/background/error/subtle/default"
       },
-      "color-background-error-subtle-hovered": {
+      "color-background-error-subtle-hover": {
         "value": "var(--color-red-solid-900)",
         "type": "color",
-        "originalName": "color/background/error/subtle/hovered"
+        "originalName": "color/background/error/subtle/hover"
       },
-      "color-background-error-subtle-pressed": {
+      "color-background-error-subtle-press": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
-        "originalName": "color/background/error/subtle/pressed"
+        "originalName": "color/background/error/subtle/press"
       },
       "color-background-disabled": {
         "value": "var(--color-neutral-alpha-1200-64)",
@@ -661,75 +666,75 @@
         "type": "color",
         "originalName": "color/background/error/default/default"
       },
-      "color-background-error-default-hovered": {
+      "color-background-error-default-hover": {
         "value": "var(--color-red-solid-700)",
         "type": "color",
-        "originalName": "color/background/error/default/hovered"
+        "originalName": "color/background/error/default/hover"
       },
-      "color-background-error-default-pressed": {
+      "color-background-error-default-press": {
         "value": "var(--color-red-solid-600)",
         "type": "color",
-        "originalName": "color/background/error/default/pressed"
+        "originalName": "color/background/error/default/press"
       },
       "color-background-error-bold-default": {
         "value": "var(--color-red-solid-500)",
         "type": "color",
         "originalName": "color/background/error/bold/default"
       },
-      "color-background-error-bold-hovered": {
+      "color-background-error-bold-hover": {
         "value": "var(--color-red-solid-400)",
         "type": "color",
-        "originalName": "color/background/error/bold/hovered"
+        "originalName": "color/background/error/bold/hover"
       },
-      "color-background-error-bold-pressed": {
+      "color-background-error-bold-press": {
         "value": "var(--color-red-solid-300)",
         "type": "color",
-        "originalName": "color/background/error/bold/pressed"
+        "originalName": "color/background/error/bold/press"
       },
       "color-background-warning-subtle-default": {
         "value": "var(--color-orange-solid-1000)",
         "type": "color",
         "originalName": "color/background/warning/subtle/default"
       },
-      "color-background-warning-subtle-hovered": {
+      "color-background-warning-subtle-hover": {
         "value": "var(--color-orange-solid-900)",
         "type": "color",
-        "originalName": "color/background/warning/subtle/hovered"
+        "originalName": "color/background/warning/subtle/hover"
       },
-      "color-background-warning-subtle-pressed": {
+      "color-background-warning-subtle-press": {
         "value": "var(--color-orange-solid-800)",
         "type": "color",
-        "originalName": "color/background/warning/subtle/pressed"
+        "originalName": "color/background/warning/subtle/press"
       },
       "color-background-warning-default-default": {
         "value": "var(--color-orange-solid-800)",
         "type": "color",
         "originalName": "color/background/warning/default/default"
       },
-      "color-background-warning-default-hovered": {
+      "color-background-warning-default-hover": {
         "value": "var(--color-orange-solid-700)",
         "type": "color",
-        "originalName": "color/background/warning/default/hovered"
+        "originalName": "color/background/warning/default/hover"
       },
-      "color-background-warning-default-pressed": {
+      "color-background-warning-default-press": {
         "value": "var(--color-orange-solid-600)",
         "type": "color",
-        "originalName": "color/background/warning/default/pressed"
+        "originalName": "color/background/warning/default/press"
       },
       "color-background-warning-bold-default": {
         "value": "var(--color-orange-solid-400)",
         "type": "color",
         "originalName": "color/background/warning/bold/default"
       },
-      "color-background-warning-bold-hovered": {
+      "color-background-warning-bold-hover": {
         "value": "var(--color-orange-solid-300)",
         "type": "color",
-        "originalName": "color/background/warning/bold/hovered"
+        "originalName": "color/background/warning/bold/hover"
       },
-      "color-background-warning-bold-pressed": {
+      "color-background-warning-bold-press": {
         "value": "var(--color-orange-solid-200)",
         "type": "color",
-        "originalName": "color/background/warning/bold/pressed"
+        "originalName": "color/background/warning/bold/press"
       },
       "color-background-success-subtle-default": {
         "value": "var(--color-green-solid-1000)",
@@ -741,305 +746,330 @@
         "type": "color",
         "originalName": "color/background/brand/primary/subtle/default"
       },
-      "color-background-brand-primary-subtle-hovered": {
+      "color-background-brand-primary-subtle-hover": {
         "value": "var(--color-brand-prussian-solid-900)",
         "type": "color",
-        "originalName": "color/background/brand/primary/subtle/hovered"
+        "originalName": "color/background/brand/primary/subtle/hover"
       },
-      "color-background-brand-primary-subtle-pressed": {
+      "color-background-brand-primary-subtle-press": {
         "value": "var(--color-brand-prussian-solid-800)",
         "type": "color",
-        "originalName": "color/background/brand/primary/subtle/pressed"
+        "originalName": "color/background/brand/primary/subtle/press"
       },
       "color-background-brand-primary-default-default": {
         "value": "var(--color-brand-prussian-solid-900)",
         "type": "color",
         "originalName": "color/background/brand/primary/default/default"
       },
-      "color-background-brand-primary-default-hovered": {
+      "color-background-brand-primary-default-hover": {
         "value": "var(--color-brand-prussian-solid-800)",
         "type": "color",
-        "originalName": "color/background/brand/primary/default/hovered"
+        "originalName": "color/background/brand/primary/default/hover"
       },
-      "color-background-brand-primary-default-pressed": {
+      "color-background-brand-primary-default-press": {
         "value": "var(--color-brand-prussian-solid-700)",
         "type": "color",
-        "originalName": "color/background/brand/primary/default/pressed"
+        "originalName": "color/background/brand/primary/default/press"
       },
       "color-background-brand-primary-bold-default": {
         "value": "var(--color-brand-prussian-solid-500)",
         "type": "color",
         "originalName": "color/background/brand/primary/bold/default"
       },
-      "color-background-brand-primary-bold-hovered": {
+      "color-background-brand-primary-bold-hover": {
         "value": "var(--color-brand-prussian-solid-400)",
         "type": "color",
-        "originalName": "color/background/brand/primary/bold/hovered"
+        "originalName": "color/background/brand/primary/bold/hover"
       },
-      "color-background-brand-primary-bold-pressed": {
+      "color-background-brand-primary-bold-press": {
         "value": "var(--color-brand-prussian-solid-300)",
         "type": "color",
-        "originalName": "color/background/brand/primary/bold/pressed"
+        "originalName": "color/background/brand/primary/bold/press"
       },
-      "color-background-brand-primary-overlay-hovered": {
+      "color-background-brand-primary-overlay-hover": {
         "value": "var(--color-brand-prussian-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/brand/primary/overlay/hovered"
+        "originalName": "color/background/brand/primary/overlay/hover"
       },
-      "color-background-brand-primary-overlay-pressed": {
+      "color-background-brand-primary-overlay-press": {
         "value": "var(--color-brand-prussian-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/brand/primary/overlay/pressed"
+        "originalName": "color/background/brand/primary/overlay/press"
+      },
+      "color-background-selected-default-default": {
+        "value": "var(--color-brand-prussian-solid-900)",
+        "type": "color",
+        "originalName": "color/background/selected/default/default"
+      },
+      "color-background-selected-default-hover": {
+        "value": "var(--color-brand-prussian-solid-800)",
+        "type": "color",
+        "originalName": "color/background/selected/default/hover"
+      },
+      "color-background-selected-default-press": {
+        "value": "var(--color-brand-prussian-solid-700)",
+        "type": "color",
+        "originalName": "color/background/selected/default/press"
+      },
+      "color-background-selected-overlay-hover": {
+        "value": "var(--color-brand-prussian-alpha-500-08)",
+        "type": "color",
+        "originalName": "color/background/selected/overlay/hover"
+      },
+      "color-background-selected-overlay-press": {
+        "value": "var(--color-brand-prussian-alpha-500-16)",
+        "type": "color",
+        "originalName": "color/background/selected/overlay/press"
       },
       "color-background-brand-secondary-subtle-default": {
         "value": "var(--color-brand-umber-solid-1000)",
         "type": "color",
         "originalName": "color/background/brand/secondary/subtle/default"
       },
-      "color-background-brand-secondary-subtle-hovered": {
+      "color-background-brand-secondary-subtle-hover": {
         "value": "var(--color-brand-umber-solid-900)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/subtle/hovered"
+        "originalName": "color/background/brand/secondary/subtle/hover"
       },
-      "color-background-brand-secondary-subtle-pressed": {
+      "color-background-brand-secondary-subtle-press": {
         "value": "var(--color-brand-umber-solid-800)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/subtle/pressed"
+        "originalName": "color/background/brand/secondary/subtle/press"
       },
       "color-background-brand-secondary-default-default": {
         "value": "var(--color-brand-umber-solid-900)",
         "type": "color",
         "originalName": "color/background/brand/secondary/default/default"
       },
-      "color-background-brand-secondary-default-hovered": {
+      "color-background-brand-secondary-default-hover": {
         "value": "var(--color-brand-umber-solid-800)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/default/hovered"
+        "originalName": "color/background/brand/secondary/default/hover"
       },
-      "color-background-brand-secondary-default-pressed": {
+      "color-background-brand-secondary-default-press": {
         "value": "var(--color-brand-umber-solid-700)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/default/pressed"
+        "originalName": "color/background/brand/secondary/default/press"
       },
       "color-background-brand-secondary-bold-default": {
         "value": "var(--color-brand-umber-solid-500)",
         "type": "color",
         "originalName": "color/background/brand/secondary/bold/default"
       },
-      "color-background-brand-secondary-bold-hovered": {
+      "color-background-brand-secondary-bold-hover": {
         "value": "var(--color-brand-umber-solid-400)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/bold/hovered"
+        "originalName": "color/background/brand/secondary/bold/hover"
       },
-      "color-background-brand-secondary-bold-pressed": {
+      "color-background-brand-secondary-bold-press": {
         "value": "var(--color-brand-umber-solid-300)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/bold/pressed"
+        "originalName": "color/background/brand/secondary/bold/press"
       },
-      "color-background-brand-secondary-overlay-hovered": {
+      "color-background-brand-secondary-overlay-hover": {
         "value": "var(--color-brand-umber-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/overlay/hovered"
+        "originalName": "color/background/brand/secondary/overlay/hover"
       },
-      "color-background-brand-secondary-overlay-pressed": {
+      "color-background-brand-secondary-overlay-press": {
         "value": "var(--color-brand-umber-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/brand/secondary/overlay/pressed"
+        "originalName": "color/background/brand/secondary/overlay/press"
       },
       "color-background-information-subtle-default": {
         "value": "var(--color-blue-solid-1000)",
         "type": "color",
         "originalName": "color/background/information/subtle/default"
       },
-      "color-background-information-subtle-hovered": {
+      "color-background-information-subtle-hover": {
         "value": "var(--color-blue-solid-900)",
         "type": "color",
-        "originalName": "color/background/information/subtle/hovered"
+        "originalName": "color/background/information/subtle/hover"
       },
-      "color-background-information-subtle-pressed": {
+      "color-background-information-subtle-press": {
         "value": "var(--color-blue-solid-800)",
         "type": "color",
-        "originalName": "color/background/information/subtle/pressed"
+        "originalName": "color/background/information/subtle/press"
       },
       "color-background-information-default-default": {
         "value": "var(--color-blue-solid-800)",
         "type": "color",
         "originalName": "color/background/information/default/default"
       },
-      "color-background-information-default-hovered": {
+      "color-background-information-default-hover": {
         "value": "var(--color-blue-solid-700)",
         "type": "color",
-        "originalName": "color/background/information/default/hovered"
+        "originalName": "color/background/information/default/hover"
       },
-      "color-background-information-default-pressed": {
+      "color-background-information-default-press": {
         "value": "var(--color-blue-solid-600)",
         "type": "color",
-        "originalName": "color/background/information/default/pressed"
+        "originalName": "color/background/information/default/press"
       },
       "color-background-information-bold-default": {
         "value": "var(--color-blue-solid-500)",
         "type": "color",
         "originalName": "color/background/information/bold/default"
       },
-      "color-background-information-bold-hovered": {
+      "color-background-information-bold-hover": {
         "value": "var(--color-blue-solid-400)",
         "type": "color",
-        "originalName": "color/background/information/bold/hovered"
+        "originalName": "color/background/information/bold/hover"
       },
-      "color-background-information-bold-pressed": {
+      "color-background-information-bold-press": {
         "value": "var(--color-blue-solid-300)",
         "type": "color",
-        "originalName": "color/background/information/bold/pressed"
+        "originalName": "color/background/information/bold/press"
       },
-      "color-background-information-overlay-hovered": {
+      "color-background-information-overlay-hover": {
         "value": "var(--color-blue-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/information/overlay/hovered"
+        "originalName": "color/background/information/overlay/hover"
       },
-      "color-background-information-overlay-pressed": {
+      "color-background-information-overlay-press": {
         "value": "var(--color-blue-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/information/overlay/pressed"
+        "originalName": "color/background/information/overlay/press"
       },
-      "color-background-success-subtle-hovered": {
+      "color-background-success-subtle-hover": {
         "value": "var(--color-green-solid-900)",
         "type": "color",
-        "originalName": "color/background/success/subtle/hovered"
+        "originalName": "color/background/success/subtle/hover"
       },
-      "color-background-success-subtle-pressed": {
+      "color-background-success-subtle-press": {
         "value": "var(--color-green-solid-800)",
         "type": "color",
-        "originalName": "color/background/success/subtle/pressed"
+        "originalName": "color/background/success/subtle/press"
       },
       "color-background-success-default-default": {
         "value": "var(--color-green-solid-800)",
         "type": "color",
         "originalName": "color/background/success/default/default"
       },
-      "color-background-success-default-hovered": {
+      "color-background-success-default-hover": {
         "value": "var(--color-green-solid-700)",
         "type": "color",
-        "originalName": "color/background/success/default/hovered"
+        "originalName": "color/background/success/default/hover"
       },
-      "color-background-success-default-pressed": {
+      "color-background-success-default-press": {
         "value": "var(--color-green-solid-600)",
         "type": "color",
-        "originalName": "color/background/success/default/pressed"
+        "originalName": "color/background/success/default/press"
       },
       "color-background-success-bold-default": {
         "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/background/success/bold/default"
       },
-      "color-background-success-bold-hovered": {
+      "color-background-success-bold-hover": {
         "value": "var(--color-green-solid-400)",
         "type": "color",
-        "originalName": "color/background/success/bold/hovered"
+        "originalName": "color/background/success/bold/hover"
       },
-      "color-background-success-bold-pressed": {
+      "color-background-success-bold-press": {
         "value": "var(--color-green-solid-300)",
         "type": "color",
-        "originalName": "color/background/success/bold/pressed"
+        "originalName": "color/background/success/bold/press"
       },
       "color-background-discovery-subtle-default": {
         "value": "var(--color-purple-solid-1000)",
         "type": "color",
         "originalName": "color/background/discovery/subtle/default"
       },
-      "color-background-discovery-subtle-hovered": {
+      "color-background-discovery-subtle-hover": {
         "value": "var(--color-purple-solid-900)",
         "type": "color",
-        "originalName": "color/background/discovery/subtle/hovered"
+        "originalName": "color/background/discovery/subtle/hover"
       },
-      "color-background-discovery-subtle-pressed": {
+      "color-background-discovery-subtle-press": {
         "value": "var(--color-purple-solid-800)",
         "type": "color",
-        "originalName": "color/background/discovery/subtle/pressed"
+        "originalName": "color/background/discovery/subtle/press"
       },
       "color-background-discovery-default-default": {
         "value": "var(--color-purple-solid-800)",
         "type": "color",
         "originalName": "color/background/discovery/default/default"
       },
-      "color-background-discovery-default-hovered": {
+      "color-background-discovery-default-hover": {
         "value": "var(--color-purple-solid-700)",
         "type": "color",
-        "originalName": "color/background/discovery/default/hovered"
+        "originalName": "color/background/discovery/default/hover"
       },
-      "color-background-discovery-default-pressed": {
+      "color-background-discovery-default-press": {
         "value": "var(--color-purple-solid-600)",
         "type": "color",
-        "originalName": "color/background/discovery/default/pressed"
+        "originalName": "color/background/discovery/default/press"
       },
       "color-background-discovery-bold-default": {
         "value": "var(--color-purple-solid-500)",
         "type": "color",
         "originalName": "color/background/discovery/bold/default"
       },
-      "color-background-discovery-bold-hovered": {
+      "color-background-discovery-bold-hover": {
         "value": "var(--color-purple-solid-400)",
         "type": "color",
-        "originalName": "color/background/discovery/bold/hovered"
+        "originalName": "color/background/discovery/bold/hover"
       },
-      "color-background-discovery-bold-pressed": {
+      "color-background-discovery-bold-press": {
         "value": "var(--color-purple-solid-300)",
         "type": "color",
-        "originalName": "color/background/discovery/bold/pressed"
+        "originalName": "color/background/discovery/bold/press"
       },
       "color-background-neutral-subtle-default": {
         "value": "var(--color-neutral-solid-1200)",
         "type": "color",
         "originalName": "color/background/neutral/subtle/default"
       },
-      "color-background-neutral-subtle-hovered": {
+      "color-background-neutral-subtle-hover": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
-        "originalName": "color/background/neutral/subtle/hovered"
+        "originalName": "color/background/neutral/subtle/hover"
       },
-      "color-background-neutral-subtle-pressed": {
+      "color-background-neutral-subtle-press": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/background/neutral/subtle/pressed"
+        "originalName": "color/background/neutral/subtle/press"
       },
       "color-background-neutral-default-default": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
         "originalName": "color/background/neutral/default/default"
       },
-      "color-background-neutral-default-hovered": {
+      "color-background-neutral-default-hover": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/background/neutral/default/hovered"
+        "originalName": "color/background/neutral/default/hover"
       },
-      "color-background-neutral-default-pressed": {
+      "color-background-neutral-default-press": {
         "value": "var(--color-neutral-solid-900)",
         "type": "color",
-        "originalName": "color/background/neutral/default/pressed"
+        "originalName": "color/background/neutral/default/press"
       },
       "color-background-neutral-bold-default": {
         "value": "var(--color-neutral-solid-200)",
         "type": "color",
         "originalName": "color/background/neutral/bold/default"
       },
-      "color-background-neutral-bold-hovered": {
+      "color-background-neutral-bold-hover": {
         "value": "var(--color-neutral-solid-100)",
         "type": "color",
         "originalName": "color/background/neutral/bold/hover"
       },
-      "color-background-neutral-bold-pressed": {
+      "color-background-neutral-bold-press": {
         "value": "var(--color-neutral-solid-0)",
         "type": "color",
         "originalName": "color/background/neutral/bold/press"
       },
-      "color-background-neutral-overlay-hovered": {
+      "color-background-neutral-overlay-hover": {
         "value": "var(--color-neutral-alpha-100-08)",
         "type": "color",
-        "originalName": "color/background/neutral/overlay/hovered"
+        "originalName": "color/background/neutral/overlay/hover"
       },
-      "color-background-neutral-overlay-pressed": {
+      "color-background-neutral-overlay-press": {
         "value": "var(--color-neutral-alpha-100-16)",
         "type": "color",
-        "originalName": "color/background/neutral/overlay/pressed"
+        "originalName": "color/background/neutral/overlay/press"
       },
       "color-background-neutral-overlay-blanket": {
         "value": "var(--color-neutral-alpha-1200-64)",
@@ -1051,45 +1081,45 @@
         "type": "color",
         "originalName": "color/elevation/surface/default"
       },
-      "color-elevation-surface-hovered": {
+      "color-elevation-surface-hover": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
-        "originalName": "color/elevation/surface/hovered"
+        "originalName": "color/elevation/surface/hover"
       },
-      "color-elevation-surface-pressed": {
+      "color-elevation-surface-press": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/elevation/surface/pressed"
+        "originalName": "color/elevation/surface/press"
       },
       "color-elevation-surface-raised-default": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
         "originalName": "color/elevation/surface/raised/default"
       },
-      "color-elevation-surface-raised-hovered": {
+      "color-elevation-surface-raised-hover": {
         "value": "var(--color-neutral-solid-1000)",
         "type": "color",
-        "originalName": "color/elevation/surface/raised/hovered"
+        "originalName": "color/elevation/surface/raised/hover"
       },
-      "color-elevation-surface-raised-pressed": {
+      "color-elevation-surface-raised-press": {
         "value": "var(--color-neutral-solid-900)",
         "type": "color",
-        "originalName": "color/elevation/surface/raised/pressed"
+        "originalName": "color/elevation/surface/raised/press"
       },
       "color-elevation-surface-sunken-default": {
         "value": "var(--color-neutral-solid-1300)",
         "type": "color",
         "originalName": "color/elevation/surface/sunken/default"
       },
-      "color-elevation-surface-sunken-hovered": {
+      "color-elevation-surface-sunken-hover": {
         "value": "var(--color-neutral-solid-1200)",
         "type": "color",
-        "originalName": "color/elevation/surface/sunken/hovered"
+        "originalName": "color/elevation/surface/sunken/hover"
       },
-      "color-elevation-surface-sunken-pressed": {
+      "color-elevation-surface-sunken-press": {
         "value": "var(--color-neutral-solid-1100)",
         "type": "color",
-        "originalName": "color/elevation/surface/sunken/pressed"
+        "originalName": "color/elevation/surface/sunken/press"
       },
       "color-elevation-shadow-overflow-default": {
         "value": "var(--color-neutral-solid-1300)",
@@ -1151,125 +1181,125 @@
         "type": "color",
         "originalName": "color/elevation/shadow/overlay/inner"
       },
-      "color-background-discovery-overlay-hovered": {
+      "color-background-discovery-overlay-hover": {
         "value": "var(--color-purple-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/discovery/overlay/hovered"
+        "originalName": "color/background/discovery/overlay/hover"
       },
-      "color-background-discovery-overlay-pressed": {
+      "color-background-discovery-overlay-press": {
         "value": "var(--color-purple-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/discovery/overlay/pressed"
+        "originalName": "color/background/discovery/overlay/press"
       },
-      "color-background-success-overlay-hovered": {
+      "color-background-success-overlay-hover": {
         "value": "var(--color-green-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/success/overlay/hovered"
+        "originalName": "color/background/success/overlay/hover"
       },
-      "color-background-success-overlay-pressed": {
+      "color-background-success-overlay-press": {
         "value": "var(--color-green-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/success/overlay/pressed"
+        "originalName": "color/background/success/overlay/press"
       },
-      "color-background-warning-overlay-hovered": {
+      "color-background-warning-overlay-hover": {
         "value": "var(--color-orange-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/warning/overlay/hovered"
+        "originalName": "color/background/warning/overlay/hover"
       },
-      "color-background-warning-overlay-pressed": {
+      "color-background-warning-overlay-press": {
         "value": "var(--color-orange-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/warning/overlay/pressed"
+        "originalName": "color/background/warning/overlay/press"
       },
-      "color-background-error-overlay-hovered": {
+      "color-background-error-overlay-hover": {
         "value": "var(--color-red-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/error/overlay/hovered"
+        "originalName": "color/background/error/overlay/hover"
       },
-      "color-background-error-overlay-pressed": {
+      "color-background-error-overlay-press": {
         "value": "var(--color-red-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/error/overlay/pressed"
+        "originalName": "color/background/error/overlay/press"
       },
-      "color-background-accent-red-overlay-hovered": {
+      "color-background-accent-red-overlay-hover": {
         "value": "var(--color-red-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/red/overlay/hovered"
+        "originalName": "color/background/accent/red/overlay/hover"
       },
-      "color-background-accent-red-overlay-pressed": {
+      "color-background-accent-red-overlay-press": {
         "value": "var(--color-red-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/red/overlay/pressed"
+        "originalName": "color/background/accent/red/overlay/press"
       },
-      "color-background-accent-orange-overlay-hovered": {
+      "color-background-accent-orange-overlay-hover": {
         "value": "var(--color-orange-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/orange/overlay/hovered"
+        "originalName": "color/background/accent/orange/overlay/hover"
       },
-      "color-background-accent-orange-overlay-pressed": {
+      "color-background-accent-orange-overlay-press": {
         "value": "var(--color-orange-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/orange/overlay/pressed"
+        "originalName": "color/background/accent/orange/overlay/press"
       },
-      "color-background-accent-yellow-overlay-hovered": {
+      "color-background-accent-yellow-overlay-hover": {
         "value": "var(--color-yellow-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/overlay/hovered"
+        "originalName": "color/background/accent/yellow/overlay/hover"
       },
-      "color-background-accent-yellow-overlay-pressed": {
+      "color-background-accent-yellow-overlay-press": {
         "value": "var(--color-yellow-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/yellow/overlay/pressed"
+        "originalName": "color/background/accent/yellow/overlay/press"
       },
-      "color-background-accent-green-overlay-hovered": {
+      "color-background-accent-green-overlay-hover": {
         "value": "var(--color-green-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/green/overlay/hovered"
+        "originalName": "color/background/accent/green/overlay/hover"
       },
-      "color-background-accent-green-overlay-pressed": {
+      "color-background-accent-green-overlay-press": {
         "value": "var(--color-green-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/green/overlay/pressed"
+        "originalName": "color/background/accent/green/overlay/press"
       },
-      "color-background-accent-teal-overlay-hovered": {
+      "color-background-accent-teal-overlay-hover": {
         "value": "var(--color-teal-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/teal/overlay/hovered"
+        "originalName": "color/background/accent/teal/overlay/hover"
       },
-      "color-background-accent-teal-overlay-pressed": {
+      "color-background-accent-teal-overlay-press": {
         "value": "var(--color-teal-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/teal/overlay/pressed"
+        "originalName": "color/background/accent/teal/overlay/press"
       },
-      "color-background-accent-blue-overlay-hovered": {
+      "color-background-accent-blue-overlay-hover": {
         "value": "var(--color-blue-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/blue/overlay/hovered"
+        "originalName": "color/background/accent/blue/overlay/hover"
       },
-      "color-background-accent-blue-overlay-pressed": {
+      "color-background-accent-blue-overlay-press": {
         "value": "var(--color-blue-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/blue/overlay/pressed"
+        "originalName": "color/background/accent/blue/overlay/press"
       },
-      "color-background-accent-purple-overlay-hovered": {
+      "color-background-accent-purple-overlay-hover": {
         "value": "var(--color-purple-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/purple/overlay/hovered"
+        "originalName": "color/background/accent/purple/overlay/hover"
       },
-      "color-background-accent-purple-overlay-pressed": {
+      "color-background-accent-purple-overlay-press": {
         "value": "var(--color-purple-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/purple/overlay/pressed"
+        "originalName": "color/background/accent/purple/overlay/press"
       },
-      "color-background-accent-magenta-overlay-hovered": {
+      "color-background-accent-magenta-overlay-hover": {
         "value": "var(--color-magenta-alpha-500-08)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/overlay/hovered"
+        "originalName": "color/background/accent/magenta/overlay/hover"
       },
-      "color-background-accent-magenta-overlay-pressed": {
+      "color-background-accent-magenta-overlay-press": {
         "value": "var(--color-magenta-alpha-500-16)",
         "type": "color",
-        "originalName": "color/background/accent/magenta/overlay/pressed"
+        "originalName": "color/background/accent/magenta/overlay/press"
       },
       "color-data-viz-sequence-prussian-100": {
         "value": "var(--color-brand-prussian-solid-1000)",

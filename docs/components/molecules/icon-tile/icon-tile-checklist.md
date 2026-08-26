@@ -47,7 +47,7 @@ graphic that is explicitly not a button.
 ### When should this component NOT be used?
 - As a clickable action (use Icon Button)
 - As a count or text indicator (use Badge or Tag)
-- Where hover/focus/pressed/disabled states are needed
+- Where hover/focus/press/disabled states are needed
 
 ---
 

@@ -80,7 +80,7 @@
   ],
   "tokens": {
     "color": {
-      "outline": "--color-border-focused"
+      "outline": "--color-border-focus"
     },
     "borderWidth": {
       "default": "--border-width-md"
@@ -117,14 +117,14 @@
   "contentRules": [],
   "responsiveRules": [],
   "themeRules": [
-    "Must be visible with sufficient contrast on both light and dark surfaces via --color-border-focused."
+    "Must be visible with sufficient contrast on both light and dark surfaces via --color-border-focus."
   ],
   "implementationNotes": [
     "Use React.memo for the exported component.",
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colors or widths - use --color-border-focused, --border-width-md.",
+    "No hardcoded colors or widths - use --color-border-focus, --border-width-md.",
     "Exports both a component (FocusRing) and a raw classNames object (focusRingClassNames) as two entry points to the same CSS, not two separate implementations."
   ],
   "relatedComponents": ["Button", "IconButton", "Link", "Checkbox", "Radio", "Switch", "Slider", "Tag"],

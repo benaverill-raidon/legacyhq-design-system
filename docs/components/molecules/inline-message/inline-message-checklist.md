@@ -85,8 +85,8 @@ inside Popup's default panel width.
 
 - [ ] Clicking the row toggles the detail popup open/closed.
 - [ ] Supports controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
-- [ ] The detail panel does not dismiss on Escape or an outside click - only clicking the row again
-      closes it.
+- [ ] The detail panel dismisses on Escape and on an outside click, inherited from Popup's own
+      defaults - the same as clicking the row again.
 
 ## Design Decisions
 
@@ -119,9 +119,6 @@ inside Popup's default panel width.
 
 - No `disabled` prop exists - if a real product need for one emerges, verify against Figma first
   rather than inventing behavior.
-- The detail panel's Escape/outside-click-proof persistence is an unusual pattern relative to most
-  popovers - make sure consumers understand it must be dismissed by re-clicking the row (or via
-  `onOpenChange` if controlled).
 
 ## Validated Figma Details
 
@@ -129,7 +126,7 @@ inside Popup's default panel width.
   (discovery/default/info/success/warning/error) x `isOpen`.
 - `figma-parts / inline-message-trigger` sub-component: node `2448:72904`, properties `titleText`,
   `showTitle`, `secondaryText`, `showSecondaryText`, `tone`, `state`
-  (default/hovered-open/focus/pressed).
+  (default/hover-open/focus/press).
 - Each tone's icon, icon color, and hover/open background tint verified directly from Figma's bound
   variables per tone (not assumed to generalize from the `info` sample) - see the Tone Mapping
   table in `inline-message-spec.md`.
@@ -140,10 +137,8 @@ inside Popup's default panel width.
   inline in Chrome), so `.root` resets `padding` to `--spacing-none` explicitly.
 - The popup's `alignment` property reads `"bottom left"` on every variant, mapping directly to
   Popup's `alignment="bottomLeft"`.
-- Figma's `tone` variant on the trigger sub-component is misspelled `succes` - not replicated.
-- Most of Figma's outer `isOpen` variant values are garbage auto-generated strings (`isOpen3`
-  through `isOpen12`), not real booleans, except for the `info` tone - the real, reliable signal is
-  the nested `popup` instance's own `isOpen` component property.
+- Open state is read from the nested `popup` instance's own `isOpen` component property, not from the
+  outer variant name.
 
 ## Examples to document
 
@@ -167,5 +162,4 @@ Inline Message / EdgeCases
 
 - **Variants** - all six tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content`, a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content,
-  Escape/outside-click not dismissing, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.

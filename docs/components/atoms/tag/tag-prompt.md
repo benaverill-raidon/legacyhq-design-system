@@ -218,7 +218,7 @@ Tag / Content
 Tag / EdgeCases
 ```
 
-States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+States uses `data-force-state` to pin hover/press as a static reference (documentation-only, same
 convention as Button/Checkbox) and real `autoFocus` for focus preview, since content and the remove
 button are two independently-focusable elements, each with their own ring - not one ring around the
 whole tag, despite Figma's single combined focus swatch (it can't represent "content focused" vs
@@ -233,7 +233,7 @@ Important test:
 ```txt
 Clicking remove does not trigger navigation or the tag link click handler.
 Icon size stays a constant 16px regardless of tag size.
-data-force-state hover/pressed preview applies to both the content and remove areas.
+data-force-state hover/press preview applies to both the content and remove areas.
 ```
 
 ## Do not

@@ -93,7 +93,7 @@ Support:
 - unchecked
 - checked
 - hover
-- pressed
+- press
 - focus
 - invalid
 - disabled

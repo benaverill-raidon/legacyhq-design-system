@@ -69,8 +69,9 @@ packages/ui/src/components/molecules/inline-message/
   Message is click/keyboard-activated only.
 - Support both controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
 - Render the popup through `Popup` with its **default styled skin** (not `unstyled`),
-  `alignment="bottomLeft"`, `closeOnEscape={false}`, `closeOnOutsideClick={false}`, and
-  `manageTriggerAria` left at its default (`true`).
+  `alignment="bottomLeft"`, and `manageTriggerAria` left at its default (`true`). Do not pass
+  `closeOnEscape`/`closeOnOutsideClick` - leave both at Popup's own default (`true`), so the detail
+  dismisses on Escape or an outside click like any other Popup consumer.
 - Style the hover/open tint off Popup's own `aria-expanded` attribute on the trigger - do not add a
   redundant custom `data-open` attribute.
 
@@ -80,12 +81,12 @@ Map each tone to its own status icon, icon color, and hover/open tint token - ve
 directly from Figma, not assumed to generalize from one sample:
 
 ```txt
-default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-hovered
-info     -> StatusInformationIcon (information)     | --color-background-information-overlay-hovered
-success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hovered
-warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hovered
-error    -> StatusErrorIcon (error)                  | --color-background-error-overlay-hovered
-discovery -> StatusDiscoveryIcon (discovery)         | --color-background-discovery-overlay-hovered
+default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-hover
+info     -> StatusInformationIcon (information)     | --color-background-information-overlay-hover
+success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hover
+warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hover
+error    -> StatusErrorIcon (error)                  | --color-background-error-overlay-hover
+discovery -> StatusDiscoveryIcon (discovery)         | --color-background-discovery-overlay-hover
 ```
 
 `default` has no matching status icon in the generated icon set (Figma's own `default`-tone trigger
@@ -135,8 +136,7 @@ Inline Message
 
 - **Variants** - all six tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content` (plain row), a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, Escape/outside
-  click not dismissing, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.
 
 ## Test Requirements
 
@@ -150,9 +150,9 @@ renders a real button with aria-expanded when content is provided
 toggles the popup open/closed on click (uncontrolled)
 supports defaultOpen
 supports controlled open/onOpenChange
-does not close on Escape or an outside click
+closes on Escape and on an outside click, inherited from Popup
 applies className to the root row
-maps every tone to its own overlay/hovered tint token
+maps every tone to its own overlay/hover tint token
 delegates positioning/portal/dismissal to Popup, not a local implementation
 reuses Popup's own aria-expanded wiring instead of a custom attribute
 ```

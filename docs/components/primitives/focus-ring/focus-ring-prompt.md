@@ -88,7 +88,7 @@ Required token mapping:
 
 ```txt
 default → --border-width-md
-color → --color-border-focused
+color → --color-border-focus
 ```
 
 Preferred CSS behavior:
@@ -96,7 +96,7 @@ Preferred CSS behavior:
 ```css
 .focusRing:focus-visible {
   outline-style: solid;
-  outline-color: var(--color-border-focused);
+  outline-color: var(--color-border-focus);
   outline-offset: 2px;
 }
 
@@ -162,7 +162,7 @@ Create tests for:
 ## Rules
 
 1. Follow `focus-ring-spec.md` exactly.
-2. Use `--color-border-focused` for color.
+2. Use `--color-border-focus` for color.
 3. Use `--border-width-md` for default.
 4. Use `:focus-visible`.
 5. No MUI.

@@ -1,0 +1,132 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ChipGroupStories from './ChipGroup.stories';
+
+<Meta of={ChipGroupStories} name="Docs" />
+
+# Chip Group
+
+Chip Group lays out a wrapping row of Chips at one shared size and alignment. It is **pure layout** —
+it draws nothing of its own, and every visible pixel belongs to the Chips inside it.
+
+<Canvas of={ChipGroupStories.Playground} />
+
+## When to use
+
+Whenever more than one Chip appears together — a scope selector, or a bar of active filters. Sharing
+`size` is the main reason to reach for it: in a *wrapping* row, one chip left at the wrong size
+visibly breaks the line it lands on.
+
+## When not to use
+
+- **The collection needs to truncate** behind a "+N more" affordance → Tag Group, with Tags.
+- **It's a row of buttons** → Button Group.
+- **You want it to decide which chips are selected** → it won't. Chip Group is layout, not state.
+
+## Usage guidance
+
+### Size travels by context, not by cloning
+
+`size` reaches each Chip through React context, so it still arrives when a Chip sits behind a
+wrapper, comes out of a `.map`, or renders conditionally. `React.cloneElement` would only reach
+*direct* children and would silently miss all three.
+
+```tsx
+<ChipGroup size="sm">
+  <Tooltip content="Only matters you own">
+    <Chip mode="scope" label="My matters" />   {/* still sm */}
+  </Tooltip>
+  {showArchived ? <Chip mode="scope" label="Archived" /> : null}
+</ChipGroup>
+```
+
+An explicit `size` on an individual Chip still wins — Chip resolves `size ?? groupSize ?? 'md'`.
+Leaving `size` off the group means "not opinionated", and every Chip keeps its own default.
+
+<Canvas of={ChipGroupStories.Sizes} />
+
+### `alignment` is not Tag Group's `alignment`
+
+Same name, different meaning. Here it maps to Figma's `primaryAxisAlignItems` (MIN/MAX) — literally
+which edge the chips pack against, i.e. `justify-content`. Tag Group's decides where its *overflow
+tag* renders; Chip Group has no overflow, so there is nothing to place.
+
+<Canvas of={ChipGroupStories.Alignment} />
+
+### Wrapping
+
+Chips wrap onto new lines once the row runs out of inline space, keeping the same 8px gap on both
+axes — Figma measures `itemSpacing: 8` and `counterAxisSpacing: 8`, so one `gap` covers both.
+
+<Canvas of={ChipGroupStories.Wrapping} />
+
+### Selection stays yours
+
+Chip Group never coordinates its children. Scope chips are independent on/off toggles, so hold that
+state yourself and pass it down — exactly as with Toggle Button.
+
+<Canvas of={ChipGroupStories.Content} />
+
+## Do / Don't
+
+**Do** set `size` once on the group.
+
+```tsx
+<ChipGroup size="sm">{scopeChips}</ChipGroup>
+```
+
+**Don't** repeat it on every chip — that's the exact mistake the group exists to prevent, since one
+missed chip breaks the line it wraps onto.
+
+```tsx
+<ChipGroup size="sm">
+  <Chip mode="scope" label="Matters" size="sm" />
+  <Chip mode="scope" label="Documents" size="sm" />
+</ChipGroup>
+```
+
+---
+
+**Do** name the group when it forms a meaningful set — that's what makes it `role="group"`.
+
+```tsx
+<ChipGroup aria-label="Search scopes">{scopeChips}</ChipGroup>
+```
+
+**Don't** put padding or a surface on it. Figma's own container has zero padding and no fill; put the
+surface on a wrapper you own so the group keeps hugging its chips.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The Chips in this group.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td>-</td><td>Shared with every Chip inside, via context. Omit to leave each Chip on its own default.</td></tr>
+    <tr><td><code>alignment</code></td><td><code>'left' | 'right'</code></td><td><code>'left'</code></td><td>Which edge the chips pack against.</td></tr>
+    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Names the group, and makes it announced as <code>role="group"</code>.</td></tr>
+    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the root's class list.</td></tr>
+  </tbody>
+</table>
+
+Every other `div` attribute passes through, and the ref forwards to the root — the same shape Button
+Group uses.
+
+## Accessibility
+
+Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour beyond
+its children's. It becomes `role="group"` **only** when given an accessible name — an unnamed group is
+a boundary a screen-reader user steps through for no benefit. There is deliberately no roving
+tabindex: the chips are independent controls, not one composite widget.
+
+## Edge cases
+
+<Canvas of={ChipGroupStories.EdgeCases} />
+
+## Related components
+
+- **Chip** — what the group lays out.
+- **Tag Group** — the truncating equivalent, with Tags.
+- **Button Group** — the same children-based layout-wrapper shape.
+- **Avatar Group** — a group that *does* own its items, because it truncates.

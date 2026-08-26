@@ -1,0 +1,122 @@
+{
+  "name": "ChipGroup",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Lay out a wrapping row of Chips at one shared size and alignment.",
+  "intent": "Give a row of Chips its measured wrap, gap, and alignment in one place, and remove the repetition (and the silent misalignment) of setting the same size on every chip by hand.",
+  "sourceFiles": {
+    "component": "chip-group.tsx",
+    "types": "chip-group.types.ts",
+    "styles": "chip-group.module.css",
+    "stories": "ChipGroup.stories.tsx",
+    "tests": "ChipGroup.test.tsx",
+    "index": "index.ts",
+    "note": "The shared size is provided through ChipSizeContext, which lives with Chip (chip/chip-size-context.ts) rather than here, so Chip can consume it without importing its own group."
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4636:84492",
+    "componentName": "chip-group",
+    "variantCount": 4,
+    "verifiedAt": "2026-08-24",
+    "note": "Filed on the file's own \"✅⏲️ Chip Group\" page, verified directly against the file via the Desktop Bridge plugin.",
+    "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=scope`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
+    "apiAdaptationNotes": [
+      "Chip Group takes `children`, not a data array. Tag Group and Avatar Group own their items because they have to decide which are visible and which are truncated; Chip Group has no overflow behaviour at all, and Chip's own props are a discriminated union on `mode`, which a flat item type could not express without duplicating that union. Button Group - the closest analogue in this system - is likewise a children-based layout wrapper.",
+      "`size` reaches each Chip through React context (ChipSizeContext), not by cloning children. cloneElement only reaches direct children, so a Chip inside a Tooltip, returned from a `.map`, or rendered conditionally would silently miss the group's size - the same structural fragility that detached Chip's own remove button from its pill. Context reaches any descendant regardless of what sits between, and an explicit `size` on an individual Chip still wins because Chip resolves `size ?? groupSize ?? 'md'`.",
+      "The provider is only mounted when `size` is actually set, so a Chip Group without one leaves every Chip on its own default rather than overriding it with undefined.",
+      "`alignment` is genuinely different from Tag Group's identically-named prop despite the shared axis name. Here it maps to Figma's primaryAxisAlignItems MIN/MAX - literally which edge the chips pack against (justify-content). In Tag Group it decides where the overflow tag renders. Chip Group has no overflow, so there is nothing to place.",
+      "No overflow or truncation was implemented, because Figma models none - all ten chips in every variant are plain, equal siblings. Chip Group is deliberately not Tag Group with chips in it.",
+      "Chip Group never manages selection. Figma's variants are all `isSelected=false` scope chips, and scope chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
+      "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
+    ]
+  },
+  "useCases": [
+    "A row of selectable search scopes above a results list",
+    "A bar of active filter chips above a task or matter list",
+    "Any wrapping collection of chips that should share one size"
+  ],
+  "antiPatterns": [
+    "A group needing overflow truncation behind a \"+N more\" affordance - that is Tag Group's job, with Tags",
+    "A row of buttons - use Button Group",
+    "Managing which chip is selected - Chip Group is layout only; hold that state yourself"
+  ],
+  "anatomy": [
+    { "name": "root", "description": "A wrapping flex row with an 8px gap on both axes and no padding or surface of its own. Carries data-alignment and data-size." },
+    { "name": "children", "description": "The Chips. Any element is accepted, but the layout is built for Chip." }
+  ],
+  "props": {
+    "children": { "type": "React.ReactNode", "required": true, "default": null, "description": "The Chips in this group." },
+    "size": { "type": "ChipSize", "required": false, "default": null, "enum": ["sm", "md"], "description": "Shared by every Chip inside, via context. Omit to leave each Chip on its own default. An explicit size on an individual Chip wins." },
+    "alignment": { "type": "ChipGroupAlignment", "required": false, "default": "left", "enum": ["left", "right"], "description": "Which edge the chips pack against - maps to justify-content." },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "Names the group and makes it announced as role=\"group\"." },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Same, by reference." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root's class list." }
+  },
+  "sizes": ["sm", "md"],
+  "slots": [{ "name": "children", "required": true, "allowedContent": "Chip elements" }],
+  "variants": {
+    "alignment": {
+      "left": { "purpose": "Chips pack against the inline start. The default, and Figma's own first variant." },
+      "right": { "purpose": "Chips pack against the inline end." }
+    }
+  },
+  "states": ["default"],
+  "accessibility": {
+    "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
+    "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
+    "selection": "not managed - each scope Chip carries its own aria-pressed",
+    "note": "Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour to document beyond its children's."
+  },
+  "keyboardInteraction": [
+    "Tab moves between the Chips' own controls in DOM order",
+    "All other keyboard behaviour belongs to the individual Chips (Enter/Space, Escape to close a segment menu, arrow keys inside an open menu)"
+  ],
+  "behaviorRules": [
+    "Provides `size` to descendant Chips through context; an explicit per-Chip size wins.",
+    "Mounts the size provider only when `size` is set.",
+    "Never coordinates selection or removal between chips.",
+    "Applies no padding, background, or border of its own - every visible pixel belongs to the Chips."
+  ],
+  "compositionRules": [
+    "Pass Chips as children; wrappers are fine - context reaches through them, unlike prop cloning.",
+    "Hold scope selection and filter removal in the consumer, and pass them down to each Chip.",
+    "Use Tag Group instead when the group needs truncation behind a \"+N more\" affordance."
+  ],
+  "responsiveRules": [
+    "Chips wrap onto new lines once the row runs out of inline space, keeping the same 8px gap on both axes.",
+    "The group hugs its container's width; `alignment` decides which edge partial rows pack against."
+  ],
+  "themeRules": ["No colour of its own - fully inherited from the Chips inside. Verified in both themes."],
+  "tokens": {
+    "note": "chip-group.module.css references exactly one token - gap: var(--spacing-sm), matching Figma's measured itemSpacing 8 and counterAxisSpacing 8 on both axes. Everything else is layout keywords. No colour, padding, or border tokens, by design."
+  },
+  "relatedComponents": ["Chip", "TagGroup", "ButtonGroup", "AvatarGroup"],
+  "do": [
+    "Set `size` once on the group rather than on every Chip - a missed chip in a wrapping row misaligns the whole line.",
+    "Give the group an aria-label when it forms a meaningful set (\"Search scopes\", \"Active filters\")."
+  ],
+  "dont": [
+    "Do not expect overflow truncation - Figma models none; reach for Tag Group if you need it.",
+    "Do not expect Chip Group to manage which chips are selected."
+  ],
+  "acceptanceCriteria": [
+    "Renders its children in a wrapping row with an 8px gap on both axes.",
+    "alignment=left packs chips against the inline start; alignment=right against the inline end.",
+    "size applies to every Chip inside, including ones behind a wrapper or produced by a map.",
+    "An explicit size on an individual Chip wins over the group's.",
+    "With no size set, each Chip keeps its own default.",
+    "Announced as role=\"group\" only when it has an accessible name.",
+    "Forwards a ref and passes native div attributes through.",
+    "Adds no padding, background, or border of its own."
+  ],
+  "knownLimitations": [
+    "No overflow or truncation - Figma models none. A very long filter bar wraps rather than collapsing behind a \"+N more\" chip.",
+    "No roving tabindex: every Chip's controls are individually tabbable, which is correct for independent controls but makes a very large group long to tab through."
+  ],
+  "futureEnhancements": [
+    "Overflow truncation behind a \"+N more\" chip, if a real filter bar needs it - would need a Figma variant first.",
+    "A vertical orientation, if chips ever stack; Figma models horizontal only."
+  ]
+}

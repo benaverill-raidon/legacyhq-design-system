@@ -38,7 +38,7 @@
  * an inactive field, per explicit design feedback.
  */
 .root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hovered);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -55,8 +55,8 @@
  * Figma).
  */
 .appearance_default:is(:focus-within, [data-force-state='focus']) {
-  border-color: var(--color-border-focused);
-  box-shadow: inset 0 0 0 1px var(--color-border-focused);
+  border-color: var(--color-border-focus);
+  box-shadow: inset 0 0 0 1px var(--color-border-focus);
 }
 
 /*
@@ -134,7 +134,7 @@
 }
 
 .appearance_subtle:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hovered);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -156,8 +156,8 @@
  * box-shadow is purely paint, so it adds zero layout impact while still reading as a thicker line.
  */
 .appearance_subtle:is(:focus-within, [data-force-state='focus']) {
-  border-bottom-color: var(--color-border-focused);
-  box-shadow: inset 0 -1px 0 0 var(--color-border-focused);
+  border-bottom-color: var(--color-border-focus);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
 }
 
 /*

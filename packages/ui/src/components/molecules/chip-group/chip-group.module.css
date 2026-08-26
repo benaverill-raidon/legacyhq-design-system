@@ -1,0 +1,25 @@
+/*
+ * A wrapping row of Chips. Measured directly from Figma's own `chip-group`: layoutMode HORIZONTAL,
+ * layoutWrap WRAP, itemSpacing 8 and counterAxisSpacing 8 (so one `gap` covers both axes),
+ * counterAxisAlignItems CENTER, and no padding of its own - the group is pure layout, every visible
+ * pixel belongs to the Chips inside it.
+ */
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/*
+ * Figma's `alignment` axis measures `primaryAxisAlignItems: MIN` / `MAX` - which edge the chips pack
+ * against. (Tag Group's identically-named prop means something else entirely: where its overflow tag
+ * renders. Chip Group has no overflow, so here it is literally justify-content.)
+ */
+.alignment_left {
+  justify-content: flex-start;
+}
+
+.alignment_right {
+  justify-content: flex-end;
+}

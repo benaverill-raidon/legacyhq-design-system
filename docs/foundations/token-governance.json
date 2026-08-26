@@ -134,7 +134,30 @@
                 "color.background.brand",
                 "color.text.primary",
                 "color.border.default"
-            ]
+            ],
+            "interactionStateVocabulary": {
+                "summary": "One canonical word per interaction state, used identically in Figma variable names, generated CSS custom properties, component variant axes, and the data-force-state escape hatch. Unified across Figma and code together - there is no longer a past-participle form anywhere.",
+                "states": [
+                    "default",
+                    "hover",
+                    "focus",
+                    "press",
+                    "disabled",
+                    "selected",
+                    "loading"
+                ],
+                "rules": [
+                    "Use the bare-verb form: hover (not hover), press (not press), focus (not focus).",
+                    "A token whose name ends in a state uses exactly one of these words, e.g. color.background.neutral.overlay.hover / .press, color.border.focus, color.border.selected.",
+                    "The Storybook data-force-state escape hatch takes the same vocabulary: data-force-state=\"hover\" | \"focus\" | \"press\". It is documentation-only and never part of a public API."
+                ],
+                "notCovered": [
+                    "CSS pseudo-classes are browser primitives and keep their own spelling: :hover, :focus-visible, :active. Only our own names follow this vocabulary - :active is the platform selector that implements the press state.",
+                    "ARIA attributes keep their spec spelling: aria-press, aria-selected, aria-disabled, aria-busy.",
+                    "ProgressIndicator step progress uses an unrelated data-state=\"active|complete|incomplete\" axis - that is step position, not interaction, and is out of scope for this vocabulary.",
+                    "Grammatical English prose in comments and docs is unaffected (\"tinted while hovered\" is prose, not an identifier)."
+                ]
+            }
         },
         "component": {
             "format": "component.variant.property",
@@ -188,7 +211,10 @@
         "rule": "scale-unlimited/declaration-strict-value",
         "config": ".stylelintrc.json",
         "command": "npm run lint:css",
-        "runsIn": ["npm run validate", "CI (.github/workflows/validate.yml)"],
+        "runsIn": [
+            "npm run validate",
+            "CI (.github/workflows/validate.yml)"
+        ],
         "scope": {
             "gated": [
                 "color and border/outline/fill/stroke color properties",
@@ -197,7 +223,12 @@
                 "padding, margin, and gap (and their longhands)"
             ],
             "notGated": {
-                "properties": ["border-width", "inset-*", "width/height", "inline-size/block-size"],
+                "properties": [
+                    "border-width",
+                    "inset-*",
+                    "width/height",
+                    "inline-size/block-size"
+                ],
                 "reason": "These frequently require geometric arithmetic (calc(), negative offsets) that doesn't map onto the token scale; gating them produced false positives against legitimate layout math."
             },
             "escapeHatch": "A raw value can still pass via an inline `stylelint-disable-next-line scale-unlimited/declaration-strict-value` comment, but the comment must state why — reviewers should treat an unexplained disable as a rejection, not a pass."

@@ -100,9 +100,9 @@
   "states": [
     "selected",
     "unselected",
-    "hovered",
-    "pressed",
-    "focused"
+    "hover",
+    "press",
+    "focus"
   ],
   "slots": [],
   "tokens": {
@@ -112,8 +112,8 @@
       "discoverySelected": "color-background-discovery-bold-default",
       "invertedSelected": "color-background-neutral-subtle-default",
       "unselectedBorder": "color-border-bold",
-      "interactiveHover": "color-background-neutral-subtle-hovered",
-      "interactivePressed": "color-background-neutral-subtle-pressed",
+      "interactiveHover": "color-background-neutral-subtle-hover",
+      "interactivePressed": "color-background-neutral-subtle-press",
       "radius": "border-radius-full-round",
       "spacing": "spacing-0"
     },

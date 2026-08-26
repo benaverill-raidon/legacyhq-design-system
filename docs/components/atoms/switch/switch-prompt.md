@@ -87,7 +87,7 @@ There is no `invalid` prop - Figma's `switch` component set has no such variant 
   stays focusable, unlike `disabled`. Figma's `isLoading=true` artwork is pixel-identical to the
   resting state; replace the visible on/off mark with a small `Spinner` (in the same `.icon` slot,
   inheriting that slot's own color - no color override needed) as a usability improvement beyond
-  the literal mockup, and suppress hover/pressed CSS while loading, the same way disabled already
+  the literal mockup, and suppress hover/press CSS while loading, the same way disabled already
   does.
 - `showIcons` (default `true`) toggles only the decorative check/X marks - `false` renders a bare
   track/thumb. Does not affect the `isLoading` Spinner, which is a functional signal, not decoration.
@@ -100,9 +100,9 @@ There is no `invalid` prop - Figma's `switch` component set has no such variant 
 Use semantic color tokens:
 
 - unchecked track default: `--color-background-neutral-bold-default`
-- unchecked track hovered: `--color-background-neutral-bold-hovered`
+- unchecked track hovered: `--color-background-neutral-bold-hover`
 - checked track default: `--color-background-success-bold-default`
-- checked track hovered: `--color-background-success-bold-hovered`
+- checked track hovered: `--color-background-success-bold-hover`
 - disabled: `--color-background-disabled`
 - inverse content/marks: `--color-content-inverse`
 - default content: `--color-content-default`
@@ -165,7 +165,7 @@ Test:
 - disabled state
 - required state
 - loading state: blocks toggling, sets `aria-busy`, stays focusable (not native `disabled`),
-  replaces the on/off mark with a Spinner in the same slot, suppresses hover/pressed CSS
+  replaces the on/off mark with a Spinner in the same slot, suppresses hover/press CSS
 - `role="switch"`
 - `onCheckedChange`
 - custom className

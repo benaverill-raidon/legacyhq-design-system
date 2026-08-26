@@ -94,7 +94,7 @@
 
 /*
  * `data-force-state` mirrors the live pseudo-classes so Storybook can present
- * hover / focus / pressed side by side as a static regression reference.
+ * hover / focus / press side by side as a static regression reference.
  */
 .root[data-interactive='true']:not([data-disabled='true']):not([data-selected='true']):is(
     :hover,
@@ -103,15 +103,15 @@
     [data-force-state='focus']
   )
   .surface::after {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .root[data-interactive='true']:not([data-disabled='true']):not([data-selected='true']):is(
     :active,
-    [data-force-state='active']
+    [data-force-state='press']
   )
   .surface::after {
-  background: var(--color-background-neutral-overlay-pressed);
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .root[data-interactive='true'][data-selected='true']:not([data-disabled='true']):is(
@@ -121,21 +121,21 @@
     [data-force-state='focus']
   )
   .surface::after {
-  background: var(--color-background-brand-primary-overlay-hovered);
+  background: var(--color-background-brand-primary-overlay-hover);
 }
 
 .root[data-interactive='true'][data-selected='true']:not([data-disabled='true']):is(
     :active,
-    [data-force-state='active']
+    [data-force-state='press']
   )
   .surface::after {
-  background: var(--color-background-brand-primary-overlay-pressed);
+  background: var(--color-background-brand-primary-overlay-press);
 }
 
 /* The focus ring primitive only reacts to :focus-visible, so mirror it here. */
 .root[data-interactive='true']:not([data-disabled='true'])[data-force-state='focus'] {
   outline: var(--focus-ring-width, var(--border-width-md)) solid
-    var(--focus-ring-color, var(--color-border-focused));
+    var(--focus-ring-color, var(--color-border-focus));
   outline-offset: var(--focus-ring-offset);
 }
 
@@ -180,6 +180,14 @@
 
 :global([data-theme='dark']) .fallbackArtwork {
   background-image: url('./person-dark.svg');
+}
+
+.fallbackArtwork[data-entity-type='team'] {
+  background-image: url('./team-light.svg');
+}
+
+:global([data-theme='dark']) .fallbackArtwork[data-entity-type='team'] {
+  background-image: url('./team-dark.svg');
 }
 
 .badgeContainer {

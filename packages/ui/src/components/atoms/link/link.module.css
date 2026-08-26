@@ -1,8 +1,8 @@
 .root {
   --link-color: var(--color-content-accent-blue-default);
-  --link-color-pressed: var(--color-content-accent-blue-bolder);
+  --link-color-press: var(--color-content-accent-blue-bolder);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bolder);
   --link-icon-size: var(--size-icon-md);
 
   /*
@@ -35,13 +35,13 @@
 .root:hover,
 .root:active,
 .root[data-force-state='hover'],
-.root[data-force-state='active'] {
+.root[data-force-state='press'] {
   text-decoration-line: underline;
 }
 
 .root:active,
-.root[data-force-state='active'] {
-  color: var(--link-color-pressed);
+.root[data-force-state='press'] {
+  color: var(--link-color-press);
 }
 
 .root:visited {
@@ -49,28 +49,28 @@
 }
 
 .root:visited:active {
-  color: var(--link-color-visited-pressed);
+  color: var(--link-color-visited-press);
 }
 
 .appearance_default {
   --link-color: var(--color-content-accent-blue-default);
-  --link-color-pressed: var(--color-content-accent-blue-bolder);
+  --link-color-press: var(--color-content-accent-blue-bolder);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bolder);
 }
 
 .appearance_subtle {
   --link-color: var(--color-content-subtle);
-  --link-color-pressed: var(--color-content-default);
+  --link-color-press: var(--color-content-default);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-pressed: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bolder);
 }
 
 .appearance_inverse {
   --link-color: var(--color-content-inverse);
-  --link-color-pressed: var(--color-content-inverse);
+  --link-color-press: var(--color-content-inverse);
   --link-color-visited: var(--color-content-inverse);
-  --link-color-visited-pressed: var(--color-content-inverse);
+  --link-color-visited-press: var(--color-content-inverse);
 
   color: var(--color-content-inverse);
 }
@@ -80,7 +80,7 @@
 .appearance_inverse:focus-visible,
 .appearance_inverse:visited,
 .appearance_inverse[data-force-state='hover'],
-.appearance_inverse[data-force-state='active'],
+.appearance_inverse[data-force-state='press'],
 .appearance_inverse[data-force-state='focus'] {
   color: var(--color-content-inverse);
 }

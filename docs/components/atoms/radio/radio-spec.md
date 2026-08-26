@@ -233,12 +233,12 @@ Use these semantic token concepts:
 - default content: `--color-content-default` or current project equivalent
 - disabled content: `--color-content-disabled` or current project equivalent
 - input background default: `--color-background-input-default`
-- input background hovered: `--color-background-input-hovered`
-- input background pressed: `--color-background-input-pressed`
+- input background hovered: `--color-background-input-hover`
+- input background pressed: `--color-background-input-press`
 - selected bold background: `--color-background-selected-bold-default`
 - inverse content: `--color-content-inverse`
 - input border: `--color-border-input`
-- focused border/ring: `--color-border-focused`
+- focused border/ring: `--color-border-focus`
 - error border: `--color-border-error`
 - disabled border: `--color-border-disabled`
 - disabled background: `--color-background-disabled`
@@ -369,9 +369,9 @@ Controls for:
 
 ### States
 
-Show unchecked, checked, and invalid (unchecked/checked) crossed with default/hover/focus/pressed/
+Show unchecked, checked, and invalid (unchecked/checked) crossed with default/hover/focus/press/
 disabled, plus a live example demonstrating real click-driven, mutually-exclusive selection. Radio
-pins hover/focus/pressed with its own `previewHover`/`previewFocus`/`previewPress` classes rather
+pins hover/focus/press with its own `previewHover`/`previewFocus`/`previewPress` classes rather
 than the shared `data-force-state` convention - document this rather than silently switching to
 `data-force-state`, which Radio's CSS does not read.
 

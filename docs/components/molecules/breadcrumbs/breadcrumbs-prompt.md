@@ -110,7 +110,7 @@ Create tests for:
 4. No Tailwind.
 5. No hardcoded design values.
 6. Export component and types.
-7. Reuse the existing `Link` atom for ancestor items - do not reimplement its hover/focus/pressed
+7. Reuse the existing `Link` atom for ancestor items - do not reimplement its hover/focus/press
    styling locally.
 
 ---

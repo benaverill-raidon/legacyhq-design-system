@@ -118,8 +118,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Checkbox label="Label" data-force-state="focus" />
         </Cell>
-        <Cell label="Pressed">
-          <Checkbox label="Label" data-force-state="active" />
+        <Cell label="Press">
+          <Checkbox label="Label" data-force-state="press" />
         </Cell>
         <Cell label="Disabled">
           <Checkbox label="Label" disabled />
@@ -136,8 +136,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Checkbox label="Label" data-force-state="focus" defaultChecked />
         </Cell>
-        <Cell label="Pressed">
-          <Checkbox label="Label" data-force-state="active" defaultChecked />
+        <Cell label="Press">
+          <Checkbox label="Label" data-force-state="press" defaultChecked />
         </Cell>
         <Cell label="Disabled">
           <Checkbox label="Label" disabled defaultChecked />
@@ -154,8 +154,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <Checkbox label="Label" data-force-state="focus" indeterminate />
         </Cell>
-        <Cell label="Pressed">
-          <Checkbox label="Label" data-force-state="active" indeterminate />
+        <Cell label="Press">
+          <Checkbox label="Label" data-force-state="press" indeterminate />
         </Cell>
         <Cell label="Disabled">
           <Checkbox label="Label" disabled indeterminate />
@@ -175,8 +175,8 @@ export const States: Story = {
         <Cell label="Hover">
           <Checkbox label="Label" invalid data-force-state="hover" />
         </Cell>
-        <Cell label="Pressed">
-          <Checkbox label="Label" invalid data-force-state="active" />
+        <Cell label="Press">
+          <Checkbox label="Label" invalid data-force-state="press" />
         </Cell>
       </Group>
 

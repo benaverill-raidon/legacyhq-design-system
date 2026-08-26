@@ -60,9 +60,15 @@ overflowLabel: (hiddenCount) => `+${hiddenCount} more`
 overflowMenuAriaLabel: `${hiddenCount} more tags`
 ```
 
-`size` defaults to `sm`, matching Figma's own `tab-group` example (every `tag` instance inside it is
-`size=sm`) - a deliberate difference from Tag's own code default of `md`, since Tag Group's default
-should match its verified Figma source exactly rather than inherit Tag's independently-chosen
+`size` carries Tag's own `TagSize` (`'sm' | 'md'`), mapping to Figma's `size` axis - `sm (24)` and
+`md (32)`, measured 24px and 32px respectively. It applies uniformly to every visible tag and to the
+overflow tag, because that is exactly what Figma does: within any one variant, all eleven `tag`
+instances (the ten visible plus the overflow trigger's) carry that variant's own size. No per-tag
+mixing exists in the source, which is why `TagGroupItem` omits `size` from Tag's props.
+
+`size` defaults to `sm` - a deliberate difference from Tag's own code default of `md`, since Tag
+Group's default should match its verified Figma source exactly (`size=sm (24)` is the first variant
+in the grid and the one the illustrative examples use) rather than inherit Tag's independently-chosen
 default.
 
 ## Truncation

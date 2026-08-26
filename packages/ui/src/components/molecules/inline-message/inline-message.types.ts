@@ -26,5 +26,5 @@ export interface InlineMessageProps {
    * Documentation-only: mirrors `:hover`/`:focus-visible` as a static Storybook regression
    * reference, the same convention Button/Checkbox/Switch use. Not part of the public API.
    */
-  'data-force-state'?: 'hover' | 'focus' | 'active';
+  'data-force-state'?: 'hover' | 'focus' | 'press';
 }

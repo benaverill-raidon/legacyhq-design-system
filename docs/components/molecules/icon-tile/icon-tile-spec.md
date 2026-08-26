@@ -32,7 +32,7 @@ Molecule
 ### Do Not Use When
 - The icon should be clickable - use Icon Button
 - The content is a count or short text value - use Badge or Tag
-- The icon needs hover/focus/pressed/disabled states
+- The icon needs hover/focus/press/disabled states
 
 ---
 

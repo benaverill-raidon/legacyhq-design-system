@@ -193,24 +193,24 @@
 }
 
 /*
- * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/pressed as
+ * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover/press as
  * a static regression reference - documentation-only, not part of the public API. Focus preview is
  * handled by the shared Focus Ring primitive's own `[data-force-state='focus']` support on `.input`
  * directly, so it needs no Switch-specific rule here.
  */
 .root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator {
-  background: var(--color-background-neutral-bold-hovered);
+  background: var(--color-background-neutral-bold-hover);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .indicator {
-  background: var(--color-background-neutral-bold-pressed);
+.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator {
+  background: var(--color-background-neutral-bold-press);
 }
 
 .root:not([data-disabled='true']):not([data-loading='true']):is(
     :hover,
     :active,
     [data-force-state='hover'],
-    [data-force-state='active']
+    [data-force-state='press']
   ) .thumb {
   transform: scaleX(1.16);
 }
@@ -220,11 +220,11 @@
 }
 
 .root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .input:checked + .indicator {
-  background: var(--color-background-success-bold-hovered);
+  background: var(--color-background-success-bold-hover);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='active']) .input:checked + .indicator {
-  background: var(--color-background-success-bold-pressed);
+.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .input:checked + .indicator {
+  background: var(--color-background-success-bold-press);
 }
 
 .input:checked + .indicator .thumb {
@@ -236,7 +236,7 @@
     :hover,
     :active,
     [data-force-state='hover'],
-    [data-force-state='active']
+    [data-force-state='press']
   ) .input:checked + .indicator .thumb {
   transform: translateX(var(--switch-thumb-translate-x)) scaleX(1.16);
 }

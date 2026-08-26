@@ -69,6 +69,20 @@ leading, before them. Either way the same tags are visible and the same tags are
 
 <Canvas of={TagGroupStories.Overflow} />
 
+### One size per group, including the overflow tag
+
+`size` (`'sm'` | `'md'`, default `'sm'`) maps to Figma's own `size` axis - `sm (24)` and `md (32)` -
+and applies to every visible tag *and* the overflow tag together. That mirrors the source: inside any
+one Figma variant, all eleven `tag` instances carry that variant's size, so there is no per-tag
+mixing to model. Note `'sm'` is deliberately not Tag's own default (`'md'`) - it matches the first
+variant in Figma's grid.
+
+```tsx
+<TagGroup tags={tags} maxVisible={10} size="md" />
+```
+
+<Canvas of={TagGroupStories.Sizes} />
+
 ### Tag Group never assumes what selecting a truncated tag means
 
 Same "never assume" rule Menu and Dropdown Menu already follow. Selecting a row in the overflow

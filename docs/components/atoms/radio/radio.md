@@ -11,7 +11,7 @@ Do not use for multiple independent selections; use Checkbox instead.
 
 ## Design intent
 Provide a clear single-selection control with consistent indicator, focus treatment, and labeling.
-The hover/pressed/focus overlay behind the indicator fades in using the `fade-quick` semantic motion
+The hover/press/focus overlay behind the indicator fades in using the `fade-quick` semantic motion
 token rather than a hardcoded duration.
 
 The selected dot appears instantly on toggle, with no scale-up or other transform-based animation,

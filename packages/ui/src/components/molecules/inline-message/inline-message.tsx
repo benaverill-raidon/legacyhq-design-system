@@ -86,8 +86,6 @@ export const InlineMessage = React.memo(function InlineMessage({
       open={isOpen}
       onOpenChange={handleOpenChange}
       alignment="bottomLeft"
-      closeOnEscape={false}
-      closeOnOutsideClick={false}
       content={content}
     >
       <button

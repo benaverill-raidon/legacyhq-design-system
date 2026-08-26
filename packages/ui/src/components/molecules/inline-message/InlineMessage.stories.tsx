@@ -150,15 +150,6 @@ export const EdgeCases: Story = {
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Escape and outside clicks do not dismiss it</h3>
-        <p style={captionStyle}>
-          Unlike a generic popover, the detail panel persists until the row is clicked again - open
-          this one, then press Escape or click elsewhere on the page to confirm it stays open.
-        </p>
-        <InlineMessage title="Persistent detail" tone="default" content="Still here after Escape or an outside click." />
-      </section>
-
-      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Dark surface</h3>
         <div data-theme="dark" style={darkSurfaceStyle}>
           <div style={row}>

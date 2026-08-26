@@ -53,11 +53,11 @@
     [data-force-state='focus']
   ),
 .appearance_default[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
-.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  background: var(--color-background-neutral-overlay-pressed);
+.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .appearance_primary {
@@ -73,13 +73,13 @@
     [data-force-state='focus']
   ),
 .appearance_primary[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  border-color: var(--color-background-brand-primary-bold-hovered);
-  background: var(--color-background-brand-primary-bold-hovered);
+  border-color: var(--color-background-brand-primary-bold-hover);
+  background: var(--color-background-brand-primary-bold-hover);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  border-color: var(--color-background-brand-primary-bold-pressed);
-  background: var(--color-background-brand-primary-bold-pressed);
+.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: var(--color-background-brand-primary-bold-press);
+  background: var(--color-background-brand-primary-bold-press);
 }
 
 .appearance_subtle {
@@ -95,11 +95,11 @@
     [data-force-state='focus']
   ),
 .appearance_subtle[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
-.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='active']) {
-  background: var(--color-background-neutral-overlay-pressed);
+.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-overlay-press);
 }
 
 .size_xs {
@@ -130,18 +130,27 @@
   border-radius: var(--border-radius-full-round);
 }
 
+/*
+ * Two disabled treatments, matching each appearance's own resting border visibility rather than
+ * one shared look - mirrors Button's own disabled rule split. appearance_default already shows a
+ * visible border at rest, so its disabled state keeps one (--color-border-disabled).
+ * appearance_primary and appearance_subtle are borderless at rest (primary's border-color equals
+ * its own background at rest, subtle's is transparent) - Figma's own disabled variants confirm
+ * primary drops its stroke entirely rather than switching to a gray one, so it stays borderless here
+ * too.
+ */
 .appearance_default:disabled,
 .appearance_default:disabled:hover,
-.appearance_default:disabled:active,
-.appearance_primary:disabled,
-.appearance_primary:disabled:hover,
-.appearance_primary:disabled:active {
+.appearance_default:disabled:active {
   border-color: var(--color-border-disabled);
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
+.appearance_primary:disabled,
+.appearance_primary:disabled:hover,
+.appearance_primary:disabled:active,
 .appearance_subtle:disabled,
 .appearance_subtle:disabled:hover,
 .appearance_subtle:disabled:active {

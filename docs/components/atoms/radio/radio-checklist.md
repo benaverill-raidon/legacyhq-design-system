@@ -67,7 +67,7 @@ RadioGroup:
 - required
 - focus-visible
 - hover
-- pressed
+- press
 
 ### RadioGroup States
 

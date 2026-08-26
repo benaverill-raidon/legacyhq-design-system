@@ -164,17 +164,24 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-sm);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-md);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-lg);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-pressed);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-brand-primary-default-default);');
-    expect(toggleButtonCss).toContain('border-color: var(--color-border-brand-primary);');
-    expect(toggleButtonCss).toContain('color: var(--color-content-brand-primary-default);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-selected-default-default);');
+    expect(toggleButtonCss).toContain('border-color: var(--color-border-selected);');
+    expect(toggleButtonCss).toContain('color: var(--color-content-selected);');
     expect(toggleButtonCss).toContain('background: var(--color-background-disabled);');
     expect(toggleButtonCss).toMatch(/\.tone_default \{[\s\S]*?background: transparent;/);
     expect(toggleButtonCss).toMatch(/\.tone_subtle \{[\s\S]*?border-color: transparent;[\s\S]*?background: transparent;/);
     expect(toggleButtonCss).not.toContain('--component-button-');
-    expect(toggleButtonCss).not.toContain('--color-background-selected-');
-    expect(toggleButtonCss).not.toContain('--color-border-selected');
+  });
+
+  it('consumes the dedicated selected token family, not the brand-primary family it used to borrow', () => {
+    // Every isSelected=true Figma variant binds color/background/selected/*, color/border/selected,
+    // and color/content/selected. The resting values are unchanged (each new token aliases the same
+    // primitive its predecessor did) - this guards the semantic mapping, not the rendered color.
+    expect(toggleButtonCss).not.toContain('--color-background-brand-primary-');
+    expect(toggleButtonCss).not.toContain('--color-border-brand-primary');
+    expect(toggleButtonCss).not.toContain('--color-content-brand-primary-');
   });
 
   it('uses a 6px icon-to-text gap, matching Figma at every size', () => {
@@ -184,29 +191,43 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).not.toContain('gap: var(--spacing-sm);');
   });
 
-  it('supports pinning hover/pressed as a static Storybook reference via data-force-state', () => {
+  it('supports pinning hover/press as a static Storybook reference via data-force-state', () => {
     expect(toggleButtonCss).toContain("[data-force-state='hover']");
-    expect(toggleButtonCss).toContain("[data-force-state='active']");
+    expect(toggleButtonCss).toContain("[data-force-state='press']");
   });
 
   it('shows the hover fill on focus-visible too, matching Button', () => {
     expect(toggleButtonCss).toMatch(
-      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hovered\);/,
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hover\);/,
     );
   });
 
   it('gives tone=default a visible border when selected, matching its own resting border', () => {
     const rule = toggleButtonCss.match(/\.tone_default\.selected[^{]*\{([^}]*)\}/);
 
-    expect(rule?.[1]).toContain('border-color: var(--color-border-brand-primary);');
-    expect(rule?.[1]).toContain('background: var(--color-background-brand-primary-default-default);');
+    expect(rule?.[1]).toContain('border-color: var(--color-border-selected);');
+    expect(rule?.[1]).toContain('background: var(--color-background-selected-default-default);');
   });
 
   it('keeps tone=subtle borderless when selected, matching its own resting border', () => {
     const rule = toggleButtonCss.match(/\.tone_subtle\.selected[^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: transparent;');
-    expect(rule?.[1]).toContain('background: var(--color-background-brand-primary-default-default);');
+    expect(rule?.[1]).toContain('background: var(--color-background-selected-default-default);');
+  });
+
+  it('steps the fill on hover/focus/press while selected, instead of pinning it to the resting fill', () => {
+    // Previously selected :hover/:active were grouped into the resting rule with identical values,
+    // so a selected toggle gave no interaction feedback at all.
+    const hoverRule = toggleButtonCss.match(
+      /\.toggleButton\.selected:not\(:disabled\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{([^}]*)\}/,
+    );
+    const pressRule = toggleButtonCss.match(
+      /\.toggleButton\.selected:not\(:disabled\):is\(:active, \[data-force-state='press'\]\)\s*\{([^}]*)\}/,
+    );
+
+    expect(hoverRule?.[1]).toContain('background: var(--color-background-selected-default-hover);');
+    expect(pressRule?.[1]).toContain('background: var(--color-background-selected-default-press);');
   });
 
   it('gives tone=default a visible disabled border, matching its own resting border', () => {

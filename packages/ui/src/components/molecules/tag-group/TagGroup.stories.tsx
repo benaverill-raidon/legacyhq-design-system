@@ -58,6 +58,25 @@ function fifteenTags(): TagGroupItem[] {
 /** Prop exploration. Pass more tags than `maxVisible` to see the overflow tag appear. */
 export const Playground: Story = {};
 
+/**
+ * Both sizes Figma defines, applied uniformly across the group. Figma's own `tab-group` variant grid
+ * crosses `size` (`sm (24)` / `md (32)`) with `alignment`, and within each variant every `tag`
+ * instance - including the one in the overflow trigger - carries that same size. There is no per-tag
+ * size mixing, which is why `TagGroupItem` omits `size` from Tag's own props.
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="sm (24px) - default" description="Tag Group defaults to sm, unlike Tag's own md default.">
+        <TagGroup tags={fifteenTags()} maxVisible={10} size="sm" />
+      </Group>
+      <Group title="md (32px)" description="The overflow tag scales with the group, not independently.">
+        <TagGroup tags={fifteenTags()} maxVisible={10} size="md" />
+      </Group>
+    </div>
+  ),
+};
+
 /** No `maxVisible` - every tag renders, wrapping onto new lines as the row fills. Matches Figma's own wrap layout (8px row/column gap). */
 export const Wrapping: Story = {
   render: () => (

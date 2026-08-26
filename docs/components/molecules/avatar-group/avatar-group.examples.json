@@ -1,0 +1,47 @@
+{
+  "component": "AvatarGroup",
+  "examples": [
+    {
+      "name": "Unbounded stack, no overflow",
+      "description": "maxVisible omitted - every avatar renders as one overlapping stack.",
+      "jsx": "<AvatarGroup\n  avatars={[\n    { id: 'p1', name: 'Ben Averill', src: benPhoto },\n    { id: 'p2', name: 'Jordan Ellis', src: jordanPhoto },\n    { id: 'p3', name: 'Priya Natarajan', src: priyaPhoto },\n  ]}\n/>",
+      "props": {}
+    },
+    {
+      "name": "Truncated stack with a '+N' overflow trigger",
+      "description": "The common case - once avatars.length exceeds maxVisible, the rest collapse behind an overflow trigger that opens a Dropdown Menu.",
+      "jsx": "<AvatarGroup avatars={nineTeamMembers} maxVisible={5} />",
+      "props": { "maxVisible": 5 }
+    },
+    {
+      "name": "Smaller size for a dense row",
+      "description": "size applies uniformly to every avatar, including the overflow trigger.",
+      "jsx": "<AvatarGroup avatars={teamMembers} maxVisible={4} size=\"sm\" />",
+      "props": { "maxVisible": 4, "size": "sm" }
+    },
+    {
+      "name": "Acting on a selected truncated person",
+      "description": "Avatar Group never assumes what selection means - wire onOverflowAvatarSelect to navigate or anything else.",
+      "jsx": "<AvatarGroup\n  avatars={teamMembers}\n  maxVisible={4}\n  onOverflowAvatarSelect={(avatar) => {\n    router.push(`/people/${avatar.id}`);\n  }}\n/>",
+      "props": { "maxVisible": 4 }
+    },
+    {
+      "name": "Individually interactive avatars",
+      "description": "Each AvatarGroupItem's own isInteractive/onClick forwards straight to the rendered Avatar, unaffected by truncation.",
+      "jsx": "<AvatarGroup\n  avatars={[\n    { id: 'p1', name: 'Ben Averill', isInteractive: true, onClick: () => openProfile('p1') },\n    { id: 'p2', name: 'Jordan Ellis', isInteractive: true, onClick: () => openProfile('p2') },\n  ]}\n/>",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Setting size on an individual avatar item",
+      "jsx": "<AvatarGroup avatars={[{ id: 'p1', name: 'Ben Averill', size: 'xl' }]} />",
+      "reason": "AvatarGroupItem omits size from Avatar's own props - Avatar Group applies one size uniformly via AvatarGroupProps.size, including to the overflow trigger. There is no per-avatar size mixing, matching Figma's own avatar-group example."
+    },
+    {
+      "name": "Expecting a truncated avatar's selection to navigate automatically",
+      "jsx": "<AvatarGroup avatars={[{ id: 'p1', name: 'Ben Averill' }]} maxVisible={0} />",
+      "reason": "Selecting a truncated avatar from the overflow panel only calls onOverflowAvatarSelect(avatar, event) - Avatar Group does not read the avatar's own data and navigate for you, the same 'never assume' rule Menu's own onSelect follows."
+    }
+  ]
+}

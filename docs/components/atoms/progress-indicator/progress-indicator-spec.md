@@ -103,7 +103,7 @@ pressed
 focused
 ```
 
-Only one dot is selected. Hover, pressed, and focus-visible states are derived from native button behavior when `onStepChange` is provided.
+Only one dot is selected. Hover, press, and focus-visible states are derived from native button behavior when `onStepChange` is provided.
 
 ## Token mapping
 
@@ -117,8 +117,8 @@ primary selected: color-background-brand-primary-bold-default
 discovery selected: color-background-discovery-bold-default
 inverted selected: color-background-neutral-subtle-default
 unselected border: color-border-bold
-interactive hover: color-background-neutral-subtle-hovered
-interactive pressed: color-background-neutral-subtle-pressed
+interactive hover: color-background-neutral-subtle-hover
+interactive pressed: color-background-neutral-subtle-press
 ```
 
 Verify the actual generated CSS variable names before implementation.
@@ -210,7 +210,7 @@ too, not just the visible dot.
 
 Progress Indicator has no root-level interactive state to pin with `data-force-state` - hover,
 focus, and pressed apply per dot. Show dot position instead (first, middle, final), passive versus
-interactive rendering, and a live interactive example to verify hover/focus/pressed by hand.
+interactive rendering, and a live interactive example to verify hover/focus/press by hand.
 
 ### Content
 

@@ -450,7 +450,7 @@ describe('Slider', () => {
     expect(slider).not.toHaveAttribute('data-pointer-focus');
   });
 
-  it('does not mark plain keyboard focus (no preceding pointerdown) as pointer-focused', () => {
+  it('does not set data-pointer-focus for plain keyboard focus (no preceding pointerdown)', () => {
     render(<Slider aria-label="Tab focus" defaultValue={50} />);
     const slider = screen.getByRole('slider', { name: 'Tab focus' });
 
@@ -936,7 +936,7 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('pointer-events: none;');
     expect(sliderCss).toContain('pointer-events: auto;');
     expect(sliderCss).not.toContain(".root:not([data-disabled='true']):active .control,");
-    expect(sliderCss).not.toContain('--slider-current-handle-width: var(--slider-handle-width-pressed);');
+    expect(sliderCss).not.toContain('--slider-current-handle-width: var(--slider-handle-width-press);');
     expect(sliderCss).not.toContain('slider-track-boundary-inset');
   });
 
@@ -978,7 +978,7 @@ describe('slider CSS contract', () => {
   });
 
   it('uses the focus ring token mapping on the private visual handle', () => {
-    expect(sliderCss).toContain('outline: var(--border-width-md) solid var(--color-border-focused);');
+    expect(sliderCss).toContain('outline: var(--border-width-md) solid var(--color-border-focus);');
     expect(sliderCss).toContain('outline-offset: var(--spacing-xs);');
     expect(sliderCss).not.toContain('outline-offset: var(--spacing-none);');
   });
@@ -1020,14 +1020,14 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('.handleVisual {');
     expect(sliderCss).toContain('background: var(--slider-handle-visual-color);');
     expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-default);');
-    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-hovered);');
-    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-pressed);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-hover);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-press);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-lower-position);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-upper-position);');
   });
 
   it('shrinks only the inner visual handle to the pressed width without changing positioning rules', () => {
-    expect(sliderCss).toContain('--slider-handle-width-pressed: var(--measurement-2);');
+    expect(sliderCss).toContain('--slider-handle-width-press: var(--measurement-2);');
     expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\']):active .handleSingle .handleVisual');
     expect(sliderCss).toContain(
       '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):active .handleLower .handleVisual',

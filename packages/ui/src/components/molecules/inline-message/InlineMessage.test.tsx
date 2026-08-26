@@ -98,7 +98,16 @@ describe('InlineMessage', () => {
     expect(screen.getByText('More detail')).toBeInTheDocument();
   });
 
-  it('does not close on Escape or an outside click - only the trigger toggles it', () => {
+  it('closes on Escape, inherited from Popup', () => {
+    render(<InlineMessage title="Title" content="More detail" defaultOpen />);
+
+    expect(screen.getByText('More detail')).toBeInTheDocument();
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.queryByText('More detail')).not.toBeInTheDocument();
+  });
+
+  it('closes on an outside click, inherited from Popup', () => {
     render(
       <div>
         <InlineMessage title="Title" content="More detail" defaultOpen />
@@ -108,11 +117,8 @@ describe('InlineMessage', () => {
 
     expect(screen.getByText('More detail')).toBeInTheDocument();
 
-    fireEvent.keyDown(document, { key: 'Escape' });
-    expect(screen.getByText('More detail')).toBeInTheDocument();
-
     fireEvent.pointerDown(screen.getByRole('button', { name: 'Outside' }));
-    expect(screen.getByText('More detail')).toBeInTheDocument();
+    expect(screen.queryByText('More detail')).not.toBeInTheDocument();
   });
 
   it('applies className to the root row', () => {
@@ -121,13 +127,13 @@ describe('InlineMessage', () => {
     expect(container.firstElementChild).toHaveClass('custom-inline-message');
   });
 
-  it('maps each tone to its own overlay/hovered tint token, matching Figma', () => {
-    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-information-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-error-overlay-hovered);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-discovery-overlay-hovered);');
+  it('maps each tone to its own overlay/hover tint token, matching Figma', () => {
+    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-information-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-error-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-discovery-overlay-hover);');
   });
 
   it('delegates positioning, the portal, and dismissal to Popup instead of a local implementation', () => {

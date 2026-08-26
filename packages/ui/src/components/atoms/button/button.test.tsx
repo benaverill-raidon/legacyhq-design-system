@@ -187,13 +187,21 @@ describe('Button', () => {
     expect(buttonCss).toContain('border: var(--border-width-sm) solid transparent;');
     expect(buttonCss).toMatch(/\.appearance_default \{[\s\S]*?border-color: var\(--color-border-input\);/);
     expect(buttonCss).toContain('background: transparent;');
-    expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-hovered);');
+    expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
     expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
     expect(buttonCss).toMatch(/\.size_md \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
     expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?--button-border-radius: var\(--border-radius-xl\);/);
     expect(buttonCss).not.toContain('border-radius: 10px;');
     expect(buttonCss).not.toContain('border-radius: 12px;');
     expect(buttonCss).not.toContain('border-radius: 14px;');
+  });
+
+  it('pins block-size per size instead of a min- floor, so the border never inflates height past the token', () => {
+    expect(buttonCss).not.toContain('min-block-size:');
+    expect(buttonCss).toMatch(/\.button \{[\s\S]*?block-size: var\(--size-control-md\);/);
+    expect(buttonCss).toMatch(/\.size_xs \{[\s\S]*?block-size: var\(--size-control-xs\);/);
+    expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?block-size: var\(--size-control-sm\);/);
+    expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?block-size: var\(--size-control-lg\);/);
   });
 
   it('gives appearance=default a visible disabled border, matching its own resting border', () => {

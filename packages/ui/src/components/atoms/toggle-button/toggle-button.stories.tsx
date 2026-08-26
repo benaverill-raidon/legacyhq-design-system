@@ -145,7 +145,7 @@ function LiveToggleExample() {
 
 /**
  * Interaction and system states, crossed with selected. `data-force-state` mirrors the adjacent
- * pseudo-class so hover/focus/pressed render as a static regression reference (documentation-only,
+ * pseudo-class so hover/focus/press render as a static regression reference (documentation-only,
  * not part of the public API) - the same convention Button and Checkbox use. Focus pairs with the
  * shared Focus Ring primitive's own `data-force-state="focus"` support (the outline ring) and also
  * shows the hover fill, matching Button - focus and hover read as one treatment rather than two
@@ -165,8 +165,8 @@ export const States: Story = {
         <Cell label="Focus visible">
           <ToggleButton data-force-state="focus">Label</ToggleButton>
         </Cell>
-        <Cell label="Pressed">
-          <ToggleButton data-force-state="active">Label</ToggleButton>
+        <Cell label="Press">
+          <ToggleButton data-force-state="press">Label</ToggleButton>
         </Cell>
         <Cell label="Disabled">
           <ToggleButton isDisabled>Label</ToggleButton>
@@ -177,8 +177,18 @@ export const States: Story = {
         <Cell label="Default">
           <ToggleButton isSelected>Label</ToggleButton>
         </Cell>
+        <Cell label="Hover">
+          <ToggleButton isSelected data-force-state="hover">
+            Label
+          </ToggleButton>
+        </Cell>
         <Cell label="Focus visible">
           <ToggleButton isSelected data-force-state="focus">
+            Label
+          </ToggleButton>
+        </Cell>
+        <Cell label="Press">
+          <ToggleButton isSelected data-force-state="press">
             Label
           </ToggleButton>
         </Cell>

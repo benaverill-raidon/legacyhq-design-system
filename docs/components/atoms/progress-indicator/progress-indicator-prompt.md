@@ -113,7 +113,7 @@ md: 20px container, 12px visible dot
 
 Selected dots are filled. Unselected dots are transparent with semantic borders. Use full-round radius and CSS only.
 
-Do not reproduce Figma hover, pressed, or focus states because this component is non-interactive.
+Do not reproduce Figma hover, press, or focus states because this component is non-interactive.
 
 # Tokens
 

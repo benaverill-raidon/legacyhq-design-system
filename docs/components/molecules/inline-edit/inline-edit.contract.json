@@ -106,7 +106,7 @@
     "Confirm calls onConfirm(draft) and returns to not-editing. Cancel calls onCancel() and returns to not-editing, showing value again.",
     "Enter/Escape key handling is scoped to the internal editing state and does nothing before editing starts.",
     "Enter and Escape both blur the field after calling onConfirm/onCancel, deselecting it the same way clicking either action button does; the mousedown-set ref flag also suppresses the auto-confirm handleBlur would otherwise re-fire from this same-tick blur.",
-    "onBlur on the root: if the newly-focused element (event.relatedTarget) is outside the root, or unavailable, call confirm(); if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
+    "onBlur on the root: if the newly-focus element (event.relatedTarget) is outside the root, or unavailable, call confirm(); if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
     "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button)."
   ],
   "compositionRules": [

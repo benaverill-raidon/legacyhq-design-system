@@ -6,7 +6,7 @@ import { AvatarPresenceOnlineIcon } from './avatar-presence-online';
 import { AvatarStatusApprovedIcon } from './avatar-status-approved';
 import { AvatarStatusDeclinedIcon } from './avatar-status-declined';
 import styles from './avatar.module.css';
-import type { AvatarPresence, AvatarProps, AvatarStatus } from './avatar.types';
+import type { AvatarEntityType, AvatarPresence, AvatarProps, AvatarStatus } from './avatar.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -101,8 +101,15 @@ function warnForMissingAccessibleName(
   console.warn('Avatar requires `name`, `alt`, `aria-label`, or `aria-labelledby` unless it is decorative.');
 }
 
-function AvatarFallbackArtwork() {
-  return <span className={styles.fallbackArtwork} data-avatar-fallback aria-hidden="true" />;
+function AvatarFallbackArtwork({ entityType }: { entityType: AvatarEntityType }) {
+  return (
+    <span
+      className={styles.fallbackArtwork}
+      data-avatar-fallback
+      data-entity-type={entityType}
+      aria-hidden="true"
+    />
+  );
 }
 
 function AvatarBadgeIcon({ badge }: { badge: Exclude<AvatarPresence | AvatarStatus, 'none'> }) {
@@ -135,6 +142,7 @@ export const Avatar = React.memo(
       isDisabled = false,
       isInteractive = false,
       decorative = false,
+      entityType = 'person',
       className,
       onClick,
       type = 'button',
@@ -188,7 +196,7 @@ export const Avatar = React.memo(
               onError={() => setImageFailed(true)}
             />
           ) : (
-            <AvatarFallbackArtwork />
+            <AvatarFallbackArtwork entityType={entityType} />
           )}
         </span>
         {visibleBadge !== 'none' ? (
@@ -218,6 +226,7 @@ export const Avatar = React.memo(
           data-presence={presence}
           data-status={status}
           data-badge={visibleBadge}
+          data-entity-type={entityType}
           onClick={onClick}
         >
           {content}
@@ -241,6 +250,7 @@ export const Avatar = React.memo(
         data-presence={presence}
         data-status={status}
         data-badge={visibleBadge}
+        data-entity-type={entityType}
       >
         {content}
       </span>

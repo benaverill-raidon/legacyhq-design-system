@@ -52,15 +52,15 @@ There is no `disabled` prop - not evidenced anywhere in Figma's `inline-message`
 
 Figma's `inline-message` component set (node `4589:2519`, file `Components v1.0.0`) wraps a real
 `popup` instance around a `figma-parts / inline-message-trigger` sub-component (node `2448:72904`).
-The trigger's own `state` variant includes `default`, `hovered/open`, `focus`, and `pressed` - a
-single merged `hovered/open` state name, not two separately demonstrated ones. Read literally this
+The trigger's own `state` variant includes `default`, `hover/open`, `focus`, and `press` - a
+single merged `hover/open` state name, not two separately demonstrated ones. Read literally this
 is ambiguous between "hover reveals the panel" (mirroring Tooltip) and "click toggles it, and the
-open/hovered tint happens to share one visual treatment." This was resolved in favor of
+open/hover tint happens to share one visual treatment." This was resolved in favor of
 **click-to-toggle**, not hover, because:
 
 - Popup's own documentation is explicit that hover-only reveals belong to Tooltip, not to a
   Popup-based component - reusing that pattern here would just duplicate Tooltip's territory.
-- The `pressed` state only makes sense for a real, clickable control, not a hover-only trigger.
+- The `press` state only makes sense for a real, clickable control, not a hover-only trigger.
 - Hover-only reveals exclude keyboard and touch users from ever seeing the detail; a real button
   does not.
 
@@ -71,15 +71,9 @@ matching `showTitle` toggle since every real-world example provides one, consist
 system always uses presence/absence rather than a parallel boolean flag for optional content
 (compare Radio's `label`).
 
-Figma's own `tone` variant on the trigger sub-component is misspelled `succes` (missing a second
-"s") - not replicated; the parent `inline-message` component set and every other tone-bearing
-component in this system spell it `success`.
-
-`isOpen`'s outer Figma variant values are largely garbage auto-generated strings (`isOpen3` through
-`isOpen12`) rather than real booleans, for every tone except `info` - a known Figma authoring
-artifact from duplicating the `info` variant to create the other five tones. The real signal used
-throughout data extraction was the **nested** `popup` instance's own `isOpen` component property
-(a genuine `"true"`/`"false"` string), not the outer variant name.
+Open state maps from the **nested** `popup` instance's own `isOpen` component property, not from the
+outer variant name - the outer set crosses `tone` with `isOpen`, so the nested property is what
+actually distinguishes an open trigger from a closed one within a single tone.
 
 ## Tone Mapping
 
@@ -89,12 +83,12 @@ pattern from one sample:
 
 | Tone | Icon | Icon color | Hover/open tint |
 |------|------|------------|------------------|
-| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-hovered` |
-| `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hovered` |
-| `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hovered` |
-| `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hovered` |
-| `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hovered` |
-| `discovery` | `StatusDiscoveryIcon` | `--color-content-discovery` | `--color-background-discovery-overlay-hovered` |
+| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-hover` |
+| `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hover` |
+| `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hover` |
+| `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hover` |
+| `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hover` |
+| `discovery` | `StatusDiscoveryIcon` | `--color-content-discovery` | `--color-background-discovery-overlay-hover` |
 
 Figma's `default`-tone icon resolves to a component literally named `node` in the shared icon
 library - a generic, unrelated placeholder rather than a real status glyph. No `StatusDefaultIcon`
@@ -147,8 +141,12 @@ trigger and panel for every Popup-based component, the same way it does for Tool
   panelSurface` instance inside the popup exactly (a raised card with border/shadow). This is the
   first component in the system to exercise that code path; Tooltip only exercises `unstyled`.
 - `alignment="bottomLeft"`, matching Figma's own `popup` instance property on every variant.
-- `closeOnEscape={false}` and `closeOnOutsideClick={false}` - the detail persists until the row is
-  clicked again, per Popup's own documented prediction for Inline Message's likely needs.
+- Leaves `closeOnEscape`/`closeOnOutsideClick` at Popup's own defaults (both `true`) - the detail
+  dismisses on Escape or an outside click, the same as any other Popup consumer. Popup's own docs
+  originally predicted Inline Message would want persistent-until-explicit-toggle behavior, and an
+  earlier revision opted out of both to match that prediction - reversed on direct product
+  feedback: a status/validation detail row should dismiss like any other transient disclosure, not
+  stay pinned open once the user has moved on.
 - Leaves `manageTriggerAria` at Popup's default (`true`) - `aria-expanded`/`aria-controls` is the
   correct ARIA pattern for a click-to-reveal disclosure, unlike Tooltip's `aria-describedby` case.
   This is the first component to exercise that default path; Tooltip sets it to `false`.
@@ -206,7 +204,6 @@ All six tones side by side, each with `content` provided.
 
 - Alignment falling back automatically near a viewport edge
 - Long detail content wrapping inside Popup's default width
-- Escape and outside clicks do not dismiss the open panel
 - Dark surface
 
 ## Testing Requirements
@@ -218,9 +215,9 @@ All six tones side by side, each with `content` provided.
 - Toggles the popup open/closed on click (uncontrolled)
 - Supports `defaultOpen`
 - Supports controlled `open`/`onOpenChange`
-- Does not close on Escape or an outside click
+- Closes on Escape and on an outside click, inherited from Popup
 - Applies `className` to the root row
-- Maps every tone to its own `overlay/hovered` tint token
+- Maps every tone to its own `overlay/hover` tint token
 - Delegates positioning/portal/dismissal to Popup rather than a local implementation
 - Reuses Popup's own `aria-expanded` wiring rather than a custom open attribute
 

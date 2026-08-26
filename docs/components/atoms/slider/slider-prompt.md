@@ -244,10 +244,10 @@ showValue
 
 Default is false.
 
-When true, show value indicator only while:
+When true, show the value indicator only in these states:
 
-- hovered
-- focused
+- hover
+- focus
 - dragging / active
 
 For `SliderRange`, show the value indicator for the active handle.

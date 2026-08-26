@@ -48,12 +48,12 @@ on/off marks stay a constant 12px at both sizes.
 implementation additionally replaces the visible on/off mark with a small `Spinner` in the same
 slot - not on the thumb, so it doesn't compete with the thumb's own slide animation - inheriting
 that slot's color with no override of its own. This is a usability improvement beyond the literal
-mockup. Hover/pressed track treatment is also suppressed while loading, the same way `disabled`
+mockup. Hover/press track treatment is also suppressed while loading, the same way `disabled`
 already does - see States.
 
 ### Verifying interaction states
 
-`data-force-state` pins hover/pressed as a static Storybook reference (documentation-only, not part
+`data-force-state` pins hover/press as a static Storybook reference (documentation-only, not part
 of the public API) - the same convention Button and Checkbox use. Focus preview instead uses the
 shared Focus Ring primitive's own `data-force-state="focus"` support on the input. See States for
 both the pinned reference states and a live, click-driven example.

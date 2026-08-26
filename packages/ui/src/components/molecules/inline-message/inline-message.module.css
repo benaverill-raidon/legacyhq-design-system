@@ -26,7 +26,7 @@
 }
 
 /*
- * The tint uses each tone's own `overlay/hovered` token - the same token Figma's `isOpen=true`
+ * The tint uses each tone's own `overlay/hover` token - the same token Figma's `isOpen=true`
  * trigger is bound to - applied on hover, keyboard focus, and while the popup is open
  * (`aria-expanded`, set automatically by Popup's default `manageTriggerAria`, not a custom
  * attribute of this component's own). Focus-visible reads identically to hover here, the same
@@ -38,27 +38,27 @@
  * system.
  */
 .tone_default.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-neutral-overlay-hovered);
+  background: var(--color-background-neutral-overlay-hover);
 }
 
 .tone_info.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-information-overlay-hovered);
+  background: var(--color-background-information-overlay-hover);
 }
 
 .tone_success.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-success-overlay-hovered);
+  background: var(--color-background-success-overlay-hover);
 }
 
 .tone_warning.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-warning-overlay-hovered);
+  background: var(--color-background-warning-overlay-hover);
 }
 
 .tone_error.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-error-overlay-hovered);
+  background: var(--color-background-error-overlay-hover);
 }
 
 .tone_discovery.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-discovery-overlay-hovered);
+  background: var(--color-background-discovery-overlay-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Avatar is an atom component used to visually represent a person in the interface. It may appear as a static identity marker, an interactive identity control, or a selectable item in people-focused UI.
+Avatar is an atom component used to visually represent a person in the interface. It may appear as a static identity marker, an interactive identity control, or a selectable item in people-focus UI.
 
 ## Badge behavior
 
@@ -29,6 +29,17 @@ Status values:
 - `accepted`
 - `declined`
 
+## Entity type (fallback artwork)
+
+`entityType` (`'person' | 'team'`, default `'person'`) selects which fallback artwork renders when
+there is no `src` (or it fails to load). No Figma variant of its own - the `avatar` component set's
+own `componentPropertyDefinitions` were checked directly and only define
+size/status/state/presence/isInteractive/isDisabled/selected. The `team` artwork
+(`team-light.svg`/`team-dark.svg`) is the real, already-shipped `team-and-partners` icon glyph
+(`packages/ui/src/assets/icons/source/team-and-partners.svg`), rescaled and recolored to match the
+`person` fallback's own template exactly (200x200, flat-color square, centered glyph, same two
+light/dark color pairs) - not new art drawn from scratch.
+
 ## Anatomy
 
 ```txt
@@ -44,6 +55,7 @@ Use the same badge container and badge icon structure for every size. XL keeps v
 ## Implementation checklist
 
 - [ ] Preserve image, full-size theme-aware fallback artwork, selected, loading-safe image fallback, and disabled behavior.
+- [ ] Fallback artwork respects `entityType` (person vs. team) in both themes; has no effect once `src` loads successfully.
 - [ ] Use the dedicated badge container and badge icon anatomy across all sizes.
 - [ ] Keep status higher priority than presence.
 - [ ] Map `offline` to the semantic subtle content color token rather than a primitive neutral color.

@@ -1,0 +1,131 @@
+{
+  "name": "AvatarGroup",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Lays out an overlapping stack of Avatars with an optional overflow trigger that opens a Dropdown Menu holding whichever people got truncated.",
+  "intent": "A thin composition of Avatar (every visible avatar), Button (the overflow trigger, reshaped into a circle), and Dropdown Menu (the overflow panel), preconfigured for the bounded-people-list-with-overflow use case, rather than a third independent implementation of overlap layout or floating-panel behavior.",
+  "tierNote": "Classified as a molecule, but its overflow panel composes Dropdown Menu (an organism, itself built from Menu + Popup) - the same deliberate, documented exception to CLAUDE.md's 'molecules compose only from atoms/primitives' rule that Tag Group already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here.",
+  "sourceFiles": {
+    "component": "avatar-group.tsx",
+    "types": "avatar-group.types.ts",
+    "styles": "avatar-group.module.css",
+    "stories": "AvatarGroup.stories.tsx",
+    "tests": "AvatarGroup.test.tsx",
+    "index": "index.ts",
+    "note": "avatar-group.module.css contains no raw values - the overlap amount, both separating rings, and the overflow trigger's forced square dimensions are all var(--...) references, including inside calc()."
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2067:119864",
+    "componentName": "avatar-group",
+    "variantCount": 12,
+    "verifiedAt": "2026-08-21",
+    "note": "Correctly named in Figma (unlike Tag Group's own tab-group typo) - filed on the file's own \"✅⏲️ Avatar Group\" page, verified directly against the file via the Desktop Bridge plugin.",
+    "structure": "12 variants cross `size` (xs/sm/md/lg, matching Avatar's own xs/sm/md/lg exactly - xxs and xl are not part of Avatar Group; default lg) x `number` (2/3/4, default 4, the count of visible avatars), plus a `showMore` boolean component property (defaultValue: true). Each variant is layoutMode HORIZONTAL with a negative itemSpacing (measured per size: xs -4, sm -4, md -8, lg -12), containing `number` `avatar` instances (each an instance-level override of the real avatar component - unmodified apart from an added separating-ring stroke, color/elevation/surface/raised/default, 1px, OUTSIDE-aligned) followed by one `dropdown-menu` instance (trigger=more-avatar, alignment=left, isOpen=false) whose trigger slot holds a `figma-parts / more-trigger` instance. That part, traced one level deeper (all 16 of its own size x state variants individually re-measured, not sampled from one), is itself a real `button` (Button) instance (appearance=subtle in code, called tone=subtle in Figma's own variant name - the same Figma-vs-code naming divergence Tag's own tone/appearance split already has) with buttonText bound to a fixed illustrative count (\"+3\"/\"+4\" depending on sample) and five instance-level overrides verified across every size/state combination: fixed square inline-size equal to its own block-size; a fully-rounded corner radius (999 on all 16); background overridden to color/elevation/surface/sunken/default - identically on all 16 variants (every size x every state, including hover/press/focus), which reads as an unfinished mockup rather than an intentional static/no-hover-feedback design, since every other interactive control in this system gives hover/press feedback; typography overridden to Body/S, M, L, L for xs/sm/md/lg (not Button's own per-size heading-based type scale - lg reuses the same Body/L style as md rather than stepping up); and padding-inline of 6/8/12/16 for xs/sm/md/lg, which for sm/md/lg happens to already equal Button's own natural per-size padding-inline default (8/12/16) - only xs (6) doesn't match Button's own default (8), and 6 isn't on the spacing scale at all. That button instance carries its own separating-ring stroke too, color/border/inverse (a different, deliberately verified token from the avatars' own ring), 1px, OUTSIDE-aligned. The nested dropdown-menu's own content slot is empty in the static file (isOpen=false, never toggled open in the source), same as Tag Group's own dropdown-menu instance.",
+    "apiAdaptationNotes": [
+      "Figma's `number` (2/3/4, a fixed illustrative axis) and `showMore` (a boolean, defaultValue true) are both replaced by a single derived `hasOverflow = avatars.length > maxVisible` boolean - the same 'closed demo becomes an open, data-driven prop' adaptation Tag Group already made for its own tab-group source. A consumer cannot set showMore inconsistently with the real truncated count, since there is no separate manual toggle.",
+      "The figma-parts / more-trigger part is not implemented as a bespoke new component - it is, verified across all 16 of its own size x state variants (not sampled from one), the real Button component with instance-level overrides (forced square inline-size, fully-rounded corner radius, a sunken-surface background instead of Button's own subtle-appearance background, and Body/S-M-L-L typography instead of Button's own per-size heading-based type scale). Code reuses Button directly (appearance=\"subtle\") and applies each override via a CSS class passed through Button's own className prop, rather than reimplementing a circular button from scratch or inventing a new Button variant.",
+      "Every one of the 16 more-trigger variants (all 4 sizes x all 4 states - default/hover/press/focus) measures the identical background fill (color/elevation/surface/sunken/default) - Figma models no visual hover/press differentiation for this part at all. Treated as an unfinished mockup rather than intentional static styling, since no other interactive control in this system omits hover/press feedback: code still differentiates hover (color/elevation/surface/sunken/hover) and press (color/elevation/surface/sunken/press) using the same token family's sibling values, which already exist for exactly this purpose.",
+      "Button's own per-size min-block-size tokens (--size-control-xs/sm/md/lg) were verified to measure identically to Avatar's own per-size tokens (--size-avatar-xs/sm/md/lg) at every one of the four shared sizes - this correspondence is what makes 'force Button's inline-size to match its own block-size' produce a circle exactly matching Avatar's own diameter, not an approximation.",
+      "The two separating-ring tokens (color-elevation-surface-raised-default around each avatar, color-border-inverse around the overflow trigger) were verified as distinct Figma variables individually, not assumed interchangeable just because both resolve to solid white in the light-mode file being inspected - using the wrong one would only surface as a visual bug in dark mode.",
+      "The overlap amount per size (xs -4, sm -4, md -8, lg -12) was measured directly rather than assumed to scale as a fixed percentage of avatar diameter (it doesn't scale perfectly - sm and xs share the same -4 value despite different diameters) - each value maps exactly onto the dedicated overlap-* semantic token family (overlap-sm/md/lg, already negative-valued), not the generic spacing-* scale, so no new token was created despite the non-uniform scaling.",
+      "maxVisible is clamped to a minimum of 1 whenever there is overflow - Figma's own component set was edited (2026-08-21) to drop its number=4 variant, leaving number=1/2/3 (each always paired with the overflow trigger, never number=0) - confirming a 'some avatars must stay visible alongside the trigger' floor is real design intent, not a code-only guess. Re-verifying the exact current number/showMore variant grid was not possible at that time - the component set was mid-edit and Figma reported 'existing errors' when reading its componentPropertyDefinitions directly (duplicate number=2 variants were found across every size). The floor behavior itself does not depend on resolving that inconsistency.",
+      "position: relative on .avatarRing and .overflowTrigger fixes a stacking-order bug verified live in a browser (not reproducible under jsdom): Avatar's own root is already position: relative, which - since neither wrapper creates its own stacking context - promotes it into .root's 'positioned' paint tier, a tier that always paints above plain static content regardless of DOM order. Button's own root is position: static, so without this the overflow trigger (last in DOM, meant to be on top) always lost to the avatar before it. Confirmed via document.elementFromPoint() at each overlap boundary both before and after the fix."
+    ]
+  },
+  "useCases": [
+    "A task's assignees, shown as a compact overlapping stack",
+    "A matter's team, bounded to a handful visible with the rest reachable through a \"+N\" trigger",
+    "An unbounded list of people with no truncation at all (maxVisible omitted)"
+  ],
+  "antiPatterns": [
+    "A single person - use Avatar directly",
+    "Non-person entities (firms, trusts, accounts) - Avatar Group inherits Avatar's own scope"
+  ],
+  "anatomy": [
+    { "name": "root", "description": "An inline-flex row where every child after the first is pulled left by a per-size negative margin, producing the overlap." },
+    { "name": "visible avatars", "description": "avatars.slice(0, maxVisible) (or every avatar, when maxVisible is omitted), each wrapped in a separating ring and rendered as a real Avatar with every one of its own props forwarded, size applied uniformly." },
+    { "name": "overflow trigger", "description": "Present only when avatars.length > maxVisible. A Button (appearance=\"subtle\"), reshaped via CSS into a circle matching Avatar's own diameter, reading overflowLabel(hiddenAvatars.length), wrapped in a DropdownMenu." },
+    { "name": "overflow panel", "description": "Dropdown Menu's Menu, one section (id: 'overflow') with one MenuItem per truncated avatar - label (name/alt/'Unnamed' fallback), a decorative leadingElement rendering that same avatar's own picture (src/name/alt/entityType all forwarded, so a truncated team entity shows the team fallback there too), and disabled mirroring that avatar's own isDisabled." }
+  ],
+  "props": {
+    "avatars": { "type": "AvatarGroupItem[]", "required": true, "default": null, "description": "Every avatar, visible and truncated. Each item is Avatar's own props (minus size) plus a required id." },
+    "maxVisible": { "type": "number", "required": false, "default": null, "description": "Once avatars.length exceeds this, only the first maxVisible avatars render - the rest are truncated behind the overflow trigger. No truncation, and no overflow trigger, when omitted." },
+    "size": { "type": "AvatarGroupSize", "required": false, "default": "lg", "enum": ["xs", "sm", "md", "lg"], "description": "Applied uniformly to every rendered avatar, including the overflow trigger." },
+    "overflowLabel": { "type": "(hiddenCount: number) => React.ReactNode", "required": false, "default": "(n) => `+${n}`", "description": "The overflow trigger's text, given the truncated count." },
+    "overflowMenuAriaLabel": { "type": "string", "required": false, "default": "`${hiddenCount} more people`", "description": "Accessible name for the overflow panel (forwarded to Dropdown Menu's aria-label, then to Menu's role=\"menu\" container)." },
+    "onOverflowAvatarSelect": { "type": "(avatar: AvatarGroupItem, event) => void", "required": false, "default": null, "description": "Called when a truncated avatar is selected from the overflow panel. Avatar Group does not navigate or close the panel on its own." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root element." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root element's class list." }
+  },
+  "sizes": ["xs", "sm", "md", "lg"],
+  "slots": [],
+  "variants": {},
+  "states": ["no-overflow", "overflow-closed", "overflow-open"],
+  "accessibility": {
+    "overflowTriggerRole": "button (Button, unmodified)",
+    "ariaExpanded": "set on the overflow trigger by Popup (via Dropdown Menu), reflecting the panel's open state",
+    "ariaControls": "set on the overflow trigger by Popup, pointing at the panel id while open",
+    "overflowPanelRole": "menu (set by Menu, via Dropdown Menu), named by overflowMenuAriaLabel",
+    "visibleAvatarAccessibility": "unchanged from Avatar's own documented accessibility - Avatar Group applies no ARIA of its own to visible avatars"
+  },
+  "keyboardInteraction": [
+    "Tab moves between visible avatars (only those with isInteractive/onClick set) and the overflow trigger, in DOM order",
+    "Enter/Space activates the overflow trigger (native button behavior, inherited from Button)",
+    "Escape closes the open overflow panel (inherited from Popup, via Dropdown Menu)",
+    "Arrow keys/Home/End/Enter navigate and activate rows inside the open overflow panel (inherited from Menu)"
+  ],
+  "behaviorRules": [
+    "hasOverflow = typeof maxVisible === 'number' && avatars.length > maxVisible - the overflow trigger renders only then.",
+    "effectiveMaxVisible = hasOverflow ? Math.max(1, maxVisible) : maxVisible - maxVisible is clamped to a minimum of 1 whenever there is overflow, so the group never renders as just the overflow trigger with zero real avatars (which would read as an anonymous count badge, not a group of people). Logs a dev-only warning when clamping occurs.",
+    "visibleAvatars = hasOverflow ? avatars.slice(0, effectiveMaxVisible) : avatars; hiddenAvatars = hasOverflow ? avatars.slice(effectiveMaxVisible) : [].",
+    "Holds exactly one piece of state (overflowOpen) to drive the overflow DropdownMenu, which is itself fully controlled.",
+    "Never calls onOverflowAvatarSelect's implied navigation automatically, and never closes the overflow panel on selection - only calls the callback itself, exactly like a Menu item's onSelect.",
+    "Every visible avatar carries the same separating ring regardless of position, including the first (nothing to separate from) - matching Figma's own uniform application.",
+    "Both .avatarRing and .overflowTrigger set position: relative so every direct child of .root lands in the same CSS paint tier - without it, the overflow trigger (position: static via Button's own root) always loses to the avatar before it regardless of DOM order, since Avatar's own root is position: relative and therefore already in the higher 'positioned' paint tier. DOM order (later child on top) then governs consistently at every junction, matching Figma's own layer order."
+  ],
+  "compositionRules": [
+    "Pass every avatar's own props (src, name, presence, isInteractive, onClick, ...) directly on each AvatarGroupItem - they forward straight to the rendered Avatar.",
+    "Do not set size per item - AvatarGroupItem omits it from Avatar's own props; Avatar Group applies one size uniformly, including to the overflow trigger.",
+    "Wire onOverflowAvatarSelect when truncated people need to be reachable (e.g. navigate to their profile) - Avatar Group does nothing with a selection on its own."
+  ],
+  "contentRules": [],
+  "responsiveRules": [
+    "The root hugs its own content width at any container size, identical to a plain inline-flex layout.",
+    "The overflow panel inherits Popup's resize/scroll-driven repositioning and touch-friendly outside-dismissal identically to Dropdown Menu."
+  ],
+  "themeRules": [
+    "Inherits Avatar's, Button's, and Dropdown Menu/Menu's token-driven theming - no component-level light/dark branching of its own."
+  ],
+  "tokens": {
+    "note": "avatar-group.module.css declares no raw values - overlap (overlap-sm/md/lg), both separating rings (color-elevation-surface-raised-default, color-border-inverse, border-width-sm), the overflow trigger's forced circle (border-radius-full-round, size-control-xs/sm/md/lg). Every other value is Avatar's, Button's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
+  },
+  "relatedComponents": ["Avatar", "Button", "DropdownMenu", "Menu", "TagGroup"],
+  "do": [
+    "Pass every avatar's own props directly on each AvatarGroupItem rather than constructing a separate Avatar element.",
+    "Wire onOverflowAvatarSelect when a truncated avatar needs to do something when selected."
+  ],
+  "dont": [
+    "Do not set size on an individual AvatarGroupItem - it is omitted from the type; set it once on AvatarGroupProps.",
+    "Do not expect selecting a truncated avatar to navigate or close the panel automatically."
+  ],
+  "acceptanceCriteria": [
+    "Renders every avatar with no overflow trigger when maxVisible is omitted or avatars.length <= maxVisible.",
+    "Renders avatars.slice(0, effectiveMaxVisible) plus an overflow trigger reading overflowLabel(hiddenCount) when avatars.length > maxVisible, where effectiveMaxVisible is maxVisible clamped to a minimum of 1.",
+    "A maxVisible of 0 or negative still renders at least one avatar alongside the overflow trigger, and logs a dev-only warning.",
+    "Activating the overflow trigger opens a role=\"menu\" panel listing every truncated avatar as a menuitem row with a decorative leading picture matching that avatar's own entityType.",
+    "Selecting a truncated avatar calls onOverflowAvatarSelect(avatar, event) and does not close the panel or perform navigation on its own.",
+    "Applies size uniformly to every visible avatar and the overflow trigger.",
+    "The overflow trigger (and every avatar past the first) visually paints on top of the avatar immediately before it, matching Figma's own layer order - verified live in a browser, not meaningfully testable under jsdom.",
+    "Supports a custom id/className on the root and a custom overflowLabel/overflowMenuAriaLabel."
+  ],
+  "knownLimitations": [
+    "No built-in virtualization - a very large avatars array renders every visible avatar eagerly, same as Menu's own sections.",
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the overflow panel (no typeahead, no built-in focus-first-item-on-open)."
+  ],
+  "futureEnhancements": [
+    "A renderAvatar/renderOverflowItem escape hatch for fully custom row content, if a real use case needs it.",
+    "A tooltip on hover listing every visible avatar's name."
+  ]
+}

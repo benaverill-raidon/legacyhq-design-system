@@ -122,7 +122,7 @@ Used for discovery, education, or guidance-oriented actions.
 
 - default
 - hover
-- pressed
+- press
 - focus
 - disabled
 - loading
@@ -236,7 +236,7 @@ Use existing semantic tokens for:
 
 ### Motion
 
-Background, border, and content color changes across hover/pressed/focus transition using the `fade-quick` semantic motion token (`--duration-fast` + `--ease-standard`):
+Background, border, and content color changes across hover/press/focus transition using the `fade-quick` semantic motion token (`--duration-fast` + `--ease-standard`):
 
 ```css
 transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
@@ -248,21 +248,28 @@ Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do no
 
 ```css
 /* xs */
-min-height: var(--size-control-xs);
+block-size: var(--size-control-xs);
 padding-inline: var(--spacing-sm);
 
 /* sm */
-min-height: var(--size-control-sm);
+block-size: var(--size-control-sm);
 padding-inline: var(--spacing-sm);
 
 /* md */
-min-height: var(--size-control-md);
+block-size: var(--size-control-md);
 padding-inline: var(--spacing-md);
 
 /* lg */
-min-height: var(--size-control-lg);
+block-size: var(--size-control-lg);
 padding-inline: var(--spacing-lg);
 ```
+
+A fixed `block-size`, not a `min-block-size` floor: at `xs`, the `heading-xs` line-height (24px)
+plus the 1px top/bottom border already sums to 26px, so a floor never actually constrains anything
+and the button rendered 2px taller than `--size-control-xs` (`sm`/`md`/`lg` never showed this, since
+their own token values comfortably exceed 26px). Fixing the size pins the box at exactly the token
+value regardless - `overflow: visible` lets a sliver of the line-box spill silently, matching
+IconButton's own already-fixed-size convention (`inline-size`/`block-size`, not `min-`).
 
 Common values:
 
@@ -285,34 +292,34 @@ Use available semantic color tokens from the theme CSS.
 ### Primary + Neutral
 
 - background: `color-background-brand-bold-default`
-- hover: `color-background-brand-bold-hovered`
-- pressed: `color-background-brand-bold-pressed`
+- hover: `color-background-brand-bold-hover`
+- pressed: `color-background-brand-bold-press`
 - content/icon: `color-content-inverse`
 
 ### Primary + Warning
 
 - background: `color-background-warning-bold-default`
-- hover: `color-background-warning-bold-hovered`
-- pressed: `color-background-warning-bold-pressed`
+- hover: `color-background-warning-bold-hover`
+- pressed: `color-background-warning-bold-press`
 - content/icon: `color-content-warning-inverse` where available, otherwise inverse token defined by theme
 
 ### Primary + Error
 
 - background: `color-background-error-bold-default`
-- hover: `color-background-error-bold-hovered`
-- pressed: `color-background-error-bold-pressed`
+- hover: `color-background-error-bold-hover`
+- pressed: `color-background-error-bold-press`
 - content/icon: `color-content-inverse`
 
 ### Primary + Discovery
 
 - background: `color-background-discovery-bold-default`
-- hover: `color-background-discovery-bold-hovered`
-- pressed: `color-background-discovery-bold-pressed`
+- hover: `color-background-discovery-bold-hover`
+- pressed: `color-background-discovery-bold-press`
 - content/icon: `color-content-inverse`
 
 ### Subtle
 
-Use neutral or semantic subtle background tokens for hover/pressed states, with default transparent/no-fill base where appropriate.
+Use neutral or semantic subtle background tokens for hover/press states, with default transparent/no-fill base where appropriate.
 
 If an exact semantic token is missing, document it and use the closest existing approved token from the generated theme files.
 
@@ -452,9 +459,9 @@ Test:
 
 Button should be built to allow future adjacent components without breaking changes:
 
-- IconButton
-- ToggleButton
-- SplitButton
-- ButtonGroup
+- IconButton (built)
+- ToggleButton (built)
+- SplitButton (built)
+- ButtonGroup (built)
 
 Do not implement these in the base Button.

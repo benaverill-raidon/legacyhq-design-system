@@ -196,7 +196,7 @@ Toggle Button / Content
 Toggle Button / EdgeCases
 ```
 
-States uses `data-force-state` to pin hover/pressed as a static reference (documentation-only, same
+States uses `data-force-state` to pin hover/press as a static reference (documentation-only, same
 convention as Button/Checkbox) - focus preview needs no extra CSS, since the shared Focus Ring
 primitive already reacts to `data-force-state="focus"` directly on this element.
 
@@ -219,7 +219,7 @@ Test:
 - custom className
 - click behavior
 - 6px icon-to-text gap at every size
-- data-force-state hover/pressed preview
+- data-force-state hover/press preview
 
 ## Do not
 

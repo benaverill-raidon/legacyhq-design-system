@@ -189,16 +189,16 @@ function FocusTestExample() {
         label="Interactive focus test"
         onStepChange={setStep}
       />
-      <span style={captionStyle}>Tab through the dots and click one to verify hover, focus, and pressed</span>
+      <span style={captionStyle}>Tab through the dots and click one to verify hover, focus, and press</span>
     </div>
   );
 }
 
 /**
  * Progress Indicator has no interactive states of its own to pin the way Button or Avatar do -
- * hover/focus/pressed apply per dot, not to the root, so this page documents the states that
+ * hover/focus/press apply per dot, not to the root, so this page documents the states that
  * actually vary: dot position, and passive versus interactive rendering. The Live group is where
- * hover/focus/pressed are verified directly, by interacting with a real instance.
+ * hover/focus/press are verified directly, by interacting with a real instance.
  */
 export const States: Story = {
   render: () => (

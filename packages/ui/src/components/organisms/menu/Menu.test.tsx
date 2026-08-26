@@ -282,19 +282,23 @@ describe('Menu', () => {
     expect(menuCss).toContain('var(--component-menu-width-sm)');
     expect(menuCss).toContain('var(--component-menu-width-md)');
     expect(menuCss).toContain('var(--component-menu-width-lg)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-hovered)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-pressed)');
-    expect(menuCss).toContain('var(--color-background-brand-primary-subtle-default)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-hover)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-press)');
+    expect(menuCss).toContain('var(--color-background-selected-default-default)');
     expect(menuCss).toContain('var(--color-content-selected)');
   });
 
-  it('uses --color-content-selected for selected text/icon, not --color-content-brand-primary-default', () => {
-    // Regression guard: color/content/selected is a genuinely distinct Figma variable from
-    // color/content/brand/primary/default (different id, own light/dark values) even though they
-    // currently resolve to the same value in both themes - code should mirror that real
-    // distinction rather than quietly reusing the brand token.
+  it('maps every selected-row token to the dedicated selected family, not the brand-primary family', () => {
+    // Re-verified against Figma's own menu-item bindings: the fill steps through
+    // color/background/selected/default/{default,hover,press}, the left indicator is
+    // color/border/selected, and the text is color/content/selected. This previously borrowed the
+    // brand-primary-subtle family, which was the closest match before a selected family existed.
     expect(menuCss).toMatch(/\.item_selected\s*\{[^}]*color:\s*var\(--color-content-selected\)/);
+    expect(menuCss).toMatch(/\.item\.item_selected[^{]*:is\(:hover, :focus-visible\)\s*\{[^}]*var\(--color-background-selected-default-hover\)/);
+    expect(menuCss).toMatch(/\.item\.item_selected[^{]*:active\s*\{[^}]*var\(--color-background-selected-default-press\)/);
     expect(menuCss).not.toContain('--color-content-brand-primary-default');
+    expect(menuCss).not.toContain('--color-background-brand-primary-subtle');
+    expect(menuCss).not.toContain('--color-border-brand-primary');
   });
 
   it("renders the selected indicator as a 2px inset left box-shadow, not a border-left, matching Figma's strokeAlign=INSIDE (padding stays unchanged)", () => {
@@ -302,7 +306,7 @@ describe('Menu', () => {
     // rows 2px to the right relative to unselected ones - Figma's own paddingLeft is identical
     // (spacing/md) whether isSelected is true or false, because the stroke paints inside the
     // existing bounds.
-    expect(menuCss).toMatch(/\.item_selected\s*\{[^}]*box-shadow:\s*inset var\(--border-width-md\) 0 0 0 var\(--color-border-brand-primary\)/);
+    expect(menuCss).toMatch(/\.item_selected\s*\{[^}]*box-shadow:\s*inset var\(--border-width-md\) 0 0 0 var\(--color-border-selected\)/);
     expect(menuCss).not.toMatch(/\.item_selected\s*\{[^}]*border-left/);
   });
 
@@ -310,9 +314,28 @@ describe('Menu', () => {
     expect(menuCss).toMatch(/\.titleRow\s*\{[^}]*gap:\s*var\(--spacing-sm\)/);
   });
 
-  it('sizes the section body padding to spacing/xs top and spacing/sm bottom, matching Figma exactly (not a uniform padding-block)', () => {
-    expect(menuCss).toMatch(/\.sectionBody\s*\{[^}]*padding-top:\s*var\(--spacing-xs\)/);
-    expect(menuCss).toMatch(/\.sectionBody\s*\{[^}]*padding-bottom:\s*var\(--spacing-sm\)/);
+  it('sizes the section body padding to a symmetric spacing/xs (4px) padding-block, matching Figma exactly', () => {
+    // Previously asymmetric (xs top / sm bottom). Figma's own `<section>/list` Container now
+    // measures paddingTop: 4, paddingBottom: 4 on every instance, so this is a single padding-block.
+    expect(menuCss).toMatch(/\.sectionBody\s*\{[^}]*padding-block:\s*var\(--spacing-xs\)/);
+    expect(menuCss).not.toMatch(/\.sectionBody\s*\{[^}]*padding-bottom:\s*var\(--spacing-sm\)/);
+  });
+
+  it('insets the menu item focus ring so it is not clipped by the horizontally-clipping scroll container', () => {
+    // A menu item is width:100% of the panel, and `.sections` (which declares only overflow-y)
+    // computes to overflow-x: auto per CSS, clipping horizontally. An outward ring had no room and
+    // got shaved on the left/right edges - offsetting inward by the ring's own width puts its outer
+    // edge flush with the row's edge instead.
+    expect(menuCss).toMatch(/\.item\s*\{[^}]*--focus-ring-offset:\s*calc\(-1 \* var\(--border-width-md\)\)/);
+  });
+
+  it('rings a standalone Avatar in the leading slot with 1px border/inverse, without touching AvatarGroup', () => {
+    // Figma's `type=avatar` elemBefore instance carries a color/border/inverse stroke at weight 1,
+    // strokeAlign OUTSIDE. The `type=avatar group` variant instead uses elevation/surface/raised,
+    // which AvatarGroup already paints itself - the direct-child combinator keeps this rule off it.
+    const rule = menuCss.match(/\.elemBefore > :global\(\[data-entity-type\]\)\s*\{([^}]*)\}/);
+
+    expect(rule?.[1]).toContain('box-shadow: 0 0 0 var(--border-width-sm) var(--color-border-inverse);');
   });
 
   it('gives elemBefore/elemAfter a fixed 24px (--size-300) box regardless of content, matching Figma exactly', () => {

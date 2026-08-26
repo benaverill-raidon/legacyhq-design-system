@@ -1,0 +1,102 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SplitButtonStories from './SplitButton.stories';
+
+<Meta of={SplitButtonStories} name="Docs" />
+
+# Split Button
+
+A split button lets people perform an action, or choose from a small group of similar actions. It
+joins a primary `Button` with a caret-only `IconButton` that opens a `Dropdown Menu` of related
+alternatives - one continuous shape, not two separate controls placed side by side.
+
+<Canvas of={SplitButtonStories.Playground} />
+
+## When to use
+
+- A primary action that has a small number of closely related alternatives - "Save" with "Save
+  as..." / "Save a copy", "Send" with "Send as draft" / "Preview before sending".
+
+## When not to use
+
+- **A single action with no alternatives.** Use Button directly.
+- **An icon-only trigger with no separate primary action.** Use Icon Button with Dropdown Menu
+  directly - Split Button always has a labeled primary segment.
+- **More than a small group of similar actions**, or actions that aren't close variations of the
+  primary one. Use Dropdown Menu on its own, or Button Group, instead.
+
+## Anatomy
+
+- **Primary action** - a real `Button` with every one of its own props (`onClick`, `isLoading`,
+  `iconBefore`/`iconAfter`, ...) forwarded through unchanged, except `appearance` (narrowed - see
+  below) and `isFullWidth` (not supported - no verified Figma variant for it).
+- **Divider** - a 1px rule between the two segments, colored by `appearance` (and overridden to
+  `color-border-disabled` when `disabled`). Internal to Split Button - not its own exported
+  component.
+- **Secondary action** - a real `IconButton` (`shape="square"`), showing a caret, wrapped in a
+  `DropdownMenu`. Its accessible name comes from `secondaryActionLabel`, which also becomes its
+  tooltip (IconButton's own existing behavior for an explicit `aria-label`).
+
+The primary action's trailing corners and the secondary action's leading corners are squared off so
+the two segments read as one continuous shape - measured directly from Figma, not an approximation.
+
+## Usage guidance
+
+### `secondaryActionLabel` is required
+
+There's no visible text on the caret segment to derive a name from, so it must be stated directly:
+
+```tsx
+<SplitButton
+  secondaryActionLabel="More Save options"
+  sections={[{ id: 'actions', items: [{ id: 'save-as', label: 'Save as...', onSelect: handleSaveAs }] }]}
+  onClick={handleSave}
+>
+  Save
+</SplitButton>
+```
+
+### `appearance` is narrower than Button's own
+
+Only `'default' | 'primary'` - Figma's own `split-button` component never shows a `'subtle'`
+variant, so it isn't exposed here. Reach for a plain `Button` (which does support `subtle`) if a
+split button's own visual weight doesn't fit either option.
+
+### The secondary action disables itself while the primary action is loading
+
+Prevents picking a different action while the primary one is still in flight - `disabled` on the
+secondary segment becomes `disabled || isLoading`, not just `disabled` on its own.
+
+<Canvas of={SplitButtonStories.EdgeCases} />
+
+### Realistic content, and every size/appearance
+
+<Canvas of={SplitButtonStories.Content} />
+<Canvas of={SplitButtonStories.Variants} />
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The primary action's own label (forwarded to Button as its own <code>children</code>).</td></tr>
+    <tr><td><code>sections</code></td><td><code>MenuSection[]</code></td><td>-</td><td>Required. The small group of related actions shown when the secondary segment opens.</td></tr>
+    <tr><td><code>secondaryActionLabel</code></td><td><code>string</code></td><td>-</td><td>Required. Accessible name (and tooltip) for the secondary segment and its panel.</td></tr>
+    <tr><td><code>appearance</code></td><td><code>'default' | 'primary'</code></td><td><code>'default'</code></td><td>Applied to both segments.</td></tr>
+    <tr><td><code>size</code></td><td><code>'xs' | 'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Applied to both segments.</td></tr>
+    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables both segments together.</td></tr>
+    <tr><td><code>isLoading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Applies to the primary action only (Button's own loading treatment); also disables the secondary action.</td></tr>
+    <tr><td><code>onClick</code></td><td><code>(event) =&gt; void</code></td><td>-</td><td>The primary action's own click handler.</td></tr>
+  </tbody>
+</table>
+
+Every other `Button` prop (`tone`, `iconBefore`, `iconAfter`, any native button attribute) forwards
+straight through to the primary action.
+
+## Related components
+
+- **Button** - the primary action.
+- **Icon Button** - the secondary (caret) action.
+- **Dropdown Menu** - the secondary action's floating panel.
+- **Menu** - the panel's content.

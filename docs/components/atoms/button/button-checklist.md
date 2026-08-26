@@ -33,7 +33,7 @@ Atom
 - Icons use the medium icon size for all button sizes.
 - Icon gap remains consistent across sizes using `spacing-075`.
 - Use shared Focus Ring utility classes instead of component-specific focus styles.
-- Use the `fade-quick` semantic motion token for hover/pressed/focus color transitions instead of a hardcoded duration/easing.
+- Use the `fade-quick` semantic motion token for hover/press/focus color transitions instead of a hardcoded duration/easing.
 - Support `isLoading` while preserving the original label width to prevent layout shift.
 - Support `isFullWidth` for layout flexibility.
 - Do not support selected/toggled behavior in the base Button.
@@ -64,7 +64,7 @@ Atom
 
 - default
 - hover
-- pressed
+- press
 - focus
 - disabled
 - loading
@@ -124,19 +124,22 @@ Use existing semantic tokens for:
 
 ## Size Reference
 
-- `xs`: min-height `24px`
-- `sm`: min-height `32px`
-- `md`: min-height `40px`
-- `lg`: min-height `48px`
+Fixed height (`block-size`, not a `min-` floor - see button-spec.md's own note on why a floor let
+xs render 2px tall):
+
+- `xs`: height `24px`
+- `sm`: height `32px`
+- `md`: height `40px`
+- `lg`: height `48px`
 
 ## Spacing Reference
 
 From Figma default tone examples:
 
-- `xs`: horizontal padding `spacing-sm`, min-height `24px`
-- `sm`: horizontal padding `spacing-sm`, min-height `32px`
-- `md`: horizontal padding `spacing-150`, min-height `40px`
-- `lg`: horizontal padding `spacing-200`, min-height `48px`
+- `xs`: horizontal padding `spacing-sm`, height `24px`
+- `sm`: horizontal padding `spacing-sm`, height `32px`
+- `md`: horizontal padding `spacing-150`, height `40px`
+- `lg`: horizontal padding `spacing-200`, height `48px`
 - icon/content gap: `spacing-075`
 - border radius: `border-radius-sm`
 - border width: `border-width-default`
@@ -160,7 +163,7 @@ Stories should document behavior, not create one story per variant permutation.
 - Button supports all sizes.
 - Button supports all appearances.
 - Button supports all tones.
-- Button supports hover, pressed, focus, disabled, and loading states.
+- Button supports hover, press, focus, disabled, and loading states.
 - Loading state preserves width.
 - Loading state prevents duplicate activation.
 - Full-width button fills its container.

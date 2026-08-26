@@ -229,10 +229,10 @@ Do not hardcode:
 
 ## Validated Figma Details
 
-- Root fill (`color-elevation-surface-raised-default`), border (`color-border-bold`), hover/pressed
-  overlay layers (`color-background-neutral-overlay-hovered`/`-pressed`), disabled border/content
+- Root fill (`color-elevation-surface-raised-default`), border (`color-border-bold`), hover/press
+  overlay layers (`color-background-neutral-overlay-hover`/`-press`), disabled border/content
   (`color-border-disabled`/`color-content-disabled`), and the focus ring color
-  (`color-border-focused`, `#003655`) all matched the existing implementation exactly - no color
+  (`color-border-focus`, `#003655`) all matched the existing implementation exactly - no color
   drift found.
 - `sm` = 24px tall, 4px corner radius; `md` = 32px tall, 8px corner radius; remove-button container
   scales 24px/32px alongside - all already correct.
@@ -244,9 +244,9 @@ Do not hardcode:
   earlier `TagTone`/Figma-properties lists were missing `brand`, which has been corrected.
 - Code's `standard` tone value was later renamed to `default` for clarity (this is now an
   intentional divergence from Figma's own `standard` variant name, not a mismatch to reconcile).
-  Its background/hover/pressed also moved from `color-elevation-surface-raised-default` plus a
-  `background-image` overlay hack to a solid `color-background-neutral-subtle-default/hovered/pressed`
-  swap, so the tone's hover/pressed transition can animate like every other tone.
+  Its background/hover/press also moved from `color-elevation-surface-raised-default` plus a
+  `background-image` overlay hack to a solid `color-background-neutral-subtle-default/hover/press`
+  swap, so the tone's hover/press transition can animate like every other tone.
 - Figma's single `state=focus` swatch shows a ring wrapping the entire tag, not a tight ring around
   just the focused sub-element - but Figma has only one `state` axis and can't represent "content
   focused" vs "remove button focused" as distinct variants. Decision: keep independent per-control
@@ -278,7 +278,7 @@ Show:
   navigational + removable)
 - `sm`/`md` side by side, confirming the icon glyph stays visually the same size at both
 - disabled tags
-- hover/pressed previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
+- hover/press previews via `data-force-state` (documentation-only, mirrors Button/Checkbox), and
   focus previews via real `autoFocus`, since content and remove are independently focusable
 - a live example verifying hover/focus/remove independence by hand
 
@@ -302,7 +302,7 @@ Test:
 - forwards ref if supported
 - custom className works
 - keeps the elemBefore/remove icon a constant 16px regardless of size
-- supports data-force-state hover/pressed preview on both the content and remove areas
+- supports data-force-state hover/press preview on both the content and remove areas
 - renders a button (not a span) when isInteractive or onClick is provided with no href/isRemovable
 - interactive tag button is natively disabled and uses the shared focus ring classes
 

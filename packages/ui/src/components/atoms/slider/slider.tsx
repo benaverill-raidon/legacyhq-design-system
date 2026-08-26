@@ -254,7 +254,7 @@ export function useSliderDragState() {
  * handling), so dragging or clicking the handle focuses the input via an explicit `.focus()` call
  * rather than the browser's own click-to-focus behavior. Because the clicked element and the
  * focused element are never the same node, Chromium's `:focus-visible` heuristic can't recognize
- * this as an ordinary mouse-focused control and defaults to treating it as keyboard-style focus -
+ * this as an ordinary mouse-focus control and defaults to treating it as keyboard-style focus -
  * showing a focus ring on a plain click or drag. `markPointerFocusPending` records that the next
  * focus event on this input originated from our own pointer handling, so the ring can be
  * suppressed for that session; any real keyduwn while focused clears it again, since the user is

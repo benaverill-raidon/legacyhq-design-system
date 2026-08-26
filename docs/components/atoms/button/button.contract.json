@@ -148,25 +148,25 @@
   "sizes": [
     {
       "name": "xs",
-      "minHeightToken": "--size-control-xs",
+      "heightToken": "--size-control-xs",
       "paddingInlineToken": "--spacing-sm",
       "radiusToken": "--border-radius-sm"
     },
     {
       "name": "sm",
-      "minHeightToken": "--size-control-sm",
+      "heightToken": "--size-control-sm",
       "paddingInlineToken": "--spacing-sm",
       "radiusToken": "--border-radius-lg"
     },
     {
       "name": "md",
-      "minHeightToken": "--size-control-md",
+      "heightToken": "--size-control-md",
       "paddingInlineToken": "--spacing-md",
       "radiusToken": "--border-radius-lg"
     },
     {
       "name": "lg",
-      "minHeightToken": "--size-control-lg",
+      "heightToken": "--size-control-lg",
       "paddingInlineToken": "--spacing-lg",
       "radiusToken": "--border-radius-xl"
     }
@@ -174,7 +174,7 @@
   "states": [
     "default",
     "hover",
-    "pressed",
+    "press",
     "focus",
     "disabled",
     "loading"
@@ -361,7 +361,7 @@
     "Supports iconAfter.",
     "Supports isFullWidth.",
     "Applies shared focus ring classes.",
-    "Uses component min-height tokens.",
+    "Uses a fixed block-size per size, keyed to semantic size-control tokens (not a min- floor).",
     "Uses semantic spacing, typography, border, and color tokens.",
     "Does not use MUI.",
     "Does not use Tailwind."

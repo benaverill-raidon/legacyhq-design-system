@@ -1,0 +1,71 @@
+.root {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/*
+ * The primary action's trailing corners and the secondary action's leading corners are squared off
+ * so the two segments read as one continuous shape with the divider sitting flush between them -
+ * measured directly from Figma (topLeft/bottomLeft: 12, topRight/bottomRight: 0 on the button at
+ * size=lg; the exact mirror on the secondary action). Logical properties keep this RTL-safe.
+ *
+ * Each segment's own border is also suppressed on that same interior edge (Figma's own button
+ * instance measures strokeRightWeight: 0, its secondary-action/icon-button instance measures
+ * strokeLeftWeight: 0 - both mirror the squared-corner sides exactly) so the divider is the only
+ * thing drawing that seam. Without this, Button's/IconButton's own 1px border on that edge stacks
+ * with the divider into a visibly wide double line.
+ */
+.primaryAction {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  border-inline-end-width: 0;
+}
+
+.secondaryAction {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-inline-start-width: 0;
+}
+
+.divider {
+  display: inline-block;
+  flex: none;
+  inline-size: var(--border-width-sm);
+}
+
+.divider[data-disabled='true'] {
+  background-color: var(--color-border-disabled);
+}
+
+.appearance_default .divider:not([data-disabled='true']) {
+  background-color: var(--color-border-input);
+}
+
+/*
+ * --color-content-brand-primary-subtle, not --color-border-brand-primary: the primary button's own
+ * background is --color-background-brand-primary-bold-default, which resolves to the exact same
+ * prussian-900 primitive as --color-border-brand-primary - a same-color-on-same-color divider that
+ * disappears. The subtle/light tint is what Figma's own divider fill actually uses here, the same
+ * "needs the subtle brand color for contrast against a bold fill" reuse Slider's own active
+ * track-stop dot already establishes (see slider.module.css) - not a text color repurposed by
+ * coincidence.
+ */
+.appearance_primary .divider:not([data-disabled='true']) {
+  background-color: var(--color-content-brand-primary-subtle);
+}
+
+.size_xs .divider {
+  block-size: var(--size-control-xs);
+}
+
+.size_sm .divider {
+  block-size: var(--size-control-sm);
+}
+
+.size_md .divider {
+  block-size: var(--size-control-md);
+}
+
+.size_lg .divider {
+  block-size: var(--size-control-lg);
+}

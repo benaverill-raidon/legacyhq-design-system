@@ -175,8 +175,8 @@ export const States: Story = {
             Client profile
           </Link>
         </Cell>
-        <Cell label="Pressed">
-          <Link href="/clients" data-force-state="active">
+        <Cell label="Press">
+          <Link href="/clients" data-force-state="press">
             Client profile
           </Link>
         </Cell>

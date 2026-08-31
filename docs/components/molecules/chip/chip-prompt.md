@@ -61,7 +61,7 @@ No changes to Dropdown Menu, Menu, or Focus Ring are needed.
 
 Props are a **discriminated union on `mode`** - not one interface with everything optional. The three
 modes differ structurally, so the union makes illegal states unrepresentable (`sections` cannot reach
-a scope chip; `onSelectedChange` cannot reach a property chip; `value` is required exactly where it
+a search chip; `onSelectedChange` cannot reach a select chip; `value` is required exactly where it
 means something). See `chip-spec.md` for the full type definitions.
 
 Defaults:
@@ -78,9 +78,9 @@ isSelected = false // scope only
 
 - Render the root as an `inline-flex` row with `align-items: stretch` and **no gap**, carrying
   `data-mode`, `data-size`, and `data-disabled`.
-- `mode="scope"`: the label segment is the control - a native `<button>` with
+- `mode="search"`: the label segment is the control - a native `<button>` with
   `aria-pressed={isSelected}`, calling `onSelectedChange(!isSelected)`. No remove button, no dropdown.
-- `mode="property"`: a plain non-interactive `<span>` label segment plus a remove button.
+- `mode="select"`: a plain non-interactive `<span>` label segment plus a remove button.
 - `mode="filter"`: a plain non-interactive `<span>` label segment, an optional operator segment, a
   required value segment, and a remove button.
 - **Each dropdown segment must own its own `open` state internally.** Figma models the operator and
@@ -94,13 +94,13 @@ isSelected = false // scope only
 - Default the remove button's accessible name to `` `Remove ${label}` `` when `label` is a string,
   otherwise `Remove`.
 - `size` and `disabled` apply to every segment together - no per-segment mixing exists in Figma.
-- Never interpret a selection: a panel row's own `onSelect` fires, and scope selection calls
+- Never interpret a selection: a panel row's own `onSelect` fires, and search selection calls
   `onSelectedChange`. Same "never assume" rule Menu and Dropdown Menu follow.
 - Do not expose `tone` - chip-base supports five tones but all 14 chip variants use `tone=default`.
 - Keep `elemBefore` and `valuePreview` decorative (`aria-hidden`), in fixed 16px boxes.
 - Give the label segment (chip-base) **no hover or press treatment in any mode** - a deliberate
   product decision, even though Figma models a state axis there. Interaction fills belong to the
-  operator, value, and remove segments. Narrow `ChipScopeProps['data-force-state']` to `'focus'`
+  operator, value, and remove segments. Narrow `ChipSearchProps['data-force-state']` to `'focus'`
   accordingly, so a hover/press value cannot silently no-op.
 - Wrap the remove button in `<Tooltip content="Remove">` **only when the chip is enabled** - render the
   bare button when disabled. Do not just pass `disabled` to Tooltip: that suppresses the popup but
@@ -111,7 +111,7 @@ isSelected = false // scope only
   by pointer and keyboard.
 - **No segment may be wrapped.** Every segment must be a direct child of the root - any wrapper
   (Tooltip, a positioning div, anything rendering DOM) breaks the seam and corner rules.
-- Each scope chip is an independent on/off toggle - never coordinate siblings. One-of-N behaviour
+- Each search chip is an independent on/off toggle - never coordinate siblings. One-of-N behaviour
   belongs to the consumer holding the state, exactly as with Toggle Button.
 
 ---
@@ -127,7 +127,7 @@ isSelected = false // scope only
   segment, not just the leading one: that is what keeps the line 1px where two middle segments meet
   (an operator and a value side by side, as on a due-date filter).
 - **Corners:** round only the outer ones, via `.segment:first-child` (leading) and
-  `.segment:last-child` (trailing), using CSS logical properties. A one-segment scope chip then takes
+  `.segment:last-child` (trailing), using CSS logical properties. A one-segment search chip then takes
   the full round on both ends with no special case.
 - Sizes: `block-size` `--size-control-xs` / `--size-control-sm`; `padding-inline` `--measurement-6` /
   `--spacing-sm`. The remove button's padding-inline is asymmetric - `4 / 6` at sm and `6 / 8` at md
@@ -135,7 +135,7 @@ isSelected = false // scope only
 - `.labelSegment` is `--color-content-subtle`; `.operatorSegment`/`.valueSegment` are
   `--color-content-default`.
 - Scope-mode rule must set **only `cursor`**. An earlier revision also set `color` there, which at
-  (0,2,0) outweighed `.selected`'s (0,1,0) and silently kept selected scope chips on
+  (0,2,0) outweighed `.selected`'s (0,1,0) and silently kept selected search chips on
   `content/subtle`. Let `.labelSegment` supply the unselected color and `.selected` override it.
 - Selected: `--color-border-selected` / `--color-background-selected-default-default` /
   `--color-content-selected`. No hover/press ramp - selection is a selection state, not an
@@ -163,7 +163,7 @@ isSelected = false // scope only
 - Modes (all three, realistic content, plus a live selectable scope row)
 - WithOperator (the operator segment)
 - Sizes (both sizes across all three modes)
-- States (scope unselected/selected x focus/disabled via `data-force-state="focus"` - there is no
+- States (search unselected/selected x focus/disabled via `data-force-state="focus"` - there is no
   hover/press on the label by design - plus a filter showing the interactive segments keep their fills)
 - Content (a realistic, removable filter bar)
 - EdgeCases (long label/value truncation, no `elemBefore`, dark surface)
@@ -174,7 +174,7 @@ isSelected = false // scope only
 
 See the list in `chip-spec.md`. Beyond behavior, include CSS regression guards for: one 1px line per
 junction, outer-corners-only rounding, the selected token family with focus sharing the hover fill,
-the neutral-subtle resting family, the scope-rule-must-not-set-color specificity trap, and
+the neutral-subtle resting family, the search-rule-must-not-set-color specificity trap, and
 disabled-fully-overrides-selected.
 
 ---

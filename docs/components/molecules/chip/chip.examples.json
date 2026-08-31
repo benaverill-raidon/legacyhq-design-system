@@ -22,14 +22,14 @@
     {
       "name": "An applied property",
       "description": "The value is the label, so there is nothing to open - the only affordance is removing it.",
-      "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
-      "props": { "mode": "property" }
+      "jsx": "<Chip mode=\"select\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
+      "props": { "mode": "select" }
     },
     {
       "name": "A selectable search scope",
-      "description": "scope is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
-      "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"scope\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
-      "props": { "mode": "scope" }
+      "description": "search is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
+      "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"search\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
+      "props": { "mode": "search" }
     },
     {
       "name": "Smaller size for a dense filter bar",
@@ -47,22 +47,22 @@
   "antiExamples": [
     {
       "name": "Using Chip as a plain label",
-      "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => {}} />",
-      "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for scope), and `onRemove` is required for property/filter precisely because every verified Figma variant has one."
+      "jsx": "<Chip mode=\"select\" label=\"Trusts\" onRemove={() => {}} />",
+      "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for search), and `onRemove` is required for select/filter precisely because every verified Figma variant has one."
     },
     {
-      "name": "Passing filter props to a scope chip",
-      "jsx": "<Chip mode=\"scope\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
-      "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the scope branch, so TypeScript rejects this at compile time rather than silently ignoring them."
+      "name": "Passing filter props to a search chip",
+      "jsx": "<Chip mode=\"search\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
+      "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the search branch, so TypeScript rejects this at compile time rather than silently ignoring them."
     },
     {
       "name": "Putting an interactive control in elemBefore or valuePreview",
-      "jsx": "<Chip mode=\"scope\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
-      "reason": "Both slots are decorative and aria-hidden. In scope mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
+      "jsx": "<Chip mode=\"search\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
+      "reason": "Both slots are decorative and aria-hidden. In search mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
     },
     {
       "name": "Expecting a tone prop",
-      "jsx": "<Chip mode=\"property\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
+      "jsx": "<Chip mode=\"select\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
       "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
     }
   ]

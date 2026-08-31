@@ -14,7 +14,7 @@ afterEach(cleanup);
 
 function scopeChips(count: number) {
   return Array.from({ length: count }, (_, index) => (
-    <Chip key={index} mode="scope" label={`Scope ${index + 1}`} />
+    <Chip key={index} mode="search" label={`Scope ${index + 1}`} />
   ));
 }
 
@@ -48,8 +48,8 @@ describe('ChipGroup', () => {
   it("lets an individual Chip's own size win over the group's", () => {
     render(
       <ChipGroup size="sm">
-        <Chip mode="scope" label="Inherits" />
-        <Chip mode="scope" label="Overrides" size="md" />
+        <Chip mode="search" label="Inherits" />
+        <Chip mode="search" label="Overrides" size="md" />
       </ChipGroup>,
     );
 
@@ -60,8 +60,8 @@ describe('ChipGroup', () => {
   it('leaves Chips on their own default when the group sets no size', () => {
     render(
       <ChipGroup>
-        <Chip mode="scope" label="Default" />
-        <Chip mode="scope" label="Explicit" size="sm" />
+        <Chip mode="search" label="Default" />
+        <Chip mode="search" label="Explicit" size="sm" />
       </ChipGroup>,
     );
 
@@ -78,10 +78,10 @@ describe('ChipGroup', () => {
     render(
       <ChipGroup size="sm">
         <Tooltip content="Wrapped">
-          <Chip mode="scope" label="Through a tooltip" />
+          <Chip mode="search" label="Through a tooltip" />
         </Tooltip>
         <>
-          <Chip mode="scope" label="Through a fragment" />
+          <Chip mode="search" label="Through a fragment" />
         </>
       </ChipGroup>,
     );
@@ -105,7 +105,7 @@ describe('ChipGroup', () => {
       return (
         <ChipGroup size="md">
           {['a', 'b'].map((id) => (
-            <Chip key={id} mode="scope" label={id} isSelected={on.includes(id)} onSelectedChange={() => toggle(id)} />
+            <Chip key={id} mode="search" label={id} isSelected={on.includes(id)} onSelectedChange={() => toggle(id)} />
           ))}
         </ChipGroup>
       );

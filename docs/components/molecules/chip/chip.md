@@ -9,9 +9,9 @@ component with one mental model.
 ## When to use
 - **`mode="filter"`** - an active filter across one property, where the value is editable in place.
   Most often several of these sit in a row above a task list: status, assignee, due date.
-- **`mode="property"`** - a single already-applied property. The value *is* the label, so there is
+- **`mode="select"`** - a single already-applied property. The value *is* the label, so there is
   nothing to open; the only affordance is removing it.
-- **`mode="scope"`** - narrowing a search to a broader category than a single property
+- **`mode="search"`** - narrowing a search to a broader category than a single property
   (Everything / Matters / Documents / People). Selectable rather than removable.
 
 ## When not to use
@@ -29,7 +29,7 @@ label segment and remove button are Chip's own, and every dropdown-backed segmen
 [Dropdown Menu](../../organisms/dropdown-menu/dropdown-menu.md).
 
 The real Figma source (`chip`, on the file's own "✅⏲️ Chip" page) is one component set with four
-axes - `mode` (filtering/scope/property), `size` (`sm (24)` / `md (32)`), `filter type`, and
+axes - `mode` (filter/select/search), `size` (`sm (24)` / `md (32)`), `filter type`, and
 `isSelected` - of which only 14 of 60 combinations exist. Every variant is a horizontal row of
 segment instances with `itemSpacing: 0`, joined by squared interior corners into one pill: the same
 construction Split Button uses.
@@ -40,20 +40,20 @@ construction Split Button uses.
 | mode | segments | interactive parts |
 |---|---|---|
 | `filter` | label + optional operator + value + remove | operator, value, remove |
-| `property` | label + remove | remove |
-| `scope` | label only | the label itself |
+| `select` | label + remove | remove |
+| `search` | label only | the label itself |
 
-`scope` is the only mode whose label segment is itself a control, and the only one Figma gives an
+`search` is the only mode whose label segment is itself a control, and the only one Figma gives an
 unselected state - so it renders as a real toggle button carrying `aria-pressed`, and its selected
-state is exactly what the `selected` token family exists for. Each scope chip is an **independent
+state is exactly what the `selected` token family exists for. Each search chip is an **independent
 on/off toggle**, not a radio group: several can be on at once, and Chip never coordinates siblings.
-In `filter` and `property` the label is a plain non-interactive span: it *names* the property rather
+In `filter` and `select` the label is a plain non-interactive span: it *names* the property rather
 than acting on it, which is also why it uses the subtler `content/subtle` text while the value and
 operator segments use `content/default`.
 
 **The label segment has no hover or press treatment in any mode.** Figma models a state axis on
 `chip-base`, but skipping it is deliberate: a passive label shouldn't light up as though it does
-something, and for `scope` the selected/unselected distinction is already the feedback. Interaction
+something, and for `search` the selected/unselected distinction is already the feedback. Interaction
 fills belong to the segments that act - the operator, the value, and remove. The label's icon
 inherits the label's own colour, so it tracks subtle → selected → disabled with the text.
 
@@ -68,13 +68,13 @@ Every real control is a native `<button>` with the shared Focus Ring, and the fo
 lifted above its neighbours so the ring is never clipped by the segment beside it. The remove button
 carries a "Remove" tooltip on hover and focus - supplementary only, since its `aria-label` is the real
 accessible name - and both the tooltip and the button itself are suppressed when the chip is disabled.
-`scope` carries `aria-pressed` (Toggle Button's semantics, not a checkbox or a link). Dropdown
+`search` carries `aria-pressed` (Toggle Button's semantics, not a checkbox or a link). Dropdown
 segments get
 `aria-expanded`/`aria-controls` from Popup via Dropdown Menu, and each panel is named from the
 property and the segment's role ("Due date operator", "Due date value") rather than from the segment's
 own label - the label is the *current value* ("on", "March 2"), which names a panel poorly.
 `elemBefore` and `valuePreview` are both `aria-hidden`: the label and value text already carry the
-meaning, and in scope mode the segment is already a button, so nesting anything focusable would be
+meaning, and in search mode the segment is already a button, so nesting anything focusable would be
 invalid HTML.
 
 ## Related

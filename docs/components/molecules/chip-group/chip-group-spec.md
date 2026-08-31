@@ -104,8 +104,8 @@ No fill, no stroke, no radius. The group contributes exactly one token reference
 
 - **No overflow or truncation.** Figma models none; all ten chips in every variant are plain, equal
   siblings. Chip Group is not Tag Group with chips in it.
-- **No selection management.** Figma's variants are all `isSelected=false` scope chips, and scope
-  chips are independent on/off toggles, so one-of-N coordination belongs to the consumer holding the
+- **No selection management.** Figma's variants are all `isSelected=false` search chips, which are
+  independent on/off toggles, so one-of-N coordination belongs to the consumer holding the
   state - exactly as with Toggle Button.
 - **No roving tabindex.** The chips are independent controls, not one composite widget, so each
   Chip's own controls stay individually tabbable.
@@ -146,7 +146,7 @@ applies its size to every Chip inside
 lets an individual Chip's own size win over the group's
 leaves Chips on their own default when the group sets no size
 reaches a Chip through a wrapper (the reason this uses context, not cloneElement)
-does not manage selection - each scope Chip stays independent
+does not manage selection - each search Chip stays independent
 is announced as a group only when it has an accessible name
 forwards a ref and passes native div attributes through
 supports a custom className alongside its own

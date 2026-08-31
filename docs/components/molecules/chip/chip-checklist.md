@@ -12,7 +12,7 @@ Molecule (see "Tier exception" below - `mode="filter"` composes Dropdown Menu, a
 - Tag (the plain, non-removable label Chip should not replace)
 - Tag Group (a truncating group of tags)
 - Dropdown Menu / Menu (the operator and value panels)
-- Toggle Button (the same `aria-pressed` selection semantics `scope` uses)
+- Toggle Button (the same `aria-pressed` selection semantics `search` uses)
 - Split Button (the same segmented-pill construction)
 - Avatar / Avatar Group (common `valuePreview` content)
 
@@ -37,8 +37,8 @@ mapping in one place instead of three.
 
 ### Where will this component be used?
 - Filter bars above task lists and matter lists (`filter`)
-- Record detail views showing applied properties (`property`)
-- Search interfaces, scoping before or during a query (`scope`)
+- Record detail views showing applied properties (`select`)
+- Search interfaces, scoping before or during a query (`search`)
 
 ### When should this component NOT be used?
 - A plain, non-removable label - use Tag
@@ -61,8 +61,8 @@ each take a `MenuSection[]`, the same shape Menu and Dropdown Menu already use.
 
 ### Mode
 - `filter` - label + optional operator + value + remove
-- `property` - label + remove
-- `scope` - label only, selectable
+- `select` - label + remove
+- `search` - label only, selectable
 
 ### Size
 - `sm` (24px), `md` (32px, default)
@@ -82,11 +82,11 @@ selected uses the `selected` family (`color-background-selected-default-default/
 Required:
 - Default, focus, disabled (every mode)
 - Hover and press on the **interactive segments only** - operator, value, remove
-- Selected (`scope` only)
+- Selected (`search` only)
 
 Not required:
 - Hover or press on the label segment (chip-base) in any mode. Figma models a state axis there, but
-  the label is a passive span in filter/property, and in scope the selected/unselected distinction is
+  the label is a passive span in filter/select, and in scope the selected/unselected distinction is
   the feedback. Deliberate product decision.
 - A blended selected+disabled treatment - Figma models no selected+disabled chip-base variant, so
   disabled fully overrides selected.
@@ -100,12 +100,12 @@ Yes, entirely inherited. Every control is a native `<button>`: Tab moves between
 Enter/Space activates, Escape closes an open panel (Popup), and arrow keys navigate panel rows (Menu).
 
 ### What ARIA is applied?
-`aria-pressed` on a `scope` chip; `aria-expanded`/`aria-controls` on dropdown segments (from Popup);
+`aria-pressed` on a `search` chip; `aria-expanded`/`aria-controls` on dropdown segments (from Popup);
 `role="menu"` with an accessible name on each panel; an accessible name on the remove button;
 `aria-hidden` on `elemBefore` and `valuePreview`.
 
 ### Is this an interactive component?
-Yes, but which parts are interactive depends on the mode - in `filter`/`property` the label segment is
+Yes, but which parts are interactive depends on the mode - in `filter`/`select` the label segment is
 a plain span, not a control.
 
 ---
@@ -130,12 +130,12 @@ Button already established (see their own `tierNote`s) - not re-derived here.
 
 Final implementation decisions:
 - **One `Chip` export, props as a discriminated union on `mode`.** The three modes differ
-  structurally, so a single all-optional interface would let `<Chip mode="scope" sections={...} />`
+  structurally, so a single all-optional interface would let `<Chip mode="search" sections={...} />`
   compile and silently do nothing. This is the first component in the system to use a discriminated
   union for its props; the alternative considered and rejected was three separate exports, which
   diverges from Figma's single component set and triples the public surface.
-- **Figma's `filtering` is `filter` in code** - a noun, consistent with its sibling values `property`
-  and `scope`. Same class of deliberate naming fix as `tab-group` -> `TagGroup`.
+- **Figma's `filter` is `filter` in code** - a noun, consistent with its sibling values `select`
+  and `search`. Same class of deliberate naming fix as `tab-group` -> `TagGroup`.
 - **Figma's `filter type` axis is not modeled.** Its four values (status/context/assignee/due date)
   differ only in data, with one structural exception: `due date` has an operator segment. Code
   exposes that fact as an optional `operator` prop, so any filter can carry a comparison and a fifth
@@ -143,10 +143,10 @@ Final implementation decisions:
 - **Each dropdown segment owns its own open state**, matching Figma - the operator and value are two
   independent `dropdown-menu` instances with their own `isOpen`. One shared flag on Chip would make
   them fight.
-- **`onRemove` is required for `filter` and `property`.** Every verified chip-level variant of both
+- **`onRemove` is required for `filter` and `select`.** Every verified chip-level variant of both
   carries a remove button; chip-base's `isRemovable=false` variants exist only at the part level, and
   a non-removable label is Tag's job.
-- **`scope` renders as a real toggle button with `aria-pressed`** - it is the only mode whose label
+- **`search` renders as a real toggle button with `aria-pressed`** - it is the only mode whose label
   segment is itself a control, and the only one Figma gives an unselected state.
 - **Panel accessible names are composed** (`${label} operator` / `${label} value`) rather than taken
   from the segment label, which is the current value ("on", "March 2") and names a panel poorly.
@@ -158,7 +158,7 @@ Final implementation decisions:
 - **No interaction states on the label segment (chip-base), in any mode.** Figma models a
   hover/press/focus axis there; skipping it is a deliberate product decision. Interaction fills belong
   to the segments that act - operator, value, remove. Consequences: nothing in Chip consumes
-  `--color-background-selected-default-hover`/`-press`, and `ChipScopeProps['data-force-state']`
+  `--color-background-selected-default-hover`/`-press`, and `ChipSearchProps['data-force-state']`
   narrows to `'focus'` only so a hover/press value cannot silently no-op.
 - **The label icon inherits the label colour** via the same `:global([data-color])` override Button
   uses, so it tracks subtle -> selected -> disabled with the text. Deliberately not applied to
@@ -171,12 +171,12 @@ Final implementation decisions:
   cannot be removed is misleading, not explanatory). The button's `aria-label` remains the accessible
   name, so the tooltip is never the sole one. `disabled` disables the remove button itself, so removal
   is impossible by pointer and keyboard alike.
-- **Scope chips toggle independently.** Not a radio group - several can be on at once, and Chip never
+- **Search chips toggle independently.** Not a radio group - several can be on at once, and Chip never
   coordinates siblings. One-of-N belongs to the consumer, exactly as with Toggle Button.
 
 ### Bugs caught during live verification
 
-- `.mode_scope .segment { color }` at (0,2,0) outweighed `.selected` at (0,1,0), so **selected scope
+- `.mode_search .segment { color }` at (0,2,0) outweighed `.selected` at (0,1,0), so **selected search
   chips silently rendered `content/subtle` text** instead of `content/selected`. The rule now sets
   only `cursor`; `.labelSegment` supplies the unselected color and `.selected` legitimately overrides
   it. Regression-guarded.
@@ -203,7 +203,7 @@ Final implementation decisions:
 - Parts: `chip-base` (`3662:7444`), `value` (`3662:25295`), `operator` (`3662:25209`),
   `remove-button` (`3662:25128`), `property-value` (`3661:41493`), `elemBefore` (`1978:50905`).
 - Segment radii measured per side: leading `[999, 0, 0, 999]`, middle `[0, 0, 0, 0]`, trailing
-  `[0, 999, 999, 0]`. Outer radius 999 on filtering/property.
+  `[0, 999, 999, 0]`. Outer radius 999 on filter/select.
 - Heights 24 (sm) / 32 (md); padding-inline 6 / 8; remove-button padding-inline 4/6 and 6/8; gap 4.
 - Per-side strokes: chip-base `[1, 0, 1, 1]`, every following segment all-1, `strokeAlign: INSIDE`.
 - `value`'s trigger holds a `property-value` preview (type=avatar | avatar group | task status |

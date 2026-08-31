@@ -1,14 +1,36 @@
 import * as React from 'react';
 import { CloseIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
+import { Avatar } from '../../atoms/avatar';
+import type { AvatarProps } from '../../atoms/avatar';
 import { Tooltip } from '../../atoms/tooltip';
 import { DropdownMenu } from '../../organisms/dropdown-menu';
 import { useChipSize } from './chip-size-context';
 import styles from './chip.module.css';
-import type { ChipProps, ChipSegment } from './chip.types';
+import type { ChipProps, ChipSegment, ChipSize } from './chip.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
+}
+
+/**
+ * The `elemBefore` leading avatar is sized to the chip, matching Figma's own elemBefore part
+ * (`element=avatar, size=sm` = 16px, `size=md` = 24px). An Avatar otherwise defaults to `xs` (24px),
+ * which is right for md but oversized for sm - so map the chip size to the avatar size and clone.
+ * Icons (always 16px in Figma's `element=icon` variant) and every other node pass through untouched.
+ * The `.elemBefore` box hugs whatever this produces.
+ *
+ * Deliberately NOT applied to `valuePreview`: that slot is an open, content-hugging preview (an
+ * Avatar Group, status icons, ...) whose size the consumer controls - see the `.preview` note in the
+ * CSS. Only the fixed leading slot is normalized.
+ */
+const LEADING_AVATAR_SIZE: Record<ChipSize, NonNullable<AvatarProps['size']>> = { sm: 'xxs', md: 'xs' };
+
+function fitChipLeadingAvatar(node: React.ReactNode, chipSize: ChipSize): React.ReactNode {
+  if (React.isValidElement(node) && node.type === Avatar) {
+    return React.cloneElement(node as React.ReactElement<AvatarProps>, { size: LEADING_AVATAR_SIZE[chipSize] });
+  }
+  return node;
 }
 
 function defaultRemoveAriaLabel(label: React.ReactNode, explicit?: string) {
@@ -92,7 +114,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
     <>
       {elemBefore ? (
         <span className={styles.elemBefore} aria-hidden="true">
-          {elemBefore}
+          {fitChipLeadingAvatar(elemBefore, size)}
         </span>
       ) : null}
       <span className={styles.label}>{label}</span>
@@ -100,12 +122,12 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
   );
 
   /*
-   * `scope` is the only mode whose label segment is itself the control - Figma gives it the only
+   * `search` is the only mode whose label segment is itself the control - Figma gives it the only
    * unselected variants, and its selected state is what the `selected` token family exists for. It
    * is a real toggle button (aria-pressed), the same semantics Toggle Button uses, rather than a
    * checkbox or a link.
    */
-  if (props.mode === 'scope') {
+  if (props.mode === 'search') {
     const { isSelected = false, onSelectedChange, 'data-force-state': dataForceState } = props;
 
     return root(
@@ -129,7 +151,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
   }
 
   /*
-   * `filter` and `property` share the same leading label segment: a plain, non-interactive span.
+   * `filter` and `select` share the same leading label segment: a plain, non-interactive span.
    * Only the dropdown segments and the remove button are real controls, matching Figma - the label
    * names the property, it does not act on it.
    */
@@ -165,7 +187,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
    */
   const removeButton = disabled ? removeControl : <Tooltip content="Remove">{removeControl}</Tooltip>;
 
-  if (props.mode === 'property') {
+  if (props.mode === 'select') {
     return root(
       <>
         <span className={mergeClassNames(styles.segment, styles.labelSegment)}>{labelContent}</span>

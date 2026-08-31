@@ -1,19 +1,19 @@
 import type * as React from 'react';
 import type { MenuSection } from '../../organisms/menu';
 
-export type ChipMode = 'filter' | 'property' | 'scope';
+export type ChipMode = 'filter' | 'select' | 'search';
 
 export type ChipSize = 'sm' | 'md';
 
 /** Shared by all three modes - the leading label segment plus geometry. */
 interface ChipCommonProps {
-  /** The leading segment's text: the property name (`filter`/`property`) or the scope name (`scope`). */
+  /** The leading segment's text: the property name (`filter`/`select`) or the search-scope name (`search`). */
   label: React.ReactNode;
   /**
    * Decorative slot before the label - an Icon or Avatar, matching Figma's own
-   * `figma-parts / elemBefore` (element=icon|avatar) at a fixed 16px box. Never an interactive
-   * control: in `scope` mode the whole segment is already a button, so nesting a focusable element
-   * inside it would be invalid HTML.
+   * `figma-parts / elemBefore` (element=icon|avatar). An Avatar is sized to the chip (sm 16px, md
+   * 24px). Never an interactive control: in `search` mode the whole segment is already a button, so
+   * nesting a focusable element inside it would be invalid HTML.
    */
   elemBefore?: React.ReactNode;
   /**
@@ -40,16 +40,16 @@ export interface ChipSegment {
 }
 
 /**
- * `scope` - a selectable search scope. The only mode Figma gives an unselected state, and the only
+ * `search` - a selectable search scope. The only mode Figma gives an unselected state, and the only
  * one whose label segment is itself the interactive control (a real toggle button).
  *
- * Each scope chip is an independent on/off toggle - it is not a radio group. Several can be on at
+ * Each search chip is an independent on/off toggle - it is not a radio group. Several can be on at
  * once, and turning one on does not turn another off; that coordination (if any) belongs to the
  * consumer holding the state, the same way Toggle Button works.
  */
-export interface ChipScopeProps extends ChipCommonProps {
-  mode: 'scope';
-  /** Selected scopes carry the `selected` token family; unselected ones read as a plain chip. */
+export interface ChipSearchProps extends ChipCommonProps {
+  mode: 'search';
+  /** Selected search chips carry the `selected` token family; unselected ones read as a plain chip. */
   isSelected?: boolean;
   /** Called with this chip's next on/off value when it is activated. */
   onSelectedChange?: (isSelected: boolean) => void;
@@ -63,10 +63,11 @@ export interface ChipScopeProps extends ChipCommonProps {
   'data-force-state'?: 'focus';
 }
 
-/** `property` - one already-applied property, with a remove affordance. No dropdowns. */
-export interface ChipPropertyProps extends ChipCommonProps {
-  mode: 'property';
-  /** Every verified Figma `property` chip carries a remove button, so this is required. */
+/** `select` - one already-applied selection/property, with a remove affordance. No dropdowns. (This
+ * is the chip a Select renders for each multi-select value.) */
+export interface ChipSelectProps extends ChipCommonProps {
+  mode: 'select';
+  /** Every verified Figma `select` chip carries a remove button, so this is required. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
   /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string. */
   removeAriaLabel?: string;
@@ -78,6 +79,13 @@ export interface ChipPropertyProps extends ChipCommonProps {
  */
 export interface ChipFilterProps extends ChipCommonProps {
   mode: 'filter';
+  /**
+   * Filter chips exist only at `md` in Figma - the `sm` filter variants were removed (`select` and
+   * `search` keep both sizes). Narrowed here so an explicit `size="sm"` on a filter chip is a type
+   * error. Note this does not override a `sm` inherited from an enclosing Chip Group; a filter chip
+   * is not expected inside a `sm` group.
+   */
+  size?: 'md';
   /** The current value segment and the menu it opens. */
   value: ChipSegment;
   /**
@@ -94,6 +102,6 @@ export interface ChipFilterProps extends ChipCommonProps {
 
 /**
  * Discriminated on `mode`, so props that only make sense for one use are rejected for the others -
- * `sections` cannot reach a scope chip, `onSelectedChange` cannot reach a property chip.
+ * `value` cannot reach a search chip, `onSelectedChange` cannot reach a select chip.
  */
-export type ChipProps = ChipScopeProps | ChipPropertyProps | ChipFilterProps;
+export type ChipProps = ChipSearchProps | ChipSelectProps | ChipFilterProps;

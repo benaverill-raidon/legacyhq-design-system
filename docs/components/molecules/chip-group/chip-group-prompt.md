@@ -93,8 +93,8 @@ size       = unset   // deliberately NOT 'md' - see below
   An unnamed group is a boundary a screen-reader user steps through for no benefit.
 - Add **no** roving tabindex or arrow-key handling: the chips are independent controls, not one
   composite widget.
-- Never manage selection or removal between chips. Figma's variants are all `isSelected=false` scope
-  chips, and scope chips are independent on/off toggles - one-of-N coordination belongs to the
+- Never manage selection or removal between chips. Figma's variants are all `isSelected=false` search
+  chips, and search chips are independent on/off toggles - one-of-N coordination belongs to the
   consumer, exactly as with Toggle Button.
 - Do **not** implement overflow or truncation. Figma models none; all ten chips in every variant are
   plain, equal siblings. Chip Group is not Tag Group with chips in it.

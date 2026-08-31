@@ -19,17 +19,17 @@
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "4631:83388",
     "componentName": "chip",
-    "variantCount": 14,
-    "verifiedAt": "2026-08-24",
-    "note": "Filed on the file's own \"✅⏲️ Chip\" page, verified directly against the file via the Desktop Bridge plugin.",
-    "structure": "One component set with four axes - `mode` (filtering/scope/property), `size` (`sm (24)` / `md (32)`), `filter type` (none/status/context/assignee/due date), and `isSelected` - but only 14 of the 60 combinations exist. Every variant is a horizontal auto-layout row (itemSpacing 0) of segment instances that read as one pill: `mode=filtering` is `figma-parts / chip-base` + one or two `dropdown-menu` instances + `figma-parts / remove-button`; `mode=property` is `chip-base` + `remove-button`; `mode=scope` is `chip-base` alone. Outer corner radius is 999 (full round) on filtering/property; scope's own chip-base carries the 999 directly. Segment corner radii measured per side: leading segment [999, 0, 0, 999], middle segments [0, 0, 0, 0], trailing segment [0, 999, 999, 0]. Measured heights match the size axis exactly (sm 24, md 32); padding-inline is 6 at sm and 8 at md, with the remove button pulled 2px toward the seam (sm 4/6, md 6/8); segment gap is 4 at both sizes.",
+    "variantCount": 5,
+    "verifiedAt": "2026-08-27",
+    "note": "Filed on the file's own \"✅⏲️ Chip\" page, verified directly against the file via the Desktop Bridge plugin. The Figma build was simplified on 2026-08-27: modes renamed (filtering, property, scope) -> (filter, select, search), the `filter type` axis removed, and chip-base's mode/tone/hasValue axes dropped.",
+    "structure": "One component set, 5 variants across two axes - `mode` (filter/select/search) and `size` (`sm (24)` / `md (32)`) - with `filter` md-only (the sm filter variants were removed): so filter/md, select/sm, select/md, search/sm, search/md. Every variant is a horizontal auto-layout row (itemSpacing 0) of segment instances that read as one pill: `mode=filter` is `figma-parts / chip-base` + one or two `dropdown-menu` instances (operator, value) + `figma-parts / remove-button`; `mode=select` is `chip-base` + `remove-button`; `mode=search` is `chip-base` alone. Outer corner radius is 999 (full round); interior corners squared. Segment corner radii measured per side: leading segment [999, 0, 0, 999], middle segments [0, 0, 0, 0], trailing segment [0, 999, 999, 0]. Measured heights match the size axis exactly (sm 24, md 32); padding-inline is 6 at sm and 8 at md, with the remove button pulled 2px toward the seam (sm 4/6, md 6/8); segment gap is 4 at both sizes. The elemBefore box hugs its content: 16px for an icon (`element=icon`) or a sm-chip avatar (`element=avatar, size=sm`), 24px for an md-chip avatar (`element=avatar, size=md`) - so the leading avatar is `xxs`/16px in a sm chip and `xs`/24px in an md chip. The value preview likewise hugs its content. The old status/context/assignee/due-date filter categories are now examples/data, not a Figma variant axis.",
     "parts": {
-      "figma-parts / chip-base": "3662:7444 - the label segment (an `elemBefore` slot at a fixed 16px box plus the label text). Axes: mode(scope/property) x size x tone(default/error/warning/success/information) x state(default/hover/press/focus) x isSelected x hasValue x isDisabled x isRemovable.",
+      "figma-parts / chip-base": "3662:7444 - the label segment (an `elemBefore` slot plus the label text). Axes (post-simplification): size x state(default/hover/press/focus) x isSelected x isDisabled x isRemovable - the earlier mode/tone/hasValue axes were dropped.",
       "figma-parts / value": "3662:25295 - the value segment's trigger. Holds a `figma-parts / property-value` preview plus the value text; its `show-property` boolean toggles that preview.",
       "figma-parts / operator": "3662:25209 - the operator segment's trigger. Text only, no preview slot.",
       "figma-parts / remove-button": "3662:25128 - a close icon in its own segment.",
       "figma-parts / property-value": "3661:41493 - the value preview, with type=avatar | avatar group | task status | primary link. Modeled in code as an open `valuePreview: React.ReactNode` slot rather than a closed enum.",
-      "figma-parts / elemBefore": "1978:50905 - element=avatar | icon, a fixed 16px box."
+      "figma-parts / elemBefore": "1978:50905 - element=icon (16px) | element=avatar with a size axis: size=sm (16px) / size=md (24px). Its box hugs the element, so the leading avatar is 16px in a sm chip and 24px in an md chip."
     },
     "tokenMapping": {
       "segmentRest": "background: color/background/neutral/subtle/default; border: color/border/input",
@@ -39,24 +39,25 @@
       "operatorAndValueText": "color/content/default, typography Body/M",
       "selected": "background: color/background/selected/default/default; border: color/border/selected; text: color/content/selected. No hover/press ramp - see the chip-base interaction-states note.",
       "disabled": "background: color/background/disabled; text: color/content/disabled; border reverts to color/border/input",
-      "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text"
+      "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text",
+      "removeIcon": "color/content/subtle at rest, color/content/disabled when disabled - Figma-verified on the remove-button's own vector. The CloseIcon inherits the remove button's colour (same :global([data-color]) inherit technique the label icon uses) rather than keeping Icon's default content/default."
     },
     "apiAdaptationNotes": [
-      "One `Chip` export whose props are a discriminated union on `mode`, rather than three components or one component with everything optional. This mirrors Figma's single component set while making illegal states unrepresentable - `sections` cannot reach a scope chip, `onSelectedChange` cannot reach a property chip.",
-      "Figma's `filtering` is named `filter` in code - a noun, consistent in form with its sibling values `property` and `scope`. Same class of deliberate naming fix as tab-group -> TagGroup.",
+      "One `Chip` export whose props are a discriminated union on `mode`, rather than three components or one component with everything optional. This mirrors Figma's single component set while making illegal states unrepresentable - `value` cannot reach a search chip, `onSelectedChange` cannot reach a select chip.",
+      "Mode names track Figma exactly: `filter` / `select` / `search`. (Figma originally named these filtering, property, and scope; it was simplified to filter/select/search on 2026-08-27 and the code API was renamed to match.)",
       "Figma's `filter type` axis (none/status/context/assignee/due date) is NOT modeled as a prop. Those four categories differ only in their data (icon, label, value) except for one structural fact: `due date` has an operator segment and the others do not. Code exposes that fact directly as an optional `operator` segment, so any filter can have a comparison and no fifth product category requires a code change. Figma's four types become four examples in the stories.",
       "Figma models the operator and value as two independent `dropdown-menu` instances, each with its own `isOpen`. Code matches that exactly - each dropdown segment owns its own open state internally, so an operator menu and a value menu can never fight over one shared flag.",
-      "chip-base's `tone` axis (default/error/warning/success/information) is deliberately not exposed. All 14 chip variants use tone=default, so any chip-level tone mapping would be extrapolated from the part rather than verified. Available for a later pass if a real need appears.",
-      "chip-base's `isRemovable=false` variants exist at the part level, but no chip-level property or filter variant uses them - every verified one has a remove button. `onRemove` is therefore required for both modes rather than optional, keeping Chip distinct from Tag (which is the right component for a non-removable label).",
-      "`scope` is the only mode whose label segment is itself interactive, and the only one Figma gives an unselected state, so it renders as a real toggle button carrying `aria-pressed` - the same semantics Toggle Button uses. For `filter` and `property` the label is a plain non-interactive span; only the dropdown segments and remove button are controls.",
+      "Chip has no `tone` axis. chip-base carried one (default/error/warning/success/information) before the simplification; every chip variant used tone=default, and the axis was since dropped from chip-base entirely. Available for a later pass if a real need appears.",
+      "chip-base's `isRemovable=false` variants exist at the part level, but no chip-level select or filter variant uses them - every verified one has a remove button. `onRemove` is therefore required for both modes rather than optional, keeping Chip distinct from Tag (which is the right component for a non-removable label).",
+      "`search` is the only mode whose label segment is itself interactive, and the only one Figma gives an unselected state, so it renders as a real toggle button carrying `aria-pressed` - the same semantics Toggle Button uses. For `filter` and `select` the label is a plain non-interactive span; only the dropdown segments and remove button are controls.",
       "Each dropdown panel's default accessible name is composed from the property and the segment's role (\"Due date operator\", \"Due date value\") rather than the segment's own label. The segment label is the current value (\"on\", \"March 2\"), which names the panel poorly on its own. `ChipSegment.menuAriaLabel` overrides it.",
       "Every segment except the last drops its own trailing border, so the next segment's leading border draws the seam - applied to every segment rather than only the leading one, which is what keeps the junction a uniform 1px where two middle segments meet (an operator and a value side by side, as on a due-date filter). Segment strokes are strokeAlign INSIDE at weight 1.",
       "Figma models no selected+disabled chip-base variant at all, so disabled fully overrides selected visuals (including resetting the border to color/border/input) rather than blending the two - the same precedent Toggle Button and Toggle Icon Button already set for that gap.",
-      "chip-base has a state axis (default/hover/press/focus) in Figma, but the label segment deliberately implements no hover or press treatment in any mode - a product decision, not an oversight. In filter/property the label is a passive span that names the property; in scope, selection is the feedback and the focus ring covers keyboard affordance. Interaction fills belong to the segments that act: the operator, the value, and remove. A consequence: nothing in Chip consumes --color-background-selected-default-hover/-press.",
-      "ChipScopeProps['data-force-state'] accepts only 'focus' as a result - a 'hover'/'press' value would render identically to the default and quietly mislead.",
+      "chip-base has a state axis (default/hover/press/focus) in Figma, but the label segment deliberately implements no hover or press treatment in any mode - a product decision, not an oversight. In filter/select the label is a passive span that names the property; in search, selection is the feedback and the focus ring covers keyboard affordance. Interaction fills belong to the segments that act: the operator, the value, and remove. A consequence: nothing in Chip consumes --color-background-selected-default-hover/-press.",
+      "ChipSearchProps['data-force-state'] accepts only 'focus' as a result - a 'hover'/'press' value would render identically to the default and quietly mislead.",
       "Every segment is position: relative, and the focused one gets z-index: 1. The focus ring is an outline drawn outside the segment box and segments sit flush, so without this the next segment paints over the ring's trailing edge and clips it. Same paint-tier reasoning as Avatar Group's overlapping stack, applied to an outline rather than a fill.",
       "The remove button carries a \"Remove\" Tooltip on hover/focus, and Tooltip is not mounted at all while disabled. Two independent reasons point the same way: \"Remove\" on a chip that cannot be removed is misleading rather than explanatory (unlike IconButton disabled tooltips, which explain why an action is unavailable); and structurally, Tooltip wraps a disabled child in an extra span so pointer events still fire, which would stop the button being a direct child of the root and detach it from the pill as its own fully-rounded island - every segment rule here is structural (:first-child / :last-child / :not(:last-child)). Passing disabled to Tooltip suppresses only the popup, not the wrapper. The button own aria-label remains the accessible name, so the tooltip is never the sole one.",
-      "Each scope chip is an independent on/off toggle, not a radio group - several can be on at once and Chip never coordinates siblings. Any one-of-N behaviour belongs to the consumer holding the state, the same way Toggle Button works.",
+      "Each search chip is an independent on/off toggle, not a radio group - several can be on at once and Chip never coordinates siblings. Any one-of-N behaviour belongs to the consumer holding the state, the same way Toggle Button works.",
       "size resolves as size ?? groupSize ?? md, where groupSize comes from ChipSizeContext. Chip Group provides it via context rather than by cloning children, because cloning only reaches direct children - a Chip behind a Tooltip, from a map, or behind a conditional would silently miss it. Explicit per-Chip size still wins."
     ]
   },
@@ -78,7 +79,7 @@
     },
     {
       "name": "label segment",
-      "description": "elemBefore (fixed 16px, decorative) plus the label. A plain span for filter/property; a real toggle button for scope."
+      "description": "elemBefore (decorative, content-hugging - 16px icon/sm-avatar, 24px md-avatar) plus the label. A plain span for filter/select; a real toggle button for search."
     },
     {
       "name": "operator segment",
@@ -90,7 +91,7 @@
     },
     {
       "name": "remove button",
-      "description": "filter and property. A button carrying a CloseIcon and an accessible name."
+      "description": "filter and select. A button carrying a CloseIcon and an accessible name."
     }
   ],
   "props": {
@@ -100,8 +101,8 @@
       "default": null,
       "enum": [
         "filter",
-        "property",
-        "scope"
+        "select",
+        "search"
       ],
       "description": "Discriminates the union - determines which other props are valid."
     },
@@ -109,13 +110,13 @@
       "type": "React.ReactNode",
       "required": true,
       "default": null,
-      "description": "The leading segment's text: the property name, or the scope name."
+      "description": "The leading segment's text: the property name (select), or the search-scope name (search)."
     },
     "elemBefore": {
       "type": "React.ReactNode",
       "required": false,
       "default": null,
-      "description": "Decorative Icon or Avatar in a fixed 16px box. Never an interactive control."
+      "description": "Decorative Icon or Avatar in a content-hugging box. Never an interactive control. An Avatar passed here is sized to the chip - `xxs` (16px) in a sm chip, `xs` (24px) in an md chip - matching Figma's elemBefore avatar size axis, so a consumer can pass one Avatar element and get the right size per chip size. Icons (always 16px) and other nodes pass through unchanged."
     },
     "size": {
       "type": "ChipSize",
@@ -137,13 +138,13 @@
       "type": "boolean",
       "required": false,
       "default": false,
-      "description": "scope only. Drives aria-pressed and the selected token family."
+      "description": "search only. Drives aria-pressed and the selected token family."
     },
     "onSelectedChange": {
       "type": "(isSelected: boolean) => void",
       "required": false,
       "default": null,
-      "description": "scope only. Called with the next selected value."
+      "description": "search only. Called with the next selected value."
     },
     "value": {
       "type": "ChipSegment",
@@ -161,19 +162,19 @@
       "type": "React.ReactNode",
       "required": false,
       "default": null,
-      "description": "filter only. Rendered before the value text - an Avatar, Avatar Group, status icons."
+      "description": "filter only. Rendered before the value text - an Avatar, Avatar Group, or status icons. Unlike elemBefore, this slot hugs its content (Figma's property-value container measures 16px for an icon preview but 24px for an Avatar / Avatar Group), so its contents are NOT size-normalized - pass an Avatar at its intended size (xs/24px, per the assignee filter)."
     },
     "onRemove": {
       "type": "(event) => void",
       "required": true,
       "default": null,
-      "description": "filter and property. Every verified Figma variant of both has a remove button."
+      "description": "filter and select. Every verified Figma variant of both has a remove button."
     },
     "removeAriaLabel": {
       "type": "string",
       "required": false,
       "default": "Remove ${label}",
-      "description": "filter and property. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
+      "description": "filter and select. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
     },
     "id": {
       "type": "string",
@@ -207,12 +208,12 @@
   "variants": {
     "mode": {
       "filter": {
-        "purpose": "An active filter on one property: label + optional operator + value + remove."
+        "purpose": "An active filter on one property: label + optional operator + value + remove. `md` only - the `sm` filter variants were removed in Figma; the `size` prop is narrowed to `'md'` for filter chips."
       },
-      "property": {
-        "purpose": "One applied property: label + remove. No dropdowns."
+      "select": {
+        "purpose": "One applied selection/property: label + remove. No dropdowns. (The chip a Select renders per multi-select value.)"
       },
-      "scope": {
+      "search": {
         "purpose": "A selectable search scope: a single toggle segment, the only mode with an unselected state."
       }
     }
@@ -224,8 +225,8 @@
     "selected"
   ],
   "accessibility": {
-    "scopeRole": "native button with aria-pressed, matching Toggle Button",
-    "labelSegment": "a plain non-interactive span in filter/property mode - it names the property rather than acting on it",
+    "searchRole": "native button with aria-pressed, matching Toggle Button",
+    "labelSegment": "a plain non-interactive span in filter/select mode - it names the property rather than acting on it",
     "dropdownSegments": "native buttons; aria-expanded/aria-controls supplied by Popup via Dropdown Menu",
     "menuRole": "menu (from Menu), named from the property and segment role by default",
     "removeButton": "native button with an accessible name (`Remove ${label}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
@@ -234,7 +235,7 @@
     "labelIcon": "inherits the label colour, so it stays legible across subtle/selected/disabled without the consumer restating it"
   },
   "keyboardInteraction": [
-    "Tab moves between the chip's own controls in DOM order (scope: one; property: remove; filter: operator, value, remove)",
+    "Tab moves between the chip's own controls in DOM order (search: one; select: remove; filter: operator, value, remove)",
     "Enter/Space activates any segment (native button behavior)",
     "Escape closes an open segment menu (inherited from Popup)",
     "Arrow keys/Home/End/Enter navigate and activate rows inside an open menu (inherited from Menu)"
@@ -242,16 +243,16 @@
   "behaviorRules": [
     "Each dropdown segment owns its own open state, so operator and value menus are independent.",
     "size and disabled apply to every segment together.",
-    "Chip never mutates its own filter/scope state - selecting a menu row calls that row's own onSelect, and scope selection calls onSelectedChange. Same 'never assume' rule Menu and Dropdown Menu follow.",
+    "Chip never mutates its own filter/search state - selecting a menu row calls that row's own onSelect, and search selection calls onSelectedChange. Same 'never assume' rule Menu and Dropdown Menu follow.",
     "showSearch is hardcoded false on the internal Dropdown Menus, matching Figma's own chip dropdown instances.",
     "The label segment has no hover or press treatment in any mode; only the operator, value, and remove segments do.",
-    "Each scope chip toggles independently - Chip never coordinates sibling chips.",
+    "Each search chip toggles independently - Chip never coordinates sibling chips.",
     "Disabled fully overrides selected, and disables the remove button along with every other control."
   ],
   "compositionRules": [
     "Reach for Tag rather than Chip for a plain, non-removable label.",
     "Pass Menu's own MenuSection[] to a segment's `sections` - Chip does not accept arbitrary panel content, matching Dropdown Menu's own 'always renders a Menu' rule.",
-    "Keep elemBefore and valuePreview decorative - both slots are aria-hidden, and in scope mode the segment is already a button, so a nested focusable element would be invalid HTML.",
+    "Keep elemBefore and valuePreview decorative - both slots are aria-hidden, and in search mode the segment is already a button, so a nested focusable element would be invalid HTML.",
     "No segment may be wrapped - every segment must remain a direct child of the root. The seam and corner rules are all structural (:first-child / :last-child / :not(:last-child)), so any wrapper (a Tooltip around a disabled child, a positioning div, anything that renders DOM) detaches that segment from the pill."
   ],
   "responsiveRules": [
@@ -277,7 +278,7 @@
   ],
   "do": [
     "Give each segment menu real MenuSection data and let its rows' own onSelect update your state.",
-    "Use scope for search scoping, filter for an editable filter, property for an applied value.",
+    "Use search for search scoping, filter for an editable filter, select for an applied value.",
     "Provide an explicit removeAriaLabel when the label is not a plain string."
   ],
   "dont": [
@@ -286,8 +287,8 @@
     "Do not use Chip as a plain label - that is Tag."
   ],
   "acceptanceCriteria": [
-    "mode=scope renders one toggle button carrying aria-pressed, with no remove button and no dropdown.",
-    "mode=property renders a non-interactive label plus a remove button, and calls onRemove when activated.",
+    "mode=search renders one toggle button carrying aria-pressed, with no remove button and no dropdown.",
+    "mode=select renders a non-interactive label plus a remove button, and calls onRemove when activated.",
     "mode=filter renders the label, a value segment that opens its own menu, and a remove button.",
     "An operator segment appears only when `operator` is given, and its menu is independent of the value menu.",
     "Each menu panel is named from the property and segment role unless menuAriaLabel overrides it.",
@@ -298,14 +299,14 @@
     "Supports a custom id/className on the root."
   ],
   "knownLimitations": [
-    "No `tone` axis yet, despite chip-base supporting five tones.",
-    "No non-removable property/filter variant, matching the verified Figma set.",
+    "No `tone` axis - chip-base carried one before the simplification, but it was dropped there too.",
+    "No non-removable select/filter variant, matching the verified Figma set.",
     "Inherits every Dropdown Menu and Menu limitation for the segment panels (no typeahead, no built-in focus-first-item-on-open, no virtualization for very long section lists).",
-    "The label segment has no hover/press feedback by design, so a scope chip signals interactivity through cursor, focus ring, and its selected state rather than a hover fill.",
+    "The label segment has no hover/press feedback by design, so a search chip signals interactivity through cursor, focus ring, and its selected state rather than a hover fill.",
     "Because the seam and corner rules are structural, Chip cannot render a segment inside a wrapper element - a constraint worth knowing before adding per-segment tooltips or popovers."
   ],
   "futureEnhancements": [
-    "Expose chip-base's `tone` axis once a real Figma chip variant uses a non-default tone.",
-    "An `isRemovable={false}` escape hatch, if a real non-removable filter/property appears."
+    "Reintroduce a `tone` axis if a real Figma chip variant needs a non-default tone.",
+    "An `isRemovable={false}` escape hatch, if a real non-removable filter/select appears."
   ]
 }

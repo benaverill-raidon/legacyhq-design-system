@@ -44,10 +44,10 @@ const meta = {
     alignment: 'left',
     children: (
       <>
-        <Chip mode="scope" label="Matters" elemBefore={<SearchIcon decorative />} isSelected />
-        <Chip mode="scope" label="Documents" elemBefore={<SearchIcon decorative />} />
-        <Chip mode="scope" label="People" elemBefore={<SearchIcon decorative />} />
-        <Chip mode="scope" label="Tasks" elemBefore={<SearchIcon decorative />} />
+        <Chip mode="search" label="Matters" elemBefore={<SearchIcon decorative />} isSelected />
+        <Chip mode="search" label="Documents" elemBefore={<SearchIcon decorative />} />
+        <Chip mode="search" label="People" elemBefore={<SearchIcon decorative />} />
+        <Chip mode="search" label="Tasks" elemBefore={<SearchIcon decorative />} />
       </>
     ),
   },
@@ -107,9 +107,9 @@ export const Alignment: Story = {
         <Group key={alignment} title={`alignment: ${alignment}${alignment === 'left' ? ' (default)' : ''}`}>
           <div style={boundedStyle}>
             <ChipGroup alignment={alignment} size="md">
-              <Chip mode="scope" label="Matters" isSelected />
-              <Chip mode="scope" label="Documents" />
-              <Chip mode="scope" label="People" />
+              <Chip mode="search" label="Matters" isSelected />
+              <Chip mode="search" label="Documents" />
+              <Chip mode="search" label="People" />
             </ChipGroup>
           </div>
         </Group>
@@ -127,8 +127,8 @@ export const Sizes: Story = {
     <div style={stack}>
       <Group title="size: sm (24px)">
         <ChipGroup size="sm">
-          <Chip mode="scope" label="Matters" isSelected />
-          <Chip mode="scope" label="Documents" />
+          <Chip mode="search" label="Matters" isSelected />
+          <Chip mode="search" label="Documents" />
           <Chip
             mode="filter"
             label="Status"
@@ -140,8 +140,8 @@ export const Sizes: Story = {
       </Group>
       <Group title="size: md (32px) - default">
         <ChipGroup size="md">
-          <Chip mode="scope" label="Matters" isSelected />
-          <Chip mode="scope" label="Documents" />
+          <Chip mode="search" label="Matters" isSelected />
+          <Chip mode="search" label="Documents" />
           <Chip
             mode="filter"
             label="Status"
@@ -156,9 +156,9 @@ export const Sizes: Story = {
         description="The group is sm; the middle chip sets size=md explicitly and keeps it."
       >
         <ChipGroup size="sm">
-          <Chip mode="scope" label="Inherits sm" />
-          <Chip mode="scope" label="Explicitly md" size="md" />
-          <Chip mode="scope" label="Inherits sm" />
+          <Chip mode="search" label="Inherits sm" />
+          <Chip mode="search" label="Explicitly md" size="md" />
+          <Chip mode="search" label="Inherits sm" />
         </ChipGroup>
       </Group>
     </div>
@@ -171,7 +171,7 @@ export const Wrapping: Story = {
     <div style={boundedStyle}>
       <ChipGroup size="md">
         {['Matters', 'Documents', 'People', 'Tasks', 'Notes', 'Invoices', 'Calendar', 'Contacts'].map((label) => (
-          <Chip key={label} mode="scope" label={label} isSelected={label === 'Matters'} />
+          <Chip key={label} mode="search" label={label} isSelected={label === 'Matters'} />
         ))}
       </ChipGroup>
     </div>
@@ -202,7 +202,7 @@ export const Content: Story = {
             ].map((option) => (
               <Chip
                 key={option.id}
-                mode="scope"
+                mode="search"
                 label={option.label}
                 elemBefore={<SearchIcon decorative />}
                 isSelected={scopes.has(option.id)}
@@ -280,7 +280,7 @@ export const EdgeCases: Story = {
       <Group title="A single chip" description="No gap to collapse, and alignment still applies.">
         <div style={boundedStyle}>
           <ChipGroup alignment="right" size="md">
-            <Chip mode="scope" label="Matters" isSelected />
+            <Chip mode="search" label="Matters" isSelected />
           </ChipGroup>
         </div>
       </Group>
@@ -289,8 +289,8 @@ export const EdgeCases: Story = {
         description="Chip Group takes any Chip - scope, property, and filter can share a row, all at one size."
       >
         <ChipGroup size="md">
-          <Chip mode="scope" label="Matters" isSelected />
-          <Chip mode="property" label="Trusts" onRemove={() => {}} />
+          <Chip mode="search" label="Matters" isSelected />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} />
           <Chip
             mode="filter"
             label="Status"
@@ -302,9 +302,9 @@ export const EdgeCases: Story = {
       </Group>
       <Group title="Disabled chips sit in the row normally">
         <ChipGroup size="md">
-          <Chip mode="scope" label="Matters" isSelected />
-          <Chip mode="scope" label="Archived" disabled />
-          <Chip mode="property" label="Trusts" onRemove={() => {}} disabled />
+          <Chip mode="search" label="Matters" isSelected />
+          <Chip mode="search" label="Archived" disabled />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} disabled />
         </ChipGroup>
       </Group>
       <Group title="Dark surface">
@@ -317,9 +317,9 @@ export const EdgeCases: Story = {
           }}
         >
           <ChipGroup size="md">
-            <Chip mode="scope" label="Matters" isSelected />
-            <Chip mode="scope" label="Documents" />
-            <Chip mode="property" label="Trusts" onRemove={() => {}} />
+            <Chip mode="search" label="Matters" isSelected />
+            <Chip mode="search" label="Documents" />
+            <Chip mode="select" label="Trusts" onRemove={() => {}} />
           </ChipGroup>
         </div>
       </Group>

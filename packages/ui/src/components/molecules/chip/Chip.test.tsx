@@ -5,6 +5,7 @@ import { act, cleanup, fireEvent, render, screen, within } from '@testing-librar
 import '@testing-library/jest-dom/vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Chip } from './chip';
+import { Avatar } from '../../atoms/avatar';
 import type { MenuSection } from '../../organisms/menu';
 
 const chipCss = readFileSync('packages/ui/src/components/molecules/chip/chip.module.css', 'utf8');
@@ -28,23 +29,23 @@ function operatorSections(): MenuSection[] {
 }
 
 describe('Chip', () => {
-  describe('mode="scope"', () => {
+  describe('mode="search"', () => {
     it('renders a real toggle button carrying aria-pressed', () => {
-      render(<Chip mode="scope" label="Matters" />);
+      render(<Chip mode="search" label="Matters" />);
 
       const chip = screen.getByRole('button', { name: 'Matters' });
       expect(chip).toHaveAttribute('aria-pressed', 'false');
     });
 
     it('reflects isSelected through aria-pressed', () => {
-      render(<Chip mode="scope" label="Matters" isSelected />);
+      render(<Chip mode="search" label="Matters" isSelected />);
 
       expect(screen.getByRole('button', { name: 'Matters' })).toHaveAttribute('aria-pressed', 'true');
     });
 
     it('calls onSelectedChange with the next value', () => {
       const handleChange = vi.fn();
-      render(<Chip mode="scope" label="Matters" isSelected onSelectedChange={handleChange} />);
+      render(<Chip mode="search" label="Matters" isSelected onSelectedChange={handleChange} />);
 
       fireEvent.click(screen.getByRole('button', { name: 'Matters' }));
 
@@ -61,7 +62,7 @@ describe('Chip', () => {
         return (
           <>
             {['matters', 'documents'].map((id) => (
-              <Chip key={id} mode="scope" label={id} isSelected={on.includes(id)} onSelectedChange={() => toggle(id)} />
+              <Chip key={id} mode="search" label={id} isSelected={on.includes(id)} onSelectedChange={() => toggle(id)} />
             ))}
           </>
         );
@@ -80,22 +81,22 @@ describe('Chip', () => {
     });
 
     it('renders no remove button and no dropdown', () => {
-      render(<Chip mode="scope" label="Matters" />);
+      render(<Chip mode="search" label="Matters" />);
 
       expect(screen.getAllByRole('button')).toHaveLength(1);
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
     });
 
     it('disables the toggle when disabled', () => {
-      render(<Chip mode="scope" label="Matters" disabled />);
+      render(<Chip mode="search" label="Matters" disabled />);
 
       expect(screen.getByRole('button', { name: 'Matters' })).toBeDisabled();
     });
   });
 
-  describe('mode="property"', () => {
+  describe('mode="select"', () => {
     it('renders a non-interactive label plus a remove button', () => {
-      render(<Chip mode="property" label="Trusts" onRemove={vi.fn()} />);
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} />);
 
       // The label names the property; only the remove button is a control.
       expect(screen.getAllByRole('button')).toHaveLength(1);
@@ -105,7 +106,7 @@ describe('Chip', () => {
 
     it('calls onRemove when the remove button is activated', () => {
       const handleRemove = vi.fn();
-      render(<Chip mode="property" label="Trusts" onRemove={handleRemove} />);
+      render(<Chip mode="select" label="Trusts" onRemove={handleRemove} />);
 
       fireEvent.click(screen.getByRole('button', { name: 'Remove Trusts' }));
 
@@ -113,14 +114,14 @@ describe('Chip', () => {
     });
 
     it('supports an explicit removeAriaLabel', () => {
-      render(<Chip mode="property" label="Trusts" onRemove={vi.fn()} removeAriaLabel="Clear the trusts filter" />);
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} removeAriaLabel="Clear the trusts filter" />);
 
       expect(screen.getByRole('button', { name: 'Clear the trusts filter' })).toBeInTheDocument();
     });
 
     it('disables the remove button when the chip is disabled, and suppresses its click', () => {
       const handleRemove = vi.fn();
-      render(<Chip mode="property" label="Trusts" onRemove={handleRemove} disabled />);
+      render(<Chip mode="select" label="Trusts" onRemove={handleRemove} disabled />);
 
       const remove = screen.getByRole('button', { name: 'Remove Trusts' });
       expect(remove).toBeDisabled();
@@ -149,7 +150,7 @@ describe('Chip', () => {
     }
 
     it('shows a Remove tooltip on hover', () => {
-      render(<Chip mode="property" label="Trusts" onRemove={vi.fn()} />);
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} />);
 
       hover(screen.getByRole('button', { name: 'Remove Trusts' }));
 
@@ -158,7 +159,7 @@ describe('Chip', () => {
 
     it('does not show the tooltip while disabled', () => {
       // "Remove" on a chip that cannot be removed is misleading rather than explanatory.
-      render(<Chip mode="property" label="Trusts" onRemove={vi.fn()} disabled />);
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} disabled />);
 
       const remove = screen.getByRole('button', { name: 'Remove Trusts' });
       hover(remove);
@@ -169,7 +170,7 @@ describe('Chip', () => {
     });
 
     it('keeps aria-label as the accessible name, so the tooltip is never the only one', () => {
-      render(<Chip mode="property" label="Trusts" onRemove={vi.fn()} />);
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} />);
 
       expect(screen.getByRole('button', { name: 'Remove Trusts' })).toHaveAttribute('aria-label', 'Remove Trusts');
     });
@@ -185,7 +186,7 @@ describe('Chip', () => {
          * bordered island. Any future wrapper around a segment reintroduces exactly that bug.
          */
         const { container } = render(
-          <Chip mode="property" label="Trusts" onRemove={vi.fn()} disabled={disabled} />,
+          <Chip mode="select" label="Trusts" onRemove={vi.fn()} disabled={disabled} />,
         );
 
         const root = container.firstElementChild as HTMLElement;
@@ -361,20 +362,20 @@ describe('Chip', () => {
   });
 
   it('applies size and mode to the root for every mode', () => {
-    const { container } = render(<Chip mode="scope" label="Matters" size="sm" />);
+    const { container } = render(<Chip mode="search" label="Matters" size="sm" />);
 
     expect(container.firstElementChild).toHaveAttribute('data-size', 'sm');
-    expect(container.firstElementChild).toHaveAttribute('data-mode', 'scope');
+    expect(container.firstElementChild).toHaveAttribute('data-mode', 'search');
   });
 
   it('defaults to size md', () => {
-    const { container } = render(<Chip mode="scope" label="Matters" />);
+    const { container } = render(<Chip mode="search" label="Matters" />);
 
     expect(container.firstElementChild).toHaveAttribute('data-size', 'md');
   });
 
   it('supports a custom id and className on the root', () => {
-    render(<Chip mode="scope" label="Matters" id="scope-chip" className="custom-chip" />);
+    render(<Chip mode="search" label="Matters" id="scope-chip" className="custom-chip" />);
 
     expect(document.getElementById('scope-chip')).toHaveClass('custom-chip');
   });
@@ -402,7 +403,7 @@ describe('Chip', () => {
     // Figma models a hover/press/focus axis on chip-base; skipping it is a deliberate product
     // decision. Interaction fills belong only to the segments that actually act.
     expect(chipCss).not.toMatch(/\.labelSegment[^{]*:hover/);
-    expect(chipCss).not.toMatch(/\.mode_scope[^{]*:hover/);
+    expect(chipCss).not.toMatch(/\.mode_search[^{]*:hover/);
     expect(chipCss).not.toMatch(/\.selected[^{]*:hover/);
     // ...and the generic all-segments rule must not have come back.
     expect(chipCss).not.toMatch(/^\.segment:not\(:disabled\):is\(:hover/m);
@@ -428,17 +429,53 @@ describe('Chip', () => {
     expect(chipCss).not.toMatch(/\.preview :global\(\[data-color\]\)/);
   });
 
+  it('makes the remove ✕ inherit the button colour (content/subtle at rest, content/disabled when disabled)', () => {
+    // Figma-verified on the remove-button's own vector: content/subtle default. CloseIcon otherwise
+    // keeps Icon's content/default; this inherit rule lets it follow the button through disabled too.
+    expect(chipCss).toMatch(/\.removeButton :global\(\[data-color\]\)\s*\{[^}]*color:\s*inherit/);
+  });
+
+  it('sizes the leading Avatar to the chip - xxs (16px) for sm, xs (24px) for md - matching Figma', () => {
+    // Figma's elemBefore part: element=avatar, size=sm is 16px and size=md is 24px. The chip overrides
+    // whatever size the consumer passes (here deliberately wrong) to the one that fits its size.
+    const { container: sm } = render(
+      <Chip mode="select" size="sm" label="Jordan Ellis" elemBefore={<Avatar name="Jordan Ellis" size="md" decorative />} onRemove={() => {}} />,
+    );
+    expect(sm.querySelector('[data-entity-type]')).toHaveAttribute('data-size', 'xxs');
+
+    const { container: md } = render(
+      <Chip mode="select" size="md" label="Jordan Ellis" elemBefore={<Avatar name="Jordan Ellis" size="xxs" decorative />} onRemove={() => {}} />,
+    );
+    expect(md.querySelector('[data-entity-type]')).toHaveAttribute('data-size', 'xs');
+  });
+
+  it('leaves a valuePreview Avatar at its own size - the value slot hugs content, consumer-controlled', () => {
+    // Only the leading elemBefore slot is size-normalized. The value preview is an open, content-
+    // hugging slot, so its avatar passes through at whatever size the consumer set (here xs/24px).
+    render(
+      <Chip
+        mode="filter"
+        label="Assignee"
+        value={{ label: '3 people', sections: [] }}
+        valuePreview={<Avatar name="Jordan Ellis" size="xs" decorative />}
+        onRemove={() => {}}
+      />,
+    );
+
+    expect(document.querySelector('[data-entity-type]')).toHaveAttribute('data-size', 'xs');
+  });
+
   it('maps resting/hover/press segment fills to the neutral-subtle family, matching Figma', () => {
     expect(chipCss).toContain('background: var(--color-background-neutral-subtle-default);');
     expect(chipCss).toContain('background: var(--color-background-neutral-subtle-hover);');
     expect(chipCss).toContain('background: var(--color-background-neutral-subtle-press);');
   });
 
-  it('does not let the scope-mode rule outweigh .selected on color', () => {
-    // Regression guard: `.mode_scope .segment { color }` is (0,2,0) and outweighed `.selected`'s
-    // (0,1,0), so selected scope chips silently kept content/subtle text. That rule must set only
+  it('does not let the search-mode rule outweigh .selected on color', () => {
+    // Regression guard: `.mode_search .segment { color }` is (0,2,0) and outweighed `.selected`'s
+    // (0,1,0), so selected search chips silently kept content/subtle text. That rule must set only
     // cursor - the unselected color comes from .labelSegment, which .selected legitimately overrides.
-    const rule = chipCss.match(/\.mode_scope \.segment\s*\{([^}]*)\}/);
+    const rule = chipCss.match(/\.mode_search \.segment\s*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('cursor: pointer;');
     expect(rule?.[1]).not.toContain('color:');

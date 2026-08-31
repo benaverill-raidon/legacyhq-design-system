@@ -79,6 +79,16 @@
   cursor: pointer;
 }
 
+/*
+ * The close ✕ tracks the button's own color rather than keeping Icon's default (content/default),
+ * so it renders content/subtle at rest and content/disabled once the chip is disabled (the
+ * `.segment:disabled` rule below repaints the button, and the icon follows) - both Figma-verified on
+ * the remove-button's own vector. Same `:global([data-color])` inherit technique `.elemBefore` uses.
+ */
+.removeButton :global([data-color]) {
+  color: inherit;
+}
+
 /* Figma pulls the close icon slightly toward the seam: padding-left is 2px less than padding-right. */
 .size_sm .segment {
   block-size: var(--size-control-xs);
@@ -99,13 +109,13 @@
 }
 
 /*
- * A scope chip is a single segment, so it takes the full round on both ends from the :first-child /
+ * A search chip is a single segment, so it takes the full round on both ends from the :first-child /
  * :last-child rules above - no extra radius handling needed. Deliberately sets only `cursor` here:
  * an earlier revision also set `color`, which at (0,2,0) outweighed `.selected`'s own (0,1,0) and
- * silently kept selected scope chips on `content/subtle` text. `.labelSegment` already supplies the
+ * silently kept selected search chips on `content/subtle` text. `.labelSegment` already supplies the
  * unselected color, and `.selected` (declared after it, same specificity) correctly overrides it.
  */
-.mode_scope .segment {
+.mode_search .segment {
   cursor: pointer;
 }
 
@@ -166,20 +176,30 @@
   cursor: not-allowed;
 }
 
-/* Fixed 16px boxes, matching Figma's own elemBefore / property-value containers. */
 .elemBefore,
 .preview {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: none;
-  block-size: var(--size-200);
 }
 
+/*
+ * The leading slot hugs its content rather than forcing one size - matching Figma's elemBefore part,
+ * which is 16px for an icon (`element=icon`) and for a sm-chip avatar (`element=avatar, size=sm`) but
+ * 24px for an md-chip avatar (`element=avatar, size=md`). chip.tsx sizes the avatar to the chip
+ * (sm -> xxs/16px, md -> xs/24px); this box then hugs whatever it holds, so an icon stays 16px while
+ * an md avatar reads at 24px without a fixed box fighting it.
+ */
 .elemBefore {
-  inline-size: var(--size-200);
   color: inherit;
 }
+
+/*
+ * The value preview likewise hugs its content - matching Figma's `property-value` container. Its
+ * contents (an Avatar Group, status icons, ...) set its size; unlike `elemBefore`, its avatars are
+ * not size-normalized, so the consumer controls them.
+ */
 
 /*
  * The label's icon tracks the label's own colour rather than keeping whatever Icon default it was

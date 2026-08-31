@@ -222,6 +222,20 @@
   color: inherit;
 }
 
+/*
+ * Optional interactive in-frame slot (Select's multi-select chips) between `.before` and the input.
+ * Shrinks and clips rather than growing, so a filled multi-select keeps the input visible on one
+ * line instead of pushing it out of the frame - matching Figma's single-line, no-wrap trigger.
+ */
+.leadingContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
 .input {
   flex: 1 1 auto;
   min-inline-size: 0;

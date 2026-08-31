@@ -36,6 +36,8 @@ interface PopupProps {
   unstyled?: boolean;
   padding?: PopupPadding;
   manageTriggerAria?: boolean;
+  anchorRef?: React.RefObject<HTMLElement | null>;
+  matchTriggerWidth?: boolean;
 }
 ```
 
@@ -48,6 +50,7 @@ closeOnOutsideClick: true
 unstyled: false
 padding: lg
 manageTriggerAria: true
+matchTriggerWidth: false
 ```
 
 `alignment`'s default of `topLeft` matches the Figma component set's own declared default variant
@@ -72,6 +75,26 @@ What Popup does own, once `open` becomes true:
 Popup does not change its own visibility in response to Escape/outside click - it only calls
 `onOpenChange`. If the consumer doesn't provide `onOpenChange`, dismissal has no visible effect,
 same as any other controlled component with no change handler.
+
+## Anchor & width matching
+
+By default the cloned trigger child is the element Popup measures (for positioning), treats as the
+inside of the outside-click boundary, and observes for resizes. Two optional props separate "what to
+measure" from "what carries the ref + ARIA":
+
+- `anchorRef` — when set, Popup measures, positions, width-matches, resize-observes, and
+  dismiss-bounds against this element instead of the trigger child. The trigger child still receives
+  the merged measurement ref and (unless `manageTriggerAria=false`) `aria-expanded`/`aria-controls`;
+  only the geometry/boundary follows the anchor. This exists for a control whose ARIA-bearing element
+  is smaller than its visible frame — Select's trigger is an `<input>` (where `aria-expanded` belongs)
+  inset within a bordered field frame, and the panel must align to the frame, not the inset input.
+- `matchTriggerWidth` (default `false`) — sizes the panel to the measured element's width (the
+  `anchorRef` element, or the trigger child) rather than letting it hug its own content. The panel
+  content must be able to fill that width; the panel picks up the measured width as an inline
+  `width`, re-measured on the same resize/scroll updates as position.
+
+Both are inert on their own for existing consumers — width still hugs content and the trigger child
+is still the measured element unless these are passed.
 
 ## Content rules
 

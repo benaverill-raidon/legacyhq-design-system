@@ -16,6 +16,10 @@ export interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
   onOpenChange?: (open: boolean) => void;
   /** Horizontal edge the panel opens aligned to, below the trigger. Maps to Popup's bottomLeft/bottomCenter/bottomRight - DropdownMenu always opens below, matching Figma exactly. */
   alignment?: DropdownMenuAlignment;
+  /** Element to measure for positioning and width instead of the trigger child - passed through to Popup. Use when the ARIA-bearing trigger is smaller than the visual control (e.g. Select's inset input within its field frame). */
+  anchorRef?: React.RefObject<HTMLElement | null>;
+  /** Sizes the panel to the trigger (or `anchorRef`) and fills the Menu to match - so a field's dropdown matches the field's width. Defaults to false. */
+  matchTriggerWidth?: boolean;
   /** Id applied to the floating panel (Popup's own id), not to the Menu inside it. */
   id?: string;
   /** Composes with the floating panel's class list (Popup's panel), not with Menu's root. */

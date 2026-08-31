@@ -47,4 +47,20 @@ export interface PopupProps {
    * widget attributes that don't apply to a supplemental hint).
    */
   manageTriggerAria?: boolean;
+  /**
+   * Element to measure for positioning and for the outside-click boundary, instead of the cloned
+   * trigger child. Use when the child that carries `aria-expanded`/the merged ref is smaller than
+   * the visual control it lives inside - e.g. Select's trigger is a text `<input>` (where the ARIA
+   * belongs) inset within a bordered field frame, and the panel should align to and match the
+   * frame, not the inset input. The trigger child still receives the merged ref and ARIA; only
+   * measurement and the dismissal boundary follow this element. Falls back to the trigger child.
+   */
+  anchorRef?: React.RefObject<HTMLElement | null>;
+  /**
+   * Sizes the panel to the measured trigger (the `anchorRef` element, or the trigger child) rather
+   * than letting it hug its own content - so a field's dropdown matches the field's width. Defaults
+   * to false. The consumer's panel content must be able to fill that width (Dropdown Menu passes
+   * `fullWidth` to its Menu for exactly this).
+   */
+  matchTriggerWidth?: boolean;
 }

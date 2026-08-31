@@ -1,0 +1,69 @@
+{
+  "component": "Select",
+  "examples": [
+    {
+      "name": "Single-select",
+      "description": "One value from a list. The trigger shows the chosen label; rows are radio items.",
+      "jsx": "const [status, setStatus] = useState<string | null>(null);\n\n<Select\n  options={[\n    { value: 'draft', label: 'Draft' },\n    { value: 'in-review', label: 'In review' },\n    { value: 'approved', label: 'Approved' },\n  ]}\n  value={status}\n  onChange={setStatus}\n  placeholder=\"Select a status\"\n  aria-label=\"Matter status\"\n/>",
+      "props": { "inputType": "single" }
+    },
+    {
+      "name": "Multi-select",
+      "description": "Several values, shown as removable chips in the trigger; rows are checkboxes.",
+      "jsx": "const [assignees, setAssignees] = useState<string[]>([]);\n\n<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  placeholder=\"Add assignees\"\n  aria-label=\"Assignees\"\n/>",
+      "props": { "inputType": "multi" }
+    },
+    {
+      "name": "Options with leading icons",
+      "description": "option.icon appears in both the row and (multi) the chip. Decorative.",
+      "jsx": "<Select\n  options={[\n    { value: 'jordan', label: 'Jordan Ellis', icon: <Avatar name=\"Jordan Ellis\" size=\"xs\" decorative /> },\n    { value: 'priya', label: 'Priya Nair', icon: <Avatar name=\"Priya Nair\" size=\"xs\" decorative /> },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Assign to\"\n/>",
+      "props": {}
+    },
+    {
+      "name": "Grouped options",
+      "description": "Consecutive options sharing a `group` render under one section heading.",
+      "jsx": "<Select\n  options={[\n    { value: 'trust', label: 'Trust', group: 'Estate' },\n    { value: 'will', label: 'Will', group: 'Estate' },\n    { value: 'llc', label: 'LLC formation', group: 'Business' },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Matter type\"\n/>",
+      "props": {}
+    },
+    {
+      "name": "Async / externally-controlled search",
+      "description": "Provide searchValue + onSearchChange to filter outside Select (e.g. server-side); Select stops filtering internally and just renders the options you pass.",
+      "jsx": "const [query, setQuery] = useState('');\nconst options = useRemoteOptions(query); // your loader\n\n<Select\n  options={options}\n  value={value}\n  onChange={setValue}\n  searchValue={query}\n  onSearchChange={setQuery}\n  emptyMessage={loading ? 'Searching...' : 'No matches'}\n/>",
+      "props": {}
+    },
+    {
+      "name": "Sizes and tones",
+      "description": "size sets trigger height (32/40/48) and chip size; tone maps to TextField's appearance.",
+      "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" tone=\"subtle\" />",
+      "props": { "size": "lg", "tone": "subtle" }
+    },
+    {
+      "name": "Invalid, in a form",
+      "description": "invalid paints the red border and sets aria-invalid; pair with your field-level error text.",
+      "jsx": "<Select options={options} value={value} onChange={setValue} invalid placeholder=\"Required\" aria-label=\"Status\" />",
+      "props": { "invalid": true }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Passing Menu sections instead of a flat option list",
+      "jsx": "<Select sections={[{ id: 's', items: [...] }]} value={value} onChange={setValue} />",
+      "reason": "Select takes a flat `options: SelectOption[]` and builds the Menu sections itself, owning selection and typeahead. There is no `sections` prop - grouping is done via each option's `group` field. TypeScript rejects this."
+    },
+    {
+      "name": "Crossing single and multi value types",
+      "jsx": "<Select inputType=\"multi\" value=\"draft\" onChange={setValue} options={options} />",
+      "reason": "SelectProps is a discriminated union on inputType - multi's value is `string[]`, single's is `string | null`. A scalar value on a multi Select is a compile-time error."
+    },
+    {
+      "name": "Using Select for a short exclusive set",
+      "jsx": "<Select options={[{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }]} value={value} onChange={setValue} />",
+      "reason": "Two or three always-relevant exclusive choices belong in Radio, which shows them all without a click. Select earns its dropdown + typeahead on medium-to-long lists."
+    },
+    {
+      "name": "Expecting a strict ARIA listbox",
+      "jsx": "// expecting role=listbox / option / aria-activedescendant",
+      "reason": "Select is deliberately the menu a11y pattern (role=combobox opening role=menu), matching Figma's text-input + dropdown-menu composition and reusing Menu. Focus moves into the menu on ArrowDown rather than staying in the input. A strict listbox mode is a documented future enhancement, not the current behaviour."
+    }
+  ]
+}

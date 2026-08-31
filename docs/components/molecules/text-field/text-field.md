@@ -44,6 +44,11 @@ nearly every other case.
   `appearance="subtle"` and `shape="square"` - not a bare icon standing in for one - so it stays a
   real, focusable, labeled button. It can also hold a full `Button` when the trailing action needs
   a text label. Because this slot can be interactive, it is never forced `aria-hidden`.
+- **`leadingContent`** is an interactive in-frame slot between `iconBefore` and the input, sharing
+  its row. Unlike `iconBefore` it is not `aria-hidden`, and it shrinks and clips to keep the field
+  single-line. It exists so a token/multi-select field can render removable chips inside the frame
+  without a second bordered frame - [Select](../select/select.md) uses it for its multi-select
+  chips. Omit it for an ordinary field.
 
 Related components and patterns include Checkbox, Radio, and Switch (the other native-form-control
 atoms in this system), Icon Button (for the trailing clear/action slot), and Select (for choosing

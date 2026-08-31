@@ -138,6 +138,17 @@
       "required": false,
       "default": true,
       "description": "Sets aria-expanded/aria-controls on the trigger while true. Set to false when the consumer already manages the trigger's own ARIA relationship to the panel content (e.g. Tooltip's aria-describedby) - aria-expanded/aria-controls are disclosure-widget attributes and don't apply to a supplemental hint."
+    },
+    "anchorRef": {
+      "type": "React.RefObject<HTMLElement | null>",
+      "required": false,
+      "description": "Element to measure for positioning, width-matching, and the outside-click boundary, instead of the cloned trigger child. Use when the child carrying the merged ref + aria-expanded is smaller than the visible control it lives inside - e.g. Select's trigger is a text input (where the ARIA belongs) inset within a bordered field frame, and the panel should align to and match the frame. The trigger child still receives the merged ref and ARIA; only measurement and the dismissal boundary follow this element. Falls back to the trigger child."
+    },
+    "matchTriggerWidth": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Sizes the panel to the measured trigger (the anchorRef element, or the trigger child) rather than letting it hug its own content - so a field's dropdown matches the field's width. The consumer's panel content must be able to fill that width (Dropdown Menu passes `fullWidth` to its Menu for exactly this)."
     }
   },
   "variants": {

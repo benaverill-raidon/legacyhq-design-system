@@ -13,6 +13,7 @@ export const TextField = React.memo(
       appearance = 'default',
       invalid = false,
       iconBefore,
+      leadingContent,
       iconAfter,
       className,
       inputClassName,
@@ -45,6 +46,9 @@ export const TextField = React.memo(
             {iconBefore}
           </span>
         ) : null}
+
+        {/* Interactive in-frame content (e.g. Select's chips) - not aria-hidden, shrinks/clips so the input stays visible. */}
+        {leadingContent ? <span className={styles.leadingContent}>{leadingContent}</span> : null}
 
         <input
           {...rest}

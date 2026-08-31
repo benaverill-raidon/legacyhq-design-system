@@ -27,6 +27,8 @@ interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   alignment?: DropdownMenuAlignment;
+  anchorRef?: React.RefObject<HTMLElement | null>;
+  matchTriggerWidth?: boolean;
   id?: string;
   className?: string;
 }
@@ -36,11 +38,18 @@ interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
 
 ```txt
 alignment: left
+matchTriggerWidth: false
 ```
 
 Every `MenuProps` default (`size: sm`, `showSearch: true`, `showScrollbar: true`, `loading: false`,
 `loadingLabel: 'Loading…'`, `emptyMessage: 'No results'`) applies unchanged, since those props pass
 straight through to the rendered Menu.
+
+`anchorRef` and `matchTriggerWidth` forward to Popup (see popup-spec). `matchTriggerWidth` also drives
+the inner Menu's `fullWidth` — a trigger-matched panel needs its Menu to stretch to the panel width
+rather than stay at one of the fixed `size` widths. Because `fullWidth` is technically inherited from
+`MenuProps`, DropdownMenu sets it internally from `matchTriggerWidth`; consumers use
+`matchTriggerWidth`, not `fullWidth`, to opt in (Select is the first consumer, matching its field).
 
 ## Composition
 

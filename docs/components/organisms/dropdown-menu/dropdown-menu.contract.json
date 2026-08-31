@@ -45,6 +45,8 @@
     "open": { "type": "boolean", "required": true, "default": null, "description": "Controlled visibility." },
     "onOpenChange": { "type": "(open: boolean) => void", "required": false, "default": null, "description": "Called with false on Escape or an outside click." },
     "alignment": { "type": "DropdownMenuAlignment", "required": false, "default": "left", "enum": ["left", "center", "right"], "description": "Maps to Popup's bottomLeft/bottomCenter/bottomRight - always opens below the trigger." },
+    "anchorRef": { "type": "React.RefObject<HTMLElement | null>", "required": false, "default": null, "description": "Element to measure for positioning and width instead of the trigger child - forwarded to Popup. Use when the ARIA-bearing trigger is smaller than the visual control (e.g. Select's inset input within its field frame)." },
+    "matchTriggerWidth": { "type": "boolean", "required": false, "default": false, "description": "Sizes the panel to the trigger (or anchorRef) and passes fullWidth to the inner Menu so it fills that width - so a field's dropdown matches the field's width. Forwarded to Popup." },
     "id": { "type": "string", "required": false, "default": null, "description": "Applied to Popup's floating panel, not to Menu's root." },
     "className": { "type": "string", "required": false, "default": null, "description": "Composes with Popup's panel class list, not with Menu's root." },
     "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "Forwarded to Menu unchanged - see menu.contract.json." },

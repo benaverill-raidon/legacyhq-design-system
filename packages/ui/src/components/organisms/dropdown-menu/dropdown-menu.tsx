@@ -28,6 +28,8 @@ export const DropdownMenu = React.memo(function DropdownMenu({
   loading,
   loadingLabel,
   emptyMessage,
+  anchorRef,
+  matchTriggerWidth = false,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }: DropdownMenuProps) {
@@ -39,10 +41,14 @@ export const DropdownMenu = React.memo(function DropdownMenu({
       padding="none"
       id={id}
       className={className}
+      anchorRef={anchorRef}
+      matchTriggerWidth={matchTriggerWidth}
       content={
         <Menu
           sections={sections}
           size={size}
+          // When the panel is sized to the trigger, the Menu fills it instead of a fixed size width.
+          fullWidth={matchTriggerWidth}
           showSearch={showSearch}
           searchValue={searchValue}
           onSearchChange={onSearchChange}

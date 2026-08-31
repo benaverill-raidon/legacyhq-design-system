@@ -134,6 +134,8 @@ export const Popup = React.memo(function Popup({
   unstyled = false,
   padding = 'lg',
   manageTriggerAria = true,
+  anchorRef,
+  matchTriggerWidth = false,
 }: PopupProps) {
   const generatedId = React.useId();
   const contentId = id ?? generatedId;
@@ -141,14 +143,23 @@ export const Popup = React.memo(function Popup({
   const panelRef = React.useRef<HTMLDivElement | null>(null);
   const [resolvedAlignment, setResolvedAlignment] = React.useState<PopupAlignment>(alignment);
   const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
+  const [panelWidth, setPanelWidth] = React.useState<number | null>(null);
   const [triggerOutOfView, setTriggerOutOfView] = React.useState(false);
 
+  // The element the panel positions against and matches width to - the anchor (e.g. a field frame)
+  // when given, otherwise the cloned trigger child itself.
+  const getMeasureEl = React.useCallback(() => anchorRef?.current ?? triggerRef.current, [anchorRef]);
+
   const updatePosition = React.useCallback(() => {
-    if (!triggerRef.current || !panelRef.current) {
+    const measureEl = getMeasureEl();
+    if (!measureEl || !panelRef.current) {
       return;
     }
 
-    const triggerRect = triggerRef.current.getBoundingClientRect();
+    const triggerRect = measureEl.getBoundingClientRect();
+    if (matchTriggerWidth) {
+      setPanelWidth(triggerRect.width);
+    }
     const panelRect = panelRef.current.getBoundingClientRect();
     const gap = getTokenPixels('--spacing-sm');
     const viewportPadding = gap;
@@ -178,7 +189,7 @@ export const Popup = React.memo(function Popup({
 
     setResolvedAlignment(bestCandidate.alignment);
     setPosition({ top: bestCandidate.top, left: bestCandidate.left });
-  }, [alignment]);
+  }, [alignment, getMeasureEl, matchTriggerWidth]);
 
   React.useLayoutEffect(() => {
     if (!open || typeof window === 'undefined') {
@@ -195,8 +206,9 @@ export const Popup = React.memo(function Popup({
     window.addEventListener('scroll', handleWindowUpdate, true);
 
     const resizeObserver = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(handleWindowUpdate) : null;
-    if (resizeObserver && triggerRef.current) {
-      resizeObserver.observe(triggerRef.current);
+    const measureEl = getMeasureEl();
+    if (resizeObserver && measureEl) {
+      resizeObserver.observe(measureEl);
     }
     if (resizeObserver && panelRef.current) {
       resizeObserver.observe(panelRef.current);
@@ -207,7 +219,7 @@ export const Popup = React.memo(function Popup({
       window.removeEventListener('scroll', handleWindowUpdate, true);
       resizeObserver?.disconnect();
     };
-  }, [open, updatePosition]);
+  }, [open, updatePosition, getMeasureEl]);
 
   React.useEffect(() => {
     if (!open || typeof document === 'undefined') {
@@ -226,7 +238,9 @@ export const Popup = React.memo(function Popup({
       }
 
       const target = event.target as Node;
-      if (panelRef.current?.contains(target) || triggerRef.current?.contains(target)) {
+      // Use the anchor (e.g. the whole field frame) as the trigger boundary when given, so a click
+      // anywhere inside the control - not only on the inset input child - keeps the panel open.
+      if (panelRef.current?.contains(target) || getMeasureEl()?.contains(target)) {
         return;
       }
 
@@ -240,7 +254,7 @@ export const Popup = React.memo(function Popup({
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('pointerdown', handlePointerDown, true);
     };
-  }, [open, closeOnEscape, closeOnOutsideClick, onOpenChange]);
+  }, [open, closeOnEscape, closeOnOutsideClick, onOpenChange, getMeasureEl]);
 
   const child = React.Children.only(children) as React.ReactElement<
     React.HTMLAttributes<HTMLElement> & { 'aria-controls'?: string; ref?: React.Ref<HTMLElement> }
@@ -278,7 +292,11 @@ export const Popup = React.memo(function Popup({
               style={
                 triggerOutOfView || !position
                   ? { visibility: 'hidden' }
-                  : { top: `${position.top}px`, left: `${position.left}px` }
+                  : {
+                      top: `${position.top}px`,
+                      left: `${position.left}px`,
+                      ...(matchTriggerWidth && panelWidth !== null ? { width: `${panelWidth}px` } : {}),
+                    }
               }
             >
               {content}

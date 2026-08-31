@@ -278,6 +278,17 @@ describe('Menu', () => {
     expect(container.firstChild).toHaveClass(styles.size_lg);
   });
 
+  it('fills its container instead of a fixed size width when fullWidth is set', () => {
+    // Used by a trigger-matched panel (Dropdown Menu's matchTriggerWidth) - the size width would
+    // otherwise fight the width Popup applies to the panel.
+    const { container } = render(
+      <Menu aria-label="Actions" size="sm" fullWidth sections={actionSections()} showSearch={false} />,
+    );
+
+    expect(container.firstChild).toHaveClass(styles.fullWidth);
+    expect(container.firstChild).not.toHaveClass(styles.size_sm);
+  });
+
   it('maps Figma-verified tokens for width, spacing, and selected-row color', () => {
     expect(menuCss).toContain('var(--component-menu-width-sm)');
     expect(menuCss).toContain('var(--component-menu-width-md)');

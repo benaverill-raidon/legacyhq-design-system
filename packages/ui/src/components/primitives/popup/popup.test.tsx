@@ -28,6 +28,42 @@ function ControlledPopup(props: Partial<React.ComponentProps<typeof Popup>> = {}
   );
 }
 
+// A field whose real trigger is an `<input>` inset within a frame `<div>` - the exact shape Select
+// composes (TextField forwards its ref to the inset input; the frame is that input's parent). Popup
+// clones this and attaches the merged ref + ARIA to the input.
+const FakeField = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
+  function FakeField(props, ref) {
+    return (
+      <div data-testid="frame">
+        <input ref={ref} aria-label="Trigger" {...props} />
+      </div>
+    );
+  },
+);
+
+// Passes the frame (the input's parent) as `anchorRef`, so positioning/width/dismissal follow the
+// whole field, not the inset input - mirroring Select. `frameRef` is derived from the trigger's own
+// (descendant) ref, so it's populated before Popup's layout effect, matching the real timing.
+function AnchoredPopup({ matchTriggerWidth = false }: { matchTriggerWidth?: boolean }) {
+  const frameRef = React.useRef<HTMLElement | null>(null);
+  const [open, setOpen] = React.useState(true);
+  const setTriggerRef = React.useCallback((node: HTMLInputElement | null) => {
+    frameRef.current = node?.parentElement ?? null;
+  }, []);
+
+  return (
+    <Popup
+      content={<span>Popup content</span>}
+      open={open}
+      onOpenChange={setOpen}
+      anchorRef={frameRef}
+      matchTriggerWidth={matchTriggerWidth}
+    >
+      <FakeField ref={setTriggerRef} />
+    </Popup>
+  );
+}
+
 describe('Popup', () => {
   it('renders the trigger and nothing else when closed', () => {
     render(<ControlledPopup />);
@@ -319,5 +355,62 @@ describe('Popup', () => {
 
     expect(trigger).not.toHaveAttribute('aria-expanded');
     expect(trigger).not.toHaveAttribute('aria-controls');
+  });
+
+  it('fixes the panel width to the measured trigger when matchTriggerWidth is set', () => {
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.tagName === 'BUTTON') {
+          return { top: 0, bottom: 40, left: 0, right: 240, width: 240, height: 40 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    render(<ControlledPopup open matchTriggerWidth />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel).toHaveStyle({ width: '240px' });
+
+    getBoundingClientRectSpy.mockRestore();
+  });
+
+  it('does not fix the panel width by default (it hugs its own content)', () => {
+    render(<ControlledPopup open />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel.style.width).toBe('');
+  });
+
+  it('measures and sizes the panel to the anchorRef element, not the smaller trigger child', () => {
+    // Select's real shape: the panel should match the field frame (320), never the inset input (120).
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute?.('data-testid') === 'frame') {
+          return { top: 0, bottom: 40, left: 0, right: 320, width: 320, height: 40 } as DOMRect;
+        }
+        if (this.tagName === 'BUTTON') {
+          return { top: 0, bottom: 40, left: 0, right: 120, width: 120, height: 40 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    render(<AnchoredPopup matchTriggerWidth />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel).toHaveStyle({ width: '320px' });
+
+    getBoundingClientRectSpy.mockRestore();
+  });
+
+  it('treats the anchorRef element as the outside-click boundary, so a press inside the frame keeps it open', () => {
+    // Without anchorRef, a press on the frame padding (outside the trigger child) would dismiss;
+    // the anchor extends the "inside" boundary to the whole control.
+    render(<AnchoredPopup />);
+
+    fireEvent.pointerDown(screen.getByTestId('frame'));
+
+    expect(screen.getByText('Popup content')).toBeInTheDocument();
   });
 });

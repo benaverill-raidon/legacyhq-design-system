@@ -151,7 +151,6 @@
           "warning",
           "error",
           "information",
-          "discovery",
           "disabled"
         ]
       },
@@ -204,7 +203,6 @@
         "warning",
         "error",
         "information",
-        "discovery",
         "disabled"
       ]
     },
@@ -225,7 +223,6 @@
         "warning": "--color-content-warning",
         "error": "--color-content-error",
         "information": "--color-content-information",
-        "discovery": "--color-content-discovery",
         "disabled": "--color-content-disabled"
       }
     },
@@ -494,6 +491,18 @@
         "required": false,
         "default": true,
         "description": "Sets aria-expanded/aria-controls on the trigger while true. Set to false when the consumer already manages the trigger's own ARIA relationship to the panel content (e.g. Tooltip's aria-describedby) - aria-expanded/aria-controls are disclosure-widget attributes and don't apply to a supplemental hint."
+      },
+      "anchorRef": {
+        "type": "React.RefObject<HTMLElement | null>",
+        "required": false,
+        "default": null,
+        "description": "Element to measure for positioning, width-matching, and the outside-click boundary, instead of the cloned trigger child. Use when the child carrying the merged ref + aria-expanded is smaller than the visible control it lives inside - e.g. Select's trigger is a text input (where the ARIA belongs) inset within a bordered field frame, and the panel should align to and match the frame. The trigger child still receives the merged ref and ARIA; only measurement and the dismissal boundary follow this element. Falls back to the trigger child."
+      },
+      "matchTriggerWidth": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sizes the panel to the measured trigger (the anchorRef element, or the trigger child) rather than letting it hug its own content - so a field's dropdown matches the field's width. The consumer's panel content must be able to fill that width (Dropdown Menu passes `fullWidth` to its Menu for exactly this)."
       }
     },
     "sizes": [],
@@ -873,8 +882,7 @@
         "enum": [
           "neutral",
           "warning",
-          "error",
-          "discovery"
+          "error"
         ]
       },
       "disabled": {
@@ -952,8 +960,7 @@
       "tone": [
         "neutral",
         "warning",
-        "error",
-        "discovery"
+        "error"
       ]
     },
     "subComponents": [],
@@ -994,7 +1001,6 @@
           "primaryWarningBackground": "--color-background-warning-bold-default",
           "primaryWarningContent": "--color-content-warning-inverse",
           "primaryErrorBackground": "--color-background-error-bold-default",
-          "primaryDiscoveryBackground": "--color-background-discovery-bold-default",
           "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
           "disabledBackground": "--color-background-disabled",
           "disabledContent": "--color-content-disabled"
@@ -1194,7 +1200,6 @@
           "default",
           "information",
           "warning",
-          "discovery",
           "error",
           "success",
           "law",
@@ -1234,7 +1239,6 @@
         "default",
         "information",
         "warning",
-        "discovery",
         "error",
         "success",
         "law",
@@ -1640,7 +1644,6 @@
         "enum": [
           "default",
           "primary",
-          "discovery",
           "inverted"
         ]
       },
@@ -1682,7 +1685,6 @@
       "appearance": [
         "default",
         "primary",
-        "discovery",
         "inverted"
       ],
       "size": [
@@ -1695,7 +1697,6 @@
       "semantic": {
         "defaultSelected": "color-background-neutral-bold-default",
         "primarySelected": "color-background-brand-primary-bold-default",
-        "discoverySelected": "color-background-discovery-bold-default",
         "invertedSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
         "interactiveHover": "color-background-neutral-subtle-hover",
@@ -2877,7 +2878,7 @@
       },
       {
         "name": "label segment",
-        "description": "elemBefore (fixed 16px, decorative) plus the label. A plain span for filter/property; a real toggle button for scope."
+        "description": "elemBefore (decorative, content-hugging - 16px icon/sm-avatar, 24px md-avatar) plus the label. A plain span for filter/select; a real toggle button for search."
       },
       {
         "name": "operator segment",
@@ -2889,7 +2890,7 @@
       },
       {
         "name": "remove button",
-        "description": "filter and property. A button carrying a CloseIcon and an accessible name."
+        "description": "filter and select. A button carrying a CloseIcon and an accessible name."
       }
     ],
     "props": {
@@ -2900,21 +2901,21 @@
         "description": "Discriminates the union - determines which other props are valid.",
         "enum": [
           "filter",
-          "property",
-          "scope"
+          "select",
+          "search"
         ]
       },
       "label": {
         "type": "React.ReactNode",
         "required": true,
         "default": null,
-        "description": "The leading segment's text: the property name, or the scope name."
+        "description": "The leading segment's text: the property name (select), or the search-scope name (search)."
       },
       "elemBefore": {
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Decorative Icon or Avatar in a fixed 16px box. Never an interactive control."
+        "description": "Decorative Icon or Avatar in a content-hugging box. Never an interactive control. An Avatar passed here is sized to the chip - `xxs` (16px) in a sm chip, `xs` (24px) in an md chip - matching Figma's elemBefore avatar size axis, so a consumer can pass one Avatar element and get the right size per chip size. Icons (always 16px) and other nodes pass through unchanged."
       },
       "size": {
         "type": "ChipSize",
@@ -2936,13 +2937,13 @@
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "scope only. Drives aria-pressed and the selected token family."
+        "description": "search only. Drives aria-pressed and the selected token family."
       },
       "onSelectedChange": {
         "type": "(isSelected: boolean) => void",
         "required": false,
         "default": null,
-        "description": "scope only. Called with the next selected value."
+        "description": "search only. Called with the next selected value."
       },
       "value": {
         "type": "ChipSegment",
@@ -2960,19 +2961,19 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "filter only. Rendered before the value text - an Avatar, Avatar Group, status icons."
+        "description": "filter only. Rendered before the value text - an Avatar, Avatar Group, or status icons. Unlike elemBefore, this slot hugs its content (Figma's property-value container measures 16px for an icon preview but 24px for an Avatar / Avatar Group), so its contents are NOT size-normalized - pass an Avatar at its intended size (xs/24px, per the assignee filter)."
       },
       "onRemove": {
         "type": "(event) => void",
         "required": true,
         "default": null,
-        "description": "filter and property. Every verified Figma variant of both has a remove button."
+        "description": "filter and select. Every verified Figma variant of both has a remove button."
       },
       "removeAriaLabel": {
         "type": "string",
         "required": false,
         "default": "Remove ${label}",
-        "description": "filter and property. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
+        "description": "filter and select. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
       },
       "id": {
         "type": "string",
@@ -2998,8 +2999,8 @@
     "variants": {
       "mode": [
         "filter",
-        "property",
-        "scope"
+        "select",
+        "search"
       ]
     },
     "subComponents": [],
@@ -3007,8 +3008,8 @@
       "note": "chip.module.css references only tokens: size-control-xs/sm for heights, measurement-6 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
     },
     "accessibility": {
-      "scopeRole": "native button with aria-pressed, matching Toggle Button",
-      "labelSegment": "a plain non-interactive span in filter/property mode - it names the property rather than acting on it",
+      "searchRole": "native button with aria-pressed, matching Toggle Button",
+      "labelSegment": "a plain non-interactive span in filter/select mode - it names the property rather than acting on it",
       "dropdownSegments": "native buttons; aria-expanded/aria-controls supplied by Popup via Dropdown Menu",
       "menuRole": "menu (from Menu), named from the property and segment role by default",
       "removeButton": "native button with an accessible name (`Remove ${label}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
@@ -3033,17 +3034,17 @@
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
       "componentSetNodeId": "4631:83388",
       "componentName": "chip",
-      "variantCount": 14,
-      "verifiedAt": "2026-08-24",
-      "note": "Filed on the file's own \"✅⏲️ Chip\" page, verified directly against the file via the Desktop Bridge plugin.",
-      "structure": "One component set with four axes - `mode` (filtering/scope/property), `size` (`sm (24)` / `md (32)`), `filter type` (none/status/context/assignee/due date), and `isSelected` - but only 14 of the 60 combinations exist. Every variant is a horizontal auto-layout row (itemSpacing 0) of segment instances that read as one pill: `mode=filtering` is `figma-parts / chip-base` + one or two `dropdown-menu` instances + `figma-parts / remove-button`; `mode=property` is `chip-base` + `remove-button`; `mode=scope` is `chip-base` alone. Outer corner radius is 999 (full round) on filtering/property; scope's own chip-base carries the 999 directly. Segment corner radii measured per side: leading segment [999, 0, 0, 999], middle segments [0, 0, 0, 0], trailing segment [0, 999, 999, 0]. Measured heights match the size axis exactly (sm 24, md 32); padding-inline is 6 at sm and 8 at md, with the remove button pulled 2px toward the seam (sm 4/6, md 6/8); segment gap is 4 at both sizes.",
+      "variantCount": 5,
+      "verifiedAt": "2026-08-27",
+      "note": "Filed on the file's own \"✅⏲️ Chip\" page, verified directly against the file via the Desktop Bridge plugin. The Figma build was simplified on 2026-08-27: modes renamed (filtering, property, scope) -> (filter, select, search), the `filter type` axis removed, and chip-base's mode/tone/hasValue axes dropped.",
+      "structure": "One component set, 5 variants across two axes - `mode` (filter/select/search) and `size` (`sm (24)` / `md (32)`) - with `filter` md-only (the sm filter variants were removed): so filter/md, select/sm, select/md, search/sm, search/md. Every variant is a horizontal auto-layout row (itemSpacing 0) of segment instances that read as one pill: `mode=filter` is `figma-parts / chip-base` + one or two `dropdown-menu` instances (operator, value) + `figma-parts / remove-button`; `mode=select` is `chip-base` + `remove-button`; `mode=search` is `chip-base` alone. Outer corner radius is 999 (full round); interior corners squared. Segment corner radii measured per side: leading segment [999, 0, 0, 999], middle segments [0, 0, 0, 0], trailing segment [0, 999, 999, 0]. Measured heights match the size axis exactly (sm 24, md 32); padding-inline is 6 at sm and 8 at md, with the remove button pulled 2px toward the seam (sm 4/6, md 6/8); segment gap is 4 at both sizes. The elemBefore box hugs its content: 16px for an icon (`element=icon`) or a sm-chip avatar (`element=avatar, size=sm`), 24px for an md-chip avatar (`element=avatar, size=md`) - so the leading avatar is `xxs`/16px in a sm chip and `xs`/24px in an md chip. The value preview likewise hugs its content. The old status/context/assignee/due-date filter categories are now examples/data, not a Figma variant axis.",
       "parts": {
-        "figma-parts / chip-base": "3662:7444 - the label segment (an `elemBefore` slot at a fixed 16px box plus the label text). Axes: mode(scope/property) x size x tone(default/error/warning/success/information) x state(default/hover/press/focus) x isSelected x hasValue x isDisabled x isRemovable.",
+        "figma-parts / chip-base": "3662:7444 - the label segment (an `elemBefore` slot plus the label text). Axes (post-simplification): size x state(default/hover/press/focus) x isSelected x isDisabled x isRemovable - the earlier mode/tone/hasValue axes were dropped.",
         "figma-parts / value": "3662:25295 - the value segment's trigger. Holds a `figma-parts / property-value` preview plus the value text; its `show-property` boolean toggles that preview.",
         "figma-parts / operator": "3662:25209 - the operator segment's trigger. Text only, no preview slot.",
         "figma-parts / remove-button": "3662:25128 - a close icon in its own segment.",
         "figma-parts / property-value": "3661:41493 - the value preview, with type=avatar | avatar group | task status | primary link. Modeled in code as an open `valuePreview: React.ReactNode` slot rather than a closed enum.",
-        "figma-parts / elemBefore": "1978:50905 - element=avatar | icon, a fixed 16px box."
+        "figma-parts / elemBefore": "1978:50905 - element=icon (16px) | element=avatar with a size axis: size=sm (16px) / size=md (24px). Its box hugs the element, so the leading avatar is 16px in a sm chip and 24px in an md chip."
       },
       "tokenMapping": {
         "segmentRest": "background: color/background/neutral/subtle/default; border: color/border/input",
@@ -3053,24 +3054,25 @@
         "operatorAndValueText": "color/content/default, typography Body/M",
         "selected": "background: color/background/selected/default/default; border: color/border/selected; text: color/content/selected. No hover/press ramp - see the chip-base interaction-states note.",
         "disabled": "background: color/background/disabled; text: color/content/disabled; border reverts to color/border/input",
-        "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text"
+        "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text",
+        "removeIcon": "color/content/subtle at rest, color/content/disabled when disabled - Figma-verified on the remove-button's own vector. The CloseIcon inherits the remove button's colour (same :global([data-color]) inherit technique the label icon uses) rather than keeping Icon's default content/default."
       },
       "apiAdaptationNotes": [
-        "One `Chip` export whose props are a discriminated union on `mode`, rather than three components or one component with everything optional. This mirrors Figma's single component set while making illegal states unrepresentable - `sections` cannot reach a scope chip, `onSelectedChange` cannot reach a property chip.",
-        "Figma's `filtering` is named `filter` in code - a noun, consistent in form with its sibling values `property` and `scope`. Same class of deliberate naming fix as tab-group -> TagGroup.",
+        "One `Chip` export whose props are a discriminated union on `mode`, rather than three components or one component with everything optional. This mirrors Figma's single component set while making illegal states unrepresentable - `value` cannot reach a search chip, `onSelectedChange` cannot reach a select chip.",
+        "Mode names track Figma exactly: `filter` / `select` / `search`. (Figma originally named these filtering, property, and scope; it was simplified to filter/select/search on 2026-08-27 and the code API was renamed to match.)",
         "Figma's `filter type` axis (none/status/context/assignee/due date) is NOT modeled as a prop. Those four categories differ only in their data (icon, label, value) except for one structural fact: `due date` has an operator segment and the others do not. Code exposes that fact directly as an optional `operator` segment, so any filter can have a comparison and no fifth product category requires a code change. Figma's four types become four examples in the stories.",
         "Figma models the operator and value as two independent `dropdown-menu` instances, each with its own `isOpen`. Code matches that exactly - each dropdown segment owns its own open state internally, so an operator menu and a value menu can never fight over one shared flag.",
-        "chip-base's `tone` axis (default/error/warning/success/information) is deliberately not exposed. All 14 chip variants use tone=default, so any chip-level tone mapping would be extrapolated from the part rather than verified. Available for a later pass if a real need appears.",
-        "chip-base's `isRemovable=false` variants exist at the part level, but no chip-level property or filter variant uses them - every verified one has a remove button. `onRemove` is therefore required for both modes rather than optional, keeping Chip distinct from Tag (which is the right component for a non-removable label).",
-        "`scope` is the only mode whose label segment is itself interactive, and the only one Figma gives an unselected state, so it renders as a real toggle button carrying `aria-pressed` - the same semantics Toggle Button uses. For `filter` and `property` the label is a plain non-interactive span; only the dropdown segments and remove button are controls.",
+        "Chip has no `tone` axis. chip-base carried one (default/error/warning/success/information) before the simplification; every chip variant used tone=default, and the axis was since dropped from chip-base entirely. Available for a later pass if a real need appears.",
+        "chip-base's `isRemovable=false` variants exist at the part level, but no chip-level select or filter variant uses them - every verified one has a remove button. `onRemove` is therefore required for both modes rather than optional, keeping Chip distinct from Tag (which is the right component for a non-removable label).",
+        "`search` is the only mode whose label segment is itself interactive, and the only one Figma gives an unselected state, so it renders as a real toggle button carrying `aria-pressed` - the same semantics Toggle Button uses. For `filter` and `select` the label is a plain non-interactive span; only the dropdown segments and remove button are controls.",
         "Each dropdown panel's default accessible name is composed from the property and the segment's role (\"Due date operator\", \"Due date value\") rather than the segment's own label. The segment label is the current value (\"on\", \"March 2\"), which names the panel poorly on its own. `ChipSegment.menuAriaLabel` overrides it.",
         "Every segment except the last drops its own trailing border, so the next segment's leading border draws the seam - applied to every segment rather than only the leading one, which is what keeps the junction a uniform 1px where two middle segments meet (an operator and a value side by side, as on a due-date filter). Segment strokes are strokeAlign INSIDE at weight 1.",
         "Figma models no selected+disabled chip-base variant at all, so disabled fully overrides selected visuals (including resetting the border to color/border/input) rather than blending the two - the same precedent Toggle Button and Toggle Icon Button already set for that gap.",
-        "chip-base has a state axis (default/hover/press/focus) in Figma, but the label segment deliberately implements no hover or press treatment in any mode - a product decision, not an oversight. In filter/property the label is a passive span that names the property; in scope, selection is the feedback and the focus ring covers keyboard affordance. Interaction fills belong to the segments that act: the operator, the value, and remove. A consequence: nothing in Chip consumes --color-background-selected-default-hover/-press.",
-        "ChipScopeProps['data-force-state'] accepts only 'focus' as a result - a 'hover'/'press' value would render identically to the default and quietly mislead.",
+        "chip-base has a state axis (default/hover/press/focus) in Figma, but the label segment deliberately implements no hover or press treatment in any mode - a product decision, not an oversight. In filter/select the label is a passive span that names the property; in search, selection is the feedback and the focus ring covers keyboard affordance. Interaction fills belong to the segments that act: the operator, the value, and remove. A consequence: nothing in Chip consumes --color-background-selected-default-hover/-press.",
+        "ChipSearchProps['data-force-state'] accepts only 'focus' as a result - a 'hover'/'press' value would render identically to the default and quietly mislead.",
         "Every segment is position: relative, and the focused one gets z-index: 1. The focus ring is an outline drawn outside the segment box and segments sit flush, so without this the next segment paints over the ring's trailing edge and clips it. Same paint-tier reasoning as Avatar Group's overlapping stack, applied to an outline rather than a fill.",
         "The remove button carries a \"Remove\" Tooltip on hover/focus, and Tooltip is not mounted at all while disabled. Two independent reasons point the same way: \"Remove\" on a chip that cannot be removed is misleading rather than explanatory (unlike IconButton disabled tooltips, which explain why an action is unavailable); and structurally, Tooltip wraps a disabled child in an extra span so pointer events still fire, which would stop the button being a direct child of the root and detach it from the pill as its own fully-rounded island - every segment rule here is structural (:first-child / :last-child / :not(:last-child)). Passing disabled to Tooltip suppresses only the popup, not the wrapper. The button own aria-label remains the accessible name, so the tooltip is never the sole one.",
-        "Each scope chip is an independent on/off toggle, not a radio group - several can be on at once and Chip never coordinates siblings. Any one-of-N behaviour belongs to the consumer holding the state, the same way Toggle Button works.",
+        "Each search chip is an independent on/off toggle, not a radio group - several can be on at once and Chip never coordinates siblings. Any one-of-N behaviour belongs to the consumer holding the state, the same way Toggle Button works.",
         "size resolves as size ?? groupSize ?? md, where groupSize comes from ChipSizeContext. Chip Group provides it via context rather than by cloning children, because cloning only reaches direct children - a Chip behind a Tooltip, from a map, or behind a conditional would silently miss it. Explicit per-Chip size still wins."
       ]
     }
@@ -3158,7 +3160,7 @@
     "accessibility": {
       "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
       "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
-      "selection": "not managed - each scope Chip carries its own aria-pressed",
+      "selection": "not managed - each search Chip carries its own aria-pressed",
       "note": "Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour to document beyond its children's."
     },
     "relatedComponents": [
@@ -3176,14 +3178,14 @@
       "variantCount": 4,
       "verifiedAt": "2026-08-24",
       "note": "Filed on the file's own \"✅⏲️ Chip Group\" page, verified directly against the file via the Desktop Bridge plugin.",
-      "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=scope`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
+      "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
       "apiAdaptationNotes": [
         "Chip Group takes `children`, not a data array. Tag Group and Avatar Group own their items because they have to decide which are visible and which are truncated; Chip Group has no overflow behaviour at all, and Chip's own props are a discriminated union on `mode`, which a flat item type could not express without duplicating that union. Button Group - the closest analogue in this system - is likewise a children-based layout wrapper.",
         "`size` reaches each Chip through React context (ChipSizeContext), not by cloning children. cloneElement only reaches direct children, so a Chip inside a Tooltip, returned from a `.map`, or rendered conditionally would silently miss the group's size - the same structural fragility that detached Chip's own remove button from its pill. Context reaches any descendant regardless of what sits between, and an explicit `size` on an individual Chip still wins because Chip resolves `size ?? groupSize ?? 'md'`.",
         "The provider is only mounted when `size` is actually set, so a Chip Group without one leaves every Chip on its own default rather than overriding it with undefined.",
         "`alignment` is genuinely different from Tag Group's identically-named prop despite the shared axis name. Here it maps to Figma's primaryAxisAlignItems MIN/MAX - literally which edge the chips pack against (justify-content). In Tag Group it decides where the overflow tag renders. Chip Group has no overflow, so there is nothing to place.",
         "No overflow or truncation was implemented, because Figma models none - all ten chips in every variant are plain, equal siblings. Chip Group is deliberately not Tag Group with chips in it.",
-        "Chip Group never manages selection. Figma's variants are all `isSelected=false` scope chips, and scope chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
+        "Chip Group never manages selection. Figma's variants are all `isSelected=false` search chips, and search chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
         "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
       ]
     }
@@ -3687,8 +3689,7 @@
           "info",
           "success",
           "warning",
-          "error",
-          "discovery"
+          "error"
         ]
       },
       "content": {
@@ -3738,8 +3739,7 @@
         "info",
         "success",
         "warning",
-        "error",
-        "discovery"
+        "error"
       ]
     },
     "subComponents": [],
@@ -3939,6 +3939,393 @@
         "Figma's one demo (currentPage=1, totalPages=20) shows 12 consecutive pages before collapsing to an ellipsis + page 20 - a width-fitting demo, not a literal algorithm. The component instead implements the standard sibling+boundary-count windowing algorithm (getPaginationRange), which with default siblingCount=1/boundaryCount=1 renders '1 2 … 20' for the same inputs. A consumer can raise siblingCount to get a wider range closer to Figma's sample.",
         "Figma's per-item VARIANT prop name 'tone' on both toggle-button and icon-button instances maps to this codebase's existing ToggleButtonTone/IconButtonAppearance prop values ('subtle'), not a new prop Pagination needs to invent.",
         "aria-current=\"page\" is added on top of ToggleButton's own isSelected/aria-pressed, since ToggleButton alone has no concept of 'current page in a sequence'."
+      ]
+    }
+  },
+  {
+    "id": "rich-text-area",
+    "name": "RichTextArea",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "beta",
+    "path": "docs/components/molecules/rich-text-area/rich-text-area.contract.json",
+    "anatomy": [],
+    "props": {
+      "value": {
+        "type": "RichTextValue",
+        "required": true,
+        "default": null,
+        "description": "The node array: `{ type: 'text', text }` runs interleaved with `{ type: 'entity', entity }` nodes. Read on mount to hydrate the editor; the DOM leads from then on."
+      },
+      "onChange": {
+        "type": "(value: RichTextValue) => void",
+        "required": true,
+        "default": null,
+        "description": "Called with the re-serialized node array after every edit, including tag insertion and deletion."
+      },
+      "onSearch": {
+        "type": "EntitySearch",
+        "required": true,
+        "default": null,
+        "description": "`(query: string) => EntitySection[] | Promise<EntitySection[]>`. Resolves the `/query` into grouped results. Called with '' when the picker opens unless `recents` is supplied."
+      },
+      "recents": {
+        "type": "EntitySection[]",
+        "required": false,
+        "default": null,
+        "description": "Shown when the picker opens with an empty query, instead of calling `onSearch('')`."
+      },
+      "entityConfig": {
+        "type": "Record<string, EntityTypeConfig>",
+        "required": false,
+        "default": null,
+        "description": "Maps each entityType to a tag `tone` and a default `icon`, used for both the inserted tag and the section heading tile. Merges over the built-in defaults."
+      },
+      "size": {
+        "type": "TextAreaSize",
+        "required": false,
+        "default": "md",
+        "description": "Text Area's frame sizing - padding, radius, font.",
+        "enum": [
+          "md",
+          "lg"
+        ]
+      },
+      "appearance": {
+        "type": "TextAreaAppearance",
+        "required": false,
+        "default": "default",
+        "description": "Text Area's appearance axis (Figma names it `tone`).",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "resize": {
+        "type": "TextAreaResize",
+        "required": false,
+        "default": "vertical",
+        "description": "Which edges the user can drag.",
+        "enum": [
+          "none",
+          "vertical",
+          "horizontal",
+          "both"
+        ]
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sets aria-invalid and paints the error border."
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Turns off contenteditable, removes the editor from the tab order, and suppresses the slash command."
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Shown while the editor is empty. Rendered from `data-placeholder` as an absolutely-positioned overlay, so it never sits in the text flow or displaces the caret."
+      },
+      "searchPlaceholder": {
+        "type": "string",
+        "required": false,
+        "default": "Type to search",
+        "description": "Placeholder inside the `/` mini-input before a query is typed."
+      },
+      "emptyMessage": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "No matches",
+        "description": "Shown in the picker when a search returns nothing."
+      },
+      "rows": {
+        "type": "number",
+        "required": false,
+        "default": 3,
+        "description": "Approximate initial height in line-height units, applied as the `--rta-rows` custom property."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes onto the wrapper."
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Applied to the editor element, for pairing with a <label htmlFor>."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name for the editor. Required unless aria-labelledby or a wired label is used."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name by reference."
+      }
+    },
+    "sizes": [
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default",
+        "subtle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "frame": "All of Text Area's frame tokens, unchanged - surface, border, radius, padding, typography per size.",
+      "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-sm`.",
+      "tagHost": "Layout only - the Tag atom carries its own tone tokens.",
+      "picker": "The Menu organism's own panel tokens; the panel caps at 280px and scrolls.",
+      "note": "No new tokens. Frame reuse is what makes the rich mode read as the same field as Text Area."
+    },
+    "accessibility": {
+      "role": "textbox (a contenteditable div), aria-multiline=\"true\"",
+      "label": "No built-in label - pass aria-label / aria-labelledby, or wire a <label htmlFor> to `id`.",
+      "invalid": "aria-invalid reflects the invalid prop.",
+      "disabled": "contenteditable is turned off and tabIndex is -1; the slash command does not fire.",
+      "tags": "Each tag renders a Tag with tabIndex -1 so the caret walk is not interrupted by tab stops; a tag with `href` is a real <a> and is reachable from the rendered content.",
+      "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. The keyboard-active row is marked with a class. See knownLimitations - this is not yet wired to aria-activedescendant."
+    },
+    "relatedComponents": [
+      "TextArea",
+      "TextField",
+      "Menu",
+      "DropdownMenu",
+      "Tag",
+      "Avatar",
+      "IconTile"
+    ],
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1697:19487",
+      "componentName": "text-area",
+      "variantCount": 64,
+      "verifiedAt": "2026-08-28",
+      "note": "Shares Text Area's component set - `type=rich-inline` is one axis value there, visually identical to `default`. The picker's own anatomy was built from the `type-cursor` figma-part added to text-field on 2026-08-28 (open-search / type-to-search variants) fed into a dropdown-menu variant with a defined open menu. Because the mode is behavior, not appearance, most of this component has no static Figma counterpart to verify against.",
+      "structure": "The editor frame is Text Area's frame, token-for-token. The `/` mini-input reuses Text Field's look (background, input border, radius) at a small size, per the Figma type-cursor part. The picker is the menu organism with search hidden - the query is typed inline in the editor, not in the panel - with one section per entity type and a 16px IconTile heading.",
+      "apiAdaptationNotes": [
+        "Built as a separate `RichTextArea` component rather than a `type` prop on TextArea. The two share a frame but nothing else: one is a native <textarea> with a string value, the other is a contenteditable surface with a structured node array, `onSearch`, and an entity config. A single component would have had two disjoint prop sets and two disjoint values.",
+        "The value is a flat node array (`RichTextValue`) - runs of text interleaved with entity nodes - not HTML or Markdown. It is what you persist; serialize it however your store needs. Storing HTML would leak the editor's DOM shape into consumers' data.",
+        "Hydrates from `value` once, then runs uncontrolled - the DOM is the source of truth while editing, with `onChange` reporting each serialized change. A contenteditable surface cannot be re-rendered from props on every keystroke without destroying the caret.",
+        "The `/` query lives in an inline editable span inside the editor (the Figma `type-cursor` look), so the picker panel has no search field of its own - `showSearch={false}`. This matches Figma and mirrors how Select types in the trigger while the panel only lists options.",
+        "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. See knownLimitations for the accessibility consequence.",
+        "Each tag is a non-editable host span with a `NavTag` portaled into it. contenteditable would otherwise let the caret walk into the tag's internals; a host span keeps each tag atomic to the caret while still being a real React subtree.",
+        "`NavTag` is a preset over the Tag atom, not a new component - Tag already does tone (color), `elemBefore` (icon), and `href` (navigation). An entityType only needs to resolve to a tone plus an icon.",
+        "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
+        "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
+      ]
+    }
+  },
+  {
+    "id": "select",
+    "name": "Select",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/select/select.contract.json",
+    "anatomy": [
+      {
+        "name": "trigger",
+        "description": "A TextField (role=combobox) - the search input, a trailing rotating caret, and (multi) the selected values as chips inside the frame."
+      },
+      {
+        "name": "chips",
+        "description": "multi-select only. One removable Chip (mode=select) per selected value, inside the trigger; sm chips in sm/md triggers, md chips in lg."
+      },
+      {
+        "name": "panel",
+        "description": "A Dropdown Menu (Popup + Menu) of option rows - menuitemradio for single, menuitemcheckbox for multi - with an empty message when the query matches nothing."
+      }
+    ],
+    "props": {
+      "options": {
+        "type": "SelectOption[]",
+        "required": true,
+        "default": null,
+        "description": "The full option list. Each: { value, label, icon?, description?, disabled?, group? }."
+      },
+      "value": {
+        "type": "string | null (single) | string[] (multi)",
+        "required": true,
+        "default": null,
+        "description": "Controlled selection. Scalar for single, array for multi."
+      },
+      "onChange": {
+        "type": "(value) => void",
+        "required": true,
+        "default": null,
+        "description": "Called with the next selection - string|null (single) or string[] (multi)."
+      },
+      "inputType": {
+        "type": "'single' | 'multi'",
+        "required": false,
+        "default": "single",
+        "description": "Discriminates the union. single: radio rows, scalar value, label in trigger. multi: checkbox rows, array value, removable chips in trigger."
+      },
+      "size": {
+        "type": "SelectSize",
+        "required": false,
+        "default": "md",
+        "description": "Trigger height 32/40/48; also sets the panel width and chip size.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "tone": {
+        "type": "SelectTone",
+        "required": false,
+        "default": "default",
+        "description": "Maps to TextField's appearance - default (bordered) or subtle (bottom-border only).",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Shown when nothing is selected."
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Disables the trigger; the panel cannot open, and chips render disabled."
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Red border and aria-invalid on the input."
+      },
+      "searchValue": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Controlled query. Provide with onSearchChange to filter externally (async); Select then stops filtering internally."
+      },
+      "onSearchChange": {
+        "type": "(value: string) => void",
+        "required": false,
+        "default": null,
+        "description": "Called as the query changes."
+      },
+      "emptyMessage": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": "No matches",
+        "description": "Shown in the panel when the query matches no options."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name for the combobox when no visible label is wired by id."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Same, by reference."
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Applied to the trigger input."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the trigger frame's class list."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "option.icon"
+    ],
+    "variants": {
+      "inputType": [
+        "single",
+        "multi"
+      ],
+      "tone": [
+        "default",
+        "subtle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "note": "select.module.css references only --fade-quick (the caret rotation transition) and the caret colour tokens --color-content-subtle (rest) / --color-content-disabled (disabled). Every other value belongs to TextField, Chip, or Dropdown Menu/Menu - see their own contract.json files."
+    },
+    "accessibility": {
+      "triggerRole": "combobox (the input), aria-haspopup=menu, aria-autocomplete=list",
+      "ariaExpanded": "set on the input by Popup, reflecting the panel's open state",
+      "ariaControls": "set on the input by Popup, pointing at the panel while open",
+      "panelRoles": "role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows carrying aria-checked",
+      "invalid": "aria-invalid on the input when invalid",
+      "focusModel": "opening keeps focus in the input; ArrowDown moves into the Menu (its roving tabindex); Escape/outside-click close and return focus to the input",
+      "note": "Deliberately the menu a11y pattern, matching Figma's text-input + dropdown-menu composition, not the strict combobox/listbox + aria-activedescendant pattern - see apiAdaptationNotes."
+    },
+    "relatedComponents": [
+      "TextField",
+      "Chip",
+      "DropdownMenu",
+      "Menu",
+      "Radio",
+      "Popup"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4662:42012",
+      "componentName": "select",
+      "variantCount": 84,
+      "verifiedAt": "2026-08-26",
+      "note": "Filed on the file's own \"✅⏲️ Select\" page, verified directly against the file via the Desktop Bridge plugin.",
+      "structure": "One component set, 84 variants across six axes - size (sm/md/lg), tone (default/subtle), state (default/hover/focus/typing/hasValue), inputType (single/multi), isInvalid, isDisabled. Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
+      "parts": {
+        "figma-parts / select-trigger": "4658:67775 - 84 variants mirroring select's own axes. Structurally a text-field instance + trailing caret, so the code trigger is the existing TextField molecule, not a bespoke frame.",
+        "text-field": "The trigger's frame, fill, border, focus/invalid/disabled treatment and per-size geometry are exactly the TextField molecule's - verified token-for-token, so Select reuses TextField rather than restating its state CSS.",
+        "caret_down": "icon 1496:1775 = the codebase's CaretDownIcon, in the trigger's elemAfterInput slot.",
+        "chip-base": "multi-select values render as Chips (mode=\"select\") inside the trigger."
+      },
+      "apiAdaptationNotes": [
+        "Props are a discriminated union on `inputType` (default 'single'), so single-select's scalar `value: string | null` and multi-select's `value: string[]` cannot be mixed up - the same pattern Chip uses for `mode`. Single's onChange takes `string | null`; multi's takes `string[]`.",
+        "Options are a flat `SelectOption[]` ({ value, label, icon?, description?, disabled?, group? }), not Menu's `MenuSection[]`. Select maps them into sections itself - grouping consecutive options by their `group` field - and owns each row's selected state, selectionType (radio for single, checkbox for multi), and onSelect. This is the ergonomic shape a Select consumer expects; the caller never hand-wires Menu rows.",
+        "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
+        "tone maps to TextField's `appearance` (default/subtle) - Figma names the axis `tone` on the trigger, but it is TextField's appearance axis, so code uses TextField's own name at that boundary.",
+        "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
+        "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
+        "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
+        "The panel always matches the field frame's width and left edge. The trigger child that carries the merged ref + aria-expanded/aria-controls is the inset input (where that a11y wiring belongs), but Select also passes the field frame (the input's parentElement, via a callback ref) as Dropdown Menu's `anchorRef` and sets `matchTriggerWidth`. Popup then measures, positions, width-matches, and scopes its outside-click boundary to the frame - not the ~9px-inset input - and the inner Menu fills that width via `fullWidth`. This keeps the input's single-child trigger + a11y contract intact while the dropdown lines up flush with the visible control. Verified live: panel width and left both equal the frame's on single and multi.",
+        "`inputType` is not offered as a runtime-mixable prop; a Select is single or multi for its lifetime, as its value type differs. This mirrors Chip's mode union."
       ]
     }
   },
@@ -4384,6 +4771,133 @@
     }
   },
   {
+    "id": "text-area",
+    "name": "TextArea",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/text-area/text-area.contract.json",
+    "anatomy": [],
+    "props": {
+      "size": {
+        "type": "TextAreaSize",
+        "required": false,
+        "default": "md",
+        "description": "Padding, radius, and font size. body-md at md, body-lg at lg. (sm was removed - it read almost identically to md.)",
+        "enum": [
+          "md",
+          "lg"
+        ]
+      },
+      "appearance": {
+        "type": "TextAreaAppearance",
+        "required": false,
+        "default": "default",
+        "description": "default = bordered box (all corners rounded). subtle = transparent until hover/focus/invalid, bottom accent only, square bottom corners. Figma names this axis `tone`.",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sets aria-invalid and paints the error border (via box-shadow, no layout shift)."
+      },
+      "resize": {
+        "type": "TextAreaResize",
+        "required": false,
+        "default": "vertical",
+        "description": "Which edges the user can drag. Maps to CSS `resize`. Disabled fields lock to none.",
+        "enum": [
+          "none",
+          "vertical",
+          "horizontal",
+          "both"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Native textarea disabled; greys the frame and locks resize."
+      },
+      "rows": {
+        "type": "number",
+        "required": false,
+        "default": null,
+        "description": "Native attribute controlling initial height. Set it to size the field; content and resize grow it from there."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes onto the textarea's class list."
+      },
+      "...rest": {
+        "type": "React.TextareaHTMLAttributes",
+        "required": false,
+        "default": null,
+        "description": "Every native textarea attribute (value, defaultValue, placeholder, maxLength, onChange, name, required, readOnly, wrap, ...) forwards to the element. A ref forwards to the <textarea>."
+      }
+    },
+    "sizes": [
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "appearance": [
+        "default",
+        "subtle"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "surface": "background: --color-elevation-surface-raised-default (rest) / -hover (hover)",
+      "border": "--color-border-input (rest) -> --color-border-focus (focus) / --color-border-error (invalid) / --color-border-disabled (disabled)",
+      "radius": "--border-radius-lg (md) / --border-radius-xl (lg)",
+      "padding": "block/inline: md --spacing-sm, lg --spacing-md",
+      "typography": "--typography-body-md-* (md) / --typography-body-lg-* (lg); placeholder --color-content-subtle; disabled text --color-content-disabled",
+      "note": "All reused from Text Field - no new tokens. See apiAdaptationNotes for the Figma `background/input/*` -> `elevation/surface/raised/*` naming mapping."
+    },
+    "accessibility": {
+      "role": "textbox (a native <textarea>), multiline",
+      "label": "No built-in label - pair with a native <label htmlFor> or aria-label, the same as Text Field and any native form control.",
+      "invalid": "aria-invalid reflects the invalid prop; the error is also conveyed visually by the border.",
+      "disabled": "native disabled - removed from the tab order and non-editable.",
+      "focus": "the frame's own focus border is the focus affordance (the textarea is itself the focusable element)."
+    },
+    "relatedComponents": [
+      "RichTextArea",
+      "TextField",
+      "Select",
+      "Label"
+    ],
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1697:19487",
+      "componentName": "text-area",
+      "variantCount": 64,
+      "verifiedAt": "2026-08-27",
+      "note": "Filed on the file's own \"🚧 Text Area\" page, verified directly against the file via the Desktop Bridge plugin. The `sm` size was removed on 2026-08-27 (it read almost identically to md); the size axis is now md/lg. variantCount reflects that removal (was 96) and should be re-confirmed live next time the Components file is connected.",
+      "structure": "One component set across six axes - `type` (default / rich-inline), `size` (md / lg), `tone` (default / subtle), `state` (default / hover / focus / typing / filled / autofill), `isDisabled`, `isInvalid`. Each variant is a single `Container` frame holding the text; the visual frame (fill, border, radius) is bound on the component node, not the inner Container (which carries only padding). Geometry measured per size: padding block/inline md 8/8, lg 12/12; radius lg (8) at md, xl (12) at lg; font body-md (14/24) at md, body-lg (16/24) at lg. State frame tokens (tone=default): default fill background/input/default + border/input 1px; hover fill background/input/hovered; focus fill background/input/pressed + border/focused 2px; typing border/focused 2px; filled + autofill = default; invalid border/error 2px; disabled background/disabled + border/disabled. tone=subtle has a transparent box with a bottom-only accent that reveals on hover (border/input) / focus (border/focused) / invalid (border/error), bottom corners square.",
+      "apiAdaptationNotes": [
+        "Renders the frame styling directly on the <textarea> (no wrapper element), because Text Area - unlike Text Field - has no leading/trailing icon slots to compose around the control. This also lets the browser's native resize grip work with no extra wiring.",
+        "Figma's `tone` axis is exposed in code as `appearance` (default/subtle) - the same axis and the same name its sibling Text Field uses, so the two components share one vocabulary.",
+        "Figma binds a newer `background/input/*` + `border/focused` token naming that has no counterpart in this build. Those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic tokens Text Field already consumes (same intent), so Text Area reuses those rather than inventing unbacked tokens - keeping it visually identical to Text Field per token governance's reuse-first rule.",
+        "Focus and invalid replace the border color and paint the extra pixel via an inset box-shadow rather than a real 1px->2px border-width change - the same technique Text Field uses, so the multi-line text never shifts by a pixel on focus/blur or invalid toggle.",
+        "Figma tints the fill on focus (`background/input/pressed`); code deliberately keeps the resting fill on focus instead, matching Text Field's established no-tint-on-focus behavior (and that token does not exist here).",
+        "The `state` axis (hover/focus/typing/filled/autofill) is not a prop - those are live pseudo-classes (`:hover`, `:focus`), with a documentation-only `data-force-state` pin mirroring them for static Storybook reference, exactly as Text Field, Button, and Checkbox do. `filled`, `typing`, and `autofill` need no distinct styling (they render as default/focus).",
+        "The `type=rich-inline` variant is implemented as a separate component, `RichTextArea` (molecules/text-area/rich). It is an inline entity-tagging mode - visually identical to `default`, the difference is entirely behavioral: `/` opens a grouped entity picker and each choice is inserted inline as a navigational tag. It is separate rather than a `type` prop because its value (a structured node array), its callbacks (`onSearch`), and its surface (contenteditable) are all disjoint from the plain <textarea>. TextArea therefore still exposes no `type` prop; reach for RichTextArea instead.",
+        "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
+      ]
+    }
+  },
+  {
     "id": "text-field",
     "name": "TextField",
     "tier": "molecule",
@@ -4398,6 +4912,10 @@
       {
         "name": "iconBefore",
         "description": "Optional leading icon or short text prefix. Always decorative - never interactive."
+      },
+      {
+        "name": "leadingContent",
+        "description": "Optional interactive in-frame content before the input, sharing its row - added so a token/multi-select field (Select) can render removable chips inside the frame. Shrinks and clips to keep the field single-line. Unlike iconBefore, not aria-hidden."
       },
       {
         "name": "input",
@@ -4459,6 +4977,12 @@
         "required": false,
         "default": null,
         "description": "Composes with the native input's class list."
+      },
+      "leadingContent": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Interactive in-frame content between iconBefore and the input (e.g. Select's chips). Not aria-hidden; shrinks/clips to stay single-line. Existing usage is unchanged when omitted."
       }
     },
     "sizes": [
@@ -4468,6 +4992,7 @@
     ],
     "slots": [
       "iconBefore",
+      "leadingContent",
       "iconAfter"
     ],
     "variants": {
@@ -4632,7 +5157,8 @@
         "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
         "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
         "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
-        "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type."
+        "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type.",
+        "Gained an additive leadingContent slot so Select can render multi-select chips inside the field frame without a second bordered frame or duplicated state CSS. In-frame, before the input, not aria-hidden (unlike the decorative iconBefore); shrinks/clips to keep the field single-line. Additive and opt-in - existing TextField usage is unchanged. Not derived from a TextField Figma variant; it exists to serve Select, whose own select-trigger nests chips inside its text-field instance."
       ]
     }
   },
@@ -4686,6 +5212,18 @@
           "center",
           "right"
         ]
+      },
+      "anchorRef": {
+        "type": "React.RefObject<HTMLElement | null>",
+        "required": false,
+        "default": null,
+        "description": "Element to measure for positioning and width instead of the trigger child - forwarded to Popup. Use when the ARIA-bearing trigger is smaller than the visual control (e.g. Select's inset input within its field frame)."
+      },
+      "matchTriggerWidth": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Sizes the panel to the trigger (or anchorRef) and passes fullWidth to the inner Menu so it fills that width - so a field's dropdown matches the field's width. Forwarded to Popup."
       },
       "id": {
         "type": "string",
@@ -4879,12 +5417,18 @@
         "type": "MenuSize",
         "required": false,
         "default": "sm",
-        "description": "Panel width only (192/240/288px) - row height always follows content.",
+        "description": "Panel width only (192/240/288px) - row height always follows content. Ignored when fullWidth is set.",
         "enum": [
           "sm",
           "md",
           "lg"
         ]
+      },
+      "fullWidth": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Fills the container's width instead of one of the fixed size widths - for a panel sized to its trigger (e.g. Select, via Dropdown Menu's matchTriggerWidth). Replaces the size width rather than layering on it."
       },
       "showSearch": {
         "type": "boolean",
@@ -5020,7 +5564,7 @@
         "description": "--typography-body-sm-* (12px)",
         "heading": "--typography-body-sm-*"
       },
-      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hover/-press, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive (same category of addition as `discovery`, added for Inline Message). `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hover/-press, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive. `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
     },
     "accessibility": {
       "role": "menu (on the sections container)",

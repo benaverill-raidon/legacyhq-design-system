@@ -4,7 +4,7 @@ Button is an atom used to trigger a user-initiated action. It renders a native `
 
 ## When to use
 
-Use Button when the user is performing an action, such as saving, submitting, confirming, canceling, opening a dialog, or starting a workflow. Use semantic tones when the action carries meaning, such as warning, destructive/error, or discovery-oriented actions.
+Use Button when the user is performing an action, such as saving, submitting, confirming, canceling, opening a dialog, or starting a workflow. Use semantic tones when the action carries meaning, such as warning or destructive/error actions.
 
 ## When not to use
 
@@ -12,7 +12,7 @@ Do not use Button for navigation-only behavior; use Link or Link Button instead.
 
 ## Design intent
 
-Button separates visual emphasis from semantic meaning. `appearance` controls emphasis (`default`, `primary`, `subtle`) and `tone` controls intent (`neutral`, `warning`, `error`, `discovery`). This avoids a large variant matrix while keeping action meaning explicit.
+Button separates visual emphasis from semantic meaning. `appearance` controls emphasis (`default`, `primary`, `subtle`) and `tone` controls intent (`neutral`, `warning`, `error`). This avoids a large variant matrix while keeping action meaning explicit.
 
 Button is text-first. It may include leading or trailing icons, but icon-only usage belongs to Icon Button. Loading should preserve the action label and avoid layout shift.
 

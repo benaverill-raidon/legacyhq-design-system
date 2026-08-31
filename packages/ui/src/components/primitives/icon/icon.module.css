@@ -65,10 +65,6 @@
   color: var(--color-content-information);
 }
 
-.color_discovery {
-  color: var(--color-content-discovery);
-}
-
 .color_disabled {
   color: var(--color-content-disabled);
 }

@@ -28,7 +28,6 @@
 
 - [ ] `default` matches the neutral Figma treatment.
 - [ ] `primary` uses the brand semantic color.
-- [ ] `discovery` maps to the discovery/help appearance.
 - [ ] `inverted` works on dark or bold surfaces.
 - [ ] Unselected dots use `color-border-bold` across all appearances.
 - [ ] No primitive colors are used directly.
@@ -70,7 +69,7 @@
 
 - [ ] Docs, Playground, Variants, Sizes, States, Content, and Edge Cases exist.
 - [ ] Docs embeds Playground and Content canvases and documents when to use / when not to use.
-- [ ] Variants shows `default`, `primary`, and `discovery` together, with `inverted` shown
+- [ ] Variants shows `default` and `primary` together, with `inverted` shown
       separately on a dark surface.
 - [ ] Sizes shows `sm` and `md`, including that the interactive hit target scales too.
 - [ ] States shows first/middle/final dot position, passive versus interactive rendering, and a

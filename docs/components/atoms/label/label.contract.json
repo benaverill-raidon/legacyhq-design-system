@@ -38,7 +38,7 @@
     },
     "tone": {
       "type": "enum",
-      "values": ["default", "information", "warning", "discovery", "error", "success", "law", "wealth"],
+      "values": ["default", "information", "warning", "error", "success", "law", "wealth"],
       "default": "default",
       "required": false
     },
@@ -63,7 +63,6 @@
       "default",
       "information",
       "warning",
-      "discovery",
       "error",
       "success",
       "law",

@@ -80,16 +80,6 @@
   --label-color: var(--color-content-warning-bold);
 }
 
-.tone_discovery.emphasis_subtle {
-  --label-background: var(--color-background-discovery-subtle-default);
-  --label-color: var(--color-content-discovery);
-}
-
-.tone_discovery.emphasis_bold {
-  --label-background: var(--color-background-discovery-bold-default);
-  --label-color: var(--color-content-inverse);
-}
-
 .tone_error.emphasis_subtle {
   --label-background: var(--color-background-error-subtle-default);
   --label-color: var(--color-content-error);

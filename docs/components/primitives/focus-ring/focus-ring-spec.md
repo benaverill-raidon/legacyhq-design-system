@@ -78,7 +78,7 @@ Focus Ring
 ### Variant Rules
 - Use `default` for all components.
 - Uses `--color-border-focus`.
-- Do not use discovery, brand, or status colors for Focus Ring in v1.
+- Do not use brand or status colors for Focus Ring in v1.
 
 ---
 

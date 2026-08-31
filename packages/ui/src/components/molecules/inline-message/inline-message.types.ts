@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error' | 'discovery';
+export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error';
 
 export interface InlineMessageProps {
   /** Bold lead text. */

@@ -158,24 +158,6 @@
   background: var(--color-background-error-bold-press);
 }
 
-.appearance_primary.tone_discovery {
-  background: var(--color-background-discovery-bold-default);
-  color: var(--color-content-inverse);
-}
-
-.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):is(
-    :hover,
-    :focus-visible,
-    [data-force-state='hover'],
-    [data-force-state='focus']
-  ) {
-  background: var(--color-background-discovery-bold-hover);
-}
-
-.appearance_primary.tone_discovery:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-discovery-bold-press);
-}
-
 .appearance_subtle {
   border-color: transparent;
   background: transparent;
@@ -216,7 +198,6 @@
 .appearance_primary:disabled:active,
 .appearance_primary.tone_warning:disabled,
 .appearance_primary.tone_error:disabled,
-.appearance_primary.tone_discovery:disabled,
 .appearance_subtle:disabled,
 .appearance_subtle:disabled:hover,
 .appearance_subtle:disabled:active {

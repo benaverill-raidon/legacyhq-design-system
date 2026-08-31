@@ -133,7 +133,6 @@ describe('InlineMessage', () => {
     expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hover);');
     expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hover);');
     expect(inlineMessageCss).toContain('background: var(--color-background-error-overlay-hover);');
-    expect(inlineMessageCss).toContain('background: var(--color-background-discovery-overlay-hover);');
   });
 
   it('delegates positioning, the portal, and dismissal to Popup instead of a local implementation', () => {

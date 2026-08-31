@@ -24,7 +24,7 @@ When `content` is omitted, the whole row renders as a plain `div` - no button, n
 ## Public API
 
 ```ts
-export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error' | 'discovery';
+export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error';
 
 export interface InlineMessageProps {
   title: React.ReactNode;
@@ -88,7 +88,6 @@ pattern from one sample:
 | `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hover` |
 | `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hover` |
 | `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hover` |
-| `discovery` | `StatusDiscoveryIcon` | `--color-content-discovery` | `--color-background-discovery-overlay-hover` |
 
 Figma's `default`-tone icon resolves to a component literally named `node` in the shared icon
 library - a generic, unrelated placeholder rather than a real status glyph. No `StatusDefaultIcon`
@@ -97,12 +96,6 @@ inspecting the generated set directly. Fabricating a new status icon that doesn'
 source library was rejected in favor of a plain CSS-drawn dot (`--size-marker-sm`, filled with
 `--color-content-default`) - the same category of decision Checkbox/Radio/Switch already make for
 their own private decorative marks (drawn with CSS, not shared icon-library assets).
-
-This required extending the shared `Icon` primitive: `IconColor` had no `'discovery'` value despite
-`discovery` being an established tone everywhere else in this system (Label, Button's tone axis,
-etc.) - confirmed as a real gap, not a deliberate omission, and added directly to `icon.types.ts`/
-`icon.module.css` (`color_discovery` -> `--color-content-discovery`) rather than working around it
-locally in Inline Message.
 
 ## Layout
 

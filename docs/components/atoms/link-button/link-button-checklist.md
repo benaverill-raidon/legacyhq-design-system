@@ -44,7 +44,7 @@ Link Button contains:
 
 ```txt
 size: xs | sm | md | lg
-tone: default | primary | subtle | warning | error | discovery
+tone: default | primary | subtle | warning | error
 state: default | hover | press | focus
 isDisabled: false | true
 isLoading: false | true
@@ -65,8 +65,7 @@ type LinkButtonTone =
   | 'primary'
   | 'subtle'
   | 'warning'
-  | 'error'
-  | 'discovery';
+  | 'error';
 
 type LinkButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -193,7 +192,6 @@ primary
 subtle
 warning
 error
-discovery
 ```
 
 ## Storybook requirements

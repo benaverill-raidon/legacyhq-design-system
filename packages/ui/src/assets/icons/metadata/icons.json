@@ -2055,17 +2055,6 @@
     "label": "Star Unstarred"
   },
   {
-    "name": "status-discovery",
-    "component": "StatusDiscoveryIcon",
-    "category": "multi-purpose",
-    "keywords": [
-      "status-discovery",
-      "status",
-      "discovery"
-    ],
-    "label": "Status Discovery"
-  },
-  {
     "name": "status-error",
     "component": "StatusErrorIcon",
     "category": "multi-purpose",

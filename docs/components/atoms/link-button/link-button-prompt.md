@@ -28,8 +28,7 @@ type LinkButtonTone =
   | 'primary'
   | 'subtle'
   | 'warning'
-  | 'error'
-  | 'discovery';
+  | 'error';
 
 type LinkButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -133,7 +132,7 @@ Supported visual props:
 
 ```txt
 size: xs | sm | md | lg
-tone/appearance: default | primary | subtle | warning | error | discovery
+tone/appearance: default | primary | subtle | warning | error
 ```
 
 States:

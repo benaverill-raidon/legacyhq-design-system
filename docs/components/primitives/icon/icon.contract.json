@@ -54,7 +54,7 @@
       "type": "IconColor",
       "required": false,
       "default": "default",
-      "enum": ["default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "discovery", "disabled"],
+      "enum": ["default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "disabled"],
       "description": "Semantic content color."
     },
     "title": {
@@ -101,7 +101,6 @@
       "warning": { "className": "color_warning", "token": "--color-content-warning" },
       "error": { "className": "color_error", "token": "--color-content-error" },
       "information": { "className": "color_information", "token": "--color-content-information" },
-      "discovery": { "className": "color_discovery", "token": "--color-content-discovery" },
       "disabled": { "className": "color_disabled", "token": "--color-content-disabled" }
     }
   },
@@ -124,7 +123,6 @@
       "warning": "--color-content-warning",
       "error": "--color-content-error",
       "information": "--color-content-information",
-      "discovery": "--color-content-discovery",
       "disabled": "--color-content-disabled"
     }
   },
@@ -170,7 +168,7 @@
     "No Tailwind.",
     "SVG-based, fill=\"currentColor\".",
     "Icons are primarily used within other components (Button, Tag, Avatar, etc.), not rendered bare at the page level.",
-    "IconColor values are added when a real, verified Figma variable needs one that doesn't map to an existing value - 'discovery' (for Inline Message) and 'selected' (for Menu's selected-row icon, --color-content-selected, matching Figma's own color/content/selected variable) were both added this way, not invented speculatively."
+    "IconColor values are added when a real, verified Figma variable needs one that doesn't map to an existing value - 'selected' (for Menu's selected-row icon, --color-content-selected, matching Figma's own color/content/selected variable) was added this way, not invented speculatively."
   ],
   "relatedComponents": ["Button", "IconButton", "Tag", "Checkbox", "Radio", "Tooltip", "Avatar"],
   "do": [

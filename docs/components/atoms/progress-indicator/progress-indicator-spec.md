@@ -20,7 +20,6 @@ atom
 export type ProgressIndicatorAppearance =
   | 'default'
   | 'primary'
-  | 'discovery'
   | 'inverted';
 
 export type ProgressIndicatorSize = 'sm' | 'md';
@@ -72,7 +71,6 @@ The Figma-only `indicator-dot` remains private anatomy.
 
 - `default`: neutral selected dot.
 - `primary`: brand selected dot.
-- `discovery`: discovery selected dot.
 - `inverted`: inverse selected dot for dark surfaces.
 
 Do not expose Figma's internal `inverse` name publicly.
@@ -114,7 +112,6 @@ Suggested semantic intent:
 ```txt
 default selected: color-background-neutral-bold-default
 primary selected: color-background-brand-primary-bold-default
-discovery selected: color-background-discovery-bold-default
 inverted selected: color-background-neutral-subtle-default
 unselected border: color-border-bold
 interactive hover: color-background-neutral-subtle-hover
@@ -197,8 +194,8 @@ Controls for `currentStep`, `totalSteps`, `appearance`, `size`, and `label`.
 
 ### Variants
 
-Show the appearance axis alone (`default`, `primary`, `discovery`), then `inverted` separately on a
-dark surface - it isn't grouped with the other three because its selected dot is white and
+Show the appearance axis alone (`default`, `primary`), then `inverted` separately on a
+dark surface - it isn't grouped with the other two because its selected dot is white and
 disappears on a light background.
 
 ### Sizes
@@ -220,7 +217,7 @@ compositions - including an externally-controlled Previous/Next pagination examp
 ### Edge Cases
 
 Show a single-step journey, out-of-range `currentStep`/`totalSteps` values clamping safely, many
-steps in a narrow container (dots do not wrap), and default/primary/discovery/inverted together on
+steps in a narrow container (dots do not wrap), and default/primary/inverted together on
 a dark surface.
 
 Do not create one story per variant permutation unless necessary.

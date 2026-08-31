@@ -57,7 +57,7 @@ describe('Button', () => {
   });
 
   it('supports tone variants', () => {
-    const tones: ButtonTone[] = ['neutral', 'warning', 'error', 'discovery'];
+    const tones: ButtonTone[] = ['neutral', 'warning', 'error'];
 
     tones.forEach((tone) => {
       const { unmount } = render(<Button tone={tone}>{tone}</Button>);

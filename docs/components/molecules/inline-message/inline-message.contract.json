@@ -73,8 +73,7 @@
         "info",
         "success",
         "warning",
-        "error",
-        "discovery"
+        "error"
       ],
       "description": "Selects the status icon, icon color, and the tint shown on hover/open."
     },
@@ -151,11 +150,6 @@
         "icon": "StatusErrorIcon",
         "iconColorToken": "--color-content-error",
         "tintToken": "--color-background-error-overlay-hover"
-      },
-      "discovery": {
-        "icon": "StatusDiscoveryIcon",
-        "iconColorToken": "--color-content-discovery",
-        "tintToken": "--color-background-discovery-overlay-hover"
       }
     }
   },
@@ -218,8 +212,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colors, spacing, or typography.",
-    "Required extending the shared Icon primitive with a 'discovery' IconColor value/class - a real, pre-existing gap confirmed absent before this component needed it, not invented locally."
+    "No hardcoded colors, spacing, or typography."
   ],
   "relatedComponents": [
     "Popup",

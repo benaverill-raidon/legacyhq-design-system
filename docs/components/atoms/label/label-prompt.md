@@ -59,7 +59,6 @@ export type LabelTone =
   | 'default'
   | 'information'
   | 'warning'
-  | 'discovery'
   | 'error'
   | 'success'
   | 'law'
@@ -173,8 +172,6 @@ Use available semantic CSS variables. Do not substitute raw hex values.
 | information | bold | information bolder/strong | content/text inverse |
 | warning | subtle | warning subtle/default | warning text/content |
 | warning | bold | warning bolder/strong | content/text inverse |
-| discovery | subtle | discovery subtle/default | discovery text/content |
-| discovery | bold | discovery bolder/strong | content/text inverse |
 | error | subtle | error subtle/default | error text/content |
 | error | bold | error bolder/strong | content/text inverse |
 | success | subtle | success subtle/default | success text/content |

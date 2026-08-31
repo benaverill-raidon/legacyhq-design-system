@@ -151,11 +151,6 @@
         "type": "color",
         "originalName": "color/content/information"
       },
-      "color-content-discovery": {
-        "value": "var(--color-purple-solid-800)",
-        "type": "color",
-        "originalName": "color/content/discovery"
-      },
       "color-border-default": {
         "value": "var(--color-neutral-alpha-1200-16)",
         "type": "color",
@@ -220,11 +215,6 @@
         "value": "var(--color-blue-solid-800)",
         "type": "color",
         "originalName": "color/border/information"
-      },
-      "color-border-discovery": {
-        "value": "var(--color-purple-solid-800)",
-        "type": "color",
-        "originalName": "color/border/discovery"
       },
       "color-background-accent-red-subtle-default": {
         "value": "var(--color-red-solid-100)",
@@ -971,51 +961,6 @@
         "type": "color",
         "originalName": "color/background/success/bold/press"
       },
-      "color-background-discovery-subtle-default": {
-        "value": "var(--color-purple-solid-100)",
-        "type": "color",
-        "originalName": "color/background/discovery/subtle/default"
-      },
-      "color-background-discovery-subtle-hover": {
-        "value": "var(--color-purple-solid-200)",
-        "type": "color",
-        "originalName": "color/background/discovery/subtle/hover"
-      },
-      "color-background-discovery-subtle-press": {
-        "value": "var(--color-purple-solid-300)",
-        "type": "color",
-        "originalName": "color/background/discovery/subtle/press"
-      },
-      "color-background-discovery-default-default": {
-        "value": "var(--color-purple-solid-300)",
-        "type": "color",
-        "originalName": "color/background/discovery/default/default"
-      },
-      "color-background-discovery-default-hover": {
-        "value": "var(--color-purple-solid-400)",
-        "type": "color",
-        "originalName": "color/background/discovery/default/hover"
-      },
-      "color-background-discovery-default-press": {
-        "value": "var(--color-purple-solid-500)",
-        "type": "color",
-        "originalName": "color/background/discovery/default/press"
-      },
-      "color-background-discovery-bold-default": {
-        "value": "var(--color-purple-solid-800)",
-        "type": "color",
-        "originalName": "color/background/discovery/bold/default"
-      },
-      "color-background-discovery-bold-hover": {
-        "value": "var(--color-purple-solid-900)",
-        "type": "color",
-        "originalName": "color/background/discovery/bold/hover"
-      },
-      "color-background-discovery-bold-press": {
-        "value": "var(--color-purple-solid-1000)",
-        "type": "color",
-        "originalName": "color/background/discovery/bold/press"
-      },
       "color-background-neutral-subtle-default": {
         "value": "var(--color-neutral-solid-100)",
         "type": "color",
@@ -1180,16 +1125,6 @@
         "value": "transparent",
         "type": "color",
         "originalName": "color/elevation/shadow/overlay/inner"
-      },
-      "color-background-discovery-overlay-hover": {
-        "value": "var(--color-purple-alpha-800-08)",
-        "type": "color",
-        "originalName": "color/background/discovery/overlay/hover"
-      },
-      "color-background-discovery-overlay-press": {
-        "value": "var(--color-purple-alpha-800-16)",
-        "type": "color",
-        "originalName": "color/background/discovery/overlay/press"
       },
       "color-background-success-overlay-hover": {
         "value": "var(--color-green-alpha-800-08)",

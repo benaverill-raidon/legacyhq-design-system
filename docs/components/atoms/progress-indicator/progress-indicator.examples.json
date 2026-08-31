@@ -12,11 +12,6 @@
       "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />"
     },
     {
-      "name": "Discovery journey",
-      "description": "Uses the discovery appearance for guided assistance.",
-      "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} appearance=\"discovery\" label=\"Guided setup\" />"
-    },
-    {
       "name": "Inverted",
       "description": "Appears on a dark or bold surface.",
       "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverted\" label=\"Document setup\" />"

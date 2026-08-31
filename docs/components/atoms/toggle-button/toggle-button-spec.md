@@ -151,7 +151,7 @@ default
 subtle
 ```
 
-Do not add primary, warning, error, or discovery in this pass.
+Do not add primary, warning, or error in this pass.
 
 ## Size support
 

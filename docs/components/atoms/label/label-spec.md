@@ -46,7 +46,6 @@ The component does not include:
 | `default` | Neutral/default classification |
 | `information` | Informational status or category |
 | `warning` | Warning or attention state |
-| `discovery` | Discovery, exploratory, or purple-coded category |
 | `error` | Error, danger, failed, or destructive status |
 | `success` | Success, complete, active, or positive status |
 | `law` | Law-specific product/category label |
@@ -74,7 +73,6 @@ export type LabelTone =
   | 'default'
   | 'information'
   | 'warning'
-  | 'discovery'
   | 'error'
   | 'success'
   | 'law'
@@ -148,8 +146,6 @@ Use semantic CSS variables where available. Do not use raw hex values.
 | `information` | `bold` | information bolder/background strong semantic token | `--color-text-inverse` or `--color-content-inverse` |
 | `warning` | `subtle` | `--color-background-warning-default` | `--color-text-warning` |
 | `warning` | `bold` | warning bolder/background strong semantic token | `--color-text-inverse` or `--color-content-inverse` |
-| `discovery` | `subtle` | `--color-background-discovery-default` | `--color-text-discovery` |
-| `discovery` | `bold` | discovery bolder/background strong semantic token | `--color-text-inverse` or `--color-content-inverse` |
 | `error` | `subtle` | `--color-background-error-default` | `--color-text-error` |
 | `error` | `bold` | error bolder/background strong semantic token | `--color-text-inverse` or `--color-content-inverse` |
 | `success` | `subtle` | `--color-background-success-default` | `--color-text-success` |

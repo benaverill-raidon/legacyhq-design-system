@@ -73,8 +73,7 @@ type LinkButtonTone =
   | 'primary'
   | 'subtle'
   | 'warning'
-  | 'error'
-  | 'discovery';
+  | 'error';
 
 type LinkButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
@@ -213,7 +212,6 @@ primary
 subtle
 warning
 error
-discovery
 ```
 
 Tone styles should match Button for:
@@ -290,7 +288,7 @@ Show matrix:
 
 ```txt
 sizes: xs | sm | md | lg
-tones: default | primary | subtle | warning | error | discovery
+tones: default | primary | subtle | warning | error
 states: default | hover | press | focus
 icons: none | before | after
 loading

@@ -16,8 +16,8 @@ packages/ui/src/components/
   atoms/        # button, badge, checkbox, switch, slider, avatar, link,
                 # tag, tooltip, radio, progress-bar, spinner, label, ...
   molecules/    # composed from atoms/primitives (documented exceptions:
-                # tag-group, avatar-group, split-button, and chip also compose
-                # the dropdown-menu organism — see each one's own "Tier
+                # tag-group, avatar-group, split-button, chip, and select also
+                # compose the dropdown-menu organism — see each one's own "Tier
                 # exception" note)
   organisms/    # composed from molecules/atoms/primitives — larger, more
                 # complete UI sections (menu, dropdown-menu, ...)
@@ -126,7 +126,7 @@ that just duplicate a semantic token under a different name (e.g. don't make
   reinvent behavior with ARIA that HTML already gives you for free.
 - **Separate emphasis from meaning.** Visual weight (e.g. `appearance`:
   default/primary/subtle) and semantic intent (e.g. `tone`:
-  neutral/warning/error/discovery) are independent props. This avoids a
+  neutral/warning/error) are independent props. This avoids a
   combinatorial variant explosion — don't add `variant="destructive-subtle"`
   style props; compose the two axes instead.
 - **Each component has a clear "when not to use."** e.g. Button is not for

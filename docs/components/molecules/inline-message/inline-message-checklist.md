@@ -65,7 +65,6 @@ inside Popup's default panel width.
 - `success`
 - `warning`
 - `error`
-- `discovery`
 
 ---
 
@@ -99,8 +98,6 @@ inside Popup's default panel width.
 - `tone="default"` renders a plain CSS dot, not a fabricated status icon - no matching icon exists
   in the generated set, and Figma's own `default`-tone trigger uses an unrelated placeholder glyph
   too.
-- Required extending the shared `Icon` primitive with a `discovery` color value - a real,
-  pre-existing gap, not invented for this component alone.
 
 ## Dependencies
 
@@ -108,8 +105,7 @@ inside Popup's default panel width.
 - TypeScript
 - CSS Modules
 - Popup primitive
-- Icon primitive (StatusInformationIcon, StatusSuccessIcon, StatusWarningIcon, StatusErrorIcon,
-  StatusDiscoveryIcon)
+- Icon primitive (StatusInformationIcon, StatusSuccessIcon, StatusWarningIcon, StatusErrorIcon)
 - Design tokens generated from Figma
 - Storybook
 - Vitest
@@ -123,7 +119,7 @@ inside Popup's default panel width.
 ## Validated Figma Details
 
 - `inline-message` component set: node `4589:2519`, file `Components v1.0.0`, variants `tone`
-  (discovery/default/info/success/warning/error) x `isOpen`.
+  (default/info/success/warning/error) x `isOpen`.
 - `figma-parts / inline-message-trigger` sub-component: node `2448:72904`, properties `titleText`,
   `showTitle`, `secondaryText`, `showSecondaryText`, `tone`, `state`
   (default/hover-open/focus/press).

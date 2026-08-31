@@ -1,0 +1,166 @@
+{
+  "name": "TextArea",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Let a user write or edit multi-line free text - notes, descriptions, comments - in a bordered, resizable field.",
+  "intent": "The multi-line counterpart of Text Field: a real native <textarea> in the same bordered frame, sharing Text Field's size, appearance, invalid, and state treatment so the two read as one family. Grouped with Text Field as a molecule for that reason, though it composes no other component.",
+  "sourceFiles": {
+    "component": "text-area.tsx",
+    "types": "text-area.types.ts",
+    "styles": "text-area.module.css",
+    "stories": "TextArea.stories.tsx",
+    "tests": "TextArea.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1697:19487",
+    "componentName": "text-area",
+    "variantCount": 64,
+    "verifiedAt": "2026-08-27",
+    "note": "Filed on the file's own \"🚧 Text Area\" page, verified directly against the file via the Desktop Bridge plugin. The `sm` size was removed on 2026-08-27 (it read almost identically to md); the size axis is now md/lg. variantCount reflects that removal (was 96) and should be re-confirmed live next time the Components file is connected.",
+    "structure": "One component set across six axes - `type` (default / rich-inline), `size` (md / lg), `tone` (default / subtle), `state` (default / hover / focus / typing / filled / autofill), `isDisabled`, `isInvalid`. Each variant is a single `Container` frame holding the text; the visual frame (fill, border, radius) is bound on the component node, not the inner Container (which carries only padding). Geometry measured per size: padding block/inline md 8/8, lg 12/12; radius lg (8) at md, xl (12) at lg; font body-md (14/24) at md, body-lg (16/24) at lg. State frame tokens (tone=default): default fill background/input/default + border/input 1px; hover fill background/input/hovered; focus fill background/input/pressed + border/focused 2px; typing border/focused 2px; filled + autofill = default; invalid border/error 2px; disabled background/disabled + border/disabled. tone=subtle has a transparent box with a bottom-only accent that reveals on hover (border/input) / focus (border/focused) / invalid (border/error), bottom corners square.",
+    "apiAdaptationNotes": [
+      "Renders the frame styling directly on the <textarea> (no wrapper element), because Text Area - unlike Text Field - has no leading/trailing icon slots to compose around the control. This also lets the browser's native resize grip work with no extra wiring.",
+      "Figma's `tone` axis is exposed in code as `appearance` (default/subtle) - the same axis and the same name its sibling Text Field uses, so the two components share one vocabulary.",
+      "Figma binds a newer `background/input/*` + `border/focused` token naming that has no counterpart in this build. Those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic tokens Text Field already consumes (same intent), so Text Area reuses those rather than inventing unbacked tokens - keeping it visually identical to Text Field per token governance's reuse-first rule.",
+      "Focus and invalid replace the border color and paint the extra pixel via an inset box-shadow rather than a real 1px->2px border-width change - the same technique Text Field uses, so the multi-line text never shifts by a pixel on focus/blur or invalid toggle.",
+      "Figma tints the fill on focus (`background/input/pressed`); code deliberately keeps the resting fill on focus instead, matching Text Field's established no-tint-on-focus behavior (and that token does not exist here).",
+      "The `state` axis (hover/focus/typing/filled/autofill) is not a prop - those are live pseudo-classes (`:hover`, `:focus`), with a documentation-only `data-force-state` pin mirroring them for static Storybook reference, exactly as Text Field, Button, and Checkbox do. `filled`, `typing`, and `autofill` need no distinct styling (they render as default/focus).",
+      "The `type=rich-inline` variant is implemented as a separate component, `RichTextArea` (molecules/text-area/rich). It is an inline entity-tagging mode - visually identical to `default`, the difference is entirely behavioral: `/` opens a grouped entity picker and each choice is inserted inline as a navigational tag. It is separate rather than a `type` prop because its value (a structured node array), its callbacks (`onSearch`), and its surface (contenteditable) are all disjoint from the plain <textarea>. TextArea therefore still exposes no `type` prop; reach for RichTextArea instead.",
+      "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
+    ]
+  },
+  "props": {
+    "size": {
+      "type": "TextAreaSize",
+      "required": false,
+      "default": "md",
+      "enum": [
+        "md",
+        "lg"
+      ],
+      "description": "Padding, radius, and font size. body-md at md, body-lg at lg. (sm was removed - it read almost identically to md.)"
+    },
+    "appearance": {
+      "type": "TextAreaAppearance",
+      "required": false,
+      "default": "default",
+      "enum": [
+        "default",
+        "subtle"
+      ],
+      "description": "default = bordered box (all corners rounded). subtle = transparent until hover/focus/invalid, bottom accent only, square bottom corners. Figma names this axis `tone`."
+    },
+    "invalid": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Sets aria-invalid and paints the error border (via box-shadow, no layout shift)."
+    },
+    "resize": {
+      "type": "TextAreaResize",
+      "required": false,
+      "default": "vertical",
+      "enum": [
+        "none",
+        "vertical",
+        "horizontal",
+        "both"
+      ],
+      "description": "Which edges the user can drag. Maps to CSS `resize`. Disabled fields lock to none."
+    },
+    "disabled": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Native textarea disabled; greys the frame and locks resize."
+    },
+    "rows": {
+      "type": "number",
+      "required": false,
+      "default": null,
+      "description": "Native attribute controlling initial height. Set it to size the field; content and resize grow it from there."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes onto the textarea's class list."
+    },
+    "...rest": {
+      "type": "React.TextareaHTMLAttributes",
+      "required": false,
+      "default": null,
+      "description": "Every native textarea attribute (value, defaultValue, placeholder, maxLength, onChange, name, required, readOnly, wrap, ...) forwards to the element. A ref forwards to the <textarea>."
+    }
+  },
+  "sizes": [
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "invalid",
+    "disabled"
+  ],
+  "variants": {
+    "appearance": {
+      "default": {
+        "purpose": "The standard bordered box, rounded on all four corners. Correct for nearly every case."
+      },
+      "subtle": {
+        "purpose": "No visible border/background until hover/focus/invalid; a bottom accent line only, square bottom corners. For an inline or low-chrome area that shouldn't compete with surrounding content until used."
+      }
+    }
+  },
+  "accessibility": {
+    "role": "textbox (a native <textarea>), multiline",
+    "label": "No built-in label - pair with a native <label htmlFor> or aria-label, the same as Text Field and any native form control.",
+    "invalid": "aria-invalid reflects the invalid prop; the error is also conveyed visually by the border.",
+    "disabled": "native disabled - removed from the tab order and non-editable.",
+    "focus": "the frame's own focus border is the focus affordance (the textarea is itself the focusable element)."
+  },
+  "tokens": {
+    "surface": "background: --color-elevation-surface-raised-default (rest) / -hover (hover)",
+    "border": "--color-border-input (rest) -> --color-border-focus (focus) / --color-border-error (invalid) / --color-border-disabled (disabled)",
+    "radius": "--border-radius-lg (md) / --border-radius-xl (lg)",
+    "padding": "block/inline: md --spacing-sm, lg --spacing-md",
+    "typography": "--typography-body-md-* (md) / --typography-body-lg-* (lg); placeholder --color-content-subtle; disabled text --color-content-disabled",
+    "note": "All reused from Text Field - no new tokens. See apiAdaptationNotes for the Figma `background/input/*` -> `elevation/surface/raised/*` naming mapping."
+  },
+  "relatedComponents": [
+    "RichTextArea",
+    "TextField",
+    "Select",
+    "Label"
+  ],
+  "do": [
+    "Give the textarea an accessible name (a wired <label htmlFor> or aria-label).",
+    "Use Text Area for multi-line free text; use Text Field for a single line.",
+    "Set `rows` to a sensible initial height for the expected content.",
+    "Keep `resize=\"vertical\"` (the default) unless a fixed layout truly needs `none`."
+  ],
+  "dont": [
+    "Don't use Text Area for a single-line value - use Text Field.",
+    "Don't use it to choose from a fixed set of options - use Select.",
+    "Don't use Text Area when the text needs to link to records - use RichTextArea, its inline entity-tagging sibling."
+  ],
+  "behaviorNotes": [
+    "The frame styling is on the <textarea> itself; there is no wrapper element.",
+    "Focus/invalid paint the thicker border via inset box-shadow, so the text never shifts.",
+    "Hover tint is suppressed once the field is focused.",
+    "A disabled field cannot be resized."
+  ],
+  "knownLimitations": [
+    "No built-in auto-resize-to-content; height is driven by `rows`, native scroll, and the `resize` grip.",
+    "No built-in label, helper text, or character-count chrome - compose those around it (a Form Field pattern is a natural future step, as noted for Text Field)."
+  ],
+  "futureEnhancements": [
+    "An optional auto-resize (grow-with-content) behavior.",
+    "A shared Form Field wrapper composing label + control + helper/error for both Text Field and Text Area."
+  ]
+}

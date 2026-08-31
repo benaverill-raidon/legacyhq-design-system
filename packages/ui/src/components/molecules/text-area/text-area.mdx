@@ -1,0 +1,153 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TextAreaStories from './TextArea.stories';
+
+<Meta of={TextAreaStories} name="Docs" />
+
+# Text Area
+
+Text Area is the multi-line counterpart of Text Field: a real native `<textarea>` in the same bordered
+frame, for writing or editing content that spans several lines — notes, descriptions, comments. It
+shares Text Field's size, appearance, invalid, and state treatment token-for-token. The frame styling
+sits directly on the `<textarea>` (no wrapper), since Text Area has no icon slots — which also lets
+the browser's native resize grip work for free.
+
+<Canvas of={TextAreaStories.Playground} />
+
+## When to use
+
+- Any genuinely multi-line free text — notes, descriptions, comments, message bodies.
+- Set `rows` for a sensible initial height; the field grows via typed content and the resize grip.
+
+## When not to use
+
+- **A single-line value.** Use Text Field.
+- **A value chosen from a fixed set of options.** Use Select.
+- **Inline entity tags / formatting.** Not supported yet — Figma's `type=rich-inline` (a
+  slash-command entity-tagging mode) is unimplemented; see "Not built yet" below.
+
+## Sizes and appearance
+
+<Canvas of={TextAreaStories.Variants} />
+
+`appearance="default"` is the standard bordered box, rounded on all four corners — correct for nearly
+every case. `appearance="subtle"` has no visible border or background until it's hovered, focused, or
+invalid — only a bottom accent line reveals, and its bottom corners stay square. Figma names this axis
+`tone`; the code uses `appearance`, the same name and axis as its Text Field sibling. Sizes match Text
+Field exactly (`body-md` at md, `body-lg` at lg; radius steps up to `xl` at lg). The `sm` size was
+removed — it read almost identically to md.
+
+## States
+
+Hover and focus below are pinned via `data-force-state` (documentation-only); invalid and disabled are
+real props.
+
+<Canvas of={TextAreaStories.States} />
+
+Figma models `hover`/`focus`/`typing`/`filled`/`autofill` as if they were variants to pick between.
+They aren't real props — they fall out of native `:hover`/`:focus` and the textarea's own
+placeholder/value. `invalid` is the one real boolean among them. Focus and invalid replace the border
+color and paint the thicker (2px) edge with an inset `box-shadow` rather than a real `border-width`
+change, so the multi-line text never shifts by a pixel. Hover is suppressed once the field is focused.
+
+## Resizing
+
+<Canvas of={TextAreaStories.Resize} />
+
+`resize` maps to the CSS `resize` property, defaulting to `vertical` — content can grow downward
+without a drag breaking the surrounding layout. Use `none` to lock the height for a fixed layout;
+content still scrolls natively. A disabled field cannot be resized.
+
+## Content
+
+<Canvas of={TextAreaStories.Content} />
+
+Text Area has no label of its own — pair it with a native `<label htmlFor>` pointing at its `id`, or
+pass `aria-label`. There is no built-in character-count or helper chrome; compose those around it, as
+the counted example shows.
+
+<Canvas of={TextAreaStories.EdgeCases} />
+
+## Do / Don't
+
+**Do** pair Text Area with a real label and a sensible `rows`.
+
+```tsx
+<label htmlFor="notes">Notes</label>
+<TextArea id="notes" rows={4} />
+```
+
+**Don't** use it for a single line, or rely on the placeholder as the only accessible name.
+
+```tsx
+<TextArea rows={1} placeholder="Name" />
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Padding, radius, and font size.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'default'</code></td>
+      <td>Bordered box vs. borderless-until-interacted (Figma's <code>tone</code>).</td>
+    </tr>
+    <tr>
+      <td><code>invalid</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Sets <code>aria-invalid</code> and the error border.</td>
+    </tr>
+    <tr>
+      <td><code>resize</code></td>
+      <td><code>'none' | 'vertical' | 'horizontal' | 'both'</code></td>
+      <td><code>'vertical'</code></td>
+      <td>Which edges the user can drag. Disabled fields lock to none.</td>
+    </tr>
+    <tr>
+      <td><code>className</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Composes with the textarea's class list.</td>
+    </tr>
+    <tr>
+      <td>...rest</td>
+      <td><code>React.TextareaHTMLAttributes&lt;HTMLTextAreaElement&gt;</code></td>
+      <td>-</td>
+      <td>Forwarded to the native textarea — <code>rows</code>, <code>value</code>, <code>placeholder</code>, <code>maxLength</code>, <code>disabled</code>, <code>onChange</code>, etc. A ref forwards to the <code>&lt;textarea&gt;</code>.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Not built yet: `type=rich-inline` (inline entity tagging)
+
+Figma's second `type`, `rich-inline`, is an **inline entity-tagging** mode — not rich-text
+formatting. While typing, a user presses **`/`** to open a searchable, grouped dropdown of entities to
+link, and each choice is inserted inline as a **navigational tag** — a colored, icon-bearing chip that
+links to that entity. It looks identical to `default` in the static mockup; the whole difference is
+behavior.
+
+It's deferred to a dedicated pass because it's a real feature, not a variant: it needs a
+slash-triggered searchable **Dropdown Menu** (grouped sections), a new **navigational-tag** element
+(which doesn't exist yet), and an editable surface that mixes text and tags (`contenteditable`, not a
+plain `<textarea>`). Because none of that ships today, no `type` prop is exposed.
+
+## Related components
+
+- **Text Field** — single-line free text; shares the frame token-for-token.
+- **Select** — for choosing from a fixed set of options instead of typing free text.
+- **Label** — for a trailing unit/status pill (as Text Field uses).

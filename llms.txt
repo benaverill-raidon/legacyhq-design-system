@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 37 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 38 components
 > across primitives/atoms/molecules/organisms.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -16,13 +16,13 @@ rules, and the task→file routing table that says which of a component's up to
 - [component-api-governance.json](docs/foundations/component-api-governance.json):
   prop-naming rules. Load when adding/renaming a prop.
 - [registry.json](docs/components/registry.json): generated, normalized
-  cross-component index (props/anatomy/sizes/slots/variants for all 37
+  cross-component index (props/anatomy/sizes/slots/variants for all 38
   components in one consistent shape). Load for structural queries across
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.
 - [exemplars.json](docs/components/exemplars.json): generated, normalized
-  cross-component runnable usage examples + anti-patterns for all 37
+  cross-component runnable usage examples + anti-patterns for all 38
   components. Load for a quick, verified code example instead of reading
   individual `.examples.json` files. See
   [component-exemplars-governance.json](docs/foundations/component-exemplars-governance.json)
@@ -61,7 +61,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [toggle-icon-button](docs/components/atoms/toggle-icon-button/toggle-icon-button.md)
 - [tooltip](docs/components/atoms/tooltip/tooltip.md)
 
-## Molecules (13)
+## Molecules (16)
 
 - [avatar-group](docs/components/molecules/avatar-group/avatar-group.md) (tier exception - composes
   the dropdown-menu organism; see its avatar-group-spec.md)
@@ -74,11 +74,17 @@ rules, and the task→file routing table that says which of a component's up to
 - [inline-edit](docs/components/molecules/inline-edit/inline-edit.md)
 - [inline-message](docs/components/molecules/inline-message/inline-message.md)
 - [pagination](docs/components/molecules/pagination/pagination.md)
+- [rich-text-area](docs/components/molecules/rich-text-area/rich-text-area.md) (tier
+  exception - composes the menu organism as its entity picker; see its
+  rich-text-area-spec.md)
+- [select](docs/components/molecules/select/select.md) (tier exception - composes the dropdown-menu
+  organism; see its select-spec.md)
 - [skeleton](docs/components/molecules/skeleton/skeleton.md)
 - [split-button](docs/components/molecules/split-button/split-button.md) (tier exception - composes
   the dropdown-menu organism; see its split-button-spec.md)
 - [tag-group](docs/components/molecules/tag-group/tag-group.md) (tier exception - composes the
   dropdown-menu organism; see its tag-group-spec.md)
+- [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
 ## Organisms (2)

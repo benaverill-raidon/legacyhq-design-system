@@ -1,0 +1,201 @@
+/*
+ * Rich Text Area is a contenteditable surface (to hold inline tags) that reuses Text Area's frame
+ * tokens token-for-token, so it reads as the same field. The frame styling lives on the editable div;
+ * disabled/invalid are driven by data-attributes (a div has no :disabled), otherwise the treatment
+ * mirrors Text Area exactly.
+ */
+.wrapper {
+  position: relative;
+  inline-size: 100%;
+}
+
+.editor {
+  --rta-radius: var(--border-radius-lg);
+  --rta-padding: var(--spacing-sm);
+
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: calc(var(--rta-rows, 3) * var(--typography-body-md-line-height) + 2 * var(--rta-padding));
+  padding: var(--rta-padding);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  border-radius: var(--rta-radius);
+  background: var(--color-elevation-surface-raised-default);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow: auto;
+  outline: none;
+  transition: background-color var(--fade-quick), border-color var(--fade-quick);
+}
+
+/* The user-drag resize axis, mirroring Text Area. Vertical by default. */
+.resize_none {
+  resize: none;
+}
+
+.resize_vertical {
+  resize: vertical;
+}
+
+.resize_horizontal {
+  resize: horizontal;
+}
+
+.resize_both {
+  resize: both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .editor {
+    transition-duration: 0ms;
+  }
+}
+
+.size_md {
+  --rta-padding: var(--spacing-sm);
+  --rta-radius: var(--border-radius-lg);
+}
+
+.size_lg {
+  --rta-padding: var(--spacing-md);
+  --rta-radius: var(--border-radius-xl);
+
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+/*
+ * Placeholder - shown when the editor has no text and no tags. Positioned absolutely so it is taken
+ * out of the text flow entirely: otherwise the browser treats the ::before content as inline and
+ * drops the caret *after* it (and the first keystroke wipes it and jumps the caret). Absolute keeps
+ * the real caret at offset 0, before the placeholder overlay.
+ */
+.editor[data-empty='true']::before {
+  content: attr(data-placeholder);
+  position: absolute;
+  inset-block-start: var(--rta-padding);
+  inset-inline-start: var(--rta-padding);
+  color: var(--color-content-subtle);
+  pointer-events: none;
+}
+
+.editor:not([data-disabled='true']):hover {
+  background: var(--color-elevation-surface-raised-hover);
+}
+
+/* Focus/invalid paint the thicker border via inset box-shadow, never a real width change - so the
+   text never shifts, exactly like Text Area. */
+.editor.appearance_default:focus {
+  background: var(--color-elevation-surface-raised-default);
+  border-color: var(--color-border-focus);
+  box-shadow: inset 0 0 0 1px var(--color-border-focus);
+}
+
+.editor[data-invalid='true'] {
+  border-color: var(--color-border-error);
+  box-shadow: inset 0 0 0 1px var(--color-border-error);
+}
+
+.editor[data-disabled='true'] {
+  background: var(--color-background-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+  resize: none;
+}
+
+/* The active (keyboard-highlighted) menu row - focus stays in the editor, so the picker marks the
+   active item with this class instead of moving focus (the aria-activedescendant pattern). Matches
+   Menu's own hover fill. */
+:global(.rta-active) {
+  background: var(--color-background-neutral-overlay-hover);
+}
+
+/* Subtle appearance - transparent box, bottom accent only, matching Text Area's subtle. */
+.appearance_subtle {
+  border-color: transparent;
+  background: transparent;
+  border-width: 0 0 var(--border-width-sm) 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.editor.appearance_subtle:focus {
+  border-bottom-color: var(--color-border-focus);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
+}
+
+.editor.appearance_subtle[data-invalid='true'] {
+  border-bottom-color: var(--color-border-error);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-error);
+}
+
+/* Inline tag host - the contenteditable=false span a NavTag portals into. Selects/deletes as one
+   unit (user-select: none), and sits on the text baseline. */
+.tagHost {
+  display: inline-block;
+  vertical-align: baseline;
+  user-select: none;
+  margin-inline: var(--measurement-2);
+  white-space: normal;
+}
+
+/*
+ * The `/` slash-input: while a slash-command is active, the `/query` the user types is wrapped in
+ * this inline mini-input, styled like a small Text Field (background, border, radius) - the Notion
+ * look. When empty (just `/`), it shows the search placeholder after the slash.
+ */
+.slashInput {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline: var(--spacing-xs);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  border-radius: var(--border-radius-md);
+  background: var(--color-elevation-surface-raised-default);
+  white-space: nowrap;
+}
+
+.slashInput[data-slash-empty='true']::after {
+  content: attr(data-placeholder);
+  color: var(--color-content-subtle);
+}
+
+/* Family/people rows put the avatar (or avatar group) inline in the label so it hugs its own width
+   and left-aligns, instead of the fixed 24px leading slot - and carry no description. */
+.avatarRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-inline-size: 0;
+}
+
+.avatarRow > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The floating slash-command picker, positioned at the caret within .wrapper. */
+.picker {
+  position: absolute;
+  z-index: 20;
+  inline-size: 264px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-elevation-surface-raised-default);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--elevation-shadow-overlay, 0 var(--spacing-xs) var(--spacing-md) var(--color-elevation-shadow-overlay-perimeter));
+}
+

@@ -90,7 +90,6 @@ describe('label CSS contract', () => {
     expect(labelCss).toContain('--label-color: var(--color-content-subtle);');
     expect(labelCss).toContain('--label-background: var(--color-background-information-subtle-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-warning-subtle-default);');
-    expect(labelCss).toContain('--label-background: var(--color-background-discovery-subtle-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-error-subtle-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-success-subtle-default);');
   });

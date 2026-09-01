@@ -127,7 +127,7 @@ Final implementation decisions:
 - Every variant: layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8,
   counterAxisAlignItems CENTER, padding 0, no fill or stroke.
 - `alignment=left` measures `primaryAxisAlignItems: MIN`; `alignment=right` measures `MAX`.
-- Each variant holds ten `chip` instances, all `mode=scope`, `filter type=none`, `isSelected=false`,
+- Each variant holds ten `chip` instances, all `mode=search`, `filter type=none`, `isSelected=false`,
   each carrying the variant's own size (62px wide at sm, 66px at md).
 - No overflow instance, no divider, no "+N more" affordance anywhere in the set.
 

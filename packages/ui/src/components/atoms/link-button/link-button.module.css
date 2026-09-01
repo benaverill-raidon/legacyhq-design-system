@@ -161,27 +161,6 @@
   background: var(--color-background-error-bold-press);
 }
 
-.appearance_primary.tone_discovery {
-  border-color: var(--color-background-discovery-bold-default);
-  background: var(--color-background-discovery-bold-default);
-  color: var(--color-content-inverse);
-}
-
-.appearance_primary.tone_discovery:not([aria-disabled='true']):not([data-loading='true']):is(
-    :hover,
-    :focus-visible,
-    [data-force-state='hover'],
-    [data-force-state='focus']
-  ) {
-  border-color: var(--color-background-discovery-bold-hover);
-  background: var(--color-background-discovery-bold-hover);
-}
-
-.appearance_primary.tone_discovery:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  border-color: var(--color-background-discovery-bold-press);
-  background: var(--color-background-discovery-bold-press);
-}
-
 .appearance_subtle {
   border-color: transparent;
   background: transparent;
@@ -216,8 +195,7 @@
 .appearance_primary[aria-disabled='true']:hover,
 .appearance_primary[aria-disabled='true']:active,
 .appearance_primary[aria-disabled='true'].tone_warning,
-.appearance_primary[aria-disabled='true'].tone_error,
-.appearance_primary[aria-disabled='true'].tone_discovery {
+.appearance_primary[aria-disabled='true'].tone_error {
   border-color: transparent;
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);

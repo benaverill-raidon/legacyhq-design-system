@@ -17,7 +17,7 @@ separate props, so a matter's severity doesn't dictate how loud it looks.
 - Continuing to the next step in a flow.
 - Opening a dialog or a menu.
 - Confirming or cancelling a decision.
-- Warning, destructive/error, or discovery-oriented actions.
+- Warning or destructive/error actions.
 
 ## When not to use
 
@@ -43,7 +43,7 @@ separate props, so a matter's severity doesn't dictate how loud it looks.
 ### Appearance versus tone
 
 `appearance` sets emphasis (`default`, `primary`, `subtle`); `tone` sets semantic intent (`neutral`,
-`warning`, `error`, `discovery`). They're independent props, but **tone only changes Button's
+`warning`, `error`). They're independent props, but **tone only changes Button's
 appearance when `appearance="primary"`** - `default` and `subtle` render identically across every
 tone value. Setting `tone="error"` on a `default` button is valid but has no visual effect; if a
 non-primary action needs to look different, that's a signal to reconsider the appearance, not to
@@ -152,7 +152,7 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
     </tr>
     <tr>
       <td><code>tone</code></td>
-      <td><code>'neutral' | 'warning' | 'error' | 'discovery'</code></td>
+      <td><code>'neutral' | 'warning' | 'error'</code></td>
       <td><code>'neutral'</code></td>
       <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
     </tr>

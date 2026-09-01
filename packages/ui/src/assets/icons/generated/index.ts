@@ -192,7 +192,6 @@ export { SortAscendingIcon } from './sort-ascending-icon';
 export { SortDescendingIcon } from './sort-descending-icon';
 export { StarStarredIcon } from './star-starred-icon';
 export { StarUnstarredIcon } from './star-unstarred-icon';
-export { StatusDiscoveryIcon } from './status-discovery-icon';
 export { StatusErrorIcon } from './status-error-icon';
 export { StatusInformationIcon } from './status-information-icon';
 export { StatusSuccessIcon } from './status-success-icon';

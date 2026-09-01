@@ -1,7 +1,6 @@
 import * as React from 'react';
 import type { ComponentType } from 'react';
 import {
-  StatusDiscoveryIcon,
   StatusErrorIcon,
   StatusInformationIcon,
   StatusSuccessIcon,
@@ -28,7 +27,6 @@ const TONE_ICONS: Partial<Record<InlineMessageTone, { Icon: ComponentType<IconPr
   success: { Icon: StatusSuccessIcon, color: 'success' },
   warning: { Icon: StatusWarningIcon, color: 'warning' },
   error: { Icon: StatusErrorIcon, color: 'error' },
-  discovery: { Icon: StatusDiscoveryIcon, color: 'discovery' },
 };
 
 function ToneIcon({ tone }: { tone: InlineMessageTone }) {

@@ -9,6 +9,15 @@
   box-sizing: border-box;
 }
 
+/*
+ * Fills the panel it's placed in instead of one of the fixed size widths - used when a consumer
+ * (via Dropdown Menu's own matchTriggerWidth) sizes the floating panel to a trigger, e.g. Select
+ * matching its field width. Replaces the size width rather than layering on top of it.
+ */
+.fullWidth {
+  width: 100%;
+}
+
 .size_sm {
   width: var(--component-menu-width-sm);
 }

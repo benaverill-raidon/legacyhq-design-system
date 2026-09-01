@@ -116,6 +116,7 @@ export const Menu = React.memo(function Menu({
   loading = false,
   loadingLabel = 'Loading…',
   emptyMessage = 'No results',
+  fullWidth = false,
   id,
   className,
   'aria-label': ariaLabel,
@@ -183,7 +184,7 @@ export const Menu = React.memo(function Menu({
   const hasAnyVisibleItems = visibleSections.some(({ items }) => items.length > 0);
 
   return (
-    <div id={id} className={mergeClassNames(styles.menu, styles[`size_${size}`], className)}>
+    <div id={id} className={mergeClassNames(styles.menu, fullWidth ? styles.fullWidth : styles[`size_${size}`], className)}>
       {showSearch ? (
         <div className={styles.search}>
           <TextField

@@ -1,0 +1,69 @@
+{
+  "component": "TextArea",
+  "examples": [
+    {
+      "name": "Basic multi-line field",
+      "description": "A labelled text area. Pair it with a native label the same way as any form control; set `rows` for the initial height.",
+      "jsx": "<label htmlFor=\"notes\">Notes</label>\n<TextArea id=\"notes\" rows={4} placeholder=\"Add a description\" />",
+      "props": {
+        "rows": 4,
+        "placeholder": "Add a description"
+      }
+    },
+    {
+      "name": "Controlled with a character count",
+      "description": "Standard controlled pattern - hold the value and cap it with the native maxLength, showing a count in a helper line.",
+      "jsx": "const [value, setValue] = useState('');\n\n<TextArea\n  aria-label=\"Bio\"\n  rows={4}\n  maxLength={240}\n  value={value}\n  onChange={(e) => setValue(e.target.value)}\n/>\n<span>{value.length} / 240</span>",
+      "props": {
+        "rows": 4,
+        "maxLength": 240
+      }
+    },
+    {
+      "name": "Sizes and appearances",
+      "description": "size controls padding/radius/font; appearance switches between the bordered box and the low-chrome subtle variant (transparent until interacted with).",
+      "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea appearance=\"subtle\" aria-label=\"Subtle\" rows={3} />",
+      "props": {
+        "size": "lg",
+        "appearance": "subtle",
+        "rows": 3
+      }
+    },
+    {
+      "name": "Invalid and disabled",
+      "description": "invalid sets aria-invalid and the error border; disabled greys the frame and locks the resize grip.",
+      "jsx": "<TextArea invalid aria-label=\"Invalid\" rows={3} defaultValue=\"Needs attention\" />\n<TextArea disabled aria-label=\"Disabled\" rows={3} defaultValue=\"Read only\" />",
+      "props": {
+        "invalid": true,
+        "disabled": true,
+        "rows": 3
+      }
+    },
+    {
+      "name": "Fixed height, no resize",
+      "description": "resize=\"none\" locks the height for tight layouts; content scrolls natively when it overflows.",
+      "jsx": "<TextArea resize=\"none\" rows={3} aria-label=\"Fixed\" />",
+      "props": {
+        "resize": "none",
+        "rows": 3
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Using Text Area for a single line",
+      "jsx": "<TextArea rows={1} aria-label=\"Name\" />",
+      "reason": "A single-line value belongs in Text Field, which gives the right keyboard/enter semantics and icon slots. Text Area is for genuinely multi-line content."
+    },
+    {
+      "name": "No accessible name",
+      "jsx": "<TextArea rows={4} placeholder=\"Notes\" />",
+      "reason": "A placeholder is not a label - it disappears on input and is not a reliable accessible name. Wire a <label htmlFor> or pass aria-label, the same as any native form control."
+    },
+    {
+      "name": "Expecting inline tags or formatting",
+      "jsx": "<TextArea aria-label=\"Body\" defaultValue=\"Assigned to /Jordan\" />",
+      "reason": "Text Area is plain text only - `/` is a literal character here. The inline entity-tagging mode (`type=rich-inline` in Figma) ships as RichTextArea; use that when the text needs to link to records."
+    }
+  ]
+}

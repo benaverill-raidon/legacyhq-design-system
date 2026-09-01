@@ -1,0 +1,119 @@
+{
+  "name": "RichTextArea",
+  "category": "molecule",
+  "status": "beta",
+  "purpose": "Let a user write multi-line text that mixes plain prose with inline links to real records - typing `/` opens a grouped entity picker and each choice is inserted as a navigational tag.",
+  "intent": "Text Area's `type=rich-inline` mode, built as its own component because the contenteditable path and its props are disjoint from the plain <textarea>. It reuses Text Area's frame tokens exactly, so the two read as one field; the difference is entirely behavioral. Composes the Menu organism as the picker and the Tag atom as the inserted tag, rather than inventing either.",
+  "sourceFiles": {
+    "component": "rich/rich-text-area.tsx",
+    "picker": "rich/entity-picker.tsx",
+    "tag": "rich/nav-tag.tsx",
+    "types": "rich/rich-text-area.types.ts",
+    "styles": "rich/rich-text-area.module.css",
+    "stories": "RichTextArea.stories.tsx",
+    "tests": "RichTextArea.test.tsx",
+    "index": "rich/index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1697:19487",
+    "componentName": "text-area",
+    "variantCount": 64,
+    "verifiedAt": "2026-08-28",
+    "note": "Shares Text Area's component set - `type=rich-inline` is one axis value there, visually identical to `default`. The picker's own anatomy was built from the `type-cursor` figma-part added to text-field on 2026-08-28 (open-search / type-to-search variants) fed into a dropdown-menu variant with a defined open menu. Because the mode is behavior, not appearance, most of this component has no static Figma counterpart to verify against.",
+    "structure": "The editor frame is Text Area's frame, token-for-token. The `/` mini-input reuses Text Field's look (background, input border, radius) at a small size, per the Figma type-cursor part. The picker is the menu organism with search hidden - the query is typed inline in the editor, not in the panel - with one section per entity type and a 16px IconTile heading.",
+    "apiAdaptationNotes": [
+      "Built as a separate `RichTextArea` component rather than a `type` prop on TextArea. The two share a frame but nothing else: one is a native <textarea> with a string value, the other is a contenteditable surface with a structured node array, `onSearch`, and an entity config. A single component would have had two disjoint prop sets and two disjoint values.",
+      "The value is a flat node array (`RichTextValue`) - runs of text interleaved with entity nodes - not HTML or Markdown. It is what you persist; serialize it however your store needs. Storing HTML would leak the editor's DOM shape into consumers' data.",
+      "Hydrates from `value` once, then runs uncontrolled - the DOM is the source of truth while editing, with `onChange` reporting each serialized change. A contenteditable surface cannot be re-rendered from props on every keystroke without destroying the caret.",
+      "The `/` query lives in an inline editable span inside the editor (the Figma `type-cursor` look), so the picker panel has no search field of its own - `showSearch={false}`. This matches Figma and mirrors how Select types in the trigger while the panel only lists options.",
+      "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. See knownLimitations for the accessibility consequence.",
+      "Each tag is a non-editable host span with a `NavTag` portaled into it. contenteditable would otherwise let the caret walk into the tag's internals; a host span keeps each tag atomic to the caret while still being a real React subtree.",
+      "`NavTag` is a preset over the Tag atom, not a new component - Tag already does tone (color), `elemBefore` (icon), and `href` (navigation). An entityType only needs to resolve to a tone plus an icon.",
+      "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
+      "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
+    ]
+  },
+  "props": {
+    "value": { "type": "RichTextValue", "required": true, "default": null, "description": "The node array: `{ type: 'text', text }` runs interleaved with `{ type: 'entity', entity }` nodes. Read on mount to hydrate the editor; the DOM leads from then on." },
+    "onChange": { "type": "(value: RichTextValue) => void", "required": true, "default": null, "description": "Called with the re-serialized node array after every edit, including tag insertion and deletion." },
+    "onSearch": { "type": "EntitySearch", "required": true, "default": null, "description": "`(query: string) => EntitySection[] | Promise<EntitySection[]>`. Resolves the `/query` into grouped results. Called with '' when the picker opens unless `recents` is supplied." },
+    "recents": { "type": "EntitySection[]", "required": false, "default": null, "description": "Shown when the picker opens with an empty query, instead of calling `onSearch('')`." },
+    "entityConfig": { "type": "Record<string, EntityTypeConfig>", "required": false, "default": null, "description": "Maps each entityType to a tag `tone` and a default `icon`, used for both the inserted tag and the section heading tile. Merges over the built-in defaults." },
+    "size": { "type": "TextAreaSize", "required": false, "default": "md", "enum": ["md", "lg"], "description": "Text Area's frame sizing - padding, radius, font." },
+    "appearance": { "type": "TextAreaAppearance", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "Text Area's appearance axis (Figma names it `tone`)." },
+    "resize": { "type": "TextAreaResize", "required": false, "default": "vertical", "enum": ["none", "vertical", "horizontal", "both"], "description": "Which edges the user can drag." },
+    "invalid": { "type": "boolean", "required": false, "default": false, "description": "Sets aria-invalid and paints the error border." },
+    "disabled": { "type": "boolean", "required": false, "default": false, "description": "Turns off contenteditable, removes the editor from the tab order, and suppresses the slash command." },
+    "placeholder": { "type": "string", "required": false, "default": null, "description": "Shown while the editor is empty. Rendered from `data-placeholder` as an absolutely-positioned overlay, so it never sits in the text flow or displaces the caret." },
+    "searchPlaceholder": { "type": "string", "required": false, "default": "Type to search", "description": "Placeholder inside the `/` mini-input before a query is typed." },
+    "emptyMessage": { "type": "React.ReactNode", "required": false, "default": "No matches", "description": "Shown in the picker when a search returns nothing." },
+    "rows": { "type": "number", "required": false, "default": 3, "description": "Approximate initial height in line-height units, applied as the `--rta-rows` custom property." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes onto the wrapper." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the editor element, for pairing with a <label htmlFor>." },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "Accessible name for the editor. Required unless aria-labelledby or a wired label is used." },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Accessible name by reference." }
+  },
+  "sizes": ["md", "lg"],
+  "states": ["default", "hover", "focus", "invalid", "disabled", "picker-open"],
+  "variants": {
+    "appearance": {
+      "default": { "purpose": "The standard bordered box - correct for nearly every case." },
+      "subtle": { "purpose": "Transparent until hover/focus/invalid, bottom accent only. For a low-chrome inline composer." }
+    }
+  },
+  "accessibility": {
+    "role": "textbox (a contenteditable div), aria-multiline=\"true\"",
+    "label": "No built-in label - pass aria-label / aria-labelledby, or wire a <label htmlFor> to `id`.",
+    "invalid": "aria-invalid reflects the invalid prop.",
+    "disabled": "contenteditable is turned off and tabIndex is -1; the slash command does not fire.",
+    "tags": "Each tag renders a Tag with tabIndex -1 so the caret walk is not interrupted by tab stops; a tag with `href` is a real <a> and is reachable from the rendered content.",
+    "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. The keyboard-active row is marked with a class. See knownLimitations - this is not yet wired to aria-activedescendant."
+  },
+  "tokens": {
+    "frame": "All of Text Area's frame tokens, unchanged - surface, border, radius, padding, typography per size.",
+    "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-sm`.",
+    "tagHost": "Layout only - the Tag atom carries its own tone tokens.",
+    "picker": "The Menu organism's own panel tokens; the panel caps at 280px and scrolls.",
+    "note": "No new tokens. Frame reuse is what makes the rich mode read as the same field as Text Area."
+  },
+  "relatedComponents": ["TextArea", "TextField", "Menu", "DropdownMenu", "Tag", "Avatar", "IconTile"],
+  "do": [
+    "Give the editor an accessible name (aria-label, aria-labelledby, or a label wired to `id`).",
+    "Return grouped sections from `onSearch`, one per entity type, so the picker reads as categories rather than a flat list.",
+    "Give each entityType a distinct tone in `entityConfig` so color encodes type consistently in both the picker row and the inserted tag.",
+    "Supply `recents` so opening the picker with an empty query is instant and useful.",
+    "Persist the node array as-is, or map it to your own shape - it is a stable, serializable structure."
+  ],
+  "dont": [
+    "Don't use it for plain multi-line text - use TextArea, which is a real <textarea> with native behavior.",
+    "Don't treat the value as HTML or Markdown - it is a flat node array by design.",
+    "Don't re-render it from `value` on every keystroke expecting the editor to follow; it hydrates once and then leads.",
+    "Don't rely on it as an accessible combobox for screen reader users yet - see knownLimitations."
+  ],
+  "behaviorNotes": [
+    "`/` only starts a command at the beginning of the editor or after whitespace - mid-word slashes stay literal characters.",
+    "The query types inline into a small bordered span; Escape (or a caret leaving the span) unwraps it back to plain text, keeping what was typed.",
+    "Enter inserts the active row as a tag, replacing the `/query` span and adding a trailing space.",
+    "That trailing space is ordinary text - deleting a tag afterwards leaves the space behind.",
+    "ArrowUp/ArrowDown move the active row and are clamped at both ends.",
+    "A pointer press outside the field closes the picker.",
+    "An empty query resolves from `recents` when provided; non-empty queries are debounced 150ms, and out-of-order responses are discarded by sequence number."
+  ],
+  "knownLimitations": [
+    "The picker's active row is marked with a class only - the editor does not yet set `aria-activedescendant`, so a screen reader user gets no announcement of which entity is active while arrowing. Keyboard operation works; the announcement does not.",
+    "The `/` mini-input relies on the browser keeping typing inside an inline editable span. Verified in Chrome (Storybook's engine); Firefox and Safari can let the caret drift out of an inline element at its boundary, and no caret-correction guard is in place yet.",
+    "Backspace does not yet delete a tag as a single unit in every position - a tag is atomic to the caret, but the surrounding deletion cases are not fully hardened.",
+    "Multi-line serialization handles `<br>` but has not been hardened against every paste shape; pasted rich HTML is not sanitized into the node model.",
+    "No auto-resize-to-content; height comes from `rows` and the resize grip.",
+    "Tests cover rendering, hydration, the slash lifecycle, picker keyboard, and serialization. They cannot cover real caret behavior - jsdom does not simulate contenteditable typing - so caret correctness is verified live in Storybook, not in CI."
+  ],
+  "futureEnhancements": [
+    "Wire `aria-activedescendant` (and ids on the picker rows) so the active entity is announced.",
+    "A caret-correction guard for Firefox/Safari at the inline span boundary.",
+    "Harden backspace-deletes-a-tag and paste handling, including sanitizing pasted HTML into the node model.",
+    "Async loading affordance in the picker beyond the Menu's own loading row.",
+    "Mention-style triggers beyond `/` (for example `@`), driven by the same picker."
+  ]
+}

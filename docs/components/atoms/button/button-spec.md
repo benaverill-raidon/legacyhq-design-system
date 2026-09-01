@@ -41,7 +41,7 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type ButtonAppearance = 'default' | 'primary' | 'subtle';
 
-export type ButtonTone = 'neutral' | 'warning' | 'error' | 'discovery';
+export type ButtonTone = 'neutral' | 'warning' | 'error';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
@@ -106,17 +106,13 @@ Used for actions that require caution.
 
 Used for destructive or high-risk actions.
 
-#### Discovery
-
-Used for discovery, education, or guidance-oriented actions.
-
 ## Appearance and Tone Matrix
 
-| Appearance | Neutral | Warning | Error | Discovery |
-|---|---|---|---|---|
-| default | standard neutral | warning outline/default | error outline/default | discovery outline/default |
-| primary | primary brand | warning bold | error bold | discovery bold |
-| subtle | neutral subtle | warning subtle | error subtle | discovery subtle |
+| Appearance | Neutral | Warning | Error |
+|---|---|---|---|
+| default | standard neutral | warning outline/default | error outline/default |
+| primary | primary brand | warning bold | error bold |
+| subtle | neutral subtle | warning subtle | error subtle |
 
 ## States
 
@@ -310,13 +306,6 @@ Use available semantic color tokens from the theme CSS.
 - pressed: `color-background-error-bold-press`
 - content/icon: `color-content-inverse`
 
-### Primary + Discovery
-
-- background: `color-background-discovery-bold-default`
-- hover: `color-background-discovery-bold-hover`
-- pressed: `color-background-discovery-bold-press`
-- content/icon: `color-content-inverse`
-
 ### Subtle
 
 Use neutral or semantic subtle background tokens for hover/press states, with default transparent/no-fill base where appropriate.
@@ -411,7 +400,6 @@ Show:
 - subtle action
 - warning action
 - error/destructive action
-- discovery action
 - loading submit button
 - button row
 - form footer

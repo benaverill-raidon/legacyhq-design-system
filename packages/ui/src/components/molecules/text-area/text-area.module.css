@@ -1,0 +1,163 @@
+/*
+ * The frame styling lives directly on the <textarea> (there is no wrapper - Text Area has no icon
+ * slots), reusing Text Field's exact semantic tokens so the two siblings read as one family. Figma's
+ * text-area binds a newer `background/input/*` + `border/focused` token naming that does not exist in
+ * this build; those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic
+ * tokens Text Field already uses (same intent), so we reuse those rather than invent unbacked tokens.
+ */
+.textarea {
+  --text-area-radius: var(--border-radius-lg);
+  --text-area-padding-block: var(--spacing-sm);
+  --text-area-padding-inline: var(--spacing-sm);
+
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: var(--text-area-padding-block);
+  padding-inline: var(--text-area-padding-inline);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  border-radius: var(--text-area-radius);
+  background: var(--color-elevation-surface-raised-default);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  transition: background-color var(--fade-quick), border-color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .textarea {
+    transition-duration: 0ms;
+  }
+}
+
+/*
+ * Padding, radius, and font are confirmed per size directly from Figma's bound variables: md is
+ * symmetric 8, lg is 12 with the radius stepping up to xl, and the font is body-md at md, body-lg at
+ * lg. (The sm size was removed - it read almost identically to md.) md's values also seed the base
+ * `.textarea` above, so an md field renders correctly even before this class applies.
+ */
+.size_md {
+  --text-area-padding-block: var(--spacing-sm);
+  --text-area-padding-inline: var(--spacing-sm);
+  --text-area-radius: var(--border-radius-lg);
+}
+
+.size_lg {
+  --text-area-padding-block: var(--spacing-md);
+  --text-area-padding-inline: var(--spacing-md);
+  --text-area-radius: var(--border-radius-xl);
+
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+/* The user-drag resize axis. Vertical by default (see the types doc). */
+.resize_none {
+  resize: none;
+}
+
+.resize_vertical {
+  resize: vertical;
+}
+
+.resize_horizontal {
+  resize: horizontal;
+}
+
+.resize_both {
+  resize: both;
+}
+
+.textarea::placeholder {
+  color: var(--color-content-subtle);
+}
+
+/*
+ * Hover tint only ever shows on an inactive field - suppressed once focused/typing, matching Text
+ * Field (and its explicit design feedback). The textarea is itself the focusable element, so this
+ * keys off `:focus` directly rather than Text Field's `:focus-within`.
+ */
+.textarea:not(:disabled):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  background: var(--color-elevation-surface-raised-hover);
+}
+
+/*
+ * Focus and invalid both replace the resting border color and paint the extra pixel with an inset
+ * box-shadow rather than growing the real `border-width` - the same technique Text Field uses, and
+ * for the same reason: a real 1px->2px border change shrinks the content box on every side, nudging
+ * the text and caret by a pixel on each focus/blur or invalid toggle. Figma's own text-area does tint
+ * the fill on focus (`background/input/pressed`); we deliberately keep the resting fill instead, to
+ * match Text Field's established no-tint-on-focus behavior (that token also does not exist here).
+ */
+.appearance_default:is(:focus, [data-force-state='focus']) {
+  border-color: var(--color-border-focus);
+  box-shadow: inset 0 0 0 1px var(--color-border-focus);
+}
+
+.textarea[data-invalid='true'] {
+  border-color: var(--color-border-error);
+  box-shadow: inset 0 0 0 1px var(--color-border-error);
+}
+
+.textarea:disabled {
+  background: var(--color-background-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+  resize: none;
+}
+
+.textarea:disabled::placeholder {
+  color: var(--color-content-disabled);
+}
+
+/*
+ * `subtle` has no box border/background at rest - only a bottom accent line reveals on hover, focus,
+ * or invalid. The bottom border is a constant 1px in the box model at every state (focus/invalid
+ * paint the extra pixel via box-shadow, not a real border change, so the text never shifts). Top
+ * corners keep the appearance's radius; the bottom corners are square - mirroring Text Field's own
+ * subtle appearance, confirmed there directly from Figma's per-side stroke and per-corner radius.
+ */
+.appearance_subtle {
+  border-color: transparent;
+  background: transparent;
+  border-width: 0 0 var(--border-width-sm) 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.appearance_subtle:not(:disabled):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  background: var(--color-elevation-surface-raised-hover);
+}
+
+/*
+ * Scoped to `:not([data-invalid='true'])` so hovering an invalid field keeps the error border instead
+ * of resetting it to `--color-border-input` - the same guard Text Field's subtle hover uses.
+ */
+.appearance_subtle:not(:disabled):not([data-invalid='true']):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  border-bottom-color: var(--color-border-input);
+}
+
+.appearance_subtle:is(:focus, [data-force-state='focus']) {
+  border-bottom-color: var(--color-border-focus);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
+}
+
+.appearance_subtle[data-invalid='true'] {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--color-border-error);
+  border-left-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--color-border-error);
+}
+
+.appearance_subtle:disabled {
+  background: transparent;
+  border-color: transparent;
+}

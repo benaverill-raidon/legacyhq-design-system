@@ -21,7 +21,7 @@ const meta = {
   argTypes: {
     currentStep: { control: { type: 'number', min: 1, step: 1 } },
     totalSteps: { control: { type: 'number', min: 1, step: 1 } },
-    appearance: { control: 'inline-radio', options: ['default', 'primary', 'discovery', 'inverted'] },
+    appearance: { control: 'inline-radio', options: ['default', 'primary', 'inverted'] },
     size: { control: 'inline-radio', options: sizes },
     label: { control: 'text' },
     getValueText: { control: false },
@@ -109,9 +109,6 @@ export const Variants: Story = {
         </Cell>
         <Cell label="primary">
           <ProgressIndicator appearance="primary" currentStep={2} totalSteps={4} label="Primary journey" />
-        </Cell>
-        <Cell label="discovery">
-          <ProgressIndicator appearance="discovery" currentStep={2} totalSteps={4} label="Discovery journey" />
         </Cell>
       </Group>
 
@@ -296,7 +293,7 @@ export const Content: Story = {
 
         <div style={cardStyle}>
           <div style={row}>
-            <ProgressIndicator appearance="discovery" currentStep={1} totalSteps={4} label="Guided setup" />
+            <ProgressIndicator appearance="primary" currentStep={1} totalSteps={4} label="Guided setup" />
             <span style={captionStyle}>Introduction</span>
           </div>
         </div>
@@ -363,7 +360,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Dark surface</h3>
         <p style={captionStyle}>
-          <code>default</code>, <code>primary</code>, and <code>discovery</code> stay legible on a
+          <code>default</code> and <code>primary</code> stay legible on a
           dark surface without switching appearance - <code>inverted</code> is only needed when the
           default selected color itself lacks contrast.
         </p>
@@ -378,7 +375,6 @@ export const EdgeCases: Story = {
         >
           <ProgressIndicator currentStep={2} totalSteps={4} label="Dark default" />
           <ProgressIndicator appearance="primary" currentStep={2} totalSteps={4} label="Dark primary" />
-          <ProgressIndicator appearance="discovery" currentStep={2} totalSteps={4} label="Dark discovery" />
           <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Dark inverted" />
         </div>
       </section>

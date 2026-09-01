@@ -93,14 +93,12 @@ Appearances:
 ```txt
 default
 primary
-help
 inverted
 ```
 
 Public-to-Figma intent mapping:
 
 ```txt
-help -> discovery
 inverted -> inverse
 ```
 

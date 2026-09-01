@@ -1,0 +1,127 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SelectStories from './Select.stories';
+
+<Meta of={SelectStories} name="Docs" />
+
+# Select
+
+Select lets someone pick one option — or several — from a searchable list, shown in a field-styled
+trigger. It's a combobox: type to filter, then choose from a dropdown.
+
+<Canvas of={SelectStories.Playground} />
+
+## When to use
+
+- Choosing from a medium-to-long list where type-to-filter helps: a status, a matter type, an
+  assignee.
+- Choosing several values at once — `inputType="multi"` shows them as removable chips.
+
+## When not to use
+
+- **A short, always-visible exclusive set** → Radio.
+- **A binary on/off** → Switch or Checkbox.
+- **Free text with no fixed options** → TextField.
+- **A menu of actions, not values** → Dropdown Menu directly.
+
+## Single vs multi
+
+Select's props are a discriminated union on `inputType` (default `single`), so single's scalar value
+and multi's array can't be crossed. Single shows the chosen label in the trigger; multi shows
+removable chips.
+
+<Canvas of={SelectStories.InputTypes} />
+
+## Usage guidance
+
+### Options are a flat list, not Menu sections
+
+Pass `SelectOption[]` — `{ value, label, icon?, description?, disabled?, group? }`. Select maps it
+into the Menu itself, owning each row's selected state, its radio (single) / checkbox (multi)
+semantics, and the typeahead filter. Grouping is automatic from each option's `group` field.
+
+```tsx
+<Select
+  options={[
+    { value: 'trust', label: 'Trust', group: 'Estate' },
+    { value: 'will', label: 'Will', group: 'Estate' },
+    { value: 'llc', label: 'LLC formation', group: 'Business' },
+  ]}
+  value={value}
+  onChange={setValue}
+/>
+```
+
+<Canvas of={SelectStories.Grouped} />
+
+### Typeahead
+
+Type in the trigger to filter. When the query matches nothing, the panel shows `emptyMessage`. To
+filter externally (async loading), pass `searchValue` + `onSearchChange` and Select stops filtering
+internally.
+
+<Canvas of={SelectStories.Typeahead} />
+
+### It's the menu accessibility pattern
+
+The input is `role="combobox"` with `aria-haspopup="menu"`; the panel is a `role="menu"` with
+`menuitemradio`/`menuitemcheckbox` rows. This matches Figma's own composition (a text input opening a
+dropdown-menu) and reuses Menu wholesale. Opening keeps focus in the input; ArrowDown moves into the
+menu; Escape returns focus to the input. It is deliberately not a strict combobox/listbox with
+`aria-activedescendant` — see the spec.
+
+## Sizes, tones, states
+
+`size` sets the trigger height (32/40/48), the panel width, and the chip size together. `tone` maps
+to TextField's `appearance`.
+
+<Canvas of={SelectStories.Variants} />
+
+<Canvas of={SelectStories.States} />
+
+## Do / Don't
+
+**Do** give the combobox an accessible name.
+
+```tsx
+<Select options={options} value={value} onChange={setValue} aria-label="Matter status" />
+```
+
+**Don't** pass Menu sections — Select takes a flat option list and builds the rows itself.
+
+```tsx
+{/* No `sections` prop — group via each option's `group` field instead. */}
+```
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>options</code></td><td><code>SelectOption[]</code></td><td>-</td><td>Required. <code>{'{ value, label, icon?, description?, disabled?, group? }'}</code>.</td></tr>
+    <tr><td><code>value</code></td><td><code>string | null</code> / <code>string[]</code></td><td>-</td><td>Required. Scalar for single, array for multi.</td></tr>
+    <tr><td><code>onChange</code></td><td><code>(value) =&gt; void</code></td><td>-</td><td>Required. Next selection.</td></tr>
+    <tr><td><code>inputType</code></td><td><code>'single' | 'multi'</code></td><td><code>'single'</code></td><td>Discriminates the union.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Trigger height, panel width, chip size.</td></tr>
+    <tr><td><code>tone</code></td><td><code>'default' | 'subtle'</code></td><td><code>'default'</code></td><td>Maps to TextField's appearance.</td></tr>
+    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Shown when nothing is selected.</td></tr>
+    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Blocks opening; disables chip removal.</td></tr>
+    <tr><td><code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Red border + aria-invalid.</td></tr>
+    <tr><td><code>searchValue</code> / <code>onSearchChange</code></td><td><code>string</code> / <code>(v) =&gt; void</code></td><td>-</td><td>Control the query externally (async filtering).</td></tr>
+    <tr><td><code>emptyMessage</code></td><td><code>React.ReactNode</code></td><td><code>"No matches"</code></td><td>Panel content when nothing matches.</td></tr>
+    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Accessible name for the combobox.</td></tr>
+    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Applied to the trigger input / frame.</td></tr>
+  </tbody>
+</table>
+
+## Edge cases
+
+<Canvas of={SelectStories.EdgeCases} />
+
+## Related components
+
+- **TextField** — the trigger frame (extended with an in-frame `leadingContent` slot for chips).
+- **Chip** — multi-select values.
+- **Dropdown Menu / Menu** — the option panel.
+- **Radio** — the right choice for a short, fixed, exclusive set.

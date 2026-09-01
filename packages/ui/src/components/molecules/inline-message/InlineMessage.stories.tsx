@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InlineMessage } from './inline-message';
 import type { InlineMessageTone } from './inline-message.types';
 
-const tones: InlineMessageTone[] = ['default', 'info', 'success', 'warning', 'error', 'discovery'];
+const tones: InlineMessageTone[] = ['default', 'info', 'success', 'warning', 'error'];
 
 const meta = {
   title: 'UI/Molecules/Inline Message',
@@ -144,7 +144,7 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Long detail content wraps inside Popup&apos;s default width</h3>
         <InlineMessage
           title="Migration in progress"
-          tone="discovery"
+          tone="info"
           content="This matter is being migrated to the new document management system. Existing links and permissions are preserved, but search indexing may take up to 24 hours to catch up across every linked workspace."
         />
       </section>

@@ -4,7 +4,7 @@ Progress Indicator is an atom that shows users where they are within a finite se
 
 Use it for onboarding, guided setup, multi-step forms, carousels, and other journeys where relative position matters. Do not use it for percentage-based system progress, indeterminate loading, tabs, or labeled step navigation. Use Progress Bar for determinate process completion and a future Stepper pattern for labeled or interactive steps.
 
-The component supports `default`, `primary`, `discovery`, and `inverted` appearances in small and medium sizes. The number of dots is dynamic and comes from `totalSteps`; it is not limited to the five-dot Figma example. Only one dot is selected, and the component does not represent completed steps separately.
+The component supports `default`, `primary`, and `inverted` appearances in small and medium sizes. The number of dots is dynamic and comes from `totalSteps`; it is not limited to the five-dot Figma example. Only one dot is selected, and the component does not represent completed steps separately.
 
 Progress Indicator remains controlled by `currentStep` and `totalSteps`. External Previous and Next buttons belong to surrounding composition, not to the component itself. The component may optionally support direct dot selection through `onStepChange`; when that callback is not provided, dots remain passive and non-focusable.
 

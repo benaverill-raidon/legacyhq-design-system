@@ -149,8 +149,8 @@ export const Modes: Story = {
         description="A single already-applied property. No dropdown - the value is the label itself, and the only control is remove."
       >
         <div style={row}>
-          <Chip mode="property" label="Trusts" onRemove={() => {}} />
-          <Chip mode="property" label="Jordan Ellis" elemBefore={<Avatar name="Jordan Ellis" size="xs" decorative />} onRemove={() => {}} />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} />
+          <Chip mode="select" label="Jordan Ellis" elemBefore={<Avatar name="Jordan Ellis" size="xs" decorative />} onRemove={() => {}} />
         </div>
       </Group>
 
@@ -190,7 +190,7 @@ function ScopeExample() {
         ].map((option) => (
           <Chip
             key={option.id}
-            mode="scope"
+            mode="search"
             label={option.label}
             elemBefore={<SearchIcon decorative />}
             isSelected={scopes.has(option.id)}
@@ -234,32 +234,38 @@ export const WithOperator: Story = {
   ),
 };
 
-/** Both sizes Figma defines - `sm (24)` and `md (32)` - applied to every segment together. */
+/**
+ * The sizes Figma defines, applied to every segment together. `property` and `scope` exist at both
+ * `sm (24)` and `md (32)`; `filter` is `md`-only (the `sm` filtering variants were removed), so it
+ * appears in the md row alone.
+ */
 export const Sizes: Story = {
   render: () => (
     <div style={stack}>
       {SIZES.map((size) => (
         <Group key={size} title={size === 'sm' ? 'sm (24px)' : 'md (32px) - default'}>
           <div style={row}>
-            <Chip
-              mode="filter"
-              size={size}
-              label="Status"
-              elemBefore={<TaskNotStartedIcon decorative />}
-              value={{ label: '2 statuses', sections: statusSections() }}
-              onRemove={() => {}}
-            />
-            <Chip
-              mode="filter"
-              size={size}
-              label="Due date"
-              elemBefore={<CalendarIcon decorative />}
-              operator={{ label: 'on', sections: operatorSections() }}
-              value={{ label: 'March 2', sections: statusSections() }}
-              onRemove={() => {}}
-            />
-            <Chip mode="property" size={size} label="Trusts" onRemove={() => {}} />
-            <Chip mode="scope" size={size} label="Matters" isSelected />
+            {size === 'md' ? (
+              <>
+                <Chip
+                  mode="filter"
+                  label="Status"
+                  elemBefore={<TaskNotStartedIcon decorative />}
+                  value={{ label: '2 statuses', sections: statusSections() }}
+                  onRemove={() => {}}
+                />
+                <Chip
+                  mode="filter"
+                  label="Due date"
+                  elemBefore={<CalendarIcon decorative />}
+                  operator={{ label: 'on', sections: operatorSections() }}
+                  value={{ label: 'March 2', sections: statusSections() }}
+                  onRemove={() => {}}
+                />
+              </>
+            ) : null}
+            <Chip mode="select" size={size} label="Trusts" onRemove={() => {}} />
+            <Chip mode="search" size={size} label="Matters" isSelected />
           </div>
         </Group>
       ))}
@@ -279,9 +285,9 @@ export const States: Story = {
     <div style={stack}>
       <Group title="scope - unselected" description="No hover or press fill - only focus and disabled change the label segment.">
         <div style={row}>
-          <Chip mode="scope" label="Default" elemBefore={<SearchIcon decorative />} />
-          <Chip mode="scope" label="Focus" elemBefore={<SearchIcon decorative />} data-force-state="focus" />
-          <Chip mode="scope" label="Disabled" elemBefore={<SearchIcon decorative />} disabled />
+          <Chip mode="search" label="Default" elemBefore={<SearchIcon decorative />} />
+          <Chip mode="search" label="Focus" elemBefore={<SearchIcon decorative />} data-force-state="focus" />
+          <Chip mode="search" label="Disabled" elemBefore={<SearchIcon decorative />} disabled />
         </div>
       </Group>
       <Group
@@ -289,9 +295,9 @@ export const States: Story = {
         description="Selected is a selection state, not an interaction state - it uses the dedicated selected token family, and the label icon tracks the text colour with it."
       >
         <div style={row}>
-          <Chip mode="scope" label="Default" elemBefore={<SearchIcon decorative />} isSelected />
-          <Chip mode="scope" label="Focus" elemBefore={<SearchIcon decorative />} isSelected data-force-state="focus" />
-          <Chip mode="scope" label="Disabled" elemBefore={<SearchIcon decorative />} isSelected disabled />
+          <Chip mode="search" label="Default" elemBefore={<SearchIcon decorative />} isSelected />
+          <Chip mode="search" label="Focus" elemBefore={<SearchIcon decorative />} isSelected data-force-state="focus" />
+          <Chip mode="search" label="Disabled" elemBefore={<SearchIcon decorative />} isSelected disabled />
         </div>
       </Group>
       <Group
@@ -319,7 +325,7 @@ export const States: Story = {
             onRemove={() => {}}
             disabled
           />
-          <Chip mode="property" label="Trusts" onRemove={() => {}} disabled />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} disabled />
         </div>
       </Group>
     </div>
@@ -392,8 +398,8 @@ export const EdgeCases: Story = {
       <Group title="No elemBefore" description="The icon slot is optional in every mode.">
         <div style={row}>
           <Chip mode="filter" label="Status" value={{ label: 'Any', sections: statusSections() }} onRemove={() => {}} />
-          <Chip mode="property" label="Trusts" onRemove={() => {}} />
-          <Chip mode="scope" label="Matters" />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} />
+          <Chip mode="search" label="Matters" />
         </div>
       </Group>
       <Group title="Dark surface">
@@ -415,8 +421,8 @@ export const EdgeCases: Story = {
             value={{ label: '2 statuses', sections: statusSections() }}
             onRemove={() => {}}
           />
-          <Chip mode="property" label="Trusts" onRemove={() => {}} />
-          <Chip mode="scope" label="Matters" isSelected />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} />
+          <Chip mode="search" label="Matters" isSelected />
         </div>
       </Group>
     </div>

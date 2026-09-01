@@ -23,7 +23,7 @@ If anything conflicts, follow `inline-message-spec.md`.
 ## Recommended API
 
 ```ts
-export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error' | 'discovery';
+export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error';
 
 export interface InlineMessageProps {
   title: React.ReactNode;
@@ -86,16 +86,11 @@ info     -> StatusInformationIcon (information)     | --color-background-informa
 success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hover
 warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hover
 error    -> StatusErrorIcon (error)                  | --color-background-error-overlay-hover
-discovery -> StatusDiscoveryIcon (discovery)         | --color-background-discovery-overlay-hover
 ```
 
 `default` has no matching status icon in the generated icon set (Figma's own `default`-tone trigger
 falls back to an unrelated generic placeholder glyph too) - draw a plain CSS dot instead of
 fabricating a new icon asset.
-
-`discovery` requires extending the shared `Icon` primitive's `IconColor` type and
-`icon.module.css` with a `discovery` value/class (`--color-content-discovery`) - it did not exist
-before this component needed it, despite being an established tone everywhere else in the system.
 
 ## Layout Requirements
 

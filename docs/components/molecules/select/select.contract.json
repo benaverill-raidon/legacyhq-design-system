@@ -1,0 +1,163 @@
+{
+  "name": "Select",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Pick one option (or several) from a searchable list, shown in a field-styled trigger.",
+  "intent": "A combobox composed from the pieces the system already has - a TextField trigger, a Dropdown Menu panel, and Chips for multi-select values - preconfigured for the choose-from-a-list use case, rather than a fourth independent implementation of a field, a floating panel, or a token input.",
+  "tierNote": "Classified as a molecule, but its panel composes Dropdown Menu (an organism, itself Menu + Popup) - the same deliberate, documented exception Tag Group, Avatar Group, Split Button, and Chip already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here. Select also composes two molecules (TextField, Chip), which is ordinary molecule-on-molecule composition.",
+  "sourceFiles": {
+    "component": "select.tsx",
+    "types": "select.types.ts",
+    "styles": "select.module.css",
+    "stories": "Select.stories.tsx",
+    "tests": "Select.test.tsx",
+    "index": "index.ts",
+    "note": "select.module.css owns the caret's open/close rotation and its colour (content/subtle at rest, content/disabled when disabled - Figma-verified on the trigger's caret_down vector); the trigger frame is TextField's CSS, the panel is Dropdown Menu/Menu's, the chips are Chip's."
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4662:42012",
+    "componentName": "select",
+    "variantCount": 84,
+    "verifiedAt": "2026-08-26",
+    "note": "Filed on the file's own \"✅⏲️ Select\" page, verified directly against the file via the Desktop Bridge plugin.",
+    "structure": "One component set, 84 variants across six axes - size (sm/md/lg), tone (default/subtle), state (default/hover/focus/typing/hasValue), inputType (single/multi), isInvalid, isDisabled. Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
+    "parts": {
+      "figma-parts / select-trigger": "4658:67775 - 84 variants mirroring select's own axes. Structurally a text-field instance + trailing caret, so the code trigger is the existing TextField molecule, not a bespoke frame.",
+      "text-field": "The trigger's frame, fill, border, focus/invalid/disabled treatment and per-size geometry are exactly the TextField molecule's - verified token-for-token, so Select reuses TextField rather than restating its state CSS.",
+      "caret_down": "icon 1496:1775 = the codebase's CaretDownIcon, in the trigger's elemAfterInput slot.",
+      "chip-base": "multi-select values render as Chips (mode=\"select\") inside the trigger."
+    },
+    "apiAdaptationNotes": [
+      "Props are a discriminated union on `inputType` (default 'single'), so single-select's scalar `value: string | null` and multi-select's `value: string[]` cannot be mixed up - the same pattern Chip uses for `mode`. Single's onChange takes `string | null`; multi's takes `string[]`.",
+      "Options are a flat `SelectOption[]` ({ value, label, icon?, description?, disabled?, group? }), not Menu's `MenuSection[]`. Select maps them into sections itself - grouping consecutive options by their `group` field - and owns each row's selected state, selectionType (radio for single, checkbox for multi), and onSelect. This is the ergonomic shape a Select consumer expects; the caller never hand-wires Menu rows.",
+      "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
+      "tone maps to TextField's `appearance` (default/subtle) - Figma names the axis `tone` on the trigger, but it is TextField's appearance axis, so code uses TextField's own name at that boundary.",
+      "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
+      "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
+      "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
+      "The panel always matches the field frame's width and left edge. The trigger child that carries the merged ref + aria-expanded/aria-controls is the inset input (where that a11y wiring belongs), but Select also passes the field frame (the input's parentElement, via a callback ref) as Dropdown Menu's `anchorRef` and sets `matchTriggerWidth`. Popup then measures, positions, width-matches, and scopes its outside-click boundary to the frame - not the ~9px-inset input - and the inner Menu fills that width via `fullWidth`. This keeps the input's single-child trigger + a11y contract intact while the dropdown lines up flush with the visible control. Verified live: panel width and left both equal the frame's on single and multi.",
+      "`inputType` is not offered as a runtime-mixable prop; a Select is single or multi for its lifetime, as its value type differs. This mirrors Chip's mode union."
+    ]
+  },
+  "useCases": [
+    "Choosing one value from a medium-to-long list (status, matter type, assignee)",
+    "Choosing several values, shown as removable chips (assignees, tags, practice areas)",
+    "Any picker that benefits from type-to-filter over a plain native <select>"
+  ],
+  "antiPatterns": [
+    "A short, always-visible set of mutually exclusive choices - use Radio",
+    "A binary on/off - use Switch or Checkbox",
+    "A free-text field with optional suggestions only - use TextField",
+    "A menu of actions rather than values - use Dropdown Menu directly"
+  ],
+  "anatomy": [
+    { "name": "trigger", "description": "A TextField (role=combobox) - the search input, a trailing rotating caret, and (multi) the selected values as chips inside the frame." },
+    { "name": "chips", "description": "multi-select only. One removable Chip (mode=select) per selected value, inside the trigger; sm chips in sm/md triggers, md chips in lg." },
+    { "name": "panel", "description": "A Dropdown Menu (Popup + Menu) of option rows - menuitemradio for single, menuitemcheckbox for multi - with an empty message when the query matches nothing." }
+  ],
+  "props": {
+    "options": { "type": "SelectOption[]", "required": true, "default": null, "description": "The full option list. Each: { value, label, icon?, description?, disabled?, group? }." },
+    "value": { "type": "string | null (single) | string[] (multi)", "required": true, "default": null, "description": "Controlled selection. Scalar for single, array for multi." },
+    "onChange": { "type": "(value) => void", "required": true, "default": null, "description": "Called with the next selection - string|null (single) or string[] (multi)." },
+    "inputType": { "type": "'single' | 'multi'", "required": false, "default": "single", "description": "Discriminates the union. single: radio rows, scalar value, label in trigger. multi: checkbox rows, array value, removable chips in trigger." },
+    "size": { "type": "SelectSize", "required": false, "default": "md", "enum": ["sm", "md", "lg"], "description": "Trigger height 32/40/48; also sets the panel width and chip size." },
+    "tone": { "type": "SelectTone", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "Maps to TextField's appearance - default (bordered) or subtle (bottom-border only)." },
+    "placeholder": { "type": "string", "required": false, "default": null, "description": "Shown when nothing is selected." },
+    "disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables the trigger; the panel cannot open, and chips render disabled." },
+    "invalid": { "type": "boolean", "required": false, "default": false, "description": "Red border and aria-invalid on the input." },
+    "searchValue": { "type": "string", "required": false, "default": null, "description": "Controlled query. Provide with onSearchChange to filter externally (async); Select then stops filtering internally." },
+    "onSearchChange": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called as the query changes." },
+    "emptyMessage": { "type": "React.ReactNode", "required": false, "default": "No matches", "description": "Shown in the panel when the query matches no options." },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "Accessible name for the combobox when no visible label is wired by id." },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Same, by reference." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the trigger input." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the trigger frame's class list." }
+  },
+  "sizes": ["sm", "md", "lg"],
+  "slots": [
+    { "name": "option.icon", "required": false, "allowedContent": "Icon or Avatar, decorative - shown in the row and (multi) the chip" }
+  ],
+  "variants": {
+    "inputType": {
+      "single": { "purpose": "One value; radio rows; the chosen label fills the trigger." },
+      "multi": { "purpose": "Several values; checkbox rows; removable chips fill the trigger." }
+    },
+    "tone": {
+      "default": { "purpose": "Bordered field frame." },
+      "subtle": { "purpose": "Bottom-border-only field frame." }
+    }
+  },
+  "states": ["default", "hover", "focus", "typing", "hasValue", "invalid", "disabled"],
+  "accessibility": {
+    "triggerRole": "combobox (the input), aria-haspopup=menu, aria-autocomplete=list",
+    "ariaExpanded": "set on the input by Popup, reflecting the panel's open state",
+    "ariaControls": "set on the input by Popup, pointing at the panel while open",
+    "panelRoles": "role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows carrying aria-checked",
+    "invalid": "aria-invalid on the input when invalid",
+    "focusModel": "opening keeps focus in the input; ArrowDown moves into the Menu (its roving tabindex); Escape/outside-click close and return focus to the input",
+    "note": "Deliberately the menu a11y pattern, matching Figma's text-input + dropdown-menu composition, not the strict combobox/listbox + aria-activedescendant pattern - see apiAdaptationNotes."
+  },
+  "keyboardInteraction": [
+    "Type to filter the options",
+    "ArrowDown opens a closed field, or moves focus into the open Menu",
+    "Enter/Space opens a closed field",
+    "Enter / arrow keys / Home / End inside the Menu navigate and activate rows (inherited from Menu)",
+    "Backspace on an empty multi-select query removes the last chip",
+    "Escape closes the panel and returns focus to the input (inherited from Popup)"
+  ],
+  "behaviorRules": [
+    "Holds its own open and (uncontrolled) query state; value is always controlled by the consumer.",
+    "single: choosing a row calls onChange(value) and closes; the trigger shows the chosen label.",
+    "multi: choosing a row toggles the value in the array, keeps the panel open, and clears the query; values render as removable chips.",
+    "Filters options itself unless searchValue/onSearchChange are provided, in which case filtering is the caller's.",
+    "size sets the trigger height, the panel width, and the chip size together.",
+    "disabled blocks opening and disables chip removal."
+  ],
+  "compositionRules": [
+    "Pass a flat SelectOption[]; Select builds the Menu sections, selection, and typeahead itself.",
+    "Keep option.icon decorative - it appears in both the row and (multi) the chip.",
+    "Hold value in the consumer and update it from onChange; Select never mutates selection on its own."
+  ],
+  "responsiveRules": [
+    "The trigger stays single-line at every size; multi-select chips shrink and clip rather than wrapping.",
+    "The panel inherits Popup's viewport-aware alignment fallback and outside-dismissal."
+  ],
+  "themeRules": ["Fully token-driven via the composed components - no light/dark branching of its own. Verified in both themes."],
+  "tokens": {
+    "note": "select.module.css references only --fade-quick (the caret rotation transition) and the caret colour tokens --color-content-subtle (rest) / --color-content-disabled (disabled). Every other value belongs to TextField, Chip, or Dropdown Menu/Menu - see their own contract.json files."
+  },
+  "relatedComponents": ["TextField", "Chip", "DropdownMenu", "Menu", "Radio", "Popup"],
+  "do": [
+    "Give the combobox an accessible name (a wired <label>, or aria-label).",
+    "Use single for one choice and multi for several - don't fake multi with repeated singles.",
+    "Provide an emptyMessage that names what wasn't found."
+  ],
+  "dont": [
+    "Do not pass Menu sections - Select takes a flat option list.",
+    "Do not expect a strict ARIA listbox; this is the menu pattern by design.",
+    "Do not use Select for a short fixed set of exclusive choices - that's Radio."
+  ],
+  "acceptanceCriteria": [
+    "Renders a combobox trigger showing the placeholder when empty and the chosen label (single) when closed.",
+    "Opens on click, typing, or ArrowDown; typing filters the options case-insensitively.",
+    "single: choosing a row calls onChange and closes, with the row marked aria-checked.",
+    "multi: renders a removable chip per value, toggles on re-pick without closing, and removes via chip ✕ or Backspace.",
+    "Shows the empty message when the query matches nothing.",
+    "Groups options under section headings by their group field.",
+    "disabled blocks opening; invalid sets aria-invalid.",
+    "size and tone map to the TextField trigger.",
+    "Supports a custom id/className on the trigger."
+  ],
+  "knownLimitations": [
+    "Menu a11y pattern, not a strict combobox/listbox - screen readers announce a menu, and focus moves into the panel on ArrowDown rather than staying in the input.",
+    "The multi-select trigger is single-line; with many values the chips clip - there is no wrap or overflow-count affordance (Figma models none).",
+    "Inherits every Menu limitation for the panel (no typeahead-within-menu beyond Select's own filter, no virtualization for very large lists)."
+  ],
+  "futureEnhancements": [
+    "A clear-all affordance for multi-select, if a real use needs it.",
+    "Option virtualization for very large lists.",
+    "A strict listbox a11y mode, if a consumer needs combobox/aria-activedescendant semantics."
+  ]
+}

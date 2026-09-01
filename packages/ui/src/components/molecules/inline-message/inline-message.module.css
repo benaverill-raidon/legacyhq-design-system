@@ -57,10 +57,6 @@
   background: var(--color-background-error-overlay-hover);
 }
 
-.tone_discovery.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-discovery-overlay-hover);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .trigger {
     transition-duration: 0ms;

@@ -3,7 +3,6 @@ import type * as React from 'react';
 export type ProgressIndicatorAppearance =
   | 'default'
   | 'primary'
-  | 'discovery'
   | 'inverted';
 
 export type ProgressIndicatorSize = 'sm' | 'md';

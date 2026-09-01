@@ -48,16 +48,6 @@
       }
     },
     {
-      "name": "Discovery action",
-      "description": "An action that leads to guidance, education, or setup discovery.",
-      "jsx": "<Button appearance=\"primary\" tone=\"discovery\">Explore setup</Button>",
-      "props": {
-        "appearance": "primary",
-        "tone": "discovery",
-        "children": "Explore setup"
-      }
-    },
-    {
       "name": "Loading submit",
       "description": "A loading form submit button that preserves its visible label.",
       "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",

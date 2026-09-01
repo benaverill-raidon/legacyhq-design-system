@@ -61,6 +61,7 @@ interface MenuSection {
 interface MenuProps {
   sections: MenuSection[];
   size?: MenuSize;
+  fullWidth?: boolean;
   showSearch?: boolean;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
@@ -81,12 +82,17 @@ interface MenuProps {
 
 ```txt
 size: sm
+fullWidth: false
 showSearch: true
 showScrollbar: true
 loading: false
 loadingLabel: 'Loading…'
 emptyMessage: 'No results'
 ```
+
+`fullWidth` overrides the `size` width and stretches the menu to fill its container (`width: 100%`),
+for a panel sized to its trigger rather than to one of the fixed 192/240/288px widths — Dropdown
+Menu passes it through as `matchTriggerWidth` so a field's dropdown (e.g. Select) matches the field.
 
 `showSearch`/`showScrollbar` default to `true`, matching Figma's own declared component-property
 defaults exactly - there was no product signal to override either.
@@ -232,8 +238,8 @@ introducing new ones:
   in both themes today - they're different Figma variables, and code should reflect that instead
   of quietly conflating them.
 - `IconColor` value `selected` (`--color-content-selected`) on the shared Icon primitive
-  (`packages/ui/src/components/primitives/icon/`) - added for Menu's selected-row icon, the same
-  way `discovery` was added for Inline Message: a real, verified need, not a speculative addition.
+  (`packages/ui/src/components/primitives/icon/`) - added for Menu's selected-row icon: a real,
+  verified need, not a speculative addition.
 - `.search`'s hover/focus neutralization stays local to Menu's own CSS rather than changing
   TextField's `appearance="subtle"` implementation - `subtle`'s existing hover/focus styling is
   correct for TextField's other consumers; menu-search is simply a stripped-down instance of it,

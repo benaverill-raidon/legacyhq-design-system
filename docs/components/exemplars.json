@@ -408,16 +408,6 @@
         }
       },
       {
-        "name": "Discovery action",
-        "description": "An action that leads to guidance, education, or setup discovery.",
-        "jsx": "<Button appearance=\"primary\" tone=\"discovery\">Explore setup</Button>",
-        "props": {
-          "appearance": "primary",
-          "tone": "discovery",
-          "children": "Explore setup"
-        }
-      },
-      {
         "name": "Loading submit",
         "description": "A loading form submit button that preserves its visible label.",
         "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
@@ -678,12 +668,6 @@
         "name": "Primary account setup",
         "description": "Uses the brand appearance for a primary setup flow.",
         "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />",
-        "props": {}
-      },
-      {
-        "name": "Discovery journey",
-        "description": "Uses the discovery appearance for guided assistance.",
-        "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} appearance=\"discovery\" label=\"Guided setup\" />",
         "props": {}
       },
       {
@@ -1207,17 +1191,17 @@
       {
         "name": "An applied property",
         "description": "The value is the label, so there is nothing to open - the only affordance is removing it.",
-        "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
+        "jsx": "<Chip mode=\"select\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
         "props": {
-          "mode": "property"
+          "mode": "select"
         }
       },
       {
         "name": "A selectable search scope",
-        "description": "scope is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
-        "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"scope\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
+        "description": "search is the only selectable mode - a real toggle button carrying aria-pressed. Chip never changes its own selection; wire onSelectedChange.",
+        "jsx": "const [scope, setScope] = useState('matters');\n\n<Chip\n  mode=\"search\"\n  label=\"Matters\"\n  isSelected={scope === 'matters'}\n  onSelectedChange={() => setScope('matters')}\n/>",
         "props": {
-          "mode": "scope"
+          "mode": "search"
         }
       },
       {
@@ -1241,22 +1225,22 @@
     "antiExamples": [
       {
         "name": "Using Chip as a plain label",
-        "jsx": "<Chip mode=\"property\" label=\"Trusts\" onRemove={() => {}} />",
-        "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for scope), and `onRemove` is required for property/filter precisely because every verified Figma variant has one."
+        "jsx": "<Chip mode=\"select\" label=\"Trusts\" onRemove={() => {}} />",
+        "reason": "Only if there is nothing to remove. A non-removable, non-interactive label is Tag's job - Chip always carries an affordance (remove, or selection for search), and `onRemove` is required for select/filter precisely because every verified Figma variant has one."
       },
       {
-        "name": "Passing filter props to a scope chip",
-        "jsx": "<Chip mode=\"scope\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
-        "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the scope branch, so TypeScript rejects this at compile time rather than silently ignoring them."
+        "name": "Passing filter props to a search chip",
+        "jsx": "<Chip mode=\"search\" label=\"Matters\" value={{ label: 'Any', sections: [] }} onRemove={() => {}} />",
+        "reason": "ChipProps is a discriminated union on `mode` - `value` and `onRemove` are not part of the search branch, so TypeScript rejects this at compile time rather than silently ignoring them."
       },
       {
         "name": "Putting an interactive control in elemBefore or valuePreview",
-        "jsx": "<Chip mode=\"scope\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
-        "reason": "Both slots are decorative and aria-hidden. In scope mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
+        "jsx": "<Chip mode=\"search\" label=\"Matters\" elemBefore={<Button size=\"xs\">Go</Button>} />",
+        "reason": "Both slots are decorative and aria-hidden. In search mode the segment is itself a <button>, so nesting a focusable element inside it is invalid HTML - the same rule Menu's own leadingElement follows."
       },
       {
         "name": "Expecting a tone prop",
-        "jsx": "<Chip mode=\"property\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
+        "jsx": "<Chip mode=\"select\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
         "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
       }
     ],
@@ -1270,8 +1254,8 @@
     "examples": [
       {
         "name": "A scope selector",
-        "description": "The common case - independent on/off scope chips sharing one size. Chip Group lays them out; the consumer holds which are on.",
-        "jsx": "const [scopes, setScopes] = useState(() => new Set(['matters']));\nconst toggle = (id) =>\n  setScopes((current) => {\n    const next = new Set(current);\n    next.has(id) ? next.delete(id) : next.add(id);\n    return next;\n  });\n\n<ChipGroup size=\"sm\" aria-label=\"Search scopes\">\n  {options.map((option) => (\n    <Chip\n      key={option.id}\n      mode=\"scope\"\n      label={option.label}\n      elemBefore={<SearchIcon decorative />}\n      isSelected={scopes.has(option.id)}\n      onSelectedChange={() => toggle(option.id)}\n    />\n  ))}\n</ChipGroup>",
+        "description": "The common case - independent on/off search chips sharing one size. Chip Group lays them out; the consumer holds which are on.",
+        "jsx": "const [scopes, setScopes] = useState(() => new Set(['matters']));\nconst toggle = (id) =>\n  setScopes((current) => {\n    const next = new Set(current);\n    next.has(id) ? next.delete(id) : next.add(id);\n    return next;\n  });\n\n<ChipGroup size=\"sm\" aria-label=\"Search scopes\">\n  {options.map((option) => (\n    <Chip\n      key={option.id}\n      mode=\"search\"\n      label={option.label}\n      elemBefore={<SearchIcon decorative />}\n      isSelected={scopes.has(option.id)}\n      onSelectedChange={() => toggle(option.id)}\n    />\n  ))}\n</ChipGroup>",
         "props": {
           "size": "sm"
         }
@@ -1287,7 +1271,7 @@
       {
         "name": "Packing chips against the trailing edge",
         "description": "alignment maps to justify-content - which edge the chips pack against. Note this is not Tag Group's alignment, which places an overflow tag.",
-        "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"scope\" label=\"Documents\" />\n</ChipGroup>",
+        "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"search\" label=\"Documents\" />\n</ChipGroup>",
         "props": {
           "alignment": "right",
           "size": "md"
@@ -1296,7 +1280,7 @@
       {
         "name": "One chip opting out of the group's size",
         "description": "An explicit size on an individual Chip wins, because Chip resolves size ?? groupSize ?? 'md'.",
-        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Inherits sm\" />\n  <Chip mode=\"scope\" label=\"Explicitly md\" size=\"md\" />\n</ChipGroup>",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"search\" label=\"Inherits sm\" />\n  <Chip mode=\"search\" label=\"Explicitly md\" size=\"md\" />\n</ChipGroup>",
         "props": {
           "size": "sm"
         }
@@ -1304,7 +1288,7 @@
       {
         "name": "Size reaching a wrapped chip",
         "description": "Size travels by context, so it still reaches a Chip behind a Tooltip, a fragment, or a conditional - which cloning children would not.",
-        "jsx": "<ChipGroup size=\"sm\">\n  <Tooltip content=\"Only matters you own\">\n    <Chip mode=\"scope\" label=\"My matters\" />\n  </Tooltip>\n  {showArchived ? <Chip mode=\"scope\" label=\"Archived\" /> : null}\n</ChipGroup>",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Tooltip content=\"Only matters you own\">\n    <Chip mode=\"search\" label=\"My matters\" />\n  </Tooltip>\n  {showArchived ? <Chip mode=\"search\" label=\"Archived\" /> : null}\n</ChipGroup>",
         "props": {
           "size": "sm"
         }
@@ -1312,7 +1296,7 @@
       {
         "name": "Mixed modes in one group",
         "description": "Any Chip mode can share a row - the group only lays them out and shares a size.",
-        "jsx": "<ChipGroup size=\"md\">\n  <Chip mode=\"scope\" label=\"Matters\" isSelected />\n  <Chip mode=\"property\" label=\"Trusts\" onRemove={detachTrusts} />\n  <Chip mode=\"filter\" label=\"Status\" value={{ label: 'Any', sections: statusSections }} onRemove={clearStatus} />\n</ChipGroup>",
+        "jsx": "<ChipGroup size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"select\" label=\"Trusts\" onRemove={detachTrusts} />\n  <Chip mode=\"filter\" label=\"Status\" value={{ label: 'Any', sections: statusSections }} onRemove={clearStatus} />\n</ChipGroup>",
         "props": {
           "size": "md"
         }
@@ -1327,11 +1311,11 @@
       {
         "name": "Expecting the group to manage selection",
         "jsx": "<ChipGroup size=\"sm\" selectedId=\"matters\">{scopeChips}</ChipGroup>",
-        "reason": "Chip Group is layout only. Scope chips are independent on/off toggles, so which are selected is the consumer's state - pass isSelected/onSelectedChange to each Chip, exactly as with Toggle Button."
+        "reason": "Chip Group is layout only. Search chips are independent on/off toggles, so which are selected is the consumer's state - pass isSelected/onSelectedChange to each Chip, exactly as with Toggle Button."
       },
       {
         "name": "Repeating size on every chip inside a sized group",
-        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"scope\" label=\"Matters\" size=\"sm\" />\n  <Chip mode=\"scope\" label=\"Documents\" size=\"sm\" />\n</ChipGroup>",
+        "jsx": "<ChipGroup size=\"sm\">\n  <Chip mode=\"search\" label=\"Matters\" size=\"sm\" />\n  <Chip mode=\"search\" label=\"Documents\" size=\"sm\" />\n</ChipGroup>",
         "reason": "Redundant - the group already shares its size through context. Setting it per-chip is only for deliberately opting one chip out, and repeating it invites the exact bug the group exists to prevent: one chip missed, breaking the line it wraps onto."
       },
       {
@@ -1599,6 +1583,162 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "rich-text-area",
+    "name": "RichTextArea",
+    "tier": "molecule",
+    "path": "docs/components/molecules/rich-text-area/rich-text-area.examples.json",
+    "examples": [
+      {
+        "name": "Basic entity tagging",
+        "description": "Hold the node array, resolve queries from your own data, and give each entity type a tone. Typing `/` opens the picker.",
+        "jsx": "const [value, setValue] = useState<RichTextValue>([]);\n\nconst search = (query: string) =>\n  query\n    ? [{ id: 'people', heading: 'People', entityType: 'person',\n         items: people.filter((p) => p.label.toLowerCase().includes(query.toLowerCase())) }]\n    : RECENTS;\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  rows={3}\n/>",
+        "props": {
+          "rows": 3
+        }
+      },
+      {
+        "name": "Recents on open",
+        "description": "Supply `recents` so opening the picker is instant - `onSearch` is then only called once a query is typed.",
+        "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  recents={RECENTS}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Tone and icon per entity type",
+        "description": "entityConfig drives both the picker's section heading tile and the inserted tag, so color encodes type consistently in both places.",
+        "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <UserIcon /> },\n  matter: { tone: 'teal', icon: <BriefcaseIcon /> },\n  roadmap: { tone: 'purple', icon: <MapIcon /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Prefilled from stored content",
+        "description": "Hydrate from a saved node array. The editor reads it on mount and leads from then on - onChange reports every later edit.",
+        "jsx": "const stored: RichTextValue = [\n  { type: 'text', text: 'Ask ' },\n  { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1' } },\n  { type: 'text', text: ' about the filing' },\n];\n\n<RichTextArea aria-label=\"Note\" value={stored} onChange={setValue} onSearch={search} />",
+        "props": {}
+      },
+      {
+        "name": "People rows with avatars",
+        "description": "A row leading with an Avatar or AvatarGroup renders inline and hugs its width, with no description line - matching Figma's People and Families lists.",
+        "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};",
+        "props": {}
+      },
+      {
+        "name": "Sizes, appearance and states",
+        "description": "The frame axes are Text Area's, unchanged.",
+        "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea appearance=\"subtle\" aria-label=\"Subtle\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
+        "props": {
+          "size": "lg",
+          "appearance": "subtle",
+          "invalid": true,
+          "disabled": true
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Using it for plain multi-line text",
+        "jsx": "<RichTextArea aria-label=\"Notes\" value={value} onChange={setValue} onSearch={() => []} />",
+        "reason": "With nothing to link to, this is a contenteditable div standing in for a <textarea> - losing native keyboard, autofill, spellcheck and scrolling behavior for no benefit. Use TextArea."
+      },
+      {
+        "name": "Driving the value on every keystroke",
+        "jsx": "<RichTextArea value={valueFromEveryOnChange} onChange={setValue} onSearch={search} aria-label=\"Note\" />",
+        "reason": "The editor hydrates from `value` once and then leads. Re-rendering a contenteditable surface from props on each keystroke would destroy the caret, so later `value` changes are deliberately ignored - treat it as initial content, not a live binding."
+      },
+      {
+        "name": "Storing the value as HTML",
+        "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
+        "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
+      },
+      {
+        "name": "Relying on it as an accessible combobox",
+        "jsx": "<RichTextArea aria-label=\"Assign work\" value={value} onChange={setValue} onSearch={search} />",
+        "reason": "The picker does not set aria-activedescendant yet, so a screen reader user gets no announcement of the active entity while arrowing. Keyboard operation works, but don't make this the only path to a required task until that's wired."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "select",
+    "name": "Select",
+    "tier": "molecule",
+    "path": "docs/components/molecules/select/select.examples.json",
+    "examples": [
+      {
+        "name": "Single-select",
+        "description": "One value from a list. The trigger shows the chosen label; rows are radio items.",
+        "jsx": "const [status, setStatus] = useState<string | null>(null);\n\n<Select\n  options={[\n    { value: 'draft', label: 'Draft' },\n    { value: 'in-review', label: 'In review' },\n    { value: 'approved', label: 'Approved' },\n  ]}\n  value={status}\n  onChange={setStatus}\n  placeholder=\"Select a status\"\n  aria-label=\"Matter status\"\n/>",
+        "props": {
+          "inputType": "single"
+        }
+      },
+      {
+        "name": "Multi-select",
+        "description": "Several values, shown as removable chips in the trigger; rows are checkboxes.",
+        "jsx": "const [assignees, setAssignees] = useState<string[]>([]);\n\n<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  placeholder=\"Add assignees\"\n  aria-label=\"Assignees\"\n/>",
+        "props": {
+          "inputType": "multi"
+        }
+      },
+      {
+        "name": "Options with leading icons",
+        "description": "option.icon appears in both the row and (multi) the chip. Decorative.",
+        "jsx": "<Select\n  options={[\n    { value: 'jordan', label: 'Jordan Ellis', icon: <Avatar name=\"Jordan Ellis\" size=\"xs\" decorative /> },\n    { value: 'priya', label: 'Priya Nair', icon: <Avatar name=\"Priya Nair\" size=\"xs\" decorative /> },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Assign to\"\n/>",
+        "props": {}
+      },
+      {
+        "name": "Grouped options",
+        "description": "Consecutive options sharing a `group` render under one section heading.",
+        "jsx": "<Select\n  options={[\n    { value: 'trust', label: 'Trust', group: 'Estate' },\n    { value: 'will', label: 'Will', group: 'Estate' },\n    { value: 'llc', label: 'LLC formation', group: 'Business' },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Matter type\"\n/>",
+        "props": {}
+      },
+      {
+        "name": "Async / externally-controlled search",
+        "description": "Provide searchValue + onSearchChange to filter outside Select (e.g. server-side); Select stops filtering internally and just renders the options you pass.",
+        "jsx": "const [query, setQuery] = useState('');\nconst options = useRemoteOptions(query); // your loader\n\n<Select\n  options={options}\n  value={value}\n  onChange={setValue}\n  searchValue={query}\n  onSearchChange={setQuery}\n  emptyMessage={loading ? 'Searching...' : 'No matches'}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Sizes and tones",
+        "description": "size sets trigger height (32/40/48) and chip size; tone maps to TextField's appearance.",
+        "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" tone=\"subtle\" />",
+        "props": {
+          "size": "lg",
+          "tone": "subtle"
+        }
+      },
+      {
+        "name": "Invalid, in a form",
+        "description": "invalid paints the red border and sets aria-invalid; pair with your field-level error text.",
+        "jsx": "<Select options={options} value={value} onChange={setValue} invalid placeholder=\"Required\" aria-label=\"Status\" />",
+        "props": {
+          "invalid": true
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Passing Menu sections instead of a flat option list",
+        "jsx": "<Select sections={[{ id: 's', items: [...] }]} value={value} onChange={setValue} />",
+        "reason": "Select takes a flat `options: SelectOption[]` and builds the Menu sections itself, owning selection and typeahead. There is no `sections` prop - grouping is done via each option's `group` field. TypeScript rejects this."
+      },
+      {
+        "name": "Crossing single and multi value types",
+        "jsx": "<Select inputType=\"multi\" value=\"draft\" onChange={setValue} options={options} />",
+        "reason": "SelectProps is a discriminated union on inputType - multi's value is `string[]`, single's is `string | null`. A scalar value on a multi Select is a compile-time error."
+      },
+      {
+        "name": "Using Select for a short exclusive set",
+        "jsx": "<Select options={[{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }]} value={value} onChange={setValue} />",
+        "reason": "Two or three always-relevant exclusive choices belong in Radio, which shows them all without a click. Select earns its dropdown + typeahead on medium-to-long lists."
+      },
+      {
+        "name": "Expecting a strict ARIA listbox",
+        "jsx": "// expecting role=listbox / option / aria-activedescendant",
+        "reason": "Select is deliberately the menu a11y pattern (role=combobox opening role=menu), matching Figma's text-input + dropdown-menu composition and reusing Menu. Focus moves into the menu on ArrowDown rather than staying in the input. A strict listbox mode is a documented future enhancement, not the current behaviour."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "skeleton",
     "name": "Skeleton",
     "tier": "molecule",
@@ -1796,6 +1936,79 @@
         "name": "Expecting a truncated tag's selection to navigate automatically",
         "jsx": "<TagGroup tags={[{ id: 'trust', label: 'Trust', href: '/trusts/1' }]} maxVisible={0} />",
         "reason": "Selecting a truncated tag from the overflow panel only calls onOverflowTagSelect(tag, event) - Tag Group does not read the tag's own href and navigate for you, the same 'never assume' rule Menu's own onSelect follows."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "text-area",
+    "name": "TextArea",
+    "tier": "molecule",
+    "path": "docs/components/molecules/text-area/text-area.examples.json",
+    "examples": [
+      {
+        "name": "Basic multi-line field",
+        "description": "A labelled text area. Pair it with a native label the same way as any form control; set `rows` for the initial height.",
+        "jsx": "<label htmlFor=\"notes\">Notes</label>\n<TextArea id=\"notes\" rows={4} placeholder=\"Add a description\" />",
+        "props": {
+          "rows": 4,
+          "placeholder": "Add a description"
+        }
+      },
+      {
+        "name": "Controlled with a character count",
+        "description": "Standard controlled pattern - hold the value and cap it with the native maxLength, showing a count in a helper line.",
+        "jsx": "const [value, setValue] = useState('');\n\n<TextArea\n  aria-label=\"Bio\"\n  rows={4}\n  maxLength={240}\n  value={value}\n  onChange={(e) => setValue(e.target.value)}\n/>\n<span>{value.length} / 240</span>",
+        "props": {
+          "rows": 4,
+          "maxLength": 240
+        }
+      },
+      {
+        "name": "Sizes and appearances",
+        "description": "size controls padding/radius/font; appearance switches between the bordered box and the low-chrome subtle variant (transparent until interacted with).",
+        "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea appearance=\"subtle\" aria-label=\"Subtle\" rows={3} />",
+        "props": {
+          "size": "lg",
+          "appearance": "subtle",
+          "rows": 3
+        }
+      },
+      {
+        "name": "Invalid and disabled",
+        "description": "invalid sets aria-invalid and the error border; disabled greys the frame and locks the resize grip.",
+        "jsx": "<TextArea invalid aria-label=\"Invalid\" rows={3} defaultValue=\"Needs attention\" />\n<TextArea disabled aria-label=\"Disabled\" rows={3} defaultValue=\"Read only\" />",
+        "props": {
+          "invalid": true,
+          "disabled": true,
+          "rows": 3
+        }
+      },
+      {
+        "name": "Fixed height, no resize",
+        "description": "resize=\"none\" locks the height for tight layouts; content scrolls natively when it overflows.",
+        "jsx": "<TextArea resize=\"none\" rows={3} aria-label=\"Fixed\" />",
+        "props": {
+          "resize": "none",
+          "rows": 3
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Using Text Area for a single line",
+        "jsx": "<TextArea rows={1} aria-label=\"Name\" />",
+        "reason": "A single-line value belongs in Text Field, which gives the right keyboard/enter semantics and icon slots. Text Area is for genuinely multi-line content."
+      },
+      {
+        "name": "No accessible name",
+        "jsx": "<TextArea rows={4} placeholder=\"Notes\" />",
+        "reason": "A placeholder is not a label - it disappears on input and is not a reliable accessible name. Wire a <label htmlFor> or pass aria-label, the same as any native form control."
+      },
+      {
+        "name": "Expecting inline tags or formatting",
+        "jsx": "<TextArea aria-label=\"Body\" defaultValue=\"Assigned to /Jordan\" />",
+        "reason": "Text Area is plain text only - `/` is a literal character here. The inline entity-tagging mode (`type=rich-inline` in Figma) ships as RichTextArea; use that when the text needs to link to records."
       }
     ],
     "exemplarCompleteness": "full"

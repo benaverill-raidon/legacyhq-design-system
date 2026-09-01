@@ -22,8 +22,7 @@
     "confirm a decision",
     "cancel a decision",
     "perform warning actions",
-    "perform destructive or error actions",
-    "perform discovery-oriented actions"
+    "perform destructive or error actions"
   ],
   "antiPatterns": [
     "navigation-only behavior",
@@ -81,8 +80,7 @@
       "values": [
         "neutral",
         "warning",
-        "error",
-        "discovery"
+        "error"
       ],
       "default": "neutral",
       "required": false
@@ -141,8 +139,7 @@
     "tone": [
       "neutral",
       "warning",
-      "error",
-      "discovery"
+      "error"
     ]
   },
   "sizes": [
@@ -235,7 +232,6 @@
         "primaryWarningBackground": "--color-background-warning-bold-default",
         "primaryWarningContent": "--color-content-warning-inverse",
         "primaryErrorBackground": "--color-background-error-bold-default",
-        "primaryDiscoveryBackground": "--color-background-discovery-bold-default",
         "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
         "disabledBackground": "--color-background-disabled",
         "disabledContent": "--color-content-disabled"
@@ -350,7 +346,7 @@
     "Supports custom button type.",
     "Supports sizes xs, sm, md, lg.",
     "Supports appearances default, primary, subtle.",
-    "Supports tones neutral, warning, error, discovery.",
+    "Supports tones neutral, warning, error.",
     "Uses native disabled attribute when disabled.",
     "Suppresses click while disabled.",
     "Suppresses click while loading.",

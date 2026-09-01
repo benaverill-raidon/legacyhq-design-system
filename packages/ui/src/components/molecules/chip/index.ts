@@ -4,8 +4,8 @@ export type {
   ChipFilterProps,
   ChipMode,
   ChipProps,
-  ChipPropertyProps,
-  ChipScopeProps,
+  ChipSearchProps,
   ChipSegment,
+  ChipSelectProps,
   ChipSize,
 } from './chip.types';

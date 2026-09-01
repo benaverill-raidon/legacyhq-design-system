@@ -15,7 +15,7 @@ Atom
 - Trigger an immediate action
 - Open a dialog, menu, or workflow
 - Confirm or cancel a decision
-- Perform semantic actions such as warning, destructive/error, or discovery-related actions
+- Perform semantic actions such as warning or destructive/error actions
 
 ## Do Not Use For
 
@@ -58,7 +58,6 @@ Atom
 - `neutral`
 - `warning`
 - `error`
-- `discovery`
 
 ### States
 

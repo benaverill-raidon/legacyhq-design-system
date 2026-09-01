@@ -1,0 +1,37 @@
+/*
+ * Select is almost entirely composition - the trigger frame is a TextField, the panel is a Dropdown
+ * Menu, and the multi-select values are Chips. The only pixels Select owns are the caret's open/close
+ * rotation. Everything else is the composed components' own tokens.
+ */
+.trigger {
+  cursor: pointer;
+}
+
+/*
+ * Caret color is Figma-verified on the select-trigger's caret_down vector: content/subtle at rest,
+ * content/disabled when the field is disabled. Set explicitly here (rather than leaning on TextField's
+ * `.action` slot color) so the disabled case is covered - TextField's disabled state repaints the
+ * frame but not its action slot. The CaretDownIcon inherits this via TextField's own
+ * `.action :global([data-color]) { color: inherit }` rule.
+ */
+.caret {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-content-subtle);
+  transition: transform var(--fade-quick);
+}
+
+.caretDisabled {
+  color: var(--color-content-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    transition-duration: 0ms;
+  }
+}
+
+.caretOpen {
+  transform: rotate(180deg);
+}

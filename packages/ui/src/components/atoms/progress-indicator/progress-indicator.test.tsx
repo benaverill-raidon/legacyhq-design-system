@@ -133,19 +133,6 @@ describe('ProgressIndicator', () => {
     expect(container.querySelectorAll(`.${styles.dotSelected}`)).toHaveLength(1);
   });
 
-  it('applies discovery appearance classes', () => {
-    render(
-      <ProgressIndicator
-        data-testid="progress-indicator"
-        currentStep={1}
-        totalSteps={4}
-        appearance="discovery"
-        label="Discovery journey"
-      />,
-    );
-
-    expect(screen.getByTestId('progress-indicator')).toHaveClass(styles.appearance_discovery);
-  });
 
   it('applies size classes', () => {
     render(
@@ -216,7 +203,7 @@ describe('ProgressIndicator', () => {
       <ProgressIndicator
         currentStep={2}
         totalSteps={5}
-        appearance="discovery"
+        appearance="primary"
         label="Interactive dots"
         onStepChange={() => undefined}
       />,
@@ -228,7 +215,7 @@ describe('ProgressIndicator', () => {
     expect(buttons[0]).toHaveClass(
       styles.dotTarget,
       styles.dotInteractive,
-      styles.appearance_discovery,
+      styles.appearance_primary,
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );

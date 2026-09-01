@@ -4,7 +4,7 @@ export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export type ButtonAppearance = 'default' | 'primary' | 'subtle';
 
-export type ButtonTone = 'neutral' | 'warning' | 'error' | 'discovery';
+export type ButtonTone = 'neutral' | 'warning' | 'error';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;

@@ -6,7 +6,6 @@ export type LabelTone =
   | 'default'
   | 'information'
   | 'warning'
-  | 'discovery'
   | 'error'
   | 'success'
   | 'law'

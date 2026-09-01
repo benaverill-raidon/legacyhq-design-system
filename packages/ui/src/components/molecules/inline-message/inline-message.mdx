@@ -32,7 +32,7 @@ secondary text - that can optionally reveal additional detail in a popup when cl
 <Canvas of={InlineMessageStories.Content} />
 
 - **Icon** - a tone-mapped status icon (`StatusInformationIcon`, `StatusSuccessIcon`,
-  `StatusWarningIcon`, `StatusErrorIcon`, `StatusDiscoveryIcon`). `tone="default"` falls back to a
+  `StatusWarningIcon`, `StatusErrorIcon`). `tone="default"` falls back to a
   plain dot - Figma has no dedicated status icon for it either, confirmed absent from the generated
   icon set.
 - **Title** - required bold lead text (`heading-xs` typography).
@@ -141,7 +141,7 @@ nothing more to say.
     </tr>
     <tr>
       <td><code>tone</code></td>
-      <td><code>'default' | 'info' | 'success' | 'warning' | 'error' | 'discovery'</code></td>
+      <td><code>'default' | 'info' | 'success' | 'warning' | 'error'</code></td>
       <td><code>'default'</code></td>
       <td>Selects the status icon and the tint shown on hover/open.</td>
     </tr>

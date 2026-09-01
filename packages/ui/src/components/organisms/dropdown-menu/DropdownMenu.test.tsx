@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DropdownMenu } from './dropdown-menu';
 import type { MenuSection } from '../menu';
 import popupStyles from '../../primitives/popup/popup.module.css';
+import menuStyles from '../menu/menu.module.css';
 
 afterEach(cleanup);
 
@@ -166,5 +167,20 @@ describe('DropdownMenu', () => {
     const panel = screen.getByRole('menu').closest('[data-alignment]') as HTMLElement;
     expect(panel).toHaveAttribute('id', 'custom-dropdown');
     expect(panel).toHaveClass('custom-panel');
+  });
+
+  it('couples matchTriggerWidth to the inner Menu, filling the panel instead of a fixed size width', () => {
+    // The panel-sizing (Popup) side is covered by Popup's own tests; this asserts DropdownMenu's
+    // unique wiring: a trigger-matched panel needs its Menu to stretch, not stay at size="sm" width.
+    // The width class lives on Menu's outer container (the role="menu" element's parent).
+    const menuRoot = () => screen.getByRole('menu').parentElement as HTMLElement;
+
+    const { rerender } = render(<ControlledDropdownMenu open size="sm" />);
+    expect(menuRoot()).toHaveClass(menuStyles.size_sm);
+    expect(menuRoot()).not.toHaveClass(menuStyles.fullWidth);
+
+    rerender(<ControlledDropdownMenu open size="sm" matchTriggerWidth />);
+    expect(menuRoot()).toHaveClass(menuStyles.fullWidth);
+    expect(menuRoot()).not.toHaveClass(menuStyles.size_sm);
   });
 });

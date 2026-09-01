@@ -65,6 +65,8 @@ export interface MenuProps {
   loadingLabel?: React.ReactNode;
   /** Shown when search filters every item out. */
   emptyMessage?: React.ReactNode;
+  /** Fills the container's width instead of one of the fixed `size` widths - for a panel sized to its trigger (e.g. Select via Dropdown Menu's `matchTriggerWidth`). Defaults to false. */
+  fullWidth?: boolean;
   id?: string;
   className?: string;
   'aria-label'?: string;

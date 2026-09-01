@@ -33,9 +33,9 @@ wrapper, comes out of a `.map`, or renders conditionally. `React.cloneElement` w
 ```tsx
 <ChipGroup size="sm">
   <Tooltip content="Only matters you own">
-    <Chip mode="scope" label="My matters" />   {/* still sm */}
+    <Chip mode="search" label="My matters" />   {/* still sm */}
   </Tooltip>
-  {showArchived ? <Chip mode="scope" label="Archived" /> : null}
+  {showArchived ? <Chip mode="search" label="Archived" /> : null}
 </ChipGroup>
 ```
 
@@ -61,7 +61,7 @@ axes — Figma measures `itemSpacing: 8` and `counterAxisSpacing: 8`, so one `ga
 
 ### Selection stays yours
 
-Chip Group never coordinates its children. Scope chips are independent on/off toggles, so hold that
+Chip Group never coordinates its children. Search chips are independent on/off toggles, so hold that
 state yourself and pass it down — exactly as with Toggle Button.
 
 <Canvas of={ChipGroupStories.Content} />
@@ -79,8 +79,8 @@ missed chip breaks the line it wraps onto.
 
 ```tsx
 <ChipGroup size="sm">
-  <Chip mode="scope" label="Matters" size="sm" />
-  <Chip mode="scope" label="Documents" size="sm" />
+  <Chip mode="search" label="Matters" size="sm" />
+  <Chip mode="search" label="Documents" size="sm" />
 </ChipGroup>
 ```
 

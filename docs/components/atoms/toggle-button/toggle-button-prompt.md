@@ -99,7 +99,7 @@ default
 subtle
 ```
 
-Do not add warning, error, discovery, or primary in this pass.
+Do not add warning, error, or primary in this pass.
 
 ## Size support
 

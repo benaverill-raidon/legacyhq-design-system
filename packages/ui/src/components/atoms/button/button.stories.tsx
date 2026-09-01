@@ -20,7 +20,7 @@ const meta = {
   },
   argTypes: {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
-    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error', 'discovery'] },
+    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
     disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
@@ -124,11 +124,6 @@ export const Variants: Story = {
         <Cell label="error">
           <Button appearance="primary" tone="error">
             Error
-          </Button>
-        </Cell>
-        <Cell label="discovery">
-          <Button appearance="primary" tone="discovery">
-            Discovery
           </Button>
         </Cell>
       </Group>
@@ -363,7 +358,7 @@ export const Content: Story = {
             <Button appearance="primary" tone="error">
               Delete matter
             </Button>
-            <Button appearance="primary" tone="discovery" iconAfter={<ArrowRightIcon />}>
+            <Button appearance="primary" iconAfter={<ArrowRightIcon />}>
               Explore setup
             </Button>
           </div>

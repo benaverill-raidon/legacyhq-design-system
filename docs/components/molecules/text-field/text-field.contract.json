@@ -20,27 +20,75 @@
     "componentSetName": "text-field",
     "variantCount": 42,
     "figmaVariantAxes": {
-      "size": ["lg", "md", "sm"],
-      "tone": ["standard", "subtle"],
-      "state": ["default", "hover", "focus", "typing", "filled"],
-      "isDisabled": ["false", "true"],
-      "isInvalid": ["false", "true"]
+      "size": [
+        "lg",
+        "md",
+        "sm"
+      ],
+      "tone": [
+        "standard",
+        "subtle"
+      ],
+      "state": [
+        "default",
+        "hover",
+        "focus",
+        "typing",
+        "filled"
+      ],
+      "isDisabled": [
+        "false",
+        "true"
+      ],
+      "isInvalid": [
+        "false",
+        "true"
+      ]
     },
     "figmaComponentProps": {
-      "placeholderText": { "type": "TEXT", "defaultValue": "Placeholder" },
-      "value": { "type": "TEXT", "defaultValue": "Value" },
-      "elemBeforeInput": { "type": "BOOLEAN", "defaultValue": false },
-      "elemAfterInput": { "type": "BOOLEAN", "defaultValue": false },
-      "slot <elemAfterInput>": { "type": "INSTANCE_SWAP" },
-      "showCaret": { "type": "BOOLEAN", "defaultValue": true, "note": "Figma mockup-only, not a real prop." },
-      "placeholder": { "type": "BOOLEAN", "defaultValue": true, "note": "Figma mockup-only toggle between placeholder/value text, not a real prop." }
+      "placeholderText": {
+        "type": "TEXT",
+        "defaultValue": "Placeholder"
+      },
+      "value": {
+        "type": "TEXT",
+        "defaultValue": "Value"
+      },
+      "elemBeforeInput": {
+        "type": "BOOLEAN",
+        "defaultValue": false
+      },
+      "elemAfterInput": {
+        "type": "BOOLEAN",
+        "defaultValue": false
+      },
+      "slot <elemAfterInput>": {
+        "type": "INSTANCE_SWAP"
+      },
+      "showCaret": {
+        "type": "BOOLEAN",
+        "defaultValue": true,
+        "note": "Figma mockup-only, not a real prop."
+      },
+      "placeholder": {
+        "type": "BOOLEAN",
+        "defaultValue": true,
+        "note": "Figma mockup-only toggle between placeholder/value text, not a real prop."
+      }
     },
     "elemBeforeInputComponent": {
-      "type": ["icon", "text"],
+      "type": [
+        "icon",
+        "text"
+      ],
       "note": "Separate Figma component for the leading slot. Never interactive. The text case (e.g. a '$' currency prefix) is bound to fixed body-lg typography at every field size."
     },
     "elemAfterInputComponent": {
-      "type": ["icon-button", "button", "label"],
+      "type": [
+        "icon-button",
+        "button",
+        "label"
+      ],
       "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square. A third `label` type was added later, nesting a real Label atom instance (tone=default, emphasis=subtle) for compact metadata/status after the input (e.g. a unit or status pill) - confirmed directly from the component's own nested instance properties, not assumed. iconAfter is already typed React.ReactNode and .action is a plain centered flex wrapper, so a Label already renders correctly there with no component code changes."
     },
     "apiAdaptationNotes": [
@@ -56,7 +104,8 @@
       "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
       "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
       "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
-      "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type."
+      "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type.",
+      "Gained an additive leadingContent slot so Select can render multi-select chips inside the field frame without a second bordered frame or duplicated state CSS. In-frame, before the input, not aria-hidden (unlike the decorative iconBefore); shrinks/clips to keep the field single-line. Additive and opt-in - existing TextField usage is unchanged. Not derived from a TextField Figma variant; it exists to serve Select, whose own select-trigger nests chips inside its text-field instance."
     ]
   },
   "useCases": [
@@ -70,36 +119,179 @@
     "faking an input with a non-form element"
   ],
   "anatomy": [
-    { "part": "root", "element": "div", "required": true, "description": "Bordered frame holding the optional before/action slots and the input; reacts to :hover and :focus-within." },
-    { "part": "iconBefore", "element": "span.before (aria-hidden)", "required": false, "description": "Optional leading icon or short text prefix. Always decorative - never interactive." },
-    { "part": "input", "element": "input", "required": true, "description": "The real native text input; carries all forwarded native attributes." },
-    { "part": "iconAfter", "element": "span.action (not aria-hidden)", "required": false, "description": "Optional trailing icon or interactive action (e.g. an IconButton clear button). Never forced aria-hidden." }
+    {
+      "part": "root",
+      "element": "div",
+      "required": true,
+      "description": "Bordered frame holding the optional before/action slots and the input; reacts to :hover and :focus-within."
+    },
+    {
+      "part": "iconBefore",
+      "element": "span.before (aria-hidden)",
+      "required": false,
+      "description": "Optional leading icon or short text prefix. Always decorative - never interactive."
+    },
+    {
+      "part": "leadingContent",
+      "element": "span.leadingContent (not aria-hidden)",
+      "required": false,
+      "description": "Optional interactive in-frame content before the input, sharing its row - added so a token/multi-select field (Select) can render removable chips inside the frame. Shrinks and clips to keep the field single-line. Unlike iconBefore, not aria-hidden."
+    },
+    {
+      "part": "input",
+      "element": "input",
+      "required": true,
+      "description": "The real native text input; carries all forwarded native attributes."
+    },
+    {
+      "part": "iconAfter",
+      "element": "span.action (not aria-hidden)",
+      "required": false,
+      "description": "Optional trailing icon or interactive action (e.g. an IconButton clear button). Never forced aria-hidden."
+    }
   ],
   "props": {
-    "size": { "type": "TextFieldSize", "required": false, "default": "md", "enum": ["sm", "md", "lg"], "description": "Frame height, padding, gap, and typography." },
-    "appearance": { "type": "TextFieldAppearance", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners." },
-    "invalid": { "type": "boolean", "required": false, "default": false, "description": "Sets aria-invalid and the error border (thicker, regardless of focus)." },
-    "iconBefore": { "type": "React.ReactNode", "required": false, "default": null, "description": "Optional leading icon or short text prefix. Always decorative (aria-hidden)." },
-    "iconAfter": { "type": "React.ReactNode", "required": false, "default": null, "description": "Optional trailing icon or interactive control (typically an IconButton clear action, or a Button). Never forced aria-hidden." },
-    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root frame's class list." },
-    "inputClassName": { "type": "string", "required": false, "default": null, "description": "Composes with the native input's class list." }
+    "size": {
+      "type": "TextFieldSize",
+      "required": false,
+      "default": "md",
+      "enum": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "description": "Frame height, padding, gap, and typography."
+    },
+    "appearance": {
+      "type": "TextFieldAppearance",
+      "required": false,
+      "default": "default",
+      "enum": [
+        "default",
+        "subtle"
+      ],
+      "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners."
+    },
+    "invalid": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Sets aria-invalid and the error border (thicker, regardless of focus)."
+    },
+    "iconBefore": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Optional leading icon or short text prefix. Always decorative (aria-hidden)."
+    },
+    "iconAfter": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Optional trailing icon or interactive control (typically an IconButton clear action, or a Button). Never forced aria-hidden."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root frame's class list."
+    },
+    "inputClassName": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the native input's class list."
+    },
+    "leadingContent": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Interactive in-frame content between iconBefore and the input (e.g. Select's chips). Not aria-hidden; shrinks/clips to stay single-line. Existing usage is unchanged when omitted."
+    }
   },
   "variants": {
     "size": {
-      "sm": { "height": "--size-control-sm (32px)", "paddingInlineStart": "--spacing-sm", "paddingInlineEnd": "--spacing-xs", "paddingBlock": "--measurement-6", "gap": "--spacing-xs", "radius": "--border-radius-lg", "typography": "--typography-body-md-*" },
-      "md": { "height": "--size-control-md (40px)", "paddingInlineStart": "--spacing-sm", "paddingInlineEnd": "--spacing-sm", "paddingBlock": "--spacing-sm", "gap": "--measurement-6", "radius": "--border-radius-lg", "typography": "--typography-body-md-*" },
-      "lg": { "height": "--size-control-lg (48px)", "paddingInlineStart": "--spacing-md", "paddingInlineEnd": "--spacing-sm", "paddingBlock": "--spacing-md", "gap": "--spacing-sm", "radius": "--border-radius-xl", "typography": "--typography-body-lg-*" }
+      "sm": {
+        "height": "--size-control-sm (32px)",
+        "paddingInlineStart": "--spacing-sm",
+        "paddingInlineEnd": "--spacing-xs",
+        "paddingBlock": "--measurement-6",
+        "gap": "--spacing-xs",
+        "radius": "--border-radius-lg",
+        "typography": "--typography-body-md-*"
+      },
+      "md": {
+        "height": "--size-control-md (40px)",
+        "paddingInlineStart": "--spacing-sm",
+        "paddingInlineEnd": "--spacing-sm",
+        "paddingBlock": "--spacing-sm",
+        "gap": "--measurement-6",
+        "radius": "--border-radius-lg",
+        "typography": "--typography-body-md-*"
+      },
+      "lg": {
+        "height": "--size-control-lg (48px)",
+        "paddingInlineStart": "--spacing-md",
+        "paddingInlineEnd": "--spacing-sm",
+        "paddingBlock": "--spacing-md",
+        "gap": "--spacing-sm",
+        "radius": "--border-radius-xl",
+        "typography": "--typography-body-lg-*"
+      }
     },
     "appearance": {
-      "default": { "purpose": "Bordered box with a raised-surface background at rest, rounded on all four corners.", "className": "appearance_default" },
-      "subtle": { "purpose": "No visible border/background until hover, focus, or invalid; bottom corners always square regardless of size.", "className": "appearance_subtle" }
+      "default": {
+        "purpose": "Bordered box with a raised-surface background at rest, rounded on all four corners.",
+        "className": "appearance_default"
+      },
+      "subtle": {
+        "purpose": "No visible border/background until hover, focus, or invalid; bottom corners always square regardless of size.",
+        "className": "appearance_subtle"
+      }
     }
   },
-  "sizes": ["sm", "md", "lg"],
-  "states": ["default", "hover", "focus", "invalid", "disabled"],
+  "sizes": [
+    "sm",
+    "md",
+    "lg"
+  ],
+  "states": [
+    "default",
+    "hover",
+    "focus",
+    "invalid",
+    "disabled"
+  ],
   "slots": [
-    { "name": "iconBefore", "required": false, "supports": ["a small icon from the generated icon set", "a short text prefix, e.g. '$'"], "interactive": false },
-    { "name": "iconAfter", "required": false, "supports": ["a small icon from the generated icon set", "an IconButton (appearance=subtle, shape=square) for a clear/dismiss action", "a Button for a labeled action", "a Label pill for compact metadata/status after the input (e.g. a unit or status tag)"], "interactive": true }
+    {
+      "name": "iconBefore",
+      "required": false,
+      "supports": [
+        "a small icon from the generated icon set",
+        "a short text prefix, e.g. '$'"
+      ],
+      "interactive": false
+    },
+    {
+      "name": "leadingContent",
+      "required": false,
+      "supports": [
+        "removable Chips for a multi-select field (Select)",
+        "other interactive tokens shown ahead of the input"
+      ],
+      "interactive": true
+    },
+    {
+      "name": "iconAfter",
+      "required": false,
+      "supports": [
+        "a small icon from the generated icon set",
+        "an IconButton (appearance=subtle, shape=square) for a clear/dismiss action",
+        "a Button for a labeled action",
+        "a Label pill for compact metadata/status after the input (e.g. a unit or status tag)"
+      ],
+      "interactive": true
+    }
   ],
   "tokens": {
     "layout": {
@@ -189,7 +381,14 @@
     "No hardcoded colors, spacing, radius, or typography, except the documented --measurement-6 gap (matches Toggle Button's own precedent for the same missing spacing/075 token).",
     "Do not add a state prop - hover/focus/typing/filled are all native pseudo-class/value-driven."
   ],
-  "relatedComponents": ["Checkbox", "Radio", "Switch", "Select", "Icon Button", "Button"],
+  "relatedComponents": [
+    "Checkbox",
+    "Radio",
+    "Switch",
+    "Select",
+    "Icon Button",
+    "Button"
+  ],
   "do": [
     "Use the native type attribute (email, password, search, ...) for the right keyboard and built-in validation.",
     "Pair with a native label[htmlFor] pointing at the input's id.",

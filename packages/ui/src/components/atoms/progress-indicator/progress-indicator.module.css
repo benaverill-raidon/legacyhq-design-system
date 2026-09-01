@@ -27,10 +27,6 @@
   --progress-indicator-selected-color: var(--color-background-brand-primary-bold-default);
 }
 
-.appearance_discovery {
-  --progress-indicator-selected-color: var(--color-background-discovery-bold-default);
-}
-
 .appearance_inverted {
   --progress-indicator-selected-color: var(--color-background-neutral-subtle-default);
 }

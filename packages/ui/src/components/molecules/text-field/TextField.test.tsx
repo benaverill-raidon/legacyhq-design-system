@@ -5,6 +5,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TextField } from './text-field';
+import textFieldStyles from './text-field.module.css';
 
 const textFieldCss = readFileSync(
   'packages/ui/src/components/molecules/text-field/text-field.module.css',
@@ -186,5 +187,38 @@ describe('TextField', () => {
     // `.root[data-invalid='true']` no longer touches border-width at all (it uses box-shadow too),
     // so this rule doesn't need to override border-bottom-width back to anything.
     expect(invalidRuleMatch?.[1]).not.toContain('border-bottom-width');
+  });
+
+  describe('leadingContent slot', () => {
+    it('renders interactive in-frame content between the leading icon and the input, not aria-hidden', () => {
+      render(
+        <TextField
+          aria-label="Tags"
+          leadingContent={<button type="button">a token</button>}
+        />,
+      );
+
+      // Unlike the decorative `iconBefore` slot, this holds real controls and stays reachable.
+      const token = screen.getByRole('button', { name: 'a token' });
+      expect(token).toBeInTheDocument();
+      expect(token.closest('[aria-hidden="true"]')).toBeNull();
+
+      // It sits ahead of the input inside the same frame.
+      const input = screen.getByRole('textbox', { name: 'Tags' });
+      expect(token.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('renders nothing for the slot when leadingContent is omitted', () => {
+      const { container } = render(<TextField aria-label="Name" />);
+
+      expect(container.querySelector(`.${textFieldStyles.leadingContent}`)).toBeNull();
+    });
+
+    it('keeps the slot single-line: shrinks and clips rather than growing', () => {
+      const rule = textFieldCss.match(/\.leadingContent\s*\{([^}]*)\}/);
+
+      expect(rule?.[1]).toContain('flex: 0 1 auto;');
+      expect(rule?.[1]).toContain('overflow: hidden;');
+    });
   });
 });

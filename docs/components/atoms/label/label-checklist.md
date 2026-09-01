@@ -55,7 +55,6 @@ Future interactivity, such as dropdown-trigger behavior, should be handled by a 
 - `default`
 - `information`
 - `warning`
-- `discovery`
 - `error`
 - `success`
 - `law`

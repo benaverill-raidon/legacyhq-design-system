@@ -21,14 +21,14 @@
     "variantCount": 4,
     "verifiedAt": "2026-08-24",
     "note": "Filed on the file's own \"✅⏲️ Chip Group\" page, verified directly against the file via the Desktop Bridge plugin.",
-    "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=scope`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
+    "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
     "apiAdaptationNotes": [
       "Chip Group takes `children`, not a data array. Tag Group and Avatar Group own their items because they have to decide which are visible and which are truncated; Chip Group has no overflow behaviour at all, and Chip's own props are a discriminated union on `mode`, which a flat item type could not express without duplicating that union. Button Group - the closest analogue in this system - is likewise a children-based layout wrapper.",
       "`size` reaches each Chip through React context (ChipSizeContext), not by cloning children. cloneElement only reaches direct children, so a Chip inside a Tooltip, returned from a `.map`, or rendered conditionally would silently miss the group's size - the same structural fragility that detached Chip's own remove button from its pill. Context reaches any descendant regardless of what sits between, and an explicit `size` on an individual Chip still wins because Chip resolves `size ?? groupSize ?? 'md'`.",
       "The provider is only mounted when `size` is actually set, so a Chip Group without one leaves every Chip on its own default rather than overriding it with undefined.",
       "`alignment` is genuinely different from Tag Group's identically-named prop despite the shared axis name. Here it maps to Figma's primaryAxisAlignItems MIN/MAX - literally which edge the chips pack against (justify-content). In Tag Group it decides where the overflow tag renders. Chip Group has no overflow, so there is nothing to place.",
       "No overflow or truncation was implemented, because Figma models none - all ten chips in every variant are plain, equal siblings. Chip Group is deliberately not Tag Group with chips in it.",
-      "Chip Group never manages selection. Figma's variants are all `isSelected=false` scope chips, and scope chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
+      "Chip Group never manages selection. Figma's variants are all `isSelected=false` search chips, and search chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
       "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
     ]
   },
@@ -66,7 +66,7 @@
   "accessibility": {
     "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
     "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
-    "selection": "not managed - each scope Chip carries its own aria-pressed",
+    "selection": "not managed - each search Chip carries its own aria-pressed",
     "note": "Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour to document beyond its children's."
   },
   "keyboardInteraction": [

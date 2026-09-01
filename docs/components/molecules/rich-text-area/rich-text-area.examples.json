@@ -1,0 +1,63 @@
+{
+  "component": "RichTextArea",
+  "examples": [
+    {
+      "name": "Basic entity tagging",
+      "description": "Hold the node array, resolve queries from your own data, and give each entity type a tone. Typing `/` opens the picker.",
+      "jsx": "const [value, setValue] = useState<RichTextValue>([]);\n\nconst search = (query: string) =>\n  query\n    ? [{ id: 'people', heading: 'People', entityType: 'person',\n         items: people.filter((p) => p.label.toLowerCase().includes(query.toLowerCase())) }]\n    : RECENTS;\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  rows={3}\n/>",
+      "props": { "rows": 3 }
+    },
+    {
+      "name": "Recents on open",
+      "description": "Supply `recents` so opening the picker is instant - `onSearch` is then only called once a query is typed.",
+      "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  recents={RECENTS}\n/>",
+      "props": {}
+    },
+    {
+      "name": "Tone and icon per entity type",
+      "description": "entityConfig drives both the picker's section heading tile and the inserted tag, so color encodes type consistently in both places.",
+      "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <UserIcon /> },\n  matter: { tone: 'teal', icon: <BriefcaseIcon /> },\n  roadmap: { tone: 'purple', icon: <MapIcon /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
+      "props": {}
+    },
+    {
+      "name": "Prefilled from stored content",
+      "description": "Hydrate from a saved node array. The editor reads it on mount and leads from then on - onChange reports every later edit.",
+      "jsx": "const stored: RichTextValue = [\n  { type: 'text', text: 'Ask ' },\n  { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1' } },\n  { type: 'text', text: ' about the filing' },\n];\n\n<RichTextArea aria-label=\"Note\" value={stored} onChange={setValue} onSearch={search} />",
+      "props": {}
+    },
+    {
+      "name": "People rows with avatars",
+      "description": "A row leading with an Avatar or AvatarGroup renders inline and hugs its width, with no description line - matching Figma's People and Families lists.",
+      "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};",
+      "props": {}
+    },
+    {
+      "name": "Sizes, appearance and states",
+      "description": "The frame axes are Text Area's, unchanged.",
+      "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea appearance=\"subtle\" aria-label=\"Subtle\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
+      "props": { "size": "lg", "appearance": "subtle", "invalid": true, "disabled": true }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Using it for plain multi-line text",
+      "jsx": "<RichTextArea aria-label=\"Notes\" value={value} onChange={setValue} onSearch={() => []} />",
+      "reason": "With nothing to link to, this is a contenteditable div standing in for a <textarea> - losing native keyboard, autofill, spellcheck and scrolling behavior for no benefit. Use TextArea."
+    },
+    {
+      "name": "Driving the value on every keystroke",
+      "jsx": "<RichTextArea value={valueFromEveryOnChange} onChange={setValue} onSearch={search} aria-label=\"Note\" />",
+      "reason": "The editor hydrates from `value` once and then leads. Re-rendering a contenteditable surface from props on each keystroke would destroy the caret, so later `value` changes are deliberately ignored - treat it as initial content, not a live binding."
+    },
+    {
+      "name": "Storing the value as HTML",
+      "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
+      "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
+    },
+    {
+      "name": "Relying on it as an accessible combobox",
+      "jsx": "<RichTextArea aria-label=\"Assign work\" value={value} onChange={setValue} onSearch={search} />",
+      "reason": "The picker does not set aria-activedescendant yet, so a screen reader user gets no announcement of the active entity while arrowing. Keyboard operation works, but don't make this the only path to a required task until that's wired."
+    }
+  ]
+}

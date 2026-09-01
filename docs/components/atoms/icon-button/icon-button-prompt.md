@@ -151,7 +151,7 @@ primary
 subtle
 ```
 
-Keep narrower than Button for now. Do not add warning/error/discovery appearances yet.
+Keep narrower than Button for now. Do not add warning/error appearances yet.
 
 ## Focus
 

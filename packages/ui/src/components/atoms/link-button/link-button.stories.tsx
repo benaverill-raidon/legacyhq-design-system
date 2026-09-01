@@ -24,7 +24,7 @@ const meta = {
     href: { control: 'text' },
     children: { control: 'text' },
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
-    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error', 'discovery'] },
+    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
     isDisabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
@@ -157,11 +157,6 @@ export const Variants: Story = {
         <Cell label="error">
           <LinkButton href="/clients" appearance="primary" tone="error">
             Error
-          </LinkButton>
-        </Cell>
-        <Cell label="discovery">
-          <LinkButton href="/clients" appearance="primary" tone="discovery">
-            Discovery
           </LinkButton>
         </Cell>
       </Group>

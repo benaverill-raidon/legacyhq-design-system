@@ -7,7 +7,6 @@ const tones: LabelTone[] = [
   'default',
   'information',
   'warning',
-  'discovery',
   'error',
   'success',
   'law',
@@ -197,7 +196,6 @@ export const Content: Story = {
 
         <div style={row}>
           <Label tone="default">Draft</Label>
-          <Label tone="discovery">Review</Label>
           <Label tone="error">Blocked</Label>
           <Label tone="success">Complete</Label>
         </div>
@@ -243,7 +241,6 @@ export const EdgeCases: Story = {
         {sectionHeading('Several labels wrapping in a row')}
         <div style={{ ...row, inlineSize: '220px' }}>
           <Label tone="default">Draft</Label>
-          <Label tone="discovery">Review</Label>
           <Label tone="error">Blocked</Label>
           <Label tone="success">Complete</Label>
           <Label tone="information">Archived</Label>

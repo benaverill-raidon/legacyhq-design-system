@@ -1,0 +1,78 @@
+{
+  "component": "Banner",
+  "examples": [
+    {
+      "name": "Neutral announcement",
+      "description": "The default page-level announcement bar.",
+      "jsx": "<Banner>Scheduled maintenance is planned for this weekend.</Banner>",
+      "props": {
+        "children": "Scheduled maintenance is planned for this weekend."
+      }
+    },
+    {
+      "name": "Warning",
+      "description": "A cautionary status on the amber bold background. Its dark content means actions use tone=warning (not the inverse treatment).",
+      "jsx": "<Banner appearance=\"warning\" actions={<Button size=\"sm\" appearance=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
+      "props": {
+        "appearance": "warning",
+        "actions": "Button (size=sm, appearance=primary, tone=warning)",
+        "children": "Your subscription expires in three days."
+      }
+    },
+    {
+      "name": "Error with an action",
+      "description": "An error status with a single inverse-tone action.",
+      "jsx": "<Banner appearance=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
+      "props": {
+        "appearance": "error",
+        "actions": "Button (size=sm, isInverse)",
+        "children": "We couldn't reach the server."
+      }
+    },
+    {
+      "name": "With two actions",
+      "description": "Two inverse-tone Buttons in a ButtonGroup, the composition Banner is designed around.",
+      "jsx": "<Banner actions={<ButtonGroup><Button size=\"sm\" isInverse>Learn more</Button><Button size=\"sm\" isInverse>Dismiss</Button></ButtonGroup>}>A new version is available.</Banner>",
+      "props": {
+        "actions": "ButtonGroup of inverse-tone Buttons",
+        "children": "A new version is available."
+      }
+    },
+    {
+      "name": "Without the leading icon",
+      "description": "The icon toggled off.",
+      "jsx": "<Banner showIcon={false}>Your changes have been saved.</Banner>",
+      "props": {
+        "showIcon": false,
+        "children": "Your changes have been saved."
+      }
+    },
+    {
+      "name": "Urgent error (assertive)",
+      "description": "An urgent error that must interrupt, using role=alert instead of the default polite status.",
+      "jsx": "<Banner appearance=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
+      "props": {
+        "appearance": "error",
+        "role": "alert",
+        "children": "Your session has expired. Sign in again to continue."
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Inline status",
+      "reason": "Use InlineMessage for an inline, in-context status next to a field or row.",
+      "jsx": "<Banner>Saved</Banner>"
+    },
+    {
+      "name": "Transient notification",
+      "reason": "Use Toast for a transient, auto-dismissing notification.",
+      "jsx": "<Banner appearance=\"default\">Copied to clipboard</Banner>"
+    },
+    {
+      "name": "Toolbar of actions",
+      "reason": "Banner is an announcement, not a toolbar - keep it to one or two actions.",
+      "jsx": "<Banner actions={<><Button isInverse>A</Button><Button isInverse>B</Button><Button isInverse>C</Button><Button isInverse>D</Button></>}>Too many actions</Banner>"
+    }
+  ]
+}

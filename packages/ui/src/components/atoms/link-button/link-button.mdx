@@ -44,6 +44,13 @@ middle-click to open in a background tab).
 on `Button` - including the same rule that **`tone` only changes anything when
 `appearance="primary"`**. See Variants, and see Button's Docs for the full explanation.
 
+### On dark surfaces
+
+`isInverse` is the on-dark treatment, shared with `Button` - for a LinkButton placed on a dark or
+bold-colored surface such as `Banner`. It renders a transparent fill with inverse content and the
+white *subtle* hover/press overlays. `isDisabled` flattens it the same way it flattens `tone`. See the
+Inverse story.
+
 ### Disabled is simulated, not native
 
 Anchors have no `disabled` attribute. Setting `isDisabled` instead applies `aria-disabled="true"`,
@@ -146,6 +153,12 @@ the route server-side if it truly must be unreachable.
       <td><code>'neutral' | 'warning' | 'error'</code></td>
       <td><code>'neutral'</code></td>
       <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
+    </tr>
+    <tr>
+      <td><code>isInverse</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>On-dark treatment for placement on dark/bold surfaces (e.g. Banner). Flattened by <code>isDisabled</code>.</td>
     </tr>
     <tr>
       <td><code>isDisabled</code></td>

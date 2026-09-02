@@ -14,6 +14,7 @@ const meta = {
     appearance: 'default',
     tone: 'neutral',
     size: 'md',
+    isInverse: false,
     disabled: false,
     isLoading: false,
     isFullWidth: false,
@@ -22,6 +23,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
     tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
+    isInverse: { control: 'boolean' },
     disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     isFullWidth: { control: 'boolean' },
@@ -279,6 +281,80 @@ export const States: Story = {
         <Cell label="Interactive">
           <Button appearance="primary" onClick={() => undefined}>
             Save changes
+          </Button>
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+/**
+ * `isInverse` is the on-dark treatment - for buttons placed on dark or bold-colored surfaces such
+ * as Banner. It overrides the resting appearance fill with a transparent background and the inverse
+ * content token, and uses the white *subtle* overlays on hover / press. It only reads on a dark
+ * backdrop, so every specimen here sits on one. Disabled flattens the inverse look the same way it
+ * flattens tone.
+ */
+export const Inverse: Story = {
+  render: () => (
+    <div
+      style={{
+        ...stack,
+        padding: 'var(--spacing-2xl)',
+        borderRadius: 'var(--border-radius-md)',
+        background: 'var(--color-background-neutral-bold-default)',
+      }}
+    >
+      <Group title="States (on a dark surface)">
+        <Cell label="Default">
+          <Button isInverse>Learn more</Button>
+        </Cell>
+        <Cell label="Hover">
+          <Button isInverse data-force-state="hover">
+            Learn more
+          </Button>
+        </Cell>
+        <Cell label="Focus visible">
+          <Button isInverse data-force-state="focus">
+            Learn more
+          </Button>
+        </Cell>
+        <Cell label="Press">
+          <Button isInverse data-force-state="press">
+            Learn more
+          </Button>
+        </Cell>
+        <Cell label="Disabled">
+          <Button isInverse disabled>
+            Learn more
+          </Button>
+        </Cell>
+        <Cell label="Loading">
+          <Button isInverse isLoading>
+            Learn more
+          </Button>
+        </Cell>
+      </Group>
+
+      <Group title="Sizes">
+        {sizes.map((size) => (
+          <Cell key={size} label={size}>
+            <Button isInverse size={size}>
+              {size.toUpperCase()}
+            </Button>
+          </Cell>
+        ))}
+      </Group>
+
+      <Group title="With icons">
+        <Cell label="Leading">
+          <Button isInverse iconBefore={<CheckIcon />}>
+            Approve
+          </Button>
+        </Cell>
+        <Cell label="Trailing">
+          <Button isInverse iconAfter={<ArrowRightIcon />}>
+            Continue
           </Button>
         </Cell>
       </Group>

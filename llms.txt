@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 38 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 40 components
 > across primitives/atoms/molecules/organisms.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -87,10 +87,12 @@ rules, and the task→file routing table that says which of a component's up to
 - [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
-## Organisms (2)
+## Organisms (4)
 
+- [banner](docs/components/organisms/banner/banner.md)
 - [dropdown-menu](docs/components/organisms/dropdown-menu/dropdown-menu.md)
 - [menu](docs/components/organisms/menu/menu.md)
+- [section-message](docs/components/organisms/section-message/section-message.md)
 
 ## Optional
 

@@ -47,6 +47,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: ButtonSize;
   appearance?: ButtonAppearance;
   tone?: ButtonTone;
+  isInverse?: boolean;
   isLoading?: boolean;
   isFullWidth?: boolean;
   iconBefore?: React.ReactNode;
@@ -61,6 +62,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 size = 'md'
 appearance = 'default'
 tone = 'neutral'
+isInverse = false
 type = 'button'
 disabled = false
 isLoading = false
@@ -312,6 +314,24 @@ Use neutral or semantic subtle background tokens for hover/press states, with de
 
 If an exact semantic token is missing, document it and use the closest existing approved token from the generated theme files.
 
+### Inverse (`isInverse`)
+
+An orthogonal on-dark treatment for buttons placed on dark or bold-colored surfaces (e.g. Banner).
+It is a boolean prop, not part of the `tone` axis, so it can later compose with any `appearance`
+(the outlined `default` inverse treatment is planned). It overrides the resting appearance fill:
+
+- background: transparent
+- border: transparent
+- content/icon: `color-content-inverse`
+- hover: `color-background-neutral-overlay-subtle-hover` (white subtle, the mode-flipped mirror of the
+  dark `color-background-neutral-overlay-hover`)
+- pressed: `color-background-neutral-overlay-subtle-press`
+- focus: white subtle hover fill plus the shared focus ring
+
+Declared after the appearance rules so it wins the cascade at equal specificity. The higher-
+specificity `:disabled` rules still flatten it, so a disabled inverse button uses the shared
+disabled treatment - matching how `tone` is flattened when disabled.
+
 ### Disabled
 
 Two disabled treatments, matching each appearance's own resting border visibility rather than one
@@ -371,6 +391,7 @@ Controls for:
 - size
 - appearance
 - tone
+- isInverse
 - disabled
 - isLoading
 - isFullWidth
@@ -385,6 +406,7 @@ Show:
 - sizes
 - appearances
 - tones
+- inverse (on a dark surface)
 - disabled
 - loading
 - icon before
@@ -418,6 +440,7 @@ Test:
 - supports size variants
 - supports appearance variants
 - supports tone variants
+- supports the inverse treatment (isInverse)
 - disabled behavior
 - loading behavior
 - loading preserves label/content

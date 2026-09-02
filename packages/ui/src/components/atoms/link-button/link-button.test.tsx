@@ -179,6 +179,22 @@ describe('LinkButton', () => {
     expect(screen.getByRole('link', { name: 'Warning' })).toHaveClass(styles.appearance_primary, styles.tone_warning);
   });
 
+  it('applies the inverse treatment when isInverse is true', () => {
+    render(
+      <LinkButton href="/clients" isInverse>
+        On dark
+      </LinkButton>,
+    );
+
+    expect(screen.getByRole('link', { name: 'On dark' })).toHaveClass(styles.inverse);
+  });
+
+  it('does not apply the inverse treatment by default', () => {
+    render(<LinkButton href="/clients">On light</LinkButton>);
+
+    expect(screen.getByRole('link', { name: 'On light' })).not.toHaveClass(styles.inverse);
+  });
+
   it('supports custom className', () => {
     render(
       <LinkButton href="/clients" className="custom-link-button" data-testid="link-button">
@@ -227,6 +243,12 @@ describe('LinkButton token mappings', () => {
 
   it('uses the brand-primary bold token for primary rest state', () => {
     expect(linkButtonCss).toContain('var(--color-background-brand-primary-bold-default)');
+  });
+
+  it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
+    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
+    expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
   });
 
   it('uses the warning bold content token for warning primary text', () => {

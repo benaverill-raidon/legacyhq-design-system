@@ -12,6 +12,8 @@ Do not use for actions that only affect the current page. Use Button instead.
 ## Design intent
 Preserve native link semantics while sharing Button appearance, sizing, and interaction patterns.
 
+Shares Button's `isInverse` on-dark treatment - an orthogonal boolean (not a `tone` value) for a Link Button placed on a dark or bold-colored surface such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press overlays, and is flattened by `isDisabled` like tone.
+
 Shares Button's motion treatment: hover/press/focus color transitions use `fade-quick`. No press-state scale or other transform-based motion - press feedback is color-only.
 
 ## Accessibility

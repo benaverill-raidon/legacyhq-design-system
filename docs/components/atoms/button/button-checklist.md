@@ -36,6 +36,7 @@ Atom
 - Use the `fade-quick` semantic motion token for hover/press/focus color transitions instead of a hardcoded duration/easing.
 - Support `isLoading` while preserving the original label width to prevent layout shift.
 - Support `isFullWidth` for layout flexibility.
+- Support `isInverse` as an orthogonal boolean on-dark treatment (not a `tone` value) for placement on dark/bold surfaces such as Banner, using the `color-background-neutral-overlay-subtle-*` overlays; flattened by `disabled` like tone.
 - Do not support selected/toggled behavior in the base Button.
 
 ## Variant Model

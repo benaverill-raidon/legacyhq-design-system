@@ -68,6 +68,18 @@ describe('Button', () => {
     });
   });
 
+  it('applies the inverse treatment when isInverse is true', () => {
+    render(<Button isInverse>On dark</Button>);
+
+    expect(screen.getByRole('button', { name: 'On dark' })).toHaveClass(styles.inverse);
+  });
+
+  it('does not apply the inverse treatment by default', () => {
+    render(<Button>On light</Button>);
+
+    expect(screen.getByRole('button', { name: 'On light' })).not.toHaveClass(styles.inverse);
+  });
+
   it('supports disabled behavior', () => {
     const handleClick = vi.fn();
 
@@ -202,6 +214,12 @@ describe('Button', () => {
     expect(buttonCss).toMatch(/\.size_xs \{[\s\S]*?block-size: var\(--size-control-xs\);/);
     expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?block-size: var\(--size-control-sm\);/);
     expect(buttonCss).toMatch(/\.size_lg \{[\s\S]*?block-size: var\(--size-control-lg\);/);
+  });
+
+  it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
+    expect(buttonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-hover);');
+    expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-press);');
   });
 
   it('gives appearance=default a visible disabled border, matching its own resting border', () => {

@@ -1,0 +1,200 @@
+{
+  "name": "Banner",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "A full-width, page-level announcement bar.",
+  "intent": "Carry a single high-visibility, page-level message on a bold background, with optional inline actions.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1550:131564",
+    "componentName": "banner",
+    "variantCount": 3,
+    "verifiedAt": "2026-09-01",
+    "notes": "The Figma `appearance` variant `appearance4` maps to the code appearance `default`. The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
+  },
+  "useCases": [
+    "announce scheduled maintenance",
+    "communicate system or service status",
+    "surface a new application version",
+    "warn about degraded or interrupted service"
+  ],
+  "antiPatterns": [
+    "inline, in-context status next to a field or row",
+    "transient auto-dismissing notification",
+    "contained boxed message inside a section",
+    "blocking confirmation or decision"
+  ],
+  "anatomy": [
+    {
+      "name": "root",
+      "element": "div",
+      "required": true,
+      "description": "full-width bar with the appearance's bold background; height hugs content"
+    },
+    {
+      "name": "icon",
+      "required": false,
+      "description": "leading status icon (warning/error) or a plain dot, inheriting the banner content color; decorative"
+    },
+    {
+      "name": "message",
+      "required": true,
+      "description": "the children; truncates to a single line with an ellipsis"
+    },
+    {
+      "name": "actions",
+      "required": false,
+      "description": "optional trailing actions, typically inverse-tone Buttons or a ButtonGroup"
+    }
+  ],
+  "props": {
+    "appearance": {
+      "type": "enum",
+      "values": ["default", "warning", "error"],
+      "default": "default",
+      "required": false
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "description": "The message. Truncates to a single line."
+    },
+    "showIcon": {
+      "type": "boolean",
+      "default": true,
+      "required": false
+    },
+    "actions": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false,
+      "description": "Optional trailing actions - pass isInverse Buttons."
+    },
+    "role": {
+      "type": "string",
+      "default": "status",
+      "required": false,
+      "description": "Overridable ARIA role - e.g. alert for urgent errors."
+    },
+    "className": {
+      "type": "string",
+      "default": null,
+      "required": false
+    }
+  },
+  "variants": {
+    "appearance": ["default", "warning", "error"]
+  },
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "allowedContent": "React.ReactNode"
+    },
+    {
+      "name": "actions",
+      "required": false,
+      "allowedContent": "React.ReactNode (inverse-tone Buttons / ButtonGroup)"
+    }
+  ],
+  "tokens": {
+    "semantic": {
+      "spacing": {
+        "paddingInline": "--spacing-2xl",
+        "paddingBlock": "--spacing-sm",
+        "rootGap": "--spacing-sm",
+        "messageGap": "--spacing-xs",
+        "actionsGap": "--spacing-xs"
+      },
+      "size": {
+        "iconSlot": "--size-300",
+        "dot": "--size-marker-sm"
+      },
+      "typography": {
+        "message": "body-md"
+      },
+      "color": {
+        "defaultBackground": "--color-background-neutral-bold-default",
+        "defaultContent": "--color-content-inverse",
+        "warningBackground": "--color-background-warning-bold-default",
+        "warningContent": "--color-content-warning-bold",
+        "errorBackground": "--color-background-error-bold-default",
+        "errorContent": "--color-content-inverse"
+      }
+    }
+  },
+  "accessibility": {
+    "nativeElement": "div",
+    "defaultRole": "status",
+    "roleOverridable": true,
+    "iconDecorative": true,
+    "colorNotSoleSignal": true
+  },
+  "behaviorRules": [
+    "Render a full-width bar whose height hugs the single message row plus block padding.",
+    "Set the bold background and content color from appearance.",
+    "Render the warning/error status icon, or a plain dot when there is no status glyph; the icon inherits the banner content color.",
+    "Omit the leading icon when showIcon is false.",
+    "Truncate the message to a single line with an ellipsis rather than wrapping.",
+    "Render the actions region only when actions are provided.",
+    "Default role to status (a polite live region); allow it to be overridden.",
+    "Mark the leading icon slot aria-hidden."
+  ],
+  "compositionRules": [
+    "Actions match the bar: default and error (dark bars) take inverse-tone Buttons; warning (amber, dark content) takes tone=warning Buttons (appearance=primary) instead.",
+    "Keep the action count low (one or two).",
+    "Use InlineMessage, Toast, or SectionMessage for the non-page-level cases."
+  ],
+  "contentRules": [
+    "Keep the message short and lead with the essential information.",
+    "Do not rely on color alone to communicate warning or error meaning.",
+    "Put detail behind an action rather than in a longer message that would be truncated."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef.",
+    "Use React.memo.",
+    "Use CSS Modules.",
+    "Force the icon to inherit the banner content color via the [data-color] override.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": [
+    "InlineMessage",
+    "Toast",
+    "SectionMessage",
+    "Button",
+    "ButtonGroup"
+  ],
+  "do": [
+    "Use Banner for a page-level announcement.",
+    "Use appearance to signal the semantic status.",
+    "Pass inverse-tone actions.",
+    "Keep the message to a single, short line."
+  ],
+  "dont": [
+    "Do not use Banner for inline or transient messages.",
+    "Do not put more than one or two actions in a Banner.",
+    "Do not rely on color alone to convey meaning.",
+    "Do not hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders the message.",
+    "Defaults to role status and the default appearance.",
+    "Supports appearances default, warning, error.",
+    "Renders a status icon for warning/error and a dot for default.",
+    "Hides the icon when showIcon is false.",
+    "Renders actions when provided and omits the region otherwise.",
+    "Truncates the message to a single line.",
+    "Allows the role to be overridden.",
+    "Forwards the ref to the root element.",
+    "Uses semantic spacing, typography, size, and color tokens.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

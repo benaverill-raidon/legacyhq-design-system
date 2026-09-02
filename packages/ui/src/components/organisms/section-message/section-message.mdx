@@ -1,0 +1,139 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as SectionMessageStories from './SectionMessage.stories';
+
+<Meta of={SectionMessageStories} name="Docs" />
+
+# Section Message
+
+Section Message is a bordered, rounded status panel placed inside the flow of a page or a section of
+one. It carries a status - information, success, warning, or error - with an optional title, a
+description, optional inline actions, and an optional dismiss button.
+
+<Canvas of={SectionMessageStories.Playground} />
+
+## When to use
+
+- A contained, in-context status message inside a section, form, or panel.
+- Communicating the result or constraint of the surrounding content - a permission restriction, a
+  validation summary, a success confirmation, a warning about the section.
+- A message that should sit in the page flow rather than float or span the full width.
+
+## When not to use
+
+- **For a full-width, page-level announcement bar.** Use `Banner`.
+- **For a transient, auto-dismissing notification.** Use `Toast`.
+- **For an inline status next to a single field or row.** Use `InlineMessage`.
+- **For a blocking confirmation or decision.** Use `ModalDialog`.
+
+## Anatomy
+
+<Canvas of={SectionMessageStories.Content} />
+
+1. **Root** - a bordered, rounded box with the appearance's tinted background and colored border.
+2. **Icon** - the status icon for the appearance, in its status color. Decorative (`aria-hidden`).
+3. **Title** - an optional bold lead line (`heading-sm`).
+4. **Description** - the `children`. Wraps to as many lines as needed.
+5. **Actions** - optional `Link`s; Section Message inserts a middot separator between them.
+6. **Dismiss** - an optional dismiss button (`isDismissible`) in the top-right.
+
+## Usage guidance
+
+### Appearance
+
+`appearance` (`information`, `success`, `warning`, `error`) sets the tinted background, the border
+color, and the status icon together - the appearance is the semantic signal. The title and
+description always use the default content color; only the icon and border take the status color.
+
+<Canvas of={SectionMessageStories.Appearances} />
+
+### Title and description
+
+The `title` is optional - omit it for a description-only message. The description (`children`) is
+required and wraps freely, so Section Message suits longer, multi-line explanations (unlike `Banner`,
+whose single line truncates).
+
+### Actions
+
+Pass `Link`s to `actions`; Section Message inserts the `·` separators between them, so callers write
+bare Links (a fragment or an array) rather than repeating separator markup. Keep actions to a small
+number of related links.
+
+### Dismiss
+
+Set `isDismissible` to show a dismiss button in the top-right. Clicking it hides the message and
+calls `onDismiss`. Reserve dismiss for messages the user can safely make go away - not for a
+persistent constraint they need to keep seeing.
+
+### Accessibility
+
+Section Message renders with `role="status"` (a polite live region) by default, so one that appears
+dynamically is announced without interrupting. Override `role` when the semantics differ - use
+`role="alert"` for an urgent error. The status icon is decorative (`aria-hidden`); the meaning is
+carried by the title and description text, not by color alone. The dismiss button is a labelled
+`IconButton` ("Dismiss").
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The description. Wraps to multiple lines.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'information' | 'success' | 'warning' | 'error'</code></td>
+      <td><code>'information'</code></td>
+      <td>Tinted background, border, and status icon.</td>
+    </tr>
+    <tr>
+      <td><code>title</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional bold title above the description.</td>
+    </tr>
+    <tr>
+      <td><code>actions</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional Links; middot separators are inserted between them.</td>
+    </tr>
+    <tr>
+      <td><code>isDismissible</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Show a dismiss button in the top-right.</td>
+    </tr>
+    <tr>
+      <td><code>onDismiss</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>-</td>
+      <td>Called when dismissed. The message also hides itself.</td>
+    </tr>
+    <tr>
+      <td><code>role</code></td>
+      <td><code>string</code></td>
+      <td><code>'status'</code></td>
+      <td>Overridable - e.g. <code>'alert'</code> for urgent errors.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `div` prop is forwarded to the root element.
+
+## Related components
+
+- **Banner** - a full-width, page-level announcement bar.
+- **Toast** - a transient, auto-dismissing notification.
+- **InlineMessage** - an inline status next to a field or row.
+- **Link** - the actions Section Message composes.

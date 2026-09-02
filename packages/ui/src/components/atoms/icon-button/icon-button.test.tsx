@@ -186,6 +186,26 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'Subtle' })).toHaveClass(styles.appearance_subtle);
   });
 
+  it('applies the inverse treatment when isInverse is true', () => {
+    render(
+      <IconButton aria-label="On dark" isInverse tooltip={false}>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'On dark' })).toHaveClass(styles.inverse);
+  });
+
+  it('does not apply the inverse treatment by default', () => {
+    render(
+      <IconButton aria-label="On light" tooltip={false}>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'On light' })).not.toHaveClass(styles.inverse);
+  });
+
   it('applies size classes', () => {
     const sizes = ['xs', 'sm', 'md', 'lg'] as const;
 
@@ -376,6 +396,13 @@ describe('icon button CSS contract', () => {
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
     expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
     expect(rule?.[0]).toContain('.appearance_subtle:disabled');
+  });
+
+  it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press/expanded', () => {
+    expect(iconButtonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(iconButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
+    expect(iconButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
+    expect(iconButtonCss).toContain(".inverse[data-expanded='true']");
   });
 
   it('keeps expanded state appearance-specific instead of overriding all tones globally', () => {

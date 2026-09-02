@@ -213,6 +213,36 @@
   text-decoration: none;
 }
 
+/*
+ * Inverse: the on-dark treatment, for a LinkButton placed on a dark or bold-colored surface (e.g.
+ * Banner). Mirrors Button's inverse - transparent fill, inverse content, and the white *subtle*
+ * overlays on hover / press - using LinkButton's `[aria-disabled='true']` guard rather than the
+ * native `:disabled` pseudo. Declared after the appearance rules so it wins the cascade at equal
+ * specificity; the disabled rules still flatten it. One look across appearances today; an outlined
+ * (default) inverse treatment is planned.
+ */
+.inverse:not([aria-disabled='true']) {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-content-inverse);
+}
+
+.inverse:not([aria-disabled='true']):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-hover);
+  text-decoration: none;
+}
+
+.inverse:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-press);
+}
+
 .leading,
 .trailing,
 .content {

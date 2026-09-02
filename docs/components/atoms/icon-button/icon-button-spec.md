@@ -29,6 +29,7 @@ interface IconButtonProps
   appearance?: IconButtonAppearance;
   size?: IconButtonSize;
   shape?: IconButtonShape;
+  isInverse?: boolean;
   isLoading?: boolean;
   isExpanded?: boolean;
   tooltip?: React.ReactNode | false;
@@ -143,6 +144,21 @@ aria-expanded={true}
 ```
 
 Use for menu/disclosure triggers. Do not use `aria-pressed` for expanded state.
+
+## Inverse behavior
+
+`isInverse` is an orthogonal boolean on-dark treatment (not part of the appearance axis), matching
+Button's `isInverse`. It overrides the resting appearance fill with:
+
+- background: transparent
+- border: transparent
+- content/icon: `color-content-inverse`
+- hover / expanded: `color-background-neutral-overlay-subtle-hover`
+- pressed: `color-background-neutral-overlay-subtle-press`
+- focus: white subtle hover fill plus the shared focus ring
+
+Declared after the appearance rules so it wins the cascade at equal specificity; the higher-
+specificity `:disabled` rules still flatten it. For placement on dark/bold surfaces such as Banner.
 
 ## Focus and refs
 

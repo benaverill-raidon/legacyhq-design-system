@@ -10,6 +10,7 @@ export interface IconButtonProps
   appearance?: IconButtonAppearance;
   size?: IconButtonSize;
   shape?: IconButtonShape;
+  isInverse?: boolean;
   isLoading?: boolean;
   isExpanded?: boolean;
   tooltip?: React.ReactNode | false;

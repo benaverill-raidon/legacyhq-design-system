@@ -1,0 +1,122 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as BannerStories from './Banner.stories';
+
+<Meta of={BannerStories} name="Docs" />
+
+# Banner
+
+Banner is a full-width, page-level announcement bar. It sits at the top of a page or region to carry
+a single high-visibility message - scheduled maintenance, a system status, a version update - on a
+bold-colored background, with optional inline actions.
+
+<Canvas of={BannerStories.Playground} />
+
+## When to use
+
+- A persistent, page-level announcement that applies to the whole page or a major region.
+- Communicating system status - maintenance, degraded service, an outage, a new release.
+- A message that warrants a full-width bar rather than an inline note.
+
+## When not to use
+
+- **For an inline, in-context status next to a field or row.** Use `InlineMessage`.
+- **For a transient, auto-dismissing notification.** Use `Toast`.
+- **For a contained, boxed message inside a section of the page.** Use `SectionMessage`.
+- **For a blocking confirmation or decision.** Use `ModalDialog`.
+
+## Anatomy
+
+<Canvas of={BannerStories.Content} />
+
+1. **Root** - a full-width bar with the appearance's bold background. Its height hugs the single
+   message row plus block padding.
+2. **Icon** - a leading status icon (`warning`/`error`) or a plain dot, inheriting the banner's
+   content color. Toggle it off with `showIcon={false}`.
+3. **Message** - the `children`. Truncates to a single line with an ellipsis rather than wrapping.
+4. **Actions** - optional trailing actions, typically inverse-tone `Button`s or a `ButtonGroup`.
+
+## Usage guidance
+
+### Appearance
+
+`appearance` sets both the bold background and the leading status icon: `default` (a dark bar with a
+dot), `warning` (amber, with dark content), and `error` (red, with inverse content). There is no
+separate tone axis - the appearance is the semantic signal.
+
+<Canvas of={BannerStories.Appearances} />
+
+### Actions match the bar
+
+On the `default` and `error` bars the background is dark, so actions use the on-dark treatment - pass
+`isInverse` `Button`s (or a `ButtonGroup` of them). The `warning` bar is amber with dark content, so
+its actions use `tone="warning"` instead (which needs `appearance="primary"` to render) rather than
+the inverse treatment. Either way, keep the action count low (one or two); Banner is an announcement,
+not a toolbar.
+
+### The message is one line
+
+The message truncates to a single line with an ellipsis so the bar stays one row tall. Keep it short
+and lead with the essential information; put any detail behind an action rather than in a longer
+message that would be cut off.
+
+### Accessibility
+
+Banner renders with `role="status"` by default - a polite live region, so a banner that appears
+dynamically is announced without interrupting. Override `role` when the semantics differ: use
+`role="alert"` for an urgent error that must interrupt, or remove it for a purely decorative bar.
+The leading icon is decorative (`aria-hidden`); the appearance is conveyed by the message text, not
+by color alone.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The message. Truncates to a single line.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'warning' | 'error'</code></td>
+      <td><code>'default'</code></td>
+      <td>Bold background and leading status icon.</td>
+    </tr>
+    <tr>
+      <td><code>showIcon</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether to render the leading status icon.</td>
+    </tr>
+    <tr>
+      <td><code>actions</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional trailing actions - pass <code>isInverse</code> Buttons.</td>
+    </tr>
+    <tr>
+      <td><code>role</code></td>
+      <td><code>string</code></td>
+      <td><code>'status'</code></td>
+      <td>Overridable - e.g. <code>'alert'</code> for urgent errors.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `div` prop is forwarded to the root element.
+
+## Related components
+
+- **InlineMessage** - an inline, in-context status row.
+- **Toast** - a transient, auto-dismissing notification.
+- **SectionMessage** - a contained, boxed message within a section.
+- **Button** / **ButtonGroup** - the inverse-tone actions Banner composes.

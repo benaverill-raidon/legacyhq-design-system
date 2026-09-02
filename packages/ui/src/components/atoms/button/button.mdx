@@ -49,6 +49,17 @@ tone value. Setting `tone="error"` on a `default` button is valid but has no vis
 non-primary action needs to look different, that's a signal to reconsider the appearance, not to
 expect tone to carry it. See Variants.
 
+### On dark surfaces
+
+Set `isInverse` for buttons that sit on a dark or bold-colored surface - most commonly inside a
+`Banner`. It overrides the resting appearance treatment with a transparent fill and the inverse
+content token, and swaps the dark neutral hover/press overlays for the white *subtle* overlays so the
+button reads correctly against the dark background. Today it renders one look across appearances; an
+outlined (`default`) inverse treatment is planned. Disabled flattens the inverse look the same way
+it flattens `tone`.
+
+<Canvas of={ButtonStories.Inverse} />
+
 ### Icon usage
 
 Icons render at one fixed size regardless of `size` - Button intentionally has no icon-size prop.
@@ -157,10 +168,16 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
       <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
     </tr>
     <tr>
+      <td><code>isInverse</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>On-dark treatment for placement on dark/bold surfaces (e.g. Banner). Flattened by <code>disabled</code>.</td>
+    </tr>
+    <tr>
       <td><code>disabled</code></td>
       <td><code>boolean</code></td>
       <td><code>false</code></td>
-      <td>Maps to the native <code>disabled</code> attribute. Flattens <code>tone</code>.</td>
+      <td>Maps to the native <code>disabled</code> attribute. Flattens <code>tone</code> and <code>isInverse</code>.</td>
     </tr>
     <tr>
       <td><code>isLoading</code></td>

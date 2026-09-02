@@ -16,6 +16,7 @@ const meta = {
     appearance: 'default',
     tone: 'neutral',
     size: 'md',
+    isInverse: false,
     isDisabled: false,
     isLoading: false,
     target: '_self',
@@ -26,6 +27,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
     tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
+    isInverse: { control: 'boolean' },
     isDisabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     target: { control: 'inline-radio', options: ['_self', '_blank'] },
@@ -264,6 +266,71 @@ export const States: Story = {
       <Group title="Live - hover, tab to, and click this">
         <Cell label="Intercepted navigation">
           <ControlledLinkPreview />
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+/**
+ * `isInverse` is the on-dark treatment - for a LinkButton placed on a dark or bold-colored surface
+ * such as Banner. It mirrors Button's inverse: transparent fill, inverse content, and the white
+ * *subtle* overlays on hover / press. It only reads on a dark backdrop, so every specimen here sits on
+ * one. `isDisabled` flattens the inverse look the same way it flattens tone.
+ */
+export const Inverse: Story = {
+  render: () => (
+    <div
+      style={{
+        ...stack,
+        padding: 'var(--spacing-2xl)',
+        borderRadius: 'var(--border-radius-md)',
+        background: 'var(--color-background-neutral-bold-default)',
+      }}
+    >
+      <Group title="States (on a dark surface)">
+        <Cell label="Default">
+          <LinkButton href="/clients" isInverse>
+            Learn more
+          </LinkButton>
+        </Cell>
+        <Cell label="Hover">
+          <LinkButton href="/clients" isInverse data-force-state="hover">
+            Learn more
+          </LinkButton>
+        </Cell>
+        <Cell label="Focus visible">
+          <LinkButton href="/clients" isInverse data-force-state="focus">
+            Learn more
+          </LinkButton>
+        </Cell>
+        <Cell label="Press">
+          <LinkButton href="/clients" isInverse data-force-state="press">
+            Learn more
+          </LinkButton>
+        </Cell>
+        <Cell label="Disabled">
+          <LinkButton href="/clients" isInverse isDisabled>
+            Learn more
+          </LinkButton>
+        </Cell>
+        <Cell label="Loading">
+          <LinkButton href="/clients" isInverse isLoading>
+            Learn more
+          </LinkButton>
+        </Cell>
+      </Group>
+
+      <Group title="With icons">
+        <Cell label="Leading">
+          <LinkButton href="/clients" isInverse iconBefore={<CheckIcon />}>
+            Approve
+          </LinkButton>
+        </Cell>
+        <Cell label="Trailing">
+          <LinkButton href="/clients" isInverse iconAfter={<ArrowRightIcon />}>
+            Continue
+          </LinkButton>
         </Cell>
       </Group>
     </div>

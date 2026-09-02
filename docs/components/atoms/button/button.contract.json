@@ -10,7 +10,7 @@
     "componentSetNodeId": "1408:7990",
     "componentName": "button",
     "variantCount": 176,
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-09-01"
   },
   "useCases": [
     "submit a form",
@@ -84,6 +84,12 @@
       ],
       "default": "neutral",
       "required": false
+    },
+    "isInverse": {
+      "type": "boolean",
+      "default": false,
+      "required": false,
+      "description": "Render the on-dark treatment for placement on dark or bold-colored surfaces (e.g. Banner). Overrides the resting appearance treatment with a transparent fill, the inverse content token, and white subtle overlays on hover/press. Flattened by disabled like tone."
     },
     "disabled": {
       "type": "boolean",
@@ -232,6 +238,9 @@
         "primaryWarningBackground": "--color-background-warning-bold-default",
         "primaryWarningContent": "--color-content-warning-inverse",
         "primaryErrorBackground": "--color-background-error-bold-default",
+        "inverseContent": "--color-content-inverse",
+        "inverseHoverBackground": "--color-background-neutral-overlay-subtle-hover",
+        "inversePressBackground": "--color-background-neutral-overlay-subtle-press",
         "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
         "disabledBackground": "--color-background-disabled",
         "disabledContent": "--color-content-disabled"
@@ -278,7 +287,9 @@
     "Use iconBefore only when not loading.",
     "Render iconAfter when provided.",
     "Set inline-size to 100% when isFullWidth is true.",
+    "Apply the inverse on-dark treatment when isInverse is true; it overrides the resting appearance fill/content and uses the white subtle overlays on hover/press.",
     "Apply disabled visual treatment with native disabled attribute.",
+    "Disabled flattens the inverse treatment the same way it flattens tone (the disabled rules win at higher specificity).",
     "Disabled shows a border only for appearance=default (matching its resting border); appearance=primary/subtle stay borderless when disabled, matching their own resting look."
   ],
   "compositionRules": [
@@ -347,6 +358,7 @@
     "Supports sizes xs, sm, md, lg.",
     "Supports appearances default, primary, subtle.",
     "Supports tones neutral, warning, error.",
+    "Supports isInverse for placement on dark or bold-colored surfaces.",
     "Uses native disabled attribute when disabled.",
     "Suppresses click while disabled.",
     "Suppresses click while loading.",

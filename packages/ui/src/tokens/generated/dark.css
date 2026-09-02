@@ -8,7 +8,7 @@
   --color-content-subtle: var(--color-neutral-solid-500);
   --color-content-inverse: var(--color-neutral-solid-1200);
   --color-content-disabled: var(--color-neutral-alpha-100-32);
-  --color-content-loading: var(--color-neutral-alpha-100-08);
+  --color-content-loading: var(--color-neutral-alpha-100-48);
   --color-skeleton-default: var(--color-neutral-alpha-100-08);
   --color-content-brand-primary-default: var(--color-brand-prussian-solid-500);
   --color-content-selected: var(--color-brand-prussian-solid-500);
@@ -208,6 +208,8 @@
   --color-background-neutral-overlay-hover: var(--color-neutral-alpha-100-08);
   --color-background-neutral-overlay-press: var(--color-neutral-alpha-100-16);
   --color-background-neutral-overlay-blanket: var(--color-neutral-alpha-1200-64);
+  --color-background-neutral-overlay-subtle-hover: var(--color-neutral-alpha-1200-08);
+  --color-background-neutral-overlay-subtle-press: var(--color-neutral-alpha-1200-16);
   --color-elevation-surface-default: var(--color-neutral-solid-1200);
   --color-elevation-surface-hover: var(--color-neutral-solid-1100);
   --color-elevation-surface-press: var(--color-neutral-solid-1000);

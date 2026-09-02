@@ -8,8 +8,9 @@
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "3984:88777",
     "componentName": "icon-button",
-    "variantCount": 184,
-    "verifiedAt": "2026-08-06"
+    "variantCount": 240,
+    "verifiedAt": "2026-09-01",
+    "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `appearance` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
   },
   "anatomy": [
     "button",
@@ -20,6 +21,12 @@
   "props": {
     "tooltip": {
       "values": ["ReactNode", false]
+    },
+    "isInverse": {
+      "type": "boolean",
+      "default": false,
+      "required": false,
+      "description": "Orthogonal on-dark treatment for placement on dark/bold surfaces such as Banner - transparent fill, inverse content, and the color-background-neutral-overlay-subtle-* overlays on hover/press/expanded. Flattened by disabled like the appearance."
     }
   },
   "variants": {
@@ -36,7 +43,8 @@
     "Uses aria-label as default tooltip content when tooltip is omitted.",
     "Does not infer tooltip text from aria-labelledby.",
     "tooltip={false} suppresses internal Tooltip rendering.",
-    "Forwarded ref resolves to the native button."
+    "Forwarded ref resolves to the native button.",
+    "Supports isInverse (boolean) as an orthogonal on-dark treatment for placement on dark/bold surfaces such as Banner; flattened by disabled like the appearance."
   ],
   "relatedComponents": ["Button", "Tooltip", "ToggleIconButton", "Spinner"]
 }

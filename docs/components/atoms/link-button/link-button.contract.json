@@ -10,7 +10,8 @@
     "componentSetNodeId": "3984:82757",
     "componentName": "link-button",
     "variantCount": 200,
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-09-01",
+    "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `tone` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
   },
   "useCases": [
     "Primary navigation",
@@ -64,7 +65,8 @@
   "behaviorRules": [
     "Uses native anchor behavior.",
     "Shares Button visual styling.",
-    "Routes to another page or location."
+    "Routes to another page or location.",
+    "Supports isInverse (boolean) as an orthogonal on-dark treatment for placement on dark/bold surfaces such as Banner - transparent fill, inverse content, and the color-background-neutral-overlay-subtle-* overlays on hover/press; flattened by isDisabled like tone."
   ],
   "compositionRules": [
     "May compose with Icon."
@@ -93,6 +95,7 @@
   "acceptanceCriteria": [
     "Maintains anchor semantics",
     "Matches Button visuals",
+    "Supports the inverse treatment (isInverse) for placement on dark or bold-colored surfaces",
     "Visible keyboard focus"
   ]
 }

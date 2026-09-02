@@ -22,7 +22,7 @@
         "originalName": "color/content/disabled"
       },
       "color-content-loading": {
-        "value": "var(--color-neutral-alpha-100-08)",
+        "value": "var(--color-neutral-alpha-100-48)",
         "type": "color",
         "originalName": "color/content/loading"
       },
@@ -1020,6 +1020,16 @@
         "value": "var(--color-neutral-alpha-1200-64)",
         "type": "color",
         "originalName": "color/background/neutral/overlay/blanket"
+      },
+      "color-background-neutral-overlay-subtle-hover": {
+        "value": "var(--color-neutral-alpha-1200-08)",
+        "type": "color",
+        "originalName": "color/background/neutral/overlay/subtle/hover"
+      },
+      "color-background-neutral-overlay-subtle-press": {
+        "value": "var(--color-neutral-alpha-1200-16)",
+        "type": "color",
+        "originalName": "color/background/neutral/overlay/subtle/press"
       },
       "color-elevation-surface-default": {
         "value": "var(--color-neutral-solid-1200)",

@@ -885,6 +885,12 @@
           "error"
         ]
       },
+      "isInverse": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Render the on-dark treatment for placement on dark or bold-colored surfaces (e.g. Banner). Overrides the resting appearance treatment with a transparent fill, the inverse content token, and white subtle overlays on hover/press. Flattened by disabled like tone."
+      },
       "disabled": {
         "type": "boolean",
         "required": false,
@@ -1001,6 +1007,9 @@
           "primaryWarningBackground": "--color-background-warning-bold-default",
           "primaryWarningContent": "--color-content-warning-inverse",
           "primaryErrorBackground": "--color-background-error-bold-default",
+          "inverseContent": "--color-content-inverse",
+          "inverseHoverBackground": "--color-background-neutral-overlay-subtle-hover",
+          "inversePressBackground": "--color-background-neutral-overlay-subtle-press",
           "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
           "disabledBackground": "--color-background-disabled",
           "disabledContent": "--color-content-disabled"
@@ -1036,7 +1045,7 @@
       "componentSetNodeId": "1408:7990",
       "componentName": "button",
       "variantCount": 176,
-      "verifiedAt": "2026-08-06"
+      "verifiedAt": "2026-09-01"
     }
   },
   {
@@ -1117,6 +1126,12 @@
           "ReactNode",
           false
         ]
+      },
+      "isInverse": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Orthogonal on-dark treatment for placement on dark/bold surfaces such as Banner - transparent fill, inverse content, and the color-background-neutral-overlay-subtle-* overlays on hover/press/expanded. Flattened by disabled like the appearance."
       }
     },
     "sizes": [
@@ -1155,8 +1170,9 @@
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
       "componentSetNodeId": "3984:88777",
       "componentName": "icon-button",
-      "variantCount": 184,
-      "verifiedAt": "2026-08-06"
+      "variantCount": 240,
+      "verifiedAt": "2026-09-01",
+      "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `appearance` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
     }
   },
   {
@@ -1422,7 +1438,8 @@
       "componentSetNodeId": "3984:82757",
       "componentName": "link-button",
       "variantCount": 200,
-      "verifiedAt": "2026-08-06"
+      "verifiedAt": "2026-09-01",
+      "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `tone` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
     }
   },
   {
@@ -5163,6 +5180,138 @@
     }
   },
   {
+    "id": "banner",
+    "name": "Banner",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/banner/banner.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "full-width bar with the appearance's bold background; height hugs content"
+      },
+      {
+        "name": "icon",
+        "description": "leading status icon (warning/error) or a plain dot, inheriting the banner content color; decorative"
+      },
+      {
+        "name": "message",
+        "description": "the children; truncates to a single line with an ellipsis"
+      },
+      {
+        "name": "actions",
+        "description": "optional trailing actions, typically inverse-tone Buttons or a ButtonGroup"
+      }
+    ],
+    "props": {
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "warning",
+          "error"
+        ]
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "The message. Truncates to a single line."
+      },
+      "showIcon": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": null
+      },
+      "actions": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional trailing actions - pass isInverse Buttons."
+      },
+      "role": {
+        "type": "string",
+        "required": false,
+        "default": "status",
+        "description": "Overridable ARIA role - e.g. alert for urgent errors."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children",
+      "actions"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "warning",
+        "error"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "paddingInline": "--spacing-2xl",
+          "paddingBlock": "--spacing-sm",
+          "rootGap": "--spacing-sm",
+          "messageGap": "--spacing-xs",
+          "actionsGap": "--spacing-xs"
+        },
+        "size": {
+          "iconSlot": "--size-300",
+          "dot": "--size-marker-sm"
+        },
+        "typography": {
+          "message": "body-md"
+        },
+        "color": {
+          "defaultBackground": "--color-background-neutral-bold-default",
+          "defaultContent": "--color-content-inverse",
+          "warningBackground": "--color-background-warning-bold-default",
+          "warningContent": "--color-content-warning-bold",
+          "errorBackground": "--color-background-error-bold-default",
+          "errorContent": "--color-content-inverse"
+        }
+      }
+    },
+    "accessibility": {
+      "nativeElement": "div",
+      "defaultRole": "status",
+      "roleOverridable": true,
+      "iconDecorative": true,
+      "colorNotSoleSignal": true
+    },
+    "relatedComponents": [
+      "InlineMessage",
+      "Toast",
+      "SectionMessage",
+      "Button",
+      "ButtonGroup"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1550:131564",
+      "componentName": "banner",
+      "variantCount": 3,
+      "verifiedAt": "2026-09-01",
+      "notes": "The Figma `appearance` variant `appearance4` maps to the code appearance `default`. The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
+    }
+  },
+  {
     "id": "dropdown-menu",
     "name": "DropdownMenu",
     "tier": "organism",
@@ -5627,6 +5776,171 @@
         "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
         "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
       ]
+    }
+  },
+  {
+    "id": "section-message",
+    "name": "SectionMessage",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/section-message/section-message.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "bordered, rounded box with the appearance's tinted background and colored border"
+      },
+      {
+        "name": "icon",
+        "description": "the status icon for the appearance, in its status color; decorative"
+      },
+      {
+        "name": "title",
+        "description": "optional bold lead line (heading-sm)"
+      },
+      {
+        "name": "description",
+        "description": "the children; wraps to multiple lines (body-md)"
+      },
+      {
+        "name": "actions",
+        "description": "optional Links, separated by an inserted middot"
+      },
+      {
+        "name": "dismiss",
+        "description": "optional dismiss IconButton (xs, subtle) in the top-right"
+      }
+    ],
+    "props": {
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "information",
+        "description": null,
+        "enum": [
+          "information",
+          "success",
+          "warning",
+          "error"
+        ]
+      },
+      "title": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional bold title above the description."
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "The description. Wraps to multiple lines."
+      },
+      "actions": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Optional Links; middot separators are inserted between them."
+      },
+      "isDismissible": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "onDismiss": {
+        "type": "() => void",
+        "required": false,
+        "default": null,
+        "description": "Called when dismissed. The message also hides itself."
+      },
+      "role": {
+        "type": "string",
+        "required": false,
+        "default": "status",
+        "description": "Overridable ARIA role - e.g. alert for urgent errors."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "title",
+      "children",
+      "actions"
+    ],
+    "variants": {
+      "appearance": [
+        "information",
+        "success",
+        "warning",
+        "error"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "padding": "--spacing-lg",
+          "rootGap": "--spacing-lg",
+          "contentGap": "--spacing-sm",
+          "actionsGap": "--spacing-xs"
+        },
+        "border": {
+          "width": "--border-width-sm",
+          "radius": "--border-radius-xl"
+        },
+        "typography": {
+          "title": "heading-sm",
+          "description": "body-md"
+        },
+        "color": {
+          "informationBackground": "--color-background-information-subtle-default",
+          "informationBorder": "--color-border-information",
+          "informationIcon": "--color-content-information",
+          "successBackground": "--color-background-success-subtle-default",
+          "successBorder": "--color-border-success",
+          "successIcon": "--color-content-success",
+          "warningBackground": "--color-background-warning-subtle-default",
+          "warningBorder": "--color-border-warning",
+          "warningIcon": "--color-content-warning",
+          "errorBackground": "--color-background-error-subtle-default",
+          "errorBorder": "--color-border-error",
+          "errorIcon": "--color-content-error",
+          "title": "--color-content-default",
+          "description": "--color-content-default",
+          "separator": "--color-content-subtle"
+        }
+      }
+    },
+    "accessibility": {
+      "nativeElement": "div",
+      "defaultRole": "status",
+      "roleOverridable": true,
+      "iconDecorative": true,
+      "colorNotSoleSignal": true,
+      "dismissLabel": "Dismiss"
+    },
+    "relatedComponents": [
+      "Banner",
+      "Toast",
+      "InlineMessage",
+      "Link",
+      "IconButton"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2286:17082",
+      "componentName": "section-message",
+      "variantCount": 4,
+      "verifiedAt": "2026-09-01",
+      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
     }
   }
 ]

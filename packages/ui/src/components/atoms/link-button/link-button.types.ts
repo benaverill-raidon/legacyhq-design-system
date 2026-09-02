@@ -11,6 +11,7 @@ export interface LinkButtonProps
   appearance?: LinkButtonAppearance;
   tone?: LinkButtonTone;
   size?: LinkButtonSize;
+  isInverse?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
   iconBefore?: React.ReactNode;

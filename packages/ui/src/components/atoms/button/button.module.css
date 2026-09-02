@@ -207,6 +207,36 @@
   cursor: not-allowed;
 }
 
+/*
+ * Inverse: for buttons placed on dark or bold-colored surfaces (e.g. Banner). It overrides the
+ * resting appearance treatment with an on-dark palette - transparent fill, the inverse content
+ * token for the label, and the white *subtle* overlays on hover / press (rather than the dark neutral
+ * overlays the on-light appearances use). Declared after the appearance rules so it wins the cascade
+ * at equal specificity; the higher-specificity `:disabled` rules above still flatten the disabled
+ * state, matching how tone is flattened when disabled. Renders one look across appearances today -
+ * an outlined (default) inverse treatment is planned.
+ */
+.inverse:not(:disabled) {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-content-inverse);
+}
+
+.inverse:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-hover);
+}
+
+.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-press);
+}
+
 .fullWidth {
   inline-size: 100%;
 }

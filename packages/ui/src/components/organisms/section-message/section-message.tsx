@@ -47,7 +47,6 @@ function toActionArray(actions: React.ReactNode): React.ReactNode[] {
 /* Interleave a decorative middot between each action so callers pass bare Link children. */
 function renderActions(actionItems: React.ReactNode[]) {
   return actionItems.map((child, index) => (
-    // eslint-disable-next-line react/no-array-index-key
     <React.Fragment key={index}>
       {index > 0 ? (
         <span className={styles.separator} aria-hidden="true">

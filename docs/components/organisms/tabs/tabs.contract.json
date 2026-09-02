@@ -1,0 +1,140 @@
+{
+  "name": "Tabs",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Switch between related views in the same context.",
+  "intent": "An accessible tab bar (line or contained) that manages selection and wires optional panels.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4762:403764",
+    "componentName": "tabs",
+    "verifiedAt": "2026-09-02",
+    "shape": "multi-variant",
+    "parts": {
+      "tab": "code-parts / <tab> (node 2140:67951): the individual tab, with type (line/contained) x state (default/hover/focus) x isSelected"
+    },
+    "notes": "Figma `tabs` is the tab BAR only (no panels): type (line/contained) + showBorder. Panels are provided in code via optional TabPanel children. State model is controlled + uncontrolled."
+  },
+  "useCases": [
+    "switch between peer views of a subject (Overview / Activity / Documents)",
+    "organize a section into a few related panels"
+  ],
+  "antiPatterns": [
+    "navigation between pages or routes",
+    "a sequence of steps (use a stepper)",
+    "many (10+) sections"
+  ],
+  "anatomy": [
+    { "name": "tablist", "element": "div[role=tablist]", "required": true, "description": "the row of tab buttons" },
+    { "name": "tab", "element": "button[role=tab]", "required": true, "description": "aria-selected + aria-controls; roving tabindex" },
+    { "name": "indicator", "required": true, "description": "line: a 3px underline on the selected tab over the bottom border; contained: a selected-surface pill" },
+    { "name": "panel", "element": "div[role=tabpanel]", "required": false, "description": "an optional TabPanel, labelled by its tab, shown only when selected" }
+  ],
+  "props": {
+    "tabs": { "type": "TabItem[]", "required": true, "description": "{ value, label, disabled? }[]" },
+    "type": { "type": "enum", "values": ["line", "contained"], "default": "line", "required": false },
+    "value": { "type": "string", "default": null, "required": false, "description": "Controlled selected value." },
+    "defaultValue": { "type": "string", "default": "first enabled tab", "required": false },
+    "onValueChange": { "type": "(value: string) => void", "default": null, "required": false },
+    "showBorder": { "type": "boolean", "default": true, "required": false, "description": "Shows the border: the bottom line for `line`, the container border for `contained`." },
+    "aria-label": { "type": "string", "default": null, "required": false },
+    "aria-labelledby": { "type": "string", "default": null, "required": false },
+    "children": { "type": "React.ReactNode", "default": null, "required": false, "description": "TabPanels." }
+  },
+  "variants": {
+    "type": ["line", "contained"]
+  },
+  "subComponents": {
+    "TabPanel": {
+      "props": {
+        "value": { "type": "string", "required": true },
+        "children": { "type": "React.ReactNode", "required": true }
+      }
+    }
+  },
+  "tokens": {
+    "semantic": {
+      "spacing": { "tabPaddingBlock": "--size-075", "tabPaddingInline": "--spacing-sm", "rootGap": "--spacing-lg", "containedContainerPadding": "--spacing-xs" },
+      "border": { "listBorder": "--border-width-sm", "indicator": "--border-width-lg", "containedTabRadius": "--border-radius-lg", "tabRadius": "--border-radius-sm", "containedContainerRadius": "--border-radius-xl" },
+      "typography": { "label": "heading-xs" },
+      "color": {
+        "labelDefault": "--color-content-subtle",
+        "labelHover": "--color-content-default",
+        "labelSelected": "--color-content-selected",
+        "labelDisabled": "--color-content-disabled",
+        "listBorder": "--color-border-default",
+        "lineIndicator": "--color-content-selected",
+        "containedSelectedBackground": "--color-background-selected-default-default",
+        "containedSelectedBorder": "--color-border-selected",
+        "containedContainerBackground": "--color-elevation-surface-raised-default",
+        "containedContainerBorder": "--color-border-default"
+      }
+    }
+  },
+  "accessibility": {
+    "tablistRole": "tablist",
+    "tabRole": "tab",
+    "panelRole": "tabpanel",
+    "labelRequired": "aria-label or aria-labelledby on the tab list",
+    "rovingTabindex": true,
+    "keyboard": "Left/Right (wrapping), Home, End; skips disabled tabs; automatic activation",
+    "focus": "shared Focus Ring primitive",
+    "disabledMechanism": "native disabled attribute"
+  },
+  "behaviorRules": [
+    "Render a role=tablist of role=tab buttons from the tabs array.",
+    "Select the first enabled tab by default (or defaultValue); support controlled value + onValueChange.",
+    "Wire each TabPanel to its tab via aria-controls / aria-labelledby, and show only the selected panel.",
+    "Use roving tabindex - only the selected tab is tabbable.",
+    "Move selection with the arrow keys (wrapping) plus Home/End, skipping disabled tabs (automatic activation).",
+    "Draw the line underline indicator (3px) over the tab list border, or fill the contained selected pill.",
+    "For the contained type, wrap the tab list in a raised, radius-xl, padded segmented container.",
+    "Do not select disabled tabs; use the native disabled attribute.",
+    "Show the border by default for both types (the bottom line for line, the container border for contained); allow showBorder to turn it off."
+  ],
+  "compositionRules": [
+    "Provide one TabPanel per tab value as children, or render panels yourself off value.",
+    "Give the tab list an accessible name."
+  ],
+  "contentRules": [
+    "Keep labels short and parallel.",
+    "Keep the tab count small; use another pattern for many sections."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef on Tabs and TabPanel.",
+    "Use a context so TabPanel reads the active value and shared ids.",
+    "Use CSS Modules and the shared Focus Ring.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": ["Menu", "ProgressTracker", "FocusRing"],
+  "do": [
+    "Use Tabs to switch between peer views.",
+    "Give the tab list an aria-label.",
+    "Use line by default; contained for denser surfaces."
+  ],
+  "dont": [
+    "Do not use Tabs for page navigation or step sequences.",
+    "Do not overload with many tabs.",
+    "Do not hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders a labelled tablist with a tab per item.",
+    "Selects the first enabled tab by default; honors defaultValue.",
+    "Selects a tab on click and shows its panel.",
+    "Wires each panel to its tab with ARIA.",
+    "Uses roving tabindex.",
+    "Moves selection with arrow keys, Home, End, skipping disabled tabs.",
+    "Does not select a disabled tab.",
+    "Supports controlled selection (value + onValueChange).",
+    "Applies the type on the root.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

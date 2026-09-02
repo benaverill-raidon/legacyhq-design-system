@@ -1,0 +1,47 @@
+{
+  "component": "Tabs",
+  "examples": [
+    {
+      "name": "Line tabs (uncontrolled)",
+      "description": "The default underlined tab bar with panels.",
+      "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'><TabPanel value='a'>Overview</TabPanel><TabPanel value='b'>Activity</TabPanel></Tabs>",
+      "props": { "type": "line", "defaultValue": "a", "aria-label": "Sections" }
+    },
+    {
+      "name": "Contained tabs",
+      "description": "Pill tabs for a denser or card-like surface.",
+      "jsx": "<Tabs type='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
+      "props": { "type": "contained", "defaultValue": "a" }
+    },
+    {
+      "name": "Controlled",
+      "description": "The parent owns the selected value.",
+      "jsx": "<Tabs tabs={tabs} value={value} onValueChange={setValue} aria-label='Sections'>...</Tabs>",
+      "props": { "value": "b" }
+    },
+    {
+      "name": "With a disabled tab",
+      "description": "A disabled tab is skipped by pointer and keyboard.",
+      "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Billing',disabled:true}]} aria-label='Sections'>...</Tabs>",
+      "props": {}
+    },
+    {
+      "name": "No bottom border",
+      "description": "Hide the line's bottom border.",
+      "jsx": "<Tabs type='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
+      "props": { "showBorder": false }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Page navigation",
+      "reason": "Use links/navigation for moving between pages, not Tabs.",
+      "jsx": "<Tabs tabs={[{value:'/home',label:'Home'},{value:'/about',label:'About'}]} />"
+    },
+    {
+      "name": "Unlabelled tablist",
+      "reason": "Give the tab list an accessible name via aria-label or aria-labelledby.",
+      "jsx": "<Tabs tabs={tabs} />"
+    }
+  ]
+}

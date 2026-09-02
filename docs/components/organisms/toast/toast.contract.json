@@ -1,0 +1,136 @@
+{
+  "name": "Toast",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "A raised, transient notification card.",
+  "intent": "Show a brief, non-blocking status - success, error, warning, info, default, or a loading spinner - with an optional description and actions.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "1565:12728",
+    "componentName": "toast",
+    "variantCount": 11,
+    "verifiedAt": "2026-09-02",
+    "notes": "Figma has appearance (default/success/error/warning/info/loading) x open (false/true). `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma appearance=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+  },
+  "useCases": [
+    "confirm a completed action",
+    "surface a background result (upload, sync)",
+    "show a pending operation with a spinner and resolve it later",
+    "warn or report an error non-blockingly"
+  ],
+  "antiPatterns": [
+    "persistent in-context status",
+    "full-width page-level announcement",
+    "blocking confirmation or decision",
+    "the only copy of a critical message"
+  ],
+  "anatomy": [
+    { "name": "root", "element": "div", "required": true, "description": "raised-surface card with a 1px border, radius-xl, and the overlay elevation shadow" },
+    { "name": "leadingIcon", "required": true, "description": "an IconTile colored per appearance, or a Spinner for loading; decorative" },
+    { "name": "title", "required": true, "description": "the lead line (heading-xs)" },
+    { "name": "dismiss", "required": false, "description": "a dismiss IconButton (xs, subtle) in the title row" },
+    { "name": "description", "required": false, "description": "supporting text (body-md), shown when expanded" },
+    { "name": "actions", "required": false, "description": "Buttons, shown when expanded" }
+  ],
+  "props": {
+    "appearance": {
+      "type": "enum",
+      "values": ["default", "success", "info", "warning", "error", "loading"],
+      "default": "default",
+      "required": false
+    },
+    "title": { "type": "React.ReactNode", "required": true },
+    "description": { "type": "React.ReactNode", "default": null, "required": false, "description": "Shown when expanded." },
+    "actions": { "type": "React.ReactNode", "default": null, "required": false, "description": "Buttons, shown when expanded." },
+    "expanded": { "type": "boolean", "default": true, "required": false, "description": "Whether the description and actions are shown." },
+    "isDismissible": { "type": "boolean", "default": true, "required": false },
+    "onDismiss": { "type": "() => void", "default": null, "required": false },
+    "role": { "type": "string", "default": "status", "required": false },
+    "className": { "type": "string", "default": null, "required": false }
+  },
+  "variants": {
+    "appearance": ["default", "success", "info", "warning", "error", "loading"]
+  },
+  "slots": [
+    { "name": "title", "required": true, "allowedContent": "React.ReactNode" },
+    { "name": "description", "required": false, "allowedContent": "React.ReactNode" },
+    { "name": "actions", "required": false, "allowedContent": "React.ReactNode (Buttons)" }
+  ],
+  "tokens": {
+    "semantic": {
+      "spacing": { "padding": "--spacing-lg", "rootGap": "--spacing-lg", "contentGap": "--spacing-sm", "actionsGap": "--spacing-sm" },
+      "size": { "inlineSize": "368px", "spinnerSlot": "--size-300", "dot": "--size-marker-sm" },
+      "border": { "width": "--border-width-sm", "radius": "--border-radius-xl" },
+      "typography": { "title": "heading-xs", "description": "body-md" },
+      "color": {
+        "surface": "--color-elevation-surface-raised-default",
+        "border": "--color-border-default",
+        "title": "--color-content-default",
+        "description": "--color-content-subtle",
+        "shadow": "--color-elevation-shadow-overlay-spread / --color-elevation-shadow-overlay-perimeter"
+      },
+      "iconTileTones": { "default": "gray", "success": "green", "info": "blue", "warning": "orange", "error": "red" }
+    }
+  },
+  "accessibility": {
+    "nativeElement": "div",
+    "defaultRole": "status",
+    "roleOverridable": true,
+    "iconDecorative": true,
+    "dismissLabel": "Dismiss"
+  },
+  "behaviorRules": [
+    "Render the leading IconTile colored per appearance, or a Spinner for the loading appearance.",
+    "Always render the title; render the description and actions only when expanded and provided.",
+    "Show the dismiss button unless isDismissible is false; call onDismiss when it is clicked.",
+    "Render on a raised surface with the overlay elevation shadow.",
+    "Default role to status (a polite live region)."
+  ],
+  "compositionRules": [
+    "Prefer showing toasts through ToastGroup and the toast() API rather than rendering Toast directly.",
+    "Pass Buttons (typically size xs, subtle) to actions.",
+    "Use the loading appearance for a pending operation and update the same id when it resolves."
+  ],
+  "contentRules": [
+    "Keep the title short; put detail in the description.",
+    "Do not put the only copy of a critical message in a toast.",
+    "Do not rely on color alone to convey the appearance."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef.",
+    "Use React.memo.",
+    "Use CSS Modules.",
+    "Compose IconTile, Spinner, IconButton, and the StatusIcon set.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": ["ToastGroup", "SectionMessage", "Banner", "IconTile", "Spinner", "IconButton", "Button"],
+  "do": [
+    "Use Toast for brief, transient, non-blocking status.",
+    "Use the appropriate appearance for the meaning.",
+    "Keep it dismissible unless it resolves on its own."
+  ],
+  "dont": [
+    "Do not use Toast for persistent or blocking messages.",
+    "Do not hide the only path to an action inside a toast.",
+    "Do not hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders the title.",
+    "Defaults to role status.",
+    "Sets a data-appearance attribute.",
+    "Renders an IconTile for non-loading appearances and a Spinner for loading.",
+    "Shows the description and actions only when expanded.",
+    "Shows a dismiss button by default and calls onDismiss; omits it when isDismissible is false.",
+    "Renders on a raised surface with a radius-xl corner, a 1px border, and the overlay shadow.",
+    "Forwards the ref to the root element.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

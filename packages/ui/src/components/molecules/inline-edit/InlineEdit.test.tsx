@@ -353,6 +353,6 @@ describe('InlineEdit', () => {
     expect(rootRule?.[1]).toContain('flex-direction: column;');
     expect(rootRule?.[1]).toContain('gap: var(--spacing-sm);');
     expect(actionsRule?.[1]).toContain('align-self: flex-end;');
-    expect(actionsRule?.[1]).toContain('gap: var(--spacing-xs);');
+    expect(actionsRule?.[1]).toContain('gap: var(--spacing-sm);');
   });
 });

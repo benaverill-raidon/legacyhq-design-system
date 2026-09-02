@@ -2267,6 +2267,74 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "empty-state",
+    "name": "EmptyState",
+    "tier": "organism",
+    "path": "docs/components/organisms/empty-state/empty-state.examples.json",
+    "examples": [
+      {
+        "name": "Caught up (inherited)",
+        "description": "A transparent empty state that blends into the surface beneath it.",
+        "jsx": "<EmptyState illustration={<Illustration />} heading=\"You're all caught up!\" actions={<Link href=\"/activity\">View all activity</Link>}>No more recent activity in the past 24 hours.</EmptyState>",
+        "props": {
+          "illustration": "spot illustration",
+          "heading": "You're all caught up!",
+          "actions": "Link",
+          "children": "No more recent activity in the past 24 hours."
+        }
+      },
+      {
+        "name": "No results (informative)",
+        "description": "A self-contained empty state on a sunken surface panel, with two actions.",
+        "jsx": "<EmptyState type=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
+        "props": {
+          "type": "informative",
+          "illustration": "spot illustration",
+          "heading": "No results found",
+          "actions": "ButtonGroup",
+          "children": "Try adjusting your search or filters."
+        }
+      },
+      {
+        "name": "Description only",
+        "description": "The minimal form - just the required description.",
+        "jsx": "<EmptyState>Nothing here yet.</EmptyState>",
+        "props": {
+          "children": "Nothing here yet."
+        }
+      },
+      {
+        "name": "First run with a primary action",
+        "description": "An empty state that invites the user to create their first item.",
+        "jsx": "<EmptyState illustration={<Illustration />} heading=\"Your inbox is empty\" actions={<Button appearance=\"primary\">Compose</Button>}>New messages will appear here.</EmptyState>",
+        "props": {
+          "illustration": "spot illustration",
+          "heading": "Your inbox is empty",
+          "actions": "Button (primary)",
+          "children": "New messages will appear here."
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Error state",
+        "jsx": "<EmptyState heading=\"Something went wrong\">We couldn't load your matters.</EmptyState>",
+        "reason": "Use SectionMessage or Banner with the error appearance for a failure, not Empty State."
+      },
+      {
+        "name": "Loading placeholder",
+        "jsx": "<EmptyState>Loading...</EmptyState>",
+        "reason": "Use Skeleton or Spinner while content loads, not an Empty State."
+      },
+      {
+        "name": "Overloaded actions",
+        "jsx": "<EmptyState actions={<><Button>A</Button><Button>B</Button><Button>C</Button><Button>D</Button></>}>Too many ways out.</EmptyState>",
+        "reason": "Keep Empty State to one primary and at most one secondary action."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "menu",
     "name": "Menu",
     "tier": "organism",
@@ -2410,6 +2478,181 @@
         "name": "Dismissible hard constraint",
         "jsx": "<SectionMessage appearance=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>",
         "reason": "Do not let the user dismiss a persistent restriction they need to keep seeing."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "tabs",
+    "name": "Tabs",
+    "tier": "organism",
+    "path": "docs/components/organisms/tabs/tabs.examples.json",
+    "examples": [
+      {
+        "name": "Line tabs (uncontrolled)",
+        "description": "The default underlined tab bar with panels.",
+        "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'><TabPanel value='a'>Overview</TabPanel><TabPanel value='b'>Activity</TabPanel></Tabs>",
+        "props": {
+          "type": "line",
+          "defaultValue": "a",
+          "aria-label": "Sections"
+        }
+      },
+      {
+        "name": "Contained tabs",
+        "description": "Pill tabs for a denser or card-like surface.",
+        "jsx": "<Tabs type='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
+        "props": {
+          "type": "contained",
+          "defaultValue": "a"
+        }
+      },
+      {
+        "name": "Controlled",
+        "description": "The parent owns the selected value.",
+        "jsx": "<Tabs tabs={tabs} value={value} onValueChange={setValue} aria-label='Sections'>...</Tabs>",
+        "props": {
+          "value": "b"
+        }
+      },
+      {
+        "name": "With a disabled tab",
+        "description": "A disabled tab is skipped by pointer and keyboard.",
+        "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Billing',disabled:true}]} aria-label='Sections'>...</Tabs>",
+        "props": {}
+      },
+      {
+        "name": "No bottom border",
+        "description": "Hide the line's bottom border.",
+        "jsx": "<Tabs type='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
+        "props": {
+          "showBorder": false
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Page navigation",
+        "jsx": "<Tabs tabs={[{value:'/home',label:'Home'},{value:'/about',label:'About'}]} />",
+        "reason": "Use links/navigation for moving between pages, not Tabs."
+      },
+      {
+        "name": "Unlabelled tablist",
+        "jsx": "<Tabs tabs={tabs} />",
+        "reason": "Give the tab list an accessible name via aria-label or aria-labelledby."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "toast",
+    "name": "Toast",
+    "tier": "organism",
+    "path": "docs/components/organisms/toast/toast.examples.json",
+    "examples": [
+      {
+        "name": "Success",
+        "description": "A success toast with a title and description.",
+        "jsx": "<Toast appearance=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
+        "props": {
+          "appearance": "success",
+          "title": "Changes saved",
+          "description": "Your matter is up to date."
+        }
+      },
+      {
+        "name": "Error with an action",
+        "description": "An error toast with a retry action.",
+        "jsx": "<Toast appearance=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" appearance=\"subtle\">Retry</Button>} />",
+        "props": {
+          "appearance": "error",
+          "title": "Upload failed",
+          "actions": "Button (xs, subtle)",
+          "description": "The file exceeded the 25 MB limit."
+        }
+      },
+      {
+        "name": "Loading",
+        "description": "A non-dismissible loading toast that resolves later.",
+        "jsx": "<Toast appearance=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
+        "props": {
+          "appearance": "loading",
+          "title": "Uploading your file...",
+          "isDismissible": false
+        }
+      },
+      {
+        "name": "Collapsed (title only)",
+        "description": "A compact toast - the state a stacked toast shows before the group is expanded.",
+        "jsx": "<Toast appearance=\"info\" title=\"Syncing your workspace\" expanded={false} />",
+        "props": {
+          "appearance": "info",
+          "title": "Syncing your workspace",
+          "expanded": false
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Persistent status",
+        "jsx": "<Toast appearance=\"warning\" title=\"You do not have permission to edit this space\" />",
+        "reason": "Use SectionMessage for a status that should stay in context."
+      },
+      {
+        "name": "Critical-only message",
+        "jsx": "<Toast appearance=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />",
+        "reason": "Do not put the only copy of a critical message in a transient toast."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "toast-group",
+    "name": "ToastGroup",
+    "tier": "organism",
+    "path": "docs/components/organisms/toast-group/toast-group.examples.json",
+    "examples": [
+      {
+        "name": "Mount the group",
+        "description": "Mount one ToastGroup near the app root; call toast() from anywhere.",
+        "jsx": "<><YourApp /><ToastGroup /></>",
+        "props": {}
+      },
+      {
+        "name": "Success toast",
+        "description": "Trigger a success toast imperatively.",
+        "jsx": "toast.success('Changes saved', { description: 'Your matter is up to date.' })",
+        "props": {}
+      },
+      {
+        "name": "Loading updated to success",
+        "description": "Reuse the id to update a loading toast in place when it resolves.",
+        "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
+        "props": {}
+      },
+      {
+        "name": "Toast with an action",
+        "description": "Actions appear when the stack is expanded.",
+        "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' appearance='subtle'>Undo</Button> })",
+        "props": {}
+      },
+      {
+        "name": "Dismiss all",
+        "description": "Clear every toast.",
+        "jsx": "toast.dismiss()",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Multiple groups",
+        "jsx": "<><ToastGroup /><ToastGroup /></>",
+        "reason": "Mount exactly one ToastGroup; multiple would each render the shared queue."
+      },
+      {
+        "name": "Critical message in a toast",
+        "jsx": "toast.error('Your session expired - unsaved work will be lost')",
+        "reason": "Toasts are transient - do not use them for critical or blocking messages."
       }
     ],
     "exemplarCompleteness": "full"

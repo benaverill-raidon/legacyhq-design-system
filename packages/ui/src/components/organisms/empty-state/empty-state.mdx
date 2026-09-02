@@ -1,0 +1,121 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as EmptyStateStories from './EmptyState.stories';
+
+<Meta of={EmptyStateStories} name="Docs" />
+
+# Empty State
+
+Empty State fills a space that has no content yet - an empty list, a cleared inbox, a search with no
+results - with a centered illustration, a heading, a short description, and optional actions that help
+the user move forward.
+
+<Canvas of={EmptyStateStories.Playground} />
+
+## When to use
+
+- A list, table, or feed that is legitimately empty (no activity, no matters, no files).
+- A search or filter that returned no results.
+- A first-run state before the user has created anything.
+
+## When not to use
+
+- **For an error or a failed load.** Use `SectionMessage` (or `Banner`) with the error appearance.
+- **For a transient, auto-dismissing message.** Use `Toast`.
+- **For a loading placeholder.** Use `Skeleton` or a `Spinner`.
+
+## Anatomy
+
+<Canvas of={EmptyStateStories.Content} />
+
+1. **Root** - a centered vertical stack. `informative` fills a sunken surface panel; `inherited`
+   (default) is transparent.
+2. **Illustration** - an optional centered spot illustration or image (~80&times;80 in the reference
+   design).
+3. **Heading** - an optional bold line (`heading-md`), centered.
+4. **Description** - the `children`, centered (`body-md`). The only required content.
+5. **Actions** - optional Buttons and/or a Link, centered below the description.
+
+## Usage guidance
+
+### Type
+
+`type` sets the background treatment. `inherited` (the default) is transparent, so the Empty State
+blends into whatever surface sits beneath it - use it inside a card, panel, or table that already has
+its own background. `informative` fills its own sunken surface panel, for a more self-contained
+empty state.
+
+<Canvas of={EmptyStateStories.Types} />
+
+### Content is mostly optional
+
+Only the description (`children`) is required. Omit the `illustration`, `heading`, or `actions` for a
+lighter empty state - a bare description alone is valid. Keep the heading short and the description to
+a sentence or two; everything is centered, so long lines wrap symmetrically.
+
+### Actions
+
+Pass Buttons and/or a Link to `actions` - typically one primary action (create, upload, new search)
+and an optional secondary. Use a `ButtonGroup` to space multiple buttons. Actions are the user's way
+out of the empty state, so make the primary one the obvious next step.
+
+### Accessibility
+
+Empty State is plain content, not a live region, so it has no default `role`. When it appears
+dynamically - for example after a search returns nothing - the container that swaps it in should
+announce the change (e.g. `role="status"` or `aria-live="polite"` on that region). The heading is
+styled text; pass a real heading element (an `h2`/`h3`) as the `heading` when the empty state needs a
+document-outline heading.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The description. Centered; wraps freely.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td><code>'inherited' | 'informative'</code></td>
+      <td><code>'inherited'</code></td>
+      <td>Background: transparent (inherited) or a sunken surface panel (informative).</td>
+    </tr>
+    <tr>
+      <td><code>illustration</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional centered spot illustration or image.</td>
+    </tr>
+    <tr>
+      <td><code>heading</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional bold heading above the description.</td>
+    </tr>
+    <tr>
+      <td><code>actions</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Optional Buttons and/or a Link, centered below the description.</td>
+    </tr>
+  </tbody>
+</table>
+
+Any other native `div` prop is forwarded to the root element.
+
+## Related components
+
+- **SectionMessage** - a contained status message (including errors).
+- **Banner** - a full-width page-level announcement.
+- **Skeleton** / **Spinner** - loading placeholders.
+- **Button** / **ButtonGroup** / **Link** - the actions Empty State composes.

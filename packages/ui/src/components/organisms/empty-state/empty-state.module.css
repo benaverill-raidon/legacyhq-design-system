@@ -1,0 +1,63 @@
+/*
+ * Empty State is a centered, vertical stack: an optional illustration above a message block
+ * (heading, description, actions). Spacing, padding, and typography map to the tokens the Figma
+ * component is bound to: spacing-2xl between the illustration and the message, spacing-lg within the
+ * message, spacing-xl padding, heading-md heading, and body-md description. The `informative` type
+ * fills a sunken surface panel; `inherited` (default) stays transparent to blend into the surface
+ * beneath it.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  box-sizing: border-box;
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.type_informative {
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.illustration {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  min-inline-size: 0;
+}
+
+.heading {
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-md-font-family);
+  font-size: var(--typography-heading-md-font-size);
+  font-weight: var(--typography-heading-md-font-weight);
+  line-height: var(--typography-heading-md-line-height);
+  letter-spacing: var(--typography-heading-md-letter-spacing);
+  text-transform: var(--typography-heading-md-text-transform);
+}
+
+.description {
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}

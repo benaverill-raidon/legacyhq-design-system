@@ -75,7 +75,7 @@
   "tokens": {
     "layout": {
       "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
-      "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons themselves)"
+      "actionsGap": "--spacing-sm (8px, between the cancel and confirm buttons themselves, matching Button Group)"
     }
   },
   "accessibility": {
@@ -126,7 +126,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded spacing - gaps come from --spacing-sm (root) and --spacing-xs (between action buttons).",
+    "No hardcoded spacing - gaps come from --spacing-sm (root) and --spacing-sm (between action buttons).",
     "flex-direction: column on the root, action row align-self: flex-end - deviates from Figma's own single-row layout so the field never shrinks to make room for the action buttons.",
     "Use React.cloneElement, not a render-prop or two separate elements, so focus persists across the read/edit transition."
   ],

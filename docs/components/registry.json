@@ -2791,7 +2791,7 @@
       },
       {
         "name": "children",
-        "description": "Typically Button and/or IconButton elements, laid out with a consistent 4px gap."
+        "description": "Typically Button and/or IconButton elements, laid out with a consistent 8px gap."
       }
     ],
     "props": {
@@ -2825,7 +2825,7 @@
     "subComponents": [],
     "tokens": {
       "layout": {
-        "gap": "--spacing-xs"
+        "gap": "--spacing-sm"
       }
     },
     "accessibility": {
@@ -3590,7 +3590,7 @@
     "tokens": {
       "layout": {
         "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
-        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons themselves)"
+        "actionsGap": "--spacing-sm (8px, between the cancel and confirm buttons themselves, matching Button Group)"
       }
     },
     "accessibility": {
@@ -5267,7 +5267,7 @@
           "paddingBlock": "--spacing-sm",
           "rootGap": "--spacing-sm",
           "messageGap": "--spacing-xs",
-          "actionsGap": "--spacing-xs"
+          "actionsGap": "--spacing-sm"
         },
         "size": {
           "iconSlot": "--size-300",
@@ -5516,6 +5516,135 @@
         "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
         "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
       ]
+    }
+  },
+  {
+    "id": "empty-state",
+    "name": "EmptyState",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/empty-state/empty-state.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "centered vertical stack; informative fills a sunken surface, inherited is transparent"
+      },
+      {
+        "name": "illustration",
+        "description": "optional centered spot illustration or image (~80x80 in the reference design)"
+      },
+      {
+        "name": "heading",
+        "description": "optional bold heading (heading-md), centered"
+      },
+      {
+        "name": "description",
+        "description": "the children, centered (body-md)"
+      },
+      {
+        "name": "actions",
+        "description": "optional Buttons and/or a Link, centered below the description"
+      }
+    ],
+    "props": {
+      "type": {
+        "type": "enum",
+        "required": false,
+        "default": "inherited",
+        "description": null,
+        "enum": [
+          "inherited",
+          "informative"
+        ]
+      },
+      "illustration": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "heading": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "The description."
+      },
+      "actions": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "illustration",
+      "heading",
+      "children",
+      "actions"
+    ],
+    "variants": {
+      "type": [
+        "inherited",
+        "informative"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "padding": "--spacing-xl",
+          "rootGap": "--spacing-2xl",
+          "messageGap": "--spacing-lg",
+          "actionsGap": "--spacing-sm"
+        },
+        "typography": {
+          "heading": "heading-md",
+          "description": "body-md"
+        },
+        "color": {
+          "heading": "--color-content-default",
+          "description": "--color-content-default",
+          "informativeBackground": "--color-elevation-surface-sunken-default"
+        }
+      }
+    },
+    "accessibility": {
+      "nativeElement": "div",
+      "defaultRole": null,
+      "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. Pass a real heading element as `heading` when a document-outline heading is needed."
+    },
+    "relatedComponents": [
+      "SectionMessage",
+      "Banner",
+      "Skeleton",
+      "Spinner",
+      "Button",
+      "ButtonGroup",
+      "Link"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "3546:56720",
+      "componentName": "empty-state",
+      "variantCount": 2,
+      "verifiedAt": "2026-09-01",
+      "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The `type` variant is inherited (transparent) vs informative (sunken surface background). The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both types."
     }
   },
   {
@@ -5941,6 +6070,423 @@
       "variantCount": 4,
       "verifiedAt": "2026-09-01",
       "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
+    }
+  },
+  {
+    "id": "tabs",
+    "name": "Tabs",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/tabs/tabs.contract.json",
+    "anatomy": [
+      {
+        "name": "tablist",
+        "description": "the row of tab buttons"
+      },
+      {
+        "name": "tab",
+        "description": "aria-selected + aria-controls; roving tabindex"
+      },
+      {
+        "name": "indicator",
+        "description": "line: a 3px underline on the selected tab over the bottom border; contained: a selected-surface pill"
+      },
+      {
+        "name": "panel",
+        "description": "an optional TabPanel, labelled by its tab, shown only when selected"
+      }
+    ],
+    "props": {
+      "tabs": {
+        "type": "TabItem[]",
+        "required": true,
+        "default": null,
+        "description": "{ value, label, disabled? }[]"
+      },
+      "type": {
+        "type": "enum",
+        "required": false,
+        "default": "line",
+        "description": null,
+        "enum": [
+          "line",
+          "contained"
+        ]
+      },
+      "value": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Controlled selected value."
+      },
+      "defaultValue": {
+        "type": "string",
+        "required": false,
+        "default": "first enabled tab",
+        "description": null
+      },
+      "onValueChange": {
+        "type": "(value: string) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "showBorder": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Shows the border: the bottom line for `line`, the container border for `contained`."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "TabPanels."
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "type": [
+        "line",
+        "contained"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "tabPaddingBlock": "--size-075",
+          "tabPaddingInline": "--spacing-sm",
+          "rootGap": "--spacing-lg",
+          "containedContainerPadding": "--spacing-xs"
+        },
+        "border": {
+          "listBorder": "--border-width-sm",
+          "indicator": "--border-width-lg",
+          "containedTabRadius": "--border-radius-lg",
+          "tabRadius": "--border-radius-sm",
+          "containedContainerRadius": "--border-radius-xl"
+        },
+        "typography": {
+          "label": "heading-xs"
+        },
+        "color": {
+          "labelDefault": "--color-content-subtle",
+          "labelHover": "--color-content-default",
+          "labelSelected": "--color-content-selected",
+          "labelDisabled": "--color-content-disabled",
+          "listBorder": "--color-border-default",
+          "lineIndicator": "--color-content-selected",
+          "containedSelectedBackground": "--color-background-selected-default-default",
+          "containedSelectedBorder": "--color-border-selected",
+          "containedContainerBackground": "--color-elevation-surface-raised-default",
+          "containedContainerBorder": "--color-border-default"
+        }
+      }
+    },
+    "accessibility": {
+      "tablistRole": "tablist",
+      "tabRole": "tab",
+      "panelRole": "tabpanel",
+      "labelRequired": "aria-label or aria-labelledby on the tab list",
+      "rovingTabindex": true,
+      "keyboard": "Left/Right (wrapping), Home, End; skips disabled tabs; automatic activation",
+      "focus": "shared Focus Ring primitive",
+      "disabledMechanism": "native disabled attribute"
+    },
+    "relatedComponents": [
+      "Menu",
+      "ProgressTracker",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4762:403764",
+      "componentName": "tabs",
+      "verifiedAt": "2026-09-02",
+      "shape": "multi-variant",
+      "parts": {
+        "tab": "code-parts / <tab> (node 2140:67951): the individual tab, with type (line/contained) x state (default/hover/focus) x isSelected"
+      },
+      "notes": "Figma `tabs` is the tab BAR only (no panels): type (line/contained) + showBorder. Panels are provided in code via optional TabPanel children. State model is controlled + uncontrolled."
+    }
+  },
+  {
+    "id": "toast",
+    "name": "Toast",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/toast/toast.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "raised-surface card with a 1px border, radius-xl, and the overlay elevation shadow"
+      },
+      {
+        "name": "leadingIcon",
+        "description": "an IconTile colored per appearance, or a Spinner for loading; decorative"
+      },
+      {
+        "name": "title",
+        "description": "the lead line (heading-xs)"
+      },
+      {
+        "name": "dismiss",
+        "description": "a dismiss IconButton (xs, subtle) in the title row"
+      },
+      {
+        "name": "description",
+        "description": "supporting text (body-md), shown when expanded"
+      },
+      {
+        "name": "actions",
+        "description": "Buttons, shown when expanded"
+      }
+    ],
+    "props": {
+      "appearance": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "success",
+          "info",
+          "warning",
+          "error",
+          "loading"
+        ]
+      },
+      "title": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "description": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Shown when expanded."
+      },
+      "actions": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Buttons, shown when expanded."
+      },
+      "expanded": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Whether the description and actions are shown."
+      },
+      "isDismissible": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": null
+      },
+      "onDismiss": {
+        "type": "() => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "role": {
+        "type": "string",
+        "required": false,
+        "default": "status",
+        "description": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "title",
+      "description",
+      "actions"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "success",
+        "info",
+        "warning",
+        "error",
+        "loading"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "padding": "--spacing-lg",
+          "rootGap": "--spacing-lg",
+          "contentGap": "--spacing-sm",
+          "actionsGap": "--spacing-sm"
+        },
+        "size": {
+          "inlineSize": "368px",
+          "spinnerSlot": "--size-300",
+          "dot": "--size-marker-sm"
+        },
+        "border": {
+          "width": "--border-width-sm",
+          "radius": "--border-radius-xl"
+        },
+        "typography": {
+          "title": "heading-xs",
+          "description": "body-md"
+        },
+        "color": {
+          "surface": "--color-elevation-surface-raised-default",
+          "border": "--color-border-default",
+          "title": "--color-content-default",
+          "description": "--color-content-subtle",
+          "shadow": "--color-elevation-shadow-overlay-spread / --color-elevation-shadow-overlay-perimeter"
+        },
+        "iconTileTones": {
+          "default": "gray",
+          "success": "green",
+          "info": "blue",
+          "warning": "orange",
+          "error": "red"
+        }
+      }
+    },
+    "accessibility": {
+      "nativeElement": "div",
+      "defaultRole": "status",
+      "roleOverridable": true,
+      "iconDecorative": true,
+      "dismissLabel": "Dismiss"
+    },
+    "relatedComponents": [
+      "ToastGroup",
+      "SectionMessage",
+      "Banner",
+      "IconTile",
+      "Spinner",
+      "IconButton",
+      "Button"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "1565:12728",
+      "componentName": "toast",
+      "variantCount": 11,
+      "verifiedAt": "2026-09-02",
+      "notes": "Figma has appearance (default/success/error/warning/info/loading) x open (false/true). `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma appearance=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+    }
+  },
+  {
+    "id": "toast-group",
+    "name": "ToastGroup",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/toast-group/toast-group.contract.json",
+    "anatomy": [
+      {
+        "name": "region",
+        "description": "fixed bottom-right, aria-labelled list of toasts; grows/shrinks between collapsed and expanded"
+      },
+      {
+        "name": "item",
+        "description": "an absolutely-positioned wrapper around a Toast, transformed for the stack/expanded layouts and swipe"
+      }
+    ],
+    "props": {
+      "maxVisible": {
+        "type": "number",
+        "required": false,
+        "default": 3,
+        "description": "How many toasts show stacked before the rest collapse behind them."
+      },
+      "duration": {
+        "type": "number",
+        "required": false,
+        "default": 5000,
+        "description": "Default auto-dismiss delay (ms) for toasts that don't set their own."
+      },
+      "label": {
+        "type": "string",
+        "required": false,
+        "default": "Notifications",
+        "description": null
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "spacing": {
+          "inset": "--spacing-xl"
+        }
+      },
+      "constants": {
+        "collapsedPeek": "16px",
+        "scaleStep": "0.05",
+        "expandedGap": "8px",
+        "swipeThreshold": "80px",
+        "regionWidth": "368px"
+      }
+    },
+    "accessibility": {
+      "nativeElement": "ol",
+      "regionLabelled": true,
+      "toastRole": "status",
+      "focusExpandsAndPauses": true,
+      "notes": "Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions."
+    },
+    "relatedComponents": [
+      "Toast",
+      "SectionMessage",
+      "Banner"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": null,
+      "componentName": "toast-group",
+      "verifiedAt": "2026-09-02",
+      "shape": "no-node-exception",
+      "notes": "Code-only behavior component - there is no Figma component for the group. It stacks the `toast` component (node 1565:12728) and its stacking/hover-expand behavior follows shadcn/sonner. The behavior was specified by the design owner, not a Figma node."
     }
   }
 ]

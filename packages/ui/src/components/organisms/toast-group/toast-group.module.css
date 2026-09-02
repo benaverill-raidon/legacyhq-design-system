@@ -1,0 +1,54 @@
+/*
+ * ToastGroup pins a stack of toasts to the bottom-right of the viewport. Each toast is absolutely
+ * anchored to the bottom of the region and positioned with transforms driven by inline CSS vars
+ * (`--toast-y`, `--toast-scale`, `--toast-x`) set by the component: collapsed, older toasts peek up
+ * and scale down behind the front one; expanded (on hover/focus) they animate into a spaced vertical
+ * list. Swiping a toast drives `--toast-x` and disables the transform transition so it follows the
+ * pointer.
+ */
+.region {
+  position: fixed;
+  inset-block-end: var(--spacing-xl);
+  inset-inline-end: var(--spacing-xl);
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  inline-size: 368px;
+  max-inline-size: calc(100vw - 2 * var(--spacing-xl));
+  list-style: none;
+  transition: block-size 300ms cubic-bezier(0.21, 1.02, 0.73, 1);
+}
+
+.item {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  inline-size: 100%;
+  opacity: 0;
+  transform: translate3d(var(--toast-x, 0px), var(--toast-y, 0px), 0) scale(var(--toast-scale, 1));
+  transform-origin: bottom center;
+  transition:
+    transform 300ms cubic-bezier(0.21, 1.02, 0.73, 1),
+    opacity 300ms ease;
+  will-change: transform, opacity;
+}
+
+.item[data-entered='true'] {
+  opacity: 1;
+}
+
+.item[data-exiting='true'] {
+  opacity: 0;
+}
+
+/* While dragging, follow the pointer instantly - keep only the opacity transition. */
+.item[data-swiping='true'] {
+  transition: opacity 300ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .region,
+  .item {
+    transition-duration: 0ms;
+  }
+}

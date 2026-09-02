@@ -58,7 +58,7 @@
       "part": "children",
       "element": "ReactNode",
       "required": true,
-      "description": "Typically Button and/or IconButton elements, laid out with a consistent 4px gap."
+      "description": "Typically Button and/or IconButton elements, laid out with a consistent 8px gap."
     }
   ],
   "props": {
@@ -93,7 +93,7 @@
   ],
   "tokens": {
     "layout": {
-      "gap": "--spacing-xs"
+      "gap": "--spacing-sm"
     }
   },
   "accessibility": {
@@ -138,7 +138,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded spacing - gap comes from --spacing-xs.",
+    "No hardcoded spacing - gap comes from --spacing-sm.",
     "align-items: flex-start on the root, matching Figma's MIN counter-axis alignment, so children keep their own width/height instead of stretching to match a sibling."
   ],
   "relatedComponents": ["Button", "IconButton", "ToggleButton"],
@@ -159,7 +159,7 @@
     "Applies data-orientation for the selected orientation.",
     "No role when unlabeled; role=group when aria-label/aria-labelledby is present.",
     "Forwards native div attributes (className, data-*, etc.) via rest props.",
-    "Uses --spacing-xs for the gap between children in both orientations.",
+    "Uses --spacing-sm for the gap between children in both orientations.",
     "Works with 2, 3, 4, or more children.",
     "Storybook includes Playground, Variants, and Composition.",
     "Tests cover children ordering, orientation, aria/role behavior, and native attribute forwarding."

@@ -1,0 +1,100 @@
+/*
+ * Toast is a raised-surface notification card: a leading status tile (or a loading spinner), a
+ * title, an optional description and actions, and a dismiss button. Layout, spacing, radius, border,
+ * and the elevation shadow map to the tokens the Figma component is bound to: spacing-lg padding and
+ * root gap, spacing-sm within the content, a radius-xl corner, a 1px default border, and the overlay
+ * elevation shadow. The card renders on a raised surface so it reads above the page.
+ */
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  box-sizing: border-box;
+  /* Fixed content width, matching the Figma toast; the ToastGroup constrains it to the viewport. */
+  inline-size: 368px;
+  max-inline-size: 100%;
+  padding: var(--spacing-lg);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-elevation-surface-raised-default);
+  /* The overlay elevation shadow, matching Figma: a 0 8px 12px spread plus a 0 0 1px perimeter. */
+  box-shadow:
+    0 8px 12px var(--color-elevation-shadow-overlay-spread),
+    0 0 1px var(--color-elevation-shadow-overlay-perimeter);
+}
+
+.tile,
+.spinnerSlot {
+  flex: 0 0 auto;
+}
+
+/* The loading appearance's spinner and title use the loading content color; the Spinner inherits
+   the current color of this slot. */
+.spinnerSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+  color: var(--color-content-loading);
+}
+
+.dot {
+  display: inline-block;
+  inline-size: var(--size-marker-sm);
+  block-size: var(--size-marker-sm);
+  border-radius: var(--border-radius-full-round);
+  background: currentColor;
+}
+
+.content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-inline-size: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.title {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+}
+
+/* The loading toast's title uses the loading content color, matching its spinner. */
+.root[data-appearance='loading'] .title {
+  color: var(--color-content-loading);
+}
+
+.dismiss {
+  flex: 0 0 auto;
+}
+
+.description {
+  min-inline-size: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}

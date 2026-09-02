@@ -105,7 +105,7 @@
         "paddingBlock": "--spacing-sm",
         "rootGap": "--spacing-sm",
         "messageGap": "--spacing-xs",
-        "actionsGap": "--spacing-xs"
+        "actionsGap": "--spacing-sm"
       },
       "size": {
         "iconSlot": "--size-300",

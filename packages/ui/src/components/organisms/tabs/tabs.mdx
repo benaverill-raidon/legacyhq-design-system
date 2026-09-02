@@ -1,0 +1,131 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TabsStories from './Tabs.stories';
+
+<Meta of={TabsStories} name="Docs" />
+
+# Tabs
+
+Tabs let people switch between related views in the same context. `Tabs` renders an accessible tab
+bar from a `tabs` array and manages the selected value (controlled or uncontrolled); optional
+`TabPanel` children render each view and are wired to their tab automatically.
+
+<Canvas of={TabsStories.Playground} />
+
+## When to use
+
+- Switching between peer views of the same subject (Overview / Activity / Documents).
+- Organizing a page section into a few related panels without navigating away.
+
+## When not to use
+
+- **For navigation between pages/routes.** Use links or a navigation component.
+- **For a sequence of steps.** Use a Progress Tracker / stepper.
+- **For many (10+) sections.** Consider a different pattern (a select, a side nav).
+
+## Anatomy
+
+1. **Tab list** - a `role="tablist"` row of tab buttons.
+2. **Tab** - a `role="tab"` button with `aria-selected` and `aria-controls`.
+3. **Indicator** - `line` draws a 3px underline on the selected tab over a shared bottom border;
+   `contained` fills the selected tab as a pill.
+4. **Panel** - an optional `TabPanel` (`role="tabpanel"`), labelled by its tab and shown only when
+   selected.
+
+## Usage guidance
+
+### Types
+
+<Canvas of={TabsStories.Types} />
+
+`type="line"` (the default) is an underlined tab bar over a bottom border - the everyday choice.
+`type="contained"` renders pill tabs inside a raised, rounded, bordered segmented container and suits
+denser or card-like surfaces. `showBorder` (default on) toggles the border - the bottom line for
+`line`, the container border for `contained`.
+
+### Controlled and uncontrolled
+
+Pass `value` + `onValueChange` to control the selection, or `defaultValue` to let Tabs manage it
+(defaulting to the first enabled tab). See the Controlled story.
+
+### Panels are optional
+
+Provide a `TabPanel` per tab value as children and Tabs wires the ARIA (`aria-controls` /
+`aria-labelledby`) and visibility for you. If you render panels elsewhere, use the `Tabs` bar on its
+own and switch content off `value` yourself.
+
+### Accessibility
+
+The tab list is a `role="tablist"`; give it an `aria-label` (or `aria-labelledby`). Selection follows
+the arrow keys (Left/Right, wrapping) with **Home**/**End**, skipping disabled tabs; only the
+selected tab is in the tab order (roving tabindex), and **Tab** then moves into the panel. Focus uses
+the shared Focus Ring. Disabled tabs use the native `disabled` attribute.
+
+## API
+
+### `Tabs`
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>tabs</code></td>
+      <td><code>{`{ value, label, disabled? }[]`}</code></td>
+      <td>-</td>
+      <td>Required. The tabs, in order.</td>
+    </tr>
+    <tr>
+      <td><code>type</code></td>
+      <td><code>'line' | 'contained'</code></td>
+      <td><code>'line'</code></td>
+      <td>Underline indicator, or pill tabs.</td>
+    </tr>
+    <tr>
+      <td><code>value</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Controlled selected value.</td>
+    </tr>
+    <tr>
+      <td><code>defaultValue</code></td>
+      <td><code>string</code></td>
+      <td>first enabled</td>
+      <td>Initial value for uncontrolled usage.</td>
+    </tr>
+    <tr>
+      <td><code>onValueChange</code></td>
+      <td><code>(value: string) =&gt; void</code></td>
+      <td>-</td>
+      <td>Called with the next value.</td>
+    </tr>
+    <tr>
+      <td><code>showBorder</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Shows the border: the bottom line (line) or the container border (contained).</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Labels the tab list.</td>
+    </tr>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Panels, typically <code>TabPanel</code> elements.</td>
+    </tr>
+  </tbody>
+</table>
+
+### `TabPanel`
+
+`value` (required) ties the panel to a tab; `children` is its content. Any other native `div` prop is
+forwarded.
+
+## Related components
+
+- **Menu** - a data-driven list of actions.
+- **Progress Tracker** - for a sequence of steps rather than peer views.

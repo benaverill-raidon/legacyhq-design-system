@@ -187,13 +187,15 @@ Final implementation decisions:
 - `isFullWidth` is omitted from the props Split Button inherits from Button - no verified Figma
   variant for a full-width split button exists.
 - The primary-appearance divider uses `color-content-brand-primary-subtle`, not
-  `color-border-brand-primary-default` (the obvious first guess for a name match) or the nonexistent
-  `color-border-brand-primary-subtle` (Figma's own variable name on that fill). `color-border-brand-
-  primary` resolves to the same `prussian-900` primitive as the primary button's own background, so
-  it painted an invisible same-color-on-same-color divider. Resolving Figma's fill node directly (not
-  just its variable name) gives `prussian-300`, a light tint - `color-content-brand-primary-subtle`
-  already aliases exactly that value, reused on a `background-color` the same way Slider's own active
-  track-stop dot already reuses it for contrast against a bold fill. Caught live in Storybook twice:
+  `color-border-brand-primary-default` (the obvious first guess for a name match, which resolves to
+  the same `prussian-900` primitive as the primary button's own background - an invisible
+  same-color-on-same-color divider). Figma binds this fill to `color/border/brand/primary/subtle`
+  (`prussian-300`), which now exists code-side (added in the brand-taupe token migration):
+  `prussian-300` in light, `prussian-900` in dark - identical to `color-content-brand-primary-subtle`
+  in light but differing in dark (content `prussian-700`), so migrating this divider to
+  `color-border-brand-primary-subtle` is the recommended follow-up. The subtle tint is reused on a
+  `background-color` the same way Slider's own active track-stop dot already reuses it for contrast
+  against a bold fill. Caught live in Storybook twice:
   first the mistyped `-subtle` name resolved to nothing (fully transparent); after that fix, the
   syntactically-valid substitute was present but exactly camouflaged against both buttons.
 - Both segments suppress their own border on the interior edge (`border-inline-end-width: 0` on the

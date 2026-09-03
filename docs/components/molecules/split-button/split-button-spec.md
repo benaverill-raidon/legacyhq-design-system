@@ -165,12 +165,16 @@ obvious first guess. That token resolves to the exact same `prussian-900` primit
 (`--color-background-brand-primary-bold-default`) as the primary button's own fill, so a divider
 painted in it disappears - identical color on identical color. Figma's own variable on this fill is
 named `color/border/brand/primary/subtle`; resolving the node directly (not just the variable name)
-gives `#b3e3ff` - `prussian-300`, a light tint, not a darker/duller shade of `prussian-900`. No
-`--color-border-*` token exists at that step, but `--color-content-brand-primary-subtle` already
-aliases exactly `prussian-300` - reused here on a `background-color` the same way Slider's own
-active track-stop dot already reuses it (see `slider.module.css`'s own comment: "needs the
-subtle/light brand color for contrast against that dark fill"), not a text-token repurposed by
-coincidence. Caught live in Storybook twice: first the mistyped `-subtle` token name resolved to
+gives `#b3e3ff` - `prussian-300`, a light tint, not a darker/duller shade of `prussian-900`. That
+token now exists code-side (added in the brand-taupe token migration): `prussian-300` in light,
+`prussian-900` in dark - the exact Figma-matching token for this divider. The component currently
+still paints the divider with `--color-content-brand-primary-subtle`, the workaround adopted before
+the border-subtle token existed; the two are identical in light (`prussian-300`) but differ in dark
+(content `prussian-700` vs border `prussian-900`), so migrating this fill to
+`--color-border-brand-primary-subtle` is the recommended follow-up. The subtle tint is applied to a
+`background-color` the same way Slider's own active track-stop dot already reuses a subtle brand
+color (see `slider.module.css`'s own comment: "needs the subtle/light brand color for contrast
+against that dark fill"), not a text-token repurposed by coincidence. Caught live in Storybook twice: first the mistyped `-subtle` token name resolved to
 nothing (fully transparent divider); after that fix, the syntactically-valid but wrong substitute
 token rendered a divider that was technically present but exactly camouflaged against both
 buttons' own background.

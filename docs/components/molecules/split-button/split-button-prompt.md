@@ -148,17 +148,20 @@ size = 'md'             // matches Button's/IconButton's own code default
   `appearance_default` root class, `var(--color-content-brand-primary-subtle)` under
   `appearance_primary`, both overridden to `var(--color-border-disabled)` when
   `[data-disabled='true']` is set on the divider itself.
-  Do not use `--color-border-brand-primary-subtle` - it does not exist in the generated token CSS
-  (Figma's own variable on this fill uses that name, but no code-side "subtle" border variant has
-  been built); it silently resolves to nothing and renders the divider fully transparent.
-  Do not use `--color-border-brand-primary-default` either, even though the name looks like the obvious
+  `--color-border-brand-primary-subtle` is the variable Figma binds this fill to. It now exists in
+  the generated token CSS (added in the brand-taupe token migration): `prussian-300` in light,
+  `prussian-900` in dark - the exact Figma-matching token for this divider. The code currently still
+  uses `--color-content-brand-primary-subtle`, the workaround from before the border-subtle token
+  existed; the two are identical in light (`prussian-300`) but differ in dark (content `prussian-700`
+  vs border `prussian-900`), so `--color-border-brand-primary-subtle` is the recommended token going
+  forward.
+  Do not use `--color-border-brand-primary-default`, even though the name looks like the obvious
   fallback - it resolves to the exact same `prussian-900` primitive as the primary button's own
   background (`--color-background-brand-primary-bold-default`), so the divider paints itself
-  invisible on top of an identical-colored surface. Resolve Figma's own fill node directly (not
-  just the variable name) and it's `prussian-300`, a light tint - `--color-content-brand-primary-
-  subtle` already aliases exactly that value, reused here on a `background-color` the same way
-  Slider's own active track-stop dot already reuses it ("needs the subtle/light brand color for
-  contrast against that dark fill" - see slider.module.css's own comment).
+  invisible on top of an identical-colored surface. Whichever subtle token is used is applied to a
+  `background-color` the same way Slider's own active track-stop dot already reuses a subtle brand
+  color ("needs the subtle/light brand color for contrast against that dark fill" - see
+  slider.module.css's own comment).
 - No raw pixel values anywhere except the CSS `0` used for squared corners (an explicitly-ignored
   value in the token-governance stylelint rule, since "no radius" has no meaningful token to
   reference).
@@ -208,9 +211,10 @@ Create tests for:
 - Forwards a ref to the primary action
 - Suppresses each segment's own border on the interior edge (`border-inline-end-width: 0` on
   `.primaryAction`, `border-inline-start-width: 0` on `.secondaryAction`)
-- Gives the primary-appearance divider `--color-content-brand-primary-subtle`, not
-  `--color-border-brand-primary-default` (same primitive as the primary button's own background - an
-  invisible divider) or `--color-border-brand-primary-subtle` (does not exist)
+- Gives the primary-appearance divider `--color-content-brand-primary-subtle` (the current
+  workaround; `--color-border-brand-primary-subtle` - Figma's actual binding - now exists and is the
+  recommended follow-up), not `--color-border-brand-primary-default` (same primitive as the primary
+  button's own background - an invisible divider)
 - Supports a custom `id`/`className` on the root
 
 ---

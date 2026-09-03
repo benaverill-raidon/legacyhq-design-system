@@ -145,16 +145,14 @@ size = 'md'             // matches Button's/IconButton's own code default
   height (`--size-control-xs/sm/md/lg` on `.size_xs .divider` / `.size_sm .divider` / etc., applied
   via a `size_${size}` class on the root - same descendant-selector pattern Avatar Group's own
   `.size_xs .overflowTrigger` already uses). Background color: `var(--color-border-input)` under an
-  `appearance_default` root class, `var(--color-content-brand-primary-subtle)` under
+  `appearance_default` root class, `var(--color-border-brand-primary-subtle)` under
   `appearance_primary`, both overridden to `var(--color-border-disabled)` when
   `[data-disabled='true']` is set on the divider itself.
-  `--color-border-brand-primary-subtle` is the variable Figma binds this fill to. It now exists in
-  the generated token CSS (added in the brand-taupe token migration): `prussian-300` in light,
-  `prussian-900` in dark - the exact Figma-matching token for this divider. The code currently still
-  uses `--color-content-brand-primary-subtle`, the workaround from before the border-subtle token
-  existed; the two are identical in light (`prussian-300`) but differ in dark (content `prussian-700`
-  vs border `prussian-900`), so `--color-border-brand-primary-subtle` is the recommended token going
-  forward.
+  `--color-border-brand-primary-subtle` is the variable Figma binds this fill to, and what the
+  divider uses. It exists in the generated token CSS (added in the brand-taupe token migration):
+  `prussian-300` in light, `prussian-900` in dark. Before that token existed the code used
+  `--color-content-brand-primary-subtle` as a stand-in - identical in light (`prussian-300`) but
+  `prussian-700` rather than `prussian-900` in dark.
   Do not use `--color-border-brand-primary-default`, even though the name looks like the obvious
   fallback - it resolves to the exact same `prussian-900` primitive as the primary button's own
   background (`--color-background-brand-primary-bold-default`), so the divider paints itself
@@ -211,10 +209,9 @@ Create tests for:
 - Forwards a ref to the primary action
 - Suppresses each segment's own border on the interior edge (`border-inline-end-width: 0` on
   `.primaryAction`, `border-inline-start-width: 0` on `.secondaryAction`)
-- Gives the primary-appearance divider `--color-content-brand-primary-subtle` (the current
-  workaround; `--color-border-brand-primary-subtle` - Figma's actual binding - now exists and is the
-  recommended follow-up), not `--color-border-brand-primary-default` (same primitive as the primary
-  button's own background - an invisible divider)
+- Gives the primary-appearance divider `--color-border-brand-primary-subtle` (Figma's actual binding
+  for this fill), not `--color-border-brand-primary-default` (same primitive as the primary button's
+  own background - an invisible divider)
 - Supports a custom `id`/`className` on the root
 
 ---

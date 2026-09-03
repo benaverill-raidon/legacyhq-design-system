@@ -145,10 +145,11 @@ describe('SplitButton', () => {
   it('gives the primary-appearance divider a color that actually contrasts against the bold primary fill', () => {
     const rule = splitButtonCss.match(/\.appearance_primary \.divider:not\(\[data-disabled='true'\]\)\s*\{([^}]*)\}/);
 
-    expect(rule?.[1]).toContain('background-color: var(--color-content-brand-primary-subtle);');
+    expect(rule?.[1]).toContain('background-color: var(--color-border-brand-primary-subtle);');
     // --color-border-brand-primary-default resolves to the same prussian-900 primitive as the primary
     // button's own background (--color-background-brand-primary-bold-default) - using it here
-    // renders an invisible same-color-on-same-color divider.
+    // renders an invisible same-color-on-same-color divider, so the divider uses the -subtle token
+    // (Figma's actual binding), not -default.
     expect(rule?.[1]).not.toContain('--color-border-brand-primary-default)');
   });
 });

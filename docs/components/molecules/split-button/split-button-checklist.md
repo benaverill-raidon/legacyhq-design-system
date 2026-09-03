@@ -186,16 +186,15 @@ Final implementation decisions:
   clamps to the viewport) when there isn't room, with no extra logic needed in Split Button.
 - `isFullWidth` is omitted from the props Split Button inherits from Button - no verified Figma
   variant for a full-width split button exists.
-- The primary-appearance divider uses `color-content-brand-primary-subtle`, not
+- The primary-appearance divider uses `color-border-brand-primary-subtle`, not
   `color-border-brand-primary-default` (the obvious first guess for a name match, which resolves to
   the same `prussian-900` primitive as the primary button's own background - an invisible
-  same-color-on-same-color divider). Figma binds this fill to `color/border/brand/primary/subtle`
-  (`prussian-300`), which now exists code-side (added in the brand-taupe token migration):
-  `prussian-300` in light, `prussian-900` in dark - identical to `color-content-brand-primary-subtle`
-  in light but differing in dark (content `prussian-700`), so migrating this divider to
-  `color-border-brand-primary-subtle` is the recommended follow-up. The subtle tint is reused on a
-  `background-color` the same way Slider's own active track-stop dot already reuses it for contrast
-  against a bold fill. Caught live in Storybook twice:
+  same-color-on-same-color divider). `color/border/brand/primary/subtle` is the variable Figma binds
+  this fill to (`prussian-300` light / `prussian-900` dark); it was added in the brand-taupe token
+  migration. Before that the divider used `color-content-brand-primary-subtle` as a stand-in -
+  identical in light (`prussian-300`) but `prussian-700` rather than `prussian-900` in dark. The
+  subtle tint is reused on a `background-color` the same way Slider's own active track-stop dot
+  already reuses it for contrast against a bold fill. Caught live in Storybook twice:
   first the mistyped `-subtle` name resolved to nothing (fully transparent); after that fix, the
   syntactically-valid substitute was present but exactly camouflaged against both buttons.
 - Both segments suppress their own border on the interior edge (`border-inline-end-width: 0` on the

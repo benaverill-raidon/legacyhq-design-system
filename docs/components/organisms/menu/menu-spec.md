@@ -178,7 +178,7 @@ Menu itself carries no background/border/shadow - verified directly against Figm
 introducing new ones:
 
 - Default row text: `--color-content-default` (label), `--color-content-subtle` (description).
-- Hover/press row background: `--color-background-neutral-overlay-hover` /
+- Hover/press row background: `--color-background-neutral-overlay-bold-hover` /
   `-overlay-press`.
 - Selected row background: `--color-background-brand-primary-subtle-default` (and the
   `-hover`/`-press` variants on interaction) - Figma's `isSelected` fills
@@ -201,12 +201,12 @@ introducing new ones:
 - Section body padding: `--spacing-xs` (4px) top, `--spacing-sm` (8px) bottom - asymmetric, not a
   uniform `padding-block`, matching the exact values on Figma's `<section>/list` → `Container`.
 - Selected-row indicator: a 2px inset left `box-shadow` (`--border-width-md`
-  `--color-border-brand-primary`), not `border-left` - Figma's own stroke on this state is
+  `--color-border-brand-primary-default`), not `border-left` - Figma's own stroke on this state is
   `strokeAlign: INSIDE` with `paddingLeft` completely unchanged (still `spacing/md`, identical to
   every other row), meaning the indicator paints inside the row's existing bounds. A real
   `border-left` would add to the box size in CSS and visibly shift selected rows 2px right relative
   to unselected ones - a regression caught by comparing rendered output against Figma directly.
-  `--color-border-brand-primary` resolves to the exact same primitive
+  `--color-border-brand-primary-default` resolves to the exact same primitive
   (`brand.prussian.solid.900`/`#003655`) Figma's own stroke variable does.
 - Label typography: `--typography-body-md-*` (14px, matching Figma's measured `menu-item` title).
   Description/heading typography: `--typography-body-sm-*` (12px).

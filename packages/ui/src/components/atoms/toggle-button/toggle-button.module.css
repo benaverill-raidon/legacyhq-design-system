@@ -46,11 +46,11 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .toggleButton:not(:disabled):not(.selected):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .size_xs {

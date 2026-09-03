@@ -148,7 +148,7 @@
                 ],
                 "rules": [
                     "Use the bare-verb form: hover (not hover), press (not press), focus (not focus).",
-                    "A token whose name ends in a state uses exactly one of these words, e.g. color.background.neutral.overlay.hover / .press, color.border.focus, color.border.selected.",
+                    "A token whose name ends in a state uses exactly one of these words, e.g. color.background.neutral.overlay.bold.hover / .bold.press, color.border.focus, color.border.selected.",
                     "The Storybook data-force-state escape hatch takes the same vocabulary: data-force-state=\"hover\" | \"focus\" | \"press\". It is documentation-only and never part of a public API."
                 ],
                 "notCovered": [

@@ -146,9 +146,9 @@ describe('SplitButton', () => {
     const rule = splitButtonCss.match(/\.appearance_primary \.divider:not\(\[data-disabled='true'\]\)\s*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('background-color: var(--color-content-brand-primary-subtle);');
-    // --color-border-brand-primary resolves to the same prussian-900 primitive as the primary
+    // --color-border-brand-primary-default resolves to the same prussian-900 primitive as the primary
     // button's own background (--color-background-brand-primary-bold-default) - using it here
     // renders an invisible same-color-on-same-color divider.
-    expect(rule?.[1]).not.toContain('--color-border-brand-primary)');
+    expect(rule?.[1]).not.toContain('--color-border-brand-primary-default)');
   });
 });

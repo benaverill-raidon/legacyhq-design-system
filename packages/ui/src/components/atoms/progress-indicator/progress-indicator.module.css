@@ -62,11 +62,11 @@
 }
 
 .dotInteractive:hover {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .dotInteractive:active {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .dotVisual {

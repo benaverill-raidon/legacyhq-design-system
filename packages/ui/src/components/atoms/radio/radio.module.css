@@ -126,7 +126,7 @@
 .radio:global(.previewHover):not([data-disabled='true']) .indicatorTarget,
 .radio:not([data-disabled='true']) .input:focus-visible + .indicatorTarget,
 .radio:global(.previewFocus):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .radio:not([data-disabled='true']):hover .input:checked + .indicatorTarget,
@@ -138,7 +138,7 @@
 
 .radio:not([data-disabled='true']):active .indicatorTarget,
 .radio:global(.previewPress):not([data-disabled='true']) .indicatorTarget {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .radio:not([data-disabled='true']):active .input:checked + .indicatorTarget,

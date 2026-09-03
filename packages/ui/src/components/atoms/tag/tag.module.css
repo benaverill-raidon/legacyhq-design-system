@@ -318,7 +318,7 @@
   --tag-background: var(--color-background-brand-primary-subtle-default);
   --tag-background-hover: var(--color-background-brand-primary-subtle-hover);
   --tag-background-press: var(--color-background-brand-primary-subtle-press);
-  --tag-border: var(--color-border-brand-primary);
+  --tag-border: var(--color-border-brand-primary-default);
   --tag-color: var(--color-content-brand-primary-default);
 }
 

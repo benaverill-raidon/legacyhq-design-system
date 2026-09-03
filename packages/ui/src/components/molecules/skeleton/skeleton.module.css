@@ -1,5 +1,5 @@
 .root {
-  --skeleton-color: var(--color-skeleton-default);
+  --skeleton-color: var(--component-skeleton-color-default);
   --skeleton-radius: var(--border-radius-sm);
 
   display: block;

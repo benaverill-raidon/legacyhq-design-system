@@ -89,12 +89,12 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
   text-decoration: none;
 }
 
 .appearance_default:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .appearance_primary {
@@ -173,12 +173,12 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
   text-decoration: none;
 }
 
 .appearance_subtle:not([aria-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .appearance_default[aria-disabled='true'],

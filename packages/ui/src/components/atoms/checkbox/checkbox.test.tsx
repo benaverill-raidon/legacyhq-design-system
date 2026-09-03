@@ -247,8 +247,8 @@ describe('checkbox CSS contract', () => {
   });
 
   it('uses neutral and brand overlay tokens with invalid overriding to neutral', () => {
-    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-hover);');
-    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
+    expect(checkboxCss).toContain('background: var(--color-background-neutral-overlay-bold-press);');
     expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
     expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(checkboxCss).toContain(".root[data-invalid='true'] .input:focus-visible + .indicatorTarget {");

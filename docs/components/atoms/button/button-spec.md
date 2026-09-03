@@ -324,7 +324,7 @@ It is a boolean prop, not part of the `tone` axis, so it can later compose with 
 - border: transparent
 - content/icon: `color-content-inverse`
 - hover: `color-background-neutral-overlay-subtle-hover` (white subtle, the mode-flipped mirror of the
-  dark `color-background-neutral-overlay-hover`)
+  dark `color-background-neutral-overlay-bold-hover`)
 - pressed: `color-background-neutral-overlay-subtle-press`
 - focus: white subtle hover fill plus the shared focus ring
 

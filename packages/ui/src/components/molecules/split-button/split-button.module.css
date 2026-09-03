@@ -42,9 +42,9 @@
 }
 
 /*
- * --color-content-brand-primary-subtle, not --color-border-brand-primary: the primary button's own
+ * --color-content-brand-primary-subtle, not --color-border-brand-primary-default: the primary button's own
  * background is --color-background-brand-primary-bold-default, which resolves to the exact same
- * prussian-900 primitive as --color-border-brand-primary - a same-color-on-same-color divider that
+ * prussian-900 primitive as --color-border-brand-primary-default - a same-color-on-same-color divider that
  * disappears. The subtle/light tint is what Figma's own divider fill actually uses here, the same
  * "needs the subtle brand color for contrast against a bold fill" reuse Slider's own active
  * track-stop dot already establishes (see slider.module.css) - not a text color repurposed by

@@ -131,8 +131,8 @@ width (per size)        → --component-menu-width-sm / -md / -lg (new component
 label text               → --color-content-default
 description text         → --color-content-subtle
 disabled text             → --color-content-disabled
-row hover background     → --color-background-neutral-overlay-hover
-row press background     → --color-background-neutral-overlay-press
+row hover background     → --color-background-neutral-overlay-bold-hover
+row press background     → --color-background-neutral-overlay-bold-press
 selected background      → --color-background-brand-primary-subtle-default (+ -hover/-press)
 selected text             → --color-content-brand-primary-default
 divider                  → --color-border-default

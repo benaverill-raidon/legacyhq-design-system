@@ -1963,8 +1963,8 @@
         "errorContent": "color-content-error",
         "inverseContent": "color-content-inverse",
         "inputBackgroundDefault": "color-background-input-default",
-        "inputBackgroundHovered": "color-background-neutral-overlay-hover",
-        "inputBackgroundPressed": "color-background-neutral-overlay-press",
+        "inputBackgroundHovered": "color-background-neutral-overlay-bold-hover",
+        "inputBackgroundPressed": "color-background-neutral-overlay-bold-press",
         "selectedBackgroundHovered": "color-background-brand-primary-overlay-hover",
         "selectedBackgroundPressed": "color-background-brand-primary-overlay-press",
         "selectedBoldBackground": "color-background-selected-bold-default",
@@ -3350,11 +3350,11 @@
       },
       "color": {
         "gray_default": {
-          "background": "--color-background-accent-gray-default-default",
+          "background": "--color-background-accent-taupe-default-default",
           "content": "--color-content-default"
         },
         "gray_bold": {
-          "background": "--color-background-accent-gray-bold-default",
+          "background": "--color-background-accent-taupe-bold-default",
           "content": "--color-content-inverse"
         },
         "brand_default": {
@@ -4420,7 +4420,7 @@
       },
       "color": {
         "default": {
-          "background": "--color-skeleton-default"
+          "background": "--component-skeleton-color-default"
         },
         "subtle": {
           "background": "--component-skeleton-color-subtle"
@@ -5816,13 +5816,13 @@
         "labelDefault": "--color-content-default",
         "descriptionDefault": "--color-content-subtle",
         "disabled": "--color-content-disabled",
-        "rowHover": "--color-background-neutral-overlay-hover",
-        "rowPress": "--color-background-neutral-overlay-press",
+        "rowHover": "--color-background-neutral-overlay-bold-hover",
+        "rowPress": "--color-background-neutral-overlay-bold-press",
         "selectedBackground": "--color-background-brand-primary-subtle-default",
         "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hover",
         "selectedBackgroundPressed": "--color-background-brand-primary-subtle-press",
         "selectedText": "--color-content-selected",
-        "selectedIndicator": "--color-border-brand-primary (2px inset left box-shadow, --border-width-md - see behaviorRules)",
+        "selectedIndicator": "--color-border-brand-primary-default (2px inset left box-shadow, --border-width-md - see behaviorRules)",
         "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
         "iconUnselected": "IconColor \"default\" (--color-content-default) for a plain unselected action row's icon; IconColor \"subtle\" (--color-content-subtle) specifically for the checkbox-empty/radio-unchecked glyphs, which are their own distinct low-emphasis indicator - both verified directly on their respective vector fills.",
         "divider": "--color-border-default"
@@ -5901,7 +5901,7 @@
         "Figma models menu-item content as free-floating slots inside a component-set variant grid (state x isSelected x isDisabled), not a data structure. Code inverts this into a `sections: MenuSection[]` prop - each item a plain object (`MenuItem`) - so a real list of N items doesn't require N manually-composed component instances.",
         "leadingElement/trailingElement are typed as arbitrary React.ReactNode but are documented as decorative-only in code: a real interactive Checkbox/Radio/Button nested inside the row's own <button> would be invalid HTML. This matches Figma exactly, not just a code-side precaution - the file's own 'checkboxes'/'radios' slot-content demos (menu-item Parts group) swap elemBefore's nested icon INSTANCE_SWAP property to the icon components `checkbox_fill`/`checkbox-empty`/`radio_checked`/`radio_unchecked` (colored `color/content/brand/primary/default` when checked, `color/content/subtle` when not - i.e. IconColor `brand`/`subtle`), never to a real Checkbox/Radio component. Selection semantics are carried by the row's own `selected`/`selectionType`, not by whatever's rendered in the slot. Every elemBefore icon (including plain, non-selectable action rows) uses the icon wrapper's `Size: md` + `spacing: spacious (24px)` component properties - code maps this to Icon's `spacing=\"spacious\"` (size=\"md\" is already Icon's own default).",
         "selectionType ('checkbox' | 'radio') is a code-level addition with no direct Figma component property - inferred from the same 'checkboxes'/'radios' slot-content demos above, which show real-world compositions where isSelected pairs with a checkbox/radio-shaped row. Modeled per-item rather than as a menu-level 'selectionMode' so a single menu can mix plain action rows with a selectable group.",
-        "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-brand-primary`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
+        "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-brand-primary-default`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
         "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
         "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
       ]

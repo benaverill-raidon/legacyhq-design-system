@@ -225,7 +225,7 @@ Do not build ToggleButtonGroup in this pass.
 - Root fill/border tokens (resting `color-border-input`/`color-content-subtle`, selected
   `color-background-selected-default-default`/`color-border-selected`/`color-content-selected`,
   disabled `color-background-disabled`/`color-border-disabled`/
-  `color-content-disabled`, hover/press overlays `color-background-neutral-overlay-hover`/
+  `color-content-disabled`, hover/press overlays `color-background-neutral-overlay-bold-hover`/
   `-press`, focus ring `color-border-focus`) all matched the existing implementation exactly.
 - Selected now consumes the dedicated `selected` semantic family rather than the `brand-primary`
   family it originally borrowed, and gained real interaction states: all 32 `isSelected=true`

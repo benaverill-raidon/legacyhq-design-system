@@ -160,7 +160,7 @@ Measured directly per `tone` in Figma's own divider part (`figma-parts / split-b
 separate `tone` value, not a CSS-only addition, confirming disabled state overrides the
 default/primary color distinction entirely rather than just dimming it.
 
-`appearance="primary"` does **not** use `--color-border-brand-primary`, despite the name being the
+`appearance="primary"` does **not** use `--color-border-brand-primary-default`, despite the name being the
 obvious first guess. That token resolves to the exact same `prussian-900` primitive
 (`--color-background-brand-primary-bold-default`) as the primary button's own fill, so a divider
 painted in it disappears - identical color on identical color. Figma's own variable on this fill is

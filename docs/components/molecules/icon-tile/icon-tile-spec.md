@@ -161,8 +161,8 @@ Background and icon color both come from the semantic accent-color layer, keyed 
 
 | Tone | Appearance | Background Token | Icon Color Token |
 |---------|------------|------------------------------------------------------|--------------------------------------------|
-| gray | default | `--color-background-accent-gray-default-default` | `--color-content-default` |
-| gray | bold | `--color-background-accent-gray-bold-default` | `--color-content-inverse` |
+| gray | default | `--color-background-accent-taupe-default-default` | `--color-content-default` |
+| gray | bold | `--color-background-accent-taupe-bold-default` | `--color-content-inverse` |
 | brand | default | `--color-background-brand-primary-default-default` | `--color-content-brand-primary-default` |
 | brand | bold | `--color-background-brand-primary-bold-default` | `--color-content-inverse` |
 | {hue} | default | `--color-background-accent-{hue}-default-default` | `--color-content-accent-{hue}-default` |

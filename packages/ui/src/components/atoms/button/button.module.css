@@ -96,12 +96,12 @@
     [data-force-state='focus']
   ) {
   border-color: var(--color-border-input);
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   border-color: var(--color-border-input);
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .appearance_primary {
@@ -170,11 +170,11 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 /*

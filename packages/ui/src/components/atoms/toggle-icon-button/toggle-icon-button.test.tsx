@@ -233,8 +233,8 @@ describe('ToggleIconButton', () => {
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-sm);');
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-md);');
     expect(toggleIconButtonCss).toContain('--toggle-icon-button-size: var(--size-control-lg);');
-    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
-    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
+    expect(toggleIconButtonCss).toContain('background: var(--color-background-neutral-overlay-bold-press);');
     expect(toggleIconButtonCss).toContain('background: var(--color-background-selected-default-default);');
     expect(toggleIconButtonCss).toContain('border-color: var(--color-border-selected);');
     expect(toggleIconButtonCss).toContain('color: var(--color-content-selected);');
@@ -251,7 +251,7 @@ describe('ToggleIconButton', () => {
     // and color/content/selected. The resting values are unchanged (each new token aliases the same
     // primitive its predecessor did) - this guards the semantic mapping, not the rendered color.
     expect(toggleIconButtonCss).not.toContain('--color-background-brand-primary-');
-    expect(toggleIconButtonCss).not.toContain('--color-border-brand-primary');
+    expect(toggleIconButtonCss).not.toContain('--color-border-brand-primary-default');
     expect(toggleIconButtonCss).not.toContain('--color-content-brand-primary-');
   });
 
@@ -262,7 +262,7 @@ describe('ToggleIconButton', () => {
 
   it('shows the hover fill on focus-visible too, matching Button', () => {
     expect(toggleIconButtonCss).toMatch(
-      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hover\);/,
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-bold-hover\);/,
     );
   });
 

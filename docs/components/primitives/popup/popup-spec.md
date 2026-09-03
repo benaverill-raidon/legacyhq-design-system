@@ -175,9 +175,9 @@ Ignored when `unstyled` is `true` - there's no skin to size in the first place.
 Figma's effect actually uses were missing. They mirror the existing `elevation.shadow.raised`
 family's structure (`default`/`spread`/`perimeter`/`inner`) and the exact alpha values (16%, 32%)
 read directly off the Figma effect (`Light/elevation.shadow.overlay`); the dark-theme values mirror
-`elevation.shadow.raised`'s light-to-dark base-hue swap (brand-umber → neutral) at the same
-percentages, since the dark variant of the overlay effect wasn't independently re-verified in
-Figma.
+`elevation.shadow.raised`'s light-to-dark alpha-tier shift (brand-taupe alpha 1100 → 1200, both
+themes now on the unified taupe ramp) at the same percentages, since the dark variant of the
+overlay effect wasn't independently re-verified in Figma.
 
 The panel hugs its content on both axes (`display: inline-flex`, no explicit width/height) rather
 than filling an ambient container - this matches the Figma component's inner `Slot`, which is set

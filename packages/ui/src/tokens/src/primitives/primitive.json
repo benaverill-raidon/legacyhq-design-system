@@ -626,156 +626,6 @@
         "type": "color",
         "originalName": "color/blue/solid/1000"
       },
-      "color-neutral-solid-0": {
-        "value": "#ffffff",
-        "type": "color",
-        "originalName": "color/neutral/solid/0"
-      },
-      "color-neutral-alpha-100-04": {
-        "value": "rgba(248, 248, 248, 0.04)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/100/04"
-      },
-      "color-neutral-alpha-100-08": {
-        "value": "rgba(248, 248, 248, 0.08)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/100/08"
-      },
-      "color-neutral-alpha-100-16": {
-        "value": "rgba(248, 248, 248, 0.16)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/100/16"
-      },
-      "color-neutral-alpha-100-32": {
-        "value": "rgba(248, 248, 248, 0.32)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/100/32"
-      },
-      "color-neutral-alpha-100-48": {
-        "value": "rgba(248, 248, 248, 0.48)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/100/48"
-      },
-      "color-neutral-alpha-1200-04": {
-        "value": "rgba(40, 39, 39, 0.04)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/04"
-      },
-      "color-neutral-alpha-1200-08": {
-        "value": "rgba(40, 39, 39, 0.08)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/08"
-      },
-      "color-neutral-alpha-1200-16": {
-        "value": "rgba(40, 39, 39, 0.16)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/16"
-      },
-      "color-neutral-alpha-1200-32": {
-        "value": "rgba(40, 39, 39, 0.32)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/32"
-      },
-      "color-neutral-alpha-1200-48": {
-        "value": "rgba(40, 39, 39, 0.48)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/48"
-      },
-      "color-neutral-alpha-1200-64": {
-        "value": "rgba(40, 39, 39, 0.64)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1200/64"
-      },
-      "color-neutral-alpha-1300-12": {
-        "value": "rgba(31, 30, 30, 0.12)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1300/12"
-      },
-      "color-neutral-alpha-1300-16": {
-        "value": "rgba(31, 30, 30, 0.16)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1300/16"
-      },
-      "color-neutral-alpha-1300-24": {
-        "value": "rgba(31, 30, 30, 0.24)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1300/24"
-      },
-      "color-neutral-alpha-1300-32": {
-        "value": "rgba(31, 30, 30, 0.32)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1300/32"
-      },
-      "color-neutral-alpha-1300-48": {
-        "value": "rgba(31, 30, 30, 0.48)",
-        "type": "color",
-        "originalName": "color/neutral/alpha/1300/48"
-      },
-      "color-neutral-solid-100": {
-        "value": "#f8f8f8",
-        "type": "color",
-        "originalName": "color/neutral/solid/100"
-      },
-      "color-neutral-solid-200": {
-        "value": "#f0f0f0",
-        "type": "color",
-        "originalName": "color/neutral/solid/200"
-      },
-      "color-neutral-solid-300": {
-        "value": "#e5e4e3",
-        "type": "color",
-        "originalName": "color/neutral/solid/300"
-      },
-      "color-neutral-solid-400": {
-        "value": "#d2d1cf",
-        "type": "color",
-        "originalName": "color/neutral/solid/400"
-      },
-      "color-neutral-solid-500": {
-        "value": "#b7b5b2",
-        "type": "color",
-        "originalName": "color/neutral/solid/500"
-      },
-      "color-neutral-solid-600": {
-        "value": "#a7a5a2",
-        "type": "color",
-        "originalName": "color/neutral/solid/600"
-      },
-      "color-neutral-solid-700": {
-        "value": "#84817e",
-        "type": "color",
-        "originalName": "color/neutral/solid/700"
-      },
-      "color-neutral-solid-800": {
-        "value": "#6d6a68",
-        "type": "color",
-        "originalName": "color/neutral/solid/800"
-      },
-      "color-neutral-solid-900": {
-        "value": "#5c5a58",
-        "type": "color",
-        "originalName": "color/neutral/solid/900"
-      },
-      "color-neutral-solid-1000": {
-        "value": "#504e4c",
-        "type": "color",
-        "originalName": "color/neutral/solid/1000"
-      },
-      "color-neutral-solid-1100": {
-        "value": "#3d3c3a",
-        "type": "color",
-        "originalName": "color/neutral/solid/1100"
-      },
-      "color-neutral-solid-1200": {
-        "value": "#282727",
-        "type": "color",
-        "originalName": "color/neutral/solid/1200"
-      },
-      "color-neutral-solid-1300": {
-        "value": "#1f1e1e",
-        "type": "color",
-        "originalName": "color/neutral/solid/1300"
-      },
       "measurement-minus-32": {
         "value": "-32px",
         "type": "float",
@@ -1316,61 +1166,6 @@
         "type": "color",
         "originalName": "color/brand/prussian/solid/1100"
       },
-      "color-brand-umber-solid-100": {
-        "value": "#f8f6f4",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/100"
-      },
-      "color-brand-umber-solid-200": {
-        "value": "#eeece6",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/200"
-      },
-      "color-brand-umber-solid-300": {
-        "value": "#e4e0d9",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/300"
-      },
-      "color-brand-umber-solid-400": {
-        "value": "#c4bbad",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/400"
-      },
-      "color-brand-umber-solid-500": {
-        "value": "#ac9d8b",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/500"
-      },
-      "color-brand-umber-solid-600": {
-        "value": "#9b8874",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/600"
-      },
-      "color-brand-umber-solid-700": {
-        "value": "#8e7968",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/700"
-      },
-      "color-brand-umber-solid-800": {
-        "value": "#776357",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/800"
-      },
-      "color-brand-umber-solid-900": {
-        "value": "#62524a",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/900"
-      },
-      "color-brand-umber-solid-1000": {
-        "value": "#50443e",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/1000"
-      },
-      "color-brand-umber-solid-1100": {
-        "value": "#2a2320",
-        "type": "color",
-        "originalName": "color/brand/umber/solid/1100"
-      },
       "color-brand-prussian-alpha-900-04": {
         "value": "rgba(0, 54, 85, 0.04)",
         "type": "color",
@@ -1596,76 +1391,6 @@
         "type": "color",
         "originalName": "color/magenta/alpha/500/48"
       },
-      "color-brand-umber-alpha-500-04": {
-        "value": "rgba(172, 157, 139, 0.04)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/500/04"
-      },
-      "color-brand-umber-alpha-800-04": {
-        "value": "rgba(119, 99, 87, 0.04)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/800/04"
-      },
-      "color-brand-umber-alpha-800-08": {
-        "value": "rgba(119, 99, 87, 0.08)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/800/08"
-      },
-      "color-brand-umber-alpha-800-16": {
-        "value": "rgba(119, 99, 87, 0.16)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/800/16"
-      },
-      "color-brand-umber-alpha-800-32": {
-        "value": "rgba(119, 99, 87, 0.32)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/800/32"
-      },
-      "color-brand-umber-alpha-800-48": {
-        "value": "rgba(119, 99, 87, 0.48)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/800/48"
-      },
-      "color-brand-umber-alpha-500-08": {
-        "value": "rgba(172, 157, 139, 0.08)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/500/08"
-      },
-      "color-brand-umber-alpha-500-16": {
-        "value": "rgba(172, 157, 139, 0.16)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/500/16"
-      },
-      "color-brand-umber-alpha-500-32": {
-        "value": "rgba(172, 157, 139, 0.32)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/500/32"
-      },
-      "color-brand-umber-alpha-500-48": {
-        "value": "rgba(172, 157, 139, 0.48)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/500/48"
-      },
-      "color-brand-umber-alpha-1100-12": {
-        "value": "rgba(42, 35, 32, 0.12)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/1100/12"
-      },
-      "color-brand-umber-alpha-1100-16": {
-        "value": "rgba(42, 35, 32, 0.16)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/1100/16"
-      },
-      "color-brand-umber-alpha-1100-24": {
-        "value": "rgba(42, 35, 32, 0.24)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/1100/24"
-      },
-      "color-brand-umber-alpha-1100-32": {
-        "value": "rgba(42, 35, 32, 0.32)",
-        "type": "color",
-        "originalName": "color/brand/umber/alpha/1100/32"
-      },
       "duration-fast": {
         "value": "150ms",
         "type": "duration",
@@ -1700,6 +1425,221 @@
         "value": "1500ms",
         "type": "duration",
         "originalName": "duration/loop-slow"
+      },
+      "color-brand-taupe-solid-0": {
+        "value": "#ffffff",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/0"
+      },
+      "color-brand-taupe-solid-100": {
+        "value": "#fbf9f6",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/100"
+      },
+      "color-brand-taupe-solid-200": {
+        "value": "#f3eee7",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/200"
+      },
+      "color-brand-taupe-solid-300": {
+        "value": "#e3dbd1",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/300"
+      },
+      "color-brand-taupe-solid-400": {
+        "value": "#d2c6b9",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/400"
+      },
+      "color-brand-taupe-solid-500": {
+        "value": "#bfab99",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/500"
+      },
+      "color-brand-taupe-solid-600": {
+        "value": "#a89080",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/600"
+      },
+      "color-brand-taupe-solid-700": {
+        "value": "#857265",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/700"
+      },
+      "color-brand-taupe-solid-800": {
+        "value": "#5c4f46",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/800"
+      },
+      "color-brand-taupe-solid-900": {
+        "value": "#423b35",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/900"
+      },
+      "color-brand-taupe-solid-1000": {
+        "value": "#2e2b28",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/1000"
+      },
+      "color-brand-taupe-solid-1100": {
+        "value": "#242221",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/1100"
+      },
+      "color-brand-taupe-solid-1200": {
+        "value": "#1a1816",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/1200"
+      },
+      "color-brand-taupe-solid-1300": {
+        "value": "#121110",
+        "type": "color",
+        "originalName": "color/brand/taupe/solid/1300"
+      },
+      "color-brand-taupe-alpha-100-04": {
+        "value": "rgba(251, 249, 246, 0.04)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/04"
+      },
+      "color-brand-taupe-alpha-100-08": {
+        "value": "rgba(251, 249, 246, 0.08)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/08"
+      },
+      "color-brand-taupe-alpha-100-16": {
+        "value": "rgba(251, 249, 246, 0.16)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/16"
+      },
+      "color-brand-taupe-alpha-100-32": {
+        "value": "rgba(251, 249, 246, 0.32)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/32"
+      },
+      "color-brand-taupe-alpha-100-48": {
+        "value": "rgba(251, 249, 246, 0.48)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/48"
+      },
+      "color-brand-taupe-alpha-500-04": {
+        "value": "rgba(191, 171, 153, 0.04)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/500/04"
+      },
+      "color-brand-taupe-alpha-500-08": {
+        "value": "rgba(191, 171, 153, 0.08)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/500/08"
+      },
+      "color-brand-taupe-alpha-500-16": {
+        "value": "rgba(191, 171, 153, 0.16)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/500/16"
+      },
+      "color-brand-taupe-alpha-500-32": {
+        "value": "rgba(191, 171, 153, 0.32)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/500/32"
+      },
+      "color-brand-taupe-alpha-500-48": {
+        "value": "rgba(191, 171, 153, 0.48)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/500/48"
+      },
+      "color-brand-taupe-alpha-800-04": {
+        "value": "rgba(92, 79, 70, 0.04)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/800/04"
+      },
+      "color-brand-taupe-alpha-800-08": {
+        "value": "rgba(92, 79, 70, 0.08)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/800/08"
+      },
+      "color-brand-taupe-alpha-800-16": {
+        "value": "rgba(92, 79, 70, 0.16)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/800/16"
+      },
+      "color-brand-taupe-alpha-800-32": {
+        "value": "rgba(92, 79, 70, 0.32)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/800/32"
+      },
+      "color-brand-taupe-alpha-800-48": {
+        "value": "rgba(92, 79, 70, 0.48)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/800/48"
+      },
+      "color-brand-taupe-alpha-1100-04": {
+        "value": "rgba(36, 34, 33, 0.04)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/04"
+      },
+      "color-brand-taupe-alpha-1100-08": {
+        "value": "rgba(36, 34, 33, 0.08)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/08"
+      },
+      "color-brand-taupe-alpha-1100-12": {
+        "value": "rgba(36, 33, 33, 0.16)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/12"
+      },
+      "color-brand-taupe-alpha-1100-16": {
+        "value": "rgba(36, 33, 33, 0.32)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/16"
+      },
+      "color-brand-taupe-alpha-1100-24": {
+        "value": "rgba(36, 33, 33, 0.48)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/24"
+      },
+      "color-brand-taupe-alpha-1100-32": {
+        "value": "rgba(36, 33, 33, 0.64)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1100/32"
+      },
+      "color-brand-taupe-alpha-1200-4": {
+        "value": "rgba(26, 24, 22, 0.04)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/4"
+      },
+      "color-brand-taupe-alpha-1200-8": {
+        "value": "rgba(26, 24, 22, 0.08)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/8"
+      },
+      "color-brand-taupe-alpha-1200-12": {
+        "value": "rgba(26, 24, 22, 0.12)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/12"
+      },
+      "color-brand-taupe-alpha-1200-16": {
+        "value": "rgba(26, 24, 22, 0.16)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/16"
+      },
+      "color-brand-taupe-alpha-1200-24": {
+        "value": "rgba(26, 24, 22, 0.24)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/24"
+      },
+      "color-brand-taupe-alpha-1200-32": {
+        "value": "rgba(26, 24, 22, 0.32)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/32"
+      },
+      "color-brand-taupe-alpha-1200-48": {
+        "value": "rgba(26, 24, 22, 0.48)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/48"
+      },
+      "color-brand-taupe-alpha-1200-64": {
+        "value": "rgba(26, 24, 22, 0.64)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/1200/64"
       }
     }
   }

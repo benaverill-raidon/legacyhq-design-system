@@ -187,7 +187,7 @@ Preferred explicit token names from Figma, if present:
 --color-background-brand-boldest-default
 --color-background-accent-green-subtler-default
 --color-background-accent-green-bolder-default
---color-background-accent-gray-bolder-default
+--color-background-accent-taupe-bolder-default
 --color-content-default
 --color-content-subtle
 --color-content-inverse

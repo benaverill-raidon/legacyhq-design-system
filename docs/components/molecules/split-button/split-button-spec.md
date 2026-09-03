@@ -152,7 +152,7 @@ Color depends on `appearance`, with `disabled` overriding both:
 | State | Token |
 |---|---|
 | `appearance="default"` | `color-border-input` |
-| `appearance="primary"` | `color-content-brand-primary-subtle` |
+| `appearance="primary"` | `color-border-brand-primary-subtle` |
 | `disabled` (either appearance) | `color-border-disabled` |
 
 Measured directly per `tone` in Figma's own divider part (`figma-parts / split-button / divider`,
@@ -165,12 +165,15 @@ obvious first guess. That token resolves to the exact same `prussian-900` primit
 (`--color-background-brand-primary-bold-default`) as the primary button's own fill, so a divider
 painted in it disappears - identical color on identical color. Figma's own variable on this fill is
 named `color/border/brand/primary/subtle`; resolving the node directly (not just the variable name)
-gives `#b3e3ff` - `prussian-300`, a light tint, not a darker/duller shade of `prussian-900`. No
-`--color-border-*` token exists at that step, but `--color-content-brand-primary-subtle` already
-aliases exactly `prussian-300` - reused here on a `background-color` the same way Slider's own
-active track-stop dot already reuses it (see `slider.module.css`'s own comment: "needs the
-subtle/light brand color for contrast against that dark fill"), not a text-token repurposed by
-coincidence. Caught live in Storybook twice: first the mistyped `-subtle` token name resolved to
+gives `#b3e3ff` - `prussian-300`, a light tint, not a darker/duller shade of `prussian-900`. That
+token now exists code-side (added in the brand-taupe token migration): `prussian-300` in light,
+`prussian-900` in dark - the exact Figma-matching token, now used for this divider. Before the
+migration the divider used `--color-content-brand-primary-subtle` as a stand-in (the border-subtle
+token did not exist yet); the two are identical in light (`prussian-300`) but differ in dark
+(content `prussian-700` vs border `prussian-900`). The subtle tint is applied to a
+`background-color` the same way Slider's own active track-stop dot already reuses a subtle brand
+color (see `slider.module.css`'s own comment: "needs the subtle/light brand color for contrast
+against that dark fill"), not a text-token repurposed by coincidence. Caught live in Storybook twice: first the mistyped `-subtle` token name resolved to
 nothing (fully transparent divider); after that fix, the syntactically-valid but wrong substitute
 token rendered a divider that was technically present but exactly camouflaged against both
 buttons' own background.

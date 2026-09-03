@@ -42,16 +42,16 @@
 }
 
 /*
- * --color-content-brand-primary-subtle, not --color-border-brand-primary-default: the primary button's own
- * background is --color-background-brand-primary-bold-default, which resolves to the exact same
- * prussian-900 primitive as --color-border-brand-primary-default - a same-color-on-same-color divider that
- * disappears. The subtle/light tint is what Figma's own divider fill actually uses here, the same
- * "needs the subtle brand color for contrast against a bold fill" reuse Slider's own active
- * track-stop dot already establishes (see slider.module.css) - not a text color repurposed by
- * coincidence.
+ * --color-border-brand-primary-subtle is the variable Figma binds this divider fill to
+ * (prussian-300 light / prussian-900 dark). NOT --color-border-brand-primary-default: that resolves
+ * to the same prussian-900 primitive as the primary button's own background
+ * (--color-background-brand-primary-bold-default), a same-color-on-same-color divider that
+ * disappears. Before the brand-taupe token migration this used --color-content-brand-primary-subtle
+ * as a stand-in (the border-subtle token did not exist yet) - identical in light, but prussian-700
+ * rather than Figma's prussian-900 in dark.
  */
 .appearance_primary .divider:not([data-disabled='true']) {
-  background-color: var(--color-content-brand-primary-subtle);
+  background-color: var(--color-border-brand-primary-subtle);
 }
 
 .size_xs .divider {

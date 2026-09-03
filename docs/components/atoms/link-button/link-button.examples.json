@@ -7,6 +7,10 @@
     {
       "name": "External navigation",
       "jsx": "<LinkButton href='https://example.com' external>Documentation</LinkButton>"
+    },
+    {
+      "name": "Inverse (on a dark surface)",
+      "jsx": "<LinkButton href='/learn-more' isInverse>Learn more</LinkButton>"
     }
   ]
 }

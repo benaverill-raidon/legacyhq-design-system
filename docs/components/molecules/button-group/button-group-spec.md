@@ -127,8 +127,8 @@ Example:
 ## Design Tokens
 
 ### Spacing
-Gap between buttons is `--spacing-xs` (4px) in both orientations, read directly from the Figma
-auto-layout `itemSpacing` (4px, unchanged across all 6 variants).
+Gap between buttons is `--spacing-sm` (8px) in both orientations. (This was updated from the
+original `--spacing-xs`/4px per design direction; keep the code and Figma `itemSpacing` in sync.)
 
 ### Layout
 `display: inline-flex` (hugs content, matching Figma's `AUTO` sizing on both axes), `flex-direction`
@@ -181,7 +181,7 @@ no state of its own.
 ## QA Checklist
 
 ### Visual
-- [ ] Matches Figma spacing (4px) in both orientations
+- [ ] Matches Figma spacing (8px) in both orientations
 - [ ] Buttons keep their own width/height (no stretch)
 - [ ] Light mode works
 - [ ] Dark mode works

@@ -83,7 +83,7 @@ pattern from one sample:
 
 | Tone | Icon | Icon color | Hover/open tint |
 |------|------|------------|------------------|
-| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-hover` |
+| `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-bold-hover` |
 | `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hover` |
 | `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hover` |
 | `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hover` |

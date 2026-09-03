@@ -293,8 +293,8 @@ describe('Menu', () => {
     expect(menuCss).toContain('var(--component-menu-width-sm)');
     expect(menuCss).toContain('var(--component-menu-width-md)');
     expect(menuCss).toContain('var(--component-menu-width-lg)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-hover)');
-    expect(menuCss).toContain('var(--color-background-neutral-overlay-press)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-bold-hover)');
+    expect(menuCss).toContain('var(--color-background-neutral-overlay-bold-press)');
     expect(menuCss).toContain('var(--color-background-selected-default-default)');
     expect(menuCss).toContain('var(--color-content-selected)');
   });
@@ -309,7 +309,7 @@ describe('Menu', () => {
     expect(menuCss).toMatch(/\.item\.item_selected[^{]*:active\s*\{[^}]*var\(--color-background-selected-default-press\)/);
     expect(menuCss).not.toContain('--color-content-brand-primary-default');
     expect(menuCss).not.toContain('--color-background-brand-primary-subtle');
-    expect(menuCss).not.toContain('--color-border-brand-primary');
+    expect(menuCss).not.toContain('--color-border-brand-primary-default');
   });
 
   it("renders the selected indicator as a 2px inset left box-shadow, not a border-left, matching Figma's strokeAlign=INSIDE (padding stays unchanged)", () => {

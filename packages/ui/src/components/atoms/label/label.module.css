@@ -56,7 +56,7 @@
 }
 
 .tone_default.emphasis_bold {
-  --label-background: var(--color-background-accent-gray-bold-default);
+  --label-background: var(--color-background-accent-taupe-bold-default);
   --label-color: var(--color-content-inverse);
 }
 

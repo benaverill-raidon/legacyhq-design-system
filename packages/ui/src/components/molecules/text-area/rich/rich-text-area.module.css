@@ -118,7 +118,7 @@
    active item with this class instead of moving focus (the aria-activedescendant pattern). Matches
    Menu's own hover fill. */
 :global(.rta-active) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 /* Subtle appearance - transparent box, bottom accent only, matching Text Area's subtle. */

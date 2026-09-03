@@ -32,6 +32,7 @@ Use Icon Button when the action is recognizable from an icon and available space
 
 - [ ] Reuse Button-family sizing and radius tokens.
 - [ ] Preserve appearance, size, shape, expanded state, className, and focus-ring behavior.
+- [ ] Support `isInverse` as an orthogonal on-dark treatment (not part of the appearance axis) for placement on dark/bold surfaces such as Banner, using the `color-background-neutral-overlay-subtle-*` overlays; flattened by `disabled`.
 - [ ] Keep square layout dimensions by size.
 
 ## Examples to document
@@ -41,4 +42,5 @@ Use Icon Button when the action is recognizable from an icon and available space
 - [ ] `tooltip={false}` with external Tooltip composition
 - [ ] `aria-labelledby` with explicit tooltip
 - [ ] Disabled explanation tooltip
+- [ ] Inverse (on a dark surface)
 - [ ] Toolbar usage

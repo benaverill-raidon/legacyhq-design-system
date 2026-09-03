@@ -134,13 +134,14 @@ Example:
 
 | Appearance | Token | Value (Light) | Value (Dark) |
 |------------|------------------------------------|--------------------------------|--------------------------------|
-| default | `--color-skeleton-default` (semantic) | `color-neutral-alpha-1200-08` | `color-neutral-alpha-100-08` |
-| subtle | `--component-skeleton-color-subtle` (component) | `color-neutral-alpha-1200-04` | `color-neutral-alpha-100-04` |
+| default | `--component-skeleton-color-default` (component) | `color-brand-taupe-alpha-1200-8` | `color-brand-taupe-alpha-100-08` |
+| subtle | `--component-skeleton-color-subtle` (component) | `color-brand-taupe-alpha-1200-4` | `color-brand-taupe-alpha-100-04` |
 
-Both were read directly off the Figma component's `boundVariables` via the Desktop Bridge plugin:
-`default` binds a `Semantic: Colors` variable (`color/skeleton/default`), `subtle` binds a
-`Component: Skeleton` variable (`color/skeleton/subtle`) - matching this design system's own
-tiering (semantic tokens for the default case, a component-tier token for the one visual
+Both were originally read directly off the Figma component's `boundVariables` via the Desktop
+Bridge plugin. After the brand-taupe token migration (which removed the semantic
+`color/skeleton/default`), both appearances now bind `Component: Skeleton` variables
+(`color/skeleton/default` and `color/skeleton/subtle`) that alias brand-taupe alpha primitives -
+matching this design system's own tiering (a component-tier token for the one visual
 exception), not a guess. Both are new tokens added alongside this component; no existing semantic
 token already expressed "skeleton placeholder fill" (the closest match, `color-content-loading`,
 resolves to the same primitive by coincidence but is a distinct, pre-existing, currently-unused

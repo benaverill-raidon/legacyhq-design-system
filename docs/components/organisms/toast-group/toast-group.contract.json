@@ -1,0 +1,116 @@
+{
+  "name": "ToastGroup",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Stack transient Toasts and provide the imperative toast() API.",
+  "intent": "Pin a bottom-right stack of Toasts that collapses in a 3D pile and expands into a vertical list on hover, with auto-dismiss, pause-on-hover, and swipe-to-dismiss.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": null,
+    "componentName": "toast-group",
+    "verifiedAt": "2026-09-02",
+    "shape": "no-node-exception",
+    "notes": "Code-only behavior component - there is no Figma component for the group. It stacks the `toast` component (node 1565:12728) and its stacking/hover-expand behavior follows shadcn/sonner. The behavior was specified by the design owner, not a Figma node."
+  },
+  "useCases": [
+    "show transient notifications app-wide via toast()",
+    "stack multiple concurrent toasts",
+    "update a pending (loading) toast to success/error in place"
+  ],
+  "antiPatterns": [
+    "persistent or in-context messages",
+    "blocking confirmations",
+    "rendering more than one ToastGroup"
+  ],
+  "anatomy": [
+    { "name": "region", "element": "ol", "required": true, "description": "fixed bottom-right, aria-labelled list of toasts; grows/shrinks between collapsed and expanded" },
+    { "name": "item", "element": "li", "required": true, "description": "an absolutely-positioned wrapper around a Toast, transformed for the stack/expanded layouts and swipe" }
+  ],
+  "props": {
+    "maxVisible": { "type": "number", "default": 3, "required": false, "description": "How many toasts show stacked before the rest collapse behind them." },
+    "duration": { "type": "number", "default": 5000, "required": false, "description": "Default auto-dismiss delay (ms) for toasts that don't set their own." },
+    "label": { "type": "string", "default": "Notifications", "required": false },
+    "className": { "type": "string", "default": null, "required": false }
+  },
+  "imperativeApi": {
+    "toast": "(title, options?) => id",
+    "toast.success": "(title, options?) => id",
+    "toast.error": "(title, options?) => id",
+    "toast.warning": "(title, options?) => id",
+    "toast.info": "(title, options?) => id",
+    "toast.loading": "(title, options?) => id  (no auto-dismiss by default)",
+    "toast.dismiss": "(id?) => void  (dismiss one, or all when id is omitted)",
+    "options": "{ id?, description?, actions?, duration?, isDismissible?, appearance? }"
+  },
+  "tokens": {
+    "semantic": {
+      "spacing": { "inset": "--spacing-xl" }
+    },
+    "constants": {
+      "collapsedPeek": "16px",
+      "scaleStep": "0.05",
+      "expandedGap": "8px",
+      "swipeThreshold": "80px",
+      "regionWidth": "368px"
+    }
+  },
+  "accessibility": {
+    "nativeElement": "ol",
+    "regionLabelled": true,
+    "toastRole": "status",
+    "focusExpandsAndPauses": true,
+    "notes": "Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions."
+  },
+  "behaviorRules": [
+    "Mount exactly one ToastGroup; call toast() from anywhere.",
+    "Keep the newest toast at the front; show at most maxVisible toasts at once (collapsed or expanded) and queue the rest, moving them into view as visible toasts dismiss.",
+    "Collapsed, stack the visible toasts in a 3D pile (older ones peek up and scale down); expand the visible toasts into a spaced vertical list on hover or focus.",
+    "Auto-dismiss each toast after its duration; pause the timers while the stack is hovered or focused.",
+    "Support swipe/drag to dismiss past a threshold.",
+    "Reduce transitions to instant under prefers-reduced-motion.",
+    "Update a toast in place when the same id is reused (loading -> success/error)."
+  ],
+  "compositionRules": [
+    "Render the Toast component for each item.",
+    "Prefer toast() over rendering Toast directly."
+  ],
+  "contentRules": [
+    "Toasts should carry redundant, non-critical information.",
+    "Do not hide the only path to an action inside a toast."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly."
+  ],
+  "implementationNotes": [
+    "A module-level observer store backs the imperative toast() API so it works without a React context.",
+    "Toast heights are measured (ResizeObserver, guarded for non-DOM environments) to lay out the expanded list.",
+    "Use CSS Modules; transforms are driven by inline CSS custom properties.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": ["Toast", "SectionMessage", "Banner"],
+  "do": [
+    "Mount one ToastGroup near the app root.",
+    "Use toast()/toast.success/error/... to show toasts.",
+    "Reuse an id to update a loading toast when it resolves."
+  ],
+  "dont": [
+    "Do not render more than one ToastGroup.",
+    "Do not use toasts for critical or blocking messages.",
+    "Do not hardcode colors or spacing."
+  ],
+  "acceptanceCriteria": [
+    "Renders nothing when there are no toasts.",
+    "Renders a toast triggered via the imperative API in an aria-labelled list.",
+    "Sets the appearance from the toast variant helpers.",
+    "Updates a toast in place when the same id is reused.",
+    "Dismisses a toast when its dismiss button is clicked.",
+    "Auto-dismisses after the duration elapses.",
+    "Keeps every toast in the DOM while stacked, newest first.",
+    "Expands to reveal descriptions when the stack is hovered.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

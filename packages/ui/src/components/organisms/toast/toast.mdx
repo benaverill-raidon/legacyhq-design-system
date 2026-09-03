@@ -1,0 +1,125 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ToastStories from './Toast.stories';
+
+<Meta of={ToastStories} name="Docs" />
+
+# Toast
+
+Toast is a raised notification card: a leading status tile (or a spinner while loading), a title, an
+optional description and actions, and a dismiss button. On its own it is the presentational card;
+in practice toasts are shown and stacked by **Toast Group** through the imperative `toast()` API.
+
+<Canvas of={ToastStories.Playground} />
+
+## When to use
+
+- A brief, transient confirmation or status that does not interrupt the task ("Changes saved").
+- A background result the user should know about ("Upload failed", "File ready").
+- A pending operation with a spinner (`loading`), later updated to success/error.
+
+## When not to use
+
+- **For a persistent, in-context status.** Use `SectionMessage`.
+- **For a full-width page-level announcement.** Use `Banner`.
+- **For a blocking confirmation.** Use `ModalDialog`.
+
+## Anatomy
+
+<Canvas of={ToastStories.Appearances} />
+
+1. **Root** - a raised-surface card with a 1px border, radius, and the overlay elevation shadow.
+2. **Leading icon** - an `IconTile` colored per appearance, or a `Spinner` for `loading`.
+3. **Title** - the required lead line (`heading-xs`).
+4. **Dismiss** - a dismiss button (top-right), unless `isDismissible` is false.
+5. **Description** - optional supporting text (`body-md`), shown when expanded.
+6. **Actions** - optional Buttons, shown when expanded.
+
+## Usage guidance
+
+### Appearance
+
+`appearance` sets the leading status tile: `default` (gray), `success` (green), `info` (blue),
+`warning` (orange), `error` (red), and `loading` (a spinner instead of a tile). Use `loading` for a
+pending operation and update the same toast id to `success`/`error` when it resolves.
+
+### Expanded and collapsed
+
+<Canvas of={ToastStories.ExpandedCollapsed} />
+
+`expanded` controls whether the description and actions are shown. A collapsed toast is compact
+(title only); an expanded one reveals its detail. Toast Group drives this from its own
+collapsed/hovered state, so a stacked toast shows its title and expands on hover.
+
+### Dismiss
+
+A dismiss button is shown by default and calls `onDismiss`. Hide it (`isDismissible={false}`) for a
+toast the user shouldn't close manually - typically a `loading` toast that resolves on its own.
+
+### Accessibility
+
+Each toast is a `role="status"` (polite) region so screen readers announce it without interrupting.
+The leading icon is decorative; the dismiss button is a labelled `IconButton`.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>title</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Required. The lead line.</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'success' | 'info' | 'warning' | 'error' | 'loading'</code></td>
+      <td><code>'default'</code></td>
+      <td>Leading status tile, or a spinner for loading.</td>
+    </tr>
+    <tr>
+      <td><code>description</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Supporting text, shown when expanded.</td>
+    </tr>
+    <tr>
+      <td><code>actions</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Buttons, shown when expanded.</td>
+    </tr>
+    <tr>
+      <td><code>expanded</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether the description and actions are shown.</td>
+    </tr>
+    <tr>
+      <td><code>isDismissible</code></td>
+      <td><code>boolean</code></td>
+      <td><code>true</code></td>
+      <td>Whether the dismiss button is shown.</td>
+    </tr>
+    <tr>
+      <td><code>onDismiss</code></td>
+      <td><code>() =&gt; void</code></td>
+      <td>-</td>
+      <td>Called when the dismiss button is clicked.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Toast Group** - stacks toasts and provides the imperative `toast()` API.
+- **SectionMessage** - a persistent, in-context status.
+- **Banner** - a full-width page-level announcement.
+- **IconTile** / **Spinner** - the leading visuals Toast composes.

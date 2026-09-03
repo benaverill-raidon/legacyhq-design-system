@@ -199,8 +199,8 @@ Inline Edit, not the consumer, renders those buttons.
 
 ### Spacing
 Gap between the content row and the action row is `--spacing-sm` (8px). Gap between the two action
-buttons themselves stays `--spacing-xs` (4px), read directly from Figma's auto-layout `itemSpacing`
-on the inner `button-group`.
+buttons themselves is also `--spacing-sm` (8px), matching the Button Group standard. (This was
+updated from the original `--spacing-xs`/4px Figma `itemSpacing`; keep the code and Figma in sync.)
 
 ### Layout
 The root diverges from Figma's own single-row layout, per explicit design feedback: `display: flex`,
@@ -275,7 +275,7 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
       room for the buttons)
 - [ ] `actionButtons={false}` hides the icon-button pair while still editing
 - [ ] Gap between the field and the action row matches `--spacing-sm` (8px); gap between the two
-      action buttons themselves matches `--spacing-xs` (4px)
+      action buttons themselves also matches `--spacing-sm` (8px)
 - [ ] Light mode works
 - [ ] Dark mode works
 

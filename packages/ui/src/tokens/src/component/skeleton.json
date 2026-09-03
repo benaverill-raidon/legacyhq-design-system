@@ -2,15 +2,25 @@
   "component": {
     "skeleton": {
       "Light": {
+        "color-default": {
+          "value": "var(--color-brand-taupe-alpha-1200-8)",
+          "type": "color",
+          "originalName": "color/skeleton/default"
+        },
         "color-subtle": {
-          "value": "var(--color-neutral-alpha-1200-04)",
+          "value": "var(--color-brand-taupe-alpha-1200-4)",
           "type": "color",
           "originalName": "color/skeleton/subtle"
         }
       },
       "Dark": {
+        "color-default": {
+          "value": "var(--color-brand-taupe-alpha-100-08)",
+          "type": "color",
+          "originalName": "color/skeleton/default"
+        },
         "color-subtle": {
-          "value": "var(--color-neutral-alpha-100-04)",
+          "value": "var(--color-brand-taupe-alpha-100-04)",
           "type": "color",
           "originalName": "color/skeleton/subtle"
         }

@@ -337,7 +337,7 @@ describe('tag CSS contract', () => {
     expect(tagCss).toContain('--tag-border: var(--color-border-accent-blue);');
     expect(tagCss).toContain('--tag-color: var(--color-content-accent-blue-bolder);');
     expect(tagCss).toContain('--tag-background: var(--color-background-brand-primary-subtle-default);');
-    expect(tagCss).toContain('--tag-border: var(--color-border-brand-primary);');
+    expect(tagCss).toContain('--tag-border: var(--color-border-brand-primary-default);');
     expect(tagCss).toContain('--tag-color: var(--color-content-brand-primary-default);');
   });
 

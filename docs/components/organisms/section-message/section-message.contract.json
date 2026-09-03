@@ -1,0 +1,225 @@
+{
+  "name": "SectionMessage",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "A bordered, in-context status panel.",
+  "intent": "Carry a section-level status - information, success, warning, or error - with an optional title, description, actions, and dismiss.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2286:17082",
+    "componentName": "section-message",
+    "variantCount": 4,
+    "verifiedAt": "2026-09-01",
+    "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
+  },
+  "useCases": [
+    "communicate a permission or access restriction inside a section",
+    "confirm a successful action inline",
+    "warn about the state of a section or form",
+    "summarize an error inside a panel"
+  ],
+  "antiPatterns": [
+    "full-width page-level announcement bar",
+    "transient auto-dismissing notification",
+    "inline status next to a single field or row",
+    "blocking confirmation or decision"
+  ],
+  "anatomy": [
+    {
+      "name": "root",
+      "element": "div",
+      "required": true,
+      "description": "bordered, rounded box with the appearance's tinted background and colored border"
+    },
+    {
+      "name": "icon",
+      "required": true,
+      "description": "the status icon for the appearance, in its status color; decorative"
+    },
+    {
+      "name": "title",
+      "required": false,
+      "description": "optional bold lead line (heading-sm)"
+    },
+    {
+      "name": "description",
+      "required": true,
+      "description": "the children; wraps to multiple lines (body-md)"
+    },
+    {
+      "name": "actions",
+      "required": false,
+      "description": "optional Links, separated by an inserted middot"
+    },
+    {
+      "name": "dismiss",
+      "required": false,
+      "description": "optional dismiss IconButton (xs, subtle) in the top-right"
+    }
+  ],
+  "props": {
+    "appearance": {
+      "type": "enum",
+      "values": ["information", "success", "warning", "error"],
+      "default": "information",
+      "required": false
+    },
+    "title": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false,
+      "description": "Optional bold title above the description."
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "description": "The description. Wraps to multiple lines."
+    },
+    "actions": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false,
+      "description": "Optional Links; middot separators are inserted between them."
+    },
+    "isDismissible": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    },
+    "onDismiss": {
+      "type": "() => void",
+      "default": null,
+      "required": false,
+      "description": "Called when dismissed. The message also hides itself."
+    },
+    "role": {
+      "type": "string",
+      "default": "status",
+      "required": false,
+      "description": "Overridable ARIA role - e.g. alert for urgent errors."
+    },
+    "className": {
+      "type": "string",
+      "default": null,
+      "required": false
+    }
+  },
+  "variants": {
+    "appearance": ["information", "success", "warning", "error"]
+  },
+  "slots": [
+    { "name": "title", "required": false, "allowedContent": "React.ReactNode" },
+    { "name": "children", "required": true, "allowedContent": "React.ReactNode" },
+    { "name": "actions", "required": false, "allowedContent": "React.ReactNode (Link elements)" }
+  ],
+  "tokens": {
+    "semantic": {
+      "spacing": {
+        "padding": "--spacing-lg",
+        "rootGap": "--spacing-lg",
+        "contentGap": "--spacing-sm",
+        "actionsGap": "--spacing-xs"
+      },
+      "border": {
+        "width": "--border-width-sm",
+        "radius": "--border-radius-xl"
+      },
+      "typography": {
+        "title": "heading-sm",
+        "description": "body-md"
+      },
+      "color": {
+        "informationBackground": "--color-background-information-subtle-default",
+        "informationBorder": "--color-border-information",
+        "informationIcon": "--color-content-information",
+        "successBackground": "--color-background-success-subtle-default",
+        "successBorder": "--color-border-success",
+        "successIcon": "--color-content-success",
+        "warningBackground": "--color-background-warning-subtle-default",
+        "warningBorder": "--color-border-warning",
+        "warningIcon": "--color-content-warning",
+        "errorBackground": "--color-background-error-subtle-default",
+        "errorBorder": "--color-border-error",
+        "errorIcon": "--color-content-error",
+        "title": "--color-content-default",
+        "description": "--color-content-default",
+        "separator": "--color-content-subtle"
+      }
+    }
+  },
+  "accessibility": {
+    "nativeElement": "div",
+    "defaultRole": "status",
+    "roleOverridable": true,
+    "iconDecorative": true,
+    "colorNotSoleSignal": true,
+    "dismissLabel": "Dismiss"
+  },
+  "behaviorRules": [
+    "Set the tinted background, border color, and status icon from appearance.",
+    "Render the icon in its own status color (not inherited).",
+    "Render the title only when provided.",
+    "Wrap the description across multiple lines (no truncation).",
+    "Insert a middot separator between each action; render the actions region only when actions are provided.",
+    "Show the dismiss button only when isDismissible is true; on dismiss, hide the message and call onDismiss.",
+    "Default role to status (a polite live region); allow it to be overridden.",
+    "Mark the status icon aria-hidden and label the dismiss button."
+  ],
+  "compositionRules": [
+    "Pass Link elements to actions (a fragment or an array); a single top-level fragment is unwrapped so each Link is separated.",
+    "Keep actions to a small number of related links.",
+    "Use Banner, Toast, or InlineMessage for the non-section-level cases."
+  ],
+  "contentRules": [
+    "Lead with the essential status in the title or first sentence.",
+    "Do not rely on color alone to communicate the appearance.",
+    "Reserve dismiss for messages the user can safely make go away."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef.",
+    "Use React.memo.",
+    "Use CSS Modules.",
+    "Reuse the StatusIcon set and the atoms Link / IconButton.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": [
+    "Banner",
+    "Toast",
+    "InlineMessage",
+    "Link",
+    "IconButton"
+  ],
+  "do": [
+    "Use Section Message for a contained, in-context status.",
+    "Use appearance to signal the semantic status.",
+    "Pass Links to actions and let the component separate them.",
+    "Use a title for a scannable lead when the message is longer."
+  ],
+  "dont": [
+    "Do not use Section Message for page-level or transient messages.",
+    "Do not rely on color alone to convey meaning.",
+    "Do not make a persistent constraint dismissible.",
+    "Do not hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders the description.",
+    "Renders the title when provided and omits it otherwise.",
+    "Defaults to role status and the information appearance.",
+    "Supports appearances information, success, warning, error.",
+    "Renders a status icon.",
+    "Interleaves a middot between actions and omits the region when none.",
+    "Is not dismissible by default; dismisses and calls onDismiss when the dismiss button is clicked.",
+    "Allows the role to be overridden.",
+    "Forwards the ref to the root element.",
+    "Uses semantic spacing, typography, border, and color tokens.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

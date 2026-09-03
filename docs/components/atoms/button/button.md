@@ -16,6 +16,8 @@ Button separates visual emphasis from semantic meaning. `appearance` controls em
 
 Button is text-first. It may include leading or trailing icons, but icon-only usage belongs to Icon Button. Loading should preserve the action label and avoid layout shift.
 
+`isInverse` is an orthogonal on-dark treatment (not a `tone` value) for buttons placed on dark or bold-colored surfaces such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press overlays; disabled flattens it the same way it flattens tone.
+
 ## Accessibility expectations
 
 Button must render a native `<button>`, default to `type="button"`, support native `type="submit"` and `type="reset"`, and use the native `disabled` attribute when disabled. Loading buttons set `aria-busy="true"`, prevent duplicate activation, and expose a non-interactive busy state without removing the action label. Focus must use the shared Focus Ring pattern.

@@ -86,6 +86,15 @@
       }
     },
     {
+      "name": "Inverse (on a dark surface)",
+      "description": "The on-dark treatment for placement on a dark or bold-colored surface such as a Banner - transparent fill, inverse content, white subtle overlays on hover/press.",
+      "jsx": "<Button isInverse>Learn more</Button>",
+      "props": {
+        "isInverse": true,
+        "children": "Learn more"
+      }
+    },
+    {
       "name": "Disabled (default appearance)",
       "description": "A disabled button using native disabled behavior. appearance=\"default\" keeps a visible border (color-border-disabled), matching its own resting bordered look.",
       "jsx": "<Button disabled>Disabled</Button>",

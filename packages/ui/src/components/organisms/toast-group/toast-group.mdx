@@ -1,0 +1,109 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ToastGroupStories from './ToastGroup.stories';
+
+<Meta of={ToastGroupStories} name="Docs" />
+
+# Toast Group
+
+Toast Group pins a stack of `Toast`s to the bottom-right of the viewport and provides the imperative
+`toast()` API. Toasts stack in a compact, three-dimensional pile; hovering (or focusing into) the
+stack expands it into a spaced vertical list. Toasts auto-dismiss, pause while the stack is hovered,
+and can be swiped away.
+
+<Canvas of={ToastGroupStories.Playground} />
+
+## Setup
+
+Mount **one** `ToastGroup` near the root of the app, then call `toast()` from anywhere:
+
+```tsx
+import { ToastGroup, toast } from '@ui/components/organisms/toast-group';
+
+function App() {
+  return (
+    <>
+      <YourApp />
+      <ToastGroup />
+    </>
+  );
+}
+
+// later, from anywhere:
+toast.success('Changes saved', { description: 'Your matter is up to date.' });
+```
+
+## The `toast()` API
+
+```ts
+toast(title, options?)            // default appearance
+toast.success(title, options?)
+toast.error(title, options?)
+toast.warning(title, options?)
+toast.info(title, options?)
+toast.loading(title, options?)    // no auto-dismiss by default
+toast.dismiss(id?)                // dismiss one, or all when id is omitted
+```
+
+`options`: `{ id?, description?, actions?, duration?, isDismissible?, appearance? }`. Reuse an `id`
+to update a toast in place - the common pattern for a `loading` toast that resolves:
+
+```tsx
+const id = toast.loading('Uploading your file...');
+await upload();
+toast.success('File uploaded', { id });
+```
+
+## Behavior
+
+- **Stacking.** The newest toast is at the front; at most `maxVisible` (default 3) are shown at once
+  and the rest are queued, moving into view as visible toasts dismiss. Hover or focus expands the
+  visible toasts into a spaced vertical list (still capped at `maxVisible`).
+- **Auto-dismiss.** Each toast dismisses after its `duration` (default 5000ms; `loading` toasts stay
+  until updated or dismissed). The timers pause while the stack is hovered or focused.
+- **Swipe to dismiss.** Drag a toast sideways past a threshold to dismiss it.
+- **Reduced motion.** Transitions collapse to instant under `prefers-reduced-motion`.
+
+## Accessibility
+
+The stack is an `aria-label`led list region; each toast is a polite `role="status"`. Focusing into
+the stack (Tab) expands it and pauses auto-dismiss, so keyboard users can reach the dismiss buttons
+and actions. Toasts should carry non-essential, redundant information - never put the only copy of a
+critical message or the only path to an action in a toast.
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>maxVisible</code></td>
+      <td><code>number</code></td>
+      <td><code>3</code></td>
+      <td>How many toasts show stacked before the rest collapse behind them.</td>
+    </tr>
+    <tr>
+      <td><code>duration</code></td>
+      <td><code>number</code></td>
+      <td><code>5000</code></td>
+      <td>Default auto-dismiss delay (ms) for toasts that don't set their own.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>string</code></td>
+      <td><code>'Notifications'</code></td>
+      <td>Accessible label for the region.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Toast** - the individual card this group stacks.
+- **SectionMessage** / **Banner** - for persistent, non-transient messages.

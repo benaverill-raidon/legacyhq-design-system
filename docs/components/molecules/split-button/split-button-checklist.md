@@ -187,7 +187,7 @@ Final implementation decisions:
 - `isFullWidth` is omitted from the props Split Button inherits from Button - no verified Figma
   variant for a full-width split button exists.
 - The primary-appearance divider uses `color-content-brand-primary-subtle`, not
-  `color-border-brand-primary` (the obvious first guess for a name match) or the nonexistent
+  `color-border-brand-primary-default` (the obvious first guess for a name match) or the nonexistent
   `color-border-brand-primary-subtle` (Figma's own variable name on that fill). `color-border-brand-
   primary` resolves to the same `prussian-900` primitive as the primary button's own background, so
   it painted an invisible same-color-on-same-color divider. Resolving Figma's fill node directly (not

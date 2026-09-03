@@ -128,7 +128,7 @@ describe('InlineMessage', () => {
   });
 
   it('maps each tone to its own overlay/hover tint token, matching Figma', () => {
-    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-hover);');
+    expect(inlineMessageCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
     expect(inlineMessageCss).toContain('background: var(--color-background-information-overlay-hover);');
     expect(inlineMessageCss).toContain('background: var(--color-background-success-overlay-hover);');
     expect(inlineMessageCss).toContain('background: var(--color-background-warning-overlay-hover);');

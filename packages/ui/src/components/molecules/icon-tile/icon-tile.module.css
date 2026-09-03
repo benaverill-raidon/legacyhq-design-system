@@ -74,12 +74,12 @@
 }
 
 .tone_gray.appearance_default {
-  background: var(--color-background-accent-gray-default-default);
+  background: var(--color-background-accent-taupe-default-default);
   color: var(--color-content-default);
 }
 
 .tone_gray.appearance_bold {
-  background: var(--color-background-accent-gray-bold-default);
+  background: var(--color-background-accent-taupe-bold-default);
   color: var(--color-content-inverse);
 }
 

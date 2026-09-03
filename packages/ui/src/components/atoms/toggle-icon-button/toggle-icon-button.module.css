@@ -41,11 +41,11 @@
     [data-force-state='hover'],
     [data-force-state='focus']
   ) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .root:not(:disabled):not(.selected):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .tone_default {

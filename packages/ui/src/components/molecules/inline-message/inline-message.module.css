@@ -38,7 +38,7 @@
  * system.
  */
 .tone_default.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .tone_info.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {

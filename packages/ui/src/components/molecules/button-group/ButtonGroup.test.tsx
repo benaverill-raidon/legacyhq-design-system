@@ -130,7 +130,7 @@ describe('ButtonGroup', () => {
     expect(ref.current).toBeInstanceOf(HTMLDivElement);
   });
 
-  it('uses the semantic xs spacing token for the gap', () => {
-    expect(buttonGroupCss).toContain('gap: var(--spacing-xs);');
+  it('uses the semantic sm spacing token for the gap', () => {
+    expect(buttonGroupCss).toContain('gap: var(--spacing-sm);');
   });
 });

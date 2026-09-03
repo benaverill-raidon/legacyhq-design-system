@@ -87,8 +87,8 @@ describe('Skeleton', () => {
     expect(screen.getByTestId('skeleton')).toHaveStyle({ inlineSize: '48px', blockSize: '48px' });
   });
 
-  it('uses semantic and component color tokens for each appearance', () => {
-    expect(skeletonCss).toContain('--skeleton-color: var(--color-skeleton-default);');
+  it('uses component color tokens for each appearance', () => {
+    expect(skeletonCss).toContain('--skeleton-color: var(--component-skeleton-color-default);');
     expect(skeletonCss).toContain('--skeleton-color: var(--component-skeleton-color-subtle);');
   });
 

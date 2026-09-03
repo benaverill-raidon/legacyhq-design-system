@@ -164,8 +164,8 @@ describe('ToggleButton', () => {
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-sm);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-md);');
     expect(toggleButtonCss).toContain('min-block-size: var(--size-control-lg);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-hover);');
-    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
+    expect(toggleButtonCss).toContain('background: var(--color-background-neutral-overlay-bold-press);');
     expect(toggleButtonCss).toContain('background: var(--color-background-selected-default-default);');
     expect(toggleButtonCss).toContain('border-color: var(--color-border-selected);');
     expect(toggleButtonCss).toContain('color: var(--color-content-selected);');
@@ -180,7 +180,7 @@ describe('ToggleButton', () => {
     // and color/content/selected. The resting values are unchanged (each new token aliases the same
     // primitive its predecessor did) - this guards the semantic mapping, not the rendered color.
     expect(toggleButtonCss).not.toContain('--color-background-brand-primary-');
-    expect(toggleButtonCss).not.toContain('--color-border-brand-primary');
+    expect(toggleButtonCss).not.toContain('--color-border-brand-primary-default');
     expect(toggleButtonCss).not.toContain('--color-content-brand-primary-');
   });
 
@@ -198,7 +198,7 @@ describe('ToggleButton', () => {
 
   it('shows the hover fill on focus-visible too, matching Button', () => {
     expect(toggleButtonCss).toMatch(
-      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-hover\);/,
+      /:is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\)\s*\{\s*background: var\(--color-background-neutral-overlay-bold-hover\);/,
     );
   });
 

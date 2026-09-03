@@ -151,7 +151,7 @@ size = 'md'             // matches Button's/IconButton's own code default
   Do not use `--color-border-brand-primary-subtle` - it does not exist in the generated token CSS
   (Figma's own variable on this fill uses that name, but no code-side "subtle" border variant has
   been built); it silently resolves to nothing and renders the divider fully transparent.
-  Do not use `--color-border-brand-primary` either, even though the name looks like the obvious
+  Do not use `--color-border-brand-primary-default` either, even though the name looks like the obvious
   fallback - it resolves to the exact same `prussian-900` primitive as the primary button's own
   background (`--color-background-brand-primary-bold-default`), so the divider paints itself
   invisible on top of an identical-colored surface. Resolve Figma's own fill node directly (not
@@ -209,7 +209,7 @@ Create tests for:
 - Suppresses each segment's own border on the interior edge (`border-inline-end-width: 0` on
   `.primaryAction`, `border-inline-start-width: 0` on `.secondaryAction`)
 - Gives the primary-appearance divider `--color-content-brand-primary-subtle`, not
-  `--color-border-brand-primary` (same primitive as the primary button's own background - an
+  `--color-border-brand-primary-default` (same primitive as the primary button's own background - an
   invisible divider) or `--color-border-brand-primary-subtle` (does not exist)
 - Supports a custom `id`/`className` on the root
 

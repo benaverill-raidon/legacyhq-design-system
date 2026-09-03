@@ -1,0 +1,64 @@
+{
+  "component": "EmptyState",
+  "examples": [
+    {
+      "name": "Caught up (inherited)",
+      "description": "A transparent empty state that blends into the surface beneath it.",
+      "jsx": "<EmptyState illustration={<Illustration />} heading=\"You're all caught up!\" actions={<Link href=\"/activity\">View all activity</Link>}>No more recent activity in the past 24 hours.</EmptyState>",
+      "props": {
+        "illustration": "spot illustration",
+        "heading": "You're all caught up!",
+        "actions": "Link",
+        "children": "No more recent activity in the past 24 hours."
+      }
+    },
+    {
+      "name": "No results (informative)",
+      "description": "A self-contained empty state on a sunken surface panel, with two actions.",
+      "jsx": "<EmptyState type=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
+      "props": {
+        "type": "informative",
+        "illustration": "spot illustration",
+        "heading": "No results found",
+        "actions": "ButtonGroup",
+        "children": "Try adjusting your search or filters."
+      }
+    },
+    {
+      "name": "Description only",
+      "description": "The minimal form - just the required description.",
+      "jsx": "<EmptyState>Nothing here yet.</EmptyState>",
+      "props": {
+        "children": "Nothing here yet."
+      }
+    },
+    {
+      "name": "First run with a primary action",
+      "description": "An empty state that invites the user to create their first item.",
+      "jsx": "<EmptyState illustration={<Illustration />} heading=\"Your inbox is empty\" actions={<Button appearance=\"primary\">Compose</Button>}>New messages will appear here.</EmptyState>",
+      "props": {
+        "illustration": "spot illustration",
+        "heading": "Your inbox is empty",
+        "actions": "Button (primary)",
+        "children": "New messages will appear here."
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Error state",
+      "reason": "Use SectionMessage or Banner with the error appearance for a failure, not Empty State.",
+      "jsx": "<EmptyState heading=\"Something went wrong\">We couldn't load your matters.</EmptyState>"
+    },
+    {
+      "name": "Loading placeholder",
+      "reason": "Use Skeleton or Spinner while content loads, not an Empty State.",
+      "jsx": "<EmptyState>Loading...</EmptyState>"
+    },
+    {
+      "name": "Overloaded actions",
+      "reason": "Keep Empty State to one primary and at most one secondary action.",
+      "jsx": "<EmptyState actions={<><Button>A</Button><Button>B</Button><Button>C</Button><Button>D</Button></>}>Too many ways out.</EmptyState>"
+    }
+  ]
+}

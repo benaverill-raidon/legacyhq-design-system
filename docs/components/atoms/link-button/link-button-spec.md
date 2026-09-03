@@ -82,6 +82,7 @@ interface LinkButtonProps
   href: string;
   tone?: LinkButtonTone;
   size?: LinkButtonSize;
+  isInverse?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
   iconBefore?: React.ReactNode;
@@ -97,6 +98,7 @@ If Button uses `appearance`, use `appearance` instead.
 ```txt
 tone: default
 size: md
+isInverse: false
 isDisabled: false
 isLoading: false
 ```
@@ -223,6 +225,21 @@ Tone styles should match Button for:
 - disabled
 - loading
 
+## Inverse mapping
+
+`isInverse` is an orthogonal boolean on-dark treatment (not a `tone` value), matching Button's
+`isInverse`. It overrides the resting appearance fill with:
+
+- background: transparent
+- border: transparent
+- content/icon: `color-content-inverse`
+- hover: `color-background-neutral-overlay-subtle-hover`
+- pressed: `color-background-neutral-overlay-subtle-press`
+- focus: white subtle hover fill plus the shared focus ring
+
+It uses LinkButton's `[aria-disabled='true']` guard rather than the native `:disabled` pseudo, and
+is flattened by `isDisabled` like tone.
+
 ## Focus behavior
 
 Use the shared Focus Ring utility/classes.
@@ -275,6 +292,7 @@ href
 children
 tone / appearance
 size
+isInverse
 isDisabled
 isLoading
 iconBefore
@@ -331,6 +349,7 @@ target blank adds rel noopener noreferrer
 provided rel is preserved
 applies size class
 applies tone/appearance class
+applies inverse class when isInverse is true
 custom className works
 forwards ref
 ```

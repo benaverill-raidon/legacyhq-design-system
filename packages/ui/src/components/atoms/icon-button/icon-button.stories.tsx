@@ -14,6 +14,7 @@ const meta = {
     appearance: 'default',
     size: 'md',
     shape: 'square',
+    isInverse: false,
     disabled: false,
     isLoading: false,
     isExpanded: false,
@@ -24,6 +25,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
     size: { control: 'inline-radio', options: sizes },
     shape: { control: 'inline-radio', options: ['square', 'round'] },
+    isInverse: { control: 'boolean' },
     disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     isExpanded: { control: 'boolean' },
@@ -242,6 +244,76 @@ export const States: Story = {
       <Group title="Live - hover, tab to, and click this">
         <Cell label="Interactive">
           <IconButton aria-label="Live" appearance="primary" onClick={() => undefined}>
+            <SearchIcon />
+          </IconButton>
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+/**
+ * `isInverse` is the on-dark treatment - for an IconButton placed on a dark or bold-colored surface
+ * such as Banner. It mirrors Button's inverse: transparent fill, inverse content, and the white
+ * *subtle* overlays on hover / press / expanded. It only reads on a dark backdrop, so every specimen
+ * here sits on one. Disabled flattens the inverse look the same way it flattens tone.
+ */
+export const Inverse: Story = {
+  render: () => (
+    <div
+      style={{
+        ...stack,
+        padding: 'var(--spacing-2xl)',
+        borderRadius: 'var(--border-radius-md)',
+        background: 'var(--color-background-neutral-bold-default)',
+      }}
+    >
+      <Group title="States (on a dark surface)">
+        <Cell label="Default">
+          <IconButton aria-label="Default" isInverse tooltip={false}>
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Hover">
+          <IconButton aria-label="Hover" isInverse tooltip={false} data-force-state="hover">
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Focus visible">
+          <IconButton aria-label="Focus" isInverse tooltip={false} data-force-state="focus">
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Press">
+          <IconButton aria-label="Press" isInverse tooltip={false} data-force-state="press">
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Expanded">
+          <IconButton aria-label="Expanded" isInverse tooltip={false} isExpanded aria-haspopup="menu">
+            <MenuIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Disabled">
+          <IconButton aria-label="Disabled" isInverse tooltip={false} disabled>
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="Loading">
+          <IconButton aria-label="Loading" isInverse tooltip={false} isLoading>
+            <MoreHorizIcon />
+          </IconButton>
+        </Cell>
+      </Group>
+
+      <Group title="Shape">
+        <Cell label="square">
+          <IconButton aria-label="Square" isInverse tooltip={false} shape="square">
+            <SearchIcon />
+          </IconButton>
+        </Cell>
+        <Cell label="round">
+          <IconButton aria-label="Round" isInverse tooltip={false} shape="round">
             <SearchIcon />
           </IconButton>
         </Cell>

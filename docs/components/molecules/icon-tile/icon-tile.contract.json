@@ -173,8 +173,8 @@
       "round": "--border-radius-full-round"
     },
     "color": {
-      "gray_default": { "background": "--color-background-accent-gray-default-default", "content": "--color-content-default" },
-      "gray_bold": { "background": "--color-background-accent-gray-bold-default", "content": "--color-content-inverse" },
+      "gray_default": { "background": "--color-background-accent-taupe-default-default", "content": "--color-content-default" },
+      "gray_bold": { "background": "--color-background-accent-taupe-bold-default", "content": "--color-content-inverse" },
       "brand_default": { "background": "--color-background-brand-primary-default-default", "content": "--color-content-brand-primary-default" },
       "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse" },
       "red_default": { "background": "--color-background-accent-red-default-default", "content": "--color-content-accent-red-default" },

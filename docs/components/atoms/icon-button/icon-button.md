@@ -12,6 +12,8 @@ Do not use when text is necessary to clarify the action.
 ## Design intent
 Matches Button sizing and appearance while using only an icon.
 
+Shares Button's `isInverse` on-dark treatment - an orthogonal boolean (not part of the appearance axis) for an Icon Button placed on a dark or bold-colored surface such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press/expanded overlays, and is flattened by `disabled`.
+
 Shares Button's motion treatment exactly: hover/press/focus color transitions use `fade-quick`. No press-state scale or other transform-based motion - press feedback is color-only.
 
 ## Accessibility

@@ -160,11 +160,11 @@
 }
 
 .item:hover:not(:disabled) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .item:active:not(:disabled) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .item:disabled {

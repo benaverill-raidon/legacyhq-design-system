@@ -82,8 +82,8 @@ Width only - row height always follows content, at any size.
 ### Token Mapping
 - Width: `--component-menu-width-sm` / `-md` / `-lg`
 - Label text: `--color-content-default`; description: `--color-content-subtle`
-- Hover background: `--color-background-neutral-overlay-hover`
-- Press background: `--color-background-neutral-overlay-press`
+- Hover background: `--color-background-neutral-overlay-bold-hover`
+- Press background: `--color-background-neutral-overlay-bold-press`
 - Selected background: `--color-background-brand-primary-subtle-default` (+ `-hover`/`-press`
   on interaction); selected text: `--color-content-brand-primary-default`
 - Disabled text: `--color-content-disabled`

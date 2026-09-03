@@ -129,7 +129,7 @@
       "default": {
         "icon": "plain CSS dot (no matching status icon exists)",
         "iconColorToken": "--color-content-default",
-        "tintToken": "--color-background-neutral-overlay-hover"
+        "tintToken": "--color-background-neutral-overlay-bold-hover"
       },
       "info": {
         "icon": "StatusInformationIcon",

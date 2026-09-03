@@ -1,0 +1,84 @@
+/*
+ * Section Message is a bordered, rounded status panel. Its background, border, and status icon come
+ * from the appearance; the title and description use the default content color. Layout, spacing,
+ * border, and radius map to the tokens the Figma component is bound to: spacing-lg padding and root
+ * gap, spacing-sm between the title/description/actions, a 1px border, and a radius-xl corner.
+ */
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  box-sizing: border-box;
+  padding: var(--spacing-lg);
+  border: var(--border-width-sm) solid transparent;
+  border-radius: var(--border-radius-xl);
+}
+
+.iconSlot {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-inline-size: 0;
+}
+
+.title {
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+}
+
+.description {
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.separator {
+  color: var(--color-content-subtle);
+  user-select: none;
+}
+
+.dismiss {
+  flex: 0 0 auto;
+}
+
+.appearance_information {
+  border-color: var(--color-border-information);
+  background: var(--color-background-information-subtle-default);
+}
+
+.appearance_success {
+  border-color: var(--color-border-success);
+  background: var(--color-background-success-subtle-default);
+}
+
+.appearance_warning {
+  border-color: var(--color-border-warning);
+  background: var(--color-background-warning-subtle-default);
+}
+
+.appearance_error {
+  border-color: var(--color-border-error);
+  background: var(--color-background-error-subtle-default);
+}

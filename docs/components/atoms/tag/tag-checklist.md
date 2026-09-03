@@ -230,7 +230,7 @@ Do not hardcode:
 ## Validated Figma Details
 
 - Root fill (`color-elevation-surface-raised-default`), border (`color-border-bold`), hover/press
-  overlay layers (`color-background-neutral-overlay-hover`/`-press`), disabled border/content
+  overlay layers (`color-background-neutral-overlay-bold-hover`/`-press`), disabled border/content
   (`color-border-disabled`/`color-content-disabled`), and the focus ring color
   (`color-border-focus`, `#003655`) all matched the existing implementation exactly - no color
   drift found.

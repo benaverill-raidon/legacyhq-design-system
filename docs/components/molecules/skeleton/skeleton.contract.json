@@ -107,7 +107,7 @@
       "blockSizeDefault": "--size-250"
     },
     "color": {
-      "default": { "background": "--color-skeleton-default" },
+      "default": { "background": "--component-skeleton-color-default" },
       "subtle": { "background": "--component-skeleton-color-subtle" }
     },
     "motion": {
@@ -164,7 +164,7 @@
     "No MUI.",
     "No Tailwind.",
     "No hardcoded colors, spacing, radius, or motion timing when tokens exist.",
-    "New tokens added for this component: semantic color-skeleton-default, component color --component-skeleton-color-subtle, primitive duration-loop-slow (1500ms), and semantic motion pulse-loop - all read directly off Figma's boundVariables/reactions, not guessed.",
+    "Component color tokens --component-skeleton-color-default and --component-skeleton-color-subtle (both aliasing brand-taupe alpha primitives after the taupe token migration; the earlier semantic color-skeleton-default was removed when Figma dropped it), primitive duration-loop-slow (1500ms), and semantic motion pulse-loop - all read directly off Figma's boundVariables/reactions, not guessed.",
     "No dedicated width/height props - forwarded style/className cover arbitrary per-usage sizing, matching ProgressBar's existing convention."
   ],
   "relatedComponents": ["Spinner", "ProgressBar"],

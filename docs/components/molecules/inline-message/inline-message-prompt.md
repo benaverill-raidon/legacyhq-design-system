@@ -81,7 +81,7 @@ Map each tone to its own status icon, icon color, and hover/open tint token - ve
 directly from Figma, not assumed to generalize from one sample:
 
 ```txt
-default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-hover
+default  -> plain dot (--color-content-default)     | --color-background-neutral-overlay-bold-hover
 info     -> StatusInformationIcon (information)     | --color-background-information-overlay-hover
 success  -> StatusSuccessIcon (success)             | --color-background-success-overlay-hover
 warning  -> StatusWarningIcon (warning)              | --color-background-warning-overlay-hover

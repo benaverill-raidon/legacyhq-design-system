@@ -44,7 +44,7 @@ Link Button contains:
 
 ```txt
 size: xs | sm | md | lg
-tone: default | primary | subtle | warning | error
+tone: default | primary | subtle | warning | error | inverse
 state: default | hover | press | focus
 isDisabled: false | true
 isLoading: false | true
@@ -74,6 +74,7 @@ interface LinkButtonProps
   href: string;
   tone?: LinkButtonTone;
   size?: LinkButtonSize;
+  isInverse?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
   iconBefore?: React.ReactNode;
@@ -82,6 +83,8 @@ interface LinkButtonProps
 }
 ```
 
+The Figma `tone=inverse` variant maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), mirroring Button - it is not a `LinkButtonTone` value.
+
 If Button uses `appearance` instead of `tone`, use Button’s exact prop name.
 
 ## Defaults
@@ -89,6 +92,7 @@ If Button uses `appearance` instead of `tone`, use Button’s exact prop name.
 ```txt
 tone: default
 size: md
+isInverse: false
 isDisabled: false
 isLoading: false
 target: undefined

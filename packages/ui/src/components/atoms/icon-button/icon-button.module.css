@@ -53,11 +53,11 @@
     [data-force-state='focus']
   ),
 .appearance_default[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .appearance_primary {
@@ -95,11 +95,11 @@
     [data-force-state='focus']
   ),
 .appearance_subtle[data-expanded='true']:not(:disabled):not([data-loading='true']) {
-  background: var(--color-background-neutral-overlay-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
 }
 
 .appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
-  background: var(--color-background-neutral-overlay-press);
+  background: var(--color-background-neutral-overlay-bold-press);
 }
 
 .size_xs {
@@ -158,6 +158,35 @@
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;
+}
+
+/*
+ * Inverse: the on-dark treatment, for an IconButton placed on a dark or bold-colored surface (e.g.
+ * Banner). Mirrors Button's inverse - transparent fill, inverse content, and the white *subtle*
+ * overlays on hover / press / expanded. Declared after the appearance rules so it wins the cascade
+ * at equal specificity; the higher-specificity `:disabled` rules still flatten it. One look across
+ * appearances today; an outlined (default) inverse treatment is planned.
+ */
+.inverse:not(:disabled) {
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-content-inverse);
+}
+
+.inverse:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ),
+.inverse[data-expanded='true']:not(:disabled):not([data-loading='true']) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-hover);
+}
+
+.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: transparent;
+  background: var(--color-background-neutral-overlay-subtle-press);
 }
 
 .content {

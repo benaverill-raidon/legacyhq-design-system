@@ -1,0 +1,89 @@
+/*
+ * Banner is a full-width, page-level announcement bar. Its height hugs its content (a single
+ * message row plus block padding), matching Figma's vertical-hug frame rather than a fixed height.
+ * Padding, gaps, background, and content color all map to the tokens the Figma component is bound
+ * to: 24px inline / 8px block padding, 8px root gap, 4px message gap.
+ */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding-block: var(--spacing-sm);
+  padding-inline: var(--spacing-2xl);
+}
+
+.message {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-inline-size: 0;
+}
+
+/*
+ * Sized to the Icon primitive's own `spacing="spacious"` container (--size-300, 24px) so the
+ * plain dot lines up identically with the real status icons - the same convention InlineMessage
+ * uses. Color is inherited so the icon takes the banner's per-appearance content color.
+ */
+.iconSlot {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+  color: inherit;
+}
+
+/*
+ * The icon inherits the banner's content color (set per appearance) rather than its own status
+ * color, so it reads correctly on the bold background - the same `[data-color]` override Button
+ * uses for its icon slots.
+ */
+.iconSlot :global([data-color]) {
+  color: inherit;
+}
+
+.dot {
+  inline-size: var(--size-marker-sm);
+  block-size: var(--size-marker-sm);
+  border-radius: var(--border-radius-full-round);
+  background: currentColor;
+}
+
+.text {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: inherit;
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.appearance_default {
+  background: var(--color-background-neutral-bold-default);
+  color: var(--color-content-inverse);
+}
+
+.appearance_warning {
+  background: var(--color-background-warning-bold-default);
+  color: var(--color-content-warning-bold);
+}
+
+.appearance_error {
+  background: var(--color-background-error-bold-default);
+  color: var(--color-content-inverse);
+}

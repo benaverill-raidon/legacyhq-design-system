@@ -1,0 +1,47 @@
+{
+  "component": "ToastGroup",
+  "examples": [
+    {
+      "name": "Mount the group",
+      "description": "Mount one ToastGroup near the app root; call toast() from anywhere.",
+      "jsx": "<><YourApp /><ToastGroup /></>",
+      "props": {}
+    },
+    {
+      "name": "Success toast",
+      "description": "Trigger a success toast imperatively.",
+      "jsx": "toast.success('Changes saved', { description: 'Your matter is up to date.' })",
+      "props": {}
+    },
+    {
+      "name": "Loading updated to success",
+      "description": "Reuse the id to update a loading toast in place when it resolves.",
+      "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
+      "props": {}
+    },
+    {
+      "name": "Toast with an action",
+      "description": "Actions appear when the stack is expanded.",
+      "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' appearance='subtle'>Undo</Button> })",
+      "props": {}
+    },
+    {
+      "name": "Dismiss all",
+      "description": "Clear every toast.",
+      "jsx": "toast.dismiss()",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Multiple groups",
+      "reason": "Mount exactly one ToastGroup; multiple would each render the shared queue.",
+      "jsx": "<><ToastGroup /><ToastGroup /></>"
+    },
+    {
+      "name": "Critical message in a toast",
+      "reason": "Toasts are transient - do not use them for critical or blocking messages.",
+      "jsx": "toast.error('Your session expired - unsaved work will be lost')"
+    }
+  ]
+}

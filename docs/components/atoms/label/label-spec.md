@@ -141,7 +141,7 @@ Use semantic CSS variables where available. Do not use raw hex values.
 | Tone | Emphasis | Background token | Text token |
 |---|---|---|---|
 | `default` | `subtle` | `--color-background-neutral-default` | `--color-text-subtle` or `--color-content-subtle` |
-| `default` | `bold` | `--color-background-accent-gray-bolder-default` | `--color-text-inverse` or `--color-content-inverse` |
+| `default` | `bold` | `--color-background-accent-taupe-bold-default` | `--color-text-inverse` or `--color-content-inverse` |
 | `information` | `subtle` | `--color-background-information-default` | `--color-text-information` |
 | `information` | `bold` | information bolder/background strong semantic token | `--color-text-inverse` or `--color-content-inverse` |
 | `warning` | `subtle` | `--color-background-warning-default` | `--color-text-warning` |

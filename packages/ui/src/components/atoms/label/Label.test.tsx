@@ -95,7 +95,7 @@ describe('label CSS contract', () => {
   });
 
   it('matches the current Figma bold semantic mappings', () => {
-    expect(labelCss).toContain('--label-background: var(--color-background-accent-gray-bold-default);');
+    expect(labelCss).toContain('--label-background: var(--color-background-accent-taupe-bold-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-brand-primary-bold-default);');
     expect(labelCss).toContain('--label-background: var(--color-background-accent-green-bold-default);');
     expect(labelCss).toContain('--label-color: var(--color-content-warning-bold);');

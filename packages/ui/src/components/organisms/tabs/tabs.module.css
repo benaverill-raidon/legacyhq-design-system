@@ -1,0 +1,112 @@
+/*
+ * Tabs is a horizontal tab bar over optional panels. Two types: `line` (a 3px underline indicator on
+ * the selected tab, over a shared bottom border) and `contained` (radius-lg pill tabs, the selected
+ * one filling a selected surface). Labels use heading-xs; per-state colors and the indicator map to
+ * the tokens the Figma component is bound to. Focus uses the shared Focus Ring primitive.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-inline-size: 0;
+}
+
+.tablist {
+  display: flex;
+  align-items: stretch;
+  min-inline-size: 0;
+}
+
+/* Line: a bottom border under the whole tab list (the selected tab's indicator sits over it). */
+.root[data-type='line'] .tablistBordered {
+  box-shadow: inset 0 calc(-1 * var(--border-width-sm)) 0 0 var(--color-border-default);
+}
+
+/*
+ * Contained: the tab list is a raised, rounded, padded segmented container - a radius-xl box on the
+ * raised surface with spacing-xs padding around the pills. Its border is toggled by `showBorder`
+ * (kept as a transparent border otherwise so the padding never shifts).
+ */
+.root[data-type='contained'] .tablist {
+  padding: var(--spacing-xs);
+  border: var(--border-width-sm) solid transparent;
+  border-radius: var(--border-radius-xl);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+.root[data-type='contained'] .tablistBordered {
+  border-color: var(--color-border-default);
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-block: var(--size-075);
+  padding-inline: var(--spacing-sm);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--fade-quick), background-color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition-duration: 0ms;
+  }
+}
+
+.tab:not(:disabled):hover {
+  color: var(--color-content-default);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--color-content-selected);
+}
+
+.tab:disabled {
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+/*
+ * Line: a 3px underline indicator on the selected tab, positioned to sit over the tablist's 1px
+ * bottom border (a pseudo-element, so it never shifts the tab's layout).
+ */
+.root[data-type='line'] .tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(-1 * var(--border-width-sm));
+  block-size: var(--border-width-lg);
+  background: var(--color-content-selected);
+}
+
+/* Contained: radius-lg pill tabs; the selected one fills the selected surface with a matching border. */
+.root[data-type='contained'] .tab {
+  border-radius: var(--border-radius-lg);
+}
+
+.root[data-type='contained'] .tab[aria-selected='true'] {
+  background: var(--color-background-selected-default-default);
+  box-shadow: inset 0 0 0 var(--border-width-sm) var(--color-border-selected);
+}
+
+.tabLabel {
+  min-inline-size: 0;
+}
+
+.panel {
+  min-inline-size: 0;
+}

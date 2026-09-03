@@ -1,0 +1,41 @@
+{
+  "component": "Toast",
+  "examples": [
+    {
+      "name": "Success",
+      "description": "A success toast with a title and description.",
+      "jsx": "<Toast appearance=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
+      "props": { "appearance": "success", "title": "Changes saved", "description": "Your matter is up to date." }
+    },
+    {
+      "name": "Error with an action",
+      "description": "An error toast with a retry action.",
+      "jsx": "<Toast appearance=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" appearance=\"subtle\">Retry</Button>} />",
+      "props": { "appearance": "error", "title": "Upload failed", "actions": "Button (xs, subtle)", "description": "The file exceeded the 25 MB limit." }
+    },
+    {
+      "name": "Loading",
+      "description": "A non-dismissible loading toast that resolves later.",
+      "jsx": "<Toast appearance=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
+      "props": { "appearance": "loading", "title": "Uploading your file...", "isDismissible": false }
+    },
+    {
+      "name": "Collapsed (title only)",
+      "description": "A compact toast - the state a stacked toast shows before the group is expanded.",
+      "jsx": "<Toast appearance=\"info\" title=\"Syncing your workspace\" expanded={false} />",
+      "props": { "appearance": "info", "title": "Syncing your workspace", "expanded": false }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Persistent status",
+      "reason": "Use SectionMessage for a status that should stay in context.",
+      "jsx": "<Toast appearance=\"warning\" title=\"You do not have permission to edit this space\" />"
+    },
+    {
+      "name": "Critical-only message",
+      "reason": "Do not put the only copy of a critical message in a transient toast.",
+      "jsx": "<Toast appearance=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />"
+    }
+  ]
+}

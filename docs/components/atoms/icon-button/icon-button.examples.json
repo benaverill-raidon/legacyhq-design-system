@@ -11,6 +11,10 @@
     {
       "name": "External tooltip composition",
       "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
+    },
+    {
+      "name": "Inverse (on a dark surface)",
+      "jsx": "<IconButton aria-label='Dismiss' isInverse><Icon name='close' /></IconButton>"
     }
   ]
 }

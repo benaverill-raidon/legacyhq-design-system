@@ -68,6 +68,15 @@ shares that same fill, so an open disclosure trigger reads consistently with its
 `Button`. Pick one shape per context and stay consistent - don't mix square and round icon buttons
 in the same toolbar.
 
+### On dark surfaces
+
+`isInverse` is the on-dark treatment, shared with `Button` - for an IconButton placed on a dark or
+bold-colored surface such as `Banner`. It renders a transparent fill with inverse content and the
+white *subtle* overlays on hover/press/expanded. `disabled` flattens it the same way it flattens the
+appearance. See the Inverse story.
+
+<Canvas of={IconButtonStories.Inverse} />
+
 ## Do / Don't
 
 **Do** let a non-empty `aria-label` double as the tooltip.
@@ -155,6 +164,12 @@ in the same toolbar.
       <td><code>'square' | 'round'</code></td>
       <td><code>'square'</code></td>
       <td>Corner treatment.</td>
+    </tr>
+    <tr>
+      <td><code>isInverse</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>On-dark treatment for placement on dark/bold surfaces (e.g. Banner). Flattened by <code>disabled</code>.</td>
     </tr>
     <tr>
       <td><code>disabled</code></td>

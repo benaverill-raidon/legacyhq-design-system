@@ -135,8 +135,8 @@ describe('Radio', () => {
     expect(radioCss).toMatch(/\.indicatorTarget \{[^}]*background: transparent;/s);
     expect(radioCss).toMatch(/\.indicatorIcon \{[^}]*color: var\(--color-content-subtle\);/s);
     expect(radioCss).toMatch(/\.checkedIcon \{[^}]*color: var\(--color-content-brand-primary-default\);/s);
-    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-hover);');
-    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-press);');
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
+    expect(radioCss).toContain('background: var(--color-background-neutral-overlay-bold-press);');
     expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
     expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(radioCss).toMatch(/\.radio\[data-invalid='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-error\);/s);

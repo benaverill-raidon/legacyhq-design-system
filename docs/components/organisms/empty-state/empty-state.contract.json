@@ -1,0 +1,180 @@
+{
+  "name": "EmptyState",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Fill a space that has no content yet.",
+  "intent": "Present a centered illustration, heading, description, and optional actions when a list, search, or view is empty.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "3546:56720",
+    "componentName": "empty-state",
+    "variantCount": 2,
+    "verifiedAt": "2026-09-01",
+    "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The `type` variant is inherited (transparent) vs informative (sunken surface background). The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both types."
+  },
+  "useCases": [
+    "an empty list, table, or feed",
+    "a search or filter with no results",
+    "a first-run state before anything is created",
+    "a cleared inbox or caught-up activity view"
+  ],
+  "antiPatterns": [
+    "an error or failed load",
+    "a transient auto-dismissing message",
+    "a loading placeholder"
+  ],
+  "anatomy": [
+    {
+      "name": "root",
+      "element": "div",
+      "required": true,
+      "description": "centered vertical stack; informative fills a sunken surface, inherited is transparent"
+    },
+    {
+      "name": "illustration",
+      "required": false,
+      "description": "optional centered spot illustration or image (~80x80 in the reference design)"
+    },
+    {
+      "name": "heading",
+      "required": false,
+      "description": "optional bold heading (heading-md), centered"
+    },
+    {
+      "name": "description",
+      "required": true,
+      "description": "the children, centered (body-md)"
+    },
+    {
+      "name": "actions",
+      "required": false,
+      "description": "optional Buttons and/or a Link, centered below the description"
+    }
+  ],
+  "props": {
+    "type": {
+      "type": "enum",
+      "values": ["inherited", "informative"],
+      "default": "inherited",
+      "required": false
+    },
+    "illustration": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false
+    },
+    "heading": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "description": "The description."
+    },
+    "actions": {
+      "type": "React.ReactNode",
+      "default": null,
+      "required": false
+    },
+    "className": {
+      "type": "string",
+      "default": null,
+      "required": false
+    }
+  },
+  "variants": {
+    "type": ["inherited", "informative"]
+  },
+  "slots": [
+    { "name": "illustration", "required": false, "allowedContent": "React.ReactNode" },
+    { "name": "heading", "required": false, "allowedContent": "React.ReactNode" },
+    { "name": "children", "required": true, "allowedContent": "React.ReactNode" },
+    { "name": "actions", "required": false, "allowedContent": "React.ReactNode (Buttons / Link)" }
+  ],
+  "tokens": {
+    "semantic": {
+      "spacing": {
+        "padding": "--spacing-xl",
+        "rootGap": "--spacing-2xl",
+        "messageGap": "--spacing-lg",
+        "actionsGap": "--spacing-sm"
+      },
+      "typography": {
+        "heading": "heading-md",
+        "description": "body-md"
+      },
+      "color": {
+        "heading": "--color-content-default",
+        "description": "--color-content-default",
+        "informativeBackground": "--color-elevation-surface-sunken-default"
+      }
+    }
+  },
+  "accessibility": {
+    "nativeElement": "div",
+    "defaultRole": null,
+    "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. Pass a real heading element as `heading` when a document-outline heading is needed."
+  },
+  "behaviorRules": [
+    "Render a centered vertical stack: optional illustration, then a message block (heading, description, actions).",
+    "Render the illustration, heading, and actions only when provided; the description is always rendered.",
+    "Fill a sunken surface background only for type=informative; keep type=inherited transparent.",
+    "Center all content and let long headings and descriptions wrap symmetrically."
+  ],
+  "compositionRules": [
+    "Pass Buttons and/or a Link to actions; use a ButtonGroup to space multiple buttons.",
+    "Make the primary action the obvious next step out of the empty state.",
+    "Use SectionMessage/Banner for errors and Skeleton/Spinner for loading."
+  ],
+  "contentRules": [
+    "Keep the heading short and the description to a sentence or two.",
+    "Describe what is empty and, where useful, how to fill it.",
+    "Do not use Empty State to convey an error."
+  ],
+  "themeRules": [
+    "Use theme CSS variables for all color values.",
+    "Do not use primitive color tokens directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "Use React.forwardRef.",
+    "Use React.memo.",
+    "Use CSS Modules.",
+    "Do not import MUI.",
+    "Do not use Tailwind utilities."
+  ],
+  "relatedComponents": [
+    "SectionMessage",
+    "Banner",
+    "Skeleton",
+    "Spinner",
+    "Button",
+    "ButtonGroup",
+    "Link"
+  ],
+  "do": [
+    "Use Empty State for a legitimately empty view.",
+    "Keep the description required and everything else optional.",
+    "Give the user a clear action out of the empty state.",
+    "Use type=inherited inside a surface that already has a background."
+  ],
+  "dont": [
+    "Do not use Empty State for errors or loading.",
+    "Do not overload it with long copy or many actions.",
+    "Do not hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders the description.",
+    "Renders the heading, illustration, and actions only when provided.",
+    "Defaults to the inherited (transparent) type.",
+    "Fills a sunken surface only for type=informative.",
+    "Centers a vertical stack with the Figma spacing tokens.",
+    "Uses heading-md for the heading and body-md for the description.",
+    "Forwards the ref to the root element.",
+    "Does not use MUI.",
+    "Does not use Tailwind."
+  ]
+}

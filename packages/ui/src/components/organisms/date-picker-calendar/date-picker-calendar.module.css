@@ -1,0 +1,145 @@
+/*
+ * Date Picker Calendar is the month-grid panel used inside the date / date-time picker popup. It is
+ * transparent by design - the surrounding popup surface provides the background and elevation. A
+ * month header (year/month nav via Icon Buttons + a title) sits over a weekday header and a 6-week
+ * day grid. Day cells map to the Figma `day` states; focus uses the shared Focus Ring primitive.
+ */
+.root {
+  display: inline-flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: var(--spacing-lg);
+  min-inline-size: 0;
+}
+
+/* Month header: prev-year / prev-month / title / next-month / next-year. */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-none);
+  margin-block-end: var(--spacing-xs);
+}
+
+.title {
+  flex: 1 1 auto;
+  text-align: center;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+  white-space: nowrap;
+}
+
+.grid {
+  border-collapse: collapse;
+}
+
+.weekRow {
+  block-size: var(--size-400);
+}
+
+.weekday {
+  inline-size: var(--size-500);
+  padding: var(--spacing-none);
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xxs-font-family);
+  font-size: var(--typography-heading-xxs-font-size);
+  font-weight: var(--typography-heading-xxs-font-weight);
+  line-height: var(--typography-heading-xxs-line-height);
+  letter-spacing: var(--typography-heading-xxs-letter-spacing);
+  text-transform: var(--typography-heading-xxs-text-transform);
+  text-align: center;
+}
+
+.cell {
+  padding: var(--spacing-none);
+  text-align: center;
+}
+
+.day {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  inline-size: var(--size-500);
+  block-size: var(--size-400);
+  margin: 0;
+  padding: var(--spacing-none);
+  border: var(--border-width-sm) solid transparent;
+  border-radius: var(--border-radius-sm);
+  background: transparent;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+  cursor: pointer;
+  transition: background-color var(--fade-quick), color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day {
+    transition-duration: 0ms;
+  }
+}
+
+.dayNumber {
+  min-inline-size: 0;
+}
+
+/* Out-of-month days are shown for context but muted. */
+.day[data-outside='true'] {
+  color: var(--color-content-disabled);
+}
+
+/* Hover / press for the everyday (unselected, enabled) cell. */
+.day:not([data-disabled='true']):not([data-selected='true']):hover {
+  background: var(--color-background-neutral-overlay-bold-hover);
+  color: var(--color-content-default);
+}
+
+.day:not([data-disabled='true']):not([data-selected='true']):active {
+  background: var(--color-background-neutral-overlay-bold-press);
+  color: var(--color-content-default);
+}
+
+/* Today: selected-content text plus a short underline under the number. */
+.day[data-today='true'] {
+  color: var(--color-content-selected);
+}
+
+.day[data-today='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--spacing-xs);
+  inset-block-end: var(--spacing-xs);
+  block-size: 2px;
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-content-selected);
+}
+
+/* Selected day: selected surface + selected border + selected content. */
+.day[data-selected='true'] {
+  border-color: var(--color-border-selected);
+  background: var(--color-background-selected-default-default);
+  color: var(--color-content-selected);
+}
+
+.day[data-selected='true']:not([data-disabled='true']):hover {
+  background: var(--color-background-selected-default-hover);
+}
+
+.day[data-selected='true']:not([data-disabled='true']):active {
+  background: var(--color-background-selected-default-press);
+}
+
+/* Disabled / unavailable days. */
+.day[data-disabled='true'] {
+  color: var(--color-content-disabled);
+  cursor: default;
+}

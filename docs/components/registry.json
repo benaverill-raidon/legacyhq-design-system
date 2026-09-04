@@ -5296,6 +5296,643 @@
     }
   },
   {
+    "id": "date-picker",
+    "name": "DatePicker",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/date-picker/date-picker.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "wrapper; defaults to a 240px field width, shrinks to its container"
+      },
+      {
+        "name": "trigger",
+        "description": "read-only date display + trailing calendar icon; aria-haspopup=dialog"
+      },
+      {
+        "name": "popup",
+        "description": "anchored to the field frame; holds the calendar"
+      },
+      {
+        "name": "calendar",
+        "description": "the month grid inside the popup"
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": "Controlled selected date."
+      },
+      "defaultValue": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onChange": {
+        "type": "(date: Date) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "open": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Controlled popup open state."
+      },
+      "defaultOpen": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "context": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "format": {
+        "type": "(date: Date, locale?: string) => string",
+        "required": false,
+        "default": "locale short date (MM/DD/YYYY)",
+        "description": null
+      },
+      "locale": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "alignment": {
+        "type": "PopupAlignment",
+        "required": false,
+        "default": "bottomLeft",
+        "description": null
+      },
+      "min": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "max": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "isDateDisabled": {
+        "type": "(date: Date) => boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "weekStartsOn": {
+        "type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
+        "required": false,
+        "default": 0,
+        "description": null
+      },
+      "today": {
+        "type": "Date",
+        "required": false,
+        "default": "current date",
+        "description": null
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "context": [
+        "default",
+        "inline"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "fieldWidthDefault": "240px (max-inline-size 100%)",
+        "openBorder": "--color-border-focus (via Text Field data-force-state=focus)",
+        "icon": "--color-content-subtle",
+        "popupPadding": "none (the calendar provides its own padding)"
+      },
+      "note": "Field surface/border/typography come from Text Field; the calendar and popup carry their own tokens. Date Picker adds only the trigger cursor/icon and the 240px default width."
+    },
+    "accessibility": {
+      "trigger": "read-only input, aria-haspopup=\"dialog\"",
+      "expanded": "aria-expanded + aria-controls set by Popup while open",
+      "panelRole": "dialog",
+      "openFocus": "focus moves into the calendar grid on open",
+      "dismiss": "Escape or selecting a day closes and returns focus to the field; outside click dismisses without moving focus",
+      "calendar": "the DatePickerCalendar provides the grid semantics and keyboard model"
+    },
+    "relatedComponents": [
+      "DatePickerCalendar",
+      "DateTimePicker",
+      "TimePicker",
+      "TextField",
+      "Popup"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4788:377097",
+      "componentName": "date-picker",
+      "verifiedAt": "2026-09-04",
+      "shape": "multi-variant",
+      "variants": "context (default | inline) x size (sm | md | lg) x state (default | filled | hover | open | disabled)",
+      "parts": {
+        "trigger": "figma-parts / select-trigger wrapping a text-field (value text + elemAfterInput calendar icon); the field frame is radius md with a border/input outline.",
+        "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
+      },
+      "notes": "context default -> Text Field appearance 'default' (bordered); context inline -> appearance 'subtle' (borderless). The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+    }
+  },
+  {
+    "id": "date-picker-calendar",
+    "name": "DatePickerCalendar",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/date-picker-calendar/date-picker-calendar.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "the transparent panel (padding spacing/lg); the popup provides the surface"
+      },
+      {
+        "name": "header",
+        "description": "prev-year / prev-month / title / next-month / next-year; nav are Icon Buttons (subtle, xs, square)"
+      },
+      {
+        "name": "title",
+        "description": "month + year (heading-xs), aria-live, labels the grid"
+      },
+      {
+        "name": "grid",
+        "description": "weekday columnheaders + six week rows"
+      },
+      {
+        "name": "day",
+        "description": "a day cell in a gridcell; roving tabindex; states via data-today/selected/outside/disabled"
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": "Controlled selected date."
+      },
+      "defaultValue": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": "Initial selection (uncontrolled)."
+      },
+      "onChange": {
+        "type": "(date: Date) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "month": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": "Controlled displayed month."
+      },
+      "defaultMonth": {
+        "type": "Date",
+        "required": false,
+        "default": "selection, else today",
+        "description": "Initial displayed month."
+      },
+      "onMonthChange": {
+        "type": "(month: Date) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "min": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": "Earliest selectable date (inclusive)."
+      },
+      "max": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": "Latest selectable date (inclusive)."
+      },
+      "isDateDisabled": {
+        "type": "(date: Date) => boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "weekStartsOn": {
+        "type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
+        "required": false,
+        "default": 0,
+        "description": null
+      },
+      "today": {
+        "type": "Date",
+        "required": false,
+        "default": "current date",
+        "description": null
+      },
+      "locale": {
+        "type": "string",
+        "required": false,
+        "default": "runtime locale",
+        "description": null
+      },
+      "previousMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous month",
+        "description": null
+      },
+      "nextMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next month",
+        "description": null
+      },
+      "previousYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous year",
+        "description": null
+      },
+      "nextYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next year",
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "panelPadding": "--spacing-lg",
+        "titleTypography": "heading-xs",
+        "titleColor": "--color-content-default",
+        "weekdayTypography": "heading-xxs",
+        "weekdayColor": "--color-content-default",
+        "dayTypography": "body-sm",
+        "dayRadius": "--border-radius-sm",
+        "dayDefault": "--color-content-subtle",
+        "dayHoverBackground": "--color-background-neutral-overlay-bold-hover",
+        "dayPressBackground": "--color-background-neutral-overlay-bold-press",
+        "dayHoverText": "--color-content-default",
+        "selectedBackground": "--color-background-selected-default-default",
+        "selectedBackgroundHover": "--color-background-selected-default-hover",
+        "selectedBackgroundPress": "--color-background-selected-default-press",
+        "selectedBorder": "--color-border-selected",
+        "selectedText": "--color-content-selected",
+        "todayText": "--color-content-selected",
+        "todayUnderline": "--color-content-selected",
+        "mutedText": "--color-content-disabled",
+        "cellInlineSize": "--size-500",
+        "cellBlockSize": "--size-400",
+        "motion": "--fade-quick"
+      },
+      "componentAllowed": [
+        "cell size (size-500 x size-400)",
+        "today underline thickness (2px)"
+      ],
+      "componentForbidden": [
+        "color aliases",
+        "radius aliases",
+        "typography aliases",
+        "spacing aliases"
+      ]
+    },
+    "accessibility": {
+      "gridRole": "grid",
+      "gridLabel": "labelled by the month title (aria-live=polite)",
+      "columnHeaders": "one per weekday (aria-label = full weekday name)",
+      "rovingTabindex": true,
+      "today": "aria-current=\"date\"",
+      "selected": "aria-selected on the gridcell",
+      "disabled": "aria-disabled on the day button (kept focusable)",
+      "keyboard": "Arrow keys (day/week), Home/End (week), PageUp/PageDown (month; Shift = year), Enter/Space (select)",
+      "focus": "shared Focus Ring primitive"
+    },
+    "relatedComponents": [
+      "DatePicker",
+      "DateTimePicker",
+      "TimePicker",
+      "IconButton",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentNodeId": "2417:61761",
+      "componentName": "date-picker-calendar",
+      "verifiedAt": "2026-09-04",
+      "shape": "sub-component",
+      "parts": {
+        "day": "figma-parts / day (component set 2417:61410): state (default | hover | press | previous selection) x isSelected x isFocused x isDisabled x today. Cell radius border/radius/sm; focus via the focus-ring primitive (border/focus).",
+        "month-header": "figma-parts / month-header (2417:60025): four icon-buttons (subtle, xs, square) around a month/year title (heading-xs, content/default).",
+        "week-header": "figma-parts / week-header (2417:61347): seven day-of-week labels (heading-xxs, content/default).",
+        "week-days": "figma-parts / week-days (2417:61453): one row of seven day cells; the grid stacks six of them."
+      },
+      "notes": "date-picker-calendar (2417:61761) is a single COMPONENT (no variants) composed of the parts above. The 'previous selection' day state is a range-preview state not implemented in this single-date v1. Out-of-month days are shown muted (content/disabled) but remain selectable (selecting switches month)."
+    }
+  },
+  {
+    "id": "date-time-picker",
+    "name": "DateTimePicker",
+    "tier": "organism",
+    "category": "organism",
+    "status": "in-progress",
+    "path": "docs/components/organisms/date-time-picker/date-time-picker.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "the labelled combined control; data-size, data-context"
+      },
+      {
+        "name": "date",
+        "description": "the date half (calendar popup); inner corners squared"
+      },
+      {
+        "name": "time",
+        "description": "the time half (hours/minutes/AM-PM popup); pulled in to share the divider"
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": "Controlled combined value."
+      },
+      "defaultValue": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onChange": {
+        "type": "(value: Date) => void",
+        "required": false,
+        "default": null,
+        "description": "Called with the combined value when either half changes."
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "context": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "locale": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "min": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": "Passed to the calendar."
+      },
+      "max": {
+        "type": "Date",
+        "required": false,
+        "default": null,
+        "description": "Passed to the calendar."
+      },
+      "isDateDisabled": {
+        "type": "(date: Date) => boolean",
+        "required": false,
+        "default": null,
+        "description": "Passed to the calendar."
+      },
+      "weekStartsOn": {
+        "type": "0 | 1 | 2 | 3 | 4 | 5 | 6",
+        "required": false,
+        "default": 0,
+        "description": null
+      },
+      "minuteStep": {
+        "type": "number",
+        "required": false,
+        "default": 5,
+        "description": "Passed to the time selector."
+      },
+      "today": {
+        "type": "Date",
+        "required": false,
+        "default": "current date",
+        "description": null
+      },
+      "datePlaceholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "timePlaceholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "dateFormat": {
+        "type": "(date: Date, locale?: string) => string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "timeFormat": {
+        "type": "(value: Date, locale?: string) => string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "dateLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Date",
+        "description": null
+      },
+      "timeLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Time",
+        "description": null
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "context": [
+        "default",
+        "inline"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "sharedDivider": "the two field borders collapse via margin-inline-start: calc(-1 * --border-width-sm)",
+        "innerCorners": "squared (border radius 0) so only the outer corners keep the Text Field radius"
+      },
+      "note": "All field, popup, and calendar tokens come from the composed DatePicker / TimePicker. Date/Time Picker only adds the join (negative margin + squared inner corners)."
+    },
+    "accessibility": {
+      "rootRole": "group",
+      "label": "aria-label or aria-labelledby on the group",
+      "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
+      "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
+    },
+    "relatedComponents": [
+      "DatePicker",
+      "TimePicker",
+      "DatePickerCalendar"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4789:411726",
+      "componentName": "date-time-picker",
+      "verifiedAt": "2026-09-04",
+      "shape": "multi-variant",
+      "variants": "context (default | inline) x size (sm | md | lg)",
+      "parts": {
+        "date-picker": "a date-picker instance (240px) - the left half.",
+        "divider": "a 1px rule between the halves; in code the two field borders collapse into one shared divider.",
+        "time-picker": "a time-picker instance (240px) - the right half."
+      },
+      "notes": "WIP in Figma: only context x size is defined (no combined open/disabled/hover/filled states) - interaction states come from the inner pickers. The set is 480px (two 240px halves). In code the control composes the DatePicker and TimePicker organisms over one shared Date; the joined look is achieved by pulling the two field frames together (negative margin) and squaring their inner corners."
+    }
+  },
+  {
     "id": "dropdown-menu",
     "name": "DropdownMenu",
     "tier": "organism",
@@ -5892,6 +6529,152 @@
     }
   },
   {
+    "id": "progress-tracker",
+    "name": "ProgressTracker",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/progress-tracker/progress-tracker.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "the labelled tracker; data-size, data-disabled"
+      },
+      {
+        "name": "track",
+        "description": "the full-round pill (sunken surface, border/bold), carries the fill; data-fill is the fill percentage"
+      },
+      {
+        "name": "fill",
+        "description": "the brand/primary/bold portion, currentStep / totalSteps wide, full-round caps"
+      },
+      {
+        "name": "steps",
+        "description": "the ordered list of step labels"
+      },
+      {
+        "name": "step",
+        "description": "one step; the label is a Link (visited + href) or a span (current/upcoming/disabled)"
+      }
+    ],
+    "props": {
+      "steps": {
+        "type": "ProgressTrackerStep[]",
+        "required": true,
+        "default": null,
+        "description": "{ label, href?, target?, onClick?, disabled? }[]"
+      },
+      "currentStep": {
+        "type": "number",
+        "required": true,
+        "default": null,
+        "description": null
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": "bar thickness only",
+        "enum": [
+          "md",
+          "lg"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "mutes labels, greys the fill, switches the track border to the disabled token, removes links"
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": "Progress",
+        "description": null
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "size": [
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "trackBackground": "--color-elevation-surface-sunken-default",
+        "trackBorder": "--color-border-bold",
+        "trackBorderWidth": "--border-width-sm",
+        "trackRadius": "--border-radius-full-round",
+        "fill": "--color-background-brand-primary-bold-default",
+        "fillDisabled": "--color-background-disabled",
+        "trackBorderDisabled": "--color-border-disabled",
+        "fillRadius": "--border-radius-full-round",
+        "labelDefault": "--color-content-subtle",
+        "labelHover": "--color-content-default",
+        "labelCurrent": "--color-content-selected",
+        "labelDisabled": "--color-content-disabled",
+        "labelTypography": "heading-xs",
+        "gapBarToLabels": "--spacing-sm",
+        "trackInsetMd": "--spacing-xxs",
+        "trackInsetLg": "--spacing-xs",
+        "fillHeightMd": "--size-marker-md",
+        "fillHeightLg": "--size-300",
+        "motion": "--fade-quick"
+      },
+      "componentAllowed": [
+        "fill width (currentStep / totalSteps, via --progress-tracker-fill)"
+      ],
+      "componentForbidden": [
+        "color aliases",
+        "radius aliases",
+        "border width aliases",
+        "spacing aliases",
+        "typography aliases"
+      ]
+    },
+    "accessibility": {
+      "rootElement": "nav",
+      "labelRequired": "aria-label or aria-labelledby (defaults to 'Progress')",
+      "list": "ol / li",
+      "currentStep": "aria-current=\"step\"",
+      "navigableSteps": "visited steps with an href render as the Link atom, restyled to the <items> states (no :visited colour; hover changes colour only, no underline)",
+      "barDecorative": "the track is aria-hidden",
+      "focus": "shared Focus Ring (via Link)"
+    },
+    "relatedComponents": [
+      "ProgressIndicator",
+      "ProgressBar",
+      "Tabs",
+      "Link",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2201:50436",
+      "componentName": "progress-tracker",
+      "verifiedAt": "2026-09-04",
+      "shape": "multi-variant",
+      "parts": {
+        "items": "code-parts / <items> (node 2184:38493): the per-step segment, with size (md|lg) x isActive x hasVisited x isDisabled x state (default|hover|focus) x section (start|middle|end). section drives the outer-corner rounding; isActive/hasVisited drive the navy fill and its trailing rounded cap; the label is the `link` atom (appearance=subtle, size=md in both sizes)."
+      },
+      "notes": "The Figma component is built from per-step segments with per-edge borders (start=top/bottom/left, middle=top/bottom, end=top/bottom/right) so adjacent segments read as one continuous pill. In code this is a single track + single fill (width = currentStep / totalSteps); the fill's own full-round radius reproduces the rounded leading + trailing caps. Only visited (past) steps are interactive in Figma (hover/focus states exist only for isActive=false, hasVisited=true) - mirrored in code by rendering only visited steps with an href as links."
+    }
+  },
+  {
     "id": "section-message",
     "name": "SectionMessage",
     "tier": "organism",
@@ -6209,6 +6992,246 @@
         "tab": "code-parts / <tab> (node 2140:67951): the individual tab, with type (line/contained) x state (default/hover/focus) x isSelected"
       },
       "notes": "Figma `tabs` is the tab BAR only (no panels): type (line/contained) + showBorder. Panels are provided in code via optional TabPanel children. State model is controlled + uncontrolled."
+    }
+  },
+  {
+    "id": "time-picker",
+    "name": "TimePicker",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/time-picker/time-picker.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "wrapper; defaults to a 240px field width, shrinks to its container"
+      },
+      {
+        "name": "trigger",
+        "description": "read-only time display + trailing clock icon; aria-haspopup=dialog"
+      },
+      {
+        "name": "popup",
+        "description": "anchored to the field frame"
+      },
+      {
+        "name": "columns",
+        "description": "hours / minutes / AM-PM; roving tabindex; selected option highlighted"
+      },
+      {
+        "name": "footer",
+        "description": "Cancel + Confirm buttons; changes are staged until Confirm"
+      }
+    ],
+    "props": {
+      "value": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": "Controlled time (only h:m used)."
+      },
+      "defaultValue": {
+        "type": "Date | null",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onChange": {
+        "type": "(value: Date) => void",
+        "required": false,
+        "default": null,
+        "description": "Called on Confirm."
+      },
+      "open": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "defaultOpen": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "onOpenChange": {
+        "type": "(open: boolean) => void",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "size": {
+        "type": "enum",
+        "required": false,
+        "default": "md",
+        "description": null,
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "context": {
+        "type": "enum",
+        "required": false,
+        "default": "default",
+        "description": null,
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "invalid": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "minuteStep": {
+        "type": "number",
+        "required": false,
+        "default": 5,
+        "description": null
+      },
+      "placeholder": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "format": {
+        "type": "(value: Date, locale?: string) => string",
+        "required": false,
+        "default": "locale 12-hour time (hh:mm AM)",
+        "description": null
+      },
+      "locale": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "alignment": {
+        "type": "PopupAlignment",
+        "required": false,
+        "default": "bottomLeft",
+        "description": null
+      },
+      "confirmLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Confirm",
+        "description": null
+      },
+      "cancelLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Cancel",
+        "description": null
+      },
+      "hoursLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Hours",
+        "description": null
+      },
+      "minutesLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Minutes",
+        "description": null
+      },
+      "meridiemLabel": {
+        "type": "string",
+        "required": false,
+        "default": "AM/PM",
+        "description": null
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": null
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "context": [
+        "default",
+        "inline"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "semantic": {
+        "fieldWidthDefault": "240px (max-inline-size 100%)",
+        "openBorder": "--color-border-focus (via Text Field data-force-state=focus)",
+        "icon": "--color-content-subtle",
+        "optionTypography": "body-md",
+        "optionHeight": "--size-400",
+        "optionSelectedBackground": "--color-background-selected-default-default",
+        "optionSelectedText": "--color-content-selected",
+        "optionHoverBackground": "--color-background-neutral-overlay-bold-hover",
+        "optionPressBackground": "--color-background-neutral-overlay-bold-press",
+        "columnDivider": "--color-border-default",
+        "footerDivider": "--color-border-default",
+        "popupPadding": "none",
+        "motion": "--fade-quick"
+      }
+    },
+    "accessibility": {
+      "trigger": "read-only input, aria-haspopup=\"dialog\"",
+      "expanded": "aria-expanded + aria-controls set by Popup while open",
+      "panelRole": "dialog",
+      "columns": "role=listbox with role=option children; aria-selected on the chosen option; roving tabindex",
+      "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm or an outside click commits",
+      "focus": "shared Focus Ring; opening moves focus to the selected hour"
+    },
+    "relatedComponents": [
+      "DatePicker",
+      "DateTimePicker",
+      "TextField",
+      "Popup",
+      "Button"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4789:410508",
+      "componentName": "time-picker",
+      "verifiedAt": "2026-09-04",
+      "shape": "multi-variant",
+      "variants": "context (default | inline) x size (sm | md | lg) x state (default | filled | hover | open | disabled)",
+      "parts": {
+        "trigger": "figma-parts / select-trigger wrapping a text-field (time text + elemAfterInput clock icon 'picker_time', 16px in a 24x24 box).",
+        "popup": "the open state renders a popup > panelSurface > columns of code-parts/<menu-item> (selected = background/selected/default/default + content/selected) + a footer-item (a button-group with Cancel/Confirm buttons, tone=subtle, size=xs), each column with its own scrollbar."
+      },
+      "notes": "context default -> Text Field appearance 'default'; inline -> 'subtle'. The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
     }
   },
   {

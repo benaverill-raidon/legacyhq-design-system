@@ -1,0 +1,46 @@
+{
+  "component": "ProgressTracker",
+  "examples": [
+    {
+      "name": "Named steps with a current position",
+      "description": "The default tracker: the bar fills to the current step, whose label is highlighted.",
+      "jsx": "<ProgressTracker steps={[{label:'Details'},{label:'Parties'},{label:'Documents'},{label:'Review'},{label:'Submit'}]} currentStep={3} aria-label='Matter setup' />",
+      "props": { "currentStep": 3, "size": "md", "aria-label": "Matter setup" }
+    },
+    {
+      "name": "Visited steps as links",
+      "description": "Give steps before the current one an href so people can jump back.",
+      "jsx": "<ProgressTracker steps={[{label:'Details',href:'#details'},{label:'Parties',href:'#parties'},{label:'Documents'}]} currentStep={3} aria-label='Setup' />",
+      "props": { "currentStep": 3 }
+    },
+    {
+      "name": "Large",
+      "description": "The lg size thickens only the bar; labels stay heading-xs.",
+      "jsx": "<ProgressTracker steps={steps} currentStep={2} size='lg' aria-label='Onboarding' />",
+      "props": { "size": "lg", "currentStep": 2 }
+    },
+    {
+      "name": "Disabled",
+      "description": "A disabled tracker greys the fill and every label, switches the track border to the disabled token, and removes links.",
+      "jsx": "<ProgressTracker steps={steps} currentStep={3} disabled aria-label='Setup' />",
+      "props": { "disabled": true, "currentStep": 3 }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Determinate percentage",
+      "reason": "Use Progress Bar for a task/system completion percentage, not a step tracker.",
+      "jsx": "<ProgressTracker steps={[{label:'0%'},{label:'50%'},{label:'100%'}]} currentStep={2} />"
+    },
+    {
+      "name": "Peer views",
+      "reason": "Use Tabs to switch between peer views; Progress Tracker is for a linear sequence.",
+      "jsx": "<ProgressTracker steps={[{label:'Overview'},{label:'Activity'},{label:'Billing'}]} currentStep={1} />"
+    },
+    {
+      "name": "Unlabelled tracker",
+      "reason": "Give the tracker an accessible name via aria-label or aria-labelledby.",
+      "jsx": "<ProgressTracker steps={steps} currentStep={2} />"
+    }
+  ]
+}

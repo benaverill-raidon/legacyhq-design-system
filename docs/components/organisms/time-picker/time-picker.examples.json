@@ -1,0 +1,41 @@
+{
+  "component": "TimePicker",
+  "examples": [
+    {
+      "name": "Uncontrolled",
+      "description": "The field owns the time; click it to open the columns, then Confirm.",
+      "jsx": "<TimePicker defaultValue={new Date(2026, 2, 9, 16, 30)} placeholder='hh:mm AM' aria-label='Time' />",
+      "props": { "size": "md", "context": "default" }
+    },
+    {
+      "name": "Controlled",
+      "description": "The parent owns the value.",
+      "jsx": "<TimePicker value={time} onChange={setTime} aria-label='Time' />",
+      "props": {}
+    },
+    {
+      "name": "Inline (borderless)",
+      "description": "The inline context renders a borderless field.",
+      "jsx": "<TimePicker context='inline' defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='Time' />",
+      "props": { "context": "inline" }
+    },
+    {
+      "name": "15-minute step",
+      "description": "minuteStep sets the minute increment.",
+      "jsx": "<TimePicker minuteStep={15} aria-label='Time' />",
+      "props": { "minuteStep": 15 }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Expecting a value on every column change",
+      "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm or an outside click, not per change.",
+      "jsx": "<TimePicker onChange={commitImmediately} /> {/* onChange runs on commit, not per column change */}"
+    },
+    {
+      "name": "Unlabelled field",
+      "reason": "Give the field an accessible name via aria-label or aria-labelledby.",
+      "jsx": "<TimePicker />"
+    }
+  ]
+}

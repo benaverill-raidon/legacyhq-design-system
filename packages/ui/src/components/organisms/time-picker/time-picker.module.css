@@ -1,0 +1,104 @@
+/*
+ * Time Picker is a time field (Text Field trigger) that opens a three-column time selector in a Popup:
+ * hours, minutes, and AM/PM, each a scrollable listbox, with Cancel / Confirm actions. The columns'
+ * options use the Figma menu-item states (selected = the selected surface + selected content). The
+ * field mirrors Date Picker (read-only display + a 24x24 clock-icon box; the open state pins the field
+ * focus treatment). The popup provides the surface; this panel manages its own layout.
+ */
+.root {
+  display: inline-block;
+  inline-size: 240px;
+  max-inline-size: 100%;
+}
+
+.trigger {
+  inline-size: 100%;
+  cursor: pointer;
+}
+
+.triggerInput {
+  cursor: pointer;
+  caret-color: transparent;
+}
+
+.iconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+}
+
+/* Popup content */
+.panel {
+  display: flex;
+  flex-direction: column;
+  inline-size: 240px;
+  max-inline-size: 100%;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  block-size: 256px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-inline-size: 0;
+}
+
+.column:not(:last-child) {
+  border-inline-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  inline-size: 100%;
+  block-size: var(--size-400);
+  margin: 0;
+  padding-inline: var(--spacing-sm);
+  border: 0;
+  background: transparent;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  cursor: pointer;
+  transition: background-color var(--fade-quick), color var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .option {
+    transition-duration: 0ms;
+  }
+}
+
+.option:not([data-selected='true']):hover {
+  background: var(--color-background-neutral-overlay-bold-hover);
+}
+
+.option:not([data-selected='true']):active {
+  background: var(--color-background-neutral-overlay-bold-press);
+}
+
+.option[data-selected='true'] {
+  background: var(--color-background-selected-default-default);
+  color: var(--color-content-selected);
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}

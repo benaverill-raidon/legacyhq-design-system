@@ -1,0 +1,114 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ProgressTrackerStories from './ProgressTracker.stories';
+
+<Meta of={ProgressTrackerStories} name="Docs" />
+
+# Progress Tracker
+
+Progress Tracker shows where someone is in a linear, multi-step journey. It renders a segmented,
+labelled progress bar from a `steps` array: the bar fills to the current step and a label sits under
+each step, with the current step highlighted.
+
+<Canvas of={ProgressTrackerStories.Playground} />
+
+## When to use
+
+- A guided, multi-step flow with **named** steps (matter setup, onboarding, a checkout wizard).
+- Any linear sequence where both the relative position **and** each step's name matter.
+
+## When not to use
+
+- **For relative position without labels.** Use the Progress Indicator (dots) atom.
+- **For determinate task/system percentage.** Use the Progress Bar atom.
+- **For switching between peer views.** Use Tabs.
+- **For page or route navigation.** Use links or a navigation component.
+
+## Anatomy
+
+1. **Track** - a full-round pill (`sunken` surface, `border/bold` outline) that carries the fill.
+2. **Fill** - the `background/brand/primary/bold` portion, `currentStep / totalSteps` wide.
+3. **Steps** - an ordered list of labels, one centred under each step. The current step is
+   `content/selected` and carries `aria-current="step"`; visited steps with an `href` are links.
+   Visited-step links reuse the `Link` atom but follow the tracker's `<items>` states: no `:visited`
+   (purple) colour, and hover changes colour only (`content/subtle` -> `content/default`) with no
+   underline.
+
+## Usage guidance
+
+### Sizes
+
+<Canvas of={ProgressTrackerStories.Sizes} />
+
+`size` (`md` default, or `lg`) only changes the **bar thickness** - the labels stay `heading-xs` in
+both, matching the Figma component.
+
+### Progress and navigation
+
+<Canvas of={ProgressTrackerStories.Progress} />
+
+`currentStep` is 1-based and clamped to `1..steps.length`; the fill grows to
+`currentStep / totalSteps`. Steps **before** the current one are treated as visited: give them an
+`href` (and optional `onClick`) to let people jump back. The current and upcoming steps are never
+links.
+
+### Disabled
+
+<Canvas of={ProgressTrackerStories.Disabled} />
+
+`disabled` greys the fill (`background/disabled`) and every label (`content/disabled`) and removes all
+links. Because that grey is low-contrast on the sunken track, the track outline also switches to
+`border/disabled` so the disabled state clearly stands out. A single step can also be disabled on its
+own with `step.disabled`.
+
+### Accessibility
+
+The tracker is a `<nav>`; give it an `aria-label` (or `aria-labelledby`) - it defaults to
+`"Progress"`. Steps are an ordered list; the current step is marked `aria-current="step"`. Visited
+steps render as the `Link` atom (subtle appearance) and use the shared Focus Ring. The bar itself is
+decorative (`aria-hidden`).
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>steps</code></td>
+      <td><code>{`{ label, href?, target?, onClick?, disabled? }[]`}</code></td>
+      <td>-</td>
+      <td>Required. The steps, in order.</td>
+    </tr>
+    <tr>
+      <td><code>currentStep</code></td>
+      <td><code>number</code></td>
+      <td>-</td>
+      <td>Required. 1-based current step; clamped to <code>1..steps.length</code>.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Bar thickness.</td>
+    </tr>
+    <tr>
+      <td><code>disabled</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Mutes every label, greys the fill, removes links.</td>
+    </tr>
+    <tr>
+      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
+      <td><code>string</code></td>
+      <td><code>'Progress'</code></td>
+      <td>Names the tracker.</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Progress Indicator** - dots for relative position without labels.
+- **Progress Bar** - determinate task/system percentage.
+- **Tabs** - switching between peer views rather than a step sequence.

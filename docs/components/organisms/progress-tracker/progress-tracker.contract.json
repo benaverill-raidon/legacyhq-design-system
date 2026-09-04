@@ -1,0 +1,152 @@
+{
+  "name": "ProgressTracker",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Show where someone is in a linear, multi-step journey with named steps.",
+  "intent": "A segmented, labelled progress bar that fills to the current step and marks it as the active position.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2201:50436",
+    "componentName": "progress-tracker",
+    "verifiedAt": "2026-09-04",
+    "shape": "multi-variant",
+    "parts": {
+      "items": "code-parts / <items> (node 2184:38493): the per-step segment, with size (md|lg) x isActive x hasVisited x isDisabled x state (default|hover|focus) x section (start|middle|end). section drives the outer-corner rounding; isActive/hasVisited drive the navy fill and its trailing rounded cap; the label is the `link` atom (appearance=subtle, size=md in both sizes)."
+    },
+    "notes": "The Figma component is built from per-step segments with per-edge borders (start=top/bottom/left, middle=top/bottom, end=top/bottom/right) so adjacent segments read as one continuous pill. In code this is a single track + single fill (width = currentStep / totalSteps); the fill's own full-round radius reproduces the rounded leading + trailing caps. Only visited (past) steps are interactive in Figma (hover/focus states exist only for isActive=false, hasVisited=true) - mirrored in code by rendering only visited steps with an href as links."
+  },
+  "useCases": [
+    "matter setup / client onboarding wizard",
+    "a multi-step form or checkout with named steps",
+    "any linear sequence where step names and position both matter"
+  ],
+  "antiPatterns": [
+    "relative position without labels (use Progress Indicator dots)",
+    "determinate task/system percentage (use Progress Bar)",
+    "switching between peer views (use Tabs)",
+    "page or route navigation"
+  ],
+  "anatomy": [
+    { "name": "root", "element": "nav", "required": true, "description": "the labelled tracker; data-size, data-disabled" },
+    { "name": "track", "element": "div[aria-hidden]", "required": true, "description": "the full-round pill (sunken surface, border/bold), carries the fill; data-fill is the fill percentage" },
+    { "name": "fill", "element": "div", "required": true, "description": "the brand/primary/bold portion, currentStep / totalSteps wide, full-round caps" },
+    { "name": "steps", "element": "ol", "required": true, "description": "the ordered list of step labels" },
+    { "name": "step", "element": "li", "required": true, "description": "one step; the label is a Link (visited + href) or a span (current/upcoming/disabled)" }
+  ],
+  "props": {
+    "steps": { "type": "ProgressTrackerStep[]", "required": true, "description": "{ label, href?, target?, onClick?, disabled? }[]" },
+    "currentStep": { "type": "number", "required": true, "indexing": "one-based", "constraints": "clamped to 1..steps.length" },
+    "size": { "type": "enum", "values": ["md", "lg"], "default": "md", "required": false, "description": "bar thickness only" },
+    "disabled": { "type": "boolean", "default": false, "required": false, "description": "mutes labels, greys the fill, switches the track border to the disabled token, removes links" },
+    "aria-label": { "type": "string", "default": "Progress", "required": false },
+    "aria-labelledby": { "type": "string", "default": null, "required": false }
+  },
+  "variants": {
+    "size": ["md", "lg"]
+  },
+  "sizes": {
+    "md": { "fillHeight": "--size-marker-md (12px)", "trackInset": "--spacing-xxs (2px)" },
+    "lg": { "fillHeight": "--size-300 (24px)", "trackInset": "--spacing-xs (4px)" }
+  },
+  "states": ["visited", "current", "upcoming", "hover", "focus", "disabled"],
+  "slots": [],
+  "tokens": {
+    "semantic": {
+      "trackBackground": "--color-elevation-surface-sunken-default",
+      "trackBorder": "--color-border-bold",
+      "trackBorderWidth": "--border-width-sm",
+      "trackRadius": "--border-radius-full-round",
+      "fill": "--color-background-brand-primary-bold-default",
+      "fillDisabled": "--color-background-disabled",
+      "trackBorderDisabled": "--color-border-disabled",
+      "fillRadius": "--border-radius-full-round",
+      "labelDefault": "--color-content-subtle",
+      "labelHover": "--color-content-default",
+      "labelCurrent": "--color-content-selected",
+      "labelDisabled": "--color-content-disabled",
+      "labelTypography": "heading-xs",
+      "gapBarToLabels": "--spacing-sm",
+      "trackInsetMd": "--spacing-xxs",
+      "trackInsetLg": "--spacing-xs",
+      "fillHeightMd": "--size-marker-md",
+      "fillHeightLg": "--size-300",
+      "motion": "--fade-quick"
+    },
+    "componentAllowed": ["fill width (currentStep / totalSteps, via --progress-tracker-fill)"],
+    "componentForbidden": ["color aliases", "radius aliases", "border width aliases", "spacing aliases", "typography aliases"]
+  },
+  "accessibility": {
+    "rootElement": "nav",
+    "labelRequired": "aria-label or aria-labelledby (defaults to 'Progress')",
+    "list": "ol / li",
+    "currentStep": "aria-current=\"step\"",
+    "navigableSteps": "visited steps with an href render as the Link atom, restyled to the <items> states (no :visited colour; hover changes colour only, no underline)",
+    "barDecorative": "the track is aria-hidden",
+    "focus": "shared Focus Ring (via Link)"
+  },
+  "keyboardInteraction": [
+    "Visited step links use native anchor behavior and the shared Focus Ring."
+  ],
+  "behaviorRules": [
+    "Render one step per steps[] entry, in order, inside an ordered list.",
+    "Clamp currentStep to the one-based range 1..steps.length.",
+    "Fill the track to currentStep / totalSteps.",
+    "Mark the current step with aria-current=\"step\"; it is never a link.",
+    "Render a step as a Link only when it is visited (before current), has an href, and is not disabled.",
+    "Restyle the visited-step Link to the <items> states: no :visited (purple) colour; hover changes colour only (content/subtle -> content/default) with no underline.",
+    "disabled greys the fill, switches the track border to border/disabled, mutes every label, and removes all links.",
+    "Two sizes change only the bar thickness; labels stay heading-xs."
+  ],
+  "compositionRules": [
+    "Give the tracker an accessible name.",
+    "Provide hrefs on visited steps to allow jumping back.",
+    "The per-step segment ('items') stays private anatomy; do not export it."
+  ],
+  "contentRules": [
+    "Use short, parallel step labels.",
+    "Keep the step count small enough that the bar segments stay legible."
+  ],
+  "responsiveRules": [
+    "The tracker fills its container width; segments and labels share the width equally.",
+    "Labels are centred under each step."
+  ],
+  "themeRules": [
+    "Use semantic tokens only.",
+    "Do not reference primitive colors directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "React and TypeScript; React.forwardRef on the root nav.",
+    "CSS Modules and the shared Focus Ring (via the Link atom).",
+    "Compose the Link atom for navigable step labels.",
+    "Single track + single fill; the fill width is a CSS custom property, not per-segment nodes.",
+    "No MUI, no Tailwind, no hardcoded colors/typography/spacing."
+  ],
+  "relatedComponents": ["ProgressIndicator", "ProgressBar", "Tabs", "Link", "FocusRing"],
+  "do": [
+    "Use for a linear journey with named steps.",
+    "Give the tracker an accessible name.",
+    "Link the visited steps so people can go back.",
+    "Use lg for more prominent surfaces."
+  ],
+  "dont": [
+    "Use for label-less relative position (use Progress Indicator).",
+    "Use for determinate percentage (use Progress Bar).",
+    "Make the current or upcoming steps links.",
+    "Expose the per-step segment part publicly.",
+    "Hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders a labelled nav with an ordered list of steps.",
+    "Marks the current step with aria-current=\"step\".",
+    "Renders visited steps with an href as links; current and upcoming steps are not links.",
+    "Clamps currentStep and sets the fill to currentStep / totalSteps.",
+    "disabled greys the fill, switches the track border to border/disabled, and removes links.",
+    "A single disabled step is not a link even when visited with an href.",
+    "Visited-step Link is restyled: no :visited colour; hover changes colour only, no underline.",
+    "Applies the size on the root.",
+    "Does not use MUI or Tailwind.",
+    "Storybook and tests compile."
+  ]
+}

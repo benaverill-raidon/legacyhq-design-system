@@ -1,0 +1,148 @@
+{
+  "name": "TimePicker",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Enter a time of day via a field that opens a three-column time selector.",
+  "intent": "A read-only time field (Text Field trigger) that opens hours / minutes / AM-PM listboxes in a Popup, with Cancel / Confirm.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4789:410508",
+    "componentName": "time-picker",
+    "verifiedAt": "2026-09-04",
+    "shape": "multi-variant",
+    "variants": "context (default | inline) x size (sm | md | lg) x state (default | filled | hover | open | disabled)",
+    "parts": {
+      "trigger": "figma-parts / select-trigger wrapping a text-field (time text + elemAfterInput clock icon 'picker_time', 16px in a 24x24 box).",
+      "popup": "the open state renders a popup > panelSurface > columns of code-parts/<menu-item> (selected = background/selected/default/default + content/selected) + a footer-item (a button-group with Cancel/Confirm buttons, tone=subtle, size=xs), each column with its own scrollbar."
+    },
+    "notes": "context default -> Text Field appearance 'default'; inline -> 'subtle'. The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
+  },
+  "useCases": ["a time-of-day field in a form", "a time filter"],
+  "antiPatterns": ["picking a date (use Date Picker / Date-Time Picker)", "entering a duration"],
+  "anatomy": [
+    { "name": "root", "element": "div", "required": true, "description": "wrapper; defaults to a 240px field width, shrinks to its container" },
+    { "name": "trigger", "element": "TextField (input)", "required": true, "description": "read-only time display + trailing clock icon; aria-haspopup=dialog" },
+    { "name": "popup", "element": "Popup (role=dialog)", "required": true, "description": "anchored to the field frame" },
+    { "name": "columns", "element": "three role=listbox", "required": true, "description": "hours / minutes / AM-PM; roving tabindex; selected option highlighted" },
+    { "name": "footer", "required": true, "description": "Cancel + Confirm buttons; changes are staged until Confirm" }
+  ],
+  "props": {
+    "value": { "type": "Date | null", "required": false, "description": "Controlled time (only h:m used)." },
+    "defaultValue": { "type": "Date | null", "required": false },
+    "onChange": { "type": "(value: Date) => void", "required": false, "description": "Called on Confirm." },
+    "open": { "type": "boolean", "required": false },
+    "defaultOpen": { "type": "boolean", "required": false },
+    "onOpenChange": { "type": "(open: boolean) => void", "required": false },
+    "size": { "type": "enum", "values": ["sm", "md", "lg"], "default": "md", "required": false },
+    "context": { "type": "enum", "values": ["default", "inline"], "default": "default", "required": false },
+    "disabled": { "type": "boolean", "default": false, "required": false },
+    "invalid": { "type": "boolean", "default": false, "required": false },
+    "minuteStep": { "type": "number", "default": 5, "required": false },
+    "placeholder": { "type": "string", "required": false },
+    "format": { "type": "(value: Date, locale?: string) => string", "default": "locale 12-hour time (hh:mm AM)", "required": false },
+    "locale": { "type": "string", "required": false },
+    "alignment": { "type": "PopupAlignment", "default": "bottomLeft", "required": false },
+    "confirmLabel": { "type": "string", "default": "Confirm", "required": false },
+    "cancelLabel": { "type": "string", "default": "Cancel", "required": false },
+    "hoursLabel": { "type": "string", "default": "Hours", "required": false },
+    "minutesLabel": { "type": "string", "default": "Minutes", "required": false },
+    "meridiemLabel": { "type": "string", "default": "AM/PM", "required": false },
+    "id": { "type": "string", "required": false },
+    "aria-label": { "type": "string", "required": false },
+    "aria-labelledby": { "type": "string", "required": false }
+  },
+  "variants": {
+    "size": ["sm", "md", "lg"],
+    "context": ["default", "inline"]
+  },
+  "states": ["default", "filled", "hover", "open", "disabled", "invalid"],
+  "slots": [],
+  "composes": ["TextField", "Popup", "Button", "PickerTimeIcon", "FocusRing"],
+  "tokens": {
+    "semantic": {
+      "fieldWidthDefault": "240px (max-inline-size 100%)",
+      "openBorder": "--color-border-focus (via Text Field data-force-state=focus)",
+      "icon": "--color-content-subtle",
+      "optionTypography": "body-md",
+      "optionHeight": "--size-400",
+      "optionSelectedBackground": "--color-background-selected-default-default",
+      "optionSelectedText": "--color-content-selected",
+      "optionHoverBackground": "--color-background-neutral-overlay-bold-hover",
+      "optionPressBackground": "--color-background-neutral-overlay-bold-press",
+      "columnDivider": "--color-border-default",
+      "footerDivider": "--color-border-default",
+      "popupPadding": "none",
+      "motion": "--fade-quick"
+    }
+  },
+  "accessibility": {
+    "trigger": "read-only input, aria-haspopup=\"dialog\"",
+    "expanded": "aria-expanded + aria-controls set by Popup while open",
+    "panelRole": "dialog",
+    "columns": "role=listbox with role=option children; aria-selected on the chosen option; roving tabindex",
+    "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm or an outside click commits",
+    "focus": "shared Focus Ring; opening moves focus to the selected hour"
+  },
+  "keyboardInteraction": [
+    "ArrowUp / ArrowDown move the selection within a column; Home / End jump to the first / last option.",
+    "Tab moves between the hours, minutes, and AM/PM columns.",
+    "Escape discards the staged change, closes the popup, and returns focus to the field.",
+    "Confirm commits the staged time; Cancel discards it."
+  ],
+  "behaviorRules": [
+    "Render a read-only Text Field showing the formatted time + a clock icon.",
+    "context maps to Text Field appearance (default -> default, inline -> subtle); size passes through.",
+    "Open a Popup with three listbox columns (hours 12-hour, minutes by minuteStep, AM/PM).",
+    "Preview the staged selection live in the field while open.",
+    "Commit the staged selection on Confirm or an outside click (onChange + close); discard it on Cancel or Escape (close).",
+    "Snap the incoming value's minute to the nearest step for the initial selection.",
+    "Controlled/uncontrolled value and open; do not open when disabled."
+  ],
+  "compositionRules": [
+    "Compose the Text Field molecule (trigger), the Popup primitive, and the Button atom (footer).",
+    "Give the field an accessible name."
+  ],
+  "contentRules": [
+    "Format the time with `format` / `locale`; provide a placeholder for the empty state.",
+    "Keep the footer button labels short."
+  ],
+  "responsiveRules": [
+    "The field defaults to 240px and shrinks to its container.",
+    "The popup is a fixed 240px panel of three equal columns; each column scrolls independently."
+  ],
+  "themeRules": [
+    "Field, popup, and options use semantic tokens; do not reference primitives directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "React and TypeScript; React.forwardRef on the root.",
+    "CSS Modules; compose Text Field + Popup + Button; custom listbox columns (not the Menu organism).",
+    "Value carried on a Date (h:m) for clean composition into a Date/Time Picker.",
+    "12-hour with AM/PM (24-hour is a future addition); native scrollbars.",
+    "No MUI, no Tailwind, no hardcoded colors/typography/spacing."
+  ],
+  "relatedComponents": ["DatePicker", "DateTimePicker", "TextField", "Popup", "Button"],
+  "do": [
+    "Use for time-of-day entry in forms and filters.",
+    "Give the field an accessible name and a placeholder.",
+    "Set minuteStep to match the granularity you need.",
+    "Use inline context on dense or borderless surfaces."
+  ],
+  "dont": [
+    "Use for date selection (use Date Picker).",
+    "Expect a commit before Confirm.",
+    "Hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders a field with the formatted time and a closed popup; placeholder when empty.",
+    "Opens three columns with the current time selected.",
+    "Previews the staged selection live in the field; Confirm or an outside click commits; Cancel or Escape discards.",
+    "Supports controlled value and open.",
+    "Respects minuteStep.",
+    "Moves focus into the columns on open; closes on Escape returning focus.",
+    "Does not open when disabled.",
+    "Does not use MUI or Tailwind.",
+    "Storybook and tests compile."
+  ]
+}

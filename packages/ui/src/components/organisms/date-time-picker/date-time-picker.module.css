@@ -1,0 +1,32 @@
+/*
+ * Date/Time Picker composes a Date Picker and a Time Picker into one control that reads as a single
+ * field with two segments: the date on the left, the time on the right. The two field frames are
+ * pulled together so their adjacent borders collapse into a single divider, and the inner corners are
+ * squared so only the outer corners stay rounded. Each half keeps its own popup, states, and a11y.
+ */
+.root {
+  display: inline-flex;
+  align-items: stretch;
+  min-inline-size: 0;
+}
+
+/*
+ * Collapse the two adjacent 1px field borders into one shared divider line between the halves.
+ */
+.time {
+  margin-inline-start: calc(-1 * var(--border-width-sm));
+}
+
+/*
+ * Square the inner corners of each half's field frame (its direct child) so the joined control has a
+ * single rounded outline. The outer corners keep the Text Field's own radius.
+ */
+.date > div {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.time > div {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}

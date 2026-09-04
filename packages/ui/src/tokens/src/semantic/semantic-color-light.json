@@ -642,7 +642,7 @@
         "originalName": "color/background/error/subtle/press"
       },
       "color-background-disabled": {
-        "value": "var(--color-brand-taupe-alpha-1200-4)",
+        "value": "var(--color-brand-taupe-alpha-1200-16)",
         "type": "color",
         "originalName": "color/background/disabled"
       },

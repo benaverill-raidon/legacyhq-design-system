@@ -2221,6 +2221,171 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "date-picker",
+    "name": "DatePicker",
+    "tier": "organism",
+    "path": "docs/components/organisms/date-picker/date-picker.examples.json",
+    "examples": [
+      {
+        "name": "Uncontrolled",
+        "description": "The field owns the selected date; click it to open the calendar.",
+        "jsx": "<DatePicker defaultValue={new Date(2026, 2, 9)} placeholder='MM/DD/YYYY' aria-label='Date' />",
+        "props": {
+          "size": "md",
+          "context": "default"
+        }
+      },
+      {
+        "name": "Controlled",
+        "description": "The parent owns the value.",
+        "jsx": "<DatePicker value={date} onChange={setDate} aria-label='Date' />",
+        "props": {}
+      },
+      {
+        "name": "Inline (borderless)",
+        "description": "The inline context renders a borderless field.",
+        "jsx": "<DatePicker context='inline' defaultValue={new Date(2026, 2, 9)} aria-label='Date' />",
+        "props": {
+          "context": "inline"
+        }
+      },
+      {
+        "name": "Sizes",
+        "description": "sm / md / lg field sizes.",
+        "jsx": "<DatePicker size='lg' aria-label='Date' />",
+        "props": {
+          "size": "lg"
+        }
+      },
+      {
+        "name": "Constrained range",
+        "description": "min / max restrict the selectable dates.",
+        "jsx": "<DatePicker min={new Date(2026, 2, 4)} max={new Date(2026, 2, 24)} aria-label='Date' />",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Always-visible calendar",
+        "jsx": "<DatePicker defaultOpen /> {/* forced open as a permanent calendar */}",
+        "reason": "For an inline, always-open calendar use Date Picker Calendar directly, not a field + popup."
+      },
+      {
+        "name": "Unlabelled field",
+        "jsx": "<DatePicker />",
+        "reason": "Give the field an accessible name via aria-label or aria-labelledby."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "date-picker-calendar",
+    "name": "DatePickerCalendar",
+    "tier": "organism",
+    "path": "docs/components/organisms/date-picker-calendar/date-picker-calendar.examples.json",
+    "examples": [
+      {
+        "name": "Uncontrolled",
+        "description": "The calendar owns the selection and displayed month.",
+        "jsx": "<DatePickerCalendar defaultValue={new Date(2026, 2, 9)} onChange={(d) => console.log(d)} />",
+        "props": {
+          "weekStartsOn": 0
+        }
+      },
+      {
+        "name": "Controlled",
+        "description": "The parent owns the selected value.",
+        "jsx": "<DatePickerCalendar value={date} onChange={setDate} />",
+        "props": {}
+      },
+      {
+        "name": "Min / max range",
+        "description": "Restrict the selectable dates; out-of-range days and blocked nav are disabled.",
+        "jsx": "<DatePickerCalendar min={new Date(2026, 2, 4)} max={new Date(2026, 2, 24)} />",
+        "props": {}
+      },
+      {
+        "name": "Disable specific dates",
+        "description": "Disable weekends (or any predicate).",
+        "jsx": "<DatePickerCalendar isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6} />",
+        "props": {}
+      },
+      {
+        "name": "Week starts Monday",
+        "description": "Start the week on Monday.",
+        "jsx": "<DatePickerCalendar weekStartsOn={1} />",
+        "props": {
+          "weekStartsOn": 1
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "As a bare field",
+        "jsx": "<DatePickerCalendar /> {/* used directly as a form field */}",
+        "reason": "Use Date Picker when you need a text field that opens the calendar in a popup."
+      },
+      {
+        "name": "Heavy background on the panel",
+        "jsx": "<div style={{ background: '#fff', boxShadow: '...' }}><DatePickerCalendar /></div> {/* duplicate surface */}",
+        "reason": "The calendar is transparent by design; the popup surface provides the background and elevation."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "date-time-picker",
+    "name": "DateTimePicker",
+    "tier": "organism",
+    "path": "docs/components/organisms/date-time-picker/date-time-picker.examples.json",
+    "examples": [
+      {
+        "name": "Uncontrolled",
+        "description": "One control for a date and a time over a single value.",
+        "jsx": "<DateTimePicker defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='When' />",
+        "props": {
+          "size": "md",
+          "context": "default"
+        }
+      },
+      {
+        "name": "Controlled",
+        "description": "The parent owns the combined date-and-time value.",
+        "jsx": "<DateTimePicker value={value} onChange={setValue} aria-label='When' />",
+        "props": {}
+      },
+      {
+        "name": "Inline (borderless)",
+        "description": "Both halves render borderless.",
+        "jsx": "<DateTimePicker context='inline' defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='When' />",
+        "props": {
+          "context": "inline"
+        }
+      },
+      {
+        "name": "Constrained + coarse minutes",
+        "description": "Date constraints go to the calendar; minuteStep to the time selector.",
+        "jsx": "<DateTimePicker min={new Date(2026, 2, 1)} max={new Date(2026, 2, 31)} minuteStep={15} aria-label='When' />",
+        "props": {
+          "minuteStep": 15
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Date only",
+        "jsx": "<DateTimePicker /> {/* time half unused */}",
+        "reason": "Use Date Picker when there is no time to capture."
+      },
+      {
+        "name": "Unlabelled group",
+        "jsx": "<DateTimePicker />",
+        "reason": "Give the group an accessible name via aria-label or aria-labelledby."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "dropdown-menu",
     "name": "DropdownMenu",
     "tier": "organism",
@@ -2406,6 +2571,68 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "progress-tracker",
+    "name": "ProgressTracker",
+    "tier": "organism",
+    "path": "docs/components/organisms/progress-tracker/progress-tracker.examples.json",
+    "examples": [
+      {
+        "name": "Named steps with a current position",
+        "description": "The default tracker: the bar fills to the current step, whose label is highlighted.",
+        "jsx": "<ProgressTracker steps={[{label:'Details'},{label:'Parties'},{label:'Documents'},{label:'Review'},{label:'Submit'}]} currentStep={3} aria-label='Matter setup' />",
+        "props": {
+          "currentStep": 3,
+          "size": "md",
+          "aria-label": "Matter setup"
+        }
+      },
+      {
+        "name": "Visited steps as links",
+        "description": "Give steps before the current one an href so people can jump back.",
+        "jsx": "<ProgressTracker steps={[{label:'Details',href:'#details'},{label:'Parties',href:'#parties'},{label:'Documents'}]} currentStep={3} aria-label='Setup' />",
+        "props": {
+          "currentStep": 3
+        }
+      },
+      {
+        "name": "Large",
+        "description": "The lg size thickens only the bar; labels stay heading-xs.",
+        "jsx": "<ProgressTracker steps={steps} currentStep={2} size='lg' aria-label='Onboarding' />",
+        "props": {
+          "size": "lg",
+          "currentStep": 2
+        }
+      },
+      {
+        "name": "Disabled",
+        "description": "A disabled tracker greys the fill and every label, switches the track border to the disabled token, and removes links.",
+        "jsx": "<ProgressTracker steps={steps} currentStep={3} disabled aria-label='Setup' />",
+        "props": {
+          "disabled": true,
+          "currentStep": 3
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Determinate percentage",
+        "jsx": "<ProgressTracker steps={[{label:'0%'},{label:'50%'},{label:'100%'}]} currentStep={2} />",
+        "reason": "Use Progress Bar for a task/system completion percentage, not a step tracker."
+      },
+      {
+        "name": "Peer views",
+        "jsx": "<ProgressTracker steps={[{label:'Overview'},{label:'Activity'},{label:'Billing'}]} currentStep={1} />",
+        "reason": "Use Tabs to switch between peer views; Progress Tracker is for a linear sequence."
+      },
+      {
+        "name": "Unlabelled tracker",
+        "jsx": "<ProgressTracker steps={steps} currentStep={2} />",
+        "reason": "Give the tracker an accessible name via aria-label or aria-labelledby."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "section-message",
     "name": "SectionMessage",
     "tier": "organism",
@@ -2540,6 +2767,58 @@
         "name": "Unlabelled tablist",
         "jsx": "<Tabs tabs={tabs} />",
         "reason": "Give the tab list an accessible name via aria-label or aria-labelledby."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "time-picker",
+    "name": "TimePicker",
+    "tier": "organism",
+    "path": "docs/components/organisms/time-picker/time-picker.examples.json",
+    "examples": [
+      {
+        "name": "Uncontrolled",
+        "description": "The field owns the time; click it to open the columns, then Confirm.",
+        "jsx": "<TimePicker defaultValue={new Date(2026, 2, 9, 16, 30)} placeholder='hh:mm AM' aria-label='Time' />",
+        "props": {
+          "size": "md",
+          "context": "default"
+        }
+      },
+      {
+        "name": "Controlled",
+        "description": "The parent owns the value.",
+        "jsx": "<TimePicker value={time} onChange={setTime} aria-label='Time' />",
+        "props": {}
+      },
+      {
+        "name": "Inline (borderless)",
+        "description": "The inline context renders a borderless field.",
+        "jsx": "<TimePicker context='inline' defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='Time' />",
+        "props": {
+          "context": "inline"
+        }
+      },
+      {
+        "name": "15-minute step",
+        "description": "minuteStep sets the minute increment.",
+        "jsx": "<TimePicker minuteStep={15} aria-label='Time' />",
+        "props": {
+          "minuteStep": 15
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Expecting a value on every column change",
+        "jsx": "<TimePicker onChange={commitImmediately} /> {/* onChange runs on commit, not per column change */}",
+        "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm or an outside click, not per change."
+      },
+      {
+        "name": "Unlabelled field",
+        "jsx": "<TimePicker />",
+        "reason": "Give the field an accessible name via aria-label or aria-labelledby."
       }
     ],
     "exemplarCompleteness": "full"

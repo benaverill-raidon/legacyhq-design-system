@@ -1,0 +1,94 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as DatePickerStories from './DatePicker.stories';
+
+<Meta of={DatePickerStories} name="Docs" />
+
+# Date Picker
+
+Date Picker is a date field that opens the Date Picker Calendar in a popup. The read-only field shows
+the selected date and a calendar icon; the calendar does the picking.
+
+<Canvas of={DatePickerStories.Playground} />
+
+## When to use
+
+- A single-date field in a form or filter.
+
+## When not to use
+
+- **An always-visible calendar** - use Date Picker Calendar directly.
+- **Picking a time** - use the Time Picker (Date/Time Picker combines both).
+- **A small set of preset dates** - a Select may be simpler.
+
+## Anatomy
+
+1. **Field** - a read-only Text Field showing the formatted date with a trailing calendar icon; it is
+   the disclosure control (`aria-haspopup="dialog"`).
+2. **Popup** - a `role="dialog"` panel anchored to the field, providing the surface.
+3. **Calendar** - the Date Picker Calendar inside the popup.
+
+## Usage guidance
+
+### Sizes and contexts
+
+<Canvas of={DatePickerStories.Sizes} />
+
+`size` (`sm`/`md`/`lg`) sets the field height. `context` maps to the Text Field appearance:
+
+<Canvas of={DatePickerStories.Contexts} />
+
+`default` is a bordered field; `inline` is borderless (subtle). The open state pins the field's focus
+treatment - a border for `default`, an underline for `inline`.
+
+### States
+
+<Canvas of={DatePickerStories.States} />
+
+Empty shows the `placeholder`; `disabled` and `invalid` map to the Text Field states.
+
+### Restricting dates
+
+<Canvas of={DatePickerStories.WithConstraints} />
+
+`min` / `max`, `isDateDisabled`, `weekStartsOn`, `today`, and `locale` pass through to the calendar.
+
+### Controlled
+
+<Canvas of={DatePickerStories.Controlled} />
+
+Pass `value` + `onChange` (and optionally `open` + `onOpenChange`) to control the picker.
+
+### Accessibility
+
+The field carries `aria-haspopup="dialog"` and, while open, `aria-expanded` + `aria-controls`
+(managed by Popup) pointing at the dialog panel. Opening moves focus into the calendar grid; Escape or
+selecting a day closes the popup and returns focus to the field; outside clicks dismiss without moving
+focus. The calendar provides its own grid keyboard model. The field is read-only in this version -
+pick via the calendar (typing a date directly is a future addition).
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Selected date (controlled / uncontrolled).</td></tr>
+    <tr><td><code>onChange</code></td><td><code>(date: Date) =&gt; void</code></td><td>-</td><td>Called with the selected date.</td></tr>
+    <tr><td><code>open</code> / <code>defaultOpen</code> / <code>onOpenChange</code></td><td>-</td><td>-</td><td>Popup open state.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size.</td></tr>
+    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless field.</td></tr>
+    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Field states.</td></tr>
+    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Empty-state text.</td></tr>
+    <tr><td><code>format</code></td><td><code>(date, locale?) =&gt; string</code></td><td>locale short date</td><td>Field display format.</td></tr>
+    <tr><td><code>min</code> / <code>max</code> / <code>isDateDisabled</code> / <code>weekStartsOn</code> / <code>today</code> / <code>locale</code></td><td>-</td><td>-</td><td>Passed to the calendar.</td></tr>
+    <tr><td><code>alignment</code></td><td><code>PopupAlignment</code></td><td><code>'bottomLeft'</code></td><td>Popup placement.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Date Picker Calendar** - the calendar this opens.
+- **Date/Time Picker** - date plus time.
+- **Text Field** - the trigger field.
+- **Popup** - positioning and dismissal.

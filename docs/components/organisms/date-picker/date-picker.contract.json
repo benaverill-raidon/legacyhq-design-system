@@ -1,0 +1,145 @@
+{
+  "name": "DatePicker",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Enter a single date via a field that opens a calendar popup.",
+  "intent": "A read-only date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4788:377097",
+    "componentName": "date-picker",
+    "verifiedAt": "2026-09-04",
+    "shape": "multi-variant",
+    "variants": "context (default | inline) x size (sm | md | lg) x state (default | filled | hover | open | disabled)",
+    "parts": {
+      "trigger": "figma-parts / select-trigger wrapping a text-field (value text + elemAfterInput calendar icon); the field frame is radius md with a border/input outline.",
+      "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
+    },
+    "notes": "context default -> Text Field appearance 'default' (bordered); context inline -> appearance 'subtle' (borderless). The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+  },
+  "useCases": [
+    "a date field in a form",
+    "a date filter",
+    "any single-date entry that benefits from a calendar"
+  ],
+  "antiPatterns": [
+    "an always-visible inline calendar (use Date Picker Calendar directly)",
+    "time selection (use Time Picker / Date-Time Picker)",
+    "a small set of preset dates (use Select)"
+  ],
+  "anatomy": [
+    { "name": "root", "element": "div", "required": true, "description": "wrapper; defaults to a 240px field width, shrinks to its container" },
+    { "name": "trigger", "element": "TextField (input)", "required": true, "description": "read-only date display + trailing calendar icon; aria-haspopup=dialog" },
+    { "name": "popup", "element": "Popup (role=dialog)", "required": true, "description": "anchored to the field frame; holds the calendar" },
+    { "name": "calendar", "element": "DatePickerCalendar", "required": true, "description": "the month grid inside the popup" }
+  ],
+  "props": {
+    "value": { "type": "Date | null", "required": false, "description": "Controlled selected date." },
+    "defaultValue": { "type": "Date | null", "required": false },
+    "onChange": { "type": "(date: Date) => void", "required": false },
+    "open": { "type": "boolean", "required": false, "description": "Controlled popup open state." },
+    "defaultOpen": { "type": "boolean", "required": false },
+    "onOpenChange": { "type": "(open: boolean) => void", "required": false },
+    "size": { "type": "enum", "values": ["sm", "md", "lg"], "default": "md", "required": false },
+    "context": { "type": "enum", "values": ["default", "inline"], "default": "default", "required": false },
+    "disabled": { "type": "boolean", "default": false, "required": false },
+    "invalid": { "type": "boolean", "default": false, "required": false },
+    "placeholder": { "type": "string", "required": false },
+    "format": { "type": "(date: Date, locale?: string) => string", "default": "locale short date (MM/DD/YYYY)", "required": false },
+    "locale": { "type": "string", "required": false },
+    "alignment": { "type": "PopupAlignment", "default": "bottomLeft", "required": false },
+    "min": { "type": "Date", "required": false },
+    "max": { "type": "Date", "required": false },
+    "isDateDisabled": { "type": "(date: Date) => boolean", "required": false },
+    "weekStartsOn": { "type": "0 | 1 | 2 | 3 | 4 | 5 | 6", "default": 0, "required": false },
+    "today": { "type": "Date", "default": "current date", "required": false },
+    "id": { "type": "string", "required": false },
+    "aria-label": { "type": "string", "required": false },
+    "aria-labelledby": { "type": "string", "required": false }
+  },
+  "variants": {
+    "size": ["sm", "md", "lg"],
+    "context": ["default", "inline"]
+  },
+  "states": ["default", "filled", "hover", "open", "disabled", "invalid"],
+  "slots": [],
+  "composes": ["TextField", "Popup", "DatePickerCalendar", "CalendarIcon"],
+  "tokens": {
+    "semantic": {
+      "fieldWidthDefault": "240px (max-inline-size 100%)",
+      "openBorder": "--color-border-focus (via Text Field data-force-state=focus)",
+      "icon": "--color-content-subtle",
+      "popupPadding": "none (the calendar provides its own padding)"
+    },
+    "note": "Field surface/border/typography come from Text Field; the calendar and popup carry their own tokens. Date Picker adds only the trigger cursor/icon and the 240px default width."
+  },
+  "accessibility": {
+    "trigger": "read-only input, aria-haspopup=\"dialog\"",
+    "expanded": "aria-expanded + aria-controls set by Popup while open",
+    "panelRole": "dialog",
+    "openFocus": "focus moves into the calendar grid on open",
+    "dismiss": "Escape or selecting a day closes and returns focus to the field; outside click dismisses without moving focus",
+    "calendar": "the DatePickerCalendar provides the grid semantics and keyboard model"
+  },
+  "keyboardInteraction": [
+    "Enter / Space / ArrowDown / ArrowUp open the popup from the field.",
+    "Escape closes the popup and returns focus to the field.",
+    "Inside the popup, the calendar's grid keyboard model applies."
+  ],
+  "behaviorRules": [
+    "Render a read-only Text Field showing the formatted selected date + a calendar icon.",
+    "context maps to Text Field appearance (default -> default, inline -> subtle); size passes through.",
+    "Render the open state by pinning the field focus treatment while open.",
+    "Open the calendar in a Popup anchored to the field frame; select fills the field and closes.",
+    "Controlled/uncontrolled value and open state.",
+    "Pass min/max/isDateDisabled/weekStartsOn/today/locale to the calendar.",
+    "Do not open when disabled."
+  ],
+  "compositionRules": [
+    "Compose the Text Field molecule (trigger), the Popup primitive (positioning/dismissal), and the Date Picker Calendar (content).",
+    "Give the field an accessible name (aria-label or aria-labelledby)."
+  ],
+  "contentRules": [
+    "Format the date with `format` / `locale`; provide a placeholder for the empty state.",
+    "Keep the field label short."
+  ],
+  "responsiveRules": [
+    "The field defaults to 240px and shrinks to its container.",
+    "The popup hugs the calendar's fixed width and repositions to avoid viewport overflow."
+  ],
+  "themeRules": [
+    "Field, popup, and calendar use semantic tokens; do not reference primitives directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "React and TypeScript; React.forwardRef on the root.",
+    "CSS Modules; compose Text Field + Popup + Date Picker Calendar.",
+    "No MUI, no Tailwind, no hardcoded colors/typography/spacing.",
+    "Read-only field (v1); manual date entry is a future addition."
+  ],
+  "relatedComponents": ["DatePickerCalendar", "DateTimePicker", "TimePicker", "TextField", "Popup"],
+  "do": [
+    "Use for single-date entry in forms and filters.",
+    "Give the field an accessible name and a placeholder.",
+    "Constrain dates with min/max or isDateDisabled.",
+    "Use inline context on dense or borderless surfaces."
+  ],
+  "dont": [
+    "Use for an always-visible calendar (use Date Picker Calendar).",
+    "Use for time selection.",
+    "Hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders a field with the formatted selected date and a closed popup.",
+    "Shows the placeholder when empty.",
+    "Opens the calendar on click / Enter / Arrow Down and marks the field expanded.",
+    "Moves focus into the calendar on open.",
+    "Selects a day: fills the field, closes, returns focus (uncontrolled); supports controlled value.",
+    "Closes on Escape and returns focus to the field.",
+    "Does not open when disabled.",
+    "Passes min/max through to the calendar; exposes a role=dialog panel via aria-controls.",
+    "Does not use MUI or Tailwind.",
+    "Storybook and tests compile."
+  ]
+}

@@ -1,0 +1,121 @@
+/*
+ * Progress Tracker is a segmented, labelled progress bar for a linear multi-step journey. A rounded
+ * "full-round" pill track (a `sunken` surface with a `border/bold` outline) is filled with the
+ * `background/brand/primary/bold` colour up to and including the current step; a `Link`/text label
+ * sits centred under each step. The fill width is `currentStep / totalSteps` and is driven by the
+ * `--progress-tracker-fill` custom property set in the component. Sizes only change the bar
+ * thickness (the label stays `heading-xs`, matching the Figma `link` size=md in both sizes).
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-inline-size: 0;
+}
+
+.size_md {
+  --progress-tracker-fill-height: var(--size-marker-md);
+  --progress-tracker-track-inset: var(--spacing-xxs);
+}
+
+.size_lg {
+  --progress-tracker-fill-height: var(--size-300);
+  --progress-tracker-track-inset: var(--spacing-xs);
+}
+
+/*
+ * The track hugs the fill: its height is the fill height plus the inset padding plus the border, so
+ * the inset padding is the cream "halo" visible between the navy fill and the outer border.
+ */
+.track {
+  box-sizing: border-box;
+  inline-size: 100%;
+  padding: var(--progress-tracker-track-inset);
+  border: var(--border-width-sm) solid var(--color-border-bold);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-elevation-surface-sunken-default);
+  overflow: hidden;
+}
+
+.fill {
+  block-size: var(--progress-tracker-fill-height);
+  inline-size: var(--progress-tracker-fill, 0%);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+  transition: inline-size var(--fade-quick);
+}
+
+/*
+ * Disabled: the fill greys to `background/disabled` (the token the Figma disabled state is bound to).
+ * On its own that low-contrast grey barely reads against the sunken track, so the track outline also
+ * switches to `border/disabled` to make the disabled state clearly stand out.
+ */
+.root[data-disabled='true'] .fill {
+  background: var(--color-background-disabled);
+}
+
+.root[data-disabled='true'] .track {
+  border-color: var(--color-border-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition-duration: 0ms;
+  }
+}
+
+.steps {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: center;
+}
+
+.label {
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  text-transform: var(--typography-heading-xs-text-transform);
+}
+
+/* The current step is not a link: it reads as the selected/active position. */
+.labelCurrent {
+  color: var(--color-content-selected);
+}
+
+.labelDisabled {
+  color: var(--color-content-disabled);
+}
+
+/*
+ * Navigable (visited) step labels reuse the Link atom, but the tracker's <items> states differ from
+ * Link's subtle defaults: there is no :visited (purple) treatment, and hover changes colour only
+ * (subtle -> `content/default`) with no underline. The doubled `.link.link` selector outranks the
+ * Link atom's own single-class rules regardless of stylesheet order.
+ */
+.link.link {
+  --link-color-visited: var(--color-content-subtle);
+  --link-color-visited-press: var(--color-content-default);
+}
+
+.link.link:hover,
+.link.link:active {
+  text-decoration-line: none;
+}
+
+.link.link:hover {
+  color: var(--color-content-default);
+}

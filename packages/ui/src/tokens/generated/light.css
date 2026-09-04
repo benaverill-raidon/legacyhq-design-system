@@ -133,7 +133,7 @@
   --color-background-error-subtle-default: var(--color-red-solid-100);
   --color-background-error-subtle-hover: var(--color-red-solid-200);
   --color-background-error-subtle-press: var(--color-red-solid-300);
-  --color-background-disabled: var(--color-brand-taupe-alpha-1200-4);
+  --color-background-disabled: var(--color-brand-taupe-alpha-1200-16);
   --color-background-error-default-default: var(--color-red-solid-300);
   --color-background-error-default-hover: var(--color-red-solid-400);
   --color-background-error-default-press: var(--color-red-solid-500);

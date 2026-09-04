@@ -1,0 +1,124 @@
+{
+  "name": "DateTimePicker",
+  "category": "organism",
+  "status": "in-progress",
+  "purpose": "Capture a date and a time together in one control.",
+  "intent": "A Date Picker and a Time Picker joined into a single field over one Date value.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4789:411726",
+    "componentName": "date-time-picker",
+    "verifiedAt": "2026-09-04",
+    "shape": "multi-variant",
+    "variants": "context (default | inline) x size (sm | md | lg)",
+    "parts": {
+      "date-picker": "a date-picker instance (240px) - the left half.",
+      "divider": "a 1px rule between the halves; in code the two field borders collapse into one shared divider.",
+      "time-picker": "a time-picker instance (240px) - the right half."
+    },
+    "notes": "WIP in Figma: only context x size is defined (no combined open/disabled/hover/filled states) - interaction states come from the inner pickers. The set is 480px (two 240px halves). In code the control composes the DatePicker and TimePicker organisms over one shared Date; the joined look is achieved by pulling the two field frames together (negative margin) and squaring their inner corners."
+  },
+  "useCases": ["a meeting start", "a deadline date + time", "a scheduled reminder"],
+  "antiPatterns": ["only a date (use Date Picker)", "only a time (use Time Picker)"],
+  "anatomy": [
+    { "name": "root", "element": "div[role=group]", "required": true, "description": "the labelled combined control; data-size, data-context" },
+    { "name": "date", "element": "DatePicker", "required": true, "description": "the date half (calendar popup); inner corners squared" },
+    { "name": "time", "element": "TimePicker", "required": true, "description": "the time half (hours/minutes/AM-PM popup); pulled in to share the divider" }
+  ],
+  "props": {
+    "value": { "type": "Date | null", "required": false, "description": "Controlled combined value." },
+    "defaultValue": { "type": "Date | null", "required": false },
+    "onChange": { "type": "(value: Date) => void", "required": false, "description": "Called with the combined value when either half changes." },
+    "size": { "type": "enum", "values": ["sm", "md", "lg"], "default": "md", "required": false },
+    "context": { "type": "enum", "values": ["default", "inline"], "default": "default", "required": false },
+    "disabled": { "type": "boolean", "default": false, "required": false },
+    "invalid": { "type": "boolean", "default": false, "required": false },
+    "locale": { "type": "string", "required": false },
+    "min": { "type": "Date", "required": false, "description": "Passed to the calendar." },
+    "max": { "type": "Date", "required": false, "description": "Passed to the calendar." },
+    "isDateDisabled": { "type": "(date: Date) => boolean", "required": false, "description": "Passed to the calendar." },
+    "weekStartsOn": { "type": "0 | 1 | 2 | 3 | 4 | 5 | 6", "default": 0, "required": false },
+    "minuteStep": { "type": "number", "default": 5, "required": false, "description": "Passed to the time selector." },
+    "today": { "type": "Date", "default": "current date", "required": false },
+    "datePlaceholder": { "type": "string", "required": false },
+    "timePlaceholder": { "type": "string", "required": false },
+    "dateFormat": { "type": "(date: Date, locale?: string) => string", "required": false },
+    "timeFormat": { "type": "(value: Date, locale?: string) => string", "required": false },
+    "dateLabel": { "type": "string", "default": "Date", "required": false },
+    "timeLabel": { "type": "string", "default": "Time", "required": false },
+    "aria-label": { "type": "string", "required": false },
+    "aria-labelledby": { "type": "string", "required": false }
+  },
+  "variants": {
+    "size": ["sm", "md", "lg"],
+    "context": ["default", "inline"]
+  },
+  "states": ["default", "disabled", "invalid"],
+  "slots": [],
+  "composes": ["DatePicker", "TimePicker"],
+  "tokens": {
+    "semantic": {
+      "sharedDivider": "the two field borders collapse via margin-inline-start: calc(-1 * --border-width-sm)",
+      "innerCorners": "squared (border radius 0) so only the outer corners keep the Text Field radius"
+    },
+    "note": "All field, popup, and calendar tokens come from the composed DatePicker / TimePicker. Date/Time Picker only adds the join (negative margin + squared inner corners)."
+  },
+  "accessibility": {
+    "rootRole": "group",
+    "label": "aria-label or aria-labelledby on the group",
+    "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
+    "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
+  },
+  "behaviorRules": [
+    "Compose a DatePicker (left) and a TimePicker (right) over one shared Date value.",
+    "Picking a date keeps the current time (else midnight); confirming a time keeps the current date (else today).",
+    "Fire onChange with the combined Date whenever either half changes.",
+    "Pass size, context, disabled, invalid, and locale to both halves.",
+    "Pass min/max/isDateDisabled/weekStartsOn/today to the calendar and minuteStep to the time selector.",
+    "Join the halves visually: collapse the shared border and square the inner corners."
+  ],
+  "compositionRules": [
+    "Compose the DatePicker and TimePicker organisms; do not reimplement their fields or popups.",
+    "Give the group an accessible name; give each half its own label."
+  ],
+  "contentRules": [
+    "Provide per-half placeholders and formats as needed.",
+    "Keep the field labels short."
+  ],
+  "responsiveRules": [
+    "Two 240px halves (480px total); each half's popup repositions to avoid viewport overflow."
+  ],
+  "themeRules": [
+    "All tokens come from the composed pickers; do not add raw color/typography.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "React and TypeScript; React.forwardRef on the root.",
+    "CSS Modules; compose DatePicker + TimePicker.",
+    "The joined look depends on each picker rendering its field frame as the direct child of its root.",
+    "No MUI, no Tailwind, no hardcoded colors/typography/spacing.",
+    "WIP: mirrors the current Figma (context x size); combined states will follow the inner pickers."
+  ],
+  "relatedComponents": ["DatePicker", "TimePicker", "DatePickerCalendar"],
+  "do": [
+    "Use for a date + time together.",
+    "Give the group and each half an accessible name.",
+    "Constrain dates via the calendar pass-throughs."
+  ],
+  "dont": [
+    "Use for only a date or only a time.",
+    "Reimplement the fields or popups.",
+    "Hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders a date field and a time field in a labelled group.",
+    "Selecting a date keeps the time; confirming a time keeps the date; onChange gets the combined Date.",
+    "Supports controlled value.",
+    "Disables both halves.",
+    "Applies size and context on the group.",
+    "Joins the halves (collapsed border + squared inner corners).",
+    "Does not use MUI or Tailwind.",
+    "Storybook and tests compile."
+  ]
+}

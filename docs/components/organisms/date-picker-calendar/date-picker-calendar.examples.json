@@ -1,0 +1,47 @@
+{
+  "component": "DatePickerCalendar",
+  "examples": [
+    {
+      "name": "Uncontrolled",
+      "description": "The calendar owns the selection and displayed month.",
+      "jsx": "<DatePickerCalendar defaultValue={new Date(2026, 2, 9)} onChange={(d) => console.log(d)} />",
+      "props": { "weekStartsOn": 0 }
+    },
+    {
+      "name": "Controlled",
+      "description": "The parent owns the selected value.",
+      "jsx": "<DatePickerCalendar value={date} onChange={setDate} />",
+      "props": {}
+    },
+    {
+      "name": "Min / max range",
+      "description": "Restrict the selectable dates; out-of-range days and blocked nav are disabled.",
+      "jsx": "<DatePickerCalendar min={new Date(2026, 2, 4)} max={new Date(2026, 2, 24)} />",
+      "props": {}
+    },
+    {
+      "name": "Disable specific dates",
+      "description": "Disable weekends (or any predicate).",
+      "jsx": "<DatePickerCalendar isDateDisabled={(d) => d.getDay() === 0 || d.getDay() === 6} />",
+      "props": {}
+    },
+    {
+      "name": "Week starts Monday",
+      "description": "Start the week on Monday.",
+      "jsx": "<DatePickerCalendar weekStartsOn={1} />",
+      "props": { "weekStartsOn": 1 }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "As a bare field",
+      "reason": "Use Date Picker when you need a text field that opens the calendar in a popup.",
+      "jsx": "<DatePickerCalendar /> {/* used directly as a form field */}"
+    },
+    {
+      "name": "Heavy background on the panel",
+      "reason": "The calendar is transparent by design; the popup surface provides the background and elevation.",
+      "jsx": "<div style={{ background: '#fff', boxShadow: '...' }}><DatePickerCalendar /></div> {/* duplicate surface */}"
+    }
+  ]
+}

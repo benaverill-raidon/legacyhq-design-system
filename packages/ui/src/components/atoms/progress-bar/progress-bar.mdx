@@ -28,10 +28,10 @@ linear track or a fixed-diameter circular ring - both driven by the same numeric
 
 <Canvas of={ProgressBarStories.Content} />
 
-- **Linear** - a fluid-width track with a filled segment, bounded by a start and end stop marker.
-  Width is controlled entirely by the parent; ProgressBar never sets its own width.
+- **Linear** - a fluid-width track with a fully-rounded filled segment over an equally rounded
+  remaining track. Width is controlled entirely by the parent; ProgressBar never sets its own width.
 - **Circular** - a fixed 72px SVG ring for both sizes, starting at 12 o'clock and advancing
-  clockwise, with a single stop marker at the top.
+  clockwise, with rounded arc ends inset inside the track. At 0% the ring is not shown.
 
 Neither variant renders visible percentage text - pair ProgressBar with your own label or number in
 the surrounding composition, as in the examples above.

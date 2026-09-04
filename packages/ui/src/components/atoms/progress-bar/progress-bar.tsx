@@ -4,6 +4,7 @@ import type { ProgressBarProps, ProgressBarSize } from './progress-bar.types';
 
 type ProgressBarStyle = React.CSSProperties & {
   '--progress-bar-value'?: string;
+  '--progress-bar-fill'?: number;
 };
 
 const circularDiameter = 72;
@@ -17,6 +18,16 @@ const circularStrokeWidthBySize: Record<ProgressBarSize, number> = {
   lg: 24,
 };
 
+/*
+ * The progress arc is inset within the track ring by this pad on both radial edges, mirroring the
+ * linear progress fill's inset so a light gap of track shows around the fill. Same values as the
+ * linear pad token (4px for both sizes).
+ */
+const circularProgressPadBySize: Record<ProgressBarSize, number> = {
+  md: 4,
+  lg: 4,
+};
+
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
@@ -27,26 +38,6 @@ function clampValue(value: number) {
   }
 
   return Math.min(100, Math.max(0, value));
-}
-
-type StopSegment = 'track' | 'progress';
-
-/*
- * Each track-stop mark sits directly on top of either the dark progress fill or the light
- * remaining track, so it needs to borrow the *other* segment's color to stay visible - a stop on
- * top of the track uses the progress-dark color, and a stop on top of progress uses the
- * track-light color. This mirrors the segment-specific track-stop variants added in Figma.
- */
-function getLinearStopSegment(position: 'start' | 'end', clampedValue: number): StopSegment {
-  if (position === 'start') {
-    return clampedValue > 0 ? 'progress' : 'track';
-  }
-
-  return clampedValue >= 100 ? 'progress' : 'track';
-}
-
-function getCircularStopSegment(clampedValue: number): StopSegment {
-  return clampedValue >= 100 ? 'progress' : 'track';
 }
 
 function getAccessibleNameProps(
@@ -93,6 +84,7 @@ function renderCircularSvg(size: ProgressBarSize, clampedValue: number) {
   const radius = circularRadiusBySize[size];
   const strokeWidth = circularStrokeWidthBySize[size];
   const innerStrokeWidth = Math.max(strokeWidth - 2, 0);
+  const progressStrokeWidth = Math.max(strokeWidth - 2 * circularProgressPadBySize[size], 0);
   const dashProps = getCircularDashProps(clampedValue);
 
   return (
@@ -119,22 +111,12 @@ function renderCircularSvg(size: ProgressBarSize, clampedValue: number) {
         strokeWidth={innerStrokeWidth}
       />
       <circle
-        className={styles.circularProgressBorder}
-        cx={circularDiameter / 2}
-        cy={circularDiameter / 2}
-        r={radius}
-        pathLength={100}
-        strokeWidth={strokeWidth}
-        strokeDasharray={dashProps.strokeDasharray}
-        strokeDashoffset={dashProps.strokeDashoffset}
-      />
-      <circle
         className={styles.circularProgress}
         cx={circularDiameter / 2}
         cy={circularDiameter / 2}
         r={radius}
         pathLength={100}
-        strokeWidth={innerStrokeWidth}
+        strokeWidth={progressStrokeWidth}
         strokeDasharray={dashProps.strokeDasharray}
         strokeDashoffset={dashProps.strokeDashoffset}
       />
@@ -171,6 +153,7 @@ export const ProgressBar = React.memo(
     const rootStyle = {
       ...(style ?? {}),
       '--progress-bar-value': `${clampedValue}%`,
+      '--progress-bar-fill': clampedValue / 100,
     } satisfies ProgressBarStyle;
     const resolvedValueText = getValueText ? getValueText(clampedValue) : ariaValueText;
 
@@ -195,34 +178,10 @@ export const ProgressBar = React.memo(
           <div className={styles.track} aria-hidden="true">
             <span className={styles.remainingTrack} />
             <span className={styles.progressSegment} />
-            <span className={mergeClassNames(styles.stopContainer, styles.stopStart)}>
-              <span
-                className={mergeClassNames(
-                  styles.stopShape,
-                  styles[`stopSegment_${getLinearStopSegment('start', clampedValue)}`],
-                )}
-              />
-            </span>
-            <span className={mergeClassNames(styles.stopContainer, styles.stopEnd)}>
-              <span
-                className={mergeClassNames(
-                  styles.stopShape,
-                  styles[`stopSegment_${getLinearStopSegment('end', clampedValue)}`],
-                )}
-              />
-            </span>
           </div>
         ) : (
           <div className={styles.circularViewport} aria-hidden="true">
             {renderCircularSvg(size, clampedValue)}
-            <span className={mergeClassNames(styles.stopContainer, styles.stopTop)}>
-              <span
-                className={mergeClassNames(
-                  styles.stopShape,
-                  styles[`stopSegment_${getCircularStopSegment(clampedValue)}`],
-                )}
-              />
-            </span>
           </div>
         )}
       </div>

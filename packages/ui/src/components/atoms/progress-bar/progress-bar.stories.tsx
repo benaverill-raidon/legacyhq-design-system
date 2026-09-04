@@ -233,8 +233,8 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         {sectionHeading('Narrow linear container')}
         <p style={captionStyle}>
-          Linear fills whatever inline width its container gives it - the stop markers stay pinned
-          to the edges even when that width is small.
+          Linear fills whatever inline width its container gives it - the rounded fill and track
+          stay legible even when that width is small.
         </p>
         <div style={{ inlineSize: '64px' }}>
           <ProgressBar value={35} label="Narrow container progress" />

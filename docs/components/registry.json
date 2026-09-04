@@ -1467,14 +1467,6 @@
         "group": "linear"
       },
       {
-        "name": "startStop",
-        "group": "linear"
-      },
-      {
-        "name": "endStop",
-        "group": "linear"
-      },
-      {
         "name": "svg",
         "group": "circular"
       },
@@ -1484,10 +1476,6 @@
       },
       {
         "name": "progressCircle",
-        "group": "circular"
-      },
-      {
-        "name": "startStop",
         "group": "circular"
       }
     ],
@@ -1551,26 +1539,22 @@
     "subComponents": [],
     "tokens": {
       "semantic": {
-        "progress": "chart/sequence/brand/900 or generated semantic equivalent",
-        "track": "chart/sequence/brand/300 or generated semantic equivalent",
-        "trackBorder": "color-border-brand",
-        "stopOnTrack": "chart/sequence/brand/900 (contrasts with the light remaining track underneath)",
-        "stopOnProgress": "chart/sequence/brand/300 (contrasts with the dark progress fill underneath)",
+        "progress": "color-background-brand-primary-bold-default",
+        "track": "color-elevation-surface-deep-default",
+        "trackBorder": "color-border-bold",
         "radius": "border-radius-full-round",
-        "borderWidth": "border-width-default"
+        "borderWidth": "border-width-sm"
       },
       "componentAllowed": [
         "linear root size",
+        "linear pad (progress fill inset)",
         "track thickness",
-        "circular diameter",
-        "stop container size",
-        "stop shape size"
+        "circular diameter"
       ],
       "componentForbidden": [
         "color aliases",
         "radius aliases",
-        "border color aliases",
-        "a fixed border/background pairing on the stop shape - it is a single flat fill that swaps token by segment"
+        "border color aliases"
       ]
     },
     "accessibility": {

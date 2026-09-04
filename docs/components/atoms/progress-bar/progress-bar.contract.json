@@ -45,15 +45,12 @@
     "linear": [
       "track",
       "progressSegment",
-      "remainingTrack",
-      "startStop",
-      "endStop"
+      "remainingTrack"
     ],
     "circular": [
       "svg",
       "trackCircle",
-      "progressCircle",
-      "startStop"
+      "progressCircle"
     ]
   },
   "props": {
@@ -104,15 +101,15 @@
   },
   "sizes": {
     "md": {
-      "linearRoot": "24px",
+      "linearRoot": "20px",
       "trackThickness": "12px",
-      "stopContainer": "12px",
+      "progressInset": "4px",
       "circularDiameter": "72px"
     },
     "lg": {
-      "linearRoot": "40px",
+      "linearRoot": "32px",
       "trackThickness": "24px",
-      "stopContainer": "24px",
+      "progressInset": "4px",
       "circularDiameter": "72px"
     }
   },
@@ -122,26 +119,22 @@
   "slots": [],
   "tokens": {
     "semantic": {
-      "progress": "chart/sequence/brand/900 or generated semantic equivalent",
-      "track": "chart/sequence/brand/300 or generated semantic equivalent",
-      "trackBorder": "color-border-brand",
-      "stopOnTrack": "chart/sequence/brand/900 (contrasts with the light remaining track underneath)",
-      "stopOnProgress": "chart/sequence/brand/300 (contrasts with the dark progress fill underneath)",
+      "progress": "color-background-brand-primary-bold-default",
+      "track": "color-elevation-surface-deep-default",
+      "trackBorder": "color-border-bold",
       "radius": "border-radius-full-round",
-      "borderWidth": "border-width-default"
+      "borderWidth": "border-width-sm"
     },
     "componentAllowed": [
       "linear root size",
+      "linear pad (progress fill inset)",
       "track thickness",
-      "circular diameter",
-      "stop container size",
-      "stop shape size"
+      "circular diameter"
     ],
     "componentForbidden": [
       "color aliases",
       "radius aliases",
-      "border color aliases",
-      "a fixed border/background pairing on the stop shape - it is a single flat fill that swaps token by segment"
+      "border color aliases"
     ]
   },
   "accessibility": {
@@ -167,7 +160,13 @@
     "Do not add animation unless explicitly specified.",
     "Linear width is controlled by the parent.",
     "Circular progress starts at 12 o'clock and advances clockwise.",
-    "Each track-stop mark renders in the color that contrasts with the segment currently underneath it, not one fixed color: the linear start stop uses the track-contrast color only at value = 0 and the progress-contrast color for any value > 0; the linear end stop and the circular top stop use the track-contrast color for value < 100 and the progress-contrast color only at value = 100."
+    "The linear progress fill and remaining track are both fully-rounded pills (border-radius-full-round) at every value.",
+    "The linear progress fill is inset within the bordered remaining track by the pad (4px) on the block axis and both inline edges, so it floats inside the track rather than meeting its edges.",
+    "The circular progress arc is inset within the track ring by the same pad on both radial edges, so a light gap of track shows around the fill - matching the linear inset.",
+    "Only the remaining track carries the bold border; the progress fill has none.",
+    "The circular progress arc is capped with rounded ends and carries no border.",
+    "At value 0 the circular variant renders nothing: the track ring and its border are hidden.",
+    "Colors map to the brand palette (progress = brand primary bold, track = deep surface, border = border/bold), and are theme-aware in light and dark."
   ],
   "compositionRules": [
     "May appear beside process labels or status summaries.",

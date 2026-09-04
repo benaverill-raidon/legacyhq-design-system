@@ -47,9 +47,7 @@ size = 'md'
 root
 └─ track
    ├─ progress segment
-   ├─ remaining track segment
-   ├─ start stop
-   └─ end stop
+   └─ remaining track segment
 ```
 
 ### Circular
@@ -58,16 +56,14 @@ root
 root
 └─ svg
    ├─ track circle
-   ├─ progress circle
-   └─ start stop
+   └─ progress circle
 ```
 
-The Figma-only `progress-segment`, `track-segment`, and `track-stop` parts should not become public React components. Implement them as private anatomy inside Progress Bar.
+The Figma-only `progress-segment` and `track-segment` parts should not become public React components. Implement them as private anatomy inside Progress Bar.
 
-Figma models `track-stop` as segment-aware variants (`track-stop-linear` for the linear start/end
-stops, sized `md`/`lg`; the circular top stop uses the equivalent single-stop part) rather than one
-fixed appearance. Each stop variant is colored to contrast with whichever segment it currently sits
-on top of - see Token mapping and Value behavior.
+Both linear segments are fully-rounded pills (`border-radius-full-round`) at every value, and the
+circular progress arc is capped with rounded ends - see Token mapping and Value behavior. The
+earlier `track-stop` marks were removed in the Figma revision and are no longer part of the anatomy.
 
 ## Variants
 
@@ -77,8 +73,9 @@ Use when horizontal space is available and the relationship between completed an
 
 - Fluid width; do not reproduce Figma's fixed 404px width.
 - Progress fills from inline-start to inline-end.
-- Start and end stop marks remain fixed at the track endpoints.
-- The progress and remaining segments meet at the exact value boundary.
+- The progress fill and the remaining track are both fully-rounded pills at every value.
+- The progress fill is inset within the bordered remaining track by the pad (4px, both sizes) on the block axis and both inline edges, so it floats inside the track. Its inline size is the fill fraction of the track's inner (padded) width, so at 100% it leaves an equal pad on the inline-end edge.
+- Only the remaining track carries the bold border; the progress fill has none.
 - Use logical properties so direction can be adapted later without restructuring.
 
 ### `circular`
@@ -90,28 +87,28 @@ Use when horizontal space is constrained or the indicator is paired with a compa
 - Progress begins at 12 o'clock.
 - Progress advances clockwise.
 - Use `stroke-dasharray` and `stroke-dashoffset`, or an equivalent SVG implementation.
-- The start stop remains at 12 o'clock.
+- The progress arc is inset within the track ring by the pad (4px, both sizes) on both radial edges, matching the linear inset, so a light gap of track shows around the fill.
+- The progress arc is capped with rounded ends (`stroke-linecap: round`) and carries no border.
+- At value 0, render nothing: hide the track ring and its border.
 - Do not use images generated from Figma.
 
 ## Sizes
 
-The `size` prop controls track thickness and the stop positioning container.
+The `size` prop controls track thickness and the progress inset (pad). The linear root block size is derived as `track thickness + 2 × pad`.
 
 ### Linear
 
-| Size | Root block size | Track thickness | Stop container |
+| Size | Root block size | Track thickness | Progress inset (pad) |
 |---|---:|---:|---:|
-| `md` | 24px | 12px | 12px |
-| `lg` | 40px | 24px | 24px |
+| `md` | 20px | 12px | 4px |
+| `lg` | 32px | 24px | 4px |
 
 ### Circular
 
-| Size | Diameter | Track thickness | Stop container |
+| Size | Diameter | Track thickness | Progress inset (pad) |
 |---|---:|---:|---:|
-| `md` | 72px | 12px | 12px |
-| `lg` | 72px | 24px | 24px |
-
-The stop shape itself is 4px in both sizes.
+| `md` | 72px | 12px | 4px |
+| `lg` | 72px | 24px | 4px |
 
 ## Value behavior
 
@@ -125,28 +122,13 @@ Support any numeric value, not only the Figma demonstration values `0`, `10`, `2
 At `0`:
 
 - linear renders only the remaining track
-- circular renders only the remaining ring
-- the start stop remains visible
+- circular renders nothing (the track ring and its border are hidden)
 
 At `100`:
 
 - linear renders only the progress track
 - circular renders a complete progress ring
 - endpoint geometry must not show a gap or overflow
-
-### Track-stop contrast
-
-Each track-stop mark is colored to contrast with whichever segment it currently sits on top of,
-not one fixed color:
-
-- **Linear start stop** (fixed at the inline-start edge): renders in the track-colored variant
-  (contrasts with the remaining track) only at `value = 0`; renders in the progress-colored variant
-  (contrasts with the progress fill) for any `value > 0`, since the fill starts at that edge.
-- **Linear end stop** (fixed at the inline-end edge): renders in the track-colored variant for
-  `value < 100`, since the remaining track still reaches that edge; renders in the progress-colored
-  variant only at `value = 100`, once the progress fill reaches all the way to the end.
-- **Circular top stop** (fixed at 12 o'clock): renders in the track-colored variant for
-  `value < 100`; renders in the progress-colored variant only at `value = 100`.
 
 ## Token mapping
 
@@ -155,48 +137,37 @@ Use existing project token names after verifying them in generated CSS.
 ### Semantic tokens
 
 ```txt
-progress color:
-  chart/sequence/brand/900
-  or the current generated semantic equivalent
+progress fill:
+  color-background-brand-primary-bold-default
 
-track color:
-  chart/sequence/brand/300
-  or the current generated semantic equivalent
+remaining track fill:
+  color-elevation-surface-deep-default
 
 track border:
-  color-border-brand
-
-stop fill (track-colored variant, contrasts with the progress fill):
-  chart/sequence/brand/900
-
-stop fill (progress-colored variant, contrasts with the remaining track):
-  chart/sequence/brand/300
-
-The track-stop shape has no border - it is a single flat fill that swaps between the two tokens
-above depending on which segment it sits on. Do not reintroduce a fixed border/background pairing.
+  color-border-bold
 
 radius:
   border-radius-full-round
 
 border width:
-  border-width-default
+  border-width-sm
 ```
 
-Do not map component CSS directly to primitive color values.
+These are theme-aware and resolve to different primitives in light and dark. Do not map component
+CSS directly to primitive color values, and do not use the old `data-viz/sequence/prussian` tokens.
 
 ### Component tokens
 
 Keep component tokens only for anatomy-specific dimensions:
 
 ```txt
---component-progress-bar-linear-root-size-md
---component-progress-bar-linear-root-size-lg
+--component-progress-bar-linear-root-size-md   (calc: track-size + 2 × pad)
+--component-progress-bar-linear-root-size-lg   (calc: track-size + 2 × pad)
+--component-progress-bar-linear-pad-md
+--component-progress-bar-linear-pad-lg
 --component-progress-bar-track-size-md
 --component-progress-bar-track-size-lg
 --component-progress-bar-circular-size
---component-progress-bar-stop-container-size-md
---component-progress-bar-stop-container-size-lg
---size-marker-xs
 ```
 
 If existing semantic dimension tokens already express one of these values without losing component intent, prefer the semantic token and omit the component alias.

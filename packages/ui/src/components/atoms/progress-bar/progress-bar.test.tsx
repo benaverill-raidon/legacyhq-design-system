@@ -10,7 +10,6 @@ import styles from './progress-bar.module.css';
 afterEach(cleanup);
 
 const progressBarCss = readFileSync('packages/ui/src/components/atoms/progress-bar/progress-bar.module.css', 'utf8');
-const tokensCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
 
 describe('ProgressBar', () => {
   it('uses linear and md as defaults', () => {
@@ -138,89 +137,102 @@ describe('ProgressBar', () => {
     expect(screen.getByTestId('progress-bar')).toHaveAttribute('data-complete', 'true');
   });
 
-  it('keeps distinct start and end stop classes on the linear track', () => {
-    const { container } = render(<ProgressBar value={48} label="Stop positions" />);
-    const startStop = container.querySelector(`.${styles.stopStart}`);
-    const endStop = container.querySelector(`.${styles.stopEnd}`);
-    const stopShapes = container.querySelectorAll(`.${styles.stopShape}`);
+  it('renders the two linear track segments and no stop markers', () => {
+    const { container } = render(<ProgressBar value={48} label="Linear segments" />);
+    const track = container.querySelector(`.${styles.track}`);
+    const remainingTrack = container.querySelector(`.${styles.remainingTrack}`);
+    const progressSegment = container.querySelector(`.${styles.progressSegment}`);
 
-    expect(startStop).toBeInTheDocument();
-    expect(endStop).toBeInTheDocument();
-    expect(startStop).not.toBe(endStop);
-    expect(stopShapes).toHaveLength(2);
+    expect(remainingTrack).toBeInTheDocument();
+    expect(progressSegment).toBeInTheDocument();
+    // The stop markers were removed in the Figma revision: the track holds exactly the two
+    // segments and nothing else.
+    expect(track?.children).toHaveLength(2);
+    // No CSS remains for the removed stop anatomy.
+    expect(progressBarCss).not.toContain('stopShape');
+    expect(progressBarCss).not.toContain('stopContainer');
   });
 
-  it('gives each linear stop the segment color it sits on top of, not one fixed color', () => {
-    function stopSegments(value: number) {
-      const { container, unmount } = render(<ProgressBar value={value} label={`Value ${value}`} />);
-      const startShape = container.querySelector(`.${styles.stopStart} .${styles.stopShape}`);
-      const endShape = container.querySelector(`.${styles.stopEnd} .${styles.stopShape}`);
-      const result = {
-        start: startShape?.classList.contains(styles.stopSegment_progress)
-          ? 'progress'
-          : startShape?.classList.contains(styles.stopSegment_track)
-            ? 'track'
-            : null,
-        end: endShape?.classList.contains(styles.stopSegment_progress)
-          ? 'progress'
-          : endShape?.classList.contains(styles.stopSegment_track)
-            ? 'track'
-            : null,
-      };
-      unmount();
-      return result;
-    }
-
-    expect(stopSegments(0)).toEqual({ start: 'track', end: 'track' });
-    expect(stopSegments(48)).toEqual({ start: 'progress', end: 'track' });
-    expect(stopSegments(100)).toEqual({ start: 'progress', end: 'progress' });
-  });
-
-  it('gives the circular stop the segment color it sits on top of', () => {
-    function circularStopSegment(value: number) {
-      const { container, unmount } = render(
-        <ProgressBar value={value} variant="circular" label={`Circular value ${value}`} />,
-      );
-      const stopShape = container.querySelector(`.${styles.stopTop} .${styles.stopShape}`);
-      const segment = stopShape?.classList.contains(styles.stopSegment_progress)
-        ? 'progress'
-        : stopShape?.classList.contains(styles.stopSegment_track)
-          ? 'track'
-          : null;
-      unmount();
-      return segment;
-    }
-
-    expect(circularStopSegment(0)).toBe('track');
-    expect(circularStopSegment(50)).toBe('track');
-    expect(circularStopSegment(100)).toBe('progress');
-  });
-
-  it('does not hardcode a fixed border/background on the shared stop shape', () => {
-    expect(progressBarCss).not.toMatch(/\.stopShape\s*{[^}]*border:/);
-    expect(progressBarCss).not.toMatch(/\.stopShape\s*{[^}]*background:/);
-  });
-
-  it('uses the component stop-size token and renders circular border layers', () => {
-    const { container } = render(<ProgressBar value={50} variant="circular" size="lg" label="Bordered circular progress" />);
+  it('renders the circular track-border and progress layers, and no separate progress border', () => {
+    const { container } = render(
+      <ProgressBar value={50} variant="circular" size="lg" label="Bordered circular progress" />,
+    );
     const progressBar = screen.getByRole('progressbar', { name: 'Bordered circular progress' });
-    const stopShape = container.querySelector(`.${styles.stopShape}`);
-    const trackBorder = container.querySelector(`.${styles.circularTrackBorder}`);
-    const progressBorder = container.querySelector(`.${styles.circularProgressBorder}`);
 
     expect(progressBar).toHaveClass(styles.size_lg, styles.variant_circular);
-    expect(stopShape).toHaveClass(styles.stopShape);
-    expect(trackBorder).toBeInTheDocument();
-    expect(progressBorder).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.circularTrackBorder}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.circularTrack}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.circularProgress}`)).toBeInTheDocument();
+    // The progress arc is framed by the track's bold border ring, so it has no border layer of its own.
+    expect(progressBarCss).not.toContain('circularProgressBorder');
+  });
+
+  it('insets the circular progress arc inside the track ring by the pad', () => {
+    // md track thickness 12, pad 4 -> progress arc 12 - 2*4 = 4, narrower than the 12 track ring.
+    const { container } = render(<ProgressBar value={50} variant="circular" label="Inset circular" />);
+    const trackBorder = container.querySelector(`.${styles.circularTrackBorder}`);
+    const progress = container.querySelector(`.${styles.circularProgress}`);
+    const trackWidth = Number(trackBorder?.getAttribute('stroke-width'));
+    const progressWidth = Number(progress?.getAttribute('stroke-width'));
+
+    expect(trackWidth).toBe(12);
+    expect(progressWidth).toBe(4);
+    expect(progressWidth).toBeLessThan(trackWidth);
+  });
+
+  it('shows no circular track at value 0', () => {
+    const { container } = render(<ProgressBar value={0} variant="circular" label="Empty circular" />);
+    const progressBar = screen.getByRole('progressbar', { name: 'Empty circular' });
+
+    expect(progressBar).toHaveClass(styles.variant_circular);
+    expect(progressBar).toHaveAttribute('data-empty', 'true');
+    // The empty-circular rule hides the track ring, its border, and the progress arc.
+    expect(progressBarCss).toMatch(
+      /\.variant_circular\[data-empty='true'\][^{]*\.circularProgress\s*{[^}]*display:\s*none/,
+    );
+    // The track layers are still in the DOM (hidden by CSS, which jsdom does not compute).
+    expect(container.querySelector(`.${styles.circularTrackBorder}`)).toBeInTheDocument();
+  });
+
+  it('gives the linear track and progress fill fully rounded corners at every value', () => {
+    // Both the remaining track and the progress fill are full-round pills - no per-corner or
+    // completion-conditional rounding, so the progress fill is a rounded pill at any value.
+    expect(progressBarCss).toMatch(
+      /\.remainingTrack\s*{[^}]*border-radius:\s*var\(--border-radius-full-round\)/,
+    );
+    expect(progressBarCss).toMatch(
+      /\.progressSegment\s*{[^}]*border-radius:\s*var\(--border-radius-full-round\)/,
+    );
+    expect(progressBarCss).not.toContain('border-start-start-radius');
+    expect(progressBarCss).not.toContain('border-end-end-radius');
+  });
+
+  it('insets the progress fill inside the bordered track by the linear pad', () => {
+    // The fill floats inside the track: inset by the pad on the block axis and inline-start, and
+    // sized to the fill fraction of the padded inner width so 100% leaves an equal inline-end pad.
+    expect(progressBarCss).toMatch(/\.progressSegment\s*{[^}]*inset-block:\s*var\(--progress-bar-linear-pad\)/);
+    expect(progressBarCss).toMatch(
+      /inline-size:\s*calc\(var\(--progress-bar-fill[^)]*\) \* \(100% - 2 \* var\(--progress-bar-linear-pad\)\)\)/,
+    );
+    render(<ProgressBar data-testid="pb" value={37} label="Fill fraction" />);
+    expect(screen.getByTestId('pb')).toHaveStyle({ '--progress-bar-fill': '0.37' });
+  });
+
+  it('uses the brand palette, not the old data-viz sequence tokens', () => {
+    // Progress fill = brand primary bold; remaining track = deep surface; borders = border/bold.
+    expect(progressBarCss).toContain('var(--color-background-brand-primary-bold-default)');
+    expect(progressBarCss).toContain('var(--color-elevation-surface-deep-default)');
+    expect(progressBarCss).toContain('var(--color-border-bold)');
+    expect(progressBarCss).not.toContain('data-viz-sequence-prussian');
+  });
+
+  it('caps the circular progress arc with rounded ends', () => {
+    expect(progressBarCss).toMatch(/\.circularProgress\s*{[^}]*stroke-linecap:\s*round/);
+    expect(progressBarCss).not.toContain('stroke-linecap: butt');
   });
 
   it('keeps the linear geometry fluid and tokenized', () => {
     expect(progressBarCss).toContain('inline-size: 100%;');
     expect(progressBarCss).not.toContain('404px');
-    expect(progressBarCss).toContain('--progress-bar-stop-size: var(--size-marker-xs);');
-  });
-
-  it('uses the current 4px stop-size token from the token source', () => {
-    expect(tokensCss).toContain('--size-marker-xs: var(--measurement-4);');
   });
 });

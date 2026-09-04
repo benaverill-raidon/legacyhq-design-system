@@ -1,19 +1,21 @@
 {
   "component": {
     "progress-bar": {
-      "linear": { "root-size": {
-        "md": { "value": "var(--measurement-24)", "type": "dimension" },
-        "lg": { "value": "var(--measurement-40)", "type": "dimension" }
-      } },
+      "linear": {
+        "root-size": {
+          "md": { "value": "calc(var(--component-progress-bar-track-size-md) + 2 * var(--component-progress-bar-linear-pad-md))", "type": "dimension" },
+          "lg": { "value": "calc(var(--component-progress-bar-track-size-lg) + 2 * var(--component-progress-bar-linear-pad-lg))", "type": "dimension" }
+        },
+        "pad": {
+          "md": { "value": "var(--measurement-4)", "type": "dimension" },
+          "lg": { "value": "var(--measurement-4)", "type": "dimension" }
+        }
+      },
       "track-size": {
         "md": { "value": "var(--measurement-12)", "type": "dimension" },
         "lg": { "value": "var(--measurement-24)", "type": "dimension" }
       },
-      "circular": { "size": { "value": "var(--measurement-72)", "type": "dimension" } },
-      "stop-container-size": {
-        "md": { "value": "var(--measurement-12)", "type": "dimension" },
-        "lg": { "value": "var(--measurement-24)", "type": "dimension" }
-      }
+      "circular": { "size": { "value": "var(--measurement-72)", "type": "dimension" } }
     }
   }
 }

@@ -30,15 +30,11 @@
 
 - [ ] Width is fluid.
 - [ ] No fixed Figma canvas width is copied.
-- [ ] Progress and remaining segments meet at the exact value boundary.
-- [ ] Start and end stops remain aligned to the track edges.
-- [ ] `md`: 24px root / 12px track.
-- [ ] `lg`: 40px root / 24px track.
-- [ ] Stop shape is 4px.
-- [ ] Track uses full-round geometry.
-- [ ] Start stop uses the track-contrast color at value 0, and the progress-contrast color for any value above 0.
-- [ ] End stop uses the track-contrast color below 100, and the progress-contrast color at value 100.
-- [ ] Stop shape has no border - a single flat fill only.
+- [ ] `md`: 20px root / 12px track / 4px inset.
+- [ ] `lg`: 32px root / 24px track / 4px inset.
+- [ ] Progress fill and remaining track are both fully-rounded pills at every value.
+- [ ] Progress fill floats inset within the track (block axis + inline-start), sized to the fill fraction of the padded inner width.
+- [ ] Only the remaining track carries the bold border; the progress fill has none.
 
 ## Circular
 
@@ -49,14 +45,17 @@
 - [ ] `lg` track thickness is 24px.
 - [ ] Progress begins at 12 o'clock.
 - [ ] Progress advances clockwise.
-- [ ] Start stop is aligned at 12 o'clock.
+- [ ] Progress arc is inset within the track ring by the pad (4px), matching the linear inset.
+- [ ] Progress arc is capped with rounded ends and has no border of its own.
+- [ ] At value 0, nothing renders (track ring and border hidden).
 - [ ] Circular geometry scales without raster artifacts.
-- [ ] Top stop uses the track-contrast color below 100, and the progress-contrast color at value 100.
 
 ## Tokens
 
-- [ ] Uses semantic progress and track colors.
-- [ ] Uses semantic border and radius tokens.
+- [ ] Progress fill uses `color-background-brand-primary-bold-default`.
+- [ ] Remaining track uses `color-elevation-surface-deep-default`.
+- [ ] Borders use `color-border-bold`; radius uses `border-radius-full-round`.
+- [ ] Does not use the old `data-viz/sequence/prussian` tokens.
 - [ ] Does not reference primitive colors directly.
 - [ ] Uses component tokens only for anatomy-specific dimensions.
 - [ ] No unnecessary component aliases were added.

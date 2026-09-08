@@ -1,0 +1,311 @@
+{
+  "name": "Field",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Wrap a single form control with a label, an optional message, and a validation state, wiring the three together for accessibility.",
+  "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",
+  "nativeElement": "div (with a nested native label)",
+  "sourceFiles": {
+    "component": "field.tsx",
+    "types": "field.types.ts",
+    "styles": "field.module.css",
+    "stories": "Field.stories.tsx",
+    "tests": "Field.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4798:124451",
+    "componentSetName": "code-parts / <field>",
+    "variantCount": 9,
+    "verifiedAt": "2026-09-08",
+    "figmaVariantAxes": {
+      "state": ["default", "error", "valid"],
+      "context": ["default", "inline"],
+      "size": ["all", "lg", "sm/md"]
+    },
+    "subParts": [
+      {
+        "name": "code-parts / <label>",
+        "componentSetNodeId": "4798:124439",
+        "variantCount": 3,
+        "note": "Figma code-part for the label. Axes context x size, plus a showRequired boolean and a labelText string. Rendered in code as Field's own native <label>, NOT the Label atom (this part is heading/xxs on color/content/subtle with no background; the Label atom is a pill with overline typography and a background)."
+      },
+      {
+        "name": "code-parts / <message>",
+        "componentSetNodeId": "4798:124412",
+        "variantCount": 9,
+        "note": "Figma code-part for the message. Axes error x valid x context x size. error -> status_error icon + color/content/error; valid -> status_success icon + color/content/success; neither -> no icon, color/content/subtle. Rendered in code as Field's own message, NOT the Inline Message molecule (this part is a compact sm icon + body/sm line with only default/error/valid states; Inline Message is larger, tone-based, and sometimes interactive)."
+      }
+    ],
+    "figmaComponentProps": {
+      "slot": {
+        "type": "SLOT",
+        "note": "The <field> root exposes a Figma slot for the control - mapped to React children."
+      },
+      "labelText": { "type": "TEXT", "defaultValue": "Field label" },
+      "showRequired": { "type": "BOOLEAN", "defaultValue": false },
+      "message": { "type": "TEXT", "defaultValue": "Message content" }
+    },
+    "apiAdaptationNotes": [
+      "Field renders its own label and message rather than reusing the Label atom / Inline Message molecule - the Figma <label>/<message> code-parts use different typography (heading/xxs, body/sm) and a smaller state set (default/error/valid) than those components expose.",
+      "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop.",
+      "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
+      "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
+      "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
+      "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
+      "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
+      "The message icon->text gap is Figma spacing/075 (6px), which has no semantic spacing token yet - uses --measurement-6, the same documented precedent as Text Field and Toggle Button."
+    ]
+  },
+  "useCases": [
+    "a labelled Text Field with helper text",
+    "a field showing an inline validation error or success message",
+    "a required field",
+    "labelling a Text Area or Select the same way as a Text Field"
+  ],
+  "antiPatterns": [
+    "a bare control with no label, helper, or error (use the control with an aria-label)",
+    "one label for a group of controls (use fieldset/legend)",
+    "a page- or section-level message (use Inline Message or Section Message)",
+    "wrapping multiple elements or a fragment (children must be a single control element)"
+  ],
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div.root (flex column, data-state/context/size)",
+      "required": true,
+      "description": "Stacks the label, control, and message in one column."
+    },
+    {
+      "part": "label",
+      "element": "label.label (native, htmlFor)",
+      "required": false,
+      "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id. Omitted when label is not provided."
+    },
+    {
+      "part": "required",
+      "element": "span.required (aria-hidden)",
+      "required": false,
+      "description": "Decorative '*' after the label when required, --color-content-error. The forwarded native required conveys the state to assistive technology."
+    },
+    {
+      "part": "control",
+      "element": "{children}",
+      "required": true,
+      "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus appearance='subtle' when context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
+    },
+    {
+      "part": "message",
+      "element": "div.message (id)",
+      "required": false,
+      "description": "Helper/error/success line at --typography-body-sm, linked to the control via aria-describedby. Omitted when message is not provided."
+    },
+    {
+      "part": "messageIcon",
+      "element": "span.messageIcon (aria-hidden)",
+      "required": false,
+      "description": "Decorative sm status Icon shown on error (status_error) / valid (status_success) only."
+    }
+  ],
+  "props": {
+    "children": {
+      "type": "React.ReactElement",
+      "required": true,
+      "description": "The single control to wrap. Must be one React element - it is cloned to receive the accessibility wiring."
+    },
+    "label": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Label text, rendered in a real native label[htmlFor]. Omit only when the control is labelled another way; then no label is rendered."
+    },
+    "message": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Helper/error/success text below the control, linked via aria-describedby. Colour and status icon follow state."
+    },
+    "state": {
+      "type": "FieldState",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "error", "valid"],
+      "description": "Colours the message and prepends a status icon; error also sets aria-invalid on the control. Does not set the control's own error border."
+    },
+    "context": {
+      "type": "FieldContext",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "inline"],
+      "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio."
+    },
+    "size": {
+      "type": "FieldSize",
+      "required": false,
+      "default": "md",
+      "enum": ["sm", "md", "lg"],
+      "description": "Matches the wrapped control's size. Consumed ONLY in the inline context, to align the label/message with the control's inner text (lg indents more; sm and md share one). No visual effect in the default context. Never resizes the control."
+    },
+    "required": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Shows a decorative '*' after the label and forwards required to the control."
+    },
+    "controlId": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Explicit id for the control, used for the label's htmlFor and the message's aria-describedby. Auto-generated when omitted; a control with its own id keeps it."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root element's class list."
+    },
+    "labelClassName": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the label's class list."
+    },
+    "messageClassName": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the message's class list."
+    }
+  },
+  "variants": {
+    "state": ["default", "error", "valid"],
+    "context": ["default", "inline"],
+    "size": ["sm", "md", "lg"]
+  },
+  "sizes": ["sm", "md", "lg"],
+  "states": ["default", "error", "valid"],
+  "slots": [
+    {
+      "name": "children",
+      "required": true,
+      "supports": [
+        "a single form control (Text Field, Text Area, Select, or a native input)"
+      ],
+      "interactive": true
+    }
+  ],
+  "tokens": {
+    "layout": {
+      "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
+      "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
+      "messageIconToTextGap": "--measurement-6 (Figma spacing/075; no semantic spacing token yet)",
+      "inlineIndent_lg": "--spacing-md",
+      "inlineIndent_sm_md": "--spacing-sm"
+    },
+    "color": {
+      "labelText": "--color-content-subtle",
+      "requiredAsterisk": "--color-content-error",
+      "messageDefault": "--color-content-subtle",
+      "messageError": "--color-content-error",
+      "messageValid": "--color-content-success"
+    },
+    "typography": {
+      "label": "--typography-heading-xxs-*",
+      "message": "--typography-body-sm-*"
+    }
+  },
+  "accessibility": {
+    "interactive": false,
+    "focusable": false,
+    "role": null,
+    "requirements": [
+      "The label is a real label[htmlFor] pointing at the control's id (generated when the control has none), so the control gets its accessible name from the label - no aria-label on the control.",
+      "The message is linked to the control via aria-describedby, merged with any aria-describedby the control already carries.",
+      "state='error' sets aria-invalid on the control; an explicit control aria-invalid always wins.",
+      "required forwards native required to the control; the visible '*' is aria-hidden.",
+      "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/appearance are never overwritten.",
+      "Use Field for one control only; a group of controls needs fieldset/legend instead of a single label[htmlFor]."
+    ]
+  },
+  "keyboardInteraction": [
+    "Field itself has no keyboard behaviour - it forwards focus and interaction entirely to the wrapped control.",
+    "Clicking the label focuses the control, via the native label[htmlFor] association."
+  ],
+  "behaviorRules": [
+    "Render label, control, then message in a single flex column.",
+    "Default state=default, context=default, size=md, required=false.",
+    "Clone the single child control to inject id, aria-describedby (merged), aria-invalid (on error), required (when required), data-force-state, and appearance='subtle' (when context=inline) - filling in only unset props.",
+    "state colours the message + status icon and sets aria-invalid; it never sets the control's own error border.",
+    "context=inline indents the label and message by the control's inner start padding for the size (lg wider than the shared sm/md), aligning them to the control's inner text, AND renders the control inline by injecting appearance='subtle' (control's own appearance wins); context=default does neither and is size-independent.",
+    "The required '*' is decorative (aria-hidden); the requirement is conveyed by the forwarded native required.",
+    "Render no label when label is omitted, and no message (nor aria-describedby) when message is omitted.",
+    "Support className (root), labelClassName, and messageClassName composition."
+  ],
+  "compositionRules": [
+    "Wrap exactly one control element - it is cloned, so text/fragments/multiple children are unsupported.",
+    "Pair state='error' with the control's own invalid prop so the message and the control's border agree.",
+    "Use context='inline' only with text-bearing controls (Text Field, Select, Text Area, pickers), where aligning the label/message to the control's inner text reads; use context='default' for Checkbox/Switch/Radio.",
+    "Match Field's size to the wrapped control's size so the inline-context alignment lands (size has no effect in the default context).",
+    "Do not also pass aria-label to a control that Field labels - the label already names it."
+  ],
+  "contentRules": [
+    "Label is a short noun phrase; message is a concise helper or validation line.",
+    "Use error/valid messages that state what to do, not just that something is wrong."
+  ],
+  "responsiveRules": [
+    "The field fills its container's inline size; the label and message wrap."
+  ],
+  "themeRules": [
+    "Must work in light and dark themes - all colours use semantic tokens."
+  ],
+  "implementationNotes": [
+    "Use React.memo for the exported component; no ref forwarding (the control keeps its own ref).",
+    "Use React.useId for the generated control id.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colours, spacing, radius, or typography, except the documented --measurement-6 gap (Figma spacing/075, matching Text Field / Toggle Button precedent).",
+    "Render the label as a native label[htmlFor]; do not reuse the Label atom or Inline Message molecule."
+  ],
+  "relatedComponents": ["Text Field", "Text Area", "Select", "Label", "Inline Message", "Section Message"],
+  "do": [
+    "Let Field label the control - no aria-label needed on it.",
+    "Pair state='error' with the control's own invalid prop for the error border.",
+    "Match Field's size to the wrapped control's size.",
+    "Write error messages that tell the user what to fix."
+  ],
+  "dont": [
+    "Don't duplicate the label as an aria-label on the control.",
+    "Don't rely on state='error' alone for the control's border - Field doesn't set it.",
+    "Don't wrap a group of controls in one Field - use fieldset/legend.",
+    "Don't pass multiple children or a fragment - Field clones a single control element."
+  ],
+  "acceptanceCriteria": [
+    "Renders the label as a native label[htmlFor] wired to the control's id; the control gets its accessible name from the label.",
+    "Generates a control id when the control has none; keeps the control's own id when set.",
+    "Links the message to the control via aria-describedby, merged with any existing value.",
+    "state='error' sets aria-invalid on the control; an explicit control aria-invalid wins.",
+    "required forwards required to the control and shows a decorative (aria-hidden) '*'.",
+    "Shows a status icon on error/valid, none on default.",
+    "Sets data-state/data-context/data-size on the root; defaults default/default/md.",
+    "context='inline' indents the label/message per size (lg -> --spacing-md, sm/md -> --spacing-sm); default does not.",
+    "context='inline' injects appearance='subtle' into the control (control's own appearance wins); context='default' leaves the control's appearance untouched.",
+    "Renders no label when label is omitted, and no message nor aria-describedby when message is omitted.",
+    "Composes className, labelClassName, and messageClassName.",
+    "Uses only semantic tokens (plus the documented --measurement-6 gap); works in light and dark.",
+    "Storybook includes Playground, States, Contexts, Content, AnyControl, and EdgeCases.",
+    "Tests cover label/id wiring, describedby merge, aria-invalid, required, status icons, data attributes, omitted label/message, className composition, and force-state forwarding."
+  ],
+  "knownLimitations": [
+    "children must be a single React element (it is cloned) - text, fragments, or multiple elements are unsupported.",
+    "state does not set the control's own error border - the consumer pairs it with the control's invalid prop.",
+    "No built-in support for labelling a group of controls (fieldset/legend is the right tool there).",
+    "--measurement-6 (Figma spacing/075) has no semantic spacing token yet."
+  ],
+  "futureEnhancements": [
+    "An optional trailing label slot (e.g. an 'Optional' tag or a character counter).",
+    "A disabled convenience prop that dims the label alongside disabling the control."
+  ]
+}

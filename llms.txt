@@ -61,7 +61,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [toggle-icon-button](docs/components/atoms/toggle-icon-button/toggle-icon-button.md)
 - [tooltip](docs/components/atoms/tooltip/tooltip.md)
 
-## Molecules (16)
+## Molecules (17)
 
 - [avatar-group](docs/components/molecules/avatar-group/avatar-group.md) (tier exception - composes
   the dropdown-menu organism; see its avatar-group-spec.md)
@@ -70,6 +70,8 @@ rules, and the task→file routing table that says which of a component's up to
 - [chip](docs/components/molecules/chip/chip.md) (tier exception - mode="filter" composes the
   dropdown-menu organism; see its chip-spec.md)
 - [chip-group](docs/components/molecules/chip-group/chip-group.md)
+- [field](docs/components/molecules/field/field.md) (wraps a single control with a label +
+  message + validation state; renders its own label/message, not the Label atom / Inline Message)
 - [icon-tile](docs/components/molecules/icon-tile/icon-tile.md)
 - [inline-edit](docs/components/molecules/inline-edit/inline-edit.md)
 - [inline-message](docs/components/molecules/inline-message/inline-message.md)

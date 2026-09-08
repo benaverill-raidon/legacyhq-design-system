@@ -1,0 +1,85 @@
+/*
+ * Field stacks a label, the wrapped control, and a message in one column. Spacing, typography, and
+ * colour are all confirmed directly from Figma's <field>/<label>/<message> parts:
+ *   - label -> control gap: 4px (label padding-bottom, Figma space/050)
+ *   - control -> message gap: 4px (message padding-top, Figma spacing/xs)
+ *   - message icon -> text gap: 6px (Figma spacing/075 - no semantic spacing token yet, so
+ *     --measurement-6, the same precedent Text Field and Toggle Button use for this exact gap)
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+}
+
+/* Label typography is Figma's heading/xxs, colour content/subtle - a quiet form label, distinct
+ * from the pill-style Label atom (overline typography, with a background). */
+.label {
+  display: flex;
+  align-items: center;
+  inline-size: fit-content;
+  padding-bottom: var(--spacing-xs);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xxs-font-family);
+  font-size: var(--typography-heading-xxs-font-size);
+  font-weight: var(--typography-heading-xxs-font-weight);
+  line-height: var(--typography-heading-xxs-line-height);
+  letter-spacing: var(--typography-heading-xxs-letter-spacing);
+}
+
+/* Decorative in the accessibility tree (the control's forwarded `required` conveys the state); the
+ * colour is the only thing that distinguishes it from the label text. */
+.required {
+  color: var(--color-content-error);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--measurement-6);
+  padding-top: var(--spacing-xs);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.messageIcon {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.messageText {
+  min-inline-size: 0;
+}
+
+/* error/valid recolour the whole message (icon inherits via its own IconColor); default stays the
+ * resting subtle colour set on `.message`. */
+.state_error .message {
+  color: var(--color-content-error);
+}
+
+.state_valid .message {
+  color: var(--color-content-success);
+}
+
+/*
+ * The inline context indents the label and message to line up with the text *inside* the control,
+ * matching the control's own inner start padding for each size (lg = --spacing-md, sm/md =
+ * --spacing-sm), confirmed directly from Figma. The default context leaves them flush with the
+ * control's outer edge.
+ */
+.context_inline.size_lg .label,
+.context_inline.size_lg .message {
+  padding-inline-start: var(--spacing-md);
+}
+
+.context_inline.size_md .label,
+.context_inline.size_md .message,
+.context_inline.size_sm .label,
+.context_inline.size_sm .message {
+  padding-inline-start: var(--spacing-sm);
+}

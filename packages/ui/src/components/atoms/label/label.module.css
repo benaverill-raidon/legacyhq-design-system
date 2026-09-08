@@ -1,14 +1,14 @@
 .label {
   --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
-  --label-font-family: var(--typography-overline-md-font-family);
-  --label-font-weight: var(--typography-overline-md-font-weight);
-  --label-font-size: var(--typography-overline-md-font-size);
-  --label-line-height: var(--typography-overline-md-line-height);
-  --label-letter-spacing: var(--typography-overline-md-letter-spacing);
-  --label-text-transform: var(--typography-overline-md-text-transform);
+  --label-font-family: var(--typography-heading-xs-font-family);
+  --label-font-weight: var(--typography-heading-xs-font-weight);
+  --label-font-size: var(--typography-heading-xs-font-size);
+  --label-line-height: var(--typography-heading-xs-line-height);
+  --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
+  --label-text-transform: var(--typography-heading-xs-text-transform);
 
   display: inline-flex;
   align-items: center;
@@ -31,23 +31,23 @@
 .size_sm {
   --label-padding-block: var(--spacing-xxs);
   --label-padding-inline: var(--spacing-xs);
-  --label-font-family: var(--typography-overline-sm-font-family);
-  --label-font-weight: var(--typography-overline-sm-font-weight);
-  --label-font-size: var(--typography-overline-sm-font-size);
-  --label-line-height: var(--typography-overline-sm-line-height);
-  --label-letter-spacing: var(--typography-overline-sm-letter-spacing);
-  --label-text-transform: var(--typography-overline-sm-text-transform);
+  --label-font-family: var(--typography-heading-xxs-font-family);
+  --label-font-weight: var(--typography-heading-xxs-font-weight);
+  --label-font-size: var(--typography-heading-xxs-font-size);
+  --label-line-height: var(--typography-heading-xxs-line-height);
+  --label-letter-spacing: var(--typography-heading-xxs-letter-spacing);
+  --label-text-transform: var(--typography-heading-xxs-text-transform);
 }
 
 .size_md {
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
-  --label-font-family: var(--typography-overline-md-font-family);
-  --label-font-weight: var(--typography-overline-md-font-weight);
-  --label-font-size: var(--typography-overline-md-font-size);
-  --label-line-height: var(--typography-overline-md-line-height);
-  --label-letter-spacing: var(--typography-overline-md-letter-spacing);
-  --label-text-transform: var(--typography-overline-md-text-transform);
+  --label-font-family: var(--typography-heading-xs-font-family);
+  --label-font-weight: var(--typography-heading-xs-font-weight);
+  --label-font-size: var(--typography-heading-xs-font-size);
+  --label-line-height: var(--typography-heading-xs-line-height);
+  --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
+  --label-text-transform: var(--typography-heading-xs-text-transform);
 }
 
 .tone_default.emphasis_subtle {

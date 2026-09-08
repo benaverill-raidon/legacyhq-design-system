@@ -89,7 +89,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
-## Organisms (14)
+## Organisms (15)
 
 - [banner](docs/components/organisms/banner/banner.md)
 - [date-picker](docs/components/organisms/date-picker/date-picker.md)
@@ -100,6 +100,8 @@ rules, and the task→file routing table that says which of a component's up to
 - [form](docs/components/organisms/form/form.md) (layout organism: native form + header,
   arranges Field-based fields into sections/rows with a footer; parts Form/FormSection/FormRow/FormFooter)
 - [menu](docs/components/organisms/menu/menu.md)
+- [modal-dialog](docs/components/organisms/modal-dialog/modal-dialog.md) (controlled overlay:
+  backdrop + centered panel with header/body/footer; portal, focus trap, scroll lock, aria-modal)
 - [progress-tracker](docs/components/organisms/progress-tracker/progress-tracker.md)
 - [section-message](docs/components/organisms/section-message/section-message.md)
 - [tabs](docs/components/organisms/tabs/tabs.md)

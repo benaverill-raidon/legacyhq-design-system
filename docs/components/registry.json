@@ -6976,6 +6976,263 @@
     }
   },
   {
+    "id": "modal-dialog",
+    "name": "ModalDialog",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/modal-dialog/modal-dialog.contract.json",
+    "anatomy": [
+      {
+        "name": "backdrop",
+        "description": "Fixed full-viewport blanket that centers the panel with --spacing-4xl inset; a genuine click on it requests close."
+      },
+      {
+        "name": "panel",
+        "description": "The dialog surface - raised-surface bg, --border-radius-xxl, --color-border-default. A flex column of header/body/footer; width per the width prop; shrinks on narrow viewports."
+      },
+      {
+        "name": "header",
+        "description": "Rendered when there's a title or close button. Status icon + title + close Icon Button. Padding --spacing-2xl/--spacing-lg."
+      },
+      {
+        "name": "statusIcon",
+        "description": "Decorative md status icon for warning/error appearance, coloured content/warning or content/error."
+      },
+      {
+        "name": "title",
+        "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby."
+      },
+      {
+        "name": "close",
+        "description": "The close (X) button; shown by default; labelled by closeLabel."
+      },
+      {
+        "name": "body",
+        "description": "The scrollable content slot; --typography-body-md; inset by --spacing-2xl; scrolls when tall while header/footer stay pinned."
+      },
+      {
+        "name": "footer",
+        "description": "Right-aligned action slot; gap --spacing-sm; padding --spacing-lg/--spacing-2xl. Rendered when footer is provided."
+      }
+    ],
+    "props": {
+      "open": {
+        "type": "boolean",
+        "required": true,
+        "default": null,
+        "description": "Whether the dialog is shown (controlled)."
+      },
+      "onClose": {
+        "type": "() => void",
+        "required": true,
+        "default": null,
+        "description": "Called on any close request (close button, Escape, backdrop). The consumer sets open to false."
+      },
+      "title": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Header heading and the dialog's accessible name (aria-labelledby)."
+      },
+      "appearance": {
+        "type": "ModalAppearance",
+        "required": false,
+        "default": "default",
+        "description": "Prepends a status icon to the title (warning/error). Does not tone the footer buttons.",
+        "enum": [
+          "default",
+          "warning",
+          "error"
+        ]
+      },
+      "width": {
+        "type": "ModalWidth",
+        "required": false,
+        "default": "medium",
+        "description": "Panel width: 400 / 600 / 752 / 968 px.",
+        "enum": [
+          "small",
+          "medium",
+          "large",
+          "extraLarge"
+        ]
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "The dialog body; scrolls when taller than the viewport allows."
+      },
+      "footer": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Right-aligned footer actions (e.g. Cancel + Confirm)."
+      },
+      "showCloseButton": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Show the header close (X) button."
+      },
+      "closeLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Close",
+        "description": "Accessible label for the close button."
+      },
+      "closeOnEscape": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Close when Escape is pressed."
+      },
+      "closeOnBackdropClick": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Close when the backdrop is clicked."
+      },
+      "initialFocusRef": {
+        "type": "React.RefObject<HTMLElement | null>",
+        "required": false,
+        "default": null,
+        "description": "Element to focus on open. Defaults to the panel."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name when there is no title."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the panel's class list."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children",
+      "footer"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "warning",
+        "error"
+      ],
+      "width": [
+        "small",
+        "medium",
+        "large",
+        "extraLarge"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "backdrop": "--color-background-brand-secondary-overlay-blanket",
+        "panelSurface": "--color-elevation-surface-raised-default",
+        "panelBorder": "--color-border-default",
+        "title": "--color-content-default",
+        "statusWarning": "--color-content-warning",
+        "statusError": "--color-content-error"
+      },
+      "layout": {
+        "backdropInset": "--spacing-4xl",
+        "panelRadius": "--border-radius-xxl (16px)",
+        "panelWidths": "400 / 600 / 752 / 968 px",
+        "headerPadding": "--spacing-2xl (top/l/r), --spacing-lg (bottom)",
+        "headerGap": "--spacing-lg",
+        "titleIconGap": "--spacing-sm",
+        "bodyInset": "--spacing-2xl",
+        "footerPadding": "--spacing-lg (top), --spacing-2xl (l/r/bottom)",
+        "footerActionGap": "--spacing-sm"
+      },
+      "typography": {
+        "title": "--typography-heading-md-*",
+        "body": "--typography-body-md-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": true,
+      "role": "dialog",
+      "requirements": [
+        "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name.",
+        "Focus moves into the panel on open, is trapped on Tab/Shift+Tab, and is restored to the trigger on close.",
+        "Escape (closeOnEscape) and a genuine backdrop click (closeOnBackdropClick) request close via onClose.",
+        "Page scroll is locked while open.",
+        "The close button is labelled by closeLabel (default 'Close').",
+        "The status icon is decorative (aria-hidden) - meaning is carried by the title and actions.",
+        "Pair appearance='error'/'warning' with a matching Confirm button tone - Modal Dialog does not tone footer buttons."
+      ]
+    },
+    "relatedComponents": [
+      "Button",
+      "Icon Button",
+      "Toast",
+      "Dropdown Menu",
+      "Menu"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2456:12608",
+      "componentSetName": "modal-dialog",
+      "variantCount": 12,
+      "verifiedAt": "2026-09-08",
+      "figmaVariantAxes": {
+        "appearance": [
+          "default",
+          "warning",
+          "error"
+        ],
+        "width": [
+          "small",
+          "medium",
+          "large",
+          "extra large"
+        ]
+      },
+      "panelWidths": {
+        "small": 400,
+        "medium": 600,
+        "large": 752,
+        "extraLarge": 968
+      },
+      "subParts": [
+        {
+          "name": "blanket",
+          "note": "Backdrop overlay filling the viewport, fill color/background/brand/secondary/overlay/blanket, centering the panel. Figma's 64px around the panel was artboard framing; the code insets the panel with --spacing-4xl."
+        },
+        {
+          "name": "modal-header",
+          "componentSetNodeId": "2456:2409",
+          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + Close icon-button (subtle, sm). warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
+        },
+        {
+          "name": "modal-footer",
+          "componentSetNodeId": "2456:11691",
+          "note": "appearance default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot."
+        }
+      ],
+      "apiAdaptationNotes": [
+        "Built standalone, not on the Popup primitive - Popup is a trigger-anchored positioned popover with no focus trap, backdrop, aria-modal, or scroll lock; a modal is a centered focus-trapped overlay, so createPortal + a focus trap are used directly.",
+        "Controlled with open + onClose (not Popup's onOpenChange) - a modal only ever requests close, and onClose lets the consumer intercept it.",
+        "Figma's appearance (default/warning/error) prepends a decorative status icon to the title; it does NOT tone the footer buttons (Modal Dialog can't know the action layout), so consumers pair appearance='error'/'warning' with a matching Confirm button tone - the same wrapper-vs-control split Field uses for state.",
+        "The footer is a right-aligned slot; Figma's footer left filter area (dropdown/date field) is example content hidden by default, not part of the component.",
+        "Surface and backdrop inset use existing tokens by intent: the panel surface is --color-elevation-surface-raised-default (the shared floating-surface token; Figma names the same role overlay/default), and the backdrop fills the viewport, insetting the panel with --spacing-4xl (Figma's 64px around the panel was artboard framing, not a design value).",
+        "Panel widths (inner) are 400/600/752/968 for small/medium/large/extraLarge; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
+        "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
+      ]
+    }
+  },
+  {
     "id": "progress-tracker",
     "name": "ProgressTracker",
     "tier": "organism",

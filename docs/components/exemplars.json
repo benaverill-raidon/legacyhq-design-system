@@ -2740,6 +2740,84 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "modal-dialog",
+    "name": "ModalDialog",
+    "tier": "organism",
+    "path": "docs/components/organisms/modal-dialog/modal-dialog.examples.json",
+    "examples": [
+      {
+        "name": "Confirmation with Cancel + Confirm",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+        "props": {
+          "title": "Save changes?"
+        }
+      },
+      {
+        "name": "Destructive confirmation (error appearance + red Confirm)",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+        "props": {
+          "appearance": "error",
+          "width": "small"
+        }
+      },
+      {
+        "name": "Informational dialog with no footer",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"What's new\">\n  <p>Read about the latest changes.</p>\n</ModalDialog>",
+        "props": {
+          "title": "What's new"
+        }
+      },
+      {
+        "name": "Labelled by aria-label (no visible title)",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} aria-label=\"Quick settings\">\n  <SettingsForm />\n</ModalDialog>",
+        "props": {}
+      },
+      {
+        "name": "Large width",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"large\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
+        "props": {
+          "width": "large"
+        }
+      },
+      {
+        "name": "Keep open while a backdrop click would otherwise close it",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Unsaved changes\" closeOnBackdropClick={false} footer={actions}>\n  <p>Save or discard before leaving.</p>\n</ModalDialog>",
+        "props": {
+          "closeOnBackdropClick": false
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "No accessible name",
+        "jsx": "<ModalDialog open={open} onClose={onClose}>\n  <SomeForm />\n</ModalDialog>",
+        "reason": "A dialog needs an accessible name - pass a title, or aria-label when there is no visible title."
+      },
+      {
+        "name": "Relying on appearance to colour the Confirm button",
+        "jsx": "<ModalDialog appearance=\"error\" footer={<Button appearance=\"primary\">Delete</Button>} />",
+        "reason": "appearance only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
+      },
+      {
+        "name": "Using a modal for transient feedback",
+        "jsx": "<ModalDialog open onClose={onClose} title=\"Saved!\" />",
+        "reason": "Non-blocking confirmation shouldn't interrupt the user - use Toast instead of a blocking dialog."
+      },
+      {
+        "name": "Uncontrolled open state",
+        "jsx": "<ModalDialog open title=\"Title\" />",
+        "reason": "Modal Dialog is controlled - it never closes itself. Provide open state and an onClose that sets it to false."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "progress-tracker",
     "name": "ProgressTracker",
     "tier": "organism",

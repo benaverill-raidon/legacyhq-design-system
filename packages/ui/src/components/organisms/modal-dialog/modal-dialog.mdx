@@ -1,0 +1,105 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as ModalDialogStories from './ModalDialog.stories';
+
+<Meta of={ModalDialogStories} name="Docs" />
+
+# Modal Dialog
+
+Modal Dialog is an organism that interrupts the flow to focus the user on a single task or decision -
+a confirmation, a short form, a piece of content that needs acknowledgement. It renders a backdrop
+over the page and a centered panel with a header (title + close), a scrollable body, and a footer for
+the actions, and it handles the modal behaviour: it portals above the page, traps focus, closes on
+Escape or a backdrop click, locks page scroll, and restores focus to whatever opened it.
+
+<Canvas of={ModalDialogStories.Playground} />
+
+## When to use
+
+- A decision or confirmation the user must resolve before continuing (especially a destructive one).
+- A short, focused task or a piece of content that needs to be acknowledged.
+
+## When not to use
+
+- **Non-blocking, transient feedback.** Use Toast.
+- **Contextual overflow anchored to a control** (a menu, a popover). Use Dropdown Menu / Menu.
+- **A large or multi-step flow.** Prefer a full page - a modal is for one focused task.
+
+## Anatomy and behaviour
+
+Modal Dialog is controlled: pass `open` and an `onClose`. It never closes itself - `onClose` fires
+(from the close button, Escape, or a backdrop click) and the consumer sets `open` to false. While
+open it:
+
+- portals into `document.body`, above the page, over a blanket backdrop;
+- sets `role="dialog"` + `aria-modal="true"`, named by the `title` (`aria-labelledby`) or, without
+  one, by `aria-label`;
+- moves focus into the panel, traps Tab within it, and restores focus to the trigger on close;
+- locks page scroll; the body scrolls internally when it is taller than the viewport allows.
+
+## Appearance
+
+<Canvas of={ModalDialogStories.Appearances} />
+
+`appearance` (`default` / `warning` / `error`) prepends a status icon to the title in the matching
+colour. It deliberately does **not** tone the footer buttons - Modal Dialog can't know your action
+layout - so pair `appearance="error"` with a matching Confirm button, e.g.
+`<Button appearance="primary" tone="error">Delete</Button>`.
+
+<Canvas of={ModalDialogStories.DestructiveConfirmation} />
+
+## Widths
+
+<Canvas of={ModalDialogStories.Widths} />
+
+Four widths - `small` (400px), `medium` (600px, default), `large` (752px), `extraLarge` (968px). The
+panel shrinks to fit narrow viewports (it never exceeds the available width).
+
+## Content
+
+<Canvas of={ModalDialogStories.ScrollingBody} />
+
+The header and footer stay fixed while a long body scrolls. The footer is a slot - pass the actions
+(typically a Cancel and a Confirm Button); they render right-aligned. Omit `footer` for an
+informational dialog.
+
+<Canvas of={ModalDialogStories.EdgeCases} />
+
+## Accessibility
+
+- Always give the dialog an accessible name: a `title`, or `aria-label` when there's no visible
+  title.
+- Focus moves into the dialog on open and returns to the trigger on close; Tab is trapped inside.
+- Escape closes the dialog (`closeOnEscape`, default on); the close button is labelled "Close" by
+  default (`closeLabel`).
+- The status icon is decorative - the appearance's meaning is carried by the title text and the
+  actions, not the icon alone.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Whether the dialog is shown (controlled).</td></tr>
+    <tr><td><code>onClose</code></td><td><code>() =&gt; void</code></td><td>-</td><td>Called on close request (close button, Escape, backdrop).</td></tr>
+    <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Header heading and the dialog's accessible name.</td></tr>
+    <tr><td><code>appearance</code></td><td><code>'default' | 'warning' | 'error'</code></td><td><code>'default'</code></td><td>Prepends a status icon to the title.</td></tr>
+    <tr><td><code>width</code></td><td><code>'small' | 'medium' | 'large' | 'extraLarge'</code></td><td><code>'medium'</code></td><td>Panel width.</td></tr>
+    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>The body content (scrolls when tall).</td></tr>
+    <tr><td><code>footer</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Right-aligned footer actions.</td></tr>
+    <tr><td><code>showCloseButton</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show the header close (X) button.</td></tr>
+    <tr><td><code>closeLabel</code></td><td><code>string</code></td><td><code>'Close'</code></td><td>Accessible label for the close button.</td></tr>
+    <tr><td><code>closeOnEscape</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when Escape is pressed.</td></tr>
+    <tr><td><code>closeOnBackdropClick</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when the backdrop is clicked.</td></tr>
+    <tr><td><code>initialFocusRef</code></td><td><code>RefObject</code></td><td>-</td><td>Element to focus on open (defaults to the panel).</td></tr>
+    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Accessible name when there's no <code>title</code>.</td></tr>
+    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the panel's class list.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Button** - the footer actions.
+- **Toast** - for non-blocking, transient feedback instead of a blocking dialog.
+- **Dropdown Menu / Menu** - for contextual overflow anchored to a control.

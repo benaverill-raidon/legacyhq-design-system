@@ -1348,6 +1348,108 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "field",
+    "name": "Field",
+    "tier": "molecule",
+    "path": "docs/components/molecules/field/field.examples.json",
+    "examples": [
+      {
+        "name": "Labelled Text Field with helper text",
+        "description": null,
+        "jsx": "<Field label=\"Email\" message=\"We'll only use this to contact you.\">\n  <TextField type=\"email\" placeholder=\"you@example.com\" />\n</Field>",
+        "props": {
+          "label": "Email",
+          "message": "We'll only use this to contact you."
+        }
+      },
+      {
+        "name": "Error state (paired with the control's own invalid)",
+        "description": null,
+        "jsx": "<Field label=\"Email\" state=\"error\" message=\"Enter a valid email address.\">\n  <TextField type=\"email\" invalid defaultValue=\"not-an-email\" />\n</Field>",
+        "props": {
+          "state": "error",
+          "message": "Enter a valid email address."
+        }
+      },
+      {
+        "name": "Valid state",
+        "description": null,
+        "jsx": "<Field label=\"Email\" state=\"valid\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
+        "props": {
+          "state": "valid",
+          "message": "Looks good."
+        }
+      },
+      {
+        "name": "Required field",
+        "description": null,
+        "jsx": "<Field label=\"Password\" required message=\"At least 12 characters.\">\n  <TextField type=\"password\" />\n</Field>",
+        "props": {
+          "required": true
+        }
+      },
+      {
+        "name": "Inline context (label/message aligned to the control's inner text)",
+        "description": null,
+        "jsx": "<Field label=\"Full name\" context=\"inline\" size=\"lg\" message=\"First and last.\">\n  <TextField size=\"lg\" placeholder=\"Placeholder\" />\n</Field>",
+        "props": {
+          "context": "inline",
+          "size": "lg"
+        }
+      },
+      {
+        "name": "Wrapping a Text Area",
+        "description": null,
+        "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Bio is required.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
+        "props": {
+          "state": "error"
+        }
+      },
+      {
+        "name": "Wrapping a Select",
+        "description": null,
+        "jsx": "<Field label=\"Country\" message=\"Where you're based.\">\n  <Select options={countryOptions} />\n</Field>",
+        "props": {}
+      },
+      {
+        "name": "No message",
+        "description": null,
+        "jsx": "<Field label=\"Company\">\n  <TextField placeholder=\"Placeholder\" />\n</Field>",
+        "props": {
+          "label": "Company"
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "Duplicating the label as an aria-label",
+        "jsx": "<Field label=\"Email\">\n  <TextField type=\"email\" aria-label=\"Email\" />\n</Field>",
+        "reason": "Field's label already names the control via htmlFor. A duplicate aria-label is redundant and can override the visible label as the accessible name."
+      },
+      {
+        "name": "Error state without the control's own invalid",
+        "jsx": "<Field label=\"Email\" state=\"error\" message=\"Enter a valid email\">\n  <TextField type=\"email\" />\n</Field>",
+        "reason": "state='error' sets the message and aria-invalid but not the control's border. Pair it with the control's own invalid prop so the two agree."
+      },
+      {
+        "name": "One Field labelling a group of controls",
+        "jsx": "<Field label=\"Notifications\">\n  <div>\n    <Checkbox /> <Checkbox />\n  </div>\n</Field>",
+        "reason": "A label[htmlFor] targets exactly one control, and Field clones a single element. Use a fieldset/legend for a group."
+      },
+      {
+        "name": "Wrapping multiple elements",
+        "jsx": "<Field label=\"Name\">\n  <TextField />\n  <TextField />\n</Field>",
+        "reason": "Field clones a single control element to inject its wiring - text, fragments, or multiple children are unsupported."
+      },
+      {
+        "name": "Inline context on a control with no inner text",
+        "jsx": "<Field label=\"Subscribe\" context=\"inline\">\n  <Checkbox />\n</Field>",
+        "reason": "The inline indent exists to align the label/message with a control's inner text (Text Field, Select, Text Area, pickers). A Checkbox/Switch/Radio has no inner text to align to - use context='default'."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "icon-tile",
     "name": "IconTile",
     "tier": "molecule",
@@ -2500,6 +2602,73 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "form",
+    "name": "Form",
+    "tier": "organism",
+    "path": "docs/components/organisms/form/form.examples.json",
+    "examples": [
+      {
+        "name": "Titled form with a required legend and end-aligned actions",
+        "description": null,
+        "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button appearance=\"subtle\" type=\"button\">Cancel</Button>\n    <Button appearance=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
+        "props": {
+          "title": "Create a new repository",
+          "requiredLegend": true
+        }
+      },
+      {
+        "name": "Two fields on one row",
+        "description": null,
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button appearance=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
+        "props": {}
+      },
+      {
+        "name": "Multiple titled sections",
+        "description": null,
+        "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button appearance=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
+        "props": {
+          "title": "Project settings",
+          "requiredLegend": true
+        }
+      },
+      {
+        "name": "Start-aligned footer",
+        "description": null,
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button appearance=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
+        "props": {}
+      },
+      {
+        "name": "No header",
+        "description": null,
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Search\"><TextField type=\"search\" /></Field>\n  </FormSection>\n</Form>",
+        "props": {}
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "A single standalone control wrapped in a Form",
+        "jsx": "<Form>\n  <Field label=\"Search\"><TextField type=\"search\" /></Field>\n</Form>",
+        "reason": "A lone control that isn't submitted with others doesn't need a Form - use Field (or the bare control) directly."
+      },
+      {
+        "name": "Managing field validation state in the Form",
+        "jsx": "<Form>{/* Form tracking each field's error state */}</Form>",
+        "reason": "Form is layout only. Validation and error state live on Field (state=\"error\") and the native control, not on Form."
+      },
+      {
+        "name": "A non-submit primary action",
+        "jsx": "<FormFooter><Button appearance=\"primary\" onClick={save}>Save</Button></FormFooter>",
+        "reason": "Give the submit Button type=\"submit\" so Enter-to-submit and the form's onSubmit work; don't rely on onClick alone."
+      },
+      {
+        "name": "Five fields in one row",
+        "jsx": "<FormRow><Field/><Field/><Field/><Field/><Field/></FormRow>",
+        "reason": "A row is for up to 4 equal columns (per Figma); more becomes too cramped - split into multiple rows."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "menu",
     "name": "Menu",
     "tier": "organism",
@@ -2566,6 +2735,84 @@
         "name": "Expecting Menu to close a containing Dropdown Menu",
         "jsx": "<DropdownMenu open={open} onOpenChange={setOpen}>\n  <Button>Actions</Button>\n  <Menu sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]} />\n</DropdownMenu>",
         "reason": "Menu has no idea it's inside a Dropdown Menu and never calls onOpenChange itself. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
+    "id": "modal-dialog",
+    "name": "ModalDialog",
+    "tier": "organism",
+    "path": "docs/components/organisms/modal-dialog/modal-dialog.examples.json",
+    "examples": [
+      {
+        "name": "Confirmation with Cancel + Confirm",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+        "props": {
+          "title": "Save changes?"
+        }
+      },
+      {
+        "name": "Destructive confirmation (error appearance + red Confirm)",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+        "props": {
+          "appearance": "error",
+          "width": "small"
+        }
+      },
+      {
+        "name": "Informational dialog with no footer",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"What's new\">\n  <p>Read about the latest changes.</p>\n</ModalDialog>",
+        "props": {
+          "title": "What's new"
+        }
+      },
+      {
+        "name": "Labelled by aria-label (no visible title)",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} aria-label=\"Quick settings\">\n  <SettingsForm />\n</ModalDialog>",
+        "props": {}
+      },
+      {
+        "name": "Large width",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"large\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
+        "props": {
+          "width": "large"
+        }
+      },
+      {
+        "name": "Keep open while a backdrop click would otherwise close it",
+        "description": null,
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Unsaved changes\" closeOnBackdropClick={false} footer={actions}>\n  <p>Save or discard before leaving.</p>\n</ModalDialog>",
+        "props": {
+          "closeOnBackdropClick": false
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "No accessible name",
+        "jsx": "<ModalDialog open={open} onClose={onClose}>\n  <SomeForm />\n</ModalDialog>",
+        "reason": "A dialog needs an accessible name - pass a title, or aria-label when there is no visible title."
+      },
+      {
+        "name": "Relying on appearance to colour the Confirm button",
+        "jsx": "<ModalDialog appearance=\"error\" footer={<Button appearance=\"primary\">Delete</Button>} />",
+        "reason": "appearance only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
+      },
+      {
+        "name": "Using a modal for transient feedback",
+        "jsx": "<ModalDialog open onClose={onClose} title=\"Saved!\" />",
+        "reason": "Non-blocking confirmation shouldn't interrupt the user - use Toast instead of a blocking dialog."
+      },
+      {
+        "name": "Uncontrolled open state",
+        "jsx": "<ModalDialog open title=\"Title\" />",
+        "reason": "Modal Dialog is controlled - it never closes itself. Provide open state and an onClose that sets it to false."
       }
     ],
     "exemplarCompleteness": "full"

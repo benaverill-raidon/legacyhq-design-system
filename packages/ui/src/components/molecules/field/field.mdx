@@ -1,0 +1,207 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as FieldStories from './Field.stories';
+
+<Meta of={FieldStories} name="Docs" />
+
+# Field
+
+Field is a molecule that wraps a single form control - Text Field, Text Area, Select - with a
+label, an optional message, and a validation state, and wires the three together so the control is
+correctly labelled and described without any manual `id`/`aria-*` bookkeeping. It's the "form field"
+layer the control components deliberately leave out: Text Field renders only the bare input frame,
+so Field is where the label and helper/error text live.
+
+<Canvas of={FieldStories.Playground} />
+
+## When to use
+
+- Any labelled form control that needs a label above it and optional helper or validation text
+  below it.
+- Whenever you'd otherwise hand-wire a `<label htmlFor>`, an `aria-describedby`, and an
+  `aria-invalid` around a control - Field does that wiring for you.
+
+## When not to use
+
+- **A bare control with no label, helper, or error.** Use the control on its own (Text Field, Text
+  Area, Select) and give it an `aria-label`.
+- **A group of controls sharing one label** (a set of radios or checkboxes). A `<label htmlFor>`
+  points at exactly one control; use a `<fieldset>`/`<legend>` for a group instead.
+- **A page-level or section-level message.** Use Inline Message or Section Message; Field's message
+  is scoped to one control.
+
+## States
+
+`error` and `valid` colour the message and prepend a decorative status icon; `default` is plain
+helper text. `error` additionally sets `aria-invalid` on the control.
+
+<Canvas of={FieldStories.States} />
+
+Field's `state` is about the label/message layer only - it deliberately does **not** paint the
+control's own error border, because it can't know the control's styling prop. Pair `state="error"`
+with the control's own `invalid` prop (`<TextField invalid />`) so the message and the border agree.
+
+## Context and size
+
+`context` and `size` work together, matching Figma's own variant model.
+
+<Canvas of={FieldStories.Contexts} />
+
+`context="default"` aligns the label and message with the control's outer edge and is
+**size-independent** - every control size renders identically (Figma's `size=all`). `context="inline"`
+does two things, because Figma models `context` as one shared axis across the whole field: it indents
+the label and message to line up with the text _inside_ the control (matching the control's own inner
+start padding for the size - `lg` by `--spacing-md`; `sm` and `md` share `--spacing-sm`), **and** it
+renders the control itself inline (borderless) by giving it `appearance="subtle"`. The control's own
+`appearance` wins if it sets one.
+
+`size` therefore only matters in the inline context, purely for that text alignment - it never
+resizes the control. Set Field's `size` to match the wrapped control's `size`, and reach for
+`context="inline"` with text-bearing controls (Text Field, Select, Text Area, date/time pickers) -
+all of which take `appearance="subtle"`; it has no meaningful effect on controls without inner text,
+like Checkbox, Switch, or Radio.
+
+## Content
+
+<Canvas of={FieldStories.Content} />
+
+Field is control-agnostic - it wires the same label, message, and state onto whatever single
+control it wraps.
+
+<Canvas of={FieldStories.AnyControl} />
+
+`required` shows a `*` after the label and forwards `required` to the control. The `*` is decorative
+(`aria-hidden`) - the forwarded `required` is what conveys the requirement to assistive technology,
+so the star is never read out twice.
+
+<Canvas of={FieldStories.EdgeCases} />
+
+## Accessibility
+
+- The label is a real `<label htmlFor>` pointing at the control's `id` (auto-generated when the
+  control has none), so the control gets its accessible name from the label - no `aria-label`
+  needed on it.
+- The message is linked to the control with `aria-describedby`, merged with any `aria-describedby`
+  the control already carries.
+- `state="error"` sets `aria-invalid` on the control; an explicit `aria-invalid` on the control
+  always wins.
+- Field only ever fills in wiring the control left unset - the control's own `id`, `aria-invalid`,
+  `aria-describedby`, and `required` are never overwritten.
+
+## Do / Don't
+
+**Do** let Field label the control - no `aria-label` needed.
+
+```tsx
+<Field label="Email">
+  <TextField type="email" />
+</Field>
+```
+
+**Don't** duplicate the label as an `aria-label` on the control.
+
+```tsx
+<Field label="Email">
+  <TextField type="email" aria-label="Email" />
+</Field>
+```
+
+---
+
+**Do** pair `state="error"` with the control's own `invalid` prop.
+
+```tsx
+<Field state="error" message="Enter a valid email">
+  <TextField invalid />
+</Field>
+```
+
+**Don't** rely on `state="error"` alone for the control's error border - Field doesn't set it.
+
+```tsx
+<Field state="error" message="Enter a valid email">
+  <TextField />
+</Field>
+```
+
+## API
+
+<table>
+  <thead>
+    <tr>
+      <th>Prop</th>
+      <th>Type</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>children</code></td>
+      <td><code>React.ReactElement</code></td>
+      <td>-</td>
+      <td>The single control to wrap. Must be one React element.</td>
+    </tr>
+    <tr>
+      <td><code>label</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Label text, rendered in a real <code>&lt;label htmlFor&gt;</code>.</td>
+    </tr>
+    <tr>
+      <td><code>message</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>Helper/error/success text, linked via <code>aria-describedby</code>.</td>
+    </tr>
+    <tr>
+      <td><code>state</code></td>
+      <td><code>'default' | 'error' | 'valid'</code></td>
+      <td><code>'default'</code></td>
+      <td>Colours the message + status icon; <code>error</code> sets <code>aria-invalid</code>.</td>
+    </tr>
+    <tr>
+      <td><code>context</code></td>
+      <td><code>'default' | 'inline'</code></td>
+      <td><code>'default'</code></td>
+      <td>Label/message flush with the control edge vs. indented to its inner text.</td>
+    </tr>
+    <tr>
+      <td><code>size</code></td>
+      <td><code>'sm' | 'md' | 'lg'</code></td>
+      <td><code>'md'</code></td>
+      <td>Matches the control's size; drives the inline-context indent only.</td>
+    </tr>
+    <tr>
+      <td><code>required</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Shows a decorative <code>*</code> and forwards <code>required</code> to the control.</td>
+    </tr>
+    <tr>
+      <td><code>controlId</code></td>
+      <td><code>string</code></td>
+      <td>auto</td>
+      <td>Explicit control id for the label/message wiring. Auto-generated when omitted.</td>
+    </tr>
+    <tr>
+      <td><code>labelClassName</code> / <code>messageClassName</code></td>
+      <td><code>string</code></td>
+      <td>-</td>
+      <td>Compose with the label / message class lists.</td>
+    </tr>
+    <tr>
+      <td>...rest</td>
+      <td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td>
+      <td>-</td>
+      <td>Forwarded to the root element (<code>className</code>, <code>style</code>, <code>data-*</code>, ...).</td>
+    </tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Text Field**, **Text Area**, **Select** - the controls Field most commonly wraps.
+- **Label** - the pill/overline-style standalone label atom; Field's own label is a quieter form
+  label baked into the wrapper, not the Label atom.
+- **Inline Message** - a standalone, sometimes-interactive message; Field's message is a plain
+  static line scoped to one control.

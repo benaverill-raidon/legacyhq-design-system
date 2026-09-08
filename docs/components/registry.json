@@ -6529,6 +6529,193 @@
     }
   },
   {
+    "id": "form",
+    "name": "Form",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/form/form.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "The form element; forwards ref and native form attributes. Renders the optional header, then children."
+      },
+      {
+        "name": "header",
+        "description": "Rendered when title, description, or requiredLegend is set. flex column, gap --spacing-md."
+      },
+      {
+        "name": "title",
+        "description": "Header title, --typography-heading-lg, --color-content-default. Presentational text."
+      },
+      {
+        "name": "description",
+        "description": "Header description and/or the required legend, --typography-body-md, --color-content-default."
+      },
+      {
+        "name": "requiredMark",
+        "description": "The legend '*', --color-content-error. Real content (not aria-hidden) - the sentence explains the convention."
+      },
+      {
+        "name": "section",
+        "description": "Vertical field group; padding-top --spacing-3xl, gap --spacing-lg; optional title (--typography-heading-sm)."
+      },
+      {
+        "name": "row",
+        "description": "Equal-width columns on one line (up to 4); gap --spacing-lg; each child flex:1 1 0."
+      },
+      {
+        "name": "footer",
+        "description": "Actions; padding-top --spacing-4xl, gap --spacing-sm; data-align end (default) / start."
+      }
+    ],
+    "props": {
+      "title": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Header title (heading/lg). Presentational text - not a semantic heading."
+      },
+      "description": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Supporting text under the title (body/md)."
+      },
+      "requiredLegend": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Renders the '* indicates a required field' legend, with the '*' in the error colour."
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "The form body: FormSection / FormRow groups and a FormFooter."
+      },
+      "headerClassName": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the header's class list."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the form element's class list."
+      },
+      "...rest": {
+        "type": "React.FormHTMLAttributes<HTMLFormElement>",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to the native <form> (onSubmit, name, noValidate, ...)."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children",
+      "footer"
+    ],
+    "variants": {
+      "footerAlign": [
+        "start",
+        "end"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "headerGap": "--spacing-md",
+        "sectionTopGap": "--spacing-3xl",
+        "sectionInnerGap": "--spacing-lg",
+        "rowColumnGap": "--spacing-lg",
+        "footerTopGap": "--spacing-4xl",
+        "footerActionGap": "--spacing-sm"
+      },
+      "color": {
+        "headerText": "--color-content-default",
+        "sectionTitle": "--color-content-default",
+        "requiredMark": "--color-content-error"
+      },
+      "typography": {
+        "title": "--typography-heading-lg-*",
+        "description": "--typography-body-md-*",
+        "sectionTitle": "--typography-heading-sm-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": false,
+      "role": "form (implicit when named)",
+      "requirements": [
+        "Render a real native <form> - native submission (Enter, type=submit) and browser validation work for free.",
+        "Give the submit Button type='submit' so it triggers onSubmit.",
+        "Field owns each control's labelling and description - Form does not re-wire them.",
+        "The section title is presentational; add a semantic heading in the page structure if a group needs one.",
+        "The required legend (including its '*') is real content, not aria-hidden."
+      ]
+    },
+    "relatedComponents": [
+      "Field",
+      "Text Field",
+      "Select",
+      "Text Area",
+      "Button"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2849:9088",
+      "componentSetName": "form",
+      "variantCount": 3,
+      "verifiedAt": "2026-09-08",
+      "workInProgress": true,
+      "figmaVariantAxes": {
+        "sections": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "subParts": [
+        {
+          "name": "code-parts / <form-header>",
+          "componentSetNodeId": "2215:66090",
+          "note": "Title (heading/lg) + description (body/md, the '*' in content/error) + optional content slot. Props: show title, show description, show content (default false), title, description. Rendered in code from Form's title/description/requiredLegend props (baked into Form, not a separate export)."
+        },
+        {
+          "name": "code-parts / <form-section>",
+          "componentNodeId": "2216:725",
+          "note": "Vertical group: optional heading (heading/sm, showTitle default false) + form-rows. padding-top spacing/3xl, internal gap spacing/lg. Rendered in code as FormSection."
+        },
+        {
+          "name": "code-parts / <form-row>",
+          "componentSetNodeId": "4800:124906",
+          "variantCount": 4,
+          "note": "1-4 equal-width slots side by side (variant 'number of slots'), each holding a Field, with a spacing/lg gap between them. Rendered in code as FormRow (equal columns via flex)."
+        },
+        {
+          "name": "code-parts / <form-footer>",
+          "componentSetNodeId": "2216:1668",
+          "variantCount": 2,
+          "note": "Actions slot aligned start/end (align variant). padding-top spacing/4xl, action gap spacing/sm. Rendered in code as FormFooter."
+        }
+      ],
+      "apiAdaptationNotes": [
+        "The Figma Form page is still marked work-in-progress (🚧). The <form-row> column gap was initially unset (0); it has since been set to --spacing-lg (16px) in Figma, matching what the code already used, so it is no longer a judgment call. One call remains: the header title is a Figma text node, so `title` renders as presentational text, not a semantic heading.",
+        "Figma's `sections` variant (1/2/3) is not a prop - it is just however many FormSection children the consumer renders.",
+        "The <form-header> is always the form's own header, so it is baked into Form (title/description/requiredLegend props) rather than a separate export. The description's '* indicates a required field' legend is exposed as the `requiredLegend` boolean, rendering the '*' in --color-content-error to match Field's required marker.",
+        "Multi-part component shipped as four separate exports (Form, FormSection, FormRow, FormFooter), matching the repo's Tabs/TabPanel and RadioGroup/Radio pattern rather than dot-notation compounds.",
+        "All inter-block spacing lives on the blocks (section padding-top 3xl, footer padding-top 4xl); the <form> has no gap of its own, so a header-less form has no wasted leading space.",
+        "Fields may sit directly in a FormSection (single column, spaced by the section gap) or inside a FormRow (equal columns) - Figma always nests rows in sections, but the direct-field case is the common one and avoids a mandatory one-slot row.",
+        "Form owns no form state - it renders a native <form> and forwards onSubmit and all native form attributes; validation and each field's state stay native / on Field."
+      ]
+    }
+  },
+  {
     "id": "menu",
     "name": "Menu",
     "tier": "organism",

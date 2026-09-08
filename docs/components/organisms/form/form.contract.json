@@ -1,0 +1,211 @@
+{
+  "name": "Form",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Lay out a set of fields the user fills in and submits together - a native <form> with a header, grouped/rowed fields, and a footer of actions.",
+  "intent": "Be a thin layout organism, not a form-state manager. Figma's Form is pure layout + slots, and this system already puts labelling/description/validation on Field and native behaviour on the control - so Form renders a real <form> (native submission + validation for free), an optional header, and the section/row/footer spacing, and owns no form state. Composes molecules (Field and its controls) into a complete UI section, so it lives at the organism tier.",
+  "nativeElement": "form",
+  "sourceFiles": {
+    "component": "form.tsx",
+    "types": "form.types.ts",
+    "styles": "form.module.css",
+    "stories": "Form.stories.tsx",
+    "tests": "Form.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2849:9088",
+    "componentSetName": "form",
+    "variantCount": 3,
+    "verifiedAt": "2026-09-08",
+    "workInProgress": true,
+    "figmaVariantAxes": { "sections": ["1", "2", "3"] },
+    "subParts": [
+      { "name": "code-parts / <form-header>", "componentSetNodeId": "2215:66090", "note": "Title (heading/lg) + description (body/md, the '*' in content/error) + optional content slot. Props: show title, show description, show content (default false), title, description. Rendered in code from Form's title/description/requiredLegend props (baked into Form, not a separate export)." },
+      { "name": "code-parts / <form-section>", "componentNodeId": "2216:725", "note": "Vertical group: optional heading (heading/sm, showTitle default false) + form-rows. padding-top spacing/3xl, internal gap spacing/lg. Rendered in code as FormSection." },
+      { "name": "code-parts / <form-row>", "componentSetNodeId": "4800:124906", "variantCount": 4, "note": "1-4 equal-width slots side by side (variant 'number of slots'), each holding a Field, with a spacing/lg gap between them. Rendered in code as FormRow (equal columns via flex)." },
+      { "name": "code-parts / <form-footer>", "componentSetNodeId": "2216:1668", "variantCount": 2, "note": "Actions slot aligned start/end (align variant). padding-top spacing/4xl, action gap spacing/sm. Rendered in code as FormFooter." }
+    ],
+    "apiAdaptationNotes": [
+      "The Figma Form page is still marked work-in-progress (🚧). The <form-row> column gap was initially unset (0); it has since been set to --spacing-lg (16px) in Figma, matching what the code already used, so it is no longer a judgment call. One call remains: the header title is a Figma text node, so `title` renders as presentational text, not a semantic heading.",
+      "Figma's `sections` variant (1/2/3) is not a prop - it is just however many FormSection children the consumer renders.",
+      "The <form-header> is always the form's own header, so it is baked into Form (title/description/requiredLegend props) rather than a separate export. The description's '* indicates a required field' legend is exposed as the `requiredLegend` boolean, rendering the '*' in --color-content-error to match Field's required marker.",
+      "Multi-part component shipped as four separate exports (Form, FormSection, FormRow, FormFooter), matching the repo's Tabs/TabPanel and RadioGroup/Radio pattern rather than dot-notation compounds.",
+      "All inter-block spacing lives on the blocks (section padding-top 3xl, footer padding-top 4xl); the <form> has no gap of its own, so a header-less form has no wasted leading space.",
+      "Fields may sit directly in a FormSection (single column, spaced by the section gap) or inside a FormRow (equal columns) - Figma always nests rows in sections, but the direct-field case is the common one and avoids a mandatory one-slot row.",
+      "Form owns no form state - it renders a native <form> and forwards onSubmit and all native form attributes; validation and each field's state stay native / on Field."
+    ]
+  },
+  "useCases": [
+    "a titled single-section create form with an end-aligned submit",
+    "a multi-section settings form",
+    "a form with two- or three-up rows of related fields"
+  ],
+  "antiPatterns": [
+    "a single standalone control (use Field or the bare control)",
+    "a page section that isn't a form (use plain layout)",
+    "managing per-field validation state in Form (that's Field / the native control)"
+  ],
+  "anatomy": [
+    { "part": "root", "element": "form.root (native <form>, flex column, gap 0)", "required": true, "description": "The form element; forwards ref and native form attributes. Renders the optional header, then children." },
+    { "part": "header", "element": "div.header (optional)", "required": false, "description": "Rendered when title, description, or requiredLegend is set. flex column, gap --spacing-md." },
+    { "part": "title", "element": "div.title", "required": false, "description": "Header title, --typography-heading-lg, --color-content-default. Presentational text." },
+    { "part": "description", "element": "p.description", "required": false, "description": "Header description and/or the required legend, --typography-body-md, --color-content-default." },
+    { "part": "requiredMark", "element": "span.requiredMark", "required": false, "description": "The legend '*', --color-content-error. Real content (not aria-hidden) - the sentence explains the convention." },
+    { "part": "section", "element": "FormSection div.section", "required": false, "description": "Vertical field group; padding-top --spacing-3xl, gap --spacing-lg; optional title (--typography-heading-sm)." },
+    { "part": "row", "element": "FormRow div.row", "required": false, "description": "Equal-width columns on one line (up to 4); gap --spacing-lg; each child flex:1 1 0." },
+    { "part": "footer", "element": "FormFooter div.footer", "required": false, "description": "Actions; padding-top --spacing-4xl, gap --spacing-sm; data-align end (default) / start." }
+  ],
+  "props": {
+    "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Header title (heading/lg). Presentational text - not a semantic heading." },
+    "description": { "type": "React.ReactNode", "required": false, "default": null, "description": "Supporting text under the title (body/md)." },
+    "requiredLegend": { "type": "boolean", "required": false, "default": false, "description": "Renders the '* indicates a required field' legend, with the '*' in the error colour." },
+    "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "The form body: FormSection / FormRow groups and a FormFooter." },
+    "headerClassName": { "type": "string", "required": false, "default": null, "description": "Composes with the header's class list." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the form element's class list." },
+    "...rest": { "type": "React.FormHTMLAttributes<HTMLFormElement>", "required": false, "default": null, "description": "Forwarded to the native <form> (onSubmit, name, noValidate, ...)." }
+  },
+  "subComponents": [
+    {
+      "name": "FormSection",
+      "element": "div",
+      "props": {
+        "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Optional section heading (heading/sm)." },
+        "titleClassName": { "type": "string", "required": false, "default": null, "description": "Composes with the title's class list." },
+        "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "Fields and/or FormRows." },
+        "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "required": false, "default": null, "description": "Forwarded to the section element." }
+      }
+    },
+    {
+      "name": "FormRow",
+      "element": "div",
+      "props": {
+        "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "Up to 4 fields, laid out as equal-width columns." },
+        "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "required": false, "default": null, "description": "Forwarded to the row element." }
+      }
+    },
+    {
+      "name": "FormFooter",
+      "element": "div",
+      "props": {
+        "align": { "type": "FormFooterAlign", "required": false, "default": "end", "enum": ["start", "end"], "description": "Horizontal alignment of the actions." },
+        "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "Action Buttons - typically Cancel + a submit." },
+        "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "required": false, "default": null, "description": "Forwarded to the footer element." }
+      }
+    }
+  ],
+  "variants": {
+    "footerAlign": ["start", "end"]
+  },
+  "sizes": [],
+  "states": ["default"],
+  "slots": [
+    { "name": "children", "required": true, "supports": ["FormSection", "FormRow", "FormFooter", "Field"], "interactive": true },
+    { "name": "footer", "required": false, "supports": ["Button (actions)"], "interactive": true }
+  ],
+  "tokens": {
+    "layout": {
+      "headerGap": "--spacing-md",
+      "sectionTopGap": "--spacing-3xl",
+      "sectionInnerGap": "--spacing-lg",
+      "rowColumnGap": "--spacing-lg",
+      "footerTopGap": "--spacing-4xl",
+      "footerActionGap": "--spacing-sm"
+    },
+    "color": {
+      "headerText": "--color-content-default",
+      "sectionTitle": "--color-content-default",
+      "requiredMark": "--color-content-error"
+    },
+    "typography": {
+      "title": "--typography-heading-lg-*",
+      "description": "--typography-body-md-*",
+      "sectionTitle": "--typography-heading-sm-*"
+    }
+  },
+  "accessibility": {
+    "interactive": true,
+    "focusable": false,
+    "role": "form (implicit when named)",
+    "requirements": [
+      "Render a real native <form> - native submission (Enter, type=submit) and browser validation work for free.",
+      "Give the submit Button type='submit' so it triggers onSubmit.",
+      "Field owns each control's labelling and description - Form does not re-wire them.",
+      "The section title is presentational; add a semantic heading in the page structure if a group needs one.",
+      "The required legend (including its '*') is real content, not aria-hidden."
+    ]
+  },
+  "keyboardInteraction": [
+    "Native form behaviour - Tab between fields; Enter in a field submits; a type='submit' button submits.",
+    "Form itself has no custom keyboard handling."
+  ],
+  "behaviorRules": [
+    "Render a native <form>; forward ref and native form attributes (onSubmit, name, noValidate, ...).",
+    "Render the header only when title, description, or requiredLegend is set.",
+    "requiredLegend renders '* indicates a required field' with the '*' in --color-content-error.",
+    "Spacing lives on the blocks (section padding-top 3xl, footer padding-top 4xl); the <form> has gap 0.",
+    "FormSection adds --spacing-3xl top spacing and spaces its children by --spacing-lg; title optional.",
+    "FormRow lays its children out as equal-width columns (flex:1 1 0), gap --spacing-lg.",
+    "FormFooter defaults to align='end'; align='start' left-aligns; gap --spacing-sm between actions.",
+    "Support className on every part (plus headerClassName / titleClassName)."
+  ],
+  "compositionRules": [
+    "Use Field for each control; Form arranges Fields, it does not replace them.",
+    "Wrap 2-4 side-by-side fields in a FormRow; place a full-width field directly in a FormSection.",
+    "Group related fields in a FormSection; give it a title only when the group needs a heading.",
+    "Put the actions in a FormFooter and give the submit Button type='submit'."
+  ],
+  "contentRules": [
+    "Title is a short noun phrase; description is a concise supporting line.",
+    "Use requiredLegend when any field in the form is required, so the '*' has an explanation."
+  ],
+  "responsiveRules": [
+    "The form fills its container's inline size; a FormRow's columns share the width equally."
+  ],
+  "themeRules": [
+    "Must work in light and dark themes - all colours use semantic tokens."
+  ],
+  "implementationNotes": [
+    "Form uses React.memo + React.forwardRef<HTMLFormElement>; the sub-parts use React.memo.",
+    "Use CSS Modules.",
+    "No MUI.",
+    "No Tailwind.",
+    "No hardcoded colours, spacing, radius, or typography.",
+    "Ship four separate exports (Form, FormSection, FormRow, FormFooter), not dot-notation compounds."
+  ],
+  "relatedComponents": ["Field", "Text Field", "Select", "Text Area", "Button"],
+  "do": [
+    "Render a real <form> and let native submission/validation work.",
+    "Use Field for each control and arrange them with FormSection / FormRow.",
+    "Give the submit Button type='submit'.",
+    "Use requiredLegend when the form has required fields."
+  ],
+  "dont": [
+    "Don't manage per-field validation state in Form - that's Field / the native control.",
+    "Don't use Form for a single standalone control or a non-form page section.",
+    "Don't rely on the section title as a semantic heading - it's presentational.",
+    "Don't put more than 4 fields in one FormRow."
+  ],
+  "acceptanceCriteria": [
+    "Renders a native <form>; forwards its ref and native attributes (onSubmit, name, noValidate).",
+    "Renders the header from title / description / requiredLegend; the legend shows a coloured '*' reading '* indicates a required field'; no header renders when all three are absent.",
+    "FormSection renders an optional title and adds --spacing-3xl top spacing.",
+    "FormRow lays its children out as equal-width columns.",
+    "FormFooter defaults to align='end' and supports align='start' via data-align.",
+    "Composes className on every part (plus headerClassName / titleClassName).",
+    "Uses only semantic tokens; works in light and dark themes.",
+    "Storybook includes Playground, Repository, Sections, Rows, FooterAlignment, and EdgeCases.",
+    "Tests cover the native form + submit + ref/attrs, header/legend, sections, rows, and footer alignment."
+  ],
+  "knownLimitations": [
+    "Figma source is work-in-progress (🚧): the presentational (non-heading) title is provisional.",
+    "No built-in responsive collapse of multi-column rows on narrow containers.",
+    "Form manages no form state or validation - it is layout + a native <form> only."
+  ],
+  "futureEnhancements": [
+    "Opt-in responsive stacking of FormRow columns on narrow containers.",
+    "A semantic-heading option for the title / section titles once the design settles."
+  ]
+}

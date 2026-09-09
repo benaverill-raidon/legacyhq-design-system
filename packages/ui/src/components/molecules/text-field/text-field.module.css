@@ -256,6 +256,20 @@
   color: var(--color-content-subtle);
 }
 
+/*
+ * Text-selection highlight. `color-content-highlight` is a translucent brand tint (prussian alpha)
+ * that layers over the value text without obscuring it, so only the background is set and the text
+ * color stays the browser default. `::selection` and Firefox's `::-moz-selection` must be separate
+ * rules - engines drop the whole rule when a selector list contains a pseudo they don't recognize.
+ */
+.input::selection {
+  background-color: var(--color-content-highlight);
+}
+
+.input::-moz-selection {
+  background-color: var(--color-content-highlight);
+}
+
 .input:disabled {
   color: var(--color-content-disabled);
   cursor: not-allowed;

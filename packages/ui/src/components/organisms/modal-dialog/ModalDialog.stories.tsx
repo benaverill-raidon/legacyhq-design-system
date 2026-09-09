@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
 import { ModalDialog } from './modal-dialog';
 import type { ModalAppearance, ModalWidth } from './modal-dialog.types';
 
@@ -75,14 +76,14 @@ function ModalDemo({
         open={open}
         onClose={() => setOpen(false)}
         footer={
-          <>
+          <ButtonGroup>
             <Button appearance="subtle" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button appearance="primary" tone={confirmTone(appearance)} onClick={() => setOpen(false)}>
               Confirm
             </Button>
-          </>
+          </ButtonGroup>
         }
       >
         {children ?? <p style={{ margin: 0 }}>Modal body content goes here.</p>}
@@ -101,14 +102,14 @@ function PlaygroundModal(args: Parameters<NonNullable<Story['render']>>[0]) {
         open={open}
         onClose={() => setOpen(false)}
         footer={
-          <>
+          <ButtonGroup>
             <Button appearance="subtle" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button appearance="primary" tone={confirmTone(args.appearance ?? 'default')} onClick={() => setOpen(false)}>
               Confirm
             </Button>
-          </>
+          </ButtonGroup>
         }
       >
         <p style={{ margin: 0 }}>Modal body content goes here.</p>
@@ -173,6 +174,42 @@ export const ScrollingBody: Story = {
       </div>
     </ModalDemo>
   ),
+};
+
+/**
+ * A header expand (maximize) action. Pass `onExpand` to show an Expand button before Close; the two
+ * share a Button Group in the header, matching the Figma modal-header.
+ */
+export const HeaderExpand: Story = {
+  render: () => {
+    function Demo() {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <Button onClick={() => setOpen(true)}>Open with expand</Button>
+          <ModalDialog
+            open={open}
+            onClose={() => setOpen(false)}
+            onExpand={() => {}}
+            title="Preview attachment"
+            footer={
+              <ButtonGroup>
+                <Button appearance="subtle" onClick={() => setOpen(false)}>
+                  Cancel
+                </Button>
+                <Button appearance="primary" onClick={() => setOpen(false)}>
+                  Confirm
+                </Button>
+              </ButtonGroup>
+            }
+          >
+            <p style={{ margin: 0 }}>The header shows an Expand (maximize) button before Close, grouped together.</p>
+          </ModalDialog>
+        </>
+      );
+    }
+    return <Demo />;
+  },
 };
 
 /** No footer, and a dialog labelled by `aria-label` instead of a visible title. */

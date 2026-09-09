@@ -2748,7 +2748,7 @@
       {
         "name": "Confirmation with Cancel + Confirm",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
         "props": {
           "title": "Save changes?"
         }
@@ -2756,7 +2756,7 @@
       {
         "name": "Destructive confirmation (error appearance + red Confirm)",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
         "props": {
           "appearance": "error",
           "width": "small"
@@ -2790,6 +2790,14 @@
         "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Unsaved changes\" closeOnBackdropClick={false} footer={actions}>\n  <p>Save or discard before leaving.</p>\n</ModalDialog>",
         "props": {
           "closeOnBackdropClick": false
+        }
+      },
+      {
+        "name": "Header expand (maximize) action",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
+        "props": {
+          "title": "Preview attachment"
         }
       }
     ],
@@ -2905,12 +2913,12 @@
       },
       {
         "name": "Warning with actions",
-        "description": "Two Link actions, separated automatically by a middot.",
-        "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<><Link href=\"/upgrade\">Upgrade</Link><Link href=\"/billing\">Billing</Link></>}>Your trial ends in three days.</SectionMessage>",
+        "description": "Two Link Button actions grouped in a ButtonGroup that lays them out as a row.",
+        "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
         "props": {
           "appearance": "warning",
           "title": "Your trial ends soon",
-          "actions": "Link elements (middots inserted)",
+          "actions": "a ButtonGroup of LinkButton elements",
           "children": "Your trial ends in three days."
         }
       },

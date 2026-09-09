@@ -67,7 +67,7 @@ describe('SectionMessage', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
-  it('interleaves a middot separator between actions', () => {
+  it('renders the actions passed to it as-is, with no injected separators', () => {
     const { container } = render(
       <SectionMessage
         actions={
@@ -81,18 +81,12 @@ describe('SectionMessage', () => {
       </SectionMessage>,
     );
 
+    const actions = container.querySelector(`.${styles.actions}`);
+    expect(actions).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'First' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Second' })).toBeInTheDocument();
-    // Two actions -> exactly one separator between them.
-    expect(container.querySelectorAll(`.${styles.separator}`)).toHaveLength(1);
-  });
-
-  it('renders no separator for a single action', () => {
-    const { container } = render(
-      <SectionMessage actions={<Link href="#a">Only</Link>}>Body</SectionMessage>,
-    );
-
-    expect(container.querySelectorAll(`.${styles.separator}`)).toHaveLength(0);
+    // The decorative middot separator is gone - actions are laid out by a ButtonGroup instead.
+    expect(actions?.textContent).not.toContain('·');
   });
 
   it('omits the actions region when no actions are provided', () => {

@@ -10,8 +10,8 @@ export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivEl
   /** The message body. */
   children: React.ReactNode;
   /**
-   * Optional trailing actions - typically `Link` elements. Section Message inserts a middot
-   * separator between each one.
+   * Optional trailing actions - typically `LinkButton` elements. Wrap multiple actions in a
+   * `ButtonGroup` (which lays them out as a row); a single action can be passed bare.
    */
   actions?: React.ReactNode;
   /** Show a dismiss button in the top-right corner. Defaults to `false`. */

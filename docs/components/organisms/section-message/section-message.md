@@ -21,16 +21,17 @@ Dialog.
 
 ## Design intent
 
-Section Message is a presentation/layout organism that composes the Icon primitive, the Link atom
-(in actions), and the Icon Button atom (the dismiss button). `appearance` (`information`, `success`,
-`warning`, `error`) sets the tinted background, the border color, and the status icon together - the
-appearance is the semantic signal.
+Section Message is a presentation/layout organism that composes the Icon primitive, the Link Button
+atom (in actions), and the Icon Button atom (the dismiss button). `appearance` (`information`,
+`success`, `warning`, `error`) sets the tinted background, the border color, and the status icon
+together - the appearance is the semantic signal.
 
 The title and description use the default content color; only the icon and border take the status
 color. Unlike Banner (a single truncated line), the description wraps freely, so Section Message
-suits longer, multi-line explanations. Actions are `Link`s; Section Message inserts the `·`
-separators between them so callers pass bare Links. Dismiss is opt-in (`isDismissible`) and hides the
-message while calling `onDismiss`.
+suits longer, multi-line explanations. Actions are `LinkButton`s laid out in a `ButtonGroup` - wrap
+multiple actions in a Button Group, or pass a single action bare; no separators are injected
+(previously the actions were `Link`s joined by a `·` middot, matching the old Figma). Dismiss is
+opt-in (`isDismissible`) and hides the message while calling `onDismiss`.
 
 ## Accessibility expectations
 
@@ -45,4 +46,4 @@ and description text, not by color alone. The dismiss control is a labelled Icon
 - Toast
 - Inline Message
 - Modal Dialog
-- Link / Icon Button (composed inside)
+- Link Button / Button Group / Icon Button (composed inside)

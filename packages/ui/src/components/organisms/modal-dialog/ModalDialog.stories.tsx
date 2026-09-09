@@ -17,6 +17,7 @@ const meta = {
     open: false,
     onClose: () => {},
     title: 'Modal title',
+    description: 'A short supporting line under the title.',
     appearance: 'default',
     width: 'medium',
     showCloseButton: true,
@@ -25,6 +26,7 @@ const meta = {
   },
   argTypes: {
     title: { control: 'text' },
+    description: { control: 'text' },
     appearance: { control: 'inline-radio', options: appearances },
     width: { control: 'inline-radio', options: widths },
     showCloseButton: { control: 'boolean' },
@@ -58,6 +60,7 @@ function ModalDemo({
   triggerLabel: string;
   appearance?: ModalAppearance;
   title?: ReactNode;
+  description?: ReactNode;
   width?: ModalWidth;
   showCloseButton?: boolean;
   closeOnEscape?: boolean;
@@ -129,10 +132,39 @@ export const Playground: Story = {
 export const Appearances: Story = {
   render: () => (
     <div style={row}>
-      <ModalDemo triggerLabel="Default" appearance="default" title="Save changes?" />
-      <ModalDemo triggerLabel="Warning" appearance="warning" title="Unsaved changes" />
-      <ModalDemo triggerLabel="Delete" appearance="error" title="Delete repository?" />
+      <ModalDemo
+        triggerLabel="Default"
+        appearance="default"
+        title="Save changes?"
+        description="Your edits will be applied right away."
+      />
+      <ModalDemo
+        triggerLabel="Warning"
+        appearance="warning"
+        title="Unsaved changes"
+        description="You'll lose your edits if you leave now."
+      />
+      <ModalDemo
+        triggerLabel="Delete"
+        appearance="error"
+        title="Delete repository?"
+        description="This can't be undone."
+      />
     </div>
+  ),
+};
+
+/**
+ * `description` renders a supporting line under the title (Figma's modal-header description). It's
+ * `body-md` text and is wired as the dialog's `aria-describedby`.
+ */
+export const WithDescription: Story = {
+  render: () => (
+    <ModalDemo
+      triggerLabel="Open dialog"
+      title="Move to archive?"
+      description="Archived projects are hidden from the dashboard but can be restored at any time."
+    />
   ),
 };
 

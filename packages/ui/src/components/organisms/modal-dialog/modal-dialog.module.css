@@ -5,8 +5,9 @@
  *     was artboard framing, not a design value)
  *   - panel radius: 16px (border/radius/xxl); surface = --color-elevation-surface-raised-default, the
  *     shared floating-surface token (Figma names it overlay/default)
- *   - header: padding 24/24/16/24 (spacing/2xl x3, spacing/lg bottom), gap 16 (spacing/lg);
- *     title/close-area icon gap 8 (spacing/sm); title = heading/md
+ *   - header: padding 24/24/16/24 (spacing/2xl x3, spacing/lg bottom); a vertical stack of the title
+ *     row and an optional description, gap 8 (spacing/sm). Title row: title/status-icon gap 8
+ *     (spacing/sm), title/close-button gap 16 (spacing/lg); title = heading/md, description = body/md
  *   - footer: padding 16/24/24/24 (spacing/lg top, spacing/2xl x3), action gap 8 (spacing/sm)
  */
 .backdrop {
@@ -53,10 +54,16 @@
 
 .header {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
+  flex-direction: column;
+  gap: var(--spacing-sm);
   flex: 0 0 auto;
   padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-lg);
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
 }
 
 .titleArea {
@@ -82,6 +89,17 @@
   font-weight: var(--typography-heading-md-font-weight);
   line-height: var(--typography-heading-md-line-height);
   letter-spacing: var(--typography-heading-md-letter-spacing);
+}
+
+/* Supporting line under the title row - body/md, content/default (matches Figma's modal-header). */
+.description {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
 .body {

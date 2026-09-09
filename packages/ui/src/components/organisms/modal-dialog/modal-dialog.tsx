@@ -34,6 +34,7 @@ export const ModalDialog = React.memo(function ModalDialog({
   open,
   onClose,
   title,
+  description,
   appearance = 'default',
   width = 'medium',
   children,
@@ -47,6 +48,7 @@ export const ModalDialog = React.memo(function ModalDialog({
   className,
 }: ModalDialogProps) {
   const titleId = React.useId();
+  const descriptionId = React.useId();
   const panelRef = React.useRef<HTMLDivElement>(null);
   // Where mousedown began, so a text-selection drag that ends on the backdrop doesn't close the
   // dialog - only a genuine press-and-release on the backdrop does.
@@ -129,7 +131,7 @@ export const ModalDialog = React.memo(function ModalDialog({
   }
 
   const status = STATUS_ICONS[appearance];
-  const hasHeader = title != null || showCloseButton;
+  const hasHeader = title != null || description != null || showCloseButton;
 
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     backdropMouseDownRef.current = event.target === event.currentTarget;
@@ -151,6 +153,7 @@ export const ModalDialog = React.memo(function ModalDialog({
         aria-modal="true"
         aria-labelledby={title != null ? titleId : undefined}
         aria-label={title == null ? ariaLabel : undefined}
+        aria-describedby={description != null ? descriptionId : undefined}
         tabIndex={-1}
         className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
         data-appearance={appearance}
@@ -159,22 +162,29 @@ export const ModalDialog = React.memo(function ModalDialog({
       >
         {hasHeader ? (
           <div className={styles.header}>
-            <div className={styles.titleArea}>
-              {status ? (
-                <span className={styles.statusIcon} aria-hidden="true">
-                  <status.Icon size="md" color={status.color} />
-                </span>
-              ) : null}
-              {title != null ? (
-                <h2 id={titleId} className={styles.title}>
-                  {title}
-                </h2>
+            <div className={styles.titleRow}>
+              <div className={styles.titleArea}>
+                {status ? (
+                  <span className={styles.statusIcon} aria-hidden="true">
+                    <status.Icon size="md" color={status.color} />
+                  </span>
+                ) : null}
+                {title != null ? (
+                  <h2 id={titleId} className={styles.title}>
+                    {title}
+                  </h2>
+                ) : null}
+              </div>
+              {showCloseButton ? (
+                <IconButton appearance="subtle" size="sm" aria-label={closeLabel} onClick={onClose}>
+                  <CloseIcon />
+                </IconButton>
               ) : null}
             </div>
-            {showCloseButton ? (
-              <IconButton appearance="subtle" size="sm" aria-label={closeLabel} onClick={onClose}>
-                <CloseIcon />
-              </IconButton>
+            {description != null ? (
+              <p id={descriptionId} className={styles.description}>
+                {description}
+              </p>
             ) : null}
           </div>
         ) : null}

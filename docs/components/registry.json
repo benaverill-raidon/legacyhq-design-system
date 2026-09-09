@@ -6993,7 +6993,7 @@
       },
       {
         "name": "header",
-        "description": "Rendered when there's a title or close button. Status icon + title + close Icon Button. Padding --spacing-2xl/--spacing-lg."
+        "description": "Rendered when there's a title, description, or close button. A column: a title row (status icon + title + close Icon Button) and an optional description below, gap --spacing-sm. Padding --spacing-2xl/--spacing-lg."
       },
       {
         "name": "statusIcon",
@@ -7002,6 +7002,10 @@
       {
         "name": "title",
         "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby."
+      },
+      {
+        "name": "description",
+        "description": "Supporting line below the title row; --typography-body-md, --color-content-default. Wired as aria-describedby when present."
       },
       {
         "name": "close",
@@ -7034,6 +7038,12 @@
         "required": false,
         "default": null,
         "description": "Header heading and the dialog's accessible name (aria-labelledby)."
+      },
+      "description": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Supporting line below the title in the header (body-md, content/default). When present, wired as the dialog's aria-describedby."
       },
       "appearance": {
         "type": "ModalAppearance",
@@ -7146,7 +7156,8 @@
         "panelRadius": "--border-radius-xxl (16px)",
         "panelWidths": "400 / 600 / 752 / 968 px",
         "headerPadding": "--spacing-2xl (top/l/r), --spacing-lg (bottom)",
-        "headerGap": "--spacing-lg",
+        "headerColumnGap": "--spacing-sm (title row to description)",
+        "titleRowGap": "--spacing-lg (title to close button)",
         "titleIconGap": "--spacing-sm",
         "bodyInset": "--spacing-2xl",
         "footerPadding": "--spacing-lg (top), --spacing-2xl (l/r/bottom)",
@@ -7154,6 +7165,7 @@
       },
       "typography": {
         "title": "--typography-heading-md-*",
+        "description": "--typography-body-md-*",
         "body": "--typography-body-md-*"
       }
     },
@@ -7185,7 +7197,7 @@
       "componentSetNodeId": "2456:12608",
       "componentSetName": "modal-dialog",
       "variantCount": 12,
-      "verifiedAt": "2026-09-08",
+      "verifiedAt": "2026-09-09",
       "figmaVariantAxes": {
         "appearance": [
           "default",
@@ -7213,12 +7225,41 @@
         {
           "name": "modal-header",
           "componentSetNodeId": "2456:2409",
-          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + Close icon-button (subtle, sm). warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
+          "note": "appearance default/warning/error. A vertical stack (gap spacing/sm): a title row (title heading/md content/default + Close icon-button subtle/sm; warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error) and an optional description (showDescription/descriptionText props) in body/md content/default below. The header also carries a `showChipGroup` boolean (off by default) - a chip row in place of the title, niche; not built as a dedicated code prop (pass chips/breadcrumbs as `title` with an aria-label if ever needed)."
         },
         {
           "name": "modal-footer",
           "componentSetNodeId": "2456:11691",
-          "note": "appearance default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot."
+          "note": "appearance default/warning/error; a right-aligned action group (Cancel + a Confirm whose tone follows the appearance: primary/warning/error). Those footer buttons are example content - the code footer is a right-aligned slot the consumer fills, and the consumer sets the Confirm tone to match the appearance (the Figma variants pair them). Its left-side filter area is example content, hidden by default.",
+          "preferredSlots": {
+            "actions": [
+              "Button",
+              "Icon Button",
+              "Link",
+              "Link Button",
+              "Split Button",
+              "Toggle Button",
+              "Toggle Icon Button"
+            ],
+            "info": [
+              "Button",
+              "Avatar Group",
+              "Checkbox",
+              "Chip",
+              "Icon Button",
+              "Button Group",
+              "Label",
+              "Link",
+              "Link Button",
+              "Progress Bar circular",
+              "Progress Bar linear",
+              "Dropdown Menu",
+              "Spinner",
+              "Switch",
+              "Tag"
+            ]
+          },
+          "preferredSlotsNote": "From the modal-footer Figma slot preferred-values lists (verified live 2026-09-09): 'actions' is the right-aligned button-group slot (= the code footer slot); 'info' is the left info/filter slot, not exposed in code."
         }
       ],
       "apiAdaptationNotes": [

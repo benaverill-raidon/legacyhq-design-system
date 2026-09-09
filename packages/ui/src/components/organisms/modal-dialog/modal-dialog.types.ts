@@ -17,6 +17,12 @@ export interface ModalDialogProps {
    */
   title?: React.ReactNode;
   /**
+   * A supporting line rendered below the title in the header (Figma's modal-header description). It's
+   * `body-md` text and, when present, is wired as the dialog's `aria-describedby`. Omit for a
+   * title-only header.
+   */
+  description?: React.ReactNode;
+  /**
    * Semantic intent. `warning` / `error` prepend a status icon to the title (in the matching
    * colour); `default` shows none. It does not tone the footer buttons - pair `appearance="error"`
    * with a matching Confirm button (e.g. `<Button appearance="primary" tone="error">`).

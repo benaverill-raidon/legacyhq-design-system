@@ -53,9 +53,12 @@ does it once.
 ## Content
 
 ### What content can be displayed?
-- Header: a title (+ optional status icon for warning/error) and a close button
+- Header: a title (+ optional status icon for warning/error), an optional description line, and a
+  close button
 - Body: arbitrary content, scrollable when tall
-- Footer: right-aligned actions (typically Cancel + Confirm)
+- Footer: right-aligned actions (typically Cancel + Confirm). Built to hold action controls - Figma's
+  footer preferred-slot list is Button, Icon Button, Link, Link Button, Split Button, Toggle Button,
+  Toggle Icon Button
 
 ### Character Limits
 None - the title wraps; the body scrolls.

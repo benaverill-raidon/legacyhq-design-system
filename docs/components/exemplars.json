@@ -2763,6 +2763,15 @@
         }
       },
       {
+        "name": "Title with a supporting description",
+        "description": null,
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Move to archive?\"\n  description=\"Archived projects are hidden from the dashboard but can be restored at any time.\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleArchive}>Archive</Button>\n    </>\n  }\n>\n  <p>The team keeps access; only its dashboard placement changes.</p>\n</ModalDialog>",
+        "props": {
+          "title": "Move to archive?",
+          "description": "Archived projects are hidden from the dashboard but can be restored at any time."
+        }
+      },
+      {
         "name": "Informational dialog with no footer",
         "description": null,
         "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"What's new\">\n  <p>Read about the latest changes.</p>\n</ModalDialog>",

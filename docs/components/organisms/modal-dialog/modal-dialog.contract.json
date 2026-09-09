@@ -19,7 +19,7 @@
     "componentSetNodeId": "2456:12608",
     "componentSetName": "modal-dialog",
     "variantCount": 12,
-    "verifiedAt": "2026-09-08",
+    "verifiedAt": "2026-09-09",
     "figmaVariantAxes": {
       "appearance": ["default", "warning", "error"],
       "width": ["small", "medium", "large", "extra large"]
@@ -27,8 +27,8 @@
     "panelWidths": { "small": 400, "medium": 600, "large": 752, "extraLarge": 968 },
     "subParts": [
       { "name": "blanket", "note": "Backdrop overlay filling the viewport, fill color/background/brand/secondary/overlay/blanket, centering the panel. Figma's 64px around the panel was artboard framing; the code insets the panel with --spacing-4xl." },
-      { "name": "modal-header", "componentSetNodeId": "2456:2409", "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + Close icon-button (subtle, sm). warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed." },
-      { "name": "modal-footer", "componentSetNodeId": "2456:11691", "note": "appearance default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot." }
+      { "name": "modal-header", "componentSetNodeId": "2456:2409", "note": "appearance default/warning/error. A vertical stack (gap spacing/sm): a title row (title heading/md content/default + Close icon-button subtle/sm; warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error) and an optional description (showDescription/descriptionText props) in body/md content/default below. The header also carries a `showChipGroup` boolean (off by default) - a chip row in place of the title, niche; not built as a dedicated code prop (pass chips/breadcrumbs as `title` with an aria-label if ever needed)." },
+      { "name": "modal-footer", "componentSetNodeId": "2456:11691", "note": "appearance default/warning/error; a right-aligned action group (Cancel + a Confirm whose tone follows the appearance: primary/warning/error). Those footer buttons are example content - the code footer is a right-aligned slot the consumer fills, and the consumer sets the Confirm tone to match the appearance (the Figma variants pair them). Its left-side filter area is example content, hidden by default.", "preferredSlots": { "actions": ["Button", "Icon Button", "Link", "Link Button", "Split Button", "Toggle Button", "Toggle Icon Button"], "info": ["Button", "Avatar Group", "Checkbox", "Chip", "Icon Button", "Button Group", "Label", "Link", "Link Button", "Progress Bar circular", "Progress Bar linear", "Dropdown Menu", "Spinner", "Switch", "Tag"] }, "preferredSlotsNote": "From the modal-footer Figma slot preferred-values lists (verified live 2026-09-09): 'actions' is the right-aligned button-group slot (= the code footer slot); 'info' is the left info/filter slot, not exposed in code." }
     ],
     "apiAdaptationNotes": [
       "Built standalone, not on the Popup primitive - Popup is a trigger-anchored positioned popover with no focus trap, backdrop, aria-modal, or scroll lock; a modal is a centered focus-trapped overlay, so createPortal + a focus trap are used directly.",
@@ -54,9 +54,10 @@
   "anatomy": [
     { "part": "backdrop", "element": "div.backdrop", "required": true, "description": "Fixed full-viewport blanket that centers the panel with --spacing-4xl inset; a genuine click on it requests close." },
     { "part": "panel", "element": "div.panel (role=dialog, aria-modal, tabIndex -1)", "required": true, "description": "The dialog surface - raised-surface bg, --border-radius-xxl, --color-border-default. A flex column of header/body/footer; width per the width prop; shrinks on narrow viewports." },
-    { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title or close button. Status icon + title + close Icon Button. Padding --spacing-2xl/--spacing-lg." },
+    { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title, description, or close button. A column: a title row (status icon + title + close Icon Button) and an optional description below, gap --spacing-sm. Padding --spacing-2xl/--spacing-lg." },
     { "part": "statusIcon", "element": "span.statusIcon (aria-hidden)", "required": false, "description": "Decorative md status icon for warning/error appearance, coloured content/warning or content/error." },
     { "part": "title", "element": "h2.title", "required": false, "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby." },
+    { "part": "description", "element": "p.description", "required": false, "description": "Supporting line below the title row; --typography-body-md, --color-content-default. Wired as aria-describedby when present." },
     { "part": "close", "element": "IconButton (subtle, sm)", "required": false, "description": "The close (X) button; shown by default; labelled by closeLabel." },
     { "part": "body", "element": "div.body", "required": true, "description": "The scrollable content slot; --typography-body-md; inset by --spacing-2xl; scrolls when tall while header/footer stay pinned." },
     { "part": "footer", "element": "div.footer", "required": false, "description": "Right-aligned action slot; gap --spacing-sm; padding --spacing-lg/--spacing-2xl. Rendered when footer is provided." }
@@ -65,6 +66,7 @@
     "open": { "type": "boolean", "required": true, "description": "Whether the dialog is shown (controlled)." },
     "onClose": { "type": "() => void", "required": true, "description": "Called on any close request (close button, Escape, backdrop). The consumer sets open to false." },
     "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Header heading and the dialog's accessible name (aria-labelledby)." },
+    "description": { "type": "React.ReactNode", "required": false, "default": null, "description": "Supporting line below the title in the header (body-md, content/default). When present, wired as the dialog's aria-describedby." },
     "appearance": { "type": "ModalAppearance", "required": false, "default": "default", "enum": ["default", "warning", "error"], "description": "Prepends a status icon to the title (warning/error). Does not tone the footer buttons." },
     "width": { "type": "ModalWidth", "required": false, "default": "medium", "enum": ["small", "medium", "large", "extraLarge"], "description": "Panel width: 400 / 600 / 752 / 968 px." },
     "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "The dialog body; scrolls when taller than the viewport allows." },
@@ -85,7 +87,13 @@
   "states": ["open", "closed"],
   "slots": [
     { "name": "children", "required": false, "supports": ["arbitrary body content"], "interactive": true },
-    { "name": "footer", "required": false, "supports": ["Button actions (Cancel + Confirm)"], "interactive": true }
+    {
+      "name": "footer",
+      "required": false,
+      "interactive": true,
+      "supports": ["Button (typically Cancel + Confirm)", "Icon Button", "Link", "Link Button", "Split Button", "Toggle Button", "Toggle Icon Button"],
+      "note": "Right-aligned actions slot the consumer fills (any ReactNode). The 'supports' list mirrors Figma's modal-footer action-group preferred-slot list - the controls the footer is designed to hold. Figma additionally has a left-aligned info/filter area with a broader preferred-slot list (Button, Avatar Group, Checkbox, Chip, Icon Button, Button Group, Label, Link, Link Button, Progress Bar circular/linear, Dropdown Menu, Spinner, Switch, Tag); the code does not expose that as a separate slot."
+    }
   ],
   "tokens": {
     "color": {
@@ -101,13 +109,14 @@
       "panelRadius": "--border-radius-xxl (16px)",
       "panelWidths": "400 / 600 / 752 / 968 px",
       "headerPadding": "--spacing-2xl (top/l/r), --spacing-lg (bottom)",
-      "headerGap": "--spacing-lg",
+      "headerColumnGap": "--spacing-sm (title row to description)",
+      "titleRowGap": "--spacing-lg (title to close button)",
       "titleIconGap": "--spacing-sm",
       "bodyInset": "--spacing-2xl",
       "footerPadding": "--spacing-lg (top), --spacing-2xl (l/r/bottom)",
       "footerActionGap": "--spacing-sm"
     },
-    "typography": { "title": "--typography-heading-md-*", "body": "--typography-body-md-*" }
+    "typography": { "title": "--typography-heading-md-*", "description": "--typography-body-md-*", "body": "--typography-body-md-*" }
   },
   "accessibility": {
     "interactive": true,
@@ -136,7 +145,7 @@
     "A backdrop click closes only on a genuine press-and-release on the backdrop, not a drag that ends there.",
     "appearance warning/error prepend a decorative status icon; default shows none.",
     "width sets the panel width; the panel shrinks below it on narrow viewports.",
-    "Render the header when there's a title or close button; render the footer when footer is provided.",
+    "Render the header when there's a title, description, or close button; render the description below the title row when provided; render the footer when footer is provided.",
     "Support className composition on the panel."
   ],
   "compositionRules": [
@@ -179,7 +188,8 @@
   ],
   "acceptanceCriteria": [
     "Renders nothing when open is false; portals a role='dialog' aria-modal='true' panel into the body when open.",
-    "Named by title (aria-labelledby) or aria-label when there's no title.",
+    "Named by title (aria-labelledby) or aria-label when there's no title; described by the description (aria-describedby) when one is provided.",
+    "Renders the description below the title row (body-md) when provided; renders the header for a description-only dialog.",
     "Close button, Escape (closeOnEscape), and a backdrop click (closeOnBackdropClick) each call onClose; a click inside the panel does not.",
     "Focus moves into the panel on open, is trapped on Tab, and is restored to the trigger on close.",
     "Page scroll is locked while open and restored on close.",
@@ -187,8 +197,8 @@
     "width sets the panel width; the panel shrinks below it on narrow viewports.",
     "Renders a right-aligned footer when footer is provided; the body scrolls when tall.",
     "Composes className onto the panel; uses only semantic tokens; works in light and dark themes.",
-    "Storybook includes Playground, Appearances, Widths, DestructiveConfirmation, ScrollingBody, and EdgeCases.",
-    "Tests cover open/closed, portal + ARIA, all three close paths, focus move/trap/restore, scroll lock, appearance icon, width, and className."
+    "Storybook includes Playground, Appearances, WithDescription, Widths, DestructiveConfirmation, ScrollingBody, and EdgeCases.",
+    "Tests cover open/closed, portal + ARIA (incl. description/aria-describedby), all three close paths, focus move/trap/restore, scroll lock, appearance icon, width, and className."
   ],
   "knownLimitations": [
     "No enter/exit transition beyond a light fade-in.",

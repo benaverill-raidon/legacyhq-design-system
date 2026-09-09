@@ -346,13 +346,28 @@ describe('InlineEdit', () => {
     expect(container.firstChild).toHaveAttribute('data-editing', 'true');
   });
 
-  it('stacks the action row below the field, anchored to the right edge, with an 8px gap', () => {
+  it('stacks the action row below the field, anchored to the right edge, with a 4px gap', () => {
     const rootRule = inlineEditCss.match(/\.root\s*\{([^}]*)\}/);
     const actionsRule = inlineEditCss.match(/\.actions\s*\{([^}]*)\}/);
 
     expect(rootRule?.[1]).toContain('flex-direction: column;');
     expect(rootRule?.[1]).toContain('gap: var(--spacing-sm);');
+    // Positioned at the end; the pair's gap is tightened to 4px, overriding Button Group's 8px.
     expect(actionsRule?.[1]).toContain('align-self: flex-end;');
-    expect(actionsRule?.[1]).toContain('gap: var(--spacing-sm);');
+    expect(actionsRule?.[1]).toContain('gap: var(--spacing-xs);');
+  });
+
+  it('wraps the confirm/cancel buttons in a Button Group, which owns the row layout and gap', () => {
+    render(
+      <InlineEdit value="Q3 Planning">
+        <input aria-label="Title" />
+      </InlineEdit>,
+    );
+
+    fireEvent.focus(screen.getByLabelText('Title'));
+
+    const group = screen.getByRole('button', { name: 'Confirm' }).closest('[data-orientation]');
+    expect(group).toHaveAttribute('data-orientation', 'horizontal');
+    expect(group).toContainElement(screen.getByRole('button', { name: 'Cancel' }));
   });
 });

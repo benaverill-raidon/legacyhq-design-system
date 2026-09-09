@@ -32,6 +32,14 @@ export interface ModalDialogProps {
   showCloseButton?: boolean;
   /** Accessible label for the close button. Default "Close". */
   closeLabel?: string;
+  /**
+   * Called when the header expand (maximize) button is clicked. Provide it to show an Expand button
+   * before Close in the header; when both are shown they share a Button Group. Omit for no expand
+   * button (the default).
+   */
+  onExpand?: () => void;
+  /** Accessible label / tooltip for the expand button. Default "Expand". */
+  expandLabel?: string;
   /** Close when Escape is pressed. Default true. */
   closeOnEscape?: boolean;
   /** Close when the backdrop (outside the panel) is clicked. Default true. */

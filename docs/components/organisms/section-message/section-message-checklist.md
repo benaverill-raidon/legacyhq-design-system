@@ -7,7 +7,8 @@ Section Message
 ## Description
 
 A bordered, rounded, in-context status panel carrying an appearance-driven status with an optional
-title, a description, optional inline Link actions, and an optional dismiss button.
+title, a description, optional Link Button actions (in a Button Group), and an optional dismiss
+button.
 
 ## Status
 
@@ -25,8 +26,8 @@ Organism.
 - [ ] Title and description use the default content color; only the icon and border take the status
       color.
 - [ ] The description wraps (no truncation), unlike Banner's single line.
-- [ ] Actions are Links; the component inserts middot separators (a single top-level fragment is
-      unwrapped).
+- [ ] Actions are Link Buttons laid out in a Button Group the caller passes; the component injects
+      no separators (previously middot-separated Links).
 - [ ] Dismiss is opt-in (`isDismissible`), hides the message, and calls `onDismiss`.
 - [ ] The icon keeps its own status color rather than inheriting.
 - [ ] `role` defaults to `status` and is overridable.
@@ -66,17 +67,16 @@ role: status
 
 ## Tokens
 
-- [ ] padding `--spacing-lg`, root gap `--spacing-lg`, content gap `--spacing-sm`, actions gap `--spacing-xs`.
+- [ ] padding `--spacing-lg`, root gap `--spacing-lg`, content gap `--spacing-sm`, actions gap `--spacing-sm` (owned by the ButtonGroup).
 - [ ] border `--border-width-sm`, radius `--border-radius-xl`.
 - [ ] title `heading-sm`, description `body-md`.
 - [ ] per-appearance subtle background + border + status-icon color tokens (no primitives, no raw values).
-- [ ] separator `--color-content-subtle`.
 
 ## Visual and structural requirements
 
 - [ ] Bordered, rounded box; content wraps.
 - [ ] Status icon in its own status color, `aria-hidden`.
-- [ ] Middot inserted between actions; region rendered only when actions provided.
+- [ ] Actions rendered as passed (no injected separators); region rendered only when actions provided.
 - [ ] Dismiss button only when `isDismissible`.
 
 ## Accessibility
@@ -98,7 +98,7 @@ role: status
 - [ ] Renders description; renders/omits title.
 - [ ] Defaults to role status + information.
 - [ ] Applies the appearance class; renders a status icon.
-- [ ] Middot between actions; no separator for one; region omitted for none.
+- [ ] Actions rendered as passed (no injected separators); region omitted for none.
 - [ ] Not dismissible by default; dismisses + calls `onDismiss`.
 - [ ] Overridable role; forwards the ref.
 - [ ] Uses MUI: no. Uses Tailwind: no.

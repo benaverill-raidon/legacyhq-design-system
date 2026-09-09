@@ -18,7 +18,8 @@ packages/ui/src/components/
   molecules/    # composed from atoms/primitives (documented exceptions:
                 # tag-group, avatar-group, split-button, chip, and select also
                 # compose the dropdown-menu organism — see each one's own "Tier
-                # exception" note)
+                # exception" note; inline-edit composes the button-group molecule
+                # for its confirm/cancel action row)
   organisms/    # composed from molecules/atoms/primitives — larger, more
                 # complete UI sections (menu, dropdown-menu, ...)
 

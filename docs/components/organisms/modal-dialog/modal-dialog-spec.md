@@ -7,8 +7,8 @@ Interrupt the flow to focus the user on a single task or decision, over a backdr
 behaviour (portal, focus trap, dismissal, scroll lock) handled.
 
 ### Description
-A controlled overlay: a blanket backdrop centering a panel of header (title + close), a scrollable
-body, and a footer of actions. The consumer owns `open` and reacts to `onClose`.
+A controlled overlay: a blanket backdrop centering a panel of header (title + header actions), a
+scrollable body, and a footer of actions. The consumer owns `open` and reacts to `onClose`.
 
 ### Category
 Organism - composes atoms (Icon Button, Buttons, status Icon) into a complete self-contained overlay
@@ -46,11 +46,13 @@ with interaction and accessibility responsibilities.
 ModalDialog (portal -> document.body)
 └─ div.backdrop (fixed inset 0, blanket, flex center, padding --spacing-4xl)
    └─ div.panel (role=dialog, aria-modal, aria-labelledby/label, tabIndex -1, width_*)
-      ├─ div.header (flex, padding 24/24/16, gap --spacing-lg)   [when title or close]
+      ├─ div.header (flex, padding 24/24/16, gap --spacing-lg)   [when title or header action]
       │  ├─ div.titleArea (flex, gap --spacing-sm)
       │  │  ├─ span.statusIcon (aria-hidden; warning/error only; md Icon)
       │  │  └─ h2.title (#id, --typography-heading-md)
-      │  └─ IconButton (subtle, sm, aria-label=closeLabel)        [showCloseButton]
+      │  └─ headerActions: ButtonGroup(.headerActions) when both are shown, else the lone button
+      │     ├─ IconButton (subtle, sm, aria-label=expandLabel, GrowDiagonalIcon)  [onExpand]
+      │     └─ IconButton (subtle, sm, aria-label=closeLabel)        [showCloseButton]
       ├─ div.body (flex 1, overflow-y auto, padding-inline --spacing-2xl)
       └─ div.footer (flex, justify end, gap --spacing-sm, padding 16/24/24)  [when footer]
 ```
@@ -76,6 +78,9 @@ ModalDialog (portal -> document.body)
 - **Scroll lock.** `document.body.style.overflow = 'hidden'` while open, restored on close.
 - **Appearance.** `warning` / `error` prepend a decorative status icon to the title; does not tone
   the footer buttons.
+- **Header actions.** The header ends with the close button; pass `onExpand` to add an Expand
+  (maximize) button before it. When both are shown they share a Button Group; a lone button renders
+  on its own. `expandLabel` / `closeLabel` set their accessible names (and tooltips).
 
 ---
 
@@ -91,6 +96,7 @@ ModalDialog (portal -> document.body)
 | Panel widths | 400 / 600 / 752 / 968 px |
 | Header padding | `--spacing-2xl` (top/l/r), `--spacing-lg` (bottom) |
 | Header gap / title-icon gap | `--spacing-lg` / `--spacing-sm` |
+| Header action gap (expand ↔ close) | `--spacing-sm` (via the header Button Group) |
 | Title typography | `--typography-heading-md-*`, `--color-content-default` |
 | Status icon colour | `--color-content-warning` / `--color-content-error` |
 | Body inset / typography | `--spacing-2xl` / `--typography-body-md-*` |
@@ -131,8 +137,10 @@ ModalDialog (portal -> document.body)
 - `warning` / `error` render a status icon; `default` renders none.
 - `width` sets the panel width; the panel shrinks below it on narrow viewports.
 - Renders a right-aligned footer when `footer` is provided; the body scrolls when tall.
+- Shows an Expand button (grouped with Close in a Button Group) when `onExpand` is provided; none by
+  default.
 - Composes `className` onto the panel; uses only semantic tokens; works in light and dark themes.
-- Storybook includes Playground, Appearances, Widths, DestructiveConfirmation, ScrollingBody, and
-  EdgeCases.
-- Tests cover open/closed, portal + ARIA, all three close paths, focus move/trap/restore, scroll
-  lock, appearance icon, width, and className.
+- Storybook includes Playground, Appearances, Widths, DestructiveConfirmation, ScrollingBody,
+  HeaderExpand, and EdgeCases.
+- Tests cover open/closed, portal + ARIA, all three close paths, the expand button and its grouping,
+  focus move/trap/restore, scroll lock, appearance icon, width, and className.

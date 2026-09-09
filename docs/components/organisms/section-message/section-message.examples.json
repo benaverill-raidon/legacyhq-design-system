@@ -21,12 +21,12 @@
     },
     {
       "name": "Warning with actions",
-      "description": "Two Link actions, separated automatically by a middot.",
-      "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<><Link href=\"/upgrade\">Upgrade</Link><Link href=\"/billing\">Billing</Link></>}>Your trial ends in three days.</SectionMessage>",
+      "description": "Two Link Button actions grouped in a ButtonGroup that lays them out as a row.",
+      "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
       "props": {
         "appearance": "warning",
         "title": "Your trial ends soon",
-        "actions": "Link elements (middots inserted)",
+        "actions": "a ButtonGroup of LinkButton elements",
         "children": "Your trial ends in three days."
       }
     },

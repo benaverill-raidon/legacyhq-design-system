@@ -73,6 +73,11 @@
   flex: 0 0 auto;
 }
 
+/* Header actions (Expand + Close) grouped in a Button Group; keep them from shrinking. */
+.headerActions {
+  flex: 0 0 auto;
+}
+
 .title {
   margin: 0;
   min-inline-size: 0;

@@ -3761,7 +3761,7 @@
       },
       {
         "name": "actions",
-        "description": "Trailing cancel/confirm IconButton pair; renders only once editing has started, when actionButtons is not false."
+        "description": "Trailing cancel/confirm IconButton pair, wrapped in a ButtonGroup for the row layout; renders only once editing has started, when actionButtons is not false. The .actions class positions the group (align-self: flex-end) and tightens its gap to 4px (--spacing-xs), overriding Button Group's default 8px for this icon-only pair."
       }
     ],
     "props": {
@@ -3823,7 +3823,7 @@
     "tokens": {
       "layout": {
         "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
-        "actionsGap": "--spacing-sm (8px, between the cancel and confirm buttons themselves, matching Button Group)"
+        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
       }
     },
     "accessibility": {
@@ -6993,7 +6993,7 @@
       },
       {
         "name": "header",
-        "description": "Rendered when there's a title or close button. Status icon + title + close Icon Button. Padding --spacing-2xl/--spacing-lg."
+        "description": "Rendered when there's a title or any header action. Status icon + title + header actions. Padding --spacing-2xl/--spacing-lg."
       },
       {
         "name": "statusIcon",
@@ -7002,6 +7002,14 @@
       {
         "name": "title",
         "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby."
+      },
+      {
+        "name": "headerActions",
+        "description": "Groups the expand + close buttons when both are shown; a lone button renders on its own."
+      },
+      {
+        "name": "expand",
+        "description": "Optional header expand (maximize) button (GrowDiagonalIcon), shown when onExpand is provided; labelled by expandLabel; sits before close."
       },
       {
         "name": "close",
@@ -7082,6 +7090,18 @@
         "default": "Close",
         "description": "Accessible label for the close button."
       },
+      "onExpand": {
+        "type": "() => void",
+        "required": false,
+        "default": null,
+        "description": "Called when the header expand (maximize) button is clicked. Provide it to show an Expand button before Close (grouped in a Button Group when both are shown)."
+      },
+      "expandLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Expand",
+        "description": "Accessible label / tooltip for the expand button."
+      },
       "closeOnEscape": {
         "type": "boolean",
         "required": false,
@@ -7148,6 +7168,7 @@
         "headerPadding": "--spacing-2xl (top/l/r), --spacing-lg (bottom)",
         "headerGap": "--spacing-lg",
         "titleIconGap": "--spacing-sm",
+        "headerActionGap": "--spacing-sm (between expand and close, owned by the header Button Group)",
         "bodyInset": "--spacing-2xl",
         "footerPadding": "--spacing-lg (top), --spacing-2xl (l/r/bottom)",
         "footerActionGap": "--spacing-sm"
@@ -7174,6 +7195,7 @@
     "relatedComponents": [
       "Button",
       "Icon Button",
+      "Button Group",
       "Toast",
       "Dropdown Menu",
       "Menu"
@@ -7213,7 +7235,7 @@
         {
           "name": "modal-header",
           "componentSetNodeId": "2456:2409",
-          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + Close icon-button (subtle, sm). warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
+          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + a header action group: an Expand (grow_diagonal) icon-button and the Close icon-button (both subtle, sm) in a Button Group. warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
         },
         {
           "name": "modal-footer",
@@ -7404,7 +7426,7 @@
       },
       {
         "name": "actions",
-        "description": "optional Links, separated by an inserted middot"
+        "description": "optional actions (typically Link Buttons), laid out by a ButtonGroup the caller passes; no separators are injected"
       },
       {
         "name": "dismiss",
@@ -7440,7 +7462,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Optional Links; middot separators are inserted between them."
+        "description": "Optional actions (typically Link Buttons). Wrap multiple in a ButtonGroup, which lays them out as a row; a single action can be passed bare."
       },
       "isDismissible": {
         "type": "boolean",
@@ -7488,7 +7510,7 @@
           "padding": "--spacing-lg",
           "rootGap": "--spacing-lg",
           "contentGap": "--spacing-sm",
-          "actionsGap": "--spacing-xs"
+          "actionsGap": "--spacing-sm (the ButtonGroup between the actions owns this; the .actions wrapper matches it for bare actions)"
         },
         "border": {
           "width": "--border-width-sm",
@@ -7512,8 +7534,7 @@
           "errorBorder": "--color-border-error",
           "errorIcon": "--color-content-error",
           "title": "--color-content-default",
-          "description": "--color-content-default",
-          "separator": "--color-content-subtle"
+          "description": "--color-content-default"
         }
       }
     },
@@ -7529,7 +7550,8 @@
       "Banner",
       "Toast",
       "InlineMessage",
-      "Link",
+      "LinkButton",
+      "ButtonGroup",
       "IconButton"
     ],
     "contentCompleteness": "full",
@@ -7540,7 +7562,7 @@
       "componentName": "section-message",
       "variantCount": 4,
       "verifiedAt": "2026-09-01",
-      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
+      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
     }
   },
   {

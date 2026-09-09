@@ -90,6 +90,44 @@ describe('ModalDialog', () => {
     expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
   });
 
+  it('renders no expand button by default', () => {
+    render(
+      <ModalDialog open onClose={() => {}} title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    expect(screen.queryByRole('button', { name: 'Expand' })).toBeNull();
+  });
+
+  it('shows an expand button, grouped with close, when onExpand is provided', () => {
+    const onExpand = vi.fn();
+    render(
+      <ModalDialog open onClose={() => {}} onExpand={onExpand} title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    const expand = screen.getByRole('button', { name: 'Expand' });
+    fireEvent.click(expand);
+    expect(onExpand).toHaveBeenCalledTimes(1);
+
+    // Expand and Close share a Button Group (the header action row).
+    const group = expand.closest('[data-orientation]');
+    expect(group).toHaveAttribute('data-orientation', 'horizontal');
+    expect(group).toContainElement(screen.getByRole('button', { name: 'Close' }));
+  });
+
+  it('supports a custom expandLabel', () => {
+    render(
+      <ModalDialog open onClose={() => {}} onExpand={() => {}} expandLabel="Maximize" title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Maximize' })).toBeInTheDocument();
+  });
+
   it('closes on Escape, unless closeOnEscape is false', () => {
     const onClose = vi.fn();
     const { rerender } = render(

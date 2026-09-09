@@ -36,8 +36,8 @@ The component does not include:
 
 | Size | Usage | Typography | Padding |
 |---|---|---|---|
-| `sm` | Dense metadata, tables, compact cards | `overline-sm` | block `spacing-025`, inline `spacing-050` |
-| `md` | Default label size, cards, page sections | `overline-md` | block `spacing-025`, inline `spacing-075` |
+| `sm` | Dense metadata, tables, compact cards | `heading-xxs` | block `spacing-xxs`, inline `spacing-xs` |
+| `md` | Default label size, cards, page sections | `heading-xs` | block `spacing-none` (0, so the 24px line-height sets the height), inline `spacing-sm` |
 
 ### Tone
 
@@ -120,19 +120,20 @@ emphasis = 'subtle'
 
 | Size | Token |
 |---|---|
-| `sm` | `overline-sm` |
-| `md` | `overline-md` |
+| `sm` | `heading-xxs` |
+| `md` | `heading-xs` |
 
-Overline typography should apply:
+Heading typography should apply:
 
 - Public Sans
 - Font weight 600
-- No text-transform (the uppercase transform previously applied here has been removed from the
-  overline typography tokens - text now renders in whatever case the caller passes)
-- `sm`: 12px font size, 16px line height, 0.5 letter spacing
-- `md`: 14px font size, 20px line height, 1px letter spacing
+- No text-transform (text renders in whatever case the caller passes)
+- `sm`: 12px font size, 16px line height, 0 letter spacing
+- `md`: 14px font size, 24px line height, 0 letter spacing
 
-If generated typography tokens do not expose `overline-sm` and `overline-md` directly, implement local classes using the corresponding semantic or primitive typography variables. Do not hardcode raw values unless the token pipeline does not yet expose the needed variables.
+The `md` line height (24px) sets the label's height, so `md` uses zero block padding (`spacing-none`); `sm` keeps `spacing-xxs` block padding around its 16px line height.
+
+If generated typography tokens do not expose `heading-xxs` and `heading-xs` directly, implement local classes using the corresponding semantic or primitive typography variables. Do not hardcode raw values unless the token pipeline does not yet expose the needed variables.
 
 ## Tone Token Mapping
 

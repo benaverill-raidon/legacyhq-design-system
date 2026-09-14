@@ -63,6 +63,27 @@ function ChipDropdownSegment({
 }) {
   const [open, setOpen] = React.useState(false);
 
+  const button = (
+    <button
+      type="button"
+      className={mergeClassNames(
+        styles.segment,
+        segmentClassName,
+        focusRingClassNames.focusRing,
+        focusRingClassNames.focusRingDefault,
+      )}
+      disabled={disabled}
+      onClick={() => setOpen((current) => !current)}
+    >
+      {preview ? (
+        <span className={styles.preview} aria-hidden="true">
+          {preview}
+        </span>
+      ) : null}
+      <span className={styles.segmentLabel}>{segment.label}</span>
+    </button>
+  );
+
   return (
     <DropdownMenu
       aria-label={segment.menuAriaLabel ?? fallbackMenuName}
@@ -71,24 +92,7 @@ function ChipDropdownSegment({
       showSearch={false}
       sections={segment.sections}
     >
-      <button
-        type="button"
-        className={mergeClassNames(
-          styles.segment,
-          segmentClassName,
-          focusRingClassNames.focusRing,
-          focusRingClassNames.focusRingDefault,
-        )}
-        disabled={disabled}
-        onClick={() => setOpen((current) => !current)}
-      >
-        {preview ? (
-          <span className={styles.preview} aria-hidden="true">
-            {preview}
-          </span>
-        ) : null}
-        <span className={styles.segmentLabel}>{segment.label}</span>
-      </button>
+      {segment.tooltip && !disabled ? <Tooltip content={segment.tooltip}>{button}</Tooltip> : button}
     </DropdownMenu>
   );
 }

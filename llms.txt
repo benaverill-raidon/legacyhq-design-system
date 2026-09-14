@@ -89,7 +89,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
-## Organisms (15)
+## Organisms (16)
 
 - [banner](docs/components/organisms/banner/banner.md)
 - [date-picker](docs/components/organisms/date-picker/date-picker.md)
@@ -104,6 +104,8 @@ rules, and the task→file routing table that says which of a component's up to
   backdrop + centered panel with header/body/footer; portal, focus trap, scroll lock, aria-modal)
 - [progress-tracker](docs/components/organisms/progress-tracker/progress-tracker.md)
 - [section-message](docs/components/organisms/section-message/section-message.md)
+- [table](docs/components/organisms/table/table.md) (data-table shell: header + filter toolbar +
+  column-config grid with sorting/selection/loading/empty + pagination footer)
 - [tabs](docs/components/organisms/tabs/tabs.md)
 - [time-picker](docs/components/organisms/time-picker/time-picker.md)
 - [toast](docs/components/organisms/toast/toast.md)

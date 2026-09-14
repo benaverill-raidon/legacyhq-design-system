@@ -1,0 +1,464 @@
+/*
+ * Table: a data-table organism. Spacing/typography/colour from Figma's drag-handle + cell components
+ * (Components v1.0.0, page "Table", verified via Desktop Bridge 2026-09-14):
+ *   - header: title heading/lg + description body/md subtle, pt-3xl pb-lg, px-2xl (md) / px-lg (sm), gap-md
+ *   - toolbar: search + filter/configure icon buttons (right), chips row below; border-bottom separator
+ *   - header cell: heading/xs SemiBold, colour content/subtle, background elevation/surface/default,
+ *     height 40 (md) / 32 (sm), inline padding spacing/sm, bottom border
+ *   - body cell: body/md content/default, row height 64 (md) / 40 (sm), inline padding spacing/sm,
+ *     bottom row divider
+ *   - outer gutter: spacing/2xl (24px) for md, spacing/lg (16px) for sm
+ *   - selection column: 40px
+ *   - drag-handle: border-default @16% (default), border-bold (hover/pressed); width 1px all states;
+ *     hover = colour change only; pressed extends with ~2px inset
+ *   - no border/radius on the table wrapper — separator is toolbar's border-block-end only
+ */
+.table {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  color: var(--color-content-default);
+}
+
+/* --- Header (title + description + actions — sits above the table body) --- */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  padding-block: var(--spacing-3xl) var(--spacing-lg);
+  padding-inline: var(--spacing-2xl);
+}
+
+.headingArea {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  letter-spacing: var(--typography-heading-lg-letter-spacing);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 0 0 auto;
+}
+
+/* --- Table body (toolbar + grid + footer — no border/radius per Figma) --- */
+.tableBody {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  background: var(--color-elevation-surface-raised-default);
+}
+
+/* --- Toolbar (search row + active-filters row + bottom separator) --- */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-block: var(--spacing-lg) var(--spacing-xl);
+  padding-inline: var(--spacing-2xl);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.toolbarControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.search {
+  flex: 1 1 auto;
+  max-inline-size: 600px;
+  min-inline-size: 0;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 0 0 auto;
+}
+
+.activeFiltersRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.activeFilters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/*
+ * Selection bar: when rows are selected, the header <th> cells are replaced by this row (the
+ * select-all checkbox stays; the column headers become the count + bulk actions).
+ */
+.thead .selectionRow th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--color-background-brand-primary-subtle-default);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.selectionHeaderCell {
+  padding-inline: var(--spacing-sm) var(--spacing-2xl);
+  text-align: start;
+}
+
+.table[data-size='md'] .selectionHeaderCell {
+  block-size: 40px;
+}
+
+.table[data-size='sm'] .selectionHeaderCell {
+  block-size: 32px;
+  padding-inline-end: var(--spacing-lg);
+}
+
+.selectionBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.selectionCount {
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+}
+
+.bulkActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* --- Grid scroll region --- */
+.scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.scroll:focus-visible {
+  outline: var(--border-width-md) solid var(--color-border-focus);
+  outline-offset: calc(-1 * var(--border-width-md));
+}
+
+.grid {
+  inline-size: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+/* Once a column is resized, freeze into fixed layout so widths are authoritative and survive paging. */
+.grid[data-resized] {
+  table-layout: fixed;
+}
+
+/* Visually-hidden accessible name for the table. */
+.caption {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- standard sr-only offset, not a spacing-scale decision */
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.headerCell,
+.cell,
+.selectHeaderCell,
+.selectCell {
+  padding-block: 0;
+  padding-inline: var(--spacing-sm);
+  text-align: start;
+  vertical-align: middle;
+}
+
+/* First/last columns get the table's outer gutter. */
+.headerCell:first-child,
+.cell:first-child,
+.selectHeaderCell:first-child,
+.selectCell:first-child {
+  padding-inline-start: var(--spacing-2xl);
+}
+
+.headerCell:last-child,
+.cell:last-child {
+  padding-inline-end: var(--spacing-2xl);
+}
+
+[data-align='center'] {
+  text-align: center;
+}
+
+[data-align='end'] {
+  text-align: end;
+}
+
+/* --- Header cells --- */
+.thead .headerCell,
+.thead .selectHeaderCell {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--color-elevation-surface-default);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+  white-space: nowrap;
+}
+
+.headerLabel {
+  min-inline-size: 0;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  inline-size: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.headerCell[data-align='center'] .sortButton {
+  justify-content: center;
+}
+
+.headerCell[data-align='end'] .sortButton {
+  justify-content: flex-end;
+}
+
+.sortButton:focus-visible {
+  outline: var(--border-width-md) solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* The sort arrow is always visible on sortable columns; it reads subtle until the column is the
+ * active sort, then takes content/default emphasis. */
+.sortIcon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-content-subtle);
+}
+
+.sortButton[data-active] .sortIcon {
+  color: var(--color-content-default);
+}
+
+/*
+ * Column resize handle: a full-height hit area at the header cell's trailing edge. Hover shows a
+ * colour change; press/active extends the handle with 2px padding top and bottom.
+ */
+.resizeHandle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: var(--spacing-sm);
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.resizeHandle::before {
+  content: '';
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block: var(--spacing-sm);
+  inline-size: var(--border-width-sm);
+  background: var(--color-border-default);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Figma drag-handle default state uses border-default fill at 16% opacity */
+  opacity: 0.16;
+}
+
+/* Hover: colour change to border-bold, inset stays retracted, width stays 1px */
+.resizeHandle:hover::before {
+  background: var(--color-border-bold);
+  opacity: 1;
+}
+
+/* Press/active: extends with ~2px (--spacing-xxs) padding top and bottom, border-bold colour */
+.resizeHandle:active::before,
+.resizeHandle:focus-visible::before {
+  inset-block: var(--spacing-xxs);
+  background: var(--color-border-bold);
+  opacity: 1;
+}
+
+.resizeHandle:focus-visible {
+  outline: none;
+}
+
+/* The trailing column's handle still resizes, but its divider would sit on the edge — hide it. */
+.headerCell:last-child .resizeHandle::before {
+  display: none;
+}
+
+/* --- Body cells + rows --- */
+.cell {
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.row .cell,
+.row .selectCell {
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.row:hover {
+  background: var(--color-background-neutral-overlay-bold-hover);
+}
+
+.row[data-selected] {
+  background: var(--color-background-brand-primary-subtle-default);
+}
+
+.row[data-selected]:hover {
+  background: var(--color-background-brand-primary-subtle-hover);
+}
+
+/* Last row drops its bottom divider when there's no footer below it. */
+.row:only-child .cell,
+.row:only-child .selectCell,
+.tableBody:not([data-has-footer]) .row:last-child .cell,
+.tableBody:not([data-has-footer]) .row:last-child .selectCell {
+  border-block-end: none;
+}
+
+/* Identifier columns render at the heading weight. */
+.cell[data-emphasis='strong'] {
+  font-weight: var(--typography-heading-xs-font-weight);
+}
+
+/* --- Selection column --- */
+.selectHeaderCell,
+.selectCell {
+  inline-size: 40px;
+  white-space: nowrap;
+}
+
+.selectCell {
+  vertical-align: middle;
+}
+
+/* --- Row heights per density --- */
+.table[data-size='md'] .thead .headerCell,
+.table[data-size='md'] .thead .selectHeaderCell {
+  block-size: 40px;
+}
+
+.table[data-size='md'] .cell,
+.table[data-size='md'] .selectCell {
+  block-size: 64px;
+}
+
+.table[data-size='sm'] .thead .headerCell,
+.table[data-size='sm'] .thead .selectHeaderCell {
+  block-size: 32px;
+}
+
+.table[data-size='sm'] .cell,
+.table[data-size='sm'] .selectCell {
+  block-size: 40px;
+}
+
+/* --- SM outer gutter: 16px (--spacing-lg) instead of MD's 24px (--spacing-2xl) --- */
+.table[data-size='sm'] .header {
+  padding-inline: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .toolbar {
+  padding-inline: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .headerCell:first-child,
+.table[data-size='sm'] .cell:first-child,
+.table[data-size='sm'] .selectHeaderCell:first-child,
+.table[data-size='sm'] .selectCell:first-child {
+  padding-inline-start: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .headerCell:last-child,
+.table[data-size='sm'] .cell:last-child {
+  padding-inline-end: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .footer {
+  padding-inline: var(--spacing-lg);
+}
+
+/* --- Empty state --- */
+.emptyCell {
+  padding: 0;
+}
+
+/* --- Loading skeletons --- */
+.skeletonText {
+  block-size: var(--spacing-lg);
+  inline-size: 70%;
+}
+
+.skeletonCheckbox {
+  block-size: var(--spacing-lg);
+  inline-size: var(--spacing-lg);
+}
+
+/* --- Footer --- */
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+}

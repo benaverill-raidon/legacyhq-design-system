@@ -2966,6 +2966,92 @@
     "exemplarCompleteness": "full"
   },
   {
+    "id": "table",
+    "name": "Table",
+    "tier": "organism",
+    "path": "docs/components/organisms/table/table.examples.json",
+    "examples": [
+      {
+        "name": "Basic table (columns + data)",
+        "description": null,
+        "jsx": "<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={[\n    { key: 'name', header: 'Name', sortable: true },\n    { key: 'role', header: 'Role' },\n    { key: 'joined', header: 'Joined', align: 'end' },\n  ]}\n  data={members}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Identifier as a strong Link; other columns at body weight",
+        "description": null,
+        "jsx": "<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={[\n    { key: 'name', header: 'Name', sortable: true, emphasis: 'strong', render: (m) => (\n      <Link href={`/members/${m.id}`} emphasis=\"strong\">{m.name}</Link>\n    ) },\n    { key: 'status', header: 'Status', render: (m) => <Tag tone={m.status === 'Active' ? 'success' : 'neutral'}>{m.status}</Tag> },\n  ]}\n  data={members}\n/>",
+        "props": {}
+      },
+      {
+        "name": "Selectable with a bulk-actions bar",
+        "description": null,
+        "jsx": "const [selected, setSelected] = useState([]);\n\n<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  selectable\n  selectedIds={selected}\n  onSelectionChange={setSelected}\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  bulkActions={\n    <>\n      <Button appearance=\"subtle\" size=\"sm\" onClick={() => setSelected([])}>Clear</Button>\n      <Button appearance=\"primary\" tone=\"error\" size=\"sm\">Remove</Button>\n    </>\n  }\n/>",
+        "props": {
+          "selectable": true
+        }
+      },
+      {
+        "name": "Client-side pagination + sort",
+        "description": null,
+        "jsx": "<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  defaultSort={{ columnKey: 'name', direction: 'asc' }}\n  pageSize={10}\n/>",
+        "props": {
+          "pageSize": 10
+        }
+      },
+      {
+        "name": "Server-driven (manual sort + pagination)",
+        "description": null,
+        "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
+        "props": {
+          "manualSort": true,
+          "manualPagination": true
+        }
+      },
+      {
+        "name": "Full list page (header + toolbar + grid + pagination)",
+        "description": null,
+        "jsx": "<Table\n  title=\"All members\"\n  description=\"Everyone with access to this workspace.\"\n  actions={<><Button appearance=\"subtle\">Export</Button><Button appearance=\"primary\">Invite member</Button></>}\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={filtered}\n  searchable\n  searchValue={search}\n  onSearchChange={setSearch}\n  filters={<Select aria-label=\"Role\" placeholder=\"Role\" inputType=\"multi\" options={roleOptions} value={role} onChange={setRole} />}\n  onClearFilters={() => { setSearch(''); setRole([]); }}\n  activeFilters={role.map((r) => ({ id: r, label: r, onRemove: () => setRole((p) => p.filter((x) => x !== r)) }))}\n  selectable\n  pageSize={10}\n/>",
+        "props": {
+          "searchable": true,
+          "selectable": true,
+          "pageSize": 10
+        }
+      },
+      {
+        "name": "Loading",
+        "description": null,
+        "jsx": "<Table caption=\"Team members\" columns={columns} data={[]} loading skeletonRowCount={8} />",
+        "props": {
+          "loading": true
+        }
+      }
+    ],
+    "antiExamples": [
+      {
+        "name": "No accessible name",
+        "jsx": "<Table columns={columns} data={rows} />",
+        "reason": "A table needs an accessible name - pass `caption` (or a `title`), rendered as a visually-hidden <caption>."
+      },
+      {
+        "name": "Index row ids with selection",
+        "jsx": "<Table columns={columns} data={rows} selectable /* no getRowId */ />",
+        "reason": "The default row id is the index, which is unstable once rows sort or paginate - selection would attach to the wrong rows. Pass a real `getRowId`."
+      },
+      {
+        "name": "Baking domain filters into the table",
+        "jsx": "<Table columns={columns} data={rows} statusFilter typeFilter /* invented props */ />",
+        "reason": "Table does not know your filter domain. Render your Selects in the `filters` slot and drive `data` + `activeFilters` from your own state."
+      },
+      {
+        "name": "A data table for a card grid",
+        "jsx": "<Table columns={oneColumn} data={cards} render={(c) => <Card {...c} />} />",
+        "reason": "A dashboard of cards is a layout grid, not tabular data - use layout primitives, not <table> semantics."
+      }
+    ],
+    "exemplarCompleteness": "full"
+  },
+  {
     "id": "tabs",
     "name": "Tabs",
     "tier": "organism",

@@ -9,8 +9,22 @@
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "1612:9862",
     "componentName": "link",
-    "variantCount": 60,
-    "verifiedAt": "2026-08-06"
+    "variantCount": 96,
+    "verifiedAt": "2026-09-11",
+    "variantAxes": {
+      "state": ["default", "hover"],
+      "target": ["_self", "_blank"],
+      "appearance": ["default", "subtle", "inverse"],
+      "hasVisited": ["false", "true"],
+      "size": ["md", "sm"],
+      "emphasis": ["strong", "default"]
+    },
+    "notes": [
+      "emphasis is a weight axis: strong = heading weight (600), default = body weight (400). Figma default emphasis is 'strong'.",
+      "hasVisited applies to every appearance including inverse; inverse visited is content/accent/purple/subtle in Figma (that token is not yet in the generated set, so code uses content/accent/purple/default as the closest available).",
+      "Figma's Link has only default + hover states - there is no press/active treatment.",
+      "Default appearance colour is content/brand/primary/default (matches Figma)."
+    ]
   },
   "useCases": [
     "Internal navigation",
@@ -46,6 +60,13 @@
       "default": "md",
       "required": false
     },
+    "emphasis": {
+      "type": "enum",
+      "values": ["default", "strong"],
+      "default": "strong",
+      "required": false,
+      "description": "Text weight: strong (heading weight) for a name/first-column identifier; default (body weight) for any other entity link."
+    },
     "target": {
       "type": "string",
       "default": "_self",
@@ -62,6 +83,10 @@
       "default",
       "subtle",
       "inverse"
+    ],
+    "emphasis": [
+      "default",
+      "strong"
     ]
   },
   "sizes": [
@@ -71,7 +96,6 @@
   "states": [
     "default",
     "hover",
-    "press",
     "focus",
     "visited"
   ],

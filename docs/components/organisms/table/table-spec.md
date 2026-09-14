@@ -144,7 +144,7 @@ Table (div.table, data-size)
 | Toolbar separator | `--border-width-sm` `--color-border-default` (border-block-end) |
 | Cell text / description | `--color-content-default` / `--color-content-subtle` |
 | Sort arrow (idle / active) | `--color-content-subtle` / `--color-content-default` |
-| Resize handle divider | `--color-border-default` @16% opacity 1px → hover: `--color-border-bold` 1px (colour only); press/focus: `--color-border-bold` 1px + extends with `--spacing-xxs` inset |
+| Resize handle divider | `--color-border-default` 1px → hover: `--color-border-bold` 1px (colour only); press/focus: `--color-border-bold` 1px + extends with `--spacing-xxs` inset |
 | Row hover, all rows *(inferred - not in Figma)* | `--color-background-neutral-overlay-bold-hover` |
 | Row selected / selected+hover *(inferred)* | `--color-background-brand-primary-subtle-default` / `-hover` |
 | Row divider / header border | `--color-border-default` (dropped for a lone row, or the last row with no footer) |

@@ -118,8 +118,8 @@ export const Pagination: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 'var(--spacing-3xl)' }}>
-      <Table columns={basicColumns} data={members.slice(0, 4)} getRowId={getRowId} caption="Medium" title="MD (default)" />
-      <Table columns={basicColumns} data={members.slice(0, 4)} getRowId={getRowId} caption="Small" title="SM (compact)" size="sm" />
+      <Table columns={basicColumns} data={members.slice(0, 4)} getRowId={getRowId} caption="Medium" title="MD" />
+      <Table columns={basicColumns} data={members.slice(0, 4)} getRowId={getRowId} caption="Small" title="SM" size="sm" />
     </div>
   ),
 };
@@ -364,87 +364,94 @@ const statusTone = (s: string) => {
   return 'error' as const;
 };
 
-const cellVariantColumns: Array<TableColumn<Member>> = [
-  {
-    key: 'avatar',
-    header: 'Avatar',
-    render: (m) => <Avatar name={m.name} size="xs" />,
-    width: 64,
-  },
-  {
-    key: 'name',
-    header: 'Name',
-    sortable: true,
-    sortValue: (m) => m.name,
-    emphasis: 'strong',
-    render: (m) => (
-      <Link href={`/members/${m.id}`} emphasis="strong">
-        {m.name}
-      </Link>
-    ),
-  },
-  {
-    key: 'email',
-    header: 'Email',
-    render: (m) => m.email,
-  },
-  {
-    key: 'role',
-    header: 'Role',
-    render: (m) => <Tag>{m.role}</Tag>,
-  },
-  {
-    key: 'status',
-    header: 'Status',
-    render: (m) => <Badge tone={statusTone(m.status)}>{m.status}</Badge>,
-  },
-  {
-    key: 'completion',
-    header: 'Completion',
-    render: (m) => <ProgressBar value={m.completion} aria-label={`${m.completion}% complete`} />,
-    width: 120,
-  },
-  {
-    key: 'active',
-    header: 'Active',
-    render: (m) => <Switch checked={m.active} aria-label={`${m.name} active`} />,
-    width: 80,
-    align: 'center',
-  },
-  {
-    key: 'actions',
-    header: '',
-    render: (m) => (
-      <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
-        <Button appearance="subtle" size="sm">Edit</Button>
-        <IconButton appearance="subtle" size="sm" aria-label={`More actions for ${m.name}`}>
-          <MoreVertIcon />
-        </IconButton>
-      </div>
-    ),
-    align: 'end',
-    width: 140,
-  },
-];
+function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> {
+  const avatarSize = tableSize === 'md' ? 'xs' : 'xxs';
+  const tagSize = tableSize === 'md' ? 'md' : 'sm';
+  const switchSize = tableSize === 'md' ? 'md' : 'sm';
+  const buttonSize = tableSize === 'md' ? 'md' : 'sm';
+
+  return [
+    {
+      key: 'avatar',
+      header: 'Avatar',
+      render: (m) => <Avatar name={m.name} size={avatarSize} />,
+      width: 64,
+    },
+    {
+      key: 'name',
+      header: 'Name',
+      sortable: true,
+      sortValue: (m) => m.name,
+      emphasis: 'strong',
+      render: (m) => (
+        <Link href={`/members/${m.id}`} emphasis="strong">
+          {m.name}
+        </Link>
+      ),
+    },
+    {
+      key: 'email',
+      header: 'Email',
+      render: (m) => m.email,
+    },
+    {
+      key: 'role',
+      header: 'Role',
+      render: (m) => <Tag size={tagSize}>{m.role}</Tag>,
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      render: (m) => <Badge tone={statusTone(m.status)}>{m.status}</Badge>,
+    },
+    {
+      key: 'completion',
+      header: 'Completion',
+      render: (m) => <ProgressBar value={m.completion} size="md" aria-label={`${m.completion}% complete`} />,
+      width: 120,
+    },
+    {
+      key: 'active',
+      header: 'Active',
+      render: (m) => <Switch checked={m.active} size={switchSize} aria-label={`${m.name} active`} />,
+      width: 80,
+      align: 'center',
+    },
+    {
+      key: 'actions',
+      header: '',
+      render: (m) => (
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
+          <Button appearance="subtle" size={buttonSize}>Edit</Button>
+          <IconButton appearance="subtle" size={buttonSize} aria-label={`More actions for ${m.name}`}>
+            <MoreVertIcon />
+          </IconButton>
+        </div>
+      ),
+      align: 'end',
+      width: 140,
+    },
+  ];
+}
 
 export const CellVariants: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 'var(--spacing-3xl)' }}>
       <Table
-        columns={cellVariantColumns}
+        columns={cellVariantColumns('md')}
         data={members.slice(0, 5)}
         getRowId={getRowId}
         title="Cell variants — MD"
-        description="Avatar, Link (name), text (email), Tag (role), Badge (status), Progress Bar, Switch, Button + IconButton."
+        description="Avatar, Link, text, Tag, Badge, Progress Bar, Switch, Button + IconButton."
         selectable
         defaultSort={{ columnKey: 'name', direction: 'asc' }}
       />
       <Table
-        columns={cellVariantColumns}
+        columns={cellVariantColumns('sm')}
         data={members.slice(0, 5)}
         getRowId={getRowId}
         title="Cell variants — SM"
-        description="Same columns at sm density."
+        description="Same columns at SM density with appropriately sized variants."
         size="sm"
         selectable
         defaultSort={{ columnKey: 'name', direction: 'asc' }}

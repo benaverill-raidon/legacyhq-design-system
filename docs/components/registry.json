@@ -7968,7 +7968,7 @@
         "cellText": "--color-content-default",
         "descriptionText": "--color-content-subtle",
         "sortIconActive": "--color-content-default",
-        "resizeHandleDivider": "--color-border-default @16% opacity 1px (default) → --color-border-bold 1px (hover/pressed); handle width stays 1px in all states",
+        "resizeHandleDivider": "--color-border-default 1px (default) → --color-border-bold 1px (hover/pressed); handle width stays 1px in all states",
         "rowHover": "--color-background-neutral-overlay-bold-hover (all rows - aids horizontal scanning)",
         "rowSelected": "--color-background-brand-primary-subtle-default",
         "rowSelectedHover": "--color-background-brand-primary-subtle-hover",

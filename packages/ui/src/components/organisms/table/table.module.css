@@ -9,7 +9,7 @@
  *     bottom row divider
  *   - outer gutter: spacing/2xl (24px) for md, spacing/lg (16px) for sm
  *   - selection column: 40px
- *   - drag-handle: border-default @16% (default), border-bold (hover/pressed); width 1px all states;
+ *   - drag-handle: border-default (default), border-bold (hover/pressed); width 1px all states;
  *     hover = colour change only; pressed extends with ~2px inset
  *   - no border/radius on the table wrapper — separator is toolbar's border-block-end only
  */
@@ -131,6 +131,7 @@
 }
 
 .selectionHeaderCell {
+  padding-block: 0;
   padding-inline: var(--spacing-sm) var(--spacing-2xl);
   text-align: start;
 }
@@ -316,8 +317,6 @@
   inset-block: var(--spacing-sm);
   inline-size: var(--border-width-sm);
   background: var(--color-border-default);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Figma drag-handle default state uses border-default fill at 16% opacity */
-  opacity: 0.16;
 }
 
 /* Hover: colour change to border-bold, inset stays retracted, width stays 1px */
@@ -388,10 +387,15 @@
 .selectCell {
   inline-size: 40px;
   white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
 }
 
-.selectCell {
-  vertical-align: middle;
+/* Override the heading-xs line-height inherited from .thead .selectHeaderCell so the
+   inline-flex checkbox label centres on the cell midpoint instead of the text baseline. */
+.thead .selectHeaderCell {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
+  line-height: 0;
 }
 
 /* --- Row heights per density --- */

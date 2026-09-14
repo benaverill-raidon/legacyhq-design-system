@@ -78,6 +78,7 @@ export function Table<Row>({
   const [columnWidths, setColumnWidths] = React.useState<Record<string, number>>({});
   const resizeRef = React.useRef<{ key: string; startX: number; startWidth: number } | null>(null);
   const headerCellRefs = React.useRef<Map<string, HTMLTableCellElement>>(new Map());
+  const selectCellRef = React.useRef<HTMLTableCellElement | null>(null);
 
   const currentSort = sort !== undefined ? sort : internalSort;
   const currentSelectedIds = selectedIds !== undefined ? selectedIds : internalSelected;
@@ -118,6 +119,15 @@ export function Table<Row>({
   const someVisibleSelected = visibleIds.some((rid) => selectedSet.has(rid));
 
   const commitSelection = (next: RowId[]) => {
+    if (next.length > 0 && currentSelectedIds.length === 0 && Object.keys(columnWidths).length === 0) {
+      const frozen: Record<string, number> = {};
+      if (selectCellRef.current) frozen.__select = Math.round(selectCellRef.current.getBoundingClientRect().width);
+      for (const col of columns) {
+        const el = headerCellRefs.current.get(col.key);
+        if (el) frozen[col.key] = Math.round(el.getBoundingClientRect().width);
+      }
+      if (Object.keys(frozen).length > 0) setColumnWidths(frozen);
+    }
     if (selectedIds === undefined) setInternalSelected(next);
     onSelectionChange?.(next);
   };
@@ -201,8 +211,9 @@ export function Table<Row>({
 
   const hasResized = Object.keys(columnWidths).length > 0;
 
-  const columnCount = columns.length + (selectable ? 1 : 0);
   const selectedCount = currentSelectedIds.length;
+
+  const columnCount = columns.length + (selectable ? 1 : 0);
   const name = accessibleString(caption, title);
   const captionContent = caption ?? title;
 
@@ -266,6 +277,14 @@ export function Table<Row>({
         <div className={styles.scroll} role="region" aria-label={name ?? 'Table'} tabIndex={0}>
           <table className={styles.grid} aria-busy={loading || undefined} data-resized={hasResized || undefined}>
             {captionContent != null ? <caption className={styles.caption}>{captionContent}</caption> : null}
+            {hasResized ? (
+              <colgroup>
+                {selectable ? <col style={{ width: columnWidths.__select }} /> : null}
+                {columns.map((col) => (
+                  <col key={col.key} style={{ width: columnWidths[col.key] ?? col.width }} />
+                ))}
+              </colgroup>
+            ) : null}
             <thead className={styles.thead}>
               {selectable && selectedCount > 0 ? (
                 <tr className={styles.selectionRow}>
@@ -288,7 +307,7 @@ export function Table<Row>({
               ) : (
                 <tr>
                   {selectable ? (
-                    <th scope="col" className={styles.selectHeaderCell}>
+                    <th ref={selectCellRef} scope="col" className={styles.selectHeaderCell}>
                       <Checkbox
                         checked={allVisibleSelected}
                         indeterminate={someVisibleSelected && !allVisibleSelected}

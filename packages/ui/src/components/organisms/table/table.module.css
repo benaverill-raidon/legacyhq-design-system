@@ -213,6 +213,8 @@
   padding-inline: var(--spacing-sm);
   text-align: start;
   vertical-align: middle;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- zero collapses the anonymous line box so vertical-align:middle centres inline-flex controls (Switch, Checkbox, Badge) on the cell midpoint instead of the text baseline */
+  line-height: 0;
 }
 
 /* First/last columns get the table's outer gutter. */
@@ -248,9 +250,12 @@
   font-family: var(--typography-heading-xs-font-family);
   font-size: var(--typography-heading-xs-font-size);
   font-weight: var(--typography-heading-xs-font-weight);
-  line-height: var(--typography-heading-xs-line-height);
   letter-spacing: var(--typography-heading-xs-letter-spacing);
   white-space: nowrap;
+}
+
+.thead .headerCell {
+  line-height: var(--typography-heading-xs-line-height);
 }
 
 .headerLabel {
@@ -348,7 +353,6 @@
   font-family: var(--typography-body-md-font-family);
   font-size: var(--typography-body-md-font-size);
   font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
   letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
@@ -389,13 +393,6 @@
   white-space: nowrap;
   vertical-align: middle;
   text-align: center;
-}
-
-/* Override the heading-xs line-height inherited from .thead .selectHeaderCell so the
-   inline-flex checkbox label centres on the cell midpoint instead of the text baseline. */
-.thead .selectHeaderCell {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value */
-  line-height: 0;
 }
 
 /* --- Row heights per density --- */

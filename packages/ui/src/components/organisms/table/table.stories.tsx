@@ -4,6 +4,7 @@ import { Avatar } from '../../atoms/avatar';
 import { Badge } from '../../atoms/badge';
 import { Button } from '../../atoms/button';
 import { IconButton } from '../../atoms/icon-button';
+import { Label } from '../../atoms/label';
 import { Link } from '../../atoms/link';
 import { ProgressBar } from '../../atoms/progress-bar';
 import { Switch } from '../../atoms/switch';
@@ -365,8 +366,9 @@ const statusTone = (s: string) => {
 };
 
 function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> {
-  const avatarSize = tableSize === 'md' ? 'xs' : 'xxs';
+  const labelSize = tableSize === 'md' ? 'md' : 'sm';
   const tagSize = tableSize === 'md' ? 'md' : 'sm';
+  const progressSize = tableSize === 'md' ? 'lg' : 'md';
   const switchSize = tableSize === 'md' ? 'md' : 'sm';
   const buttonSize = tableSize === 'md' ? 'md' : 'sm';
 
@@ -374,7 +376,7 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
     {
       key: 'avatar',
       header: 'Avatar',
-      render: (m) => <Avatar name={m.name} size={avatarSize} />,
+      render: (m) => <Avatar name={m.name} size="sm" />,
       width: 64,
     },
     {
@@ -400,6 +402,11 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
       render: (m) => <Tag size={tagSize}>{m.role}</Tag>,
     },
     {
+      key: 'department',
+      header: 'Department',
+      render: (m) => <Label size={labelSize}>{m.department}</Label>,
+    },
+    {
       key: 'status',
       header: 'Status',
       render: (m) => <Badge tone={statusTone(m.status)}>{m.status}</Badge>,
@@ -407,7 +414,7 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
     {
       key: 'completion',
       header: 'Completion',
-      render: (m) => <ProgressBar value={m.completion} size="md" aria-label={`${m.completion}% complete`} />,
+      render: (m) => <ProgressBar value={m.completion} size={progressSize} aria-label={`${m.completion}% complete`} />,
       width: 120,
     },
     {
@@ -442,7 +449,7 @@ export const CellVariants: Story = {
         data={members.slice(0, 5)}
         getRowId={getRowId}
         title="Cell variants — MD"
-        description="Avatar, Link, text, Tag, Badge, Progress Bar, Switch, Button + IconButton."
+        description="Avatar, Link, text, Label, Tag, Badge, Progress Bar, Switch, Button + IconButton."
         selectable
         defaultSort={{ columnKey: 'name', direction: 'asc' }}
       />

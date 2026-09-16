@@ -37,6 +37,8 @@ export interface ChipSegment {
   sections: MenuSection[];
   /** Accessible name for this segment's own menu panel. */
   menuAriaLabel?: string;
+  /** Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context. */
+  tooltip?: React.ReactNode;
 }
 
 /**

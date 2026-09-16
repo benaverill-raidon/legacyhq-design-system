@@ -43,7 +43,7 @@ If it triggers an action instead of navigation, use Button.
 - `sm` maps to `heading-xxs`
 - `md` maps to `heading-xs`
 - Default underline: none
-- Hover/press underline: yes
+- Hover underline: yes (no press/active state - Figma has only default + hover)
 - Visited: native CSS `:visited`, no `hasVisited` prop
 - External icon appears automatically for `target="_blank"`
 - No disabled state

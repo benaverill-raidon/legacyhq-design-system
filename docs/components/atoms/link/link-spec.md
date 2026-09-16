@@ -76,11 +76,10 @@ target = '_self'
 | `md` | `heading-xs` |
 
 ## States
-Supported:
+Supported (Figma's Link has only default + hover; there is no press/active treatment):
 ```txt
 default
 hover
-press
 focus
 visited
 ```
@@ -106,8 +105,11 @@ Do not add a `hasVisited` prop. Use native CSS `:visited`.
 ### Underline behavior
 - Default: no underline
 - Hover: underline
-- Press/active: underline
-- Visited: color change only unless hovered or pressed
+- Visited: color change only
+
+### Emphasis
+`emphasis` sets the text weight only: `strong` (the default, a heading weight) for a name /
+first-column identifier; `default` (a body weight) for any other entity link.
 
 ## Token mapping
 
@@ -124,11 +126,10 @@ Use generated token names from `tokens.css`, `light.css`, and `dark.css`.
 
 Expected mappings:
 - default: link default token
-- pressed: link pressed token
-- visited default: link visited default token
-- visited pressed: link visited pressed token
+- visited default: link visited default token (content/accent/purple/default)
 - subtle: content/text subtle token
-- inverse: content/text inverse token
+- inverse: content/text inverse token; inverse visited = content/accent/purple/subtle in Figma
+  (code uses content/accent/purple/default until that token ships)
 
 If the system uses `--color-text-*` instead of `--color-content-*`, use the generated token names from the current token output.
 
@@ -145,7 +146,7 @@ The Link should:
 - use tokenized typography
 - use tokenized colors
 - use `currentColor` for external icon
-- use underline on hover/press
+- use underline on hover
 - preserve native anchor behavior
 - support light and dark themes
 

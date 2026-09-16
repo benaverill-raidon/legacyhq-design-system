@@ -1,0 +1,126 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TableStories from './table.stories';
+
+<Meta of={TableStories} name="Docs" />
+
+# Table
+
+Table is an organism for presenting a large, sortable, filterable set of records - the workhorse of
+list/index ("All X") pages. It renders a section header, a filter toolbar, a column-config-driven grid
+(sortable headers, a selection column, loading/empty states), and a pagination footer, composing Text
+Field, Select, Chip, Checkbox, Button, Skeleton, Empty State, and Pagination.
+
+<Canvas of={TableStories.FullShell} />
+
+## When to use
+
+- A page of records the user scans, sorts, filters, selects, and pages through ("All members").
+- A selectable list with bulk actions, or a dense data view (`size="sm"`).
+- A server-paged dataset (with `manualSort` + `manualPagination`).
+
+## When not to use
+
+- **A simple key/value layout or short static list.** Use plain markup / a description list.
+- **A dashboard of cards.** That's a layout grid, not tabular data.
+- **A spreadsheet-style editable grid.** Cell editing / formulas are out of scope.
+
+## Columns and data
+
+<Canvas of={TableStories.Basic} />
+
+Pass `columns` + `data`. A column is `{ key, header, render?, sortable?, align?, width? }`; a cell
+shows `String(row[key])` unless you pass `render` to compose any content. Always pass a stable
+`getRowId` - it defaults to the row index, which is unstable once rows sort or paginate.
+
+## Sorting
+
+<Canvas of={TableStories.Sortable} />
+
+Sorting is owned by default: set `defaultSort`, click a sortable header to cycle ascending ->
+descending -> unsorted, and the data reorders client-side. Control it with `sort` + `onSortChange`, or
+set `manualSort` to sort server-side.
+
+## Selection
+
+<Canvas of={TableStories.Selectable} />
+
+`selectable` adds a leading Checkbox column with a header select-all (indeterminate for a partial
+selection). Selection is **checkbox-only** - rows are never clickable - and is owned by default,
+controllable via `selectedIds` + `onSelectionChange`. When one or more rows are selected, a selection
+bar appears at the top of the card with the count on the left and your `bulkActions` on the right; a
+selectable row also gets a subtle neutral hover, distinct from the brand-tinted selected state.
+
+## Columns, resizing, and interaction rules
+
+Columns resize by default: drag a header's trailing edge (or focus the handle and use the Arrow
+keys); opt out with `resizableColumns={false}` or per column with `column.resizable === false`. Mark
+the identifier column with `emphasis: 'strong'` (heading weight) and leave other columns at body
+weight. Follow the interaction rules consistently: **checkbox** = selection, **Link** = navigation (a
+routable value in a cell, or a strong Link for the identifier), **Button** = an action that changes
+state. Controls inside a row act independently.
+
+## Toolbar
+
+<Canvas of={TableStories.WithToolbar} />
+
+`searchable` renders the built-in search; `filters` is a slot for your domain Selects; `onClearFilters`
+adds a Clear filters action; `activeFilters` renders removable pills. Pass `toolbar` to replace the
+whole built-in toolbar.
+
+## Pagination, sizes, and states
+
+<Canvas of={TableStories.Pagination} />
+
+Pass `pageSize` for client-side pagination, or `manualPagination` with `page` / `pageCount` /
+`onPageChange` for a server-paged API.
+
+<Canvas of={TableStories.Sizes} />
+
+<Canvas of={TableStories.Loading} />
+
+<Canvas of={TableStories.EmptyStateStory} />
+
+## Accessibility
+
+- It's a real `<table>` - always give it an accessible name via `caption` or `title`.
+- Sortable headers set `aria-sort` and wrap the label in a `<button>`; the scrollable grid is a
+  keyboard-focusable `role="region"`.
+- Selection uses real Checkboxes; keep content you put in cells accessible (label in-cell buttons).
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>columns</code></td><td><code>TableColumn&lt;Row&gt;[]</code></td><td>-</td><td>Column definitions.</td></tr>
+    <tr><td><code>data</code></td><td><code>Row[]</code></td><td>-</td><td>The row data.</td></tr>
+    <tr><td><code>getRowId</code></td><td><code>(row, i) =&gt; string | number</code></td><td><code>index</code></td><td>Stable row id (pass a real one for selection).</td></tr>
+    <tr><td><code>size</code></td><td><code>'md' | 'sm'</code></td><td><code>'md'</code></td><td>Row density.</td></tr>
+    <tr><td><code>caption</code> / <code>title</code></td><td><code>ReactNode</code></td><td>-</td><td>Accessible name / header title.</td></tr>
+    <tr><td><code>description</code> / <code>actions</code></td><td><code>ReactNode</code></td><td>-</td><td>Header description / right-aligned actions.</td></tr>
+    <tr><td><code>searchable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show the built-in search field.</td></tr>
+    <tr><td><code>searchValue</code> / <code>onSearchChange</code></td><td><code>string</code> / <code>fn</code></td><td>-</td><td>Controlled search.</td></tr>
+    <tr><td><code>filters</code></td><td><code>ReactNode</code></td><td>-</td><td>Filter controls slot.</td></tr>
+    <tr><td><code>onClearFilters</code> / <code>activeFilters</code></td><td><code>fn</code> / <code>TableActiveFilter[]</code></td><td>-</td><td>Clear action / removable pills.</td></tr>
+    <tr><td><code>sort</code> / <code>defaultSort</code> / <code>onSortChange</code></td><td><code>TableSort | null</code></td><td>-</td><td>Controlled / uncontrolled sort.</td></tr>
+    <tr><td><code>manualSort</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Sort server-side (no client reorder).</td></tr>
+    <tr><td><code>selectable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Selection Checkbox column + select-all.</td></tr>
+    <tr><td><code>selectedIds</code> / <code>onSelectionChange</code></td><td><code>(string|number)[]</code> / <code>fn</code></td><td>-</td><td>Controlled selection.</td></tr>
+    <tr><td><code>bulkActions</code></td><td><code>ReactNode</code></td><td>-</td><td>Actions in the selection bar when rows are selected.</td></tr>
+    <tr><td><code>resizableColumns</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Drag/Arrow-key column resizing.</td></tr>
+    <tr><td><code>page</code> / <code>pageCount</code> / <code>onPageChange</code></td><td><code>number</code> / <code>fn</code></td><td>-</td><td>Controlled pagination.</td></tr>
+    <tr><td><code>pageSize</code> / <code>manualPagination</code></td><td><code>number</code> / <code>boolean</code></td><td>-</td><td>Client-side / server-side paging.</td></tr>
+    <tr><td><code>loading</code> / <code>skeletonRowCount</code></td><td><code>boolean</code> / <code>number</code></td><td><code>false</code> / <code>5</code></td><td>Skeleton rows + aria-busy.</td></tr>
+    <tr><td><code>empty</code></td><td><code>ReactNode</code></td><td>Empty State</td><td>Shown when there are no rows.</td></tr>
+    <tr><td><code>className</code> / <code>id</code></td><td><code>string</code></td><td>-</td><td>Root class / id.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Pagination** - the footer.
+- **Select / Text Field / Chip** - the toolbar (filters, search, active filters).
+- **Checkbox** - selection. **Button / Icon Button** - actions.
+- **Skeleton** - loading rows. **Empty State** - the empty slot.

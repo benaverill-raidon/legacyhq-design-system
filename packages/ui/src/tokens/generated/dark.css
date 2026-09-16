@@ -12,6 +12,7 @@
   --color-content-loading: var(--color-brand-taupe-alpha-100-48);
   --color-content-brand-primary-default: var(--color-brand-prussian-solid-500);
   --color-content-selected: var(--color-brand-prussian-solid-500);
+  --color-content-highlight: var(--color-brand-prussian-alpha-500-32);
   --color-content-brand-primary-subtle: var(--color-brand-prussian-solid-700);
   --color-content-error: var(--color-red-solid-500);
   --color-content-warning: var(--color-orange-solid-500);

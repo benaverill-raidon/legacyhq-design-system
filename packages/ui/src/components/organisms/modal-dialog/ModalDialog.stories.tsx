@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
 import { ModalDialog } from './modal-dialog';
 import type { ModalAppearance, ModalWidth } from './modal-dialog.types';
 
@@ -17,7 +18,6 @@ const meta = {
     open: false,
     onClose: () => {},
     title: 'Modal title',
-    description: 'A short supporting line under the title.',
     appearance: 'default',
     width: 'medium',
     showCloseButton: true,
@@ -26,7 +26,6 @@ const meta = {
   },
   argTypes: {
     title: { control: 'text' },
-    description: { control: 'text' },
     appearance: { control: 'inline-radio', options: appearances },
     width: { control: 'inline-radio', options: widths },
     showCloseButton: { control: 'boolean' },
@@ -60,7 +59,6 @@ function ModalDemo({
   triggerLabel: string;
   appearance?: ModalAppearance;
   title?: ReactNode;
-  description?: ReactNode;
   width?: ModalWidth;
   showCloseButton?: boolean;
   closeOnEscape?: boolean;
@@ -78,14 +76,14 @@ function ModalDemo({
         open={open}
         onClose={() => setOpen(false)}
         footer={
-          <>
+          <ButtonGroup>
             <Button appearance="subtle" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button appearance="primary" tone={confirmTone(appearance)} onClick={() => setOpen(false)}>
               Confirm
             </Button>
-          </>
+          </ButtonGroup>
         }
       >
         {children ?? <p style={{ margin: 0 }}>Modal body content goes here.</p>}
@@ -104,14 +102,14 @@ function PlaygroundModal(args: Parameters<NonNullable<Story['render']>>[0]) {
         open={open}
         onClose={() => setOpen(false)}
         footer={
-          <>
+          <ButtonGroup>
             <Button appearance="subtle" onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button appearance="primary" tone={confirmTone(args.appearance ?? 'default')} onClick={() => setOpen(false)}>
               Confirm
             </Button>
-          </>
+          </ButtonGroup>
         }
       >
         <p style={{ margin: 0 }}>Modal body content goes here.</p>
@@ -132,39 +130,10 @@ export const Playground: Story = {
 export const Appearances: Story = {
   render: () => (
     <div style={row}>
-      <ModalDemo
-        triggerLabel="Default"
-        appearance="default"
-        title="Save changes?"
-        description="Your edits will be applied right away."
-      />
-      <ModalDemo
-        triggerLabel="Warning"
-        appearance="warning"
-        title="Unsaved changes"
-        description="You'll lose your edits if you leave now."
-      />
-      <ModalDemo
-        triggerLabel="Delete"
-        appearance="error"
-        title="Delete repository?"
-        description="This can't be undone."
-      />
+      <ModalDemo triggerLabel="Default" appearance="default" title="Save changes?" />
+      <ModalDemo triggerLabel="Warning" appearance="warning" title="Unsaved changes" />
+      <ModalDemo triggerLabel="Delete" appearance="error" title="Delete repository?" />
     </div>
-  ),
-};
-
-/**
- * `description` renders a supporting line under the title (Figma's modal-header description). It's
- * `body-md` text and is wired as the dialog's `aria-describedby`.
- */
-export const WithDescription: Story = {
-  render: () => (
-    <ModalDemo
-      triggerLabel="Open dialog"
-      title="Move to archive?"
-      description="Archived projects are hidden from the dashboard but can be restored at any time."
-    />
   ),
 };
 
@@ -205,6 +174,42 @@ export const ScrollingBody: Story = {
       </div>
     </ModalDemo>
   ),
+};
+
+/**
+ * A header expand (maximize) action. Pass `onExpand` to show an Expand button before Close; the two
+ * share a Button Group in the header, matching the Figma modal-header.
+ */
+export const HeaderExpand: Story = {
+  render: () => {
+    function Demo() {
+      const [open, setOpen] = useState(false);
+      return (
+        <>
+          <Button onClick={() => setOpen(true)}>Open with expand</Button>
+          <ModalDialog
+            open={open}
+            onClose={() => setOpen(false)}
+            onExpand={() => {}}
+            title="Preview attachment"
+            footer={
+              <ButtonGroup>
+                <Button appearance="subtle" onClick={() => setOpen(false)}>
+                  Cancel
+                </Button>
+                <Button appearance="primary" onClick={() => setOpen(false)}>
+                  Confirm
+                </Button>
+              </ButtonGroup>
+            }
+          >
+            <p style={{ margin: 0 }}>The header shows an Expand (maximize) button before Close, grouped together.</p>
+          </ModalDialog>
+        </>
+      );
+    }
+    return <Demo />;
+  },
 };
 
 /** No footer, and a dialog labelled by `aria-label` instead of a visible title. */

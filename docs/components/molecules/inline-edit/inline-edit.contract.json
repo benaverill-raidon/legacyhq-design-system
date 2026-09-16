@@ -54,7 +54,7 @@
   "anatomy": [
     { "part": "root", "element": "div", "required": true, "description": "Transparent layout wrapper - flex row, no color/border tokens of its own." },
     { "part": "content", "element": "div", "required": true, "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing." },
-    { "part": "actions", "element": "span", "required": false, "description": "Trailing cancel/confirm IconButton pair; renders only once editing has started, when actionButtons is not false." }
+    { "part": "actions", "element": "ButtonGroup (div)", "required": false, "description": "Trailing cancel/confirm IconButton pair, wrapped in a ButtonGroup for the row layout; renders only once editing has started, when actionButtons is not false. The .actions class positions the group (align-self: flex-end) and tightens its gap to 4px (--spacing-xs), overriding Button Group's default 8px for this icon-only pair." }
   ],
   "props": {
     "value": { "type": "string", "required": true, "default": null, "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft." },
@@ -75,7 +75,7 @@
   "tokens": {
     "layout": {
       "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
-      "actionsGap": "--spacing-sm (8px, between the cancel and confirm buttons themselves, matching Button Group)"
+      "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
     }
   },
   "accessibility": {
@@ -126,8 +126,9 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded spacing - gaps come from --spacing-sm (root) and --spacing-sm (between action buttons).",
+    "No hardcoded spacing - the root gap comes from --spacing-sm; the gap between the action buttons is --spacing-xs (4px), an InlineEdit override of Button Group's default 8px applied via a higher-specificity `.root .actions` rule.",
     "flex-direction: column on the root, action row align-self: flex-end - deviates from Figma's own single-row layout so the field never shrinks to make room for the action buttons.",
+    "The confirm/cancel pair is wrapped in ButtonGroup (a molecule composing another molecule - the same actions-row grouping Figma's inline-edit uses) rather than a bespoke flex span, so the row layout stays consistent with every other action row in the system.",
     "Use React.cloneElement, not a render-prop or two separate elements, so focus persists across the read/edit transition."
   ],
   "relatedComponents": ["TextField", "IconButton", "ButtonGroup"],

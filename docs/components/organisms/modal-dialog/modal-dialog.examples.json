@@ -3,18 +3,13 @@
   "examples": [
     {
       "name": "Confirmation with Cancel + Confirm",
-      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
       "props": { "title": "Save changes?" }
     },
     {
       "name": "Destructive confirmation (error appearance + red Confirm)",
-      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
       "props": { "appearance": "error", "width": "small" }
-    },
-    {
-      "name": "Title with a supporting description",
-      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Move to archive?\"\n  description=\"Archived projects are hidden from the dashboard but can be restored at any time.\"\n  footer={\n    <>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleArchive}>Archive</Button>\n    </>\n  }\n>\n  <p>The team keeps access; only its dashboard placement changes.</p>\n</ModalDialog>",
-      "props": { "title": "Move to archive?", "description": "Archived projects are hidden from the dashboard but can be restored at any time." }
     },
     {
       "name": "Informational dialog with no footer",
@@ -35,6 +30,11 @@
       "name": "Keep open while a backdrop click would otherwise close it",
       "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Unsaved changes\" closeOnBackdropClick={false} footer={actions}>\n  <p>Save or discard before leaving.</p>\n</ModalDialog>",
       "props": { "closeOnBackdropClick": false }
+    },
+    {
+      "name": "Header expand (maximize) action",
+      "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
+      "props": { "title": "Preview attachment" }
     }
   ],
   "antiExamples": [

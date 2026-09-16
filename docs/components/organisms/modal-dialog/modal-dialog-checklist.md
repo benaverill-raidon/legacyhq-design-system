@@ -9,7 +9,8 @@ Modal Dialog
 Organism
 
 ### Related Components
-- Button (footer actions), Icon Button (the close button)
+- Button (footer actions), Icon Button (the close / expand buttons), Button Group (the header and
+  footer action rows)
 - Toast (non-blocking transient feedback - the alternative when a modal is too heavy)
 - Dropdown Menu / Menu (contextual overflow anchored to a control)
 
@@ -53,12 +54,10 @@ does it once.
 ## Content
 
 ### What content can be displayed?
-- Header: a title (+ optional status icon for warning/error), an optional description line, and a
-  close button
+- Header: a title (+ optional status icon for warning/error), an optional expand (maximize) button,
+  and a close button (expand + close share a Button Group when both are shown)
 - Body: arbitrary content, scrollable when tall
-- Footer: right-aligned actions (typically Cancel + Confirm). Built to hold action controls - Figma's
-  footer preferred-slot list is Button, Icon Button, Link, Link Button, Split Button, Toggle Button,
-  Toggle Icon Button
+- Footer: right-aligned actions (typically Cancel + Confirm)
 
 ### Character Limits
 None - the title wraps; the body scrolls.
@@ -97,7 +96,8 @@ close. `initialFocusRef` overrides the initial target.
 
 ### How is it dismissed?
 The close button, Escape (`closeOnEscape`), and a backdrop click (`closeOnBackdropClick`) - all call
-`onClose`. The close button is labelled "Close" (`closeLabel`).
+`onClose`. The close button is labelled "Close" (`closeLabel`). The optional expand button (`onExpand`,
+labelled `expandLabel`) is a separate action - it does not dismiss.
 
 ### Is the status icon meaningful?
 No - it's decorative; the appearance's meaning is carried by the title and actions.

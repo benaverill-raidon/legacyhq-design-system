@@ -40,6 +40,9 @@ once there's a real use case - the same note Text Field carries - but isn't part
 - Hover, focus, typing, filled, and autofill are live states, not props. A documentation-only
   `data-force-state` pin mirrors the hover/focus pseudo-classes for a static Storybook reference, the
   same convention Text Field, Button, and Checkbox use.
+- Selected text is tinted with the shared `color-content-highlight` token - a translucent brand
+  `::selection` background applied identically across Text Field, Text Area, and Rich Text Area
+  (background only; the text color is left untouched).
 
 ## Resizing
 

@@ -851,6 +851,11 @@
         "type": "float",
         "originalName": "typography/font-weight/400"
       },
+      "typography-font-weight-500": {
+        "value": "500px",
+        "type": "float",
+        "originalName": "typography/font-weight/500"
+      },
       "typography-font-weight-600": {
         "value": "600px",
         "type": "float",

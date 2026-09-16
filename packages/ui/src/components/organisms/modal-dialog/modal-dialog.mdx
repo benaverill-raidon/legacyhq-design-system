@@ -36,14 +36,6 @@ open it:
 - moves focus into the panel, traps Tab within it, and restores focus to the trigger on close;
 - locks page scroll; the body scrolls internally when it is taller than the viewport allows.
 
-## Title and description
-
-<Canvas of={ModalDialogStories.WithDescription} />
-
-The header holds the `title` (the heading and accessible name) and an optional `description` - a
-supporting `body-md` line below it for one sentence of context. When present, the description is wired
-as the dialog's `aria-describedby`; keep longer explanation in the body.
-
 ## Appearance
 
 <Canvas of={ModalDialogStories.Appearances} />
@@ -68,9 +60,7 @@ panel shrinks to fit narrow viewports (it never exceeds the available width).
 
 The header and footer stay fixed while a long body scrolls. The footer is a slot - pass the actions
 (typically a Cancel and a Confirm Button); they render right-aligned. Omit `footer` for an
-informational dialog. It accepts any content, but it's designed to hold actions: the Figma footer's
-preferred-slot list is Button, Icon Button, Link, Link Button, Split Button, Toggle Button, and
-Toggle Icon Button.
+informational dialog.
 
 <Canvas of={ModalDialogStories.EdgeCases} />
 
@@ -94,7 +84,6 @@ Toggle Icon Button.
     <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Whether the dialog is shown (controlled).</td></tr>
     <tr><td><code>onClose</code></td><td><code>() =&gt; void</code></td><td>-</td><td>Called on close request (close button, Escape, backdrop).</td></tr>
     <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Header heading and the dialog's accessible name.</td></tr>
-    <tr><td><code>description</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Supporting line below the title (body-md); wired as <code>aria-describedby</code>.</td></tr>
     <tr><td><code>appearance</code></td><td><code>'default' | 'warning' | 'error'</code></td><td><code>'default'</code></td><td>Prepends a status icon to the title.</td></tr>
     <tr><td><code>width</code></td><td><code>'small' | 'medium' | 'large' | 'extraLarge'</code></td><td><code>'medium'</code></td><td>Panel width.</td></tr>
     <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>The body content (scrolls when tall).</td></tr>

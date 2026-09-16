@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
-import { CloseIcon, StatusErrorIcon, StatusWarningIcon } from '../../../assets/icons';
+import { CloseIcon, GrowDiagonalIcon, StatusErrorIcon, StatusWarningIcon } from '../../../assets/icons';
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
+import { ButtonGroup } from '../../molecules/button-group';
 import styles from './modal-dialog.module.css';
 import type { ModalAppearance, ModalDialogProps } from './modal-dialog.types';
 
@@ -34,13 +35,14 @@ export const ModalDialog = React.memo(function ModalDialog({
   open,
   onClose,
   title,
-  description,
   appearance = 'default',
   width = 'medium',
   children,
   footer,
   showCloseButton = true,
   closeLabel = 'Close',
+  onExpand,
+  expandLabel = 'Expand',
   closeOnEscape = true,
   closeOnBackdropClick = true,
   initialFocusRef,
@@ -48,7 +50,6 @@ export const ModalDialog = React.memo(function ModalDialog({
   className,
 }: ModalDialogProps) {
   const titleId = React.useId();
-  const descriptionId = React.useId();
   const panelRef = React.useRef<HTMLDivElement>(null);
   // Where mousedown began, so a text-selection drag that ends on the backdrop doesn't close the
   // dialog - only a genuine press-and-release on the backdrop does.
@@ -131,7 +132,28 @@ export const ModalDialog = React.memo(function ModalDialog({
   }
 
   const status = STATUS_ICONS[appearance];
-  const hasHeader = title != null || description != null || showCloseButton;
+
+  // Header actions: an optional Expand (maximize) button, then the Close button. When both are
+  // present they share a Button Group (matching Figma's modal-header); a lone button renders on its
+  // own rather than in a single-child group.
+  const expandButton = onExpand ? (
+    <IconButton key="expand" appearance="subtle" size="sm" aria-label={expandLabel} onClick={onExpand}>
+      <GrowDiagonalIcon />
+    </IconButton>
+  ) : null;
+  const closeButton = showCloseButton ? (
+    <IconButton key="close" appearance="subtle" size="sm" aria-label={closeLabel} onClick={onClose}>
+      <CloseIcon />
+    </IconButton>
+  ) : null;
+  const headerButtons = [expandButton, closeButton].filter(Boolean);
+  const headerActions =
+    headerButtons.length > 1 ? (
+      <ButtonGroup className={styles.headerActions}>{headerButtons}</ButtonGroup>
+    ) : (
+      (headerButtons[0] ?? null)
+    );
+  const hasHeader = title != null || headerButtons.length > 0;
 
   const handleBackdropMouseDown = (event: React.MouseEvent<HTMLDivElement>) => {
     backdropMouseDownRef.current = event.target === event.currentTarget;
@@ -153,7 +175,6 @@ export const ModalDialog = React.memo(function ModalDialog({
         aria-modal="true"
         aria-labelledby={title != null ? titleId : undefined}
         aria-label={title == null ? ariaLabel : undefined}
-        aria-describedby={description != null ? descriptionId : undefined}
         tabIndex={-1}
         className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
         data-appearance={appearance}
@@ -162,30 +183,19 @@ export const ModalDialog = React.memo(function ModalDialog({
       >
         {hasHeader ? (
           <div className={styles.header}>
-            <div className={styles.titleRow}>
-              <div className={styles.titleArea}>
-                {status ? (
-                  <span className={styles.statusIcon} aria-hidden="true">
-                    <status.Icon size="md" color={status.color} />
-                  </span>
-                ) : null}
-                {title != null ? (
-                  <h2 id={titleId} className={styles.title}>
-                    {title}
-                  </h2>
-                ) : null}
-              </div>
-              {showCloseButton ? (
-                <IconButton appearance="subtle" size="sm" aria-label={closeLabel} onClick={onClose}>
-                  <CloseIcon />
-                </IconButton>
+            <div className={styles.titleArea}>
+              {status ? (
+                <span className={styles.statusIcon} aria-hidden="true">
+                  <status.Icon size="md" color={status.color} />
+                </span>
+              ) : null}
+              {title != null ? (
+                <h2 id={titleId} className={styles.title}>
+                  {title}
+                </h2>
               ) : null}
             </div>
-            {description != null ? (
-              <p id={descriptionId} className={styles.description}>
-                {description}
-              </p>
-            ) : null}
+            {headerActions}
           </div>
         ) : null}
 

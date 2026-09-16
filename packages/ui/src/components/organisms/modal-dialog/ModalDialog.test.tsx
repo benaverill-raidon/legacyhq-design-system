@@ -36,38 +36,6 @@ describe('ModalDialog', () => {
     expect(screen.getByText('This cannot be undone.')).toBeInTheDocument();
   });
 
-  it('renders a description and wires it as aria-describedby', () => {
-    render(
-      <ModalDialog open onClose={() => {}} title="Move to archive?" description="Archived projects can be restored.">
-        Body
-      </ModalDialog>,
-    );
-
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveAccessibleDescription('Archived projects can be restored.');
-    expect(screen.getByText('Archived projects can be restored.')).toBeInTheDocument();
-  });
-
-  it('has no aria-describedby when there is no description', () => {
-    render(
-      <ModalDialog open onClose={() => {}} title="Title">
-        Body
-      </ModalDialog>,
-    );
-
-    expect(screen.getByRole('dialog')).not.toHaveAttribute('aria-describedby');
-  });
-
-  it('renders the header for a description-only dialog', () => {
-    render(
-      <ModalDialog open onClose={() => {}} aria-label="Notice" showCloseButton={false} description="Just so you know.">
-        Body
-      </ModalDialog>,
-    );
-
-    expect(screen.getByText('Just so you know.')).toBeInTheDocument();
-  });
-
   it('portals into document.body', () => {
     const { container } = render(
       <ModalDialog open onClose={() => {}} title="Title">
@@ -120,6 +88,44 @@ describe('ModalDialog', () => {
     );
 
     expect(screen.queryByRole('button', { name: 'Close' })).toBeNull();
+  });
+
+  it('renders no expand button by default', () => {
+    render(
+      <ModalDialog open onClose={() => {}} title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    expect(screen.queryByRole('button', { name: 'Expand' })).toBeNull();
+  });
+
+  it('shows an expand button, grouped with close, when onExpand is provided', () => {
+    const onExpand = vi.fn();
+    render(
+      <ModalDialog open onClose={() => {}} onExpand={onExpand} title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    const expand = screen.getByRole('button', { name: 'Expand' });
+    fireEvent.click(expand);
+    expect(onExpand).toHaveBeenCalledTimes(1);
+
+    // Expand and Close share a Button Group (the header action row).
+    const group = expand.closest('[data-orientation]');
+    expect(group).toHaveAttribute('data-orientation', 'horizontal');
+    expect(group).toContainElement(screen.getByRole('button', { name: 'Close' }));
+  });
+
+  it('supports a custom expandLabel', () => {
+    render(
+      <ModalDialog open onClose={() => {}} onExpand={() => {}} expandLabel="Maximize" title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Maximize' })).toBeInTheDocument();
   });
 
   it('closes on Escape, unless closeOnEscape is false', () => {

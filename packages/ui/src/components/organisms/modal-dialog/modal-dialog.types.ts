@@ -17,12 +17,6 @@ export interface ModalDialogProps {
    */
   title?: React.ReactNode;
   /**
-   * A supporting line rendered below the title in the header (Figma's modal-header description). It's
-   * `body-md` text and, when present, is wired as the dialog's `aria-describedby`. Omit for a
-   * title-only header.
-   */
-  description?: React.ReactNode;
-  /**
    * Semantic intent. `warning` / `error` prepend a status icon to the title (in the matching
    * colour); `default` shows none. It does not tone the footer buttons - pair `appearance="error"`
    * with a matching Confirm button (e.g. `<Button appearance="primary" tone="error">`).
@@ -38,6 +32,14 @@ export interface ModalDialogProps {
   showCloseButton?: boolean;
   /** Accessible label for the close button. Default "Close". */
   closeLabel?: string;
+  /**
+   * Called when the header expand (maximize) button is clicked. Provide it to show an Expand button
+   * before Close in the header; when both are shown they share a Button Group. Omit for no expand
+   * button (the default).
+   */
+  onExpand?: () => void;
+  /** Accessible label / tooltip for the expand button. Default "Expand". */
+  expandLabel?: string;
   /** Close when Escape is pressed. Default true. */
   closeOnEscape?: boolean;
   /** Close when the backdrop (outside the panel) is clicked. Default true. */

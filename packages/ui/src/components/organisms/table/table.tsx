@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { ArrowDownIcon, ArrowUpIcon, SearchIcon } from '../../../assets/icons';
+import { ArrowDownIcon, ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon, CloseIcon, SearchIcon } from '../../../assets/icons';
 import { Button } from '../../atoms/button';
 import { Checkbox } from '../../atoms/checkbox';
-import { Pagination } from '../../molecules/pagination';
+import { IconButton } from '../../atoms/icon-button';
+import { Select } from '../../molecules/select';
 import { Skeleton } from '../../molecules/skeleton';
 import { TextField } from '../../molecules/text-field';
-import { EmptyState } from '../empty-state';
 import styles from './table.module.css';
 import type { RowId, TableProps, TableSort } from './table.types';
 
@@ -47,7 +47,7 @@ export function Table<Row>({
   toolbarActions,
   activeFilters,
   onClearFilters,
-  clearFiltersLabel = 'Clear all filters',
+  clearFiltersLabel = 'Clear filters',
   sort,
   defaultSort = null,
   onSortChange,
@@ -65,6 +65,9 @@ export function Table<Row>({
   onPageChange,
   pageSize,
   manualPagination = false,
+  totalItems,
+  itemsPerPageOptions,
+  onPageSizeChange,
   resizableColumns = true,
   loading = false,
   skeletonRowCount = 5,
@@ -76,9 +79,11 @@ export function Table<Row>({
   const [internalSelected, setInternalSelected] = React.useState<RowId[]>(defaultSelectedIds);
   const [internalPage, setInternalPage] = React.useState(1);
   const [columnWidths, setColumnWidths] = React.useState<Record<string, number>>({});
+  const [searchExpanded, setSearchExpanded] = React.useState(() => Boolean(searchValue));
   const resizeRef = React.useRef<{ key: string; startX: number; startWidth: number } | null>(null);
   const headerCellRefs = React.useRef<Map<string, HTMLTableCellElement>>(new Map());
   const selectCellRef = React.useRef<HTMLTableCellElement | null>(null);
+  const searchRef = React.useRef<HTMLInputElement>(null);
 
   const currentSort = sort !== undefined ? sort : internalSort;
   const currentSelectedIds = selectedIds !== undefined ? selectedIds : internalSelected;
@@ -111,7 +116,13 @@ export function Table<Row>({
     ? sortedRows.slice((currentPage - 1) * pageSize, currentPage * pageSize)
     : sortedRows;
 
-  const showPagination = manualPagination ? (pageCount ?? 0) > 1 : clientPaginated && resolvedPageCount > 1;
+  const showFooter = manualPagination
+    ? (pageCount ?? 0) > 1
+    : clientPaginated && resolvedPageCount > 1;
+
+  const resolvedTotalItems = totalItems ?? (clientPaginated ? sortedRows.length : visibleRows.length);
+  const rangeStart = clientPaginated ? (currentPage - 1) * pageSize + 1 : 1;
+  const rangeEnd = clientPaginated ? Math.min(currentPage * pageSize, resolvedTotalItems) : resolvedTotalItems;
 
   const selectedSet = React.useMemo(() => new Set(currentSelectedIds), [currentSelectedIds]);
   const visibleIds = visibleRows.map((r) => r.id);
@@ -217,8 +228,8 @@ export function Table<Row>({
   const name = accessibleString(caption, title);
   const captionContent = caption ?? title;
 
-  const hasHeader = title != null || description != null || actions != null;
-  const hasBuiltInToolbar = searchable || toolbarActions != null || onClearFilters != null;
+  const hasHeader = title != null || description != null;
+  const hasBuiltInToolbar = searchable || toolbarActions != null || actions != null || onClearFilters != null || (selectable && selectedCount > 0);
   const hasActiveFilters = activeFilters != null;
   const hasToolbar = toolbar != null || hasBuiltInToolbar || hasActiveFilters;
 
@@ -226,36 +237,73 @@ export function Table<Row>({
     <div className={cx(styles.table, className)} data-size={size} id={id}>
       {hasHeader ? (
         <div className={styles.header}>
-          <div className={styles.headingArea}>
-            {title != null ? <h2 className={styles.title}>{title}</h2> : null}
-            {description != null ? <p className={styles.description}>{description}</p> : null}
-          </div>
-          {actions != null ? <div className={styles.actions}>{actions}</div> : null}
+          {title != null ? <h2 className={styles.title}>{title}</h2> : null}
+          {description != null ? <p className={styles.description}>{description}</p> : null}
         </div>
       ) : null}
 
-      <div className={styles.tableBody} data-has-footer={showPagination || undefined}>
+      <div className={styles.tableBody} data-has-footer={showFooter || undefined}>
         {hasToolbar ? (
           <div className={styles.toolbar}>
             {toolbar ?? (
               <>
-                <div className={styles.toolbarControls}>
-                  {searchable ? (
-                    <TextField
-                      type="search"
-                      size={size === 'sm' ? 'sm' : 'md'}
-                      className={styles.search}
-                      iconBefore={<SearchIcon />}
-                      placeholder={searchPlaceholder}
-                      aria-label={searchPlaceholder}
-                      value={searchValue}
-                      onChange={(event) => onSearchChange?.(event.currentTarget.value)}
-                    />
-                  ) : null}
-                  {toolbarActions != null ? (
-                    <div className={styles.toolbarActions}>{toolbarActions}</div>
-                  ) : null}
-                </div>
+                {(searchable || toolbarActions != null || actions != null || (selectable && selectedCount > 0)) ? (
+                  <div className={styles.toolbarControls}>
+                    {selectable && selectedCount > 0 ? (
+                      <div className={styles.selectionPill}>
+                        <span className={styles.selectionCount}>{selectionCountLabel(selectedCount)}</span>
+                        <div className={styles.bulkActions}>{bulkActions}</div>
+                      </div>
+                    ) : (
+                      <div className={styles.toolbarButtonGroup}>
+                        {searchable ? (
+                          searchExpanded ? (
+                            <TextField
+                              ref={searchRef}
+                              size={size === 'sm' ? 'sm' : 'md'}
+                              className={styles.search}
+                              iconBefore={<SearchIcon />}
+                              iconAfter={
+                                <IconButton
+                                  appearance="subtle"
+                                  size="xs"
+                                  aria-label="Clear search"
+                                  style={searchValue ? undefined : { visibility: 'hidden' }}
+                                  tabIndex={searchValue ? undefined : -1}
+                                  onClick={() => {
+                                    onSearchChange?.('');
+                                    searchRef.current?.focus();
+                                  }}
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              }
+                              placeholder={searchPlaceholder}
+                              aria-label={searchPlaceholder}
+                              value={searchValue}
+                              onChange={(event) => onSearchChange?.(event.currentTarget.value)}
+                              onBlur={() => { if (!searchValue) setSearchExpanded(false); }}
+                            />
+                          ) : (
+                            <IconButton
+                              appearance="subtle"
+                              size={size}
+                              onClick={() => {
+                                setSearchExpanded(true);
+                                requestAnimationFrame(() => searchRef.current?.focus());
+                              }}
+                              aria-label={searchPlaceholder}
+                            >
+                              <SearchIcon />
+                            </IconButton>
+                          )
+                        ) : null}
+                        {toolbarActions}
+                        {actions}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
                 {hasActiveFilters || onClearFilters != null ? (
                   <div className={styles.activeFiltersRow}>
                     {hasActiveFilters ? (
@@ -286,25 +334,6 @@ export function Table<Row>({
               </colgroup>
             ) : null}
             <thead className={styles.thead}>
-              {selectable && selectedCount > 0 ? (
-                <tr className={styles.selectionRow}>
-                  <th scope="col" className={styles.selectHeaderCell}>
-                    <Checkbox
-                      checked={allVisibleSelected}
-                      indeterminate={someVisibleSelected && !allVisibleSelected}
-                      onCheckedChange={toggleAll}
-                      disabled={visibleRows.length === 0}
-                      aria-label={selectionColumnLabel}
-                    />
-                  </th>
-                  <th scope="col" colSpan={columns.length} className={styles.selectionHeaderCell}>
-                    <div className={styles.selectionBar}>
-                      <span className={styles.selectionCount}>{selectionCountLabel(selectedCount)}</span>
-                      {bulkActions != null ? <div className={styles.bulkActions}>{bulkActions}</div> : null}
-                    </div>
-                  </th>
-                </tr>
-              ) : (
                 <tr>
                   {selectable ? (
                     <th ref={selectCellRef} scope="col" className={styles.selectHeaderCell}>
@@ -384,7 +413,6 @@ export function Table<Row>({
                   );
                 })}
                 </tr>
-              )}
             </thead>
             <tbody>
               {loading ? (
@@ -406,9 +434,10 @@ export function Table<Row>({
                 <tr>
                   <td colSpan={columnCount} className={styles.emptyCell}>
                     {empty ?? (
-                      <EmptyState type="informative" heading="No results">
-                        There is nothing to show here yet.
-                      </EmptyState>
+                      <div className={styles.emptyContainer}>
+                        <p className={styles.emptyHeading}>No results</p>
+                        <p className={styles.emptyDescription}>There is nothing to show here yet.</p>
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -446,14 +475,59 @@ export function Table<Row>({
           </table>
         </div>
 
-        {showPagination ? (
-          <div className={styles.footer}>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={resolvedPageCount}
-              onPageChange={handlePageChange}
-              ariaLabel={name ? `${name} pagination` : 'Table pagination'}
-            />
+        {showFooter ? (
+          <div className={styles.footer} role="navigation" aria-label={name ? `${name} pagination` : 'Table pagination'}>
+            <div className={styles.footerGroup}>
+              {itemsPerPageOptions != null && itemsPerPageOptions.length > 0 ? (
+                <>
+                  <span className={styles.footerLabel}>Items per page:</span>
+                  <Select
+                    size="sm"
+                    appearance="subtle"
+                    className={styles.footerSelect}
+                    options={itemsPerPageOptions.map((opt) => ({ value: String(opt), label: String(opt) }))}
+                    value={String(pageSize)}
+                    onChange={(v) => { if (v != null) onPageSizeChange?.(Number(v)); }}
+                    aria-label="Items per page"
+                  />
+                </>
+              ) : null}
+              <span className={styles.footerLabel}>
+                {rangeStart}–{rangeEnd} of {resolvedTotalItems.toLocaleString()} items
+              </span>
+            </div>
+            <div className={styles.footerGroup}>
+              <Select
+                size="sm"
+                appearance="subtle"
+                className={styles.footerSelect}
+                options={Array.from({ length: resolvedPageCount }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))}
+                value={String(currentPage)}
+                onChange={(v) => { if (v != null) handlePageChange(Number(v)); }}
+                aria-label="Page"
+              />
+              <span className={styles.footerLabel}>of {resolvedPageCount} pages</span>
+              <div className={styles.footerNav}>
+                <IconButton
+                  appearance="subtle"
+                  size="sm"
+                  disabled={currentPage <= 1}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  aria-label="Previous page"
+                >
+                  <ChevronLeftIcon />
+                </IconButton>
+                <IconButton
+                  appearance="subtle"
+                  size="sm"
+                  disabled={currentPage >= resolvedPageCount}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  aria-label="Next page"
+                >
+                  <ChevronRightIcon />
+                </IconButton>
+              </div>
+            </div>
           </div>
         ) : null}
       </div>

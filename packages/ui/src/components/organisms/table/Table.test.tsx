@@ -189,9 +189,9 @@ describe('Table', () => {
 
     expect(screen.getByText('2 selected')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
-    // The selection bar replaces the column headers: the sort buttons are gone while selecting.
-    expect(screen.queryByRole('button', { name: 'Sort by Name' })).not.toBeInTheDocument();
-    // The select-all checkbox stays.
+    // The selection bar lives in the toolbar; column headers stay visible.
+    expect(screen.getByRole('button', { name: 'Sort by Name' })).toBeInTheDocument();
+    // The select-all checkbox stays in the header.
     expect(screen.getByRole('checkbox', { name: 'Select all rows' })).toBeInTheDocument();
   });
 
@@ -239,7 +239,10 @@ describe('Table', () => {
     }
     render(<Harness />);
 
-    const search = screen.getByRole('searchbox', { name: 'Search people' });
+    // Search starts collapsed as an IconButton; click to expand
+    fireEvent.click(screen.getByRole('button', { name: 'Search people' }));
+
+    const search = screen.getByRole('textbox', { name: 'Search people' });
     fireEvent.change(search, { target: { value: 'ali' } });
     expect(search).toHaveValue('ali');
   });
@@ -294,6 +297,37 @@ describe('Table', () => {
 
     expect(screen.getByText('Status: Active')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /clear/i })).not.toBeInTheDocument();
+  });
+
+  it('renders footer with items-per-page selector and page navigation', () => {
+    const onPageSizeChange = vi.fn();
+    render(
+      <Table
+        columns={columns}
+        data={rows}
+        getRowId={getRowId}
+        caption="People"
+        pageSize={2}
+        itemsPerPageOptions={[2, 5, 10]}
+        onPageSizeChange={onPageSizeChange}
+      />,
+    );
+
+    const footer = screen.getByRole('navigation', { name: /pagination/i });
+    expect(within(footer).getByText(/Items per page/)).toBeInTheDocument();
+    expect(within(footer).getByText(/1–2 of 3 items/)).toBeInTheDocument();
+    expect(within(footer).getByText(/of 2 pages/)).toBeInTheDocument();
+
+    const pageSizeSelect = within(footer).getByRole('combobox', { name: 'Items per page' });
+    expect(pageSizeSelect).toHaveValue('2');
+
+    fireEvent.mouseDown(pageSizeSelect);
+    fireEvent.click(screen.getByRole('menuitemradio', { name: '5' }));
+    expect(onPageSizeChange).toHaveBeenCalledWith(5);
+
+    const nextButton = within(footer).getByLabelText('Next page');
+    fireEvent.click(nextButton);
+    expect(within(footer).getByRole('combobox', { name: 'Page' })).toHaveValue('2');
   });
 
   it('applies the size data attribute and composes className', () => {

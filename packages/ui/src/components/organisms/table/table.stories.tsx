@@ -9,7 +9,7 @@ import { Link } from '../../atoms/link';
 import { ProgressBar } from '../../atoms/progress-bar';
 import { Switch } from '../../atoms/switch';
 import { Tag } from '../../atoms/tag';
-import { AddIcon, ConfigureIcon, FilterIcon, MoreVertIcon } from '../../../assets/icons';
+import { FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
 import { Chip } from '../../molecules/chip';
 import { Table } from './table';
 import type { TableColumn } from './table.types';
@@ -113,7 +113,20 @@ export const Selectable: Story = {
 };
 
 export const Pagination: Story = {
-  render: () => <Table columns={basicColumns} data={members} getRowId={getRowId} caption="Team members" pageSize={5} />,
+  render: function PaginationStory() {
+    const [currentPageSize, setCurrentPageSize] = useState(5);
+    return (
+      <Table
+        columns={basicColumns}
+        data={members}
+        getRowId={getRowId}
+        caption="Team members"
+        pageSize={currentPageSize}
+        itemsPerPageOptions={[5, 10, 25]}
+        onPageSizeChange={setCurrentPageSize}
+      />
+    );
+  },
 };
 
 export const Sizes: Story = {
@@ -169,8 +182,8 @@ export const WithToolbar: Story = {
             <IconButton appearance="subtle" aria-label="Filter">
               <FilterIcon />
             </IconButton>
-            <IconButton appearance="subtle" aria-label="Configure">
-              <ConfigureIcon />
+            <IconButton appearance="subtle" aria-label="Settings">
+              <SettingsIcon />
             </IconButton>
           </>
         }
@@ -213,9 +226,6 @@ export const WithToolbar: Story = {
                   onRemove={() => setDeptFilter(null)}
                 />
               ) : null}
-              <IconButton appearance="subtle" size="sm" aria-label="Add filter">
-                <AddIcon />
-              </IconButton>
             </>
           ) : undefined
         }
@@ -245,6 +255,7 @@ export const FullShell: Story = {
     const [roleFilter, setRoleFilter] = useState<string | null>(null);
     const [statusFilter, setStatusFilter] = useState<string | null>(null);
     const [deptFilter, setDeptFilter] = useState<string | null>(null);
+    const [currentPageSize, setCurrentPageSize] = useState(6);
 
     const filtered = useMemo(
       () =>
@@ -268,13 +279,7 @@ export const FullShell: Story = {
         title="All members"
         description="Everyone with access to the LegacyHQ workspace."
         actions={
-          <>
-            <Button appearance="subtle">Export</Button>
-            <Button appearance="primary">Invite member</Button>
-            <IconButton appearance="subtle" aria-label="More actions">
-              <MoreVertIcon />
-            </IconButton>
-          </>
+          <Button appearance="primary">Invite member</Button>
         }
         searchable
         searchValue={search}
@@ -285,8 +290,8 @@ export const FullShell: Story = {
             <IconButton appearance="subtle" aria-label="Filter">
               <FilterIcon />
             </IconButton>
-            <IconButton appearance="subtle" aria-label="Configure">
-              <ConfigureIcon />
+            <IconButton appearance="subtle" aria-label="Settings">
+              <SettingsIcon />
             </IconButton>
           </>
         }
@@ -329,9 +334,6 @@ export const FullShell: Story = {
                   onRemove={() => setDeptFilter(null)}
                 />
               ) : null}
-              <IconButton appearance="subtle" size="sm" aria-label="Add filter">
-                <AddIcon />
-              </IconButton>
             </>
           ) : undefined
         }
@@ -351,7 +353,9 @@ export const FullShell: Story = {
           </>
         }
         defaultSort={{ columnKey: 'name', direction: 'asc' }}
-        pageSize={6}
+        pageSize={currentPageSize}
+        itemsPerPageOptions={[6, 10, 25]}
+        onPageSizeChange={setCurrentPageSize}
       />
     );
   },
@@ -366,19 +370,14 @@ const statusTone = (s: string) => {
 };
 
 function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> {
+  const avatarSize = tableSize === 'md' ? 'sm' as const : 'xs' as const;
   const labelSize = tableSize === 'md' ? 'md' : 'sm';
   const tagSize = tableSize === 'md' ? 'md' : 'sm';
-  const progressSize = tableSize === 'md' ? 'lg' : 'md';
+  const progressSize = tableSize === 'md' ? 'md' : 'md';
   const switchSize = tableSize === 'md' ? 'md' : 'sm';
   const buttonSize = tableSize === 'md' ? 'md' : 'sm';
 
   return [
-    {
-      key: 'avatar',
-      header: 'Avatar',
-      render: (m) => <Avatar name={m.name} size="sm" />,
-      width: 64,
-    },
     {
       key: 'name',
       header: 'Name',
@@ -386,9 +385,12 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
       sortValue: (m) => m.name,
       emphasis: 'strong',
       render: (m) => (
-        <Link href={`/members/${m.id}`} emphasis="strong">
-          {m.name}
-        </Link>
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+          <Avatar name={m.name} size={avatarSize} />
+          <Link href={`/members/${m.id}`} emphasis="strong">
+            {m.name}
+          </Link>
+        </span>
       ),
     },
     {
@@ -449,7 +451,7 @@ export const CellVariants: Story = {
         data={members.slice(0, 5)}
         getRowId={getRowId}
         title="Cell variants — MD"
-        description="Avatar, Link, text, Label, Tag, Badge, Progress Bar, Switch, Button + IconButton."
+        description="Avatar + Link, text, Label, Tag, Badge, Progress Bar, Switch, Button + IconButton."
         selectable
         defaultSort={{ columnKey: 'name', direction: 'asc' }}
       />

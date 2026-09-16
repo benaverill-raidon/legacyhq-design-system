@@ -1,17 +1,20 @@
 /*
- * Table: a data-table organism. Spacing/typography/colour from Figma's drag-handle + cell components
- * (Components v1.0.0, page "Table", verified via Desktop Bridge 2026-09-14):
+ * Table: a data-table organism. Spacing/typography/colour from Figma's toolbar + cell components
+ * (Components v1.0.0, page "Table", verified via Desktop Bridge 2026-09-16):
  *   - header: title heading/lg + description body/md subtle, pt-3xl pb-lg, px-2xl (md) / px-lg (sm), gap-md
- *   - toolbar: search + filter/configure icon buttons (right), chips row below; border-bottom separator
- *   - header cell: heading/xs SemiBold, colour content/subtle, background elevation/surface/default,
+ *   - toolbar controls: single inline button-group (search, filter, settings, brand button),
+ *     right-aligned; pt-2xl pb-sm px-2xl (md), pt-lg pb-sm px-lg (sm)
+ *   - selection pill: bg selected/default/default, border border/selected, radius-lg (8px),
+ *     colour content/selected, body-md 400; always includes bulk-actions button-group
+ *   - header cell: heading/xs SemiBold, colour content/subtle, background elevation/surface/sunken/default,
  *     height 40 (md) / 32 (sm), inline padding spacing/sm, bottom border
  *   - body cell: body/md content/default, row height 64 (md) / 40 (sm), inline padding spacing/sm,
  *     bottom row divider
+ *   - scroll region: margin-block-start spacing/lg, border-top border/default
+ *   - footer: no fill (context provides), border-top border/default
  *   - outer gutter: spacing/2xl (24px) for md, spacing/lg (16px) for sm
  *   - selection column: 40px
- *   - drag-handle: border-default (default), border-bold (hover/pressed); width 1px all states;
- *     hover = colour change only; pressed extends with ~2px inset
- *   - no border/radius on the table wrapper — separator is toolbar's border-block-end only
+ *   - drag-handle: border-default (default), border-bold (hover/pressed); width 1px all states
  */
 .table {
   display: flex;
@@ -20,22 +23,13 @@
   color: var(--color-content-default);
 }
 
-/* --- Header (title + description + actions — sits above the table body) --- */
+/* --- Header (title + description — sits above the table body) --- */
 .header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-lg);
-  flex-wrap: wrap;
-  padding-block: var(--spacing-3xl) var(--spacing-lg);
-  padding-inline: var(--spacing-2xl);
-}
-
-.headingArea {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  min-inline-size: 0;
+  padding-block: var(--spacing-3xl) var(--spacing-lg);
+  padding-inline: var(--spacing-2xl);
 }
 
 .title {
@@ -58,45 +52,68 @@
   letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
-.actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex: 0 0 auto;
-}
-
 /* --- Table body (toolbar + grid + footer — no border/radius per Figma) --- */
 .tableBody {
   display: flex;
   flex-direction: column;
   min-inline-size: 0;
-  background: var(--color-elevation-surface-raised-default);
 }
 
-/* --- Toolbar (search row + active-filters row + bottom separator) --- */
+/* --- Toolbar (controls row + active-filters row; no bottom border — separator lives on .scroll) --- */
 .toolbar {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  padding-block: var(--spacing-lg) var(--spacing-xl);
-  padding-inline: var(--spacing-2xl);
-  border-block-end: var(--border-width-sm) solid var(--color-border-default);
 }
 
 .toolbarControls {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+  padding-block: var(--spacing-2xl) var(--spacing-sm);
+  padding-inline: var(--spacing-2xl);
+}
+
+.toolbarButtonGroup {
+  display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
 .search {
-  flex: 1 1 auto;
-  max-inline-size: 600px;
+  flex: 0 1 auto;
+  inline-size: 280px;
+  max-inline-size: 100%;
   min-inline-size: 0;
 }
 
-.toolbarActions {
+/*
+ * Selection pill: a right-aligned pill inside .toolbarControls when rows are selected.
+ * Replaces the toolbar button-group — the outer container's padding/alignment stays the same.
+ */
+.selectionPill {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  padding-block: var(--spacing-xs);
+  padding-inline: var(--spacing-md) var(--spacing-xs);
+  background: var(--color-background-selected-default-default);
+  border: var(--border-width-sm) solid var(--color-border-selected);
+  border-radius: var(--border-radius-lg);
+}
+
+.selectionCount {
+  white-space: nowrap;
+  color: var(--color-content-selected);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.bulkActions {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -109,6 +126,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-sm);
+  padding-inline: var(--spacing-2xl);
 }
 
 .activeFilters {
@@ -118,59 +136,11 @@
   gap: var(--spacing-sm);
 }
 
-/*
- * Selection bar: when rows are selected, the header <th> cells are replaced by this row (the
- * select-all checkbox stays; the column headers become the count + bulk actions).
- */
-.thead .selectionRow th {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: 1;
-  background: var(--color-background-brand-primary-subtle-default);
-  border-block-end: var(--border-width-sm) solid var(--color-border-default);
-}
-
-.selectionHeaderCell {
-  padding-block: 0;
-  padding-inline: var(--spacing-sm) var(--spacing-2xl);
-  text-align: start;
-}
-
-.table[data-size='md'] .selectionHeaderCell {
-  block-size: 40px;
-}
-
-.table[data-size='sm'] .selectionHeaderCell {
-  block-size: 32px;
-  padding-inline-end: var(--spacing-lg);
-}
-
-.selectionBar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-}
-
-.selectionCount {
-  color: var(--color-content-default);
-  font-family: var(--typography-heading-xs-font-family);
-  font-size: var(--typography-heading-xs-font-size);
-  font-weight: var(--typography-heading-xs-font-weight);
-  line-height: var(--typography-heading-xs-line-height);
-  letter-spacing: var(--typography-heading-xs-letter-spacing);
-}
-
-.bulkActions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacing-sm);
-}
-
 /* --- Grid scroll region --- */
 .scroll {
+  margin-block-start: var(--spacing-lg);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+  background: var(--color-elevation-surface-raised-default);
   overflow-x: auto;
   overflow-y: auto;
 }
@@ -244,7 +214,7 @@
   position: sticky;
   inset-block-start: 0;
   z-index: 1;
-  background: var(--color-elevation-surface-default);
+  background: var(--color-elevation-surface-sunken-default);
   border-block-end: var(--border-width-sm) solid var(--color-border-default);
   color: var(--color-content-subtle);
   font-family: var(--typography-heading-xs-font-family);
@@ -411,9 +381,10 @@
   block-size: 32px;
 }
 
+/* 40px total row height: subtract the 1px bottom border so border-collapse renders exactly 40px. */
 .table[data-size='sm'] .cell,
 .table[data-size='sm'] .selectCell {
-  block-size: 40px;
+  block-size: calc(40px - var(--border-width-sm));
 }
 
 /* --- SM outer gutter: 16px (--spacing-lg) instead of MD's 24px (--spacing-2xl) --- */
@@ -421,7 +392,17 @@
   padding-inline: var(--spacing-lg);
 }
 
-.table[data-size='sm'] .toolbar {
+.table[data-size='sm'] .toolbarControls {
+  padding-block: var(--spacing-lg) var(--spacing-sm);
+  padding-inline: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .selectionPill {
+  padding-block: 0;
+  padding-inline: var(--spacing-sm) var(--spacing-xs);
+}
+
+.table[data-size='sm'] .activeFiltersRow {
   padding-inline: var(--spacing-lg);
 }
 
@@ -437,13 +418,40 @@
   padding-inline-end: var(--spacing-lg);
 }
 
-.table[data-size='sm'] .footer {
-  padding-inline: var(--spacing-lg);
-}
-
 /* --- Empty state --- */
 .emptyCell {
   padding: 0;
+}
+
+.emptyContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  background: var(--color-elevation-surface-deep-default);
+  text-align: center;
+}
+
+.emptyHeading {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+}
+
+.emptyDescription {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
 /* --- Loading skeletons --- */
@@ -460,6 +468,47 @@
 /* --- Footer --- */
 .footer {
   display: flex;
-  justify-content: center;
-  padding: var(--spacing-lg) var(--spacing-2xl);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-lg);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.table[data-size='md'] .footer {
+  min-block-size: 64px;
+  padding-block: var(--spacing-lg);
+  padding-inline: var(--spacing-lg);
+}
+
+.table[data-size='sm'] .footer {
+  min-block-size: 40px;
+  padding-block: var(--spacing-sm);
+  padding-inline: var(--spacing-lg);
+}
+
+.footerGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.footerLabel {
+  white-space: nowrap;
+}
+
+.footerSelect {
+  inline-size: 64px;
+  flex: 0 0 auto;
+}
+
+.footerNav {
+  display: flex;
+  align-items: center;
+  gap: 0;
 }

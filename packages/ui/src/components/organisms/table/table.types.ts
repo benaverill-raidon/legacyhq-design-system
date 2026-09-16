@@ -102,7 +102,7 @@ export interface TableProps<Row> {
    * filter-chip segments (operator, value, remove) stay fully controlled.
    */
   activeFilters?: React.ReactNode;
-  /** When provided, renders a "Clear all filters" action at the trailing edge of the chip row. */
+  /** When provided, renders a "Clear filters" action at the trailing edge of the chip row. */
   onClearFilters?: () => void;
   clearFiltersLabel?: string;
 
@@ -145,6 +145,14 @@ export interface TableProps<Row> {
   pageSize?: number;
   /** The consumer paginates server-side; Table does not slice `data` and shows `pageCount` pages. */
   manualPagination?: boolean;
+
+  // --- Footer ---
+  /** Total number of items (used in the footer's "X–Y of Z items" label). */
+  totalItems?: number;
+  /** Available page-size options shown in the "Items per page" dropdown. */
+  itemsPerPageOptions?: number[];
+  /** Called when the user picks a different page size from the footer dropdown. */
+  onPageSizeChange?: (pageSize: number) => void;
 
   // --- Columns ---
   /** Allow dragging column-header edges to resize columns. Default true. */

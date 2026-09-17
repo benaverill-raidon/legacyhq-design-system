@@ -117,9 +117,9 @@ describe('Banner', () => {
 
 describe('Banner CSS contract', () => {
   it('maps each appearance to its bold background and content token', () => {
-    expect(bannerCss).toMatch(/\.appearance_default \{[\s\S]*?background: var\(--color-background-neutral-bold-default\);[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(bannerCss).toMatch(/\.appearance_default \{[\s\S]*?background: var\(--color-background-neutral-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(bannerCss).toMatch(/\.appearance_warning \{[\s\S]*?background: var\(--color-background-warning-bold-default\);[\s\S]*?color: var\(--color-content-warning-bold\);/);
-    expect(bannerCss).toMatch(/\.appearance_error \{[\s\S]*?background: var\(--color-background-error-bold-default\);[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(bannerCss).toMatch(/\.appearance_error \{[\s\S]*?background: var\(--color-background-error-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
   });
 
   it('uses the Figma spacing tokens for padding and gaps', () => {

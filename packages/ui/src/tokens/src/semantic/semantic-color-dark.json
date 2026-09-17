@@ -11,10 +11,20 @@
         "type": "color",
         "originalName": "color/content/subtle"
       },
-      "color-content-inverse": {
+      "color-content-subtler": {
+        "value": "var(--color-brand-taupe-alpha-500-48)",
+        "type": "color",
+        "originalName": "color/content/subtler"
+      },
+      "color-content-inverse-default": {
         "value": "var(--color-brand-taupe-solid-1100)",
         "type": "color",
-        "originalName": "color/content/inverse"
+        "originalName": "color/content/inverse/default"
+      },
+      "color-content-inverse-disabled": {
+        "value": "var(--color-brand-taupe-alpha-1100-32)",
+        "type": "color",
+        "originalName": "color/content/inverse/disabled"
       },
       "color-content-disabled": {
         "value": "var(--color-brand-taupe-alpha-100-32)",
@@ -61,80 +71,85 @@
         "type": "color",
         "originalName": "color/content/accent/red/default"
       },
-      "color-content-accent-red-bolder": {
+      "color-content-accent-red-bold": {
         "value": "var(--color-red-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/red/bolder"
+        "originalName": "color/content/accent/red/bold"
       },
       "color-content-accent-orange-default": {
         "value": "var(--color-orange-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/orange/default"
       },
-      "color-content-accent-orange-bolder": {
+      "color-content-accent-orange-bold": {
         "value": "var(--color-orange-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/orange/bolder"
+        "originalName": "color/content/accent/orange/bold"
       },
       "color-content-accent-yellow-default": {
         "value": "var(--color-yellow-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/yellow/default"
       },
-      "color-content-accent-yellow-bolder": {
+      "color-content-accent-yellow-bold": {
         "value": "var(--color-yellow-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/yellow/bolder"
+        "originalName": "color/content/accent/yellow/bold"
       },
       "color-content-accent-green-default": {
         "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/green/default"
       },
-      "color-content-accent-green-bolder": {
+      "color-content-accent-green-bold": {
         "value": "var(--color-green-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/green/bolder"
+        "originalName": "color/content/accent/green/bold"
       },
       "color-content-accent-teal-default": {
         "value": "var(--color-teal-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/teal/default"
       },
-      "color-content-accent-teal-bolder": {
+      "color-content-accent-teal-bold": {
         "value": "var(--color-teal-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/teal/bolder"
+        "originalName": "color/content/accent/teal/bold"
       },
       "color-content-accent-blue-default": {
         "value": "var(--color-blue-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/blue/default"
       },
-      "color-content-accent-blue-bolder": {
+      "color-content-accent-blue-bold": {
         "value": "var(--color-blue-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/blue/bolder"
+        "originalName": "color/content/accent/blue/bold"
       },
       "color-content-accent-purple-default": {
         "value": "var(--color-purple-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/purple/default"
       },
-      "color-content-accent-purple-bolder": {
+      "color-content-accent-purple-bold": {
         "value": "var(--color-purple-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/purple/bolder"
+        "originalName": "color/content/accent/purple/bold"
+      },
+      "color-content-accent-purple-subtle": {
+        "value": "var(--color-purple-solid-700)",
+        "type": "color",
+        "originalName": "color/content/accent/purple/subtle"
       },
       "color-content-accent-magenta-default": {
         "value": "var(--color-magenta-solid-500)",
         "type": "color",
         "originalName": "color/content/accent/magenta/default"
       },
-      "color-content-accent-magenta-bolder": {
+      "color-content-accent-magenta-bold": {
         "value": "var(--color-magenta-solid-400)",
         "type": "color",
-        "originalName": "color/content/accent/magenta/bolder"
+        "originalName": "color/content/accent/magenta/bold"
       },
       "color-content-warning-bold": {
         "value": "var(--color-brand-taupe-solid-1200)",
@@ -166,10 +181,15 @@
         "type": "color",
         "originalName": "color/border/bolder"
       },
-      "color-border-inverse": {
-        "value": "var(--color-brand-taupe-solid-1100)",
+      "color-border-inverse-default": {
+        "value": "var(--color-brand-taupe-alpha-1100-16)",
         "type": "color",
-        "originalName": "color/border/inverse"
+        "originalName": "color/border/inverse/default"
+      },
+      "color-border-inverse-disabled": {
+        "value": "var(--color-brand-taupe-alpha-1100-08)",
+        "type": "color",
+        "originalName": "color/border/inverse/disabled"
       },
       "color-border-focus": {
         "value": "var(--color-brand-prussian-solid-500)",
@@ -651,6 +671,11 @@
         "type": "color",
         "originalName": "color/background/disabled"
       },
+      "color-background-inverse-disabled": {
+        "value": "var(--color-brand-taupe-alpha-100-64)",
+        "type": "color",
+        "originalName": "color/background/inverse-disabled"
+      },
       "color-background-error-default-default": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
@@ -785,6 +810,16 @@
         "value": "var(--color-brand-prussian-alpha-500-16)",
         "type": "color",
         "originalName": "color/background/brand/primary/overlay/press"
+      },
+      "color-background-brand-primary-gradient-subtle": {
+        "value": "var(--color-brand-prussian-alpha-500-04)",
+        "type": "color",
+        "originalName": "color/background/brand/primary/gradient/subtle"
+      },
+      "color-background-brand-primary-gradient-default": {
+        "value": "var(--color-brand-prussian-alpha-500-48)",
+        "type": "color",
+        "originalName": "color/background/brand/primary/gradient/default"
       },
       "color-background-selected-default-default": {
         "value": "var(--color-brand-prussian-solid-900)",
@@ -1281,40 +1316,40 @@
         "type": "color",
         "originalName": "color/data-viz/sequence/prussian/500"
       },
-      "color-data-viz-catergory-subtler-prussian": {
+      "color-data-viz-catergory-subtle-prussian": {
         "value": "var(--color-brand-prussian-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/prussian"
+        "originalName": "color/data-viz/catergory/subtle/prussian"
       },
-      "color-data-viz-catergory-subtler-taupe": {
+      "color-data-viz-catergory-subtle-taupe": {
         "value": "var(--color-brand-taupe-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/taupe"
+        "originalName": "color/data-viz/catergory/subtle/taupe"
       },
-      "color-data-viz-catergory-subtler-teal": {
+      "color-data-viz-catergory-subtle-teal": {
         "value": "var(--color-teal-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/teal"
+        "originalName": "color/data-viz/catergory/subtle/teal"
       },
       "color-data-viz-sequence-prussian-700": {
         "value": "var(--color-brand-prussian-solid-400)",
         "type": "color",
         "originalName": "color/data-viz/sequence/prussian/700"
       },
-      "color-data-viz-catergory-subtler-purple": {
+      "color-data-viz-catergory-subtle-purple": {
         "value": "var(--color-purple-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/purple"
+        "originalName": "color/data-viz/catergory/subtle/purple"
       },
-      "color-data-viz-catergory-subtler-orange": {
+      "color-data-viz-catergory-subtle-orange": {
         "value": "var(--color-orange-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/orange"
+        "originalName": "color/data-viz/catergory/subtle/orange"
       },
-      "color-data-viz-catergory-subtler-pink": {
+      "color-data-viz-catergory-subtle-pink": {
         "value": "var(--color-magenta-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/pink"
+        "originalName": "color/data-viz/catergory/subtle/pink"
       },
       "color-data-viz-sequence-prussian-900": {
         "value": "var(--color-brand-prussian-solid-200)",
@@ -1331,45 +1366,45 @@
         "type": "color",
         "originalName": "color/border/accent/orange"
       },
-      "color-data-viz-catergory-subtler-green": {
+      "color-data-viz-catergory-subtle-green": {
         "value": "var(--color-green-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/green"
+        "originalName": "color/data-viz/catergory/subtle/green"
       },
       "color-border-accent-yellow": {
         "value": "var(--color-yellow-solid-500)",
         "type": "color",
         "originalName": "color/border/accent/yellow"
       },
-      "color-data-viz-catergory-subtler-blue": {
+      "color-data-viz-catergory-subtle-blue": {
         "value": "var(--color-blue-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/blue"
+        "originalName": "color/data-viz/catergory/subtle/blue"
       },
-      "color-data-viz-catergory-subtler-yellow": {
+      "color-data-viz-catergory-subtle-yellow": {
         "value": "var(--color-yellow-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/yellow"
+        "originalName": "color/data-viz/catergory/subtle/yellow"
       },
       "color-border-accent-green": {
         "value": "var(--color-green-solid-500)",
         "type": "color",
         "originalName": "color/border/accent/green"
       },
-      "color-data-viz-catergory-subtler-red": {
+      "color-data-viz-catergory-subtle-red": {
         "value": "var(--color-red-solid-800)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtler/red"
+        "originalName": "color/data-viz/catergory/subtle/red"
       },
       "color-data-viz-sequence-green-100": {
         "value": "var(--color-green-solid-1000)",
         "type": "color",
         "originalName": "color/data-viz/sequence/green/100"
       },
-      "color-data-viz-catergory-subtle-prussian": {
+      "color-data-viz-catergory-default-prussian": {
         "value": "var(--color-brand-prussian-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/prussian"
+        "originalName": "color/data-viz/catergory/default/prussian"
       },
       "color-data-viz-sequence-green-300": {
         "value": "var(--color-green-solid-800)",
@@ -1381,15 +1416,15 @@
         "type": "color",
         "originalName": "color/border/accent/teal"
       },
-      "color-data-viz-catergory-subtle-taupe": {
+      "color-data-viz-catergory-default-taupe": {
         "value": "var(--color-brand-taupe-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/taupe"
+        "originalName": "color/data-viz/catergory/default/taupe"
       },
-      "color-data-viz-catergory-subtle-teal": {
+      "color-data-viz-catergory-default-teal": {
         "value": "var(--color-teal-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/teal"
+        "originalName": "color/data-viz/catergory/default/teal"
       },
       "color-border-accent-blue": {
         "value": "var(--color-blue-solid-500)",
@@ -1406,10 +1441,10 @@
         "type": "color",
         "originalName": "color/data-viz/sequence/green/700"
       },
-      "color-data-viz-catergory-subtle-purple": {
+      "color-data-viz-catergory-default-purple": {
         "value": "var(--color-purple-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/purple"
+        "originalName": "color/data-viz/catergory/default/purple"
       },
       "color-border-accent-purple": {
         "value": "var(--color-purple-solid-500)",
@@ -1421,85 +1456,85 @@
         "type": "color",
         "originalName": "color/data-viz/sequence/green/900"
       },
-      "color-data-viz-catergory-subtle-orange": {
+      "color-data-viz-catergory-default-orange": {
         "value": "var(--color-orange-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/orange"
+        "originalName": "color/data-viz/catergory/default/orange"
       },
       "color-border-accent-magenta": {
         "value": "var(--color-magenta-solid-500)",
         "type": "color",
         "originalName": "color/border/accent/magenta"
       },
-      "color-data-viz-catergory-subtle-magenta": {
+      "color-data-viz-catergory-default-magenta": {
         "value": "var(--color-magenta-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/magenta"
+        "originalName": "color/data-viz/catergory/default/magenta"
       },
-      "color-data-viz-catergory-subtle-green": {
+      "color-data-viz-catergory-default-green": {
         "value": "var(--color-green-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/green"
+        "originalName": "color/data-viz/catergory/default/green"
       },
-      "color-data-viz-catergory-subtle-blue": {
+      "color-data-viz-catergory-default-blue": {
         "value": "var(--color-blue-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/blue"
+        "originalName": "color/data-viz/catergory/default/blue"
       },
-      "color-data-viz-catergory-subtle-yellow": {
+      "color-data-viz-catergory-default-yellow": {
         "value": "var(--color-yellow-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/yellow"
+        "originalName": "color/data-viz/catergory/default/yellow"
       },
-      "color-data-viz-catergory-subtle-red": {
+      "color-data-viz-catergory-default-red": {
         "value": "var(--color-red-solid-700)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/subtle/red"
+        "originalName": "color/data-viz/catergory/default/red"
       },
       "color-data-viz-diverging-positive-bold": {
         "value": "var(--color-green-solid-300)",
         "type": "color",
         "originalName": "color/data-viz/diverging/positive-bold"
       },
-      "color-data-viz-catergory-bolder-prussian": {
+      "color-data-viz-catergory-bold-prussian": {
         "value": "var(--color-brand-prussian-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/prussian"
+        "originalName": "color/data-viz/catergory/bold/prussian"
       },
       "color-data-viz-diverging-positive": {
         "value": "var(--color-green-solid-600)",
         "type": "color",
         "originalName": "color/data-viz/diverging/positive"
       },
-      "color-data-viz-catergory-bolder-taupe": {
+      "color-data-viz-catergory-bold-taupe": {
         "value": "var(--color-brand-taupe-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/taupe"
+        "originalName": "color/data-viz/catergory/bold/taupe"
       },
-      "color-data-viz-catergory-bolder-teal": {
+      "color-data-viz-catergory-bold-teal": {
         "value": "var(--color-teal-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/teal"
+        "originalName": "color/data-viz/catergory/bold/teal"
       },
       "color-data-viz-diverging-positive-subtle": {
         "value": "var(--color-green-solid-900)",
         "type": "color",
         "originalName": "color/data-viz/diverging/positive-subtle"
       },
-      "color-data-viz-catergory-bolder-purple": {
+      "color-data-viz-catergory-bold-purple": {
         "value": "var(--color-purple-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/purple"
+        "originalName": "color/data-viz/catergory/bold/purple"
       },
       "color-data-viz-diverging-neutral": {
         "value": "var(--color-brand-taupe-solid-600)",
         "type": "color",
         "originalName": "color/data-viz/diverging/neutral"
       },
-      "color-data-viz-catergory-bolder-orange": {
+      "color-data-viz-catergory-bold-orange": {
         "value": "var(--color-orange-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/orange"
+        "originalName": "color/data-viz/catergory/bold/orange"
       },
       "color-data-viz-diverging-negative-subtle": {
         "value": "var(--color-red-solid-900)",
@@ -1511,35 +1546,35 @@
         "type": "color",
         "originalName": "color/data-viz/diverging/negative"
       },
-      "color-data-viz-catergory-bolder-pink": {
+      "color-data-viz-catergory-bold-pink": {
         "value": "var(--color-magenta-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/pink"
+        "originalName": "color/data-viz/catergory/bold/pink"
       },
-      "color-data-viz-catergory-bolder-green": {
+      "color-data-viz-catergory-bold-green": {
         "value": "var(--color-green-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/green"
+        "originalName": "color/data-viz/catergory/bold/green"
       },
       "color-data-viz-diverging-negative-bold": {
         "value": "var(--color-red-solid-300)",
         "type": "color",
         "originalName": "color/data-viz/diverging/negative-bold"
       },
-      "color-data-viz-catergory-bolder-blue": {
+      "color-data-viz-catergory-bold-blue": {
         "value": "var(--color-blue-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/blue"
+        "originalName": "color/data-viz/catergory/bold/blue"
       },
-      "color-data-viz-catergory-bolder-yellow": {
+      "color-data-viz-catergory-bold-yellow": {
         "value": "var(--color-yellow-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/yellow"
+        "originalName": "color/data-viz/catergory/bold/yellow"
       },
-      "color-data-viz-catergory-bolder-red": {
+      "color-data-viz-catergory-bold-red": {
         "value": "var(--color-red-solid-500)",
         "type": "color",
-        "originalName": "color/data-viz/catergory/bolder/red"
+        "originalName": "color/data-viz/catergory/bold/red"
       },
       "color-background-autofill-default": {
         "value": "var(--color-brand-prussian-alpha-500-08)",

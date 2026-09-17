@@ -969,12 +969,12 @@ describe('slider CSS contract', () => {
   it('generates the expanded chart semantic token groups', () => {
     expect(lightCss).toContain('--color-data-viz-sequence-green-900: var(--color-green-solid-900);');
     expect(darkCss).toContain('--color-data-viz-sequence-green-900: var(--color-green-solid-200);');
-    expect(lightCss).toContain('--color-data-viz-catergory-subtler-prussian: var(--color-brand-prussian-solid-300);');
-    expect(lightCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-500);');
-    expect(lightCss).toContain('--color-data-viz-catergory-bolder-prussian: var(--color-brand-prussian-solid-700);');
-    expect(darkCss).toContain('--color-data-viz-catergory-subtler-prussian: var(--color-brand-prussian-solid-800);');
-    expect(darkCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-700);');
-    expect(darkCss).toContain('--color-data-viz-catergory-bolder-prussian: var(--color-brand-prussian-solid-500);');
+    expect(lightCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-300);');
+    expect(lightCss).toContain('--color-data-viz-catergory-default-prussian: var(--color-brand-prussian-solid-500);');
+    expect(lightCss).toContain('--color-data-viz-catergory-bold-prussian: var(--color-brand-prussian-solid-700);');
+    expect(darkCss).toContain('--color-data-viz-catergory-subtle-prussian: var(--color-brand-prussian-solid-800);');
+    expect(darkCss).toContain('--color-data-viz-catergory-default-prussian: var(--color-brand-prussian-solid-700);');
+    expect(darkCss).toContain('--color-data-viz-catergory-bold-prussian: var(--color-brand-prussian-solid-500);');
   });
 
   it('uses the focus ring token mapping on the private visual handle', () => {

@@ -80,7 +80,7 @@
 
 .tone_gray.appearance_bold {
   background: var(--color-background-accent-taupe-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_brand.appearance_default {
@@ -90,7 +90,7 @@
 
 .tone_brand.appearance_bold {
   background: var(--color-background-brand-primary-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_red.appearance_default {
@@ -100,7 +100,7 @@
 
 .tone_red.appearance_bold {
   background: var(--color-background-accent-red-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_orange.appearance_default {
@@ -110,7 +110,7 @@
 
 .tone_orange.appearance_bold {
   background: var(--color-background-accent-orange-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_yellow.appearance_default {
@@ -120,7 +120,7 @@
 
 .tone_yellow.appearance_bold {
   background: var(--color-background-accent-yellow-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_green.appearance_default {
@@ -130,7 +130,7 @@
 
 .tone_green.appearance_bold {
   background: var(--color-background-accent-green-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_teal.appearance_default {
@@ -140,7 +140,7 @@
 
 .tone_teal.appearance_bold {
   background: var(--color-background-accent-teal-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_blue.appearance_default {
@@ -150,7 +150,7 @@
 
 .tone_blue.appearance_bold {
   background: var(--color-background-accent-blue-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_purple.appearance_default {
@@ -160,7 +160,7 @@
 
 .tone_purple.appearance_bold {
   background: var(--color-background-accent-purple-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_magenta.appearance_default {
@@ -170,5 +170,5 @@
 
 .tone_magenta.appearance_bold {
   background: var(--color-background-accent-magenta-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }

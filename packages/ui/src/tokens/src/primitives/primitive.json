@@ -1526,6 +1526,11 @@
         "type": "color",
         "originalName": "color/brand/taupe/alpha/100/48"
       },
+      "color-brand-taupe-alpha-100-64": {
+        "value": "rgba(251, 249, 246, 0.64)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/64"
+      },
       "color-brand-taupe-alpha-500-04": {
         "value": "rgba(191, 171, 153, 0.04)",
         "type": "color",

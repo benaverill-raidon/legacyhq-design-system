@@ -106,7 +106,7 @@
 
 .appearance_primary {
   background: var(--color-background-brand-primary-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_primary:not(:disabled):not([data-loading='true']):is(
@@ -142,7 +142,7 @@
 
 .appearance_primary.tone_error {
   background: var(--color-background-error-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_primary.tone_error:not(:disabled):not([data-loading='true']):is(
@@ -219,7 +219,7 @@
 .inverse:not(:disabled) {
   border-color: transparent;
   background: transparent;
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .inverse:not(:disabled):not([data-loading='true']):is(

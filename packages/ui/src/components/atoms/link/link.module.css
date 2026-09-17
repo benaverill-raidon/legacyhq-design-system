@@ -1,8 +1,8 @@
 .root {
   --link-color: var(--color-content-accent-blue-default);
-  --link-color-press: var(--color-content-accent-blue-bolder);
+  --link-color-press: var(--color-content-accent-blue-bold);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bold);
   --link-icon-size: var(--size-icon-md);
 
   /*
@@ -54,25 +54,25 @@
 
 .appearance_default {
   --link-color: var(--color-content-accent-blue-default);
-  --link-color-press: var(--color-content-accent-blue-bolder);
+  --link-color-press: var(--color-content-accent-blue-bold);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bold);
 }
 
 .appearance_subtle {
   --link-color: var(--color-content-subtle);
   --link-color-press: var(--color-content-default);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
+  --link-color-visited-press: var(--color-content-accent-purple-bold);
 }
 
 .appearance_inverse {
-  --link-color: var(--color-content-inverse);
-  --link-color-press: var(--color-content-inverse);
-  --link-color-visited: var(--color-content-inverse);
-  --link-color-visited-press: var(--color-content-inverse);
+  --link-color: var(--color-content-inverse-default);
+  --link-color-press: var(--color-content-inverse-default);
+  --link-color-visited: var(--color-content-inverse-default);
+  --link-color-visited-press: var(--color-content-inverse-default);
 
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_inverse:hover,
@@ -82,7 +82,7 @@
 .appearance_inverse[data-force-state='hover'],
 .appearance_inverse[data-force-state='press'],
 .appearance_inverse[data-force-state='focus'] {
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .size_sm {

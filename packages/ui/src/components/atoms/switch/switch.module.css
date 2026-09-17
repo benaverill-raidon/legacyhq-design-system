@@ -89,7 +89,7 @@
   overflow: hidden;
   border-radius: var(--switch-track-radius);
   background: var(--color-background-neutral-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
   pointer-events: none;
   transition: background-color var(--fade-quick);
 }
@@ -102,7 +102,7 @@
   inline-size: var(--switch-thumb-size);
   block-size: var(--switch-thumb-size);
   border-radius: var(--border-radius-full-round);
-  background: var(--color-content-inverse);
+  background: var(--color-content-inverse-default);
   transform: translateX(var(--spacing-none));
   transform-origin: left center;
   transition: transform var(--move-quick);
@@ -116,7 +116,7 @@
   justify-content: center;
   inline-size: var(--switch-icon-size);
   block-size: var(--switch-icon-size);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
   transform: translateY(-50%);
 }
 

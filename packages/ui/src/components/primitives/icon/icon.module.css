@@ -38,7 +38,7 @@
 }
 
 .color_inverse {
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .color_brand {

@@ -442,7 +442,7 @@ describe('Tooltip', () => {
 
   it('maps Figma visual tokens and private anatomy constraints', () => {
     expect(tooltipCss).toContain('background: var(--color-background-neutral-bold-default);');
-    expect(tooltipCss).toContain('color: var(--color-content-inverse);');
+    expect(tooltipCss).toContain('color: var(--color-content-inverse-default);');
     expect(tooltipCss).toContain('padding-block: var(--spacing-xxs);');
     expect(tooltipCss).toContain('padding-inline: var(--measurement-6);');
     expect(tooltipCss).toContain('gap: var(--spacing-xs);');

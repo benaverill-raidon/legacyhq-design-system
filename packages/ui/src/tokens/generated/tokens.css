@@ -346,12 +346,15 @@
   --component-menu-width-sm: 192px;
   --component-menu-width-md: 240px;
   --component-menu-width-lg: 288px;
+  --component-progress-bar-linear-root-size-sm: calc(var(--component-progress-bar-track-size-sm) + 2 * var(--component-progress-bar-linear-pad-sm));
   --component-progress-bar-linear-root-size-md: calc(var(--component-progress-bar-track-size-md) + 2 * var(--component-progress-bar-linear-pad-md));
   --component-progress-bar-linear-root-size-lg: calc(var(--component-progress-bar-track-size-lg) + 2 * var(--component-progress-bar-linear-pad-lg));
+  --component-progress-bar-linear-pad-sm: var(--measurement-4);
   --component-progress-bar-linear-pad-md: var(--measurement-4);
   --component-progress-bar-linear-pad-lg: var(--measurement-4);
-  --component-progress-bar-track-size-md: var(--measurement-12);
-  --component-progress-bar-track-size-lg: var(--measurement-24);
+  --component-progress-bar-track-size-sm: var(--measurement-16);
+  --component-progress-bar-track-size-md: var(--measurement-24);
+  --component-progress-bar-track-size-lg: var(--measurement-32);
   --component-progress-bar-circular-size: var(--measurement-72);
   --component-progress-indicator-dot-container-size-sm: var(--measurement-16);
   --component-progress-indicator-dot-container-size-md: var(--measurement-20);

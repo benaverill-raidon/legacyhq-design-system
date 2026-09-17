@@ -37,10 +37,10 @@ const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)', justif
 function demoActions() {
   return (
     <>
-      <Button size="xs" appearance="subtle">
+      <Button size="xs" prominence="tertiary">
         Understood
       </Button>
-      <Button size="xs" appearance="subtle">
+      <Button size="xs" prominence="tertiary">
         No thanks
       </Button>
     </>

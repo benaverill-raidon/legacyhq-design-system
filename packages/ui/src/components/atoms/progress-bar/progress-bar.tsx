@@ -9,21 +9,19 @@ type ProgressBarStyle = React.CSSProperties & {
 
 const circularDiameter = 72;
 const circularRadiusBySize: Record<ProgressBarSize, number> = {
-  md: 30,
-  lg: 24,
+  sm: 28,
+  md: 24,
+  lg: 20,
 };
 
 const circularStrokeWidthBySize: Record<ProgressBarSize, number> = {
-  md: 12,
-  lg: 24,
+  sm: 16,
+  md: 24,
+  lg: 32,
 };
 
-/*
- * The progress arc is inset within the track ring by this pad on both radial edges, mirroring the
- * linear progress fill's inset so a light gap of track shows around the fill. Same values as the
- * linear pad token (4px for both sizes).
- */
 const circularProgressPadBySize: Record<ProgressBarSize, number> = {
+  sm: 4,
   md: 4,
   lg: 4,
 };

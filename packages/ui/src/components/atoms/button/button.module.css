@@ -83,13 +83,13 @@
  * Focus is grouped into the same rule as hover - focus-visible shows the hover fill in addition to
  * the outline ring from the shared focus-ring primitive, so focus and hover read as one treatment.
  */
-.appearance_default {
+.prominence_secondary {
   border-color: var(--color-border-input);
   background: transparent;
   color: var(--color-content-subtle);
 }
 
-.appearance_default:not(:disabled):not([data-loading='true']):is(
+.prominence_secondary:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -99,17 +99,37 @@
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-.appearance_default:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.prominence_secondary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   border-color: var(--color-border-input);
   background: var(--color-background-neutral-overlay-bold-press);
 }
 
-.appearance_primary {
+.prominence_secondary.tone_brand {
+  border-color: var(--color-border-brand-primary-default);
+  color: var(--color-content-brand-primary-default);
+}
+
+.prominence_secondary.tone_brand:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  border-color: var(--color-border-brand-primary-default);
+  background: var(--color-background-brand-primary-overlay-hover);
+}
+
+.prominence_secondary.tone_brand:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: var(--color-border-brand-primary-default);
+  background: var(--color-background-brand-primary-overlay-press);
+}
+
+.prominence_primary {
   background: var(--color-background-brand-primary-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):is(
+.prominence_primary:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -118,16 +138,16 @@
   background: var(--color-background-brand-primary-bold-hover);
 }
 
-.appearance_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.prominence_primary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   background: var(--color-background-brand-primary-bold-press);
 }
 
-.appearance_primary.tone_warning {
+.prominence_primary.tone_warning {
   background: var(--color-background-warning-bold-default);
   color: var(--color-content-warning-bold);
 }
 
-.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):is(
+.prominence_primary.tone_warning:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -136,16 +156,16 @@
   background: var(--color-background-warning-bold-hover);
 }
 
-.appearance_primary.tone_warning:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.prominence_primary.tone_warning:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   background: var(--color-background-warning-bold-press);
 }
 
-.appearance_primary.tone_error {
+.prominence_primary.tone_error {
   background: var(--color-background-error-bold-default);
   color: var(--color-content-inverse);
 }
 
-.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):is(
+.prominence_primary.tone_error:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -154,17 +174,17 @@
   background: var(--color-background-error-bold-hover);
 }
 
-.appearance_primary.tone_error:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.prominence_primary.tone_error:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   background: var(--color-background-error-bold-press);
 }
 
-.appearance_subtle {
+.prominence_tertiary {
   border-color: transparent;
   background: transparent;
   color: var(--color-content-subtle);
 }
 
-.appearance_subtle:not(:disabled):not([data-loading='true']):is(
+.prominence_tertiary:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -173,34 +193,51 @@
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-.appearance_subtle:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.prominence_tertiary:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   background: var(--color-background-neutral-overlay-bold-press);
 }
 
+.prominence_tertiary.tone_brand {
+  color: var(--color-content-brand-primary-default);
+}
+
+.prominence_tertiary.tone_brand:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  background: var(--color-background-brand-primary-overlay-hover);
+}
+
+.prominence_tertiary.tone_brand:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  background: var(--color-background-brand-primary-overlay-press);
+}
+
 /*
- * Two disabled treatments, matching each appearance's own resting border visibility rather than
- * one shared look: `appearance_default` already shows a visible border at rest, so its disabled
- * state keeps one (`--color-border-disabled`). `appearance_primary` and `appearance_subtle` are
+ * Two disabled treatments, matching each prominence's own resting border visibility rather than
+ * one shared look: `prominence_secondary` already shows a visible border at rest, so its disabled
+ * state keeps one (`--color-border-disabled`). `prominence_primary` and `prominence_tertiary` are
  * borderless at rest - applying the same border color there would draw a border that was never
  * part of their look, so their disabled state stays borderless (`border-color: transparent`).
  */
-.appearance_default:disabled,
-.appearance_default:disabled:hover,
-.appearance_default:disabled:active {
+.prominence_secondary:disabled,
+.prominence_secondary:disabled:hover,
+.prominence_secondary:disabled:active {
   border-color: var(--color-border-disabled);
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
-.appearance_primary:disabled,
-.appearance_primary:disabled:hover,
-.appearance_primary:disabled:active,
-.appearance_primary.tone_warning:disabled,
-.appearance_primary.tone_error:disabled,
-.appearance_subtle:disabled,
-.appearance_subtle:disabled:hover,
-.appearance_subtle:disabled:active {
+.prominence_primary:disabled,
+.prominence_primary:disabled:hover,
+.prominence_primary:disabled:active,
+.prominence_primary.tone_warning:disabled,
+.prominence_primary.tone_error:disabled,
+.prominence_tertiary:disabled,
+.prominence_tertiary:disabled:hover,
+.prominence_tertiary:disabled:active {
   border-color: transparent;
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
@@ -209,12 +246,11 @@
 
 /*
  * Inverse: for buttons placed on dark or bold-colored surfaces (e.g. Banner). It overrides the
- * resting appearance treatment with an on-dark palette - transparent fill, the inverse content
+ * resting prominence treatment with an on-dark palette - transparent fill, the inverse content
  * token for the label, and the white *subtle* overlays on hover / press (rather than the dark neutral
- * overlays the on-light appearances use). Declared after the appearance rules so it wins the cascade
+ * overlays the on-light prominences use). Declared after the prominence rules so it wins the cascade
  * at equal specificity; the higher-specificity `:disabled` rules above still flatten the disabled
- * state, matching how tone is flattened when disabled. Renders one look across appearances today -
- * an outlined (default) inverse treatment is planned.
+ * state, matching how tone is flattened when disabled.
  */
 .inverse:not(:disabled) {
   border-color: transparent;
@@ -238,6 +274,10 @@
 }
 
 .fullWidth {
+  inline-size: 100%;
+}
+
+.expanded {
   inline-size: 100%;
 }
 

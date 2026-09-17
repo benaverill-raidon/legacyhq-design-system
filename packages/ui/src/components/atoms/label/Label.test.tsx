@@ -80,8 +80,10 @@ describe('Label', () => {
     expect(screen.getByText('Static')).not.toHaveAttribute('tabindex');
   });
 
-  it('uses the small semantic border radius token', () => {
-    expect(labelCss).toContain('border-radius: var(--border-radius-sm);');
+  it('uses a uniform 4px border radius across sizes', () => {
+    expect(labelCss).toContain('border-radius: var(--label-border-radius);');
+    expect(labelCss).toContain('--label-border-radius: var(--border-radius-sm);');
+    expect(labelCss).not.toContain('--label-border-radius: var(--border-radius-lg);');
   });
 });
 

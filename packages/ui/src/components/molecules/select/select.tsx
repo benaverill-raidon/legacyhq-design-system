@@ -105,6 +105,23 @@ export const Select = React.memo(function Select(props: SelectProps) {
 
   const focusInput = React.useCallback(() => inputRef.current?.focus(), []);
 
+  // Clicks on the TextField frame's own padding (between its border and child elements) don't reach
+  // the <input> or caret handlers. This listener catches those so the entire trigger surface opens
+  // the dropdown — event.target === frame confirms the click hit the frame itself, not a child.
+  React.useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const handleFrameMouseDown = (event: MouseEvent) => {
+      if (disabled) return;
+      if (event.target !== frame) return;
+      event.preventDefault();
+      setOpen(true);
+      inputRef.current?.focus();
+    };
+    frame.addEventListener('mousedown', handleFrameMouseDown);
+    return () => frame.removeEventListener('mousedown', handleFrameMouseDown);
+  }, [disabled]);
+
   const handlePick = React.useCallback(
     (value: string) => {
       if (multi) {
@@ -241,6 +258,13 @@ export const Select = React.memo(function Select(props: SelectProps) {
           <span
             className={mergeClassNames(styles.caret, open && styles.caretOpen, disabled && styles.caretDisabled)}
             aria-hidden="true"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              if (!disabled) {
+                setOpen((prev) => !prev);
+                focusInput();
+              }
+            }}
           >
             <CaretDownIcon size="md" decorative />
           </span>

@@ -55,6 +55,11 @@
   border-radius: 0;
 }
 
+/* Icons inside inline inputs are dialed back to subtler inside a key/value context. */
+.value {
+  --field-icon-color: var(--color-content-subtler);
+}
+
 /* sm: shorter row, smaller font */
 .size_sm {
   min-block-size: var(--size-control-sm);

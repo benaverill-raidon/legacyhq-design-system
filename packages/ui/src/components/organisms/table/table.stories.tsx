@@ -9,8 +9,9 @@ import { Link } from '../../atoms/link';
 import { ProgressBar } from '../../atoms/progress-bar';
 import { Switch } from '../../atoms/switch';
 import { Tag } from '../../atoms/tag';
-import { FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
+import { EditIcon, FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
 import { Chip } from '../../molecules/chip';
+import { TextField } from '../../molecules/text-field';
 import { Table } from './table';
 import type { TableColumn } from './table.types';
 
@@ -467,4 +468,77 @@ export const CellVariants: Story = {
       />
     </div>
   ),
+};
+
+/* ---------- Editable Cells: inline TextFields with edit icon ---------- */
+
+export const EditableCells: Story = {
+  render: function EditableCellsStory() {
+    const [rows, setRows] = useState(() =>
+      members.slice(0, 5).map((m) => ({ ...m })),
+    );
+
+    const updateField = (id: number, field: keyof Member, value: string) => {
+      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
+    };
+
+    const editableColumns: Array<TableColumn<Member>> = [
+      {
+        key: 'name',
+        header: 'Name',
+        emphasis: 'strong',
+        render: (m) => (
+          <TextField
+            size="sm"
+            appearance="inline"
+            value={m.name}
+            iconAfter={<EditIcon size="sm" decorative />}
+            onChange={(e) => updateField(m.id, 'name', e.currentTarget.value)}
+            aria-label="Name"
+          />
+        ),
+      },
+      {
+        key: 'email',
+        header: 'Email',
+        render: (m) => (
+          <TextField
+            size="sm"
+            appearance="inline"
+            value={m.email}
+            iconAfter={<EditIcon size="sm" decorative />}
+            onChange={(e) => updateField(m.id, 'email', e.currentTarget.value)}
+            aria-label="Email"
+          />
+        ),
+      },
+      {
+        key: 'role',
+        header: 'Role',
+        render: (m) => (
+          <TextField
+            size="sm"
+            appearance="inline"
+            value={m.role}
+            iconAfter={<EditIcon size="sm" decorative />}
+            onChange={(e) => updateField(m.id, 'role', e.currentTarget.value)}
+            aria-label="Role"
+          />
+        ),
+      },
+      { key: 'status', header: 'Status' },
+      { key: 'joined', header: 'Joined', align: 'end' },
+    ];
+
+    return (
+      <Table
+        columns={editableColumns}
+        data={rows}
+        getRowId={getRowId}
+        title="Editable cells"
+        description="Inline TextFields with an edit icon indicate editable fields."
+        caption="Editable members"
+      />
+    );
+  },
 };

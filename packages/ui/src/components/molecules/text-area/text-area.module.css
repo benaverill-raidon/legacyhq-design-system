@@ -255,7 +255,7 @@
   flex: 0 0 auto;
   inline-size: var(--size-control-xs);
   block-size: var(--size-control-xs);
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
 }
 
 .action :global([data-color]) {

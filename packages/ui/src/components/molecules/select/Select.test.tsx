@@ -240,7 +240,7 @@ describe('Select', () => {
     // Verified live against Figma's select-trigger caret_down vector: content/subtle default,
     // content/disabled when isDisabled. The CaretDownIcon inherits this via TextField's own
     // `.action :global([data-color]) { color: inherit }`.
-    expect(selectCss).toMatch(/\.caret\s*\{[^}]*color:\s*var\(--color-content-subtle\)/);
+    expect(selectCss).toMatch(/\.caret\s*\{[^}]*color:\s*var\(--field-icon-color,\s*var\(--color-content-subtle\)\)/);
     expect(selectCss).toMatch(/\.caretDisabled\s*\{[^}]*color:\s*var\(--color-content-disabled\)/);
   });
 

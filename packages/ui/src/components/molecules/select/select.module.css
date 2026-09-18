@@ -18,7 +18,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
   transition: transform var(--fade-quick);
 }
 

@@ -228,7 +228,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
   font-family: var(--typography-body-lg-font-family);
   font-size: var(--typography-body-lg-font-size);
   font-weight: var(--typography-body-lg-font-weight);
@@ -253,7 +253,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
 }
 
 .action :global([data-color]) {

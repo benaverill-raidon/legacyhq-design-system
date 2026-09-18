@@ -8,6 +8,11 @@
   color: var(--color-content-default);
 }
 
+.size_sm {
+  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-sm);
+  --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-sm);
+}
+
 .size_md {
   --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-md);
   --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-md);

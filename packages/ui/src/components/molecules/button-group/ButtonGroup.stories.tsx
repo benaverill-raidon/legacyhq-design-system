@@ -113,8 +113,8 @@ export const Composition: Story = {
           <h3 style={headingStyle}>Discard unsaved changes?</h3>
           <p style={captionStyle}>This can&apos;t be undone.</p>
           <ButtonGroup aria-label="Dialog actions">
-            <Button appearance="subtle">Cancel</Button>
-            <Button appearance="primary" tone="error">
+            <Button prominence="tertiary">Cancel</Button>
+            <Button prominence="primary" tone="error">
               Discard
             </Button>
           </ButtonGroup>
@@ -134,10 +134,10 @@ export const Composition: Story = {
 
       <Group title="Stacked form actions">
         <ButtonGroup orientation="vertical" aria-label="Form actions">
-          <Button appearance="primary" isFullWidth>
+          <Button prominence="primary" isFullWidth>
             Continue
           </Button>
-          <Button appearance="subtle" isFullWidth>
+          <Button prominence="tertiary" isFullWidth>
             Go back
           </Button>
         </ButtonGroup>

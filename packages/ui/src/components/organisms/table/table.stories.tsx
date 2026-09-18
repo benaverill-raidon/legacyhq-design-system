@@ -279,7 +279,7 @@ export const FullShell: Story = {
         title="All members"
         description="Everyone with access to the LegacyHQ workspace."
         actions={
-          <Button appearance="primary">Invite member</Button>
+          <Button prominence="primary">Invite member</Button>
         }
         searchable
         searchValue={search}
@@ -344,10 +344,10 @@ export const FullShell: Story = {
         getSelectionLabel={(m) => `Select ${m.name}`}
         bulkActions={
           <>
-            <Button appearance="subtle" size="sm" onClick={() => setSelected([])}>
+            <Button prominence="tertiary" size="sm" onClick={() => setSelected([])}>
               Clear
             </Button>
-            <Button appearance="primary" tone="error" size="sm">
+            <Button prominence="primary" tone="error" size="sm">
               Remove
             </Button>
           </>
@@ -431,7 +431,7 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
       header: '',
       render: (m) => (
         <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
-          <Button appearance="subtle" size={buttonSize}>Edit</Button>
+          <Button prominence="tertiary" size={buttonSize}>Edit</Button>
           <IconButton appearance="subtle" size={buttonSize} aria-label={`More actions for ${m.name}`}>
             <MoreVertIcon />
           </IconButton>

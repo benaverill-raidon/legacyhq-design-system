@@ -96,7 +96,7 @@ function PopupDemo({
       role={role}
       content={content ?? <MenuContent />}
     >
-      <Button appearance={open ? 'primary' : 'default'} onClick={() => setOpen((current) => !current)}>
+      <Button prominence={open ? 'primary' : 'secondary'} onClick={() => setOpen((current) => !current)}>
         {label}
       </Button>
     </Popup>

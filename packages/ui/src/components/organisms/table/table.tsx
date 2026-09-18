@@ -310,7 +310,7 @@ export function Table<Row>({
                       <div className={styles.activeFilters}>{activeFilters}</div>
                     ) : null}
                     {onClearFilters != null ? (
-                      <Button appearance="subtle" size="sm" onClick={onClearFilters}>
+                      <Button prominence="tertiary" size="sm" onClick={onClearFilters}>
                         {clearFiltersLabel}
                       </Button>
                     ) : null}

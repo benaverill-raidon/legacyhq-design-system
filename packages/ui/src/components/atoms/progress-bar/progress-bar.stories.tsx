@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressBar } from './progress-bar';
 import type { ProgressBarSize } from './progress-bar.types';
 
-const sizes: ProgressBarSize[] = ['md', 'lg'];
+const sizes: ProgressBarSize[] = ['sm', 'md', 'lg'];
 
 const meta = {
   title: 'UI/Atoms/ProgressBar',

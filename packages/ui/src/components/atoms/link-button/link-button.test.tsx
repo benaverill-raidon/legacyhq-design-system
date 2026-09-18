@@ -163,12 +163,12 @@ describe('LinkButton', () => {
 
   it('applies appearance and tone classes', () => {
     const { rerender } = render(
-      <LinkButton href="/clients" appearance="default" tone="neutral">
+      <LinkButton href="/clients" appearance="default" tone="default">
         Default
       </LinkButton>,
     );
 
-    expect(screen.getByRole('link', { name: 'Default' })).toHaveClass(styles.appearance_default, styles.tone_neutral);
+    expect(screen.getByRole('link', { name: 'Default' })).toHaveClass(styles.appearance_default, styles.tone_default);
 
     rerender(
       <LinkButton href="/clients" appearance="primary" tone="warning">

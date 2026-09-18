@@ -37,7 +37,7 @@ const row: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: 'var(--spac
 
 function undoAction() {
   return (
-    <Button size="xs" appearance="subtle">
+    <Button size="xs" prominence="tertiary">
       Undo
     </Button>
   );
@@ -64,7 +64,7 @@ export const Playground: Story = {
 
       <div style={row}>
         <Button
-          appearance="primary"
+          prominence="primary"
           onClick={() =>
             toast('Event created', { description: 'Monday, 9:00 AM with the Acme team.', actions: undoAction() })
           }
@@ -95,7 +95,7 @@ export const Playground: Story = {
 
       <ButtonGroup>
         <Button
-          appearance="subtle"
+          prominence="tertiary"
           onClick={() => {
             toast.success('First');
             toast.info('Second');
@@ -106,7 +106,7 @@ export const Playground: Story = {
         >
           Add five (see the stack)
         </Button>
-        <Button appearance="subtle" onClick={() => toast.dismiss()}>
+        <Button prominence="tertiary" onClick={() => toast.dismiss()}>
           Clear all
         </Button>
       </ButtonGroup>

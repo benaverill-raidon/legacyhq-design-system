@@ -11,7 +11,7 @@
     "componentName": "section-message",
     "variantCount": 4,
     "verifiedAt": "2026-09-01",
-    "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
+    "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
   },
   "useCases": [
     "communicate a permission or access restriction inside a section",
@@ -50,7 +50,7 @@
     {
       "name": "actions",
       "required": false,
-      "description": "optional Links, separated by an inserted middot"
+      "description": "optional actions (typically Link Buttons), laid out by a ButtonGroup the caller passes; no separators are injected"
     },
     {
       "name": "dismiss",
@@ -80,7 +80,7 @@
       "type": "React.ReactNode",
       "default": null,
       "required": false,
-      "description": "Optional Links; middot separators are inserted between them."
+      "description": "Optional actions (typically Link Buttons). Wrap multiple in a ButtonGroup, which lays them out as a row; a single action can be passed bare."
     },
     "isDismissible": {
       "type": "boolean",
@@ -111,7 +111,7 @@
   "slots": [
     { "name": "title", "required": false, "allowedContent": "React.ReactNode" },
     { "name": "children", "required": true, "allowedContent": "React.ReactNode" },
-    { "name": "actions", "required": false, "allowedContent": "React.ReactNode (Link elements)" }
+    { "name": "actions", "required": false, "allowedContent": "React.ReactNode (typically a ButtonGroup of LinkButton elements)" }
   ],
   "tokens": {
     "semantic": {
@@ -119,7 +119,7 @@
         "padding": "--spacing-lg",
         "rootGap": "--spacing-lg",
         "contentGap": "--spacing-sm",
-        "actionsGap": "--spacing-xs"
+        "actionsGap": "--spacing-sm (the ButtonGroup between the actions owns this; the .actions wrapper matches it for bare actions)"
       },
       "border": {
         "width": "--border-width-sm",
@@ -143,8 +143,7 @@
         "errorBorder": "--color-border-error",
         "errorIcon": "--color-content-error",
         "title": "--color-content-default",
-        "description": "--color-content-default",
-        "separator": "--color-content-subtle"
+        "description": "--color-content-default"
       }
     }
   },
@@ -161,13 +160,13 @@
     "Render the icon in its own status color (not inherited).",
     "Render the title only when provided.",
     "Wrap the description across multiple lines (no truncation).",
-    "Insert a middot separator between each action; render the actions region only when actions are provided.",
+    "Render the actions region (which holds the caller's actions, laid out by their ButtonGroup) only when actions are provided; do not inject separators.",
     "Show the dismiss button only when isDismissible is true; on dismiss, hide the message and call onDismiss.",
     "Default role to status (a polite live region); allow it to be overridden.",
     "Mark the status icon aria-hidden and label the dismiss button."
   ],
   "compositionRules": [
-    "Pass Link elements to actions (a fragment or an array); a single top-level fragment is unwrapped so each Link is separated.",
+    "Wrap multiple actions in a ButtonGroup of LinkButtons; a single action can be passed bare.",
     "Keep actions to a small number of related links.",
     "Use Banner, Toast, or InlineMessage for the non-section-level cases."
   ],
@@ -185,7 +184,7 @@
     "Use React.forwardRef.",
     "Use React.memo.",
     "Use CSS Modules.",
-    "Reuse the StatusIcon set and the atoms Link / IconButton.",
+    "Reuse the StatusIcon set and the atoms LinkButton / IconButton; lay actions out with ButtonGroup.",
     "Do not import MUI.",
     "Do not use Tailwind utilities."
   ],
@@ -193,13 +192,14 @@
     "Banner",
     "Toast",
     "InlineMessage",
-    "Link",
+    "LinkButton",
+    "ButtonGroup",
     "IconButton"
   ],
   "do": [
     "Use Section Message for a contained, in-context status.",
     "Use appearance to signal the semantic status.",
-    "Pass Links to actions and let the component separate them.",
+    "Wrap multiple actions in a ButtonGroup of Link Buttons; pass a single action bare.",
     "Use a title for a scannable lead when the message is longer."
   ],
   "dont": [
@@ -214,7 +214,7 @@
     "Defaults to role status and the information appearance.",
     "Supports appearances information, success, warning, error.",
     "Renders a status icon.",
-    "Interleaves a middot between actions and omits the region when none.",
+    "Renders the passed actions (no injected separators) and omits the region when none.",
     "Is not dismissible by default; dismisses and calls onDismiss when the dismiss button is clicked.",
     "Allows the role to be overridden.",
     "Forwards the ref to the root element.",

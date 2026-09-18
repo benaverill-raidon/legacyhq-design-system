@@ -28,36 +28,6 @@ const APPEARANCE_ICON: Record<SectionMessageAppearance, { Icon: ComponentType<Ic
   error: { Icon: StatusErrorIcon, color: 'error' },
 };
 
-/*
- * Normalize the `actions` slot to a flat list of action nodes. Callers naturally write the actions
- * as a fragment (`<><Link/><Link/></>`) or an array; a single top-level fragment is unwrapped to its
- * children so each Link is separated, rather than being treated as one action.
- */
-function toActionArray(actions: React.ReactNode): React.ReactNode[] {
-  const top = React.Children.toArray(actions).filter(Boolean);
-
-  if (top.length === 1 && React.isValidElement(top[0]) && top[0].type === React.Fragment) {
-    const fragment = top[0] as React.ReactElement<{ children?: React.ReactNode }>;
-    return React.Children.toArray(fragment.props.children).filter(Boolean);
-  }
-
-  return top;
-}
-
-/* Interleave a decorative middot between each action so callers pass bare Link children. */
-function renderActions(actionItems: React.ReactNode[]) {
-  return actionItems.map((child, index) => (
-    <React.Fragment key={index}>
-      {index > 0 ? (
-        <span className={styles.separator} aria-hidden="true">
-          &middot;
-        </span>
-      ) : null}
-      {child}
-    </React.Fragment>
-  ));
-}
-
 export const SectionMessage = React.memo(
   React.forwardRef<HTMLDivElement, SectionMessageProps>(function SectionMessage(
     {
@@ -86,7 +56,7 @@ export const SectionMessage = React.memo(
 
     const { Icon, color } = APPEARANCE_ICON[appearance];
     const hasTitle = title !== undefined && title !== null;
-    const actionItems = toActionArray(actions);
+    const hasActions = React.Children.toArray(actions).filter(Boolean).length > 0;
 
     return (
       <div
@@ -102,7 +72,7 @@ export const SectionMessage = React.memo(
         <div className={styles.content}>
           {hasTitle ? <div className={styles.title}>{title}</div> : null}
           <div className={styles.description}>{children}</div>
-          {actionItems.length > 0 ? <div className={styles.actions}>{renderActions(actionItems)}</div> : null}
+          {hasActions ? <div className={styles.actions}>{actions}</div> : null}
         </div>
 
         {isDismissible ? (

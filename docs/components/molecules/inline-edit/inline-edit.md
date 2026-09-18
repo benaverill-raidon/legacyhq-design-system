@@ -12,9 +12,10 @@ or requiring a separate edit screen/dialog.
 Inline Edit takes a single child - most commonly a `TextField` with `appearance="subtle"`, since a
 subtle field already reads as plain text at rest - and clones it for both states: read-only (not
 editable, but still focusable, showing the last confirmed `value`) and editable (showing the
-in-progress draft while the user types). A trailing confirm (check) / cancel (X) icon-button pair
-appears only once editing has started - controllable via `actionButtons` - and `Enter`/`Escape` work
-as shortcuts for confirm/cancel from anywhere inside it, in addition to the visible buttons.
+in-progress draft while the user types). A trailing confirm (check) / cancel (X) icon-button pair -
+laid out as a `ButtonGroup` - appears only once editing has started - controllable via
+`actionButtons` - and `Enter`/`Escape` work as shortcuts for confirm/cancel from anywhere inside it,
+in addition to the visible buttons.
 
 `value` is controlled the same way `TextField`'s own `value` is: the parent supplies the last
 confirmed value and gets it back via `onConfirm` only when the user commits an edit, not on every

@@ -3,7 +3,8 @@
 ## Overview
 
 Section Message is a bordered, rounded, in-context status panel. It belongs to the organism tier and
-composes the Icon primitive, the Link atom (actions), and the Icon Button atom (dismiss).
+composes the Icon primitive, the Link Button atom laid out in a Button Group (actions), and the Icon
+Button atom (dismiss).
 
 ## Anatomy
 
@@ -14,7 +15,8 @@ composes the Icon primitive, the Link atom (actions), and the Icon Button atom (
 3. **Content** - a vertical column:
    - **Title** - optional bold lead line (`heading-sm`, default content color).
    - **Description** - the `children`, wrapping across lines (`body-md`, default content color).
-   - **Actions** - optional `Link`s with an inserted middot between each.
+   - **Actions** - optional actions (typically `LinkButton`s), laid out by a `ButtonGroup` the
+     caller passes; no separators are injected.
 4. **Dismiss** - optional dismiss `IconButton` (xs, subtle) in the top-right.
 
 ## Public API
@@ -77,12 +79,12 @@ status color.
 - padding: `--spacing-lg` (16px)
 - root gap (icon ↔ content ↔ dismiss): `--spacing-lg` (16px)
 - content gap (title ↔ description ↔ actions): `--spacing-sm` (8px)
-- actions gap (between links and middots): `--spacing-xs` (4px)
+- actions gap (between actions): `--spacing-sm` (8px, owned by the ButtonGroup; the `.actions`
+  wrapper matches it for bare actions)
 - border: `--border-width-sm` (1px)
 - radius: `--border-radius-xl`
 - title typography: `heading-sm`
 - description typography: `body-md`
-- separator color: `--color-content-subtle`
 
 The panel hugs its content vertically; the description wraps rather than truncating.
 
@@ -91,8 +93,8 @@ The panel hugs its content vertically; the description wraps rather than truncat
 - Set the tinted background, border color, and status icon from `appearance`.
 - The icon keeps its own status color (unlike Banner, whose icon inherits the bar color).
 - Render the title only when provided; render the actions region only when actions are provided.
-- Insert a middot between each action. A single top-level fragment passed to `actions` is unwrapped
-  so each Link is separated.
+- Render the actions as passed (typically a `ButtonGroup` of `LinkButton`s); do not inject
+  separators.
 - Show the dismiss button only when `isDismissible`. On dismiss, hide the message (internal state)
   and call `onDismiss`.
 
@@ -125,8 +127,7 @@ defaults to role status and the information appearance
 applies the appearance class
 renders a status icon
 allows the role to be overridden
-interleaves a middot between actions
-renders no separator for a single action
+renders the actions passed to it as-is, with no injected separators
 omits the actions region when none
 is not dismissible by default
 dismisses and calls onDismiss when the dismiss button is clicked

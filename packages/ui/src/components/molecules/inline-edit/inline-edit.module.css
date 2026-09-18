@@ -14,9 +14,13 @@
   inline-size: 100%;
 }
 
-.actions {
-  display: inline-flex;
-  align-items: center;
+/*
+ * The confirm/cancel pair is a Button Group. Position it at the end of the column (below the field),
+ * and tighten the gap to 4px - the icon-only pair reads better closer together than Button Group's
+ * default 8px. The descendant selector outranks Button Group's own `.root` gap so the override wins
+ * regardless of stylesheet order.
+ */
+.root .actions {
   align-self: flex-end;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
 }

@@ -3192,6 +3192,255 @@
     }
   },
   {
+    "id": "field",
+    "name": "Field",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/field/field.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Stacks the label, control, and message in one column."
+      },
+      {
+        "name": "label",
+        "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id. Omitted when label is not provided."
+      },
+      {
+        "name": "required",
+        "description": "Decorative '*' after the label when required, --color-content-error. The forwarded native required conveys the state to assistive technology."
+      },
+      {
+        "name": "control",
+        "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus appearance='subtle' when context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
+      },
+      {
+        "name": "message",
+        "description": "Helper/error/success line at --typography-body-sm, linked to the control via aria-describedby. Omitted when message is not provided."
+      },
+      {
+        "name": "messageIcon",
+        "description": "Decorative sm status Icon shown on error (status_error) / valid (status_success) only."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactElement",
+        "required": true,
+        "default": null,
+        "description": "The single control to wrap. Must be one React element - it is cloned to receive the accessibility wiring."
+      },
+      "label": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Label text, rendered in a real native label[htmlFor]. Omit only when the control is labelled another way; then no label is rendered."
+      },
+      "message": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Helper/error/success text below the control, linked via aria-describedby. Colour and status icon follow state."
+      },
+      "state": {
+        "type": "FieldState",
+        "required": false,
+        "default": "default",
+        "description": "Colours the message and prepends a status icon; error also sets aria-invalid on the control. Does not set the control's own error border.",
+        "enum": [
+          "default",
+          "error",
+          "valid"
+        ]
+      },
+      "context": {
+        "type": "FieldContext",
+        "required": false,
+        "default": "default",
+        "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio.",
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
+      "size": {
+        "type": "FieldSize",
+        "required": false,
+        "default": "md",
+        "description": "Matches the wrapped control's size. Consumed ONLY in the inline context, to align the label/message with the control's inner text (lg indents more; sm and md share one). No visual effect in the default context. Never resizes the control.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Shows a decorative '*' after the label and forwards required to the control."
+      },
+      "controlId": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Explicit id for the control, used for the label's htmlFor and the message's aria-describedby. Auto-generated when omitted; a control with its own id keeps it."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root element's class list."
+      },
+      "labelClassName": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the label's class list."
+      },
+      "messageClassName": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the message's class list."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [
+      "children"
+    ],
+    "variants": {
+      "state": [
+        "default",
+        "error",
+        "valid"
+      ],
+      "context": [
+        "default",
+        "inline"
+      ],
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
+        "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
+        "messageIconToTextGap": "--measurement-6 (Figma spacing/075; no semantic spacing token yet)",
+        "inlineIndent_lg": "--spacing-md",
+        "inlineIndent_sm_md": "--spacing-sm"
+      },
+      "color": {
+        "labelText": "--color-content-subtle",
+        "requiredAsterisk": "--color-content-error",
+        "messageDefault": "--color-content-subtle",
+        "messageError": "--color-content-error",
+        "messageValid": "--color-content-success"
+      },
+      "typography": {
+        "label": "--typography-heading-xxs-*",
+        "message": "--typography-body-sm-*"
+      }
+    },
+    "accessibility": {
+      "interactive": false,
+      "focusable": false,
+      "role": null,
+      "requirements": [
+        "The label is a real label[htmlFor] pointing at the control's id (generated when the control has none), so the control gets its accessible name from the label - no aria-label on the control.",
+        "The message is linked to the control via aria-describedby, merged with any aria-describedby the control already carries.",
+        "state='error' sets aria-invalid on the control; an explicit control aria-invalid always wins.",
+        "required forwards native required to the control; the visible '*' is aria-hidden.",
+        "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/appearance are never overwritten.",
+        "Use Field for one control only; a group of controls needs fieldset/legend instead of a single label[htmlFor]."
+      ]
+    },
+    "relatedComponents": [
+      "Text Field",
+      "Text Area",
+      "Select",
+      "Label",
+      "Inline Message",
+      "Section Message"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4798:124451",
+      "componentSetName": "code-parts / <field>",
+      "variantCount": 9,
+      "verifiedAt": "2026-09-08",
+      "figmaVariantAxes": {
+        "state": [
+          "default",
+          "error",
+          "valid"
+        ],
+        "context": [
+          "default",
+          "inline"
+        ],
+        "size": [
+          "all",
+          "lg",
+          "sm/md"
+        ]
+      },
+      "subParts": [
+        {
+          "name": "code-parts / <label>",
+          "componentSetNodeId": "4798:124439",
+          "variantCount": 3,
+          "note": "Figma code-part for the label. Axes context x size, plus a showRequired boolean and a labelText string. Rendered in code as Field's own native <label>, NOT the Label atom (this part is heading/xxs on color/content/subtle with no background; the Label atom is a pill with overline typography and a background)."
+        },
+        {
+          "name": "code-parts / <message>",
+          "componentSetNodeId": "4798:124412",
+          "variantCount": 9,
+          "note": "Figma code-part for the message. Axes error x valid x context x size. error -> status_error icon + color/content/error; valid -> status_success icon + color/content/success; neither -> no icon, color/content/subtle. Rendered in code as Field's own message, NOT the Inline Message molecule (this part is a compact sm icon + body/sm line with only default/error/valid states; Inline Message is larger, tone-based, and sometimes interactive)."
+        }
+      ],
+      "figmaComponentProps": {
+        "slot": {
+          "type": "SLOT",
+          "note": "The <field> root exposes a Figma slot for the control - mapped to React children."
+        },
+        "labelText": {
+          "type": "TEXT",
+          "defaultValue": "Field label"
+        },
+        "showRequired": {
+          "type": "BOOLEAN",
+          "defaultValue": false
+        },
+        "message": {
+          "type": "TEXT",
+          "defaultValue": "Message content"
+        }
+      },
+      "apiAdaptationNotes": [
+        "Field renders its own label and message rather than reusing the Label atom / Inline Message molecule - the Figma <label>/<message> code-parts use different typography (heading/xxs, body/sm) and a smaller state set (default/error/valid) than those components expose.",
+        "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop.",
+        "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
+        "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
+        "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
+        "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
+        "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
+        "The message icon->text gap is Figma spacing/075 (6px), which has no semantic spacing token yet - uses --measurement-6, the same documented precedent as Text Field and Toggle Button."
+      ]
+    }
+  },
+  {
     "id": "icon-tile",
     "name": "IconTile",
     "tier": "molecule",
@@ -3512,7 +3761,7 @@
       },
       {
         "name": "actions",
-        "description": "Trailing cancel/confirm IconButton pair; renders only once editing has started, when actionButtons is not false."
+        "description": "Trailing cancel/confirm IconButton pair, wrapped in a ButtonGroup for the row layout; renders only once editing has started, when actionButtons is not false. The .actions class positions the group (align-self: flex-end) and tightens its gap to 4px (--spacing-xs), overriding Button Group's default 8px for this icon-only pair."
       }
     ],
     "props": {
@@ -3574,7 +3823,7 @@
     "tokens": {
       "layout": {
         "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
-        "actionsGap": "--spacing-sm (8px, between the cancel and confirm buttons themselves, matching Button Group)"
+        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
       }
     },
     "accessibility": {
@@ -4201,6 +4450,16 @@
           "subtle"
         ]
       },
+      "appearance": {
+        "type": "SelectTone",
+        "required": false,
+        "default": null,
+        "description": "Alias for tone, using the canonical appearance name Text Field/Text Area use for the same axis, so a wrapper (e.g. Field's inline context) can drive it with one shared prop. An explicit tone wins.",
+        "enum": [
+          "default",
+          "subtle"
+        ]
+      },
       "placeholder": {
         "type": "string",
         "required": false,
@@ -4322,6 +4581,7 @@
         "Options are a flat `SelectOption[]` ({ value, label, icon?, description?, disabled?, group? }), not Menu's `MenuSection[]`. Select maps them into sections itself - grouping consecutive options by their `group` field - and owns each row's selected state, selectionType (radio for single, checkbox for multi), and onSelect. This is the ergonomic shape a Select consumer expects; the caller never hand-wires Menu rows.",
         "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
         "tone maps to TextField's `appearance` (default/subtle) - Figma names the axis `tone` on the trigger, but it is TextField's appearance axis, so code uses TextField's own name at that boundary.",
+        "An additive `appearance` alias for `tone` was added (same SelectTone values) so a wrapper can drive the trigger's standard/subtle axis with the canonical `appearance` name Text Field/Text Area use - specifically Field's inline context, which injects appearance='subtle' into whatever control it wraps. An explicit `tone` still wins, so existing usage is unchanged.",
         "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
         "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
         "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
@@ -6269,6 +6529,193 @@
     }
   },
   {
+    "id": "form",
+    "name": "Form",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/form/form.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "The form element; forwards ref and native form attributes. Renders the optional header, then children."
+      },
+      {
+        "name": "header",
+        "description": "Rendered when title, description, or requiredLegend is set. flex column, gap --spacing-md."
+      },
+      {
+        "name": "title",
+        "description": "Header title, --typography-heading-lg, --color-content-default. Presentational text."
+      },
+      {
+        "name": "description",
+        "description": "Header description and/or the required legend, --typography-body-md, --color-content-default."
+      },
+      {
+        "name": "requiredMark",
+        "description": "The legend '*', --color-content-error. Real content (not aria-hidden) - the sentence explains the convention."
+      },
+      {
+        "name": "section",
+        "description": "Vertical field group; padding-top --spacing-3xl, gap --spacing-lg; optional title (--typography-heading-sm)."
+      },
+      {
+        "name": "row",
+        "description": "Equal-width columns on one line (up to 4); gap --spacing-lg; each child flex:1 1 0."
+      },
+      {
+        "name": "footer",
+        "description": "Actions; padding-top --spacing-4xl, gap --spacing-sm; data-align end (default) / start."
+      }
+    ],
+    "props": {
+      "title": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Header title (heading/lg). Presentational text - not a semantic heading."
+      },
+      "description": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Supporting text under the title (body/md)."
+      },
+      "requiredLegend": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Renders the '* indicates a required field' legend, with the '*' in the error colour."
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "The form body: FormSection / FormRow groups and a FormFooter."
+      },
+      "headerClassName": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the header's class list."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the form element's class list."
+      },
+      "...rest": {
+        "type": "React.FormHTMLAttributes<HTMLFormElement>",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to the native <form> (onSubmit, name, noValidate, ...)."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children",
+      "footer"
+    ],
+    "variants": {
+      "footerAlign": [
+        "start",
+        "end"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "layout": {
+        "headerGap": "--spacing-md",
+        "sectionTopGap": "--spacing-3xl",
+        "sectionInnerGap": "--spacing-lg",
+        "rowColumnGap": "--spacing-lg",
+        "footerTopGap": "--spacing-4xl",
+        "footerActionGap": "--spacing-sm"
+      },
+      "color": {
+        "headerText": "--color-content-default",
+        "sectionTitle": "--color-content-default",
+        "requiredMark": "--color-content-error"
+      },
+      "typography": {
+        "title": "--typography-heading-lg-*",
+        "description": "--typography-body-md-*",
+        "sectionTitle": "--typography-heading-sm-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": false,
+      "role": "form (implicit when named)",
+      "requirements": [
+        "Render a real native <form> - native submission (Enter, type=submit) and browser validation work for free.",
+        "Give the submit Button type='submit' so it triggers onSubmit.",
+        "Field owns each control's labelling and description - Form does not re-wire them.",
+        "The section title is presentational; add a semantic heading in the page structure if a group needs one.",
+        "The required legend (including its '*') is real content, not aria-hidden."
+      ]
+    },
+    "relatedComponents": [
+      "Field",
+      "Text Field",
+      "Select",
+      "Text Area",
+      "Button"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2849:9088",
+      "componentSetName": "form",
+      "variantCount": 3,
+      "verifiedAt": "2026-09-08",
+      "workInProgress": true,
+      "figmaVariantAxes": {
+        "sections": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "subParts": [
+        {
+          "name": "code-parts / <form-header>",
+          "componentSetNodeId": "2215:66090",
+          "note": "Title (heading/lg) + description (body/md, the '*' in content/error) + optional content slot. Props: show title, show description, show content (default false), title, description. Rendered in code from Form's title/description/requiredLegend props (baked into Form, not a separate export)."
+        },
+        {
+          "name": "code-parts / <form-section>",
+          "componentNodeId": "2216:725",
+          "note": "Vertical group: optional heading (heading/sm, showTitle default false) + form-rows. padding-top spacing/3xl, internal gap spacing/lg. Rendered in code as FormSection."
+        },
+        {
+          "name": "code-parts / <form-row>",
+          "componentSetNodeId": "4800:124906",
+          "variantCount": 4,
+          "note": "1-4 equal-width slots side by side (variant 'number of slots'), each holding a Field, with a spacing/lg gap between them. Rendered in code as FormRow (equal columns via flex)."
+        },
+        {
+          "name": "code-parts / <form-footer>",
+          "componentSetNodeId": "2216:1668",
+          "variantCount": 2,
+          "note": "Actions slot aligned start/end (align variant). padding-top spacing/4xl, action gap spacing/sm. Rendered in code as FormFooter."
+        }
+      ],
+      "apiAdaptationNotes": [
+        "The Figma Form page is still marked work-in-progress (🚧). The <form-row> column gap was initially unset (0); it has since been set to --spacing-lg (16px) in Figma, matching what the code already used, so it is no longer a judgment call. One call remains: the header title is a Figma text node, so `title` renders as presentational text, not a semantic heading.",
+        "Figma's `sections` variant (1/2/3) is not a prop - it is just however many FormSection children the consumer renders.",
+        "The <form-header> is always the form's own header, so it is baked into Form (title/description/requiredLegend props) rather than a separate export. The description's '* indicates a required field' legend is exposed as the `requiredLegend` boolean, rendering the '*' in --color-content-error to match Field's required marker.",
+        "Multi-part component shipped as four separate exports (Form, FormSection, FormRow, FormFooter), matching the repo's Tabs/TabPanel and RadioGroup/Radio pattern rather than dot-notation compounds.",
+        "All inter-block spacing lives on the blocks (section padding-top 3xl, footer padding-top 4xl); the <form> has no gap of its own, so a header-less form has no wasted leading space.",
+        "Fields may sit directly in a FormSection (single column, spaced by the section gap) or inside a FormRow (equal columns) - Figma always nests rows in sections, but the direct-field case is the common one and avoids a mandatory one-slot row.",
+        "Form owns no form state - it renders a native <form> and forwards onSubmit and all native form attributes; validation and each field's state stay native / on Field."
+      ]
+    }
+  },
+  {
     "id": "menu",
     "name": "Menu",
     "tier": "organism",
@@ -6529,6 +6976,285 @@
     }
   },
   {
+    "id": "modal-dialog",
+    "name": "ModalDialog",
+    "tier": "organism",
+    "category": "organism",
+    "status": "stable",
+    "path": "docs/components/organisms/modal-dialog/modal-dialog.contract.json",
+    "anatomy": [
+      {
+        "name": "backdrop",
+        "description": "Fixed full-viewport blanket that centers the panel with --spacing-4xl inset; a genuine click on it requests close."
+      },
+      {
+        "name": "panel",
+        "description": "The dialog surface - raised-surface bg, --border-radius-xxl, --color-border-default. A flex column of header/body/footer; width per the width prop; shrinks on narrow viewports."
+      },
+      {
+        "name": "header",
+        "description": "Rendered when there's a title or any header action. Status icon + title + header actions. Padding --spacing-2xl/--spacing-lg."
+      },
+      {
+        "name": "statusIcon",
+        "description": "Decorative md status icon for warning/error appearance, coloured content/warning or content/error."
+      },
+      {
+        "name": "title",
+        "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby."
+      },
+      {
+        "name": "headerActions",
+        "description": "Groups the expand + close buttons when both are shown; a lone button renders on its own."
+      },
+      {
+        "name": "expand",
+        "description": "Optional header expand (maximize) button (GrowDiagonalIcon), shown when onExpand is provided; labelled by expandLabel; sits before close."
+      },
+      {
+        "name": "close",
+        "description": "The close (X) button; shown by default; labelled by closeLabel."
+      },
+      {
+        "name": "body",
+        "description": "The scrollable content slot; --typography-body-md; inset by --spacing-2xl; scrolls when tall while header/footer stay pinned."
+      },
+      {
+        "name": "footer",
+        "description": "Right-aligned action slot; gap --spacing-sm; padding --spacing-lg/--spacing-2xl. Rendered when footer is provided."
+      }
+    ],
+    "props": {
+      "open": {
+        "type": "boolean",
+        "required": true,
+        "default": null,
+        "description": "Whether the dialog is shown (controlled)."
+      },
+      "onClose": {
+        "type": "() => void",
+        "required": true,
+        "default": null,
+        "description": "Called on any close request (close button, Escape, backdrop). The consumer sets open to false."
+      },
+      "title": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Header heading and the dialog's accessible name (aria-labelledby)."
+      },
+      "appearance": {
+        "type": "ModalAppearance",
+        "required": false,
+        "default": "default",
+        "description": "Prepends a status icon to the title (warning/error). Does not tone the footer buttons.",
+        "enum": [
+          "default",
+          "warning",
+          "error"
+        ]
+      },
+      "width": {
+        "type": "ModalWidth",
+        "required": false,
+        "default": "medium",
+        "description": "Panel width: 400 / 600 / 752 / 968 px.",
+        "enum": [
+          "small",
+          "medium",
+          "large",
+          "extraLarge"
+        ]
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "The dialog body; scrolls when taller than the viewport allows."
+      },
+      "footer": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Right-aligned footer actions (e.g. Cancel + Confirm)."
+      },
+      "showCloseButton": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Show the header close (X) button."
+      },
+      "closeLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Close",
+        "description": "Accessible label for the close button."
+      },
+      "onExpand": {
+        "type": "() => void",
+        "required": false,
+        "default": null,
+        "description": "Called when the header expand (maximize) button is clicked. Provide it to show an Expand button before Close (grouped in a Button Group when both are shown)."
+      },
+      "expandLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Expand",
+        "description": "Accessible label / tooltip for the expand button."
+      },
+      "closeOnEscape": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Close when Escape is pressed."
+      },
+      "closeOnBackdropClick": {
+        "type": "boolean",
+        "required": false,
+        "default": true,
+        "description": "Close when the backdrop is clicked."
+      },
+      "initialFocusRef": {
+        "type": "React.RefObject<HTMLElement | null>",
+        "required": false,
+        "default": null,
+        "description": "Element to focus on open. Defaults to the panel."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible name when there is no title."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the panel's class list."
+      }
+    },
+    "sizes": [],
+    "slots": [
+      "children",
+      "footer"
+    ],
+    "variants": {
+      "appearance": [
+        "default",
+        "warning",
+        "error"
+      ],
+      "width": [
+        "small",
+        "medium",
+        "large",
+        "extraLarge"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "backdrop": "--color-background-brand-secondary-overlay-blanket",
+        "panelSurface": "--color-elevation-surface-raised-default",
+        "panelBorder": "--color-border-default",
+        "title": "--color-content-default",
+        "statusWarning": "--color-content-warning",
+        "statusError": "--color-content-error"
+      },
+      "layout": {
+        "backdropInset": "--spacing-4xl",
+        "panelRadius": "--border-radius-xxl (16px)",
+        "panelWidths": "400 / 600 / 752 / 968 px",
+        "headerPadding": "--spacing-2xl (top/l/r), --spacing-lg (bottom)",
+        "headerGap": "--spacing-lg",
+        "titleIconGap": "--spacing-sm",
+        "headerActionGap": "--spacing-sm (between expand and close, owned by the header Button Group)",
+        "bodyInset": "--spacing-2xl",
+        "footerPadding": "--spacing-lg (top), --spacing-2xl (l/r/bottom)",
+        "footerActionGap": "--spacing-sm"
+      },
+      "typography": {
+        "title": "--typography-heading-md-*",
+        "body": "--typography-body-md-*"
+      }
+    },
+    "accessibility": {
+      "interactive": true,
+      "focusable": true,
+      "role": "dialog",
+      "requirements": [
+        "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name.",
+        "Focus moves into the panel on open, is trapped on Tab/Shift+Tab, and is restored to the trigger on close.",
+        "Escape (closeOnEscape) and a genuine backdrop click (closeOnBackdropClick) request close via onClose.",
+        "Page scroll is locked while open.",
+        "The close button is labelled by closeLabel (default 'Close').",
+        "The status icon is decorative (aria-hidden) - meaning is carried by the title and actions.",
+        "Pair appearance='error'/'warning' with a matching Confirm button tone - Modal Dialog does not tone footer buttons."
+      ]
+    },
+    "relatedComponents": [
+      "Button",
+      "Icon Button",
+      "Button Group",
+      "Toast",
+      "Dropdown Menu",
+      "Menu"
+    ],
+    "contentCompleteness": "full",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "2456:12608",
+      "componentSetName": "modal-dialog",
+      "variantCount": 12,
+      "verifiedAt": "2026-09-08",
+      "figmaVariantAxes": {
+        "appearance": [
+          "default",
+          "warning",
+          "error"
+        ],
+        "width": [
+          "small",
+          "medium",
+          "large",
+          "extra large"
+        ]
+      },
+      "panelWidths": {
+        "small": 400,
+        "medium": 600,
+        "large": 752,
+        "extraLarge": 968
+      },
+      "subParts": [
+        {
+          "name": "blanket",
+          "note": "Backdrop overlay filling the viewport, fill color/background/brand/secondary/overlay/blanket, centering the panel. Figma's 64px around the panel was artboard framing; the code insets the panel with --spacing-4xl."
+        },
+        {
+          "name": "modal-header",
+          "componentSetNodeId": "2456:2409",
+          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + a header action group: an Expand (grow_diagonal) icon-button and the Close icon-button (both subtle, sm) in a Button Group. warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
+        },
+        {
+          "name": "modal-footer",
+          "componentSetNodeId": "2456:11691",
+          "note": "appearance default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot."
+        }
+      ],
+      "apiAdaptationNotes": [
+        "Built standalone, not on the Popup primitive - Popup is a trigger-anchored positioned popover with no focus trap, backdrop, aria-modal, or scroll lock; a modal is a centered focus-trapped overlay, so createPortal + a focus trap are used directly.",
+        "Controlled with open + onClose (not Popup's onOpenChange) - a modal only ever requests close, and onClose lets the consumer intercept it.",
+        "Figma's appearance (default/warning/error) prepends a decorative status icon to the title; it does NOT tone the footer buttons (Modal Dialog can't know the action layout), so consumers pair appearance='error'/'warning' with a matching Confirm button tone - the same wrapper-vs-control split Field uses for state.",
+        "The footer is a right-aligned slot; Figma's footer left filter area (dropdown/date field) is example content hidden by default, not part of the component.",
+        "Surface and backdrop inset use existing tokens by intent: the panel surface is --color-elevation-surface-raised-default (the shared floating-surface token; Figma names the same role overlay/default), and the backdrop fills the viewport, insetting the panel with --spacing-4xl (Figma's 64px around the panel was artboard framing, not a design value).",
+        "Panel widths (inner) are 400/600/752/968 for small/medium/large/extraLarge; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
+        "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
+      ]
+    }
+  },
+  {
     "id": "progress-tracker",
     "name": "ProgressTracker",
     "tier": "organism",
@@ -6700,7 +7426,7 @@
       },
       {
         "name": "actions",
-        "description": "optional Links, separated by an inserted middot"
+        "description": "optional actions (typically Link Buttons), laid out by a ButtonGroup the caller passes; no separators are injected"
       },
       {
         "name": "dismiss",
@@ -6736,7 +7462,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Optional Links; middot separators are inserted between them."
+        "description": "Optional actions (typically Link Buttons). Wrap multiple in a ButtonGroup, which lays them out as a row; a single action can be passed bare."
       },
       "isDismissible": {
         "type": "boolean",
@@ -6784,7 +7510,7 @@
           "padding": "--spacing-lg",
           "rootGap": "--spacing-lg",
           "contentGap": "--spacing-sm",
-          "actionsGap": "--spacing-xs"
+          "actionsGap": "--spacing-sm (the ButtonGroup between the actions owns this; the .actions wrapper matches it for bare actions)"
         },
         "border": {
           "width": "--border-width-sm",
@@ -6808,8 +7534,7 @@
           "errorBorder": "--color-border-error",
           "errorIcon": "--color-content-error",
           "title": "--color-content-default",
-          "description": "--color-content-default",
-          "separator": "--color-content-subtle"
+          "description": "--color-content-default"
         }
       }
     },
@@ -6825,7 +7550,8 @@
       "Banner",
       "Toast",
       "InlineMessage",
-      "Link",
+      "LinkButton",
+      "ButtonGroup",
       "IconButton"
     ],
     "contentCompleteness": "full",
@@ -6836,7 +7562,7 @@
       "componentName": "section-message",
       "variantCount": 4,
       "verifiedAt": "2026-09-01",
-      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link instances separated by a middot."
+      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
     }
   },
   {

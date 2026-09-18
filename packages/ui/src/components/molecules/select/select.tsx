@@ -50,7 +50,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
   const {
     options,
     size = 'md',
-    tone = 'default',
+    tone,
+    appearance,
     placeholder,
     disabled = false,
     invalid = false,
@@ -62,6 +63,11 @@ export const Select = React.memo(function Select(props: SelectProps) {
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
   } = props;
+
+  // `appearance` is an alias for `tone` (the canonical name Text Field/Text Area use); an explicit
+  // `tone` wins so existing usage is unchanged, and a wrapper like Field's inline context can drive
+  // the trigger with `appearance="subtle"`.
+  const resolvedAppearance = tone ?? appearance ?? 'default';
 
   const multi = props.inputType === 'multi';
 
@@ -221,7 +227,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
         id={id}
         className={mergeClassNames(styles.trigger, className)}
         size={size}
-        appearance={tone}
+        appearance={resolvedAppearance}
         invalid={invalid}
         disabled={disabled}
         role="combobox"

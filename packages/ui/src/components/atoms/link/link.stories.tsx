@@ -153,10 +153,32 @@ export const Sizes: Story = {
 };
 
 /**
- * Interaction states. Hover and pressed are pinned via a documentation-only `data-force-state`
- * attribute, the same convention Button uses. `visited` cannot be forced this way - browsers
- * deliberately prevent scripts and styles from being driven by `:visited` beyond a fixed color, to
- * stop sites from detecting a user's browsing history. See the live example instead.
+ * `emphasis` sets the weight: `strong` (the default, a heading weight) for a name / first-column
+ * identifier, `default` (a body weight) for any other entity link.
+ */
+export const Emphasis: Story = {
+  render: () => (
+    <Group title="Emphasis">
+      <Cell label="Strong (default)">
+        <Link href="/clients" emphasis="strong">
+          Ada Lovelace
+        </Link>
+      </Cell>
+      <Cell label="Default">
+        <Link href="/clients" emphasis="default">
+          View invoice
+        </Link>
+      </Cell>
+    </Group>
+  ),
+};
+
+/**
+ * Interaction states. Link has only `default` and `hover` states (there is no press/active
+ * treatment); hover is pinned via a documentation-only `data-force-state` attribute, the same
+ * convention Button uses. `visited` cannot be forced this way - browsers deliberately prevent scripts
+ * and styles from being driven by `:visited` beyond a fixed color, to stop sites from detecting a
+ * user's browsing history. See the live example instead.
  */
 export const States: Story = {
   render: () => (
@@ -172,11 +194,6 @@ export const States: Story = {
         </Cell>
         <Cell label="Focus visible">
           <Link href="/clients" data-force-state="focus">
-            Client profile
-          </Link>
-        </Cell>
-        <Cell label="Press">
-          <Link href="/clients" data-force-state="press">
             Client profile
           </Link>
         </Cell>

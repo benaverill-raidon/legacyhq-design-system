@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
 import { Toast } from './toast';
 import type { ToastAppearance } from './toast.types';
 
@@ -36,14 +37,14 @@ const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)', justif
 
 function demoActions() {
   return (
-    <>
+    <ButtonGroup>
       <Button size="xs" appearance="subtle">
         Understood
       </Button>
       <Button size="xs" appearance="subtle">
         No thanks
       </Button>
-    </>
+    </ButtonGroup>
   );
 }
 

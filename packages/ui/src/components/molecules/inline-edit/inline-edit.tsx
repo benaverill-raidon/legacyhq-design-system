@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CheckIcon, CloseIcon } from '../../../assets/icons';
 import { IconButton } from '../../atoms/icon-button';
+import { ButtonGroup } from '../button-group';
 import styles from './inline-edit.module.css';
 import type { InlineEditProps } from './inline-edit.types';
 
@@ -117,14 +118,14 @@ export const InlineEdit = React.memo(function InlineEdit({
       <div className={styles.content}>{control}</div>
 
       {isEditing && actionButtons ? (
-        <span className={styles.actions}>
+        <ButtonGroup className={styles.actions}>
           <IconButton size="sm" aria-label={cancelLabel} onMouseDown={handleActionMouseDown} onClick={cancel}>
             <CloseIcon />
           </IconButton>
           <IconButton size="sm" aria-label={confirmLabel} onMouseDown={handleActionMouseDown} onClick={confirm}>
             <CheckIcon />
           </IconButton>
-        </span>
+        </ButtonGroup>
       ) : null}
     </div>
   );

@@ -47,16 +47,16 @@
   letter-spacing: var(--typography-body-md-letter-spacing);
 }
 
+/*
+ * Positioning wrapper for the actions row. Multiple actions are laid out by the ButtonGroup the
+ * caller passes in (which owns the row direction + gap); this keeps a matching gap so a couple of
+ * bare actions still space correctly, and wraps on narrow widths.
+ */
 .actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.separator {
-  color: var(--color-content-subtle);
-  user-select: none;
+  gap: var(--spacing-sm);
 }
 
 .dismiss {

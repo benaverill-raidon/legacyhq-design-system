@@ -1,0 +1,260 @@
+{
+  "name": "Table",
+  "category": "organism",
+  "status": "beta",
+  "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
+  "intent": "A data-table shell: a section header (title + description + actions), a toolbar (search + filter/configure icon buttons + active-filter Chip mode='filter' pills), a column-config-driven grid (sortable headers, a selection column, row/loading/empty states), and a pagination footer. Driven by `columns` + `data`; sorting and selection are owned by default (uncontrolled) with controlled overrides, while pagination and search are controlled for server-driven data. Composes Text Field, Chip, Checkbox, Icon Button, Button, Skeleton, Empty State, and Pagination into one complete section - which is why it lives at the organism tier.",
+  "nativeElement": "table (semantic thead/tbody/th/td, with a visually-hidden caption)",
+  "sourceFiles": {
+    "component": "table.tsx",
+    "types": "table.types.ts",
+    "styles": "table.module.css",
+    "stories": "Table.stories.tsx",
+    "tests": "Table.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "2949:40357",
+    "componentSetName": "table",
+    "note": "Not a variant set: the `table` frame (2949:40357) holds two size components - size=md (2949:40355) and size=sm (2949:40356). The Figma page is marked in-progress (✅⏲️), and the grid renders empty in the master because its cells live in the separate 'Parts' library (a `figma-parts / column / <type>` per cell content type). Verified live via figma-dev-mode.",
+    "sizeAxis": ["md", "sm"],
+    "verifiedAt": "2026-09-10",
+    "subParts": [
+      { "name": "table / head", "componentNodeId": "2949:40307", "note": "The section header: {title} (heading/lg), {description} (body/md, content/subtle), and a right-aligned button-group of two Buttons + an overflow Icon Button. Maps to the `title` / `description` / `actions` props." },
+      { "name": "table / filters", "componentNodeId": "2948:37536", "note": "The toolbar: a search Text Field (left, flex-growing up to 600px) + filter/configure Icon Buttons (right), a row of Chip mode='filter' active-filter pills + a '+' add-filter Icon Button + a 'Clear all filters' action (right), over a bottom border separator. Code maps this to search (`searchable`) + `toolbarActions` (Icon Buttons) + `activeFilters` (consumer-rendered Chip mode='filter' ReactNode) + `onClearFilters`. The filter/configure dropdowns are consumer-owned." },
+      { "name": "table / columns", "componentNodeId": "2953:23358", "note": "The grid, laid out column-by-column: a 24px left/right gutter (`column / padding`), up to 8 (wide) or 16 (narrow) column slots, and vertical/horizontal scrollbars. In code this is a normal row-oriented <table>; the per-column layout is expressed as the `columns` config." },
+      { "name": "cell / table-head", "componentNodeId": "2956:29798", "note": "The header cell (deep-verified via the Desktop Bridge): background elevation/surface/default (a subtle grey band vs. the white body rows), a Title label in heading/xs SemiBold coloured content/SUBTLE (not default), an always-visible sort Icon Button (arrow_down) + a column-menu (⋮) dropdown, a vertical drag-handle divider (border/default) between columns, and a bottom border (border/default). Header height 40 (md) / 32 (sm). Code renders the sort control (asc/desc/none, with aria-sort; the arrow stays visible and takes content/default when active) and defers the column-menu ⋮ and drag-resize to future work." },
+      { "name": "cell / text (and 20+ other cell types)", "componentNodeId": "2957:59685", "note": "Body cell (deep-verified): content at --spacing-sm inline padding, body/md, content/default, transparent background, with a bottom row divider (--color-border-default). Row height 64 (md) / 40 (sm). Figma ships a `column / <type>` for each cell content type; the code does NOT hard-code these - a column's `render` returns any content composed from existing atoms/molecules (see cellContentTypes)." },
+      { "name": "container-pagination", "componentNodeId": "2948:39041", "note": "The footer: the Pagination molecule, centered, over a top border." }
+    ],
+    "cellContentTypes": ["text", "text-icon", "text-badge", "text-icontile", "avatar", "avatar-group", "tag", "tag-group", "label", "link", "button", "button-group", "icon", "icon-button", "dropdown-menu", "checkbox", "radio", "toggle", "progress-bar", "inline-textfield", "inline-select", "inline-date", "inline-time"],
+    "cellContentTypesNote": "The Figma cell content types the grid is designed to hold (from the 'Parts' `figma-parts / column / <type>` list, verified live 2026-09-10). The code expresses these through a column's `render` prop rather than one component per type; a built-in selection Checkbox column is the exception.",
+    "apiAdaptationNotes": [
+      "Column-config driven, not slot-composed. Figma lays the grid out as columns, each a stack of a header cell + body cells of one content type; the code takes `columns` (with `key`, `header`, `sortable`, `align`, `width`, `render`) + `data` and renders a semantic row-oriented <table>. This scales to a data-heavy app (many similar 'All X' pages) far better than hand-composed rows.",
+      "Cells render arbitrary content via `column.render` rather than a component-per-content-type. Figma's 20+ `column / <type>` parts are examples of what a cell can hold (Tag, Avatar, Link, Badge, Button, ...); baking a renderer for each would be a combinatorial, low-value surface. The one structural exception is the selection Checkbox column (`selectable`).",
+      "Batteries-included but controllable. Sorting and selection are owned by default (uncontrolled: `defaultSort` / `defaultSelectedIds`) with controlled overrides (`sort`+`onSortChange`, `selectedIds`+`onSelectionChange`). The built-in sort reorders `data` client-side; `manualSort` hands sorting to the consumer (server-side).",
+      "Pagination is controlled or client-side. Pass `pageSize` for client-side slicing (the table computes the page count and owns the page), or `manualPagination` + `page`/`pageCount`/`onPageChange` for server-driven paging. Search is always controlled (`searchValue`/`onSearchChange`) - the consumer owns the data query.",
+      "The toolbar renders the shell (search + `toolbarActions` Icon Buttons + active-filter Chip mode='filter' pills + Clear all filters); the filter/configure dropdowns are consumer-owned, since specific filter categories do not generalise. Pass `toolbar` to replace the built-in toolbar entirely.",
+      "Accessibility: a real <table> with a visually-hidden <caption> (or the `title`) for the accessible name; sortable headers set aria-sort and wrap the label in a <button>; the scroll region is a keyboard-focusable role=region; `aria-busy` marks the loading state.",
+      "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/default, header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
+      "Deferred from v1 (Figma page is in-progress): single-select (radio) column, the per-column ⋮ menu, column resize/reorder, sticky first column, and row expansion. The sortable header + selection Checkbox cover the primary interactions."
+    ]
+  },
+  "useCases": [
+    "an 'All members' / 'All records' list page with search, filters, sorting, and pagination",
+    "a selectable list with bulk actions (select-all + per-row checkboxes)",
+    "a compact dense table (size='sm') for data-heavy views",
+    "a server-driven table (manualSort + manualPagination) backed by a paged API"
+  ],
+  "antiPatterns": [
+    "a simple key/value layout or a short static list (use a description list or plain markup)",
+    "a layout grid / dashboard of cards (use layout primitives, not a data table)",
+    "editable spreadsheet-style grids with cell-level editing and formulas (out of scope)"
+  ],
+  "anatomy": [
+    { "part": "root", "element": "div.table (data-size)", "required": true, "description": "Flex column of the header, the card, spaced by --spacing-lg." },
+    { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title, description, or actions. Heading area (title heading/lg + description body/md subtle) + right-aligned actions." },
+    { "part": "tableBody", "element": "div.tableBody (data-has-footer)", "required": true, "description": "Raised surface (no border or radius per Figma) holding the toolbar, the grid scroll region, and the footer. data-has-footer marks whether a pagination footer is shown." },
+    { "part": "selectionBar", "element": "thead > tr.selectionRow (replaces the header cells)", "required": false, "description": "When one or more rows are selected, the column-header <th> cells are REPLACED by this row: the select-all Checkbox stays, then the selected count (left) + `bulkActions` (right) on a brand-primary-subtle band." },
+    { "part": "toolbar", "element": "div.toolbar", "required": false, "description": "Rendered for `toolbar`, `searchable`, `toolbarActions`, `onClearFilters`, or `activeFilters`. Row 1: search (left, flex-grow) + toolbarActions (right). Row 2: activeFilters Chips + Clear all filters. Bottom border separator." },
+    { "part": "scroll", "element": "div.scroll (role=region, tabIndex 0)", "required": true, "description": "The horizontally/vertically scrollable, keyboard-focusable region wrapping the <table>." },
+    { "part": "grid", "element": "table.grid", "required": true, "description": "Semantic table with a visually-hidden <caption> for its accessible name; aria-busy while loading." },
+    { "part": "headerCell", "element": "th (scope=col, aria-sort)", "required": true, "description": "Sticky header cell (elevation/surface/default band, content/subtle heading/xs); sortable columns wrap the label + sort arrow in a <button>." },
+    { "part": "resizeHandle", "element": "span (role=separator, aria-orientation=vertical, tabIndex 0)", "required": false, "description": "Drag handle at the header cell's trailing edge (Figma's drag-handle divider); resizes the column by pointer drag or Arrow keys. Shown when resizableColumns and column.resizable !== false." },
+    { "part": "selectionColumn", "element": "th/td (40px, Checkbox)", "required": false, "description": "Leading column with a header select-all Checkbox and a per-row Checkbox; shown when `selectable`. Selection is checkbox-only - rows are never clickable." },
+    { "part": "row", "element": "tr (data-selected, data-selectable)", "required": true, "description": "Body row; a bottom row divider on its cells (dropped when it is the only row). Hover background only when selection is enabled (neutral overlay); brand-tinted when selected." },
+    { "part": "cell", "element": "td (data-align, data-emphasis)", "required": true, "description": "Body cell; body/md (heading weight when column.emphasis='strong' for an identifier); renders `column.render(row)` or `row[key]`." },
+    { "part": "footer", "element": "div.footer (Pagination)", "required": false, "description": "Centered Pagination (no top border); shown when pagination is enabled and there's more than one page." }
+  ],
+  "props": {
+    "columns": { "type": "Array<TableColumn<Row>>", "required": true, "description": "Column definitions (key, header, render, sortable, align, width, resizable, emphasis, ...). column.resizable=false opts a column out of resizing; column.emphasis='strong' marks an identifier column (heading weight)." },
+    "data": { "type": "Row[]", "required": true, "description": "The row data. Sorted/paginated unless the matching manual flag is set." },
+    "getRowId": { "type": "(row: Row, index: number) => string | number", "required": false, "default": "index", "description": "Stable row id for selection and React keys. Pass a real id when using selection." },
+    "size": { "type": "TableSize", "required": false, "default": "md", "enum": ["md", "sm"], "description": "Row density: md (64px rows) or sm (40px rows)." },
+    "caption": { "type": "React.ReactNode", "required": false, "default": null, "description": "Accessible name for the <table> (visually-hidden caption). Falls back to `title`." },
+    "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Header title (heading/lg)." },
+    "description": { "type": "React.ReactNode", "required": false, "default": null, "description": "Supporting description under the title." },
+    "actions": { "type": "React.ReactNode", "required": false, "default": null, "description": "Right-aligned header actions (Buttons + overflow Icon Button)." },
+    "toolbar": { "type": "React.ReactNode", "required": false, "default": null, "description": "Replaces the entire built-in toolbar." },
+    "searchable": { "type": "boolean", "required": false, "default": false, "description": "Show the built-in search field." },
+    "searchValue": { "type": "string", "required": false, "description": "Controlled search value." },
+    "onSearchChange": { "type": "(value: string) => void", "required": false, "description": "Search change handler." },
+    "searchPlaceholder": { "type": "string", "required": false, "default": "Search", "description": "Search field placeholder + accessible name." },
+    "toolbarActions": { "type": "React.ReactNode", "required": false, "default": null, "description": "Right-aligned toolbar actions beside the search field — typically a filter Icon Button and a configure Icon Button. The consumer owns the buttons and their dropdown/popover content." },
+    "activeFilters": { "type": "React.ReactNode", "required": false, "default": null, "description": "Applied filter chips rendered below the search row. Pass Chip mode='filter' components and an optional '+' IconButton. The consumer renders the chips directly so filter-chip segments stay fully controlled." },
+    "onClearFilters": { "type": "() => void", "required": false, "description": "When set, renders a 'Clear all filters' action at the trailing edge of the chip row." },
+    "clearFiltersLabel": { "type": "string", "required": false, "default": "Clear all filters" },
+    "sort": { "type": "TableSort | null", "required": false, "description": "Controlled sort. Pair with onSortChange." },
+    "defaultSort": { "type": "TableSort | null", "required": false, "default": null, "description": "Initial sort (uncontrolled)." },
+    "onSortChange": { "type": "(sort: TableSort | null) => void", "required": false },
+    "manualSort": { "type": "boolean", "required": false, "default": false, "description": "Consumer sorts server-side; Table reflects state but does not reorder data." },
+    "selectable": { "type": "boolean", "required": false, "default": false, "description": "Enable the leading selection Checkbox column + header select-all." },
+    "selectedIds": { "type": "Array<string | number>", "required": false, "description": "Controlled selection. Pair with onSelectionChange." },
+    "defaultSelectedIds": { "type": "Array<string | number>", "required": false, "default": "[]", "description": "Initial selection (uncontrolled)." },
+    "onSelectionChange": { "type": "(ids: Array<string | number>) => void", "required": false },
+    "selectionColumnLabel": { "type": "string", "required": false, "default": "Select all rows" },
+    "getSelectionLabel": { "type": "(row: Row, index: number) => string", "required": false, "default": "Select row" },
+    "bulkActions": { "type": "React.ReactNode", "required": false, "description": "Actions shown on the right of the selection bar when one or more rows are selected." },
+    "selectionCountLabel": { "type": "(count: number) => string", "required": false, "default": "(n) => `${n} selected`", "description": "Formats the selection-bar count." },
+    "page": { "type": "number", "required": false, "description": "Controlled current page (1-based)." },
+    "pageCount": { "type": "number", "required": false, "description": "Total pages (required for manualPagination)." },
+    "onPageChange": { "type": "(page: number) => void", "required": false },
+    "pageSize": { "type": "number", "required": false, "description": "Rows per page; enables client-side pagination." },
+    "manualPagination": { "type": "boolean", "required": false, "default": false, "description": "Consumer paginates server-side; Table shows pageCount pages and does not slice." },
+    "resizableColumns": { "type": "boolean", "required": false, "default": true, "description": "Allow dragging column-header edges (and Arrow keys on the handle) to resize columns." },
+    "loading": { "type": "boolean", "required": false, "default": false, "description": "Show skeleton rows; sets aria-busy." },
+    "skeletonRowCount": { "type": "number", "required": false, "default": 5 },
+    "empty": { "type": "React.ReactNode", "required": false, "default": "an Empty State", "description": "Shown when there are no rows." },
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root class list." },
+    "id": { "type": "string", "required": false, "default": null }
+  },
+  "variants": {
+    "size": ["md", "sm"]
+  },
+  "sizes": ["md", "sm"],
+  "states": ["default", "loading", "empty", "row-hover", "row-selected", "selection-active", "sorted", "resizing"],
+  "slots": [
+    { "name": "columns[].render", "required": false, "supports": ["arbitrary cell content - Text, Tag, Avatar, Avatar Group, Link, Badge, Button, Icon Button, Progress Bar, Toggle, inline editors, ..."], "interactive": true },
+    { "name": "actions", "required": false, "supports": ["Button", "Icon Button"], "interactive": true },
+    { "name": "bulkActions", "required": false, "supports": ["Button", "Icon Button"], "interactive": true },
+    { "name": "toolbar", "required": false, "supports": ["a full custom toolbar"], "interactive": true },
+    { "name": "toolbarActions", "required": false, "supports": ["Icon Button (filter)", "Icon Button (configure)"], "interactive": true },
+    { "name": "activeFilters", "required": false, "supports": ["Chip mode='filter'", "Icon Button (add filter)"], "interactive": true },
+    { "name": "empty", "required": false, "supports": ["Empty State"], "interactive": true }
+  ],
+  "tokens": {
+    "color": {
+      "cardSurface": "--color-elevation-surface-raised-default",
+      "headerBackground": "--color-elevation-surface-default",
+      "headerText": "--color-content-subtle",
+      "selectionBarBackground": "--color-background-brand-primary-subtle-default",
+      "border": "--color-border-default",
+      "cellText": "--color-content-default",
+      "descriptionText": "--color-content-subtle",
+      "sortIconActive": "--color-content-default",
+      "resizeHandleDivider": "--color-border-default 1px (default) → --color-border-bold 1px (hover/pressed); handle width stays 1px in all states",
+      "rowHover": "--color-background-neutral-overlay-bold-hover (all rows - aids horizontal scanning)",
+      "rowSelected": "--color-background-brand-primary-subtle-default",
+      "rowSelectedHover": "--color-background-brand-primary-subtle-hover",
+      "focusRing": "--color-border-focus"
+    },
+    "layout": {
+      "headerPadding": "block: --spacing-3xl / --spacing-lg, inline: --spacing-2xl",
+      "headingGap": "--spacing-md",
+      "cellInlinePadding": "--spacing-sm",
+      "outerGutter": "--spacing-2xl (md, 24px) / --spacing-lg (sm, 16px)",
+      "toolbarPadding": "--spacing-lg / --spacing-2xl",
+      "footerPadding": "--spacing-lg / --spacing-2xl",
+      "headerCellHeight": "40px (md) / 32px (sm)",
+      "rowHeight": "64px (md) / 40px (sm)",
+      "selectionColumnWidth": "40px"
+    },
+    "typography": { "title": "--typography-heading-lg-*", "headerCell": "--typography-heading-xs-*", "cell": "--typography-body-md-*", "description": "--typography-body-md-*" }
+  },
+  "accessibility": {
+    "interactive": true,
+    "role": "table",
+    "requirements": [
+      "A semantic <table> with thead/tbody/th(scope=col)/td and a visually-hidden <caption> (or the title) as the accessible name - always give it a name.",
+      "Sortable headers set aria-sort (ascending/descending/none) and wrap the label in a <button labelled 'Sort by {column}'>.",
+      "The selection column uses real Checkboxes; the header select-all is labelled and goes indeterminate when only some visible rows are selected. Selection is checkbox-only - rows are never clickable, so controls inside a row act independently.",
+      "Column resize handles are role=separator (aria-orientation=vertical), keyboard-focusable, and operable with Arrow keys.",
+      "The scrollable grid is a keyboard-focusable role=region with an accessible name (WCAG 2.1.1).",
+      "The loading state sets aria-busy on the table; skeletons are decorative.",
+      "Row content composed via render must remain accessible (e.g. give action buttons labels)."
+    ]
+  },
+  "keyboardInteraction": [
+    "Tab reaches the toolbar controls, the sortable header buttons, the selection checkboxes, in-cell controls, the scroll region, and the pagination.",
+    "Enter/Space on a sortable header button cycles the sort (ascending → descending → unsorted).",
+    "Enter/Space toggles a selection checkbox; the header checkbox toggles all visible rows.",
+    "A focused column resize handle resizes with ArrowLeft / ArrowRight.",
+    "The scroll region is focusable so it can be scrolled by keyboard."
+  ],
+  "behaviorRules": [
+    "Render the grid from `columns` + `data`; a cell shows `column.render(row)` or `String(row[key])`.",
+    "Sorting is uncontrolled by default (defaultSort) and controlled via sort+onSortChange; the built-in sort reorders data client-side unless manualSort.",
+    "Sort cycles ascending → descending → unsorted per column.",
+    "Selection is checkbox-only (rows are never clickable), uncontrolled by default (defaultSelectedIds) and controlled via selectedIds+onSelectionChange; select-all operates over the visible (current-page) rows.",
+    "When one or more rows are selected, the column-header <th> cells are REPLACED by the selection bar: the select-all Checkbox stays, then the selected count (left) + bulkActions (right).",
+    "All rows show a neutral-overlay-bold hover (aids horizontal scanning); the selected state is brand-tinted. A single row - or the last row when there is no pagination footer - drops its bottom divider.",
+    "Columns are resizable by default (resizableColumns): drag the header-edge separator or use Arrow keys; per-column opt-out via column.resizable=false. The first resize freezes every column's width (fixed table-layout) so a resize doesn't reflow the others and the widths persist across page/data changes.",
+    "column.emphasis='strong' renders a cell at the heading weight (an identifier); otherwise body weight.",
+    "Pagination is client-side when pageSize is set (Table slices + owns the page) or server-driven when manualPagination (Table shows pageCount pages).",
+    "loading shows skeleton rows and sets aria-busy; an empty data set shows the empty slot (default: an informative/sunken Empty State whose background meets the card edges - the empty cell has no padding).",
+    "Render the header when there's a title/description/actions; render the toolbar for search/filters/clear/active-filters; render the footer when pagination is enabled and there's more than one page."
+  ],
+  "interactionRules": [
+    "Checkbox = row selection. Never use a row click for selection; rows are not clickable.",
+    "Link = navigation/routing. If a value is an entity, it must be a Link; a single primary destination can also be a dedicated Link/action near the row's trailing edge.",
+    "Button = action. Use Buttons for operations that change state, not for plain navigation.",
+    "Interactive controls inside a row (links, buttons, menus, checkboxes) behave independently and never trigger another row-level interaction.",
+    "Identifier typography: strong (heading weight, or a strong Link) for the name / first-column identifier; default (body weight, or a default Link) for every other column."
+  ],
+  "compositionRules": [
+    "Give the table an accessible name via `caption` or `title`.",
+    "Pass a real `getRowId` whenever `selectable` (or sorting/pagination reorder rows).",
+    "Compose rich cells with `column.render` (Tag, Avatar, Link, Button, ...); keep them accessible.",
+    "Mark the identifier column with `emphasis: 'strong'` (and, if it routes, a `<Link emphasis=\"strong\">`); leave other columns at body weight / default Links.",
+    "Provide `bulkActions` (Buttons) for the selection bar when `selectable`.",
+    "Pass filter/configure Icon Buttons through `toolbarActions`; render Chip mode='filter' through `activeFilters`; drive filter state from the consumer.",
+    "For large/server datasets, use manualSort + manualPagination and fetch on the callbacks."
+  ],
+  "contentRules": [
+    "Header labels are short noun phrases; align numeric columns to the end.",
+    "Keep the title a short phrase and the description one line."
+  ],
+  "responsiveRules": [
+    "The grid scrolls horizontally within its region on narrow viewports; the card and toolbar wrap.",
+    "Set explicit `column.width` / `minWidth` to control wrapping and horizontal scroll."
+  ],
+  "themeRules": [
+    "Must work in light and dark themes - all colours use semantic tokens."
+  ],
+  "implementationNotes": [
+    "Generic over the row type, written as a plain function component (React.memo would erase the generic).",
+    "Use CSS Modules + design tokens only; row/header heights and the selection column width are structural px (not token-gated).",
+    "Compose existing components: Text Field (search), Select (filters), Chip (active filters), Checkbox (selection), Button / Icon Button (actions), Skeleton (loading), Empty State (empty), Pagination (footer).",
+    "No MUI. No Tailwind. No hardcoded colours, spacing, radius, or typography."
+  ],
+  "relatedComponents": ["Pagination", "Checkbox", "Text Field", "Chip", "Skeleton", "Empty State", "Button", "Icon Button"],
+  "do": [
+    "Give every table an accessible name (caption or title).",
+    "Use `render` to compose cell content from existing atoms/molecules.",
+    "Select rows with checkboxes; provide bulkActions for the selection bar.",
+    "Mark the identifier column emphasis='strong' (and a strong Link if it routes).",
+    "Use manualSort + manualPagination for server-driven data; pass a stable getRowId when selecting."
+  ],
+  "dont": [
+    "Don't use a data table for a simple key/value layout or a card grid.",
+    "Don't make whole rows clickable - selection is checkbox-only and navigation is a Link/action.",
+    "Don't rely on index-based row ids with selection when rows can reorder.",
+    "Don't bake domain-specific filter logic into the table - pass filter/configure buttons via `toolbarActions` and Chip mode='filter' via `activeFilters`.",
+    "Don't forget an accessible name, or labels on in-cell action controls."
+  ],
+  "acceptanceCriteria": [
+    "Renders a semantic role=table named by caption/title; columns render row[key] by default or column.render.",
+    "Sortable headers cycle asc/desc/none, set aria-sort, and reorder data client-side (unless manualSort, which only fires onSortChange).",
+    "selectable adds a Checkbox column with a header select-all that goes indeterminate; selection is controllable and checkbox-only (rows are not clickable).",
+    "Selecting rows shows the selection bar (count + bulkActions); rows show a neutral-overlay hover only when selectable; a lone row drops its bottom divider.",
+    "Columns resize via a role=separator header handle (pointer drag + Arrow keys); resizableColumns=false / column.resizable=false opt out.",
+    "column.emphasis='strong' renders the cell at the heading weight.",
+    "pageSize paginates client-side; manualPagination shows pageCount pages; search is controlled.",
+    "loading shows skeleton rows + aria-busy; an empty data set shows an informative (sunken) Empty State by default.",
+    "Composes className + data-size; uses only semantic tokens; works in light and dark themes.",
+    "Storybook includes Basic, Sortable, Selectable, Pagination, Sizes, WithToolbar, Loading, Empty, and FullShell.",
+    "Tests cover render/default+custom cell, sort (client + manual), selection + select-all/indeterminate + checkbox-only, selection bar, resize handles, emphasis, client pagination, loading, empty, search, and size/className."
+  ],
+  "knownLimitations": [
+    "Single-select (radio) column, the per-column ⋮ menu, column reorder, sticky first column, and row expansion are deferred (the Figma page is still in-progress).",
+    "The built-in client-side sort compares row[key] (or column.sortValue) with a general comparator; complex/locale-specific sorts need manualSort.",
+    "Resized column widths are session-only state (not persisted) and reset on remount."
+  ],
+  "futureEnhancements": [
+    "Single-select (radio) rows and the per-column options menu.",
+    "Column reorder, a sticky first column, and persisted column widths.",
+    "Row expansion / detail rows."
+  ]
+}

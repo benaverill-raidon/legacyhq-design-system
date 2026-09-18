@@ -23,6 +23,12 @@ interface SelectCommonProps {
   options: SelectOption[];
   size?: SelectSize;
   tone?: SelectTone;
+  /**
+   * Alias for `tone`, matching the canonical `appearance` name Text Field and Text Area use for the
+   * same standard/subtle axis. Lets a wrapper (e.g. Field's inline context) drive the trigger's
+   * appearance with one shared prop name. An explicit `tone` wins if both are set.
+   */
+  appearance?: SelectTone;
   /** Placeholder shown when nothing is selected. */
   placeholder?: string;
   disabled?: boolean;

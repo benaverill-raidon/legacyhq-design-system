@@ -10,7 +10,7 @@
   border: 0;
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
   font-family: var(--typography-heading-xxs-font-family);
   font-size: var(--typography-heading-xxs-font-size);
   font-weight: var(--typography-heading-xxs-font-weight);
@@ -24,20 +24,20 @@
 
 .tone_default {
   background: var(--color-background-neutral-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_brand {
   background: var(--color-background-brand-primary-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_success {
   background: var(--color-background-success-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .tone_error {
   background: var(--color-background-error-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }

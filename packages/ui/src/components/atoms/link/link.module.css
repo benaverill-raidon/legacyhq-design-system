@@ -52,22 +52,19 @@
 
 /*
  * Inverse now carries a visited treatment too (Figma's `hasVisited` applies across every appearance).
- * Figma names the on-dark visited colour `content/accent/purple/subtle`; that token is not yet in the
- * generated set, so this uses `content/accent/purple/default` as the closest available - revisit when
- * the subtle token ships.
  */
 .appearance_inverse {
-  --link-color: var(--color-content-inverse);
-  --link-color-visited: var(--color-content-accent-purple-default);
+  --link-color: var(--color-content-inverse-default);
+  --link-color-visited: var(--color-content-accent-purple-subtle);
 
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_inverse:hover,
 .appearance_inverse:focus-visible,
 .appearance_inverse[data-force-state='hover'],
 .appearance_inverse[data-force-state='focus'] {
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .size_sm {

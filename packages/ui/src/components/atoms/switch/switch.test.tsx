@@ -158,9 +158,9 @@ describe('Switch', () => {
   });
 
   it('inherits the on/off mark color for the loading Spinner - no color override of its own', () => {
-    // The indicator sets color: var(--color-content-inverse) for the check/X marks via
+    // The indicator sets color: var(--color-content-inverse-default) for the check/X marks via
     // currentColor; the Spinner slots into the same .icon element so it inherits that directly.
-    expect(switchCss).toMatch(/\.icon \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(switchCss).toMatch(/\.icon \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
 
     const thumbBlockMatch = switchCss.match(/\.thumb \{[\s\S]*?\n\}/);
     expect(thumbBlockMatch?.[0]).not.toContain('color:');
@@ -286,7 +286,7 @@ describe('Switch', () => {
     expect(switchCss).toContain('background: var(--color-background-neutral-bold-default);');
     expect(switchCss).toContain('background: var(--color-background-success-bold-default);');
     expect(switchCss).toContain('background: var(--color-background-disabled);');
-    expect(switchCss).toContain('color: var(--color-content-inverse);');
+    expect(switchCss).toContain('color: var(--color-content-inverse-default);');
     expect(switchCss).not.toContain(".root[data-disabled='true'] .icon");
   });
 

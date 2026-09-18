@@ -57,7 +57,7 @@
 
 .tone_default.emphasis_bold {
   --label-background: var(--color-background-accent-taupe-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_information.emphasis_subtle {
@@ -67,7 +67,7 @@
 
 .tone_information.emphasis_bold {
   --label-background: var(--color-background-information-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_warning.emphasis_subtle {
@@ -87,7 +87,7 @@
 
 .tone_error.emphasis_bold {
   --label-background: var(--color-background-error-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_success.emphasis_subtle {
@@ -97,7 +97,7 @@
 
 .tone_success.emphasis_bold {
   --label-background: var(--color-background-success-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_law.emphasis_subtle {
@@ -107,7 +107,7 @@
 
 .tone_law.emphasis_bold {
   --label-background: var(--color-background-brand-primary-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_wealth.emphasis_subtle {
@@ -117,5 +117,5 @@
 
 .tone_wealth.emphasis_bold {
   --label-background: var(--color-background-accent-green-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }

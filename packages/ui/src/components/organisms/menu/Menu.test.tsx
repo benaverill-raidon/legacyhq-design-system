@@ -346,7 +346,7 @@ describe('Menu', () => {
     // which AvatarGroup already paints itself - the direct-child combinator keeps this rule off it.
     const rule = menuCss.match(/\.elemBefore > :global\(\[data-entity-type\]\)\s*\{([^}]*)\}/);
 
-    expect(rule?.[1]).toContain('box-shadow: 0 0 0 var(--border-width-sm) var(--color-border-inverse);');
+    expect(rule?.[1]).toContain('box-shadow: 0 0 0 var(--border-width-sm) var(--color-border-inverse-default);');
   });
 
   it('gives elemBefore/elemAfter a fixed 24px (--size-300) box regardless of content, matching Figma exactly', () => {

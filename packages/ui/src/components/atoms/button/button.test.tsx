@@ -217,7 +217,7 @@ describe('Button', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
-    expect(buttonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(buttonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-hover);');
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-press);');
   });

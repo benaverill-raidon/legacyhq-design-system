@@ -255,7 +255,7 @@
   --tag-background-hover: var(--color-background-accent-blue-subtle-hover);
   --tag-background-press: var(--color-background-accent-blue-subtle-press);
   --tag-border: var(--color-border-accent-blue);
-  --tag-color: var(--color-content-accent-blue-bolder);
+  --tag-color: var(--color-content-accent-blue-bold);
 }
 
 .tone_green {
@@ -263,7 +263,7 @@
   --tag-background-hover: var(--color-background-accent-green-subtle-hover);
   --tag-background-press: var(--color-background-accent-green-subtle-press);
   --tag-border: var(--color-border-accent-green);
-  --tag-color: var(--color-content-accent-green-bolder);
+  --tag-color: var(--color-content-accent-green-bold);
 }
 
 .tone_purple {
@@ -271,7 +271,7 @@
   --tag-background-hover: var(--color-background-accent-purple-subtle-hover);
   --tag-background-press: var(--color-background-accent-purple-subtle-press);
   --tag-border: var(--color-border-accent-purple);
-  --tag-color: var(--color-content-accent-purple-bolder);
+  --tag-color: var(--color-content-accent-purple-bold);
 }
 
 .tone_red {
@@ -279,7 +279,7 @@
   --tag-background-hover: var(--color-background-accent-red-subtle-hover);
   --tag-background-press: var(--color-background-accent-red-subtle-press);
   --tag-border: var(--color-border-accent-red);
-  --tag-color: var(--color-content-accent-red-bolder);
+  --tag-color: var(--color-content-accent-red-bold);
 }
 
 .tone_teal {
@@ -287,7 +287,7 @@
   --tag-background-hover: var(--color-background-accent-teal-subtle-hover);
   --tag-background-press: var(--color-background-accent-teal-subtle-press);
   --tag-border: var(--color-border-accent-teal);
-  --tag-color: var(--color-content-accent-teal-bolder);
+  --tag-color: var(--color-content-accent-teal-bold);
 }
 
 .tone_yellow {
@@ -295,7 +295,7 @@
   --tag-background-hover: var(--color-background-accent-yellow-subtle-hover);
   --tag-background-press: var(--color-background-accent-yellow-subtle-press);
   --tag-border: var(--color-border-accent-yellow);
-  --tag-color: var(--color-content-accent-yellow-bolder);
+  --tag-color: var(--color-content-accent-yellow-bold);
 }
 
 .tone_orange {
@@ -303,7 +303,7 @@
   --tag-background-hover: var(--color-background-accent-orange-subtle-hover);
   --tag-background-press: var(--color-background-accent-orange-subtle-press);
   --tag-border: var(--color-border-accent-orange);
-  --tag-color: var(--color-content-accent-orange-bolder);
+  --tag-color: var(--color-content-accent-orange-bold);
 }
 
 .tone_magenta {
@@ -311,7 +311,7 @@
   --tag-background-hover: var(--color-background-accent-magenta-subtle-hover);
   --tag-background-press: var(--color-background-accent-magenta-subtle-press);
   --tag-border: var(--color-border-accent-magenta);
-  --tag-color: var(--color-content-accent-magenta-bolder);
+  --tag-color: var(--color-content-accent-magenta-bold);
 }
 
 .tone_brand {

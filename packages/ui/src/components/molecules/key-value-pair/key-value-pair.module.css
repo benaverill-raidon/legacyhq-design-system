@@ -1,0 +1,107 @@
+/*
+ * Key Value Pair lays out a label (key) and a value side by side in a horizontal row. The key takes
+ * a fixed proportion of the row width; the value fills the rest. When children are provided (an
+ * inline-editable control like TextField/TextArea/Select with appearance="inline"), they fill the
+ * value slot. Static pairs render plain text in the value slot.
+ */
+.root {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+  min-block-size: var(--size-control-md);
+}
+
+.underline {
+  border-bottom: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.key {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+  min-block-size: var(--size-control-md);
+  inline-size: 40%;
+  padding-inline-start: var(--spacing-sm);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  margin: 0;
+}
+
+.value {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  margin: 0;
+  padding: 0;
+}
+
+.value_static {
+  align-self: center;
+  padding-inline-start: var(--spacing-sm);
+}
+
+/* TextField, TextArea, and Select share square inline frames inside a key/value row. */
+.value [data-appearance='inline'] {
+  border-radius: 0;
+}
+
+/* sm: shorter row, smaller font */
+.size_sm {
+  min-block-size: var(--size-control-sm);
+}
+
+.size_sm .key {
+  min-block-size: var(--size-control-sm);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.size_sm .value {
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+/* md: default — values seeded in `.root` / `.key` / `.value` above */
+
+/* lg: taller row, larger font, wider key padding to match TextField lg */
+.size_lg {
+  min-block-size: var(--size-control-lg);
+}
+
+.size_lg .key {
+  min-block-size: var(--size-control-lg);
+  padding-inline-start: var(--spacing-md);
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}
+
+.size_lg .value_static {
+  padding-inline-start: var(--spacing-md);
+}
+
+.size_lg .value {
+  font-family: var(--typography-body-lg-font-family);
+  font-size: var(--typography-body-lg-font-size);
+  font-weight: var(--typography-body-lg-font-weight);
+  line-height: var(--typography-body-lg-line-height);
+  letter-spacing: var(--typography-body-lg-letter-spacing);
+}

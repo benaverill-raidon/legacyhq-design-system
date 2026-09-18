@@ -1,16 +1,22 @@
 /*
- * The frame styling lives directly on the <textarea> (there is no wrapper - Text Area has no icon
- * slots), reusing Text Field's exact semantic tokens so the two siblings read as one family. Figma's
- * text-area binds a newer `background/input/*` + `border/focused` token naming that does not exist in
- * this build; those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic
- * tokens Text Field already uses (same intent), so we reuse those rather than invent unbacked tokens.
+ * The frame styling (border, background, radius) lives on a wrapper <div> rather than on the
+ * <textarea> itself, so it can host a trailing icon/action slot (`iconAfter`) alongside the text -
+ * the same wrapper pattern Text Field uses. The wrapper reuses Text Field's exact semantic tokens so
+ * the two siblings read as one family. Figma's text-area binds a newer `background/input/*` +
+ * `border/focused` token naming that does not exist in this build; those map one-to-one onto the
+ * `elevation/surface/raised/*` + `border/focus` semantic tokens Text Field already uses (same
+ * intent), so we reuse those rather than invent unbacked tokens.
  */
-.textarea {
+.root {
   --text-area-radius: var(--border-radius-lg);
   --text-area-padding-block: var(--spacing-sm);
   --text-area-padding-inline: var(--spacing-sm);
+  --text-area-control-height: var(--size-control-md);
+  --text-area-line-height: var(--typography-body-md-line-height);
+  --text-area-border-block: calc(2 * var(--border-width-sm));
 
-  display: block;
+  display: flex;
+  align-items: flex-start;
   box-sizing: border-box;
   inline-size: 100%;
   padding-block: var(--text-area-padding-block);
@@ -18,17 +24,11 @@
   border: var(--border-width-sm) solid var(--color-border-input);
   border-radius: var(--text-area-radius);
   background: var(--color-elevation-surface-raised-default);
-  color: var(--color-content-default);
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
   transition: background-color var(--fade-quick), border-color var(--fade-quick);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .textarea {
+  .root {
     transition-duration: 0ms;
   }
 }
@@ -36,9 +36,14 @@
 /*
  * Padding, radius, and font are confirmed per size directly from Figma's bound variables: md is
  * symmetric 8, lg is 12 with the radius stepping up to xl, and the font is body-md at md, body-lg at
- * lg. (The sm size was removed - it read almost identically to md.) md's values also seed the base
- * `.textarea` above, so an md field renders correctly even before this class applies.
+ * lg. The compact sm option uses TextField's small control tokens. md's values also seed the base
+ * `.root` above, so an md field renders correctly even before this class applies.
  */
+.size_sm {
+  --text-area-padding-block: var(--measurement-6);
+  --text-area-control-height: var(--size-control-sm);
+}
+
 .size_md {
   --text-area-padding-block: var(--spacing-sm);
   --text-area-padding-inline: var(--spacing-sm);
@@ -46,10 +51,32 @@
 }
 
 .size_lg {
+  --text-area-control-height: var(--size-control-lg);
+  --text-area-line-height: var(--typography-body-lg-line-height);
   --text-area-padding-block: var(--spacing-md);
   --text-area-padding-inline: var(--spacing-md);
   --text-area-radius: var(--border-radius-xl);
+}
 
+/* The textarea fills the wrapper, inheriting its padding from the wrapper's gap/padding. */
+.textarea {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  resize: inherit;
+}
+
+.size_lg .textarea {
   font-family: var(--typography-body-lg-font-family);
   font-size: var(--typography-body-lg-font-size);
   font-weight: var(--typography-body-lg-font-weight);
@@ -57,33 +84,45 @@
   letter-spacing: var(--typography-body-lg-letter-spacing);
 }
 
-/* The user-drag resize axis. Vertical by default (see the types doc). */
+.textarea::placeholder {
+  color: var(--color-content-subtle);
+}
+
+.textarea:disabled {
+  color: var(--color-content-disabled);
+  cursor: not-allowed;
+}
+
+.textarea:disabled::placeholder {
+  color: var(--color-content-disabled);
+}
+
+/* The user-drag resize axis, applied to the wrapper so the frame border grows with the resize. */
 .resize_none {
   resize: none;
 }
 
 .resize_vertical {
   resize: vertical;
+  overflow: auto;
 }
 
 .resize_horizontal {
   resize: horizontal;
+  overflow: auto;
 }
 
 .resize_both {
   resize: both;
-}
-
-.textarea::placeholder {
-  color: var(--color-content-subtle);
+  overflow: auto;
 }
 
 /*
  * Hover tint only ever shows on an inactive field - suppressed once focused/typing, matching Text
- * Field (and its explicit design feedback). The textarea is itself the focusable element, so this
- * keys off `:focus` directly rather than Text Field's `:focus-within`.
+ * Field (and its explicit design feedback). Keys off `:focus-within` (the wrapper contains the
+ * focusable textarea) rather than `:focus` directly.
  */
-.textarea:not(:disabled):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-elevation-surface-raised-hover);
 }
 
@@ -91,30 +130,24 @@
  * Focus and invalid both replace the resting border color and paint the extra pixel with an inset
  * box-shadow rather than growing the real `border-width` - the same technique Text Field uses, and
  * for the same reason: a real 1px->2px border change shrinks the content box on every side, nudging
- * the text and caret by a pixel on each focus/blur or invalid toggle. Figma's own text-area does tint
- * the fill on focus (`background/input/pressed`); we deliberately keep the resting fill instead, to
- * match Text Field's established no-tint-on-focus behavior (that token also does not exist here).
+ * the text and caret by a pixel on each focus/blur or invalid toggle. Scoped to `appearance_default`
+ * only - `appearance_subtle` gets its own focus indicator below.
  */
-.appearance_default:is(:focus, [data-force-state='focus']) {
+.appearance_default:is(:focus-within, [data-force-state='focus']) {
   border-color: var(--color-border-focus);
   box-shadow: inset 0 0 0 1px var(--color-border-focus);
 }
 
-.textarea[data-invalid='true'] {
+.root[data-invalid='true'] {
   border-color: var(--color-border-error);
   box-shadow: inset 0 0 0 1px var(--color-border-error);
 }
 
-.textarea:disabled {
+.root[data-disabled='true'] {
   background: var(--color-background-disabled);
   border-color: var(--color-border-disabled);
-  color: var(--color-content-disabled);
   cursor: not-allowed;
   resize: none;
-}
-
-.textarea:disabled::placeholder {
-  color: var(--color-content-disabled);
 }
 
 /*
@@ -125,6 +158,7 @@
  * subtle appearance, confirmed there directly from Figma's per-side stroke and per-corner radius.
  */
 .appearance_subtle {
+  --text-area-border-block: var(--border-width-sm);
   border-color: transparent;
   background: transparent;
   border-width: 0 0 var(--border-width-sm) 0;
@@ -132,7 +166,7 @@
   border-bottom-right-radius: 0;
 }
 
-.appearance_subtle:not(:disabled):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.appearance_subtle:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-elevation-surface-raised-hover);
 }
 
@@ -140,11 +174,11 @@
  * Scoped to `:not([data-invalid='true'])` so hovering an invalid field keeps the error border instead
  * of resetting it to `--color-border-input` - the same guard Text Field's subtle hover uses.
  */
-.appearance_subtle:not(:disabled):not([data-invalid='true']):not(:focus):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.appearance_subtle:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   border-bottom-color: var(--color-border-input);
 }
 
-.appearance_subtle:is(:focus, [data-force-state='focus']) {
+.appearance_subtle:is(:focus-within, [data-force-state='focus']) {
   border-bottom-color: var(--color-border-focus);
   box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
 }
@@ -157,7 +191,77 @@
   box-shadow: inset 0 -1px 0 0 var(--color-border-error);
 }
 
-.appearance_subtle:disabled {
+.appearance_subtle[data-disabled='true'] {
   background: transparent;
   border-color: transparent;
+}
+
+/*
+ * `inline` mirrors `subtle`'s bottom-only border treatment but starts fully chromeless at rest —
+ * no border or background visible until the user hovers, focuses, or triggers invalid/disabled.
+ * Keeps the root's padding and top-corner radius so the field reads as a real input when activated —
+ * confirmed directly from Figma's context=inline axis. For embedding inside Key Value Pair wrapped
+ * in Inline Edit.
+ */
+.appearance_inline {
+  --text-area-border-block: var(--border-width-sm);
+  border-color: transparent;
+  background: transparent;
+  border-width: 0 0 var(--border-width-sm) 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.appearance_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  border-bottom-color: var(--color-border-input);
+}
+
+.appearance_inline:is(:focus-within, [data-force-state='focus']) {
+  border-bottom-color: var(--color-border-focus);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
+}
+
+.appearance_inline[data-invalid='true'] {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--color-border-error);
+  border-left-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--color-border-error);
+}
+
+.appearance_inline[data-disabled='true'] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/*
+ * The trailing slot holds an icon or interactive control (e.g. an edit IconButton). Not aria-hidden:
+ * may hold a real interactive control. Aligns to the top of the wrapper so it stays pinned even as the
+ * textarea grows with content.
+ */
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  inline-size: var(--size-control-xs);
+  block-size: var(--size-control-xs);
+  color: var(--color-content-subtle);
+}
+
+.action :global([data-color]) {
+  color: inherit;
+}
+
+/* Fit one line inside the existing control height, then let content expand the normal flow. */
+.root.auto_resize {
+  min-block-size: var(--text-area-control-height);
+  padding-block: calc((var(--text-area-control-height) - var(--text-area-line-height) - var(--text-area-border-block)) / 2);
+  resize: none;
+  overflow: visible;
+}
+
+.auto_resize .textarea {
+  min-block-size: 1lh;
+  resize: none;
 }

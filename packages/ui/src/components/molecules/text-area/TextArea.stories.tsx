@@ -1,11 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { EditIcon } from '../../../assets/icons';
+import { IconButton } from '../../atoms/icon-button';
 import { TextArea } from './text-area';
 import type { TextAreaAppearance, TextAreaResize, TextAreaSize } from './text-area.types';
 
-const sizes: TextAreaSize[] = ['md', 'lg'];
-const appearances: TextAreaAppearance[] = ['default', 'subtle'];
+const sizes: TextAreaSize[] = ['sm', 'md', 'lg'];
+const appearances: TextAreaAppearance[] = ['default', 'subtle', 'inline'];
 const resizes: TextAreaResize[] = ['none', 'vertical', 'horizontal', 'both'];
 
 const meta = {
@@ -25,6 +27,8 @@ const meta = {
     size: { control: 'inline-radio', options: sizes },
     appearance: { control: 'inline-radio', options: appearances },
     resize: { control: 'inline-radio', options: resizes },
+    autoResize: { control: 'boolean' },
+    maxRows: { control: { type: 'number', min: 1, max: 12 } },
     invalid: { control: 'boolean' },
     disabled: { control: 'boolean' },
     rows: { control: { type: 'number', min: 1, max: 12 } },
@@ -86,6 +90,19 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 /** Prop exploration. Every supported prop is wired to a control. */
 export const Playground: Story = {};
 
+/** Opt-in content sizing; the ordinary textarea stories retain native rows and manual resize. */
+export const AutoResize: Story = {
+  render: () => (
+    <Group title="Grows to six lines, then scrolls">
+      {sizes.map((size) => (
+        <Cell key={size} label={size}>
+          <TextArea size={size} autoResize defaultValue="Edit these notes" aria-label={`Growing notes ${size}`} />
+        </Cell>
+      ))}
+    </Group>
+  ),
+};
+
 /** Size x appearance, scannable side by side. */
 export const Variants: Story = {
   render: () => (
@@ -111,7 +128,7 @@ export const Variants: Story = {
 export const States: Story = {
   render: () => (
     <div style={stack}>
-      {appearances.map((appearance) => (
+      {(['default', 'subtle'] as const).map((appearance) => (
         <Group key={appearance} title={`Appearance: ${appearance}`}>
           <Cell label="Default">
             <TextArea appearance={appearance} rows={3} placeholder="Placeholder" aria-label="Default" />
@@ -194,6 +211,50 @@ export const Content: Story = {
       <Group title="Paired with a native label and a live count">
         <Cell label="">
           <CountingField />
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+/** Trailing icon/action slot via `iconAfter`. */
+export const IconAfter: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="iconAfter with a decorative icon">
+        {sizes.map((size) => (
+          <Cell key={size} label={size}>
+            <TextArea
+              size={size}
+              rows={3}
+              defaultValue="Editable notes"
+              aria-label={`With icon ${size}`}
+              iconAfter={<EditIcon color="subtle" />}
+            />
+          </Cell>
+        ))}
+      </Group>
+
+      <Group title="iconAfter with an interactive IconButton">
+        <Cell label="md + IconButton">
+          <TextArea
+            rows={3}
+            defaultValue="Click the edit button"
+            aria-label="With icon button"
+            iconAfter={<IconButton tooltip="Edit" size="sm"><EditIcon /></IconButton>}
+          />
+        </Cell>
+      </Group>
+
+      <Group title="iconAfter with inline appearance (for embedding)">
+        <Cell label="inline + icon">
+          <TextArea
+            appearance="inline"
+            rows={2}
+            defaultValue="Inline value"
+            aria-label="Inline with icon"
+            iconAfter={<EditIcon color="subtle" />}
+          />
         </Cell>
       </Group>
     </div>

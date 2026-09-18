@@ -12,6 +12,7 @@ Molecule (grouped with Text Field, its single-line sibling; composes no other co
 - Text Field (single-line free text; shares the frame token-for-token)
 - Select (choosing from a fixed set of options)
 - Label (a trailing unit/status pill, as Text Field uses)
+- Key Value Pair (embeds Text Area with `appearance="inline"` and `iconAfter`)
 
 ---
 
@@ -40,11 +41,13 @@ for the multi-line case, with its own size/tone/state axes and a resize affordan
 ## Variants
 
 ### size
-- `md` (default), `lg` — padding/radius/font. (`sm` was removed — it read almost identically to md.)
+- `sm`, `md` (default), `lg` — padding/radius/font. Compact `sm` is supported in code for key/value rows.
+- `autoResize` (default false) grows/shrinks content from the control-size minimum; `maxRows` (default 6) caps growth before scrolling.
 
 ### appearance
-- `default` (bordered box), `subtle` (transparent until hover/focus/invalid, bottom accent only) —
-  Figma names this axis `tone`
+- `default` (bordered box), `subtle` (transparent until hover/focus/invalid, bottom accent only),
+  `inline` (chromeless at rest, subtle-style bottom-only border on hover/focus/invalid) — Figma names this axis `tone`; `inline` maps from
+  Figma's separate `context` axis
 
 ### resize
 - `none`, `vertical` (default), `horizontal`, `both` — maps to CSS `resize`
@@ -78,9 +81,13 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 
 ## Implementation decisions
 
-- **Frame on the `<textarea>` itself**, no wrapper — Text Area has no icon slots, and it lets the
-  native resize grip work with no wiring.
-- **`appearance`, not `tone`** — same name and axis as its Text Field sibling.
+- **Wrapper `<div>` pattern** (matching Text Field) — the frame styling lives on a wrapper div, with
+  the textarea as a transparent child. Enables the trailing icon/action slot (`iconAfter`). Resize
+  still works via `resize: inherit` on the textarea and `overflow: auto` on the wrapper.
+- **`iconAfter` slot** — trailing icon or interactive control (e.g. edit pencil IconButton). Not
+  `aria-hidden`; may hold a real focusable action.
+- **`appearance`, not `tone`** — same name and axis as its Text Field sibling. Three values:
+  `default` (bordered), `subtle` (bottom accent), `inline` (chromeless at rest, subtle-style bottom-only on interaction).
 - **Reuse Text Field's tokens** rather than invent unbacked `background/input/*` tokens (reuse-first).
 - **`resize` prop** (default `vertical`); disabled forces `resize: none`.
 - **`type=rich-inline` ships as RichTextArea** — an inline entity-tagging mode (slash-command
@@ -97,6 +104,9 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 - subtle: transparent at rest, square bottom corners ✓
 - resize axis renders per option; disabled locks it ✓
 - Dark surface renders correctly; no console errors ✓
+- iconAfter: decorative icon, interactive IconButton, and inline appearance all render correctly ✓
+- inline: chromeless at rest, subtle-style bottom-only border on hover/focus/invalid, keeps padding and top radius ✓
+- Key Value Pair embedding with inline TextArea + iconAfter ✓
 
 ---
 
@@ -121,3 +131,7 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 - [x] Invalid and disabled
 - [x] Fixed height (resize=none)
 - [x] Dark surface
+- [x] iconAfter with decorative icon
+- [x] iconAfter with interactive IconButton
+- [x] Inline appearance (chromeless)
+- [x] Inline appearance inside Key Value Pair

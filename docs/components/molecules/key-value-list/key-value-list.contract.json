@@ -1,0 +1,76 @@
+{
+  "name": "KeyValueList",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Stack Key Value Pair items vertically in a semantic <dl> element.",
+  "intent": "A thin layout wrapper that provides the <dl> (description list) structure screen readers need to announce key/value pairs correctly. Resets browser default margins and uses a flex column layout. Individual pairs manage their own padding and dividers.",
+  "sourceFiles": {
+    "component": "key-value-list.tsx",
+    "types": "key-value-list.types.ts",
+    "styles": "key-value-list.module.css",
+    "stories": "KeyValueList.stories.tsx",
+    "tests": "KeyValueList.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4882:341496",
+    "componentName": "key-value-list",
+    "variantCount": 2,
+    "verifiedAt": "2026-09-17",
+    "note": "2 variants (underlined vs. clean). The underline treatment is delegated to each child KeyValuePair's own underline prop.",
+    "apiAdaptationNotes": [
+      "Figma models the underlined/clean distinction as list-level variants. In code, underline is a per-pair prop on KeyValuePair, giving finer control (e.g. omitting the underline on the last item).",
+      "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
+    ]
+  },
+  "props": {
+    "children": {
+      "type": "React.ReactNode",
+      "required": true,
+      "default": null,
+      "description": "Key Value Pair children."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the <dl> element's class list."
+    }
+  },
+  "sizes": [],
+  "states": ["default"],
+  "variants": {},
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "dl",
+      "required": true,
+      "description": "Flex column container. Resets browser default dl margin/padding."
+    }
+  ],
+  "accessibility": {
+    "role": "A <dl> element — screen readers announce the description list structure.",
+    "structure": "Children must be KeyValuePair items (or equivalent <dt>/<dd> structures)."
+  },
+  "tokens": {},
+  "relatedComponents": [
+    "KeyValuePair"
+  ],
+  "do": [
+    "Use as the wrapper for multiple Key Value Pair items.",
+    "Control underlines per-pair with KeyValuePair's underline prop."
+  ],
+  "dont": [
+    "Don't nest non-KeyValuePair content directly — the <dl> expects <dt>/<dd> children.",
+    "Don't use for tabular data that needs sorting/filtering."
+  ],
+  "behaviorNotes": [
+    "Pure layout container — no interactive states, no spacing of its own.",
+    "Each child KeyValuePair manages its own padding and optional underline."
+  ],
+  "knownLimitations": [
+    "No built-in divider management — set underline individually on each KeyValuePair."
+  ]
+}

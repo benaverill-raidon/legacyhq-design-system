@@ -342,10 +342,10 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
               />
             </div>
             <div className={styles.footer}>
-              <Button appearance="subtle" size="xs" onClick={() => close(true)}>
+              <Button prominence="tertiary" size="xs" onClick={() => close(true)}>
                 {cancelLabel}
               </Button>
-              <Button appearance="subtle" size="xs" onClick={() => commit(true)}>
+              <Button prominence="tertiary" size="xs" onClick={() => commit(true)}>
                 {confirmLabel}
               </Button>
             </div>

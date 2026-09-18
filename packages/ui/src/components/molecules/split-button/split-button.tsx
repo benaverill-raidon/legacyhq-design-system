@@ -40,7 +40,7 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
         {...rest}
         ref={forwardedRef}
         className={styles.primaryAction}
-        appearance={appearance}
+        prominence={appearance === 'primary' ? 'primary' : 'secondary'}
         tone={tone}
         size={size}
         disabled={disabled}

@@ -1,0 +1,11 @@
+/*
+ * Key Value List is a thin layout wrapper — a <dl> that stacks Key Value Pair items vertically with
+ * no extra gap (each pair manages its own padding and optional underline divider). Reset the browser
+ * default <dl> margin so it sits flush.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}

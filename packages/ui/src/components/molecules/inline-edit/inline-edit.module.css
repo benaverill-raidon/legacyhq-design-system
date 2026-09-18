@@ -3,11 +3,21 @@
  * has to shrink to make room for the actions while editing - per explicit design feedback.
  */
 .root {
+  --inline-edit-control-height: var(--size-control-md);
+
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: var(--spacing-sm);
+  position: relative;
   inline-size: 100%;
+}
+
+.root[data-control-size='sm'] {
+  --inline-edit-control-height: var(--size-control-sm);
+}
+
+.root[data-control-size='lg'] {
+  --inline-edit-control-height: var(--size-control-lg);
 }
 
 .content {
@@ -15,12 +25,54 @@
 }
 
 /*
- * The confirm/cancel pair is a Button Group. Position it at the end of the column (below the field),
- * and tighten the gap to 4px - the icon-only pair reads better closer together than Button Group's
- * default 8px. The descendant selector outranks Button Group's own `.root` gap so the override wins
- * regardless of stylesheet order.
+ * The confirm/cancel pair is a Button Group. Absolutely positioned below the field so it floats
+ * above surrounding page content like a popup — matching Figma's inline-edit pattern. The gap is
+ * tightened to 4px; the icon-only pair reads better closer together than Button Group's default 8px.
+ * The descendant selector outranks Button Group's own `.root` gap so the override wins regardless of
+ * stylesheet order.
  */
 .root .actions {
-  align-self: flex-end;
+  position: absolute;
+  inset-block-start: calc(100% + var(--spacing-sm));
+  inset-inline-end: 0;
+  z-index: 1;
   gap: var(--spacing-xs);
+}
+
+/*
+ * Figma's inline-edit action buttons use the neutral-subtle background ramp instead of the overlay
+ * ramp IconButton's default appearance paints. Override rest, hover, and press to pin them to the
+ * subtle family. The `:not(:disabled)` guard keeps specificity above IconButton's own rules (~0,4,0).
+ */
+.root .actions button {
+  background: var(--color-background-neutral-subtle-default);
+}
+
+.root .actions button:not(:disabled):is(:hover, :focus-visible, [data-force-state='hover'], [data-force-state='focus']) {
+  background: var(--color-background-neutral-subtle-hover);
+}
+
+.root .actions button:not(:disabled):is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-subtle-press);
+}
+
+/*
+ * actionPlacement='end': float actions beyond the field's trailing edge without consuming its
+ * width. Logical insets support both text directions; auto block margins center the actions.
+ * Containers using this placement need room for the actions outside the field.
+ */
+.placement_end .actions {
+  inset-block: 0;
+  inset-inline-start: calc(100% + var(--spacing-sm));
+  inset-inline-end: auto;
+  inline-size: max-content;
+  block-size: max-content;
+  margin-block: auto;
+}
+
+.placement_end.alignment_start .actions {
+  inset-block-end: auto;
+  block-size: var(--inline-edit-control-height);
+  align-items: center;
+  margin-block: 0;
 }

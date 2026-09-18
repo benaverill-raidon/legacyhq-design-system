@@ -195,6 +195,7 @@ primitive directly, the same documented gap Toggle Button already has for its ow
 |------------|--------------|--------------|
 | default | standard | Bordered box, rounded on all four corners, with a raised-surface background at rest |
 | subtle | subtle | No visible border or background until hover, focus, or invalid; bottom corners always square |
+| inline | (context axis) | Chromeless at rest with subtle-style bottom-only border on hover/focus/invalid. Keeps normal padding, height, and top-corner radius; bottom corners square. For embedding inside Key Value Pair wrapped in Inline Edit. |
 
 ---
 
@@ -220,7 +221,7 @@ No fixed limit - native `maxLength` applies if set.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | size | `'sm' \| 'md' \| 'lg'` | No | `'md'` |
-| appearance | `'default' \| 'subtle'` | No | `'default'` |
+| appearance | `'default' \| 'subtle' \| 'inline'` | No | `'default'` |
 | invalid | boolean | No | `false` |
 | iconBefore | ReactNode | No | undefined |
 | iconAfter | ReactNode | No | undefined |

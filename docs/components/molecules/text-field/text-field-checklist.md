@@ -71,7 +71,7 @@ No fixed limit - native `maxLength` applies if the consumer sets it.
 - sm, md, lg
 
 ### Appearance
-- default (bordered), subtle (borderless until interacted)
+- default (bordered), subtle (borderless until interacted), inline (chromeless at rest, subtle-style bottom-only on interaction)
 
 ---
 

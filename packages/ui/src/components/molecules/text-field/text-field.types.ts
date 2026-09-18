@@ -1,7 +1,7 @@
 import type * as React from 'react';
 
 export type TextFieldSize = 'sm' | 'md' | 'lg';
-export type TextFieldAppearance = 'default' | 'subtle';
+export type TextFieldAppearance = 'default' | 'subtle' | 'inline';
 
 export interface TextFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: TextFieldSize;

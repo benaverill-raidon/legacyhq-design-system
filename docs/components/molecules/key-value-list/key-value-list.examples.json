@@ -1,0 +1,30 @@
+{
+  "component": "KeyValueList",
+  "examples": [
+    {
+      "name": "Static underlined list",
+      "description": "A read-only metadata list with underline dividers between pairs.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" underline />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "props": {}
+    },
+    {
+      "name": "Static clean list (no underlines)",
+      "description": "A read-only metadata list without dividers.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "props": {}
+    },
+    {
+      "name": "Mixed editable and static pairs",
+      "description": "Some pairs are inline-editable (with TextField/TextArea), others are static.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea appearance=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Non-KeyValuePair children",
+      "jsx": "<KeyValueList>\n  <div>Not a pair</div>\n</KeyValueList>",
+      "reason": "The <dl> element expects <dt>/<dd> children. Use KeyValuePair items inside KeyValueList."
+    }
+  ]
+}

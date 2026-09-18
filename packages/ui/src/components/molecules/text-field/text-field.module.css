@@ -179,6 +179,44 @@
 }
 
 /*
+ * `inline` mirrors `subtle`'s bottom-only border treatment but starts fully chromeless at rest —
+ * no border or background visible until the user hovers, focuses, or triggers invalid/disabled.
+ * Keeps the root's padding, height, and top-corner radius so the field reads as a real input when
+ * activated — confirmed directly from Figma's context=inline axis: bottom-only 1px stroke on hover
+ * (border/input), bottom-only 2px on focus (border/focused via box-shadow), top corners rounded,
+ * bottom corners square. For embedding inside Key Value Pair wrapped in Inline Edit.
+ */
+.appearance_inline {
+  border-color: transparent;
+  background: transparent;
+  border-width: 0 0 var(--border-width-sm) 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.appearance_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+  border-bottom-color: var(--color-border-input);
+}
+
+.appearance_inline:is(:focus-within, [data-force-state='focus']) {
+  border-bottom-color: var(--color-border-focus);
+  box-shadow: inset 0 -1px 0 0 var(--color-border-focus);
+}
+
+.appearance_inline[data-invalid='true'] {
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: var(--color-border-error);
+  border-left-color: transparent;
+  box-shadow: inset 0 -1px 0 0 var(--color-border-error);
+}
+
+.appearance_inline[data-disabled='true'] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/*
  * The leading slot is icon-or-text only (never interactive - confirmed from Figma's own
  * elemBeforeInput component, whose only two `type` values are icon and text), so it always stays
  * aria-hidden in the markup. The text example ("$", a currency-style prefix) is bound to body-lg
@@ -190,7 +228,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
   font-family: var(--typography-body-lg-font-family);
   font-size: var(--typography-body-lg-font-size);
   font-weight: var(--typography-body-lg-font-weight);
@@ -215,7 +253,7 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  color: var(--color-content-subtle);
+  color: var(--field-icon-color, var(--color-content-subtle));
 }
 
 .action :global([data-color]) {

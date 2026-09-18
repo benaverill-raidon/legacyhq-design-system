@@ -75,7 +75,7 @@
 
 .appearance_default {
   background: var(--color-background-neutral-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_warning {
@@ -85,5 +85,5 @@
 
 .appearance_error {
   background: var(--color-background-error-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }

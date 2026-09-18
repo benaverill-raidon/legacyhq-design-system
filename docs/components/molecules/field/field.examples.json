@@ -1,0 +1,72 @@
+{
+  "component": "Field",
+  "examples": [
+    {
+      "name": "Labelled Text Field with helper text",
+      "jsx": "<Field label=\"Email\" message=\"We'll only use this to contact you.\">\n  <TextField type=\"email\" placeholder=\"you@example.com\" />\n</Field>",
+      "props": { "label": "Email", "message": "We'll only use this to contact you." }
+    },
+    {
+      "name": "Error state (paired with the control's own invalid)",
+      "jsx": "<Field label=\"Email\" state=\"error\" message=\"Enter a valid email address.\">\n  <TextField type=\"email\" invalid defaultValue=\"not-an-email\" />\n</Field>",
+      "props": { "state": "error", "message": "Enter a valid email address." }
+    },
+    {
+      "name": "Valid state",
+      "jsx": "<Field label=\"Email\" state=\"valid\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
+      "props": { "state": "valid", "message": "Looks good." }
+    },
+    {
+      "name": "Required field",
+      "jsx": "<Field label=\"Password\" required message=\"At least 12 characters.\">\n  <TextField type=\"password\" />\n</Field>",
+      "props": { "required": true }
+    },
+    {
+      "name": "Inline context (label/message aligned to the control's inner text)",
+      "jsx": "<Field label=\"Full name\" context=\"inline\" size=\"lg\" message=\"First and last.\">\n  <TextField size=\"lg\" placeholder=\"Placeholder\" />\n</Field>",
+      "props": { "context": "inline", "size": "lg" }
+    },
+    {
+      "name": "Wrapping a Text Area",
+      "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Bio is required.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
+      "props": { "state": "error" }
+    },
+    {
+      "name": "Wrapping a Select",
+      "jsx": "<Field label=\"Country\" message=\"Where you're based.\">\n  <Select options={countryOptions} />\n</Field>",
+      "props": {}
+    },
+    {
+      "name": "No message",
+      "jsx": "<Field label=\"Company\">\n  <TextField placeholder=\"Placeholder\" />\n</Field>",
+      "props": { "label": "Company" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Duplicating the label as an aria-label",
+      "jsx": "<Field label=\"Email\">\n  <TextField type=\"email\" aria-label=\"Email\" />\n</Field>",
+      "reason": "Field's label already names the control via htmlFor. A duplicate aria-label is redundant and can override the visible label as the accessible name."
+    },
+    {
+      "name": "Error state without the control's own invalid",
+      "jsx": "<Field label=\"Email\" state=\"error\" message=\"Enter a valid email\">\n  <TextField type=\"email\" />\n</Field>",
+      "reason": "state='error' sets the message and aria-invalid but not the control's border. Pair it with the control's own invalid prop so the two agree."
+    },
+    {
+      "name": "One Field labelling a group of controls",
+      "jsx": "<Field label=\"Notifications\">\n  <div>\n    <Checkbox /> <Checkbox />\n  </div>\n</Field>",
+      "reason": "A label[htmlFor] targets exactly one control, and Field clones a single element. Use a fieldset/legend for a group."
+    },
+    {
+      "name": "Wrapping multiple elements",
+      "jsx": "<Field label=\"Name\">\n  <TextField />\n  <TextField />\n</Field>",
+      "reason": "Field clones a single control element to inject its wiring - text, fragments, or multiple children are unsupported."
+    },
+    {
+      "name": "Inline context on a control with no inner text",
+      "jsx": "<Field label=\"Subscribe\" context=\"inline\">\n  <Checkbox />\n</Field>",
+      "reason": "The inline indent exists to align the label/message with a control's inner text (Text Field, Select, Text Area, pickers). A Checkbox/Switch/Radio has no inner text to align to - use context='default'."
+    }
+  ]
+}

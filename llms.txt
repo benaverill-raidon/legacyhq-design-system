@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 44 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 49 components
 > across primitives/atoms/molecules/organisms.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -61,7 +61,7 @@ rules, and the task→file routing table that says which of a component's up to
 - [toggle-icon-button](docs/components/atoms/toggle-icon-button/toggle-icon-button.md)
 - [tooltip](docs/components/atoms/tooltip/tooltip.md)
 
-## Molecules (16)
+## Molecules (17)
 
 - [avatar-group](docs/components/molecules/avatar-group/avatar-group.md) (tier exception - composes
   the dropdown-menu organism; see its avatar-group-spec.md)
@@ -70,6 +70,8 @@ rules, and the task→file routing table that says which of a component's up to
 - [chip](docs/components/molecules/chip/chip.md) (tier exception - mode="filter" composes the
   dropdown-menu organism; see its chip-spec.md)
 - [chip-group](docs/components/molecules/chip-group/chip-group.md)
+- [field](docs/components/molecules/field/field.md) (wraps a single control with a label +
+  message + validation state; renders its own label/message, not the Label atom / Inline Message)
 - [icon-tile](docs/components/molecules/icon-tile/icon-tile.md)
 - [inline-edit](docs/components/molecules/inline-edit/inline-edit.md)
 - [inline-message](docs/components/molecules/inline-message/inline-message.md)
@@ -87,14 +89,23 @@ rules, and the task→file routing table that says which of a component's up to
 - [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
-## Organisms (8)
+## Organisms (15)
 
 - [banner](docs/components/organisms/banner/banner.md)
+- [date-picker](docs/components/organisms/date-picker/date-picker.md)
+- [date-picker-calendar](docs/components/organisms/date-picker-calendar/date-picker-calendar.md)
+- [date-time-picker](docs/components/organisms/date-time-picker/date-time-picker.md)
 - [dropdown-menu](docs/components/organisms/dropdown-menu/dropdown-menu.md)
 - [empty-state](docs/components/organisms/empty-state/empty-state.md)
+- [form](docs/components/organisms/form/form.md) (layout organism: native form + header,
+  arranges Field-based fields into sections/rows with a footer; parts Form/FormSection/FormRow/FormFooter)
 - [menu](docs/components/organisms/menu/menu.md)
+- [modal-dialog](docs/components/organisms/modal-dialog/modal-dialog.md) (controlled overlay:
+  backdrop + centered panel with header/body/footer; portal, focus trap, scroll lock, aria-modal)
+- [progress-tracker](docs/components/organisms/progress-tracker/progress-tracker.md)
 - [section-message](docs/components/organisms/section-message/section-message.md)
 - [tabs](docs/components/organisms/tabs/tabs.md)
+- [time-picker](docs/components/organisms/time-picker/time-picker.md)
 - [toast](docs/components/organisms/toast/toast.md)
 - [toast-group](docs/components/organisms/toast-group/toast-group.md)
 

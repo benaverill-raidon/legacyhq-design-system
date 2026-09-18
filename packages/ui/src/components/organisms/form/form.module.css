@@ -1,0 +1,88 @@
+/*
+ * Form and its parts are a layout scaffold - all spacing/typography confirmed from Figma's
+ * form / <form-header> / <form-section> / <form-row> / <form-footer> parts (Components v1.0.0):
+ *   - header title -> description gap: 12px (spacing/md)
+ *   - section top gap: 32px (spacing/3xl); section title -> rows / row -> row: 16px (spacing/lg)
+ *   - footer top gap: 40px (spacing/4xl); between footer actions: 8px (spacing/sm)
+ *   - between columns in a row: 16px (spacing/lg)
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.title {
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  letter-spacing: var(--typography-heading-lg-letter-spacing);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+/* The legend's `*` is coloured to match Field's required marker; it stays real content (not
+ * aria-hidden) because the sentence is what explains the convention. */
+.requiredMark {
+  color: var(--color-content-error);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding-block-start: var(--spacing-3xl);
+}
+
+.sectionTitle {
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+}
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+/* Each field is an equal-width column; min-inline-size:0 lets a field shrink instead of overflowing. */
+.row > * {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding-block-start: var(--spacing-4xl);
+}
+
+.footer[data-align='end'] {
+  justify-content: flex-end;
+}
+
+.footer[data-align='start'] {
+  justify-content: flex-start;
+}

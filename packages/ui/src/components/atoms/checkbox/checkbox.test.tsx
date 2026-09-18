@@ -243,7 +243,7 @@ describe('checkbox CSS contract', () => {
     expect(checkboxCss).toContain('color: var(--color-content-subtle);');
     expect(checkboxCss).toContain('.selectedIcon {');
     expect(checkboxCss).toContain('color: var(--color-content-brand-primary-default);');
-    expect(checkboxCss).not.toContain('background: var(--color-content-inverse);');
+    expect(checkboxCss).not.toContain('background: var(--color-content-inverse-default);');
   });
 
   it('uses neutral and brand overlay tokens with invalid overriding to neutral', () => {

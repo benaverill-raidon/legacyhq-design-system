@@ -129,11 +129,11 @@
       "root": "--border-radius-sm"
     },
     "typography": {
-      "fontFamily": "--typography-overline-sm-font-family",
-      "fontSize": "--typography-overline-sm-font-size",
-      "fontWeight": "--typography-overline-sm-font-weight",
-      "lineHeight": "--typography-overline-sm-line-height",
-      "letterSpacing": "--typography-overline-sm-letter-spacing"
+      "fontFamily": "--typography-heading-xxs-font-family",
+      "fontSize": "--typography-heading-xxs-font-size",
+      "fontWeight": "--typography-heading-xxs-font-weight",
+      "lineHeight": "--typography-heading-xxs-line-height",
+      "letterSpacing": "--typography-heading-xxs-letter-spacing"
     },
     "color": {
       "default": {

@@ -1,0 +1,47 @@
+{
+  "component": "DatePicker",
+  "examples": [
+    {
+      "name": "Uncontrolled",
+      "description": "The field owns the selected date; click it to open the calendar.",
+      "jsx": "<DatePicker defaultValue={new Date(2026, 2, 9)} placeholder='MM/DD/YYYY' aria-label='Date' />",
+      "props": { "size": "md", "context": "default" }
+    },
+    {
+      "name": "Controlled",
+      "description": "The parent owns the value.",
+      "jsx": "<DatePicker value={date} onChange={setDate} aria-label='Date' />",
+      "props": {}
+    },
+    {
+      "name": "Inline (borderless)",
+      "description": "The inline context renders a borderless field.",
+      "jsx": "<DatePicker context='inline' defaultValue={new Date(2026, 2, 9)} aria-label='Date' />",
+      "props": { "context": "inline" }
+    },
+    {
+      "name": "Sizes",
+      "description": "sm / md / lg field sizes.",
+      "jsx": "<DatePicker size='lg' aria-label='Date' />",
+      "props": { "size": "lg" }
+    },
+    {
+      "name": "Constrained range",
+      "description": "min / max restrict the selectable dates.",
+      "jsx": "<DatePicker min={new Date(2026, 2, 4)} max={new Date(2026, 2, 24)} aria-label='Date' />",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Always-visible calendar",
+      "reason": "For an inline, always-open calendar use Date Picker Calendar directly, not a field + popup.",
+      "jsx": "<DatePicker defaultOpen /> {/* forced open as a permanent calendar */}"
+    },
+    {
+      "name": "Unlabelled field",
+      "reason": "Give the field an accessible name via aria-label or aria-labelledby.",
+      "jsx": "<DatePicker />"
+    }
+  ]
+}

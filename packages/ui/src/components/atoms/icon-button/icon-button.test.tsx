@@ -399,7 +399,7 @@ describe('icon button CSS contract', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press/expanded', () => {
-    expect(iconButtonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(iconButtonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(iconButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
     expect(iconButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
     expect(iconButtonCss).toContain(".inverse[data-expanded='true']");

@@ -1,0 +1,80 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as DateTimePickerStories from './DateTimePicker.stories';
+
+<Meta of={DateTimePickerStories} name="Docs" />
+
+# Date/Time Picker
+
+Date/Time Picker combines a Date Picker and a Time Picker into one control - a date half on the left
+and a time half on the right - over a single `Date` value.
+
+<Canvas of={DateTimePickerStories.Playground} />
+
+## When to use
+
+- Capturing a specific moment: a date **and** a time (a meeting start, a deadline, a reminder).
+
+## When not to use
+
+- **Only a date** - use the Date Picker.
+- **Only a time** - use the Time Picker.
+
+## Anatomy
+
+1. **Date half** - a Date Picker (calendar popup) showing the date part.
+2. **Divider** - the two field frames collapse into a single shared border between the halves.
+3. **Time half** - a Time Picker (hours / minutes / AM-PM popup) showing the time part.
+
+The two halves read as one field: a single rounded outline with squared inner corners and a divider.
+Each half keeps its own popup, states, and keyboard model.
+
+## Usage guidance
+
+### Sizes and contexts
+
+<Canvas of={DateTimePickerStories.Sizes} />
+
+`size` (`sm`/`md`/`lg`) and `context` (`default` bordered / `inline` borderless) pass through to both
+halves so they stay in step.
+
+<Canvas of={DateTimePickerStories.Contexts} />
+
+### One shared value
+
+<Canvas of={DateTimePickerStories.Controlled} />
+
+Both halves are driven by a single `Date`. Picking a **date** keeps the current time; confirming a
+**time** keeps the current date. `onChange` fires with the combined `Date` whenever either half
+changes. Date constraints (`min`, `max`, `isDateDisabled`, `weekStartsOn`) go to the calendar;
+`minuteStep` goes to the time selector.
+
+### Accessibility
+
+The control is a `role="group"`; give it an `aria-label` (or `aria-labelledby`). Each half is an
+independent field with its own accessible name (`dateLabel` / `timeLabel`, defaulting to `Date` /
+`Time`), popup, and keyboard model - see the Date Picker and Time Picker docs.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>The combined date-and-time (controlled / uncontrolled).</td></tr>
+    <tr><td><code>onChange</code></td><td><code>(value: Date) =&gt; void</code></td><td>-</td><td>Called with the combined value when either half changes.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size (both halves).</td></tr>
+    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless (both halves).</td></tr>
+    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Applied to both halves.</td></tr>
+    <tr><td><code>min</code> / <code>max</code> / <code>isDateDisabled</code> / <code>weekStartsOn</code></td><td>-</td><td>-</td><td>Passed to the calendar.</td></tr>
+    <tr><td><code>minuteStep</code></td><td><code>number</code></td><td><code>5</code></td><td>Passed to the time selector.</td></tr>
+    <tr><td><code>datePlaceholder</code> / <code>timePlaceholder</code></td><td><code>string</code></td><td>-</td><td>Per-half placeholders.</td></tr>
+    <tr><td><code>dateLabel</code> / <code>timeLabel</code></td><td><code>string</code></td><td>Date / Time</td><td>Per-half accessible names.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Date Picker** - the date half on its own.
+- **Time Picker** - the time half on its own.
+- **Date Picker Calendar** - the calendar the date half opens.

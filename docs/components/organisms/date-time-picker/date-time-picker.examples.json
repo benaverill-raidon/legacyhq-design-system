@@ -1,0 +1,41 @@
+{
+  "component": "DateTimePicker",
+  "examples": [
+    {
+      "name": "Uncontrolled",
+      "description": "One control for a date and a time over a single value.",
+      "jsx": "<DateTimePicker defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='When' />",
+      "props": { "size": "md", "context": "default" }
+    },
+    {
+      "name": "Controlled",
+      "description": "The parent owns the combined date-and-time value.",
+      "jsx": "<DateTimePicker value={value} onChange={setValue} aria-label='When' />",
+      "props": {}
+    },
+    {
+      "name": "Inline (borderless)",
+      "description": "Both halves render borderless.",
+      "jsx": "<DateTimePicker context='inline' defaultValue={new Date(2026, 2, 9, 16, 30)} aria-label='When' />",
+      "props": { "context": "inline" }
+    },
+    {
+      "name": "Constrained + coarse minutes",
+      "description": "Date constraints go to the calendar; minuteStep to the time selector.",
+      "jsx": "<DateTimePicker min={new Date(2026, 2, 1)} max={new Date(2026, 2, 31)} minuteStep={15} aria-label='When' />",
+      "props": { "minuteStep": 15 }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Date only",
+      "reason": "Use Date Picker when there is no time to capture.",
+      "jsx": "<DateTimePicker /> {/* time half unused */}"
+    },
+    {
+      "name": "Unlabelled group",
+      "reason": "Give the group an accessible name via aria-label or aria-labelledby.",
+      "jsx": "<DateTimePicker />"
+    }
+  ]
+}

@@ -851,6 +851,11 @@
         "type": "float",
         "originalName": "typography/font-weight/400"
       },
+      "typography-font-weight-500": {
+        "value": "500px",
+        "type": "float",
+        "originalName": "typography/font-weight/500"
+      },
       "typography-font-weight-600": {
         "value": "600px",
         "type": "float",
@@ -1520,6 +1525,11 @@
         "value": "rgba(251, 249, 246, 0.48)",
         "type": "color",
         "originalName": "color/brand/taupe/alpha/100/48"
+      },
+      "color-brand-taupe-alpha-100-64": {
+        "value": "rgba(251, 249, 246, 0.64)",
+        "type": "color",
+        "originalName": "color/brand/taupe/alpha/100/64"
       },
       "color-brand-taupe-alpha-500-04": {
         "value": "rgba(191, 171, 153, 0.04)",

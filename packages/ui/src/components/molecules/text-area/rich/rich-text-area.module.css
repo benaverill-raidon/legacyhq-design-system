@@ -35,6 +35,18 @@
   transition: background-color var(--fade-quick), border-color var(--fade-quick);
 }
 
+/*
+ * Text-selection highlight - see Text Field for why the two pseudo-elements are separate rules. Set
+ * on `.editor`; the selection tint propagates to selected text inside its rich descendants.
+ */
+.editor::selection {
+  background-color: var(--color-content-highlight);
+}
+
+.editor::-moz-selection {
+  background-color: var(--color-content-highlight);
+}
+
 /* The user-drag resize axis, mirroring Text Area. Vertical by default. */
 .resize_none {
   resize: none;

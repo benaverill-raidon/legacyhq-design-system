@@ -246,7 +246,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
-    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
   });

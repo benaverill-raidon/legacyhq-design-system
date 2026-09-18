@@ -1,0 +1,96 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as DatePickerCalendarStories from './DatePickerCalendar.stories';
+
+<Meta of={DatePickerCalendarStories} name="Docs" />
+
+# Date Picker Calendar
+
+Date Picker Calendar is the month-grid panel for choosing a single date. It is the content that fills
+the popup surface of the upcoming Date Picker and Date/Time Picker, and can be used anywhere a date
+needs to be picked from a calendar.
+
+<Canvas of={DatePickerCalendarStories.Playground} />
+
+## When to use
+
+- Inside a date field's popup, to pick a day.
+- Any inline "pick a date" surface (a scheduling panel, a filter).
+
+## When not to use
+
+- **For a full field + popup** - that is the Date Picker (which wraps this calendar); use it when you
+  need an input.
+- **For picking a time** - use the Time Picker; Date/Time Picker combines both.
+- **For a small set of preset dates** - a Select or Radio group may be simpler.
+
+## Anatomy
+
+1. **Month header** - previous-year (`«`), previous-month (`‹`), the month + year title, next-month
+   (`›`), and next-year (`»`) controls. The four controls are Icon Buttons (`subtle`, `xs`, square).
+2. **Weekday header** - a `columnheader` per weekday, starting on `weekStartsOn`.
+3. **Day grid** - a `role="grid"` of six weeks; each day is a button in a `gridcell`. Out-of-month
+   days are shown for context but muted; today is underlined; the selected day fills the selected
+   surface.
+
+## Usage guidance
+
+### Selection
+
+Uncontrolled, the calendar owns the selection (`defaultValue`) and the displayed month
+(`defaultMonth`). For controlled usage, pass `value` + `onChange` (see the Controlled story). The
+calendar is **transparent** - the surrounding popup provides the surface and elevation.
+
+### Restricting dates
+
+<Canvas of={DatePickerCalendarStories.MinMax} />
+
+`min` / `max` bound the selectable range (inclusive); out-of-range days are disabled and the
+year/month nav is blocked once the whole target month is out of range. `isDateDisabled(date)` disables
+individual dates:
+
+<Canvas of={DatePickerCalendarStories.DisabledWeekends} />
+
+### Week start
+
+<Canvas of={DatePickerCalendarStories.WeekStartsMonday} />
+
+`weekStartsOn` (0 = Sunday, the default; 1 = Monday, ...) sets the first column. Month, year, and
+weekday names come from `locale`.
+
+### Accessibility
+
+The grid is a `role="grid"` labelled by the month title (`aria-live` so month changes are announced).
+Days use a roving tabindex - only one day is in the tab order. Arrow keys move by day and week,
+**Home**/**End** jump to the start/end of the week, **PageUp**/**PageDown** change month
+(with **Shift**, year), and **Enter**/**Space** select. Focus uses the shared Focus Ring. Today is
+`aria-current="date"`; the selected day's cell is `aria-selected`; disabled days are `aria-disabled`.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>value</code></td><td><code>Date | null</code></td><td>-</td><td>Controlled selected date.</td></tr>
+    <tr><td><code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Initial selection (uncontrolled).</td></tr>
+    <tr><td><code>onChange</code></td><td><code>(date: Date) =&gt; void</code></td><td>-</td><td>Called with the selected date.</td></tr>
+    <tr><td><code>month</code></td><td><code>Date</code></td><td>-</td><td>Controlled displayed month.</td></tr>
+    <tr><td><code>defaultMonth</code></td><td><code>Date</code></td><td>selection / today</td><td>Initial displayed month.</td></tr>
+    <tr><td><code>onMonthChange</code></td><td><code>(month: Date) =&gt; void</code></td><td>-</td><td>Called when the displayed month changes.</td></tr>
+    <tr><td><code>min</code> / <code>max</code></td><td><code>Date</code></td><td>-</td><td>Selectable range (inclusive).</td></tr>
+    <tr><td><code>isDateDisabled</code></td><td><code>(date: Date) =&gt; boolean</code></td><td>-</td><td>Disable individual dates.</td></tr>
+    <tr><td><code>weekStartsOn</code></td><td><code>0-6</code></td><td><code>0</code></td><td>First day of the week.</td></tr>
+    <tr><td><code>today</code></td><td><code>Date</code></td><td>current date</td><td>The date marked "today".</td></tr>
+    <tr><td><code>locale</code></td><td><code>string</code></td><td>runtime</td><td>Month / weekday names.</td></tr>
+  </tbody>
+</table>
+
+Nav button labels are configurable via `previousMonthLabel`, `nextMonthLabel`, `previousYearLabel`,
+`nextYearLabel`.
+
+## Related components
+
+- **Date Picker** - a date field that opens this calendar in a popup.
+- **Date/Time Picker** - date plus time selection.
+- **Icon Button** - the month/year nav controls.

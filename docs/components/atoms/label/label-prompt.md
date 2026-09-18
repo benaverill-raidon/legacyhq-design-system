@@ -100,8 +100,8 @@ Usage example:
 - Forward standard span attributes.
 - Merge consumer `className` with internal CSS Module classes.
 - Use `children` for label content.
-- Do not apply any case transform - render text exactly as passed (the overline typography tokens
-  no longer include an uppercase transform).
+- Do not apply any case transform - render text exactly as passed (the heading typography tokens
+  do not include an uppercase transform).
 - Use semantic CSS variables from generated token files.
 - Do not use borders.
 - Do not include icons.
@@ -119,33 +119,33 @@ Base class should use:
 Size mapping:
 
 - `sm`
-  - typography: `overline-sm`
+  - typography: `heading-xxs`
   - padding-block: `--spacing-xxs`
   - padding-inline: `--spacing-xs`
   - border-radius: `--border-radius-xs`
 
 - `md`
-  - typography: `overline-md`
-  - padding-block: `--spacing-xxs`
+  - typography: `heading-xs`
+  - padding-block: `--spacing-none` (the 24px line height sets the height, keeping the box at 24px)
   - padding-inline: `--spacing-sm`
   - border-radius: `--border-radius-xs`
 
-Typography details if `overline-sm` and `overline-md` variables/classes do not exist yet:
+Typography details if `heading-xxs` and `heading-xs` variables/classes do not exist yet:
 
-- `overline-sm`
+- `heading-xxs`
   - Public Sans
   - font weight 600
   - font size 12px via token
   - line height 16px via token
-  - letter spacing 0.5px via token
+  - letter spacing 0 via token
   - no text-transform
 
-- `overline-md`
+- `heading-xs`
   - Public Sans
   - font weight 600
   - font size 14px via token
-  - line height 20px via token
-  - letter spacing 1px via token
+  - line height 24px via token
+  - letter spacing 0 via token
   - no text-transform
 
 Before implementation, inspect:

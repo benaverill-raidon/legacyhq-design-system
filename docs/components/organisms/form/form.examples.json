@@ -1,0 +1,52 @@
+{
+  "component": "Form",
+  "examples": [
+    {
+      "name": "Titled form with a required legend and end-aligned actions",
+      "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button appearance=\"subtle\" type=\"button\">Cancel</Button>\n    <Button appearance=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
+      "props": { "title": "Create a new repository", "requiredLegend": true }
+    },
+    {
+      "name": "Two fields on one row",
+      "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button appearance=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
+      "props": {}
+    },
+    {
+      "name": "Multiple titled sections",
+      "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button appearance=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
+      "props": { "title": "Project settings", "requiredLegend": true }
+    },
+    {
+      "name": "Start-aligned footer",
+      "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button appearance=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
+      "props": {}
+    },
+    {
+      "name": "No header",
+      "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Search\"><TextField type=\"search\" /></Field>\n  </FormSection>\n</Form>",
+      "props": {}
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "A single standalone control wrapped in a Form",
+      "jsx": "<Form>\n  <Field label=\"Search\"><TextField type=\"search\" /></Field>\n</Form>",
+      "reason": "A lone control that isn't submitted with others doesn't need a Form - use Field (or the bare control) directly."
+    },
+    {
+      "name": "Managing field validation state in the Form",
+      "jsx": "<Form>{/* Form tracking each field's error state */}</Form>",
+      "reason": "Form is layout only. Validation and error state live on Field (state=\"error\") and the native control, not on Form."
+    },
+    {
+      "name": "A non-submit primary action",
+      "jsx": "<FormFooter><Button appearance=\"primary\" onClick={save}>Save</Button></FormFooter>",
+      "reason": "Give the submit Button type=\"submit\" so Enter-to-submit and the form's onSubmit work; don't rely on onClick alone."
+    },
+    {
+      "name": "Five fields in one row",
+      "jsx": "<FormRow><Field/><Field/><Field/><Field/><Field/></FormRow>",
+      "reason": "A row is for up to 4 equal columns (per Figma); more becomes too cramped - split into multiple rows."
+    }
+  ]
+}

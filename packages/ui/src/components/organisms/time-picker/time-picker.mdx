@@ -1,0 +1,99 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as TimePickerStories from './TimePicker.stories';
+
+<Meta of={TimePickerStories} name="Docs" />
+
+# Time Picker
+
+Time Picker is a time field that opens a three-column time selector in a popup: hours, minutes, and
+AM/PM. The read-only field shows the selected time and a clock icon; the columns do the picking, and a
+Confirm commits the choice.
+
+<Canvas of={TimePickerStories.Playground} />
+
+## When to use
+
+- A single time-of-day field in a form or filter.
+
+## When not to use
+
+- **Picking a date** - use the Date Picker (Date/Time Picker combines both).
+- **A duration or a countdown** - this selects a time of day.
+
+## Anatomy
+
+1. **Field** - a read-only Text Field showing the formatted time with a trailing clock icon; it is the
+   disclosure control (`aria-haspopup="dialog"`).
+2. **Popup** - a `role="dialog"` panel anchored to the field.
+3. **Columns** - three scrollable listboxes (hours, minutes, AM/PM); the selected option in each is
+   highlighted.
+4. **Footer** - Cancel and Confirm buttons. Column changes are staged and previewed live in the
+   field; **Confirm or an outside click** commits them, while **Cancel or Escape** discards them.
+
+## Usage guidance
+
+### Sizes and contexts
+
+<Canvas of={TimePickerStories.Sizes} />
+
+`size` (`sm`/`md`/`lg`) sets the field height. `context` maps to the Text Field appearance:
+
+<Canvas of={TimePickerStories.Contexts} />
+
+`default` is a bordered field; `inline` is borderless (subtle). The open state pins the field's focus
+treatment - a border for `default`, an underline for `inline`.
+
+### States
+
+<Canvas of={TimePickerStories.States} />
+
+Empty shows the `placeholder`; `disabled` and `invalid` map to the Text Field states.
+
+### Minute step
+
+<Canvas of={TimePickerStories.MinuteStep} />
+
+`minuteStep` (default `5`) sets the minute increment.
+
+### Controlled
+
+<Canvas of={TimePickerStories.Controlled} />
+
+Pass `value` + `onChange` (and optionally `open` + `onOpenChange`). The value is carried on a `Date`
+(only hours and minutes are used), so it composes cleanly with the Date Picker in a Date/Time Picker.
+
+### Accessibility
+
+The field carries `aria-haspopup="dialog"` and, while open, `aria-expanded` + `aria-controls`
+(managed by Popup) pointing at the dialog panel. Each column is a `role="listbox"` of `role="option"`
+buttons with a roving tabindex; Arrow Up/Down (and Home/End) move within a column, Tab moves between
+columns, and Escape (or Cancel) discards and closes. While open, the field previews the staged
+selection live; **Confirm or an outside click commits** it, and **Cancel or Escape discards** it.
+
+## API
+
+<table>
+  <thead>
+    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Selected time (controlled / uncontrolled); only h:m are used.</td></tr>
+    <tr><td><code>onChange</code></td><td><code>(value: Date) =&gt; void</code></td><td>-</td><td>Called with the committed time on Confirm.</td></tr>
+    <tr><td><code>open</code> / <code>defaultOpen</code> / <code>onOpenChange</code></td><td>-</td><td>-</td><td>Popup open state.</td></tr>
+    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size.</td></tr>
+    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless field.</td></tr>
+    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Field states.</td></tr>
+    <tr><td><code>minuteStep</code></td><td><code>number</code></td><td><code>5</code></td><td>Minute increment.</td></tr>
+    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Empty-state text.</td></tr>
+    <tr><td><code>format</code></td><td><code>(value, locale?) =&gt; string</code></td><td>locale 12-hour time</td><td>Field display format.</td></tr>
+    <tr><td><code>alignment</code></td><td><code>PopupAlignment</code></td><td><code>'bottomLeft'</code></td><td>Popup placement.</td></tr>
+    <tr><td><code>confirmLabel</code> / <code>cancelLabel</code></td><td><code>string</code></td><td>Confirm / Cancel</td><td>Footer button labels.</td></tr>
+  </tbody>
+</table>
+
+## Related components
+
+- **Date Picker** - a date field with a calendar popup.
+- **Date/Time Picker** - date plus time.
+- **Text Field** - the trigger field.
+- **Popup** - positioning and dismissal.

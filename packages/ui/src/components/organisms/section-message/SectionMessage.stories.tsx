@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Link } from '../../atoms/link';
+import { LinkButton } from '../../atoms/link-button';
+import { ButtonGroup } from '../../molecules/button-group';
 import { SectionMessage } from './section-message';
 import type { SectionMessageAppearance } from './section-message.types';
 
@@ -36,14 +37,17 @@ const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)', maxInl
 const description =
   "You're not allowed to change these restrictions. It's either due to the restrictions on the page, or permission settings for this space.";
 
-/** Two Link actions, separated automatically by a middot. Passed directly (not via a wrapper
- * component) so Section Message can interleave the separators. */
+/** Two Link Button actions, grouped in a ButtonGroup that lays them out as a row. */
 function demoActions() {
   return (
-    <>
-      <Link href="#learn-more">Learn more</Link>
-      <Link href="#request-access">Request access</Link>
-    </>
+    <ButtonGroup>
+      <LinkButton href="#learn-more" appearance="subtle" size="sm">
+        Learn more
+      </LinkButton>
+      <LinkButton href="#request-access" appearance="subtle" size="sm">
+        Request access
+      </LinkButton>
+    </ButtonGroup>
   );
 }
 
@@ -103,7 +107,11 @@ export const Content: Story = {
         <SectionMessage
           appearance="warning"
           title="Your trial ends soon"
-          actions={<Link href="#upgrade">Upgrade now</Link>}
+          actions={
+            <LinkButton href="#upgrade" appearance="subtle" size="sm">
+              Upgrade now
+            </LinkButton>
+          }
         >
           Your trial ends in three days. Upgrade to keep access to your matters.
         </SectionMessage>
@@ -129,7 +137,15 @@ export const EdgeCases: Story = {
       </Labelled>
 
       <Labelled label="Dismissible, no title, one action">
-        <SectionMessage appearance="warning" isDismissible actions={<Link href="#review">Review settings</Link>}>
+        <SectionMessage
+          appearance="warning"
+          isDismissible
+          actions={
+            <LinkButton href="#review" appearance="subtle" size="sm">
+              Review settings
+            </LinkButton>
+          }
+        >
           Some of your notification preferences are out of date.
         </SectionMessage>
       </Labelled>

@@ -1,8 +1,6 @@
 .root {
-  --link-color: var(--color-content-accent-blue-default);
-  --link-color-press: var(--color-content-accent-blue-bolder);
+  --link-color: var(--color-content-brand-primary-default);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
   --link-icon-size: var(--size-icon-md);
 
   /*
@@ -29,60 +27,44 @@
 }
 
 /*
- * `[data-force-state]` mirrors the adjacent pseudo-class so Storybook can present hover / pressed
- * as a static regression reference. It is documentation-only, not part of the public API.
+ * Hover underlines; there is no press/active treatment (removed to match Figma, whose Link has only
+ * `default` and `hover` states). `[data-force-state='hover']` mirrors `:hover` so Storybook can pin
+ * the state as a static regression reference - documentation-only, not part of the public API.
  */
 .root:hover,
-.root:active,
-.root[data-force-state='hover'],
-.root[data-force-state='press'] {
+.root[data-force-state='hover'] {
   text-decoration-line: underline;
-}
-
-.root:active,
-.root[data-force-state='press'] {
-  color: var(--link-color-press);
 }
 
 .root:visited {
   color: var(--link-color-visited);
 }
 
-.root:visited:active {
-  color: var(--link-color-visited-press);
-}
-
 .appearance_default {
-  --link-color: var(--color-content-accent-blue-default);
-  --link-color-press: var(--color-content-accent-blue-bolder);
+  --link-color: var(--color-content-brand-primary-default);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
 }
 
 .appearance_subtle {
   --link-color: var(--color-content-subtle);
-  --link-color-press: var(--color-content-default);
   --link-color-visited: var(--color-content-accent-purple-default);
-  --link-color-visited-press: var(--color-content-accent-purple-bolder);
 }
 
+/*
+ * Inverse now carries a visited treatment too (Figma's `hasVisited` applies across every appearance).
+ */
 .appearance_inverse {
-  --link-color: var(--color-content-inverse);
-  --link-color-press: var(--color-content-inverse);
-  --link-color-visited: var(--color-content-inverse);
-  --link-color-visited-press: var(--color-content-inverse);
+  --link-color: var(--color-content-inverse-default);
+  --link-color-visited: var(--color-content-accent-purple-subtle);
 
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_inverse:hover,
-.appearance_inverse:active,
 .appearance_inverse:focus-visible,
-.appearance_inverse:visited,
 .appearance_inverse[data-force-state='hover'],
-.appearance_inverse[data-force-state='press'],
 .appearance_inverse[data-force-state='focus'] {
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .size_sm {
@@ -90,7 +72,6 @@
 
   font-family: var(--typography-heading-xxs-font-family);
   font-size: var(--typography-heading-xxs-font-size);
-  font-weight: var(--typography-heading-xxs-font-weight);
   line-height: var(--typography-heading-xxs-line-height);
   letter-spacing: var(--typography-heading-xxs-letter-spacing);
   text-transform: var(--typography-heading-xxs-text-transform);
@@ -98,6 +79,19 @@
 
 .size_md {
   --link-icon-size: var(--size-icon-md);
+}
+
+/*
+ * Emphasis sets the weight only (Figma's `emphasis` axis): `strong` is the heading weight (for a
+ * name / first-column identifier), `default` is the body weight (for any other entity link). Declared
+ * after the size rules so it wins the equal-specificity font-weight cascade.
+ */
+.emphasis_strong {
+  font-weight: var(--typography-heading-xs-font-weight);
+}
+
+.emphasis_default {
+  font-weight: var(--typography-body-md-font-weight);
 }
 
 .content {

@@ -1,0 +1,32 @@
+/*
+ * Date Picker is a date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.
+ * The field is read-only - it displays the selected date and a calendar icon; the calendar in the
+ * popup does the picking. `context` maps to the Text Field appearance (default = bordered,
+ * inline = subtle/borderless); the open state is rendered by pinning the field's focus treatment
+ * (data-force-state="focus"). Defaults to Figma's 240px field width, but shrinks to its container.
+ */
+.root {
+  display: inline-block;
+  inline-size: 240px;
+  max-inline-size: 100%;
+}
+
+.trigger {
+  inline-size: 100%;
+  cursor: pointer;
+}
+
+/* The input is a read-only display of the selected date, so it reads as a control, not a text box. */
+.triggerInput {
+  cursor: pointer;
+  caret-color: transparent;
+}
+
+/* A 24x24 box around the 16px calendar glyph, matching the Figma elemAfterInput container. */
+.iconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+}

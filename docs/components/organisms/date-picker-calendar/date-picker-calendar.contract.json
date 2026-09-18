@@ -1,0 +1,160 @@
+{
+  "name": "DatePickerCalendar",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Choose a single date from a month grid.",
+  "intent": "The month-grid panel that fills the date / date-time picker popup surface.",
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentNodeId": "2417:61761",
+    "componentName": "date-picker-calendar",
+    "verifiedAt": "2026-09-04",
+    "shape": "sub-component",
+    "parts": {
+      "day": "figma-parts / day (component set 2417:61410): state (default | hover | press | previous selection) x isSelected x isFocused x isDisabled x today. Cell radius border/radius/sm; focus via the focus-ring primitive (border/focus).",
+      "month-header": "figma-parts / month-header (2417:60025): four icon-buttons (subtle, xs, square) around a month/year title (heading-xs, content/default).",
+      "week-header": "figma-parts / week-header (2417:61347): seven day-of-week labels (heading-xxs, content/default).",
+      "week-days": "figma-parts / week-days (2417:61453): one row of seven day cells; the grid stacks six of them."
+    },
+    "notes": "date-picker-calendar (2417:61761) is a single COMPONENT (no variants) composed of the parts above. The 'previous selection' day state is a range-preview state not implemented in this single-date v1. Out-of-month days are shown muted (content/disabled) but remain selectable (selecting switches month)."
+  },
+  "useCases": [
+    "the popup body of a date field",
+    "an inline scheduling / date-filter panel"
+  ],
+  "antiPatterns": [
+    "a full date field + popup (use Date Picker)",
+    "picking a time (use Time Picker / Date-Time Picker)",
+    "a small set of preset dates (use Select or Radio)"
+  ],
+  "anatomy": [
+    { "name": "root", "element": "div", "required": true, "description": "the transparent panel (padding spacing/lg); the popup provides the surface" },
+    { "name": "header", "required": true, "description": "prev-year / prev-month / title / next-month / next-year; nav are Icon Buttons (subtle, xs, square)" },
+    { "name": "title", "element": "span", "required": true, "description": "month + year (heading-xs), aria-live, labels the grid" },
+    { "name": "grid", "element": "table[role=grid]", "required": true, "description": "weekday columnheaders + six week rows" },
+    { "name": "day", "element": "button", "required": true, "description": "a day cell in a gridcell; roving tabindex; states via data-today/selected/outside/disabled" }
+  ],
+  "props": {
+    "value": { "type": "Date | null", "required": false, "description": "Controlled selected date." },
+    "defaultValue": { "type": "Date | null", "required": false, "description": "Initial selection (uncontrolled)." },
+    "onChange": { "type": "(date: Date) => void", "required": false },
+    "month": { "type": "Date", "required": false, "description": "Controlled displayed month." },
+    "defaultMonth": { "type": "Date", "required": false, "default": "selection, else today", "description": "Initial displayed month." },
+    "onMonthChange": { "type": "(month: Date) => void", "required": false },
+    "min": { "type": "Date", "required": false, "description": "Earliest selectable date (inclusive)." },
+    "max": { "type": "Date", "required": false, "description": "Latest selectable date (inclusive)." },
+    "isDateDisabled": { "type": "(date: Date) => boolean", "required": false },
+    "weekStartsOn": { "type": "0 | 1 | 2 | 3 | 4 | 5 | 6", "default": 0, "required": false },
+    "today": { "type": "Date", "default": "current date", "required": false },
+    "locale": { "type": "string", "default": "runtime locale", "required": false },
+    "previousMonthLabel": { "type": "string", "default": "Previous month", "required": false },
+    "nextMonthLabel": { "type": "string", "default": "Next month", "required": false },
+    "previousYearLabel": { "type": "string", "default": "Previous year", "required": false },
+    "nextYearLabel": { "type": "string", "default": "Next year", "required": false }
+  },
+  "variants": {},
+  "states": ["default", "hover", "press", "focus", "selected", "today", "outside", "disabled"],
+  "slots": [],
+  "tokens": {
+    "semantic": {
+      "panelPadding": "--spacing-lg",
+      "titleTypography": "heading-xs",
+      "titleColor": "--color-content-default",
+      "weekdayTypography": "heading-xxs",
+      "weekdayColor": "--color-content-default",
+      "dayTypography": "body-sm",
+      "dayRadius": "--border-radius-sm",
+      "dayDefault": "--color-content-subtle",
+      "dayHoverBackground": "--color-background-neutral-overlay-bold-hover",
+      "dayPressBackground": "--color-background-neutral-overlay-bold-press",
+      "dayHoverText": "--color-content-default",
+      "selectedBackground": "--color-background-selected-default-default",
+      "selectedBackgroundHover": "--color-background-selected-default-hover",
+      "selectedBackgroundPress": "--color-background-selected-default-press",
+      "selectedBorder": "--color-border-selected",
+      "selectedText": "--color-content-selected",
+      "todayText": "--color-content-selected",
+      "todayUnderline": "--color-content-selected",
+      "mutedText": "--color-content-disabled",
+      "cellInlineSize": "--size-500",
+      "cellBlockSize": "--size-400",
+      "motion": "--fade-quick"
+    },
+    "componentAllowed": ["cell size (size-500 x size-400)", "today underline thickness (2px)"],
+    "componentForbidden": ["color aliases", "radius aliases", "typography aliases", "spacing aliases"]
+  },
+  "accessibility": {
+    "gridRole": "grid",
+    "gridLabel": "labelled by the month title (aria-live=polite)",
+    "columnHeaders": "one per weekday (aria-label = full weekday name)",
+    "rovingTabindex": true,
+    "today": "aria-current=\"date\"",
+    "selected": "aria-selected on the gridcell",
+    "disabled": "aria-disabled on the day button (kept focusable)",
+    "keyboard": "Arrow keys (day/week), Home/End (week), PageUp/PageDown (month; Shift = year), Enter/Space (select)",
+    "focus": "shared Focus Ring primitive"
+  },
+  "keyboardInteraction": [
+    "ArrowLeft/Right move by one day; ArrowUp/Down by one week.",
+    "Home/End jump to the first/last day of the week.",
+    "PageUp/PageDown change month; Shift+PageUp/PageDown change year.",
+    "Enter/Space select the focused day (native button)."
+  ],
+  "behaviorRules": [
+    "Render six week rows for the displayed month; show adjacent-month days muted.",
+    "Uncontrolled selection via defaultValue; controlled via value + onChange.",
+    "Uncontrolled month via defaultMonth; controlled via month + onMonthChange.",
+    "Clamp min/max (inclusive); disable out-of-range days and block year/month nav once the whole target month is out of range.",
+    "isDateDisabled disables individual dates; disabled days are not selectable.",
+    "Mark today with aria-current and an underline; selected day fills the selected surface.",
+    "Use a roving tabindex and the WAI-ARIA grid keyboard model; focus uses the shared Focus Ring."
+  ],
+  "compositionRules": [
+    "Render inside a popup surface (this panel is transparent).",
+    "Compose the Icon Button atom for the month/year nav.",
+    "The day, month-header, and week-header parts stay private anatomy."
+  ],
+  "contentRules": [
+    "Month, year, and weekday names come from locale.",
+    "Nav button labels are configurable and should stay short."
+  ],
+  "responsiveRules": [
+    "Fixed cell size (size-500 x size-400); the panel is sized by the seven columns plus padding."
+  ],
+  "themeRules": [
+    "Use semantic tokens only.",
+    "Do not reference primitive colors directly.",
+    "Dark theme is supported through the generated token variables."
+  ],
+  "implementationNotes": [
+    "React and TypeScript; React.forwardRef on the root.",
+    "Self-contained date math (no date library).",
+    "CSS Modules and the shared Focus Ring; compose the Icon Button atom.",
+    "No MUI, no Tailwind, no hardcoded colors/typography/spacing.",
+    "Single-date selection; range ('previous selection') is a future addition."
+  ],
+  "relatedComponents": ["DatePicker", "DateTimePicker", "TimePicker", "IconButton", "FocusRing"],
+  "do": [
+    "Use inside a date field popup or an inline date surface.",
+    "Provide min/max or isDateDisabled to constrain selectable dates.",
+    "Set weekStartsOn and locale for the audience."
+  ],
+  "dont": [
+    "Use as a standalone field (use Date Picker).",
+    "Use for time selection.",
+    "Give the panel its own heavy background (the popup provides the surface).",
+    "Hardcode colors, spacing, or typography."
+  ],
+  "acceptanceCriteria": [
+    "Renders the month title, weekday headers, and a six-week grid.",
+    "Marks today with aria-current=\"date\" and the selected day's cell with aria-selected.",
+    "Selects a day on click (uncontrolled) and supports controlled value + onChange.",
+    "Navigates months and years from the header.",
+    "Disables out-of-range days and blocks nav past min/max; isDateDisabled disables individual dates.",
+    "Uses a roving tabindex and moves the focused day with the arrow keys, crossing month boundaries.",
+    "Supports weekStartsOn and locale.",
+    "Does not use MUI or Tailwind.",
+    "Storybook and tests compile."
+  ]
+}

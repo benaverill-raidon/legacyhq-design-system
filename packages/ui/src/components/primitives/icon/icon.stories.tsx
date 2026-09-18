@@ -123,7 +123,7 @@ const inverseSurfaceStyle = {
   padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
-  color: 'var(--color-content-inverse)',
+  color: 'var(--color-content-inverse-default)',
 } satisfies CSSProperties;
 
 function getIconComponent(componentName: string) {

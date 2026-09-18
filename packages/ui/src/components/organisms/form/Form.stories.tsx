@@ -73,10 +73,10 @@ function RepositoryForm() {
         </FormSection>
 
         <FormFooter align="end">
-          <Button appearance="subtle" type="button">
+          <Button prominence="tertiary" type="button">
             Cancel
           </Button>
-          <Button appearance="primary" type="submit">
+          <Button prominence="primary" type="submit">
             Create repository
           </Button>
         </FormFooter>
@@ -99,10 +99,10 @@ export const Playground: Story = {
           </Field>
         </FormSection>
         <FormFooter align="end">
-          <Button appearance="subtle" type="button">
+          <Button prominence="tertiary" type="button">
             Cancel
           </Button>
-          <Button appearance="primary" type="submit">
+          <Button prominence="primary" type="submit">
             Create
           </Button>
         </FormFooter>
@@ -135,7 +135,7 @@ export const Sections: Story = {
         </FormSection>
 
         <FormFooter align="end">
-          <Button appearance="primary" type="submit">
+          <Button prominence="primary" type="submit">
             Save changes
           </Button>
         </FormFooter>
@@ -190,10 +190,10 @@ export const FooterAlignment: Story = {
             </Field>
           </FormSection>
           <FormFooter align={align}>
-            <Button appearance="subtle" type="button">
+            <Button prominence="tertiary" type="button">
               Cancel
             </Button>
-            <Button appearance="primary" type="submit">
+            <Button prominence="primary" type="submit">
               Submit
             </Button>
           </FormFooter>
@@ -236,7 +236,7 @@ export const EdgeCases: Story = {
               </Field>
             </FormSection>
             <FormFooter align="end">
-              <Button appearance="primary" type="submit">
+              <Button prominence="primary" type="submit">
                 Create
               </Button>
             </FormFooter>

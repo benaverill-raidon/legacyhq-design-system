@@ -83,7 +83,7 @@ export const Playground: Story = {
         <CheckIcon />
       </Illustration>
     ),
-    actions: <Button appearance="subtle">View all activity</Button>,
+    actions: <Button prominence="tertiary">View all activity</Button>,
   },
 };
 
@@ -101,7 +101,7 @@ export const Types: Story = {
               </Illustration>
             }
             heading="You're all caught up!"
-            actions={<Button appearance="subtle">View all activity</Button>}
+            actions={<Button prominence="tertiary">View all activity</Button>}
           >
             No more recent activity in the past 24 hours.
           </EmptyState>
@@ -126,8 +126,8 @@ export const Content: Story = {
           heading="No results found"
           actions={
             <ButtonGroup>
-              <Button appearance="subtle">Clear filters</Button>
-              <Button appearance="primary">New search</Button>
+              <Button prominence="tertiary">Clear filters</Button>
+              <Button prominence="primary">New search</Button>
             </ButtonGroup>
           }
         >
@@ -174,7 +174,7 @@ export const EdgeCases: Story = {
             </Illustration>
           }
           heading="We couldn't find any matters that match every one of the filters you've applied"
-          actions={<Button appearance="primary">Reset all filters</Button>}
+          actions={<Button prominence="primary">Reset all filters</Button>}
         >
           Matters are only shown here once they match all of the active filters at the same time. Try
           removing a filter or two to widen the results.
@@ -183,7 +183,7 @@ export const EdgeCases: Story = {
 
       <Labelled label="Narrow container">
         <div style={{ inlineSize: '280px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
-          <EmptyState heading="No files" actions={<Button appearance="primary">Upload</Button>}>
+          <EmptyState heading="No files" actions={<Button prominence="primary">Upload</Button>}>
             Drag files here to get started.
           </EmptyState>
         </div>

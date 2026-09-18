@@ -46,10 +46,10 @@ function BannerActions({ appearance = 'default' }: { appearance?: BannerAppearan
   if (appearance === 'warning') {
     return (
       <ButtonGroup>
-        <Button size="sm" appearance="primary" tone="warning">
+        <Button size="sm" prominence="primary" tone="warning">
           Learn more
         </Button>
-        <Button size="sm" appearance="primary" tone="warning">
+        <Button size="sm" prominence="primary" tone="warning">
           Dismiss
         </Button>
       </ButtonGroup>

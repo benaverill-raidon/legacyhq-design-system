@@ -117,6 +117,15 @@
   overflow: auto;
 }
 
+/* Text-selection highlight - see Text Field for why the two pseudo-elements are separate rules. */
+.textarea::selection {
+  background-color: var(--color-content-highlight);
+}
+
+.textarea::-moz-selection {
+  background-color: var(--color-content-highlight);
+}
+
 /*
  * Hover tint only ever shows on an inactive field - suppressed once focused/typing, matching Text
  * Field (and its explicit design feedback). Keys off `:focus-within` (the wrapper contains the

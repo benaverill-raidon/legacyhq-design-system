@@ -5,7 +5,10 @@ where prose and links to real records live in the same line of text. While typin
 opens a grouped picker of entities; choosing one drops it inline as a **navigational tag** - a
 colored, icon-bearing chip that links to that record.
 
-It reuses Text Area's frame token-for-token, so on screen the two are the same field. Everything that
+It reuses Text Area's frame token-for-token, so on screen the two are the same field - including the
+shared `color-content-highlight` `::selection` tint on selected text (background only), the same as
+Text Field and Text Area; the inline tags select as a unit and aren't highlighted as text. Everything
+that
 differs is behavior, which is exactly why it's a separate component rather than a `type` prop: one is
 a native `<textarea>` holding a string, the other is a `contenteditable` surface holding a structured
 node array, plus a search callback and an entity config. Folding both into one component would have

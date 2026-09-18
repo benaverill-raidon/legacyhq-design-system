@@ -33,6 +33,10 @@ field that shouldn't visually compete with surrounding content until someone int
 `appearance="default"` (the standard bordered look, rounded on all four corners) is correct for
 nearly every other case.
 
+Selected text inside the field is tinted with the shared `color-content-highlight` token - a
+translucent brand `::selection` background applied identically across Text Field, Text Area, and
+Rich Text Area (background only; the text color is left untouched).
+
 ## Leading and trailing slots
 
 - **`iconBefore`** is icon-or-text only, and always decorative (`aria-hidden`) - it never carries

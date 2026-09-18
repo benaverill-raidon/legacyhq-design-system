@@ -74,6 +74,25 @@ describe('Link', () => {
     expect(screen.getByRole('link', { name: 'Medium' })).toHaveClass(styles.size_md);
   });
 
+  it('applies emphasis variants and defaults to strong', () => {
+    const { rerender } = render(<Link href="/clients">Default emphasis</Link>);
+    expect(screen.getByRole('link', { name: 'Default emphasis' })).toHaveClass(styles.emphasis_strong);
+
+    rerender(
+      <Link href="/clients" emphasis="default">
+        Body
+      </Link>,
+    );
+    expect(screen.getByRole('link', { name: 'Body' })).toHaveClass(styles.emphasis_default);
+
+    rerender(
+      <Link href="/clients" emphasis="strong">
+        Identifier
+      </Link>,
+    );
+    expect(screen.getByRole('link', { name: 'Identifier' })).toHaveClass(styles.emphasis_strong);
+  });
+
   it('forwards native anchor props and supports custom className', () => {
     render(
       <Link href="/download" download data-testid="download-link" className="custom-link">
@@ -158,29 +177,33 @@ describe('Link', () => {
     );
   });
 
-  it('maps the inverse appearance directly to the inverse content token across states', () => {
+  it('maps the inverse appearance to the inverse content token, with a visited treatment', () => {
     expect(linkCss).toContain('.appearance_inverse {');
-    expect(linkCss).toContain('color: var(--color-content-inverse);');
+    expect(linkCss).toContain('color: var(--color-content-inverse-default);');
     expect(linkCss).toContain('.appearance_inverse:hover');
-    expect(linkCss).toContain('.appearance_inverse:active');
     expect(linkCss).toContain('.appearance_inverse:focus-visible');
-    expect(linkCss).toContain('.appearance_inverse:visited');
+    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-subtle);');
   });
 });
 
 describe('link CSS contract', () => {
-  it('matches the current Figma default and visited semantic mappings', () => {
-    expect(linkCss).toContain('--link-color: var(--color-content-accent-blue-default);');
-    expect(linkCss).toContain('--link-color-press: var(--color-content-accent-blue-bolder);');
+  it('matches the Figma default and visited semantic mappings, with no press state', () => {
+    expect(linkCss).toContain('--link-color: var(--color-content-brand-primary-default);');
     expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-default);');
-    expect(linkCss).toContain('--link-color-visited-press: var(--color-content-accent-purple-bolder);');
+    // The press/active state was removed to match Figma (Link has only default + hover states).
+    expect(linkCss).not.toContain('--link-color-press');
+    expect(linkCss).not.toContain('--link-color-visited-press');
+    expect(linkCss).not.toContain('.root:active');
   });
 
-  it('matches the current Figma subtle semantic mappings', () => {
+  it('matches the Figma subtle semantic mappings', () => {
     expect(linkCss).toContain('.appearance_subtle {');
     expect(linkCss).toContain('--link-color: var(--color-content-subtle);');
-    expect(linkCss).toContain('--link-color-press: var(--color-content-default);');
-    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-default);');
-    expect(linkCss).toContain('--link-color-visited-press: var(--color-content-accent-purple-bolder);');
+  });
+
+  it('sets weight from the emphasis axis (strong = heading, default = body)', () => {
+    expect(linkCss).toContain('.emphasis_strong {');
+    expect(linkCss).toContain('.emphasis_default {');
+    expect(linkCss).toContain('font-weight: var(--typography-body-md-font-weight);');
   });
 });

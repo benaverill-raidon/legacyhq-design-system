@@ -34,6 +34,7 @@ export const Link = React.memo(
     {
       appearance = 'default',
       size = 'md',
+      emphasis = 'strong',
       target = '_self',
       rel,
       href,
@@ -56,6 +57,7 @@ export const Link = React.memo(
           styles.root,
           styles[`appearance_${appearance}`],
           styles[`size_${size}`],
+          styles[`emphasis_${emphasis}`],
           focusRingClassNames.focusRing,
           focusRingClassNames.focusRingDefault,
           className,

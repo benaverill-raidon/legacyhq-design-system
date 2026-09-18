@@ -1,22 +1,25 @@
 .label {
   --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
-  --label-padding-block: var(--spacing-none);
+  --label-min-block-size: 24px;
+  --label-padding-block: var(--spacing-xxs);
   --label-padding-inline: var(--spacing-sm);
+  --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);
   --label-font-weight: var(--typography-heading-xs-font-weight);
   --label-font-size: var(--typography-heading-xs-font-size);
   --label-line-height: var(--typography-heading-xs-line-height);
   --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
-  --label-text-transform: var(--typography-heading-xs-text-transform);
 
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   width: fit-content;
+  min-block-size: var(--label-min-block-size);
   padding-block: var(--label-padding-block);
   padding-inline: var(--label-padding-inline);
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--label-border-radius);
   background: var(--label-background);
   color: var(--label-color);
   font-family: var(--label-font-family);
@@ -24,30 +27,32 @@
   font-weight: var(--label-font-weight);
   line-height: var(--label-line-height);
   letter-spacing: var(--label-letter-spacing);
-  text-transform: var(--label-text-transform);
   white-space: nowrap;
+  text-align: center;
 }
 
 .size_sm {
+  --label-min-block-size: 20px;
   --label-padding-block: var(--spacing-xxs);
   --label-padding-inline: var(--spacing-xs);
+  --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xxs-font-family);
   --label-font-weight: var(--typography-heading-xxs-font-weight);
   --label-font-size: var(--typography-heading-xxs-font-size);
   --label-line-height: var(--typography-heading-xxs-line-height);
   --label-letter-spacing: var(--typography-heading-xxs-letter-spacing);
-  --label-text-transform: var(--typography-heading-xxs-text-transform);
 }
 
 .size_md {
-  --label-padding-block: var(--spacing-none);
+  --label-min-block-size: 24px;
+  --label-padding-block: var(--spacing-xxs);
   --label-padding-inline: var(--spacing-sm);
+  --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);
   --label-font-weight: var(--typography-heading-xs-font-weight);
   --label-font-size: var(--typography-heading-xs-font-size);
   --label-line-height: var(--typography-heading-xs-line-height);
   --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
-  --label-text-transform: var(--typography-heading-xs-text-transform);
 }
 
 .tone_default.emphasis_subtle {

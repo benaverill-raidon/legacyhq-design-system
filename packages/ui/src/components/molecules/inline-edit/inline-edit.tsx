@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { CheckIcon, CloseIcon } from '../../../assets/icons';
+import { CheckIcon, CloseIcon, EditIcon } from '../../../assets/icons';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../button-group';
 import styles from './inline-edit.module.css';
@@ -21,6 +22,7 @@ export const InlineEdit = React.memo(function InlineEdit({
   cancelLabel = 'Cancel',
   className,
 }: InlineEditProps) {
+  const cellSize = useEditableCellSize();
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState(value);
   const rootRef = React.useRef<HTMLDivElement>(null);
@@ -32,6 +34,7 @@ export const InlineEdit = React.memo(function InlineEdit({
   const suppressBlurRef = React.useRef(false);
 
   const startEditing = () => {
+    suppressBlurRef.current = false;
     setDraft(value);
     setIsEditing(true);
   };
@@ -103,11 +106,16 @@ export const InlineEdit = React.memo(function InlineEdit({
     ? React.cloneElement(children, {
         value: draft,
         onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft(event.target.value),
+        ...(cellSize ? { iconAfter: undefined } : {}),
       })
     : React.cloneElement(children, {
         value,
         readOnly: true,
         onFocus: startEditing,
+        ...(cellSize ? {
+          onClick: startEditing,
+          iconAfter: <span className={styles.editIcon} aria-hidden="true"><EditIcon size="md" decorative /></span>,
+        } : {}),
       });
 
   // onKeyDown/onBlur below only catch events bubbled up from the always-focusable child clone
@@ -120,6 +128,8 @@ export const InlineEdit = React.memo(function InlineEdit({
       className={mergeClassNames(styles.root, actionPlacement === 'end' && styles.placement_end, actionPlacement === 'end' && actionAlignment === 'start' && styles.alignment_start, className)}
       data-editing={isEditing ? 'true' : 'false'}
       data-control-size={controlSize}
+      data-editable-cell={cellSize ?? undefined}
+      data-has-actions={isEditing && actionButtons ? 'true' : undefined}
       onKeyDown={isEditing ? handleKeyDown : undefined}
       onBlur={isEditing ? handleBlur : undefined}
     >

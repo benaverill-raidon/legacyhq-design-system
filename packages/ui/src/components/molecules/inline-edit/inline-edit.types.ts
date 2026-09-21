@@ -8,6 +8,8 @@ export interface InlineEditableProps {
   onFocus?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   readOnly?: boolean;
   autoFocus?: boolean;
+  onClick?: React.MouseEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  iconAfter?: React.ReactNode;
 }
 
 export interface InlineEditProps {

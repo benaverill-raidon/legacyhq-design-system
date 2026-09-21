@@ -22,7 +22,7 @@ Field, Select, Chip, Checkbox, Button, Skeleton, Empty State, and Pagination.
 
 - **A simple key/value layout or short static list.** Use plain markup / a description list.
 - **A dashboard of cards.** That's a layout grid, not tabular data.
-- **A spreadsheet-style editable grid.** Cell editing / formulas are out of scope.
+- **A spreadsheet with formulas or range selection.** Use a dedicated grid for those interactions.
 
 ## Columns and data
 
@@ -31,6 +31,25 @@ Field, Select, Chip, Checkbox, Button, Skeleton, Empty State, and Pagination.
 Pass `columns` + `data`. A column is `{ key, header, render?, sortable?, align?, width? }`; a cell
 shows `String(row[key])` unless you pass `render` to compose any content. Always pass a stable
 `getRowId` - it defaults to the row index, which is unstable once rows sort or paginate.
+
+## Inline editable cells
+
+<Canvas of={TableStories.EditableCells} />
+
+<Canvas of={TableStories.EditableCellsCompact} />
+
+Set `cellAppearance: 'editable'` on an editor column. In its `render`, use `InlineEdit` wrapping
+`TextField` for text, or render `Select`, `DatePicker`, or `TimePicker` directly. Give each control
+an accessible label identifying its row. The consumer owns the value and save callback.
+
+Editable triggers fill the 40px/64px row and receive table-specific padding, hover fill, and bottom
+focus indicator. Text actions stay inside the cell; Enter confirms, Escape cancels, and leaving the
+editor commits. Select and date choices commit immediately; TimePicker retains its staged selection
+and Cancel/Confirm behavior. Row selection and hover remain owned by the row.
+
+Cell sizing applies only to the trigger; popup contents keep their own sizing. Popups use a 4px
+gap, and the inline time panel uses leading-aligned options with a selected leading rule.
+Standalone controls retain their normal styling. The last row follows the table's divider rules.
 
 ## Sorting
 

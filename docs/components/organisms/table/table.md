@@ -11,7 +11,7 @@ section with real sorting, selection, and pagination behaviour.
 
 Use Table for a page of records the user scans, sorts, filters, selects, and pages through. Do not
 use it for a simple key/value layout or a short static list (use plain markup), a dashboard of cards
-(that's a layout grid, not tabular data), or a spreadsheet-style editable grid (out of scope).
+(that's a layout grid, not tabular data), or a spreadsheet with formulas and range selection.
 
 ## Column-config driven
 
@@ -22,6 +22,23 @@ ship a cell-per-content-type; `render` is the extension point.
 
 Always pass a stable `getRowId` (it defaults to the row index, which is unstable once rows sort or
 paginate) - it's required in practice whenever you use selection.
+
+## Inline editable cells
+
+Set `cellAppearance: 'editable'` on a column and compose its editor through `render`:
+`InlineEdit` wrapping `TextField`, or a `Select`, `DatePicker`, or `TimePicker` directly.
+Table supplies density and full-cell styling; the consumer owns values and save callbacks.
+Always label each editor with its column and row identity.
+
+The cell trigger fills the row, with 16px/8px start/end padding. Hover uses
+`--color-background-neutral-overlay-bold-hover` and a 1px `--color-border-input` underline;
+editing/open uses a 2px `--color-border-focus` underline. Text editing places 24px Cancel/Confirm
+actions inside the cell, 4px apart. Enter confirms, Escape cancels, and blur commits. Picker popups
+keep their own sizing and use a 4px trigger gap. The inline time panel aligns options to the start
+and marks selected values with a leading rule. Row hover and selection still belong to the row.
+
+See the `EditableCells` and `EditableCellsCompact` Storybook examples. These overrides do not
+change controls outside explicitly editable columns.
 
 ## Batteries-included, but controllable
 

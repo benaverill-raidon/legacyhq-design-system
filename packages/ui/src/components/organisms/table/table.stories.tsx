@@ -9,11 +9,60 @@ import { Link } from '../../atoms/link';
 import { ProgressBar } from '../../atoms/progress-bar';
 import { Switch } from '../../atoms/switch';
 import { Tag } from '../../atoms/tag';
-import { EditIcon, FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
+import { FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
 import { Chip } from '../../molecules/chip';
+import { InlineEdit } from '../../molecules/inline-edit';
 import { TextField } from '../../molecules/text-field';
+import { Select } from '../../molecules/select';
+import { DatePicker } from '../date-picker';
+import { TimePicker } from '../time-picker';
 import { Table } from './table';
 import type { TableColumn } from './table.types';
+
+interface EditableRecord {
+  id: number;
+  name: string;
+  status: string;
+  date: Date;
+  time: Date;
+}
+
+function EditableCellsExample({ size = 'md' }: { size?: 'sm' | 'md' }) {
+  const [records, setRecords] = useState<EditableRecord[]>([
+    { id: 1, name: 'Quarterly review', status: 'Scheduled', date: new Date(2026, 2, 9), time: new Date(2026, 2, 9, 16, 30) },
+    { id: 2, name: 'Team planning', status: 'Draft', date: new Date(2026, 2, 12), time: new Date(2026, 2, 12, 9, 0) },
+    { id: 3, name: 'Project kickoff', status: 'Scheduled', date: new Date(2026, 2, 16), time: new Date(2026, 2, 16, 10, 15) },
+  ]);
+  const update = (id: number, patch: Partial<EditableRecord>) => {
+    setRecords((previous) => previous.map((row) => row.id === id ? { ...row, ...patch } : row));
+  };
+  const editableColumns: TableColumn<EditableRecord>[] = [
+    { key: 'name', header: 'Event', cellAppearance: 'editable', width: 280,
+      render: (row) => <InlineEdit value={row.name} onConfirm={(name) => update(row.id, { name })}>
+        <TextField aria-label={`Event ${row.id}`} />
+      </InlineEdit> },
+    { key: 'status', header: 'Status', cellAppearance: 'editable', width: 200,
+      render: (row) => <Select aria-label={`Status ${row.id}`} value={row.status}
+        options={['Draft', 'Scheduled', 'Complete'].map((value) => ({ value, label: value }))}
+        onChange={(status) => update(row.id, { status: status ?? '' })} /> },
+    { key: 'date', header: 'Date', cellAppearance: 'editable', width: 240,
+      render: (row) => <DatePicker aria-label={`Date ${row.id}`} value={row.date} locale="en-US"
+        onChange={(date) => update(row.id, { date })} /> },
+    { key: 'time', header: 'Time', cellAppearance: 'editable', width: 240,
+      render: (row) => <TimePicker aria-label={`Time ${row.id}`} value={row.time} locale="en-US"
+        onChange={(time) => update(row.id, { time })} /> },
+  ];
+  return <Table caption={`Editable events (${size})`} columns={editableColumns} data={records}
+    getRowId={(row) => row.id} size={size} selectable defaultSelectedIds={[2]} />;
+}
+
+export const EditableCells: Story = {
+  render: () => <EditableCellsExample />,
+};
+
+export const EditableCellsCompact: Story = {
+  render: () => <EditableCellsExample size="sm" />,
+};
 
 /* ---------- Shared member data ---------- */
 
@@ -468,77 +517,4 @@ export const CellVariants: Story = {
       />
     </div>
   ),
-};
-
-/* ---------- Editable Cells: inline TextFields with edit icon ---------- */
-
-export const EditableCells: Story = {
-  render: function EditableCellsStory() {
-    const [rows, setRows] = useState(() =>
-      members.slice(0, 5).map((m) => ({ ...m })),
-    );
-
-    const updateField = (id: number, field: keyof Member, value: string) => {
-      setRows((prev) => prev.map((r) => (r.id === id ? { ...r, [field]: value } : r)));
-    };
-
-    const editableColumns: Array<TableColumn<Member>> = [
-      {
-        key: 'name',
-        header: 'Name',
-        emphasis: 'strong',
-        render: (m) => (
-          <TextField
-            size="sm"
-            appearance="inline"
-            value={m.name}
-            iconAfter={<EditIcon size="sm" decorative />}
-            onChange={(e) => updateField(m.id, 'name', e.currentTarget.value)}
-            aria-label="Name"
-          />
-        ),
-      },
-      {
-        key: 'email',
-        header: 'Email',
-        render: (m) => (
-          <TextField
-            size="sm"
-            appearance="inline"
-            value={m.email}
-            iconAfter={<EditIcon size="sm" decorative />}
-            onChange={(e) => updateField(m.id, 'email', e.currentTarget.value)}
-            aria-label="Email"
-          />
-        ),
-      },
-      {
-        key: 'role',
-        header: 'Role',
-        render: (m) => (
-          <TextField
-            size="sm"
-            appearance="inline"
-            value={m.role}
-            iconAfter={<EditIcon size="sm" decorative />}
-            onChange={(e) => updateField(m.id, 'role', e.currentTarget.value)}
-            aria-label="Role"
-          />
-        ),
-      },
-      { key: 'status', header: 'Status' },
-      { key: 'joined', header: 'Joined', align: 'end' },
-    ];
-
-    return (
-      <Table
-        columns={editableColumns}
-        data={rows}
-        getRowId={getRowId}
-        title="Editable cells"
-        description="Inline TextFields with an edit icon indicate editable fields."
-        caption="Editable members"
-      />
-    );
-  },
 };

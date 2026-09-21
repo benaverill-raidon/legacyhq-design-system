@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { EditableCellContext, useEditableCellSize } from '../editable-cell-context';
 import styles from './popup.module.css';
 import type { PopupAlignment, PopupPadding, PopupProps } from './popup.types';
 
@@ -137,6 +138,7 @@ export const Popup = React.memo(function Popup({
   anchorRef,
   matchTriggerWidth = false,
 }: PopupProps) {
+  const cellSize = useEditableCellSize();
   const generatedId = React.useId();
   const contentId = id ?? generatedId;
   const triggerRef = React.useRef<HTMLElement | null>(null);
@@ -161,8 +163,8 @@ export const Popup = React.memo(function Popup({
       setPanelWidth(triggerRect.width);
     }
     const panelRect = panelRef.current.getBoundingClientRect();
-    const gap = getTokenPixels('--spacing-sm');
-    const viewportPadding = gap;
+    const gap = getTokenPixels(cellSize ? '--spacing-xs' : '--spacing-sm');
+    const viewportPadding = getTokenPixels('--spacing-sm');
 
     // Without this, clamping the panel to stay fully on-screen (below) leaves it visibly "stuck"
     // at the viewport edge once the trigger scrolls out of view entirely, floating with no visible
@@ -189,7 +191,7 @@ export const Popup = React.memo(function Popup({
 
     setResolvedAlignment(bestCandidate.alignment);
     setPosition({ top: bestCandidate.top, left: bestCandidate.left });
-  }, [alignment, getMeasureEl, matchTriggerWidth]);
+  }, [alignment, getMeasureEl, matchTriggerWidth, cellSize]);
 
   React.useLayoutEffect(() => {
     if (!open || typeof window === 'undefined') {
@@ -299,7 +301,7 @@ export const Popup = React.memo(function Popup({
                     }
               }
             >
-              {content}
+              <EditableCellContext.Provider value={null}>{content}</EditableCellContext.Provider>
             </div>,
             document.body,
           )

@@ -46,7 +46,7 @@ and Pagination into one complete section with real interaction and accessibility
 ### Do Not Use When
 - A simple key/value layout or a short static list (use plain markup / a description list).
 - A dashboard of cards (a layout grid, not tabular data).
-- A spreadsheet-style editable grid with cell editing/formulas (out of scope).
+- A spreadsheet with formulas or range selection (out of scope). Individual inline editors are supported.
 
 ---
 
@@ -132,6 +132,29 @@ Table (div.table, data-size)
   row-level interaction.
 
 ---
+
+## Inline editable cells (verified 2026-09-21)
+
+Figma Console inspection covered `2927:36490` (text), `2927:36509` (select), `2927:36528` (date),
+and `2927:36547` (time), including default, hover, and typing/open at both densities. The date/time
+open variants still carry duplicate `state=hover` names; their nested trigger strokes and popup
+visibility identify the actual open state.
+
+Use `column.cellAppearance = 'editable'` with consumer-owned editors in `render`. Existing controls
+inherit table density and trigger styling through an internal context; portaled Popup contents reset
+that context. Text uses InlineEdit + TextField; the other three render their own picker directly.
+
+- Rows remain 40px / 64px. Editable tables use separate borders with zero spacing and painted body
+  dividers so editor underlines and regular-cell dividers share the same pixel boundary.
+- Trigger padding: 16px start, 8px end; body/md typography and a 24px trailing glyph box.
+- Resting triggers are transparent with the row divider; hover is neutral-overlay-bold-hover with
+  a 1px border-input underline and square corners.
+- Typing/open is transparent with a 2px border-focus underline and square corners, including while
+  focus moves into a popup or to an inline action.
+- Text actions are 24px Cancel/Confirm buttons, 4px apart, centered vertically and inset 8px.
+- Popups sit 4px below the trigger. The inline time panel uses leading-aligned options with a
+  selected leading rule and a 40px footer.
+- Row hover/selection stay on `<tr>`. Standalone controls retain their existing appearance.
 
 ## Tokens
 

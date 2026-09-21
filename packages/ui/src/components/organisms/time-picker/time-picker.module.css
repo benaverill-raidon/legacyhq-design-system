@@ -11,6 +11,11 @@
   max-inline-size: 100%;
 }
 
+.root[data-editable-cell] {
+  display: block;
+  inline-size: 100%;
+}
+
 .trigger {
   inline-size: 100%;
   cursor: pointer;
@@ -101,4 +106,22 @@
   gap: var(--spacing-sm);
   padding: var(--spacing-sm);
   border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+/* Table's inline time popup uses leading-aligned values and a selected leading rule. */
+.panel[data-table-cell] .option {
+  justify-content: flex-start;
+  padding-inline: var(--spacing-md);
+}
+
+.panel[data-table-cell] .option[data-selected='true'] {
+  box-shadow: inset var(--border-width-md) 0 0 var(--color-border-selected);
+}
+
+.panel[data-table-cell] .footer {
+  box-sizing: border-box;
+  block-size: 40px;
+  align-items: center;
+  padding-block: 0;
+  padding-inline: var(--spacing-md);
 }

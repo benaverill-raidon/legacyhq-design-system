@@ -11,6 +11,11 @@
   max-inline-size: 100%;
 }
 
+.root[data-editable-cell] {
+  display: block;
+  inline-size: 100%;
+}
+
 .trigger {
   inline-size: 100%;
   cursor: pointer;

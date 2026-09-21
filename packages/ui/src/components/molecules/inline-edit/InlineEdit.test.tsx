@@ -346,15 +346,30 @@ describe('InlineEdit', () => {
     expect(container.firstChild).toHaveAttribute('data-editing', 'true');
   });
 
-  it('stacks the action row below the field, anchored to the right edge, with a 4px gap', () => {
+  it('floats the action row as a popup below the field by default, anchored to the right edge, with a 4px gap', () => {
     const rootRule = inlineEditCss.match(/\.root\s*\{([^}]*)\}/);
     const actionsRule = inlineEditCss.match(/\.actions\s*\{([^}]*)\}/);
 
     expect(rootRule?.[1]).toContain('flex-direction: column;');
-    expect(rootRule?.[1]).toContain('gap: var(--spacing-sm);');
-    // Positioned at the end; the pair's gap is tightened to 4px, overriding Button Group's 8px.
-    expect(actionsRule?.[1]).toContain('align-self: flex-end;');
+    expect(rootRule?.[1]).toContain('position: relative;');
+    expect(actionsRule?.[1]).toContain('position: absolute;');
+    expect(actionsRule?.[1]).toContain('inset-block-start: calc(100% + var(--spacing-sm));');
+    expect(actionsRule?.[1]).toContain('inset-inline-end: 0;');
     expect(actionsRule?.[1]).toContain('gap: var(--spacing-xs);');
+  });
+
+  it('places actions outside the input trailing edge when actionPlacement="end"', () => {
+    const placementEndActionsRule = inlineEditCss.match(/\.placement_end\s+\.actions\s*\{([^}]*)\}/);
+    expect(placementEndActionsRule?.[1]).toContain('inset-inline-start: calc(100% + var(--spacing-sm));');
+    expect(placementEndActionsRule?.[1]).toContain('inset-inline-end: auto;');
+    expect(placementEndActionsRule?.[1]).toContain('inset-block: 0;');
+    expect(placementEndActionsRule?.[1]).toContain('margin-block: auto;');
+  });
+
+  it('pins the action buttons to the neutral-subtle background ramp (rest, hover, press)', () => {
+    expect(inlineEditCss).toContain('background: var(--color-background-neutral-subtle-default);');
+    expect(inlineEditCss).toContain('background: var(--color-background-neutral-subtle-hover);');
+    expect(inlineEditCss).toContain('background: var(--color-background-neutral-subtle-press);');
   });
 
   it('wraps the confirm/cancel buttons in a Button Group, which owns the row layout and gap', () => {

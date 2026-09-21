@@ -30,6 +30,10 @@ export interface TableColumn<Row> {
    * Tag, Avatar, Link, Button, etc. - Table does not ship a cell-per-content-type.
    */
   render?: (row: Row, rowIndex: number) => React.ReactNode;
+  /** Full-cell inline editor styling for InlineEdit/TextField, Select, DatePicker, or TimePicker.
+   * The consumer still owns values and commits through `render`; Table supplies density and styling.
+   */
+  cellAppearance?: 'default' | 'editable';
   /** Show a sort control on this column's header and let it participate in sorting. */
   sortable?: boolean;
   /** Header + cell alignment. Default `start`. Use `end` for numeric columns. */

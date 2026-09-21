@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checkbox } from './checkbox';
+import { CheckboxGroup } from './checkbox-group';
 
 const meta = {
   title: 'UI/Atoms/Checkbox',
@@ -264,6 +265,81 @@ export const Content: Story = {
           <button type="submit">Apply filters</button>
         </form>
       </section>
+    </div>
+  ),
+};
+
+const groupOptions = [
+  { value: 'email', label: 'Email' },
+  { value: 'sms', label: 'SMS' },
+  { value: 'in-app', label: 'In-app' },
+];
+
+/** CheckboxGroup renders a labelled fieldset of Checkbox items, matching the RadioGroup pattern. */
+export const GroupVariants: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Options API">
+        <CheckboxGroup label="Notification channels" name="channels" options={groupOptions} />
+      </Group>
+
+      <Group title="Default value">
+        <CheckboxGroup
+          label="Notification channels"
+          name="channels-default"
+          defaultValue={['email', 'in-app']}
+          options={groupOptions}
+        />
+      </Group>
+
+      <Group title="Horizontal orientation">
+        <CheckboxGroup
+          label="Notification channels"
+          name="channels-horizontal"
+          orientation="horizontal"
+          options={groupOptions}
+        />
+      </Group>
+
+      <Group title="With description">
+        <CheckboxGroup
+          label="Notification channels"
+          name="channels-desc"
+          description="Choose how you'd like to receive updates."
+          options={groupOptions}
+        />
+      </Group>
+
+      <Group title="Required">
+        <CheckboxGroup label="Notification channels" name="channels-required" required options={groupOptions} />
+      </Group>
+
+      <Group title="Disabled">
+        <CheckboxGroup
+          label="Notification channels"
+          name="channels-disabled"
+          disabled
+          defaultValue={['email']}
+          options={groupOptions}
+        />
+      </Group>
+
+      <Group title="Invalid with error message">
+        <CheckboxGroup
+          label="Notification channels"
+          name="channels-invalid"
+          invalid
+          errorMessage="Select at least one channel."
+          options={groupOptions}
+        />
+      </Group>
+
+      <Group title="Children composition">
+        <CheckboxGroup label="Custom layout">
+          <Checkbox label="Custom A" name="custom" value="a" />
+          <Checkbox label="Custom B" name="custom" value="b" />
+        </CheckboxGroup>
+      </Group>
     </div>
   ),
 };

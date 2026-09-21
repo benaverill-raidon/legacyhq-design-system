@@ -95,7 +95,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
       >
         <Button
           size={size}
-          appearance="subtle"
+          prominence="tertiary"
           className={styles.overflowTrigger}
           onClick={() => setOverflowOpen((current) => !current)}
         >

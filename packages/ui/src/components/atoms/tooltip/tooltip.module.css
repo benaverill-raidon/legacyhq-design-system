@@ -23,7 +23,7 @@
   padding-inline: var(--measurement-6);
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
   font-family: var(--typography-body-sm-font-family);
   font-size: var(--typography-body-sm-font-size);
   font-weight: var(--typography-body-sm-font-weight);

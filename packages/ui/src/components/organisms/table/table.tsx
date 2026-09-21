@@ -6,6 +6,7 @@ import { IconButton } from '../../atoms/icon-button';
 import { Select } from '../../molecules/select';
 import { Skeleton } from '../../molecules/skeleton';
 import { TextField } from '../../molecules/text-field';
+import { EditableCellContext } from '../../primitives/editable-cell-context';
 import styles from './table.module.css';
 import type { RowId, TableProps, TableSort } from './table.types';
 
@@ -310,7 +311,7 @@ export function Table<Row>({
                       <div className={styles.activeFilters}>{activeFilters}</div>
                     ) : null}
                     {onClearFilters != null ? (
-                      <Button appearance="subtle" size="sm" onClick={onClearFilters}>
+                      <Button prominence="tertiary" size="sm" onClick={onClearFilters}>
                         {clearFiltersLabel}
                       </Button>
                     ) : null}
@@ -323,7 +324,8 @@ export function Table<Row>({
 
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
         <div className={styles.scroll} role="region" aria-label={name ?? 'Table'} tabIndex={0}>
-          <table className={styles.grid} aria-busy={loading || undefined} data-resized={hasResized || undefined}>
+          <table className={styles.grid} aria-busy={loading || undefined} data-resized={hasResized || undefined}
+            data-has-editable-cells={columns.some((column) => column.cellAppearance === 'editable') || undefined}>
             {captionContent != null ? <caption className={styles.caption}>{captionContent}</caption> : null}
             {hasResized ? (
               <colgroup>
@@ -461,10 +463,13 @@ export function Table<Row>({
                           className={cx(styles.cell, column.className)}
                           data-align={column.align}
                           data-emphasis={column.emphasis}
+                          data-editable={column.cellAppearance === 'editable' ? 'true' : undefined}
                         >
-                          {column.render
-                            ? column.render(row, index)
-                            : String((row as Record<string, unknown>)[column.key] ?? '')}
+                          <EditableCellContext.Provider value={column.cellAppearance === 'editable' ? size : null}>
+                            {column.render
+                              ? column.render(row, index)
+                              : String((row as Record<string, unknown>)[column.key] ?? '')}
+                          </EditableCellContext.Provider>
                         </td>
                       ))}
                     </tr>

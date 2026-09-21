@@ -3,17 +3,20 @@
     "progress-bar": {
       "linear": {
         "root-size": {
+          "sm": { "value": "calc(var(--component-progress-bar-track-size-sm) + 2 * var(--component-progress-bar-linear-pad-sm))", "type": "dimension" },
           "md": { "value": "calc(var(--component-progress-bar-track-size-md) + 2 * var(--component-progress-bar-linear-pad-md))", "type": "dimension" },
           "lg": { "value": "calc(var(--component-progress-bar-track-size-lg) + 2 * var(--component-progress-bar-linear-pad-lg))", "type": "dimension" }
         },
         "pad": {
+          "sm": { "value": "var(--measurement-4)", "type": "dimension" },
           "md": { "value": "var(--measurement-4)", "type": "dimension" },
           "lg": { "value": "var(--measurement-4)", "type": "dimension" }
         }
       },
       "track-size": {
-        "md": { "value": "var(--measurement-12)", "type": "dimension" },
-        "lg": { "value": "var(--measurement-24)", "type": "dimension" }
+        "sm": { "value": "var(--measurement-16)", "type": "dimension" },
+        "md": { "value": "var(--measurement-24)", "type": "dimension" },
+        "lg": { "value": "var(--measurement-32)", "type": "dimension" }
       },
       "circular": { "size": { "value": "var(--measurement-72)", "type": "dimension" } }
     }

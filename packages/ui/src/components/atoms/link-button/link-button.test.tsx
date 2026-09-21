@@ -163,12 +163,12 @@ describe('LinkButton', () => {
 
   it('applies appearance and tone classes', () => {
     const { rerender } = render(
-      <LinkButton href="/clients" appearance="default" tone="neutral">
+      <LinkButton href="/clients" appearance="default" tone="default">
         Default
       </LinkButton>,
     );
 
-    expect(screen.getByRole('link', { name: 'Default' })).toHaveClass(styles.appearance_default, styles.tone_neutral);
+    expect(screen.getByRole('link', { name: 'Default' })).toHaveClass(styles.appearance_default, styles.tone_default);
 
     rerender(
       <LinkButton href="/clients" appearance="primary" tone="warning">
@@ -246,7 +246,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
-    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
   });

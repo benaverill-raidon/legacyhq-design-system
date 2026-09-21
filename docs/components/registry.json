@@ -4042,6 +4042,185 @@
     }
   },
   {
+    "id": "key-value-list",
+    "name": "KeyValueList",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/key-value-list/key-value-list.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Flex column container. Resets browser default dl margin/padding."
+      }
+    ],
+    "props": {
+      "children": {
+        "type": "React.ReactNode",
+        "required": true,
+        "default": null,
+        "description": "Key Value Pair children."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the <dl> element's class list."
+      }
+    },
+    "sizes": [],
+    "slots": [],
+    "variants": {},
+    "subComponents": [],
+    "tokens": {},
+    "accessibility": {
+      "role": "A <dl> element — screen readers announce the description list structure.",
+      "structure": "Children must be KeyValuePair items (or equivalent <dt>/<dd> structures)."
+    },
+    "relatedComponents": [
+      "KeyValuePair"
+    ],
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4882:341496",
+      "componentName": "key-value-list",
+      "variantCount": 2,
+      "verifiedAt": "2026-09-17",
+      "note": "2 variants (underlined vs. clean). The underline treatment is delegated to each child KeyValuePair's own underline prop.",
+      "apiAdaptationNotes": [
+        "Figma models the underlined/clean distinction as list-level variants. In code, underline is a per-pair prop on KeyValuePair, giving finer control (e.g. omitting the underline on the last item).",
+        "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
+      ]
+    }
+  },
+  {
+    "id": "key-value-pair",
+    "name": "KeyValuePair",
+    "tier": "molecule",
+    "category": "molecule",
+    "status": "stable",
+    "path": "docs/components/molecules/key-value-pair/key-value-pair.contract.json",
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "Flex row (align-items: baseline) holding the key and value. Carries the size class and optional underline border."
+      },
+      {
+        "name": "key",
+        "description": "Label text in the left column (40% width, content/subtle color)."
+      },
+      {
+        "name": "value",
+        "description": "Value text or inline-editable children in the right column (flex: 1 1 auto, content/default color)."
+      }
+    ],
+    "props": {
+      "label": {
+        "type": "string",
+        "required": true,
+        "default": null,
+        "description": "The key label displayed in the left column."
+      },
+      "value": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Static value text. Ignored when children is provided."
+      },
+      "size": {
+        "type": "KeyValuePairSize",
+        "required": false,
+        "default": "md",
+        "description": "Controls padding-block and typography.",
+        "enum": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "underline": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": "Adds a 1px bottom border divider."
+      },
+      "className": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Composes with the root element's class list."
+      },
+      "children": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "Inline-editable control (TextField/TextArea/Select with appearance='inline'). Takes precedence over value."
+      }
+    },
+    "sizes": [
+      "sm",
+      "md",
+      "lg"
+    ],
+    "slots": [],
+    "variants": {
+      "size": [
+        "sm",
+        "md",
+        "lg"
+      ]
+    },
+    "subComponents": [],
+    "tokens": {
+      "color": {
+        "key_text": "--color-content-subtle",
+        "value_text": "--color-content-default",
+        "underline_border": "--color-border-default"
+      },
+      "spacing": {
+        "gap": "--spacing-lg",
+        "paddingBlock_sm": "--spacing-xs",
+        "paddingBlock_md": "--spacing-sm",
+        "paddingBlock_lg": "--spacing-md"
+      },
+      "typography": {
+        "sm": "--typography-body-sm-*",
+        "md": "--typography-body-md-*",
+        "lg": "--typography-body-lg-*"
+      }
+    },
+    "accessibility": {
+      "role": "Uses semantic <dt>/<dd> elements inside a <dl> (Key Value List).",
+      "label": "The key (<dt>) provides the label; inline-editable children must provide their own aria-label.",
+      "structure": "Must be wrapped in a Key Value List (<dl>) for screen readers to announce the description list structure."
+    },
+    "relatedComponents": [
+      "KeyValueList",
+      "TextField",
+      "TextArea",
+      "Field"
+    ],
+    "contentCompleteness": "partial",
+    "figmaSource": {
+      "file": "Components v1.0.0",
+      "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+      "componentSetNodeId": "4869:244271",
+      "componentName": "key-value-pair",
+      "variantCount": 22,
+      "verifiedAt": "2026-09-17",
+      "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea with appearance='inline'.",
+      "apiAdaptationNotes": [
+        "Figma's context=default renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
+        "The key (label) uses <dt> and the value uses <dd> for semantic HTML, expecting the parent Key Value List to render a <dl>.",
+        "Key width is a fixed 40% (inline-size: 40%) at all sizes, matching the Figma layout.",
+        "Gap between key and value is --spacing-lg at all sizes.",
+        "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop."
+      ]
+    }
+  },
+  {
     "id": "pagination",
     "name": "Pagination",
     "tier": "molecule",
@@ -5054,10 +5233,11 @@
         "type": "TextAreaAppearance",
         "required": false,
         "default": "default",
-        "description": "default = bordered box (all corners rounded). subtle = transparent until hover/focus/invalid, bottom accent only, square bottom corners. Figma names this axis `tone`.",
+        "description": "default = bordered box (all corners rounded). subtle = transparent until hover/focus/invalid, bottom accent only, square bottom corners. inline = chromeless at rest, subtle-style bottom-only border on hover/focus/invalid, keeps padding and top-corner radius — for embedding inside Key Value Pair wrapped in Inline Edit. Figma names this axis `tone`; the inline value maps from Figma's separate `context` axis.",
         "enum": [
           "default",
-          "subtle"
+          "subtle",
+          "inline"
         ]
       },
       "invalid": {
@@ -5090,11 +5270,17 @@
         "default": null,
         "description": "Native attribute controlling initial height. Set it to size the field; content and resize grow it from there."
       },
+      "iconAfter": {
+        "type": "React.ReactNode",
+        "required": false,
+        "default": null,
+        "description": "A trailing icon or interactive control (e.g. an edit pencil IconButton) rendered after the textarea. Not aria-hidden - it may hold a real focusable action."
+      },
       "className": {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Composes onto the textarea's class list."
+        "description": "Composes with the wrapper div's class list."
       },
       "...rest": {
         "type": "React.TextareaHTMLAttributes",
@@ -5111,7 +5297,8 @@
     "variants": {
       "appearance": [
         "default",
-        "subtle"
+        "subtle",
+        "inline"
       ]
     },
     "subComponents": [],
@@ -5128,13 +5315,15 @@
       "label": "No built-in label - pair with a native <label htmlFor> or aria-label, the same as Text Field and any native form control.",
       "invalid": "aria-invalid reflects the invalid prop; the error is also conveyed visually by the border.",
       "disabled": "native disabled - removed from the tab order and non-editable.",
-      "focus": "the frame's own focus border is the focus affordance (the textarea is itself the focusable element)."
+      "focus": "the wrapper's own focus border is the focus affordance (via :focus-within, since the focusable textarea is a child of the wrapper).",
+      "iconAfter": "iconAfter is never forced aria-hidden - it may hold a real interactive control (e.g. an IconButton) which must keep its own accessible name and stay keyboard-reachable."
     },
     "relatedComponents": [
       "RichTextArea",
       "TextField",
       "Select",
-      "Label"
+      "Label",
+      "KeyValuePair"
     ],
     "contentCompleteness": "partial",
     "figmaSource": {
@@ -5147,8 +5336,10 @@
       "note": "Filed on the file's own \"🚧 Text Area\" page, verified directly against the file via the Desktop Bridge plugin. The `sm` size was removed on 2026-08-27 (it read almost identically to md); the size axis is now md/lg. variantCount reflects that removal (was 96) and should be re-confirmed live next time the Components file is connected.",
       "structure": "One component set across six axes - `type` (default / rich-inline), `size` (md / lg), `tone` (default / subtle), `state` (default / hover / focus / typing / filled / autofill), `isDisabled`, `isInvalid`. Each variant is a single `Container` frame holding the text; the visual frame (fill, border, radius) is bound on the component node, not the inner Container (which carries only padding). Geometry measured per size: padding block/inline md 8/8, lg 12/12; radius lg (8) at md, xl (12) at lg; font body-md (14/24) at md, body-lg (16/24) at lg. State frame tokens (tone=default): default fill background/input/default + border/input 1px; hover fill background/input/hovered; focus fill background/input/pressed + border/focused 2px; typing border/focused 2px; filled + autofill = default; invalid border/error 2px; disabled background/disabled + border/disabled. tone=subtle has a transparent box with a bottom-only accent that reveals on hover (border/input) / focus (border/focused) / invalid (border/error), bottom corners square.",
       "apiAdaptationNotes": [
-        "Renders the frame styling directly on the <textarea> (no wrapper element), because Text Area - unlike Text Field - has no leading/trailing icon slots to compose around the control. This also lets the browser's native resize grip work with no extra wiring.",
-        "Figma's `tone` axis is exposed in code as `appearance` (default/subtle) - the same axis and the same name its sibling Text Field uses, so the two components share one vocabulary.",
+        "Refactored from a bare <textarea> to a wrapper <div> pattern (matching Text Field) to support a trailing icon/action slot (iconAfter). The wrapper div gets the frame styling (border, background, radius, padding) and uses display: flex; align-items: flex-start to lay out the textarea and the optional action slot side by side. The textarea is a transparent, borderless child inside the wrapper, with flex: 1 1 auto. Focus detection uses :focus-within on the wrapper instead of :focus on the textarea. The browser's native resize grip still works: resize: inherit on the textarea, with overflow: auto on the wrapper's resize_* classes (CSS requires overflow != visible for resize to work on a div).",
+        "Added an iconAfter slot (React.ReactNode) for a trailing icon or interactive control (e.g. an edit pencil IconButton). Rendered in a span.action wrapper, flex: 0 0 auto. Not aria-hidden - it may hold a real focusable action. The inline appearance combined with iconAfter is the standard pattern for embedding inside a Key Value Pair.",
+        "Added a third appearance value, 'inline', for chromeless-at-rest embedding inside Key Value Pair wrapped in Inline Edit. Figma's 'context' axis (default/inline) maps here. Mirrors subtle's bottom-only border treatment but starts fully transparent at rest (no border or background). Hover shows the raised-surface hover background + a bottom accent (border/input), focus shows a bottom-only 2px focus border (border-bottom-color + bottom-only box-shadow, same technique as subtle), invalid shows a bottom-only error border, and disabled stays transparent. Top corners keep the size's radius; bottom corners are square — same shape as subtle. The field keeps its normal padding and height so it reads as a real input when activated.",
+        "Figma's `tone` axis is exposed in code as `appearance` (default/subtle/inline) - the same axis and the same name its sibling Text Field uses, so the two components share one vocabulary.",
         "Figma binds a newer `background/input/*` + `border/focused` token naming that has no counterpart in this build. Those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic tokens Text Field already consumes (same intent), so Text Area reuses those rather than inventing unbacked tokens - keeping it visually identical to Text Field per token governance's reuse-first rule.",
         "Focus and invalid replace the border color and paint the extra pixel via an inset box-shadow rather than a real 1px->2px border-width change - the same technique Text Field uses, so the multi-line text never shifts by a pixel on focus/blur or invalid toggle.",
         "Figma tints the fill on focus (`background/input/pressed`); code deliberately keeps the resting fill on focus instead, matching Text Field's established no-tint-on-focus behavior (and that token does not exist here).",
@@ -5203,10 +5394,11 @@
         "type": "TextFieldAppearance",
         "required": false,
         "default": "default",
-        "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners.",
+        "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners; inline is chromeless at rest with subtle-style bottom-only border on hover/focus/invalid, keeps padding and top-corner radius — for embedding inside Key Value Pair wrapped in Inline Edit.",
         "enum": [
           "default",
-          "subtle"
+          "subtle",
+          "inline"
         ]
       },
       "invalid": {
@@ -5264,7 +5456,8 @@
       ],
       "appearance": [
         "default",
-        "subtle"
+        "subtle",
+        "inline"
       ]
     },
     "subComponents": [],
@@ -5324,7 +5517,8 @@
       "Switch",
       "Select",
       "Icon Button",
-      "Button"
+      "Button",
+      "KeyValuePair"
     ],
     "contentCompleteness": "full",
     "figmaSource": {

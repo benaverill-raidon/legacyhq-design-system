@@ -130,6 +130,6 @@ describe('IconTile', () => {
     expect(iconTileCss).toContain('background: var(--color-background-accent-red-default-default);');
     expect(iconTileCss).toContain('background: var(--color-background-accent-red-bold-default);');
     expect(iconTileCss).toContain('background: var(--color-background-brand-primary-default-default);');
-    expect(iconTileCss).toContain('color: var(--color-content-inverse);');
+    expect(iconTileCss).toContain('color: var(--color-content-inverse-default);');
   });
 });

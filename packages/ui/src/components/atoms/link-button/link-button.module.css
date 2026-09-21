@@ -100,7 +100,7 @@
 .appearance_primary {
   border-color: var(--color-background-brand-primary-bold-default);
   background: var(--color-background-brand-primary-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_primary:not([aria-disabled='true']):not([data-loading='true']):is(
@@ -143,7 +143,7 @@
 .appearance_primary.tone_error {
   border-color: var(--color-background-error-bold-default);
   background: var(--color-background-error-bold-default);
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .appearance_primary.tone_error:not([aria-disabled='true']):not([data-loading='true']):is(
@@ -224,7 +224,7 @@
 .inverse:not([aria-disabled='true']) {
   border-color: transparent;
   background: transparent;
-  color: var(--color-content-inverse);
+  color: var(--color-content-inverse-default);
 }
 
 .inverse:not([aria-disabled='true']):not([data-loading='true']):is(

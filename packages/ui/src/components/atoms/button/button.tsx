@@ -12,12 +12,13 @@ export const Button = React.memo(
   React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
     {
       size = 'md',
-      appearance = 'default',
-      tone = 'neutral',
+      prominence = 'secondary',
+      tone = 'default',
       isInverse = false,
       disabled = false,
       isLoading = false,
       isFullWidth = false,
+      isExpanded,
       iconBefore,
       iconAfter,
       children,
@@ -51,10 +52,11 @@ export const Button = React.memo(
         className={mergeClassNames(
           styles.button,
           styles[`size_${size}`],
-          styles[`appearance_${appearance}`],
+          styles[`prominence_${prominence}`],
           styles[`tone_${tone}`],
           isInverse && styles.inverse,
           isFullWidth && styles.fullWidth,
+          isExpanded && styles.expanded,
           focusRingClassNames.focusRing,
           focusRingClassNames.focusRingDefault,
           className,
@@ -62,8 +64,10 @@ export const Button = React.memo(
         disabled={disabled}
         aria-busy={isLoading ? true : undefined}
         aria-disabled={isLoading ? true : undefined}
+        aria-expanded={isExpanded != null ? isExpanded : undefined}
         data-loading={isLoading ? 'true' : undefined}
         data-full-width={isFullWidth ? 'true' : undefined}
+        data-expanded={isExpanded ? 'true' : undefined}
         onClick={handleClick}
       >
         {hasLeading ? (

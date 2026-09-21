@@ -213,7 +213,7 @@
   box-sizing: border-box;
   inline-size: var(--avatar-badge-icon-size);
   block-size: var(--avatar-badge-icon-size);
-  border: var(--border-width-md) solid var(--color-border-inverse);
+  border: var(--border-width-md) solid var(--color-border-inverse-default);
   border-radius: var(--border-radius-full-round);
   background: transparent;
   color: inherit;

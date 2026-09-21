@@ -62,7 +62,7 @@ const cardStyle: CSSProperties = {
 
 const darkCardStyle: CSSProperties = {
   ...cardStyle,
-  borderColor: 'var(--color-border-inverse)',
+  borderColor: 'var(--color-border-inverse-default)',
   background: 'var(--color-elevation-surface-default)',
   color: 'var(--color-content-default)',
 };
@@ -115,7 +115,7 @@ export const Variants: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Inverted (requires a dark or bold surface)</h3>
         <p style={captionStyle}>
-          The inverted selected dot renders in <code>color-content-inverse</code> (white) - correct
+          The inverted selected dot renders in <code>color-content-inverse-default</code> (white) - correct
           on a dark surface, invisible on a light one. This is why it isn&rsquo;t grouped with the
           other three appearances above.
         </p>

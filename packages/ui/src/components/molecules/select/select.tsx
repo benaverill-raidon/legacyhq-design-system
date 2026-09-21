@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CaretDownIcon } from '../../../assets/icons';
 import { TextField } from '../text-field';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { Chip } from '../chip';
 import { DropdownMenu } from '../../organisms/dropdown-menu';
 import type { MenuSection, MenuItem } from '../../organisms/menu';
@@ -47,6 +48,7 @@ function buildSections(
 }
 
 export const Select = React.memo(function Select(props: SelectProps) {
+  const cellSize = useEditableCellSize();
   const {
     options,
     size = 'md',
@@ -104,6 +106,23 @@ export const Select = React.memo(function Select(props: SelectProps) {
   }, [options, query, onSearchChange]);
 
   const focusInput = React.useCallback(() => inputRef.current?.focus(), []);
+
+  // Clicks on the TextField frame's own padding (between its border and child elements) don't reach
+  // the <input> or caret handlers. This listener catches those so the entire trigger surface opens
+  // the dropdown — event.target === frame confirms the click hit the frame itself, not a child.
+  React.useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    const handleFrameMouseDown = (event: MouseEvent) => {
+      if (disabled) return;
+      if (event.target !== frame) return;
+      event.preventDefault();
+      setOpen(true);
+      inputRef.current?.focus();
+    };
+    frame.addEventListener('mousedown', handleFrameMouseDown);
+    return () => frame.removeEventListener('mousedown', handleFrameMouseDown);
+  }, [disabled]);
 
   const handlePick = React.useCallback(
     (value: string) => {
@@ -228,6 +247,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
         className={mergeClassNames(styles.trigger, className)}
         size={size}
         appearance={resolvedAppearance}
+        data-force-state={cellSize && open && !disabled ? 'focus' : undefined}
         invalid={invalid}
         disabled={disabled}
         role="combobox"
@@ -239,8 +259,15 @@ export const Select = React.memo(function Select(props: SelectProps) {
         leadingContent={chips}
         iconAfter={
           <span
-            className={mergeClassNames(styles.caret, open && styles.caretOpen, disabled && styles.caretDisabled)}
+            className={mergeClassNames(styles.caret, cellSize && styles.cellCaret, open && !cellSize && styles.caretOpen, disabled && styles.caretDisabled)}
             aria-hidden="true"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              if (!disabled) {
+                setOpen((prev) => !prev);
+                focusInput();
+              }
+            }}
           >
             <CaretDownIcon size="md" decorative />
           </span>
@@ -251,6 +278,9 @@ export const Select = React.memo(function Select(props: SelectProps) {
         }}
         onMouseDown={() => {
           if (!disabled && !open) setOpen(true);
+        }}
+        onClick={() => {
+          if (cellSize && !disabled && !open) setOpen(true);
         }}
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel}

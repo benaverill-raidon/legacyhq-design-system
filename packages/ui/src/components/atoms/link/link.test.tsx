@@ -179,12 +179,10 @@ describe('Link', () => {
 
   it('maps the inverse appearance to the inverse content token, with a visited treatment', () => {
     expect(linkCss).toContain('.appearance_inverse {');
-    expect(linkCss).toContain('color: var(--color-content-inverse);');
+    expect(linkCss).toContain('color: var(--color-content-inverse-default);');
     expect(linkCss).toContain('.appearance_inverse:hover');
     expect(linkCss).toContain('.appearance_inverse:focus-visible');
-    // Inverse now carries a visited colour (Figma's hasVisited applies to every appearance) rather
-    // than forcing the inverse token on :visited.
-    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-default);');
+    expect(linkCss).toContain('--link-color-visited: var(--color-content-accent-purple-subtle);');
   });
 });
 

@@ -46,7 +46,7 @@ const row: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: 'var(--spac
 
 /** Confirm button tone follows the modal's appearance, the way the Figma variants pair them. */
 function confirmTone(appearance: ModalAppearance) {
-  return appearance === 'default' ? 'neutral' : appearance;
+  return appearance === 'default' ? 'default' : appearance;
 }
 
 /** A trigger button that opens a modal; the modal owns its own open state for the demo. */
@@ -77,10 +77,10 @@ function ModalDemo({
         onClose={() => setOpen(false)}
         footer={
           <ButtonGroup>
-            <Button appearance="subtle" onClick={() => setOpen(false)}>
+            <Button prominence="tertiary" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button appearance="primary" tone={confirmTone(appearance)} onClick={() => setOpen(false)}>
+            <Button prominence="primary" tone={confirmTone(appearance)} onClick={() => setOpen(false)}>
               Confirm
             </Button>
           </ButtonGroup>
@@ -103,10 +103,10 @@ function PlaygroundModal(args: Parameters<NonNullable<Story['render']>>[0]) {
         onClose={() => setOpen(false)}
         footer={
           <ButtonGroup>
-            <Button appearance="subtle" onClick={() => setOpen(false)}>
+            <Button prominence="tertiary" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button appearance="primary" tone={confirmTone(args.appearance ?? 'default')} onClick={() => setOpen(false)}>
+            <Button prominence="primary" tone={confirmTone(args.appearance ?? 'default')} onClick={() => setOpen(false)}>
               Confirm
             </Button>
           </ButtonGroup>
@@ -194,10 +194,10 @@ export const HeaderExpand: Story = {
             title="Preview attachment"
             footer={
               <ButtonGroup>
-                <Button appearance="subtle" onClick={() => setOpen(false)}>
+                <Button prominence="tertiary" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
-                <Button appearance="primary" onClick={() => setOpen(false)}>
+                <Button prominence="primary" onClick={() => setOpen(false)}>
                   Confirm
                 </Button>
               </ButtonGroup>

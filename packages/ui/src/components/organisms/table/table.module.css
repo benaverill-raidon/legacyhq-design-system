@@ -331,6 +331,56 @@
   border-block-end: var(--border-width-sm) solid var(--color-border-default);
 }
 
+/* Separate borders avoid half-pixel collapsed edges where editable and regular cells meet.
+ * Body dividers are painted inside the common row bounds instead of consuming layout height. */
+.grid[data-has-editable-cells] {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.grid[data-has-editable-cells] .headerCell,
+.grid[data-has-editable-cells] .selectHeaderCell {
+  box-sizing: border-box;
+}
+
+.row {
+  --table-row-divider: var(--color-border-default);
+}
+
+.row:only-child,
+.tableBody:not([data-has-footer]) .row:last-child {
+  --table-row-divider: transparent;
+}
+
+/* Editable controls own their underline and fill the entire cell. Row fills remain on <tr>. */
+.table .row .cell[data-editable='true'] {
+  --editable-cell-divider: var(--table-row-divider);
+
+  padding: 0;
+  border-block-end: none;
+  box-shadow: none;
+}
+
+/* Let the row set the total height when full-cell controls coexist with bordered regular cells. */
+.table[data-size='md'] .row:has(.cell[data-editable='true']) {
+  block-size: 64px;
+}
+
+.table[data-size='sm'] .row:has(.cell[data-editable='true']) {
+  block-size: 40px;
+}
+
+.table .row:has(.cell[data-editable='true']) > .cell,
+.table .row:has(.cell[data-editable='true']) > .selectCell {
+  block-size: auto;
+  border-block-end: none;
+}
+
+.table .row:has(.cell[data-editable='true']) > .cell:not([data-editable='true']),
+.table .row:has(.cell[data-editable='true']) > .selectCell {
+  box-shadow: inset 0 -1px 0 var(--table-row-divider);
+}
+
 .row:hover {
   background: var(--color-background-neutral-overlay-bold-hover);
 }

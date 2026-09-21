@@ -7,7 +7,7 @@ import { CheckIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { Button } from './button';
 import styles from './button.module.css';
-import type { ButtonAppearance, ButtonSize, ButtonTone } from './button.types';
+import type { ButtonProminence, ButtonSize, ButtonTone } from './button.types';
 
 const buttonCss = readFileSync('packages/ui/src/components/atoms/button/button.module.css', 'utf8');
 
@@ -44,20 +44,20 @@ describe('Button', () => {
     });
   });
 
-  it('supports appearance variants', () => {
-    const appearances: ButtonAppearance[] = ['default', 'primary', 'subtle'];
+  it('supports prominence variants', () => {
+    const prominences: ButtonProminence[] = ['primary', 'secondary', 'tertiary'];
 
-    appearances.forEach((appearance) => {
-      const { unmount } = render(<Button appearance={appearance}>{appearance}</Button>);
+    prominences.forEach((prominence) => {
+      const { unmount } = render(<Button prominence={prominence}>{prominence}</Button>);
 
-      expect(screen.getByRole('button', { name: appearance })).toHaveClass(styles[`appearance_${appearance}`]);
+      expect(screen.getByRole('button', { name: prominence })).toHaveClass(styles[`prominence_${prominence}`]);
 
       unmount();
     });
   });
 
   it('supports tone variants', () => {
-    const tones: ButtonTone[] = ['neutral', 'warning', 'error'];
+    const tones: ButtonTone[] = ['default', 'brand', 'warning', 'error'];
 
     tones.forEach((tone) => {
       const { unmount } = render(<Button tone={tone}>{tone}</Button>);
@@ -100,7 +100,7 @@ describe('Button', () => {
 
   it('applies disabled behavior to primary semantic tone buttons', () => {
     render(
-      <Button appearance="primary" tone="error" disabled>
+      <Button prominence="primary" tone="error" disabled>
         Delete
       </Button>,
     );
@@ -108,7 +108,7 @@ describe('Button', () => {
     const button = screen.getByRole('button', { name: 'Delete' });
 
     expect(button).toBeDisabled();
-    expect(button).toHaveClass(styles.appearance_primary, styles.tone_error);
+    expect(button).toHaveClass(styles.prominence_primary, styles.tone_error);
   });
 
   it('supports loading behavior', () => {
@@ -136,6 +136,20 @@ describe('Button', () => {
     render(<Button isFullWidth>Continue</Button>);
 
     expect(screen.getByRole('button', { name: 'Continue' })).toHaveClass(styles.fullWidth);
+  });
+
+  it('supports isExpanded', () => {
+    const { rerender } = render(<Button isExpanded>Expand</Button>);
+    const button = screen.getByRole('button', { name: 'Expand' });
+
+    expect(button).toHaveAttribute('aria-expanded', 'true');
+    expect(button).toHaveAttribute('data-expanded', 'true');
+    expect(button).toHaveClass(styles.expanded);
+
+    rerender(<Button isExpanded={false}>Expand</Button>);
+
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(button).not.toHaveAttribute('data-expanded');
   });
 
   it('renders iconBefore and iconAfter', () => {
@@ -197,7 +211,7 @@ describe('Button', () => {
     expect(buttonCss).toContain('--button-border-radius: var(--border-radius-sm);');
     expect(buttonCss).toContain('--focus-ring-offset: var(--spacing-xxs);');
     expect(buttonCss).toContain('border: var(--border-width-sm) solid transparent;');
-    expect(buttonCss).toMatch(/\.appearance_default \{[\s\S]*?border-color: var\(--color-border-input\);/);
+    expect(buttonCss).toMatch(/\.prominence_secondary \{[\s\S]*?border-color: var\(--color-border-input\);/);
     expect(buttonCss).toContain('background: transparent;');
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-bold-hover);');
     expect(buttonCss).toMatch(/\.size_sm \{[\s\S]*?--button-border-radius: var\(--border-radius-lg\);/);
@@ -217,25 +231,37 @@ describe('Button', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
-    expect(buttonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse\);/);
+    expect(buttonCss).toMatch(/\.inverse:not\(:disabled\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-hover);');
     expect(buttonCss).toContain('background: var(--color-background-neutral-overlay-subtle-press);');
   });
 
-  it('gives appearance=default a visible disabled border, matching its own resting border', () => {
-    const rule = buttonCss.match(/\.appearance_default:disabled[^{]*\{([^}]*)\}/);
+  it('gives prominence=secondary a visible disabled border, matching its own resting border', () => {
+    const rule = buttonCss.match(/\.prominence_secondary:disabled[^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
     expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
   });
 
-  it('keeps appearance=primary/subtle disabled borderless, matching their own resting border', () => {
-    const rule = buttonCss.match(/\.appearance_primary:disabled[^{]*\{([^}]*)\}/);
+  it('keeps prominence=primary/tertiary disabled borderless, matching their own resting border', () => {
+    const rule = buttonCss.match(/\.prominence_primary:disabled[^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: transparent;');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
     expect(rule?.[1]).toContain('color: var(--color-content-disabled);');
-    expect(rule?.[0]).toContain('.appearance_subtle:disabled');
+    expect(rule?.[0]).toContain('.prominence_tertiary:disabled');
+  });
+
+  it('provides a brand tone treatment for secondary and tertiary prominences', () => {
+    expect(buttonCss).toMatch(
+      /\.prominence_secondary\.tone_brand \{[\s\S]*?border-color: var\(--color-border-brand-primary-default\);/,
+    );
+    expect(buttonCss).toMatch(
+      /\.prominence_secondary\.tone_brand \{[\s\S]*?color: var\(--color-content-brand-primary-default\);/,
+    );
+    expect(buttonCss).toMatch(
+      /\.prominence_tertiary\.tone_brand \{[\s\S]*?color: var\(--color-content-brand-primary-default\);/,
+    );
   });
 });

@@ -1,0 +1,157 @@
+{
+  "name": "KeyValuePair",
+  "category": "molecule",
+  "status": "stable",
+  "purpose": "Map a descriptive label to a static or inline-editable value for scannable metadata presentation.",
+  "intent": "Present metadata as label/value rows using semantic <dt>/<dd> elements. Supports both static text values and inline-editable controls (TextField/TextArea/Select with appearance='inline'). Grouped as a molecule because it composes text controls for its inline-editable mode.",
+  "sourceFiles": {
+    "component": "key-value-pair.tsx",
+    "types": "key-value-pair.types.ts",
+    "styles": "key-value-pair.module.css",
+    "stories": "KeyValuePair.stories.tsx",
+    "tests": "KeyValuePair.test.tsx",
+    "index": "index.ts"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4869:244271",
+    "componentName": "key-value-pair",
+    "variantCount": 22,
+    "verifiedAt": "2026-09-17",
+    "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea with appearance='inline'.",
+    "apiAdaptationNotes": [
+      "Figma's context=default renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
+      "The key (label) uses <dt> and the value uses <dd> for semantic HTML, expecting the parent Key Value List to render a <dl>.",
+      "Key width is a fixed 40% (inline-size: 40%) at all sizes, matching the Figma layout.",
+      "Gap between key and value is --spacing-lg at all sizes.",
+      "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop."
+    ]
+  },
+  "props": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "default": null,
+      "description": "The key label displayed in the left column."
+    },
+    "value": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Static value text. Ignored when children is provided."
+    },
+    "size": {
+      "type": "KeyValuePairSize",
+      "required": false,
+      "default": "md",
+      "enum": ["sm", "md", "lg"],
+      "description": "Controls padding-block and typography."
+    },
+    "underline": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "description": "Adds a 1px bottom border divider."
+    },
+    "className": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Composes with the root element's class list."
+    },
+    "children": {
+      "type": "React.ReactNode",
+      "required": false,
+      "default": null,
+      "description": "Inline-editable control (TextField/TextArea/Select with appearance='inline'). Takes precedence over value."
+    }
+  },
+  "sizes": ["sm", "md", "lg"],
+  "states": ["default"],
+  "variants": {
+    "size": {
+      "sm": {
+        "paddingBlock": "--spacing-xs",
+        "typography": "--typography-body-sm-*"
+      },
+      "md": {
+        "paddingBlock": "--spacing-sm",
+        "typography": "--typography-body-md-*"
+      },
+      "lg": {
+        "paddingBlock": "--spacing-md",
+        "typography": "--typography-body-lg-*"
+      }
+    }
+  },
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div",
+      "required": true,
+      "description": "Flex row (align-items: baseline) holding the key and value. Carries the size class and optional underline border."
+    },
+    {
+      "part": "key",
+      "element": "dt",
+      "required": true,
+      "description": "Label text in the left column (40% width, content/subtle color)."
+    },
+    {
+      "part": "value",
+      "element": "dd",
+      "required": true,
+      "description": "Value text or inline-editable children in the right column (flex: 1 1 auto, content/default color)."
+    }
+  ],
+  "accessibility": {
+    "role": "Uses semantic <dt>/<dd> elements inside a <dl> (Key Value List).",
+    "label": "The key (<dt>) provides the label; inline-editable children must provide their own aria-label.",
+    "structure": "Must be wrapped in a Key Value List (<dl>) for screen readers to announce the description list structure."
+  },
+  "tokens": {
+    "color": {
+      "key_text": "--color-content-subtle",
+      "value_text": "--color-content-default",
+      "underline_border": "--color-border-default"
+    },
+    "spacing": {
+      "gap": "--spacing-lg",
+      "paddingBlock_sm": "--spacing-xs",
+      "paddingBlock_md": "--spacing-sm",
+      "paddingBlock_lg": "--spacing-md"
+    },
+    "typography": {
+      "sm": "--typography-body-sm-*",
+      "md": "--typography-body-md-*",
+      "lg": "--typography-body-lg-*"
+    }
+  },
+  "relatedComponents": [
+    "KeyValueList",
+    "TextField",
+    "TextArea",
+    "Field"
+  ],
+  "do": [
+    "Wrap in a Key Value List (<dl>) for proper semantic structure.",
+    "Use appearance='inline' on TextField/TextArea children for inline editing.",
+    "Provide aria-label on inline-editable children for accessibility.",
+    "Use underline to visually separate pairs in a list."
+  ],
+  "dont": [
+    "Don't use for full form layouts - use the Form organism with Field molecules.",
+    "Don't pass both value and children expecting both to render - children wins.",
+    "Don't use outside a <dl> context - the <dt>/<dd> elements need it for correct semantics."
+  ],
+  "behaviorNotes": [
+    "children takes precedence over value when both are provided.",
+    "The key occupies a fixed 40% width; the value fills the remaining space.",
+    "align-items: baseline keeps the key text and value text (or inline control text) vertically aligned."
+  ],
+  "knownLimitations": [
+    "Fixed 40% key width - not configurable per instance.",
+    "No built-in validation or error state - inline-editable children manage their own."
+  ]
+}

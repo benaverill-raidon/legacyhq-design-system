@@ -104,7 +104,7 @@ describe('SplitButton', () => {
   it('applies appearance to both the primary and secondary actions', () => {
     renderSplitButton({ appearance: 'primary' });
 
-    expect(screen.getByRole('button', { name: 'Save' })).toHaveClass(buttonStyles.appearance_primary);
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveClass(buttonStyles.prominence_primary);
     expect(screen.getByRole('button', { name: 'More Save options' })).toHaveClass(iconButtonStyles.appearance_primary);
   });
 

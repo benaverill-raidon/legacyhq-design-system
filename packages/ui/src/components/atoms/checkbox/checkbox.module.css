@@ -211,3 +211,60 @@
     transition-duration: 0ms;
   }
 }
+
+.group {
+  min-inline-size: 0;
+  margin: var(--spacing-none);
+  padding: var(--spacing-none);
+  border: 0;
+  color: var(--color-content-default);
+}
+
+.legend {
+  display: inline-flex;
+  align-items: baseline;
+  padding: var(--spacing-none);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  text-transform: var(--typography-body-md-text-transform);
+}
+
+.description {
+  margin-block-start: var(--spacing-xs);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.options {
+  display: flex;
+  gap: var(--spacing-none);
+  margin-block-start: var(--spacing-none);
+  overflow: visible;
+}
+
+.orientation_vertical .options {
+  flex-direction: column;
+}
+
+.orientation_horizontal .options {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.errorMessage {
+  margin-block-start: var(--spacing-xs);
+  color: var(--color-content-error);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}

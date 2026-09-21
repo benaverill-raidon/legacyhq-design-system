@@ -308,6 +308,7 @@
   --color-brand-taupe-alpha-100-16: rgba(251, 249, 246, 0.16);
   --color-brand-taupe-alpha-100-32: rgba(251, 249, 246, 0.32);
   --color-brand-taupe-alpha-100-48: rgba(251, 249, 246, 0.48);
+  --color-brand-taupe-alpha-100-64: rgba(251, 249, 246, 0.64);
   --color-brand-taupe-alpha-500-04: rgba(191, 171, 153, 0.04);
   --color-brand-taupe-alpha-500-08: rgba(191, 171, 153, 0.08);
   --color-brand-taupe-alpha-500-16: rgba(191, 171, 153, 0.16);
@@ -347,12 +348,15 @@
   --component-menu-width-sm: 192px;
   --component-menu-width-md: 240px;
   --component-menu-width-lg: 288px;
+  --component-progress-bar-linear-root-size-sm: calc(var(--component-progress-bar-track-size-sm) + 2 * var(--component-progress-bar-linear-pad-sm));
   --component-progress-bar-linear-root-size-md: calc(var(--component-progress-bar-track-size-md) + 2 * var(--component-progress-bar-linear-pad-md));
   --component-progress-bar-linear-root-size-lg: calc(var(--component-progress-bar-track-size-lg) + 2 * var(--component-progress-bar-linear-pad-lg));
+  --component-progress-bar-linear-pad-sm: var(--measurement-4);
   --component-progress-bar-linear-pad-md: var(--measurement-4);
   --component-progress-bar-linear-pad-lg: var(--measurement-4);
-  --component-progress-bar-track-size-md: var(--measurement-12);
-  --component-progress-bar-track-size-lg: var(--measurement-24);
+  --component-progress-bar-track-size-sm: var(--measurement-16);
+  --component-progress-bar-track-size-md: var(--measurement-24);
+  --component-progress-bar-track-size-lg: var(--measurement-32);
   --component-progress-bar-circular-size: var(--measurement-72);
   --component-progress-indicator-dot-container-size-sm: var(--measurement-16);
   --component-progress-indicator-dot-container-size-md: var(--measurement-20);

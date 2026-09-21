@@ -3,7 +3,7 @@ import type * as React from 'react';
 export type SelectSize = 'sm' | 'md' | 'lg';
 
 /** Maps to TextField's `appearance` - Figma's `tone` axis on the trigger. */
-export type SelectTone = 'default' | 'subtle';
+export type SelectTone = 'default' | 'subtle' | 'inline';
 
 export interface SelectOption {
   /** Stable identity, and the value reported through onChange. */

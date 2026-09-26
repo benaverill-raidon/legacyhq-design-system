@@ -8,15 +8,15 @@ import * as TextAreaStories from './TextArea.stories';
 Text Area is the multi-line counterpart of Text Field: a real native `<textarea>` in the same bordered
 frame, for writing or editing content that spans several lines — notes, descriptions, comments. It
 shares Text Field's size, appearance, invalid, and state treatment token-for-token. The frame styling
-sits directly on the `<textarea>` (no wrapper), since Text Area has no icon slots — which also lets
-the browser's native resize grip work for free.
+lives on a wrapper `<div>` (the same pattern Text Field uses) so it can host an optional trailing
+icon/action slot (`iconAfter`).
 
 <Canvas of={TextAreaStories.Playground} />
 
 ## When to use
 
 - Any genuinely multi-line free text — notes, descriptions, comments, message bodies.
-- Set `rows` for a sensible initial height; the field grows via typed content and the resize grip.
+- Set `rows` for a fixed initial height, or opt into `autoResize` to grow with content.
 
 ## When not to use
 
@@ -33,8 +33,8 @@ the browser's native resize grip work for free.
 every case. `appearance="subtle"` has no visible border or background until it's hovered, focused, or
 invalid — only a bottom accent line reveals, and its bottom corners stay square. Figma names this axis
 `tone`; the code uses `appearance`, the same name and axis as its Text Field sibling. Sizes match Text
-Field exactly (`body-md` at md, `body-lg` at lg; radius steps up to `xl` at lg). The `sm` size was
-removed — it read almost identically to md.
+Field (`body-md` at sm/md, `body-lg` at lg; radius steps up to `xl` at lg). The compact `sm` option
+supports small editable key/value rows.
 
 ## States
 
@@ -57,6 +57,18 @@ change, so the multi-line text never shifts by a pixel. Hover is suppressed once
 without a drag breaking the surrounding layout. Use `none` to lock the height for a fixed layout;
 content still scrolls natively. A disabled field cannot be resized.
 
+<Canvas of={TextAreaStories.AutoResize} />
+
+`autoResize` is opt-in. It starts at the matching TextField control height (sm/md/lg), grows with
+existing or entered content, and shrinks when text is removed. `maxRows` defaults to six visible
+lines, after which the textarea scrolls vertically. This mode overrides `rows` and manual resizing.
+It also recalculates when the field width changes, so wrapped text fits its container.
+
+For editable key/value rows, compose `<TextArea autoResize size={size} appearance="inline" />`
+inside `<InlineEdit actionPlacement="end" actionAlignment="start">`. The row grows in normal flow;
+allow space to its trailing side for the actions. Enter inserts a newline, Ctrl/Cmd+Enter confirms,
+and Escape cancels.
+
 ## Content
 
 <Canvas of={TextAreaStories.Content} />
@@ -66,6 +78,14 @@ pass `aria-label`. There is no built-in character-count or helper chrome; compos
 the counted example shows.
 
 <Canvas of={TextAreaStories.EdgeCases} />
+
+## Trailing icon
+
+<Canvas of={TextAreaStories.IconAfter} />
+
+`iconAfter` places an icon or interactive control (like an edit IconButton) at the trailing end of the
+frame. The slot is not `aria-hidden` — it may hold a real focusable action. The `inline` appearance
+combined with `iconAfter` is the standard pattern for embedding inside a Key Value Pair.
 
 ## Do / Don't
 
@@ -96,15 +116,15 @@ the counted example shows.
   <tbody>
     <tr>
       <td><code>size</code></td>
-      <td><code>'md' | 'lg'</code></td>
+      <td><code>'sm' | 'md' | 'lg'</code></td>
       <td><code>'md'</code></td>
       <td>Padding, radius, and font size.</td>
     </tr>
     <tr>
       <td><code>appearance</code></td>
-      <td><code>'default' | 'subtle'</code></td>
+      <td><code>'default' | 'subtle' | 'inline'</code></td>
       <td><code>'default'</code></td>
-      <td>Bordered box vs. borderless-until-interacted (Figma's <code>tone</code>).</td>
+      <td>Bordered box, borderless-until-interacted, or chromeless at rest with subtle-style bottom-only border on interaction (Figma's <code>context</code>).</td>
     </tr>
     <tr>
       <td><code>invalid</code></td>
@@ -119,10 +139,28 @@ the counted example shows.
       <td>Which edges the user can drag. Disabled fields lock to none.</td>
     </tr>
     <tr>
+      <td><code>autoResize</code></td>
+      <td><code>boolean</code></td>
+      <td><code>false</code></td>
+      <td>Grow and shrink with content, using the size token as the minimum height.</td>
+    </tr>
+    <tr>
+      <td><code>maxRows</code></td>
+      <td><code>number</code></td>
+      <td><code>6</code></td>
+      <td>Visible line limit in auto-resize mode; additional content scrolls vertically.</td>
+    </tr>
+    <tr>
+      <td><code>iconAfter</code></td>
+      <td><code>React.ReactNode</code></td>
+      <td>-</td>
+      <td>A trailing icon or interactive control (e.g. an edit pencil IconButton).</td>
+    </tr>
+    <tr>
       <td><code>className</code></td>
       <td><code>string</code></td>
       <td>-</td>
-      <td>Composes with the textarea's class list.</td>
+      <td>Composes with the wrapper's class list.</td>
     </tr>
     <tr>
       <td>...rest</td>
@@ -151,3 +189,4 @@ plain `<textarea>`). Because none of that ships today, no `type` prop is exposed
 - **Text Field** — single-line free text; shares the frame token-for-token.
 - **Select** — for choosing from a fixed set of options instead of typing free text.
 - **Label** — for a trailing unit/status pill (as Text Field uses).
+- **Key Value Pair** — embeds Text Area with `appearance="inline"` and `iconAfter` for inline editing.

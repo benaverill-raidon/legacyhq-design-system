@@ -19,9 +19,20 @@
       }
     },
     {
-      "name": "component-progress-bar-linear-root-size-md",
+      "name": "component-progress-bar-linear-root-size-sm",
       "mode": "tokens",
       "after": "component-menu-width-lg",
+      "sourcePath": "component.progress-bar.linear.root-size.sm",
+      "value": {
+        "kind": "inset-size",
+        "track": "component.progress-bar.track-size.sm",
+        "padding": "component.progress-bar.linear.pad.sm"
+      }
+    },
+    {
+      "name": "component-progress-bar-linear-root-size-md",
+      "mode": "tokens",
+      "after": "component-progress-bar-linear-root-size-sm",
       "sourcePath": "component.progress-bar.linear.root-size.md",
       "value": {
         "kind": "inset-size",

@@ -3,6 +3,7 @@ import { PickerTimeIcon } from '../../../assets/icons';
 import { Button } from '../../atoms/button';
 import { TextField } from '../../molecules/text-field';
 import { Popup } from '../../primitives/popup';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import styles from './time-picker.module.css';
 import type { TimePickerProps } from './time-picker.types';
@@ -181,6 +182,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
   },
   forwardedRef,
 ) {
+  const cellSize = useEditableCellSize();
   const isValueControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
   const selected = isValueControlled ? value ?? null : internalValue;
@@ -309,7 +311,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
   const displayValue = isOpen ? format(pendingDate, locale) : selected ? format(selected, locale) : '';
 
   return (
-    <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)}>
+    <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)} data-editable-cell={cellSize ?? undefined}>
       <Popup
         open={isOpen}
         onOpenChange={handleOpenChange}
@@ -320,7 +322,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
         padding="none"
         closeOnEscape={false}
         content={
-          <div className={styles.panel}>
+          <div className={styles.panel} data-table-cell={cellSize ?? undefined}>
             <div className={styles.columns}>
               <Column
                 label={hoursLabel}
@@ -342,10 +344,10 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
               />
             </div>
             <div className={styles.footer}>
-              <Button appearance="subtle" size="xs" onClick={() => close(true)}>
+              <Button prominence="tertiary" size="xs" onClick={() => close(true)}>
                 {cancelLabel}
               </Button>
-              <Button appearance="subtle" size="xs" onClick={() => commit(true)}>
+              <Button prominence="tertiary" size="xs" onClick={() => commit(true)}>
                 {confirmLabel}
               </Button>
             </div>

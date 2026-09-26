@@ -47,6 +47,26 @@
         "resize": "none",
         "rows": 3
       }
+    },
+    {
+      "name": "Trailing icon (iconAfter)",
+      "description": "iconAfter places an icon or interactive control at the trailing end of the frame. The slot is not aria-hidden - it may hold a real focusable action.",
+      "jsx": "<TextArea rows={3} defaultValue=\"Editable notes\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />",
+      "props": {
+        "rows": 3,
+        "iconAfter": "EditIcon"
+      }
+    },
+    {
+      "name": "Inline appearance inside Key Value Pair",
+      "description": "appearance=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest with subtle-style bottom-only border on hover/focus/invalid.",
+      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "props": {
+        "appearance": "inline",
+        "rows": 2,
+        "resize": "none",
+        "iconAfter": "EditIcon"
+      }
     }
   ],
   "antiExamples": [

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CalendarIcon } from '../../../assets/icons';
 import { Popup } from '../../primitives/popup';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { TextField } from '../../molecules/text-field';
 import { DatePickerCalendar } from '../date-picker-calendar';
 import styles from './date-picker.module.css';
@@ -45,6 +46,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
   },
   forwardedRef,
 ) {
+  const cellSize = useEditableCellSize();
   const isValueControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
   const selected = isValueControlled ? value ?? null : internalValue;
@@ -121,7 +123,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
   const displayValue = selected ? format(selected, locale) : '';
 
   return (
-    <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)}>
+    <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)} data-editable-cell={cellSize ?? undefined}>
       <Popup
         open={isOpen}
         onOpenChange={handleOpenChange}

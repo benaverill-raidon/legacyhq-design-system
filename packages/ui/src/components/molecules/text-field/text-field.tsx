@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import styles from './text-field.module.css';
 import type { TextFieldProps } from './text-field.types';
 
@@ -23,11 +24,18 @@ export const TextField = React.memo(
     },
     forwardedRef,
   ) {
+    const cellSize = useEditableCellSize();
+    if (cellSize) {
+      size = cellSize;
+      appearance = 'subtle';
+    }
     // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
     // it to the root frame, since hover/focus styling keys off the frame rather than the input.
     const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
 
     return (
+      // The input supplies keyboard interaction; delegate clicks on cell padding/glyphs to it.
+      // eslint-disable-next-line jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events
       <div
         className={mergeClassNames(
           styles.root,
@@ -37,9 +45,16 @@ export const TextField = React.memo(
         )}
         data-size={size}
         data-appearance={appearance}
+        data-editable-cell={cellSize ?? undefined}
         data-invalid={invalid ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
         data-force-state={dataForceState}
+        onClick={cellSize ? (event) => {
+          if (disabled || (event.target as HTMLElement).closest('input, button, a')) return;
+          const input = event.currentTarget.querySelector('input');
+          input?.focus();
+          input?.click();
+        } : undefined}
       >
         {iconBefore ? (
           <span className={styles.before} aria-hidden="true">

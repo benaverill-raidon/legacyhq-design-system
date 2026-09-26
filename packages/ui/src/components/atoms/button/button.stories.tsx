@@ -11,22 +11,24 @@ const meta = {
   component: Button,
   args: {
     children: 'Save changes',
-    appearance: 'default',
-    tone: 'neutral',
+    prominence: 'secondary',
+    tone: 'default',
     size: 'md',
     isInverse: false,
     disabled: false,
     isLoading: false,
     isFullWidth: false,
+    isExpanded: false,
   },
   argTypes: {
-    appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
-    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
+    prominence: { control: 'inline-radio', options: ['primary', 'secondary', 'tertiary'] },
+    tone: { control: 'inline-radio', options: ['default', 'brand', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
     isInverse: { control: 'boolean' },
     disabled: { control: 'boolean' },
     isLoading: { control: 'boolean' },
     isFullWidth: { control: 'boolean' },
+    isExpanded: { control: 'boolean' },
     iconBefore: { control: false },
     iconAfter: { control: false },
     className: { control: false },
@@ -93,39 +95,52 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * The intentionally designed forms. `tone` only has a visual effect on `appearance="primary"` -
- * `default` and `subtle` render identically across tones - so this page shows appearance alone,
- * then primary crossed with tone, rather than a full appearance x tone grid.
+ * The intentionally designed combinations. Primary prominence carries brand, warning, and error
+ * tones. Secondary and tertiary only carry default and brand — no warning or error at those levels.
  */
 export const Variants: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Appearance (tone has no effect here)">
-        <Cell label="default">
-          <Button appearance="default">Default</Button>
-        </Cell>
-        <Cell label="primary">
-          <Button appearance="primary">Primary</Button>
-        </Cell>
-        <Cell label="subtle">
-          <Button appearance="subtle">Subtle</Button>
-        </Cell>
-      </Group>
-
-      <Group title="Primary x tone">
-        <Cell label="neutral">
-          <Button appearance="primary" tone="neutral">
-            Neutral
+      <Group title="Primary prominence">
+        <Cell label="brand">
+          <Button prominence="primary" tone="brand">
+            Brand
           </Button>
         </Cell>
         <Cell label="warning">
-          <Button appearance="primary" tone="warning">
+          <Button prominence="primary" tone="warning">
             Warning
           </Button>
         </Cell>
         <Cell label="error">
-          <Button appearance="primary" tone="error">
+          <Button prominence="primary" tone="error">
             Error
+          </Button>
+        </Cell>
+      </Group>
+
+      <Group title="Secondary prominence">
+        <Cell label="default">
+          <Button prominence="secondary" tone="default">
+            Default
+          </Button>
+        </Cell>
+        <Cell label="brand">
+          <Button prominence="secondary" tone="brand">
+            Brand
+          </Button>
+        </Cell>
+      </Group>
+
+      <Group title="Tertiary prominence">
+        <Cell label="default">
+          <Button prominence="tertiary" tone="default">
+            Default
+          </Button>
+        </Cell>
+        <Cell label="brand">
+          <Button prominence="tertiary" tone="brand">
+            Brand
           </Button>
         </Cell>
       </Group>
@@ -181,7 +196,7 @@ export const Sizes: Story = {
 export const States: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Default appearance">
+      <Group title="Secondary prominence">
         <Cell label="Default">
           <Button>Save changes</Button>
         </Cell>
@@ -202,63 +217,63 @@ export const States: Story = {
         </Cell>
       </Group>
 
-      <Group title="Primary appearance">
+      <Group title="Primary prominence">
         <Cell label="Default">
-          <Button appearance="primary">Save changes</Button>
+          <Button prominence="primary">Save changes</Button>
         </Cell>
         <Cell label="Hover">
-          <Button appearance="primary" data-force-state="hover">
+          <Button prominence="primary" data-force-state="hover">
             Save changes
           </Button>
         </Cell>
         <Cell label="Focus visible">
-          <Button appearance="primary" data-force-state="focus">
+          <Button prominence="primary" data-force-state="focus">
             Save changes
           </Button>
         </Cell>
         <Cell label="Press">
-          <Button appearance="primary" data-force-state="press">
+          <Button prominence="primary" data-force-state="press">
             Save changes
           </Button>
         </Cell>
         <Cell label="Disabled">
-          <Button appearance="primary" disabled>
+          <Button prominence="primary" disabled>
             Save changes
           </Button>
         </Cell>
         <Cell label="Loading">
-          <Button appearance="primary" isLoading>
+          <Button prominence="primary" isLoading>
             Save changes
           </Button>
         </Cell>
       </Group>
 
-      <Group title="Subtle appearance">
+      <Group title="Tertiary prominence">
         <Cell label="Default">
-          <Button appearance="subtle">Save changes</Button>
+          <Button prominence="tertiary">Save changes</Button>
         </Cell>
         <Cell label="Hover">
-          <Button appearance="subtle" data-force-state="hover">
+          <Button prominence="tertiary" data-force-state="hover">
             Save changes
           </Button>
         </Cell>
         <Cell label="Focus visible">
-          <Button appearance="subtle" data-force-state="focus">
+          <Button prominence="tertiary" data-force-state="focus">
             Save changes
           </Button>
         </Cell>
         <Cell label="Press">
-          <Button appearance="subtle" data-force-state="press">
+          <Button prominence="tertiary" data-force-state="press">
             Save changes
           </Button>
         </Cell>
         <Cell label="Disabled">
-          <Button appearance="subtle" disabled>
+          <Button prominence="tertiary" disabled>
             Save changes
           </Button>
         </Cell>
         <Cell label="Loading">
-          <Button appearance="subtle" isLoading>
+          <Button prominence="tertiary" isLoading>
             Save changes
           </Button>
         </Cell>
@@ -266,12 +281,12 @@ export const States: Story = {
 
       <Group title="Disabled flattens tone">
         <Cell label="warning, disabled">
-          <Button appearance="primary" tone="warning" disabled>
+          <Button prominence="primary" tone="warning" disabled>
             Archive
           </Button>
         </Cell>
         <Cell label="error, disabled">
-          <Button appearance="primary" tone="error" disabled>
+          <Button prominence="primary" tone="error" disabled>
             Delete
           </Button>
         </Cell>
@@ -279,7 +294,7 @@ export const States: Story = {
 
       <Group title="Live - hover, tab to, and click this">
         <Cell label="Interactive">
-          <Button appearance="primary" onClick={() => undefined}>
+          <Button prominence="primary" onClick={() => undefined}>
             Save changes
           </Button>
         </Cell>
@@ -290,7 +305,7 @@ export const States: Story = {
 
 /**
  * `isInverse` is the on-dark treatment - for buttons placed on dark or bold-colored surfaces such
- * as Banner. It overrides the resting appearance fill with a transparent background and the inverse
+ * as Banner. It overrides the resting prominence fill with a transparent background and the inverse
  * content token, and uses the white *subtle* overlays on hover / press. It only reads on a dark
  * backdrop, so every specimen here sits on one. Disabled flattens the inverse look the same way it
  * flattens tone.
@@ -385,15 +400,15 @@ export const Content: Story = {
 
       <Group title="Loading preserves the label and its width">
         <Cell label="Default">
-          <Button appearance="primary">Save changes</Button>
+          <Button prominence="primary">Save changes</Button>
         </Cell>
         <Cell label="Loading (same width)">
-          <Button appearance="primary" isLoading>
+          <Button prominence="primary" isLoading>
             Save changes
           </Button>
         </Cell>
         <Cell label="Loading replaces a leading icon">
-          <Button appearance="primary" iconBefore={<CheckIcon />} isLoading>
+          <Button prominence="primary" iconBefore={<CheckIcon />} isLoading>
             Save changes
           </Button>
         </Cell>
@@ -401,8 +416,16 @@ export const Content: Story = {
 
       <Group title="Full width">
         <div style={{ inlineSize: '320px' }}>
-          <Button isFullWidth appearance="primary">
+          <Button isFullWidth prominence="primary">
             Continue
+          </Button>
+        </div>
+      </Group>
+
+      <Group title="Expanded">
+        <div style={{ inlineSize: '320px' }}>
+          <Button isExpanded prominence="primary">
+            Expand
           </Button>
         </div>
       </Group>
@@ -419,22 +442,22 @@ export const Content: Story = {
         </h3>
         <div style={cardStyle}>
           <div style={row}>
-            <Button appearance="primary" iconBefore={<CheckIcon />}>
+            <Button prominence="primary" iconBefore={<CheckIcon />}>
               Save changes
             </Button>
             <Button>Cancel</Button>
-            <Button appearance="subtle">Preview</Button>
+            <Button prominence="tertiary">Preview</Button>
           </div>
         </div>
         <div style={cardStyle}>
           <div style={row}>
-            <Button appearance="primary" tone="warning">
+            <Button prominence="primary" tone="warning">
               Archive matter
             </Button>
-            <Button appearance="primary" tone="error">
+            <Button prominence="primary" tone="error">
               Delete matter
             </Button>
-            <Button appearance="primary" iconAfter={<ArrowRightIcon />}>
+            <Button prominence="primary" iconAfter={<ArrowRightIcon />}>
               Explore setup
             </Button>
           </div>
@@ -443,10 +466,10 @@ export const Content: Story = {
           <label htmlFor="matter-name">Matter name</label>
           <input id="matter-name" name="matterName" />
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--spacing-sm)' }}>
-            <Button appearance="subtle" type="button" iconBefore={<CloseIcon />}>
+            <Button prominence="tertiary" type="button" iconBefore={<CloseIcon />}>
               Cancel
             </Button>
-            <Button appearance="primary" type="submit" isLoading>
+            <Button prominence="primary" type="submit" isLoading>
               Save matter
             </Button>
           </div>
@@ -463,14 +486,14 @@ export const EdgeCases: Story = {
       <Group title="Long label">
         <Cell label="Overflows rather than wrapping (no ellipsis)">
           <div style={{ inlineSize: '160px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
-            <Button appearance="primary">Save changes and continue to the next step</Button>
+            <Button prominence="primary">Save changes and continue to the next step</Button>
           </div>
         </Cell>
       </Group>
 
       <Group title="Narrow flex container">
         <div style={{ display: 'flex', gap: 'var(--spacing-xs)', inlineSize: '200px' }}>
-          <Button appearance="primary">Save changes</Button>
+          <Button prominence="primary">Save changes</Button>
           <Button>Cancel</Button>
         </div>
       </Group>
@@ -489,7 +512,7 @@ export const EdgeCases: Story = {
           Button has no icon-only mode - passing an icon with no visible label leaves the button
           unlabelled for assistive technology. Use <code>IconButton</code> instead.
         </p>
-        <Button appearance="subtle" iconBefore={<DeleteIcon />} aria-label="Delete">
+        <Button prominence="tertiary" iconBefore={<DeleteIcon />} aria-label="Delete">
           {null}
         </Button>
       </section>
@@ -513,9 +536,9 @@ export const EdgeCases: Story = {
             background: 'var(--color-elevation-surface-default)',
           }}
         >
-          <Button>Dark default</Button>
-          <Button appearance="primary">Dark primary</Button>
-          <Button appearance="subtle">Dark subtle</Button>
+          <Button>Dark secondary</Button>
+          <Button prominence="primary">Dark primary</Button>
+          <Button prominence="tertiary">Dark tertiary</Button>
         </div>
       </section>
     </div>

@@ -22,7 +22,7 @@ export const LinkButton = React.memo(
       href,
       size = 'md',
       appearance = 'default',
-      tone = 'neutral',
+      tone = 'default',
       isInverse = false,
       isDisabled = false,
       isLoading = false,

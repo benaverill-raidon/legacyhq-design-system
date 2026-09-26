@@ -168,9 +168,10 @@
       "default": "default",
       "enum": [
         "default",
-        "subtle"
+        "subtle",
+        "inline"
       ],
-      "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners."
+      "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners; inline is chromeless at rest with subtle-style bottom-only border on hover/focus/invalid, keeps padding and top-corner radius — for embedding inside Key Value Pair wrapped in Inline Edit."
     },
     "invalid": {
       "type": "boolean",
@@ -247,6 +248,10 @@
       "subtle": {
         "purpose": "No visible border/background until hover, focus, or invalid; bottom corners always square regardless of size.",
         "className": "appearance_subtle"
+      },
+      "inline": {
+        "purpose": "Chromeless at rest with subtle-style bottom-only border on hover/focus/invalid. Keeps the field's normal padding, height, and top-corner radius so it reads as a real input when activated. For embedding inside Key Value Pair wrapped in Inline Edit.",
+        "className": "appearance_inline"
       }
     }
   },
@@ -387,7 +392,8 @@
     "Switch",
     "Select",
     "Icon Button",
-    "Button"
+    "Button",
+    "KeyValuePair"
   ],
   "do": [
     "Use the native type attribute (email, password, search, ...) for the right keyboard and built-in validation.",

@@ -71,9 +71,10 @@ All 24 former custom-string tokens have been removed or remodeled:
   parameter tokens are omitted as standalone CSS declarations to preserve the
   public variable set. Spinner timing still aliases the existing non-linear
   `ease-loop`. Pulse timing is `[0, 0, 1, 1]`, serialized as `linear`.
-- **Progress bar:** Two recipes emit `calc(track size + 2 * padding)` using the
-  existing CSS variable references. Total height has no independent token and is
-  not frozen to 20px/32px. Runtime track/padding changes retain their dependency.
+- **Progress bar:** Three recipes (sm/md/lg) emit `calc(track size + 2 * padding)`
+  using the existing CSS variable references. Total height has no independent token
+  and is not frozen to 24px/32px/40px. Runtime track/padding changes retain their
+  dependency.
 
 Recipes describe keyword, alias, inset-size, and motion declarations. `after`
 anchors preserve declaration order; missing/cyclic anchors fail rather than
@@ -140,31 +141,38 @@ new exporter schemas explicitly.
 
 ## Migration evidence
 
-Baseline: checkout `03cd31dccc2d07fa6b394e8c45da78af2cdad4da`, captured 2026-09-26
-using Style Dictionary 5.3.0 before source/config changes. `npm run build` matched
-all checked-in CSS: **no pre-existing drift**. The fixture manifest records
+Baseline: master `86ed9e49455f28086b39ead893bbaea2095cdf8f`, captured 2026-09-26
+using Style Dictionary 5.3.0 and the pre-DTCG source/config. Rebuilding that commit
+matched all checked-in CSS: **no pre-existing drift**. The fixture manifest records
 LF-normalized SHA-256 hashes.
+
+The migration was first authored and proven against `03cd31d`, a base that predated
+the Progress Bar Figma alignment (#34). On rebasing, that change was ported to DTCG:
+`pad.sm`, `track-size.sm/md/lg` (16/24/32px), and an `sm` inset-size recipe. Only
+`tokens.css` moved (561 to 564 declarations); `light.css` and `dark.css` hashes are
+identical to the original baseline.
 
 The first migration retained 1,207 tokens, including 24 documented custom string
 tokens. The follow-up replaces those exceptions with standard data and separate
-recipes: **1,191 DTCG tokens and 20 CSS recipe declarations**. Four loop parameter
+recipes: **1,193 DTCG tokens and 21 CSS recipe declarations**. Four loop parameter
 tokens are used through recipes rather than emitted separately. Figma traceability
 for the former casing tokens is preserved on recipes and loop names on groups.
 
-All three regenerated CSS files still match the original baseline exactly,
-normalizing line endings only: 561 base, 323 Light, and 323 Dark declarations.
-Selectors, variable names, values, aliases, calculations, and order are unchanged.
-Component styles and React code, including reduced-motion rules, are unchanged.
+All three regenerated CSS files match the baseline exactly, normalizing line
+endings only: 564 base, 323 Light, and 323 Dark declarations. Selectors, variable
+names, values, aliases, calculations, and order are unchanged. Component styles
+and React code, including reduced-motion rules, are unchanged.
 
 Validation passed: `npm run build`, `npm run tokens:check`, `npm run tokens:export`,
-eight pipeline tests, full `npm run validate` (1,141 component tests across 56
+eight pipeline tests, full `npm run validate` (1,189 component tests across 60
 files), and `git diff --check`. ESLint reports only the existing
 `react-hooks/exhaustive-deps` warning in `date-picker-calendar.tsx:152`.
 
-A headless Edge check compared baseline/generated CSS using the unchanged
-progress-bar, spinner, and skeleton styles. Both normal and reduced-motion runs
-matched. Progress-bar heights were 20px/32px initially; changing the medium track
-to 20px produced 28px, and then changing its padding to 6px produced 32px.
+A headless Edge check (run against the original `03cd31d` baseline, before the
+rebase) compared baseline/generated CSS using the unchanged progress-bar, spinner,
+and skeleton styles. Both normal and reduced-motion runs matched. Progress-bar
+heights were then 20px/32px; changing the medium track to 20px produced 28px, and
+then changing its padding to 6px produced 32px.
 Text-transform stayed `none`. Spinner retained 860ms and
 `cubic-bezier(0.4, 0.15, 0.6, 0.85)`; skeleton retained 1500ms linear timing.
 Both animations computed to `none` with reduced motion enabled.

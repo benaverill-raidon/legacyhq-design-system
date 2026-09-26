@@ -168,15 +168,15 @@ describe('ProgressBar', () => {
   });
 
   it('insets the circular progress arc inside the track ring by the pad', () => {
-    // md track thickness 12, pad 4 -> progress arc 12 - 2*4 = 4, narrower than the 12 track ring.
+    // md track thickness 24, pad 4 -> progress arc 24 - 2*4 = 16, narrower than the 24 track ring.
     const { container } = render(<ProgressBar value={50} variant="circular" label="Inset circular" />);
     const trackBorder = container.querySelector(`.${styles.circularTrackBorder}`);
     const progress = container.querySelector(`.${styles.circularProgress}`);
     const trackWidth = Number(trackBorder?.getAttribute('stroke-width'));
     const progressWidth = Number(progress?.getAttribute('stroke-width'));
 
-    expect(trackWidth).toBe(12);
-    expect(progressWidth).toBe(4);
+    expect(trackWidth).toBe(24);
+    expect(progressWidth).toBe(16);
     expect(progressWidth).toBeLessThan(trackWidth);
   });
 

@@ -14,7 +14,7 @@ const meta = {
     href: '/clients',
     children: 'Open client',
     appearance: 'default',
-    tone: 'neutral',
+    tone: 'default',
     size: 'md',
     isInverse: false,
     isDisabled: false,
@@ -25,7 +25,7 @@ const meta = {
     href: { control: 'text' },
     children: { control: 'text' },
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
-    tone: { control: 'inline-radio', options: ['neutral', 'warning', 'error'] },
+    tone: { control: 'inline-radio', options: ['default', 'brand', 'warning', 'error'] },
     size: { control: 'inline-radio', options: sizes },
     isInverse: { control: 'boolean' },
     isDisabled: { control: 'boolean' },
@@ -146,9 +146,9 @@ export const Variants: Story = {
       </Group>
 
       <Group title="Primary x tone">
-        <Cell label="neutral">
-          <LinkButton href="/clients" appearance="primary" tone="neutral">
-            Neutral
+        <Cell label="default">
+          <LinkButton href="/clients" appearance="primary" tone="default">
+            Default
           </LinkButton>
         </Cell>
         <Cell label="warning">

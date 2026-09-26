@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { CheckIcon, CloseIcon } from '../../../assets/icons';
+import { CheckIcon, CloseIcon, EditIcon } from '../../../assets/icons';
+import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../button-group';
 import styles from './inline-edit.module.css';
@@ -15,13 +16,17 @@ export const InlineEdit = React.memo(function InlineEdit({
   onConfirm,
   onCancel,
   actionButtons = true,
+  actionPlacement = 'below',
+  actionAlignment = 'center',
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   className,
 }: InlineEditProps) {
+  const cellSize = useEditableCellSize();
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState(value);
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const controlSize = children.props.size === 'sm' || children.props.size === 'lg' ? children.props.size : 'md';
   // Set on mousedown for the cancel/confirm buttons themselves, so the blur that mousedown causes
   // (moving focus off the field) doesn't get treated as "clicked off" - see handleBlur. Needed
   // because a couple of browsers don't reliably move focus to a clicked <button>, which would
@@ -29,6 +34,7 @@ export const InlineEdit = React.memo(function InlineEdit({
   const suppressBlurRef = React.useRef(false);
 
   const startEditing = () => {
+    suppressBlurRef.current = false;
     setDraft(value);
     setIsEditing(true);
   };
@@ -72,11 +78,15 @@ export const InlineEdit = React.memo(function InlineEdit({
   // isEditing closure (still true, since the setIsEditing(false) above hasn't committed yet),
   // double-firing confirm - the same mousedown flag used for the action buttons suppresses it.
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!isEditing) {
+    if (!isEditing || event.defaultPrevented || event.nativeEvent.isComposing) {
       return;
     }
 
     if (event.key === 'Enter') {
+      // Multiline fields keep native newlines; Ctrl/Cmd+Enter confirms the draft.
+      if (event.target instanceof HTMLTextAreaElement && !event.ctrlKey && !event.metaKey) return;
+      // Let focused action buttons handle Enter themselves (especially Cancel).
+      if (event.target instanceof HTMLElement && event.target.closest('button')) return;
       event.preventDefault();
       suppressBlurRef.current = true;
       confirm();
@@ -95,12 +105,17 @@ export const InlineEdit = React.memo(function InlineEdit({
   const control = isEditing
     ? React.cloneElement(children, {
         value: draft,
-        onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDraft(event.target.value),
+        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft(event.target.value),
+        ...(cellSize ? { iconAfter: undefined } : {}),
       })
     : React.cloneElement(children, {
         value,
         readOnly: true,
         onFocus: startEditing,
+        ...(cellSize ? {
+          onClick: startEditing,
+          iconAfter: <span className={styles.editIcon} aria-hidden="true"><EditIcon size="md" decorative /></span>,
+        } : {}),
       });
 
   // onKeyDown/onBlur below only catch events bubbled up from the always-focusable child clone
@@ -110,8 +125,11 @@ export const InlineEdit = React.memo(function InlineEdit({
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       ref={rootRef}
-      className={mergeClassNames(styles.root, className)}
+      className={mergeClassNames(styles.root, actionPlacement === 'end' && styles.placement_end, actionPlacement === 'end' && actionAlignment === 'start' && styles.alignment_start, className)}
       data-editing={isEditing ? 'true' : 'false'}
+      data-control-size={controlSize}
+      data-editable-cell={cellSize ?? undefined}
+      data-has-actions={isEditing && actionButtons ? 'true' : undefined}
       onKeyDown={isEditing ? handleKeyDown : undefined}
       onBlur={isEditing ? handleBlur : undefined}
     >
@@ -119,10 +137,10 @@ export const InlineEdit = React.memo(function InlineEdit({
 
       {isEditing && actionButtons ? (
         <ButtonGroup className={styles.actions}>
-          <IconButton size="sm" aria-label={cancelLabel} onMouseDown={handleActionMouseDown} onClick={cancel}>
+          <IconButton size="xs" appearance="default" aria-label={cancelLabel} onMouseDown={handleActionMouseDown} onClick={cancel}>
             <CloseIcon />
           </IconButton>
-          <IconButton size="sm" aria-label={confirmLabel} onMouseDown={handleActionMouseDown} onClick={confirm}>
+          <IconButton size="xs" appearance="default" aria-label={confirmLabel} onMouseDown={handleActionMouseDown} onClick={confirm}>
             <CheckIcon />
           </IconButton>
         </ButtonGroup>

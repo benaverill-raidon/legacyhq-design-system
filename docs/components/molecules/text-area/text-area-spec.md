@@ -4,25 +4,28 @@
 
 Text Area is a real native `<textarea>` in the same bordered frame as [Text Field](../text-field/text-field-spec.md),
 for multi-line free text. It shares Text Field's `size`, `appearance`, `invalid`, and state treatment
-token-for-token, and adds a `resize` axis. The frame styling lives directly on the `<textarea>` (no
-wrapper element) because Text Area composes no icon slots.
+token-for-token, and adds a `resize` axis. The frame styling lives on a wrapper `<div>` (matching
+Text Field's pattern) so it can host an optional trailing icon/action slot (`iconAfter`).
 
 ## Anatomy
 
 ```txt
-<textarea>  ← the frame IS the textarea (border, background, radius, padding on the element itself)
-  the text  ← native multi-line content; placeholder at content/subtle
-  ⌟ resize grip  ← native browser affordance, controlled by the `resize` property
+<div.root>       ← bordered frame (border, background, radius, padding); display: flex; align-items: flex-start
+  <textarea>     ← transparent, borderless child (flex: 1 1 auto); resize: inherit
+  <span.action>  ← optional trailing icon/action slot (iconAfter); flex: 0 0 auto
+</div.root>
 ```
 
-No wrapper `<div>`, no leading/trailing slots. Figma's own text-area is a single `Container` frame
-holding the text, and the visual frame (fill/border/radius) is bound on the component node itself.
+The wrapper `<div>` gets the same frame styling Text Field's root div uses. Focus detection uses
+`:focus-within` on the wrapper. Resize still works: `resize: inherit` on the textarea, with
+`overflow: auto` on the wrapper's resize_* classes (CSS requires overflow != visible for resize
+to work on a div). The ref forwards to the `<textarea>`, not the wrapper.
 
 ## Public API
 
 ```ts
-type TextAreaSize = 'md' | 'lg';
-type TextAreaAppearance = 'default' | 'subtle';
+type TextAreaSize = 'sm' | 'md' | 'lg';
+type TextAreaAppearance = 'default' | 'subtle' | 'inline';
 type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -30,13 +33,21 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   appearance?: TextAreaAppearance;
   invalid?: boolean;
   resize?: TextAreaResize;
+  autoResize?: boolean;
+  maxRows?: number;
+  iconAfter?: React.ReactNode;
   className?: string;
 }
 ```
 
-The ref forwards to the `<textarea>`. Every native textarea attribute (`value`, `defaultValue`,
-`placeholder`, `rows`, `maxLength`, `onChange`, `name`, `required`, `readOnly`, `wrap`, ...) passes
-straight through.
+The ref forwards to the `<textarea>` (not the wrapper). Every native textarea attribute (`value`,
+`defaultValue`, `placeholder`, `rows`, `maxLength`, `onChange`, `name`, `required`, `readOnly`,
+`wrap`, ...) passes straight through.
+
+`iconAfter` renders a trailing icon or interactive control (e.g. an edit pencil IconButton) after
+the textarea inside the wrapper. The slot is not `aria-hidden` — it may hold a real focusable action.
+The `inline` appearance combined with `iconAfter` is the standard pattern for embedding inside a
+Key Value Pair.
 
 ## Defaults
 
@@ -45,10 +56,13 @@ size: md
 appearance: default
 invalid: false
 resize: vertical
+autoResize: false
+maxRows: 6
 ```
 
 `appearance` mirrors Text Field (Figma names the axis `tone`); the code uses `appearance` so the two
-siblings share one vocabulary.
+siblings share one vocabulary. `inline` is a third value added for chromeless-at-rest embedding inside
+composed components like Key Value Pair — it maps from Figma's separate `context` axis.
 
 ## Geometry
 
@@ -61,8 +75,9 @@ Measured directly from Figma's bound variables, per size:
 | radius | `--border-radius-lg` (8) | `--border-radius-xl` (12) |
 | font | `body-md` (14/24) | `body-lg` (16/24) |
 
-The `sm` size was removed - it read almost identically to md - so md is now the smaller of the two,
-and its values seed the base `.textarea` rule. Otherwise identical to Text Field's size mapping.
+Code also supports `sm` for compact key/value rows: body-md typography, `--measurement-6` block
+padding, and the md inline padding/radius. Auto-resize uses `--size-control-sm/md/lg` for the
+minimum frame height and adjusts block padding to fit one line within that height.
 
 ## States and tokens
 
@@ -84,6 +99,14 @@ never shifts by a pixel. Hover tint is suppressed once focused.
 (`border/input`), focus (`border/focus`, +1px via box-shadow), and invalid (`border/error`). Bottom
 corners are square; top corners keep the size's radius - mirroring Text Field's subtle appearance.
 
+**`appearance=inline`** mirrors `subtle`'s bottom-only border treatment but starts fully chromeless
+at rest — no border or background visible until the user interacts. Hover shows the raised-surface
+hover background + a bottom accent (like subtle hover), focus shows a bottom-only 2px focus border
+(via border-bottom-color + bottom-only box-shadow, same technique as `subtle`), invalid shows a
+bottom-only error border, and disabled stays transparent. Top corners keep the size's radius; bottom
+corners are square — same shape as `subtle`. For embedding inside Key Value Pair wrapped in Inline
+Edit.
+
 ### Token naming note
 
 Figma's text-area binds a newer `background/input/*` (default/hovered/pressed) and `border/focused`
@@ -97,7 +120,13 @@ resting fill on focus instead, matching Text Field's established behavior.
 
 `resize` maps to the CSS `resize` property (`none`/`vertical`/`horizontal`/`both`), defaulting to
 `vertical`. A disabled field forces `resize: none`. Initial height comes from the native `rows`
-attribute; there is no auto-resize-to-content in this version.
+attribute unless `autoResize` is enabled.
+
+`autoResize` opts into measuring existing and entered content, growing and shrinking in normal
+document flow. The minimum height matches TextField for the selected size. `maxRows` defaults to
+six text lines, with vertical scrolling for additional content. Auto-resize overrides `rows` and
+manual resizing, and remeasures on controlled updates, font readiness, and width changes.
+Key/value examples enable it with `InlineEdit actionPlacement="end" actionAlignment="start"`.
 
 ## `type=rich-inline`: implemented as RichTextArea
 
@@ -135,7 +164,7 @@ uses the default size, appearance, and resize
 applies a selected size / appearance / resize option
 sets aria-invalid and data-invalid when invalid (and not by default)
 disables the textarea and marks it disabled
-applies className to the textarea
+applies className to the wrapper
 forwards native props (rows, placeholder, maxLength, onChange)
 forwards the ref to the native textarea
 supports data-force-state for documentation
@@ -144,11 +173,14 @@ suppresses the hover background once focused
 reuses Text Field semantic tokens for surface/border/radius
 subtle rests at a 1px bottom-only border; focus/invalid paint via box-shadow
 disables the resize grip on a disabled field
+renders iconAfter when provided
+does not render the action slot when iconAfter is absent
+applies the inline appearance
+inline appearance is chromeless at rest but retains interaction states
 ```
 
 ## Future considerations
 
 - The `type=rich-inline` inline entity-tagging mode (slash-command searchable dropdown + inline
   navigational tags), per "Not implemented" above.
-- Optional auto-resize (grow-with-content).
 - A shared Form Field wrapper (label + control + helper/error) for both Text Field and Text Area.

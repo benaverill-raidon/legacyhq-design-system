@@ -1,7 +1,7 @@
 import type * as React from 'react';
 
 export type ProgressBarVariant = 'linear' | 'circular';
-export type ProgressBarSize = 'md' | 'lg';
+export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
 export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   value: number;

@@ -1,0 +1,62 @@
+{
+  "component": "KeyValuePair",
+  "examples": [
+    {
+      "name": "Static value",
+      "description": "A read-only key/value row with a plain text value.",
+      "jsx": "<KeyValuePair label=\"Client name\" value=\"Jane Doe\" />",
+      "props": {
+        "label": "Client name",
+        "value": "Jane Doe"
+      }
+    },
+    {
+      "name": "Underlined pair",
+      "description": "Add underline for a bottom border divider between pairs.",
+      "jsx": "<KeyValuePair label=\"Account type\" value=\"Trust\" underline />",
+      "props": {
+        "label": "Account type",
+        "underline": true
+      }
+    },
+    {
+      "name": "Inline editable with TextField",
+      "description": "Pass a TextField with appearance='inline' as children for inline editing. The edit icon provides the affordance.",
+      "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "props": {
+        "label": "Client name",
+        "underline": true
+      }
+    },
+    {
+      "name": "Inline editable with TextArea",
+      "description": "Pass a TextArea with appearance='inline' for multi-line inline editing.",
+      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "props": {
+        "label": "Notes",
+        "underline": true
+      }
+    },
+    {
+      "name": "Small size",
+      "description": "The sm size uses tighter padding and smaller typography.",
+      "jsx": "<KeyValuePair size=\"sm\" label=\"Status\" value=\"Active\" />",
+      "props": {
+        "size": "sm",
+        "label": "Status"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Without a <dl> parent",
+      "jsx": "<div>\n  <KeyValuePair label=\"Name\" value=\"Jane\" />\n</div>",
+      "reason": "<dt>/<dd> elements are semantically meaningful only inside a <dl>. Wrap pairs in a KeyValueList."
+    },
+    {
+      "name": "Using for a form layout",
+      "jsx": "<KeyValuePair label=\"Email\">\n  <TextField placeholder=\"Enter email\" />\n</KeyValuePair>",
+      "reason": "Key Value Pair is for compact metadata display, not full form layouts. Use the Form organism with Field molecules for forms."
+    }
+  ]
+}

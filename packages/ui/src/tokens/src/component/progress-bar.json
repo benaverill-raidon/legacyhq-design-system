@@ -4,6 +4,10 @@
       "linear": {
         "root-size": {},
         "pad": {
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          },
           "md": {
             "$type": "dimension",
             "$value": "{Primitive.Value.measurement-4}"
@@ -15,13 +19,17 @@
         }
       },
       "track-size": {
+        "sm": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-16}"
+        },
         "md": {
           "$type": "dimension",
-          "$value": "{Primitive.Value.measurement-12}"
+          "$value": "{Primitive.Value.measurement-24}"
         },
         "lg": {
           "$type": "dimension",
-          "$value": "{Primitive.Value.measurement-24}"
+          "$value": "{Primitive.Value.measurement-32}"
         }
       },
       "circular": {

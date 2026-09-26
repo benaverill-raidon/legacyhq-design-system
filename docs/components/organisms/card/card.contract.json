@@ -1,0 +1,111 @@
+{
+  "name": "Card",
+  "category": "organism",
+  "status": "stable",
+  "purpose": "Wrap arbitrary content in an optional theme-aware surface and border with rounded corners.",
+  "intent": "A surface shell with a single unrestricted children slot. Content owns padding, layout, semantics, and interactions. Tier exception: it lives with organisms as a container for complete content sections, while importing no other UI components.",
+  "nativeElement": "div",
+  "sourceFiles": {
+    "component": "card.tsx",
+    "types": "card.types.ts",
+    "styles": "card.module.css",
+    "stories": "Card.stories.tsx",
+    "tests": "Card.test.tsx",
+    "index": "index.ts",
+    "docs": "card.mdx"
+  },
+  "figmaSource": {
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "4968:153931",
+    "componentSetName": "card",
+    "variantCount": 30,
+    "verifiedAt": "2026-09-22",
+    "verificationMethod": "Figma Console: all variant dimensions, padding, clipping, stroke alignment/weight, effects, native slots, and bound surface/radius/border variables.",
+    "figmaVariantAxes": {
+      "surface": ["raised", "default", "sunken", "deep", "none"],
+      "border": ["true", "false"],
+      "borderRadius": ["lg (8px)", "xl (12px)", "xxl (16px)"]
+    },
+    "variantNodeIds": {
+      "border=true": {
+      "raised": { "lg": "4968:153926", "xl": "4968:153923", "xxl": "4968:153919" },
+      "default": { "lg": "4968:153928", "xl": "4968:153920", "xxl": "4968:153924" },
+      "sunken": { "lg": "4968:153929", "xl": "4968:153925", "xxl": "4968:153922" },
+      "deep": { "lg": "4968:153927", "xl": "4968:153930", "xxl": "4968:153921" },
+      "none": { "lg": "4980:159274", "xl": "4980:159272", "xxl": "4980:159276" }
+      },
+      "border=false": {
+        "raised": { "lg": "4980:159279", "xl": "4980:159281", "xxl": "4980:159283" },
+        "default": { "lg": "4980:159285", "xl": "4980:159287", "xxl": "4980:159289" },
+        "sunken": { "lg": "4980:159291", "xl": "4980:159293", "xxl": "4980:159295" },
+        "deep": { "lg": "4980:159297", "xl": "4980:159299", "xxl": "4980:159301" },
+        "none": { "lg": "4980:159305", "xl": "4980:159303", "xxl": "4980:159307" }
+      }
+    },
+    "apiAdaptationNotes": [
+      "Native Figma slot#4968:0 maps to React children, with no extra wrapper or prescribed content components.",
+      "Radius labels map to semantic keys lg/xl/xxl. Defaults are raised, lg, and border=true.",
+      "Master dimensions are demonstration sizes, not a fixed code size.",
+      "The single slot fills the master; its horizontal/vertical authoring direction does not impose a content layout in code.",
+      "Border=true has an inside 1px default stroke; border=false has no stroke or reserved border width. All variants retain clipping, zero padding and gap, and no shadow.",
+      "Surface=none has no fill and maps to transparent, independently of the border. It does not apply opacity to children."
+    ]
+  },
+  "useCases": ["Dashboard content panels", "A surface around a form or list", "Inset or nested content sections", "Transparent panels with an optional outline and rounded clipping"],
+  "antiPatterns": ["Using Card as a whole-card button or link", "Expecting a built-in header, footer, padding, or shadow", "Adding a card where ordinary layout needs no surface, border, or clipping"],
+  "anatomy": [
+    { "part": "root", "element": "div", "description": "Border-box surface with an optional 1px border, radius, and clipped overflow; surface=none is transparent." },
+    { "part": "content", "element": "children (no extra wrapper)", "description": "Any React content; owns its layout and semantics." }
+  ],
+  "props": {
+    "surface": { "type": "CardSurface", "default": "raised", "required": false, "enum": ["raised", "default", "sunken", "deep", "none"], "description": "Theme-aware surface color; raised adds no shadow and none is transparent." },
+    "border": { "type": "boolean", "default": true, "required": false, "description": "Show the 1px default border. False removes both its paint and width." },
+    "borderRadius": { "type": "CardBorderRadius", "default": "lg", "required": false, "enum": ["lg", "xl", "xxl"], "description": "Semantic radius: 8, 12, or 16px." },
+    "children": { "type": "React.ReactNode", "default": null, "required": false, "description": "Unrestricted slot rendered directly inside the card." },
+    "className": { "type": "string", "default": null, "required": false, "description": "Composes with the root CSS Module class." },
+    "ref": { "type": "React.Ref<HTMLDivElement>", "default": null, "required": false, "description": "Forwarded to the root div." },
+    "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "default": null, "required": false, "description": "Native div attributes, style, and consumer event handlers." }
+  },
+  "variants": { "surface": ["raised", "default", "sunken", "deep", "none"], "borderRadius": ["lg", "xl", "xxl"], "border": ["true", "false"] },
+  "states": ["default"],
+  "slots": [{ "name": "children", "required": false, "supports": ["Any ReactNode"], "interactive": true }],
+  "tokens": {
+    "raised": "--color-elevation-surface-raised-default",
+    "default": "--color-elevation-surface-default",
+    "sunken": "--color-elevation-surface-sunken-default",
+    "deep": "--color-elevation-surface-deep-default",
+    "none": "transparent (no fill; no additional token)",
+    "border": "--color-border-default",
+    "borderWidth": "--border-width-sm",
+    "radii": ["--border-radius-lg", "--border-radius-xl", "--border-radius-xxl"]
+  },
+  "accessibility": {
+    "interactive": false,
+    "requirements": [
+      "Do not add an implicit role or tab stop to the root.",
+      "Children provide native semantics, headings, accessible names, and keyboard behavior.",
+      "Inset controls enough to preserve focus indicators within the clipped boundary."
+    ]
+  },
+  "behaviorRules": [
+    "Render arbitrary children directly without cloning or remounting them when variants change.",
+    "No card-owned state, hover treatment, focus treatment, or interaction handlers.",
+    "Clip content to the radius; use portaled overlays when content must escape the card.",
+    "Height follows content and width follows the containing layout unless the consumer supplies dimensions.",
+    "Surface and border are independent: border=false removes the border entirely; surface=none removes only the background fill and keeps content fully opaque."
+  ],
+  "compositionRules": ["Consumers own layout and padding, including optional headers/footers.", "Use existing semantic components inside the slot.", "Multiple children and nested cards are supported."],
+  "themeRules": ["Use semantic tokens for every surface, border, and radius; inherit text styling from the content context."],
+  "do": ["Choose surface, border, and radius independently.", "Compose content through children.", "Use real buttons and links for interactions inside the card."],
+  "dont": ["Do not bake domain-specific content or actions into Card.", "Do not make the generic card shell a click target.", "Do not assume raised means a shadow or that Card supplies padding."],
+  "acceptanceCriteria": [
+    "All 30 surface/radius/border combinations match the Figma bindings; no shadows.",
+    "Default raised/lg/border=true; no intrinsic dimensions, padding, or typography.",
+    "Native attributes and ref are forwarded; children remain directly rendered and preserve state.",
+    "Light and dark themes, narrow content, edge clipping, and composed form behavior are verified.",
+    "Storybook/MDX, all source docs, generated indexes, and repository validation are complete."
+  ],
+  "knownLimitations": ["Clipped overflow requires inset focus indicators and portaled overlays.", "Whole-card navigation/selection and named content sections are not part of this surface component."],
+  "relatedComponents": ["Form", "Table", "Empty State", "Popup"]
+}

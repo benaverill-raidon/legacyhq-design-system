@@ -2,20 +2,56 @@
   "component": {
     "switch": {
       "md": {
-        "track-width": { "value": "var(--measurement-40)", "type": "dimension" },
-        "track-height": { "value": "var(--measurement-20)", "type": "dimension" },
-        "thumb-size": { "value": "var(--measurement-16)", "type": "dimension" },
-        "thumb-inset": { "value": "var(--measurement-2)", "type": "dimension" },
-        "thumb-translation": { "value": "var(--measurement-20)", "type": "dimension" },
-        "icon-offset": { "value": "var(--measurement-6)", "type": "dimension" }
+        "track-width": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-40}"
+        },
+        "track-height": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-20}"
+        },
+        "thumb-size": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-16}"
+        },
+        "thumb-inset": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-2}"
+        },
+        "thumb-translation": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-20}"
+        },
+        "icon-offset": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-6}"
+        }
       },
       "sm": {
-        "track-width": { "value": "var(--measurement-32)", "type": "dimension" },
-        "track-height": { "value": "var(--measurement-16)", "type": "dimension" },
-        "thumb-size": { "value": "var(--measurement-12)", "type": "dimension" },
-        "thumb-inset": { "value": "var(--measurement-2)", "type": "dimension" },
-        "thumb-translation": { "value": "var(--measurement-16)", "type": "dimension" },
-        "icon-offset": { "value": "var(--measurement-4)", "type": "dimension" }
+        "track-width": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-32}"
+        },
+        "track-height": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-16}"
+        },
+        "thumb-size": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-12}"
+        },
+        "thumb-inset": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-2}"
+        },
+        "thumb-translation": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-16}"
+        },
+        "icon-offset": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-4}"
+        }
       }
     }
   }

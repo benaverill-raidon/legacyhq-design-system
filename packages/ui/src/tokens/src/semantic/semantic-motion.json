@@ -1,34 +1,103 @@
 {
   "Semantic: Motion": {
     "fade-quick": {
-      "value": "var(--duration-fast) var(--ease-standard)",
-      "type": "string",
-      "originalName": "fade/quick"
+      "$type": "transition",
+      "$value": {
+        "duration": "{Primitive.Value.duration-fast}",
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": "{Primitive.Value.ease-standard}"
+      },
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "fade/quick"
+        }
+      }
     },
     "fade-long": {
-      "value": "var(--duration-slow) var(--ease-standard)",
-      "type": "string",
-      "originalName": "fade/long"
+      "$type": "transition",
+      "$value": {
+        "duration": "{Primitive.Value.duration-slow}",
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": "{Primitive.Value.ease-standard}"
+      },
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "fade/long"
+        }
+      }
     },
     "move-quick": {
-      "value": "var(--duration-fast) var(--ease-spring)",
-      "type": "string",
-      "originalName": "move/quick"
+      "$type": "transition",
+      "$value": {
+        "duration": "{Primitive.Value.duration-fast}",
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": "{Primitive.Value.ease-spring}"
+      },
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "move/quick"
+        }
+      }
     },
     "move-long": {
-      "value": "var(--duration-slow) var(--ease-spring)",
-      "type": "string",
-      "originalName": "move/long"
+      "$type": "transition",
+      "$value": {
+        "duration": "{Primitive.Value.duration-slow}",
+        "delay": {
+          "value": 0,
+          "unit": "ms"
+        },
+        "timingFunction": "{Primitive.Value.ease-spring}"
+      },
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "move/long"
+        }
+      }
     },
     "spin-loop": {
-      "value": "var(--duration-loop) var(--ease-loop)",
-      "type": "string",
-      "originalName": "spin/loop"
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "spin/loop"
+        }
+      },
+      "duration": {
+        "$type": "duration",
+        "$value": "{Primitive.Value.duration-loop}"
+      },
+      "timingFunction": {
+        "$type": "cubicBezier",
+        "$value": "{Primitive.Value.ease-loop}"
+      }
     },
     "pulse-loop": {
-      "value": "var(--duration-loop-slow) linear",
-      "type": "string",
-      "originalName": "pulse/loop"
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "pulse/loop"
+        }
+      },
+      "duration": {
+        "$type": "duration",
+        "$value": "{Primitive.Value.duration-loop-slow}"
+      },
+      "timingFunction": {
+        "$type": "cubicBezier",
+        "$value": [
+          0,
+          0,
+          1,
+          1
+        ]
+      }
     }
   }
 }

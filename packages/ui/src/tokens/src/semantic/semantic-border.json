@@ -1,54 +1,94 @@
 {
   "Semantic: Border": {
     "border-radius-xs": {
-      "value": "var(--border-radius-2)",
-      "type": "float",
-      "originalName": "border/radius/xs"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-2}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/xs"
+        }
+      }
     },
     "border-radius-sm": {
-      "value": "var(--border-radius-4)",
-      "type": "float",
-      "originalName": "border/radius/sm"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-4}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/sm"
+        }
+      }
     },
     "border-radius-md": {
-      "value": "var(--border-radius-5)",
-      "type": "float",
-      "originalName": "border/radius/md"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-5}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/md"
+        }
+      }
     },
     "border-radius-lg": {
-      "value": "var(--border-radius-8)",
-      "type": "float",
-      "originalName": "border/radius/lg"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-8}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/lg"
+        }
+      }
     },
     "border-radius-xl": {
-      "value": "var(--border-radius-12)",
-      "type": "float",
-      "originalName": "border/radius/xl"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-12}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/xl"
+        }
+      }
     },
     "border-radius-xxl": {
-      "value": "var(--border-radius-16)",
-      "type": "float",
-      "originalName": "border/radius/xxl"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/xxl"
+        }
+      }
     },
     "border-radius-full-round": {
-      "value": "var(--border-radius-round)",
-      "type": "float",
-      "originalName": "border/radius/full-round"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-radius-round}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/radius/full-round"
+        }
+      }
     },
     "border-width-sm": {
-      "value": "var(--border-width-1)",
-      "type": "float",
-      "originalName": "border/width/sm"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-width-1}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/width/sm"
+        }
+      }
     },
     "border-width-md": {
-      "value": "var(--border-width-2)",
-      "type": "float",
-      "originalName": "border/width/md"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-width-2}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/width/md"
+        }
+      }
     },
     "border-width-lg": {
-      "value": "var(--border-width-3)",
-      "type": "float",
-      "originalName": "border/width/lg"
+      "$type": "dimension",
+      "$value": "{Primitive.Value.border-width-3}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "border/width/lg"
+        }
+      }
     }
   }
 }

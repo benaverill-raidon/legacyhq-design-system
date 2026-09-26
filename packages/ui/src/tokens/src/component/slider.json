@@ -1,30 +1,80 @@
 {
   "component": {
     "slider": {
-      "track": { "height": {
-        "xs": { "value": "var(--measurement-16)", "type": "dimension" },
-        "sm": { "value": "var(--measurement-24)", "type": "dimension" },
-        "md": { "value": "var(--measurement-40)", "type": "dimension" }
-      } },
-      "handle": {
-        "half-width": { "value": "var(--measurement-2)", "type": "dimension" },
-        "width": {
-          "xs": { "value": "var(--measurement-4)", "type": "dimension" },
-          "sm": { "value": "var(--measurement-4)", "type": "dimension" },
-          "md": { "value": "var(--measurement-4)", "type": "dimension" }
-        },
+      "track": {
         "height": {
-          "xs": { "value": "var(--measurement-44)", "type": "dimension" },
-          "sm": { "value": "var(--measurement-44)", "type": "dimension" },
-          "md": { "value": "var(--measurement-44)", "type": "dimension" }
+          "xs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-16}"
+          },
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-24}"
+          },
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-40}"
+          }
         }
       },
-      "stop": { "container": { "size": {
-        "xs": { "value": "var(--measurement-16)", "type": "dimension" },
-        "sm": { "value": "var(--measurement-16)", "type": "dimension" },
-        "md": { "value": "var(--measurement-16)", "type": "dimension" }
-      } } },
-      "vertical": { "control-length": { "value": "var(--measurement-104)", "type": "dimension" } }
+      "handle": {
+        "half-width": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-2}"
+        },
+        "width": {
+          "xs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          },
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          },
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          }
+        },
+        "height": {
+          "xs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-44}"
+          },
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-44}"
+          },
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-44}"
+          }
+        }
+      },
+      "stop": {
+        "container": {
+          "size": {
+            "xs": {
+              "$type": "dimension",
+              "$value": "{Primitive.Value.measurement-16}"
+            },
+            "sm": {
+              "$type": "dimension",
+              "$value": "{Primitive.Value.measurement-16}"
+            },
+            "md": {
+              "$type": "dimension",
+              "$value": "{Primitive.Value.measurement-16}"
+            }
+          }
+        }
+      },
+      "vertical": {
+        "control-length": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-104}"
+        }
+      }
     }
   }
 }

@@ -1,7 +1,7 @@
 # LegacyHQ Design System
 
 > React component library with a three-tier token architecture (primitive →
-> semantic → component), CSS Modules, Storybook, and Vitest. 49 components
+> semantic → component), CSS Modules, Storybook, and Vitest. 58 components
 > across primitives/atoms/molecules/organisms.
 
 Read [CLAUDE.md](CLAUDE.md) first — repo conventions, token tiers, prop-naming
@@ -16,13 +16,13 @@ rules, and the task→file routing table that says which of a component's up to
 - [component-api-governance.json](docs/foundations/component-api-governance.json):
   prop-naming rules. Load when adding/renaming a prop.
 - [registry.json](docs/components/registry.json): generated, normalized
-  cross-component index (props/anatomy/sizes/slots/variants for all 38
+  cross-component index (props/anatomy/sizes/slots/variants for all 58
   components in one consistent shape). Load for structural queries across
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.
 - [exemplars.json](docs/components/exemplars.json): generated, normalized
-  cross-component runnable usage examples + anti-patterns for all 38
+  cross-component runnable usage examples + anti-patterns for all 58
   components. Load for a quick, verified code example instead of reading
   individual `.examples.json` files. See
   [component-exemplars-governance.json](docs/foundations/component-exemplars-governance.json)
@@ -91,9 +91,10 @@ rules, and the task→file routing table that says which of a component's up to
 - [text-area](docs/components/molecules/text-area/text-area.md)
 - [text-field](docs/components/molecules/text-field/text-field.md)
 
-## Organisms (15)
+## Organisms (17)
 
 - [banner](docs/components/organisms/banner/banner.md)
+- [card](docs/components/organisms/card/card.md) (surface shell with a single unrestricted content slot)
 - [date-picker](docs/components/organisms/date-picker/date-picker.md)
 - [date-picker-calendar](docs/components/organisms/date-picker-calendar/date-picker-calendar.md)
 - [date-time-picker](docs/components/organisms/date-time-picker/date-time-picker.md)
@@ -106,6 +107,7 @@ rules, and the task→file routing table that says which of a component's up to
   backdrop + centered panel with header/body/footer; portal, focus trap, scroll lock, aria-modal)
 - [progress-tracker](docs/components/organisms/progress-tracker/progress-tracker.md)
 - [section-message](docs/components/organisms/section-message/section-message.md)
+- [table](docs/components/organisms/table/table.md)
 - [tabs](docs/components/organisms/tabs/tabs.md)
 - [time-picker](docs/components/organisms/time-picker/time-picker.md)
 - [toast](docs/components/organisms/toast/toast.md)

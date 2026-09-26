@@ -1,0 +1,53 @@
+{
+  "component": "Card",
+  "examples": [
+    {
+      "name": "Borderless surface",
+      "description": "Keep the surface and rounded corners while removing the stroke and its width.",
+      "jsx": "<Card surface=\"sunken\" border={false}><div style={{ padding: 'var(--spacing-lg)' }}>Project notes</div></Card>",
+      "props": { "surface": "sunken", "border": false }
+    },
+    {
+      "name": "Transparent outlined panel",
+      "description": "Keep an outline while showing the parent background through the card.",
+      "jsx": "<Card surface=\"none\" borderRadius=\"xl\"><div style={{ padding: 'var(--spacing-lg)' }}>Outlined content</div></Card>",
+      "props": { "surface": "none", "borderRadius": "xl" }
+    },
+    {
+      "name": "Transparent and borderless",
+      "description": "Retain rounded clipping without painting a surface or stroke.",
+      "jsx": "<Card surface=\"none\" border={false}><div style={{ padding: 'var(--spacing-lg)' }}>Content only</div></Card>",
+      "props": { "surface": "none", "border": false }
+    },
+    {
+      "name": "Consumer-spaced content",
+      "description": "Card supplies the surface; the section supplies semantics and spacing.",
+      "jsx": "<Card><section aria-labelledby=\"summary\" style={{ padding: 'var(--spacing-2xl)' }}><h2 id=\"summary\">Summary</h2><p>Any content can go here.</p></section></Card>",
+      "props": {}
+    },
+    {
+      "name": "Inset surface",
+      "description": "Surface and radius are independent axes.",
+      "jsx": "<Card surface=\"sunken\" borderRadius=\"xxl\"><div style={{ padding: 'var(--spacing-lg)' }}>Project notes</div></Card>",
+      "props": { "surface": "sunken", "borderRadius": "xxl" }
+    },
+    {
+      "name": "Form in a card",
+      "description": "The form and its controls retain their native behavior.",
+      "jsx": "<Card borderRadius=\"xl\"><div style={{ padding: 'var(--spacing-2xl)' }}><Form onSubmit={handleSubmit}><FormSection><Field label=\"Project name\" required><TextField /></Field></FormSection><FormFooter><Button type=\"submit\" prominence=\"primary\">Save</Button></FormFooter></Form></div></Card>",
+      "props": { "borderRadius": "xl" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Clickable shell",
+      "jsx": "<Card onClick={openProject}>Open project</Card>",
+      "reason": "Card is a div with no keyboard activation or link semantics. Compose a real Link or Button inside it."
+    },
+    {
+      "name": "Invented content API",
+      "jsx": "<Card header=\"Project\" footer={<Button>Save</Button>} padding=\"lg\" />",
+      "reason": "There are no built-in header/footer/padding props; compose and space arbitrary children."
+    }
+  ]
+}

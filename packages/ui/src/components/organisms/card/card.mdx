@@ -1,0 +1,85 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import * as CardStories from './Card.stories';
+
+<Meta of={CardStories} name="Docs" />
+
+# Card
+
+An optional surface, an optional thin border, and rounded corners around any content. Pass content through `children`;
+the card supplies no header, footer, padding, typography, or interaction of its own.
+
+<Canvas of={CardStories.Playground} />
+
+## Surfaces and corners
+
+Choose `raised` (default), `default`, `sunken`, `deep`, or `none`. The first four use theme-aware
+surface colors; `none` is transparent. `raised` does not add a shadow.
+
+`border` defaults to `true` (a 1px default border). Set `border={false}` to remove the stroke
+and its width. Surface, border, and radius are independent.
+
+`borderRadius` accepts `lg` (8px, default), `xl` (12px), and `xxl` (16px).
+
+<Canvas of={CardStories.AllVariants} />
+
+## Transparent and borderless
+
+Use `surface="none"` to show the parent background through the card. It keeps its border unless
+you also set `border={false}`. Rounded clipping remains active; children keep full opacity.
+
+<Canvas of={CardStories.NoSurface} />
+
+```tsx
+<Card surface="none" border={false} borderRadius="xl">
+  {children}
+</Card>
+```
+
+## One unrestricted slot
+
+```tsx
+import { Card } from './card';
+
+<Card surface="raised" borderRadius="xl">
+  <section aria-labelledby="project-title" style={{ padding: 'var(--spacing-2xl)' }}>
+    <h2 id="project-title">Project overview</h2>
+    <p>Content and layout belong to you.</p>
+  </section>
+</Card>
+```
+
+Multiple children, composed components, and nested cards are all supported. The examples provide
+their own padding and layout; there is no mandatory content wrapper or set of card subcomponents.
+
+<Canvas of={CardStories.ContentSlot} />
+
+## Edge-to-edge content
+
+The card clips content to its rounded boundary, matching Figma. It has no fixed dimensions:
+width follows its layout context and height follows its content unless the consumer sets a size.
+An empty card has only its border height (zero when borderless); the swatches above provide a demonstration height.
+
+<Canvas of={CardStories.EdgeToEdge} />
+
+## Forms and other interactions
+
+Controls inside the slot keep their own behavior. A card is a plain `div`, not a button, link,
+focus target, or landmark. Compose native headings, sections, forms, links, and buttons as needed.
+There are no card-level hover, pressed, selected, or disabled states.
+
+<Canvas of={CardStories.WithForm} />
+
+Keep focusable controls inset enough that their focus indicators are visible. Use the existing
+portaled Popup or picker components for content that needs to escape the clipped boundary.
+
+## API
+
+<ArgTypes of={CardStories.Playground} />
+
+Native `div` attributes, `className`, `style`, and a forwarded `HTMLDivElement` ref are supported.
+
+## Design source
+
+[Card in Figma](https://www.figma.com/design/M0eINB6n1BfrXu7ntYqb1i/Components-v1.0.0?node-id=4968-153931).
+All 30 variants, their variable bindings, optional border/fill, clipping, and zero padding were inspected through
+Figma Console on September 22, 2026.

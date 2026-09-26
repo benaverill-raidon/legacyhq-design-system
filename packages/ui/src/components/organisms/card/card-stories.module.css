@@ -1,0 +1,108 @@
+/* Consumer-owned layout for examples; none of these styles are part of Card. */
+.preview {
+  padding: var(--spacing-2xl);
+  background: var(--color-elevation-surface-default);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  line-height: var(--typography-body-md-line-height);
+}
+
+.example {
+  max-inline-size: 480px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-2xl);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--typography-heading-md-font-family);
+  font-size: var(--typography-heading-md-font-size);
+  font-weight: var(--typography-heading-md-font-weight);
+  line-height: var(--typography-heading-md-line-height);
+}
+
+.description {
+  margin: 0;
+  color: var(--color-content-subtle);
+}
+
+.label {
+  margin: 0;
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+}
+
+.variants {
+  display: grid;
+  gap: var(--spacing-2xl);
+  max-inline-size: 680px;
+}
+
+.variantRow,
+.sample {
+  display: grid;
+  gap: var(--spacing-sm);
+  min-inline-size: 0;
+}
+
+.samples {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.swatch {
+  block-size: 114px;
+}
+
+.compositions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: var(--spacing-2xl);
+  max-inline-size: 960px;
+}
+
+.metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2xl);
+  margin: 0;
+}
+
+.metrics dd {
+  margin: 0;
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+}
+
+.list {
+  margin: 0;
+  padding-inline-start: var(--spacing-2xl);
+}
+
+.inset {
+  margin: 0;
+  padding: var(--spacing-lg);
+}
+
+.banner {
+  block-size: 144px;
+  background: var(--color-background-brand-primary-subtle-default);
+}
+
+.backdrop {
+  display: grid;
+  gap: var(--spacing-2xl);
+  max-inline-size: 480px;
+  padding: var(--spacing-2xl);
+  background: linear-gradient(135deg, var(--color-elevation-surface-sunken-default) 50%, var(--color-elevation-surface-deep-default) 50%);
+}

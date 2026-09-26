@@ -1,0 +1,36 @@
+.root {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  overflow: hidden;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+.root[data-surface='default'] {
+  background: var(--color-elevation-surface-default);
+}
+
+.root[data-surface='sunken'] {
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.root[data-surface='deep'] {
+  background: var(--color-elevation-surface-deep-default);
+}
+
+.root[data-surface='none'] {
+  background: transparent;
+}
+
+.root[data-border='false'] {
+  border: none;
+}
+
+.root[data-border-radius='xl'] {
+  border-radius: var(--border-radius-xl);
+}
+
+.root[data-border-radius='xxl'] {
+  border-radius: var(--border-radius-xxl);
+}

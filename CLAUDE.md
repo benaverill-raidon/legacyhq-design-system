@@ -99,6 +99,11 @@ design-deviation notes).
 
 ## Token architecture (three tiers — this is load-bearing)
 
+Token source uses standard DTCG types; CSS compatibility recipes live separately
+from the token data. See [`docs/foundations/token-format.md`](docs/foundations/token-format.md)
+for types, reference handling, migration evidence, and the manual Figma-export
+conversion step. `npm run tokens:check` and `npm run test:tokens` run in `validate`.
+
 From `docs/foundations/token-governance.json`. The "components must never
 consume primitives directly" / "no raw values" rules below are enforced
 mechanically by `npm run lint:css` (stylelint), not just by convention or
@@ -179,7 +184,7 @@ change.)
 ## Commands
 
 - `npm run validate` — the one command to run after touching a component;
-  runs `typecheck`, then `lint`, then `lint:css`, then `test`. Run this before
+  checks token data/CSS compatibility, then runs `typecheck`, `lint`, `lint:css`, and `test`. Run this before
   considering a change done. Also runs in CI (`.github/workflows/validate.yml`)
   on every push/PR.
 - `npm run lint:css` — stylelint over `packages/ui/src/components/**/*.module.css`.

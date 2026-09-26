@@ -1,0 +1,233 @@
+{
+  "version": 1,
+  "omitTokens": [
+    "Semantic: Motion.spin-loop.duration",
+    "Semantic: Motion.spin-loop.timingFunction",
+    "Semantic: Motion.pulse-loop.duration",
+    "Semantic: Motion.pulse-loop.timingFunction"
+  ],
+  "declarations": [
+    {
+      "name": "typography-text-transform-none",
+      "mode": "tokens",
+      "after": "typography-paragraph-spacing-48",
+      "sourcePath": "Primitive.Value.typography-text-transform-none",
+      "originalName": "typography/text-transform/none",
+      "value": {
+        "kind": "keyword",
+        "value": "none"
+      }
+    },
+    {
+      "name": "component-progress-bar-linear-root-size-md",
+      "mode": "tokens",
+      "after": "component-menu-width-lg",
+      "sourcePath": "component.progress-bar.linear.root-size.md",
+      "value": {
+        "kind": "inset-size",
+        "track": "component.progress-bar.track-size.md",
+        "padding": "component.progress-bar.linear.pad.md"
+      }
+    },
+    {
+      "name": "component-progress-bar-linear-root-size-lg",
+      "mode": "tokens",
+      "after": "component-progress-bar-linear-root-size-md",
+      "sourcePath": "component.progress-bar.linear.root-size.lg",
+      "value": {
+        "kind": "inset-size",
+        "track": "component.progress-bar.track-size.lg",
+        "padding": "component.progress-bar.linear.pad.lg"
+      }
+    },
+    {
+      "name": "spin-loop",
+      "mode": "tokens",
+      "after": "move-long",
+      "sourcePath": "Semantic: Motion.spin-loop",
+      "originalName": "spin/loop",
+      "value": {
+        "kind": "motion",
+        "duration": "Semantic: Motion.spin-loop.duration",
+        "timingFunction": "Semantic: Motion.spin-loop.timingFunction"
+      }
+    },
+    {
+      "name": "pulse-loop",
+      "mode": "tokens",
+      "after": "spin-loop",
+      "sourcePath": "Semantic: Motion.pulse-loop",
+      "originalName": "pulse/loop",
+      "value": {
+        "kind": "motion",
+        "duration": "Semantic: Motion.pulse-loop.duration",
+        "timingFunction": "Semantic: Motion.pulse-loop.timingFunction"
+      }
+    },
+    {
+      "name": "typography-display-lg-text-transform",
+      "mode": "tokens",
+      "after": "typography-display-lg-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-display-lg-text-transform",
+      "originalName": "typography/display/lg/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-display-md-text-transform",
+      "mode": "tokens",
+      "after": "typography-display-md-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-display-md-text-transform",
+      "originalName": "typography/display/md/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-display-sm-text-transform",
+      "mode": "tokens",
+      "after": "typography-display-sm-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-display-sm-text-transform",
+      "originalName": "typography/display/sm/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-xxl-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-xxl-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-xxl-text-transform",
+      "originalName": "typography/heading/xxl/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-xl-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-xl-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-xl-text-transform",
+      "originalName": "typography/heading/xl/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-lg-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-lg-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-lg-text-transform",
+      "originalName": "typography/heading/lg/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-md-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-md-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-md-text-transform",
+      "originalName": "typography/heading/md/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-xs-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-xs-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-xs-text-transform",
+      "originalName": "typography/heading/xs/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-sm-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-sm-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-sm-text-transform",
+      "originalName": "typography/heading/sm/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-body-xl-text-transform",
+      "mode": "tokens",
+      "after": "typography-body-xl-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-body-xl-text-transform",
+      "originalName": "typography/body/xl/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-heading-xxs-text-transform",
+      "mode": "tokens",
+      "after": "typography-heading-xxs-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-heading-xxs-text-transform",
+      "originalName": "typography/heading/xxs/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-body-lg-text-transform",
+      "mode": "tokens",
+      "after": "typography-body-lg-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-body-lg-text-transform",
+      "originalName": "typography/body/lg/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-body-md-text-transform",
+      "mode": "tokens",
+      "after": "typography-body-md-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-body-md-text-transform",
+      "originalName": "typography/body/md/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-body-sm-text-transform",
+      "mode": "tokens",
+      "after": "typography-body-sm-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-body-sm-text-transform",
+      "originalName": "typography/body/sm/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-display-xs-text-transform",
+      "mode": "tokens",
+      "after": "typography-display-xs-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-display-xs-text-transform",
+      "originalName": "typography/display/xs/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    }
+  ]
+}

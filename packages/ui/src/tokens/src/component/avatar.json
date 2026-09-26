@@ -3,20 +3,56 @@
     "avatar": {
       "badge": {
         "size": {
-          "xxs": { "value": "var(--measurement-8)", "type": "dimension" },
-          "xs": { "value": "var(--measurement-12)", "type": "dimension" },
-          "sm": { "value": "var(--measurement-12)", "type": "dimension" },
-          "md": { "value": "var(--measurement-14)", "type": "dimension" },
-          "lg": { "value": "var(--measurement-16)", "type": "dimension" },
-          "xl": { "value": "var(--measurement-20)", "type": "dimension" }
+          "xxs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-8}"
+          },
+          "xs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-12}"
+          },
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-12}"
+          },
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-14}"
+          },
+          "lg": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-16}"
+          },
+          "xl": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-20}"
+          }
         },
         "icon-size": {
-          "xxs": { "value": "var(--measurement-8)", "type": "dimension" },
-          "xs": { "value": "var(--measurement-12)", "type": "dimension" },
-          "sm": { "value": "var(--measurement-12)", "type": "dimension" },
-          "md": { "value": "var(--measurement-14)", "type": "dimension" },
-          "lg": { "value": "var(--measurement-16)", "type": "dimension" },
-          "xl": { "value": "var(--measurement-18)", "type": "dimension" }
+          "xxs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-8}"
+          },
+          "xs": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-12}"
+          },
+          "sm": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-12}"
+          },
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-14}"
+          },
+          "lg": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-16}"
+          },
+          "xl": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-18}"
+          }
         }
       }
     }

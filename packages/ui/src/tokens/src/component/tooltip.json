@@ -2,17 +2,23 @@
   "component": {
     "tooltip": {
       "z-index": {
-        "value": "1",
-        "type": "number"
+        "$type": "number",
+        "$value": 1
       },
       "max-width": {
         "truncated": {
-          "value": "420px",
-          "type": "dimension"
+          "$type": "dimension",
+          "$value": {
+            "value": 420,
+            "unit": "px"
+          }
         },
         "wrapped": {
-          "value": "240px",
-          "type": "dimension"
+          "$type": "dimension",
+          "$value": {
+            "value": 240,
+            "unit": "px"
+          }
         }
       }
     }

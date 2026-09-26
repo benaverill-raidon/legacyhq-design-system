@@ -233,5 +233,21 @@
             },
             "escapeHatch": "A raw value can still pass via an inline `stylelint-disable-next-line scale-unlimited/declaration-strict-value` comment, but the comment must state why — reviewers should treat an unexplained disable as a rejection, not a pass."
         }
+    },
+    "sourceFormat": {
+        "format": "DTCG 2025.10 standard token data; separate CSS recipes",
+        "documentation": "docs/foundations/token-format.md",
+        "source": "packages/ui/src/tokens/src",
+        "figmaTraceability": "$extensions.com.legacyhq.originalName",
+        "automatedFigmaExport": false,
+        "conversionCommand": "npm run tokens:convert -- <legacy-tier-directory> <new-output-directory>",
+        "validationCommands": [
+            "npm run build",
+            "npm run tokens:check",
+            "npm run test:tokens"
+        ],
+        "cssRecipes": "packages/ui/src/tokens/css-recipes.json",
+        "interchangeExportCommand": "npm run tokens:export -- <output.tokens.json>",
+        "casingPolicy": "Preserve authored casing. Uppercase or other casing controls require a new design decision."
     }
 }

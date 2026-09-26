@@ -2,8 +2,14 @@
   "component": {
     "progress-indicator": {
       "dot-container-size": {
-        "sm": { "value": "var(--measurement-16)", "type": "dimension" },
-        "md": { "value": "var(--measurement-20)", "type": "dimension" }
+        "sm": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-16}"
+        },
+        "md": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-20}"
+        }
       }
     }
   }

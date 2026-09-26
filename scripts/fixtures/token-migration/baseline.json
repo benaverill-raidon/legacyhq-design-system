@@ -1,0 +1,20 @@
+{
+  "capturedFromCommit": "03cd31dccc2d07fa6b394e8c45da78af2cdad4da",
+  "capturedOn": "2026-09-26",
+  "styleDictionary": "5.3.0",
+  "preMigrationCheckedInDifferences": [],
+  "files": {
+    "tokens.css": {
+      "sha256LF": "1c2c7d6573be832570b425f86f06f93fe18102af90fe49a9ea08192b79d9bb16",
+      "declarations": 561
+    },
+    "light.css": {
+      "sha256LF": "0b5eb1aed32e5645bc72134bfda25b7caf99db6f1d8114037711bbc61cdea942",
+      "declarations": 323
+    },
+    "dark.css": {
+      "sha256LF": "44024b1d9145ef3d62edf5f0ac10c3211629c999fac7fee9dc896e237e2f7479",
+      "declarations": 323
+    }
+  }
+}

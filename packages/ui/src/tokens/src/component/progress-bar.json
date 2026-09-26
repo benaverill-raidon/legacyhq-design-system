@@ -2,20 +2,34 @@
   "component": {
     "progress-bar": {
       "linear": {
-        "root-size": {
-          "md": { "value": "calc(var(--component-progress-bar-track-size-md) + 2 * var(--component-progress-bar-linear-pad-md))", "type": "dimension" },
-          "lg": { "value": "calc(var(--component-progress-bar-track-size-lg) + 2 * var(--component-progress-bar-linear-pad-lg))", "type": "dimension" }
-        },
+        "root-size": {},
         "pad": {
-          "md": { "value": "var(--measurement-4)", "type": "dimension" },
-          "lg": { "value": "var(--measurement-4)", "type": "dimension" }
+          "md": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          },
+          "lg": {
+            "$type": "dimension",
+            "$value": "{Primitive.Value.measurement-4}"
+          }
         }
       },
       "track-size": {
-        "md": { "value": "var(--measurement-12)", "type": "dimension" },
-        "lg": { "value": "var(--measurement-24)", "type": "dimension" }
+        "md": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-12}"
+        },
+        "lg": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-24}"
+        }
       },
-      "circular": { "size": { "value": "var(--measurement-72)", "type": "dimension" } }
+      "circular": {
+        "size": {
+          "$type": "dimension",
+          "$value": "{Primitive.Value.measurement-72}"
+        }
+      }
     }
   }
 }

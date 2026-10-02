@@ -327,8 +327,9 @@ Contrast (WCAG 2.x, 14px/600 label needs 4.5:1; border needs 3:1 as a non-text U
 light (`red-800` #a5140f) is 7.38:1 on `elevation-surface-default`, 5.66:1 on `surface-deep`, and
 4.96:1 on surface-default under the hover overlay. Dark (`red-500` #ff3b34) is 4.47:1 on
 `elevation-surface-default` (#242221) and 3.97:1 on `surface-raised` (#2e2b28) - the border passes,
-but the label falls just short of 4.5:1 in dark mode. This is a property of the shared
-`color-content-error` dark value, not of Button; tracked as a follow-up.
+but the label falls just short of 4.5:1 in dark mode. This is a known gap in the shared
+`color-content-error` dark value, not in Button. Raising it to `red-400` was tried and reverted so
+code stays in line with Figma's Tokens v1.0.0 file; resolve it there first, then re-export.
 
 Supported prominence x tone pairings: primary (default, brand, warning, error); secondary (default,
 brand, error); tertiary (default, brand). Warning is primary only. Other pairings render the

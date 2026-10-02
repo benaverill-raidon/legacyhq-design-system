@@ -863,24 +863,25 @@
           "lg"
         ]
       },
-      "appearance": {
+      "prominence": {
         "type": "enum",
         "required": false,
-        "default": "default",
+        "default": "secondary",
         "description": null,
         "enum": [
-          "default",
           "primary",
-          "subtle"
+          "secondary",
+          "tertiary"
         ]
       },
       "tone": {
         "type": "enum",
         "required": false,
-        "default": "neutral",
-        "description": null,
+        "default": "default",
+        "description": "Semantic intent. Only the pairings in supportedCombinations are styled; any other prominence x tone pairing renders that prominence's default look. brand: every prominence. error: primary (bold fill) and secondary (outlined). warning: primary only.",
         "enum": [
-          "neutral",
+          "default",
+          "brand",
           "warning",
           "error"
         ]
@@ -958,13 +959,14 @@
       "iconAfter"
     ],
     "variants": {
-      "appearance": [
-        "default",
+      "prominence": [
         "primary",
-        "subtle"
+        "secondary",
+        "tertiary"
       ],
       "tone": [
-        "neutral",
+        "default",
+        "brand",
         "warning",
         "error"
       ]
@@ -1007,6 +1009,10 @@
           "primaryWarningBackground": "--color-background-warning-bold-default",
           "primaryWarningContent": "--color-content-warning-inverse",
           "primaryErrorBackground": "--color-background-error-bold-default",
+          "secondaryErrorBorder": "--color-border-error",
+          "secondaryErrorContent": "--color-content-error",
+          "secondaryErrorHoverBackground": "--color-background-error-overlay-hover",
+          "secondaryErrorPressBackground": "--color-background-error-overlay-press",
           "inverseContent": "--color-content-inverse",
           "inverseHoverBackground": "--color-background-neutral-overlay-subtle-hover",
           "inversePressBackground": "--color-background-neutral-overlay-subtle-press",

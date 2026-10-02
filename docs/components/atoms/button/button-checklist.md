@@ -85,6 +85,9 @@ Atom
 - Focus must be visible with keyboard navigation.
 - Button text should clearly communicate the action.
 - Do not rely on color alone to communicate destructive or warning actions.
+- `prominence="secondary" tone="error"` renders the outlined error treatment (error border + label,
+  error overlays on hover/focus/press, bordered secondary disabled state) and `isInverse` still
+  overrides it at rest, hover, and press.
 
 ## Loading Requirements
 

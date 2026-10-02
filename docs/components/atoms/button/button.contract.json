@@ -65,25 +65,27 @@
       "default": "md",
       "required": false
     },
-    "appearance": {
+    "prominence": {
       "type": "enum",
       "values": [
-        "default",
         "primary",
-        "subtle"
+        "secondary",
+        "tertiary"
       ],
-      "default": "default",
+      "default": "secondary",
       "required": false
     },
     "tone": {
       "type": "enum",
       "values": [
-        "neutral",
+        "default",
+        "brand",
         "warning",
         "error"
       ],
-      "default": "neutral",
-      "required": false
+      "default": "default",
+      "required": false,
+      "description": "Semantic intent. Only the pairings in supportedCombinations are styled; any other prominence x tone pairing renders that prominence's default look. brand: every prominence. error: primary (bold fill) and secondary (outlined). warning: primary only."
     },
     "isInverse": {
       "type": "boolean",
@@ -137,16 +139,35 @@
     }
   },
   "variants": {
-    "appearance": [
-      "default",
+    "prominence": [
       "primary",
-      "subtle"
+      "secondary",
+      "tertiary"
     ],
     "tone": [
-      "neutral",
+      "default",
+      "brand",
       "warning",
       "error"
     ]
+  },
+  "supportedCombinations": {
+    "primary": [
+      "default",
+      "brand",
+      "warning",
+      "error"
+    ],
+    "secondary": [
+      "default",
+      "brand",
+      "error"
+    ],
+    "tertiary": [
+      "default",
+      "brand"
+    ],
+    "notes": "primary + default renders the same brand fill as primary + brand. Unlisted pairings (secondary + warning, tertiary + warning, tertiary + error) are valid props but render the prominence's default look."
   },
   "sizes": [
     {
@@ -238,6 +259,10 @@
         "primaryWarningBackground": "--color-background-warning-bold-default",
         "primaryWarningContent": "--color-content-warning-inverse",
         "primaryErrorBackground": "--color-background-error-bold-default",
+        "secondaryErrorBorder": "--color-border-error",
+        "secondaryErrorContent": "--color-content-error",
+        "secondaryErrorHoverBackground": "--color-background-error-overlay-hover",
+        "secondaryErrorPressBackground": "--color-background-error-overlay-press",
         "inverseContent": "--color-content-inverse",
         "inverseHoverBackground": "--color-background-neutral-overlay-subtle-hover",
         "inversePressBackground": "--color-background-neutral-overlay-subtle-press",
@@ -356,8 +381,9 @@
     "Defaults to type button.",
     "Supports custom button type.",
     "Supports sizes xs, sm, md, lg.",
-    "Supports appearances default, primary, subtle.",
-    "Supports tones neutral, warning, error.",
+    "Supports prominences primary, secondary, tertiary.",
+    "Supports tones default, brand, warning, error.",
+    "Styles prominence=secondary tone=error as an outlined destructive action (error border and label, error overlays on hover/focus/press), flattened by disabled like the other secondary variants.",
     "Supports isInverse for placement on dark or bold-colored surfaces.",
     "Uses native disabled attribute when disabled.",
     "Suppresses click while disabled.",

@@ -325,10 +325,11 @@ Secondary + Brand pattern with the error semantic tokens:
 
 Contrast (WCAG 2.x, 14px/600 label needs 4.5:1; border needs 3:1 as a non-text UI boundary):
 light (`red-800` #a5140f) is 7.38:1 on `elevation-surface-default`, 5.66:1 on `surface-deep`, and
-4.96:1 on surface-default under the hover overlay. Dark (`red-500` #ff3b34) is 4.47:1 on
-`elevation-surface-default` (#242221) and 3.97:1 on `surface-raised` (#2e2b28) - the border passes,
-but the label falls just short of 4.5:1 in dark mode. This is a property of the shared
-`color-content-error` dark value, not of Button; tracked as a follow-up.
+4.96:1 on surface-default under the hover overlay. Dark: `color-content-error` is `red-400`
+(#ff6964) - 5.62:1 on `elevation-surface-default` (#242221) and 5.00:1 on `surface-raised`
+(#2e2b28), 5.20:1 / 4.65:1 under the hover overlay. The dark border stays `red-500` (#ff3b34,
+`color-border-error`), 4.47:1 / 3.97:1, comfortably over 3:1. (Dark `color-content-error` was
+`red-500` until it was raised to `red-400` because the label measured 4.47:1, just under 4.5:1.)
 
 Supported prominence x tone pairings: primary (default, brand, warning, error); secondary (default,
 brand, error); tertiary (default, brand). Warning is primary only. Other pairings render the

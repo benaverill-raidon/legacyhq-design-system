@@ -7,6 +7,14 @@
     "commit": "03cd31dccc2d07fa6b394e8c45da78af2cdad4da",
     "reason": "Migration was authored on a pre-#34 base. Rebased onto master 86ed9e4, whose legacy build adds the progress-bar sm size and 16/24/32 track sizes. light.css and dark.css hashes are unchanged; only tokens.css moved (561 -> 564 declarations)."
   },
+  "intentionalChanges": [
+    {
+      "file": "dark.css",
+      "from": "  --color-content-error: var(--color-red-solid-500);",
+      "to": "  --color-content-error: var(--color-red-solid-400);",
+      "reason": "Dark error text measured 4.47:1 on elevation-surface-default (#242221) and 3.97:1 on surface-raised (#2e2b28), under WCAG 4.5:1 for 14px/600 labels (e.g. Button prominence=secondary tone=error). red-400 measures 5.62:1 / 5.00:1, matching dark color-content-accent-red-bold."
+    }
+  ],
   "files": {
     "tokens.css": {
       "sha256LF": "673bd47995070bb3c43bf46e1e484f1c3541d207e8bb7ef49b2a558b81d47187",

@@ -10,10 +10,17 @@ const { validateSources, cssValue, EXTENSION } = tokens;
 const token = ($type, $value, extra = {}) => ({ $type, $value, ...extra });
 const source = tree => ({ 'semantic/test.json': tree });
 
-test('all selectors, declarations, values and runtime aliases match the pre-migration build', async () => {
+// The fixtures stay the historical pre-DTCG build; deliberate value changes since then are listed
+// in baseline.json `intentionalChanges` and applied here, so each one is explicit and reviewable.
+test('all selectors, declarations, values and runtime aliases match the pre-migration build plus intentional changes', async () => {
+  const { intentionalChanges = [] } = JSON.parse(fs.readFileSync('scripts/fixtures/token-migration/baseline.json', 'utf8'));
   const output = await new StyleDictionary({ ...config, log: { verbosity: 'silent' } }).formatAllPlatforms();
   for (const [mode, [file]] of Object.entries(output)) {
-    const baseline = fs.readFileSync(`scripts/fixtures/token-migration/${mode}.css`, 'utf8').replace(/\r\n/g, '\n');
+    let baseline = fs.readFileSync(`scripts/fixtures/token-migration/${mode}.css`, 'utf8').replace(/\r\n/g, '\n');
+    for (const change of intentionalChanges.filter(c => c.file === `${mode}.css`)) {
+      assert.equal(baseline.split(`${change.from}\n`).length, 2, `intentional change "${change.from}" must match exactly one ${mode}.css line`);
+      baseline = baseline.replace(`${change.from}\n`, `${change.to}\n`);
+    }
     assert.equal(file.output, baseline, `${mode}.css changed from the pre-DTCG build`);
   }
 });

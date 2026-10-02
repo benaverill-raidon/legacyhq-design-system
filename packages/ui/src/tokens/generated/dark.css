@@ -16,7 +16,7 @@
   --color-content-selected: var(--color-brand-prussian-solid-500);
   --color-content-highlight: var(--color-brand-prussian-alpha-500-32);
   --color-content-brand-primary-subtle: var(--color-brand-prussian-solid-700);
-  --color-content-error: var(--color-red-solid-400);
+  --color-content-error: var(--color-red-solid-500);
   --color-content-warning: var(--color-orange-solid-500);
   --color-content-accent-red-default: var(--color-red-solid-500);
   --color-content-accent-red-bold: var(--color-red-solid-400);

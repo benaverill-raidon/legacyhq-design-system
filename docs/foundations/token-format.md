@@ -110,9 +110,6 @@ cover transition member types, delays, source assembly, recipe errors, export
 conversion, casing policy, and exact comparison with the pre-migration CSS.
 Both checks run in `validate` and CI. Historical compatibility fixtures are in
 `scripts/fixtures/token-migration/`; do not replace them to conceal a regression.
-A deliberate value change after the migration is recorded instead as an entry in
-`baseline.json` `intentionalChanges` (`file`, exact `from`/`to` declaration lines,
-and a `reason`), which the pipeline test applies to the fixture before comparing.
 
 There is **no automated Figma token export path** in this checkout. Existing
 scripts generate icons, registry entries, and exemplars; they do not fetch Figma

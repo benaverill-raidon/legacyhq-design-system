@@ -102,7 +102,7 @@
       },
       "color-content-error": {
         "$type": "color",
-        "$value": "{Primitive.Value.color-red-solid-400}",
+        "$value": "{Primitive.Value.color-red-solid-500}",
         "$extensions": {
           "com.legacyhq": {
             "originalName": "color/content/error"

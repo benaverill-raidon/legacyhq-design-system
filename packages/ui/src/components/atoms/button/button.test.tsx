@@ -111,6 +111,32 @@ describe('Button', () => {
     expect(button).toHaveClass(styles.prominence_primary, styles.tone_error);
   });
 
+  it('renders prominence=secondary with tone=error', () => {
+    render(
+      <Button prominence="secondary" tone="error">
+        Remove
+      </Button>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Remove' })).toHaveClass(
+      styles.prominence_secondary,
+      styles.tone_error,
+    );
+  });
+
+  it('applies disabled behavior to prominence=secondary tone=error', () => {
+    render(
+      <Button prominence="secondary" tone="error" disabled>
+        Remove
+      </Button>,
+    );
+
+    const button = screen.getByRole('button', { name: 'Remove' });
+
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass(styles.prominence_secondary, styles.tone_error);
+  });
+
   it('supports loading behavior', () => {
     const handleClick = vi.fn();
     const { container } = render(
@@ -262,6 +288,38 @@ describe('Button', () => {
     );
     expect(buttonCss).toMatch(
       /\.prominence_tertiary\.tone_brand \{[\s\S]*?color: var\(--color-content-brand-primary-default\);/,
+    );
+  });
+
+  it('provides an outlined error treatment for prominence=secondary using the semantic error tokens', () => {
+    const rest = buttonCss.match(/\.prominence_secondary\.tone_error \{([^}]*)\}/);
+    const hover = buttonCss.match(
+      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\) \{([^}]*)\}/,
+    );
+    const press = buttonCss.match(
+      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(:active, \[data-force-state='press'\]\) \{([^}]*)\}/,
+    );
+
+    expect(rest?.[1]).toContain('border-color: var(--color-border-error);');
+    expect(rest?.[1]).toContain('color: var(--color-content-error);');
+    expect(hover?.[1]).toContain('border-color: var(--color-border-error);');
+    expect(hover?.[1]).toContain('background: var(--color-background-error-overlay-hover);');
+    expect(press?.[1]).toContain('border-color: var(--color-border-error);');
+    expect(press?.[1]).toContain('background: var(--color-background-error-overlay-press);');
+  });
+
+  it('flattens prominence=secondary tone=error into the bordered secondary disabled treatment', () => {
+    const rule = buttonCss.match(/\.prominence_secondary:disabled[^{]*\{([^}]*)\}/);
+
+    expect(rule?.[0]).toContain('.prominence_secondary.tone_error:disabled');
+    expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
+  });
+
+  it('gives the inverse rules an extra class so they out-rank prominence x tone hover/press rules', () => {
+    expect(buttonCss).toContain('.button.inverse:not(:disabled) {');
+    expect(buttonCss).toMatch(/\.button\.inverse:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover/);
+    expect(buttonCss).toContain(
+      ".button.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {",
     );
   });
 });

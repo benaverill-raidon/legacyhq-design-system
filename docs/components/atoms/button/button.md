@@ -14,6 +14,8 @@ Do not use Button for navigation-only behavior; use Link or Link Button instead.
 
 Button separates visual emphasis from semantic meaning. `appearance` controls emphasis (`default`, `primary`, `subtle`) and `tone` controls intent (`neutral`, `warning`, `error`). This avoids a large variant matrix while keeping action meaning explicit.
 
+In the current code the axes are `prominence` (`primary`, `secondary`, `tertiary`) and `tone` (`default`, `brand`, `warning`, `error`). Designed pairings: primary carries brand, warning, and error; secondary carries default, brand, and error; tertiary carries default and brand. `prominence="secondary" tone="error"` is the outlined destructive action - use it when a destructive action shouldn't be the loudest control in its group, and keep `prominence="primary" tone="error"` for the confirming step. Warning is primary only.
+
 Button is text-first. It may include leading or trailing icons, but icon-only usage belongs to Icon Button. Loading should preserve the action label and avoid layout shift.
 
 `isInverse` is an orthogonal on-dark treatment (not a `tone` value) for buttons placed on dark or bold-colored surfaces such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press overlays; disabled flattens it the same way it flattens tone.

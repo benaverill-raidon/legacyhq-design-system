@@ -96,7 +96,10 @@ export const Playground: Story = {};
 
 /**
  * The intentionally designed combinations. Primary prominence carries brand, warning, and error
- * tones. Secondary and tertiary only carry default and brand — no warning or error at those levels.
+ * tones. Secondary carries default, brand, and error - an outlined destructive action, for when the
+ * destructive action shouldn't be the loudest control in its group. Tertiary carries default and
+ * brand. Warning is primary only; any other prominence x tone pairing renders that prominence's
+ * default look.
  */
 export const Variants: Story = {
   render: () => (
@@ -128,6 +131,11 @@ export const Variants: Story = {
         <Cell label="brand">
           <Button prominence="secondary" tone="brand">
             Brand
+          </Button>
+        </Cell>
+        <Cell label="error">
+          <Button prominence="secondary" tone="error">
+            Error
           </Button>
         </Cell>
       </Group>
@@ -217,6 +225,37 @@ export const States: Story = {
         </Cell>
       </Group>
 
+      <Group title="Secondary prominence, error tone">
+        <Cell label="Default">
+          <Button tone="error">Delete</Button>
+        </Cell>
+        <Cell label="Hover">
+          <Button tone="error" data-force-state="hover">
+            Delete
+          </Button>
+        </Cell>
+        <Cell label="Focus visible">
+          <Button tone="error" data-force-state="focus">
+            Delete
+          </Button>
+        </Cell>
+        <Cell label="Press">
+          <Button tone="error" data-force-state="press">
+            Delete
+          </Button>
+        </Cell>
+        <Cell label="Disabled">
+          <Button tone="error" disabled>
+            Delete
+          </Button>
+        </Cell>
+        <Cell label="Loading">
+          <Button tone="error" isLoading>
+            Delete
+          </Button>
+        </Cell>
+      </Group>
+
       <Group title="Primary prominence">
         <Cell label="Default">
           <Button prominence="primary">Save changes</Button>
@@ -290,6 +329,11 @@ export const States: Story = {
             Delete
           </Button>
         </Cell>
+        <Cell label="secondary error, disabled">
+          <Button prominence="secondary" tone="error" disabled>
+            Delete
+          </Button>
+        </Cell>
       </Group>
 
       <Group title="Live - hover, tab to, and click this">
@@ -347,6 +391,24 @@ export const Inverse: Story = {
         <Cell label="Loading">
           <Button isInverse isLoading>
             Learn more
+          </Button>
+        </Cell>
+      </Group>
+
+      <Group title="Inverse overrides tone">
+        <Cell label="secondary error">
+          <Button isInverse tone="error">
+            Dismiss
+          </Button>
+        </Cell>
+        <Cell label="secondary error, hover">
+          <Button isInverse tone="error" data-force-state="hover">
+            Dismiss
+          </Button>
+        </Cell>
+        <Cell label="secondary error, press">
+          <Button isInverse tone="error" data-force-state="press">
+            Dismiss
           </Button>
         </Cell>
       </Group>

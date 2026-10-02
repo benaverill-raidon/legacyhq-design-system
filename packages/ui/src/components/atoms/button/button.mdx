@@ -6,7 +6,7 @@ import * as ButtonStories from './button.stories';
 # Button
 
 Button triggers a user-initiated action - submitting a form, confirming a decision, opening a
-dialog, starting a workflow. Visual emphasis (`appearance`) and semantic intent (`tone`) are
+dialog, starting a workflow. Visual emphasis (`prominence`) and semantic intent (`tone`) are
 separate props, so a matter's severity doesn't dictate how loud it looks.
 
 <Canvas of={ButtonStories.Playground} />
@@ -40,14 +40,26 @@ separate props, so a matter's severity doesn't dictate how loud it looks.
 
 ## Usage guidance
 
-### Appearance versus tone
+### Prominence versus tone
 
-`appearance` sets emphasis (`default`, `primary`, `subtle`); `tone` sets semantic intent (`neutral`,
-`warning`, `error`). They're independent props, but **tone only changes Button's
-appearance when `appearance="primary"`** - `default` and `subtle` render identically across every
-tone value. Setting `tone="error"` on a `default` button is valid but has no visual effect; if a
-non-primary action needs to look different, that's a signal to reconsider the appearance, not to
-expect tone to carry it. See Variants.
+`prominence` sets emphasis (`primary`, `secondary`, `tertiary`); `tone` sets semantic intent
+(`default`, `brand`, `warning`, `error`). They're independent props, but only these pairings are
+designed:
+
+| Prominence  | default | brand | warning | error |
+| ----------- | ------- | ----- | ------- | ----- |
+| `primary`   | -       | ✓     | ✓       | ✓     |
+| `secondary` | ✓       | ✓     | -       | ✓     |
+| `tertiary`  | ✓       | ✓     | -       | -     |
+
+(`primary` + `default` renders the same brand fill as `primary` + `brand`.) Any other pairing is
+valid but renders that prominence's default look - `tone="warning"` on a secondary button has no
+visual effect. Warning is primary only.
+
+`prominence="secondary" tone="error"` is the outlined destructive action: an error-colored border
+and label with error-tinted hover/press overlays. Reach for it when a destructive action shouldn't be
+the loudest control in its group - e.g. "Remove" beside a primary "Save" - and keep
+`prominence="primary" tone="error"` for the confirming step of a destructive flow. See Variants.
 
 ### On dark surfaces
 
@@ -87,18 +99,23 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
 
 ## Do / Don't
 
-**Do** use `tone` together with `appearance="primary"` for warning or destructive actions.
+**Do** use `tone="error"` with `prominence="primary"` for the confirming destructive action, or with
+`prominence="secondary"` for a lower-emphasis destructive action.
 
 ```tsx
-<Button appearance="primary" tone="error">
+<Button prominence="primary" tone="error">
   Delete matter
+</Button>
+<Button prominence="secondary" tone="error">
+  Remove collaborator
 </Button>
 ```
 
-**Don't** set `tone` on a `default` or `subtle` button expecting it to change how it looks.
+**Don't** set `tone` on a pairing that isn't designed (e.g. warning on secondary, error on tertiary)
+expecting it to change how it looks.
 
 ```tsx
-<Button tone="error">Delete matter</Button>
+<Button prominence="tertiary" tone="error">Delete matter</Button>
 ```
 
 ---
@@ -106,7 +123,7 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
 **Do** keep the label visible through a loading state.
 
 ```tsx
-<Button appearance="primary" isLoading>
+<Button prominence="primary" isLoading>
   Save matter
 </Button>
 ```
@@ -114,7 +131,7 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
 **Don't** strip the label down to an icon or a spinner alone.
 
 ```tsx
-<Button appearance="primary" isLoading aria-label="Save" />
+<Button prominence="primary" isLoading aria-label="Save" />
 ```
 
 ---
@@ -156,16 +173,16 @@ hover-equivalent treatment; don't add a focus style that looks unrelated to hove
       <td>Control height, padding, and (at <code>lg</code>) typography scale.</td>
     </tr>
     <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'primary' | 'subtle'</code></td>
-      <td><code>'default'</code></td>
-      <td>Visual emphasis. Only <code>primary</code> responds to <code>tone</code>.</td>
+      <td><code>prominence</code></td>
+      <td><code>'primary' | 'secondary' | 'tertiary'</code></td>
+      <td><code>'secondary'</code></td>
+      <td>Visual emphasis. See Prominence versus tone for which tones each prominence carries.</td>
     </tr>
     <tr>
       <td><code>tone</code></td>
-      <td><code>'neutral' | 'warning' | 'error'</code></td>
-      <td><code>'neutral'</code></td>
-      <td>Semantic intent. Visually inert unless <code>appearance="primary"</code>.</td>
+      <td><code>'default' | 'brand' | 'warning' | 'error'</code></td>
+      <td><code>'default'</code></td>
+      <td>Semantic intent. <code>brand</code>: every prominence. <code>error</code>: primary and secondary. <code>warning</code>: primary only.</td>
     </tr>
     <tr>
       <td><code>isInverse</code></td>

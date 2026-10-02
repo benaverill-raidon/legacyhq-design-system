@@ -408,6 +408,16 @@
         }
       },
       {
+        "name": "Lower-emphasis destructive action",
+        "description": "An outlined destructive action for when it shouldn't be the loudest control in its group, e.g. beside a primary Save.",
+        "jsx": "<Button prominence=\"secondary\" tone=\"error\">Remove collaborator</Button>",
+        "props": {
+          "prominence": "secondary",
+          "tone": "error",
+          "children": "Remove collaborator"
+        }
+      },
+      {
         "name": "Loading submit",
         "description": "A loading form submit button that preserves its visible label.",
         "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",

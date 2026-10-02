@@ -124,6 +124,30 @@
   background: var(--color-background-brand-primary-overlay-press);
 }
 
+/*
+ * Outlined destructive action: the lower-emphasis counterpart to `prominence_primary.tone_error`,
+ * for a destructive action that shouldn't be the loudest control in its group.
+ */
+.prominence_secondary.tone_error {
+  border-color: var(--color-border-error);
+  color: var(--color-content-error);
+}
+
+.prominence_secondary.tone_error:not(:disabled):not([data-loading='true']):is(
+    :hover,
+    :focus-visible,
+    [data-force-state='hover'],
+    [data-force-state='focus']
+  ) {
+  border-color: var(--color-border-error);
+  background: var(--color-background-error-overlay-hover);
+}
+
+.prominence_secondary.tone_error:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+  border-color: var(--color-border-error);
+  background: var(--color-background-error-overlay-press);
+}
+
 .prominence_primary {
   background: var(--color-background-brand-primary-bold-default);
   color: var(--color-content-inverse-default);
@@ -223,7 +247,8 @@
  */
 .prominence_secondary:disabled,
 .prominence_secondary:disabled:hover,
-.prominence_secondary:disabled:active {
+.prominence_secondary:disabled:active,
+.prominence_secondary.tone_error:disabled {
   border-color: var(--color-border-disabled);
   background: var(--color-background-disabled);
   color: var(--color-content-disabled);
@@ -248,17 +273,19 @@
  * Inverse: for buttons placed on dark or bold-colored surfaces (e.g. Banner). It overrides the
  * resting prominence treatment with an on-dark palette - transparent fill, the inverse content
  * token for the label, and the white *subtle* overlays on hover / press (rather than the dark neutral
- * overlays the on-light prominences use). Declared after the prominence rules so it wins the cascade
- * at equal specificity; the higher-specificity `:disabled` rules above still flatten the disabled
- * state, matching how tone is flattened when disabled.
+ * overlays the on-light prominences use). The extra `.button` class lifts each rule one class above
+ * its prominence x tone counterpart (e.g. `.prominence_secondary.tone_error:...:is(:hover)`), so
+ * inverse wins at rest, hover, and press for every tone. `:not(:disabled)` keeps it off disabled
+ * buttons, so the `:disabled` rules above still flatten the disabled state, matching how tone is
+ * flattened when disabled.
  */
-.inverse:not(:disabled) {
+.button.inverse:not(:disabled) {
   border-color: transparent;
   background: transparent;
   color: var(--color-content-inverse-default);
 }
 
-.inverse:not(:disabled):not([data-loading='true']):is(
+.button.inverse:not(:disabled):not([data-loading='true']):is(
     :hover,
     :focus-visible,
     [data-force-state='hover'],
@@ -268,7 +295,7 @@
   background: var(--color-background-neutral-overlay-subtle-hover);
 }
 
-.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
+.button.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {
   border-color: transparent;
   background: var(--color-background-neutral-overlay-subtle-press);
 }

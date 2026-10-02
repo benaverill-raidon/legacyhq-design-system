@@ -308,6 +308,33 @@ Use available semantic color tokens from the theme CSS.
 - pressed: `color-background-error-bold-press`
 - content/icon: `color-content-inverse`
 
+### Secondary + Error (`prominence="secondary" tone="error"`)
+
+The outlined destructive action - the lower-emphasis counterpart to Primary + Error, mirroring the
+Secondary + Brand pattern with the error semantic tokens:
+
+- border: `color-border-error` (rest, hover, focus, pressed)
+- content/icon: `color-content-error`
+- background: transparent at rest
+- hover / focus: `color-background-error-overlay-hover`
+- pressed: `color-background-error-overlay-press`
+- disabled: the bordered secondary disabled treatment (`color-border-disabled`,
+  `color-background-disabled`, `color-content-disabled`)
+- `isInverse` overrides it at rest, hover, and press (the inverse rules carry an extra `.button`
+  class so they out-rank the prominence x tone hover/press selectors)
+
+Contrast (WCAG 2.x, 14px/600 label needs 4.5:1; border needs 3:1 as a non-text UI boundary):
+light (`red-800` #a5140f) is 7.38:1 on `elevation-surface-default`, 5.66:1 on `surface-deep`, and
+4.96:1 on surface-default under the hover overlay. Dark (`red-500` #ff3b34) is 4.47:1 on
+`elevation-surface-default` (#242221) and 3.97:1 on `surface-raised` (#2e2b28) - the border passes,
+but the label falls just short of 4.5:1 in dark mode. This is a known gap in the shared
+`color-content-error` dark value, not in Button. Raising it to `red-400` was tried and reverted so
+code stays in line with Figma's Tokens v1.0.0 file; resolve it there first, then re-export.
+
+Supported prominence x tone pairings: primary (default, brand, warning, error); secondary (default,
+brand, error); tertiary (default, brand). Warning is primary only. Other pairings render the
+prominence's default look.
+
 ### Subtle
 
 Use neutral or semantic subtle background tokens for hover/press states, with default transparent/no-fill base where appropriate.

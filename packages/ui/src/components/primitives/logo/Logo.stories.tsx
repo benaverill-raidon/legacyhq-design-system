@@ -8,7 +8,7 @@ const types: LogoType[] = ['mark', 'wordmark', 'full'];
 const sizes: LogoSize[] = ['xxs', 'xs', 'sm', 'md', 'lg'];
 
 const meta: Meta<typeof Logo> = {
-  title: 'UI/Primitives/Logo',
+  title: 'Foundations/Logo',
   component: Logo,
   args: {
     type: 'full',

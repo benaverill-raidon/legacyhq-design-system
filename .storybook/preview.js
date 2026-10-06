@@ -31,6 +31,27 @@ const preview = {
     },
   ],
   parameters: {
+    options: {
+      // Sidebar IA. Sections and component groups follow this order; anything not listed (and
+      // every component within a group) sorts alphabetically. Story order within a component is
+      // untouched (names aren't sorted). The component groups must be the labels in
+      // classification.storybook.componentGroups (docs/foundations/component-registry-governance.json),
+      // in that order - component-taxonomy.test.ts fails if they drift.
+      // Must stay an inline literal: Storybook reads it statically, not by executing this file.
+      storySort: {
+        method: 'alphabetical',
+        order: [
+          'Introduction',
+          ['Overview', 'Getting Started', 'Principles', 'Accessibility', 'Changelog'],
+          'Foundations',
+          ['Color', 'Typography', 'Spacing', 'Radius', 'Elevation', 'Motion', 'Icons', 'Focus Ring', 'Logo'],
+          'Components',
+          ['Actions', 'Forms', 'Feedback', 'Navigation', 'Data Display', 'Overlays'],
+          'Patterns',
+          'Templates',
+        ],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

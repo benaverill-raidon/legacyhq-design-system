@@ -6,7 +6,7 @@ import { DatePicker } from './date-picker';
 const TODAY = new Date(2026, 2, 9); // 9 March 2026
 
 const meta = {
-  title: 'UI/Organisms/DatePicker',
+  title: 'Components/Forms/Date Picker',
   component: DatePicker,
   args: {
     defaultValue: TODAY,

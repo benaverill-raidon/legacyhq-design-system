@@ -7,7 +7,7 @@ const appearances: SkeletonAppearance[] = ['default', 'subtle'];
 const shapes: SkeletonShape[] = ['rectangle', 'circle'];
 
 const meta = {
-  title: 'UI/Molecules/Skeleton',
+  title: 'Components/Feedback/Skeleton',
   component: Skeleton,
   args: {
     appearance: 'subtle',

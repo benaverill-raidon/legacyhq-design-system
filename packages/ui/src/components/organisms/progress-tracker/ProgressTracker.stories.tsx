@@ -12,7 +12,7 @@ const steps: ProgressTrackerStep[] = [
 ];
 
 const meta = {
-  title: 'UI/Organisms/ProgressTracker',
+  title: 'Components/Navigation/Progress Tracker',
   component: ProgressTracker,
   args: {
     steps,

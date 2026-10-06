@@ -6,7 +6,7 @@
   "status": "stable",
   "owner": "LegacyHQ Design System",
   "lastReviewed": "2026-10-06",
-  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json"],
+  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json", "packages/ui/src/components/**/*.stories.tsx (title only)", ".storybook/preview.js (storySort only)"],
   "overview": {
     "description": "Every component has a hand-authored <name>.contract.json meant to be a machine-readable contract (props, anatomy, tokens, a11y, behavior rules). An audit found severe shape inconsistency across the 28 files - not just missing fields, but genuinely incompatible JSON shapes for the same field name. docs/components/registry.json is generated from these files by scripts/generate-component-registry.mjs, which normalizes every field to one canonical shape and validates the result against docs/foundations/component-registry.schema.json. This is the reliable, single-fetch, machine-consumable view; the source contract.json files remain the deep-dive reference for one component's full, un-normalized detail.",
     "purpose": "Let an agent or tool query structural facts (props, anatomy, sizes, slots, variants) across many components at once without reading 28 differently-shaped files, while never fabricating content the source files don't actually contain."
@@ -24,7 +24,7 @@
         "meaning": "Functional / documentation grouping - the job the component does for the user.",
         "allowedValues": "The `category` enum in docs/foundations/component-registry.schema.json is the single authoritative list. Other files may attach definitions, labels, or ordering to those values (e.g. `categories` below), but never define the set themselves.",
         "source": "Authored as the top-level `category` key in each <name>.contract.json. Required: registry generation fails if it is missing or not in the schema enum.",
-        "drives": ["registry.json `category`"]
+        "drives": ["registry.json `category`", "Storybook sidebar group (story titles must match - see `storybook` below)"]
       }
     },
     "categories": {
@@ -58,7 +58,36 @@
         "category": "layout",
         "decision": "Not created yet. Card stays in data-display until there are enough real layout components (e.g. a coded Page Header) to justify a separate group - no one-item categories."
       }
-    ]
+    ],
+    "storybook": {
+      "titleRule": "Every component (every contract.json) has exactly one story file whose meta `title` is `Components/<group label>/<display name>`, or `Foundations/<display name>` for the `foundations` category. Titles never use the retired `UI/<Tier>/` form.",
+      "componentGroups": [
+        { "category": "actions", "label": "Actions" },
+        { "category": "forms", "label": "Forms" },
+        { "category": "feedback", "label": "Feedback" },
+        { "category": "navigation", "label": "Navigation" },
+        { "category": "data-display", "label": "Data Display" },
+        { "category": "overlays", "label": "Overlays" }
+      ],
+      "componentGroupsRule": "Sidebar label and order for each component category. Must cover exactly the schema enum minus `foundations`, which is its own top-level Foundations section rather than a group under Components.",
+      "displayNameRule": "The contract `name` split into words at each capital (`ProgressBar` -> `Progress Bar`), unless the name is listed in displayNameOverrides.",
+      "displayNameOverrides": {
+        "Icon": "Icons"
+      },
+      "ordering": "parameters.options.storySort in .storybook/preview.js fixes the order of top-level sections and of the component groups (which must be componentGroups' labels, in order); components sort alphabetically within a group, keeping every `X Group` next to `X` without nesting. storySort has to stay an inline literal because Storybook reads it statically, so it is a literal copy of the labels - the test below catches drift.",
+      "enforcement": {
+        "test": "packages/ui/src/components/component-taxonomy.test.ts (runs in `npm test`, so CI fails on drift)",
+        "fails when": [
+          "a contract's category is missing or not in the schema enum",
+          "the governance category definitions or componentGroups don't cover exactly the schema enum",
+          "the storySort component-group order differs from componentGroups",
+          "a displayNameOverrides key isn't a real component name",
+          "a component has no story with its expected title, or more than one",
+          "a `Components/` story uses an unknown group or matches no contract's name and category",
+          "any story title starts with `UI/`"
+        ]
+      }
+    }
   },
   "normalizationRules": [
     {

@@ -7,7 +7,7 @@ import type { SliderSize } from './slider.types';
 const sizes: SliderSize[] = ['xs', 'sm', 'md'];
 
 const meta = {
-  title: 'UI/Atoms/Slider',
+  title: 'Components/Forms/Slider',
   component: Slider,
   args: {
     label: 'Slider',

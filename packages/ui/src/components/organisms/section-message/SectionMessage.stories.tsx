@@ -8,7 +8,7 @@ import type { SectionMessageAppearance } from './section-message.types';
 const appearances: SectionMessageAppearance[] = ['information', 'success', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Section Message',
+  title: 'Components/Feedback/Section Message',
   component: SectionMessage,
   args: {
     appearance: 'information',

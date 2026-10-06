@@ -6,7 +6,7 @@ import type { SpinnerSize } from './spinner.types';
 const sizes: SpinnerSize[] = ['sm', 'md', 'lg', 'xl'];
 
 const meta = {
-  title: 'UI/Atoms/Spinner',
+  title: 'Components/Feedback/Spinner',
   component: Spinner,
   args: {
     size: 'lg',

@@ -6,7 +6,7 @@ import type { ProgressBarSize } from './progress-bar.types';
 const sizes: ProgressBarSize[] = ['sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/ProgressBar',
+  title: 'Components/Feedback/Progress Bar',
   component: ProgressBar,
   args: {
     value: 42,

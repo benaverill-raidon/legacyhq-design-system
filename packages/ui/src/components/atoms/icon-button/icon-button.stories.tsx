@@ -8,7 +8,7 @@ import type { IconButtonSize } from './icon-button.types';
 const sizes: IconButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Icon Button',
+  title: 'Components/Actions/Icon Button',
   component: IconButton,
   args: {
     appearance: 'default',

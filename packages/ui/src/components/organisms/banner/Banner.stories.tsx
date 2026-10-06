@@ -8,7 +8,7 @@ import type { BannerAppearance } from './banner.types';
 const appearances: BannerAppearance[] = ['default', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Banner',
+  title: 'Components/Feedback/Banner',
   component: Banner,
   parameters: { layout: 'fullscreen' },
   args: {

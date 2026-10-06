@@ -8,7 +8,7 @@ import { RichTextArea } from './rich';
 import type { EntityOption, EntitySection, RichTextValue } from './rich';
 
 const meta = {
-  title: 'UI/Molecules/Text Area/Rich Inline',
+  title: 'Components/Forms/Rich Text Area',
   component: RichTextArea,
   // Stories drive their own state via `render`; these satisfy the required props on the type.
   args: { value: [], onChange: () => {}, onSearch: () => [] },

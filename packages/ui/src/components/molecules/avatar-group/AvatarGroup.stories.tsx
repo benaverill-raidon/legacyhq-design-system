@@ -39,7 +39,7 @@ function entities(count: number): AvatarGroupItem[] {
 }
 
 const meta = {
-  title: 'UI/Molecules/Avatar Group',
+  title: 'Components/Data Display/Avatar Group',
   component: AvatarGroup,
   args: {
     avatars: clients(4),

@@ -4,7 +4,7 @@ import { Checkbox } from './checkbox';
 import { CheckboxGroup } from './checkbox-group';
 
 const meta = {
-  title: 'UI/Atoms/Checkbox',
+  title: 'Components/Forms/Checkbox',
   component: Checkbox,
   args: {
     label: 'Label',

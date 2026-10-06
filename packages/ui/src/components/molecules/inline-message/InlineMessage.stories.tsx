@@ -6,7 +6,7 @@ import type { InlineMessageTone } from './inline-message.types';
 const tones: InlineMessageTone[] = ['default', 'info', 'success', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Molecules/Inline Message',
+  title: 'Components/Feedback/Inline Message',
   component: InlineMessage,
   args: {
     title: 'Title',

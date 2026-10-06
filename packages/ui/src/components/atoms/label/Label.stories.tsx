@@ -17,7 +17,7 @@ const emphases: LabelEmphasis[] = ['subtle', 'bold'];
 const sizes: LabelSize[] = ['sm', 'md'];
 
 const meta = {
-  title: 'UI/Atoms/Label',
+  title: 'Components/Data Display/Label',
   component: Label,
   args: {
     children: 'Label',

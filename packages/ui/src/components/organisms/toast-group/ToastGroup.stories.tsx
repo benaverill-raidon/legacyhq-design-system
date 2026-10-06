@@ -6,7 +6,7 @@ import { ToastGroup } from './toast-group';
 import { toast } from './toast-store';
 
 const meta = {
-  title: 'UI/Organisms/Toast Group',
+  title: 'Components/Feedback/Toast Group',
   component: ToastGroup,
   parameters: { layout: 'fullscreen' },
   args: {

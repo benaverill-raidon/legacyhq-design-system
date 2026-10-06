@@ -13,7 +13,7 @@ const tabs: TabItem[] = [
 ];
 
 const meta = {
-  title: 'UI/Organisms/Tabs',
+  title: 'Components/Navigation/Tabs',
   component: Tabs,
   args: {
     type: 'line',

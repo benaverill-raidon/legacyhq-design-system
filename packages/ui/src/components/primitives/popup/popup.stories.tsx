@@ -104,7 +104,7 @@ function PopupDemo({
 }
 
 const meta = {
-  title: 'UI/Primitives/Popup',
+  title: 'Components/Overlays/Popup',
   component: Popup,
   args: {
     open: false,

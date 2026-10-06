@@ -33,7 +33,7 @@ const iconComponents = generatedIcons as Record<string, ComponentType<IconProps>
 const iconNames = metadata.map((icon) => icon.name);
 
 const meta: Meta<typeof AddIcon> = {
-  title: 'UI/Primitives/Icon',
+  title: 'Foundations/Icons',
   component: AddIcon,
   args: {
     size: 'md',

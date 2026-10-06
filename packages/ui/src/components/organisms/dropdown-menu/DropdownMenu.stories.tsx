@@ -10,7 +10,7 @@ import type { DropdownMenuAlignment } from './dropdown-menu.types';
 import type { MenuItem } from '../menu';
 
 const meta = {
-  title: 'UI/Organisms/Dropdown Menu',
+  title: 'Components/Actions/Dropdown Menu',
   component: DropdownMenu,
   args: {
     sections: [],

@@ -49,7 +49,7 @@ function peopleSections(): MenuSection[] {
 }
 
 const meta = {
-  title: 'UI/Molecules/Chip',
+  title: 'Components/Forms/Chip',
   component: Chip,
   args: {
     mode: 'filter',

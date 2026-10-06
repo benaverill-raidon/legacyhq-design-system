@@ -9,7 +9,7 @@ import { KeyValuePair } from '../key-value-pair';
 import { KeyValueList } from './key-value-list';
 
 const meta = {
-  title: 'UI/Molecules/Key Value List',
+  title: 'Components/Data Display/Key Value List',
   component: KeyValueList,
   args: {
     children: null,

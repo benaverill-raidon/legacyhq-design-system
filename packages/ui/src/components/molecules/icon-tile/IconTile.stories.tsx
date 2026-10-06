@@ -21,7 +21,7 @@ const shapes: IconTileShape[] = ['square', 'round'];
 const sizes: IconTileSize[] = ['xxs', 'xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Molecules/Icon Tile',
+  title: 'Components/Data Display/Icon Tile',
   component: IconTile,
   args: {
     tone: 'brand',

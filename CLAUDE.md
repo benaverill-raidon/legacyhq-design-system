@@ -71,6 +71,17 @@ rules, category definitions, and recorded edge cases live in the
 `docs/foundations/component-registry-governance.json`; there is
 deliberately no `layout` category yet (Card stays in `data-display`).
 
+The Storybook sidebar groups by category, not tier: a component's story
+title is `Components/<Group label>/<Display name>` (e.g.
+`Components/Data Display/Key Value Pair`), or `Foundations/<Display name>`
+for `foundations` components. Group labels and order, and display-name
+exceptions (`displayNameOverrides`, e.g. Icon → Icons), live in
+`classification.storybook` in the governance file.
+`packages/ui/src/components/component-taxonomy.test.ts` (part of
+`npm test`) fails if a contract's category is missing or invalid, a story
+title disagrees with it, an unknown group or old `UI/` title appears, or
+the governance labels / `storySort` order drift from the schema.
+
 `foundations` is a category for component-like system assets (Icon, Focus
 Ring, Logo). The Foundations *documentation* is broader — it also covers
 Color, Typography, Spacing, Radius, Elevation, and Motion, which aren't
@@ -208,8 +219,9 @@ change.)
    — they're expected to stay in sync, not just describe v1.
 4. Add/update `.stories.tsx` and `.test.tsx` alongside the component.
 5. If this is a new component, add one line for it under the correct tier
-   heading in `llms.txt`, and set its `category` in `.contract.json` (see
-   "Tier vs. category" above).
+   heading in `llms.txt`, set its `category` in `.contract.json`, and give
+   its story the matching `Components/<Group label>/<Name>` title (see
+   "Tier vs. category" above — the taxonomy test enforces it).
 
 ## Commands
 

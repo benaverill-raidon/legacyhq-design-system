@@ -9,7 +9,7 @@ const sizes: ProgressIndicatorSize[] = ['sm', 'md'];
 const totals = [3, 5, 8];
 
 const meta = {
-  title: 'UI/Atoms/ProgressIndicator',
+  title: 'Components/Navigation/Progress Indicator',
   component: ProgressIndicator,
   args: {
     currentStep: 2,

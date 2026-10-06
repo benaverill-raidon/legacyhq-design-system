@@ -6,7 +6,7 @@ import { TagGroup } from './tag-group';
 import type { TagGroupAlignment, TagGroupItem } from './tag-group.types';
 
 const meta = {
-  title: 'UI/Molecules/Tag Group',
+  title: 'Components/Data Display/Tag Group',
   component: TagGroup,
   args: {
     tags: Array.from({ length: 6 }, (_, index) => ({ id: `tag-${index + 1}`, label: `Tag ${index + 1}` })),

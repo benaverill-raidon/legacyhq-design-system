@@ -14,7 +14,7 @@ const radii: CardBorderRadius[] = ['lg', 'xl', 'xxl'];
 const radiusLabels = { lg: '8px', xl: '12px', xxl: '16px' };
 
 const meta = {
-  title: 'UI/Organisms/Card',
+  title: 'Components/Data Display/Card',
   component: Card,
   parameters: { layout: 'fullscreen' },
   decorators: [(Story) => <div className={styles.preview}><Story /></div>],

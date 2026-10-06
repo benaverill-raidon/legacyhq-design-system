@@ -11,7 +11,7 @@ const options = [
 ];
 
 const meta = {
-  title: 'UI/Atoms/Radio',
+  title: 'Components/Forms/Radio',
   component: Radio,
   args: {
     label: 'Label',

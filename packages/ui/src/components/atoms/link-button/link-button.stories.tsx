@@ -8,7 +8,7 @@ import type { LinkButtonSize } from './link-button.types';
 const sizes: LinkButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Link Button',
+  title: 'Components/Navigation/Link Button',
   component: LinkButton,
   args: {
     href: '/clients',

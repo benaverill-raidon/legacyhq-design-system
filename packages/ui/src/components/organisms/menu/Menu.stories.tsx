@@ -16,7 +16,7 @@ import { Menu } from './menu';
 import type { MenuItem, MenuSize } from './menu.types';
 
 const meta = {
-  title: 'UI/Organisms/Menu',
+  title: 'Components/Actions/Menu',
   component: Menu,
   args: {
     sections: [],

@@ -9,7 +9,7 @@ import type { ButtonGroupOrientation } from './button-group.types';
 const orientations: ButtonGroupOrientation[] = ['horizontal', 'vertical'];
 
 const meta = {
-  title: 'UI/Molecules/Button Group',
+  title: 'Components/Actions/Button Group',
   component: ButtonGroup,
   args: {
     orientation: 'horizontal',

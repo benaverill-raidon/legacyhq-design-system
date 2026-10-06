@@ -6,7 +6,7 @@ import type { LinkSize } from './link.types';
 const sizes: LinkSize[] = ['sm', 'md'];
 
 const meta = {
-  title: 'UI/Atoms/Link',
+  title: 'Components/Navigation/Link',
   component: Link,
   args: {
     href: '/clients',

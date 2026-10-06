@@ -8,7 +8,7 @@ import { ToggleIconButton } from '../toggle-icon-button';
 import { Tooltip } from './tooltip';
 
 const meta = {
-  title: 'UI/Atoms/Tooltip',
+  title: 'Components/Overlays/Tooltip',
   component: Tooltip,
   args: {
     content: 'Edit',

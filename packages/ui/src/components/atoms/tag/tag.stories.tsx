@@ -15,7 +15,7 @@ const elemBeforeOptions = {
 const tones: TagTone[] = ['default', 'blue', 'green', 'purple', 'red', 'teal', 'yellow', 'orange', 'magenta', 'brand'];
 
 const meta = {
-  title: 'UI/Atoms/Tag',
+  title: 'Components/Data Display/Tag',
   component: Tag,
   args: {
     children: 'Averill Family Living Trust',

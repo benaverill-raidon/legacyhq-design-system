@@ -90,7 +90,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 }
 
 const meta = {
-  title: 'UI/Atoms/Avatar',
+  title: 'Components/Data Display/Avatar',
   component: Avatar,
   args: {
     size: 'md',

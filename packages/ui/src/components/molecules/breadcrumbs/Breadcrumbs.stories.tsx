@@ -11,7 +11,7 @@ const defaultItems: BreadcrumbItem[] = [
 ];
 
 const meta = {
-  title: 'UI/Molecules/Breadcrumbs',
+  title: 'Components/Navigation/Breadcrumbs',
   component: Breadcrumbs,
   args: {
     items: defaultItems,

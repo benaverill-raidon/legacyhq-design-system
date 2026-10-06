@@ -10,7 +10,7 @@ import { Checkbox } from '../../atoms/checkbox';
 import { Form, FormSection, FormRow, FormFooter } from './form';
 
 const meta = {
-  title: 'UI/Organisms/Form',
+  title: 'Components/Forms/Form',
   component: Form,
   args: {
     title: 'Create a new repository',

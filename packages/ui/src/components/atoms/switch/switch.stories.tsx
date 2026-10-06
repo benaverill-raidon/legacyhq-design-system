@@ -7,7 +7,7 @@ import type { SwitchSize } from './switch.types';
 const sizes: SwitchSize[] = ['md', 'sm'];
 
 const meta = {
-  title: 'UI/Atoms/Switch',
+  title: 'Components/Forms/Switch',
   component: Switch,
   args: {
     label: 'Label',

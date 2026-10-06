@@ -15,7 +15,7 @@ const surface: CSSProperties = {
 };
 
 const meta = {
-  title: 'UI/Organisms/DatePickerCalendar',
+  title: 'Components/Forms/Date Picker Calendar',
   component: DatePickerCalendar,
   args: {
     defaultMonth: TODAY,

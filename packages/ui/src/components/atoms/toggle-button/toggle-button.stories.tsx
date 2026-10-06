@@ -8,7 +8,7 @@ import type { ToggleButtonSize } from './toggle-button.types';
 const sizes: ToggleButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Toggle Button',
+  title: 'Components/Actions/Toggle Button',
   component: ToggleButton,
   args: {
     children: 'Toggle Button',

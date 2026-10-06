@@ -10,7 +10,7 @@ const widths: ModalWidth[] = ['small', 'medium', 'large', 'extraLarge'];
 const appearances: ModalAppearance[] = ['default', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Modal Dialog',
+  title: 'Components/Overlays/Modal Dialog',
   component: ModalDialog,
   args: {
     // Required props; every story's render provides its own open state and onClose, so these are

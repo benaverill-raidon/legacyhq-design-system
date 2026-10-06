@@ -37,7 +37,7 @@ function operatorSections(): MenuSection[] {
 }
 
 const meta = {
-  title: 'UI/Molecules/Chip Group',
+  title: 'Components/Forms/Chip Group',
   component: ChipGroup,
   args: {
     size: 'md',

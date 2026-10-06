@@ -11,7 +11,7 @@ const appearances: TextAreaAppearance[] = ['default', 'subtle', 'inline'];
 const resizes: TextAreaResize[] = ['none', 'vertical', 'horizontal', 'both'];
 
 const meta = {
-  title: 'UI/Molecules/Text Area',
+  title: 'Components/Forms/Text Area',
   component: TextArea,
   args: {
     size: 'md',

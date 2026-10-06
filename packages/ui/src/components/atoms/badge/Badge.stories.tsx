@@ -6,7 +6,7 @@ import type { BadgeTone } from './badge.types';
 const tones: BadgeTone[] = ['default', 'brand', 'success', 'error'];
 
 const meta = {
-  title: 'UI/Atoms/Badge',
+  title: 'Components/Data Display/Badge',
   component: Badge,
   args: {
     children: '1',

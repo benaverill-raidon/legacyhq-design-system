@@ -8,7 +8,7 @@ import type { ToastAppearance } from './toast.types';
 const appearances: ToastAppearance[] = ['default', 'success', 'info', 'warning', 'error', 'loading'];
 
 const meta = {
-  title: 'UI/Organisms/Toast',
+  title: 'Components/Feedback/Toast',
   component: Toast,
   args: {
     appearance: 'info',

@@ -6,7 +6,7 @@ import { DateTimePicker } from './date-time-picker';
 const MARCH_9_430PM = new Date(2026, 2, 9, 16, 30);
 
 const meta = {
-  title: 'UI/Organisms/DateTimePicker',
+  title: 'Components/Forms/Date Time Picker',
   component: DateTimePicker,
   args: {
     defaultValue: MARCH_9_430PM,

@@ -10,7 +10,7 @@ import type { EmptyStateType } from './empty-state.types';
 const types: EmptyStateType[] = ['inherited', 'informative'];
 
 const meta = {
-  title: 'UI/Organisms/Empty State',
+  title: 'Components/Feedback/Empty State',
   component: EmptyState,
   args: {
     type: 'inherited',

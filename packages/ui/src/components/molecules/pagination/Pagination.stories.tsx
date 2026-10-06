@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './pagination';
 
 const meta = {
-  title: 'UI/Molecules/Pagination',
+  title: 'Components/Navigation/Pagination',
   component: Pagination,
   args: {
     currentPage: 1,

@@ -11,7 +11,7 @@ const states: FieldState[] = ['default', 'error', 'valid'];
 const contexts: FieldContext[] = ['default', 'inline'];
 
 const meta = {
-  title: 'UI/Molecules/Field',
+  title: 'Components/Forms/Field',
   component: Field,
   args: {
     // A default control so `children` (required) is satisfied for every story; stories with their

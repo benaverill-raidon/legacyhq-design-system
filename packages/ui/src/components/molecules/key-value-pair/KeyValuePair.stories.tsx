@@ -12,7 +12,7 @@ import type { KeyValuePairSize } from './key-value-pair.types';
 const sizes: KeyValuePairSize[] = ['sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Molecules/Key Value Pair',
+  title: 'Components/Data Display/Key Value Pair',
   component: KeyValuePair,
   args: {
     label: 'Client name',

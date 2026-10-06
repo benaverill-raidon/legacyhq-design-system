@@ -11,7 +11,7 @@ const sizes: TextFieldSize[] = ['sm', 'md', 'lg'];
 const appearances: TextFieldAppearance[] = ['default', 'subtle'];
 
 const meta = {
-  title: 'UI/Molecules/Text Field',
+  title: 'Components/Forms/Text Field',
   component: TextField,
   args: {
     size: 'md',

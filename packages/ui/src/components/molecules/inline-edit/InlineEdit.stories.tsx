@@ -5,7 +5,7 @@ import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
 
 const meta = {
-  title: 'UI/Molecules/Inline Edit',
+  title: 'Components/Forms/Inline Edit',
   component: InlineEdit,
   args: {
     value: 'Q3 Planning',

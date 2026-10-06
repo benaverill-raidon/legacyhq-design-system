@@ -33,7 +33,7 @@ const GROUPED_OPTIONS: SelectOption[] = [
 ];
 
 const meta = {
-  title: 'UI/Molecules/Select',
+  title: 'Components/Forms/Select',
   component: Select,
   args: {
     options: STATUS_OPTIONS,

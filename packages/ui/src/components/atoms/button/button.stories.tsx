@@ -7,7 +7,7 @@ import type { ButtonSize } from './button.types';
 const sizes: ButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Button',
+  title: 'Components/Actions/Button',
   component: Button,
   args: {
     children: 'Save changes',

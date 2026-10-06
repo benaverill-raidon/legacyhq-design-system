@@ -5,7 +5,7 @@
 ### Name
 Badge
 
-### Category
+### Tier
 Atom
 
 ### Related Components

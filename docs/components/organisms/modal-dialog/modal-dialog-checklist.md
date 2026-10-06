@@ -5,7 +5,7 @@
 ### Name
 Modal Dialog
 
-### Category
+### Tier
 Organism
 
 ### Related Components

@@ -5,7 +5,7 @@
 ### Name
 Chip
 
-### Category
+### Tier
 Molecule (see "Tier exception" below - `mode="filter"` composes Dropdown Menu, an organism)
 
 ### Related Components

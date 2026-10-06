@@ -10,7 +10,7 @@ explicit confirm/cancel step.
 Use Inline Edit to make a single displayed value directly editable on the same spot on the page,
 rather than always showing an open input or requiring a separate form/dialog.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

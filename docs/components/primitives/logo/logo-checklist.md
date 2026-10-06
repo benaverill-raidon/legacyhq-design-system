@@ -5,7 +5,7 @@
 ### Name
 Logo
 
-### Category
+### Tier
 Primitive / Brand Asset
 
 ### Related Assets

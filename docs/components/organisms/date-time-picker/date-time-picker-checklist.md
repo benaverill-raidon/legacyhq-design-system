@@ -13,7 +13,7 @@ A combined date + time control: a Date Picker and a Time Picker joined into one 
 
 In progress (mirrors the current WIP Figma: context x size).
 
-## Component category
+## Component tier
 
 Organism.
 

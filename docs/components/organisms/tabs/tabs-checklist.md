@@ -13,7 +13,7 @@ uncontrolled) and wires optional TabPanel children.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

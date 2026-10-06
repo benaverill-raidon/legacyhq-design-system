@@ -5,7 +5,7 @@
 ### Name
 Focus Ring
 
-### Category
+### Tier
 Primitive
 
 ### Related Components

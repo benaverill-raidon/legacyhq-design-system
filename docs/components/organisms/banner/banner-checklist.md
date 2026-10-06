@@ -13,7 +13,7 @@ background, with an optional leading status icon and optional inverse-tone actio
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

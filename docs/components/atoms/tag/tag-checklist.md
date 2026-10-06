@@ -12,7 +12,7 @@ A tag labels UI objects for classification and navigation.
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 

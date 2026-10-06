@@ -5,7 +5,7 @@
 ### Name
 Inline Edit
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

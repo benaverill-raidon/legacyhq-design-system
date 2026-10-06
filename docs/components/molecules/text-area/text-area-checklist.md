@@ -5,7 +5,7 @@
 ### Name
 TextArea
 
-### Category
+### Tier
 Molecule (grouped with Text Field, its single-line sibling; composes no other component)
 
 ### Related Components

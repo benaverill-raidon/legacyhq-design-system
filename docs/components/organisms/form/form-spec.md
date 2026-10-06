@@ -12,7 +12,7 @@ description, required-field legend), and the spacing between section/row/footer 
 come from Field (wrapping Text Field, Select, Text Area, ...) passed as children; submission,
 validation, and each field's own state stay native and the consumer's.
 
-### Category
+### Tier
 Organism - it composes molecules (Field and its controls) into a complete UI section. Exported as
 four related parts (Form, FormSection, FormRow, FormFooter), the same separate-export pattern Tabs
 (Tabs + TabPanel) uses rather than dot-notation compounds.

@@ -10,7 +10,7 @@ preserving the layout the real content will fill.
 Use Skeleton to sketch out a loading layout - a text line, an avatar circle, an image block, a
 card - reducing perceived load time and layout shift versus a spinner or blank region.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

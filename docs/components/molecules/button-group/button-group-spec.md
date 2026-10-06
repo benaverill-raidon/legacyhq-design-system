@@ -10,7 +10,7 @@ spacing and orientation.
 Use Button Group to lay out two or more related `Button`/`IconButton` elements in a row or column
 with a single, consistent gap between them.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

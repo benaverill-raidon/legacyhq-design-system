@@ -8,7 +8,7 @@ Icon provides a consistent, reusable system for rendering SVG symbols across the
 ### Description
 Use Icon components to communicate actions, objects, statuses, and visual cues. Icons should be sized, spaced, colored, and labeled consistently through shared props and generated React components.
 
-### Category
+### Tier
 Primitive
 
 ### Design Reference

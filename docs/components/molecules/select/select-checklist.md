@@ -5,7 +5,7 @@
 ### Name
 Select
 
-### Category
+### Tier
 Molecule (see "Tier exception" below — its panel composes Dropdown Menu, an organism)
 
 ### Related Components

@@ -8,7 +8,7 @@ Text Field lets a user write or edit a single line of free text.
 ### Description
 Use Text Field for any short, single-line text entry - names, emails, search boxes, quantities.
 
-### Category
+### Tier
 Molecule - its trailing slot composes a real Icon Button/Button, not just decoration around a
 bare input, so it doesn't belong at the atom tier.
 

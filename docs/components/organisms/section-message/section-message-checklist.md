@@ -14,7 +14,7 @@ button.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

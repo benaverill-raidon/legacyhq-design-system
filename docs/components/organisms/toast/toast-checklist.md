@@ -13,7 +13,7 @@ description and actions, and a dismiss button. Shown and stacked by Toast Group.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

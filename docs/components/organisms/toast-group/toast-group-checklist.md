@@ -14,7 +14,7 @@ and a max-visible cap. Code-only behavior component (no Figma node).
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

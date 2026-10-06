@@ -5,7 +5,7 @@
 ### Name
 Chip Group
 
-### Category
+### Tier
 Molecule (no tier exception - it composes only Chip and renders a plain `div`)
 
 ### Related Components

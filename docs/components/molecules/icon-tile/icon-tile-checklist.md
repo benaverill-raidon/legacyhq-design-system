@@ -5,7 +5,7 @@
 ### Name
 Icon Tile
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

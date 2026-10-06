@@ -12,7 +12,7 @@ filter/configure icon buttons + active-filter Chip mode="filter" pills), a colum
 (sortable headers, a selection column, loading/empty states), and a pagination footer. Driven by
 `columns` + `data`.
 
-### Category
+### Tier
 Organism - composes Text Field, Chip, Checkbox, Icon Button, Button, Skeleton, Empty State,
 and Pagination into one complete section with real interaction and accessibility responsibilities.
 

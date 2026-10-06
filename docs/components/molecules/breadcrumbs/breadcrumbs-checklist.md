@@ -5,7 +5,7 @@
 ### Name
 Breadcrumbs
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

@@ -10,7 +10,7 @@ greater visual emphasis than a bare icon.
 Use Icon Tile to give an icon a scannable, colored container - a feature call-out, an empty-state
 graphic, or a leading visual in a list or card.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

@@ -8,7 +8,7 @@ Use it for onboarding, setup, multi-step forms, guided workflows, carousels, and
 
 Do not use it for system process completion, percentage-based progress, free navigation, tab selection, or a stepper that requires labels and actions. Use Progress Bar for determinate system progress and a future Stepper pattern for labeled, navigable steps.
 
-## Category
+## Tier
 
 ```txt
 atom

@@ -14,7 +14,7 @@ to the calendar.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

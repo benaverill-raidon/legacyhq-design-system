@@ -13,7 +13,7 @@ shown when a view has no content yet. `inherited` (transparent) or `informative`
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

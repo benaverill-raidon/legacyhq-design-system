@@ -5,7 +5,7 @@
 ### Name
 Skeleton
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

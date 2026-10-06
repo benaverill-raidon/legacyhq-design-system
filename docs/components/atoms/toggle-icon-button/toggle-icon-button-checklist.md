@@ -12,7 +12,7 @@ An icon-only toggle button lets users switch between selected and unselected sta
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 

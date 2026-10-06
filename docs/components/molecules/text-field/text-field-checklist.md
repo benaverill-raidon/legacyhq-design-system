@@ -5,7 +5,7 @@
 ### Name
 Text Field
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

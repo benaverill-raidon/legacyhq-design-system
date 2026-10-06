@@ -5,7 +5,7 @@
 ### Name
 Icon
 
-### Category
+### Tier
 Primitive
 
 ### Related Components

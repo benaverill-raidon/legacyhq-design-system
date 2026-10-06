@@ -14,7 +14,7 @@ AM-PM listboxes) in a Popup, with staged Cancel / Confirm. Sizes, default/inline
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

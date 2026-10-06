@@ -5,7 +5,7 @@
 ### Name
 Button Group
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

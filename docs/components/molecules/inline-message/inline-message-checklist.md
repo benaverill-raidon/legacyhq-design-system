@@ -5,7 +5,7 @@
 ### Name
 Inline Message
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

@@ -5,7 +5,7 @@
 ### Name
 Dropdown Menu
 
-### Category
+### Tier
 Organism
 
 ### Related Components

@@ -7,7 +7,7 @@ Spinner is a non-interactive primitive used to communicate that content is loadi
 ## Status
 
 - Component name: `Spinner`
-- Component category: Primitive
+- Component tier: Atom
 - Stability target: Production-ready
 - Default size: `lg`
 - Default accessibility mode: Decorative

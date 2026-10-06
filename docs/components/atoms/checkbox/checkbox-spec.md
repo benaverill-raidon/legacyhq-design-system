@@ -7,7 +7,7 @@ Checkbox is a form input atom used to let users select one or more independent o
 ## Component Type
 
 - Name: `Checkbox`
-- Category: Atom
+- Tier: Atom
 - Folder: `packages/ui/src/components/atoms/checkbox/`
 - Public export: Yes
 - Interactive: Yes

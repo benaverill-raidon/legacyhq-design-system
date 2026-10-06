@@ -12,7 +12,7 @@ Area, and Select render only their control frame; Field is where the label and h
 live, and where the `htmlFor`/`aria-describedby`/`aria-invalid`/`required` wiring is done once
 instead of at every call site.
 
-### Category
+### Tier
 Molecule - it composes the Icon primitive (the message's status glyph) and a native `<label>`
 around a control slot. The control it wraps is passed in as `children`, not owned, so a single Field
 serves every control type.

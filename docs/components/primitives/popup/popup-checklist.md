@@ -5,7 +5,7 @@
 ### Name
 Popup
 
-### Category
+### Tier
 Primitive
 
 ### Related Components

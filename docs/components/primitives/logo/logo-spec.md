@@ -8,7 +8,7 @@ Logo provides a consistent, reusable way to display the LegacyHQ brand mark, wor
 ### Description
 Use Logo to render approved brand assets in a controlled way. Logo should support multiple types and sizes while preserving brand proportions, accessibility, and theme compatibility.
 
-### Category
+### Tier
 Primitive / Brand Asset
 
 ### Design Reference

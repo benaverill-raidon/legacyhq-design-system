@@ -5,7 +5,7 @@
 ### Name
 RichTextArea
 
-### Category
+### Tier
 Molecule - Text Area's `type=rich-inline` mode, shipped as its own component.
 
 ### Related Components

@@ -8,7 +8,7 @@ Breadcrumbs are a navigation system used to show a user's location in a site or 
 ### Description
 Use Breadcrumbs to render an ordered trail of ancestor links ending in the current page.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

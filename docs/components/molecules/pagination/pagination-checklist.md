@@ -5,7 +5,7 @@
 ### Name
 Pagination
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

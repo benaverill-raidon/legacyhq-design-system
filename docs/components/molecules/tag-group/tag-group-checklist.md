@@ -5,7 +5,7 @@
 ### Name
 Tag Group
 
-### Category
+### Tier
 Molecule (see "Tier exception" in Notes below - its overflow panel composes an organism, Dropdown Menu)
 
 ### Related Components

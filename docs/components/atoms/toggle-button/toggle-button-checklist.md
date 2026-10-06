@@ -12,7 +12,7 @@ Allows users to switch between selected and unselected states while visible as a
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 

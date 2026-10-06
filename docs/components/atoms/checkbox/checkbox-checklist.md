@@ -6,7 +6,7 @@ Checkbox is an input control that allows a user to select one or more options fr
 
 ## Component Type
 
-- Category: Atom
+- Tier: Atom
 - Public component: `Checkbox`
 - Internal visual anatomy: `CheckboxIndicator`
 - Figma-only part: `checkbox-item`

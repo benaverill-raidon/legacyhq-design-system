@@ -12,7 +12,7 @@ Link buttons open new pages, websites, or new locations on a page. These are but
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 

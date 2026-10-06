@@ -5,7 +5,7 @@
 ### Name
 Split Button
 
-### Category
+### Tier
 Molecule (see "Tier exception" below - its dropdown panel composes an organism, Dropdown Menu)
 
 ### Related Components

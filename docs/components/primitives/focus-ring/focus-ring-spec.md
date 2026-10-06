@@ -8,7 +8,7 @@ Focus Ring is a primitive used to visually indicate the currently focused intera
 ### Description
 Use Focus Ring to provide consistent focus styling across interactive components such as buttons, form controls, links, and custom pressable elements. It should appear when an element receives keyboard focus or otherwise requires visible focus indication.
 
-### Category
+### Tier
 Primitive
 
 ### Design Reference

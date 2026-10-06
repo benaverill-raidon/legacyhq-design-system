@@ -9,7 +9,7 @@ users jump directly to any page.
 ### Description
 Use Pagination below a paged table, list, or search-results view to navigate between pages.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference

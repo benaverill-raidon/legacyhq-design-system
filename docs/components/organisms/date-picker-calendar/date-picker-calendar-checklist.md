@@ -14,7 +14,7 @@ full keyboard grid.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

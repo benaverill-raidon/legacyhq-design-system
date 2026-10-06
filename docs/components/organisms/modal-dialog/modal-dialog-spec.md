@@ -10,7 +10,7 @@ behaviour (portal, focus trap, dismissal, scroll lock) handled.
 A controlled overlay: a blanket backdrop centering a panel of header (title + header actions), a
 scrollable body, and a footer of actions. The consumer owns `open` and reacts to `onClose`.
 
-### Category
+### Tier
 Organism - composes atoms (Icon Button, Buttons, status Icon) into a complete self-contained overlay
 with interaction and accessibility responsibilities.
 

@@ -8,7 +8,7 @@ Badge is a compact visual indicator for numeric values such as tallies, counts, 
 ### Description
 Use Badge to display short numeric information inline with other interface elements.
 
-### Category
+### Tier
 Atom
 
 ### Design Reference

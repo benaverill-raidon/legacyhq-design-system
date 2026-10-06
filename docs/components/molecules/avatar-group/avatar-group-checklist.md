@@ -5,7 +5,7 @@
 ### Name
 Avatar Group
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

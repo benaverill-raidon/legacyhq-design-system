@@ -8,7 +8,7 @@ Use it for uploads, document generation, processing, onboarding completion, and 
 
 Do not use it for indeterminate loading, decorative charts, sliders, or step-by-step workflow navigation.
 
-## Category
+## Tier
 
 ```txt
 atom

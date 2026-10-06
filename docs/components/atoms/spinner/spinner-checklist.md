@@ -23,7 +23,7 @@ Do not use Spinner when:
 
 ## Component Type
 
-- Category: Primitive
+- Tier: Atom
 - Component name: Spinner
 - Interactivity: Non-interactive
 - Rendered element: `span` wrapper with inline `svg`

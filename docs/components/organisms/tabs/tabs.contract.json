@@ -1,6 +1,6 @@
 {
   "name": "Tabs",
-  "category": "organism",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Switch between related views in the same context.",
   "intent": "An accessible tab bar (line or contained) that manages selection and wires optional panels.",

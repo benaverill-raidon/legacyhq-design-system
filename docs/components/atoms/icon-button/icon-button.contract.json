@@ -1,6 +1,6 @@
 {
   "name": "IconButton",
-  "category": "atom",
+  "category": "actions",
   "status": "stable",
   "purpose": "Icon-only action button.",
   "figmaSource": {

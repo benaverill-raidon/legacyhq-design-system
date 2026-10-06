@@ -1,6 +1,6 @@
 {
   "name": "TagGroup",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Lays out a wrapping row of Tags with an optional overflow tag that opens a Dropdown Menu holding whichever tags got truncated.",
   "intent": "A thin composition of Tag (every visible tag and the overflow tag itself) and Dropdown Menu (the overflow panel), preconfigured for the bounded-tag-list-with-overflow use case, rather than a third independent implementation of wrapping-row layout or floating-panel behavior.",

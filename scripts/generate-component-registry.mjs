@@ -166,6 +166,9 @@ function normalizeVariants(raw, ctx) {
 function normalizeComponent({ id, tier, raw, relPath }) {
   const name = raw.name;
   if (!name) throw new Error(`${id}: missing "name"`);
+  // category is required, not nullable: the schema enum alone can't catch a missing value
+  // (validateAgainstSchema treats null leaves as valid), so check presence explicitly here.
+  if (!raw.category) throw new Error(`${name}: missing "category" (see classification in component-registry-governance.json)`);
 
   // Radio documents two components (Radio + RadioGroup) in one file: no top-level
   // anatomy/props, instead nested under `radio`/`radioGroup` keys. Detected structurally
@@ -199,7 +202,7 @@ function normalizeComponent({ id, tier, raw, relPath }) {
     id,
     name,
     tier,
-    category: raw.category ?? null,
+    category: raw.category,
     status: raw.status ?? 'undocumented',
     path: relPath,
     anatomy,

@@ -1,6 +1,6 @@
 {
   "name": "SplitButton",
-  "category": "molecule",
+  "category": "actions",
   "status": "stable",
   "purpose": "Lets people perform a primary action, or choose from a small group of similar actions via an attached Dropdown Menu.",
   "intent": "A thin composition of Button (the primary action), IconButton (the secondary, caret-only action), and Dropdown Menu (the secondary action's floating panel), preconfigured for the primary-action-with-close-alternatives use case, rather than a third independent implementation of any of them.",

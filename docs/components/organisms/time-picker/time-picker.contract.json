@@ -1,6 +1,6 @@
 {
   "name": "TimePicker",
-  "category": "organism",
+  "category": "forms",
   "status": "stable",
   "purpose": "Enter a time of day via a field that opens a three-column time selector.",
   "intent": "A read-only time field (Text Field trigger) that opens hours / minutes / AM-PM listboxes in a Popup, with Cancel / Confirm.",

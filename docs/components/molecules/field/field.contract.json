@@ -1,6 +1,6 @@
 {
   "name": "Field",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Wrap a single form control with a label, an optional message, and a validation state, wiring the three together for accessibility.",
   "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",

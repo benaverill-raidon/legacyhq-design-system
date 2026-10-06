@@ -1,6 +1,6 @@
 {
   "name": "Logo",
-  "category": "primitive",
+  "category": "foundations",
   "status": "stable",
   "purpose": "Render the approved LegacyHQ brand mark, wordmark, or full lockup consistently across the product.",
   "intent": "Provide the single source for brand artwork so no surface recreates, recolors, or distorts the logo on its own.",

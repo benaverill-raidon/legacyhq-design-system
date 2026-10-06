@@ -1,6 +1,6 @@
 {
   "name": "Popup",
-  "category": "primitive",
+  "category": "overlays",
   "status": "stable",
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
   "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",

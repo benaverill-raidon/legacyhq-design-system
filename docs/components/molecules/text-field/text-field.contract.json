@@ -1,6 +1,6 @@
 {
   "name": "TextField",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Let a user write or edit a single line of free text.",
   "intent": "Provide one consistent, accessible native text-input control - sizing, borders, and interaction states - that every free-text entry point in the product shares. Composes an optional leading icon/text slot and an optional trailing icon/action slot (which may itself compose a real Icon Button or Button), which is why it lives at the molecule tier rather than atom.",

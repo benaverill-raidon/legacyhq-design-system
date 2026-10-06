@@ -1,6 +1,6 @@
 {
   "name": "Label",
-  "category": "atom",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Display short metadata.",
   "intent": "Compact semantic annotation.",

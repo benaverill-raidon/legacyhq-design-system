@@ -1,6 +1,6 @@
 {
   "name": "Tooltip",
-  "category": "atom",
+  "category": "overlays",
   "status": "stable",
   "purpose": "Supplemental contextual information.",
   "intent": "Give a trigger element a short, non-interactive, hover/focus-revealed explanation without requiring it to carry its own accessible name.",

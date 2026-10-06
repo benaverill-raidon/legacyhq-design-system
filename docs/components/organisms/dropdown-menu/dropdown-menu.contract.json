@@ -1,6 +1,6 @@
 {
   "name": "DropdownMenu",
-  "category": "organism",
+  "category": "actions",
   "status": "stable",
   "purpose": "Pairs any trigger element with a floating Menu panel.",
   "intent": "A thin composition of Popup (positioning/dismissal) and Menu (search/sectioning/selection/keyboard nav) preconfigured for the click-to-open action-menu use case, rather than a third independent implementation of either concern.",

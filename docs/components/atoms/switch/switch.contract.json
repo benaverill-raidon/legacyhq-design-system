@@ -1,6 +1,6 @@
 {
   "name": "Switch",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Binary toggle control.",
   "intent": "Immediately enable or disable a setting.",

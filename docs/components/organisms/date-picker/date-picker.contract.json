@@ -1,6 +1,6 @@
 {
   "name": "DatePicker",
-  "category": "organism",
+  "category": "forms",
   "status": "stable",
   "purpose": "Enter a single date via a field that opens a calendar popup.",
   "intent": "A read-only date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.",

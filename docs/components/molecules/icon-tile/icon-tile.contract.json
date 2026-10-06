@@ -1,6 +1,6 @@
 {
   "name": "IconTile",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
   "intent": "Provide a non-interactive, scannable colored icon container distinct from Icon Button (interactive) and Badge/Tag (text content).",

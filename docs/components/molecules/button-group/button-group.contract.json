@@ -1,6 +1,6 @@
 {
   "name": "ButtonGroup",
-  "category": "molecule",
+  "category": "actions",
   "status": "stable",
   "purpose": "Lay out a set of related, independent action buttons with consistent spacing and direction.",
   "intent": "Centralize the recurring 'N buttons, one gap, one direction' layout without introducing any new visual treatment - all color/radius/typography comes from the Button/IconButton children.",

@@ -1,6 +1,6 @@
 {
   "name": "Breadcrumbs",
-  "category": "molecule",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Show a user's location in a nested/hierarchical section via an ordered trail of ancestor links ending in the current page.",
   "intent": "Provide a consistent, accessible 'you are here' trail composed from the existing Link atom, rather than every page reinventing separators and spacing.",

@@ -1,6 +1,6 @@
 {
   "name": "ProgressIndicator",
-  "category": "atom",
+  "category": "navigation",
   "status": "specified",
   "purpose": "Show the user current position within a finite sequence of steps.",
   "intent": "Provide a compact representation of relative journey position, with optional direct step selection.",

@@ -48,6 +48,35 @@ Component source files follow: `component-name.tsx`,
 `ComponentName.stories.tsx`, `ComponentName.test.tsx` (lowercase-hyphen for
 the implementation file, PascalCase for stories/tests).
 
+## Tier vs. category (two separate dimensions)
+
+Every component is classified twice, and the two must not be conflated:
+
+- **`tier`** = compositional complexity (`primitive`, `atom`, `molecule`,
+  `organism`). Derived from the folder; drives file layout, composition
+  rules, and the `llms.txt` headings.
+- **`category`** = functional/documentation grouping (`actions`, `forms`,
+  `feedback`, `navigation`, `data-display`, `overlays`, `foundations`).
+  Authored as `category` in `.contract.json`; required — registry
+  generation fails if it's missing or invalid. The authoritative list of
+  values is the `category` enum in
+  `docs/foundations/component-registry.schema.json`; the list above is for
+  orientation only.
+
+Classify by the job the component does, not its looks or tier — e.g.
+progress toward completion → `feedback` (Progress Bar); position within a
+sequence → `navigation` (Progress Indicator, Progress Tracker). The full
+rules, category definitions, and recorded edge cases live in the
+`classification` block of
+`docs/foundations/component-registry-governance.json`; there is
+deliberately no `layout` category yet (Card stays in `data-display`).
+
+`foundations` is a category for component-like system assets (Icon, Focus
+Ring, Logo). The Foundations *documentation* is broader — it also covers
+Color, Typography, Spacing, Radius, Elevation, and Motion, which aren't
+components and aren't in the registry — so filtering `registry.json` by
+`category: foundations` is not an index of the foundations docs.
+
 ## Context routing
 
 Don't read all 6 doc files for every component task — Button's full set alone
@@ -179,7 +208,8 @@ change.)
    — they're expected to stay in sync, not just describe v1.
 4. Add/update `.stories.tsx` and `.test.tsx` alongside the component.
 5. If this is a new component, add one line for it under the correct tier
-   heading in `llms.txt`.
+   heading in `llms.txt`, and set its `category` in `.contract.json` (see
+   "Tier vs. category" above).
 
 ## Commands
 

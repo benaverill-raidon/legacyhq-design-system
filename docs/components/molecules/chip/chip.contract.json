@@ -1,6 +1,6 @@
 {
   "name": "Chip",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Show and edit an applied filter, an applied property, or a selectable search scope, as one compact segmented pill.",
   "intent": "Give the three closely-related chip uses one component and one mental model, with each use's own props typed so they cannot be mixed up - rather than three near-identical components or one component with a pile of conditionally-meaningful props.",

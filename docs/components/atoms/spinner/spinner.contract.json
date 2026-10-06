@@ -1,6 +1,6 @@
 {
   "name": "Spinner",
-  "category": "atom",
+  "category": "feedback",
   "status": "stable",
   "purpose": "Indeterminate loading indicator.",
   "intent": "Communicate ongoing work.",

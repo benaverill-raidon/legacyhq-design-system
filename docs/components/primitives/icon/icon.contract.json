@@ -1,6 +1,6 @@
 {
   "name": "Icon",
-  "category": "primitive",
+  "category": "foundations",
   "status": "stable",
   "purpose": "Render standardized icons throughout the design system.",
   "intent": "Provide one consistent icon system - sizing, spacing, and color inheritance - that every generated glyph shares, instead of each icon reinventing its own props.",

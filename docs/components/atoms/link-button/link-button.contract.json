@@ -1,6 +1,6 @@
 {
   "name": "LinkButton",
-  "category": "atom",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Navigation styled as a button.",
   "intent": "Combine anchor semantics with Button visuals.",

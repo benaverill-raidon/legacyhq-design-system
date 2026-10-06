@@ -1,6 +1,6 @@
 {
   "name": "TextArea",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Let a user write or edit multi-line free text - notes, descriptions, comments - in a bordered, resizable field.",
   "intent": "The multi-line counterpart of Text Field: a real native <textarea> in the same bordered frame, sharing Text Field's size, appearance, invalid, and state treatment so the two read as one family. Grouped with Text Field as a molecule for that reason, though it composes no other component.",

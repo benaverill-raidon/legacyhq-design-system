@@ -1,6 +1,6 @@
 {
   "name": "Checkbox",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Select one or more independent options.",
   "intent": "Native checkbox control.",

@@ -1,6 +1,6 @@
 {
   "name": "Slider",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",

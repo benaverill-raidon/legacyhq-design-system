@@ -1,6 +1,6 @@
 {
   "name": "Link",
-  "category": "atom",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Navigation.",
   "intent": "Hyperlink behavior.",

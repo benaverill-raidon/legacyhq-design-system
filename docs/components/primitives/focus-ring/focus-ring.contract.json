@@ -1,6 +1,6 @@
 {
   "name": "FocusRing",
-  "category": "primitive",
+  "category": "foundations",
   "status": "stable",
   "purpose": "Provide one consistent keyboard-focus indicator shared by every interactive component.",
   "intent": "Centralize :focus-visible styling so no component defines its own one-off focus treatment.",

@@ -1,6 +1,6 @@
 {
   "name": "SectionMessage",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "A bordered, in-context status panel.",
   "intent": "Carry a section-level status - information, success, warning, or error - with an optional title, description, actions, and dismiss.",

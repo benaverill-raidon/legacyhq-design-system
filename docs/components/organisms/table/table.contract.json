@@ -1,6 +1,6 @@
 {
   "name": "Table",
-  "category": "organism",
+  "category": "data-display",
   "status": "beta",
   "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
   "intent": "A data-table shell: a section header (title + description + actions), a toolbar (search + filter/configure icon buttons + active-filter Chip mode='filter' pills), a column-config-driven grid (sortable headers, a selection column, row/loading/empty states), and a pagination footer. Driven by `columns` + `data`; sorting and selection are owned by default (uncontrolled) with controlled overrides, while pagination and search are controlled for server-driven data. Composes Text Field, Chip, Checkbox, Icon Button, Button, Skeleton, Empty State, and Pagination into one complete section - which is why it lives at the organism tier.",

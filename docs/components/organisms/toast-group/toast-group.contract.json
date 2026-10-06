@@ -1,6 +1,6 @@
 {
   "name": "ToastGroup",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "Stack transient Toasts and provide the imperative toast() API.",
   "intent": "Pin a bottom-right stack of Toasts that collapses in a 3D pile and expands into a vertical list on hover, with auto-dismiss, pause-on-hover, and swipe-to-dismiss.",

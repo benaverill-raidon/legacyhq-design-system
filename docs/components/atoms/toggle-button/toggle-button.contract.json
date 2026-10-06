@@ -1,6 +1,6 @@
 {
   "name": "ToggleButton",
-  "category": "atom",
+  "category": "actions",
   "status": "stable",
   "purpose": "Persistent toggle control styled as a button.",
   "intent": "Represent binary selection while remaining button-like.",

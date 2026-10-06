@@ -1,6 +1,6 @@
 {
   "name": "Pagination",
-  "category": "molecule",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Divide a large amount of content into pages and let users jump directly to any page, or step forward/backward.",
   "intent": "Provide a controlled, accessible page-range control composed from ToggleButton (page numbers) and IconButton (previous/next), with a reusable sibling/boundary-count windowing algorithm.",

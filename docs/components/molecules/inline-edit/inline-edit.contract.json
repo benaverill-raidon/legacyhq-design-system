@@ -1,6 +1,6 @@
 {
   "name": "InlineEdit",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Let a single displayed value switch between a read-only display and an editable control in place, starting on click, with an explicit confirm/cancel step.",
   "intent": "Provide the shared click-to-edit trigger, draft tracking, trailing confirm/cancel chrome, and keyboard shortcuts for 'click a value to edit it' UIs, so every call site doesn't reimplement read/edit state and draft-vs-confirmed-value tracking itself.",

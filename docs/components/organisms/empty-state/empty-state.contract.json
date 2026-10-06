@@ -1,6 +1,6 @@
 {
   "name": "EmptyState",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "Fill a space that has no content yet.",
   "intent": "Present a centered illustration, heading, description, and optional actions when a list, search, or view is empty.",

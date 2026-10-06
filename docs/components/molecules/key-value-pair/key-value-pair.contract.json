@@ -1,6 +1,6 @@
 {
   "name": "KeyValuePair",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Map a descriptive label to a static or inline-editable value for scannable metadata presentation.",
   "intent": "Present metadata as label/value rows using semantic <dt>/<dd> elements. Supports both static text values and inline-editable controls (TextField/TextArea/Select with appearance='inline'). Grouped as a molecule because it composes text controls for its inline-editable mode.",

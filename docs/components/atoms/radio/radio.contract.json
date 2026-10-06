@@ -1,6 +1,6 @@
 {
   "name": "Radio",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "publicExports": [
     "Radio",

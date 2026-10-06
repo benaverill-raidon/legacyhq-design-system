@@ -1,6 +1,6 @@
 {
   "name": "AvatarGroup",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Lays out an overlapping stack of Avatars with an optional overflow trigger that opens a Dropdown Menu holding whichever people got truncated.",
   "intent": "A thin composition of Avatar (every visible avatar), Button (the overflow trigger, reshaped into a circle), and Dropdown Menu (the overflow panel), preconfigured for the bounded-people-list-with-overflow use case, rather than a third independent implementation of overlap layout or floating-panel behavior.",

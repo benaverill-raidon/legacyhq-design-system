@@ -1,6 +1,6 @@
 {
   "name": "RichTextArea",
-  "category": "molecule",
+  "category": "forms",
   "status": "beta",
   "purpose": "Let a user write multi-line text that mixes plain prose with inline links to real records - typing `/` opens a grouped entity picker and each choice is inserted as a navigational tag.",
   "intent": "Text Area's `type=rich-inline` mode, built as its own component because the contenteditable path and its props are disjoint from the plain <textarea>. It reuses Text Area's frame tokens exactly, so the two read as one field; the difference is entirely behavioral. Composes the Menu organism as the picker and the Tag atom as the inserted tag, rather than inventing either.",

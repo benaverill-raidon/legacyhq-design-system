@@ -3,7 +3,7 @@
     "id": "focus-ring",
     "name": "FocusRing",
     "tier": "primitive",
-    "category": "primitive",
+    "category": "foundations",
     "status": "stable",
     "path": "docs/components/primitives/focus-ring/focus-ring.contract.json",
     "anatomy": [
@@ -98,7 +98,7 @@
     "id": "icon",
     "name": "Icon",
     "tier": "primitive",
-    "category": "primitive",
+    "category": "foundations",
     "status": "stable",
     "path": "docs/components/primitives/icon/icon.contract.json",
     "anatomy": [
@@ -262,7 +262,7 @@
     "id": "logo",
     "name": "Logo",
     "tier": "primitive",
-    "category": "primitive",
+    "category": "foundations",
     "status": "stable",
     "path": "docs/components/primitives/logo/logo.contract.json",
     "anatomy": [
@@ -382,7 +382,7 @@
     "id": "popup",
     "name": "Popup",
     "tier": "primitive",
-    "category": "primitive",
+    "category": "overlays",
     "status": "stable",
     "path": "docs/components/primitives/popup/popup.contract.json",
     "anatomy": [
@@ -588,7 +588,7 @@
     "id": "avatar",
     "name": "Avatar",
     "tier": "atom",
-    "category": null,
+    "category": "data-display",
     "status": "undocumented",
     "path": "docs/components/atoms/avatar/avatar.contract.json",
     "anatomy": [
@@ -696,7 +696,7 @@
     "id": "badge",
     "name": "Badge",
     "tier": "atom",
-    "category": "atom",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/atoms/badge/badge.contract.json",
     "anatomy": [
@@ -830,7 +830,7 @@
     "id": "button",
     "name": "Button",
     "tier": "atom",
-    "category": "atom",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/atoms/button/button.contract.json",
     "anatomy": [
@@ -1058,7 +1058,7 @@
     "id": "checkbox",
     "name": "Checkbox",
     "tier": "atom",
-    "category": "atom",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/atoms/checkbox/checkbox.contract.json",
     "anatomy": [
@@ -1105,7 +1105,7 @@
     "id": "icon-button",
     "name": "IconButton",
     "tier": "atom",
-    "category": "atom",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/atoms/icon-button/icon-button.contract.json",
     "anatomy": [
@@ -1185,7 +1185,7 @@
     "id": "label",
     "name": "Label",
     "tier": "atom",
-    "category": "atom",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/atoms/label/label.contract.json",
     "anatomy": [
@@ -1290,7 +1290,7 @@
     "id": "link",
     "name": "Link",
     "tier": "atom",
-    "category": "atom",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/atoms/link/link.contract.json",
     "anatomy": [
@@ -1437,7 +1437,7 @@
     "id": "link-button",
     "name": "LinkButton",
     "tier": "atom",
-    "category": "atom",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/atoms/link-button/link-button.contract.json",
     "anatomy": [
@@ -1499,7 +1499,7 @@
     "id": "progress-bar",
     "name": "ProgressBar",
     "tier": "atom",
-    "category": "atom",
+    "category": "feedback",
     "status": "specified",
     "path": "docs/components/atoms/progress-bar/progress-bar.contract.json",
     "anatomy": [
@@ -1656,7 +1656,7 @@
     "id": "progress-indicator",
     "name": "ProgressIndicator",
     "tier": "atom",
-    "category": "atom",
+    "category": "navigation",
     "status": "specified",
     "path": "docs/components/atoms/progress-indicator/progress-indicator.contract.json",
     "anatomy": [
@@ -1803,7 +1803,7 @@
     "id": "radio",
     "name": "Radio",
     "tier": "atom",
-    "category": "atom",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/atoms/radio/radio.contract.json",
     "anatomy": [],
@@ -2070,7 +2070,7 @@
     "id": "slider",
     "name": "Slider",
     "tier": "atom",
-    "category": "atom",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/atoms/slider/slider.contract.json",
     "anatomy": [
@@ -2137,7 +2137,7 @@
     "id": "spinner",
     "name": "Spinner",
     "tier": "atom",
-    "category": "atom",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/atoms/spinner/spinner.contract.json",
     "anatomy": [
@@ -2184,7 +2184,7 @@
     "id": "switch",
     "name": "Switch",
     "tier": "atom",
-    "category": "atom",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/atoms/switch/switch.contract.json",
     "anatomy": [
@@ -2245,7 +2245,7 @@
     "id": "tag",
     "name": "Tag",
     "tier": "atom",
-    "category": "atom",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/atoms/tag/tag.contract.json",
     "anatomy": [
@@ -2314,7 +2314,7 @@
     "id": "toggle-button",
     "name": "ToggleButton",
     "tier": "atom",
-    "category": "atom",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/atoms/toggle-button/toggle-button.contract.json",
     "anatomy": [
@@ -2382,7 +2382,7 @@
     "id": "toggle-icon-button",
     "name": "ToggleIconButton",
     "tier": "atom",
-    "category": "atom",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/atoms/toggle-icon-button/toggle-icon-button.contract.json",
     "anatomy": [
@@ -2448,7 +2448,7 @@
     "id": "tooltip",
     "name": "Tooltip",
     "tier": "atom",
-    "category": "atom",
+    "category": "overlays",
     "status": "stable",
     "path": "docs/components/atoms/tooltip/tooltip.contract.json",
     "anatomy": [
@@ -2548,7 +2548,7 @@
     "id": "avatar-group",
     "name": "AvatarGroup",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/molecules/avatar-group/avatar-group.contract.json",
     "anatomy": [
@@ -2677,7 +2677,7 @@
     "id": "breadcrumbs",
     "name": "Breadcrumbs",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/molecules/breadcrumbs/breadcrumbs.contract.json",
     "anatomy": [
@@ -2818,7 +2818,7 @@
     "id": "button-group",
     "name": "ButtonGroup",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/molecules/button-group/button-group.contract.json",
     "anatomy": [
@@ -2922,7 +2922,7 @@
     "id": "chip",
     "name": "Chip",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/chip/chip.contract.json",
     "anatomy": [
@@ -3135,7 +3135,7 @@
     "id": "chip-group",
     "name": "ChipGroup",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/chip-group/chip-group.contract.json",
     "anatomy": [
@@ -3248,7 +3248,7 @@
     "id": "field",
     "name": "Field",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/field/field.contract.json",
     "anatomy": [
@@ -3497,7 +3497,7 @@
     "id": "icon-tile",
     "name": "IconTile",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/molecules/icon-tile/icon-tile.contract.json",
     "anatomy": [
@@ -3800,7 +3800,7 @@
     "id": "inline-edit",
     "name": "InlineEdit",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/inline-edit/inline-edit.contract.json",
     "anatomy": [
@@ -3948,7 +3948,7 @@
     "id": "inline-message",
     "name": "InlineMessage",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/molecules/inline-message/inline-message.contract.json",
     "anatomy": [
@@ -4098,7 +4098,7 @@
     "id": "key-value-list",
     "name": "KeyValueList",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/molecules/key-value-list/key-value-list.contract.json",
     "anatomy": [
@@ -4152,7 +4152,7 @@
     "id": "key-value-pair",
     "name": "KeyValuePair",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/molecules/key-value-pair/key-value-pair.contract.json",
     "anatomy": [
@@ -4277,7 +4277,7 @@
     "id": "pagination",
     "name": "Pagination",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/molecules/pagination/pagination.contract.json",
     "anatomy": [
@@ -4428,7 +4428,7 @@
     "id": "rich-text-area",
     "name": "RichTextArea",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "beta",
     "path": "docs/components/molecules/rich-text-area/rich-text-area.contract.json",
     "anatomy": [],
@@ -4619,7 +4619,7 @@
     "id": "select",
     "name": "Select",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/select/select.contract.json",
     "anatomy": [
@@ -4826,7 +4826,7 @@
     "id": "skeleton",
     "name": "Skeleton",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/molecules/skeleton/skeleton.contract.json",
     "anatomy": [
@@ -4957,7 +4957,7 @@
     "id": "split-button",
     "name": "SplitButton",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/molecules/split-button/split-button.contract.json",
     "anatomy": [
@@ -5130,7 +5130,7 @@
     "id": "tag-group",
     "name": "TagGroup",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/molecules/tag-group/tag-group.contract.json",
     "anatomy": [
@@ -5267,7 +5267,7 @@
     "id": "text-area",
     "name": "TextArea",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/text-area/text-area.contract.json",
     "anatomy": [],
@@ -5420,7 +5420,7 @@
     "id": "text-field",
     "name": "TextField",
     "tier": "molecule",
-    "category": "molecule",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/text-field/text-field.contract.json",
     "anatomy": [
@@ -5688,7 +5688,7 @@
     "id": "banner",
     "name": "Banner",
     "tier": "organism",
-    "category": "organism",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/organisms/banner/banner.contract.json",
     "anatomy": [
@@ -5820,7 +5820,7 @@
     "id": "card",
     "name": "Card",
     "tier": "organism",
-    "category": "organism",
+    "category": "data-display",
     "status": "stable",
     "path": "docs/components/organisms/card/card.contract.json",
     "anatomy": [
@@ -6037,7 +6037,7 @@
     "id": "date-picker",
     "name": "DatePicker",
     "tier": "organism",
-    "category": "organism",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/organisms/date-picker/date-picker.contract.json",
     "anatomy": [
@@ -6259,7 +6259,7 @@
     "id": "date-picker-calendar",
     "name": "DatePickerCalendar",
     "tier": "organism",
-    "category": "organism",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/organisms/date-picker-calendar/date-picker-calendar.contract.json",
     "anatomy": [
@@ -6461,7 +6461,7 @@
     "id": "date-time-picker",
     "name": "DateTimePicker",
     "tier": "organism",
-    "category": "organism",
+    "category": "forms",
     "status": "in-progress",
     "path": "docs/components/organisms/date-time-picker/date-time-picker.contract.json",
     "anatomy": [
@@ -6674,7 +6674,7 @@
     "id": "dropdown-menu",
     "name": "DropdownMenu",
     "tier": "organism",
-    "category": "organism",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/organisms/dropdown-menu/dropdown-menu.contract.json",
     "anatomy": [
@@ -6881,7 +6881,7 @@
     "id": "empty-state",
     "name": "EmptyState",
     "tier": "organism",
-    "category": "organism",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/organisms/empty-state/empty-state.contract.json",
     "anatomy": [
@@ -7010,7 +7010,7 @@
     "id": "form",
     "name": "Form",
     "tier": "organism",
-    "category": "organism",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/organisms/form/form.contract.json",
     "anatomy": [
@@ -7197,7 +7197,7 @@
     "id": "menu",
     "name": "Menu",
     "tier": "organism",
-    "category": "organism",
+    "category": "actions",
     "status": "stable",
     "path": "docs/components/organisms/menu/menu.contract.json",
     "anatomy": [
@@ -7457,7 +7457,7 @@
     "id": "modal-dialog",
     "name": "ModalDialog",
     "tier": "organism",
-    "category": "organism",
+    "category": "overlays",
     "status": "stable",
     "path": "docs/components/organisms/modal-dialog/modal-dialog.contract.json",
     "anatomy": [
@@ -7736,7 +7736,7 @@
     "id": "progress-tracker",
     "name": "ProgressTracker",
     "tier": "organism",
-    "category": "organism",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/organisms/progress-tracker/progress-tracker.contract.json",
     "anatomy": [
@@ -7882,7 +7882,7 @@
     "id": "section-message",
     "name": "SectionMessage",
     "tier": "organism",
-    "category": "organism",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/organisms/section-message/section-message.contract.json",
     "anatomy": [
@@ -8047,7 +8047,7 @@
     "id": "table",
     "name": "Table",
     "tier": "organism",
-    "category": "organism",
+    "category": "data-display",
     "status": "beta",
     "path": "docs/components/organisms/table/table.contract.json",
     "anatomy": [
@@ -8513,7 +8513,7 @@
     "id": "tabs",
     "name": "Tabs",
     "tier": "organism",
-    "category": "organism",
+    "category": "navigation",
     "status": "stable",
     "path": "docs/components/organisms/tabs/tabs.contract.json",
     "anatomy": [
@@ -8668,7 +8668,7 @@
     "id": "time-picker",
     "name": "TimePicker",
     "tier": "organism",
-    "category": "organism",
+    "category": "forms",
     "status": "stable",
     "path": "docs/components/organisms/time-picker/time-picker.contract.json",
     "anatomy": [
@@ -8908,7 +8908,7 @@
     "id": "toast",
     "name": "Toast",
     "tier": "organism",
-    "category": "organism",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/organisms/toast/toast.contract.json",
     "anatomy": [
@@ -9086,7 +9086,7 @@
     "id": "toast-group",
     "name": "ToastGroup",
     "tier": "organism",
-    "category": "organism",
+    "category": "feedback",
     "status": "stable",
     "path": "docs/components/organisms/toast-group/toast-group.contract.json",
     "anatomy": [

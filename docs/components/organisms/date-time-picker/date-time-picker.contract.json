@@ -1,6 +1,6 @@
 {
   "name": "DateTimePicker",
-  "category": "organism",
+  "category": "forms",
   "status": "in-progress",
   "purpose": "Capture a date and a time together in one control.",
   "intent": "A Date Picker and a Time Picker joined into a single field over one Date value.",

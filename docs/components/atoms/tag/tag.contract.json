@@ -1,6 +1,6 @@
 {
   "name": "Tag",
-  "category": "atom",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Display compact metadata with optional navigation and removal.",
   "intent": "Represent entities and contextual metadata throughout LegacyHQ.",

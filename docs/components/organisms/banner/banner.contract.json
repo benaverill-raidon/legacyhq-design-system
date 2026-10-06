@@ -1,6 +1,6 @@
 {
   "name": "Banner",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "A full-width, page-level announcement bar.",
   "intent": "Carry a single high-visibility, page-level message on a bold background, with optional inline actions.",

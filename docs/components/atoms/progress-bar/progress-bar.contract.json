@@ -1,6 +1,6 @@
 {
   "name": "ProgressBar",
-  "category": "atom",
+  "category": "feedback",
   "status": "specified",
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",

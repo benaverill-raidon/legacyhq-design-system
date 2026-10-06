@@ -1,6 +1,6 @@
 {
   "name": "Select",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Pick one option (or several) from a searchable list, shown in a field-styled trigger.",
   "intent": "A combobox composed from the pieces the system already has - a TextField trigger, a Dropdown Menu panel, and Chips for multi-select values - preconfigured for the choose-from-a-list use case, rather than a fourth independent implementation of a field, a floating panel, or a token input.",

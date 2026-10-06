@@ -33,6 +33,15 @@ rules, and the task→file routing table that says which of a component's up to
   invented. Load when tracing a component back to its design source or
   when re-verifying Figma mapping data.
 
+The index below is grouped by **tier** (compositional complexity: what a
+component is built from). Each component also has an independent
+**category** (functional grouping, e.g. forms or feedback) in its
+`.contract.json` and in `registry.json`. The valid categories are the
+`category` enum in
+[component-registry.schema.json](docs/foundations/component-registry.schema.json);
+the rules are in the `classification` block of
+[component-registry-governance.json](docs/foundations/component-registry-governance.json).
+
 ## Primitives (4)
 
 - [focus-ring](docs/components/primitives/focus-ring/focus-ring.md)

@@ -1,6 +1,6 @@
 {
   "name": "DatePickerCalendar",
-  "category": "organism",
+  "category": "forms",
   "status": "stable",
   "purpose": "Choose a single date from a month grid.",
   "intent": "The month-grid panel that fills the date / date-time picker popup surface.",

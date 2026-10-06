@@ -1,6 +1,6 @@
 {
   "name": "Badge",
-  "category": "atom",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Display compact numeric values such as counts, tallies, and score changes.",
   "intent": "Provide a small, non-interactive visual indicator that supports fast scanning without adding action or status-label semantics.",

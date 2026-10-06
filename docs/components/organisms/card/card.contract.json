@@ -1,6 +1,6 @@
 {
   "name": "Card",
-  "category": "organism",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Wrap arbitrary content in an optional theme-aware surface and border with rounded corners.",
   "intent": "A surface shell with a single unrestricted children slot. Content owns padding, layout, semantics, and interactions. Tier exception: it lives with organisms as a container for complete content sections, while importing no other UI components.",

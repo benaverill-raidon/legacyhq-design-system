@@ -1,6 +1,6 @@
 {
   "name": "Menu",
-  "category": "organism",
+  "category": "actions",
   "status": "stable",
   "purpose": "A searchable, sectioned list of interactive rows.",
   "intent": "Give Dropdown Menu (and any other floating or embedded action/option list) a shared, data-driven list implementation instead of each hand-rolling row markup, search filtering, and roving-tabindex keyboard navigation independently.",

@@ -1,6 +1,6 @@
 {
   "name": "Toast",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "A raised, transient notification card.",
   "intent": "Show a brief, non-blocking status - success, error, warning, info, default, or a loading spinner - with an optional description and actions.",

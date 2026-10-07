@@ -152,11 +152,15 @@ from the token data. See [`docs/foundations/token-format.md`](docs/foundations/t
 for types, reference handling, migration evidence, and the manual Figma-export
 conversion step. `npm run tokens:check` and `npm run test:tokens` run in `validate`.
 
-From `docs/foundations/token-governance.json`. The "components must never
-consume primitives directly" / "no raw values" rules below are enforced
-mechanically by `npm run lint:css` (stylelint), not just by convention or
-review — see the `enforcement` block in that file and the Commands section
-below.
+From `docs/foundations/token-governance.json`. Two of the rules below are
+enforced mechanically, not just by convention or review: "no raw values" by
+`npm run lint:css` (stylelint), and "components must never consume primitives
+directly" — for color only — by
+`packages/ui/src/components/component-color-tokens.test.ts` (part of
+`npm test`). Stylelint can't distinguish primitive from semantic `var()`s, and
+other primitive types aren't checked: a few components still use primitive
+dimension tokens (`measurement-2`/`-6`/`-32`) directly. See the `enforcement`
+block in that file and the Commands section below.
 
 1. **Primitive** — raw values only, no intent. `color.blue.500`,
    `spacing.4`. **Components must never consume these directly.**
@@ -236,7 +240,7 @@ change.)
 - `npm run validate` — the one command to run after touching a component;
   checks token data/CSS compatibility, then runs `typecheck`, `lint`, `lint:css`, and `test`. Run this before
   considering a change done. Also runs in CI (`.github/workflows/validate.yml`)
-  on every push/PR.
+  on every pull request and push to master.
 - `npm run lint:css` — stylelint over `packages/ui/src/{components,storybook}/**/*.module.css`
   (Storybook docs pages follow the same token rules as components).
   Enforces the token architecture mechanically: raw values for color,

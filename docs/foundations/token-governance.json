@@ -232,6 +232,16 @@
                 "reason": "These frequently require geometric arithmetic (calc(), negative offsets) that doesn't map onto the token scale; gating them produced false positives against legitimate layout math."
             },
             "escapeHatch": "A raw value can still pass via an inline `stylelint-disable-next-line scale-unlimited/declaration-strict-value` comment, but the comment must state why — reviewers should treat an unexplained disable as a rejection, not a pass."
+        },
+        "primitiveColorCheck": {
+            "description": "Stylelint accepts any var(), so it can't tell a primitive from a semantic token. This test closes that gap for color: component CSS that references a primitive color token - or a deprecated alias resolving to one - fails with the file, line, and token.",
+            "test": "packages/ui/src/components/component-color-tokens.test.ts",
+            "command": "npm test",
+            "runsIn": [
+                "npm run validate",
+                "CI (.github/workflows/validate.yml)"
+            ],
+            "notCovered": "Other primitive types are not checked. Component CSS currently references three primitive dimension tokens directly - measurement-2 (slider, text-area), measurement-6 (chip, field, text-area, text-field, toggle-button, tooltip), and measurement-32 (spinner)."
         }
     },
     "sourceFormat": {

@@ -1,11 +1,11 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
+import { componentsUsing } from '../../blocks/doc-helpers';
 import {
   accent,
   aliasOf,
   backgroundMatrices,
-  componentsUsing,
   contrast,
   dataViz,
   groupOf,

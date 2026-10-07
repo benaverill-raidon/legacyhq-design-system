@@ -217,24 +217,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.anatomy {
-  display: grid;
-  gap: var(--spacing-sm);
-}
-
-.anatomyParts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
-}
-
-.anatomyParts > li {
-  display: grid;
-  gap: var(--spacing-xxs);
-  justify-items: center;
-  color: var(--color-content-subtle);
-}
-
 /* Contrast */
 
 .legend {

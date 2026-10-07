@@ -3,14 +3,15 @@ import { Label } from '../../../components/atoms/label';
 import type { LabelTone } from '../../../components/atoms/label';
 import { ToggleButton } from '../../../components/atoms/toggle-button';
 import { ButtonGroup } from '../../../components/molecules/button-group';
-import { breakable, Code, doc, DocFooter, DocHeader, DocPage, DocSection, DocSubsection } from '../../blocks/doc-page';
+import { usersOf } from '../../blocks/component-css';
+import { inWords, listOf, titleCase } from '../../blocks/doc-helpers';
+import { breakable, Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection } from '../../blocks/doc-page';
 import {
   accent,
   aliasOf,
   backgroundMatrices,
   bandOf,
   componentColorTokens,
-  componentsUsing,
   contrast,
   CONTRAST_SURFACES,
   contrastGaps,
@@ -26,20 +27,7 @@ import {
 import type { ContrastBand, Matrix, Mode } from './color-data';
 import styles from './color.module.css';
 
-// Vite inlines component CSS so usage ("used today by ...") is read from the stylesheets themselves.
-const componentCss = import.meta.glob('../../../components/**/*.module.css', { query: '?raw', import: 'default', eager: true }) as Record<
-  string,
-  string
->;
-
-const titleCase = (value: string) => value.replace(/(^|-)([a-z])/g, (_m, dash, letter) => `${dash ? ' ' : ''}${letter.toUpperCase()}`);
-const listOf = (items: string[]) =>
-  items.length <= 2 ? items.join(' and ') : `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
-const usersOf = (...prefixes: string[]) =>
-  [...new Set(prefixes.flatMap((prefix) => componentsUsing(prefix, componentCss)))].sort().map(titleCase);
 const ratioText = (ratio: number) => `${ratio.toFixed(2)}:1`;
-const NUMBER_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
-const inWords = (count: number) => NUMBER_WORDS[count] ?? String(count);
 
 // --- Theme switch + live values -----------------------------------------------------------------
 
@@ -387,22 +375,11 @@ function Structure() {
           </p>
         </li>
       </ol>
-      <div className={styles.anatomy}>
-        <p className={doc.eyebrow}>Anatomy of a token name</p>
-        <ol className={styles.anatomyParts}>
-          {anatomy.map(([part, role]) => (
-            <li key={part}>
-              <Code>{part}</Code>
-              <span className={doc.small}>{role}</span>
-            </li>
-          ))}
-        </ol>
-        <p className={doc.caption}>
-          Not every token uses every part: <Code>color-content-default</Code> is just a property and a role. States are{' '}
-          <Code>default</Code>, <Code>hover</Code>, and <Code>press</Code>; <Code>overlay</Code> tokens are translucent state
-          layers placed over another fill.
-        </p>
-      </div>
+      <DocAnatomy parts={anatomy}>
+        Not every token uses every part: <Code>color-content-default</Code> is just a property and a role. States are{' '}
+        <Code>default</Code>, <Code>hover</Code>, and <Code>press</Code>; <Code>overlay</Code> tokens are translucent state
+        layers placed over another fill.
+      </DocAnatomy>
     </DocSection>
   );
 }

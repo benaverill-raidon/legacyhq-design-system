@@ -303,14 +303,3 @@ export const ratioRange = (text: string, mode: Mode) => {
   const ratios = contrast.find((row) => row.text === text)?.byMode[mode].map(({ ratio }) => ratio) ?? [];
   return { min: Math.min(...ratios), max: Math.max(...ratios) };
 };
-
-// --- Usage ------------------------------------------------------------------------------------
-
-/** Component folder names whose CSS references any token with this prefix. CSS is passed in. */
-export function componentsUsing(prefix: string, cssByPath: Record<string, string>) {
-  const users = Object.entries(cssByPath)
-    .filter(([, css]) => css.includes(`var(--${prefix}`))
-    .map(([path]) => path.replace(/\\/g, '/').match(/\/([a-z-]+)\/[^/]+\.module\.css$/)?.[1])
-    .filter((name): name is string => Boolean(name));
-  return [...new Set(users)].sort();
-}

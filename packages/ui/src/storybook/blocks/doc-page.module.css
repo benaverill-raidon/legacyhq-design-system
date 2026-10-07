@@ -149,6 +149,24 @@
   margin-block-start: var(--spacing-xl);
 }
 
+.anatomy {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.anatomyParts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.anatomyParts > li {
+  display: grid;
+  gap: var(--spacing-xxs);
+  justify-items: center;
+  color: var(--color-content-subtle);
+}
+
 .footer {
   padding-block-start: var(--spacing-lg);
   border-block-start: var(--border-width-sm) solid var(--color-border-default);

@@ -42,6 +42,24 @@ export function DocSubsection({ title, children }: { title: string; children: Re
   );
 }
 
+/** A real token name split into its parts, each labelled with what it names; children are the caption. */
+export function DocAnatomy({ parts, children }: { parts: Array<[part: string, meaning: string]>; children?: React.ReactNode }) {
+  return (
+    <div className={doc.anatomy}>
+      <p className={doc.eyebrow}>Anatomy of a token name</p>
+      <ol className={doc.anatomyParts}>
+        {parts.map(([part, meaning]) => (
+          <li key={part}>
+            <Code>{part}</Code>
+            <span className={doc.small}>{meaning}</span>
+          </li>
+        ))}
+      </ol>
+      {children && <p className={doc.caption}>{children}</p>}
+    </div>
+  );
+}
+
 /** The closing note that says which source files the page reads from. */
 export function DocFooter({ children }: { children: React.ReactNode }) {
   return (

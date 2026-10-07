@@ -1,0 +1,366 @@
+/*
+ * Foundations / Color layout. Page rhythm, type scale, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Swatch panels switch theme with data-theme="dark"; every
+ * other part of the page stays light.
+ */
+
+/* Theme switch and swatch panels */
+
+.switchRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.panel {
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-default);
+  color: var(--color-content-default);
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--spacing-2xl);
+  block-size: var(--spacing-xl);
+  vertical-align: middle;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+}
+
+.textSample {
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+}
+
+.borderSample {
+  display: inline-block;
+  inline-size: var(--spacing-2xl);
+  block-size: var(--spacing-xl);
+  vertical-align: middle;
+  border-width: var(--border-width-md);
+  border-style: solid;
+  border-radius: var(--border-radius-xs);
+}
+
+.onBold {
+  display: inline-flex;
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-background-neutral-bold-default);
+  vertical-align: middle;
+}
+
+.value {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- no monospace font token exists; color values need a fixed-width face */
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  white-space: nowrap;
+}
+
+.alias {
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+/* Token tables (Content, Border) */
+
+.tokenTable {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.tokenTable :where(th, td) {
+  padding: var(--spacing-xs) var(--spacing-md) var(--spacing-xs) var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.tokenTable tbody tr:last-child :where(th, td) {
+  border-block-end: none;
+}
+
+.tokenTable thead th,
+.matrix thead :where(th, td),
+.contrastTable thead :where(th, td) {
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.tokenTable tbody th {
+  font-weight: var(--typography-body-md-font-weight);
+}
+
+/* Emphasis x state matrices (Background, Surfaces, Accent) */
+
+.matrixScroll {
+  overflow-x: auto;
+}
+
+.matrix {
+  border-collapse: collapse;
+}
+
+.matrix :where(th, td) {
+  padding: var(--spacing-xxs) var(--spacing-xs);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.matrix thead th[scope='colgroup'] {
+  padding-block-end: var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.matrix tbody th,
+.matrix thead th[scope='col']:first-child {
+  padding-inline-start: var(--spacing-none);
+  text-align: start;
+}
+
+.matrix tbody th {
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+}
+
+.extras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm) var(--spacing-lg);
+}
+
+.extras > li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.subgroup {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin-block-start: var(--spacing-md);
+}
+
+.subgroupCaption {
+  max-inline-size: 72ch;
+  color: var(--color-content-subtle);
+}
+
+/* Data visualization */
+
+.dataViz {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.strip {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  align-items: center;
+  margin-block-start: var(--spacing-xxs);
+}
+
+.stripLabel {
+  color: var(--color-content-subtle);
+}
+
+.stripSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xxs);
+}
+
+/* Structure */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.tier {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-xxs);
+  align-content: start;
+  padding-block-start: var(--spacing-sm);
+  border-block-start: var(--border-width-md) solid var(--color-border-bold);
+}
+
+.tier:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  inset-block-start: var(--spacing-sm);
+  inset-inline-start: 100%;
+  inline-size: var(--spacing-xl);
+  color: var(--color-content-subtle);
+  text-align: center;
+}
+
+.tierCount {
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.anatomy {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.anatomyParts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.anatomyParts > li {
+  display: grid;
+  gap: var(--spacing-xxs);
+  justify-items: center;
+  color: var(--color-content-subtle);
+}
+
+/* Contrast */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-xl);
+}
+
+.contrastTable {
+  border-collapse: collapse;
+}
+
+.contrastTable :where(th, td) {
+  padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.contrastTable thead th[scope='colgroup'] {
+  padding-block-end: var(--spacing-none);
+}
+
+.contrastCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.contrastSample {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--spacing-2xl);
+  block-size: var(--spacing-xl);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+}
+
+.contrastResult {
+  display: grid;
+  gap: var(--spacing-xxs);
+  justify-items: start;
+}
+
+.contrastRatio {
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.notes {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding-inline-start: var(--spacing-lg);
+  list-style: disc;
+}
+
+/* Primitive palettes */
+
+.palettes {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.palette {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.ramp {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  gap: var(--spacing-xxs);
+}
+
+.ramp > li {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.rampSwatch {
+  block-size: var(--spacing-2xl);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+}
+
+.rampStep {
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.alphaRamp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xxs);
+}
+
+/* Alpha swatches sit on a checkerboard so their transparency is visible. */
+.alphaRamp > li {
+  border-radius: var(--border-radius-xs);
+  background:
+    repeating-conic-gradient(var(--color-elevation-surface-sunken-default) 0 25%, var(--color-elevation-surface-raised-default) 0 50%)
+    0 0 / var(--spacing-sm) var(--spacing-sm);
+}
+
+.alphaSwatch {
+  display: block;
+  inline-size: var(--spacing-xl);
+  block-size: var(--spacing-md);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+}
+
+@media (max-width: 900px) {
+  .tiers {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tier::after {
+    content: none;
+  }
+}

@@ -239,6 +239,555 @@
         "kind": "alias",
         "target": "typography-text-transform-none"
       }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-prussian",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-taupe",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-teal",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-purple",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-orange",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-pink",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-green",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-blue",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-yellow",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-red",
+      "mode": "light",
+      "after": "color-data-viz-category-subtle-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-red"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-prussian",
+      "mode": "light",
+      "after": "color-data-viz-category-default-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-taupe",
+      "mode": "light",
+      "after": "color-data-viz-category-default-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-teal",
+      "mode": "light",
+      "after": "color-data-viz-category-default-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-purple",
+      "mode": "light",
+      "after": "color-data-viz-category-default-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-orange",
+      "mode": "light",
+      "after": "color-data-viz-category-default-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-magenta",
+      "mode": "light",
+      "after": "color-data-viz-category-default-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-green",
+      "mode": "light",
+      "after": "color-data-viz-category-default-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-blue",
+      "mode": "light",
+      "after": "color-data-viz-category-default-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-yellow",
+      "mode": "light",
+      "after": "color-data-viz-category-default-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-red",
+      "mode": "light",
+      "after": "color-data-viz-category-default-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-red"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-prussian",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-taupe",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-teal",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-purple",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-orange",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-pink",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-green",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-blue",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-yellow",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-red",
+      "mode": "light",
+      "after": "color-data-viz-category-bold-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-red"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-prussian",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-taupe",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-teal",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-purple",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-orange",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-pink",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-green",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-blue",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-yellow",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-subtle-red",
+      "mode": "dark",
+      "after": "color-data-viz-category-subtle-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-subtle-red"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-prussian",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-taupe",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-teal",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-purple",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-orange",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-magenta",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-green",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-blue",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-yellow",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-default-red",
+      "mode": "dark",
+      "after": "color-data-viz-category-default-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-default-red"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-prussian",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-prussian",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-prussian"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-taupe",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-taupe",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-taupe"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-teal",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-teal",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-teal"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-purple",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-purple",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-purple"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-orange",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-orange",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-orange"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-pink",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-magenta",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-magenta"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-green",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-green",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-green"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-blue",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-blue",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-blue"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-yellow",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-yellow",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-yellow"
+      }
+    },
+    {
+      "name": "color-data-viz-catergory-bold-red",
+      "mode": "dark",
+      "after": "color-data-viz-category-bold-red",
+      "value": {
+        "kind": "alias",
+        "target": "color-data-viz-category-bold-red"
+      }
+    },
+    {
+      "name": "color-green-alpha-500-4",
+      "mode": "tokens",
+      "after": "color-green-alpha-500-04",
+      "value": {
+        "kind": "alias",
+        "target": "color-green-alpha-500-04"
+      }
     }
   ]
 }

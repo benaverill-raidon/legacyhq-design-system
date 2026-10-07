@@ -7,18 +7,31 @@
     "commit": "03cd31dccc2d07fa6b394e8c45da78af2cdad4da",
     "reason": "Migration was authored on a pre-#34 base. Rebased onto master 86ed9e4, whose legacy build adds the progress-bar sm size and 16/24/32 track sizes. light.css and dark.css hashes are unchanged; only tokens.css moved (561 -> 564 declarations)."
   },
+  "identifierRenames": [
+    {
+      "on": "2026-10-07",
+      "reason": "Naming fixes made first in the Figma Tokens v1.0.0 file (variable IDs preserved) and mirrored in the token source: color/data-viz/catergory/* -> category/* (30 variables), categorical data-viz pink -> magenta at the subtle and bold levels (matching the magenta primitives and the default level), and color/green/alpha/500/4 -> 500/04 (matching its alpha siblings).",
+      "verification": "For each file, the new output with the deprecated alias lines removed equals the previous output with old names mapped to new ones, line for line - identifiers changed, values, order, and selectors did not.",
+      "deprecatedAliases": "Each old custom property is kept as an alias recipe (css-recipes.json) resolving to its new name: 30 in light.css, 30 in dark.css, 1 in tokens.css. See 'Deprecated aliases' in docs/foundations/token-format.md for when they can be removed.",
+      "previousFiles": {
+        "tokens.css": { "sha256LF": "673bd47995070bb3c43bf46e1e484f1c3541d207e8bb7ef49b2a558b81d47187", "declarations": 564 },
+        "light.css": { "sha256LF": "0b5eb1aed32e5645bc72134bfda25b7caf99db6f1d8114037711bbc61cdea942", "declarations": 323 },
+        "dark.css": { "sha256LF": "44024b1d9145ef3d62edf5f0ac10c3211629c999fac7fee9dc896e237e2f7479", "declarations": 323 }
+      }
+    }
+  ],
   "files": {
     "tokens.css": {
-      "sha256LF": "673bd47995070bb3c43bf46e1e484f1c3541d207e8bb7ef49b2a558b81d47187",
-      "declarations": 564
+      "sha256LF": "21f06badfab95ec996d4b0e4f53b03432394ffa71ccd01bc15906a41ba3d1b16",
+      "declarations": 565
     },
     "light.css": {
-      "sha256LF": "0b5eb1aed32e5645bc72134bfda25b7caf99db6f1d8114037711bbc61cdea942",
-      "declarations": 323
+      "sha256LF": "36578a6e6a444e070cf8befe3c5c3e2c03623eb599318967931244a3d8516edb",
+      "declarations": 353
     },
     "dark.css": {
-      "sha256LF": "44024b1d9145ef3d62edf5f0ac10c3211629c999fac7fee9dc896e237e2f7479",
-      "declarations": 323
+      "sha256LF": "191500aae52ecbb73aad6dd5dd77ca7ae229526ffd70a9783e33f265a0dffab9",
+      "declarations": 353
     }
   }
 }

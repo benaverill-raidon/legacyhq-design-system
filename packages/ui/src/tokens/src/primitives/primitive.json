@@ -902,7 +902,7 @@
           }
         }
       },
-      "color-green-alpha-500-4": {
+      "color-green-alpha-500-04": {
         "$type": "color",
         "$value": {
           "colorSpace": "srgb",
@@ -915,7 +915,7 @@
         },
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/green/alpha/500/4"
+            "originalName": "color/green/alpha/500/04"
           }
         }
       },

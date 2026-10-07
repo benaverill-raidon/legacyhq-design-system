@@ -92,6 +92,26 @@ Colors serialize to six-digit hex or rgba with 8-bit RGB channels; font families
 receive CSS quotes. Existing component-to-primitive references remain unchanged;
 this migration does not revise the three-tier governance policy.
 
+### Deprecated aliases
+
+Renamed tokens keep their old CSS custom property for a while, as an alias recipe
+that resolves to the new name. Themed tokens get the alias in both `light.css` and
+`dark.css`, because an alias declared only on `:root` would keep the Light value
+inside `[data-theme="dark"]`. Nothing in this repository uses the old names; they
+exist for consumers outside it.
+
+| Old custom property | New custom property | Since |
+| --- | --- | --- |
+| `--color-data-viz-catergory-{subtle,default,bold}-{hue}` (28) | `--color-data-viz-category-…` | 2026-10-07 |
+| `--color-data-viz-catergory-{subtle,bold}-pink` | `--color-data-viz-category-{subtle,bold}-magenta` | 2026-10-07 |
+| `--color-green-alpha-500-4` | `--color-green-alpha-500-04` | 2026-10-07 |
+
+The Figma variables were renamed at the same time (Tokens v1.0.0; variable IDs
+unchanged). The aliases stay until the LegacyHQ application has been checked for the
+old names - for example `git grep -nE "data-viz-catergory|green-alpha-500-4\b"` in
+its repository - and any uses are migrated. Then delete the alias recipes from
+`css-recipes.json`, rebuild, and update the migration fixtures.
+
 ## Build, validation, and exports
 
 Use Node 22+ and `npm ci`. Style Dictionary is pinned to 5.3.0 and runs with

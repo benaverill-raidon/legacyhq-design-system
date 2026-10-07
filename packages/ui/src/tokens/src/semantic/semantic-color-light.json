@@ -2376,30 +2376,30 @@
           }
         }
       },
-      "color-data-viz-catergory-subtle-prussian": {
+      "color-data-viz-category-subtle-prussian": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-prussian-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/prussian"
+            "originalName": "color/data-viz/category/subtle/prussian"
           }
         }
       },
-      "color-data-viz-catergory-subtle-taupe": {
+      "color-data-viz-category-subtle-taupe": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-taupe-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/taupe"
+            "originalName": "color/data-viz/category/subtle/taupe"
           }
         }
       },
-      "color-data-viz-catergory-subtle-teal": {
+      "color-data-viz-category-subtle-teal": {
         "$type": "color",
         "$value": "{Primitive.Value.color-teal-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/teal"
+            "originalName": "color/data-viz/category/subtle/teal"
           }
         }
       },
@@ -2412,30 +2412,30 @@
           }
         }
       },
-      "color-data-viz-catergory-subtle-purple": {
+      "color-data-viz-category-subtle-purple": {
         "$type": "color",
         "$value": "{Primitive.Value.color-purple-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/purple"
+            "originalName": "color/data-viz/category/subtle/purple"
           }
         }
       },
-      "color-data-viz-catergory-subtle-orange": {
+      "color-data-viz-category-subtle-orange": {
         "$type": "color",
         "$value": "{Primitive.Value.color-orange-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/orange"
+            "originalName": "color/data-viz/category/subtle/orange"
           }
         }
       },
-      "color-data-viz-catergory-subtle-pink": {
+      "color-data-viz-category-subtle-magenta": {
         "$type": "color",
         "$value": "{Primitive.Value.color-magenta-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/pink"
+            "originalName": "color/data-viz/category/subtle/magenta"
           }
         }
       },
@@ -2466,12 +2466,12 @@
           }
         }
       },
-      "color-data-viz-catergory-subtle-green": {
+      "color-data-viz-category-subtle-green": {
         "$type": "color",
         "$value": "{Primitive.Value.color-green-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/green"
+            "originalName": "color/data-viz/category/subtle/green"
           }
         }
       },
@@ -2484,21 +2484,21 @@
           }
         }
       },
-      "color-data-viz-catergory-subtle-blue": {
+      "color-data-viz-category-subtle-blue": {
         "$type": "color",
         "$value": "{Primitive.Value.color-blue-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/blue"
+            "originalName": "color/data-viz/category/subtle/blue"
           }
         }
       },
-      "color-data-viz-catergory-subtle-yellow": {
+      "color-data-viz-category-subtle-yellow": {
         "$type": "color",
         "$value": "{Primitive.Value.color-yellow-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/yellow"
+            "originalName": "color/data-viz/category/subtle/yellow"
           }
         }
       },
@@ -2511,12 +2511,12 @@
           }
         }
       },
-      "color-data-viz-catergory-subtle-red": {
+      "color-data-viz-category-subtle-red": {
         "$type": "color",
         "$value": "{Primitive.Value.color-red-solid-300}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/subtle/red"
+            "originalName": "color/data-viz/category/subtle/red"
           }
         }
       },
@@ -2529,12 +2529,12 @@
           }
         }
       },
-      "color-data-viz-catergory-default-prussian": {
+      "color-data-viz-category-default-prussian": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-prussian-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/prussian"
+            "originalName": "color/data-viz/category/default/prussian"
           }
         }
       },
@@ -2556,21 +2556,21 @@
           }
         }
       },
-      "color-data-viz-catergory-default-taupe": {
+      "color-data-viz-category-default-taupe": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-taupe-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/taupe"
+            "originalName": "color/data-viz/category/default/taupe"
           }
         }
       },
-      "color-data-viz-catergory-default-teal": {
+      "color-data-viz-category-default-teal": {
         "$type": "color",
         "$value": "{Primitive.Value.color-teal-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/teal"
+            "originalName": "color/data-viz/category/default/teal"
           }
         }
       },
@@ -2601,12 +2601,12 @@
           }
         }
       },
-      "color-data-viz-catergory-default-purple": {
+      "color-data-viz-category-default-purple": {
         "$type": "color",
         "$value": "{Primitive.Value.color-purple-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/purple"
+            "originalName": "color/data-viz/category/default/purple"
           }
         }
       },
@@ -2628,12 +2628,12 @@
           }
         }
       },
-      "color-data-viz-catergory-default-orange": {
+      "color-data-viz-category-default-orange": {
         "$type": "color",
         "$value": "{Primitive.Value.color-orange-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/orange"
+            "originalName": "color/data-viz/category/default/orange"
           }
         }
       },
@@ -2646,48 +2646,48 @@
           }
         }
       },
-      "color-data-viz-catergory-default-magenta": {
+      "color-data-viz-category-default-magenta": {
         "$type": "color",
         "$value": "{Primitive.Value.color-magenta-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/magenta"
+            "originalName": "color/data-viz/category/default/magenta"
           }
         }
       },
-      "color-data-viz-catergory-default-green": {
+      "color-data-viz-category-default-green": {
         "$type": "color",
         "$value": "{Primitive.Value.color-green-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/green"
+            "originalName": "color/data-viz/category/default/green"
           }
         }
       },
-      "color-data-viz-catergory-default-blue": {
+      "color-data-viz-category-default-blue": {
         "$type": "color",
         "$value": "{Primitive.Value.color-blue-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/blue"
+            "originalName": "color/data-viz/category/default/blue"
           }
         }
       },
-      "color-data-viz-catergory-default-yellow": {
+      "color-data-viz-category-default-yellow": {
         "$type": "color",
         "$value": "{Primitive.Value.color-yellow-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/yellow"
+            "originalName": "color/data-viz/category/default/yellow"
           }
         }
       },
-      "color-data-viz-catergory-default-red": {
+      "color-data-viz-category-default-red": {
         "$type": "color",
         "$value": "{Primitive.Value.color-red-solid-500}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/default/red"
+            "originalName": "color/data-viz/category/default/red"
           }
         }
       },
@@ -2700,12 +2700,12 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-prussian": {
+      "color-data-viz-category-bold-prussian": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-prussian-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/prussian"
+            "originalName": "color/data-viz/category/bold/prussian"
           }
         }
       },
@@ -2718,21 +2718,21 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-taupe": {
+      "color-data-viz-category-bold-taupe": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-taupe-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/taupe"
+            "originalName": "color/data-viz/category/bold/taupe"
           }
         }
       },
-      "color-data-viz-catergory-bold-teal": {
+      "color-data-viz-category-bold-teal": {
         "$type": "color",
         "$value": "{Primitive.Value.color-teal-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/teal"
+            "originalName": "color/data-viz/category/bold/teal"
           }
         }
       },
@@ -2745,12 +2745,12 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-purple": {
+      "color-data-viz-category-bold-purple": {
         "$type": "color",
         "$value": "{Primitive.Value.color-purple-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/purple"
+            "originalName": "color/data-viz/category/bold/purple"
           }
         }
       },
@@ -2763,12 +2763,12 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-orange": {
+      "color-data-viz-category-bold-orange": {
         "$type": "color",
         "$value": "{Primitive.Value.color-orange-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/orange"
+            "originalName": "color/data-viz/category/bold/orange"
           }
         }
       },
@@ -2790,21 +2790,21 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-pink": {
+      "color-data-viz-category-bold-magenta": {
         "$type": "color",
         "$value": "{Primitive.Value.color-magenta-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/pink"
+            "originalName": "color/data-viz/category/bold/magenta"
           }
         }
       },
-      "color-data-viz-catergory-bold-green": {
+      "color-data-viz-category-bold-green": {
         "$type": "color",
         "$value": "{Primitive.Value.color-green-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/green"
+            "originalName": "color/data-viz/category/bold/green"
           }
         }
       },
@@ -2817,30 +2817,30 @@
           }
         }
       },
-      "color-data-viz-catergory-bold-blue": {
+      "color-data-viz-category-bold-blue": {
         "$type": "color",
         "$value": "{Primitive.Value.color-blue-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/blue"
+            "originalName": "color/data-viz/category/bold/blue"
           }
         }
       },
-      "color-data-viz-catergory-bold-yellow": {
+      "color-data-viz-category-bold-yellow": {
         "$type": "color",
         "$value": "{Primitive.Value.color-yellow-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/yellow"
+            "originalName": "color/data-viz/category/bold/yellow"
           }
         }
       },
-      "color-data-viz-catergory-bold-red": {
+      "color-data-viz-category-bold-red": {
         "$type": "color",
         "$value": "{Primitive.Value.color-red-solid-700}",
         "$extensions": {
           "com.legacyhq": {
-            "originalName": "color/data-viz/catergory/bold/red"
+            "originalName": "color/data-viz/category/bold/red"
           }
         }
       },

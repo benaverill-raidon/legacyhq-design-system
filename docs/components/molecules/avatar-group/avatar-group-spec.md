@@ -164,9 +164,9 @@ across every size/state variant - all 16 re-measured directly, not sampled from 
   (`color-elevation-surface-sunken-press`) using the same token family's sibling values, rather
   than leaving the trigger visually static on interaction like every other button in this system.
 - **Typography overridden to the `body` scale**, not Button's own per-size heading-based type
-  styles: Body/S, M, L, L for xs/sm/md/lg respectively (12px/14px/16px/16px, weight 400 throughout -
+  styles: Body/SM, MD, LG, LG for xs/sm/md/lg respectively (12px/14px/16px/16px, weight 400 throughout -
   `typography-body-sm/md/lg/lg`). Button's own `size=lg` normally steps up to a larger heading
-  style; the more-trigger's `lg` variant instead reuses the exact same Body/L style as `md` - text
+  style; the more-trigger's `lg` variant instead reuses the exact same Body/LG style as `md` - text
   size does not grow with the trigger's own diameter past `md`.
 - **Padding-inline matches Button's own per-size default almost exactly** - measured 8/12/16 for
   sm/md/lg align exactly with Button's own `spacing-sm/md/lg`, needing no override at all. `xs`

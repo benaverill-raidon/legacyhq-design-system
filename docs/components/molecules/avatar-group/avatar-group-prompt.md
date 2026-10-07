@@ -152,7 +152,7 @@ overflowLabel = (hiddenCount) => `+${hiddenCount}`
   - Override typography per size to the `body` scale, not Button's own per-size heading-based type
     styles: `typography-body-sm` (xs), `typography-body-md` (sm), `typography-body-lg` (md AND lg -
     Button's own `size=lg` normally steps up to a larger heading style; the more-trigger's `lg`
-    variant instead reuses the exact same Body/L style as `md`).
+    variant instead reuses the exact same Body/LG style as `md`).
   - Do not override `padding-inline` - Button's own per-size default already matches Figma's
     measured value for sm/md/lg (8/12/16) exactly. `xs` measures 6px in Figma, which isn't on the
     spacing scale (nearest tokens are 4 and 8) - leave it at Button's own natural 8px rather than

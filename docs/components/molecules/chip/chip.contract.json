@@ -36,7 +36,7 @@
       "segmentHover": "background: color/background/neutral/subtle/hover",
       "segmentPress": "background: color/background/neutral/subtle/press",
       "labelText": "color/content/subtle - the label names the property rather than acting on it",
-      "operatorAndValueText": "color/content/default, typography Body/M",
+      "operatorAndValueText": "color/content/default, typography Body/MD",
       "selected": "background: color/background/selected/default/default; border: color/border/selected; text: color/content/selected. No hover/press ramp - see the chip-base interaction-states note.",
       "disabled": "background: color/background/disabled; text: color/content/disabled; border reverts to color/border/input",
       "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text",

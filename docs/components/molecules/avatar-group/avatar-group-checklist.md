@@ -161,7 +161,7 @@ Final implementation decisions:
   `Button` component with several instance-level overrides verified across all 16 of its own
   size x state variants - not a bespoke new component: forced square size, fully-rounded corner
   radius, a `sunken`-surface background instead of Button's own subtle-appearance background, and
-  Body/S-M-L-L typography instead of Button's own per-size heading-based type scale. Code reuses
+  Body/SM-MD-LG-LG typography instead of Button's own per-size heading-based type scale. Code reuses
   `Button` directly with the same overrides applied via CSS, rather than reimplementing a circular
   button from scratch.
 - All 16 more-trigger variants (every size x every state) measure the identical background fill -

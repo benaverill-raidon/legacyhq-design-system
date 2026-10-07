@@ -277,8 +277,9 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
     purpose: 'The tokens and system assets every component is built from.',
     availableNow: (
       <>
-        <DocLink size="sm" to="Foundations/Color" /> · <DocLink size="sm" to="Foundations/Icons" /> ·{' '}
-        <DocLink size="sm" to="Foundations/Focus Ring" /> · <DocLink size="sm" to="Foundations/Logo" />
+        <DocLink size="sm" to="Foundations/Color" /> · <DocLink size="sm" to="Foundations/Typography" /> ·{' '}
+        <DocLink size="sm" to="Foundations/Icons" /> · <DocLink size="sm" to="Foundations/Focus Ring" /> ·{' '}
+        <DocLink size="sm" to="Foundations/Logo" />
       </>
     ),
   },

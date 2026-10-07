@@ -3,7 +3,6 @@ import { Button } from '../../../components/atoms/button';
 import { Label } from '../../../components/atoms/label';
 import type { LabelTone } from '../../../components/atoms/label';
 import { Card } from '../../../components/organisms/card';
-import { Logo } from '../../../components/primitives/logo';
 import buttonCss from '../../../components/atoms/button/button.module.css?raw';
 import { DocLink } from '../../blocks/doc-link';
 import { componentCount, componentGroups, findComponentRule, tokenTrace } from './overview-data';
@@ -48,7 +47,6 @@ function Section({ number, title, children }: { number: number; title: string; c
 function Header() {
   return (
     <header className={styles.header}>
-      <Logo type="full" size="md" decorative />
       <h1 className={styles.h1}>LegacyHQ Design System</h1>
       <p className={styles.lede}>The shared foundations, components, and guidance used to design and build LegacyHQ.</p>
       <p className={styles.context}>
@@ -120,7 +118,8 @@ const stages: Array<{ name: string; role: string; description: React.ReactNode; 
     livesIn: <Code>{breakable('packages/ui/src/tokens/src')}</Code>,
     guardrail: (
       <>
-        <Code>npm run tokens:check</Code> validates every token, reference, and type.
+        <Code>npm run tokens:check</Code> validates every token, reference, and type. It runs in CI on every pull
+        request and push to master.
       </>
     ),
   },
@@ -136,7 +135,8 @@ const stages: Array<{ name: string; role: string; description: React.ReactNode; 
     ),
     guardrail: (
       <>
-        Never edited by hand; <Code>tokens:check</Code> confirms the output is current and resolves in both themes.
+        Never edited by hand; in CI, <Code>tokens:check</Code> also confirms the output is current and resolves in both
+        themes.
       </>
     ),
   },
@@ -146,7 +146,7 @@ const stages: Array<{ name: string; role: string; description: React.ReactNode; 
     description: 'TypeScript components built on native HTML elements and styled with CSS Modules that reference design tokens.',
     livesIn: <Code>{breakable('packages/ui/src/components')}</Code>,
     guardrail:
-      'Stylelint rejects raw color, type, spacing, and radius values. ESLint enforces accessibility rules, and Vitest covers behavior. All three run in CI on every push and pull request.',
+      'Stylelint rejects raw color, type, spacing, and radius values. ESLint enforces accessibility rules, and Vitest covers behavior. All three run in CI on every pull request and push to master.',
   },
   {
     name: 'Storybook',

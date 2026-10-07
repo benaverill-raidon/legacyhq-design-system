@@ -139,10 +139,6 @@
   border-block-end: var(--border-width-sm) solid var(--color-border-default);
 }
 
-.header .h1 {
-  margin-block-start: var(--spacing-lg);
-}
-
 .section {
   display: grid;
   gap: var(--spacing-xl);
@@ -200,7 +196,7 @@
   inset-block-start: 50%;
   inset-inline-start: 100%;
   inline-size: var(--spacing-xl);
-  color: var(--color-content-subtler);
+  color: var(--color-content-subtle);
   text-align: center;
   transform: translateY(-50%);
 }
@@ -248,7 +244,7 @@
   inset-block-start: var(--spacing-sm);
   inset-inline-start: 100%;
   inline-size: var(--spacing-xl);
-  color: var(--color-content-subtler);
+  color: var(--color-content-subtle);
   text-align: center;
 }
 

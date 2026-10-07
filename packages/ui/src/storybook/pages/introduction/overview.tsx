@@ -5,6 +5,7 @@ import type { LabelTone } from '../../../components/atoms/label';
 import { Card } from '../../../components/organisms/card';
 import buttonCss from '../../../components/atoms/button/button.module.css?raw';
 import { DocLink } from '../../blocks/doc-link';
+import { breakable, Code, doc, DocFooter, DocHeader, DocPage, DocSection, DocSubsection } from '../../blocks/doc-page';
 import { componentCount, componentGroups, findComponentRule, tokenTrace } from './overview-data';
 import styles from './overview.module.css';
 
@@ -17,45 +18,6 @@ const statusTone: Record<Status, LabelTone> = {
   'In progress': 'information',
   Planned: 'default',
 };
-
-function Code({ children }: { children: React.ReactNode }) {
-  return <code className={styles.code}>{children}</code>;
-}
-
-// Long token identifiers get break opportunities after their separators instead of mid-word.
-function breakable(identifier: string) {
-  return identifier.split(/(?<=[/.-])/).map((part, index) => (
-    <React.Fragment key={index}>
-      {index > 0 && <wbr />}
-      {part}
-    </React.Fragment>
-  ));
-}
-
-function Section({ number, title, children }: { number: number; title: string; children: React.ReactNode }) {
-  const id = `overview-section-${number}`;
-  return (
-    <section className={styles.section} aria-labelledby={id}>
-      <h2 id={id} className={styles.h2}>
-        <span className={styles.sectionNumber}>{number}</span> {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
-
-function Header() {
-  return (
-    <header className={styles.header}>
-      <h1 className={styles.h1}>LegacyHQ Design System</h1>
-      <p className={styles.lede}>The shared foundations, components, and guidance used to design and build LegacyHQ.</p>
-      <p className={styles.context}>
-        LegacyHQ is a platform for estate-planning and wealth-management teams to manage families, planning workflows,
-        documents, relationships, and ongoing client work in one place.
-      </p>
-    </header>
-  );
-}
 
 const audiences = [
   {
@@ -74,14 +36,14 @@ const audiences = [
 
 function WhySection() {
   return (
-    <Section number={1} title="What it is and why it exists">
+    <DocSection number={1} title="What it is and why it exists">
       <div className={styles.prose}>
-        <p className={styles.body}>
+        <p className={doc.body}>
           LegacyHQ’s interface grew across several approaches: MUI, Tailwind, custom CSS, and one-off implementations.
           Each met a local need. Together, they let the same pattern look and behave differently from screen to screen,
           and meant the same decisions were made and built more than once.
         </p>
-        <p className={styles.body}>
+        <p className={doc.body}>
           The design system is the response: one shared language for design and code. Visual decisions start in Figma as
           design tokens and carry through to the React components teams build with. Guidance for using them lives here,
           next to working examples. The system is progressively replacing legacy patterns across LegacyHQ.
@@ -91,13 +53,13 @@ function WhySection() {
         {audiences.map(({ name, text }) => (
           <li key={name}>
             <Card className={styles.card}>
-              <h3 className={styles.cardTitle}>{name}</h3>
-              <p className={styles.small}>{text}</p>
+              <h3 className={doc.title}>{name}</h3>
+              <p className={doc.small}>{text}</p>
             </Card>
           </li>
         ))}
       </ul>
-    </Section>
+    </DocSection>
   );
 }
 
@@ -170,21 +132,21 @@ function Pipeline() {
         {stages.map(({ name, role, description, livesIn, guardrail }, index) => (
           <li key={name} className={styles.stage}>
             <Card className={styles.stageCard}>
-              <p className={styles.eyebrow}>
+              <p className={doc.eyebrow}>
                 <span className={styles.stageNumber}>{String(index + 1).padStart(2, '0')}</span> {role}
               </p>
-              <h3 className={styles.cardTitle}>{name}</h3>
-              <p className={styles.small}>{description}</p>
+              <h3 className={doc.title}>{name}</h3>
+              <p className={doc.small}>{description}</p>
               {/* Stacked rather than Key Value Pair, whose side-by-side row is too narrow inside a card. */}
               <dl className={styles.stageFacts}>
                 <div>
-                  <dt className={styles.eyebrow}>Lives in</dt>
-                  <dd className={styles.small}>{livesIn}</dd>
+                  <dt className={doc.eyebrow}>Lives in</dt>
+                  <dd className={doc.small}>{livesIn}</dd>
                 </div>
                 {guardrail && (
                   <div>
-                    <dt className={styles.eyebrow}>Guardrail</dt>
-                    <dd className={styles.small}>{guardrail}</dd>
+                    <dt className={doc.eyebrow}>Guardrail</dt>
+                    <dd className={doc.small}>{guardrail}</dd>
                   </div>
                 )}
               </dl>
@@ -193,11 +155,11 @@ function Pipeline() {
         ))}
       </ol>
       <Card surface="sunken" border={false} className={styles.card}>
-        <p className={styles.small}>
-          <strong className={styles.strong}>Machine-readable layer.</strong> Each component also has a contract describing
-          its props, anatomy, tokens, and accessibility requirements. Generated indexes make the whole system queryable:
+        <p className={doc.small}>
+          <strong className={doc.strong}>Machine-readable layer.</strong> Each component also has a contract describing its
+          props, anatomy, tokens, and accessibility requirements. Generated indexes make the whole system queryable:
         </p>
-        <p className={styles.small}>
+        <p className={doc.small}>
           <Code>{'<component>.contract.json'}</Code> → <Code>registry.json</Code> · <Code>exemplars.json</Code>, indexed by{' '}
           <Code>llms.txt</Code>, with conventions in <Code>CLAUDE.md</Code>.
         </p>
@@ -226,43 +188,42 @@ function TokenTrace() {
   const rule = componentRule;
 
   return (
-    <div className={styles.subsection}>
-      <h3 className={styles.h3}>One token, end to end</h3>
-      <p className={styles.body}>
+    <DocSubsection title="One token, end to end">
+      <p className={doc.body}>
         A real token, followed from Figma to a rendered button. Values are read from the token source and the live CSS, so
         this example always reflects the current system.
       </p>
       <ol className={styles.traceSteps}>
         <li className={styles.traceStep}>
-          <p className={styles.eyebrow}>Figma variable</p>
+          <p className={doc.eyebrow}>Figma variable</p>
           <p className={styles.traceValue}>
             <Code>{breakable(tokenTrace.figmaName ?? '')}</Code>
           </p>
-          <p className={styles.small}>
+          <p className={doc.small}>
             Collection: {tokenTrace.collection} · Modes: {tokenTrace.modes.map(({ mode }) => mode).join(', ')}
           </p>
         </li>
         <li className={styles.traceStep}>
-          <p className={styles.eyebrow}>Design token</p>
+          <p className={doc.eyebrow}>Design token</p>
           <p className={styles.traceValue}>
             <Code>{breakable(tokenTrace.token)}</Code>
           </p>
           <ul className={styles.traceModes}>
             {tokenTrace.modes.map(({ mode, reference }) => (
-              <li key={mode} className={styles.small}>
+              <li key={mode} className={doc.small}>
                 {mode} → <Code>{breakable(primitiveName(reference) ?? '')}</Code>
               </li>
             ))}
           </ul>
         </li>
         <li className={styles.traceStep}>
-          <p className={styles.eyebrow}>CSS variable</p>
+          <p className={doc.eyebrow}>CSS variable</p>
           <p className={styles.traceValue}>
             <Code>{breakable(tokenTrace.cssVariable)}</Code>
           </p>
           <ul className={styles.traceModes}>
             {tokenTrace.modes.map(({ mode }) => (
-              <li key={mode} className={styles.small}>
+              <li key={mode} className={doc.small}>
                 {mode}{' '}
                 <span className={styles.swatch} data-theme={mode === 'Dark' ? 'dark' : undefined} aria-hidden="true" />{' '}
                 <Code>{resolved[mode] ?? '…'}</Code>
@@ -271,10 +232,10 @@ function TokenTrace() {
           </ul>
         </li>
         <li className={styles.traceStep}>
-          <p className={styles.eyebrow}>Component</p>
-          <p className={styles.cardTitle}>Button</p>
+          <p className={doc.eyebrow}>Component</p>
+          <p className={doc.title}>Button</p>
           {rule && (
-            <pre className={styles.codeBlock}>
+            <pre className={doc.codeBlock}>
               <code>
                 {rule.selector} {'{'}
                 {'\n  '}
@@ -287,19 +248,19 @@ function TokenTrace() {
       </ol>
       <div className={styles.traceResult}>
         <div ref={lightRef} className={styles.themePanel}>
-          <p className={styles.eyebrow}>Light</p>
+          <p className={`${doc.eyebrow} ${styles.panelLabel}`}>Light</p>
           <Button prominence="primary">Save changes</Button>
         </div>
         <div ref={darkRef} className={styles.themePanel} data-theme="dark">
-          <p className={styles.eyebrow}>Dark</p>
+          <p className={`${doc.eyebrow} ${styles.panelLabel}`}>Dark</p>
           <Button prominence="primary">Save changes</Button>
         </div>
       </div>
-      <p className={styles.caption}>
+      <p className={doc.caption}>
         Button never references Prussian 900 directly. It uses the semantic token, so remapping that token or switching
         theme updates the button without any change to component code.
       </p>
-    </div>
+    </DocSubsection>
   );
 }
 
@@ -353,7 +314,7 @@ function SectionIndex() {
       <tbody>
         {sections.map(({ name, status, purpose, availableNow }) => (
           <tr key={name}>
-            <th scope="row" className={styles.cardTitle}>
+            <th scope="row" className={doc.title}>
               {name}
             </th>
             <td>
@@ -362,7 +323,7 @@ function SectionIndex() {
               </Label>
             </td>
             <td>{purpose}</td>
-            <td className={styles.subtle}>{availableNow ?? '—'}</td>
+            <td className={doc.subtle}>{availableNow ?? '—'}</td>
           </tr>
         ))}
       </tbody>
@@ -411,9 +372,8 @@ const groupExamples: Record<string, React.ReactNode[]> = {
 
 function ComponentGroups() {
   return (
-    <div className={styles.subsection}>
-      <h3 className={styles.h3}>Component groups</h3>
-      <p className={styles.body}>
+    <DocSubsection title="Component groups">
+      <p className={doc.body}>
         Components are grouped by the job they do. In code they’re organized by compositional tier (primitive, atom,
         molecule, organism), but finding the right component starts with what you need it to do.
       </p>
@@ -425,11 +385,11 @@ function ComponentGroups() {
             <li key={category}>
               <Card className={styles.card}>
                 <h4 className={styles.groupTitle}>
-                  <span className={styles.cardTitle}>{label}</span>
-                  <span className={styles.count}>{count}</span>
+                  <span className={doc.title}>{label}</span>
+                  <span className={`${doc.small} ${doc.subtle} ${styles.count}`}>{count}</span>
                 </h4>
-                <p className={styles.small}>{definition}</p>
-                <p className={styles.examples}>
+                <p className={doc.small}>{definition}</p>
+                <p className={`${doc.small} ${styles.examples}`}>
                   {examples.map((example, index) => (
                     <React.Fragment key={index}>
                       {index > 0 && ' · '}
@@ -448,7 +408,7 @@ function ComponentGroups() {
           );
         })}
       </ul>
-    </div>
+    </DocSubsection>
   );
 }
 
@@ -491,12 +451,12 @@ function NextSteps() {
     <div className={styles.grid3}>
       {nextSteps.map(({ audience, items }) => (
         <div key={audience} className={styles.nextColumn}>
-          <h3 className={styles.cardTitle}>{audience}</h3>
+          <h3 className={doc.title}>{audience}</h3>
           <ul className={styles.nextList}>
             {items.map(({ entry, description }, index) => (
               <li key={index}>
                 <span className={styles.nextEntry}>{entry}</span>
-                <span className={styles.small}>{description}</span>
+                <span className={`${doc.small} ${styles.nextDescription}`}>{description}</span>
               </li>
             ))}
           </ul>
@@ -508,32 +468,34 @@ function NextSteps() {
 
 export function Overview() {
   return (
-    <div className={styles.page}>
-      <Header />
+    <DocPage>
+      <DocHeader
+        title="LegacyHQ Design System"
+        lede="The shared foundations, components, and guidance used to design and build LegacyHQ."
+        context="LegacyHQ is a platform for estate-planning and wealth-management teams to manage families, planning workflows, documents, relationships, and ongoing client work in one place."
+      />
       <WhySection />
-      <Section number={2} title="From design to production">
-        <p className={styles.body}>
+      <DocSection number={2} title="From design to production">
+        <p className={doc.body}>
           The design system provides a shared path from design decisions in Figma to implementation in the product. Each
           stage has a defined source and set of checks that help keep the system consistent.
         </p>
         <Pipeline />
         <TokenTrace />
-      </Section>
-      <Section number={3} title="How these docs are organized">
-        <p className={styles.body}>Five sections, from orientation to complete workflows. Status shows what’s ready today.</p>
+      </DocSection>
+      <DocSection number={3} title="How these docs are organized">
+        <p className={doc.body}>Five sections, from orientation to complete workflows. Status shows what’s ready today.</p>
         <SectionIndex />
         <ComponentGroups />
-      </Section>
-      <Section number={4} title="Where to go next">
+      </DocSection>
+      <DocSection number={4} title="Where to go next">
         <NextSteps />
-      </Section>
-      <footer className={styles.footer}>
-        <p className={styles.small}>
-          This page reads from the system itself: section groups and definitions from{' '}
-          <Code>component-registry-governance.json</Code>, component counts from <Code>registry.json</Code>, and the
-          token example from the DTCG source and live CSS.
-        </p>
-      </footer>
-    </div>
+      </DocSection>
+      <DocFooter>
+        This page reads from the system itself: section groups and definitions from{' '}
+        <Code>component-registry-governance.json</Code>, component counts from <Code>registry.json</Code>, and the token
+        example from the DTCG source and live CSS.
+      </DocFooter>
+    </DocPage>
   );
 }

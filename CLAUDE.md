@@ -27,9 +27,11 @@ packages/ui/src/storybook/   # Storybook-only docs; never exported as components
   pages/        # docs pages that aren't one component's docs (Introduction/
                 # Overview, ...): MDX with <Meta title="..." />, page-local
                 # components and CSS Modules beside it
-  blocks/       # docs building blocks shared across pages — currently only
-                # DocLink (internal links by sidebar title, checked by
-                # doc-link.test.ts). Extract here only once a second page needs it.
+  blocks/       # docs building blocks shared across pages: DocLink (internal
+                # links by sidebar title, checked by doc-link.test.ts) and
+                # doc-page (page rhythm + type scale as `doc` classes, header,
+                # numbered sections, subsections, footer note, Code). Extract
+                # here only once a second page needs it.
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)

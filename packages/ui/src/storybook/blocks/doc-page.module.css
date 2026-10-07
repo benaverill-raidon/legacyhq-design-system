@@ -1,0 +1,156 @@
+/*
+ * Shared page styles for Storybook docs pages rendered inside addon-docs <Unstyled>: the page
+ * rhythm, the LegacyHQ Public Sans type scale, and the structural pieces in doc-page.tsx. Pages are
+ * light only; a region opts into Dark with data-theme="dark". Page-specific layout stays with the page.
+ */
+
+.page {
+  display: grid;
+  gap: var(--spacing-4xl);
+  padding-block-end: var(--spacing-2xl);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.page :where(h1, h2, h3, h4, p, ol, ul, dl, dd, figure, pre) {
+  margin: 0;
+}
+
+.page :where(ol, ul) {
+  padding: 0;
+  list-style: none;
+}
+
+/* Type scale */
+
+.h1 {
+  font-family: var(--typography-heading-xxl-font-family);
+  font-size: var(--typography-heading-xxl-font-size);
+  font-weight: var(--typography-heading-xxl-font-weight);
+  line-height: var(--typography-heading-xxl-line-height);
+  letter-spacing: var(--typography-heading-xxl-letter-spacing);
+}
+
+.h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  letter-spacing: var(--typography-heading-lg-letter-spacing);
+}
+
+.h3 {
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+}
+
+/* Card titles, table row headers, and other small headings. */
+.title {
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+}
+
+.lede {
+  max-inline-size: 60ch;
+  font-family: var(--typography-body-xl-font-family);
+  font-size: var(--typography-body-xl-font-size);
+  font-weight: var(--typography-body-xl-font-weight);
+  line-height: var(--typography-body-xl-line-height);
+  letter-spacing: var(--typography-body-xl-letter-spacing);
+}
+
+.body {
+  max-inline-size: 72ch;
+}
+
+.small,
+.caption,
+.eyebrow {
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.context,
+.caption,
+.eyebrow,
+.subtle {
+  color: var(--color-content-subtle);
+}
+
+.context,
+.caption {
+  max-inline-size: 72ch;
+}
+
+.strong {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.code,
+.codeBlock {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- no monospace font token exists; code identifiers need a fixed-width face */
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.code {
+  padding: var(--spacing-none) var(--spacing-xxs);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-elevation-surface-sunken-default);
+  overflow-wrap: break-word;
+}
+
+.codeBlock {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-elevation-surface-sunken-default);
+  white-space: pre-wrap;
+}
+
+/* Structure */
+
+.header {
+  display: grid;
+  gap: var(--spacing-md);
+  justify-items: start;
+  padding-block-end: var(--spacing-2xl);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.section {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.sectionNumber {
+  color: var(--color-content-subtler);
+}
+
+.subsection {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin-block-start: var(--spacing-xl);
+}
+
+.footer {
+  padding-block-start: var(--spacing-lg);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+  color: var(--color-content-subtle);
+}

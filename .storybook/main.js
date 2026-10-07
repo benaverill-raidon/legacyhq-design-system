@@ -6,7 +6,9 @@ const config = {
     // Standalone MDX documentation pages, attached to a story file via <Meta of={...} />.
     // Listed first so Docs sorts above the stories it documents.
     "../packages/ui/src/components/**/*.mdx",
-    "../packages/ui/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../packages/ui/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    // Storybook-only documentation pages (Introduction, Foundations, ...), titled via <Meta title="..." />.
+    "../packages/ui/src/storybook/pages/**/*.mdx"
   ],
   "addons": [
     "@storybook/addon-docs",

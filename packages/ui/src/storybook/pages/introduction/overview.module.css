@@ -1,0 +1,390 @@
+/*
+ * Introduction / Overview. Rendered inside addon-docs <Unstyled>, so this file owns all of the
+ * page's typography (LegacyHQ Public Sans scale) instead of Storybook's docs styles. Light only;
+ * the token trace's Dark panel opts in with data-theme="dark".
+ */
+
+.page {
+  display: grid;
+  gap: var(--spacing-4xl);
+  padding-block-end: var(--spacing-2xl);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.page :where(h1, h2, h3, h4, p, ol, ul, dl, dd, figure, pre) {
+  margin: 0;
+}
+
+.page :where(ol, ul) {
+  padding: 0;
+  list-style: none;
+}
+
+/* Type scale */
+
+.h1 {
+  font-family: var(--typography-heading-xxl-font-family);
+  font-size: var(--typography-heading-xxl-font-size);
+  font-weight: var(--typography-heading-xxl-font-weight);
+  line-height: var(--typography-heading-xxl-line-height);
+  letter-spacing: var(--typography-heading-xxl-letter-spacing);
+}
+
+.h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  letter-spacing: var(--typography-heading-lg-letter-spacing);
+}
+
+.h3 {
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+  letter-spacing: var(--typography-heading-sm-letter-spacing);
+}
+
+.cardTitle {
+  font-family: var(--typography-heading-xs-font-family);
+  font-size: var(--typography-heading-xs-font-size);
+  font-weight: var(--typography-heading-xs-font-weight);
+  line-height: var(--typography-heading-xs-line-height);
+  letter-spacing: var(--typography-heading-xs-letter-spacing);
+}
+
+.lede {
+  max-inline-size: 60ch;
+  font-family: var(--typography-body-xl-font-family);
+  font-size: var(--typography-body-xl-font-size);
+  font-weight: var(--typography-body-xl-font-weight);
+  line-height: var(--typography-body-xl-line-height);
+  letter-spacing: var(--typography-body-xl-letter-spacing);
+}
+
+.body {
+  max-inline-size: 72ch;
+}
+
+.small,
+.caption,
+.eyebrow,
+.examples,
+.count {
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.context,
+.caption,
+.eyebrow,
+.count,
+.subtle {
+  color: var(--color-content-subtle);
+}
+
+.context {
+  max-inline-size: 72ch;
+}
+
+.caption {
+  max-inline-size: 72ch;
+}
+
+.strong {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.code,
+.codeBlock {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- no monospace font token exists; code identifiers need a fixed-width face */
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.code {
+  padding: var(--spacing-none) var(--spacing-xxs);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-elevation-surface-sunken-default);
+  overflow-wrap: break-word;
+}
+
+.codeBlock {
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-elevation-surface-sunken-default);
+  white-space: pre-wrap;
+}
+
+/* Layout */
+
+.header {
+  display: grid;
+  gap: var(--spacing-md);
+  justify-items: start;
+  padding-block-end: var(--spacing-2xl);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.header .h1 {
+  margin-block-start: var(--spacing-lg);
+}
+
+.section {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.sectionNumber {
+  color: var(--color-content-subtler);
+}
+
+.subsection {
+  display: grid;
+  gap: var(--spacing-lg);
+  margin-block-start: var(--spacing-xl);
+}
+
+.prose {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.grid3 > li {
+  display: grid;
+}
+
+.card {
+  display: grid;
+  gap: var(--spacing-sm);
+  align-content: start;
+  padding: var(--spacing-lg);
+}
+
+/* Pipeline */
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+}
+
+/* Connector between stages in the same row (01 -> 02 -> 03, 04 -> 05 -> 06). */
+.stage:not(:nth-child(3n))::after {
+  content: '→';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 100%;
+  inline-size: var(--spacing-xl);
+  color: var(--color-content-subtler);
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.stageCard {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+}
+
+.stageNumber {
+  color: var(--color-content-default);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.stageFacts {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding-block-start: var(--spacing-sm);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+/* Token trace */
+
+.traceSteps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.traceStep {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-xs);
+  align-content: start;
+  padding-block-start: var(--spacing-sm);
+  border-block-start: var(--border-width-md) solid var(--color-border-bold);
+}
+
+.traceStep:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  inset-block-start: var(--spacing-sm);
+  inset-inline-start: 100%;
+  inline-size: var(--spacing-xl);
+  color: var(--color-content-subtler);
+  text-align: center;
+}
+
+.traceValue {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.traceModes {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--spacing-md);
+  block-size: var(--spacing-md);
+  vertical-align: middle;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+.traceResult {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.themePanel {
+  display: grid;
+  gap: var(--spacing-md);
+  justify-items: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--color-elevation-surface-default);
+  color: var(--color-content-default);
+}
+
+.themePanel .eyebrow {
+  justify-self: start;
+}
+
+/* Docs map */
+
+.sectionTable {
+  inline-size: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.sectionTable :where(th, td) {
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.sectionTable thead th {
+  padding-block-start: var(--spacing-none);
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.sectionTable td:last-child {
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}
+
+.examples {
+  margin-block-start: auto;
+  padding-block-start: var(--spacing-xs);
+}
+
+.more {
+  color: var(--color-content-subtle);
+  white-space: nowrap;
+}
+
+/* Where to go next */
+
+.nextColumn {
+  display: grid;
+  gap: var(--spacing-md);
+  align-content: start;
+  padding-block-start: var(--spacing-md);
+  border-block-start: var(--border-width-md) solid var(--color-border-bold);
+}
+
+.nextList {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.nextList > li {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.nextList .small {
+  color: var(--color-content-subtle);
+}
+
+.nextEntry {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.footer {
+  padding-block-start: var(--spacing-lg);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+  color: var(--color-content-subtle);
+}
+
+@media (max-width: 900px) {
+  .grid3,
+  .stages,
+  .traceSteps,
+  .traceResult {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stage::after,
+  .traceStep::after {
+    content: none;
+  }
+}

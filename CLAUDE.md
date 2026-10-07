@@ -23,6 +23,14 @@ packages/ui/src/components/
   organisms/    # composed from molecules/atoms/primitives — larger, more
                 # complete UI sections (menu, dropdown-menu, ...)
 
+packages/ui/src/storybook/   # Storybook-only docs; never exported as components
+  pages/        # docs pages that aren't one component's docs (Introduction/
+                # Overview, ...): MDX with <Meta title="..." />, page-local
+                # components and CSS Modules beside it
+  blocks/       # docs building blocks shared across pages — currently only
+                # DocLink (internal links by sidebar title, checked by
+                # doc-link.test.ts). Extract here only once a second page needs it.
+
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
   foundations/component-registry-governance.json  # registry.json normalization rules
@@ -229,7 +237,8 @@ change.)
   checks token data/CSS compatibility, then runs `typecheck`, `lint`, `lint:css`, and `test`. Run this before
   considering a change done. Also runs in CI (`.github/workflows/validate.yml`)
   on every push/PR.
-- `npm run lint:css` — stylelint over `packages/ui/src/components/**/*.module.css`.
+- `npm run lint:css` — stylelint over `packages/ui/src/{components,storybook}/**/*.module.css`
+  (Storybook docs pages follow the same token rules as components).
   Enforces the token architecture mechanically: raw values for color,
   typography, radius, and spacing properties fail the build instead of relying
   on review to catch them. Config lives in `.stylelintrc.json`; the policy

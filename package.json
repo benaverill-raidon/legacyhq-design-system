@@ -10,7 +10,7 @@
     "generate:exemplars": "node scripts/generate-component-exemplars.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "lint:css": "stylelint \"packages/ui/src/components/**/*.module.css\"",
+    "lint:css": "stylelint \"packages/ui/src/{components,storybook}/**/*.module.css\"",
     "test": "vitest run",
     "validate": "npm run tokens:check && npm run test:tokens && npm run typecheck && npm run lint && npm run lint:css && npm test",
     "storybook": "storybook dev -p 6006",

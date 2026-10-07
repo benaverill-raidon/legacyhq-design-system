@@ -30,12 +30,12 @@
     "categories": {
       "description": "Definition of each category value. Keys must match the schema enum exactly - this is metadata for the values, not a second list of them.",
       "definitions": {
-        "actions": "Triggers something - submits, confirms, opens, or offers a set of actions.",
-        "forms": "Captures or edits a value - inputs, pickers, selection controls, and the field/form structure around them.",
-        "feedback": "Communicates system status - messages, loading, progress toward completion, and empty states.",
-        "navigation": "Moves the user, or shows where they are - links, wayfinding, and position within a sequence.",
-        "data-display": "Presents information - metadata, people, records, and content surfaces.",
-        "overlays": "Layers content above the page - dialogs, tooltips, and anchored popups.",
+        "actions": "Triggers something — submits, confirms, opens, or offers a set of actions.",
+        "forms": "Captures or edits a value — inputs, pickers, selection controls, and the field/form structure around them.",
+        "feedback": "Communicates system status — messages, loading, progress toward completion, and empty states.",
+        "navigation": "Moves the user, or shows where they are — links, wayfinding, and position within a sequence.",
+        "data-display": "Presents information — metadata, people, records, and content surfaces.",
+        "overlays": "Layers content above the page — dialogs, tooltips, and anchored popups.",
         "foundations": "Component-like system assets that are documented with the design foundations rather than as product UI - e.g. Icon, Focus Ring, Logo."
       }
     },

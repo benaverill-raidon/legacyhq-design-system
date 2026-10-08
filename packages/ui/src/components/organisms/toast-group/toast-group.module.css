@@ -47,9 +47,11 @@
   transition: opacity var(--fade-long);
 }
 
+/* The swiping selector is listed too: it's more specific than .item and resets the shorthand. */
 @media (prefers-reduced-motion: reduce) {
   .region,
-  .item {
+  .item,
+  .item[data-swiping='true'] {
     transition-duration: 0ms;
   }
 }

@@ -18,6 +18,11 @@ describe('ToastGroup motion', () => {
     expect(toastGroupCss).not.toMatch(/\d+ms\s+(ease|linear|cubic-bezier)|cubic-bezier\(/);
   });
 
+  it('skips every transition under reduced motion, including the swipe fade', () => {
+    const reduced = toastGroupCss.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(reduced).toMatch(/\.region,\s*\.item,\s*\.item\[data-swiping='true'\] \{\s*transition-duration: 0ms;/);
+  });
+
   it('removes an exiting toast only once the fade-long exit has finished', () => {
     const exitMs = Number(toastGroupSource.match(/const EXIT_MS = (\d+);/)?.[1]);
     const slowMs = Number(tokensCss.match(/--duration-slow: (\d+)ms;/)?.[1]);

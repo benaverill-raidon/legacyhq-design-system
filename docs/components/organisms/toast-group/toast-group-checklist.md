@@ -27,6 +27,7 @@ Organism.
 - [ ] Auto-dismiss after `duration` (default 5000; loading = Infinity); timers pause while expanded.
 - [ ] Swipe/drag past a threshold dismisses; exit animates out before removal.
 - [ ] Reuse an id to update a toast in place (loading -> success/error).
+- [ ] Stack movement uses `--move-long`, opacity `--fade-long`; the exit timer matches the 300ms fade.
 - [ ] Reduced motion collapses transitions to instant.
 - [ ] Behavior follows shadcn/sonner; there is no Figma component for the group.
 

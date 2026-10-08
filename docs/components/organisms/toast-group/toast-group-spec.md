@@ -53,7 +53,10 @@ Reuse an `id` to update a toast in place (loading -> success/error).
   disables it). Timers pause while expanded.
 - **Swipe.** Pointer drag past 80px dismisses; otherwise it snaps back. The transform transition is
   disabled while dragging so the toast follows the pointer.
-- **Exit.** Dismissal animates out (opacity) before the toast is removed from the store.
+- **Exit.** Dismissal fades the toast out with `--fade-long` (300ms), and the toast is removed from the
+  store once that fade has finished (the removal timer matches `--duration-slow`).
+- **Motion.** The stack's physical movement - each toast's transform and the region's height - uses
+  `--move-long`; appearing and disappearing (opacity) uses `--fade-long`.
 - **Reduced motion.** Transitions collapse to instant.
 
 ## Layout and tokens

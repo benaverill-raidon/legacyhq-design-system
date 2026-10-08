@@ -10,7 +10,8 @@ const COLLAPSED_PEEK = 16; // px each stacked toast peeks above the front one
 const SCALE_STEP = 0.05; // scale reduction per depth when collapsed
 const EXPANDED_GAP = 8; // px between toasts when the stack is expanded
 const SWIPE_DISMISS_THRESHOLD = 80; // px of horizontal travel before a swipe dismisses
-const EXIT_MS = 200; // exit-animation duration before the toast is removed
+// The exit fade is --fade-long (--duration-slow, 300ms); the toast is removed once it has finished.
+const EXIT_MS = 300;
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');

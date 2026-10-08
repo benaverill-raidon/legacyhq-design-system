@@ -1,8 +1,30 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ToastGroup } from './toast-group';
 import { toast } from './toast-store';
+
+const toastGroupCss = readFileSync('packages/ui/src/components/organisms/toast-group/toast-group.module.css', 'utf8');
+const toastGroupSource = readFileSync('packages/ui/src/components/organisms/toast-group/toast-group.tsx', 'utf8');
+const tokensCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
+
+describe('ToastGroup motion', () => {
+  it('moves the stack with move-long and fades with fade-long, with no raw timings', () => {
+    expect(toastGroupCss).toContain('transition: block-size var(--move-long);');
+    expect(toastGroupCss).toMatch(/transform var\(--move-long\),\s*opacity var\(--fade-long\);/);
+    expect(toastGroupCss).toContain('transition: opacity var(--fade-long);');
+    expect(toastGroupCss).not.toMatch(/\d+ms\s+(ease|linear|cubic-bezier)|cubic-bezier\(/);
+  });
+
+  it('removes an exiting toast only once the fade-long exit has finished', () => {
+    const exitMs = Number(toastGroupSource.match(/const EXIT_MS = (\d+);/)?.[1]);
+    const slowMs = Number(tokensCss.match(/--duration-slow: (\d+)ms;/)?.[1]);
+    expect(tokensCss).toMatch(/--fade-long: var\(--duration-slow\)/);
+    expect(exitMs).toBe(slowMs);
+  });
+});
 
 afterEach(() => {
   act(() => {

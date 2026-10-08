@@ -279,8 +279,8 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
       <>
         <DocLink size="sm" to="Foundations/Color" /> · <DocLink size="sm" to="Foundations/Typography" /> ·{' '}
         <DocLink size="sm" to="Foundations/Spacing" /> · <DocLink size="sm" to="Foundations/Radius" /> ·{' '}
-        <DocLink size="sm" to="Foundations/Icons" /> · <DocLink size="sm" to="Foundations/Focus Ring" /> ·{' '}
-        <DocLink size="sm" to="Foundations/Logo" />
+        <DocLink size="sm" to="Foundations/Elevation" /> · <DocLink size="sm" to="Foundations/Icons" /> ·{' '}
+        <DocLink size="sm" to="Foundations/Focus Ring" /> · <DocLink size="sm" to="Foundations/Logo" />
       </>
     ),
   },

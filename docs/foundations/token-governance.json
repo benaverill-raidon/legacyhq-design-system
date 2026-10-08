@@ -255,7 +255,19 @@
                     "border-radius-*",
                     "border-width-*"
                 ],
-                "definition": "Corner radius and stroke width - separate families even when a value matches a spacing step."
+                "definition": "Corner radius and stroke width - separate families even when a value matches a spacing step.",
+                "strokeRule": "Border-width tokens define stroke thickness regardless of rendering technique: border, outline, inset/outset shadow, divider, indicator, or SVG stroke.",
+                "blurredShadows": "A blurred shadow is elevation, not a stroke. An unblurred shadow (offset or spread only) is a stroke and takes its thickness from border-width tokens.",
+                "techniques": {
+                    "border": "The stroke is there at rest and part of the element's box.",
+                    "insetShadow": "The stroke appears or thickens with state and content must not move, sits inside padding without resizing the element, or is painted over content.",
+                    "outsetShadow": "A ring outside an element that must not change its size (spread only).",
+                    "outline": "Keyboard focus, through the Focus Ring primitive.",
+                    "element": "A line of its own (divider, indicator), sized with a border-width token."
+                },
+                "emphasisStroke": "A stroke that thickens with state without moving content is an inset shadow of calc(var(--border-width-md) - var(--border-width-sm)) inside the resting border, so the visual stroke is md.",
+                "radiusNotes": "border-radius-md (5px) is used only by Rich Text Area's slash input and by no Figma component; whether to retire it is a separate design decision.",
+                "documentation": "Foundations / Radius"
             },
             {
                 "key": "component",
@@ -295,7 +307,11 @@
                 "Table row heights (32, 40, and 64px) are raw lengths repeated across Table, Text Field (editable table cells), and Time Picker (table-cell footer), with no shared token.",
                 "Panel and dialog widths are raw lengths in Date Picker and Time Picker (240px), Toast and Toast Group (368px), and Modal Dialog (400-968px), while Menu and Tooltip widths are component tokens."
             ],
-            "note": "The spacing findings also appear on Foundations / Spacing, generated from component CSS. The sizing and layout findings are recorded only here; they are not spacing issues."
+            "note": "The spacing findings also appear on Foundations / Spacing, and shape exceptions would appear on Foundations / Radius, both generated from component CSS. The sizing and layout findings are recorded only here; they are not spacing issues.",
+            "shape": [
+                "None in component CSS (2026-10-08): no raw radius or stroke values, no shape primitives, and every stroke-like shadow takes its thickness from border-width tokens.",
+                "Figma: most component strokes bind deleted variables (border/width/default, 🌮 Stroke) and pills use raw radii (10000, 8333, 1198.8) instead of border/radius/full-round; tracked as a separate Figma clean-up."
+            ]
         }
     },
     "enforcement": {

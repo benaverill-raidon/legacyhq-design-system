@@ -192,6 +192,14 @@ Not every raw length needs a token. The rules are in the `dimensions` block of
 token-governance.json, with open findings; Storybook's Foundations / Spacing
 page documents them for people.
 
+**Strokes: border-width tokens set thickness whatever draws the stroke** —
+border, outline, inset/outset shadow, divider, indicator, or SVG stroke. An
+unblurred shadow is a stroke; a blurred one is elevation. A stroke that
+thickens with state without moving content (field focus/invalid) is an inset
+shadow of `calc(var(--border-width-md) - var(--border-width-sm))` inside the
+resting border. Radius tokens are for corners only. See Foundations / Radius
+and the `shape` family in token-governance.json.
+
 **Before creating a new token**, check whether an existing semantic token
 already expresses the same meaning — reuse it. Don't create component tokens
 that just duplicate a semantic token under a different name (e.g. don't make

@@ -274,4 +274,13 @@ describe('ModalDialog', () => {
     expect(modalCss).toContain('border-radius: var(--border-radius-xxl);');
     expect(modalCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
+
+  it('enters with the fade-quick recipe, only when motion is allowed', () => {
+    const allowed = modalCss.match(/@media \(prefers-reduced-motion: no-preference\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(allowed).toContain('animation: modal-backdrop-in var(--fade-quick);');
+    expect(allowed).toContain('animation: modal-panel-in var(--fade-quick);');
+    // A recipe is already duration + easing; another timing function after it invalidates the shorthand.
+    expect(modalCss).not.toMatch(/var\(--fade-quick[^)]*\)\s+(ease|linear|cubic-bezier)/);
+    expect(modalCss).toMatch(/@keyframes modal-panel-in \{\s*from \{\s*opacity: 0;\s*transform: translateY\(8px\);/);
+  });
 });

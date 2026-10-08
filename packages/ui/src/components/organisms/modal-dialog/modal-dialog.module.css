@@ -122,13 +122,19 @@
   padding: var(--spacing-lg) var(--spacing-2xl) var(--spacing-2xl);
 }
 
+/*
+ * Entrance: the backdrop fades in and the panel fades in while rising 8px (the rise is this
+ * component's own choreography), both timed with --fade-quick. --fade-quick is already a duration
+ * plus an easing, so nothing follows it in the shorthand - a second timing function would make the
+ * whole declaration invalid. Only plays when the user hasn't asked for reduced motion.
+ */
 @media (prefers-reduced-motion: no-preference) {
   .backdrop {
-    animation: modal-backdrop-in var(--fade-quick, 120ms) ease-out;
+    animation: modal-backdrop-in var(--fade-quick);
   }
 
   .panel {
-    animation: modal-panel-in var(--fade-quick, 120ms) ease-out;
+    animation: modal-panel-in var(--fade-quick);
   }
 }
 

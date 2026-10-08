@@ -94,6 +94,7 @@ ModalDialog (portal -> document.body)
 | Panel border | `--border-width-sm` `--color-border-default` |
 | Panel radius | `--border-radius-xxl` (16px) |
 | Panel shadow | `--elevation-shadow-overlay` |
+| Entrance | `--fade-quick`: the backdrop fades in; the panel fades in and rises 8px (local keyframes). Skipped under reduced motion |
 | Panel widths | 400 / 600 / 752 / 968 px |
 | Header padding | `--spacing-2xl` (top/l/r), `--spacing-lg` (bottom) |
 | Header gap / title-icon gap | `--spacing-lg` / `--spacing-sm` |

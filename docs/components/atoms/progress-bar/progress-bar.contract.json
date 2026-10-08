@@ -157,7 +157,7 @@
     "Clamp rendered and announced value to 0\u2013100.",
     "Support arbitrary numeric values.",
     "Do not add indeterminate behavior.",
-    "Do not add animation unless explicitly specified.",
+    "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular ring is hidden, so reaching or leaving 0 shows or hides it at once.",
     "Linear width is controlled by the parent.",
     "Circular progress starts at 12 o'clock and advances clockwise.",
     "The linear progress fill and remaining track are both fully-rounded pills (border-radius-full-round) at every value.",

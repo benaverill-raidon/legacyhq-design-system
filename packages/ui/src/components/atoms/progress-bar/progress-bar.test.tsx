@@ -235,4 +235,13 @@ describe('ProgressBar', () => {
     expect(progressBarCss).toContain('inline-size: 100%;');
     expect(progressBarCss).not.toContain('404px');
   });
+
+  it('eases fill changes with fade-quick, and not under reduced motion', () => {
+    expect(progressBarCss).toContain('transition: inline-size var(--fade-quick);');
+    expect(progressBarCss).toMatch(/stroke-dashoffset var\(--fade-quick\),\s*stroke-dasharray var\(--fade-quick\);/);
+    // Progress is a visual state change, never physical movement: no spring.
+    expect(progressBarCss).not.toMatch(/--move-|--ease-spring/);
+    const reduced = progressBarCss.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(reduced).toMatch(/\.progressSegment,\s*\.circularProgress \{\s*transition-duration: 0ms;/);
+  });
 });

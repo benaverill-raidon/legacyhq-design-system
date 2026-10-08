@@ -204,7 +204,7 @@ Do not make the component focusable. Do not add keyboard interaction. Decorative
 - No Figma-exported bitmap or SVG assets.
 - No hardcoded colors.
 - No interactive thumb or drag behavior.
-- No animation unless requested in a later revision.
+- Value changes ease with `--fade-quick` (the linear fill's inline size; the circular arc's dash offset and dash array), matching Progress Tracker. Never a spring or movement recipe: progress is a state change, not physical movement. No transition under `prefers-reduced-motion: reduce`. At value 0 the circular ring is hidden, so reaching or leaving 0 shows or hides it at once.
 - Forward the root ref.
 - Preserve native `data-*` and `aria-*` attributes.
 - Circular progress must scale cleanly without raster artifacts.

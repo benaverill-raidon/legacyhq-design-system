@@ -60,6 +60,7 @@
 - [ ] Uses component tokens only for anatomy-specific dimensions.
 - [ ] No unnecessary component aliases were added.
 - [ ] No hardcoded design values where a token exists.
+- [ ] Fill changes ease with `--fade-quick` (linear inline size; circular dash offset and dash array), with no transition under reduced motion.
 
 ## Accessibility
 

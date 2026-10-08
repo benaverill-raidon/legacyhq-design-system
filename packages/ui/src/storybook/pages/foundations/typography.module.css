@@ -9,28 +9,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Structure */
-
-.tiers {
-  display: grid;
-  gap: var(--spacing-sm);
-  margin: 0;
-}
-
-.tiers > div {
-  display: grid;
-  grid-template-columns: 10rem minmax(0, 1fr);
-  gap: var(--spacing-md);
-  align-items: baseline;
-  padding-block-end: var(--spacing-sm);
-  border-block-end: var(--border-width-sm) solid var(--color-border-default);
-}
-
-.tiers dd {
-  margin: 0;
-  color: var(--color-content-subtle);
-}
-
 /* Type roles */
 
 .roleList {
@@ -118,7 +96,6 @@
 
 @media (max-width: 900px) {
   .roleRow,
-  .tiers > div,
   .spec > div {
     grid-template-columns: minmax(0, 1fr);
   }

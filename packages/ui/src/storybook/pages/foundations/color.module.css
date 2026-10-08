@@ -24,8 +24,8 @@
 
 .swatch {
   display: inline-block;
-  inline-size: var(--spacing-2xl);
-  block-size: var(--spacing-xl);
+  inline-size: var(--size-300);
+  block-size: var(--size-250);
   vertical-align: middle;
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xs);
@@ -40,8 +40,8 @@
 
 .borderSample {
   display: inline-block;
-  inline-size: var(--spacing-2xl);
-  block-size: var(--spacing-xl);
+  inline-size: var(--size-300);
+  block-size: var(--size-250);
   vertical-align: middle;
   border-width: var(--border-width-md);
   border-style: solid;
@@ -249,8 +249,8 @@
 .contrastSample {
   display: inline-grid;
   place-items: center;
-  inline-size: var(--spacing-2xl);
-  block-size: var(--spacing-xl);
+  inline-size: var(--size-300);
+  block-size: var(--size-250);
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xs);
   font-family: var(--typography-heading-xs-font-family);
@@ -302,7 +302,7 @@
 }
 
 .rampSwatch {
-  block-size: var(--spacing-2xl);
+  block-size: var(--size-300);
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xs);
 }
@@ -326,13 +326,13 @@
   border-radius: var(--border-radius-xs);
   background:
     repeating-conic-gradient(var(--color-elevation-surface-sunken-default) 0 25%, var(--color-elevation-surface-raised-default) 0 50%)
-    0 0 / var(--spacing-sm) var(--spacing-sm);
+    0 0 / var(--size-100) var(--size-100);
 }
 
 .alphaSwatch {
   display: block;
-  inline-size: var(--spacing-xl);
-  block-size: var(--spacing-md);
+  inline-size: var(--size-250);
+  block-size: var(--size-150);
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xs);
 }

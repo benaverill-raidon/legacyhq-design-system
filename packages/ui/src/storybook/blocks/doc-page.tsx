@@ -60,6 +60,18 @@ export function DocAnatomy({ parts, children }: { parts: Array<[part: string, me
   );
 }
 
+/** The components that use something: up to four by name, otherwise three and a "+N more" count. */
+export function UsedBy({ users }: { users: string[] }) {
+  if (!users.length) return <span className={doc.subtle}>Not used by components yet</span>;
+  const shown = users.length <= 4 ? users : users.slice(0, 3);
+  return (
+    <span title={users.length > shown.length ? users.join(', ') : undefined}>
+      {shown.join(', ')}
+      {users.length > shown.length && <span className={doc.subtle}> +{users.length - shown.length} more</span>}
+    </span>
+  );
+}
+
 /** The closing note that says which source files the page reads from. */
 export function DocFooter({ children }: { children: React.ReactNode }) {
   return (

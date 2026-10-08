@@ -149,6 +149,33 @@
   margin-block-start: var(--spacing-xl);
 }
 
+/* Labelled rows, such as a page's token tiers: <dl className={doc.definitions}> with a div per row. */
+.definitions {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.definitions > div {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: var(--spacing-md);
+  align-items: baseline;
+  padding-block-end: var(--spacing-sm);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.definitions dd {
+  margin: 0;
+  color: var(--color-content-subtle);
+}
+
+@media (max-width: 900px) {
+  .definitions > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .anatomy {
   display: grid;
   gap: var(--spacing-sm);

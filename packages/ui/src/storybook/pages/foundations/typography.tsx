@@ -2,7 +2,7 @@ import * as React from 'react';
 import { componentsWith, usersOf } from '../../blocks/component-css';
 import { inWords, listOf, titleCase } from '../../blocks/doc-helpers';
 import { DocLink } from '../../blocks/doc-link';
-import { Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection } from '../../blocks/doc-page';
+import { Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection, UsedBy } from '../../blocks/doc-page';
 import {
   componentTypographyTokens,
   displayOnlySizes,
@@ -50,18 +50,6 @@ const SPECIMENS: Record<Group, string> = {
   body: 'Review the trust documents and confirm each beneficiary before the next client meeting.',
 };
 
-function UsedBy({ role }: { role: Role }) {
-  const users = usersOf(`typography-${role.name}-`);
-  if (!users.length) return <span className={doc.subtle}>Not used by components yet</span>;
-  const shown = users.length <= 4 ? users : users.slice(0, 3);
-  return (
-    <span title={users.length > shown.length ? users.join(', ') : undefined}>
-      {shown.join(', ')}
-      {users.length > shown.length && <span className={doc.subtle}> +{users.length - shown.length} more</span>}
-    </span>
-  );
-}
-
 function RoleRow({ role }: { role: Role }) {
   return (
     <li className={styles.roleRow}>
@@ -96,7 +84,7 @@ function RoleRow({ role }: { role: Role }) {
         <div>
           <dt className={doc.eyebrow}>Used by</dt>
           <dd>
-            <UsedBy role={role} />
+            <UsedBy users={usersOf(`typography-${role.name}-`)} />
           </dd>
         </div>
       </dl>
@@ -131,7 +119,7 @@ function Structure() {
         and paragraph spacing) applied together, so a role reads the same wherever it’s used.
         {themed ? ' Some values change between Light and Dark.' : ' Nothing changes between Light and Dark.'}
       </p>
-      <dl className={styles.tiers}>
+      <dl className={doc.definitions}>
         <div>
           <dt className={doc.title}>Primitives</dt>
           <dd className={doc.small}>

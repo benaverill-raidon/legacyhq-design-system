@@ -30,8 +30,8 @@ packages/ui/src/storybook/   # Storybook-only docs; never exported as components
   blocks/       # docs building blocks shared across pages: DocLink (internal
                 # links by sidebar title, checked by doc-link.test.ts),
                 # doc-page (page rhythm + type scale as `doc` classes, header,
-                # numbered sections, subsections, token-name anatomy, footer
-                # note, Code),
+                # numbered sections, subsections, token-name anatomy,
+                # "used by" lists, definition rows, footer note, Code),
                 # doc-helpers (pure copy + "which components use X" helpers,
                 # testable) and component-css (Vite-only raw component CSS for
                 # those lookups). Extract here only once a second page needs it.

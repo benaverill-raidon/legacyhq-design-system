@@ -108,8 +108,8 @@
 
 .swatch {
   display: inline-block;
-  inline-size: var(--spacing-md);
-  block-size: var(--spacing-md);
+  inline-size: var(--size-150);
+  block-size: var(--size-150);
   vertical-align: middle;
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xs);

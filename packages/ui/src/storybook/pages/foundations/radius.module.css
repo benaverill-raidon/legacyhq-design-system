@@ -1,0 +1,150 @@
+/*
+ * Foundations / Radius layout. Page rhythm, type scale, tables, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Every corner, stroke, and sample is drawn with the token it
+ * illustrates (inline var() references or the rules below), so the picture is the value. Shape tokens
+ * have no theme dependency, so the page stays light throughout.
+ */
+
+.sampleColumn {
+  inline-size: 7rem;
+}
+
+/* A rounded box; its border-radius is the token, set inline. */
+.corner {
+  display: block;
+  inline-size: var(--size-1000);
+  block-size: var(--size-600);
+  border: var(--border-width-sm) solid var(--color-border-bold);
+  background: var(--color-background-neutral-default-default);
+}
+
+/* A line whose thickness is the token: a real top border, width set inline. */
+.stroke {
+  display: block;
+  inline-size: var(--size-1000);
+  border-block-start-style: solid;
+  border-block-start-color: var(--color-border-bold);
+}
+
+/* Applying radius */
+
+.levels {
+  display: grid;
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.level {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--spacing-xl);
+  align-items: start;
+  padding-block: var(--spacing-lg);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.levelText {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 64ch;
+}
+
+/* Control heights side by side, each with the radius its size uses. */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: flex-end;
+}
+
+.controls > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: start;
+}
+
+.control {
+  display: block;
+  inline-size: var(--size-800);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+/* Contained Tabs in miniature: an xl list, xs padding, an lg selected tab inside. */
+.nested {
+  display: flex;
+  justify-self: start;
+  padding: var(--spacing-xs);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xl);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+.nested > span {
+  inline-size: var(--size-1000);
+  block-size: var(--size-400);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-background-selected-default-default);
+  box-shadow: inset 0 0 0 var(--border-width-sm) var(--color-border-selected);
+}
+
+/* Border, shadow, or outline: the same field at rest and focused. */
+
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+  margin: 0;
+}
+
+.compare > div {
+  display: grid;
+  gap: var(--spacing-sm);
+  justify-items: start;
+  padding: var(--spacing-lg);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+}
+
+.compare figcaption {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--size-control-md);
+  padding-inline: var(--spacing-sm);
+  border: var(--border-width-sm) solid var(--color-border-input);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-raised-default);
+  color: var(--color-content-default);
+}
+
+.fieldFocused {
+  border-color: var(--color-border-focus);
+  box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-focus);
+}
+
+/* Exceptions note */
+
+.exceptions {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.exceptions ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 900px) {
+  .level,
+  .compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

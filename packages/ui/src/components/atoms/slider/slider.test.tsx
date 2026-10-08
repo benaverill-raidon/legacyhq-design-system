@@ -1027,7 +1027,7 @@ describe('slider CSS contract', () => {
   });
 
   it('shrinks only the inner visual handle to the pressed width without changing positioning rules', () => {
-    expect(sliderCss).toContain('--slider-handle-width-press: var(--measurement-2);');
+    expect(sliderCss).toContain('--slider-handle-width-press: var(--size-025);');
     expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\']):active .handleSingle .handleVisual');
     expect(sliderCss).toContain(
       '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):active .handleLower .handleVisual',

@@ -120,8 +120,8 @@
   ],
   "tokens": {
     "layout": {
-      "minInlineSize": "--spacing-lg",
-      "blockSize": "--spacing-lg",
+      "minInlineSize": "--size-200",
+      "blockSize": "--size-200",
       "paddingBlock": "--spacing-none",
       "paddingInline": "--spacing-xs"
     },

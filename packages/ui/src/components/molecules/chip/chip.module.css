@@ -92,7 +92,7 @@
 /* Figma pulls the close icon slightly toward the seam: padding-left is 2px less than padding-right. */
 .size_sm .segment {
   block-size: var(--size-control-xs);
-  padding-inline: var(--measurement-6);
+  padding-inline: var(--spacing-075);
 }
 
 .size_md .segment {
@@ -101,11 +101,11 @@
 }
 
 .size_sm .removeButton {
-  padding-inline: var(--spacing-xs) var(--measurement-6);
+  padding-inline: var(--spacing-xs) var(--spacing-075);
 }
 
 .size_md .removeButton {
-  padding-inline: var(--measurement-6) var(--spacing-sm);
+  padding-inline: var(--spacing-075) var(--spacing-sm);
 }
 
 /*

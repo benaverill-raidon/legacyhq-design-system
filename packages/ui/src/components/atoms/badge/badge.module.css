@@ -3,8 +3,8 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-inline-size: var(--spacing-lg);
-  block-size: var(--spacing-lg);
+  min-inline-size: var(--size-200);
+  block-size: var(--size-200);
   padding-block: var(--spacing-none);
   padding-inline: var(--spacing-xs);
   border: 0;

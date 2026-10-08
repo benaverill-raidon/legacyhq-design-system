@@ -216,7 +216,7 @@
         "height": "--size-control-sm (32px)",
         "paddingInlineStart": "--spacing-sm",
         "paddingInlineEnd": "--spacing-xs",
-        "paddingBlock": "--measurement-6",
+        "paddingBlock": "--spacing-075",
         "gap": "--spacing-xs",
         "radius": "--border-radius-lg",
         "typography": "--typography-body-md-*"
@@ -226,7 +226,7 @@
         "paddingInlineStart": "--spacing-sm",
         "paddingInlineEnd": "--spacing-sm",
         "paddingBlock": "--spacing-sm",
-        "gap": "--measurement-6",
+        "gap": "--spacing-075",
         "radius": "--border-radius-lg",
         "typography": "--typography-body-md-*"
       },
@@ -312,11 +312,11 @@
       "paddingInlineEnd_md": "--spacing-sm",
       "paddingInlineStart_lg": "--spacing-md",
       "paddingInlineEnd_lg": "--spacing-sm",
-      "paddingBlock_sm": "--measurement-6",
+      "paddingBlock_sm": "--spacing-075",
       "paddingBlock_md": "--spacing-sm",
       "paddingBlock_lg": "--spacing-md",
       "gap_sm": "--spacing-xs",
-      "gap_md": "--measurement-6",
+      "gap_md": "--spacing-075",
       "gap_lg": "--spacing-sm"
     },
     "color": {
@@ -383,7 +383,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colors, spacing, radius, or typography, except the documented --measurement-6 gap (matches Toggle Button's own precedent for the same missing spacing/075 token).",
+    "No hardcoded colors, spacing, radius, or typography.",
     "Do not add a state prop - hover/focus/typing/filled are all native pseudo-class/value-driven."
   ],
   "relatedComponents": [
@@ -427,8 +427,7 @@
   ],
   "knownLimitations": [
     "No multi-line (textarea) mode.",
-    "No integrated label, helper text, or error message - Figma's source component doesn't include them.",
-    "--measurement-6 (Figma's spacing/075) has no semantic spacing token yet."
+    "No integrated label, helper text, or error message - Figma's source component doesn't include them."
   ],
   "futureEnhancements": [
     "A 'Form Field' molecule composing a label, this input, and helper/error text",

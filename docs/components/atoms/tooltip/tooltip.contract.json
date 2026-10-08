@@ -79,7 +79,7 @@
       "--spacing-xs",
       "--border-radius-sm"
     ],
-    "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
+    "note": "Horizontal padding is --spacing-075 (6px), matching Figma. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
   },
   "accessibility": {
     "triggeredBy": ["pointer", "focus"],

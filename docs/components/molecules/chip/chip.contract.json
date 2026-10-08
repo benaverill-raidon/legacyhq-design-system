@@ -263,7 +263,7 @@
     "Fully token-driven - no component-level light/dark branching. Verified in both themes."
   ],
   "tokens": {
-    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, measurement-6 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
+    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
   },
   "relatedComponents": [
     "Tag",

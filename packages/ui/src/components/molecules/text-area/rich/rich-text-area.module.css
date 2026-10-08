@@ -158,7 +158,7 @@
   display: inline-block;
   vertical-align: baseline;
   user-select: none;
-  margin-inline: var(--measurement-2);
+  margin-inline: var(--spacing-xxs);
   white-space: normal;
 }
 

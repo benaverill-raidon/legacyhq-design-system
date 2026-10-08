@@ -167,10 +167,8 @@ lg
 Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry:
 24/32/40/48px tall, 4/8/8/12px corner radius, 6/8/12/16px inline padding - verified against Figma.
 
-The icon-to-text gap is a constant 6px (`--measurement-6`) at every size - verified by measuring
-Figma's own auto-layout itemSpacing, which is identical across xs/sm/md/lg. This isn't one of the
-named spacing tokens (4/8/12/16px), so it's aliased directly to the raw 6px measurement rather than
-a semantic spacing token.
+The icon-to-text gap is a constant 6px (`--spacing-075`) at every size - verified by measuring
+Figma's own auto-layout itemSpacing, which is identical across xs/sm/md/lg.
 
 ## Icon support
 

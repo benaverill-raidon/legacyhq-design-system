@@ -40,7 +40,7 @@
  * `.root` above, so an md field renders correctly even before this class applies.
  */
 .size_sm {
-  --text-area-padding-block: var(--measurement-6);
+  --text-area-padding-block: var(--spacing-075);
   --text-area-control-height: var(--size-control-sm);
 }
 

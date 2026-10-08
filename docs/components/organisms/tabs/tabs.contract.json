@@ -55,7 +55,7 @@
   },
   "tokens": {
     "semantic": {
-      "spacing": { "tabPaddingBlock": "--size-075", "tabPaddingInline": "--spacing-sm", "rootGap": "--spacing-lg", "containedContainerPadding": "--spacing-xs" },
+      "spacing": { "tabPaddingBlock": "--spacing-075", "tabPaddingInline": "--spacing-sm", "rootGap": "--spacing-lg", "containedContainerPadding": "--spacing-xs" },
       "border": { "listBorder": "--border-width-sm", "indicator": "--border-width-lg", "containedTabRadius": "--border-radius-lg", "tabRadius": "--border-radius-sm", "containedContainerRadius": "--border-radius-xl" },
       "typography": { "label": "heading-xs" },
       "color": {

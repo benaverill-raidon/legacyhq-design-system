@@ -163,8 +163,8 @@ enforced mechanically, not just by convention or review: "no raw values" by
 directly" — for color only — by
 `packages/ui/src/components/component-color-tokens.test.ts` (part of
 `npm test`). Stylelint can't distinguish primitive from semantic `var()`s, and
-other primitive types aren't checked: a few components still use primitive
-dimension tokens (`measurement-2`/`-6`/`-32`) directly. See the `enforcement`
+other primitive types aren't checked (no component CSS uses a primitive
+dimension token today, but nothing enforces it). See the `enforcement`
 block in that file and the Commands section below.
 
 1. **Primitive** — raw values only, no intent. `color.blue.500`,

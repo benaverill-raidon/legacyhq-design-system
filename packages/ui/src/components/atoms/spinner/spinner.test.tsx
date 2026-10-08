@@ -98,7 +98,7 @@ describe('Spinner', () => {
     expect(spinnerCss).toContain('--spinner-stroke-width: var(--border-width-md);');
     expect(spinnerCss).toContain('--spinner-stroke-width: var(--border-width-lg);');
     expect(spinnerCss).toContain('--spinner-graphic-size: 100%;');
-    expect(spinnerCss).toContain('--spinner-graphic-size: calc(var(--measurement-32) / var(--size-spinner-xl) * 100%);');
+    expect(spinnerCss).toContain('--spinner-graphic-size: calc(var(--size-400) / var(--size-spinner-xl) * 100%);');
     expect(spinnerCss).toContain('inline-size: var(--spinner-graphic-size);');
     expect(spinnerCss).toContain('block-size: var(--spinner-graphic-size);');
   });

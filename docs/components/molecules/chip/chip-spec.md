@@ -146,8 +146,8 @@ Measured directly, per size:
 | | sm | md |
 |---|---|---|
 | segment block-size | `--size-control-xs` (24) | `--size-control-sm` (32) |
-| segment padding-inline | `--measurement-6` (6) | `--spacing-sm` (8) |
-| remove button padding-inline | `--spacing-xs` / `--measurement-6` (4 / 6) | `--measurement-6` / `--spacing-sm` (6 / 8) |
+| segment padding-inline | `--spacing-075` (6) | `--spacing-sm` (8) |
+| remove button padding-inline | `--spacing-xs` / `--spacing-075` (4 / 6) | `--spacing-075` / `--spacing-sm` (6 / 8) |
 | segment gap | `--spacing-xs` (4) | `--spacing-xs` (4) |
 
 The remove button's asymmetric padding is real, not a simplification - Figma pulls the close icon 2px

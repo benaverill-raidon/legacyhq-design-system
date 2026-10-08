@@ -115,8 +115,7 @@ Tooltip uses semantic color, typography, spacing, and radius tokens: background
 (`border-radius-sm`, 4px), vertical padding (`spacing-xxs`, 2px), and content gap (`spacing-xs`,
 4px) - all verified directly against Figma's tooltip-primitive frame.
 
-Horizontal padding is `--measurement-6` (6px) - a raw measurement rather than a named spacing token,
-since Figma's own value doesn't land on the 4/8/12/16px spacing scale. A prior implementation used
+Horizontal padding is `--spacing-075` (6px), matching Figma. A prior implementation used
 `--spacing-sm` (8px) here, which was 2px too wide.
 
 There is no arrow/caret pointing at the trigger - Figma's tooltip is a plain rounded rectangle.

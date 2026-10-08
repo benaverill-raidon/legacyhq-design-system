@@ -72,7 +72,7 @@ showBorder = true
 
 ## Layout and tokens
 
-- tab padding: block `--size-075` (6px), inline `--spacing-sm` (8px)
+- tab padding: block `--spacing-075` (6px), inline `--spacing-sm` (8px)
 - root gap (tab list ↔ panels): `--spacing-lg`
 - tab list border: `--border-width-sm` / `--color-border-default`
 - line indicator: `--border-width-lg` (3px) / `--color-content-selected`

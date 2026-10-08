@@ -120,7 +120,7 @@ Field (div.root, flex column, data-state/context/size)
 | Required `*` colour | `--color-content-error` | |
 | Label -> control gap | `--spacing-xs` (label `padding-bottom`) | Figma space/050 (4px) |
 | Control -> message gap | `--spacing-xs` (message `padding-top`) | Figma spacing/xs (4px) |
-| Message icon -> text gap | `--measurement-6` | Figma spacing/075 (6px) - no semantic spacing token yet; same precedent as Text Field / Toggle Button |
+| Message icon -> text gap | `--spacing-075` | Figma spacing/075 (6px) |
 | Message typography | `--typography-body-sm-*` | Figma body/sm |
 | Message colour (default) | `--color-content-subtle` | |
 | Message colour (error) | `--color-content-error` | |
@@ -186,7 +186,7 @@ Field (div.root, flex column, data-state/context/size)
 - Renders no `<label>` when `label` is omitted, and no message (nor `aria-describedby`) when
   `message` is omitted.
 - Composes `className` (root), `labelClassName`, and `messageClassName`.
-- Uses only semantic tokens (plus the documented `--measurement-6` gap); works in light and dark.
+- Uses only semantic tokens; works in light and dark.
 - Storybook includes Playground, States, Contexts, Content, AnyControl, and EdgeCases.
 - Tests cover label/id wiring, describedby merge, aria-invalid, required, status icons, data
   attributes, omitted label/message, className composition, and force-state forwarding.

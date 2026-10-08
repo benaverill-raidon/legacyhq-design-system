@@ -75,7 +75,7 @@ Measured directly from Figma's bound variables, per size:
 | radius | `--border-radius-lg` (8) | `--border-radius-xl` (12) |
 | font | `body-md` (14/24) | `body-lg` (16/24) |
 
-Code also supports `sm` for compact key/value rows: body-md typography, `--measurement-6` block
+Code also supports `sm` for compact key/value rows: body-md typography, `--spacing-075` block
 padding, and the md inline padding/radius. Auto-resize uses `--size-control-sm/md/lg` for the
 minimum frame height and adjusts block padding to fit one line within that height.
 

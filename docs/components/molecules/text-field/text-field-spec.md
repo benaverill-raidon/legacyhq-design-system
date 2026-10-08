@@ -174,8 +174,8 @@ mirror each other:
 
 | Size | Height | Padding inline (start / end) | Padding block | Gap | Radius | Typography |
 |------|--------|-------------------------------|---------------|-----|--------|------------|
-| sm | 32px (`--size-control-sm`) | `--spacing-sm` / `--spacing-xs` | `--measurement-6` | `--spacing-xs` | `--border-radius-lg` | `--typography-body-md-*` |
-| md | 40px (`--size-control-md`) | `--spacing-sm` / `--spacing-sm` | `--spacing-sm` | `--measurement-6` | `--border-radius-lg` | `--typography-body-md-*` |
+| sm | 32px (`--size-control-sm`) | `--spacing-sm` / `--spacing-xs` | `--spacing-075` | `--spacing-xs` | `--border-radius-lg` | `--typography-body-md-*` |
+| md | 40px (`--size-control-md`) | `--spacing-sm` / `--spacing-sm` | `--spacing-sm` | `--spacing-075` | `--border-radius-lg` | `--typography-body-md-*` |
 | lg | 48px (`--size-control-lg`) | `--spacing-md` / `--spacing-sm` | `--spacing-md` | `--spacing-sm` | `--border-radius-xl` | `--typography-body-lg-*` |
 
 `sm` and `md` share the same typography (`body-md`) - confirmed directly from Figma's bound text
@@ -185,9 +185,8 @@ Inline padding is asymmetric at every size (the end side is tighter than the sta
 trailing icon/action sits closer to the field's edge - confirmed directly from Figma's per-side
 padding values, not assumed symmetric with the original single-value pass. The gap between the
 input and an adjacent icon/action also varies per size (4px/6px/8px) rather than a flat 6px at
-every size - `--spacing-xs` (sm), `--measurement-6` (md, Figma's `spacing/075`), `--spacing-sm`
-(lg). There is no semantic spacing token for the 6px value yet, so it falls back to the raw
-primitive directly, the same documented gap Toggle Button already has for its own icon gap.
+every size - `--spacing-xs` (sm), `--spacing-075` (md, Figma's `spacing/075`), `--spacing-sm`
+(lg).
 
 ### Appearance
 
@@ -376,8 +375,6 @@ boolean prop.
 - No multi-line (textarea) mode.
 - No integrated label, helper text, or error message - Figma's source component doesn't include
   them; see "Future Enhancements."
-- `--measurement-6` (Figma's `spacing/075`) has no semantic spacing token yet, so it's consumed
-  directly - the same documented gap Toggle Button already has.
 
 ## Future Enhancements
 - A "Form Field" molecule composing a label, this input, and helper/error text

@@ -2,7 +2,7 @@
   --slider-track-height: var(--component-slider-track-height-md);
   --slider-stop-container-size: var(--component-slider-stop-container-size-md);
   --slider-handle-width: var(--component-slider-handle-width-md);
-  --slider-handle-width-press: var(--measurement-2);
+  --slider-handle-width-press: var(--size-025);
   --slider-handle-height: var(--component-slider-handle-height-md);
   --slider-value-scale-inset: var(--component-slider-handle-half-width);
   --slider-internal-gap: var(--spacing-sm);

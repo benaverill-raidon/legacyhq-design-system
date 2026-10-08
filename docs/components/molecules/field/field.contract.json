@@ -56,7 +56,7 @@
       "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
       "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
       "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
-      "The message icon->text gap is Figma spacing/075 (6px), which has no semantic spacing token yet - uses --measurement-6, the same documented precedent as Text Field and Toggle Button."
+      "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
     ]
   },
   "useCases": [
@@ -200,7 +200,7 @@
     "layout": {
       "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
       "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
-      "messageIconToTextGap": "--measurement-6 (Figma spacing/075; no semantic spacing token yet)",
+      "messageIconToTextGap": "--spacing-075 (Figma spacing/075)",
       "inlineIndent_lg": "--spacing-md",
       "inlineIndent_sm_md": "--spacing-sm"
     },
@@ -266,7 +266,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colours, spacing, radius, or typography, except the documented --measurement-6 gap (Figma spacing/075, matching Text Field / Toggle Button precedent).",
+    "No hardcoded colours, spacing, radius, or typography.",
     "Render the label as a native label[htmlFor]; do not reuse the Label atom or Inline Message molecule."
   ],
   "relatedComponents": ["Text Field", "Text Area", "Select", "Label", "Inline Message", "Section Message"],
@@ -294,15 +294,14 @@
     "context='inline' injects appearance='subtle' into the control (control's own appearance wins); context='default' leaves the control's appearance untouched.",
     "Renders no label when label is omitted, and no message nor aria-describedby when message is omitted.",
     "Composes className, labelClassName, and messageClassName.",
-    "Uses only semantic tokens (plus the documented --measurement-6 gap); works in light and dark.",
+    "Uses only semantic tokens; works in light and dark.",
     "Storybook includes Playground, States, Contexts, Content, AnyControl, and EdgeCases.",
     "Tests cover label/id wiring, describedby merge, aria-invalid, required, status icons, data attributes, omitted label/message, className composition, and force-state forwarding."
   ],
   "knownLimitations": [
     "children must be a single React element (it is cloned) - text, fragments, or multiple elements are unsupported.",
     "state does not set the control's own error border - the consumer pairs it with the control's invalid prop.",
-    "No built-in support for labelling a group of controls (fieldset/legend is the right tool there).",
-    "--measurement-6 (Figma spacing/075) has no semantic spacing token yet."
+    "No built-in support for labelling a group of controls (fieldset/legend is the right tool there)."
   ],
   "futureEnhancements": [
     "An optional trailing label slot (e.g. an 'Optional' tag or a character counter).",

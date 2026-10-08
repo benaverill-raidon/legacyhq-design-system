@@ -103,7 +103,7 @@
   block-size: var(--switch-thumb-size);
   border-radius: var(--border-radius-full-round);
   background: var(--color-content-inverse-default);
-  transform: translateX(var(--spacing-none));
+  transform: translateX(0);
   transform-origin: left center;
   transition: transform var(--move-quick);
 }

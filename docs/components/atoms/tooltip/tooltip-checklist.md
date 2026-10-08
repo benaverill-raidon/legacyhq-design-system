@@ -51,8 +51,7 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
   corner radius (`border-radius-sm`, 4px), vertical padding (`spacing-xxs`, 2px), truncated max
   width (420px), and wrapped max width (240px) all matched the existing implementation exactly.
 - Fixed a real bug: horizontal padding was `--spacing-sm` (8px); Figma's own tooltip-primitive frame
-  measures 6px left/right padding at every content length. Fixed to `--measurement-6`, since 6px
-  doesn't land on the named 4/8/12/16px spacing scale.
+  measures 6px left/right padding at every content length. Fixed to `--spacing-075`.
 - No arrow/caret element exists in Figma's tooltip - it's a plain rounded rectangle, matching the
   implementation. A "keycap" layer appears in every Figma variant's node tree but renders invisible
   in every captured screenshot - an authoring artifact, not a real anatomy piece to replicate.

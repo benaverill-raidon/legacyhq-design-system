@@ -758,8 +758,8 @@
     "subComponents": [],
     "tokens": {
       "layout": {
-        "minInlineSize": "--spacing-lg",
-        "blockSize": "--spacing-lg",
+        "minInlineSize": "--size-200",
+        "blockSize": "--size-200",
         "paddingBlock": "--spacing-none",
         "paddingInline": "--spacing-xs"
       },
@@ -2516,7 +2516,7 @@
         "--spacing-xs",
         "--border-radius-sm"
       ],
-      "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
+      "note": "Horizontal padding is --spacing-075 (6px), matching Figma. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
     },
     "accessibility": {
       "triggeredBy": [
@@ -3059,7 +3059,7 @@
     },
     "subComponents": [],
     "tokens": {
-      "note": "chip.module.css references only tokens: size-control-xs/sm for heights, measurement-6 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
+      "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
     },
     "accessibility": {
       "searchRole": "native button with aria-pressed, matching Toggle Button",
@@ -3388,7 +3388,7 @@
       "layout": {
         "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
         "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
-        "messageIconToTextGap": "--measurement-6 (Figma spacing/075; no semantic spacing token yet)",
+        "messageIconToTextGap": "--spacing-075 (Figma spacing/075)",
         "inlineIndent_lg": "--spacing-md",
         "inlineIndent_sm_md": "--spacing-sm"
       },
@@ -3489,7 +3489,7 @@
         "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
         "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
         "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
-        "The message icon->text gap is Figma spacing/075 (6px), which has no semantic spacing token yet - uses --measurement-6, the same documented precedent as Text Field and Toggle Button."
+        "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
       ]
     }
   },
@@ -5542,11 +5542,11 @@
         "paddingInlineEnd_md": "--spacing-sm",
         "paddingInlineStart_lg": "--spacing-md",
         "paddingInlineEnd_lg": "--spacing-sm",
-        "paddingBlock_sm": "--measurement-6",
+        "paddingBlock_sm": "--spacing-075",
         "paddingBlock_md": "--spacing-sm",
         "paddingBlock_lg": "--spacing-md",
         "gap_sm": "--spacing-xs",
-        "gap_md": "--measurement-6",
+        "gap_md": "--spacing-075",
         "gap_lg": "--spacing-sm"
       },
       "color": {
@@ -8606,7 +8606,7 @@
     "tokens": {
       "semantic": {
         "spacing": {
-          "tabPaddingBlock": "--size-075",
+          "tabPaddingBlock": "--spacing-075",
           "tabPaddingInline": "--spacing-sm",
           "rootGap": "--spacing-lg",
           "containedContainerPadding": "--spacing-xs"

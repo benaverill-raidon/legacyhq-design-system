@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding-block: var(--size-075);
+  padding-block: var(--spacing-075);
   padding-inline: var(--spacing-sm);
   border: 0;
   border-radius: var(--border-radius-sm);

@@ -20,7 +20,7 @@
   gap: var(--spacing-xs);
   box-sizing: border-box;
   padding-block: var(--spacing-xxs);
-  padding-inline: var(--measurement-6);
+  padding-inline: var(--spacing-075);
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse-default);

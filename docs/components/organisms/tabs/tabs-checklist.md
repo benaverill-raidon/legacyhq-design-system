@@ -71,7 +71,7 @@ showBorder: true
 
 ## Tokens
 
-- [ ] tab padding block `--size-075`, inline `--spacing-sm`; root gap `--spacing-lg`.
+- [ ] tab padding block `--spacing-075`, inline `--spacing-sm`; root gap `--spacing-lg`.
 - [ ] tab list border `--border-width-sm` / `--color-border-default`.
 - [ ] line indicator `--border-width-lg` / `--color-content-selected`.
 - [ ] contained tab radius `--border-radius-lg`; selected fill `--color-background-selected-default-default`

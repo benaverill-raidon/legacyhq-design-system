@@ -444,7 +444,7 @@ describe('Tooltip', () => {
     expect(tooltipCss).toContain('background: var(--color-background-neutral-bold-default);');
     expect(tooltipCss).toContain('color: var(--color-content-inverse-default);');
     expect(tooltipCss).toContain('padding-block: var(--spacing-xxs);');
-    expect(tooltipCss).toContain('padding-inline: var(--measurement-6);');
+    expect(tooltipCss).toContain('padding-inline: var(--spacing-075);');
     expect(tooltipCss).toContain('gap: var(--spacing-xs);');
     expect(tooltipCss).toContain('border-radius: var(--border-radius-sm);');
     expect(tooltipCss).toContain('max-inline-size: var(--component-tooltip-max-width-truncated);');

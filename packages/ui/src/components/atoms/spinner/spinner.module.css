@@ -33,7 +33,7 @@
 
 .size_xl {
   --spinner-size: var(--size-spinner-xl);
-  --spinner-graphic-size: calc(var(--measurement-32) / var(--size-spinner-xl) * 100%);
+  --spinner-graphic-size: calc(var(--size-400) / var(--size-spinner-xl) * 100%);
   --spinner-stroke-width: var(--border-width-lg);
 }
 

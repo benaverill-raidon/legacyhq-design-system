@@ -72,7 +72,7 @@ No new tokens. Segments use `color-background-neutral-subtle-default/hover/press
 `color-border-input`; the label is `color-content-subtle`, operator/value `color-content-default`;
 selected uses the `selected` family (`color-background-selected-default-default/hover/press`,
 `color-border-selected`, `color-content-selected`); disabled uses `color-background-disabled` /
-`color-content-disabled`. Geometry uses `size-control-xs/sm`, `measurement-6`, `spacing-sm/xs`,
+`color-content-disabled`. Geometry uses `size-control-xs/sm`, `spacing-075`, `spacing-sm/xs`,
 `border-width-sm`, `border-radius-full-round`, and `size-200` for the 16px slots.
 
 ---

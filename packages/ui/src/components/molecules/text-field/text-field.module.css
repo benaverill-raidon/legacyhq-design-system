@@ -4,7 +4,7 @@
   --text-field-padding-inline-start: var(--spacing-sm);
   --text-field-padding-inline-end: var(--spacing-sm);
   --text-field-padding-block: var(--spacing-sm);
-  --text-field-gap: var(--measurement-6);
+  --text-field-gap: var(--spacing-075);
 
   display: flex;
   align-items: center;
@@ -83,7 +83,7 @@
   --text-field-height: var(--size-control-sm);
   --text-field-padding-inline-start: var(--spacing-sm);
   --text-field-padding-inline-end: var(--spacing-xs);
-  --text-field-padding-block: var(--measurement-6);
+  --text-field-padding-block: var(--spacing-075);
   --text-field-gap: var(--spacing-xs);
   --text-field-radius: var(--border-radius-lg);
 }
@@ -93,7 +93,7 @@
   --text-field-padding-inline-start: var(--spacing-sm);
   --text-field-padding-inline-end: var(--spacing-sm);
   --text-field-padding-block: var(--spacing-sm);
-  --text-field-gap: var(--measurement-6);
+  --text-field-gap: var(--spacing-075);
   --text-field-radius: var(--border-radius-lg);
 }
 

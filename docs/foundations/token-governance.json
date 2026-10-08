@@ -241,7 +241,7 @@
                 "npm run validate",
                 "CI (.github/workflows/validate.yml)"
             ],
-            "notCovered": "Other primitive types are not checked. Component CSS currently references three primitive dimension tokens directly - measurement-2 (slider, text-area), measurement-6 (chip, field, text-area, text-field, toggle-button, tooltip), and measurement-32 (spinner)."
+            "notCovered": "Other primitive types are not checked. No component CSS references a primitive dimension token today, but nothing enforces that yet. Component tokens may alias dimension primitives (see the component token JSON files); that is the token layer, not component CSS."
         }
     },
     "sourceFormat": {

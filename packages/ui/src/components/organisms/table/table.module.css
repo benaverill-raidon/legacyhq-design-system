@@ -280,7 +280,7 @@
   position: absolute;
   inset-block: 0;
   inset-inline-end: 0;
-  inline-size: var(--spacing-sm);
+  inline-size: var(--size-100);
   cursor: col-resize;
   touch-action: none;
 }
@@ -506,13 +506,13 @@
 
 /* --- Loading skeletons --- */
 .skeletonText {
-  block-size: var(--spacing-lg);
+  block-size: var(--size-200);
   inline-size: 70%;
 }
 
 .skeletonCheckbox {
-  block-size: var(--spacing-lg);
-  inline-size: var(--spacing-lg);
+  block-size: var(--size-200);
+  inline-size: var(--size-200);
 }
 
 /* --- Footer --- */

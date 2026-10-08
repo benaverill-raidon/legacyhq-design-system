@@ -314,6 +314,52 @@
             ]
         }
     },
+    "elevation": {
+        "description": "How visual depth is expressed. Documented for people in Storybook at Foundations / Elevation.",
+        "surfaceColor": "Surface color expresses depth within the page: color-elevation-surface-deep, -sunken, -default (the page), and -raised, each with hover and press. Raised surfaces rest on the page and cast no shadow; their border separates them.",
+        "shadow": "An elevation shadow indicates that a surface floats above the interface. Use the role token; never rebuild a shadow from the color-elevation-shadow-* colors in component CSS. A floating surface keeps its border; the shadow sits outside it.",
+        "roles": [
+            {
+                "key": "overlay",
+                "token": "--elevation-shadow-overlay",
+                "source": "DTCG shadow composite in Semantic: Elevation (semantic-elevation-light.json and -dark.json), so light.css and dark.css each declare it and its colors resolve per theme.",
+                "layers": "inset 0 0 0 border-width-sm in color-elevation-shadow-overlay-inner (transparent in both themes); 0 8px 12px 0 in -spread; 0 0 1px 0 in -perimeter.",
+                "figma": "Light/elevation.shadow.overlay and Dark/elevation.shadow.overlay effect styles.",
+                "usedBy": [
+                    "Popup (and Dropdown Menu, Select, Date Picker, Time Picker, Inline Message through it)",
+                    "Toast",
+                    "Rich Text Area's slash-command picker",
+                    "Modal Dialog"
+                ]
+            }
+        ],
+        "strokeComposition": "Shape owns stroke thickness. Elevation may compose a Shape stroke into a shadow recipe, as the overlay inner ring does with border-width-sm. Blurred shadow layers are elevation; unblurred standalone rings and strokes remain Shape.",
+        "notYet": "Figma defines raised and overflow effect styles and their colors exist as tokens, but no component uses them, so they have no composite. Add one only when a component needs it.",
+        "unused": {
+            "primitives": "shadow-sm/md/lg-x/y/blur/spread (12): no token or component uses them; kept for now.",
+            "colors": [
+                "color-elevation-shadow-overlay-default",
+                "color-elevation-shadow-raised-default",
+                "color-elevation-shadow-raised-spread",
+                "color-elevation-shadow-raised-perimeter",
+                "color-elevation-shadow-raised-inner",
+                "color-elevation-shadow-overflow-default",
+                "color-elevation-shadow-overflow-spread",
+                "color-elevation-shadow-overflow-perimeter",
+                "color-elevation-shadow-overflow-color"
+            ]
+        },
+        "layering": "Stacking order (z-index) is a separate concern: it is not paired with elevation and isn't tokenized yet.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "findings": [
+                "Popup-based overlays (z-index 1) render behind an open Modal Dialog (z-index 1000); Toast Group and Modal Dialog tie at 1000. Tracked as a separate layering task.",
+                "Four Light taupe alpha primitives (alpha-1100-12/16/24/32) are twice as opaque as their names and Figma (0.16/0.32/0.48/0.64), so the Light overlay shadow renders at 32%/64% instead of Figma's 16%/32%, and Light border-default and press fills are affected too. Tracked separately.",
+                "Storybook applies the theme to a wrapper div, so portaled overlays (Popup, Modal Dialog) render with Light tokens in Dark mode. Tracked separately.",
+                "Figma: color/elevation/shadow/overlay/spread and /perimeter don't exist as variables, and the effect styles aren't bound to variables (they hard-code the same values)."
+            ]
+        }
+    },
     "enforcement": {
         "description": "This governance doc is a convention, not a guarantee. Raw-value regressions in component CSS are caught mechanically by stylelint, not by review alone.",
         "tool": "stylelint",

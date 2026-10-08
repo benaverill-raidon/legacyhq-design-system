@@ -200,6 +200,14 @@ shadow of `calc(var(--border-width-md) - var(--border-width-sm))` inside the
 resting border. Radius tokens are for corners only. See Foundations / Radius
 and the `shape` family in token-governance.json.
 
+**Elevation: surface color for depth, one shadow for floating.** Surface color
+(`color-elevation-surface-*`) expresses depth within the page; raised surfaces
+keep their border and cast no shadow. Anything that floats above the interface
+uses `--elevation-shadow-overlay` (a DTCG shadow composite, themed) — never a
+shadow rebuilt from `color-elevation-shadow-*`. z-index is separate and not
+tokenized. See Foundations / Elevation and the `elevation` block in
+token-governance.json.
+
 **Before creating a new token**, check whether an existing semantic token
 already expresses the same meaning — reuse it. Don't create component tokens
 that just duplicate a semantic token under a different name (e.g. don't make

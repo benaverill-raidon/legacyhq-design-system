@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "status": "stable",
     "owner": "LegacyHQ Design System",
-    "lastReviewed": "2026-07-07",
+    "lastReviewed": "2026-10-08",
     "appliesTo": [
         "tokens",
         "components",
@@ -84,6 +84,7 @@
                 "rules": [
                     "Component tokens are exceptions, not defaults.",
                     "Component tokens should generally alias semantic tokens.",
+                    "Exception: a component dimension token may alias the primitive scale when it represents geometry unique to that component (see dimensions.componentTokenException).",
                     "Component tokens should only exist when a component requires independent control, theming, or behavior."
                 ],
                 "representsIntent": true,
@@ -171,7 +172,7 @@
     "antiPatterns": [
         "Duplicate meanings.",
         "Component tokens that mirror existing semantic tokens.",
-        "Component tokens that reference primitive values directly.",
+        "Component tokens that reference primitive values directly - except dimension tokens for geometry unique to one component (see dimensions.componentTokenException).",
         "Creating tokens for a single isolated use case.",
         "Creating semantic tokens that differ only by component name."
     ],
@@ -203,7 +204,99 @@
         "preferIntentOverImplementation": true,
         "allowPrimitiveConsumptionByComponents": false,
         "allowComponentTokenForSemanticDuplicate": false,
-        "componentTokensRequireDocumentedNeed": true
+        "componentTokensRequireDocumentedNeed": true,
+        "allowComponentDimensionTokensToAliasPrimitives": true
+    },
+    "dimensions": {
+        "description": "Which family a dimension token belongs to, and how to choose one. Documented for people in Storybook at Foundations / Spacing.",
+        "primitiveScale": {
+            "tokens": "measurement-*",
+            "rule": "Raw lengths with no intent. Component CSS never references them.",
+            "figmaNaming": "Figma names these primitives number/*. The repo keeps measurement-*; whether to align the names is a separate token-source decision."
+        },
+        "families": [
+            {
+                "key": "spacing",
+                "tokens": [
+                    "spacing-*"
+                ],
+                "definition": "Spacing describes distance between, inside, or relative to elements when that distance expresses layout relationship.",
+                "appliesTo": [
+                    "padding",
+                    "gap",
+                    "margin",
+                    "layout inset"
+                ]
+            },
+            {
+                "key": "overlap",
+                "tokens": [
+                    "overlap-*"
+                ],
+                "definition": "Negative spacing for elements that deliberately stack, such as the avatars in an Avatar Group."
+            },
+            {
+                "key": "sizing",
+                "tokens": [
+                    "size-control-*",
+                    "size-choice-*",
+                    "size-icon-*",
+                    "size-marker-*",
+                    "size-avatar-*",
+                    "size-logo-*",
+                    "size-spinner-*",
+                    "size-<NNN>"
+                ],
+                "definition": "The dimensions of elements themselves. Use the most specific family that fits; the numeric scale (100 = 8px) covers any other element dimension."
+            },
+            {
+                "key": "shape",
+                "tokens": [
+                    "border-radius-*",
+                    "border-width-*"
+                ],
+                "definition": "Corner radius and stroke width - separate families even when a value matches a spacing step."
+            },
+            {
+                "key": "component",
+                "tokens": [
+                    "component-<name>-*"
+                ],
+                "definition": "Geometry only one component has, such as Switch's thumb travel or Menu's widths."
+            }
+        ],
+        "rule": "Choose a dimension token by what the value does, not by the number it resolves to: 16px of padding is spacing-lg, and a 16px-tall element is size-200. If the right family doesn't have the value, raise it as a gap rather than borrowing a primitive or another family's token.",
+        "notSpacing": [
+            "focus-ring offsets",
+            "motion travel",
+            "decorative strokes",
+            "shadow geometry",
+            "type metrics such as line height"
+        ],
+        "componentTokenException": "Component tokens may alias primitives when they represent geometry unique to one component. Do not create semantic tokens only so component tokens have something to alias. Component CSS itself must never consume primitives.",
+        "rawLengths": {
+            "rule": "Not every numeric length needs a token. Separate values that reveal a missing reusable token from acceptable local or layout arithmetic.",
+            "acceptable": [
+                "percentages and centering (100%, 50%, -50%)",
+                "calc() built from tokens",
+                "the 1px visually-hidden pattern",
+                "one-off geometry local to one component"
+            ]
+        },
+        "enforcement": "Not enforced yet. Foundations / Spacing lists, live from component CSS, the places where spacing is missing, misclassified, or borrowed for a non-spacing purpose.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "spacing": [
+                "There is no focus-ring offset token: several components set --focus-ring-offset or outline-offset with spacing tokens, and Focus Ring and Table set a raw 2px.",
+                "Rich Text Area's slash-command picker shadow falls back to spacing tokens for its offset and blur, because the --elevation-shadow-overlay token it refers to doesn't exist.",
+                "Link sets its icon line-height with --spacing-none."
+            ],
+            "sizingAndLayout": [
+                "Table row heights (32, 40, and 64px) are raw lengths repeated across Table, Text Field (editable table cells), and Time Picker (table-cell footer), with no shared token.",
+                "Panel and dialog widths are raw lengths in Date Picker and Time Picker (240px), Toast and Toast Group (368px), and Modal Dialog (400-968px), while Menu and Tooltip widths are component tokens."
+            ],
+            "note": "The spacing findings also appear on Foundations / Spacing, generated from component CSS. The sizing and layout findings are recorded only here; they are not spacing issues."
+        }
     },
     "enforcement": {
         "description": "This governance doc is a convention, not a guarantee. Raw-value regressions in component CSS are caught mechanically by stylelint, not by review alone.",

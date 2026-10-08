@@ -175,6 +175,19 @@ block in that file and the Commands section below.
 3. **Component** — exceptions only, not defaults. `button.primary.background`.
    Should alias semantic tokens. Only create one when a component needs
    independent theming/control that the semantic layer can't express.
+   Exception: a dimension token for geometry unique to one component (Switch
+   thumb travel, Slider handle) may alias the `measurement-*` primitives;
+   component CSS still never does.
+
+**Dimensions: choose by job, not by number.** Spacing (`spacing-*`, negative
+`overlap-*`) is distance between, inside, or relative to elements when it
+expresses layout relationship: padding, gap, margin, layout inset. Sizing
+(`size-*` families) is the dimensions of elements. Focus-ring offsets, motion
+travel, strokes, shadows, and type metrics aren't spacing, even though they're
+lengths. 16px of padding is `--spacing-lg`; a 16px-tall element is `--size-200`.
+Not every raw length needs a token. The rules are in the `dimensions` block of
+token-governance.json, with open findings; Storybook's Foundations / Spacing
+page documents them for people.
 
 **Before creating a new token**, check whether an existing semantic token
 already expresses the same meaning — reuse it. Don't create component tokens

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { componentCss, usersOf } from '../../blocks/component-css';
+import { componentsUsingToken, tokenUses } from '../../blocks/css-usage';
 import { componentsMatching, inWords, listOf, titleCase } from '../../blocks/doc-helpers';
-import { Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection, UsedBy } from '../../blocks/doc-page';
+import { Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection, DocTokenTable, UsedBy } from '../../blocks/doc-page';
 import {
   componentDimensionTokens,
-  componentsUsingToken,
   overlapScale,
   primitiveScale,
   sizeFamilies,
@@ -13,7 +13,6 @@ import {
   spacingScale,
   spacingUsage,
   themed,
-  tokenUses,
 } from './spacing-data';
 import type { DimensionToken, Exception } from './spacing-data';
 import styles from './spacing.module.css';
@@ -99,36 +98,17 @@ function Scale() {
         {capitalize(inWords(spacingScale.length))} steps from {first.px} to {last.px}px, close together at the small end, where a
         2px difference is visible, and further apart as distances grow. Each square is drawn at its step’s size.
       </p>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th scope="col">Token</th>
-            <th scope="col" className={styles.squareColumn}>
-              <span className={styles.visuallyHidden}>Size</span>
-            </th>
-            <th scope="col">Value</th>
-            <th scope="col">Figma</th>
-            <th scope="col">Used by</th>
-          </tr>
-        </thead>
-        <tbody>
-          {spacingScale.map((token) => (
-            <tr key={token.name}>
-              <th scope="row">
-                <Code>{token.name}</Code>
-              </th>
-              <td className={styles.squareColumn}>
-                <Square token={token} />
-              </td>
-              <td className={styles.numbers}>{token.px}px</td>
-              <td className={doc.subtle}>{token.figmaName}</td>
-              <td>
-                <UsedBy users={usersOfToken(token.name)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <DocTokenTable
+        sampleLabel="Size"
+        sampleClassName={styles.squareColumn}
+        rows={spacingScale.map((token) => ({
+          name: token.name,
+          sample: <Square token={token} />,
+          value: `${token.px}px`,
+          figmaName: token.figmaName,
+          users: usersOfToken(token.name),
+        }))}
+      />
       <DocSubsection title="Overlap">
         <p className={doc.body}>
           Overlap is negative spacing, for elements that deliberately stack, like the avatars in an Avatar Group.
@@ -142,7 +122,7 @@ function Scale() {
                 <span />
               </span>
               <span className={doc.small}>
-                <Code>{token.name}</Code> <span className={`${doc.subtle} ${styles.numbers}`}>{token.px}px</span>
+                <Code>{token.name}</Code> <span className={`${doc.subtle} ${doc.numbers}`}>{token.px}px</span>
               </span>
               <span className={doc.small}>
                 <UsedBy users={usersOfToken(token.name)} />
@@ -158,7 +138,7 @@ function Scale() {
           {onlyOrganisms &&
             ` From ${largeSteps[0].step} (${largeSteps[0].px}px) up, the steps appear only in organisms, where they separate sections and inset large containers.`}
         </p>
-        <table className={`${styles.table} ${styles.compact}`}>
+        <table className={`${doc.table} ${styles.compact}`}>
           <thead>
             <tr>
               <th scope="col">Step</th>
@@ -176,7 +156,7 @@ function Scale() {
                   <Code>{token}</Code>
                 </th>
                 {SPACING_KINDS.map((kind) => (
-                  <td key={kind} className={`${styles.count} ${styles.numbers}`} title={byKind[kind].join(', ') || undefined}>
+                  <td key={kind} className={`${styles.count} ${doc.numbers}`} title={byKind[kind].join(', ') || undefined}>
                     {byKind[kind].length || <span className={doc.subtle}>–</span>}
                   </td>
                 ))}
@@ -253,7 +233,7 @@ function Applying() {
                 return token ? (
                   <li key={name}>
                     <Square token={token} />
-                    <span className={`${doc.small} ${styles.numbers}`}>
+                    <span className={`${doc.small} ${doc.numbers}`}>
                       <Code>{name}</Code> {token.px}px
                     </span>
                   </li>
@@ -367,7 +347,7 @@ function SpacingVsSizing() {
           <figcaption className={doc.caption}>The same {lg.px}px, two different jobs, two different tokens.</figcaption>
         </figure>
       )}
-      <table className={styles.table}>
+      <table className={doc.table}>
         <thead>
           <tr>
             <th scope="col">The value is…</th>
@@ -390,7 +370,7 @@ function SpacingVsSizing() {
         a gap; don’t borrow a primitive, or a token from another family that happens to share the number.
       </p>
       <DocSubsection title="Sizing tokens">
-        <table className={styles.table}>
+        <table className={doc.table}>
           <thead>
             <tr>
               <th scope="col">Family</th>
@@ -406,7 +386,7 @@ function SpacingVsSizing() {
                   <th scope="row" className={doc.strong}>
                     {family.label}
                   </th>
-                  <td className={styles.numbers}>
+                  <td className={doc.numbers}>
                     {family.key === 'numeric'
                       ? `${values.length} steps, ${Math.min(...values)}–${Math.max(...values)}px`
                       : `${family.tokens.map(({ step: name, px: value }) => `${name.replace(`${family.key}-`, '')} ${value}`).join(' · ')}`}

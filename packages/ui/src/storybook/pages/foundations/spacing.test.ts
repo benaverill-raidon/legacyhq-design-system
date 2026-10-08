@@ -7,10 +7,10 @@ import {
   sizeFamilies,
   spacingExceptions,
   spacingScale,
-  tokenUses,
   unfamiliedSizes,
   unmatchedTokens,
 } from './spacing-data';
+import { tokenUses } from '../../blocks/css-usage';
 
 // Foundations / Spacing renders from the token source and component CSS, so every dimension token
 // must land in a family and resolve, and the CSS analysis must attribute uses to the right

@@ -72,6 +72,53 @@ export function UsedBy({ users }: { users: string[] }) {
   );
 }
 
+export type DocTokenRow = {
+  /** CSS name without the leading dashes, e.g. `spacing-sm`. */
+  name: string;
+  /** A picture of the value, drawn with the token itself. */
+  sample: React.ReactNode;
+  value: string;
+  figmaName?: string;
+  users: string[];
+};
+
+/**
+ * A token scale, one row per step: name, a live sample, value, Figma name, and the components that
+ * use it. `sampleLabel` names the sample column for screen readers; `sampleClassName` sizes it.
+ */
+export function DocTokenTable({ rows, sampleLabel, sampleClassName }: { rows: DocTokenRow[]; sampleLabel: string; sampleClassName?: string }) {
+  return (
+    <table className={doc.table}>
+      <thead>
+        <tr>
+          <th scope="col">Token</th>
+          <th scope="col" className={sampleClassName}>
+            <span className={doc.visuallyHidden}>{sampleLabel}</span>
+          </th>
+          <th scope="col">Value</th>
+          <th scope="col">Figma</th>
+          <th scope="col">Used by</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.name}>
+            <th scope="row">
+              <Code>{row.name}</Code>
+            </th>
+            <td className={sampleClassName}>{row.sample}</td>
+            <td className={doc.numbers}>{row.value}</td>
+            <td className={doc.subtle}>{row.figmaName}</td>
+            <td>
+              <UsedBy users={row.users} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
 /** The closing note that says which source files the page reads from. */
 export function DocFooter({ children }: { children: React.ReactNode }) {
   return (

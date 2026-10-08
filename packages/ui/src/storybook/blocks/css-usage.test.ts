@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { componentsUsingToken, kindOf, tokenUses } from './css-usage';
+import { componentsUsingToken, kindOf, shadowLayers, tokenUses } from './css-usage';
 
 // The Foundations pages say which components use each token, and for what, from these helpers - so
 // a property landing in the wrong kind would put a component in the wrong column or exception.
@@ -42,6 +42,19 @@ describe('css-usage', () => {
         { component: 'field', token: 'border-width-md', kind: 'shadow', bare: false },
       ]),
     );
+  });
+
+  it('reads each shadow layer: blurred (elevation) or not (a stroke), and its raw lengths', () => {
+    const [ring, drop, perimeter] = shadowLayers(
+      'inset 0 0 0 var(--border-width-sm) var(--color-a), 0 8px 12px 0 var(--color-b), 0 0 1px var(--color-c)',
+    );
+    expect(ring).toEqual({ inset: true, lengths: ['0', '0', '0', 'var(--border-width-sm)'], blurred: false, rawLengths: [], references: ['border-width-sm', 'color-a'] });
+    expect(drop).toMatchObject({ inset: false, blurred: true, rawLengths: ['8px', '12px'], references: ['color-b'] });
+    expect(perimeter).toMatchObject({ blurred: true, rawLengths: ['1px'] });
+    expect(shadowLayers('var(--elevation-shadow-overlay)')).toEqual([
+      { inset: false, lengths: [], blurred: false, rawLengths: [], references: ['elevation-shadow-overlay'] },
+    ]);
+    expect(shadowLayers('inset 0 calc(-1 * var(--border-width-sm)) 0 0 red')[0]).toMatchObject({ blurred: false, rawLengths: [] });
   });
 
   it('matches a token exactly, not by prefix', () => {

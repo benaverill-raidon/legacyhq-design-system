@@ -1,7 +1,7 @@
 import primitiveSource from '../../../tokens/src/primitives/primitive.json';
 import borderSource from '../../../tokens/src/semantic/semantic-border.json';
-import { declarationsIn, displayNames, kindOf, tokenUses } from '../../blocks/css-usage';
-import type { TokenUse } from '../../blocks/css-usage';
+import { declarationsIn, displayNames, kindOf, shadowLayers, tokenUses } from '../../blocks/css-usage';
+import type { ShadowLayer, TokenUse } from '../../blocks/css-usage';
 
 // Everything Foundations / Radius shows about the tokens is derived here from the DTCG source: the
 // radius and border-width scales, their primitives, and whether any component defines its own
@@ -89,32 +89,8 @@ const RAW_LENGTH = /(^|[\s(,])-?(\d*\.)?\d+(px|rem|em)\b/;
 const isPrimitiveShape = (token: string) => /^border-(radius-(\d+|round)|width-\d+)$/.test(token);
 const isOtherDimension = (token: string) => /^(spacing|overlap|size|measurement)-/.test(token);
 
-/** Splits `a, b(c, d)` at top-level commas, or `x calc(y z)` at top-level spaces. */
-function splitTopLevel(value: string, separator: ',' | ' ') {
-  const parts: string[] = [];
-  let depth = 0;
-  let current = '';
-  for (const char of value) {
-    if (char === '(') depth++;
-    if (char === ')') depth--;
-    if (depth === 0 && (separator === ',' ? char === ',' : /\s/.test(char))) {
-      if (current.trim()) parts.push(current.trim());
-      current = '';
-    } else current += char;
-  }
-  if (current.trim()) parts.push(current.trim());
-  return parts;
-}
-
-const isLength = (part: string) => /^-?(\d*\.)?\d+(px|rem|em)?$/.test(part) || /^calc\(/.test(part) || /^var\(--(border-width|spacing|size|measurement)-/.test(part);
-
 /** A shadow layer with no blur is a stroke; true when that stroke's thickness is a raw length. */
-const rawStrokeLayer = (layer: string) => {
-  const lengths = splitTopLevel(layer, ' ').filter((part) => part !== 'inset' && isLength(part));
-  const blur = lengths[2];
-  const blurred = blur !== undefined && !/^0(px)?$/.test(blur);
-  return !blurred && lengths.some((length) => /^-?(\d*\.)?\d+(px|rem|em)$/.test(length) && !/^-?0+(\.0+)?(px|rem|em)$/.test(length));
-};
+const rawStrokeLayer = (layer: ShadowLayer) => !layer.blurred && layer.rawLengths.length > 0;
 
 /** Where shape is missing, misclassified, or borrowed for a non-shape purpose. */
 export function shapeExceptions(cssByPath: Record<string, string>): Exception[] {
@@ -133,7 +109,7 @@ export function shapeExceptions(cssByPath: Record<string, string>): Exception[] 
       components: displayNames(
         [
           ...shapeDeclarations('stroke').filter(({ value }) => RAW_LENGTH.test(value.replace(/var\([^)]*\)/g, ''))),
-          ...declarations.filter(({ property, value }) => kindOf(property) === 'shadow' && splitTopLevel(value, ',').some(rawStrokeLayer)),
+          ...declarations.filter(({ property, value }) => kindOf(property) === 'shadow' && shadowLayers(value).some(rawStrokeLayer)),
         ].map(({ component }) => component),
       ),
     },

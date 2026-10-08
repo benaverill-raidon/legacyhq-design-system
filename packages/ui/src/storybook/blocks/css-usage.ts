@@ -111,3 +111,53 @@ export const displayNames = (components: Iterable<string>) => [...new Set(compon
 /** Display names of components whose CSS references exactly this token. */
 export const componentsUsingToken = (token: string, cssByPath: Record<string, string>) =>
   componentsMatching((css) => new RegExp(`var\\(\\s*--${token}\\s*[,)]`).test(css), cssByPath).map(titleCase);
+
+// --- Shadows ----------------------------------------------------------------------------------
+
+/** Splits `a, b(c, d)` at top-level commas, or `x calc(y z)` at top-level spaces. */
+export function splitTopLevel(value: string, separator: ',' | ' ') {
+  const parts: string[] = [];
+  let depth = 0;
+  let current = '';
+  for (const char of value) {
+    if (char === '(') depth++;
+    if (char === ')') depth--;
+    if (depth === 0 && (separator === ',' ? char === ',' : /\s/.test(char))) {
+      if (current.trim()) parts.push(current.trim());
+      current = '';
+    } else current += char;
+  }
+  if (current.trim()) parts.push(current.trim());
+  return parts;
+}
+
+export type ShadowLayer = {
+  inset: boolean;
+  /** The layer's lengths in order: x, y, then blur and spread when present. */
+  lengths: string[];
+  /** A non-zero blur makes the layer elevation; a layer without one is a stroke (Shape). */
+  blurred: boolean;
+  /** Non-zero lengths written as raw numbers rather than tokens or calc(). */
+  rawLengths: string[];
+  /** Custom properties the layer references, e.g. `color-elevation-shadow-overlay-spread`. */
+  references: string[];
+};
+
+const isShadowLength = (part: string) =>
+  /^-?(\d*\.)?\d+(px|rem|em)?$/.test(part) || /^calc\(/.test(part) || /^var\(--(border-width|spacing|size|measurement|shadow)-/.test(part);
+const isRawLength = (part: string) => /^-?(\d*\.)?\d+(px|rem|em)$/.test(part) && !/^-?0+(\.0+)?(px|rem|em)$/.test(part);
+
+/** Each layer of a box-shadow value, in order. `none` and a bare var() have no lengths. */
+export const shadowLayers = (value: string): ShadowLayer[] =>
+  splitTopLevel(value, ',').map((layer) => {
+    const parts = splitTopLevel(layer, ' ');
+    const lengths = parts.filter((part) => part !== 'inset' && isShadowLength(part));
+    const blur = lengths[2];
+    return {
+      inset: parts.includes('inset'),
+      lengths,
+      blurred: blur !== undefined && !/^0(px)?$/.test(blur),
+      rawLengths: lengths.filter(isRawLength),
+      references: [...layer.matchAll(/var\(\s*--([\w-]+)/g)].map(([, name]) => name),
+    };
+  });

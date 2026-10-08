@@ -3,7 +3,7 @@ import { componentsMatching, componentsUsing, titleCase } from './doc-helpers';
 // Every component stylesheet, inlined by Vite, so docs pages can say which components use a token
 // or behavior - read from the CSS itself rather than retyped. Storybook only: Vitest intercepts
 // `?raw` CSS imports, so tests pass CSS read from disk to the pure helpers in doc-helpers.ts instead.
-const componentCss = import.meta.glob('../../components/**/*.module.css', { query: '?raw', import: 'default', eager: true }) as Record<
+export const componentCss = import.meta.glob('../../components/**/*.module.css', { query: '?raw', import: 'default', eager: true }) as Record<
   string,
   string
 >;

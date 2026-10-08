@@ -208,6 +208,6 @@
   background: var(--color-elevation-surface-raised-default);
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--elevation-shadow-overlay, 0 var(--spacing-xs) var(--spacing-md) var(--color-elevation-shadow-overlay-perimeter));
+  box-shadow: var(--elevation-shadow-overlay);
 }
 

@@ -3,8 +3,8 @@
  * confirmed from Figma's modal-dialog / modal-header / modal-footer parts (Components v1.0.0):
  *   - backdrop: fills the viewport; --spacing-4xl inset keeps the panel off the edges (Figma's 64px
  *     was artboard framing, not a design value)
- *   - panel radius: 16px (border/radius/xxl); surface = --color-elevation-surface-raised-default, the
- *     shared floating-surface token (Figma names it overlay/default)
+ *   - panel radius: 16px (border/radius/xxl); surface = --color-elevation-surface-raised-default;
+ *     shadow = --elevation-shadow-overlay (Figma's elevation.shadow.overlay effect style)
  *   - header: padding 24/24/16/24 (spacing/2xl x3, spacing/lg bottom), gap 16 (spacing/lg);
  *     title/close-area icon gap 8 (spacing/sm); title = heading/md
  *   - footer: padding 16/24/24/24 (spacing/lg top, spacing/2xl x3), action gap 8 (spacing/sm)
@@ -31,6 +31,7 @@
   background: var(--color-elevation-surface-raised-default);
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xxl);
+  box-shadow: var(--elevation-shadow-overlay);
   outline: none;
   overflow: hidden;
 }

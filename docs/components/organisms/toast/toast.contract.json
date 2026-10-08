@@ -68,7 +68,7 @@
         "border": "--color-border-default",
         "title": "--color-content-default",
         "description": "--color-content-subtle",
-        "shadow": "--color-elevation-shadow-overlay-spread / --color-elevation-shadow-overlay-perimeter"
+        "shadow": "--elevation-shadow-overlay"
       },
       "iconTileTones": { "default": "gray", "success": "green", "info": "blue", "warning": "orange", "error": "red" }
     }

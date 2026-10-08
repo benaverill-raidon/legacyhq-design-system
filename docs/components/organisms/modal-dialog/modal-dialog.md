@@ -68,7 +68,7 @@ dialog.
   (`--color-background-brand-secondary-overlay-blanket`) that centers the panel, with a
   `--spacing-4xl` inset keeping it off the edges.
 - **panel** - `role="dialog"`, `--color-elevation-surface-raised-default` surface,
-  `--border-radius-xxl` (16px), `--color-border-default` border. A flex column of header, body,
+  `--border-radius-xxl` (16px), `--color-border-default` border, `--elevation-shadow-overlay` shadow. A flex column of header, body,
   footer.
 - **header** - status icon (warning/error) + title (`--typography-heading-md`,
   `--color-content-default`) + header actions (an optional expand/maximize Icon Button, then the

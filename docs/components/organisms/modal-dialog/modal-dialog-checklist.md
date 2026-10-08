@@ -118,7 +118,7 @@ button tone (Modal Dialog does not tone footer buttons).
 Built standalone (not on the Popup primitive, which is a positioned popover with no focus trap /
 backdrop / scroll lock). Controlled and `onClose`-only. `appearance` adds a header status icon but
 does not tone the footer buttons (the consumer pairs the Confirm button tone). The panel surface uses
-the shared floating-surface token `--color-elevation-surface-raised-default` (Figma names it
-`overlay/default`), and the backdrop fills the viewport, insetting the panel with `--spacing-4xl`
+the shared floating-surface token `--color-elevation-surface-raised-default` with the overlay elevation
+shadow `--elevation-shadow-overlay` (Figma's panel binds both), and the backdrop fills the viewport, insetting the panel with `--spacing-4xl`
 (Figma's 64px around the panel was artboard framing, not a design value). See `modal-dialog-spec.md`
 for the full reasoning.

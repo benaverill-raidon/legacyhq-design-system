@@ -269,8 +269,9 @@ describe('ModalDialog', () => {
     expect(document.body.style.overflow).not.toBe('hidden');
   });
 
-  it('uses semantic tokens for the surface and radius', () => {
+  it('uses semantic tokens for the surface, radius, and elevation', () => {
     expect(modalCss).toContain('background: var(--color-background-brand-secondary-overlay-blanket);');
     expect(modalCss).toContain('border-radius: var(--border-radius-xxl);');
+    expect(modalCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 });

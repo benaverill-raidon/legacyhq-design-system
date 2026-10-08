@@ -93,10 +93,19 @@ describe('spacing exceptions', () => {
     expect(at({ 'a/focus-ring.module.css': '.ring { --focus-ring-offset: 2px; outline-offset: var(--focus-ring-offset); }' })).toEqual([]);
   });
 
-  it('finds the exceptions the page currently lists', () => {
-    expect(spacingExceptions(componentCss).map(({ key }) => key)).toEqual(
-      expect.arrayContaining(['spacing-as-focus-offset', 'spacing-as-shadow', 'spacing-as-typography']),
-    );
+  it('only reports kinds of exception the page has copy for', () => {
+    // Live exceptions come and go as components are fixed; the page must be able to word each one.
+    const worded = [
+      'primitive-as-spacing',
+      'size-as-spacing',
+      'spacing-as-size',
+      'spacing-as-focus-offset',
+      'spacing-as-motion',
+      'spacing-as-stroke',
+      'spacing-as-shadow',
+      'spacing-as-typography',
+    ];
+    expect(spacingExceptions(componentCss).map(({ key }) => key).filter((key) => !worded.includes(key))).toEqual([]);
   });
 });
 

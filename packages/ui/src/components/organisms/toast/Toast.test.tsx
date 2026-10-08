@@ -94,9 +94,8 @@ describe('Toast CSS contract', () => {
     expect(toastCss).toContain('border: var(--border-width-sm) solid var(--color-border-default);');
   });
 
-  it('applies the overlay elevation shadow (0 8px 12px spread + 0 0 1px perimeter)', () => {
-    expect(toastCss).toContain('0 8px 12px var(--color-elevation-shadow-overlay-spread)');
-    expect(toastCss).toContain('0 0 1px var(--color-elevation-shadow-overlay-perimeter)');
+  it('applies the overlay elevation shadow', () => {
+    expect(toastCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 
   it('colors the loading appearance with the loading content token', () => {

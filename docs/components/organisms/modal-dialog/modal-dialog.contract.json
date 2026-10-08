@@ -35,7 +35,7 @@
       "Controlled with open + onClose (not Popup's onOpenChange) - a modal only ever requests close, and onClose lets the consumer intercept it.",
       "Figma's appearance (default/warning/error) prepends a decorative status icon to the title; it does NOT tone the footer buttons (Modal Dialog can't know the action layout), so consumers pair appearance='error'/'warning' with a matching Confirm button tone - the same wrapper-vs-control split Field uses for state.",
       "The footer is a right-aligned slot; Figma's footer left filter area (dropdown/date field) is example content hidden by default, not part of the component.",
-      "Surface and backdrop inset use existing tokens by intent: the panel surface is --color-elevation-surface-raised-default (the shared floating-surface token; Figma names the same role overlay/default), and the backdrop fills the viewport, insetting the panel with --spacing-4xl (Figma's 64px around the panel was artboard framing, not a design value).",
+      "Surface and backdrop inset use existing tokens by intent: the panel surface is --color-elevation-surface-raised-default with the overlay elevation shadow --elevation-shadow-overlay (Figma binds elevation/surface/raised/default and the elevation.shadow.overlay effect style), and the backdrop fills the viewport, insetting the panel with --spacing-4xl (Figma's 64px around the panel was artboard framing, not a design value).",
       "Panel widths (inner) are 400/600/752/968 for small/medium/large/extraLarge; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
       "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
     ]
@@ -53,7 +53,7 @@
   ],
   "anatomy": [
     { "part": "backdrop", "element": "div.backdrop", "required": true, "description": "Fixed full-viewport blanket that centers the panel with --spacing-4xl inset; a genuine click on it requests close." },
-    { "part": "panel", "element": "div.panel (role=dialog, aria-modal, tabIndex -1)", "required": true, "description": "The dialog surface - raised-surface bg, --border-radius-xxl, --color-border-default. A flex column of header/body/footer; width per the width prop; shrinks on narrow viewports." },
+    { "part": "panel", "element": "div.panel (role=dialog, aria-modal, tabIndex -1)", "required": true, "description": "The dialog surface - raised-surface bg, --border-radius-xxl, --color-border-default, --elevation-shadow-overlay. A flex column of header/body/footer; width per the width prop; shrinks on narrow viewports." },
     { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title or any header action. Status icon + title + header actions. Padding --spacing-2xl/--spacing-lg." },
     { "part": "statusIcon", "element": "span.statusIcon (aria-hidden)", "required": false, "description": "Decorative md status icon for warning/error appearance, coloured content/warning or content/error." },
     { "part": "title", "element": "h2.title", "required": false, "description": "--typography-heading-md, --color-content-default; the dialog's accessible name via aria-labelledby." },
@@ -100,6 +100,7 @@
       "statusWarning": "--color-content-warning",
       "statusError": "--color-content-error"
     },
+    "shadow": "--elevation-shadow-overlay",
     "layout": {
       "backdropInset": "--spacing-4xl",
       "panelRadius": "--border-radius-xxl (16px)",

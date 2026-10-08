@@ -93,6 +93,7 @@ ModalDialog (portal -> document.body)
 | Panel surface | `--color-elevation-surface-raised-default` |
 | Panel border | `--border-width-sm` `--color-border-default` |
 | Panel radius | `--border-radius-xxl` (16px) |
+| Panel shadow | `--elevation-shadow-overlay` |
 | Panel widths | 400 / 600 / 752 / 968 px |
 | Header padding | `--spacing-2xl` (top/l/r), `--spacing-lg` (bottom) |
 | Header gap / title-icon gap | `--spacing-lg` / `--spacing-sm` |
@@ -118,8 +119,9 @@ ModalDialog (portal -> document.body)
   filter area is example content, hidden by default), so the footer is a slot the consumer fills with
   Buttons.
 - **Surface and backdrop inset use existing tokens by intent.** The panel surface is
-  `--color-elevation-surface-raised-default` - the shared floating-surface token (Figma names the same
-  role `overlay/default`). The backdrop fills the viewport; Figma's 64px around the panel was artboard
+  `--color-elevation-surface-raised-default`, with the overlay elevation shadow
+  (`--elevation-shadow-overlay`), as Figma's panel binds `elevation/surface/raised/default` and the
+  `elevation.shadow.overlay` effect style. The backdrop fills the viewport; Figma's 64px around the panel was artboard
   framing, not a design value, so the code insets the panel with `--spacing-4xl`, an existing spacing
   token. No new tokens are required.
 

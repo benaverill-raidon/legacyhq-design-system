@@ -61,7 +61,7 @@ loading  -> Spinner (no tile)
 - padding: `--spacing-lg`; root gap: `--spacing-lg`; content gap: `--spacing-sm`; actions gap: `--spacing-sm`
 - border: `--border-width-sm` solid `--color-border-default`; radius: `--border-radius-xl`
 - surface: `--color-elevation-surface-raised-default`
-- shadow: the overlay elevation shadow (`--color-elevation-shadow-overlay-spread` / `-perimeter`)
+- shadow: the overlay elevation shadow (`--elevation-shadow-overlay`)
 - title: `heading-xs`, `--color-content-default`; description: `body-md`, `--color-content-subtle`
 - spinner slot: `--size-300`; default dot: `--size-marker-sm`
 

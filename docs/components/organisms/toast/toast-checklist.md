@@ -63,7 +63,7 @@ role: status
 
 - [ ] inline-size 368px; padding/root-gap `--spacing-lg`; content/actions gap `--spacing-sm`.
 - [ ] border `--border-width-sm` / `--color-border-default`; radius `--border-radius-xl`.
-- [ ] surface `--color-elevation-surface-raised-default`; overlay elevation shadow tokens.
+- [ ] surface `--color-elevation-surface-raised-default`; shadow `--elevation-shadow-overlay`.
 - [ ] title `heading-xs` / `--color-content-default`; description `body-md` / `--color-content-subtle`.
 - [ ] per-appearance Icon Tile tones; spinner slot `--size-300`; dot `--size-marker-sm`.
 

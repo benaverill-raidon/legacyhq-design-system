@@ -17,10 +17,8 @@
   border: var(--border-width-sm) solid var(--color-border-default);
   border-radius: var(--border-radius-xl);
   background: var(--color-elevation-surface-raised-default);
-  /* The overlay elevation shadow, matching Figma: a 0 8px 12px spread plus a 0 0 1px perimeter. */
-  box-shadow:
-    0 8px 12px var(--color-elevation-shadow-overlay-spread),
-    0 0 1px var(--color-elevation-shadow-overlay-perimeter);
+  /* The overlay elevation shadow, the same role as every other floating surface (Figma: elevation.shadow.overlay). */
+  box-shadow: var(--elevation-shadow-overlay);
 }
 
 .tile,

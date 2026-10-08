@@ -29,6 +29,26 @@
       "previousFiles": {
         "tokens.css": { "sha256LF": "21f06badfab95ec996d4b0e4f53b03432394ffa71ccd01bc15906a41ba3d1b16", "declarations": 565 }
       }
+    },
+    {
+      "on": "2026-10-08",
+      "tokens": ["--elevation-shadow-overlay"],
+      "reason": "The overlay elevation shadow as a DTCG shadow composite (Semantic: Elevation, Light and Dark), matching Figma's elevation.shadow.overlay effect style: an inset ring of --border-width-sm in the overlay inner color, a 0 8px 12px drop in the overlay spread color, and a 0 0 1px perimeter. Components wrote this recipe out by hand, or approximated it.",
+      "verification": "light.css and dark.css each gain exactly this one declaration; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "36578a6e6a444e070cf8befe3c5c3e2c03623eb599318967931244a3d8516edb", "declarations": 353 },
+        "dark.css": { "sha256LF": "191500aae52ecbb73aad6dd5dd77ca7ae229526ffd70a9783e33f265a0dffab9", "declarations": 353 }
+      }
+    }
+  ],
+  "valueChanges": [
+    {
+      "on": "2026-10-08",
+      "tokens": ["--color-elevation-shadow-overlay-inner (Dark)"],
+      "from": "var(--color-brand-taupe-solid-500)",
+      "to": "rgba(0, 0, 0, 0)",
+      "reason": "Figma's Dark overlay effect style draws the inner ring transparent; the variable was solid taupe 500, so code showed a visible ring in Dark only. Changed first in Figma (Tokens v1.0.0, variable ID unchanged), then here. Light was already transparent.",
+      "verification": "dark.css differs from the previous file by this one value and the added --elevation-shadow-overlay line."
     }
   ],
   "files": {
@@ -37,12 +57,12 @@
       "declarations": 566
     },
     "light.css": {
-      "sha256LF": "36578a6e6a444e070cf8befe3c5c3e2c03623eb599318967931244a3d8516edb",
-      "declarations": 353
+      "sha256LF": "bd6828d65541770e5f2bd2333fb8d773fc12deebcb3e909fe2d873e5375cb0cb",
+      "declarations": 354
     },
     "dark.css": {
-      "sha256LF": "191500aae52ecbb73aad6dd5dd77ca7ae229526ffd70a9783e33f265a0dffab9",
-      "declarations": 353
+      "sha256LF": "248ce7daca82afc57c2d940cc8308e5002b753434e6986a3e116a36258b423f8",
+      "declarations": 354
     }
   }
 }

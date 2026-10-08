@@ -38,6 +38,30 @@ test('invalid values, dangling aliases, cycles, mode crossings and collisions fa
   ]) assert.throws(() => validateSources(source(tree)));
 });
 
+test('shadow composites validate each layer and serialize to a CSS box-shadow list', () => {
+  const px = value => ({ value, unit: 'px' });
+  const layer = (extra = {}) => ({ color: '{Light.ink}', offsetX: px(0), offsetY: px(8), blur: px(12), spread: px(0), ...extra });
+  const tree = value => ({
+    Border: { w: token('dimension', px(1)) },
+    Light: { ink: token('color', { colorSpace: 'srgb', components: [0, 0, 0], alpha: 0.16 }), shadow: token('shadow', value) }
+  });
+  const { tokens: entries, byId } = validateSources(source(tree([
+    layer({ inset: true, offsetY: px(0), blur: px(0), spread: '{Border.w}' }),
+    layer()
+  ])));
+  assert.equal(cssValue(entries.find(entry => entry.id === 'Light.shadow'), byId),
+    'inset 0px 0px 0px var(--border-w) var(--ink), 0px 8px 12px 0px var(--ink)');
+  for (const bad of [
+    [],
+    layer({ blur: px(-1) }),
+    layer({ inset: 'yes' }),
+    layer({ color: '#000' }),
+    layer({ extra: 1 }),
+    layer({ spread: undefined }),
+    layer({ spread: '{Light.ink}' })
+  ]) assert.throws(() => validateSources(source(tree(bad))));
+});
+
 test('same CSS name in a primitive and a mode alias is emitted as a literal, never a CSS cycle', () => {
   const { tokens: entries, byId } = validateSources(source({
     Primitive: { Value: { size: token('dimension', { value: 12, unit: 'px' }) } },

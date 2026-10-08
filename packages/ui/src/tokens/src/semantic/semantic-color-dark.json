@@ -2091,7 +2091,15 @@
       },
       "color-elevation-shadow-overlay-inner": {
         "$type": "color",
-        "$value": "{Primitive.Value.color-brand-taupe-solid-500}",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0
+        },
         "$extensions": {
           "com.legacyhq": {
             "originalName": "color/elevation/shadow/overlay/inner"

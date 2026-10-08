@@ -5,7 +5,8 @@ const ROOT = 'packages/ui/src/tokens/src';
 const RECIPE_FILE = 'packages/ui/src/tokens/css-recipes.json';
 const TIERS = ['primitives', 'responsive', 'component', 'semantic'];
 const WRAPPERS = new Set(['Primitive', 'Value', 'Light', 'Dark', 'Semantic: Border',
-  'Semantic: Color', 'Semantic: Dimension', 'Semantic: Typography', 'Semantic: Motion']);
+  'Semantic: Color', 'Semantic: Dimension', 'Semantic: Elevation', 'Semantic: Typography', 'Semantic: Motion']);
+const SHADOW_LENGTHS = ['offsetX', 'offsetY', 'blur', 'spread'];
 const wholeReference = /^\{([^{}]+)\}$/;
 const object = v => v !== null && typeof v === 'object' && !Array.isArray(v);
 const numeric = v => typeof v === 'number' && Number.isFinite(v);
@@ -102,6 +103,14 @@ function cssTypedValue(type, value, byId, owner, seen = new Set()) {
       : ` ${cssTypedValue('duration', value.delay, byId, owner, seen)}`;
     return `${duration} ${easing}${delay}`;
   }
+  if (type === 'shadow') {
+    // One CSS box-shadow layer per DTCG layer, in order; references stay live.
+    return (Array.isArray(value) ? value : [value]).map(layer => [
+      ...(layer.inset ? ['inset'] : []),
+      ...SHADOW_LENGTHS.map(key => cssTypedValue('dimension', layer[key], byId, owner, seen)),
+      cssTypedValue('color', layer.color, byId, owner, seen)
+    ].join(' ')).join(', ');
+  }
   return cssLiteral(type, value);
 }
 function cssValue(token, byId, seen = new Set()) {
@@ -156,6 +165,17 @@ function validateSources(sources) {
           checkValue('cubicBezier', v.timingFunction, t, stack);
         }
         break;
+      case 'shadow': {
+        const layers = Array.isArray(v) ? v : [v];
+        valid = layers.length > 0 && layers.every(layer => exactKeys(layer, ['color', ...SHADOW_LENGTHS], ['inset'])
+          && (layer.inset === undefined || typeof layer.inset === 'boolean')
+          && !(object(layer.blur) && layer.blur.value < 0));
+        if (valid) for (const layer of layers) {
+          checkValue('color', layer.color, t, stack);
+          for (const key of SHADOW_LENGTHS) checkValue('dimension', layer[key], t, stack);
+        }
+        break;
+      }
     }
     if (!valid) fail(t, `unsupported type or invalid ${type} value`);
   }

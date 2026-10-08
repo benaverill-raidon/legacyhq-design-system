@@ -237,7 +237,7 @@
   --color-elevation-shadow-overlay-default: var(--color-brand-taupe-solid-1200);
   --color-elevation-shadow-overlay-spread: var(--color-brand-taupe-alpha-1200-16);
   --color-elevation-shadow-overlay-perimeter: var(--color-brand-taupe-alpha-1200-32);
-  --color-elevation-shadow-overlay-inner: var(--color-brand-taupe-solid-500);
+  --color-elevation-shadow-overlay-inner: rgba(0, 0, 0, 0);
   --color-background-success-overlay-hover: var(--color-green-alpha-500-08);
   --color-background-success-overlay-press: var(--color-green-alpha-500-16);
   --color-background-warning-overlay-hover: var(--color-orange-alpha-500-08);
@@ -356,4 +356,5 @@
   --color-elevation-surface-deep-default: var(--color-brand-taupe-solid-1300);
   --color-elevation-surface-deep-hover: var(--color-brand-taupe-solid-1200);
   --color-elevation-surface-deep-press: var(--color-brand-taupe-solid-1100);
+  --elevation-shadow-overlay: inset 0px 0px 0px var(--border-width-sm) var(--color-elevation-shadow-overlay-inner), 0px 8px 12px 0px var(--color-elevation-shadow-overlay-spread), 0px 0px 1px 0px var(--color-elevation-shadow-overlay-perimeter);
 }

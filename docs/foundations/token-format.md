@@ -25,6 +25,12 @@ and [Color module](https://www.designtokens.org/TR/2025.10/color/).
 | `number` | Unitless JSON number |
 | `cubicBezier` | Four numbers; x coordinates in [0, 1] |
 | `transition` | `duration`, `delay`, and `timingFunction`, each a correctly typed value or token reference |
+| `shadow` | One layer or an ordered array of layers, each with `color`, `offsetX`, `offsetY`, `blur` (not negative), `spread`, and optional boolean `inset`; every member a correctly typed value or token reference |
+
+A shadow that references themed colors lives in a themed collection (`Semantic: Elevation`, with
+Light and Dark groups), so each theme's CSS file declares it and its colors resolve per theme; one
+`:root` declaration would keep the Light colors inside `[data-theme="dark"]`. CSS serializes the
+layers in order as a `box-shadow` list, keeping references live.
 
 Every token declares `$type`. References use complete token paths, including
 collection and mode groups, for example `{Primitive.Value.duration-fast}`.
@@ -48,7 +54,7 @@ may reference tokens in other fragments.
 The data uses a valid subset of DTCG. Our validator/formatter is **not a complete
 implementation of every DTCG tool requirement**. It intentionally rejects
 unimplemented features such as group type inheritance, `$extends`, JSON Pointer
-`$ref`, other composite types, non-sRGB colors, and font-weight keywords.
+`$ref`, composite types other than `transition` and `shadow`, non-sRGB colors, and font-weight keywords.
 Light/Dark output routing remains repository configuration, not an implementation
 of DTCG Resolver documents. CSS recipes are platform-specific and do not become
 portable DTCG behavior merely because the token data is valid.

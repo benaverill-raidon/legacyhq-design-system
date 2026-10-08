@@ -20,10 +20,21 @@
       }
     }
   ],
+  "tokenAdditions": [
+    {
+      "on": "2026-10-08",
+      "tokens": ["--spacing-075"],
+      "reason": "A 6px step on the semantic spacing scale (spacing/075, aliasing the 6px primitive), created first in the Figma Tokens v1.0.0 Semantic: Dimension collection and mirrored in the token source. Components used the primitive directly for this distance because the scale had no 6px step.",
+      "verification": "tokens.css with the one added line removed equals the previous tokens.css exactly; light.css and dark.css are unchanged.",
+      "previousFiles": {
+        "tokens.css": { "sha256LF": "21f06badfab95ec996d4b0e4f53b03432394ffa71ccd01bc15906a41ba3d1b16", "declarations": 565 }
+      }
+    }
+  ],
   "files": {
     "tokens.css": {
-      "sha256LF": "21f06badfab95ec996d4b0e4f53b03432394ffa71ccd01bc15906a41ba3d1b16",
-      "declarations": 565
+      "sha256LF": "4086e7f4c4a1e5c80d46ff86124c3766657209afca5dfdf87ed8a166eb02403e",
+      "declarations": 566
     },
     "light.css": {
       "sha256LF": "36578a6e6a444e070cf8befe3c5c3e2c03623eb599318967931244a3d8516edb",

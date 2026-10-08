@@ -457,6 +457,7 @@
   --size-spinner-md: var(--measurement-16);
   --size-spinner-lg: var(--measurement-24);
   --size-spinner-xl: var(--measurement-48);
+  --spacing-075: var(--measurement-6);
   --fade-quick: var(--duration-fast) var(--ease-standard);
   --fade-long: var(--duration-slow) var(--ease-standard);
   --move-quick: var(--duration-fast) var(--ease-spring);

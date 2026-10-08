@@ -92,7 +92,7 @@ Frame tokens by state (`appearance=default`), verified against Figma and reused 
 | disabled | `background/disabled` | `border/disabled` | 1px |
 
 Focus and invalid keep the real `border-width` at 1px and paint the extra pixel with
-`box-shadow: inset 0 0 0 1px <color>` - the same technique Text Field uses, so the multi-line text
+`box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color>` - the same technique Text Field uses, so the multi-line text
 never shifts by a pixel. Hover tint is suppressed once focused.
 
 **`appearance=subtle`** is transparent at rest with a bottom-only 1px border, revealing on hover

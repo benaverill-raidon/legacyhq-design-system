@@ -113,7 +113,7 @@ but a real width change shrinks the content box on every side, including the lef
 nudges the placeholder/value text and the typing caret to the right on every focus/blur or invalid
 toggle. This was reported directly against the component from a side-by-side screenshot. Both
 `:focus-within` and `invalid` now paint the extra thickness with
-`box-shadow: inset 0 0 0 1px <color>` instead, layered directly against the real (constant) 1px
+`box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color>` instead, layered directly against the real (constant) 1px
 border - a box-shadow is pure paint with zero layout impact, so the frame reads as thicker without
 the content box (or the text/caret inside it) ever resizing. This is the same technique
 `appearance="subtle"` uses for its own bottom-only version of this problem (see below).
@@ -140,7 +140,7 @@ by a pixel, which visibly nudges the vertically-centered placeholder/value text 
 against this component from a side-by-side screenshot (the same problem, and the same fix, that
 `appearance="default"`'s own focus/invalid needed - see above). `border-bottom-width` now stays a
 constant `1px` in the box model at every state (rest, hover, focus, invalid) - focus and invalid
-instead paint an extra pixel via `box-shadow: inset 0 -1px 0 0 <color>`, layered directly against
+instead paint an extra pixel via `box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 <color>`, layered directly against
 the real 1px border, with zero layout impact.
 
 Hovering an `invalid` `appearance="subtle"` field no longer resets the bottom border back to

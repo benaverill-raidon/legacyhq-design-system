@@ -142,12 +142,12 @@ describe('TextField', () => {
     const invalidRuleMatch = textFieldCss.match(/\.root\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
     expect(focusRuleMatch?.[1]).toContain('border-color: var(--color-border-focus);');
-    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 1px var(--color-border-focus);');
-    expect(focusRuleMatch?.[1]).not.toContain('border-width');
+    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-focus);');
+    expect(focusRuleMatch?.[1]).not.toMatch(/(^|[\s;])border-width\s*:/);
 
     expect(invalidRuleMatch?.[1]).toContain('border-color: var(--color-border-error);');
-    expect(invalidRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 1px var(--color-border-error);');
-    expect(invalidRuleMatch?.[1]).not.toContain('border-width');
+    expect(invalidRuleMatch?.[1]).toContain('box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-error);');
+    expect(invalidRuleMatch?.[1]).not.toMatch(/(^|[\s;])border-width\s*:/);
   });
 
   it('suppresses the hover background once the field is focused/typing', () => {
@@ -180,10 +180,10 @@ describe('TextField', () => {
     const invalidRuleMatch = textFieldCss.match(/\.appearance_subtle\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
     expect(focusRuleMatch?.[1]).toContain('border-bottom-color: var(--color-border-focus);');
-    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 -1px 0 0 var(--color-border-focus);');
+    expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).not.toContain('border-bottom-width');
 
-    expect(invalidRuleMatch?.[1]).toContain('box-shadow: inset 0 -1px 0 0 var(--color-border-error);');
+    expect(invalidRuleMatch?.[1]).toContain('box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-error);');
     // `.root[data-invalid='true']` no longer touches border-width at all (it uses box-shadow too),
     // so this rule doesn't need to override border-bottom-width back to anything.
     expect(invalidRuleMatch?.[1]).not.toContain('border-bottom-width');

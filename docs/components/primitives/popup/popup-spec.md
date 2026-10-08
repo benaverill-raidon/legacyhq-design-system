@@ -151,9 +151,9 @@ own copy, which it did before Popup existed:
 The panel uses semantic color, spacing, radius, and shadow tokens, all verified directly against
 Figma's `popup` component set: background (`--color-elevation-surface-raised-default`), border
 (`--border-width-sm` `--color-border-default`), padding (`--spacing-lg`, 16px, by default - see
-`padding` below), corner radius (`--border-radius-lg`, 8px), and a three-layer shadow matching
-Figma's `elevation.shadow.overlay` effect style (`--color-elevation-shadow-overlay-inner`,
-`-spread`, `-perimeter`).
+`padding` below), corner radius (`--border-radius-lg`, 8px), and the overlay elevation shadow
+(`--elevation-shadow-overlay`, Figma's `elevation.shadow.overlay` effect style: an inner ring, an 8px
+drop, and a 1px perimeter).
 
 ### Padding
 

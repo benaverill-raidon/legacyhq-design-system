@@ -284,9 +284,7 @@ describe('Popup', () => {
     expect(popupCss).toContain('background: var(--color-elevation-surface-raised-default);');
     expect(popupCss).toContain('border: var(--border-width-sm) solid var(--color-border-default);');
     expect(popupCss).toContain('border-radius: var(--border-radius-lg);');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-inner)');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-spread)');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-perimeter)');
+    expect(popupCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 
   it('hugs its content instead of stretching to fill a container', () => {

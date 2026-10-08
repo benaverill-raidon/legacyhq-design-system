@@ -529,11 +529,9 @@
     "tokens": {
       "color": {
         "background": "--color-elevation-surface-raised-default",
-        "border": "--color-border-default",
-        "shadowInner": "--color-elevation-shadow-overlay-inner",
-        "shadowSpread": "--color-elevation-shadow-overlay-spread",
-        "shadowPerimeter": "--color-elevation-shadow-overlay-perimeter"
+        "border": "--color-border-default"
       },
+      "shadow": "--elevation-shadow-overlay",
       "borderWidth": "--border-width-sm",
       "spacing": {
         "padding": "--spacing-sm | --spacing-md | --spacing-lg (via the padding prop, default lg)",
@@ -542,7 +540,7 @@
       },
       "radius": "--border-radius-lg",
       "motion": "--fade-quick",
-      "note": "--color-elevation-shadow-overlay-spread and -perimeter were added alongside this component - they mirror the existing --color-elevation-shadow-raised-* family's shape, using the exact alpha values (16%, 32%) read from Figma's Light/elevation.shadow.overlay effect style. The dark-theme values mirror elevation.shadow.raised's light-to-dark base-hue swap at the same percentages rather than an independently re-verified dark effect."
+      "note": "The shadow is the overlay elevation role, --elevation-shadow-overlay (Figma's elevation.shadow.overlay effect style): an inset ring of --border-width-sm in --color-elevation-shadow-overlay-inner (transparent in both themes), a 0 8px 12px drop in -spread, and a 0 0 1px perimeter in -perimeter. -spread and -perimeter were added alongside this component and don't exist as Figma variables; Figma's effect style uses the same values unbound."
     },
     "accessibility": {
       "triggeredBy": [

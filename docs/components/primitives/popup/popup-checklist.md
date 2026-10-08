@@ -86,7 +86,7 @@ Yes - `children` is the single trigger element, cloned to receive a measurement 
 - Border: `--border-width-sm` / `--color-border-default`
 - Padding: `--spacing-sm` / `--spacing-md` / `--spacing-lg` (via the `padding` prop)
 - Radius: `--border-radius-lg`
-- Shadow: `--color-elevation-shadow-overlay-inner` / `-spread` / `-perimeter`
+- Shadow: `--elevation-shadow-overlay`
 - Trigger-to-panel gap: `--spacing-sm`
 - Inter-content gap: `--spacing-xs`
 

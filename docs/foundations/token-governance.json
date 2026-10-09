@@ -360,6 +360,37 @@
             ]
         }
     },
+    "motion": {
+        "description": "How motion is built and applied. Documented for people in Storybook at Foundations / Motion. Motion is code-only: Figma has no motion variables, and its prototypes set their own timings.",
+        "primitives": "Durations (duration-fast 150ms, duration-slow 300ms, duration-loop 860ms, duration-loop-slow 1500ms) and easings (ease-standard, which never overshoots; ease-spring, which overshoots to about 110% before settling; ease-loop). Component CSS never uses them directly.",
+        "recipes": {
+            "rule": "Components use recipes: a duration and an easing in one value, used whole in a transition or an animation, once for each property that changes. Never add a timing function after a recipe: the declaration becomes invalid and the browser drops it. Modal Dialog's entrance never ran because of this.",
+            "fade": "fade-* uses the standard non-overshooting motion curve for visual state changes: color, opacity, and indicators that turn or grow (Select's caret, Progress Bar's and Progress Tracker's fills).",
+            "move": "move-* uses the spring curve for physical movement of an element: Switch's thumb, Slider's handle, Avatar's selection ring, and Toast Group's stack.",
+            "duration": "quick is duration-fast (150ms), for direct feedback; long is duration-slow (300ms), for larger choreography such as the toast stack.",
+            "loops": "spin-loop (Spinner) and pulse-loop (Skeleton) repeat an animation. pulse-loop holds a literal linear curve rather than an easing primitive.",
+            "delay": "No recipe has a delay and no component adds one. Add a delay only when there's a real need."
+        },
+        "hover": "High-frequency, direct hover feedback may be instant: Menu and Table rows, Link, Avatar Group, and Inline Edit change on hover with no transition. More prominent state changes use fade-quick.",
+        "overlays": "Overlays enter using fade-quick; individual components may add local keyframed choreography, such as Modal Dialog's 8px rise. Popup and Modal Dialog leave at once. Toast Group uses move-long for the stack's movement and fade-long for toasts appearing and leaving.",
+        "progress": "Progress uses fade-quick, never a spring or movement recipe: it's a state change, not physical movement.",
+        "componentMotion": "Keyframes and choreography stay local to the component, timed with a recipe. There are no component motion tokens.",
+        "distance": "How far something travels is component geometry, not a motion or spacing token: a component dimension token when it's tied to the component's sizes (Switch's thumb travel), otherwise local (Modal Dialog's 8px rise, Toast Group's stack offsets).",
+        "timers": "A JavaScript timer that waits for motion should match the recipe's duration: Toast Group's EXIT_MS is 300, duration-slow, and a test keeps them in step.",
+        "reducedMotion": {
+            "rule": "Every component that moves responds to prefers-reduced-motion: reduce. The state still changes, without the movement: transitions finish at once (transition-duration: 0ms), loops stop (animation: none), and entrances don't play (animation-duration: 0ms, or the animation is added only inside a no-preference block, as Modal Dialog does).",
+            "selectors": "A reduce block must list every selector that adds motion. A media query adds no specificity, so a more specific moving rule elsewhere wins; Toast Group's .item[data-swiping='true'] did until it was listed.",
+            "spinner": "Spinner stops rather than turning slowly, and shows a still arc."
+        },
+        "naming": "Recipes say quick/long while the duration primitives say fast/slow, and the loop durations are duration-loop and duration-loop-slow. Left as is for now.",
+        "enforcement": "Not mechanically enforced yet: stylelint doesn't gate transition or animation values. The Motion page lists, from component CSS, raw timings, a recipe followed by a timing function, motion that reduced motion doesn't switch off, motion primitives used directly, and missing motion tokens. Modal Dialog, Toast Group, and Progress Bar tests pin their own motion. Candidates for later: those checks as lint or tests, and JavaScript exit timers derived from the CSS duration.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "findings": [
+                "Figma prototypes use their own timings, which differ from code: Switch's thumb is 200ms ease-in-out in Figma and move-quick (150ms spring) in code; Menu's hover is 300ms ease-out in Figma and instant in code. With no motion variables in Figma, there's nothing to reconcile against yet."
+            ]
+        }
+    },
     "enforcement": {
         "description": "This governance doc is a convention, not a guarantee. Raw-value regressions in component CSS are caught mechanically by stylelint, not by review alone.",
         "tool": "stylelint",

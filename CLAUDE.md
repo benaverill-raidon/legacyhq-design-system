@@ -208,6 +208,20 @@ shadow rebuilt from `color-elevation-shadow-*`. z-index is separate and not
 tokenized. See Foundations / Elevation and the `elevation` block in
 token-governance.json.
 
+**Motion: recipes, never primitives.** Components use the recipe tokens:
+`fade-*` (standard curve, no overshoot) for visual state changes, including
+indicators that turn or grow and progress; `move-*` (spring) for physical
+movement; `spin-loop`/`pulse-loop` for loops. `quick` is 150ms, `long` 300ms.
+Never use `duration-*`/`ease-*` directly, and never put a timing function after
+a recipe (the declaration becomes invalid and is dropped). Dense, direct hover
+feedback (menu/table rows, links) may be instant. Overlays enter with
+`fade-quick`; extra choreography is local keyframes, and travel distance is
+component geometry. Every moving selector is switched off in a
+`prefers-reduced-motion: reduce` block (list the exact selectors: a media query
+adds no specificity) or added only under `no-preference`. Motion is code-only:
+Figma has no motion variables. See Foundations / Motion and the `motion` block
+in token-governance.json.
+
 **Before creating a new token**, check whether an existing semantic token
 already expresses the same meaning — reuse it. Don't create component tokens
 that just duplicate a semantic token under a different name (e.g. don't make

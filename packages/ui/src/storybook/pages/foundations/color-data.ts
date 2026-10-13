@@ -1,15 +1,16 @@
 import primitiveSource from '../../../tokens/src/primitives/primitive.json';
 import semanticDarkSource from '../../../tokens/src/semantic/semantic-color-dark.json';
 import semanticLightSource from '../../../tokens/src/semantic/semantic-color-light.json';
+import { contrastRatio, MODES, resolveColor } from '../../blocks/color-values';
+import type { Mode } from '../../blocks/color-values';
 
 // Everything Foundations / Color shows about tokens is derived here from the DTCG source: names,
 // groups, aliases, counts, matrices, ramps, and contrast. Usage guidance is authored on the page;
 // values are not. color.test.ts fails if a token stops resolving or lands in no group.
 
-export type Mode = 'Light' | 'Dark';
-export const MODES: Mode[] = ['Light', 'Dark'];
+export { aliasOf, contrastRatio, MODES, resolveColor } from '../../blocks/color-values';
+export type { Mode } from '../../blocks/color-values';
 
-type Srgb = { colorSpace: 'srgb'; components: number[]; alpha?: number };
 type Entry = { $type: string; $value: unknown; $extensions?: { 'com.legacyhq'?: { originalName?: string } } };
 
 const primitives = (primitiveSource as unknown as { Primitive: { Value: Record<string, Entry> } }).Primitive.Value;
@@ -41,22 +42,6 @@ export const componentColorTokens = Object.values(componentSources).flatMap((sou
 );
 
 // --- Values -----------------------------------------------------------------------------------
-
-/** Follows aliases ({Primitive.Value.x} or another semantic token) to an sRGB value. */
-export function resolveColor(name: string, mode: Mode): Srgb | undefined {
-  let value = (semantic[mode][name] ?? primitives[name])?.$value;
-  for (let depth = 0; typeof value === 'string' && depth < 10; depth++) {
-    const target = value.match(/^\{(.+)\}$/)?.[1]?.split('.').pop();
-    value = target ? (semantic[mode][target] ?? primitives[target])?.$value : undefined;
-  }
-  return value && typeof value === 'object' ? (value as Srgb) : undefined;
-}
-
-/** The primitive a semantic token points to in a mode, e.g. "color-brand-taupe-solid-1100". */
-export function aliasOf(name: string, mode: Mode) {
-  const value = semantic[mode][name]?.$value;
-  return typeof value === 'string' ? value.replace(/^\{(?:[^.}]+\.)*([^.}]+)\}$/, '$1') : undefined;
-}
 
 export const figmaNameOf = (name: string) =>
   (semantic.Light[name] ?? primitives[name])?.$extensions?.['com.legacyhq']?.originalName;
@@ -264,17 +249,6 @@ export const CONTRAST_TEXT = [
 export const CONTRAST_SURFACES = ['color-elevation-surface-default', 'color-elevation-surface-raised-default', 'color-elevation-surface-sunken-default'];
 /** Below 4.5:1 by documented intent, so not reported as gaps (see the Contrast notes). */
 export const CONTRAST_LIMITED = ['color-content-subtler', 'color-content-disabled'];
-
-const channel = (c: number) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-const luminance = ([r, g, b]: number[]) => 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
-
-/** WCAG contrast of a (possibly translucent) foreground over an opaque background. */
-export function contrastRatio(foreground: Srgb, background: Srgb) {
-  const alpha = foreground.alpha ?? 1;
-  const blended = foreground.components.map((c, i) => c * alpha + background.components[i] * (1 - alpha));
-  const [lighter, darker] = [luminance(blended), luminance(background.components)].sort((a, b) => b - a);
-  return (lighter + 0.05) / (darker + 0.05);
-}
 
 export type ContrastBand = 'text' | 'large' | 'low';
 export const bandOf = (ratio: number): ContrastBand => (ratio >= 4.5 ? 'text' : ratio >= 3 ? 'large' : 'low');

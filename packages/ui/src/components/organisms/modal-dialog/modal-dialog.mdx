@@ -36,14 +36,14 @@ open it:
 - moves focus into the panel, traps Tab within it, and restores focus to the trigger on close;
 - locks page scroll; the body scrolls internally when it is taller than the viewport allows.
 
-## Appearance
+## Tone
 
-<Canvas of={ModalDialogStories.Appearances} />
+<Canvas of={ModalDialogStories.Tones} />
 
-`appearance` (`default` / `warning` / `error`) prepends a status icon to the title in the matching
+`tone` (`default` / `warning` / `error`) prepends a status icon to the title in the matching
 colour. It deliberately does **not** tone the footer buttons - Modal Dialog can't know your action
-layout - so pair `appearance="error"` with a matching Confirm button, e.g.
-`<Button appearance="primary" tone="error">Delete</Button>`.
+layout - so pair `tone="error"` with a matching Confirm button, e.g.
+`<Button prominence="primary" tone="error">Delete</Button>`.
 
 <Canvas of={ModalDialogStories.DestructiveConfirmation} />
 
@@ -51,7 +51,7 @@ layout - so pair `appearance="error"` with a matching Confirm button, e.g.
 
 <Canvas of={ModalDialogStories.Widths} />
 
-Four widths - `small` (400px), `medium` (600px, default), `large` (752px), `extraLarge` (968px). The
+Four widths - `sm` (400px), `md` (600px, default), `lg` (752px), `xl` (968px). The
 panel shrinks to fit narrow viewports (it never exceeds the available width).
 
 ## Content
@@ -71,7 +71,7 @@ informational dialog.
 - Focus moves into the dialog on open and returns to the trigger on close; Tab is trapped inside.
 - Escape closes the dialog (`closeOnEscape`, default on); the close button is labelled "Close" by
   default (`closeLabel`).
-- The status icon is decorative - the appearance's meaning is carried by the title text and the
+- The status icon is decorative - the tone's meaning is carried by the title text and the
   actions, not the icon alone.
 
 ## API
@@ -84,8 +84,8 @@ informational dialog.
     <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Whether the dialog is shown (controlled).</td></tr>
     <tr><td><code>onClose</code></td><td><code>() =&gt; void</code></td><td>-</td><td>Called on close request (close button, Escape, backdrop).</td></tr>
     <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Header heading and the dialog's accessible name.</td></tr>
-    <tr><td><code>appearance</code></td><td><code>'default' | 'warning' | 'error'</code></td><td><code>'default'</code></td><td>Prepends a status icon to the title.</td></tr>
-    <tr><td><code>width</code></td><td><code>'small' | 'medium' | 'large' | 'extraLarge'</code></td><td><code>'medium'</code></td><td>Panel width.</td></tr>
+    <tr><td><code>tone</code></td><td><code>'default' | 'warning' | 'error'</code></td><td><code>'default'</code></td><td>Prepends a status icon to the title.</td></tr>
+    <tr><td><code>width</code></td><td><code>'sm' | 'md' | 'lg' | 'xl'</code></td><td><code>'md'</code></td><td>Panel width.</td></tr>
     <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>The body content (scrolls when tall).</td></tr>
     <tr><td><code>footer</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Right-aligned footer actions.</td></tr>
     <tr><td><code>showCloseButton</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show the header close (X) button.</td></tr>

@@ -12,19 +12,19 @@
     {
       "name": "Warning",
       "description": "A cautionary status on the amber bold background. Its dark content means actions use tone=warning (not the inverse treatment).",
-      "jsx": "<Banner appearance=\"warning\" actions={<Button size=\"sm\" appearance=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
+      "jsx": "<Banner tone=\"warning\" actions={<Button size=\"sm\" prominence=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
       "props": {
-        "appearance": "warning",
-        "actions": "Button (size=sm, appearance=primary, tone=warning)",
+        "tone": "warning",
+        "actions": "Button (size=sm, prominence=primary, tone=warning)",
         "children": "Your subscription expires in three days."
       }
     },
     {
       "name": "Error with an action",
       "description": "An error status with a single inverse-tone action.",
-      "jsx": "<Banner appearance=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
+      "jsx": "<Banner tone=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
       "props": {
-        "appearance": "error",
+        "tone": "error",
         "actions": "Button (size=sm, isInverse)",
         "children": "We couldn't reach the server."
       }
@@ -50,9 +50,9 @@
     {
       "name": "Urgent error (assertive)",
       "description": "An urgent error that must interrupt, using role=alert instead of the default polite status.",
-      "jsx": "<Banner appearance=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
+      "jsx": "<Banner tone=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
       "props": {
-        "appearance": "error",
+        "tone": "error",
         "role": "alert",
         "children": "Your session has expired. Sign in again to continue."
       }
@@ -67,7 +67,7 @@
     {
       "name": "Transient notification",
       "reason": "Use Toast for a transient, auto-dismissing notification.",
-      "jsx": "<Banner appearance=\"default\">Copied to clipboard</Banner>"
+      "jsx": "<Banner tone=\"default\">Copied to clipboard</Banner>"
     },
     {
       "name": "Toolbar of actions",

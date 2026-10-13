@@ -5701,7 +5701,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "full-width bar with the appearance's bold background; height hugs content"
+        "description": "full-width bar with the tone's bold background; height hugs content"
       },
       {
         "name": "icon",
@@ -5717,7 +5717,7 @@
       }
     ],
     "props": {
-      "appearance": {
+      "tone": {
         "type": "enum",
         "required": false,
         "default": "default",
@@ -5743,7 +5743,7 @@
       "statusLabel": {
         "type": "string",
         "required": false,
-        "default": "the appearance's name (Warning, Error); none for default",
+        "default": "the tone's name (Warning, Error); none for default",
         "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
       },
       "actions": {
@@ -5771,7 +5771,7 @@
       "actions"
     ],
     "variants": {
-      "appearance": [
+      "tone": [
         "default",
         "warning",
         "error"
@@ -5827,7 +5827,7 @@
       "componentName": "banner",
       "variantCount": 3,
       "verifiedAt": "2026-09-01",
-      "notes": "The Figma `appearance` variant `appearance4` maps to the code appearance `default`. The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
+      "notes": "The Figma `tone` variants match code (default, warning, error). The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
     }
   },
   {
@@ -7495,7 +7495,7 @@
       },
       {
         "name": "statusIcon",
-        "description": "Decorative md status icon for warning/error appearance, coloured content/warning or content/error."
+        "description": "Decorative md status icon for warning/error tone, coloured content/warning or content/error."
       },
       {
         "name": "title",
@@ -7541,8 +7541,8 @@
         "default": null,
         "description": "Header heading and the dialog's accessible name (aria-labelledby)."
       },
-      "appearance": {
-        "type": "ModalAppearance",
+      "tone": {
+        "type": "ModalTone",
         "required": false,
         "default": "default",
         "description": "Prepends a status icon to the title (warning/error). Does not tone the footer buttons.",
@@ -7555,13 +7555,13 @@
       "width": {
         "type": "ModalWidth",
         "required": false,
-        "default": "medium",
+        "default": "md",
         "description": "Panel width: 400 / 600 / 752 / 968 px.",
         "enum": [
-          "small",
-          "medium",
-          "large",
-          "extraLarge"
+          "sm",
+          "md",
+          "lg",
+          "xl"
         ]
       },
       "children": {
@@ -7637,16 +7637,16 @@
       "footer"
     ],
     "variants": {
-      "appearance": [
+      "tone": [
         "default",
         "warning",
         "error"
       ],
       "width": [
-        "small",
-        "medium",
-        "large",
-        "extraLarge"
+        "sm",
+        "md",
+        "lg",
+        "xl"
       ]
     },
     "subComponents": [],
@@ -7688,7 +7688,7 @@
         "Page scroll is locked while open.",
         "The close button is labelled by closeLabel (default 'Close').",
         "The status icon is decorative (aria-hidden) - meaning is carried by the title and actions.",
-        "Pair appearance='error'/'warning' with a matching Confirm button tone - Modal Dialog does not tone footer buttons."
+        "Pair tone='error'/'warning' with a matching Confirm button tone - Modal Dialog does not tone footer buttons."
       ]
     },
     "relatedComponents": [
@@ -7708,23 +7708,23 @@
       "variantCount": 12,
       "verifiedAt": "2026-09-08",
       "figmaVariantAxes": {
-        "appearance": [
+        "tone": [
           "default",
           "warning",
           "error"
         ],
         "width": [
-          "small",
-          "medium",
-          "large",
-          "extra large"
+          "sm",
+          "md",
+          "lg",
+          "xl"
         ]
       },
       "panelWidths": {
-        "small": 400,
-        "medium": 600,
-        "large": 752,
-        "extraLarge": 968
+        "sm": 400,
+        "md": 600,
+        "lg": 752,
+        "xl": 968
       },
       "subParts": [
         {
@@ -7734,21 +7734,21 @@
         {
           "name": "modal-header",
           "componentSetNodeId": "2456:2409",
-          "note": "appearance default/breadcrumb/warning/error. Title (heading/md, content/default) + a header action group: an Expand (grow_diagonal) icon-button and the Close icon-button (both subtle, sm) in a Button Group. warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' appearance swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
+          "note": "appearance default/breadcrumb/warning/error (this part keeps appearance: it also holds the breadcrumb style, not only a tone). Title (heading/md, content/default) + a header action group: an Expand (grow_diagonal) icon-button and the Close icon-button (both subtle, sm) in a Button Group. warning/error prepend StatusWarningIcon / StatusErrorIcon coloured content/warning / content/error. The 'breadcrumb' tone swaps the title for breadcrumbs - not built as a dedicated prop; pass breadcrumbs as `title` with an aria-label if needed."
         },
         {
           "name": "modal-footer",
           "componentSetNodeId": "2456:11691",
-          "note": "appearance default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot."
+          "note": "tone default/warning/error; a right-aligned action group (Cancel + Confirm). Its left-side filter area is example content, hidden by default - the code footer is a right-aligned slot."
         }
       ],
       "apiAdaptationNotes": [
         "Built standalone, not on the Popup primitive - Popup is a trigger-anchored positioned popover with no focus trap, backdrop, aria-modal, or scroll lock; a modal is a centered focus-trapped overlay, so createPortal + a focus trap are used directly.",
         "Controlled with open + onClose (not Popup's onOpenChange) - a modal only ever requests close, and onClose lets the consumer intercept it.",
-        "Figma's appearance (default/warning/error) prepends a decorative status icon to the title; it does NOT tone the footer buttons (Modal Dialog can't know the action layout), so consumers pair appearance='error'/'warning' with a matching Confirm button tone - the same wrapper-vs-control split Field uses for state.",
+        "Figma's tone (default/warning/error) prepends a decorative status icon to the title; it does NOT tone the footer buttons (Modal Dialog can't know the action layout), so consumers pair tone='error'/'warning' with a matching Confirm button tone - the same wrapper-vs-control split Field uses for state.",
         "The footer is a right-aligned slot; Figma's footer left filter area (dropdown/date field) is example content hidden by default, not part of the component.",
         "Surface and backdrop inset use existing tokens by intent: the panel surface is --color-elevation-surface-raised-default with the overlay elevation shadow --elevation-shadow-overlay (Figma binds elevation/surface/raised/default and the elevation.shadow.overlay effect style), and the backdrop fills the viewport, insetting the panel with --spacing-4xl (Figma's 64px around the panel was artboard framing, not a design value).",
-        "Panel widths (inner) are 400/600/752/968 for small/medium/large/extraLarge; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
+        "Panel widths (inner) are 400/600/752/968 for sm/md/lg/xl; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
         "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
       ]
     }
@@ -7909,11 +7909,11 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "bordered, rounded box with the appearance's tinted background and colored border"
+        "description": "bordered, rounded box with the tone's tinted background and colored border"
       },
       {
         "name": "icon",
-        "description": "the status icon for the appearance, in its status color; decorative"
+        "description": "the status icon for the tone, in its status color; decorative"
       },
       {
         "name": "title",
@@ -7933,7 +7933,7 @@
       }
     ],
     "props": {
-      "appearance": {
+      "tone": {
         "type": "enum",
         "required": false,
         "default": "information",
@@ -7948,7 +7948,7 @@
       "statusLabel": {
         "type": "string",
         "required": false,
-        "default": "the appearance's name (Information, Success, Warning, Error)",
+        "default": "the tone's name (Information, Success, Warning, Error)",
         "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
       },
       "title": {
@@ -8007,7 +8007,7 @@
       "actions"
     ],
     "variants": {
-      "appearance": [
+      "tone": [
         "information",
         "success",
         "warning",
@@ -8074,7 +8074,7 @@
       "componentName": "section-message",
       "variantCount": 4,
       "verifiedAt": "2026-09-01",
-      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
+      "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` tone was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
     }
   },
   {
@@ -8976,7 +8976,7 @@
       },
       {
         "name": "leadingIcon",
-        "description": "an IconTile colored per appearance, or a Spinner for loading; decorative"
+        "description": "an IconTile colored per tone, or a Spinner for loading; decorative"
       },
       {
         "name": "title",
@@ -8996,7 +8996,7 @@
       }
     ],
     "props": {
-      "appearance": {
+      "tone": {
         "type": "enum",
         "required": false,
         "default": "default",
@@ -9013,7 +9013,7 @@
       "statusLabel": {
         "type": "string",
         "required": false,
-        "default": "the appearance's name (Success, Information, Warning, Error); none for default and loading",
+        "default": "the tone's name (Success, Information, Warning, Error); none for default and loading",
         "description": "Visually hidden text read before the title, since the status icon is decorative. An empty string omits it."
       },
       "title": {
@@ -9078,7 +9078,7 @@
       "actions"
     ],
     "variants": {
-      "appearance": [
+      "tone": [
         "default",
         "success",
         "information",
@@ -9150,7 +9150,7 @@
       "componentName": "toast",
       "variantCount": 11,
       "verifiedAt": "2026-09-02",
-      "notes": "Figma has appearance (default/success/error/warning/info/loading) x open (false/true); Figma's info is code's information. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma appearance=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+      "notes": "Figma has tone (default/success/error/warning/info/loading) x open (false/true); Figma's info is code's information. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
     }
   },
   {

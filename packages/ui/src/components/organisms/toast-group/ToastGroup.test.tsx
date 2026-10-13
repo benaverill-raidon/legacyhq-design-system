@@ -57,14 +57,14 @@ describe('ToastGroup', () => {
     expect(screen.getByRole('list', { name: 'Notifications' })).toBeInTheDocument();
   });
 
-  it('sets the appearance from the toast variant helpers', () => {
+  it('sets the tone from the toast variant helpers', () => {
     render(<ToastGroup />);
 
     act(() => {
       toast.error('Upload failed', { duration: Infinity });
     });
 
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'error');
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'error');
   });
 
   it('updates a toast in place when the same id is reused (loading -> success)', () => {
@@ -73,13 +73,13 @@ describe('ToastGroup', () => {
     act(() => {
       toast.loading('Uploading', { id: 'upload' });
     });
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'loading');
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'loading');
 
     act(() => {
       toast.success('Uploaded', { id: 'upload', duration: Infinity });
     });
     expect(screen.getByText('Uploaded')).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'success');
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'success');
     expect(screen.getAllByRole('status')).toHaveLength(1);
   });
 

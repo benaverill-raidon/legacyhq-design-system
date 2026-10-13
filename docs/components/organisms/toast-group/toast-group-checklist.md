@@ -71,7 +71,7 @@ label: Notifications
 ## Tests
 
 - [ ] Renders nothing when empty; renders a triggered toast in an aria-labelled list.
-- [ ] Appearance from the variant helpers; update in place by id.
+- [ ] Tone from the variant helpers; update in place by id.
 - [ ] Dismiss button + auto-dismiss remove the toast.
 - [ ] All toasts in the DOM while stacked, newest first.
 - [ ] Hover expands to reveal descriptions.

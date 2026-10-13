@@ -25,10 +25,10 @@ in practice toasts are shown and stacked by **Toast Group** through the imperati
 
 ## Anatomy
 
-<Canvas of={ToastStories.Appearances} />
+<Canvas of={ToastStories.Tones} />
 
 1. **Root** - a raised-surface card with a 1px border, radius, and the overlay elevation shadow.
-2. **Leading icon** - an `IconTile` colored per appearance, or a `Spinner` for `loading`.
+2. **Leading icon** - an `IconTile` colored per tone, or a `Spinner` for `loading`.
 3. **Title** - the required lead line (`heading-xs`).
 4. **Dismiss** - a dismiss button (top-right), unless `isDismissible` is false.
 5. **Description** - optional supporting text (`body-md`), shown when expanded.
@@ -36,9 +36,9 @@ in practice toasts are shown and stacked by **Toast Group** through the imperati
 
 ## Usage guidance
 
-### Appearance
+### Tone
 
-`appearance` sets the leading status tile: `default` (gray), `success` (green), `information` (blue),
+`tone` sets the leading status tile: `default` (gray), `success` (green), `information` (blue),
 `warning` (orange), `error` (red), and `loading` (a spinner instead of a tile). Use `loading` for a
 pending operation and update the same toast id to `success`/`error` when it resolves.
 
@@ -79,7 +79,7 @@ The leading icon is decorative; the dismiss button is a labelled `IconButton`.
       <td>Required. The lead line.</td>
     </tr>
     <tr>
-      <td><code>appearance</code></td>
+      <td><code>tone</code></td>
       <td><code>'default' | 'success' | 'information' | 'warning' | 'error' | 'loading'</code></td>
       <td><code>'default'</code></td>
       <td>Leading status tile, or a spinner for loading.</td>

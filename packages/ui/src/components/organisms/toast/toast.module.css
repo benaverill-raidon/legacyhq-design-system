@@ -26,7 +26,7 @@
   flex: 0 0 auto;
 }
 
-/* The loading appearance's spinner and title use the loading content color; the Spinner inherits
+/* The loading tone's spinner and title use the loading content color; the Spinner inherits
    the current color of this slot. */
 .spinnerSlot {
   display: inline-flex;
@@ -72,7 +72,7 @@
 }
 
 /* The loading toast's title uses the loading content color, matching its spinner. */
-.root[data-appearance='loading'] .title {
+.root[data-tone='loading'] .title {
   color: var(--color-content-loading);
 }
 

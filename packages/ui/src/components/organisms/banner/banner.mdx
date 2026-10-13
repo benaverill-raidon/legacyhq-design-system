@@ -28,7 +28,7 @@ bold-colored background, with optional inline actions.
 
 <Canvas of={BannerStories.Content} />
 
-1. **Root** - a full-width bar with the appearance's bold background. Its height hugs the single
+1. **Root** - a full-width bar with the tone's bold background. Its height hugs the single
    message row plus block padding.
 2. **Icon** - a leading status icon (`warning`/`error`) or a plain dot, inheriting the banner's
    content color. Toggle it off with `showIcon={false}`.
@@ -37,19 +37,19 @@ bold-colored background, with optional inline actions.
 
 ## Usage guidance
 
-### Appearance
+### Tone
 
-`appearance` sets both the bold background and the leading status icon: `default` (a dark bar with a
+`tone` sets both the bold background and the leading status icon: `default` (a dark bar with a
 dot), `warning` (amber, with dark content), and `error` (red, with inverse content). There is no
-separate tone axis - the appearance is the semantic signal.
+separate tone axis - the tone is the semantic signal.
 
-<Canvas of={BannerStories.Appearances} />
+<Canvas of={BannerStories.Tones} />
 
 ### Actions match the bar
 
 On the `default` and `error` bars the background is dark, so actions use the on-dark treatment - pass
 `isInverse` `Button`s (or a `ButtonGroup` of them). The `warning` bar is amber with dark content, so
-its actions use `tone="warning"` instead (which needs `appearance="primary"` to render) rather than
+its actions use `tone="warning"` Buttons (with `prominence="primary"`) rather than
 the inverse treatment. Either way, keep the action count low (one or two); Banner is an announcement,
 not a toolbar.
 
@@ -64,7 +64,7 @@ message that would be cut off.
 Banner renders with `role="status"` by default - a polite live region, so a banner that appears
 dynamically is announced without interrupting. Override `role` when the semantics differ: use
 `role="alert"` for an urgent error that must interrupt, or remove it for a purely decorative bar.
-The leading icon is decorative (`aria-hidden`); the appearance is conveyed by the message text, not
+The leading icon is decorative (`aria-hidden`); the tone is conveyed by the message text, not
 by color alone.
 
 ## API
@@ -86,7 +86,7 @@ by color alone.
       <td>Required. The message. Truncates to a single line.</td>
     </tr>
     <tr>
-      <td><code>appearance</code></td>
+      <td><code>tone</code></td>
       <td><code>'default' | 'warning' | 'error'</code></td>
       <td><code>'default'</code></td>
       <td>Bold background and leading status icon.</td>

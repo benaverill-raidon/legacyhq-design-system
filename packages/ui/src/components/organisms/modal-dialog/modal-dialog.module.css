@@ -36,19 +36,19 @@
   overflow: hidden;
 }
 
-.width_small {
+.width_sm {
   inline-size: 400px;
 }
 
-.width_medium {
+.width_md {
   inline-size: 600px;
 }
 
-.width_large {
+.width_lg {
   inline-size: 752px;
 }
 
-.width_extraLarge {
+.width_xl {
   inline-size: 968px;
 }
 

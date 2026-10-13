@@ -1,11 +1,13 @@
 import type * as React from 'react';
-import type { DeprecatedToastAppearance, ToastAppearance } from '../toast/toast.types';
+import type { DeprecatedToastTone, ToastTone } from '../toast/toast.types';
 
 /** Options accepted by `toast()` and its variants. */
 export interface ToastOptions {
   /** Stable id. Reuse it to update an existing toast in place (e.g. loading -> success). */
   id?: string;
-  appearance?: ToastAppearance | DeprecatedToastAppearance;
+  tone?: ToastTone | DeprecatedToastTone;
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: ToastTone | DeprecatedToastTone;
   description?: React.ReactNode;
   actions?: React.ReactNode;
   /** Auto-dismiss delay in ms. `Infinity` (or 0) keeps the toast until dismissed. Defaults to 5000. */
@@ -85,14 +87,14 @@ function createToast(title: React.ReactNode, options: ToastOptions = {}): string
 
 /**
  * Imperative API. Call `toast('Saved')` from anywhere; `toast.success/error/warning/info/loading`
- * set the appearance (`info` sets `information`), and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
+ * set the tone (`info` sets `information`), and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
  */
 export const toast: ToastFunction = Object.assign(createToast, {
-  success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'success' }),
-  error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'error' }),
-  warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'warning' }),
-  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'information' }),
+  success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'success' }),
+  error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'error' }),
+  warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'warning' }),
+  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'information' }),
   loading: (title: React.ReactNode, options: ToastOptions = {}) =>
-    toastStore.add(title, { duration: Infinity, ...options, appearance: 'loading' }),
+    toastStore.add(title, { duration: Infinity, ...options, tone: 'loading' }),
   dismiss: (id?: string) => toastStore.dismiss(id),
 });

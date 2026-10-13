@@ -29,8 +29,8 @@ description, optional inline actions, and an optional dismiss button.
 
 <Canvas of={SectionMessageStories.Content} />
 
-1. **Root** - a bordered, rounded box with the appearance's tinted background and colored border.
-2. **Icon** - the status icon for the appearance, in its status color. Decorative (`aria-hidden`).
+1. **Root** - a bordered, rounded box with the tone's tinted background and colored border.
+2. **Icon** - the status icon for the tone, in its status color. Decorative (`aria-hidden`).
 3. **Title** - an optional bold lead line (`heading-sm`).
 4. **Description** - the `children`. Wraps to as many lines as needed.
 5. **Actions** - optional `Link`s; Section Message inserts a middot separator between them.
@@ -38,13 +38,13 @@ description, optional inline actions, and an optional dismiss button.
 
 ## Usage guidance
 
-### Appearance
+### Tone
 
-`appearance` (`information`, `success`, `warning`, `error`) sets the tinted background, the border
-color, and the status icon together - the appearance is the semantic signal. The title and
+`tone` (`information`, `success`, `warning`, `error`) sets the tinted background, the border
+color, and the status icon together - the tone is the semantic signal. The title and
 description always use the default content color; only the icon and border take the status color.
 
-<Canvas of={SectionMessageStories.Appearances} />
+<Canvas of={SectionMessageStories.Tones} />
 
 ### Title and description
 
@@ -91,7 +91,7 @@ carried by the title and description text, not by color alone. The dismiss butto
       <td>Required. The description. Wraps to multiple lines.</td>
     </tr>
     <tr>
-      <td><code>appearance</code></td>
+      <td><code>tone</code></td>
       <td><code>'information' | 'success' | 'warning' | 'error'</code></td>
       <td><code>'information'</code></td>
       <td>Tinted background, border, and status icon.</td>

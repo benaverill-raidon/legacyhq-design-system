@@ -1,13 +1,17 @@
 import type * as React from 'react';
 
-export type SectionMessageAppearance = 'information' | 'success' | 'warning' | 'error';
+export type SectionMessageTone = 'information' | 'success' | 'warning' | 'error';
+/** @deprecated Renamed to `SectionMessageTone`. */
+export type SectionMessageAppearance = SectionMessageTone;
 
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
-  /** Semantic appearance - sets the tinted background, border, and status icon. Defaults to `information`. */
-  appearance?: SectionMessageAppearance;
+  /** Semantic tone - sets the tinted background, border, and status icon. Defaults to `information`. */
+  tone?: SectionMessageTone;
+  /** @deprecated Renamed to `tone`, the name every component uses for meaning. Still accepted. */
+  appearance?: SectionMessageTone;
   /**
    * Read by assistive technology before the message, since the status icon is decorative. Defaults
-   * to the appearance's name ("Information", "Success", "Warning", "Error"); pass a translation, or an empty string to omit it.
+   * to the tone's name ("Information", "Success", "Warning", "Error"); pass a translation, or an empty string to omit it.
    */
   statusLabel?: string;
   /** Optional bold title, shown above the description. Omit to render the description alone. */

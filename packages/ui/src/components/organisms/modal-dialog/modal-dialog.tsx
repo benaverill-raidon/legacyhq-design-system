@@ -5,13 +5,16 @@ import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../../molecules/button-group';
 import styles from './modal-dialog.module.css';
-import type { ModalAppearance, ModalDialogProps } from './modal-dialog.types';
+import type { DeprecatedModalWidth, ModalDialogProps, ModalTone, ModalWidth } from './modal-dialog.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-const STATUS_ICONS: Partial<Record<ModalAppearance, { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
+/** The size names the deprecated width names map to. */
+const WIDTHS: Record<DeprecatedModalWidth, ModalWidth> = { small: 'sm', medium: 'md', large: 'lg', extraLarge: 'xl' };
+
+const STATUS_ICONS: Partial<Record<ModalTone, { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
   warning: { Icon: StatusWarningIcon, color: 'warning' },
   error: { Icon: StatusErrorIcon, color: 'error' },
 };
@@ -35,8 +38,9 @@ export const ModalDialog = React.memo(function ModalDialog({
   open,
   onClose,
   title,
-  appearance = 'default',
-  width = 'medium',
+  tone: requestedTone,
+  appearance,
+  width: requestedWidth = 'md',
   children,
   footer,
   showCloseButton = true,
@@ -131,7 +135,10 @@ export const ModalDialog = React.memo(function ModalDialog({
     return null;
   }
 
-  const status = STATUS_ICONS[appearance];
+  // `appearance` is the deprecated name for `tone`; the long width names are deprecated too.
+  const tone: ModalTone = requestedTone ?? appearance ?? 'default';
+  const width: ModalWidth = WIDTHS[requestedWidth as DeprecatedModalWidth] ?? (requestedWidth as ModalWidth);
+  const status = STATUS_ICONS[tone];
 
   // Header actions: an optional Expand (maximize) button, then the Close button. When both are
   // present they share a Button Group (matching Figma's modal-header); a lone button renders on its
@@ -177,7 +184,7 @@ export const ModalDialog = React.memo(function ModalDialog({
         aria-label={title == null ? ariaLabel : undefined}
         tabIndex={-1}
         className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
-        data-appearance={appearance}
+        data-tone={tone}
         data-has-header={hasHeader ? 'true' : undefined}
         data-has-footer={footer != null ? 'true' : undefined}
       >

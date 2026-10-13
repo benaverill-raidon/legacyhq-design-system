@@ -27,7 +27,7 @@ export interface ToastGroupProps {
 ### Imperative API (`toast`)
 
 ```ts
-toast(title, options?)          // default appearance
+toast(title, options?)          // default tone
 toast.success(title, options?)
 toast.error(title, options?)
 toast.warning(title, options?)
@@ -35,7 +35,7 @@ toast.info(title, options?)
 toast.loading(title, options?)  // duration Infinity by default
 toast.dismiss(id?)              // one, or all when id is omitted
 
-// options: { id?, description?, actions?, duration?, isDismissible?, appearance? }
+// options: { id?, description?, actions?, duration?, isDismissible?, tone? }
 ```
 
 Reuse an `id` to update a toast in place (loading -> success/error).
@@ -78,7 +78,7 @@ Reuse an `id` to update a toast in place (loading -> success/error).
 ```txt
 renders nothing when there are no toasts
 renders a toast triggered via the imperative API
-sets the appearance from the toast variant helpers
+sets the tone from the toast variant helpers
 updates a toast in place when the same id is reused
 dismisses a toast when its dismiss button is clicked
 auto-dismisses after the duration elapses

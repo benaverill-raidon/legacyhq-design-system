@@ -22,7 +22,7 @@
     {
       "name": "Toast with an action",
       "description": "Actions appear when the stack is expanded.",
-      "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' appearance='subtle'>Undo</Button> })",
+      "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' tone='subtle'>Undo</Button> })",
       "props": {}
     },
     {

@@ -1,7 +1,11 @@
 import type * as React from 'react';
 
-export type ModalAppearance = 'default' | 'warning' | 'error';
-export type ModalWidth = 'small' | 'medium' | 'large' | 'extraLarge';
+export type ModalTone = 'default' | 'warning' | 'error';
+/** @deprecated Renamed to `ModalTone`. */
+export type ModalAppearance = ModalTone;
+export type ModalWidth = 'sm' | 'md' | 'lg' | 'xl';
+/** @deprecated Use `sm`, `md`, `lg`, or `xl`, the size names every component uses. Still accepted. */
+export type DeprecatedModalWidth = 'small' | 'medium' | 'large' | 'extraLarge';
 
 export interface ModalDialogProps {
   /** Whether the dialog is shown. Controlled by the consumer. */
@@ -18,12 +22,14 @@ export interface ModalDialogProps {
   title?: React.ReactNode;
   /**
    * Semantic intent. `warning` / `error` prepend a status icon to the title (in the matching
-   * colour); `default` shows none. It does not tone the footer buttons - pair `appearance="error"`
-   * with a matching Confirm button (e.g. `<Button appearance="primary" tone="error">`).
+   * colour); `default` shows none. It does not tone the footer buttons - pair `tone="error"`
+   * with a matching Confirm button (e.g. `<Button prominence="primary" tone="error">`).
    */
-  appearance?: ModalAppearance;
-  /** Panel width: small (400px), medium (600px), large (752px), or extraLarge (968px). */
-  width?: ModalWidth;
+  tone?: ModalTone;
+  /** @deprecated Renamed to `tone`, the name every component uses for meaning. Still accepted. */
+  appearance?: ModalTone;
+  /** Panel width: sm (400px), md (600px), lg (752px), or xl (968px). */
+  width?: ModalWidth | DeprecatedModalWidth;
   /** The dialog body. Scrolls within the panel when it is taller than the viewport allows. */
   children?: React.ReactNode;
   /** The footer actions (e.g. a Cancel and a Confirm Button), rendered right-aligned. Omit for none. */

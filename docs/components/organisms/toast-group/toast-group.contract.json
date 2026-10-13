@@ -41,7 +41,7 @@
     "toast.info": "(title, options?) => id",
     "toast.loading": "(title, options?) => id  (no auto-dismiss by default)",
     "toast.dismiss": "(id?) => void  (dismiss one, or all when id is omitted)",
-    "options": "{ id?, description?, actions?, duration?, isDismissible?, appearance? }"
+    "options": "{ id?, description?, actions?, duration?, isDismissible?, tone? }"
   },
   "tokens": {
     "semantic": {
@@ -104,7 +104,7 @@
   "acceptanceCriteria": [
     "Renders nothing when there are no toasts.",
     "Renders a toast triggered via the imperative API in an aria-labelled list.",
-    "Sets the appearance from the toast variant helpers.",
+    "Sets the tone from the toast variant helpers.",
     "Updates a toast in place when the same id is reused.",
     "Dismisses a toast when its dismiss button is clicked.",
     "Auto-dismisses after the duration elapses.",

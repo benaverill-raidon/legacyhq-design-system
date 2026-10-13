@@ -40,7 +40,7 @@ does it once.
 - Confirmations (delete, discard, publish), short focused forms, content acknowledgements
 
 ### What are the most common use cases?
-- A destructive confirmation (error appearance + a red Confirm)
+- A destructive confirmation (error tone + a red Confirm)
 - A "save changes?" prompt
 - A short form or informational dialog
 
@@ -66,11 +66,11 @@ None - the title wraps; the body scrolls.
 
 ## Variants
 
-### Appearance
+### Tone
 - default, warning (status icon), error (status icon)
 
 ### Width
-- small (400px), medium (600px), large (752px), extraLarge (968px)
+- sm (400px), md (600px), lg (752px), xl (968px)
 
 ---
 
@@ -100,10 +100,10 @@ The close button, Escape (`closeOnEscape`), and a backdrop click (`closeOnBackdr
 labelled `expandLabel`) is a separate action - it does not dismiss.
 
 ### Is the status icon meaningful?
-No - it's decorative; the appearance's meaning is carried by the title and actions.
+No - it's decorative; the tone's meaning is carried by the title and actions.
 
 ### What must the consumer still do?
-Give the dialog an accessible name; pair `appearance="error"`/`"warning"` with a matching Confirm
+Give the dialog an accessible name; pair `tone="error"`/`"warning"` with a matching Confirm
 button tone (Modal Dialog does not tone footer buttons).
 
 ---
@@ -116,7 +116,7 @@ button tone (Modal Dialog does not tone footer buttons).
 
 ## Notes
 Built standalone (not on the Popup primitive, which is a positioned popover with no focus trap /
-backdrop / scroll lock). Controlled and `onClose`-only. `appearance` adds a header status icon but
+backdrop / scroll lock). Controlled and `onClose`-only. `tone` adds a header status icon but
 does not tone the footer buttons (the consumer pairs the Confirm button tone). The panel surface uses
 the shared floating-surface token `--color-elevation-surface-raised-default` with the overlay elevation
 shadow `--elevation-shadow-overlay` (Figma's panel binds both), and the backdrop fills the viewport, insetting the panel with `--spacing-4xl`

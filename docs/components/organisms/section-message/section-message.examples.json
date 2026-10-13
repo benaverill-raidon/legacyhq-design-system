@@ -13,18 +13,18 @@
     {
       "name": "Success (no title)",
       "description": "A description-only success message.",
-      "jsx": "<SectionMessage appearance=\"success\">Your changes were published successfully.</SectionMessage>",
+      "jsx": "<SectionMessage tone=\"success\">Your changes were published successfully.</SectionMessage>",
       "props": {
-        "appearance": "success",
+        "tone": "success",
         "children": "Your changes were published successfully."
       }
     },
     {
       "name": "Warning with actions",
       "description": "Two Link Button actions grouped in a ButtonGroup that lays them out as a row.",
-      "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
+      "jsx": "<SectionMessage tone=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
       "props": {
-        "appearance": "warning",
+        "tone": "warning",
         "title": "Your trial ends soon",
         "actions": "a ButtonGroup of LinkButton elements",
         "children": "Your trial ends in three days."
@@ -33,9 +33,9 @@
     {
       "name": "Error, dismissible",
       "description": "A dismissible error message with a dismiss button in the top-right.",
-      "jsx": "<SectionMessage appearance=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
+      "jsx": "<SectionMessage tone=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
       "props": {
-        "appearance": "error",
+        "tone": "error",
         "title": "Something went wrong",
         "isDismissible": true,
         "children": "We couldn't save your changes."
@@ -44,9 +44,9 @@
     {
       "name": "Urgent error (assertive)",
       "description": "An urgent error using role=alert instead of the default polite status.",
-      "jsx": "<SectionMessage appearance=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
+      "jsx": "<SectionMessage tone=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
       "props": {
-        "appearance": "error",
+        "tone": "error",
         "role": "alert",
         "title": "Payment failed",
         "children": "Update your payment method to keep your subscription active."
@@ -57,17 +57,17 @@
     {
       "name": "Page-level banner",
       "reason": "Use Banner for a full-width, page-level announcement bar.",
-      "jsx": "<SectionMessage appearance=\"information\">Scheduled maintenance this weekend</SectionMessage>"
+      "jsx": "<SectionMessage tone=\"information\">Scheduled maintenance this weekend</SectionMessage>"
     },
     {
       "name": "Transient notification",
       "reason": "Use Toast for a transient, auto-dismissing notification.",
-      "jsx": "<SectionMessage appearance=\"success\" isDismissible>Copied to clipboard</SectionMessage>"
+      "jsx": "<SectionMessage tone=\"success\" isDismissible>Copied to clipboard</SectionMessage>"
     },
     {
       "name": "Dismissible hard constraint",
       "reason": "Do not let the user dismiss a persistent restriction they need to keep seeing.",
-      "jsx": "<SectionMessage appearance=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>"
+      "jsx": "<SectionMessage tone=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>"
     }
   ]
 }

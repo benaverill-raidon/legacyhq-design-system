@@ -16,11 +16,11 @@ with interaction and accessibility responsibilities.
 
 ### Design Reference
 - Figma file `Components v1.0.0` (`M0eINB6n1BfrXu7ntYqb1i`), page "Modal Dialog" (marked done ✅).
-- `modal-dialog` component set (node `2456:12608`): `appearance` (default/warning/error) x `width`
-  (small/medium/large/extra large) = 12 variants. Assembled from `modal-header` (set `2456:2409`,
-  appearance default/breadcrumb/warning/error) + a `<modal-body>` slot + `modal-footer` (set
-  `2456:11691`, appearance default/warning/error), over a `blanket` backdrop instance.
-- Panel widths (inner): small 400, medium 600, large 752, extraLarge 968. Verified live 2026-09-08.
+- `modal-dialog` component set (node `2456:12608`): `tone` (default/warning/error) x `width`
+  (sm/md/lg/xl) = 12 variants. Assembled from `modal-header` (set `2456:2409`,
+  tone default/breadcrumb/warning/error) + a `<modal-body>` slot + `modal-footer` (set
+  `2456:11691`, tone default/warning/error), over a `blanket` backdrop instance.
+- Panel widths (inner): sm 400, md 600, lg 752, xl 968 (the long names small/medium/large/extraLarge are deprecated aliases). Verified live 2026-09-08.
 - `modal-header` props: `titleText`, `Close` (BOOLEAN), `showChipGroup`, `appearance`. Warning/error
   prepend a status icon (StatusWarningIcon / StatusErrorIcon) coloured content/warning / content/error;
   the title stays content/default.
@@ -76,7 +76,7 @@ ModalDialog (portal -> document.body)
 - **Dismissal.** Escape (capture-phase keydown, `closeOnEscape`); a press-and-release on the backdrop
   itself (`closeOnBackdropClick`) - a drag that ends on the backdrop does not close it.
 - **Scroll lock.** `document.body.style.overflow = 'hidden'` while open, restored on close.
-- **Appearance.** `warning` / `error` prepend a decorative status icon to the title; does not tone
+- **Tone.** `warning` / `error` prepend a decorative status icon to the title; does not tone
   the footer buttons.
 - **Header actions.** The header ends with the close button; pass `onExpand` to add an Expand
   (maximize) button before it. When both are shown they share a Button Group; a lone button renders
@@ -113,7 +113,7 @@ ModalDialog (portal -> document.body)
   overlay, so it's implemented directly with `createPortal` + a focus trap rather than reusing Popup.
 - **Controlled, `onClose`-only.** A modal only ever requests close; the consumer owns `open`. `onClose`
   (rather than Popup's `onOpenChange`) reads clearly and lets the consumer intercept a close.
-- **`appearance` adds the status icon only, not the button tone.** Modal Dialog can't know the footer
+- **`tone` adds the status icon only, not the button tone.** Modal Dialog can't know the footer
   layout, so it colours the header icon and leaves the Confirm button's tone to the consumer - the
   same wrapper-vs-control split Field uses for `state` / the control's `invalid`.
 - **Footer is a slot, right-aligned.** Figma's footer is a right-aligned action group (its left
@@ -143,7 +143,7 @@ ModalDialog (portal -> document.body)
 - Shows an Expand button (grouped with Close in a Button Group) when `onExpand` is provided; none by
   default.
 - Composes `className` onto the panel; uses only semantic tokens; works in light and dark themes.
-- Storybook includes Playground, Appearances, Widths, DestructiveConfirmation, ScrollingBody,
+- Storybook includes Playground, Tones, Widths, DestructiveConfirmation, ScrollingBody,
   HeaderExpand, and EdgeCases.
 - Tests cover open/closed, portal + ARIA, all three close paths, the expand button and its grouping,
-  focus move/trap/restore, scroll lock, appearance icon, width, and className.
+  focus move/trap/restore, scroll lock, tone icon, width, and className.

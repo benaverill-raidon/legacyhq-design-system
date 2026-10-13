@@ -22,9 +22,9 @@ Dialog.
 ## Design intent
 
 Section Message is a presentation/layout organism that composes the Icon primitive, the Link Button
-atom (in actions), and the Icon Button atom (the dismiss button). `appearance` (`information`,
+atom (in actions), and the Icon Button atom (the dismiss button). `tone` (`information`,
 `success`, `warning`, `error`) sets the tinted background, the border color, and the status icon
-together - the appearance is the semantic signal.
+together - the tone is the semantic signal.
 
 The title and description use the default content color; only the icon and border take the status
 color. Unlike Banner (a single truncated line), the description wraps freely, so Section Message

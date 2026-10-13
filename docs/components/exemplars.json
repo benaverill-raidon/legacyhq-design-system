@@ -2396,19 +2396,19 @@
       {
         "name": "Warning",
         "description": "A cautionary status on the amber bold background. Its dark content means actions use tone=warning (not the inverse treatment).",
-        "jsx": "<Banner appearance=\"warning\" actions={<Button size=\"sm\" appearance=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
+        "jsx": "<Banner tone=\"warning\" actions={<Button size=\"sm\" prominence=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
         "props": {
-          "appearance": "warning",
-          "actions": "Button (size=sm, appearance=primary, tone=warning)",
+          "tone": "warning",
+          "actions": "Button (size=sm, prominence=primary, tone=warning)",
           "children": "Your subscription expires in three days."
         }
       },
       {
         "name": "Error with an action",
         "description": "An error status with a single inverse-tone action.",
-        "jsx": "<Banner appearance=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
+        "jsx": "<Banner tone=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "actions": "Button (size=sm, isInverse)",
           "children": "We couldn't reach the server."
         }
@@ -2434,9 +2434,9 @@
       {
         "name": "Urgent error (assertive)",
         "description": "An urgent error that must interrupt, using role=alert instead of the default polite status.",
-        "jsx": "<Banner appearance=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
+        "jsx": "<Banner tone=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "role": "alert",
           "children": "Your session has expired. Sign in again to continue."
         }
@@ -2450,7 +2450,7 @@
       },
       {
         "name": "Transient notification",
-        "jsx": "<Banner appearance=\"default\">Copied to clipboard</Banner>",
+        "jsx": "<Banner tone=\"default\">Copied to clipboard</Banner>",
         "reason": "Use Toast for a transient, auto-dismissing notification."
       },
       {
@@ -2958,18 +2958,18 @@
       {
         "name": "Confirmation with Cancel + Confirm",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
         "props": {
           "title": "Save changes?"
         }
       },
       {
-        "name": "Destructive confirmation (error appearance + red Confirm)",
+        "name": "Destructive confirmation (error tone + red Confirm)",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  tone=\"error\"\n  width=\"sm\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
         "props": {
-          "appearance": "error",
-          "width": "small"
+          "tone": "error",
+          "width": "sm"
         }
       },
       {
@@ -2989,9 +2989,9 @@
       {
         "name": "Large width",
         "description": null,
-        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"large\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"lg\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
         "props": {
-          "width": "large"
+          "width": "lg"
         }
       },
       {
@@ -3005,7 +3005,7 @@
       {
         "name": "Header expand (maximize) action",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
         "props": {
           "title": "Preview attachment"
         }
@@ -3018,9 +3018,9 @@
         "reason": "A dialog needs an accessible name - pass a title, or aria-label when there is no visible title."
       },
       {
-        "name": "Relying on appearance to colour the Confirm button",
-        "jsx": "<ModalDialog appearance=\"error\" footer={<Button appearance=\"primary\">Delete</Button>} />",
-        "reason": "appearance only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
+        "name": "Relying on tone to colour the Confirm button",
+        "jsx": "<ModalDialog tone=\"error\" footer={<Button prominence=\"primary\">Delete</Button>} />",
+        "reason": "tone only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
       },
       {
         "name": "Using a modal for transient feedback",
@@ -3115,18 +3115,18 @@
       {
         "name": "Success (no title)",
         "description": "A description-only success message.",
-        "jsx": "<SectionMessage appearance=\"success\">Your changes were published successfully.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"success\">Your changes were published successfully.</SectionMessage>",
         "props": {
-          "appearance": "success",
+          "tone": "success",
           "children": "Your changes were published successfully."
         }
       },
       {
         "name": "Warning with actions",
         "description": "Two Link Button actions grouped in a ButtonGroup that lays them out as a row.",
-        "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
         "props": {
-          "appearance": "warning",
+          "tone": "warning",
           "title": "Your trial ends soon",
           "actions": "a ButtonGroup of LinkButton elements",
           "children": "Your trial ends in three days."
@@ -3135,9 +3135,9 @@
       {
         "name": "Error, dismissible",
         "description": "A dismissible error message with a dismiss button in the top-right.",
-        "jsx": "<SectionMessage appearance=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "title": "Something went wrong",
           "isDismissible": true,
           "children": "We couldn't save your changes."
@@ -3146,9 +3146,9 @@
       {
         "name": "Urgent error (assertive)",
         "description": "An urgent error using role=alert instead of the default polite status.",
-        "jsx": "<SectionMessage appearance=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "role": "alert",
           "title": "Payment failed",
           "children": "Update your payment method to keep your subscription active."
@@ -3158,17 +3158,17 @@
     "antiExamples": [
       {
         "name": "Page-level banner",
-        "jsx": "<SectionMessage appearance=\"information\">Scheduled maintenance this weekend</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"information\">Scheduled maintenance this weekend</SectionMessage>",
         "reason": "Use Banner for a full-width, page-level announcement bar."
       },
       {
         "name": "Transient notification",
-        "jsx": "<SectionMessage appearance=\"success\" isDismissible>Copied to clipboard</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"success\" isDismissible>Copied to clipboard</SectionMessage>",
         "reason": "Use Toast for a transient, auto-dismissing notification."
       },
       {
         "name": "Dismissible hard constraint",
-        "jsx": "<SectionMessage appearance=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>",
         "reason": "Do not let the user dismiss a persistent restriction they need to keep seeing."
       }
     ],
@@ -3383,9 +3383,9 @@
       {
         "name": "Success",
         "description": "A success toast with a title and description.",
-        "jsx": "<Toast appearance=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
+        "jsx": "<Toast tone=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
         "props": {
-          "appearance": "success",
+          "tone": "success",
           "title": "Changes saved",
           "description": "Your matter is up to date."
         }
@@ -3393,9 +3393,9 @@
       {
         "name": "Error with an action",
         "description": "An error toast with a retry action.",
-        "jsx": "<Toast appearance=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" appearance=\"subtle\">Retry</Button>} />",
+        "jsx": "<Toast tone=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" prominence=\"tertiary\">Retry</Button>} />",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "title": "Upload failed",
           "actions": "Button (xs, subtle)",
           "description": "The file exceeded the 25 MB limit."
@@ -3404,9 +3404,9 @@
       {
         "name": "Loading",
         "description": "A non-dismissible loading toast that resolves later.",
-        "jsx": "<Toast appearance=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
+        "jsx": "<Toast tone=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
         "props": {
-          "appearance": "loading",
+          "tone": "loading",
           "title": "Uploading your file...",
           "isDismissible": false
         }
@@ -3414,9 +3414,9 @@
       {
         "name": "Collapsed (title only)",
         "description": "A compact toast - the state a stacked toast shows before the group is expanded.",
-        "jsx": "<Toast appearance=\"information\" title=\"Syncing your workspace\" expanded={false} />",
+        "jsx": "<Toast tone=\"information\" title=\"Syncing your workspace\" expanded={false} />",
         "props": {
-          "appearance": "information",
+          "tone": "information",
           "title": "Syncing your workspace",
           "expanded": false
         }
@@ -3425,12 +3425,12 @@
     "antiExamples": [
       {
         "name": "Persistent status",
-        "jsx": "<Toast appearance=\"warning\" title=\"You do not have permission to edit this space\" />",
+        "jsx": "<Toast tone=\"warning\" title=\"You do not have permission to edit this space\" />",
         "reason": "Use SectionMessage for a status that should stay in context."
       },
       {
         "name": "Critical-only message",
-        "jsx": "<Toast appearance=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />",
+        "jsx": "<Toast tone=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />",
         "reason": "Do not put the only copy of a critical message in a transient toast."
       }
     ],
@@ -3463,7 +3463,7 @@
       {
         "name": "Toast with an action",
         "description": "Actions appear when the stack is expanded.",
-        "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' appearance='subtle'>Undo</Button> })",
+        "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' tone='subtle'>Undo</Button> })",
         "props": {}
       },
       {

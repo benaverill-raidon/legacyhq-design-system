@@ -128,7 +128,7 @@ function StackedToast({ item, index, expanded, hidden, offset, duration, onHeigh
       onPointerCancel={endSwipe}
     >
       <Toast
-        appearance={item.appearance}
+        tone={item.tone ?? item.appearance}
         title={item.title}
         description={item.description}
         actions={item.actions}

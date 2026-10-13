@@ -24,10 +24,10 @@ describe('Toast', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('sets a data-appearance attribute', () => {
-    render(<Toast appearance="error" title="Failed" />);
+  it('sets a data-tone attribute', () => {
+    render(<Toast tone="error" title="Failed" />);
 
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'error');
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'error');
   });
 
   it('shows the description and actions only when expanded', () => {
@@ -48,18 +48,19 @@ describe('Toast', () => {
     expect(screen.queryByRole('button', { name: 'Undo' })).not.toBeInTheDocument();
   });
 
-  it('renders a status tile for a non-loading appearance', () => {
-    const { container } = render(<Toast appearance="success" title="Saved" />);
+  it('renders a status tile for a non-loading tone', () => {
+    const { container } = render(<Toast tone="success" title="Saved" />);
 
     expect(container.querySelector('[data-tone="green"]')).toBeInTheDocument();
     expect(container.querySelector(`.${styles.spinnerSlot}`)).not.toBeInTheDocument();
   });
 
-  it('renders a spinner for the loading appearance', () => {
-    const { container } = render(<Toast appearance="loading" title="Uploading" />);
+  it('renders a spinner for the loading tone', () => {
+    const { container } = render(<Toast tone="loading" title="Uploading" />);
 
     expect(container.querySelector(`.${styles.spinnerSlot}`)).toBeInTheDocument();
-    expect(container.querySelector('[data-tone]')).not.toBeInTheDocument();
+    // No Icon Tile inside the toast (the toast root carries data-tone itself).
+    expect(container.querySelector('[role="status"] [data-tone]')).not.toBeInTheDocument();
   });
 
   it('shows a dismiss button by default and calls onDismiss', () => {
@@ -98,24 +99,24 @@ describe('Toast CSS contract', () => {
     expect(toastCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 
-  it('colors the loading appearance with the loading content token', () => {
+  it('colors the loading tone with the loading content token', () => {
     expect(toastCss).toMatch(/\.spinnerSlot \{[\s\S]*?color: var\(--color-content-loading\);/);
-    expect(toastCss).toMatch(/\.root\[data-appearance='loading'\] \.title \{[\s\S]*?color: var\(--color-content-loading\);/);
+    expect(toastCss).toMatch(/\.root\[data-tone='loading'\] \.title \{[\s\S]*?color: var\(--color-content-loading\);/);
   });
 
   it('announces the status before the title, except for default and loading', () => {
-    const { rerender } = render(<Toast appearance="error" title="Upload failed" isDismissible={false} />);
+    const { rerender } = render(<Toast tone="error" title="Upload failed" isDismissible={false} />);
     expect(screen.getByRole('status')).toHaveTextContent('Error: Upload failed');
     expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
 
-    rerender(<Toast appearance="information" title="New version" isDismissible={false} />);
+    rerender(<Toast tone="information" title="New version" isDismissible={false} />);
     expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
 
-    rerender(<Toast appearance="success" statusLabel="Listo" title="Saved" isDismissible={false} />);
+    rerender(<Toast tone="success" statusLabel="Listo" title="Saved" isDismissible={false} />);
     expect(screen.getByRole('status')).toHaveTextContent('Listo: Saved');
 
-    for (const appearance of ['default', 'loading'] as const) {
-      rerender(<Toast appearance={appearance} title="Saving" isDismissible={false} />);
+    for (const tone of ['default', 'loading'] as const) {
+      rerender(<Toast tone={tone} title="Saving" isDismissible={false} />);
       expect(screen.getByRole('status')).not.toHaveTextContent(/:/);
     }
   });
@@ -125,9 +126,14 @@ describe('Toast CSS contract', () => {
     expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
   });
 
-  it('still accepts the deprecated info appearance as information', () => {
-    render(<Toast appearance="info" title="New version" isDismissible={false} />);
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'information');
+  it('still accepts the deprecated info tone as information', () => {
+    render(<Toast tone="info" title="New version" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'information');
     expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
+  });
+
+  it('still accepts the deprecated appearance prop as tone', () => {
+    render(<Toast appearance="error" title="Upload failed" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'error');
   });
 });

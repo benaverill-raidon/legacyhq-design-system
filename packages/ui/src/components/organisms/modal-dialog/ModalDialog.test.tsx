@@ -187,7 +187,7 @@ describe('ModalDialog', () => {
 
   it('shows a status icon for warning and error, but not default', () => {
     const { container: warn } = render(
-      <ModalDialog open onClose={() => {}} title="Title" appearance="warning">
+      <ModalDialog open onClose={() => {}} title="Title" tone="warning">
         Body
       </ModalDialog>,
     );
@@ -202,16 +202,16 @@ describe('ModalDialog', () => {
     expect(def.ownerDocument.querySelector(`.${styles.statusIcon}`)).toBeNull();
   });
 
-  it('applies the width class and appearance data attribute', () => {
+  it('applies the width class and tone data attribute', () => {
     render(
-      <ModalDialog open onClose={() => {}} title="Title" width="large" appearance="error">
+      <ModalDialog open onClose={() => {}} title="Title" width="lg" tone="error">
         Body
       </ModalDialog>,
     );
 
     const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveClass(styles.width_large);
-    expect(dialog).toHaveAttribute('data-appearance', 'error');
+    expect(dialog).toHaveClass(styles.width_lg);
+    expect(dialog).toHaveAttribute('data-tone', 'error');
   });
 
   it('composes className onto the panel', () => {
@@ -282,5 +282,16 @@ describe('ModalDialog', () => {
     // A recipe is already duration + easing; another timing function after it invalidates the shorthand.
     expect(modalCss).not.toMatch(/var\(--fade-quick[^)]*\)\s+(ease|linear|cubic-bezier)/);
     expect(modalCss).toMatch(/@keyframes modal-panel-in \{\s*from \{\s*opacity: 0;\s*transform: translateY\(8px\);/);
+  });
+
+  it('still accepts the deprecated appearance prop and long width names', () => {
+    render(
+      <ModalDialog open onClose={() => {}} title="Title" width="extraLarge" appearance="warning">
+        Body
+      </ModalDialog>,
+    );
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveClass(styles.width_xl);
+    expect(dialog).toHaveAttribute('data-tone', 'warning');
   });
 });

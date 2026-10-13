@@ -35,7 +35,7 @@ toast.success('Changes saved', { description: 'Your matter is up to date.' });
 ## The `toast()` API
 
 ```ts
-toast(title, options?)            // default appearance
+toast(title, options?)            // default tone
 toast.success(title, options?)
 toast.error(title, options?)
 toast.warning(title, options?)
@@ -44,7 +44,7 @@ toast.loading(title, options?)    // no auto-dismiss by default
 toast.dismiss(id?)                // dismiss one, or all when id is omitted
 ```
 
-`options`: `{ id?, description?, actions?, duration?, isDismissible?, appearance? }`. Reuse an `id`
+`options`: `{ id?, description?, actions?, duration?, isDismissible?, tone? }`. Reuse an `id`
 to update a toast in place - the common pattern for a `loading` toast that resolves:
 
 ```tsx

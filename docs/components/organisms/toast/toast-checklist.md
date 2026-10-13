@@ -19,7 +19,7 @@ Organism.
 
 ## Design decisions
 
-- [ ] `appearance` (`default` | `success` | `information` | `warning` | `error` | `loading`) selects the
+- [ ] `tone` (`default` | `success` | `information` | `warning` | `error` | `loading`) selects the
       leading Icon Tile tone, or a Spinner for `loading`.
 - [ ] `expanded` controls whether the description and actions show (Figma `open`).
 - [ ] Renders on a raised surface with a 1px border, radius-xl, and the overlay elevation shadow.
@@ -29,7 +29,7 @@ Organism.
 ## Figma properties
 
 ```txt
-appearance: default | success | error | warning | info | loading   (code: info is information)
+tone: default | success | error | warning | info | loading   (code: info is information)
 open: false | true   (code: expanded)
 title / description  (code: title / description)
 ```
@@ -37,10 +37,10 @@ title / description  (code: title / description)
 ## Code props
 
 ```ts
-type ToastAppearance = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
+type ToastTone = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
 
 interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  appearance?: ToastAppearance;
+  tone?: ToastTone;
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
@@ -53,7 +53,7 @@ interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>
 ## Defaults
 
 ```txt
-appearance: default
+tone: default
 expanded: true
 isDismissible: true
 role: status
@@ -65,12 +65,12 @@ role: status
 - [ ] border `--border-width-sm` / `--color-border-default`; radius `--border-radius-xl`.
 - [ ] surface `--color-elevation-surface-raised-default`; shadow `--elevation-shadow-overlay`.
 - [ ] title `heading-xs` / `--color-content-default`; description `body-md` / `--color-content-subtle`.
-- [ ] per-appearance Icon Tile tones; spinner slot `--size-300`; dot `--size-marker-sm`.
+- [ ] per-tone Icon Tile tones; spinner slot `--size-300`; dot `--size-marker-sm`.
 
 ## Accessibility
 
 - [ ] `role="status"` by default; leading icon decorative; dismiss labelled.
-- [ ] Status appearances announce their status before the title (visually hidden `statusLabel`); `default` and `loading` announce none.
+- [ ] Status tones announce their status before the title (visually hidden `statusLabel`); `default` and `loading` announce none.
 
 ## Examples to document
 
@@ -81,7 +81,7 @@ role: status
 
 ## Tests
 
-- [ ] Renders title; sets data-appearance.
+- [ ] Renders title; sets data-tone.
 - [ ] Icon Tile for non-loading, Spinner for loading.
 - [ ] Description/actions only when expanded.
 - [ ] Dismiss default + onDismiss; hidden when isDismissible false.

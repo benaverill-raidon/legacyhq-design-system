@@ -25,7 +25,7 @@
 /*
  * Sized to the Icon primitive's own `spacing="spacious"` container (--size-300, 24px) so the
  * plain dot lines up identically with the real status icons - the same convention InlineMessage
- * uses. Color is inherited so the icon takes the banner's per-appearance content color.
+ * uses. Color is inherited so the icon takes the banner's per-tone content color.
  */
 .iconSlot {
   display: inline-flex;
@@ -38,7 +38,7 @@
 }
 
 /*
- * The icon inherits the banner's content color (set per appearance) rather than its own status
+ * The icon inherits the banner's content color (set per tone) rather than its own status
  * color, so it reads correctly on the bold background - the same `[data-color]` override Button
  * uses for its icon slots.
  */
@@ -73,17 +73,17 @@
   gap: var(--spacing-sm);
 }
 
-.appearance_default {
+.tone_default {
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse-default);
 }
 
-.appearance_warning {
+.tone_warning {
   background: var(--color-background-warning-bold-default);
   color: var(--color-content-warning-bold);
 }
 
-.appearance_error {
+.tone_error {
   background: var(--color-background-error-bold-default);
   color: var(--color-content-inverse-default);
 }

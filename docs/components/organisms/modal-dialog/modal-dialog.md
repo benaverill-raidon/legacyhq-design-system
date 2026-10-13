@@ -39,12 +39,12 @@ The value of Modal Dialog is the overlay behaviour, done once and correctly:
 - **Semantics.** `role="dialog"` + `aria-modal="true"`, named by the `title` (`aria-labelledby`) or,
   without a visible title, by `aria-label`.
 
-## Appearance
+## Tone
 
-`appearance` (`default` / `warning` / `error`) prepends a decorative status icon to the title in the
+`tone` (`default` / `warning` / `error`) prepends a decorative status icon to the title in the
 matching colour. It deliberately does **not** tone the footer buttons - Modal Dialog can't know the
-action layout - so pair `appearance="error"` with a matching Confirm button (e.g. `<Button
-appearance="primary" tone="error">Delete</Button>`), the same wrapper-vs-control split Field uses for
+action layout - so pair `tone="error"` with a matching Confirm button (e.g. `<Button
+prominence="primary" tone="error">Delete</Button>`), the same wrapper-vs-control split Field uses for
 `state`.
 
 ## Header actions
@@ -57,7 +57,7 @@ tooltips).
 
 ## Widths and content
 
-Four widths - `small` (400px), `medium` (600px, default), `large` (752px), `extraLarge` (968px) -
+Four widths - `sm` (400px), `md` (600px, default), `lg` (752px), `xl` (968px) -
 confirmed from Figma. The panel shrinks to fit narrow viewports. The footer is a slot: pass the
 actions (typically Cancel + Confirm) and they render right-aligned; omit it for an informational
 dialog.

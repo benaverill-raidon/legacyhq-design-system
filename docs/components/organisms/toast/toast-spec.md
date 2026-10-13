@@ -10,7 +10,7 @@ shown and stacked by Toast Group.
 
 1. **Root** - a `div` rendered as a raised-surface card (1px border, radius-xl, overlay shadow),
    laid out as a horizontal row.
-2. **Leading icon** - an Icon Tile colored per appearance, or a Spinner for `loading`. Decorative.
+2. **Leading icon** - an Icon Tile colored per tone, or a Spinner for `loading`. Decorative.
 3. **Content** - a vertical column:
    - **Title row** - the title (`heading-xs`) plus the dismiss Icon Button.
    - **Description** - optional (`body-md`, subtle), shown when expanded.
@@ -19,11 +19,11 @@ shown and stacked by Toast Group.
 ## Public API
 
 ```ts
-export type ToastAppearance = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
+export type ToastTone = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
 // 'info', the earlier name, is still accepted as a deprecated alias of 'information'.
 
 export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  appearance?: ToastAppearance;
+  tone?: ToastTone;
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
@@ -36,7 +36,7 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 ## Default Props
 
 ```txt
-appearance = 'default'
+tone = 'default'
 expanded = true
 isDismissible = true
 role = 'status'
@@ -44,7 +44,7 @@ role = 'status'
 
 ## Variants
 
-`appearance` selects the leading visual. Each non-loading appearance maps to an Icon Tile tone plus a
+`tone` selects the leading visual. Each non-loading tone maps to an Icon Tile tone plus a
 status glyph (default has no glyph, so a dot stands in). `loading` shows a Spinner.
 
 ```txt
@@ -68,7 +68,7 @@ loading  -> Spinner (no tile)
 
 ## Behavior
 
-- Render the Icon Tile (per-appearance tone) or the Spinner for `loading`.
+- Render the Icon Tile (per-tone tone) or the Spinner for `loading`.
 - Always render the title; render the description and actions only when `expanded` and provided.
 - Show the dismiss button unless `isDismissible` is false; call `onDismiss` on click.
 
@@ -76,12 +76,12 @@ loading  -> Spinner (no tile)
 
 - Default `role="status"` (polite live region), overridable.
 - Leading icon decorative; dismiss button labelled by `dismissLabel` ("Dismiss" by default).
-- Because the icon is decorative, `success`, `information`, `warning`, and `error` announce their status before the title as visually hidden text ("Success:", "Information:", "Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit). `default` and `loading` announce none.
+- Because the icon is decorative, `success`, `information`, `warning`, and `error` announce their status before the title as visually hidden text ("Success:", "Information:", "Warning:", "Error:"), from `statusLabel` (defaults to the tone's name; pass a translation, or an empty string to omit). `default` and `loading` announce none.
 
 ## Storybook
 
 - Playground
-- Appearances
+- Tones
 - ExpandedCollapsed
 - Content
 
@@ -90,10 +90,10 @@ loading  -> Spinner (no tile)
 ```txt
 renders the title
 defaults to role status
-sets a data-appearance attribute
+sets a data-tone attribute
 shows the description and actions only when expanded
-renders a status tile for a non-loading appearance
-renders a spinner for the loading appearance
+renders a status tile for a non-loading tone
+renders a spinner for the loading tone
 shows a dismiss button by default and calls onDismiss
 omits the dismiss button when isDismissible is false
 forwards the ref to the root element

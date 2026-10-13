@@ -13,35 +13,35 @@ import { Spinner } from '../../atoms/spinner';
 import { IconTile } from '../../molecules/icon-tile';
 import type { IconTileTone } from '../../molecules/icon-tile';
 import styles from './toast.module.css';
-import type { ToastAppearance, ToastProps } from './toast.types';
+import type { ToastProps, ToastTone } from './toast.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
 /*
- * Each non-loading appearance maps to an IconTile tone plus a status glyph (default has no glyph, so
+ * Each non-loading tone maps to an IconTile tone plus a status glyph (default has no glyph, so
  * a plain dot stands in - the same convention Banner/InlineMessage use). `loading` shows a Spinner
  * instead of a tile.
  */
-const APPEARANCE_CONFIG: Record<Exclude<ToastAppearance, 'loading'>, { tone: IconTileTone; Icon?: ComponentType<IconProps> }> = {
-  default: { tone: 'gray' },
-  success: { tone: 'green', Icon: StatusSuccessIcon },
-  information: { tone: 'blue', Icon: StatusInformationIcon },
-  warning: { tone: 'orange', Icon: StatusWarningIcon },
-  error: { tone: 'red', Icon: StatusErrorIcon },
+const TONE_CONFIG: Record<Exclude<ToastTone, 'loading'>, { tileTone: IconTileTone; Icon?: ComponentType<IconProps> }> = {
+  default: { tileTone: 'gray' },
+  success: { tileTone: 'green', Icon: StatusSuccessIcon },
+  information: { tileTone: 'blue', Icon: StatusInformationIcon },
+  warning: { tileTone: 'orange', Icon: StatusWarningIcon },
+  error: { tileTone: 'red', Icon: StatusErrorIcon },
 };
 
-/** What each appearance announces before the title; `default` and `loading` carry no status. */
-const STATUS_LABELS: Partial<Record<ToastAppearance, string>> = {
+/** What each tone announces before the title; `default` and `loading` carry no status. */
+const STATUS_LABELS: Partial<Record<ToastTone, string>> = {
   success: 'Success',
   information: 'Information',
   warning: 'Warning',
   error: 'Error',
 };
 
-function ToastLeadingIcon({ appearance }: { appearance: ToastAppearance }) {
-  if (appearance === 'loading') {
+function ToastLeadingIcon({ tone }: { tone: ToastTone }) {
+  if (tone === 'loading') {
     return (
       <span className={styles.spinnerSlot} aria-hidden="true">
         <Spinner size="sm" />
@@ -49,10 +49,10 @@ function ToastLeadingIcon({ appearance }: { appearance: ToastAppearance }) {
     );
   }
 
-  const { tone, Icon } = APPEARANCE_CONFIG[appearance];
+  const { tileTone, Icon } = TONE_CONFIG[tone];
 
   return (
-    <IconTile className={styles.tile} tone={tone} size="xs" shape="square" decorative>
+    <IconTile className={styles.tile} tone={tileTone} size="xs" shape="square" decorative>
       {Icon ? <Icon /> : <span className={styles.dot} />}
     </IconTile>
   );
@@ -61,7 +61,8 @@ function ToastLeadingIcon({ appearance }: { appearance: ToastAppearance }) {
 export const Toast = React.memo(
   React.forwardRef<HTMLDivElement, ToastProps>(function Toast(
     {
-      appearance: requestedAppearance = 'default',
+      tone: requestedTone,
+      appearance,
       statusLabel,
       title,
       description,
@@ -76,9 +77,10 @@ export const Toast = React.memo(
     },
     forwardedRef,
   ) {
-    // `info` is the deprecated name for `information`.
-    const appearance: ToastAppearance = requestedAppearance === 'info' ? 'information' : requestedAppearance;
-    const status = statusLabel ?? STATUS_LABELS[appearance];
+    // `appearance` is the deprecated name for `tone`, and `info` for `information`.
+    const requested = requestedTone ?? appearance ?? 'default';
+    const tone: ToastTone = requested === 'info' ? 'information' : requested;
+    const status = statusLabel ?? STATUS_LABELS[tone];
     const hasDescription = expanded && description !== undefined && description !== null;
     const hasActions = expanded && React.Children.toArray(actions).filter(Boolean).length > 0;
 
@@ -88,9 +90,9 @@ export const Toast = React.memo(
         ref={forwardedRef}
         role={role}
         className={mergeClassNames(styles.root, className)}
-        data-appearance={appearance}
+        data-tone={tone}
       >
-        <ToastLeadingIcon appearance={appearance} />
+        <ToastLeadingIcon tone={tone} />
 
         <div className={styles.content}>
           {status ? (

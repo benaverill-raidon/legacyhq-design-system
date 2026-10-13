@@ -17,12 +17,11 @@ export interface MenuItem {
    * so nesting a focusable one inside it is invalid HTML. Pass an Icon with `spacing="spacious"`
    * (size stays at Icon's own `md` default) to fill the slot the way Figma does.
    *
-   * Any icon here should track `selected`: color="selected" when the item is selected,
-   * color="default" otherwise - verified on a plain, non-checkbox icon (same color/content/selected
-   * variable the row's own text uses), not just checkbox/radio ones. For a checkbox/radio-style
-   * row specifically, use the exact icons Figma's own menu-item uses -
-   * CheckboxFillIcon/CheckboxEmptyIcon or RadioCheckedIcon/RadioUncheckedIcon, colored
-   * color="selected" when selected and color="subtle" (not "default") when not - never a real
+   * An icon here needs no color: it takes the row's text color, so it turns `selected` with the
+   * row (color/content/selected, the variable Figma binds) and `disabled` with it. For a
+   * checkbox/radio-style row, use the exact icons Figma's own menu-item uses -
+   * CheckboxFillIcon/CheckboxEmptyIcon or RadioCheckedIcon/RadioUncheckedIcon - and set
+   * color="subtle" on the unchecked one, which Figma dims below the row's text. Never a real
    * Checkbox/Radio.
    */
   leadingElement?: React.ReactNode;

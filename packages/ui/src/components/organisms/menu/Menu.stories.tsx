@@ -69,13 +69,10 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 // Figma's <elemBefore> exactly - confirmed on the plain (non-selectable) action row's own icon
 // instance, not just the checkbox/radio ones.
 //
-// color: verified directly against Figma that a PLAIN elemBefore icon (not just the
-// checkbox/radio ones) binds to the same color/content/selected variable as the row's own text
-// when isSelected=true, and color/content/default when not - so any icon should recolor with the
-// row's selected state, not just checkbox/radio-style ones. selectedId is optional because most
-// callers of actionItems() (Sizes, EdgeCases, the "danger zone" section) don't demonstrate
-// selection at all.
-function actionItems(selectedId?: string): MenuItem[] {
+// color: a plain elemBefore icon binds to the same color/content/selected variable as the row's
+// own text when isSelected=true (verified against Figma). Icons take the surrounding text color,
+// so no color prop is needed: the icon follows the row through selected and disabled.
+function actionItems(): MenuItem[] {
   const definitions = [
     { id: 'rename', label: 'Rename', Icon: EditIcon },
     { id: 'duplicate', label: 'Duplicate', Icon: CopyIcon },
@@ -85,7 +82,7 @@ function actionItems(selectedId?: string): MenuItem[] {
 
   return definitions.map(({ Icon, ...item }) => ({
     ...item,
-    leadingElement: <Icon spacing="spacious" color={item.id === selectedId ? 'selected' : 'default'} decorative />,
+    leadingElement: <Icon spacing="spacious" decorative />,
   }));
 }
 
@@ -96,7 +93,7 @@ export const Playground: Story = {
       const [search, setSearch] = React.useState('');
       const [selected, setSelected] = React.useState('rename');
 
-      const items: MenuItem[] = actionItems(selected).map((item) => ({
+      const items: MenuItem[] = actionItems().map((item) => ({
         ...item,
         selected: item.id === selected,
         onSelect: () => setSelected(item.id),
@@ -156,7 +153,7 @@ export const Content: Story = {
         selectionType: 'checkbox',
         selected: checked[item.id],
         leadingElement: checked[item.id] ? (
-          <CheckboxFillIcon spacing="spacious" color="selected" decorative />
+          <CheckboxFillIcon spacing="spacious" decorative />
         ) : (
           <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />
         ),
@@ -183,7 +180,7 @@ export const Content: Story = {
         selected: sort === value,
         leadingElement:
           sort === value ? (
-            <RadioCheckedIcon spacing="spacious" color="selected" decorative />
+            <RadioCheckedIcon spacing="spacious" decorative />
           ) : (
             <RadioUncheckedIcon spacing="spacious" color="subtle" decorative />
           ),

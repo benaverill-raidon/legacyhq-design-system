@@ -84,19 +84,20 @@ content, and `spacing="spacious"` is what centers a 16px icon inside it. Without
 renders undersized and pinned to one corner instead of filling the slot the way Figma's own icon
 (`Size: md`, `spacing: spacious (24px)`) does:
 
+An icon in these slots needs no `color`: it takes the row's text color, so it turns `selected`
+with the row (the same `color/content/selected` variable Figma binds) and `disabled` with it:
+
 ```tsx
-leadingElement: item.selected
-  ? <CheckboxFillIcon spacing="spacious" color="selected" decorative />
-  : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />
+leadingElement: <EditIcon spacing="spacious" decorative />
 ```
 
-This isn't specific to checkbox/radio rows: **any** `leadingElement` icon should track `selected`
-the same way - `color="selected"` when the row is selected, `color="default"` when it isn't -
-verified directly against Figma on a plain, non-checkbox icon (it binds to the exact same
-`color/content/selected` variable the row's own text does under `isSelected=true`):
+For a checkbox- or radio-style row, set `color="subtle"` on the unchecked icon, which Figma dims
+below the row's text; the checked icon takes the selected color from the row:
 
 ```tsx
-leadingElement: <EditIcon spacing="spacious" color={item.selected ? 'selected' : 'default'} decorative />
+leadingElement: item.selected
+  ? <CheckboxFillIcon spacing="spacious" decorative />
+  : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />
 ```
 
 <Canvas of={MenuStories.Content} />
@@ -167,7 +168,7 @@ the real state.
   selectionType: 'checkbox',
   selected: checked,
   leadingElement: checked
-    ? <CheckboxFillIcon spacing="spacious" color="selected" decorative />
+    ? <CheckboxFillIcon spacing="spacious" decorative />
     : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />,
 }
 ```

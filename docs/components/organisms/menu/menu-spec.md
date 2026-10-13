@@ -121,17 +121,16 @@ optionally, `selectionType`:
 
 Figma's own `checkboxes`/`radios` demo compositions render the check/radio state via
 `leadingElement` icons, not a real form control: `CheckboxFillIcon`/`CheckboxEmptyIcon` for a
-checkbox-style row, `RadioCheckedIcon`/`RadioUncheckedIcon` for a radio-style row - colored
-`color="selected"` when selected and `color="subtle"` when not (verified on the actual vector fill
-of both icon families). This is the canonical pattern to follow, not a generic checkmark or a real
+checkbox-style row, `RadioCheckedIcon`/`RadioUncheckedIcon` for a radio-style row. The checked
+icon takes the row's selected text color; the unchecked one sets `color="subtle"` (verified on the
+actual vector fill of both icon families). This is the canonical pattern to follow, not a generic checkmark or a real
 `Checkbox`/`Radio`.
 
-This isn't specific to checkbox/radio rows: a **plain**, non-checkbox `elemBefore` icon on a
-selected row binds to the exact same `color/content/selected` variable as the row's own text
-(verified directly - same variable id, not just the same resolved value), while an unselected
-plain icon uses `color/content/default`. Any `leadingElement` icon that should visually track
-`selected` - not just a checkbox/radio glyph - should set `color="selected"`/`color="default"`
-accordingly.
+A **plain**, non-checkbox `elemBefore` icon on a selected row binds to the exact same
+`color/content/selected` variable as the row's own text (verified directly - same variable id),
+and an unselected one to `color/content/default`. Icons take the surrounding text color by
+default, so a plain `leadingElement` icon needs no `color` prop: it follows the row through
+selected and disabled.
 
 ## Keyboard navigation
 

@@ -113,7 +113,7 @@ describe('Link', () => {
       </Link>,
     );
 
-    const link = screen.getByRole('link', { name: 'External website' });
+    const link = screen.getByRole('link', { name: 'External website (opens in a new tab)' });
     const icon = container.querySelector(`.${styles.icon}`);
     const svg = container.querySelector('svg');
 
@@ -122,6 +122,43 @@ describe('Link', () => {
     expect(icon).toHaveAttribute('aria-hidden', 'true');
     expect(svg).toHaveAttribute('aria-hidden', 'true');
     expect(svg).toHaveAttribute('focusable', 'false');
+  });
+
+  it('renders the library external-link icon at the link size', () => {
+    const { container, rerender } = render(
+      <Link href="https://example.com" target="_blank">
+        External website
+      </Link>,
+    );
+
+    expect(container.querySelector(`.${styles.icon} [data-size]`)).toHaveAttribute('data-size', 'md');
+    expect(container.querySelector(`.${styles.icon} [data-color]`)).toHaveAttribute('data-color', 'inherit');
+
+    rerender(
+      <Link href="https://example.com" target="_blank" size="sm">
+        External website
+      </Link>,
+    );
+    expect(container.querySelector(`.${styles.icon} [data-size]`)).toHaveAttribute('data-size', 'sm');
+  });
+
+  it('tells assistive technology that the link opens a new tab, with an overridable label', () => {
+    const { rerender } = render(
+      <Link href="https://example.com" target="_blank">
+        External website
+      </Link>,
+    );
+    expect(screen.getByRole('link', { name: 'External website (opens in a new tab)' })).toBeInTheDocument();
+
+    rerender(
+      <Link href="https://example.com" target="_blank" newTabLabel="(nueva pestaña)">
+        External website
+      </Link>,
+    );
+    expect(screen.getByRole('link', { name: 'External website (nueva pestaña)' })).toBeInTheDocument();
+
+    rerender(<Link href="/clients">Clients</Link>);
+    expect(screen.getByRole('link', { name: 'Clients' })).toBeInTheDocument();
   });
 
   it('does not render an external icon for self target', () => {
@@ -138,7 +175,7 @@ describe('Link', () => {
       </Link>,
     );
 
-    expect(screen.getByRole('link', { name: 'External website' })).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.getByRole('link', { name: 'External website (opens in a new tab)' })).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('preserves existing rel values while adding secure values', () => {
@@ -148,7 +185,7 @@ describe('Link', () => {
       </Link>,
     );
 
-    expect(screen.getByRole('link', { name: 'External website' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'External website (opens in a new tab)' })).toHaveAttribute(
       'rel',
       'nofollow sponsored noopener noreferrer',
     );

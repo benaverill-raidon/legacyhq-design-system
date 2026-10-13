@@ -72,6 +72,12 @@
       "default": "_self",
       "required": false
     },
+    "newTabLabel": {
+      "type": "string",
+      "default": "(opens in a new tab)",
+      "required": false,
+      "description": "Visually hidden text read after the link text when target is _blank, since the external-link icon is decorative."
+    },
     "rel": {
       "type": "string",
       "default": null,
@@ -112,7 +118,8 @@
   ],
   "behaviorRules": [
     "Use anchor semantics.",
-    "External links may show icon."
+    "External links may show icon.",
+    "When target is _blank, render the library's LinkExternalIcon (decorative, at the link's size) and visually hidden newTabLabel text after the link text."
   ],
   "compositionRules": [
     "Use LinkButton when link should appear as button."

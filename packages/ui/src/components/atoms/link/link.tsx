@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { LinkExternalIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import styles from './link.module.css';
 import type { LinkProps } from './link.types';
@@ -19,16 +20,6 @@ export function getSecureRel(target: React.HTMLAttributeAnchorTarget | undefined
   return Array.from(relValues).join(' ');
 }
 
-function ExternalLinkIcon() {
-  return (
-    <span className={styles.icon} aria-hidden="true">
-      <svg className={styles.iconSvg} viewBox="0 0 16 16" fill="currentColor" focusable="false" aria-hidden="true">
-        <path d="M12.6667 12.6667H3.33333V3.33333H8V2H3.33333C2.59333 2 2 2.6 2 3.33333V12.6667C2 13.4 2.59333 14 3.33333 14H12.6667C13.4 14 14 13.4 14 12.6667V8H12.6667V12.6667ZM9.33333 2V3.33333H11.7267L5.17333 9.88667L6.11333 10.8267L12.6667 4.27333V6.66667H14V2H9.33333Z" />
-      </svg>
-    </span>
-  );
-}
-
 export const Link = React.memo(
   React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     {
@@ -36,6 +27,7 @@ export const Link = React.memo(
       size = 'md',
       emphasis = 'strong',
       target = '_self',
+      newTabLabel = '(opens in a new tab)',
       rel,
       href,
       children,
@@ -64,7 +56,16 @@ export const Link = React.memo(
         )}
       >
         <span className={styles.content}>{children}</span>
-        {isExternal ? <ExternalLinkIcon /> : null}
+        {isExternal ? (
+          <>
+            {/* The icon shows that the link opens a new tab; the hidden text says so to assistive technology. */}
+            <span className={styles.icon} aria-hidden="true">
+              <LinkExternalIcon size={size} />
+            </span>
+            {/* A flex container doesn't render this space, but it separates the label in the name. */}{' '}
+            <span className={styles.visuallyHidden}>{newTabLabel}</span>
+          </>
+        ) : null}
       </a>
     );
   }),

@@ -1355,6 +1355,12 @@
         "default": "_self",
         "description": null
       },
+      "newTabLabel": {
+        "type": "string",
+        "required": false,
+        "default": "(opens in a new tab)",
+        "description": "Visually hidden text read after the link text when target is _blank, since the external-link icon is decorative."
+      },
       "rel": {
         "type": "string",
         "required": false,

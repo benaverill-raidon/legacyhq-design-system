@@ -13,5 +13,10 @@ export interface LinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorEle
   appearance?: LinkAppearance;
   size?: LinkSize;
   emphasis?: LinkEmphasis;
+  /**
+   * Read by assistive technology after the link text when `target="_blank"`, since the
+   * external-link icon is decorative. Defaults to "(opens in a new tab)".
+   */
+  newTabLabel?: string;
   children: React.ReactNode;
 }

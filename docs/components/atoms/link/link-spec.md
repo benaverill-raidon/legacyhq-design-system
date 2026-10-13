@@ -95,7 +95,8 @@ Do not support disabled links. If the destination is unavailable, do not render 
 
 ### External links
 When `target="_blank"`:
-- render an external-link icon after the text
+- render the library's `LinkExternalIcon` after the text, at the link's size (`sm` or `md`)
+- add visually hidden text after the link text, `newTabLabel` (default "(opens in a new tab)"), so assistive technology hears what the decorative icon shows
 - apply `rel="noopener noreferrer"` automatically
 - preserve any user-provided `rel` values while ensuring `noopener noreferrer` are included
 
@@ -134,7 +135,7 @@ Expected mappings:
 If the system uses `--color-text-*` instead of `--color-content-*`, use the generated token names from the current token output.
 
 ### Icon
-External-link icon inherits color with `currentColor`.
+External-link icon is the library's `link-external` glyph and takes the link's color (Icon's default `inherit`).
 
 ### Spacing
 Use a semantic spacing token for icon gap, such as spacing-025 or the closest available generated token.
@@ -159,6 +160,7 @@ The Link should:
 - Preserve keyboard access.
 - Use shared Focus Ring primitive.
 - External-link icon is decorative: `aria-hidden="true"` and `focusable="false"`.
+- For `target="_blank"`, the accessible name ends with `newTabLabel` (default "(opens in a new tab)"), rendered as visually hidden text.
 - Automatically add `rel="noopener noreferrer"` for `target="_blank"`.
 
 ## Engineering requirements

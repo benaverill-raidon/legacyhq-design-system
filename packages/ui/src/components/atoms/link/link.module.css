@@ -109,10 +109,12 @@
   line-height: var(--spacing-none);
 }
 
-.iconSvg {
-  display: block;
-  inline-size: var(--link-icon-size);
-  block-size: var(--link-icon-size);
-  fill: currentColor;
-  color: inherit;
+/* The new-tab label: read by assistive technology, not shown. */
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

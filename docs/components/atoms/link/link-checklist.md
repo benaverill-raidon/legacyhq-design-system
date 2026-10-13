@@ -35,6 +35,7 @@ If it triggers an action instead of navigation, use Button.
 - Use shared Focus Ring primitive for focus-visible styling.
 - For `target="_blank"`, automatically apply `rel="noopener noreferrer"`.
 - External-link icon must be decorative with `aria-hidden="true"` and `focusable="false"`.
+- For `target="_blank"`, visually hidden `newTabLabel` text ("(opens in a new tab)" by default) follows the link text.
 
 ## Design decisions
 - Component name: `Link`
@@ -52,7 +53,7 @@ If it triggers an action instead of navigation, use Button.
 
 ## Dependencies
 - Focus Ring primitive
-- Icon component or internal external-link icon
+- Icon library (`LinkExternalIcon`)
 - Typography tokens
 - Link color tokens
 - Content/text color tokens

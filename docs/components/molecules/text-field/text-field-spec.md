@@ -15,8 +15,11 @@ bare input, so it doesn't belong at the atom tier.
 ### Design Reference
 - Figma Component: `text-field` (component set, node `1690:14129`, file `Components v1.0.0`)
 - Variant axes: `size` (sm, md, lg) x `context` (default, inline) x `state` (default, hover, focus,
-  typing, filled) x `isDisabled` (false, true) x `isInvalid` (false, true) = 42 variants (not fully
-  crossed - `isInvalid` is only demonstrated on `filled`, `isDisabled` only on `default`)
+  typing, filled, autofill) x `isDisabled` (false, true) x `isInvalid` (false, true) = 48 variants
+  (not fully crossed - `isInvalid` is only demonstrated on `filled`, `isDisabled` only on `default`;
+  re-checked 2026-10-13)
+- `state=autofill` fills the frame with `color/background/autofill/default`. Code doesn't apply that
+  token yet, so an autofilled field shows the browser's own autofill styling.
 - Component properties: `placeholderText` (TEXT), `value` (TEXT), `elemBeforeInput` (BOOLEAN),
   `elemAfterInput` (BOOLEAN), `slot <elemAfterInput>` (INSTANCE_SWAP) - `showCaret` and
   `placeholder` (BOOLEAN) exist only to drive Figma's own mockup between placeholder/value text and

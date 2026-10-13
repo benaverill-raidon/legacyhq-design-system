@@ -18,7 +18,7 @@
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
     "componentSetNodeId": "1690:14129",
     "componentSetName": "text-field",
-    "variantCount": 42,
+    "variantCount": 48,
     "figmaVariantAxes": {
       "size": [
         "lg",
@@ -34,7 +34,8 @@
         "hover",
         "focus",
         "typing",
-        "filled"
+        "filled",
+        "autofill"
       ],
       "isDisabled": [
         "false",
@@ -92,6 +93,7 @@
       "note": "Separate Figma component for the trailing slot. Frequently interactive (e.g. a clear action) - confirmed from a screenshot of the clear icon-button in its hover state. The icon-button case uses appearance=subtle, shape=square. A third `label` type was added later, nesting a real Label atom instance (tone=default, emphasis=subtle) for compact metadata/status after the input (e.g. a unit or status pill) - confirmed directly from the component's own nested instance properties, not assumed. iconAfter is already typed React.ReactNode and .action is a plain centered flex wrapper, so a Label already renders correctly there with no component code changes."
     },
     "apiAdaptationNotes": [
+      "Figma's autofill state (added after this contract was first written; seen 2026-10-13) fills the frame with color/background/autofill/default. Code doesn't apply that token yet: an autofilled field shows the browser's own autofill styling.",
       "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focus+empty (:focus-within + :placeholder-shown), typing=focus+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
       "Figma's 'context' axis (default/inline) is the 'context' prop - the same name and values. It replaces the earlier 'appearance' prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline both map to context=inline, default to context=default. The old code-only appearance=inline look (subtle without the hover background) was merged into context=inline, so Key Value Pair inline fields now get Figma's hover background.",
       "isInvalid renders with strokeWeight=2 even when not focused, confirmed directly from node data - invalid's thicker border is not a focus-only effect.",

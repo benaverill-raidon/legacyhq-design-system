@@ -57,8 +57,9 @@ for the multi-line case, with its own size/context/state axes and a resize affor
 ## States
 
 Required: default, hover, focus, invalid, disabled.
-Live pseudo-classes (`:hover`, `:focus`) with a documentation-only `data-force-state` pin. `typing`,
-`filled`, and `autofill` (Figma states) need no distinct styling — they render as default/focus.
+Live pseudo-classes (`:hover`, `:focus`) with a documentation-only `data-force-state` pin. `typing`
+and `filled` (Figma states) need no distinct styling — they render as default/focus. Figma's
+`autofill` fills the frame with `color/background/autofill/default`, which code doesn't apply yet.
 
 ---
 

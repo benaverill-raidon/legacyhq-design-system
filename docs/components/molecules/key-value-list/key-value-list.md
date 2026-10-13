@@ -30,4 +30,4 @@ announce key/value pairs correctly.
 ## Related components
 
 - **Key Value Pair** — the individual row this list wraps.
-- **Text Field** / **Text Area** — `appearance="inline"` for inline editing inside pairs.
+- **Text Field** / **Text Area** — `context="inline"` for inline editing inside pairs.

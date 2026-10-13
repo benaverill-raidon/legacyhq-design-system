@@ -2,7 +2,7 @@
 
 Text Area is the multi-line counterpart of [Text Field](../text-field/text-field.md): a real native
 `<textarea>` inside the same bordered frame, for writing or editing content that spans several lines -
-notes, descriptions, comments, message bodies. It shares Text Field's size, appearance, invalid, and
+notes, descriptions, comments, message bodies. It shares Text Field's size, context, invalid, and
 interaction-state treatment token-for-token, so the two read as one family.
 
 It's grouped with Text Field as a molecule for that reason, even though it composes no other
@@ -23,16 +23,18 @@ support - all keep working for free. It has no attached label of its own; pair i
 "Form Field" pattern composing a label, the control, and helper/error text is a natural next step
 once there's a real use case - the same note Text Field carries - but isn't part of this component.
 
-## Size, appearance, and states
+## Size, context, and states
 
 - **`size`** (`md` / `lg`) controls padding, corner radius, and font size - `body-md` typography at
   md, `body-lg` at lg, radius stepping up to `xl` at lg. Confirmed per size directly from Figma. (The
   `sm` size was removed - it read almost identically to md.)
-- **`appearance`** (`default` / `subtle`) is the same axis Text Field exposes (Figma names it `tone`).
-  `default` is the standard bordered box, rounded on all four corners. `subtle` has no visible border
-  or background until it's hovered, focused, or invalid - only a bottom accent line reveals, and its
-  bottom corners stay square. Use `subtle` for a low-chrome area that shouldn't compete with
-  surrounding content until someone interacts with it.
+- **`context`** (`default` / `inline`) is the same axis Text Field exposes, with the same name and
+  values as Figma's `context`. `default` is the standard bordered box, rounded on all four corners.
+  `inline` has no visible border or background at rest - hover shows the raised-hover background
+  and a 1px bottom border, focus and invalid paint a 2px bottom line, and its bottom corners stay
+  square. Use `inline` for a field inside a row (such as a Key Value Pair value) that shouldn't
+  compete with surrounding content until someone interacts with it. The older `appearance` prop is
+  deprecated but still accepted: `subtle` and `inline` both map to `context="inline"`.
 - **`invalid`** sets `aria-invalid` and paints the error border. Like Text Field, focus and invalid
   replace the border color and paint the thicker (2px) edge with an inset box-shadow rather than a
   real border-width change - so the multi-line text never shifts by a pixel on focus/blur or when the

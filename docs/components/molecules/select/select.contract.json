@@ -22,7 +22,7 @@
     "variantCount": 84,
     "verifiedAt": "2026-08-26",
     "note": "Filed on the file's own \"✅⏲️ Select\" page, verified directly against the file via the Desktop Bridge plugin.",
-    "structure": "One component set, 84 variants across six axes - size (sm/md/lg), tone (default/subtle), state (default/hover/focus/typing/hasValue), inputType (single/multi), isInvalid, isDisabled. Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
+    "structure": "One component set, 84 variants across six axes - size (sm/md/lg), context (default/inline), state (default/hover/open/hasValue/openValue), inputType (single/multi), isInvalid, isDisabled (axes re-checked 2026-10-13). Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
     "parts": {
       "figma-parts / select-trigger": "4658:67775 - 84 variants mirroring select's own axes. Structurally a text-field instance + trailing caret, so the code trigger is the existing TextField molecule, not a bespoke frame.",
       "text-field": "The trigger's frame, fill, border, focus/invalid/disabled treatment and per-size geometry are exactly the TextField molecule's - verified token-for-token, so Select reuses TextField rather than restating its state CSS.",
@@ -33,8 +33,8 @@
       "Props are a discriminated union on `inputType` (default 'single'), so single-select's scalar `value: string | null` and multi-select's `value: string[]` cannot be mixed up - the same pattern Chip uses for `mode`. Single's onChange takes `string | null`; multi's takes `string[]`.",
       "Options are a flat `SelectOption[]` ({ value, label, icon?, description?, disabled?, group? }), not Menu's `MenuSection[]`. Select maps them into sections itself - grouping consecutive options by their `group` field - and owns each row's selected state, selectionType (radio for single, checkbox for multi), and onSelect. This is the ergonomic shape a Select consumer expects; the caller never hand-wires Menu rows.",
       "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
-      "tone maps to TextField's `appearance` (default/subtle) - Figma names the axis `tone` on the trigger, but it is TextField's appearance axis, so code uses TextField's own name at that boundary.",
-      "An additive `appearance` alias for `tone` was added (same SelectTone values) so a wrapper can drive the trigger's standard/subtle axis with the canonical `appearance` name Text Field/Text Area use - specifically Field's inline context, which injects appearance='subtle' into whatever control it wraps. An explicit `tone` still wins, so existing usage is unchanged.",
+      "`context` (default/inline) is passed straight to the TextField trigger - the same prop, values, and Figma axis name (`context`) as Text Field and Text Area, so a wrapper drives all three with one prop. Field's inline context injects context='inline' into whatever control it wraps unless the control sets its own.",
+      "`tone` and `appearance` are deprecated aliases for `context` (SelectTone: default/subtle/inline), still accepted: subtle and inline both map to context='inline', default to 'default'. An explicit `context` wins over either.",
       "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
       "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
       "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
@@ -64,8 +64,9 @@
     "onChange": { "type": "(value) => void", "required": true, "default": null, "description": "Called with the next selection - string|null (single) or string[] (multi)." },
     "inputType": { "type": "'single' | 'multi'", "required": false, "default": "single", "description": "Discriminates the union. single: radio rows, scalar value, label in trigger. multi: checkbox rows, array value, removable chips in trigger." },
     "size": { "type": "SelectSize", "required": false, "default": "md", "enum": ["sm", "md", "lg"], "description": "Trigger height 32/40/48; also sets the panel width and chip size." },
-    "tone": { "type": "SelectTone", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "Maps to TextField's appearance - default (bordered) or subtle (bottom-border only)." },
-    "appearance": { "type": "SelectTone", "required": false, "default": null, "enum": ["default", "subtle"], "description": "Alias for tone, using the canonical appearance name Text Field/Text Area use for the same axis, so a wrapper (e.g. Field's inline context) can drive it with one shared prop. An explicit tone wins." },
+    "context": { "type": "SelectContext", "required": false, "default": "default", "enum": ["default", "inline"], "description": "The trigger's context, as Text Field's - default (bordered) or inline (chromeless until hovered or focused, for a field inside a row)." },
+    "tone": { "type": "SelectTone", "required": false, "default": null, "enum": ["default", "subtle", "inline"], "description": "Deprecated - use context. subtle and inline map to context='inline'. Still accepted; an explicit context wins." },
+    "appearance": { "type": "SelectTone", "required": false, "default": null, "enum": ["default", "subtle", "inline"], "description": "Deprecated - use context. subtle and inline map to context='inline'. Still accepted; an explicit context wins." },
     "placeholder": { "type": "string", "required": false, "default": null, "description": "Shown when nothing is selected." },
     "disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables the trigger; the panel cannot open, and chips render disabled." },
     "invalid": { "type": "boolean", "required": false, "default": false, "description": "Red border and aria-invalid on the input." },
@@ -86,9 +87,9 @@
       "single": { "purpose": "One value; radio rows; the chosen label fills the trigger." },
       "multi": { "purpose": "Several values; checkbox rows; removable chips fill the trigger." }
     },
-    "tone": {
+    "context": {
       "default": { "purpose": "Bordered field frame." },
-      "subtle": { "purpose": "Bottom-border-only field frame." }
+      "inline": { "purpose": "Chromeless at rest; raised-hover background and a bottom border on hover, a bottom focus line on focus - for a field inside a row." }
     }
   },
   "states": ["default", "hover", "focus", "typing", "hasValue", "invalid", "disabled"],
@@ -149,7 +150,7 @@
     "Shows the empty message when the query matches nothing.",
     "Groups options under section headings by their group field.",
     "disabled blocks opening; invalid sets aria-invalid.",
-    "size and tone map to the TextField trigger.",
+    "size and context map to the TextField trigger; the deprecated tone/appearance values map to a context.",
     "Supports a custom id/className on the trigger."
   ],
   "knownLimitations": [

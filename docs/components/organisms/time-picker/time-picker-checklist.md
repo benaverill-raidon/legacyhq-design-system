@@ -22,8 +22,8 @@ Organism.
 
 - [ ] Trigger = read-only Text Field showing the formatted time + a trailing clock icon (16px in a
       24x24 box); same field pattern as Date Picker.
-- [ ] context maps to Text Field appearance (default bordered / inline subtle); sizes sm/md/lg; open
-      state pins the field focus treatment.
+- [ ] context passes straight to the Text Field's context (default bordered / inline borderless);
+      sizes sm/md/lg; open state pins the field focus treatment.
 - [ ] Popup with three listbox columns: hours (12-hour), minutes (by minuteStep), AM/PM.
 - [ ] Options use the Figma menu-item states (selected = selected surface + selected content; hover =
       neutral overlay). Native scrollbars (vs Figma's custom scrollbar chrome).

@@ -194,12 +194,12 @@ describe('Select', () => {
       expect(screen.getByRole('menu')).toBeInTheDocument();
     });
 
-    it('maps size and tone to the TextField trigger', () => {
-      const { rerender } = render(<Select options={OPTIONS} value={null} onChange={vi.fn()} size="lg" tone="subtle" />);
+    it('maps size and context to the TextField trigger', () => {
+      const { rerender } = render(<Select options={OPTIONS} value={null} onChange={vi.fn()} size="lg" context="inline" />);
 
       const frame = combobox().closest(`.${textFieldStyles.root}`);
       expect(frame).toHaveClass(textFieldStyles.size_lg);
-      expect(frame).toHaveClass(textFieldStyles.appearance_subtle);
+      expect(frame).toHaveClass(textFieldStyles.context_inline);
 
       rerender(<Select options={OPTIONS} value={null} onChange={vi.fn()} size="sm" />);
       expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.size_sm);
@@ -250,5 +250,14 @@ describe('Select', () => {
 
     rerender(<Select options={OPTIONS} value={null} onChange={vi.fn()} disabled />);
     expect(container.querySelector(`.${selectStyles.caretDisabled}`)).toBeInTheDocument();
+  });
+
+  it('maps the deprecated tone and appearance values to a context', () => {
+    const { rerender } = render(<Select options={OPTIONS} value={null} onChange={vi.fn()} tone="subtle" />);
+    expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.context_inline);
+    rerender(<Select options={OPTIONS} value={null} onChange={vi.fn()} appearance="inline" />);
+    expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.context_inline);
+    rerender(<Select options={OPTIONS} value={null} onChange={vi.fn()} />);
+    expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.context_default);
   });
 });

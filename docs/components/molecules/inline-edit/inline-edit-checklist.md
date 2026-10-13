@@ -53,7 +53,7 @@ instead of every call site rebuilding draft/value tracking from scratch.
 
 ### What content can be displayed?
 - A single controlled input-like element as `children` - typically a `TextField` with
-  `appearance="subtle"`, cloned by Inline Edit for both the read-only and editable states
+  `context="inline"`, cloned by Inline Edit for both the read-only and editable states
 
 ### Character Limits
 Not applicable - Inline Edit has no text content of its own.

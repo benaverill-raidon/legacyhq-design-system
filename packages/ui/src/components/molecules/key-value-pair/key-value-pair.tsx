@@ -9,7 +9,7 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 /**
  * Key Value Pair maps a descriptive label to a static or inline-editable value for scannable
  * metadata presentation. Pass plain `value` text for read-only display, or provide children
- * (a TextField / TextArea / Select with `appearance="inline"`) for inline editing.
+ * (a TextField / TextArea / Select with `context="inline"`) for inline editing.
  */
 export const KeyValuePair = React.memo(function KeyValuePair({
   label,

@@ -21,7 +21,7 @@ describe('Table editable cells', () => {
       ]} />
     </>);
     expect(screen.getByLabelText('Cell').parentElement).toHaveAttribute('data-editable-cell', size);
-    expect(screen.getByLabelText('Cell').parentElement).toHaveAttribute('data-appearance', 'subtle');
+    expect(screen.getByLabelText('Cell').parentElement).toHaveAttribute('data-context', 'inline');
     for (const name of ['Standalone', 'Regular', 'Search']) {
       expect(screen.getByLabelText(name).parentElement).not.toHaveAttribute('data-editable-cell');
     }

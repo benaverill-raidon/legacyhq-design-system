@@ -69,10 +69,11 @@ dropdown-menu) and reuses Menu wholesale. Opening keeps focus in the input; Arro
 menu; Escape returns focus to the input. It is deliberately not a strict combobox/listbox with
 `aria-activedescendant` — see the spec.
 
-## Sizes, tones, states
+## Sizes, contexts, states
 
-`size` sets the trigger height (32/40/48), the panel width, and the chip size together. `tone` maps
-to TextField's `appearance`.
+`size` sets the trigger height (32/40/48), the panel width, and the chip size together. `context` is
+the same axis as TextField's: `inline` is chromeless until hovered or focused, for a field inside a
+row.
 
 <Canvas of={SelectStories.Variants} />
 
@@ -104,7 +105,7 @@ to TextField's `appearance`.
     <tr><td><code>onChange</code></td><td><code>(value) =&gt; void</code></td><td>-</td><td>Required. Next selection.</td></tr>
     <tr><td><code>inputType</code></td><td><code>'single' | 'multi'</code></td><td><code>'single'</code></td><td>Discriminates the union.</td></tr>
     <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Trigger height, panel width, chip size.</td></tr>
-    <tr><td><code>tone</code></td><td><code>'default' | 'subtle'</code></td><td><code>'default'</code></td><td>Maps to TextField's appearance.</td></tr>
+    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Same as TextField's <code>context</code>. Deprecated aliases <code>tone</code> / <code>appearance</code> still work: <code>'subtle'</code> and <code>'inline'</code> map to <code>'inline'</code>.</td></tr>
     <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Shown when nothing is selected.</td></tr>
     <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Blocks opening; disables chip removal.</td></tr>
     <tr><td><code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Red border + aria-invalid.</td></tr>

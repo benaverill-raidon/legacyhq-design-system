@@ -360,7 +360,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
           className={styles.trigger}
           inputClassName={styles.triggerInput}
           size={size}
-          appearance={context === 'inline' ? 'subtle' : 'default'}
+          context={context}
           invalid={invalid}
           disabled={disabled}
           readOnly

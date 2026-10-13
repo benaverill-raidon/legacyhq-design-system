@@ -62,7 +62,7 @@ format = locale short date (year numeric, month/day 2-digit, e.g. 03/09/2026)
 
 ## Variants and states
 
-- `context`: `default` -> Text Field appearance `default` (bordered); `inline` -> appearance `subtle`
+- `context`: passed straight to the Text Field's `context` - `default` (bordered); `inline`
   (borderless).
 - `size`: `sm` / `md` / `lg` (Text Field sizes).
 - states: `default`, `filled` (value present), `hover`, `open` (field focus treatment pinned via

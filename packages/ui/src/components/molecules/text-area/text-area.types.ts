@@ -1,6 +1,9 @@
 import type * as React from 'react';
 
 export type TextAreaSize = 'sm' | 'md' | 'lg';
+/** `inline` is chromeless until hovered or focused, for a field inside a row (Figma's context=inline). */
+export type TextAreaContext = 'default' | 'inline';
+/** @deprecated Use `TextAreaContext`: `subtle` and `inline` are both `inline`. */
 export type TextAreaAppearance = 'default' | 'subtle' | 'inline';
 
 /**
@@ -14,13 +17,13 @@ export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextArea
   /** Controls padding, radius, and typography; autoResize also uses the matching TextField height. */
   size?: TextAreaSize;
   /**
-   * `default` is the standard bordered box (rounded on all four corners). `subtle` has no visible
-   * border or background at rest - only a bottom accent line reveals on hover, focus, or invalid,
-   * and its bottom corners stay square. `inline` is fully chromeless - no border, no background, no
-   * visual treatment at all - intended for embedding inside compound components like Key Value Pair.
-   * Mirrors Text Field's own appearance axis (Figma names this axis `context`; the code uses
-   * `appearance`, the same name its sibling Text Field uses).
+   * `default` is the standard bordered box (rounded on all four corners). `inline` has no visible
+   * border or background at rest - a background and bottom accent line reveal on hover, focus, or
+   * invalid, and its bottom corners stay square. For a field inside a row, such as Key Value Pair.
+   * The same axis as Text Field's, Field's, and Figma's `context`.
    */
+  context?: TextAreaContext;
+  /** @deprecated Use `context`: `subtle` and `inline` map to `context="inline"`. Still accepted. */
   appearance?: TextAreaAppearance;
   /** Sets `aria-invalid` and paints the error border. */
   invalid?: boolean;

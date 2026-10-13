@@ -4,10 +4,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar } from '../../atoms/avatar';
 import { TaskNotStartedIcon } from '../../../assets/icons';
 import { Select } from './select';
-import type { SelectOption, SelectSize, SelectTone } from './select.types';
+import type { SelectContext, SelectOption, SelectSize } from './select.types';
 
 const SIZES: SelectSize[] = ['sm', 'md', 'lg'];
-const TONES: SelectTone[] = ['default', 'subtle'];
+const CONTEXTS: SelectContext[] = ['default', 'inline'];
 
 const STATUS_OPTIONS: SelectOption[] = [
   { value: 'draft', label: 'Draft' },
@@ -38,7 +38,7 @@ const meta = {
   args: {
     options: STATUS_OPTIONS,
     size: 'md',
-    tone: 'default',
+    context: 'default',
     placeholder: 'Select a status',
     // Defaults so `render`-only stories satisfy the discriminated union; the Playground render
     // overrides value/onChange with its own state.
@@ -47,7 +47,7 @@ const meta = {
   },
   argTypes: {
     size: { control: 'inline-radio', options: SIZES },
-    tone: { control: 'inline-radio', options: TONES },
+    context: { control: 'inline-radio', options: CONTEXTS },
     placeholder: { control: 'text' },
     disabled: { control: 'boolean' },
     invalid: { control: 'boolean' },
@@ -65,7 +65,7 @@ const meta = {
         <Select
           options={args.options}
           size={args.size}
-          tone={args.tone}
+          context={args.context}
           placeholder={args.placeholder}
           disabled={args.disabled}
           invalid={args.invalid}
@@ -171,19 +171,19 @@ export const Grouped: Story = {
   },
 };
 
-/** All three sizes and both tones. `tone` maps to TextField's `appearance`. */
+/** All three sizes in both contexts. `context` is the same axis as Text Field's. */
 export const Variants: Story = {
   render: () => {
-    function Field({ size, tone }: { size: SelectSize; tone: SelectTone }) {
+    function Field({ size, context }: { size: SelectSize; context: SelectContext }) {
       const [value, setValue] = React.useState<string | null>('approved');
-      return <Select options={STATUS_OPTIONS} value={value} onChange={setValue} size={size} tone={tone} />;
+      return <Select options={STATUS_OPTIONS} value={value} onChange={setValue} size={size} context={context} />;
     }
     return (
       <div style={stack}>
-        {TONES.map((tone) => (
-          <Group key={tone} title={`tone: ${tone}`}>
+        {CONTEXTS.map((context) => (
+          <Group key={context} title={`context: ${context}`}>
             {SIZES.map((size) => (
-              <Field key={size} size={size} tone={tone} />
+              <Field key={size} size={size} context={context} />
             ))}
           </Group>
         ))}

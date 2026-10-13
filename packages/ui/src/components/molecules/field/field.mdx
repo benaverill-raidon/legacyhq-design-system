@@ -51,13 +51,13 @@ with the control's own `invalid` prop (`<TextField invalid />`) so the message a
 does two things, because Figma models `context` as one shared axis across the whole field: it indents
 the label and message to line up with the text _inside_ the control (matching the control's own inner
 start padding for the size - `lg` by `--spacing-md`; `sm` and `md` share `--spacing-sm`), **and** it
-renders the control itself inline (borderless) by giving it `appearance="subtle"`. The control's own
-`appearance` wins if it sets one.
+renders the control itself inline (borderless) by giving it `context="inline"`. The control's own
+`context` (or a deprecated `appearance`/`tone`) wins if it sets one.
 
 `size` therefore only matters in the inline context, purely for that text alignment - it never
 resizes the control. Set Field's `size` to match the wrapped control's `size`, and reach for
 `context="inline"` with text-bearing controls (Text Field, Select, Text Area, date/time pickers) -
-all of which take `appearance="subtle"`; it has no meaningful effect on controls without inner text,
+all of which take `context="inline"`; it has no meaningful effect on controls without inner text,
 like Checkbox, Switch, or Radio.
 
 ## Content
@@ -163,7 +163,7 @@ so the star is never read out twice.
       <td><code>context</code></td>
       <td><code>'default' | 'inline'</code></td>
       <td><code>'default'</code></td>
-      <td>Label/message flush with the control edge vs. indented to its inner text.</td>
+      <td>Label/message flush with the control edge vs. indented to its inner text. <code>inline</code> also gives the control <code>context="inline"</code> unless it sets its own.</td>
     </tr>
     <tr>
       <td><code>size</code></td>

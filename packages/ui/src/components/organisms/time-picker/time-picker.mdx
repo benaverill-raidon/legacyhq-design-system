@@ -36,11 +36,11 @@ Confirm commits the choice.
 
 <Canvas of={TimePickerStories.Sizes} />
 
-`size` (`sm`/`md`/`lg`) sets the field height. `context` maps to the Text Field appearance:
+`size` (`sm`/`md`/`lg`) sets the field height. `context` passes straight to the Text Field's `context`:
 
 <Canvas of={TimePickerStories.Contexts} />
 
-`default` is a bordered field; `inline` is borderless (subtle). The open state pins the field's focus
+`default` is a bordered field; `inline` is borderless. The open state pins the field's focus
 treatment - a border for `default`, an underline for `inline`.
 
 ### States

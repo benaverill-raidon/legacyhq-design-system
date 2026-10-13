@@ -152,7 +152,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
           className={styles.trigger}
           inputClassName={styles.triggerInput}
           size={size}
-          appearance={context === 'inline' ? 'subtle' : 'default'}
+          context={context}
           invalid={invalid}
           disabled={disabled}
           readOnly

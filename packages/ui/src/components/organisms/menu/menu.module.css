@@ -38,13 +38,13 @@
  * Menu's search field has no hover or focus styling at all in Figma - no underline, no background
  * tint, just the native text cursor (menu-search's own component set only has default/focus/typing
  * variants, no hover variant, and its text-field instance's fills/strokes are empty in every one of
- * them). TextField's own `appearance="subtle"` still paints a colored bottom border on focus and a
+ * them). TextField's own `context="inline"` still paints a colored bottom border on focus and a
  * background tint on hover (correct for TextField generally, just not what this specific Figma
  * instance does) - neutralized here rather than by changing TextField itself.
  *
- * TextField's own hover rule is `.appearance_subtle:not([data-disabled]):not(:focus-within):
+ * TextField's own hover rule is `.context_inline:not([data-disabled]):not(:focus-within):
  * not([data-force-state='focus']):is(:hover, [data-force-state='hover'])` - specificity (0,5,0)
- * (1 class + 3 :not() + 1 :is()), higher than a plain `.search [data-appearance='subtle']:hover`
+ * (1 class + 3 :not() + 1 :is()), higher than a plain `.search [data-context='inline']:hover`
  * (0,3,0) would reach, so that alone loses regardless of CSS source order. Matching
  * `[data-size='md']` (real - Menu's search field is always size="md") alongside two `:not()`
  * clauses mirroring TextField's own conditions brings this to (0,6,0), which reliably wins without
@@ -53,13 +53,13 @@
  * unusually high specificity.
  */
 .search
-  :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):hover {
+  :global([data-context='inline'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):hover {
   background: transparent;
   border-bottom-color: transparent;
 }
 
 .search
-  :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):focus-within {
+  :global([data-context='inline'][data-size='md']:not([data-disabled='true']):not([data-invalid='true'])):focus-within {
   border-bottom-color: transparent;
   box-shadow: none;
 }

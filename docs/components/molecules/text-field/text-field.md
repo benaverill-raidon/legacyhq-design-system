@@ -26,12 +26,17 @@ way you would with any native form control. A future "Form Field" pattern compos
 input, and helper/error text is a natural next step once there's a real use case for it, but isn't
 part of this component today.
 
-The `appearance="subtle"` variant has no visible border or background until it's hovered, focused,
-or invalid, and its bottom corners are always square (`0px` radius) - only the top corners round -
-confirmed directly from Figma's per-corner radius data. It's useful for a search box or inline-edit
-field that shouldn't visually compete with surrounding content until someone interacts with it.
-`appearance="default"` (the standard bordered look, rounded on all four corners) is correct for
-nearly every other case.
+`context="inline"` (Figma's `context=inline`) has no visible border or background at rest. On hover
+it shows the raised-hover background and a 1px bottom border; focus and invalid paint a 2px bottom
+line in the focus or error color. Its bottom corners are always square (`0px` radius) - only the top
+corners round - confirmed directly from Figma's per-corner radius data. Use it for a field that sits
+inside a row or other content and shouldn't visually compete with it until someone interacts with
+it - a search box, an inline-edit field, a Key Value Pair value. `context="default"` (the standard
+bordered look, rounded on all four corners) is correct for nearly every other case.
+
+The older `appearance` prop is deprecated but still accepted: `appearance="subtle"` and
+`appearance="inline"` both render `context="inline"`, and `appearance="default"` renders
+`context="default"`.
 
 Selected text inside the field is tinted with the shared `color-content-highlight` token - a
 translucent brand `::selection` background applied identically across Text Field, Text Area, and

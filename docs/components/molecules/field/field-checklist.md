@@ -68,9 +68,9 @@ None - the label and message wrap.
 - default, error, valid
 
 ### Context
-- default (flush with the control edge; size-independent; control keeps its appearance), inline
+- default (flush with the control edge; size-independent; control keeps its own context), inline
   (label/message indented to the control's inner text AND the control rendered inline/borderless via
-  appearance="subtle" - for text-bearing controls: Text Field, Select, Text Area, pickers)
+  context="inline" - for text-bearing controls: Text Field, Select, Text Area, pickers)
 
 ### Size
 - sm, md, lg (matches the wrapped control). Consumed only in the inline context, to align the
@@ -125,10 +125,10 @@ Figma `<label>`/`<message>` code-parts use different typography and a smaller st
 components. `state` drives the label/message layer and `aria-invalid` only, never the control's own
 border. `context` is a single shared axis in Figma (it sits on the field AND the control), so
 `context="inline"` both indents the label/message to the control's inner text and renders the control
-inline by injecting `appearance="subtle"` (Text Field/Text Area take `appearance`; Select gained an
-additive `appearance` alias for its `tone`). `context`/`size` are coupled - the indent is 0 in
-default (size-independent) and the control's inner padding in inline, where `lg` indents more than
-the shared `sm`/`md`, per Figma's `size=all | lg | sm/md` model; inline is for text-bearing controls
+inline by injecting `context="inline"` (Text Field, Text Area, and Select take the same `context`
+prop; the control's own `context`, or a deprecated `appearance`/`tone`, wins). `context`/`size` are
+coupled - the indent is 0 in default (size-independent) and the control's inner padding in inline,
+where `lg` indents more than the shared `sm`/`md`, per Figma's `size=all | lg | sm/md` model; inline is for text-bearing controls
 (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio. Auto-wiring is done by cloning
 the single child control and only filling in props the control left unset. See `field-spec.md` for
 the full reasoning.

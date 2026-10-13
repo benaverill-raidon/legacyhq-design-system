@@ -3,7 +3,7 @@
 ## Overview
 
 Text Area is a real native `<textarea>` in the same bordered frame as [Text Field](../text-field/text-field-spec.md),
-for multi-line free text. It shares Text Field's `size`, `appearance`, `invalid`, and state treatment
+for multi-line free text. It shares Text Field's `size`, `context`, `invalid`, and state treatment
 token-for-token, and adds a `resize` axis. The frame styling lives on a wrapper `<div>` (matching
 Text Field's pattern) so it can host an optional trailing icon/action slot (`iconAfter`).
 
@@ -25,11 +25,15 @@ to work on a div). The ref forwards to the `<textarea>`, not the wrapper.
 
 ```ts
 type TextAreaSize = 'sm' | 'md' | 'lg';
+type TextAreaContext = 'default' | 'inline';
+/** @deprecated Use TextAreaContext: subtle and inline are both inline. */
 type TextAreaAppearance = 'default' | 'subtle' | 'inline';
 type TextAreaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   size?: TextAreaSize;
+  context?: TextAreaContext;
+  /** @deprecated Use context: subtle and inline map to context="inline". */
   appearance?: TextAreaAppearance;
   invalid?: boolean;
   resize?: TextAreaResize;
@@ -46,23 +50,23 @@ The ref forwards to the `<textarea>` (not the wrapper). Every native textarea at
 
 `iconAfter` renders a trailing icon or interactive control (e.g. an edit pencil IconButton) after
 the textarea inside the wrapper. The slot is not `aria-hidden` — it may hold a real focusable action.
-The `inline` appearance combined with `iconAfter` is the standard pattern for embedding inside a
-Key Value Pair.
+`context="inline"` combined with `iconAfter` is the standard pattern for embedding inside a Key
+Value Pair.
 
 ## Defaults
 
 ```txt
 size: md
-appearance: default
+context: default
 invalid: false
 resize: vertical
 autoResize: false
 maxRows: 6
 ```
 
-`appearance` mirrors Text Field (Figma names the axis `tone`); the code uses `appearance` so the two
-siblings share one vocabulary. `inline` is a third value added for chromeless-at-rest embedding inside
-composed components like Key Value Pair — it maps from Figma's separate `context` axis.
+`context` mirrors Text Field and Figma's `context` axis (`default` / `inline`) - the same name and
+values in all three. The older `appearance` prop is deprecated but still accepted: `subtle` and
+`inline` both map to `context="inline"`, `default` to `context="default"`.
 
 ## Geometry
 
@@ -81,7 +85,7 @@ minimum frame height and adjusts block padding to fit one line within that heigh
 
 ## States and tokens
 
-Frame tokens by state (`appearance=default`), verified against Figma and reused from Text Field:
+Frame tokens by state (`context=default`), verified against Figma and reused from Text Field:
 
 | state | background | border | painted width |
 |---|---|---|---|
@@ -95,17 +99,13 @@ Focus and invalid keep the real `border-width` at 1px and paint the extra pixel 
 `box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color>` - the same technique Text Field uses, so the multi-line text
 never shifts by a pixel. Hover tint is suppressed once focused.
 
-**`appearance=subtle`** is transparent at rest with a bottom-only 1px border, revealing on hover
-(`border/input`), focus (`border/focus`, +1px via box-shadow), and invalid (`border/error`). Bottom
-corners are square; top corners keep the size's radius - mirroring Text Field's subtle appearance.
-
-**`appearance=inline`** mirrors `subtle`'s bottom-only border treatment but starts fully chromeless
-at rest — no border or background visible until the user interacts. Hover shows the raised-surface
-hover background + a bottom accent (like subtle hover), focus shows a bottom-only 2px focus border
-(via border-bottom-color + bottom-only box-shadow, same technique as `subtle`), invalid shows a
-bottom-only error border, and disabled stays transparent. Top corners keep the size's radius; bottom
-corners are square — same shape as `subtle`. For embedding inside Key Value Pair wrapped in Inline
-Edit.
+**`context=inline`** (Figma's `context=inline`) is chromeless at rest - no visible border or
+background, with a transparent bottom-only 1px border. Hover shows the raised-surface hover
+background (`elevation/surface/raised/hover`) plus the bottom border in `border/input`; focus shows a
+bottom-only 2px focus line (`border/focus` on the bottom border, +1px via a bottom-only inset
+box-shadow); invalid shows a bottom-only error border (`border/error`) the same way; disabled stays
+transparent. Bottom corners are square; top corners keep the size's radius - mirroring Text Field's
+`context="inline"`. For a field inside a row, such as Key Value Pair wrapped in Inline Edit.
 
 ### Token naming note
 
@@ -160,8 +160,9 @@ So Text Area still exposes no `type` prop, and the illegal state cannot be reque
 
 ```txt
 renders a native textarea
-uses the default size, appearance, and resize
-applies a selected size / appearance / resize option
+uses the default size, context, and resize
+applies a selected size / context / resize option
+maps the deprecated appearance values to a context
 sets aria-invalid and data-invalid when invalid (and not by default)
 disables the textarea and marks it disabled
 applies className to the wrapper
@@ -171,16 +172,9 @@ supports data-force-state for documentation
 paints focus/invalid via box-shadow, not a border-width change
 suppresses the hover background once focused
 reuses Text Field semantic tokens for surface/border/radius
-subtle rests at a 1px bottom-only border; focus/invalid paint via box-shadow
+context=inline rests at a 1px bottom-only border; focus/invalid paint via box-shadow
 disables the resize grip on a disabled field
 renders iconAfter when provided
 does not render the action slot when iconAfter is absent
-applies the inline appearance
-inline appearance is chromeless at rest but retains interaction states
+context=inline is chromeless at rest, with Figma's hover fill and bottom-only states
 ```
-
-## Future considerations
-
-- The `type=rich-inline` inline entity-tagging mode (slash-command searchable dropdown + inline
-  navigational tags), per "Not implemented" above.
-- A shared Form Field wrapper (label + control + helper/error) for both Text Field and Text Area.

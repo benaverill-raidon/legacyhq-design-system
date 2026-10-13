@@ -5,7 +5,7 @@
 Key Value Pair presents a label (key) and its associated value in a horizontal row for scannable
 metadata. The key occupies a fixed 40% width; the value fills the remaining space. The value slot
 accepts either a plain `value` prop (static text) or `children` (an inline-editable control like
-TextField/TextArea/Select with `appearance="inline"`).
+TextField/TextArea/Select with `context="inline"`).
 
 ## Anatomy
 
@@ -18,7 +18,7 @@ TextField/TextArea/Select with `appearance="inline"`).
 
 When `underline` is true, the root gets a 1px bottom border (`border/default`).
 
-For editable multiline values, use `TextArea autoResize size={size} appearance="inline"` inside
+For editable multiline values, use `TextArea autoResize size={size} context="inline"` inside
 `InlineEdit actionPlacement="end" actionAlignment="start"`. The minimum field height matches
 TextField's `--size-control-sm/md/lg` token. Content grows the field and row in normal flow up to
 six lines (`maxRows={6}`), then scrolls vertically. Following rows move down; the key and external
@@ -61,7 +61,9 @@ underline: false
 
 Key width is always 40% (`inline-size: 40%`). The gap between key and value is `--spacing-lg` at
 all sizes. Rows have no block padding. Inline TextField, TextArea, and Select frames have square
-corners within the value slot.
+corners within the value slot (`.value [data-context='inline'] { border-radius: 0; }`). Otherwise
+they keep the standard `context="inline"` treatment, including the raised-hover background on
+hover, as Figma's Key Value Pair uses the standard `context=inline` instances.
 
 ## Tokens
 
@@ -100,10 +102,12 @@ renders without underline by default
 
 - Component: `key-value-pair` (node `4869:244271`, file `Components v1.0.0`)
 - 22 variants across size (sm, md, lg), context (default, inline), and underline axes.
-- The `context=inline` variant maps to embedding a TextField/TextArea with `appearance="inline"`.
+- The `context=inline` variant maps to embedding a TextField/TextArea/Select with
+  `context="inline"` — Figma uses the standard Text Field/Text Area/Select `context=inline`
+  instances there.
 
 ## Related components
 
 - **Key Value List** — `<dl>` wrapper for multiple pairs.
-- **Text Field** — `appearance="inline"` for single-line inline editing.
-- **Text Area** — `appearance="inline"` for multi-line inline editing.
+- **Text Field** — `context="inline"` for single-line inline editing.
+- **Text Area** — `context="inline"` for multi-line inline editing.

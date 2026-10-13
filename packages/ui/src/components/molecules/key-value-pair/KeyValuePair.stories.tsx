@@ -56,7 +56,7 @@ function LiveEditableKVP({ label, initial }: { label: string; initial: string })
   return (
     <KeyValuePair label={label} underline>
       <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
-        <TextField appearance="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
+        <TextField context="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
       </InlineEdit>
     </KeyValuePair>
   );
@@ -67,7 +67,7 @@ function LiveNotesKVP({ label = 'Notes', initial, size = 'md' }: { label?: strin
   return (
     <KeyValuePair size={size} label={label} underline>
       <InlineEdit value={value} onConfirm={setValue} actionPlacement="end" actionAlignment="start">
-        <TextArea size={size} autoResize appearance="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
+        <TextArea size={size} autoResize context="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
       </InlineEdit>
     </KeyValuePair>
   );
@@ -103,7 +103,7 @@ function LiveSelectKVP({ label, initial }: { label: string; initial: string }) {
   return (
     <KeyValuePair label={label} underline>
       <Select
-        appearance="inline"
+        context="inline"
         aria-label={label}
         options={accountTypeOptions}
         value={value}
@@ -162,7 +162,7 @@ export const Sizes: Story = {
         <Group key={size} title={`Size: ${size}`}>
           <KeyValuePair size={size} label="Client name" underline>
             <InlineEdit value="Jane Doe" onConfirm={() => {}} actionPlacement="end">
-              <TextField size={size} appearance="inline" aria-label="Client name" iconAfter={<EditIcon color="subtle" />} />
+              <TextField size={size} context="inline" aria-label="Client name" iconAfter={<EditIcon color="subtle" />} />
             </InlineEdit>
           </KeyValuePair>
           <LiveNotesKVP size={size} initial="Trust schedule pending." />

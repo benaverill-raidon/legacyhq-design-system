@@ -10,8 +10,8 @@ Molecule
 
 ### Related Components
 - Key Value List (wraps pairs in a `<dl>`)
-- Text Field (`appearance="inline"` for single-line inline editing)
-- Text Area (`appearance="inline"` for multi-line inline editing)
+- Text Field (`context="inline"` for single-line inline editing)
+- Text Area (`context="inline"` for multi-line inline editing)
 - Field (for full form layouts — not the same use case)
 
 ---
@@ -48,7 +48,8 @@ needs consistent layout, typography, and semantic structure across the product.
 ## States
 
 No interactive states — the component is a layout container. Inline-editable children manage their
-own hover/focus/invalid states.
+own hover/focus/invalid states (the standard `context="inline"` treatment, including the hover
+background); Key Value Pair only squares their frame corners.
 
 ---
 
@@ -97,6 +98,8 @@ All tokens are semantic — no primitives consumed directly.
 
 - `key-value-pair` component set: node `4869:244271`, page in Components v1.0.0.
 - 22 variants across size (sm/md/lg), context (default/inline), and underline axes.
+- The inline variants use the standard Text Field/Text Area/Select `context=inline` instances, so
+  code passes `context="inline"` children with no Key Value Pair-specific field look.
 
 ---
 

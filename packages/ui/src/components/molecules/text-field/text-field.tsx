@@ -11,7 +11,8 @@ export const TextField = React.memo(
   React.forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
     {
       size = 'md',
-      appearance = 'default',
+      context: requestedContext,
+      appearance,
       invalid = false,
       iconBefore,
       leadingContent,
@@ -25,9 +26,11 @@ export const TextField = React.memo(
     forwardedRef,
   ) {
     const cellSize = useEditableCellSize();
+    // `appearance` is the deprecated name for `context`: its subtle and inline values are both inline.
+    let context = requestedContext ?? (appearance && appearance !== 'default' ? 'inline' : 'default');
     if (cellSize) {
       size = cellSize;
-      appearance = 'subtle';
+      context = 'inline';
     }
     // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
     // it to the root frame, since hover/focus styling keys off the frame rather than the input.
@@ -40,11 +43,11 @@ export const TextField = React.memo(
         className={mergeClassNames(
           styles.root,
           styles[`size_${size}`],
-          styles[`appearance_${appearance}`],
+          styles[`context_${context}`],
           className,
         )}
         data-size={size}
-        data-appearance={appearance}
+        data-context={context}
         data-editable-cell={cellSize ?? undefined}
         data-invalid={invalid ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}

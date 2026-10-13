@@ -7,7 +7,7 @@ export interface KeyValuePairProps {
   label: string;
   /**
    * Static value text. Used when the pair is read-only (`context=static` in Figma). Ignored when
-   * `children` are provided — pass a TextField, TextArea, or Select with `appearance="inline"` as
+   * `children` are provided — pass a TextField, TextArea, or Select with `context="inline"` as
    * children for editable pairs.
    */
   value?: React.ReactNode;
@@ -17,7 +17,7 @@ export interface KeyValuePairProps {
   underline?: boolean;
   className?: string;
   /**
-   * Editable value control. Pass a TextField, TextArea, or Select with `appearance="inline"` for
+   * Editable value control. Pass a TextField, TextArea, or Select with `context="inline"` for
    * inline editing. When provided, `value` is ignored.
    */
   children?: React.ReactNode;

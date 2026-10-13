@@ -122,7 +122,7 @@ before cancel's own click handler runs.
 Because most values displayed this way are short pieces of text, `children` is expected to be a
 single controlled input-like element - `TextField` today, and `Select`/`DatePicker`/`TimePicker`/
 `DateTimePicker` once those exist, matching Figma's own five documented slot types. Consumers are
-expected to use `appearance="subtle"` on the slotted `TextField` most of the time, since a subtle
+expected to use `context="inline"` on the slotted `TextField` most of the time, since an inline
 field already has no visible border/background at rest, so it reads as plain text until clicked -
 the same visual result Figma's blank `state=default` variant implies, achieved by styling the real
 input rather than rendering a second, separate read-only display.
@@ -140,7 +140,7 @@ Inline Edit has no size, appearance, or tone variants of its own - Figma's only 
 
 ### Supported Content
 A single controlled input-like element appropriate for editing one value - `TextField` today
-(typically with `appearance="subtle"`); `Select`, `DatePicker`, `TimePicker`, `DateTimePicker` once
+(typically with `context="inline"`); `Select`, `DatePicker`, `TimePicker`, `DateTimePicker` once
 built, matching Figma's own slot. The child must accept `value`, `onChange`, and `readOnly` -
 Inline Edit clones it with these props to drive both the read-only and editable states.
 
@@ -237,7 +237,7 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 
 ### Uses
 - Icon Button (atom) - the confirm/cancel actions, `size="sm"`, default `shape`/`appearance`
-- Text Field (molecule) - the most common cloned control today, typically `appearance="subtle"`
+- Text Field (molecule) - the most common cloned control today, typically `context="inline"`
 
 ### Used By
 - Editable name/title fields

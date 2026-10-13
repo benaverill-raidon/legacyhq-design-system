@@ -191,7 +191,7 @@ export const Menu = React.memo(function Menu({
           <TextField
             type="text"
             size="md"
-            appearance="subtle"
+            context="inline"
             // This field only ever mounts while a containing Dropdown Menu is open (Popup
             // unmounts its content while closed), so autoFocus here means "focus search every
             // time the menu opens", not "steal focus on page load" - the anti-pattern the

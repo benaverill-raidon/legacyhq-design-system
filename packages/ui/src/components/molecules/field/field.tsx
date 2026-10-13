@@ -59,12 +59,12 @@ export const Field = React.memo(function Field({
   };
 
   // `context` is a single shared axis in Figma: an inline field also renders its control inline
-  // (borderless), so the whole field reads as one inline unit. Propagate it to the control's
-  // `appearance` (the code name for that axis - Text Field, Text Area, and Select all take
-  // `appearance="subtle"`). The control's own `appearance` always wins. This is deliberately unlike
-  // `state`, which maps to the control's *separate* invalid axis and so stays the consumer's call.
-  if (context === 'inline' && childProps.appearance === undefined) {
-    injectedProps.appearance = 'subtle';
+  // (borderless), so the whole field reads as one inline unit. Text Field, Text Area, and Select take
+  // the same `context` prop; the control's own context (or deprecated appearance/tone) always wins.
+  // This is deliberately unlike `state`, which maps to the control's *separate* invalid axis and so
+  // stays the consumer's call.
+  if (context === 'inline' && childProps.context === undefined && childProps.appearance === undefined && childProps.tone === undefined) {
+    injectedProps.context = 'inline';
   }
 
   const control = child ? React.cloneElement(child, injectedProps) : children;

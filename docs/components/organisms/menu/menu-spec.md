@@ -209,20 +209,20 @@ introducing new ones:
   (`brand.prussian.solid.900`/`#003655`) Figma's own stroke variable does.
 - Label typography: `--typography-body-md-*` (14px, matching Figma's measured `menu-item` title).
   Description/heading typography: `--typography-body-sm-*` (12px).
-- Search field: rendered as `size="md"` with TextField's `appearance="subtle"`
-  (`data-appearance="subtle"`, `data-size="md"`), matching Figma's own `menu-search` → nested
-  `text-field`'s `size: md`, `tone: subtle` component properties exactly - confirmed directly from
-  the actual Figma instance, not assumed. No leading icon (the instance has no `elemBeforeInput`
-  at all - only a trailing `elemAfterInput` clear button). `appearance="subtle"` alone still
+- Search field: rendered as `size="md"` with TextField's `context="inline"`
+  (`data-context="inline"`, `data-size="md"`), matching Figma's own `menu-search` → nested
+  `text-field`'s `size: md`, `context: inline` - confirmed directly from the actual Figma
+  instance (re-checked 2026-10-13), not assumed. No leading icon (the instance has no `elemBeforeInput`
+  at all - only a trailing `elemAfterInput` clear button). `context="inline"` alone still
   leaves a colored focus underline and a hover background tint (correct for TextField generally)
   - but the wrapper's own `code-parts / <menu-search>` component has no hover variant at all, and
   its `text-field` instance's `fills`/`strokes` are empty in every one of its default/focus/typing
   states, so Menu additionally neutralizes both via
-  `.search :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true']))`
+  `.search :global([data-context='inline'][data-size='md']:not([data-disabled='true']):not([data-invalid='true']))`
   `:hover`/`:focus-within`. The extra `[data-size='md']` and two `:not()` clauses aren't padding -
-  TextField's own hover rule stacks three `:not()` clauses of its own
+  TextField's own hover rule (on `.context_inline`) stacks three `:not()` clauses of its own
   (`:not([data-disabled]):not(:focus-within):not([data-force-state='focus']):is(:hover, ...)`),
-  landing at specificity `(0,5,0)`; a plain `.search [data-appearance='subtle']:hover` only reaches
+  landing at specificity `(0,5,0)`; a plain `.search [data-context='inline']:hover` only reaches
   `(0,3,0)` and silently loses regardless of CSS source order - `(0,6,0)` is what actually wins,
   without `!important` (see "New tokens" below). The field is also `autoFocus`ed whenever it's
   rendered.
@@ -240,7 +240,7 @@ introducing new ones:
   (`packages/ui/src/components/primitives/icon/`) - added for Menu's selected-row icon: a real,
   verified need, not a speculative addition.
 - `.search`'s hover/focus neutralization stays local to Menu's own CSS rather than changing
-  TextField's `appearance="subtle"` implementation - `subtle`'s existing hover/focus styling is
+  TextField's `context="inline"` implementation - `inline`'s existing hover/focus styling is
   correct for TextField's other consumers; menu-search is simply a stripped-down instance of it,
   verified directly against Figma rather than assumed.
 

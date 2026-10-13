@@ -2,7 +2,9 @@ import type * as React from 'react';
 
 export type SelectSize = 'sm' | 'md' | 'lg';
 
-/** Maps to TextField's `appearance` - Figma's `tone` axis on the trigger. */
+/** The trigger's context, as Text Field's: `inline` is chromeless until hovered or focused (Figma's context). */
+export type SelectContext = 'default' | 'inline';
+/** @deprecated Use `SelectContext`: `subtle` and `inline` are both `inline`. */
 export type SelectTone = 'default' | 'subtle' | 'inline';
 
 export interface SelectOption {
@@ -22,12 +24,11 @@ export interface SelectOption {
 interface SelectCommonProps {
   options: SelectOption[];
   size?: SelectSize;
+  /** `default` (bordered) or `inline` (chromeless until hovered or focused), as Text Field's. Defaults to `default`. */
+  context?: SelectContext;
+  /** @deprecated Use `context`: `subtle` and `inline` map to `context="inline"`. Still accepted. */
   tone?: SelectTone;
-  /**
-   * Alias for `tone`, matching the canonical `appearance` name Text Field and Text Area use for the
-   * same standard/subtle axis. Lets a wrapper (e.g. Field's inline context) drive the trigger's
-   * appearance with one shared prop name. An explicit `tone` wins if both are set.
-   */
+  /** @deprecated Use `context`: `subtle` and `inline` map to `context="inline"`. Still accepted. */
   appearance?: SelectTone;
   /** Placeholder shown when nothing is selected. */
   placeholder?: string;

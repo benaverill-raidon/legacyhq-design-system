@@ -492,7 +492,7 @@ export function Table<Row>({
                   <span className={styles.footerLabel}>Items per page:</span>
                   <Select
                     size="sm"
-                    appearance="subtle"
+                    context="inline"
                     className={styles.footerSelect}
                     options={itemsPerPageOptions.map((opt) => ({ value: String(opt), label: String(opt) }))}
                     value={String(pageSize)}
@@ -508,7 +508,7 @@ export function Table<Row>({
             <div className={styles.footerGroup}>
               <Select
                 size="sm"
-                appearance="subtle"
+                context="inline"
                 className={styles.footerSelect}
                 options={Array.from({ length: resolvedPageCount }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))}
                 value={String(currentPage)}

@@ -54,7 +54,7 @@ serves every control type.
 Field (div.root, flex column, data-state/context/size)
 ├─ label.label (optional; native <label htmlFor>, --typography-heading-xxs)
 │  └─ span.required (optional, "*", aria-hidden, --color-content-error)
-├─ {children}  (the wrapped control - the slot - cloned to receive id/aria-*/required, plus appearance="subtle" when context=inline)
+├─ {children}  (the wrapped control - the slot - cloned to receive id/aria-*/required, plus context="inline" when context=inline)
 └─ div.message (optional; id, --typography-body-sm)
    ├─ span.messageIcon (error/valid only; aria-hidden; sm status Icon)
    └─ span.messageText
@@ -82,9 +82,10 @@ Field (div.root, flex column, data-state/context/size)
 - `required`: forwarded when `required` is set, unless the control already sets `required`.
 - `data-force-state`: forwarded to the control (documentation-only, for static Storybook state
   references), unless the control already sets it.
-- `appearance`: `"subtle"` when `context="inline"` (see Context / Size), unless the control already
-  sets its own `appearance`. This is the only injected prop tied to a Field axis rather than pure
-  wiring - it exists because Figma models `context` as one shared axis across the field and control.
+- `context`: `"inline"` when `context="inline"` (see Context / Size), unless the control already
+  sets its own `context` (or a deprecated `appearance`/`tone`). This is the only injected prop tied
+  to a Field axis rather than pure wiring - it exists because Figma models `context` as one shared
+  axis across the field and control.
 - The control's own props always win - Field only fills in what the consumer left unset.
 
 ### State
@@ -95,18 +96,19 @@ Field (div.root, flex column, data-state/context/size)
 
 ### Context / Size (coupled, matching Figma's `size=all | lg | sm/md`)
 - `context="default"`: label and message flush with the control's outer edge, and the control keeps
-  its own appearance. **Size-independent** - every control size renders identically (Figma's single
+  its own context. **Size-independent** - every control size renders identically (Figma's single
   `size=all` default variant).
 - `context="inline"` does two things, because Figma models `context` as one shared axis across the
   whole field: (a) it indents the label and message to the control's inner start padding for the
   size (`lg` -> `--spacing-md`, `sm` and `md` share `--spacing-sm`), aligning them to the control's
-  inner text; and (b) it renders the control inline by injecting `appearance="subtle"` (the control's
-  own `appearance` wins), so the field reads as one borderless inline unit.
+  inner text; and (b) it renders the control inline by injecting `context="inline"` (the control's
+  own `context`, or a deprecated `appearance`/`tone`, wins), so the field reads as one borderless
+  inline unit.
 - `size` therefore only does anything in the inline context, purely to align the label/message with
   the control's inner text. It never resizes the control (set the control's own `size` too).
 - Because inline means a borderless control whose inner text the label lines up with, it is meant for
   text-bearing controls (Text Field, Select, Text Area, date/time pickers - all of which take
-  `appearance="subtle"`); it has no meaningful effect on controls without inner text (Checkbox,
+  `context="inline"`); it has no meaningful effect on controls without inner text (Checkbox,
   Switch, Radio) - use `context="default"` there.
 
 ---
@@ -148,14 +150,14 @@ Field (div.root, flex column, data-state/context/size)
   declares its own id or aria state is never surprised. `cloneElement` is the same pattern Inline
   Edit already uses in this system.
 - **`context` is one shared axis across the field AND its control - so it propagates.** In Figma,
-  the same `context` property (standard/inline) sits on the `<field>`, the Text Field, the Select,
-  etc. An inline field is a borderless (inline) control with its label/message aligned to the
-  control's inner text. So Field propagates `context="inline"` to the control by injecting
-  `appearance="subtle"` (the code name for that same axis - Text Field and Text Area use
-  `appearance`, and Select now takes it as an alias for its `tone`). This is deliberately different
-  from `state`: `state` maps to the control's *separate* `isInvalid` axis (a different Figma
-  property), so it stays the consumer's call, whereas `context` is literally the same axis on both
-  and so is wired through. The control's own `appearance` always wins, as with every injected prop.
+  the same `context` property (default/inline) sits on the `<field>`, the Text Field, the Text Area,
+  the Select, etc. An inline field is a borderless (inline) control with its label/message aligned
+  to the control's inner text. So Field propagates `context="inline"` to the control - Text Field,
+  Text Area, and Select take the same `context` prop, with the same values, as Figma. This is
+  deliberately different from `state`: `state` maps to the control's *separate* `isInvalid` axis (a
+  different Figma property), so it stays the consumer's call, whereas `context` is literally the
+  same axis on both and so is wired through. The control's own `context` (or a deprecated
+  `appearance`/`tone`) always wins, as with every injected prop.
 - **`context`/`size` are coupled, and `size` only distinguishes anything inline.** Both `context`
   values keep the same vertical stack; the only label/message difference in the node data is a start
   padding (0 in `default`; the control's inner padding in `inline`). Figma models this as one
@@ -181,8 +183,8 @@ Field (div.root, flex column, data-state/context/size)
 - Shows a status icon on `error`/`valid`, none on `default`.
 - Sets `data-state`, `data-context`, `data-size` on the root; defaults `default`/`default`/`md`.
 - `context="inline"` indents the label/message per size (`lg` -> `--spacing-md`, `sm`/`md` ->
-  `--spacing-sm`) AND injects `appearance="subtle"` into the control (control's own `appearance`
-  wins); `context="default"` does neither.
+  `--spacing-sm`) AND injects `context="inline"` into the control (control's own `context`, or a
+  deprecated `appearance`/`tone`, wins); `context="default"` does neither.
 - Renders no `<label>` when `label` is omitted, and no message (nor `aria-describedby`) when
   `message` is omitted.
 - Composes `className` (root), `labelClassName`, and `messageClassName`.

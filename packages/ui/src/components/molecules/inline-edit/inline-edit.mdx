@@ -25,7 +25,7 @@ there is no state where the confirm/cancel buttons show before the field has bee
 
 ## Anatomy
 
-Inline Edit takes a single child - typically a `TextField` with `appearance="subtle"` - and clones
+Inline Edit takes a single child - typically a `TextField` with `context="inline"` - and clones
 it for both states: read-only (not editable, but still focusable, showing the last confirmed
 `value`) and editable (showing the in-progress draft). A confirm/cancel `IconButton` pair appears
 below the field, anchored to its trailing/right edge, only once editing has started - the field
@@ -44,7 +44,7 @@ while editing, and discards it on cancel, reverting the field to `value`.
 const [value, setValue] = useState('Q3 Planning');
 
 <InlineEdit value={value} onConfirm={setValue}>
-  <TextField appearance="subtle" aria-label="Title" />
+  <TextField context="inline" aria-label="Title" />
 </InlineEdit>;
 ```
 
@@ -78,11 +78,11 @@ somewhere else on the page; the only way to discard is explicit.
 
 ## Do / Don't
 
-**Do** pass a single controlled-input-like child, typically a subtle `TextField`.
+**Do** pass a single controlled-input-like child, typically a `TextField` with `context="inline"`.
 
 ```tsx
 <InlineEdit value={value} onConfirm={setValue}>
-  <TextField appearance="subtle" aria-label="Title" />
+  <TextField context="inline" aria-label="Title" />
 </InlineEdit>
 ```
 
@@ -102,7 +102,7 @@ still work.
 
 ```tsx
 <InlineEdit value={value} actionButtons={false} onConfirm={setValue}>
-  <TextField appearance="subtle" aria-label="Title" />
+  <TextField context="inline" aria-label="Title" />
 </InlineEdit>
 ```
 
@@ -139,7 +139,7 @@ still work.
       <td><code>children</code></td>
       <td><code>React.ReactElement</code></td>
       <td>-</td>
-      <td>Required. A single controlled input-like element (e.g. a subtle <code>TextField</code>) Inline Edit clones for both states.</td>
+      <td>Required. A single controlled input-like element (e.g. a <code>TextField</code> with <code>context="inline"</code>) Inline Edit clones for both states.</td>
     </tr>
     <tr>
       <td><code>onConfirm</code></td>
@@ -182,7 +182,7 @@ still work.
 
 ## Related components
 
-- **Text Field** - the control Inline Edit clones, typically with `appearance="subtle"` so it reads
+- **Text Field** - the control Inline Edit clones, typically with `context="inline"` so it reads
   as plain text until interacted with.
 - **Icon Button** - the confirm/cancel actions Inline Edit renders internally.
 - **Button Group** - a similarly thin "compose atoms into a named layout" molecule, though Button

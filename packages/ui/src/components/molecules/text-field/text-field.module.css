@@ -50,12 +50,12 @@
  * and caret to the right, reported directly against this component from a side-by-side screenshot.
  * An inset box-shadow as wide as `--border-width-md` minus `--border-width-sm` paints the extra pixel
  * as a ring layered against the real border instead, so the stroke reads as `md` with zero layout
- * impact - the same technique `appearance_subtle` uses for its own
- * bottom-only version of this problem (see below). Scoped to `appearance_default` only -
- * `appearance_subtle` gets its own focus indicator below (a colored bottom border, confirmed from
+ * impact - the same technique `context_inline` uses for its own
+ * bottom-only version of this problem (see below). Scoped to `context_default` only -
+ * `context_inline` gets its own focus indicator below (a colored bottom border, confirmed from
  * Figma).
  */
-.appearance_default:is(:focus-within, [data-force-state='focus']) {
+.context_default:is(:focus-within, [data-force-state='focus']) {
   border-color: var(--color-border-focus);
   box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-focus);
 }
@@ -126,7 +126,7 @@
  * (radius 0) at every size, confirmed directly from Figma's per-corner radius - only the top
  * corners share the standard/default appearance's radius.
  */
-.appearance_subtle {
+.context_inline {
   border-color: transparent;
   background: transparent;
   border-width: 0 0 var(--border-width-sm) 0;
@@ -134,7 +134,7 @@
   border-bottom-right-radius: 0;
 }
 
-.appearance_subtle:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-elevation-surface-raised-hover);
 }
 
@@ -144,7 +144,7 @@
  * design feedback, hover should never mask the invalid state, the same way the default/standard
  * appearance's hover (background-only, no border-color touch) never does.
  */
-.appearance_subtle:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.context_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   border-bottom-color: var(--color-border-input);
 }
 
@@ -156,17 +156,17 @@
  * pixel on every focus/blur or invalid toggle - reported directly against this component. The
  * box-shadow is purely paint, so it adds zero layout impact while still reading as a thicker line.
  */
-.appearance_subtle:is(:focus-within, [data-force-state='focus']) {
+.context_inline:is(:focus-within, [data-force-state='focus']) {
   border-bottom-color: var(--color-border-focus);
   box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);
 }
 
 /*
- * Border widths here just restate what `.appearance_subtle` already set (0/0/1px/0) - `.root`'s own
+ * Border widths here just restate what `.context_inline` already set (0/0/1px/0) - `.root`'s own
  * `[data-invalid='true']` rule no longer touches border-width at all (it uses the same box-shadow
  * technique above), so there's no leftover shorthand value left to override.
  */
-.appearance_subtle[data-invalid='true'] {
+.context_inline[data-invalid='true'] {
   border-top-color: transparent;
   border-right-color: transparent;
   border-bottom-color: var(--color-border-error);
@@ -174,45 +174,7 @@
   box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-error);
 }
 
-.appearance_subtle[data-disabled='true'] {
-  background: transparent;
-  border-color: transparent;
-}
-
-/*
- * `inline` mirrors `subtle`'s bottom-only border treatment but starts fully chromeless at rest —
- * no border or background visible until the user hovers, focuses, or triggers invalid/disabled.
- * Keeps the root's padding, height, and top-corner radius so the field reads as a real input when
- * activated — confirmed directly from Figma's context=inline axis: bottom-only 1px stroke on hover
- * (border/input), bottom-only 2px on focus (border/focused via box-shadow), top corners rounded,
- * bottom corners square. For embedding inside Key Value Pair wrapped in Inline Edit.
- */
-.appearance_inline {
-  border-color: transparent;
-  background: transparent;
-  border-width: 0 0 var(--border-width-sm) 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.appearance_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  border-bottom-color: var(--color-border-input);
-}
-
-.appearance_inline:is(:focus-within, [data-force-state='focus']) {
-  border-bottom-color: var(--color-border-focus);
-  box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);
-}
-
-.appearance_inline[data-invalid='true'] {
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: var(--color-border-error);
-  border-left-color: transparent;
-  box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-error);
-}
-
-.appearance_inline[data-disabled='true'] {
+.context_inline[data-disabled='true'] {
   background: transparent;
   border-color: transparent;
 }

@@ -14,7 +14,7 @@ bare input, so it doesn't belong at the atom tier.
 
 ### Design Reference
 - Figma Component: `text-field` (component set, node `1690:14129`, file `Components v1.0.0`)
-- Variant axes: `size` (sm, md, lg) x `tone` (standard, subtle) x `state` (default, hover, focus,
+- Variant axes: `size` (sm, md, lg) x `context` (default, inline) x `state` (default, hover, focus,
   typing, filled) x `isDisabled` (false, true) x `isInvalid` (false, true) = 42 variants (not fully
   crossed - `isInvalid` is only demonstrated on `filled`, `isDisabled` only on `default`)
 - Component properties: `placeholderText` (TEXT), `value` (TEXT), `elemBeforeInput` (BOOLEAN),
@@ -85,12 +85,12 @@ showing placeholder text and value text for documentation purposes - the real co
 prop for either; a real native input already shows its own caret and switches between placeholder
 and value automatically.
 
-Figma's `tone` axis (`standard`, `subtle`) is renamed to `appearance` (`default`, `subtle`) in the
-React API, matching this design system's existing convention of naming the visual-weight axis
-`appearance` (see Button) - Figma's `tone` here is a pure visual-weight distinction (bordered box
-vs. borderless-until-interacted), not a semantic-meaning axis, so `tone` would be the wrong word for
-it in this codebase's vocabulary. `standard` is renamed to `default` to match the `default`/`subtle`
-vocabulary Button and Icon Button already use for the same two-value shape.
+Figma's `context` axis (`default`, `inline`) is the `context` prop in the React API - the same name
+and the same values. It replaces the earlier `appearance` prop (`default`/`subtle`/`inline`), which
+is deprecated but still accepted: `subtle` and `inline` both map to `context="inline"`, `default` to
+`context="default"`. The old code-only `inline` look (the same as `subtle` but without the hover
+background) was merged into `context="inline"`, so a Key Value Pair inline field now gets Figma's
+hover background too.
 
 Figma's `isInvalid` variant is always shown with `strokeWeight: 2` (thicker than the resting 1px
 border) even when not focused - confirmed directly from the node data, not assumed. The component
@@ -102,7 +102,7 @@ to `--color-border-focus`. The focused-frame indicator directly replaces the res
 color - the exact same pattern `invalid` already uses (see above) - rather than adding an outline
 ring around the existing border. (An earlier pass used an `outline` here specifically to avoid a
 layout shift; per explicit design feedback, the border should replace `border-input` the same way
-`invalid` does, not wrap it, so the outline approach was reverted.) `appearance="subtle"` already
+`invalid` does, not wrap it, so the outline approach was reverted.) `context="inline"` already
 followed this "replace, don't wrap" pattern for its own focus indicator (a bottom-border color swap)
 and needed no change.
 
@@ -116,36 +116,36 @@ toggle. This was reported directly against the component from a side-by-side scr
 `box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color>` instead, layered directly against the real (constant) 1px
 border - a box-shadow is pure paint with zero layout impact, so the frame reads as thicker without
 the content box (or the text/caret inside it) ever resizing. This is the same technique
-`appearance="subtle"` uses for its own bottom-only version of this problem (see below).
+`context="inline"` uses for its own bottom-only version of this problem (see below).
 
 Hover is suppressed once the field is focus/typing (`:focus-within`, or the pinned
 `data-force-state='focus'` reference used for the static Storybook state) - hover should only ever
-be visible on an inactive field, per explicit design feedback. This applies to both appearances.
+be visible on an inactive field, per explicit design feedback. This applies to both contexts.
 
-`appearance="subtle"`'s bottom corners are always square (`border-bottom-{left,right}-radius: 0`)
-at every size, confirmed directly from Figma's per-corner radius data on the subtle variants - only
-the top two corners share `appearance="default"`'s standard radius. This is a per-corner override,
-not a smaller uniform radius, since `appearance="default"` remains rounded on all four corners at
+`context="inline"`'s bottom corners are always square (`border-bottom-{left,right}-radius: 0`)
+at every size, confirmed directly from Figma's per-corner radius data on the inline variants - only
+the top two corners share `context="default"`'s standard radius. This is a per-corner override,
+not a smaller uniform radius, since `context="default"` remains rounded on all four corners at
 the same sizes.
 
-`appearance="subtle"` rests at the same `1px` bottom border-width `appearance="default"` uses at
+`context="inline"` rests at the same `1px` bottom border-width `context="default"` uses at
 rest, per explicit design feedback - an earlier pass instead reserved a constant `2px` (transparent
 at rest) specifically to avoid any layout shift when `invalid`/focus reveal the border. That
-reservation was reverted so both appearances share one resting width instead of `subtle` being
+reservation was reverted so both contexts share one resting width instead of `inline` being
 special-cased.
 
 Reverting the constant-2px reservation reintroduced the exact layout shift it was built to avoid:
 changing the real `border-bottom-width` from `1px` to `2px` on focus/invalid shrinks the content box
 by a pixel, which visibly nudges the vertically-centered placeholder/value text - reported directly
 against this component from a side-by-side screenshot (the same problem, and the same fix, that
-`appearance="default"`'s own focus/invalid needed - see above). `border-bottom-width` now stays a
+`context="default"`'s own focus/invalid needed - see above). `border-bottom-width` now stays a
 constant `1px` in the box model at every state (rest, hover, focus, invalid) - focus and invalid
 instead paint an extra pixel via `box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 <color>`, layered directly against
 the real 1px border, with zero layout impact.
 
-Hovering an `invalid` `appearance="subtle"` field no longer resets the bottom border back to
+Hovering an `invalid` `context="inline"` field no longer resets the bottom border back to
 `--color-border-input` - per explicit design feedback, the error border must stay visible through
-hover, the same way `appearance="default"`'s hover (background-only, no border-color touch) never
+hover, the same way `context="default"`'s hover (background-only, no border-color touch) never
 masks `invalid` either. The hover rule that changes the bottom border color is scoped with
 `:not([data-invalid='true'])` so it only applies to the non-invalid case; the hover rule that
 changes background remains unscoped, since background hover feedback is still expected on an
@@ -188,13 +188,15 @@ input and an adjacent icon/action also varies per size (4px/6px/8px) rather than
 every size - `--spacing-xs` (sm), `--spacing-075` (md, Figma's `spacing/075`), `--spacing-sm`
 (lg).
 
-### Appearance
+### Context
 
-| Appearance | Figma `tone` | Description |
-|------------|--------------|--------------|
-| default | standard | Bordered box, rounded on all four corners, with a raised-surface background at rest |
-| subtle | subtle | No visible border or background until hover, focus, or invalid; bottom corners always square |
-| inline | (context axis) | Chromeless at rest with subtle-style bottom-only border on hover/focus/invalid. Keeps normal padding, height, and top-corner radius; bottom corners square. For embedding inside Key Value Pair wrapped in Inline Edit. |
+| Context | Figma `context` | Description |
+|---------|-----------------|--------------|
+| default | default | Bordered box, rounded on all four corners, with a raised-surface background at rest |
+| inline | inline | No border or background at rest. Hover shows the raised-hover background and a 1px bottom border; focus and invalid paint a 2px bottom line. Keeps normal padding, height, and top-corner radius; bottom corners always square. For a field inside a row - a search box, an inline-edit field, a Key Value Pair value. |
+
+The deprecated `appearance` prop still works: `subtle` and `inline` map to `inline`, `default` to
+`default`.
 
 ---
 
@@ -220,7 +222,8 @@ No fixed limit - native `maxLength` applies if set.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | size | `'sm' \| 'md' \| 'lg'` | No | `'md'` |
-| appearance | `'default' \| 'subtle' \| 'inline'` | No | `'default'` |
+| context | `'default' \| 'inline'` | No | `'default'` |
+| appearance (deprecated) | `'default' \| 'subtle' \| 'inline'` | No | undefined |
 | invalid | boolean | No | `false` |
 | iconBefore | ReactNode | No | undefined |
 | iconAfter | ReactNode | No | undefined |
@@ -231,6 +234,9 @@ No fixed limit - native `maxLength` applies if set.
 `disabled`, `placeholder`, `value`, `defaultValue`, `type`, `onChange`, `required`, `name`, `id`,
 etc. are all the real native `<input>` attributes, forwarded directly - there is no bespoke
 `isDisabled` or custom placeholder/value prop.
+
+`appearance` is a deprecated alias for `context`, still accepted: `subtle` and `inline` map to
+`context="inline"`, `default` to `context="default"`. An explicit `context` wins.
 
 `iconBefore`/`iconAfter` are both typed as plain `React.ReactNode` - the asymmetry between "always
 decorative" and "may be interactive" is enforced by the component's markup (only `iconBefore`'s
@@ -278,9 +284,11 @@ sibling button - Text Field does not manage focus order beyond native DOM order.
 Hover only ever shows on an inactive field - once the field is focus/typing, the hover background
 is suppressed regardless of pointer position, so focus/typing and hover styling never compete.
 
-`appearance="subtle"` starts from a transparent background and border at rest, then uses the exact
-same hover/focus/invalid tokens as `appearance="default"` once interacted with - confirmed directly
-from Figma's bound variables on the subtle variants, not assumed symmetry.
+`context="inline"` starts from a transparent background and border at rest, then uses the exact
+same hover/focus/invalid tokens as `context="default"` once interacted with - the
+`--color-elevation-surface-raised-hover` background plus a `--color-border-input` bottom border on
+hover, and `--color-border-focus` / `--color-border-error` on the bottom edge only - confirmed
+directly from Figma's bound variables on the inline variants, not assumed symmetry.
 
 ### Sizing
 See the Size table above.
@@ -309,6 +317,11 @@ boolean prop.
 - Forms
 - Search boxes
 - Inline-edit fields
+- Field - with `context="inline"`, injects `context="inline"` into its control unless the control
+  sets its own `context` (or a deprecated `appearance`)
+- Date Picker and Time Picker - pass their own `context` straight to the Text Field
+- Table - editable cells force `context="inline"`
+- Menu - its search field uses `context="inline"`
 
 ---
 
@@ -334,19 +347,20 @@ boolean prop.
 ## QA Checklist
 
 ### Visual
-- [ ] Matches Figma across size x appearance
+- [ ] Matches Figma across size x context
 - [ ] Hover, focus, invalid, and disabled states match Figma's bound tokens
 - [ ] Focus/typing replaces the resting border color directly (like invalid), not an outline ring
       around it
-- [ ] `appearance="default"` rests at 1px border-width at every state (rest, hover, focus, invalid) -
+- [ ] `context="default"` rests at 1px border-width at every state (rest, hover, focus, invalid) -
       focus/invalid look thicker via `box-shadow` only, never a real `border-width` change, so the
       input text and typing caret never shift horizontally
 - [ ] Hover background never shows while the field is focused/typing
-- [ ] `appearance="subtle"` renders square bottom corners at every size
-- [ ] `appearance="subtle"` rests at the same 1px border-width as `appearance="default"`, at every
+- [ ] `context="inline"` renders square bottom corners at every size
+- [ ] `context="inline"` shows the raised-hover background and a 1px bottom border on hover
+- [ ] `context="inline"` rests at the same 1px border-width as `context="default"`, at every
       state (rest, hover, focus, invalid) - focus/invalid look thicker via `box-shadow` only, never
       a real `border-bottom-width` change, so the input text never shifts vertically
-- [ ] Hovering an invalid `appearance="subtle"` field keeps the error border color, not
+- [ ] Hovering an invalid `context="inline"` field keeps the error border color, not
       `--color-border-input`
 - [ ] Inline padding is asymmetric (tighter on the end side) at every size
 - [ ] Light mode works
@@ -354,7 +368,8 @@ boolean prop.
 
 ### Functional
 - [ ] Renders a real native `<input>`
-- [ ] size and appearance render correctly
+- [ ] size and context render correctly
+- [ ] deprecated `appearance` values map to a context (`subtle`/`inline` → `inline`)
 - [ ] invalid sets aria-invalid and the error border
 - [ ] disabled prevents interaction and applies disabled tokens
 - [ ] iconBefore/iconAfter render when provided
@@ -372,10 +387,6 @@ boolean prop.
 ---
 
 ## Known Limitations
-- No multi-line (textarea) mode.
+- No multi-line mode - use Text Area.
 - No integrated label, helper text, or error message - Figma's source component doesn't include
-  them; see "Future Enhancements."
-
-## Future Enhancements
-- A "Form Field" molecule composing a label, this input, and helper/error text
-- A textarea variant if a real multi-line use case emerges
+  them; wrap it in Field.

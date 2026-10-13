@@ -22,12 +22,12 @@ describe('TextField', () => {
     expect(input.tagName).toBe('INPUT');
   });
 
-  it('uses the default size and appearance', () => {
+  it('uses the default size and context', () => {
     render(<TextField aria-label="Name" />);
 
     const wrapper = screen.getByRole('textbox').closest('div');
     expect(wrapper).toHaveAttribute('data-size', 'md');
-    expect(wrapper).toHaveAttribute('data-appearance', 'default');
+    expect(wrapper).toHaveAttribute('data-context', 'default');
   });
 
   it('applies a selected size', () => {
@@ -36,10 +36,10 @@ describe('TextField', () => {
     expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-size', 'lg');
   });
 
-  it('applies a selected appearance', () => {
-    render(<TextField appearance="subtle" aria-label="Name" />);
+  it('applies the inline context', () => {
+    render(<TextField context="inline" aria-label="Name" />);
 
-    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-appearance', 'subtle');
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'inline');
   });
 
   it('sets aria-invalid and data-invalid when invalid', () => {
@@ -135,9 +135,9 @@ describe('TextField', () => {
     expect(textFieldCss).toContain('border-color: var(--color-border-focus);');
   });
 
-  it('paints focus/invalid on appearance=default via box-shadow, not a real border-width change (avoids shifting the text/caret)', () => {
+  it('paints focus/invalid on context=default via box-shadow, not a real border-width change (avoids shifting the text/caret)', () => {
     const focusRuleMatch = textFieldCss.match(
-      /\.appearance_default:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
+      /\.context_default:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
     );
     const invalidRuleMatch = textFieldCss.match(/\.root\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
@@ -162,22 +162,22 @@ describe('TextField', () => {
     expect(textFieldCss).toContain('--text-field-radius: var(--border-radius-xl);');
   });
 
-  it('rests appearance=subtle at the same 1px border-width as the default appearance', () => {
-    expect(textFieldCss).toContain('.appearance_subtle {');
-    expect(textFieldCss).toMatch(/\.appearance_subtle\s*\{[^}]*border-width:\s*0 0 var\(--border-width-sm\) 0;/);
+  it('rests context=inline at the same 1px border-width as the default context', () => {
+    expect(textFieldCss).toContain('.context_inline {');
+    expect(textFieldCss).toMatch(/\.context_inline\s*\{[^}]*border-width:\s*0 0 var\(--border-width-sm\) 0;/);
   });
 
-  it('never lets hover mask the invalid border color on appearance=subtle', () => {
+  it('never lets hover mask the invalid border color on context=inline', () => {
     expect(textFieldCss).toMatch(
-      /\.appearance_subtle:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\):not\(:focus-within\):not\(\[data-force-state='focus'\]\):is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*border-bottom-color: var\(--color-border-input\);/,
+      /\.context_inline:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\):not\(:focus-within\):not\(\[data-force-state='focus'\]\):is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*border-bottom-color: var\(--color-border-input\);/,
     );
   });
 
-  it('paints a thicker focus/invalid border on appearance=subtle via box-shadow, not a real border-width change (avoids shifting the text)', () => {
+  it('paints a thicker focus/invalid border on context=inline via box-shadow, not a real border-width change (avoids shifting the text)', () => {
     const focusRuleMatch = textFieldCss.match(
-      /\.appearance_subtle:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
+      /\.context_inline:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
     );
-    const invalidRuleMatch = textFieldCss.match(/\.appearance_subtle\[data-invalid='true'\]\s*\{([^}]*)\}/);
+    const invalidRuleMatch = textFieldCss.match(/\.context_inline\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
     expect(focusRuleMatch?.[1]).toContain('border-bottom-color: var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);');
@@ -220,5 +220,19 @@ describe('TextField', () => {
       expect(rule?.[1]).toContain('flex: 0 1 auto;');
       expect(rule?.[1]).toContain('overflow: hidden;');
     });
+  });
+
+  it('maps the deprecated appearance values to a context', () => {
+    const { rerender } = render(<TextField appearance="subtle" aria-label="Name" />);
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'inline');
+    rerender(<TextField appearance="inline" aria-label="Name" />);
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'inline');
+    rerender(<TextField appearance="default" aria-label="Name" />);
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'default');
+  });
+
+  it('has one inline look, Figma\'s: no separate chromeless-without-hover duplicate', () => {
+    expect(textFieldCss).not.toMatch(/appearance_/);
+    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
   });
 });

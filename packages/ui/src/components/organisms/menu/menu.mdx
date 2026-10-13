@@ -29,9 +29,9 @@ consumer supplies.
 
 ## Anatomy
 
-- **Search** (`showSearch`, default `true`) - a `size="md"`, `appearance="subtle"` `TextField`
+- **Search** (`showSearch`, default `true`) - a `size="md"`, `context="inline"` `TextField`
   with no leading icon and a trailing clear button once there's a value - matching Figma's
-  `menu-search` instance exactly (`size: md`, `tone: subtle`, no `elemBeforeInput`). `subtle`
+  `menu-search` instance exactly (`size: md`, `context: inline`, no `elemBeforeInput`). `inline`
   alone still shows a colored focus underline and hover background; Menu additionally strips both
   in CSS to match this specific instance, which has neither in any state. Filters items by a
   case-insensitive substring match against each item's `label` and `description` (only when

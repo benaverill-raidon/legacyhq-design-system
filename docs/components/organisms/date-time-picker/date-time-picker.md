@@ -19,8 +19,8 @@ Do not use it when only a date is needed (use Date Picker) or only a time is nee
 The control composes the real Date Picker and Time Picker side by side (480px = two 240px halves in
 Figma). The two field frames collapse into a single shared border so the control reads as one field:
 a single rounded outline with squared inner corners and a divider between the halves. `size` and
-`context` pass through to both halves so they stay in step; `default` is bordered, `inline` is
-borderless (subtle).
+`context` pass through to both halves (and on to their Text Field triggers) so they stay in step;
+`default` is bordered, `inline` is borderless.
 
 Both halves are driven by one `Date`. Picking a date keeps the current time; confirming a time keeps
 the current date; `onChange` fires with the combined `Date`. Date constraints (`min`, `max`,

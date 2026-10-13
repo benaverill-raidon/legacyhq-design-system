@@ -24,20 +24,24 @@ Icon Button or Button.
 - **Multi-line content.** There is no textarea mode.
 - **A value chosen from a fixed set of options.** Use Select instead.
 
-## Sizes and appearance
+## Sizes and context
 
 <Canvas of={TextFieldStories.Variants} />
 
-`appearance="default"` (the standard bordered look, rounded on all four corners) is correct for
-nearly every case. `appearance="subtle"` has no visible border or background until it's hovered,
-focused, or invalid, and its bottom corners are always square regardless of size - useful for a
-search box or inline-edit field that shouldn't visually compete with surrounding content until
-someone interacts with it. Confirmed directly from Figma: subtle never shows a full box border,
-even on hover/focus - only a bottom accent line reveals - and its bottom-corner radius is always 0.
-It rests at the same 1px bottom border-width `appearance="default"` uses at rest, at every state -
-focus and invalid paint a thicker look via `box-shadow` only, never a real `border-bottom-width`
-change, so the input text never shifts vertically. Hovering an invalid `appearance="subtle"` field
-keeps the error border color rather than resetting it.
+`context="default"` (the standard bordered look, rounded on all four corners) is correct for
+nearly every case. `context="inline"` (Figma's `context=inline`) is for a field inside a row - a
+search box, an inline-edit field, a Key Value Pair value - that shouldn't visually compete with
+surrounding content until someone interacts with it. It has no visible border or background at
+rest. Confirmed directly from Figma, it never shows a full box border: hover shows the raised-hover
+background and a 1px bottom border, focus and invalid paint a 2px bottom line, and its bottom
+corners are always square regardless of size. It rests at the same 1px bottom border-width
+`context="default"` uses at rest, at every state - focus and invalid paint the thicker look via
+`box-shadow` only, never a real `border-bottom-width` change, so the input text never shifts
+vertically. Hovering an invalid `context="inline"` field keeps the error border color rather than
+resetting it.
+
+The older `appearance` prop is deprecated but still accepted: `subtle` and `inline` both map to
+`context="inline"`.
 
 ## States
 
@@ -54,7 +58,7 @@ directly from Figma's node data, not a focus-only effect.
 
 Focus/typing replaces the resting border color directly - the same pattern `invalid` already uses -
 rather than adding an outline ring around the existing border. Border *width* never literally
-changes, though: `appearance="default"` rests at 1px at every state (rest, hover, focus, invalid),
+changes, though: `context="default"` rests at 1px at every state (rest, hover, focus, invalid),
 painting the "thicker" look on focus/invalid via `box-shadow` only, so the placeholder/value text
 and the typing caret never shift horizontally. Hover is suppressed once the field is focused/typing:
 hover styling is only ever visible on an inactive field.
@@ -128,10 +132,16 @@ name. When building a clearable field, pass a real `IconButton` (`appearance="su
       <td>Frame height, padding, and typography.</td>
     </tr>
     <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'subtle'</code></td>
+      <td><code>context</code></td>
+      <td><code>'default' | 'inline'</code></td>
       <td><code>'default'</code></td>
-      <td>Bordered box vs. borderless-until-interacted.</td>
+      <td>Bordered box, or chromeless until hovered or focused for a field inside a row (Figma's <code>context</code>).</td>
+    </tr>
+    <tr>
+      <td><code>appearance</code></td>
+      <td><code>'default' | 'subtle' | 'inline'</code></td>
+      <td>-</td>
+      <td>Deprecated - use <code>context</code>. <code>subtle</code> and <code>inline</code> map to <code>context="inline"</code>.</td>
     </tr>
     <tr>
       <td><code>invalid</code></td>

@@ -16,7 +16,7 @@
       "trigger": "figma-parts / select-trigger wrapping a text-field (value text + elemAfterInput calendar icon); the field frame is radius md with a border/input outline.",
       "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
     },
-    "notes": "context default -> Text Field appearance 'default' (bordered); context inline -> appearance 'subtle' (borderless). The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+    "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
   },
   "useCases": [
     "a date field in a form",
@@ -89,7 +89,7 @@
   ],
   "behaviorRules": [
     "Render a read-only Text Field showing the formatted selected date + a calendar icon.",
-    "context maps to Text Field appearance (default -> default, inline -> subtle); size passes through.",
+    "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Render the open state by pinning the field focus treatment while open.",
     "Open the calendar in a Popup anchored to the field frame; select fills the field and closes.",
     "Controlled/uncontrolled value and open state.",

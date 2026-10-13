@@ -16,7 +16,7 @@
       "trigger": "figma-parts / select-trigger wrapping a text-field (time text + elemAfterInput clock icon 'picker_time', 16px in a 24x24 box).",
       "popup": "the open state renders a popup > panelSurface > columns of code-parts/<menu-item> (selected = background/selected/default/default + content/selected) + a footer-item (a button-group with Cancel/Confirm buttons, tone=subtle, size=xs), each column with its own scrollbar."
     },
-    "notes": "context default -> Text Field appearance 'default'; inline -> 'subtle'. The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
+    "notes": "context passes straight to the Text Field's own context ('default' | 'inline'). The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
   },
   "useCases": ["a time-of-day field in a form", "a time filter"],
   "antiPatterns": ["picking a date (use Date Picker / Date-Time Picker)", "entering a duration"],
@@ -92,7 +92,7 @@
   ],
   "behaviorRules": [
     "Render a read-only Text Field showing the formatted time + a clock icon.",
-    "context maps to Text Field appearance (default -> default, inline -> subtle); size passes through.",
+    "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Open a Popup with three listbox columns (hours 12-hour, minutes by minuteStep, AM/PM).",
     "Preview the staged selection live in the field while open.",
     "Commit the staged selection on Confirm or an outside click (onChange + close); discard it on Cancel or Escape (close).",

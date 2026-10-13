@@ -1544,14 +1544,14 @@
     "examples": [
       {
         "name": "Basic click-to-edit text value",
-        "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. A subtle TextField is the recommended child for most cases.",
-        "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField appearance=\"subtle\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
+        "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. An inline TextField (context='inline') is the recommended child for most cases.",
+        "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField context=\"inline\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
         "props": {}
       },
       {
         "name": "Read-only display (before any interaction)",
         "description": "Inline Edit always starts read-only - the confirm/cancel buttons only appear once the field is clicked or focused.",
-        "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "value": "Q3 Planning"
         }
@@ -1559,7 +1559,7 @@
       {
         "name": "No visible action buttons (Enter/Escape only, once editing)",
         "description": "actionButtons={false} hides the icon buttons once editing starts; Enter still confirms and Escape still cancels.",
-        "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "actionButtons": false
         }
@@ -1567,7 +1567,7 @@
       {
         "name": "Custom accessible names for the action buttons",
         "description": null,
-        "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "confirmLabel": "Save title",
           "cancelLabel": "Discard changes"
@@ -1582,12 +1582,12 @@
       },
       {
         "name": "Expecting an isEditing prop to show the buttons upfront",
-        "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "reason": "There is no isEditing prop - editing always starts on click/focus of the field itself, never before."
       },
       {
         "name": "Expecting onConfirm to fire on every keystroke",
-        "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
       }
     ],
@@ -1659,7 +1659,7 @@
       {
         "name": "Mixed editable and static pairs",
         "description": "Some pairs are inline-editable (with TextField/TextArea), others are static.",
-        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea appearance=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea context=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
         "props": {}
       }
     ],
@@ -1698,8 +1698,8 @@
       },
       {
         "name": "Inline editable with TextField",
-        "description": "Pass a TextField with appearance='inline' as children for inline editing. The edit icon provides the affordance.",
-        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "description": "Pass a TextField with context='inline' as children for inline editing. The edit icon provides the affordance.",
+        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
           "label": "Client name",
           "underline": true
@@ -1707,8 +1707,8 @@
       },
       {
         "name": "Inline editable with TextArea",
-        "description": "Pass a TextArea with appearance='inline' for multi-line inline editing.",
-        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "description": "Pass a TextArea with context='inline' for multi-line inline editing.",
+        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
           "label": "Notes",
           "underline": true
@@ -1930,12 +1930,12 @@
         "props": {}
       },
       {
-        "name": "Sizes and tones",
-        "description": "size sets trigger height (32/40/48) and chip size; tone maps to TextField's appearance.",
-        "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" tone=\"subtle\" />",
+        "name": "Sizes and contexts",
+        "description": "size sets trigger height (32/40/48) and chip size; context is the same axis as TextField's (inline: chromeless until hovered or focused).",
+        "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" context=\"inline\" />",
         "props": {
           "size": "lg",
-          "tone": "subtle"
+          "context": "inline"
         }
       },
       {
@@ -2198,12 +2198,12 @@
         }
       },
       {
-        "name": "Sizes and appearances",
-        "description": "size controls padding/radius/font; appearance switches between the bordered box and the low-chrome subtle variant (transparent until interacted with).",
-        "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea appearance=\"subtle\" aria-label=\"Subtle\" rows={3} />",
+        "name": "Sizes and contexts",
+        "description": "size controls padding/radius/font; context switches between the bordered box and the chromeless inline field (transparent until interacted with).",
+        "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea context=\"inline\" aria-label=\"Inline\" rows={3} />",
         "props": {
           "size": "lg",
-          "appearance": "subtle",
+          "context": "inline",
           "rows": 3
         }
       },
@@ -2236,11 +2236,11 @@
         }
       },
       {
-        "name": "Inline appearance inside Key Value Pair",
-        "description": "appearance=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest with subtle-style bottom-only border on hover/focus/invalid.",
-        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "name": "Inline context inside Key Value Pair",
+        "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
+        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
-          "appearance": "inline",
+          "context": "inline",
           "rows": 2,
           "resize": "none",
           "iconAfter": "EditIcon"
@@ -2289,11 +2289,11 @@
         }
       },
       {
-        "name": "Subtle appearance (search box)",
+        "name": "Inline context (search box)",
         "description": null,
-        "jsx": "<TextField appearance=\"subtle\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
+        "jsx": "<TextField context=\"inline\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
         "props": {
-          "appearance": "subtle",
+          "context": "inline",
           "type": "search"
         }
       },
@@ -2329,12 +2329,12 @@
         }
       },
       {
-        "name": "Small size, subtle appearance (square bottom corners)",
+        "name": "Small size, inline context (square bottom corners)",
         "description": null,
-        "jsx": "<TextField size=\"sm\" appearance=\"subtle\" placeholder=\"Placeholder\" aria-label=\"Small subtle field\" />",
+        "jsx": "<TextField size=\"sm\" context=\"inline\" placeholder=\"Placeholder\" aria-label=\"Small inline field\" />",
         "props": {
           "size": "sm",
-          "appearance": "subtle"
+          "context": "inline"
         }
       },
       {
@@ -2346,11 +2346,11 @@
         }
       },
       {
-        "name": "Inline appearance inside Key Value Pair",
-        "description": "appearance=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest with subtle-style bottom-only border on hover/focus/invalid.",
-        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "name": "Inline context inside Key Value Pair",
+        "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
+        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
-          "appearance": "inline",
+          "context": "inline",
           "iconAfter": "EditIcon"
         }
       }

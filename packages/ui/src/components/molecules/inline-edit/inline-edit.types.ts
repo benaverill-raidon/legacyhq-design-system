@@ -15,7 +15,7 @@ export interface InlineEditableProps {
 export interface InlineEditProps {
   /** The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft. */
   value: string;
-  /** A single controlled input-like element (e.g. `<TextField appearance="subtle" />`) InlineEdit clones for both the read-only display and the editable control. */
+  /** A single controlled input-like element (e.g. `<TextField context="inline" />`) InlineEdit clones for both the read-only display and the editable control. */
   children: React.ReactElement<InlineEditableProps>;
   /** Called with the draft when confirmed. Enter confirms single-line fields; Ctrl/Cmd+Enter confirms textareas. */
   onConfirm?: (value: string) => void;

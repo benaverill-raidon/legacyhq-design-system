@@ -1,10 +1,16 @@
 import type * as React from 'react';
 
 export type TextFieldSize = 'sm' | 'md' | 'lg';
+/** `inline` is chromeless until hovered or focused, for a field inside a row (Figma's context=inline). */
+export type TextFieldContext = 'default' | 'inline';
+/** @deprecated Use `TextFieldContext`: `subtle` and `inline` are both `inline`. */
 export type TextFieldAppearance = 'default' | 'subtle' | 'inline';
 
 export interface TextFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   size?: TextFieldSize;
+  /** `default` (bordered) or `inline` (chromeless until hovered or focused). Defaults to `default`. */
+  context?: TextFieldContext;
+  /** @deprecated Use `context`: `subtle` and `inline` map to `context="inline"`. Still accepted. */
   appearance?: TextFieldAppearance;
   invalid?: boolean;
   /** Icon or short text only (e.g. a currency prefix). Always decorative/non-interactive. */

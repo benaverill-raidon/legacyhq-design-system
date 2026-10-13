@@ -21,8 +21,8 @@
     },
     {
       "name": "Inline editable with TextField",
-      "description": "Pass a TextField with appearance='inline' as children for inline editing. The edit icon provides the affordance.",
-      "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "description": "Pass a TextField with context='inline' as children for inline editing. The edit icon provides the affordance.",
+      "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
       "props": {
         "label": "Client name",
         "underline": true
@@ -30,8 +30,8 @@
     },
     {
       "name": "Inline editable with TextArea",
-      "description": "Pass a TextArea with appearance='inline' for multi-line inline editing.",
-      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "description": "Pass a TextArea with context='inline' for multi-line inline editing.",
+      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
       "props": {
         "label": "Notes",
         "underline": true

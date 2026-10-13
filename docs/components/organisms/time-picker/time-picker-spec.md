@@ -66,7 +66,7 @@ hoursLabel = 'Hours'; minutesLabel = 'Minutes'; meridiemLabel = 'AM/PM'
 
 ## Variants and states
 
-- `context`: `default` -> Text Field appearance `default` (bordered); `inline` -> `subtle` (borderless).
+- `context`: passed straight to the Text Field's `context` - `default` (bordered); `inline` (borderless).
 - `size`: `sm` / `md` / `lg`.
 - states: `default`, `filled`, `hover`, `open` (field focus treatment pinned), `disabled`, `invalid`.
 

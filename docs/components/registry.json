@@ -3273,7 +3273,7 @@
       },
       {
         "name": "control",
-        "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus appearance='subtle' when context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
+        "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus context='inline' when Field's context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
       },
       {
         "name": "message",
@@ -3318,7 +3318,7 @@
         "type": "FieldContext",
         "required": false,
         "default": "default",
-        "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio.",
+        "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text and gives the control context='inline' unless it sets its own - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio.",
         "enum": [
           "default",
           "inline"
@@ -3420,7 +3420,7 @@
         "The message is linked to the control via aria-describedby, merged with any aria-describedby the control already carries.",
         "state='error' sets aria-invalid on the control; an explicit control aria-invalid always wins.",
         "required forwards native required to the control; the visible '*' is aria-hidden.",
-        "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/appearance are never overwritten.",
+        "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/context (or deprecated appearance/tone) are never overwritten.",
         "Use Field for one control only; a group of controls needs fieldset/legend instead of a single label[htmlFor]."
       ]
     },
@@ -3493,7 +3493,7 @@
         "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop.",
         "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
         "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
-        "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
+        "context is a single shared axis in Figma (the same 'context' property, default/inline, sits on <field>, text-field, text-area, select, etc.), so Field propagates context='inline' to the control by injecting context='inline' - Text Field, Text Area, and Select take the same context prop with the same values. The control's own context (or a deprecated appearance/tone) wins. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
         "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
         "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
         "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
@@ -3835,7 +3835,7 @@
         "type": "React.ReactElement",
         "required": true,
         "default": null,
-        "description": "A single controlled input-like element (e.g. a subtle TextField) InlineEdit clones for both the read-only display and the editable control."
+        "description": "A single controlled input-like element (e.g. a TextField with context='inline') InlineEdit clones for both the read-only display and the editable control."
       },
       "onConfirm": {
         "type": "(value: string) => void",
@@ -3946,7 +3946,7 @@
         "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
         "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
         "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
-        "children is expected to be a single controlled input-like element (TextField today, typically appearance=subtle so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
+        "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
         "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
       ]
     }
@@ -4216,7 +4216,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Inline-editable control (TextField/TextArea/Select with appearance='inline'). Takes precedence over value."
+        "description": "Inline-editable control (TextField/TextArea/Select with context='inline'). Takes precedence over value."
       }
     },
     "sizes": [
@@ -4270,13 +4270,14 @@
       "componentName": "key-value-pair",
       "variantCount": 22,
       "verifiedAt": "2026-09-17",
-      "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea with appearance='inline'.",
+      "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea/Select with context='inline' - Figma uses the standard Text Field/Text Area/Select context=inline instances there.",
       "apiAdaptationNotes": [
-        "Figma's context=default renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
+        "Figma's context=static renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
         "The key (label) uses <dt> and the value uses <dd> for semantic HTML, expecting the parent Key Value List to render a <dl>.",
         "Key width is a fixed 40% (inline-size: 40%) at all sizes, matching the Figma layout.",
         "Gap between key and value is --spacing-lg at all sizes.",
-        "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop."
+        "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop.",
+        "Inline fields in the value slot keep the standard context='inline' treatment, including the raised-hover background, matching Figma. Key Value Pair only squares their frames: .value [data-context='inline'] { border-radius: 0; }."
       ]
     }
   },
@@ -4679,24 +4680,36 @@
           "lg"
         ]
       },
+      "context": {
+        "type": "SelectContext",
+        "required": false,
+        "default": "default",
+        "description": "The trigger's context, as Text Field's - default (bordered) or inline (chromeless until hovered or focused, for a field inside a row).",
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
       "tone": {
         "type": "SelectTone",
         "required": false,
-        "default": "default",
-        "description": "Maps to TextField's appearance - default (bordered) or subtle (bottom-border only).",
+        "default": null,
+        "description": "Deprecated - use context. subtle and inline map to context='inline'. Still accepted; an explicit context wins.",
         "enum": [
           "default",
-          "subtle"
+          "subtle",
+          "inline"
         ]
       },
       "appearance": {
         "type": "SelectTone",
         "required": false,
         "default": null,
-        "description": "Alias for tone, using the canonical appearance name Text Field/Text Area use for the same axis, so a wrapper (e.g. Field's inline context) can drive it with one shared prop. An explicit tone wins.",
+        "description": "Deprecated - use context. subtle and inline map to context='inline'. Still accepted; an explicit context wins.",
         "enum": [
           "default",
-          "subtle"
+          "subtle",
+          "inline"
         ]
       },
       "placeholder": {
@@ -4773,9 +4786,9 @@
         "single",
         "multi"
       ],
-      "tone": [
+      "context": [
         "default",
-        "subtle"
+        "inline"
       ]
     },
     "subComponents": [],
@@ -4808,7 +4821,7 @@
       "variantCount": 84,
       "verifiedAt": "2026-08-26",
       "note": "Filed on the file's own \"✅⏲️ Select\" page, verified directly against the file via the Desktop Bridge plugin.",
-      "structure": "One component set, 84 variants across six axes - size (sm/md/lg), tone (default/subtle), state (default/hover/focus/typing/hasValue), inputType (single/multi), isInvalid, isDisabled. Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
+      "structure": "One component set, 84 variants across six axes - size (sm/md/lg), context (default/inline), state (default/hover/open/hasValue/openValue), inputType (single/multi), isInvalid, isDisabled (axes re-checked 2026-10-13). Every variant is a `dropdown-menu` instance (Popup + panel) whose trigger slot holds a `figma-parts / select-trigger` (4658:67775), which is itself a `text-field` instance carrying a trailing `caret_down` in its elemAfterInput slot. In multi + hasValue, the trigger's text-field also holds `chip-container` frames (chip-base, mode=select) ahead of the input. The panel's surface slot is the generic empty `panelSurface` in the static file - the real option list is a code decision, the same 'static mockup, real content is code' pattern as every other dropdown-menu-based molecule. Trigger geometry measured per size: sm 32 / radius 8, md 40 / radius 8, lg 48 / radius 12; frame fill color/elevation/surface/raised/default (hover raised/hover), border color/border/input, focus+typing border color/border/focused, disabled background/disabled + border/disabled. The multi trigger is single-line, NO_WRAP at every size - chips sit inline, chip size sm for sm/md triggers and md for lg.",
       "parts": {
         "figma-parts / select-trigger": "4658:67775 - 84 variants mirroring select's own axes. Structurally a text-field instance + trailing caret, so the code trigger is the existing TextField molecule, not a bespoke frame.",
         "text-field": "The trigger's frame, fill, border, focus/invalid/disabled treatment and per-size geometry are exactly the TextField molecule's - verified token-for-token, so Select reuses TextField rather than restating its state CSS.",
@@ -4819,8 +4832,8 @@
         "Props are a discriminated union on `inputType` (default 'single'), so single-select's scalar `value: string | null` and multi-select's `value: string[]` cannot be mixed up - the same pattern Chip uses for `mode`. Single's onChange takes `string | null`; multi's takes `string[]`.",
         "Options are a flat `SelectOption[]` ({ value, label, icon?, description?, disabled?, group? }), not Menu's `MenuSection[]`. Select maps them into sections itself - grouping consecutive options by their `group` field - and owns each row's selected state, selectionType (radio for single, checkbox for multi), and onSelect. This is the ergonomic shape a Select consumer expects; the caller never hand-wires Menu rows.",
         "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
-        "tone maps to TextField's `appearance` (default/subtle) - Figma names the axis `tone` on the trigger, but it is TextField's appearance axis, so code uses TextField's own name at that boundary.",
-        "An additive `appearance` alias for `tone` was added (same SelectTone values) so a wrapper can drive the trigger's standard/subtle axis with the canonical `appearance` name Text Field/Text Area use - specifically Field's inline context, which injects appearance='subtle' into whatever control it wraps. An explicit `tone` still wins, so existing usage is unchanged.",
+        "`context` (default/inline) is passed straight to the TextField trigger - the same prop, values, and Figma axis name (`context`) as Text Field and Text Area, so a wrapper drives all three with one prop. Field's inline context injects context='inline' into whatever control it wraps unless the control sets its own.",
+        "`tone` and `appearance` are deprecated aliases for `context` (SelectTone: default/subtle/inline), still accepted: subtle and inline both map to context='inline', default to 'default'. An explicit `context` wins over either.",
         "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
         "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
         "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
@@ -5290,11 +5303,21 @@
           "lg"
         ]
       },
+      "context": {
+        "type": "TextAreaContext",
+        "required": false,
+        "default": "default",
+        "description": "default = bordered box (all corners rounded). inline = chromeless at rest; raised-hover background and a bottom-only border on hover, bottom-only focus/error line on focus/invalid; keeps padding and top-corner radius, square bottom corners — for a field inside a row, such as Key Value Pair wrapped in Inline Edit. Same name and values as Text Field's and Figma's `context`.",
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
       "appearance": {
         "type": "TextAreaAppearance",
         "required": false,
-        "default": "default",
-        "description": "default = bordered box (all corners rounded). subtle = transparent until hover/focus/invalid, bottom accent only, square bottom corners. inline = chromeless at rest, subtle-style bottom-only border on hover/focus/invalid, keeps padding and top-corner radius — for embedding inside Key Value Pair wrapped in Inline Edit. Figma names this axis `tone`; the inline value maps from Figma's separate `context` axis.",
+        "default": null,
+        "description": "Deprecated - use context. subtle and inline map to context='inline', default to 'default'. Still accepted; an explicit context wins.",
         "enum": [
           "default",
           "subtle",
@@ -5369,9 +5392,8 @@
     ],
     "slots": [],
     "variants": {
-      "appearance": [
+      "context": [
         "default",
-        "subtle",
         "inline"
       ]
     },
@@ -5408,12 +5430,12 @@
       "variantCount": 64,
       "verifiedAt": "2026-08-27",
       "note": "Filed on the file's own \"🚧 Text Area\" page, verified directly against the file via the Desktop Bridge plugin. The `sm` size was removed on 2026-08-27 (it read almost identically to md); the size axis is now md/lg. variantCount reflects that removal (was 96) and should be re-confirmed live next time the Components file is connected.",
-      "structure": "One component set across six axes - `type` (default / rich-inline), `size` (md / lg), `tone` (default / subtle), `state` (default / hover / focus / typing / filled / autofill), `isDisabled`, `isInvalid`. Each variant is a single `Container` frame holding the text; the visual frame (fill, border, radius) is bound on the component node, not the inner Container (which carries only padding). Geometry measured per size: padding block/inline md 8/8, lg 12/12; radius lg (8) at md, xl (12) at lg; font body-md (14/24) at md, body-lg (16/24) at lg. State frame tokens (tone=default): default fill background/input/default + border/input 1px; hover fill background/input/hovered; focus fill background/input/pressed + border/focused 2px; typing border/focused 2px; filled + autofill = default; invalid border/error 2px; disabled background/disabled + border/disabled. tone=subtle has a transparent box with a bottom-only accent that reveals on hover (border/input) / focus (border/focused) / invalid (border/error), bottom corners square.",
+      "structure": "One component set across six axes - `type` (default / rich-inline), `size` (md / lg), `context` (default / inline), `state` (default / hover / focus / typing / filled / autofill), `isDisabled`, `isInvalid`. Each variant is a single `Container` frame holding the text; the visual frame (fill, border, radius) is bound on the component node, not the inner Container (which carries only padding). Geometry measured per size: padding block/inline md 8/8, lg 12/12; radius lg (8) at md, xl (12) at lg; font body-md (14/24) at md, body-lg (16/24) at lg. State frame tokens (context=default): default fill background/input/default + border/input 1px; hover fill background/input/hovered; focus fill background/input/pressed + border/focused 2px; typing border/focused 2px; filled + autofill = default; invalid border/error 2px; disabled background/disabled + border/disabled. context=inline has a transparent box; hover adds the hover fill and a bottom-only accent (border/input), and focus (border/focused) / invalid (border/error) reveal a bottom-only line, bottom corners square.",
       "apiAdaptationNotes": [
         "Refactored from a bare <textarea> to a wrapper <div> pattern (matching Text Field) to support a trailing icon/action slot (iconAfter). The wrapper div gets the frame styling (border, background, radius, padding) and uses display: flex; align-items: flex-start to lay out the textarea and the optional action slot side by side. The textarea is a transparent, borderless child inside the wrapper, with flex: 1 1 auto. Focus detection uses :focus-within on the wrapper instead of :focus on the textarea. The browser's native resize grip still works: resize: inherit on the textarea, with overflow: auto on the wrapper's resize_* classes (CSS requires overflow != visible for resize to work on a div).",
-        "Added an iconAfter slot (React.ReactNode) for a trailing icon or interactive control (e.g. an edit pencil IconButton). Rendered in a span.action wrapper, flex: 0 0 auto. Not aria-hidden - it may hold a real focusable action. The inline appearance combined with iconAfter is the standard pattern for embedding inside a Key Value Pair.",
-        "Added a third appearance value, 'inline', for chromeless-at-rest embedding inside Key Value Pair wrapped in Inline Edit. Figma's 'context' axis (default/inline) maps here. Mirrors subtle's bottom-only border treatment but starts fully transparent at rest (no border or background). Hover shows the raised-surface hover background + a bottom accent (border/input), focus shows a bottom-only 2px focus border (border-bottom-color + bottom-only box-shadow, same technique as subtle), invalid shows a bottom-only error border, and disabled stays transparent. Top corners keep the size's radius; bottom corners are square — same shape as subtle. The field keeps its normal padding and height so it reads as a real input when activated.",
-        "Figma's `tone` axis is exposed in code as `appearance` (default/subtle/inline) - the same axis and the same name its sibling Text Field uses, so the two components share one vocabulary.",
+        "Added an iconAfter slot (React.ReactNode) for a trailing icon or interactive control (e.g. an edit pencil IconButton). Rendered in a span.action wrapper, flex: 0 0 auto. Not aria-hidden - it may hold a real focusable action. context=inline combined with iconAfter is the standard pattern for embedding inside a Key Value Pair.",
+        "context=inline (Figma's context=inline) is for a field inside a row, such as Key Value Pair wrapped in Inline Edit. Transparent at rest (no border or background). Hover shows the raised-surface hover background + a bottom accent (border/input), focus shows a bottom-only 2px focus border (border-bottom-color + bottom-only box-shadow), invalid shows a bottom-only error border the same way, and disabled stays transparent. Top corners keep the size's radius; bottom corners are square. The field keeps its normal padding and height so it reads as a real input when activated.",
+        "Figma's `context` axis (default/inline) is the `context` prop - the same name and values its sibling Text Field uses, so the two components share one vocabulary. It replaces the earlier `appearance` prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline both map to context=inline, default to context=default. The old code-only appearance=inline look (subtle without the hover background) was merged into context=inline.",
         "Figma binds a newer `background/input/*` + `border/focused` token naming that has no counterpart in this build. Those map one-to-one onto the `elevation/surface/raised/*` + `border/focus` semantic tokens Text Field already consumes (same intent), so Text Area reuses those rather than inventing unbacked tokens - keeping it visually identical to Text Field per token governance's reuse-first rule.",
         "Focus and invalid replace the border color and paint the extra pixel via an inset box-shadow rather than a real 1px->2px border-width change - the same technique Text Field uses, so the multi-line text never shifts by a pixel on focus/blur or invalid toggle.",
         "Figma tints the fill on focus (`background/input/pressed`); code deliberately keeps the resting fill on focus instead, matching Text Field's established no-tint-on-focus behavior (and that token does not exist here).",
@@ -5464,11 +5486,21 @@
           "lg"
         ]
       },
+      "context": {
+        "type": "TextFieldContext",
+        "required": false,
+        "default": "default",
+        "description": "default is bordered at rest, rounded on all four corners; inline has no border/background at rest, shows the raised-hover background and a 1px bottom border on hover, a 2px bottom focus/error line on focus/invalid, and always has square bottom corners - for a field inside a row, such as a search box or a Key Value Pair value. Matches Figma's context axis.",
+        "enum": [
+          "default",
+          "inline"
+        ]
+      },
       "appearance": {
         "type": "TextFieldAppearance",
         "required": false,
-        "default": "default",
-        "description": "default is bordered at rest, rounded on all four corners; subtle has no visible border/background until hover, focus, or invalid, and always has square bottom corners; inline is chromeless at rest with subtle-style bottom-only border on hover/focus/invalid, keeps padding and top-corner radius — for embedding inside Key Value Pair wrapped in Inline Edit.",
+        "default": null,
+        "description": "Deprecated - use context. subtle and inline map to context='inline', default to 'default'. Still accepted; an explicit context wins.",
         "enum": [
           "default",
           "subtle",
@@ -5528,9 +5560,8 @@
         "md",
         "lg"
       ],
-      "appearance": [
+      "context": [
         "default",
-        "subtle",
         "inline"
       ]
     },
@@ -5542,7 +5573,7 @@
         "height_lg": "--size-control-lg",
         "radius_sm_md": "--border-radius-lg",
         "radius_lg": "--border-radius-xl",
-        "radius_subtle_bottom_corners": "0 (always, every size)",
+        "radius_inline_bottom_corners": "0 (always, every size)",
         "paddingInlineStart_sm": "--spacing-sm",
         "paddingInlineEnd_sm": "--spacing-xs",
         "paddingInlineStart_md": "--spacing-sm",
@@ -5607,9 +5638,9 @@
           "md",
           "sm"
         ],
-        "tone": [
-          "standard",
-          "subtle"
+        "context": [
+          "default",
+          "inline"
         ],
         "state": [
           "default",
@@ -5675,15 +5706,15 @@
       },
       "apiAdaptationNotes": [
         "Figma's 'state' axis (default/hover/focus/typing/filled) is not a real prop - verified from bound tokens: hover=:hover, focus=focus+empty (:focus-within + :placeholder-shown), typing=focus+has-value (:focus-within, not :placeholder-shown), filled=unfocused+has-value (not :placeholder-shown). All four derive from native pseudo-classes plus the input's own value; none are exposed as a prop.",
-        "Figma's 'tone' axis (standard/subtle) is renamed to 'appearance' (default/subtle) - a pure visual-weight distinction, matching this system's existing appearance vocabulary (see Button) rather than the semantic-meaning 'tone' word.",
+        "Figma's 'context' axis (default/inline) is the 'context' prop - the same name and values. It replaces the earlier 'appearance' prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline both map to context=inline, default to context=default. The old code-only appearance=inline look (subtle without the hover background) was merged into context=inline, so Key Value Pair inline fields now get Figma's hover background.",
         "isInvalid renders with strokeWeight=2 even when not focused, confirmed directly from node data - invalid's thicker border is not a focus-only effect.",
-        "Figma's literal focus treatment thickens the frame's own border 1px->2px and swaps its color to --color-border-focus. Focus/typing replaces the resting border's color directly - the same pattern invalid already uses - rather than adding an outline ring around it, per explicit design feedback. Border width does not literally change to 2px, though: an earlier pass changed the real border-width on appearance=default's focus AND invalid, matching Figma directly, but that shifts the content box (and the placeholder/value text and typing caret) on every side, reported directly against the component from a side-by-side screenshot - both now paint the extra pixel via box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color> instead, keeping border-width a constant 1px in the box model with zero layout impact.",
+        "Figma's literal focus treatment thickens the frame's own border 1px->2px and swaps its color to --color-border-focus. Focus/typing replaces the resting border's color directly - the same pattern invalid already uses - rather than adding an outline ring around it, per explicit design feedback. Border width does not literally change to 2px, though: an earlier pass changed the real border-width on context=default's focus AND invalid, matching Figma directly, but that shifts the content box (and the placeholder/value text and typing caret) on every side, reported directly against the component from a side-by-side screenshot - both now paint the extra pixel via box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color> instead, keeping border-width a constant 1px in the box model with zero layout impact.",
         "Hover is suppressed once the field is focus/typing (:focus-within, or the pinned data-force-state='focus' reference) - hover should only ever be visible on an inactive field, per explicit design feedback.",
         "showCaret and placeholder (BOOLEAN) component properties exist only to drive Figma's own mockup and have no code equivalent - a real input shows its own caret and switches placeholder/value automatically.",
-        "appearance=subtle's bottom corners are always square (border-bottom-{left,right}-radius: 0), confirmed directly from Figma's per-corner radius data on the subtle variants - only the top corners share appearance=default's radius.",
-        "appearance=subtle rests at the same 1px bottom border-width appearance=default uses at rest, per explicit design feedback (an earlier pass reserved a constant 2px transparent border specifically to avoid a layout shift; that reservation was reverted). Reverting it reintroduced the shift a real border-width change causes (the vertically-centered text visibly nudges by a pixel), so focus/invalid on appearance=subtle now paint the thicker look via box-shadow (inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 <color>) instead, keeping border-bottom-width a constant 1px in the box model at every state - zero layout impact. appearance.default's own invalid/focus still uses a real border-width change (a whole-box change on all four sides is a much smaller relative shift there), so this technique is specific to appearance=subtle.",
-        "`.root[data-invalid='true']` sets the border-width shorthand (all four sides) to 2px; `.appearance_subtle[data-invalid='true']` overrides border-top/right/left-width back to 0 and must also explicitly reset border-bottom-width back to 1px, or that side silently inherits the shorthand's leftover 2px and reintroduces the same text shift.",
-        "Hovering an invalid appearance=subtle field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
+        "context=inline's bottom corners are always square (border-bottom-{left,right}-radius: 0), confirmed directly from Figma's per-corner radius data on the inline variants - only the top corners share context=default's radius.",
+        "context=inline rests at the same 1px bottom border-width context=default uses at rest, per explicit design feedback (an earlier pass reserved a constant 2px transparent border specifically to avoid a layout shift; that reservation was reverted). Reverting it reintroduced the shift a real border-width change causes (the vertically-centered text visibly nudges by a pixel), so focus/invalid on context=inline now paint the thicker look via box-shadow (inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 <color>) instead, keeping border-bottom-width a constant 1px in the box model at every state - zero layout impact. context=default uses the same technique, inset on all four sides.",
+        "Neither `.root[data-invalid='true']` nor `.context_inline[data-invalid='true']` touches border-width: both paint the thicker error line with an inset box-shadow (four-sided on context=default, bottom-only on context=inline), so there is no leftover border-width shorthand to reset and no text shift.",
+        "Hovering an invalid context=inline field keeps the error border color rather than resetting to --color-border-input, per explicit design feedback - the border-color-changing hover rule is scoped with :not([data-invalid='true']); the background-changing hover rule is not, since hover should still tint the background on an invalid field.",
         "elemBeforeInput and elemAfterInput are separate, asymmetric Figma components (icon|text vs icon-button|button), not a symmetric before/after pair - iconBefore is always aria-hidden, iconAfter is never forced aria-hidden.",
         "Inline padding is asymmetric per size (tighter on the end side) and the icon/input gap varies per size (4px/6px/8px) rather than a flat 6px, confirmed directly from Figma's per-side bound variables.",
         "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type.",
@@ -6266,7 +6297,7 @@
         "trigger": "figma-parts / select-trigger wrapping a text-field (value text + elemAfterInput calendar icon); the field frame is radius md with a border/input outline.",
         "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
       },
-      "notes": "context default -> Text Field appearance 'default' (bordered); context inline -> appearance 'subtle' (borderless). The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+      "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
     }
   },
   {
@@ -7217,7 +7248,7 @@
     "anatomy": [
       {
         "name": "search",
-        "description": "Optional TextField (size=\"md\", appearance=\"subtle\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)."
+        "description": "Optional TextField (size=\"md\", context=\"inline\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)."
       },
       {
         "name": "section",
@@ -7455,7 +7486,7 @@
         {
           "name": "menu-search",
           "componentSetNodeId": "3628:17489",
-          "note": "A `text-field` instance, `size=\"md\"` and `tone=\"subtle\"` - mapped to code as a composed TextField with `size=\"md\"` `appearance=\"subtle\"` (TextField's own prop names for the same concepts), not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `appearance=\"subtle\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override, no `!important`) rather than relying on `appearance=\"subtle\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
+          "note": "A `text-field` instance, `size=\"md\"` with `context=\"inline\"` (re-checked in Figma 2026-10-13) - mapped to code as a composed TextField with `size=\"md\"` `context=\"inline\"`, not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `context=\"inline\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override on `[data-context='inline'][data-size='md']`, no `!important`) rather than relying on `context=\"inline\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
         },
         {
           "name": "heading-item",
@@ -8959,7 +8990,7 @@
         "trigger": "figma-parts / select-trigger wrapping a text-field (time text + elemAfterInput clock icon 'picker_time', 16px in a 24x24 box).",
         "popup": "the open state renders a popup > panelSurface > columns of code-parts/<menu-item> (selected = background/selected/default/default + content/selected) + a footer-item (a button-group with Cancel/Confirm buttons, tone=subtle, size=xs), each column with its own scrollbar."
       },
-      "notes": "context default -> Text Field appearance 'default'; inline -> 'subtle'. The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
+      "notes": "context passes straight to the Text Field's own context ('default' | 'inline'). The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
     }
   },
   {

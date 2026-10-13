@@ -18,8 +18,8 @@ Select may be simpler.
 
 ## Design intent
 
-The trigger is a Text Field showing the formatted date plus a trailing calendar icon. `context` maps
-to the Text Field appearance: `default` is a bordered field; `inline` is borderless (subtle). Three
+The trigger is a Text Field showing the formatted date plus a trailing calendar icon. `context` passes
+straight to the Text Field's own `context`: `default` is a bordered field; `inline` is borderless. Three
 sizes (`sm`/`md`/`lg`) match the field sizes. The open state is drawn by pinning the field's focus
 treatment - a `border/focus` box for `default`, a `border/focus` underline for `inline` - matching the
 Figma `open` variant. `disabled` and `invalid` map to the Text Field's own states.

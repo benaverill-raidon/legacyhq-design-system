@@ -27,7 +27,9 @@ Select
 
 ```ts
 type SelectSize = 'sm' | 'md' | 'lg';
-type SelectTone = 'default' | 'subtle';
+type SelectContext = 'default' | 'inline';
+/** @deprecated Use SelectContext: subtle and inline are both inline. */
+type SelectTone = 'default' | 'subtle' | 'inline';
 
 interface SelectOption {
   value: string;
@@ -41,7 +43,11 @@ interface SelectOption {
 interface SelectCommonProps {
   options: SelectOption[];
   size?: SelectSize;
+  context?: SelectContext;
+  /** @deprecated Use context. */
   tone?: SelectTone;
+  /** @deprecated Use context. */
+  appearance?: SelectTone;
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
@@ -73,12 +79,15 @@ A **discriminated union on `inputType`** (default `'single'`), so single's scala
 array can't be crossed — the same pattern Chip uses for `mode`. The common case (`single`) needs no
 discriminant.
 
+`tone` and `appearance` are deprecated aliases for `context`, still accepted: `subtle` and `inline`
+both map to `context="inline"`, `default` to `default`. An explicit `context` wins.
+
 ## Defaults
 
 ```txt
 inputType: single
 size: md
-tone: default
+context: default
 emptyMessage: "No matches"
 ```
 
@@ -86,7 +95,8 @@ emptyMessage: "No matches"
 
 - **Trigger** — the existing `TextField`. Its frame, fill, border, and per-size geometry match
   Figma's `select-trigger` token-for-token (verified), so Select reuses it rather than restating the
-  state CSS. `tone` maps to TextField's `appearance`.
+  state CSS. `context` passes straight through to TextField's `context` — the same prop, values,
+  and Figma axis.
 - **Panel** — `DropdownMenu` with `showSearch={false}` (the trigger *is* the search field), the
   option rows built by Select, and `emptyMessage` for no-results.
 - **Chips** — multi-select values render as `Chip mode="select"` in the trigger's `leadingContent`
@@ -202,11 +212,12 @@ grouping: a section heading per group
 states: does not open when disabled
 states: aria-invalid when invalid
 states: opens on ArrowDown
-states: size and tone map to the TextField trigger
+states: size and context map to the TextField trigger
 a11y: combobox with menu popup + list autocomplete
 a11y: aria-expanded reflects open state
 a11y: custom id/className on the trigger
 caret rotates only while open, via a class
+deprecated tone and appearance values map to a context
 ```
 
 Plus TextField's own suite gains three cases for the new `leadingContent` slot.

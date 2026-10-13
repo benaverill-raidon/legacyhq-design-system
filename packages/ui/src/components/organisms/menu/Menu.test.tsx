@@ -236,18 +236,18 @@ describe('Menu', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it("renders the search field with TextField's subtle appearance and size=md, matching Figma's tone=subtle, size=md exactly", () => {
+  it("renders the search field with TextField's inline context and size=md, matching Figma's context=inline, size=md exactly", () => {
     render(<Menu aria-label="Actions" sections={actionSections()} />);
 
-    const field = screen.getByRole('textbox').closest('[data-appearance]');
-    expect(field).toHaveAttribute('data-appearance', 'subtle');
+    const field = screen.getByRole('textbox').closest('[data-context]');
+    expect(field).toHaveAttribute('data-context', 'inline');
     expect(field).toHaveAttribute('data-size', 'md');
   });
 
   it('does not render a leading search icon (removed - too small at this size)', () => {
     render(<Menu aria-label="Actions" sections={actionSections()} />);
 
-    const field = screen.getByRole('textbox').closest('[data-appearance]') as HTMLElement;
+    const field = screen.getByRole('textbox').closest('[data-context]') as HTMLElement;
     expect(field.querySelector('svg')).not.toBeInTheDocument();
   });
 
@@ -259,14 +259,14 @@ describe('Menu', () => {
 
   it("neutralizes the search field's hover/focus underline and hover background in CSS, matching Figma's menu-search exactly (no hover variant at all, empty fills/strokes in every state)", () => {
     // The selector needs [data-size='md'] plus two :not() clauses (not just a bare
-    // :global([data-appearance='subtle']):hover) to reach specificity (0,6,0) - TextField's own
+    // :global([data-context='inline']):hover) to reach specificity (0,6,0) - TextField's own
     // hover rule stacks three :not() clauses of its own, landing at (0,5,0), which a simpler
     // override would lose to regardless of CSS source order.
     expect(menuCss).toMatch(
-      /\.search\s+:global\(\[data-appearance='subtle'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):hover\s*\{[^}]*background:\s*transparent/,
+      /\.search\s+:global\(\[data-context='inline'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):hover\s*\{[^}]*background:\s*transparent/,
     );
     expect(menuCss).toMatch(
-      /\.search\s+:global\(\[data-appearance='subtle'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):focus-within\s*\{[^}]*border-bottom-color:\s*transparent/,
+      /\.search\s+:global\(\[data-context='inline'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):focus-within\s*\{[^}]*border-bottom-color:\s*transparent/,
     );
   });
 

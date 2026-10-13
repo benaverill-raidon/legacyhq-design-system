@@ -17,8 +17,8 @@ Do not use it to pick a date (use Date Picker; Date/Time Picker combines both) o
 ## Design intent
 
 The trigger is a Text Field showing the formatted time plus a trailing clock icon - the same field
-pattern as Date Picker. `context` maps to the Text Field appearance (`default` bordered, `inline`
-borderless), three sizes (`sm`/`md`/`lg`), and the open state pins the field's focus treatment. The
+pattern as Date Picker. `context` passes straight to the Text Field's `context` (`default` bordered,
+`inline` borderless), three sizes (`sm`/`md`/`lg`), and the open state pins the field's focus treatment. The
 popup holds three scrollable listboxes - hours (12-hour), minutes (in `minuteStep` increments), and
 AM/PM - each highlighting its selected option with the selected surface + selected content tokens
 (the Figma menu-item states). A footer holds Cancel and Confirm. Column changes are **staged** and

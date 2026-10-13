@@ -98,12 +98,12 @@ describe('TextArea', () => {
     expect(field.parentElement?.tagName).toBe('DIV');
   });
 
-  it('uses the default size, appearance, and resize', () => {
+  it('uses the default size, context, and resize', () => {
     render(<TextArea aria-label="Notes" />);
 
     const root = screen.getByRole('textbox').parentElement!;
     expect(root).toHaveAttribute('data-size', 'md');
-    expect(root).toHaveAttribute('data-appearance', 'default');
+    expect(root).toHaveAttribute('data-context', 'default');
     expect(root).toHaveClass(styles.resize_vertical);
   });
 
@@ -113,18 +113,19 @@ describe('TextArea', () => {
     expect(screen.getByRole('textbox').parentElement).toHaveAttribute('data-size', 'lg');
   });
 
-  it('applies a selected appearance', () => {
-    render(<TextArea appearance="subtle" aria-label="Notes" />);
-
-    expect(screen.getByRole('textbox').parentElement).toHaveAttribute('data-appearance', 'subtle');
-  });
-
-  it('applies the inline appearance', () => {
-    render(<TextArea appearance="inline" aria-label="Notes" />);
+  it('applies the inline context', () => {
+    render(<TextArea context="inline" aria-label="Notes" />);
 
     const root = screen.getByRole('textbox').parentElement!;
-    expect(root).toHaveAttribute('data-appearance', 'inline');
-    expect(root).toHaveClass(styles.appearance_inline);
+    expect(root).toHaveAttribute('data-context', 'inline');
+    expect(root).toHaveClass(styles.context_inline);
+  });
+
+  it('maps the deprecated appearance values to a context', () => {
+    const { rerender } = render(<TextArea appearance="subtle" aria-label="Notes" />);
+    expect(screen.getByRole('textbox').parentElement).toHaveAttribute('data-context', 'inline');
+    rerender(<TextArea appearance="inline" aria-label="Notes" />);
+    expect(screen.getByRole('textbox').parentElement).toHaveAttribute('data-context', 'inline');
   });
 
   it('applies each resize option as a class on the wrapper', () => {
@@ -200,9 +201,9 @@ describe('TextArea', () => {
     expect(container.querySelector(`.${styles.action}`)).toBeNull();
   });
 
-  it('paints focus/invalid on appearance=default via box-shadow, not a real border-width change', () => {
+  it('paints focus/invalid on context=default via box-shadow, not a real border-width change', () => {
     const focusRuleMatch = textAreaCss.match(
-      /\.appearance_default:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
+      /\.context_default:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/,
     );
     const invalidRuleMatch = textAreaCss.match(/\.root\[data-invalid='true'\]\s*\{([^}]*)\}/);
 
@@ -225,21 +226,21 @@ describe('TextArea', () => {
     expect(textAreaCss).toContain('--text-area-radius: var(--border-radius-xl);');
   });
 
-  it('rests appearance=subtle at a 1px bottom-only border, painting the thicker focus/invalid edge via box-shadow', () => {
-    expect(textAreaCss).toMatch(/\.appearance_subtle\s*\{[^}]*border-width:\s*0 0 var\(--border-width-sm\) 0;/);
+  it('rests context=inline at a 1px bottom-only border, painting the thicker focus/invalid edge via box-shadow', () => {
+    expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*border-width:\s*0 0 var\(--border-width-sm\) 0;/);
 
-    const focusRuleMatch = textAreaCss.match(/\.appearance_subtle:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/);
+    const focusRuleMatch = textAreaCss.match(/\.context_inline:is\(:focus-within, \[data-force-state='focus'\]\)\s*\{([^}]*)\}/);
     expect(focusRuleMatch?.[1]).toContain('border-bottom-color: var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).toContain('box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);');
     expect(focusRuleMatch?.[1]).not.toContain('border-bottom-width');
   });
 
-  it('inline appearance is chromeless at rest with subtle-style bottom-only states', () => {
-    expect(textAreaCss).toMatch(/\.appearance_inline\s*\{[^}]*border-color:\s*transparent;/);
-    expect(textAreaCss).toMatch(/\.appearance_inline\s*\{[^}]*background:\s*transparent;/);
-    expect(textAreaCss).toMatch(/\.appearance_inline\s*\{[^}]*border-width:\s*0 0 var\(--border-width-sm\) 0;/);
-    expect(textAreaCss).toMatch(/\.appearance_inline[^{]*:focus-within[^{]*\{[^}]*border-bottom-color:\s*var\(--color-border-focus\)/);
-    expect(textAreaCss).toMatch(/\.appearance_inline\[data-invalid[^{]*\{[^}]*border-bottom-color:\s*var\(--color-border-error\)/);
+  it('is chromeless at rest in the inline context, with Figma\'s hover fill and bottom-only states', () => {
+    expect(textAreaCss).not.toMatch(/appearance_/);
+    expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*border-color:\s*transparent;/);
+    expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*background:\s*transparent;/);
+    expect(textAreaCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textAreaCss).toMatch(/\.context_inline\[data-invalid[^{]*\{[^}]*border-bottom-color:\s*var\(--color-border-error\)/);
   });
 
   it('disables resize on a disabled wrapper', () => {

@@ -52,6 +52,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
   const {
     options,
     size = 'md',
+    context,
     tone,
     appearance,
     placeholder,
@@ -66,10 +67,9 @@ export const Select = React.memo(function Select(props: SelectProps) {
     'aria-labelledby': ariaLabelledBy,
   } = props;
 
-  // `appearance` is an alias for `tone` (the canonical name Text Field/Text Area use); an explicit
-  // `tone` wins so existing usage is unchanged, and a wrapper like Field's inline context can drive
-  // the trigger with `appearance="subtle"`.
-  const resolvedAppearance = tone ?? appearance ?? 'default';
+  // `tone` and `appearance` are deprecated names for `context`: their subtle and inline values are inline.
+  const legacy = tone ?? appearance;
+  const resolvedContext = context ?? (legacy && legacy !== 'default' ? 'inline' : 'default');
 
   const multi = props.inputType === 'multi';
 
@@ -246,7 +246,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
         id={id}
         className={mergeClassNames(styles.trigger, className)}
         size={size}
-        appearance={resolvedAppearance}
+        context={resolvedContext}
         data-force-state={cellSize && open && !disabled ? 'focus' : undefined}
         invalid={invalid}
         disabled={disabled}

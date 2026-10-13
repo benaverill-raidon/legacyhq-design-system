@@ -173,34 +173,34 @@ describe('Field', () => {
     expect(root).toHaveAttribute('data-size', 'lg');
   });
 
-  it('renders the control inline (appearance="subtle") when context is inline', () => {
+  it('renders the control inline (context="inline") when the field context is inline', () => {
     render(
       <Field label="Email" context="inline">
         <TextField aria-label="Email" />
       </Field>,
     );
 
-    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-appearance', 'subtle');
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'inline');
   });
 
-  it('does not change the control appearance in the default context', () => {
+  it('does not change the control context in the default field context', () => {
     render(
       <Field label="Email" context="default">
         <TextField aria-label="Email" />
       </Field>,
     );
 
-    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-appearance', 'default');
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'default');
   });
 
-  it('lets the control_s own appearance win over the inline context', () => {
+  it('lets the control_s own context win over the inline field context', () => {
     render(
       <Field label="Email" context="inline">
-        <TextField aria-label="Email" appearance="default" />
+        <TextField aria-label="Email" context="default" />
       </Field>,
     );
 
-    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-appearance', 'default');
+    expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-context', 'default');
   });
 
   it('renders no <label> when label is omitted', () => {

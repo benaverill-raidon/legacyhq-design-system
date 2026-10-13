@@ -32,12 +32,13 @@ leaving it to each call site:
   `aria-describedby` the control already carries (never clobbered).
 - `state="error"` sets `aria-invalid` on the control.
 - `required` forwards `required` to the control and shows a decorative `*` after the label.
-- `context="inline"` renders the control inline (borderless) by giving it `appearance="subtle"`, so
+- `context="inline"` renders the control inline (borderless) by giving it `context="inline"`, so
   the whole field reads as one inline unit (see Context and size below).
 
 Field only ever *fills in* wiring the control left unset - the control's own `id`, `aria-invalid`,
-`aria-describedby`, `required`, and `appearance` always win. Because the control is cloned to receive
-these props, `children` must be a single React element (not text, a fragment, or multiple elements).
+`aria-describedby`, `required`, and `context` (or a deprecated `appearance`/`tone`) always win.
+Because the control is cloned to receive these props, `children` must be a single React element
+(not text, a fragment, or multiple elements).
 
 ## State is the label/message layer only
 
@@ -60,13 +61,13 @@ context; `size=lg` and `size=sm/md` only for the inline context):
   whole field: (a) it indents the label and message to line up with the text *inside* the control -
   by the control's own inner start padding for the size, `lg` by `--spacing-md`, `sm` and `md`
   sharing `--spacing-sm` - and (b) it renders the **control itself inline** (borderless) by giving
-  it `appearance="subtle"`, so the field reads as one inline unit. The control's own `appearance`
-  still wins if it sets one.
+  it `context="inline"`, so the field reads as one inline unit. The control's own `context` (or a
+  deprecated `appearance`/`tone`) still wins if it sets one.
 
 So `size` only does anything in the inline context, purely to achieve that text alignment; it never
 resizes the control (set the control's own `size` too). Because inline is about a borderless control
 whose inner text the label lines up with, `context="inline"` is meant for text-bearing controls -
-Text Field, Select, Text Area, and the date/time pickers, all of which take `appearance="subtle"` -
+Text Field, Select, Text Area, and the date/time pickers, all of which take `context="inline"` -
 and has no meaningful effect on controls without inner text such as Checkbox, Switch, or Radio (use
 `context="default"` for those).
 

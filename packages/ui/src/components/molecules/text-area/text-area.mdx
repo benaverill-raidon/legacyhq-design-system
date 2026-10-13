@@ -7,7 +7,7 @@ import * as TextAreaStories from './TextArea.stories';
 
 Text Area is the multi-line counterpart of Text Field: a real native `<textarea>` in the same bordered
 frame, for writing or editing content that spans several lines — notes, descriptions, comments. It
-shares Text Field's size, appearance, invalid, and state treatment token-for-token. The frame styling
+shares Text Field's size, context, invalid, and state treatment token-for-token. The frame styling
 lives on a wrapper `<div>` (the same pattern Text Field uses) so it can host an optional trailing
 icon/action slot (`iconAfter`).
 
@@ -22,17 +22,18 @@ icon/action slot (`iconAfter`).
 
 - **A single-line value.** Use Text Field.
 - **A value chosen from a fixed set of options.** Use Select.
-- **Inline entity tags / formatting.** Not supported yet — Figma's `type=rich-inline` (a
-  slash-command entity-tagging mode) is unimplemented; see "Not built yet" below.
+- **Inline entity tags.** Use Rich Text Area, Figma's `type=rich-inline` (see below).
 
-## Sizes and appearance
+## Sizes and context
 
 <Canvas of={TextAreaStories.Variants} />
 
-`appearance="default"` is the standard bordered box, rounded on all four corners — correct for nearly
-every case. `appearance="subtle"` has no visible border or background until it's hovered, focused, or
-invalid — only a bottom accent line reveals, and its bottom corners stay square. Figma names this axis
-`tone`; the code uses `appearance`, the same name and axis as its Text Field sibling. Sizes match Text
+`context="default"` is the standard bordered box, rounded on all four corners — correct for nearly
+every case. `context="inline"` has no visible border or background at rest — hover shows the
+raised-hover background and a bottom border, focus and invalid paint a 2px bottom line, and its bottom
+corners stay square. It's for a field inside a row, such as a Key Value Pair value. `context` is the
+same name and axis as its Text Field sibling and Figma's `context`. The older `appearance` prop is
+deprecated but still accepted: `subtle` and `inline` both map to `context="inline"`. Sizes match Text
 Field (`body-md` at sm/md, `body-lg` at lg; radius steps up to `xl` at lg). The compact `sm` option
 supports small editable key/value rows.
 
@@ -64,7 +65,7 @@ existing or entered content, and shrinks when text is removed. `maxRows` default
 lines, after which the textarea scrolls vertically. This mode overrides `rows` and manual resizing.
 It also recalculates when the field width changes, so wrapped text fits its container.
 
-For editable key/value rows, compose `<TextArea autoResize size={size} appearance="inline" />`
+For editable key/value rows, compose `<TextArea autoResize size={size} context="inline" />`
 inside `<InlineEdit actionPlacement="end" actionAlignment="start">`. The row grows in normal flow;
 allow space to its trailing side for the actions. Enter inserts a newline, Ctrl/Cmd+Enter confirms,
 and Escape cancels.
@@ -84,7 +85,7 @@ the counted example shows.
 <Canvas of={TextAreaStories.IconAfter} />
 
 `iconAfter` places an icon or interactive control (like an edit IconButton) at the trailing end of the
-frame. The slot is not `aria-hidden` — it may hold a real focusable action. The `inline` appearance
+frame. The slot is not `aria-hidden` — it may hold a real focusable action. `context="inline"`
 combined with `iconAfter` is the standard pattern for embedding inside a Key Value Pair.
 
 ## Do / Don't
@@ -121,10 +122,16 @@ combined with `iconAfter` is the standard pattern for embedding inside a Key Val
       <td>Padding, radius, and font size.</td>
     </tr>
     <tr>
+      <td><code>context</code></td>
+      <td><code>'default' | 'inline'</code></td>
+      <td><code>'default'</code></td>
+      <td>Bordered box, or chromeless until hovered or focused for a field inside a row (Figma's <code>context</code>).</td>
+    </tr>
+    <tr>
       <td><code>appearance</code></td>
       <td><code>'default' | 'subtle' | 'inline'</code></td>
-      <td><code>'default'</code></td>
-      <td>Bordered box, borderless-until-interacted, or chromeless at rest with subtle-style bottom-only border on interaction (Figma's <code>context</code>).</td>
+      <td>-</td>
+      <td>Deprecated - use <code>context</code>. <code>subtle</code> and <code>inline</code> map to <code>context="inline"</code>.</td>
     </tr>
     <tr>
       <td><code>invalid</code></td>
@@ -171,22 +178,22 @@ combined with `iconAfter` is the standard pattern for embedding inside a Key Val
   </tbody>
 </table>
 
-## Not built yet: `type=rich-inline` (inline entity tagging)
+## `type=rich-inline` is Rich Text Area
 
 Figma's second `type`, `rich-inline`, is an **inline entity-tagging** mode — not rich-text
-formatting. While typing, a user presses **`/`** to open a searchable, grouped dropdown of entities to
+formatting. While typing, a user presses **`/`** to open a searchable, grouped list of entities to
 link, and each choice is inserted inline as a **navigational tag** — a colored, icon-bearing chip that
 links to that entity. It looks identical to `default` in the static mockup; the whole difference is
 behavior.
 
-It's deferred to a dedicated pass because it's a real feature, not a variant: it needs a
-slash-triggered searchable **Dropdown Menu** (grouped sections), a new **navigational-tag** element
-(which doesn't exist yet), and an editable surface that mixes text and tags (`contenteditable`, not a
-plain `<textarea>`). Because none of that ships today, no `type` prop is exposed.
+In code it's a separate component, **Rich Text Area**, rather than a `type` prop: its value (text
+mixed with tags), its callbacks (`onSearch`), and its editable surface (`contenteditable`, not a
+plain `<textarea>`) share nothing with Text Area's. So Text Area exposes no `type` prop.
 
 ## Related components
 
 - **Text Field** — single-line free text; shares the frame token-for-token.
 - **Select** — for choosing from a fixed set of options instead of typing free text.
+- **Rich Text Area** — multi-line text with inline entity tags (Figma's `type=rich-inline`).
 - **Label** — for a trailing unit/status pill (as Text Field uses).
-- **Key Value Pair** — embeds Text Area with `appearance="inline"` and `iconAfter` for inline editing.
+- **Key Value Pair** — embeds Text Area with `context="inline"` and `iconAfter` for inline editing.

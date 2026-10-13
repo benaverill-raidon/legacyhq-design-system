@@ -38,7 +38,7 @@
       "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
       "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
       "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
-      "children is expected to be a single controlled input-like element (TextField today, typically appearance=subtle so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
+      "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
       "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
     ]
   },
@@ -58,7 +58,7 @@
   ],
   "props": {
     "value": { "type": "string", "required": true, "default": null, "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft." },
-    "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "A single controlled input-like element (e.g. a subtle TextField) InlineEdit clones for both the read-only display and the editable control." },
+    "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "A single controlled input-like element (e.g. a TextField with context='inline') InlineEdit clones for both the read-only display and the editable control." },
     "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit." },
     "onCancel": { "type": "() => void", "required": false, "default": null, "description": "Called when the cancel button (or Escape) discards the draft and reverts to value." },
     "actionButtons": { "type": "boolean", "required": false, "default": true, "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false." },
@@ -70,7 +70,7 @@
   "sizes": [],
   "states": ["read-only (not editing)", "editing"],
   "slots": [
-    { "name": "children", "required": true, "supports": ["TextField (today, typically appearance=subtle)", "Select/DatePicker/TimePicker/DateTimePicker (once built, if they accept value/onChange/readOnly)"] }
+    { "name": "children", "required": true, "supports": ["TextField (today, typically context=inline)", "Select/DatePicker/TimePicker/DateTimePicker (once built, if they accept value/onChange/readOnly)"] }
   ],
   "tokens": {
     "layout": {
@@ -110,7 +110,7 @@
     "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button)."
   ],
   "compositionRules": [
-    "Clone a single controlled input-like child appropriate for editing one value - TextField today (typically appearance=subtle), Select/DatePicker/TimePicker/DateTimePicker once built.",
+    "Clone a single controlled input-like child appropriate for editing one value - TextField today (typically context=inline), Select/DatePicker/TimePicker/DateTimePicker once built.",
     "Do not use for multiple related fields - use a real form instead."
   ],
   "contentRules": [
@@ -133,7 +133,7 @@
   ],
   "relatedComponents": ["TextField", "IconButton", "ButtonGroup"],
   "do": [
-    "Pass a single subtle-appearance TextField (or similar controlled input) as children most of the time.",
+    "Pass a single TextField with context='inline' (or similar controlled input) as children most of the time.",
     "Control value from the parent and update it in onConfirm.",
     "Use actionButtons=false only when you have another confirm/cancel mechanism (Enter/Escape still work)."
   ],
@@ -155,7 +155,7 @@
     "confirmLabel/cancelLabel set the accessible names of the action buttons.",
     "className applies to the root.",
     "Works in light and dark themes.",
-    "Storybook includes Playground, Variants, Content, and Edge Cases, every example using a subtle TextField.",
+    "Storybook includes Playground, Variants, Content, and Edge Cases, every example using a TextField with context='inline'.",
     "Tests cover read-only rendering, starting to edit, actionButtons, confirm/cancel behavior including revert-on-cancel, blur-to-confirm, keyboard shortcuts, and accessible names."
   ],
   "knownLimitations": [

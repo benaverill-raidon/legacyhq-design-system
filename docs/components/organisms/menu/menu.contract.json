@@ -21,7 +21,7 @@
       {
         "name": "menu-search",
         "componentSetNodeId": "3628:17489",
-        "note": "A `text-field` instance, `size=\"md\"` and `tone=\"subtle\"` - mapped to code as a composed TextField with `size=\"md\"` `appearance=\"subtle\"` (TextField's own prop names for the same concepts), not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `appearance=\"subtle\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override, no `!important`) rather than relying on `appearance=\"subtle\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
+        "note": "A `text-field` instance, `size=\"md\"` with `context=\"inline\"` (re-checked in Figma 2026-10-13) - mapped to code as a composed TextField with `size=\"md\"` `context=\"inline\"`, not a bespoke input. Direct inspection of the actual instance (not just its component-property defaults) confirmed `elemAfterInput` (the clear icon-button) is used, but no leading `elemBeforeInput` icon - the search field has no leading icon at all. The outer `code-parts / <menu-search>` wrapper itself only has default/focus/typing variants - no hover variant at all - and the nested text-field instance's own `fills`/`strokes` are empty ([]) in every one of those three states. Code therefore neutralizes TextField's own `context=\"inline\"` hover-background and focus-underline rules specifically inside Menu's `.search` wrapper (a local-class-plus-global-attribute-selector override on `[data-context='inline'][data-size='md']`, no `!important`) rather than relying on `context=\"inline\"` alone, which still shows both. That override needs `[data-size='md']` plus two `:not()` clauses to reach sufficient specificity - TextField's own hover rule stacks three `:not()` clauses of its own (specificity (0,5,0)), higher than a bare `:hover` override (0,3,0) would reach."
       },
       {
         "name": "heading-item",
@@ -48,7 +48,7 @@
     "Nesting a real interactive control (Checkbox, Radio, Button) inside leadingElement/trailingElement"
   ],
   "anatomy": [
-    { "name": "search", "description": "Optional TextField (size=\"md\", appearance=\"subtle\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)." },
+    { "name": "search", "description": "Optional TextField (size=\"md\", context=\"inline\", no leading icon) with a trailing clear button once there's a value, shown above sections when showSearch is true (default)." },
     { "name": "section", "description": "One per entry in `sections` - a leading divider, an optional heading row, and its list of items." },
     { "name": "divider", "description": "Renders above every section, matching Figma's per-section leading separator - except the very first section when showSearch is false, since a divider there would float at the top edge with nothing above it to divide from.", "group": "section" },
     { "name": "heading", "description": "Optional section label with an optional leading icon.", "group": "section" },
@@ -191,7 +191,7 @@
     "Applies the size-specific width class (--component-menu-width-sm/md/lg); row height is unaffected by size.",
     "Renders a 2px inset left indicator (not border-left) on a selected row, without shifting its padding relative to unselected rows.",
     "Selected row text and its leadingElement/trailingElement icon (when colored via IconColor \"selected\") use --color-content-selected, not --color-content-brand-primary-default.",
-    "Renders the search field as size=\"md\" with TextField's subtle appearance (data-appearance=\"subtle\", data-size=\"md\"), no leading icon, no visible hover background or focus underline of its own, and autoFocused whenever it's rendered."
+    "Renders the search field as size=\"md\" with TextField's inline context (data-context=\"inline\", data-size=\"md\"), no leading icon, no visible hover background or focus underline of its own, and autoFocused whenever it's rendered."
   ],
   "knownLimitations": [
     "showScrollbar maps to native overflow, not Figma's decorative custom scrollbar-thumb graphic.",

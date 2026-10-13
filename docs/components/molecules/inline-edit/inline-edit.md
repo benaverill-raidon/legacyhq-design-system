@@ -9,8 +9,8 @@ Use Inline Edit whenever a single value - a name, a title, a quantity - should b
 where it's displayed, with an explicit confirm/cancel step, rather than always showing an open input
 or requiring a separate edit screen/dialog.
 
-Inline Edit takes a single child - most commonly a `TextField` with `appearance="subtle"`, since a
-subtle field already reads as plain text at rest - and clones it for both states: read-only (not
+Inline Edit takes a single child - most commonly a `TextField` with `context="inline"`, since an
+inline field already reads as plain text at rest - and clones it for both states: read-only (not
 editable, but still focusable, showing the last confirmed `value`) and editable (showing the
 in-progress draft while the user types). A trailing confirm (check) / cancel (X) icon-button pair -
 laid out as a `ButtonGroup` - appears only once editing has started - controllable via
@@ -27,6 +27,6 @@ use it when the edit needs its own dedicated screen or dialog (a lot of fields, 
 or anything that benefits from more space) - use a real form instead.
 
 Related components and patterns include Text Field (the control Inline Edit clones, typically with
-`appearance="subtle"`), Icon Button (the confirm/cancel actions), and Button Group (a similar
+`context="inline"`), Icon Button (the confirm/cancel actions), and Button Group (a similar
 "compose atoms into a named layout" molecule, though Button Group has no state of its own while
 Inline Edit does).

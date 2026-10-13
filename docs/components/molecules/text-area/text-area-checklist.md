@@ -12,7 +12,7 @@ Molecule (grouped with Text Field, its single-line sibling; composes no other co
 - Text Field (single-line free text; shares the frame token-for-token)
 - Select (choosing from a fixed set of options)
 - Label (a trailing unit/status pill, as Text Field uses)
-- Key Value Pair (embeds Text Area with `appearance="inline"` and `iconAfter`)
+- Key Value Pair (embeds Text Area with `context="inline"` and `iconAfter`)
 
 ---
 
@@ -24,7 +24,7 @@ in a bordered, resizable field.
 
 ### Why does it need to exist?
 Text Field is single-line by design. Figma has a dedicated `text-area` component set (96 variants)
-for the multi-line case, with its own size/tone/state axes and a resize affordance.
+for the multi-line case, with its own size/context/state axes and a resize affordance.
 
 ---
 
@@ -33,8 +33,7 @@ for the multi-line case, with its own size/tone/state axes and a resize affordan
 ### When should this component NOT be used?
 - A single-line value — Text Field
 - A value from a fixed set of options — Select
-- Inline entity tagging — not supported yet (`type=rich-inline`, the slash-command tagging mode, is
-  unimplemented)
+- Inline entity tagging — Rich Text Area (Figma's `type=rich-inline`, the slash-command tagging mode)
 
 ---
 
@@ -44,10 +43,11 @@ for the multi-line case, with its own size/tone/state axes and a resize affordan
 - `sm`, `md` (default), `lg` — padding/radius/font. Compact `sm` is supported in code for key/value rows.
 - `autoResize` (default false) grows/shrinks content from the control-size minimum; `maxRows` (default 6) caps growth before scrolling.
 
-### appearance
-- `default` (bordered box), `subtle` (transparent until hover/focus/invalid, bottom accent only),
-  `inline` (chromeless at rest, subtle-style bottom-only border on hover/focus/invalid) — Figma names this axis `tone`; `inline` maps from
-  Figma's separate `context` axis
+### context
+- `default` (bordered box), `inline` (chromeless at rest; raised-hover background and bottom border
+  on hover, bottom-only focus/error line on focus/invalid) — the same name and values as Figma's
+  `context` axis
+- The deprecated `appearance` prop still works: `subtle` and `inline` map to `inline`
 
 ### resize
 - `none`, `vertical` (default), `horizontal`, `both` — maps to CSS `resize`
@@ -86,8 +86,9 @@ edge via inset box-shadow, not a real border-width change (no text shift).
   still works via `resize: inherit` on the textarea and `overflow: auto` on the wrapper.
 - **`iconAfter` slot** — trailing icon or interactive control (e.g. edit pencil IconButton). Not
   `aria-hidden`; may hold a real focusable action.
-- **`appearance`, not `tone`** — same name and axis as its Text Field sibling. Three values:
-  `default` (bordered), `subtle` (bottom accent), `inline` (chromeless at rest, subtle-style bottom-only on interaction).
+- **`context`** — same name and axis as its Text Field sibling and Figma. Two values: `default`
+  (bordered), `inline` (chromeless at rest, hover background and bottom-only border on interaction).
+  `appearance` is a deprecated alias (`subtle`/`inline` → `inline`).
 - **Reuse Text Field's tokens** rather than invent unbacked `background/input/*` tokens (reuse-first).
 - **`resize` prop** (default `vertical`); disabled forces `resize: none`.
 - **`type=rich-inline` ships as RichTextArea** — an inline entity-tagging mode (slash-command
@@ -101,11 +102,11 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 
 - Geometry per size: padding md 8/8, lg 12/12; radius lg→xl; font 14→16 ✓ (sm removed)
 - default/hover/focus/invalid/disabled border + background match Figma's state matrix ✓
-- subtle: transparent at rest, square bottom corners ✓
 - resize axis renders per option; disabled locks it ✓
 - Dark surface renders correctly; no console errors ✓
-- iconAfter: decorative icon, interactive IconButton, and inline appearance all render correctly ✓
-- inline: chromeless at rest, subtle-style bottom-only border on hover/focus/invalid, keeps padding and top radius ✓
+- iconAfter: decorative icon, interactive IconButton, and inline context all render correctly ✓
+- inline: chromeless at rest, square bottom corners, hover background + bottom-only border on
+  hover/focus/invalid, keeps padding and top radius ✓
 - Key Value Pair embedding with inline TextArea + iconAfter ✓
 
 ---
@@ -113,7 +114,7 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 ## Validated Figma Details
 
 - `text-area` component set: node `1697:19487`, page "🚧 Text Area". Axes: type / size (md, lg after
-  the sm removal) / tone / state / isDisabled / isInvalid. Exact post-removal variant count to be
+  the sm removal) / context (default, inline) / state / isDisabled / isInvalid. Exact post-removal variant count to be
   re-confirmed live (was 96 with three sizes).
 - The visual frame (fill/border/radius) is bound on the component node; the inner `Container` frame
   carries only padding.
@@ -127,11 +128,11 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 
 - [x] Basic labelled field
 - [x] Controlled with a character count
-- [x] Sizes and appearances
+- [x] Sizes and contexts
 - [x] Invalid and disabled
 - [x] Fixed height (resize=none)
 - [x] Dark surface
 - [x] iconAfter with decorative icon
 - [x] iconAfter with interactive IconButton
-- [x] Inline appearance (chromeless)
-- [x] Inline appearance inside Key Value Pair
+- [x] Inline context (chromeless)
+- [x] Inline context inside Key Value Pair

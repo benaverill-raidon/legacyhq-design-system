@@ -21,8 +21,8 @@ Organism.
 ## Design decisions
 
 - [ ] Trigger = read-only Text Field showing the formatted date + a trailing calendar icon.
-- [ ] context maps to Text Field appearance: default (bordered) / inline (subtle, borderless); size
-      passes through (sm/md/lg).
+- [ ] context passes straight to the Text Field's context: default (bordered) / inline (borderless);
+      size passes through (sm/md/lg).
 - [ ] Open state rendered by pinning the field focus treatment (`data-force-state="focus"`) - border
       box for default, underline for inline (matches Figma `open`).
 - [ ] Popup primitive anchored to the field frame (bottomLeft default), role=dialog, padding none; the

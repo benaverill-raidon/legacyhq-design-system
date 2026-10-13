@@ -4,10 +4,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EditIcon } from '../../../assets/icons';
 import { IconButton } from '../../atoms/icon-button';
 import { TextArea } from './text-area';
-import type { TextAreaAppearance, TextAreaResize, TextAreaSize } from './text-area.types';
+import type { TextAreaContext, TextAreaResize, TextAreaSize } from './text-area.types';
 
 const sizes: TextAreaSize[] = ['sm', 'md', 'lg'];
-const appearances: TextAreaAppearance[] = ['default', 'subtle', 'inline'];
+const contexts: TextAreaContext[] = ['default', 'inline'];
 const resizes: TextAreaResize[] = ['none', 'vertical', 'horizontal', 'both'];
 
 const meta = {
@@ -15,7 +15,7 @@ const meta = {
   component: TextArea,
   args: {
     size: 'md',
-    appearance: 'default',
+    context: 'default',
     invalid: false,
     disabled: false,
     resize: 'vertical',
@@ -25,7 +25,7 @@ const meta = {
   },
   argTypes: {
     size: { control: 'inline-radio', options: sizes },
-    appearance: { control: 'inline-radio', options: appearances },
+    context: { control: 'inline-radio', options: contexts },
     resize: { control: 'inline-radio', options: resizes },
     autoResize: { control: 'boolean' },
     maxRows: { control: { type: 'number', min: 1, max: 12 } },
@@ -103,15 +103,15 @@ export const AutoResize: Story = {
   ),
 };
 
-/** Size x appearance, scannable side by side. */
+/** Size x context, scannable side by side. */
 export const Variants: Story = {
   render: () => (
     <div style={stack}>
-      {appearances.map((appearance) => (
-        <Group key={appearance} title={`Appearance: ${appearance}`}>
+      {contexts.map((context) => (
+        <Group key={context} title={`Context: ${context}`}>
           {sizes.map((size) => (
             <Cell key={size} label={size}>
-              <TextArea size={size} appearance={appearance} rows={4} placeholder="Placeholder" aria-label={`${appearance} ${size}`} />
+              <TextArea size={size} context={context} rows={4} placeholder="Placeholder" aria-label={`${context} ${size}`} />
             </Cell>
           ))}
         </Group>
@@ -128,22 +128,22 @@ export const Variants: Story = {
 export const States: Story = {
   render: () => (
     <div style={stack}>
-      {(['default', 'subtle'] as const).map((appearance) => (
-        <Group key={appearance} title={`Appearance: ${appearance}`}>
+      {(['default', 'inline'] as const).map((context) => (
+        <Group key={context} title={`Context: ${context}`}>
           <Cell label="Default">
-            <TextArea appearance={appearance} rows={3} placeholder="Placeholder" aria-label="Default" />
+            <TextArea context={context} rows={3} placeholder="Placeholder" aria-label="Default" />
           </Cell>
           <Cell label="Hover">
-            <TextArea appearance={appearance} rows={3} placeholder="Placeholder" aria-label="Hover" data-force-state="hover" />
+            <TextArea context={context} rows={3} placeholder="Placeholder" aria-label="Hover" data-force-state="hover" />
           </Cell>
           <Cell label="Focus">
-            <TextArea appearance={appearance} rows={3} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
+            <TextArea context={context} rows={3} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
           </Cell>
           <Cell label="Invalid">
-            <TextArea appearance={appearance} rows={3} invalid defaultValue="This value needs attention" aria-label="Invalid" />
+            <TextArea context={context} rows={3} invalid defaultValue="This value needs attention" aria-label="Invalid" />
           </Cell>
           <Cell label="Disabled">
-            <TextArea appearance={appearance} rows={3} disabled defaultValue="Disabled value" aria-label="Disabled" />
+            <TextArea context={context} rows={3} disabled defaultValue="Disabled value" aria-label="Disabled" />
           </Cell>
         </Group>
       ))}
@@ -246,10 +246,10 @@ export const IconAfter: Story = {
         </Cell>
       </Group>
 
-      <Group title="iconAfter with inline appearance (for embedding)">
+      <Group title="iconAfter in the inline context (for embedding)">
         <Cell label="inline + icon">
           <TextArea
-            appearance="inline"
+            context="inline"
             rows={2}
             defaultValue="Inline value"
             aria-label="Inline with icon"
@@ -290,7 +290,7 @@ export const EdgeCases: Story = {
               <TextArea rows={3} placeholder="Placeholder" aria-label="Dark default" />
             </div>
             <div style={fieldStyle}>
-              <TextArea rows={3} appearance="subtle" placeholder="Placeholder" aria-label="Dark subtle" />
+              <TextArea rows={3} context="inline" placeholder="Placeholder" aria-label="Dark inline" />
             </div>
             <div style={fieldStyle}>
               <TextArea rows={3} invalid defaultValue="Invalid" aria-label="Dark invalid" />

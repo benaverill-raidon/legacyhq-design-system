@@ -66,7 +66,9 @@ Examples:
 - ArrowRight
 
 ### Single-Purpose Icons
-Single-purpose icons are reserved for a dedicated meaning and should not be reused casually.
+Single-purpose icons are reserved for a dedicated meaning and should not be reused casually. They are named after their associated function, so a single-purpose icon can share a glyph with a multi-purpose one (`task-not-started` and `radio-unchecked`).
+
+Membership mirrors the Figma Icons page's "Single-purpose icons" section (the `singlePurposeNames` list in `scripts/generate-icons.mjs`); every other icon is multi-purpose.
 
 Examples:
 - AdministrativeAccount

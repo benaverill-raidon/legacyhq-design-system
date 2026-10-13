@@ -7,32 +7,44 @@ const sourceDir = path.join(iconsDir, 'source');
 const generatedDir = path.join(iconsDir, 'generated');
 const metadataDir = path.join(iconsDir, 'metadata');
 
+/*
+ * Single-purpose icons, matching the Figma Icons page's "Single-purpose icons" section: "reserved
+ * for a dedicated meaning and ... named after their associated function." Everything else is
+ * multi-purpose: "named descriptively after what they represent." administrative-account and
+ * firms-all are code-only; the rest mirror Figma.
+ */
 const singlePurposeNames = new Set([
   'administrative-account',
+  'agreement',
   'alive-and-well',
+  'all',
   'assets',
   'auto-edit',
   'bank-account',
   'closely-held-business',
   'contact-support',
   'counselpro-logo',
-  'data-error',
   'deceased',
   'disinherited',
   'document-add',
   'document-generation',
   'document-templates',
-  'family-tree',
+  'documents',
   'event-templates',
   'events',
+  'family-tree',
   'firms-all',
+  'incapacitated',
+  'income',
+  'institutions',
+  'integrations',
   'integrity-management',
   'investment-account',
   'life-insurance-policy',
+  'message',
+  'minor',
+  'miscellaneous-asset',
   'non-qualified-annuity',
-  'people-all',
-  'person-account',
-  'person-account-management',
   'qualified-plan',
   'real-estate',
   'referral',
@@ -40,12 +52,23 @@ const singlePurposeNames = new Set([
   'referral-existing-client',
   'referral-internet',
   'referral-newspaper',
+  'roadmap',
   'savings-bond',
   'schedule-meeting',
   'services-legal',
+  'signature',
+  'signed',
+  'task',
+  'task-complete',
+  'task-in-progress',
+  'task-not-started',
   'team-and-partners',
+  'transfer',
   'treasury-direct',
+  'trust',
+  'virtual',
   'wealth-management',
+  'will',
 ]);
 
 const keywordAliases = {

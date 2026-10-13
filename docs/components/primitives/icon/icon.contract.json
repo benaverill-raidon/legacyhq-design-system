@@ -48,7 +48,7 @@
       "required": false,
       "default": "none",
       "enum": ["none", "spacious"],
-      "description": "Hit-box/container padding around the glyph, independent of its visual size."
+      "description": "The box around the glyph: none matches the glyph; spacious centers it in a 24px box so it lines up with 24px slots. A layout box, not a hit area."
     },
     "color": {
       "type": "IconColor",
@@ -89,7 +89,7 @@
     },
     "spacing": {
       "none": { "purpose": "Container matches the glyph size exactly.", "className": "spacing_none" },
-      "spacious": { "purpose": "Centers the glyph in a larger, fixed touch/click-target box.", "className": "spacing_spacious", "token": "--size-300" }
+      "spacious": { "purpose": "Centers the glyph in a 24px box, to line up with 24px slots (a menu row's leading element, a message's status icon). Not a hit area: the control around the icon sets that.", "className": "spacing_spacious", "token": "--size-300" }
     },
     "color": {
       "inherit": { "className": "color_inherit", "token": null, "purpose": "Default. Takes the surrounding text color, so the icon follows its control through hover, selection, disabled, and inverse." },

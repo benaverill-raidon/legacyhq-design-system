@@ -1,0 +1,121 @@
+/*
+ * Foundations / Icons layout. Page rhythm, type scale, tables, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Every glyph is the library component itself, so what you
+ * see is what components render. Icons take the text color around them, as they do in components.
+ */
+
+.glyphColumn {
+  inline-size: 3rem;
+}
+
+/* The library: a compact grid of glyphs and names. */
+
+.search {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 24rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  gap: var(--spacing-xs);
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: center;
+  align-content: start;
+  padding: var(--spacing-md) var(--spacing-xs) var(--spacing-sm);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+.cellName {
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+  color: var(--color-content-subtle);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Marks icons components already use. */
+.usedMark {
+  position: absolute;
+  inset-block-start: var(--spacing-xs);
+  inset-inline-end: var(--spacing-xs);
+  inline-size: var(--size-075);
+  block-size: var(--size-075);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+/* Size */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+  align-items: flex-end;
+}
+
+.controls > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: start;
+}
+
+.boxes {
+  display: flex;
+  gap: var(--spacing-2xl);
+  align-items: flex-end;
+}
+
+.boxes > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: start;
+}
+
+/* Outlines the icon's own box, so the 24px spacious box reads against the bare glyph. */
+.box {
+  display: inline-flex;
+  outline: var(--border-width-sm) dashed var(--color-border-bold);
+}
+
+/* Color */
+
+.inverseSample {
+  background: var(--color-background-brand-primary-bold-default);
+  text-align: center;
+}
+
+.statuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+}
+
+.statuses > li {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+/* Exceptions note */
+
+.exceptions {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.exceptions ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}

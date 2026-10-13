@@ -31,8 +31,8 @@
       }
     },
     {
-      "name": "Spacious hit box",
-      "description": "A visually small icon centered in a larger click/touch target.",
+      "name": "Spacious box",
+      "description": "An icon centered in a 24px box, to line up with 24px slots. Not a hit area.",
       "jsx": "<CloseIcon spacing=\"spacious\" />",
       "props": {
         "spacing": "spacious"

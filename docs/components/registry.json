@@ -130,7 +130,7 @@
         "type": "IconSpacing",
         "required": false,
         "default": "none",
-        "description": "Hit-box/container padding around the glyph, independent of its visual size.",
+        "description": "The box around the glyph: none matches the glyph; spacious centers it in a 24px box so it lines up with 24px slots. A layout box, not a hit area.",
         "enum": [
           "none",
           "spacious"

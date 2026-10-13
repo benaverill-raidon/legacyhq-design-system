@@ -16,6 +16,7 @@ type IconMetadata = {
 const sizes: IconSize[] = ['sm', 'md'];
 const spacings: IconSpacing[] = ['none', 'spacious'];
 const colors: IconColor[] = [
+  'inherit',
   'default',
   'subtle',
   'inverse',
@@ -82,35 +83,6 @@ const rowStyle = {
   gap: 'var(--spacing-md)',
 } satisfies CSSProperties;
 
-const galleryStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-  gap: 'var(--spacing-sm)',
-  color: 'var(--color-content-default)',
-} satisfies CSSProperties;
-
-const itemStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'var(--spacing-2xl) 1fr',
-  alignItems: 'center',
-  gap: 'var(--spacing-sm)',
-  minInlineSize: 0,
-  padding: 'var(--spacing-sm)',
-  border: 'var(--border-width-sm) solid var(--color-border-default)',
-  borderRadius: 'var(--border-radius-sm)',
-  background: 'var(--color-elevation-surface-default)',
-} satisfies CSSProperties;
-
-const labelStyle = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-  fontFamily: 'var(--typography-body-sm-font-family)',
-  fontSize: 'var(--typography-body-sm-font-size)',
-  fontWeight: 'var(--typography-body-sm-font-weight)',
-  lineHeight: 'var(--typography-body-sm-line-height)',
-} satisfies CSSProperties;
-
 // `color="inverse"` needs a bold/dark backdrop that contrasts with whatever the ambient theme
 // happens to be (like Badge's default chip or a Tooltip bubble), not a full dark-theme preview -
 // so this uses the "boldest contrast for the current theme" tokens directly rather than
@@ -130,24 +102,6 @@ function getIconComponent(componentName: string) {
   return iconComponents[componentName] ?? AddIcon;
 }
 
-function IconGallery({ category }: { category: IconMetadata['category'] }) {
-  const icons = metadata.filter((icon) => icon.category === category);
-
-  return (
-    <div style={galleryStyle}>
-      {icons.map((icon) => {
-        const Component = getIconComponent(icon.component);
-
-        return (
-          <div key={icon.name} style={itemStyle} title={`${icon.label}: ${icon.name}`}>
-            <Component spacing="spacious" />
-            <span style={labelStyle}>{icon.label}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 export const Playground: Story = {
   argTypes: {
@@ -207,22 +161,6 @@ export const Variants: Story = {
         <AddIcon color="inverse" />
         <span>Inverse color on a dark surface</span>
       </div>
-    </div>
-  ),
-};
-
-export const Examples: Story = {
-  render: () => (
-    <div style={stackStyle}>
-      <section style={sectionStyle}>
-        <strong>Multi-purpose icons</strong>
-        <IconGallery category="multi-purpose" />
-      </section>
-
-      <section style={sectionStyle}>
-        <strong>Single-purpose icons</strong>
-        <IconGallery category="single-purpose" />
-      </section>
     </div>
   ),
 };

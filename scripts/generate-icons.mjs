@@ -100,7 +100,7 @@ function getKeywords(name) {
 }
 
 function cleanSvg(svg) {
-  return svg
+  return removeEmptyGroups(svg
     .replace(/<\?xml[\s\S]*?\?>/g, '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
@@ -113,7 +113,9 @@ function cleanSvg(svg) {
     .replace(/\s+data-[\w-]+="[^"]*"/g, '')
     .replace(/\s+width="[^"]*"/i, '')
     .replace(/\s+height="[^"]*"/i, '')
-    .replace(/\s+clipPath="url\([^)]+\)"/g, '')
+    // Figma exports wrap glyphs in a clip-path whose <clipPath> lives in <defs>, removed above; drop
+    // the reference too rather than leave it pointing at nothing.
+    .replace(/\s+clip-?[pP]ath="url\([^)]+\)"/g, '')
     .replace(/\s+fill-rule=/g, ' fillRule=')
     .replace(/\s+clip-rule=/g, ' clipRule=')
     .replace(/\s+stroke-linecap=/g, ' strokeLinecap=')
@@ -124,7 +126,23 @@ function cleanSvg(svg) {
     .replace(/\s+class=/g, ' className=')
     .replace(/\s+style="[^"]*"/g, '')
     .replace(/\s+id="[^"]*"/g, '')
-    .trim();
+    .trim());
+}
+
+/** Groups left empty once their clip-path, gradient, or foreignObject content is gone, nested or not. */
+function removeEmptyGroups(svg) {
+  let previous;
+  let next = svg;
+  do {
+    previous = next;
+    next = next.replace(/<g\b[^>]*>\s*<\/g>/g, '');
+  } while (next !== previous);
+  return next;
+}
+
+/** The distinct paints an icon uses, other than none: more than one means flattening loses color. */
+function paintsOf(svg) {
+  return new Set([...svg.matchAll(/\s(?:fill|stroke)="(?!none\b)([^"]+)"/gi)].map(([, paint]) => paint.toLowerCase()));
 }
 
 function normalizePaint(svg) {
@@ -179,7 +197,7 @@ async function main() {
     .sort((a, b) => a.localeCompare(b));
 
   const metadata = [];
-  const hardcodedPaint = [];
+  const flattenedPaint = [];
   const exports = [];
 
   for (const file of files) {
@@ -189,12 +207,12 @@ async function main() {
     const generatedFileName = `${name}-icon`;
     const sourcePath = path.join(sourceDir, file);
     const rawSvg = await readFile(sourcePath, 'utf8');
-    const normalizedSvg = normalizePaint(cleanSvg(rawSvg));
-    const { viewBox, content } = extractSvg(normalizedSvg, file);
-    const remainingPaint = [...content.matchAll(/\s(?:fill|stroke)="(?!none\b|currentColor\b|url\()[^"]+"/gi)];
+    const cleanedSvg = cleanSvg(rawSvg);
+    const { viewBox, content } = extractSvg(normalizePaint(cleanedSvg), file);
 
-    if (remainingPaint.length > 0) {
-      hardcodedPaint.push(file);
+    // Every paint becomes currentColor, so an icon drawn in more than one color loses it.
+    if (paintsOf(cleanedSvg).size > 1) {
+      flattenedPaint.push(file);
     }
 
     await writeFile(
@@ -216,8 +234,8 @@ async function main() {
   await writeFile(path.join(iconsDir, 'index.ts'), "export * from './generated';\nexport { default as iconMetadata } from './metadata/icons.json';\n");
   await writeFile(path.join(metadataDir, 'icons.json'), `${JSON.stringify(metadata, null, 2)}\n`);
 
-  if (hardcodedPaint.length > 0) {
-    console.warn(`Icons with unresolved hardcoded paint: ${hardcodedPaint.join(', ')}`);
+  if (flattenedPaint.length > 0) {
+    console.warn(`Multi-color icons flattened to one color: ${flattenedPaint.join(', ')}`);
   }
 
   console.log(`Generated ${metadata.length} icons.`);

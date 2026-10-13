@@ -3996,7 +3996,7 @@
         "description": "Selects the status icon, icon color, and the tint shown on hover/open.",
         "enum": [
           "default",
-          "info",
+          "information",
           "success",
           "warning",
           "error"
@@ -4046,7 +4046,7 @@
     "variants": {
       "tone": [
         "default",
-        "info",
+        "information",
         "success",
         "warning",
         "error"
@@ -9004,7 +9004,7 @@
         "enum": [
           "default",
           "success",
-          "info",
+          "information",
           "warning",
           "error",
           "loading"
@@ -9081,7 +9081,7 @@
       "appearance": [
         "default",
         "success",
-        "info",
+        "information",
         "warning",
         "error",
         "loading"
@@ -9119,7 +9119,7 @@
         "iconTileTones": {
           "default": "gray",
           "success": "green",
-          "info": "blue",
+          "information": "blue",
           "warning": "orange",
           "error": "red"
         }
@@ -9130,7 +9130,7 @@
       "defaultRole": "status",
       "roleOverridable": true,
       "iconDecorative": true,
-      "statusAnnounced": "Visually hidden statusLabel before the title for success, info, warning, and error.",
+      "statusAnnounced": "Visually hidden statusLabel before the title for success, information, warning, and error.",
       "dismissLabel": "Dismiss"
     },
     "relatedComponents": [
@@ -9150,7 +9150,7 @@
       "componentName": "toast",
       "variantCount": 11,
       "verifiedAt": "2026-09-02",
-      "notes": "Figma has appearance (default/success/error/warning/info/loading) x open (false/true). `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma appearance=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+      "notes": "Figma has appearance (default/success/error/warning/info/loading) x open (false/true); Figma's info is code's information. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma appearance=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
     }
   },
   {

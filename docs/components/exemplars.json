@@ -3414,9 +3414,9 @@
       {
         "name": "Collapsed (title only)",
         "description": "A compact toast - the state a stacked toast shows before the group is expanded.",
-        "jsx": "<Toast appearance=\"info\" title=\"Syncing your workspace\" expanded={false} />",
+        "jsx": "<Toast appearance=\"information\" title=\"Syncing your workspace\" expanded={false} />",
         "props": {
-          "appearance": "info",
+          "appearance": "information",
           "title": "Syncing your workspace",
           "expanded": false
         }

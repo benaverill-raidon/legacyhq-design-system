@@ -1,6 +1,8 @@
 import type * as React from 'react';
 
-export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error';
+export type InlineMessageTone = 'default' | 'information' | 'success' | 'warning' | 'error';
+/** @deprecated Use `information`, the status name every other component and token uses. Still accepted. */
+export type DeprecatedInlineMessageTone = 'info';
 
 export interface InlineMessageProps {
   /** Bold lead text. */
@@ -8,7 +10,7 @@ export interface InlineMessageProps {
   /** Optional muted trailing text, shown after the title. */
   secondaryText?: React.ReactNode;
   /** Semantic tone - selects the status icon and the tint shown while open. */
-  tone?: InlineMessageTone;
+  tone?: InlineMessageTone | DeprecatedInlineMessageTone;
   /**
    * Detail content revealed in a popup below the row when clicked. Omitting it renders a plain,
    * non-interactive status row with no button, no popup, and no expand affordance.

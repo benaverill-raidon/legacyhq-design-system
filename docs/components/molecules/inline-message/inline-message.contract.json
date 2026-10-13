@@ -70,7 +70,7 @@
       "default": "default",
       "enum": [
         "default",
-        "info",
+        "information",
         "success",
         "warning",
         "error"
@@ -131,7 +131,7 @@
         "iconColorToken": "--color-content-default",
         "tintToken": "--color-background-neutral-overlay-bold-hover"
       },
-      "info": {
+      "information": {
         "icon": "StatusInformationIcon",
         "iconColorToken": "--color-content-information",
         "tintToken": "--color-background-information-overlay-hover"

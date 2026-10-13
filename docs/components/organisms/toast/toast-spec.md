@@ -19,7 +19,8 @@ shown and stacked by Toast Group.
 ## Public API
 
 ```ts
-export type ToastAppearance = 'default' | 'success' | 'info' | 'warning' | 'error' | 'loading';
+export type ToastAppearance = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
+// 'info', the earlier name, is still accepted as a deprecated alias of 'information'.
 
 export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   appearance?: ToastAppearance;
@@ -49,7 +50,7 @@ status glyph (default has no glyph, so a dot stands in). `loading` shows a Spinn
 ```txt
 default  -> IconTile tone gray, dot
 success  -> IconTile tone green, success glyph
-info     -> IconTile tone blue, information glyph
+information -> IconTile tone blue, information glyph
 warning  -> IconTile tone orange, warning glyph
 error    -> IconTile tone red, error glyph
 loading  -> Spinner (no tile)
@@ -75,7 +76,7 @@ loading  -> Spinner (no tile)
 
 - Default `role="status"` (polite live region), overridable.
 - Leading icon decorative; dismiss button labelled by `dismissLabel` ("Dismiss" by default).
-- Because the icon is decorative, `success`, `info`, `warning`, and `error` announce their status before the title as visually hidden text ("Success:", "Information:", "Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit). `default` and `loading` announce none.
+- Because the icon is decorative, `success`, `information`, `warning`, and `error` announce their status before the title as visually hidden text ("Success:", "Information:", "Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit). `default` and `loading` announce none.
 
 ## Storybook
 

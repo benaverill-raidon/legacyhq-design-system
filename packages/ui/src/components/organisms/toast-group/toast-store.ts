@@ -1,11 +1,11 @@
 import type * as React from 'react';
-import type { ToastAppearance } from '../toast/toast.types';
+import type { DeprecatedToastAppearance, ToastAppearance } from '../toast/toast.types';
 
 /** Options accepted by `toast()` and its variants. */
 export interface ToastOptions {
   /** Stable id. Reuse it to update an existing toast in place (e.g. loading -> success). */
   id?: string;
-  appearance?: ToastAppearance;
+  appearance?: ToastAppearance | DeprecatedToastAppearance;
   description?: React.ReactNode;
   actions?: React.ReactNode;
   /** Auto-dismiss delay in ms. `Infinity` (or 0) keeps the toast until dismissed. Defaults to 5000. */
@@ -85,13 +85,13 @@ function createToast(title: React.ReactNode, options: ToastOptions = {}): string
 
 /**
  * Imperative API. Call `toast('Saved')` from anywhere; `toast.success/error/warning/info/loading`
- * set the appearance, and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
+ * set the appearance (`info` sets `information`), and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
  */
 export const toast: ToastFunction = Object.assign(createToast, {
   success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'success' }),
   error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'error' }),
   warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'warning' }),
-  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'info' }),
+  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'information' }),
   loading: (title: React.ReactNode, options: ToastOptions = {}) =>
     toastStore.add(title, { duration: Infinity, ...options, appearance: 'loading' }),
   dismiss: (id?: string) => toastStore.dismiss(id),

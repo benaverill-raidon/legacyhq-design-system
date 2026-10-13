@@ -108,7 +108,7 @@ describe('Toast CSS contract', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Error: Upload failed');
     expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
 
-    rerender(<Toast appearance="info" title="New version" isDismissible={false} />);
+    rerender(<Toast appearance="information" title="New version" isDismissible={false} />);
     expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
 
     rerender(<Toast appearance="success" statusLabel="Listo" title="Saved" isDismissible={false} />);
@@ -123,5 +123,11 @@ describe('Toast CSS contract', () => {
   it('names the dismiss button with an overridable label', () => {
     render(<Toast title="Saved" dismissLabel="Cerrar" />);
     expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
+
+  it('still accepts the deprecated info appearance as information', () => {
+    render(<Toast appearance="info" title="New version" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'information');
+    expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
   });
 });

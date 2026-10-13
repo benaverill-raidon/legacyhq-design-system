@@ -1,10 +1,12 @@
 import type * as React from 'react';
 
-export type ToastAppearance = 'default' | 'success' | 'info' | 'warning' | 'error' | 'loading';
+export type ToastAppearance = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
+/** @deprecated Use `information`, the status name every other component and token uses. Still accepted. */
+export type DeprecatedToastAppearance = 'info';
 
 export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Semantic appearance - sets the leading status tile (or a spinner for `loading`). Defaults to `default`. */
-  appearance?: ToastAppearance;
+  appearance?: ToastAppearance | DeprecatedToastAppearance;
   /**
    * Read by assistive technology before the message, since the status icon is decorative. Defaults
    * to the appearance's name ("Success", "Information", "Warning", "Error"; `default` and `loading` have none); pass a translation, or an empty string to omit it.

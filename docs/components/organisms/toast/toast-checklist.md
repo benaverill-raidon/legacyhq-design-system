@@ -19,7 +19,7 @@ Organism.
 
 ## Design decisions
 
-- [ ] `appearance` (`default` | `success` | `info` | `warning` | `error` | `loading`) selects the
+- [ ] `appearance` (`default` | `success` | `information` | `warning` | `error` | `loading`) selects the
       leading Icon Tile tone, or a Spinner for `loading`.
 - [ ] `expanded` controls whether the description and actions show (Figma `open`).
 - [ ] Renders on a raised surface with a 1px border, radius-xl, and the overlay elevation shadow.
@@ -29,7 +29,7 @@ Organism.
 ## Figma properties
 
 ```txt
-appearance: default | success | error | warning | info | loading
+appearance: default | success | error | warning | info | loading   (code: info is information)
 open: false | true   (code: expanded)
 title / description  (code: title / description)
 ```
@@ -37,7 +37,7 @@ title / description  (code: title / description)
 ## Code props
 
 ```ts
-type ToastAppearance = 'default' | 'success' | 'info' | 'warning' | 'error' | 'loading';
+type ToastAppearance = 'default' | 'success' | 'information' | 'warning' | 'error' | 'loading';
 
 interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   appearance?: ToastAppearance;

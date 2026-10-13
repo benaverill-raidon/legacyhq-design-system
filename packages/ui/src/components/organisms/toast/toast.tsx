@@ -27,7 +27,7 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 const APPEARANCE_CONFIG: Record<Exclude<ToastAppearance, 'loading'>, { tone: IconTileTone; Icon?: ComponentType<IconProps> }> = {
   default: { tone: 'gray' },
   success: { tone: 'green', Icon: StatusSuccessIcon },
-  info: { tone: 'blue', Icon: StatusInformationIcon },
+  information: { tone: 'blue', Icon: StatusInformationIcon },
   warning: { tone: 'orange', Icon: StatusWarningIcon },
   error: { tone: 'red', Icon: StatusErrorIcon },
 };
@@ -35,7 +35,7 @@ const APPEARANCE_CONFIG: Record<Exclude<ToastAppearance, 'loading'>, { tone: Ico
 /** What each appearance announces before the title; `default` and `loading` carry no status. */
 const STATUS_LABELS: Partial<Record<ToastAppearance, string>> = {
   success: 'Success',
-  info: 'Information',
+  information: 'Information',
   warning: 'Warning',
   error: 'Error',
 };
@@ -61,7 +61,7 @@ function ToastLeadingIcon({ appearance }: { appearance: ToastAppearance }) {
 export const Toast = React.memo(
   React.forwardRef<HTMLDivElement, ToastProps>(function Toast(
     {
-      appearance = 'default',
+      appearance: requestedAppearance = 'default',
       statusLabel,
       title,
       description,
@@ -76,6 +76,8 @@ export const Toast = React.memo(
     },
     forwardedRef,
   ) {
+    // `info` is the deprecated name for `information`.
+    const appearance: ToastAppearance = requestedAppearance === 'info' ? 'information' : requestedAppearance;
     const status = statusLabel ?? STATUS_LABELS[appearance];
     const hasDescription = expanded && description !== undefined && description !== null;
     const hasActions = expanded && React.Children.toArray(actions).filter(Boolean).length > 0;

@@ -5,13 +5,13 @@ import { ButtonGroup } from '../../molecules/button-group';
 import { Toast } from './toast';
 import type { ToastAppearance } from './toast.types';
 
-const appearances: ToastAppearance[] = ['default', 'success', 'info', 'warning', 'error', 'loading'];
+const appearances: ToastAppearance[] = ['default', 'success', 'information', 'warning', 'error', 'loading'];
 
 const meta = {
   title: 'Components/Feedback/Toast',
   component: Toast,
   args: {
-    appearance: 'info',
+    appearance: 'information',
     title: "This is the toast's title",
     description: 'Additional information that will help users understand the flag.',
     expanded: true,
@@ -115,7 +115,7 @@ export const Content: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Title only">
-        <Toast appearance="info" title="Syncing your workspace" />
+        <Toast appearance="information" title="Syncing your workspace" />
       </Labelled>
       <Labelled label="Description, no actions">
         <Toast appearance="error" title="Upload failed" description="The file was larger than the 25 MB limit." />

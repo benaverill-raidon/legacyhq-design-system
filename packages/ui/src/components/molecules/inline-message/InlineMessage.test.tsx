@@ -170,4 +170,14 @@ describe('InlineMessage', () => {
   it('applies matching padding on both sides of the text group', () => {
     expect(inlineMessageCss).toMatch(/\.text \{[\s\S]*?padding-inline: var\(--spacing-xs\);/);
   });
+
+  it('uses information for the info tone, and still accepts the deprecated info', () => {
+    const { container, rerender } = render(<InlineMessage title="Synced" tone="information" content="Details" />);
+    expect(container.querySelector('button')).toHaveClass(styles.tone_information);
+    expect(container.querySelector('[data-color="information"]')).toBeInTheDocument();
+
+    rerender(<InlineMessage title="Synced" tone="info" content="Details" />);
+    expect(container.querySelector('button')).toHaveClass(styles.tone_information);
+    expect(container.querySelector('[data-color="information"]')).toBeInTheDocument();
+  });
 });

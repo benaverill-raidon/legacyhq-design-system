@@ -22,7 +22,7 @@ Dialog. Never put the only copy of a critical message, or the only path to an ac
 
 Toast is a presentation organism that composes the Icon Tile molecule (the colored status tile), the
 Spinner atom (loading), the Icon Button atom (dismiss), and the Status icon set. `appearance`
-(`default`, `success`, `info`, `warning`, `error`, `loading`) selects the leading visual. The card
+(`default`, `success`, `information`, `warning`, `error`, `loading`) selects the leading visual. The card
 renders on a raised surface with a 1px border and the overlay elevation shadow so it reads above the
 page.
 

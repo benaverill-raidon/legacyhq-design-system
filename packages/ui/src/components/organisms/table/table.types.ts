@@ -157,6 +157,16 @@ export interface TableProps<Row> {
   previousPageLabel?: string;
   /** Accessible name for the footer's next-page button. Defaults to "Next page". */
   nextPageLabel?: string;
+  /** Accessible name for the footer's navigation region. Defaults to "<name> pagination", or "Table pagination". */
+  paginationLabel?: string;
+  /** The footer's page-size label and its Select's accessible name. Defaults to "Items per page". */
+  itemsPerPageLabel?: string;
+  /** The footer's range text. Defaults to "1–10 of 42 items". */
+  getRangeLabel?: (start: number, end: number, total: number) => string;
+  /** Accessible name for the footer's page Select. Defaults to "Page". */
+  pageLabel?: string;
+  /** The text after the page Select. Defaults to "of 5 pages". */
+  getPageCountLabel?: (pageCount: number) => string;
 
   // --- Footer ---
   /** Total number of items (used in the footer's "X–Y of Z items" label). */

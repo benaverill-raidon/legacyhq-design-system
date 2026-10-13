@@ -112,6 +112,9 @@ Table (div.table, data-size)
   cells stay at the body weight.
 - **Pagination.** Client-side when `pageSize` is set (Table slices + owns the page); server-driven
   when `manualPagination` (Table shows `pageCount` pages). Search is controlled.
+- **Footer text.** Every piece of it is a prop with an English default, so it can be translated:
+  `paginationLabel`, `itemsPerPageLabel`, `getRangeLabel(start, end, total)`, `pageLabel`,
+  `getPageCountLabel(pageCount)`, `previousPageLabel`, and `nextPageLabel`.
 - **Toolbar.** Row 1: search field (flex-growing up to 600px) + `toolbarActions` Icon Buttons
   (right-aligned). Row 2: `activeFilters` Chip `mode="filter"` pills + optional "+" add-filter Icon
   Button + "Clear all filters" action (trailing edge, only when `onClearFilters` is provided).

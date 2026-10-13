@@ -370,4 +370,29 @@ describe('Table', () => {
     expect(screen.getByRole('button', { name: 'Página anterior' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Página siguiente' })).toBeInTheDocument();
   });
+
+  it('lets the footer text be replaced, for translation', () => {
+    render(
+      <Table
+        columns={columns}
+        data={rows}
+        getRowId={getRowId}
+        caption="People"
+        pageSize={2}
+        itemsPerPageOptions={[2, 5]}
+        paginationLabel="Paginación"
+        itemsPerPageLabel="Elementos por página"
+        getRangeLabel={(start, end, total) => `${start}-${end} de ${total}`}
+        pageLabel="Página"
+        getPageCountLabel={(count) => `de ${count}`}
+      />,
+    );
+
+    const footer = screen.getByRole('navigation', { name: 'Paginación' });
+    expect(within(footer).getByText('Elementos por página:')).toBeInTheDocument();
+    expect(within(footer).getByRole('combobox', { name: 'Elementos por página' })).toBeInTheDocument();
+    expect(within(footer).getByText('1-2 de 3')).toBeInTheDocument();
+    expect(within(footer).getByRole('combobox', { name: 'Página' })).toBeInTheDocument();
+    expect(within(footer).getByText('de 2')).toBeInTheDocument();
+  });
 });

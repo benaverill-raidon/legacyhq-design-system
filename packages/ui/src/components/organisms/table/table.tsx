@@ -70,6 +70,11 @@ export function Table<Row>({
   manualPagination = false,
   previousPageLabel = 'Previous page',
   nextPageLabel = 'Next page',
+  paginationLabel,
+  itemsPerPageLabel = 'Items per page',
+  getRangeLabel = (start, end, total) => `${start}–${end} of ${total.toLocaleString()} items`,
+  pageLabel = 'Page',
+  getPageCountLabel = (pageCount) => `of ${pageCount} pages`,
   totalItems,
   itemsPerPageOptions,
   onPageSizeChange,
@@ -485,11 +490,11 @@ export function Table<Row>({
         </div>
 
         {showFooter ? (
-          <div className={styles.footer} role="navigation" aria-label={name ? `${name} pagination` : 'Table pagination'}>
+          <div className={styles.footer} role="navigation" aria-label={paginationLabel ?? (name ? `${name} pagination` : 'Table pagination')}>
             <div className={styles.footerGroup}>
               {itemsPerPageOptions != null && itemsPerPageOptions.length > 0 ? (
                 <>
-                  <span className={styles.footerLabel}>Items per page:</span>
+                  <span className={styles.footerLabel}>{itemsPerPageLabel}:</span>
                   <Select
                     size="sm"
                     context="inline"
@@ -497,13 +502,11 @@ export function Table<Row>({
                     options={itemsPerPageOptions.map((opt) => ({ value: String(opt), label: String(opt) }))}
                     value={String(pageSize)}
                     onChange={(v) => { if (v != null) onPageSizeChange?.(Number(v)); }}
-                    aria-label="Items per page"
+                    aria-label={itemsPerPageLabel}
                   />
                 </>
               ) : null}
-              <span className={styles.footerLabel}>
-                {rangeStart}–{rangeEnd} of {resolvedTotalItems.toLocaleString()} items
-              </span>
+              <span className={styles.footerLabel}>{getRangeLabel(rangeStart, rangeEnd, resolvedTotalItems)}</span>
             </div>
             <div className={styles.footerGroup}>
               <Select
@@ -513,9 +516,9 @@ export function Table<Row>({
                 options={Array.from({ length: resolvedPageCount }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))}
                 value={String(currentPage)}
                 onChange={(v) => { if (v != null) handlePageChange(Number(v)); }}
-                aria-label="Page"
+                aria-label={pageLabel}
               />
-              <span className={styles.footerLabel}>of {resolvedPageCount} pages</span>
+              <span className={styles.footerLabel}>{getPageCountLabel(resolvedPageCount)}</span>
               <div className={styles.footerNav}>
                 <IconButton
                   appearance="subtle"

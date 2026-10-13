@@ -8402,6 +8402,36 @@
         "default": "Next page",
         "description": "Accessible name for the footer's next-page button."
       },
+      "paginationLabel": {
+        "type": "string",
+        "required": false,
+        "default": "<name> pagination, or Table pagination",
+        "description": "Accessible name for the footer's navigation region."
+      },
+      "itemsPerPageLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Items per page",
+        "description": "The footer's page-size label and its Select's accessible name."
+      },
+      "getRangeLabel": {
+        "type": "(start: number, end: number, total: number) => string",
+        "required": false,
+        "default": "(start, end, total) => `${start}–${end} of ${total} items`",
+        "description": "The footer's range text."
+      },
+      "pageLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Page",
+        "description": "Accessible name for the footer's page Select."
+      },
+      "getPageCountLabel": {
+        "type": "(pageCount: number) => string",
+        "required": false,
+        "default": "(pageCount) => `of ${pageCount} pages`",
+        "description": "The text after the footer's page Select."
+      },
       "resizableColumns": {
         "type": "boolean",
         "required": false,

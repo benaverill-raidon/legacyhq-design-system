@@ -91,7 +91,8 @@ whole built-in toolbar.
 <Canvas of={TableStories.Pagination} />
 
 Pass `pageSize` for client-side pagination, or `manualPagination` with `page` / `pageCount` /
-`onPageChange` for a server-paged API.
+`onPageChange` for a server-paged API. Every piece of footer text is a prop with an English default,
+so it can be translated (see the API table).
 
 <Canvas of={TableStories.Sizes} />
 
@@ -131,6 +132,9 @@ Pass `pageSize` for client-side pagination, or `manualPagination` with `page` / 
     <tr><td><code>resizableColumns</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Drag/Arrow-key column resizing.</td></tr>
     <tr><td><code>page</code> / <code>pageCount</code> / <code>onPageChange</code></td><td><code>number</code> / <code>fn</code></td><td>-</td><td>Controlled pagination.</td></tr>
     <tr><td><code>pageSize</code> / <code>manualPagination</code></td><td><code>number</code> / <code>boolean</code></td><td>-</td><td>Client-side / server-side paging.</td></tr>
+    <tr><td><code>itemsPerPageLabel</code> / <code>pageLabel</code> / <code>paginationLabel</code></td><td><code>string</code></td><td><code>'Items per page'</code> / <code>'Page'</code> / <code>'&lt;name&gt; pagination'</code></td><td>Footer labels and accessible names, for translation.</td></tr>
+    <tr><td><code>getRangeLabel</code> / <code>getPageCountLabel</code></td><td><code>fn</code></td><td>"1–10 of 42 items" / "of 5 pages"</td><td>Footer text built from the page numbers, for translation.</td></tr>
+    <tr><td><code>previousPageLabel</code> / <code>nextPageLabel</code></td><td><code>string</code></td><td><code>'Previous page'</code> / <code>'Next page'</code></td><td>Names of the footer's arrow buttons.</td></tr>
     <tr><td><code>loading</code> / <code>skeletonRowCount</code></td><td><code>boolean</code> / <code>number</code></td><td><code>false</code> / <code>5</code></td><td>Skeleton rows + aria-busy.</td></tr>
     <tr><td><code>empty</code></td><td><code>ReactNode</code></td><td>Empty State</td><td>Shown when there are no rows.</td></tr>
     <tr><td><code>className</code> / <code>id</code></td><td><code>string</code></td><td>-</td><td>Root class / id.</td></tr>

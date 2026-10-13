@@ -233,6 +233,50 @@ describe('TextField', () => {
 
   it('has one inline look, Figma\'s: no separate chromeless-without-hover duplicate', () => {
     expect(textFieldCss).not.toMatch(/appearance_/);
-    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background-color: var\(--color-elevation-surface-raised-hover\);/);
+  });
+
+  describe('autofill', () => {
+    const css = textFieldCss.replace(/\/\*[\s\S]*?\*\//g, '');
+    const frameRule = css.match(
+      /\.root:not\(\[data-disabled='true'\]\):is\(:has\(\.input:autofill\), \[data-force-state='autofill'\]\)\s*\{([^}]*)\}/,
+    );
+    const inputRule = css.match(/\.input:autofill\s*\{([^}]*)\}/);
+
+    it('layers the autofill token over the raised surface when the input is autofilled or pinned, except when disabled', () => {
+      expect(frameRule?.[1]).toContain('background-color: var(--color-elevation-surface-raised-default);');
+      expect(frameRule?.[1]).toContain(
+        'background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));',
+      );
+    });
+
+    it("keeps each context's resting stroke, as Figma does", () => {
+      expect(frameRule?.[1]).not.toMatch(/border|box-shadow/);
+    });
+
+    it('keeps the tint through hover: hover rules set background-color, never the shorthand that clears the tint layer', () => {
+      const hoverRules = [...css.matchAll(/([^{}]*:hover[^{}]*)\{([^}]*)\}/g)];
+      expect(hoverRules.length).toBeGreaterThan(0);
+      for (const [, , body] of hoverRules) expect(body).not.toMatch(/(^|[\s;])background\s*:/);
+    });
+
+    it("hides the browser's own autofill fill by clipping the input's background to its text", () => {
+      expect(inputRule?.[1]).toContain('-webkit-background-clip: text;');
+      expect(inputRule?.[1]).toContain('background-clip: text;');
+      expect(inputRule?.[1]).toContain('-webkit-text-fill-color: var(--color-content-default);');
+      expect(inputRule?.[1]).toContain('caret-color: var(--color-content-default);');
+      expect(css).toMatch(/\.input:autofill:disabled\s*\{\s*-webkit-text-fill-color: var\(--color-content-disabled\);/);
+    });
+
+    it('adds no motion of its own', () => {
+      // `autofill` inside a selector, not the token name inside a declaration.
+      expect(css).not.toMatch(/(^|\})[^{}]*autofill[^{}]*\{[^}]*(transition|animation)/);
+    });
+
+    it('pins the autofill state on the frame for documentation', () => {
+      render(<TextField aria-label="Email" defaultValue="jordan@example.com" data-force-state="autofill" />);
+
+      expect(screen.getByRole('textbox').closest('div')).toHaveAttribute('data-force-state', 'autofill');
+    });
   });
 });

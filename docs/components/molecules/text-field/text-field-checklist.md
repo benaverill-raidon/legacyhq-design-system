@@ -81,6 +81,10 @@ No fixed limit - native `maxLength` applies if the consumer sets it.
 
 Required:
 - Default, hover, focus, disabled, invalid
+- Autofill - Figma's `state=autofill`: `--color-background-autofill-default` over the raised surface
+  in both contexts, with each context's resting stroke, when the input matches `:autofill` (or the
+  documentation-only `data-force-state="autofill"` pin). The browser's own autofill fill on the input
+  is hidden by clipping its background to the text, and the tint stays through hover and focus.
 
 Not Required:
 - A separate "typing" or "filled" state - both fall out of native `:placeholder-shown` plus
@@ -112,8 +116,9 @@ accessible name (e.g. `aria-label="Clear"`) and remain reachable by keyboard.
 ---
 
 ## Notes
-Figma's `state` variant axis (default/hover/focus/typing/filled) is not a real prop - it resolves
-entirely to native `:hover`, `:focus-within`, and `:placeholder-shown`, plus the input's own value.
+Figma's `state` variant axis (default/hover/focus/typing/filled/autofill) is not a real prop - it
+resolves entirely to native `:hover`, `:focus-within`, `:placeholder-shown`, and `:autofill`, plus the
+input's own value.
 Figma's `context` axis (`default`/`inline`) is the `context` prop, with the same name and values.
 `context="inline"` always renders square bottom corners (top corners only), confirmed from Figma's
 per-corner radius data. `elemBeforeInput` (icon-or-text,

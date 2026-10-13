@@ -39,16 +39,22 @@ supports small editable key/value rows.
 
 ## States
 
-Hover and focus below are pinned via `data-force-state` (documentation-only); invalid and disabled are
-real props.
+Hover, focus, and autofill below are pinned via `data-force-state` (documentation-only); invalid and
+disabled are real props.
 
 <Canvas of={TextAreaStories.States} />
 
 Figma models `hover`/`focus`/`typing`/`filled`/`autofill` as if they were variants to pick between.
-They aren't real props — they fall out of native `:hover`/`:focus` and the textarea's own
+They aren't real props — they fall out of native `:hover`/`:focus`/`:autofill` and the textarea's own
 placeholder/value. `invalid` is the one real boolean among them. Focus and invalid replace the border
 color and paint the thicker (2px) edge with an inset `box-shadow` rather than a real `border-width`
 change, so the multi-line text never shifts by a pixel. Hover is suppressed once the field is focused.
+
+An autofilled field (a saved address, say) gets the same treatment as Text Field, in both contexts:
+the translucent `color-background-autofill-default` tint over the raised surface, with the browser's
+own autofill fill on the textarea hidden, and the tint kept while the field is hovered or focused.
+The pinned reference shows the frame only; the "Real browser autofill" fields under Edge Cases show
+the browser's fill being hidden.
 
 ## Resizing
 

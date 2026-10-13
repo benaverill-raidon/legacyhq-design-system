@@ -35,10 +35,11 @@
  * static regression reference - documentation-only, not part of the public API, the same
  * convention Button and Checkbox use. Hover is suppressed once the field is focused/typing (real
  * `:focus-within`, or the pinned `data-force-state='focus'` reference) - hover only ever shows on
- * an inactive field, per explicit design feedback.
+ * an inactive field, per explicit design feedback. Hover sets `background-color` only, never the
+ * `background` shorthand, so it keeps the autofill tint layer (see Autofill below).
  */
 .root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hover);
+  background-color: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -135,7 +136,7 @@
 }
 
 .context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hover);
+  background-color: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -177,6 +178,44 @@
 .context_inline[data-disabled='true'] {
   background: transparent;
   border-color: transparent;
+}
+
+/*
+ * Autofill, confirmed from Figma's `state=autofill` variants (re-checked 2026-10-13): the frame
+ * layers the translucent `--color-background-autofill-default` over
+ * `--color-elevation-surface-raised-default`, and keeps each context's resting stroke - 1px
+ * `--color-border-input` on context=default, none on context=inline. So context=inline, transparent
+ * at rest, shows the raised surface while autofilled. The tint is a background-image layer, so the
+ * hover rules above still change the surface under it, and focus/invalid still change the border.
+ * A disabled field shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only
+ * pin for Storybook. No transition of its own: the surface change fades with `.root`'s existing
+ * one, which the reduced-motion block already switches off.
+ */
+.root:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']) {
+  background-color: var(--color-elevation-surface-raised-default);
+  background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));
+}
+
+/*
+ * The browser paints its own autofill fill and text color on the native input with `!important`
+ * in its user-agent stylesheet (Chrome's blue, Safari's yellow), which author CSS can't override.
+ * Clipping the input's background to its text leaves that fill only under the glyphs, where the
+ * text covers it, so the frame shows through in every state without matching its color.
+ * `-webkit-text-fill-color` and `caret-color` replace the forced text color. `filter: none` clears the
+ * filter some Firefox versions use for the same highlight. A long background-color transition would
+ * also hide the fill, but only with a raw timing that the motion rules don't allow, and turning it
+ * off for reduced motion would bring the browser's fill back.
+ */
+.input:autofill {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: var(--color-content-default);
+  caret-color: var(--color-content-default);
+  filter: none;
+}
+
+.input:autofill:disabled {
+  -webkit-text-fill-color: var(--color-content-disabled);
 }
 
 /*
@@ -295,7 +334,7 @@
 }
 
 .root[data-editable-cell]:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-background-neutral-overlay-bold-hover);
+  background-color: var(--color-background-neutral-overlay-bold-hover);
   border-radius: 0;
 }
 

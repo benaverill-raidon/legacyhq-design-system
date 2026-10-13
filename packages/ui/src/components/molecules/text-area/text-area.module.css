@@ -129,10 +129,11 @@
 /*
  * Hover tint only ever shows on an inactive field - suppressed once focused/typing, matching Text
  * Field (and its explicit design feedback). Keys off `:focus-within` (the wrapper contains the
- * focusable textarea) rather than `:focus` directly.
+ * focusable textarea) rather than `:focus` directly. Hover sets `background-color` only, never the
+ * `background` shorthand, so it keeps the autofill tint layer (see Autofill below).
  */
 .root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hover);
+  background-color: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -176,7 +177,7 @@
 }
 
 .context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background: var(--color-elevation-surface-raised-hover);
+  background-color: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -203,6 +204,38 @@
 .context_inline[data-disabled='true'] {
   background: transparent;
   border-color: transparent;
+}
+
+/*
+ * Autofill - the same treatment as Text Field, confirmed from Figma's `state=autofill` variants
+ * (re-checked 2026-10-13): `--color-background-autofill-default` layered over
+ * `--color-elevation-surface-raised-default` in both contexts, with each context's resting stroke
+ * kept (1px `--color-border-input` on context=default, none on context=inline). The tint is a
+ * background-image layer, so hover still changes the surface under it and focus/invalid the border;
+ * a disabled field shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only pin. No
+ * transition of its own - the surface change fades with `.root`'s, which reduced motion switches off.
+ */
+.root:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']) {
+  background-color: var(--color-elevation-surface-raised-default);
+  background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));
+}
+
+/*
+ * The browser's own `!important` autofill fill and text color on the native textarea can't be
+ * overridden, so the background is clipped to the text (where the glyphs cover it) and the text and
+ * caret colors are replaced - see Text Field for the full reasoning, including why this isn't the
+ * long-transition workaround.
+ */
+.textarea:autofill {
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: var(--color-content-default);
+  caret-color: var(--color-content-default);
+  filter: none;
+}
+
+.textarea:autofill:disabled {
+  -webkit-text-fill-color: var(--color-content-disabled);
 }
 
 /*

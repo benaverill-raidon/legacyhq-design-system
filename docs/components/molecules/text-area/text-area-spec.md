@@ -94,10 +94,23 @@ Frame tokens by state (`context=default`), verified against Figma and reused fro
 | focus | `elevation/surface/raised/default` | `border/focus` | 2px (box-shadow) |
 | invalid | `elevation/surface/raised/default` | `border/error` | 2px (box-shadow) |
 | disabled | `background/disabled` | `border/disabled` | 1px |
+| autofill | `background/autofill/default` over `elevation/surface/raised/default` (hover: over `-raised/hover`) | `border/input` | 1px |
 
 Focus and invalid keep the real `border-width` at 1px and paint the extra pixel with
 `box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) <color>` - the same technique Text Field uses, so the multi-line text
 never shifts by a pixel. Hover tint is suppressed once focused.
+
+**Autofill** matches Figma's `state=autofill` variants (re-checked 2026-10-13, both contexts) and
+Text Field's treatment exactly. The frame layers `--color-background-autofill-default` as a
+`background-image` over a `--color-elevation-surface-raised-default` `background-color` when the
+textarea matches `:autofill` (`.root:has(.textarea:autofill)`), or under the documentation-only
+`data-force-state='autofill'` pin, except when disabled. Each context keeps its resting stroke, so
+`context=inline` shows the raised surface with no visible line. The tint is its own layer: hover
+(which sets `background-color` only, never the `background` shorthand) still changes the surface
+under it, and focus and invalid still change the border. The browser's own `!important` autofill
+fill on the textarea is hidden with `background-clip: text`, and `-webkit-text-fill-color` and
+`caret-color` replace its forced text color. There's no transition: a long-transition workaround
+would need a raw timing the motion rules don't allow. See Text Field's spec for the full reasoning.
 
 **`context=inline`** (Figma's `context=inline`) is chromeless at rest - no visible border or
 background, with a transparent bottom-only 1px border. Hover shows the raised-surface hover
@@ -105,7 +118,8 @@ background (`elevation/surface/raised/hover`) plus the bottom border in `border/
 bottom-only 2px focus line (`border/focus` on the bottom border, +1px via a bottom-only inset
 box-shadow); invalid shows a bottom-only error border (`border/error`) the same way; disabled stays
 transparent. Bottom corners are square; top corners keep the size's radius - mirroring Text Field's
-`context="inline"`. For a field inside a row, such as Key Value Pair wrapped in Inline Edit.
+`context="inline"`. Autofilled, it shows the raised surface with the autofill tint and still no
+visible line. For a field inside a row, such as Key Value Pair wrapped in Inline Edit.
 
 ### Token naming note
 
@@ -177,4 +191,10 @@ disables the resize grip on a disabled field
 renders iconAfter when provided
 does not render the action slot when iconAfter is absent
 context=inline is chromeless at rest, with Figma's hover fill and bottom-only states
+autofill: layers the autofill token over the raised surface (autofilled or pinned, not disabled)
+autofill: keeps each context's resting stroke
+autofill: hover rules set background-color, never the shorthand that clears the tint layer
+autofill: hides the browser's own fill by clipping the textarea's background to its text
+autofill: adds no motion of its own
+autofill: pins the state on the wrapper for documentation
 ```

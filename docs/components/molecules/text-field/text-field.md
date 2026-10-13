@@ -34,6 +34,13 @@ inside a row or other content and shouldn't visually compete with it until someo
 it - a search box, an inline-edit field, a Key Value Pair value. `context="default"` (the standard
 bordered look, rounded on all four corners) is correct for nearly every other case.
 
+When the browser autofills the field (a saved name, email, or address), the frame shows Figma's
+`state=autofill`: the translucent `color-background-autofill-default` tint over the raised surface,
+in both contexts - so an inline field, transparent at rest, gains the raised surface while
+autofilled. The browser's own autofill fill (Chrome's blue, Safari's yellow) is hidden, so the field
+looks the same in every browser. It's a live state (`:autofill`), not a prop; the browser clears it
+when the person edits the value. Hover, focus, and invalid still apply while it's on.
+
 The older `appearance` prop is deprecated but still accepted: `appearance="subtle"` and
 `appearance="inline"` both render `context="inline"`, and `appearance="default"` renders
 `context="default"`.

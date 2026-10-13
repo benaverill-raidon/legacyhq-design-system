@@ -56,10 +56,13 @@ for the multi-line case, with its own size/context/state axes and a resize affor
 
 ## States
 
-Required: default, hover, focus, invalid, disabled.
-Live pseudo-classes (`:hover`, `:focus`) with a documentation-only `data-force-state` pin. `typing`
-and `filled` (Figma states) need no distinct styling — they render as default/focus. Figma's
-`autofill` fills the frame with `color/background/autofill/default`, which code doesn't apply yet.
+Required: default, hover, focus, invalid, disabled, autofill.
+Live pseudo-classes (`:hover`, `:focus`, `:autofill`) with a documentation-only `data-force-state`
+pin. `typing` and `filled` (Figma states) need no distinct styling — they render as default/focus.
+Figma's `autofill` layers `color/background/autofill/default` over the raised surface in both
+contexts, keeping each context's resting stroke; code applies it when the textarea matches
+`:autofill`, hides the browser's own autofill fill (background clipped to the text), and keeps the
+tint through hover and focus.
 
 ---
 
@@ -76,7 +79,9 @@ and `filled` (Figma states) need no distinct styling — they render as default/
 
 No new tokens — all reused from Text Field. Figma's `background/input/*` + `border/focused` naming
 maps onto `elevation/surface/raised/*` + `border/focus` (same intent). Focus/invalid paint the thicker
-edge via inset box-shadow, not a real border-width change (no text shift).
+edge via inset box-shadow, not a real border-width change (no text shift). Autofill uses the existing
+semantic `--color-background-autofill-default`, layered over `--color-elevation-surface-raised-default`
+exactly as Figma binds it.
 
 ---
 
@@ -109,14 +114,21 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 - inline: chromeless at rest, square bottom corners, hover background + bottom-only border on
   hover/focus/invalid, keeps padding and top radius ✓
 - Key Value Pair embedding with inline TextArea + iconAfter ✓
+- autofill (pinned, 2026-10-13): raised surface + `rgba(0, 54, 85, 0.08)` tint in light,
+  `rgba(106, 173, 212, 0.08)` in dark; `border/input` 1px on default, no visible line on inline;
+  matches Figma's md variants in both contexts ✓. The browser's own fill being hidden needs a real
+  autofill (Edge Cases) - not checked in Storybook's automated pass
 
 ---
 
 ## Validated Figma Details
 
 - `text-area` component set: node `1697:19487`, page "🚧 Text Area". Axes: type / size (md, lg after
-  the sm removal) / context (default, inline) / state / isDisabled / isInvalid. Exact post-removal variant count to be
-  re-confirmed live (was 96 with three sizes).
+  the sm removal) / context (default, inline) / state / isDisabled / isInvalid. 64 variants after the
+  removal (was 96 with three sizes), re-confirmed live 2026-10-13.
+- `state=autofill` (8 variants: type x size x context): fills `color/elevation/surface/raised/default`
+  then `color/background/autofill/default` at 8%; stroke `color/border/input` 1px on
+  `context=default`, none on `context=inline`; value text `color/content/default`.
 - The visual frame (fill/border/radius) is bound on the component node; the inner `Container` frame
   carries only padding.
 - `type=rich-inline` is visually identical to `default` in the static mockup — the difference is the
@@ -137,3 +149,4 @@ edge via inset box-shadow, not a real border-width change (no text shift).
 - [x] iconAfter with interactive IconButton
 - [x] Inline context (chromeless)
 - [x] Inline context inside Key Value Pair
+- [x] Autofill, pinned (States) and real browser autofill (Edge Cases)

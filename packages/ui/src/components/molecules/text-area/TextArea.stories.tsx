@@ -121,9 +121,10 @@ export const Variants: Story = {
 };
 
 /**
- * Hover and focus are pinned via `data-force-state` (documentation-only, mirrors the live
- * pseudo-class) so they're visible side by side as a static reference, the same convention Text
- * Field, Button, and Checkbox use. Invalid and disabled are real props.
+ * Hover, focus, and autofill are pinned via `data-force-state` (documentation-only, mirrors the
+ * live pseudo-class - `:autofill` for autofill) so they're visible side by side as a static
+ * reference, the same convention Text Field, Button, and Checkbox use. Invalid and disabled are
+ * real props.
  */
 export const States: Story = {
   render: () => (
@@ -138,6 +139,9 @@ export const States: Story = {
           </Cell>
           <Cell label="Focus">
             <TextArea context={context} rows={3} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
+          </Cell>
+          <Cell label="Autofill">
+            <TextArea context={context} rows={3} defaultValue={'221 Main Street\nApartment 4'} aria-label="Autofill" data-force-state="autofill" />
           </Cell>
           <Cell label="Invalid">
             <TextArea context={context} rows={3} invalid defaultValue="This value needs attention" aria-label="Invalid" />
@@ -282,6 +286,16 @@ export const EdgeCases: Story = {
         </div>
       </Group>
 
+      {/* The States pin can't show the browser's own autofill paint being removed; these can. */}
+      <Group title="Real browser autofill (pick a saved address)">
+        <Cell label="context: default">
+          <TextArea rows={3} name="street-address" autoComplete="street-address" placeholder="Street address" aria-label="Street address" />
+        </Cell>
+        <Cell label="context: inline">
+          <TextArea rows={3} context="inline" name="shipping-address" autoComplete="shipping street-address" placeholder="Shipping address" aria-label="Shipping address" />
+        </Cell>
+      </Group>
+
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Dark surface</h3>
         <div data-theme="dark" style={cardStyle}>
@@ -294,6 +308,9 @@ export const EdgeCases: Story = {
             </div>
             <div style={fieldStyle}>
               <TextArea rows={3} invalid defaultValue="Invalid" aria-label="Dark invalid" />
+            </div>
+            <div style={fieldStyle}>
+              <TextArea rows={3} defaultValue="Autofilled" aria-label="Dark autofill" data-force-state="autofill" />
             </div>
           </div>
         </div>

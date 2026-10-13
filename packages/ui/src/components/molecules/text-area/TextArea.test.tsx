@@ -239,11 +239,55 @@ describe('TextArea', () => {
     expect(textAreaCss).not.toMatch(/appearance_/);
     expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*border-color:\s*transparent;/);
     expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*background:\s*transparent;/);
-    expect(textAreaCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textAreaCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background-color: var\(--color-elevation-surface-raised-hover\);/);
     expect(textAreaCss).toMatch(/\.context_inline\[data-invalid[^{]*\{[^}]*border-bottom-color:\s*var\(--color-border-error\)/);
   });
 
   it('disables resize on a disabled wrapper', () => {
     expect(textAreaCss).toMatch(/\.root\[data-disabled='true'\]\s*\{[^}]*resize:\s*none;/);
+  });
+
+  describe('autofill', () => {
+    const css = textAreaCss.replace(/\/\*[\s\S]*?\*\//g, '');
+    const frameRule = css.match(
+      /\.root:not\(\[data-disabled='true'\]\):is\(:has\(\.textarea:autofill\), \[data-force-state='autofill'\]\)\s*\{([^}]*)\}/,
+    );
+    const textareaRule = css.match(/\.textarea:autofill\s*\{([^}]*)\}/);
+
+    it('layers the autofill token over the raised surface when the textarea is autofilled or pinned, except when disabled', () => {
+      expect(frameRule?.[1]).toContain('background-color: var(--color-elevation-surface-raised-default);');
+      expect(frameRule?.[1]).toContain(
+        'background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));',
+      );
+    });
+
+    it("keeps each context's resting stroke, as Figma does", () => {
+      expect(frameRule?.[1]).not.toMatch(/border|box-shadow/);
+    });
+
+    it('keeps the tint through hover: hover rules set background-color, never the shorthand that clears the tint layer', () => {
+      const hoverRules = [...css.matchAll(/([^{}]*:hover[^{}]*)\{([^}]*)\}/g)];
+      expect(hoverRules.length).toBeGreaterThan(0);
+      for (const [, , body] of hoverRules) expect(body).not.toMatch(/(^|[\s;])background\s*:/);
+    });
+
+    it("hides the browser's own autofill fill by clipping the textarea's background to its text", () => {
+      expect(textareaRule?.[1]).toContain('-webkit-background-clip: text;');
+      expect(textareaRule?.[1]).toContain('background-clip: text;');
+      expect(textareaRule?.[1]).toContain('-webkit-text-fill-color: var(--color-content-default);');
+      expect(textareaRule?.[1]).toContain('caret-color: var(--color-content-default);');
+      expect(css).toMatch(/\.textarea:autofill:disabled\s*\{\s*-webkit-text-fill-color: var\(--color-content-disabled\);/);
+    });
+
+    it('adds no motion of its own', () => {
+      // `autofill` inside a selector, not the token name inside a declaration.
+      expect(css).not.toMatch(/(^|\})[^{}]*autofill[^{}]*\{[^}]*(transition|animation)/);
+    });
+
+    it('pins the autofill state on the wrapper for documentation', () => {
+      render(<TextArea aria-label="Address" defaultValue="221 Main Street" data-force-state="autofill" />);
+
+      expect(screen.getByRole('textbox').parentElement).toHaveAttribute('data-force-state', 'autofill');
+    });
   });
 });

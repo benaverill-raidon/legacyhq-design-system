@@ -115,9 +115,9 @@ export const Variants: Story = {
 };
 
 /**
- * Hover and focus are pinned via `data-force-state` (documentation-only, mirrors the live
- * pseudo-class) so they're visible side by side as a static reference, the same convention
- * Button and Checkbox use. Invalid and disabled are real props.
+ * Hover, focus, and autofill are pinned via `data-force-state` (documentation-only, mirrors the
+ * live pseudo-class - `:autofill` for autofill) so they're visible side by side as a static
+ * reference, the same convention Button and Checkbox use. Invalid and disabled are real props.
  */
 export const States: Story = {
   render: () => (
@@ -132,6 +132,9 @@ export const States: Story = {
           </Cell>
           <Cell label="Focus">
             <TextField context={context} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
+          </Cell>
+          <Cell label="Autofill">
+            <TextField context={context} defaultValue="jordan.lee@example.com" aria-label="Autofill" data-force-state="autofill" />
           </Cell>
           <Cell label="Invalid">
             <TextField context={context} invalid defaultValue="Invalid value" aria-label="Invalid" />
@@ -240,6 +243,16 @@ export const EdgeCases: Story = {
         </div>
       </Group>
 
+      {/* The States pin can't show the browser's own autofill paint being removed; these can. */}
+      <Group title="Real browser autofill (pick a saved suggestion)">
+        <Cell label="context: default">
+          <TextField name="name" autoComplete="name" placeholder="Full name" aria-label="Full name" />
+        </Cell>
+        <Cell label="context: inline">
+          <TextField context="inline" name="email" type="email" autoComplete="email" placeholder="Email" aria-label="Email" />
+        </Cell>
+      </Group>
+
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Dark surface</h3>
         <div data-theme="dark" style={darkSurfaceStyle}>
@@ -252,6 +265,9 @@ export const EdgeCases: Story = {
             </div>
             <div style={fieldStyle}>
               <TextField invalid defaultValue="Invalid" aria-label="Dark invalid" />
+            </div>
+            <div style={fieldStyle}>
+              <TextField defaultValue="Autofilled" aria-label="Dark autofill" data-force-state="autofill" />
             </div>
           </div>
         </div>

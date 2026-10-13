@@ -21,6 +21,8 @@ export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivEl
   actions?: React.ReactNode;
   /** Show a dismiss button in the top-right corner. Defaults to `false`. */
   isDismissible?: boolean;
+  /** Accessible name for the dismiss button. Defaults to "Dismiss". */
+  dismissLabel?: string;
   /** Called when the dismiss button is clicked. The message also hides itself. */
   onDismiss?: () => void;
 }

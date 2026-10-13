@@ -68,6 +68,7 @@ export const Toast = React.memo(
       actions,
       expanded = true,
       isDismissible = true,
+      dismissLabel = 'Dismiss',
       onDismiss,
       className,
       role = 'status',
@@ -102,7 +103,7 @@ export const Toast = React.memo(
                 className={styles.dismiss}
                 appearance="subtle"
                 size="xs"
-                aria-label="Dismiss"
+                aria-label={dismissLabel}
                 tooltip={false}
                 onClick={onDismiss}
               >

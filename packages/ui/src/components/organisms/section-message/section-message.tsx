@@ -45,6 +45,7 @@ export const SectionMessage = React.memo(
       children,
       actions,
       isDismissible = false,
+      dismissLabel = 'Dismiss',
       onDismiss,
       className,
       role = 'status',
@@ -95,7 +96,7 @@ export const SectionMessage = React.memo(
             className={styles.dismiss}
             appearance="subtle"
             size="xs"
-            aria-label="Dismiss"
+            aria-label={dismissLabel}
             onClick={handleDismiss}
           >
             <CloseIcon />

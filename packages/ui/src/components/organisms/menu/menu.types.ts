@@ -56,6 +56,8 @@ export interface MenuProps {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
+  /** Accessible name for the search field's clear button. Defaults to "Clear search". */
+  clearSearchLabel?: string;
   /** Enables scrolling (with a visible scrollbar) once content exceeds maxHeight. Defaults to true, matching the Figma component's own default. */
   showScrollbar?: boolean;
   /** Caps the sections area's height before it scrolls. No cap by default. */

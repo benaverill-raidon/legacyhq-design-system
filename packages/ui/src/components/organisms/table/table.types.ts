@@ -94,6 +94,10 @@ export interface TableProps<Row> {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
+  /** Accessible name for the search field and the Icon Button that opens it. Defaults to "Search". */
+  searchLabel?: string;
+  /** Accessible name for the search field's clear button. Defaults to "Clear search". */
+  clearSearchLabel?: string;
   /**
    * Right-aligned toolbar actions beside the search field — typically the filter Icon Button (opens a
    * filter dropdown menu) and the configure Icon Button (opens a settings popover). The Table
@@ -149,6 +153,10 @@ export interface TableProps<Row> {
   pageSize?: number;
   /** The consumer paginates server-side; Table does not slice `data` and shows `pageCount` pages. */
   manualPagination?: boolean;
+  /** Accessible name for the footer's previous-page button. Defaults to "Previous page". */
+  previousPageLabel?: string;
+  /** Accessible name for the footer's next-page button. Defaults to "Next page". */
+  nextPageLabel?: string;
 
   // --- Footer ---
   /** Total number of items (used in the footer's "X–Y of Z items" label). */

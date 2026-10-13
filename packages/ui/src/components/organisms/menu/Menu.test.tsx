@@ -358,4 +358,14 @@ describe('Menu', () => {
     expect(menuCss).not.toMatch(/^\.menu\s*\{[^}]*background/m);
     expect(menuCss).not.toMatch(/^\.menu\s*\{[^}]*border:/m);
   });
+
+  it('names the clear-search button with an overridable label', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchValue="ren" onSearchChange={() => {}} sections={actionSections()} />);
+    expect(screen.getByRole('button', { name: 'Clear search' })).toBeInTheDocument();
+
+    rerender(
+      <Menu aria-label="Actions" searchValue="ren" onSearchChange={() => {}} clearSearchLabel="Effacer" sections={actionSections()} />,
+    );
+    expect(screen.getByRole('button', { name: 'Effacer' })).toBeInTheDocument();
+  });
 });

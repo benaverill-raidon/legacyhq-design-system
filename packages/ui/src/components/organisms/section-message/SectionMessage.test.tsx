@@ -176,4 +176,13 @@ describe('SectionMessage CSS contract', () => {
     );
     expect(screen.getByRole('status')).toHaveTextContent('Erreur: Upload failed.');
   });
+
+  it('names the dismiss button with an overridable label', () => {
+    render(
+      <SectionMessage isDismissible dismissLabel="Cerrar">
+        Saved.
+      </SectionMessage>,
+    );
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
 });

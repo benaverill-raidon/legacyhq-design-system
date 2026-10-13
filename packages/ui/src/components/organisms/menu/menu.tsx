@@ -111,6 +111,7 @@ export const Menu = React.memo(function Menu({
   searchValue,
   onSearchChange,
   searchPlaceholder,
+  clearSearchLabel = 'Clear search',
   showScrollbar = true,
   maxHeight,
   loading = false,
@@ -203,7 +204,7 @@ export const Menu = React.memo(function Menu({
             aria-label={searchPlaceholder ?? 'Search'}
             iconAfter={
               searchValue ? (
-                <IconButton aria-label="Clear search" appearance="subtle" size="sm" onClick={() => onSearchChange?.('')}>
+                <IconButton aria-label={clearSearchLabel} appearance="subtle" size="sm" onClick={() => onSearchChange?.('')}>
                   <CloseIcon size="sm" decorative />
                 </IconButton>
               ) : undefined

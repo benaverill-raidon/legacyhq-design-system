@@ -233,7 +233,8 @@ describe('Table', () => {
           searchable
           searchValue={value}
           onSearchChange={setValue}
-          searchPlaceholder="Search people"
+          searchPlaceholder="Search people…"
+          searchLabel="Search people"
         />
       );
     }
@@ -338,5 +339,35 @@ describe('Table', () => {
     const root = container.firstElementChild as HTMLElement;
     expect(root).toHaveAttribute('data-size', 'sm');
     expect(root).toHaveClass('custom');
+  });
+
+  it('names its icon-only controls with overridable labels, not the placeholder', () => {
+    const { rerender } = render(
+      <Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable searchValue="" pageSize={2} />,
+    );
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Previous page' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Next page' })).toBeInTheDocument();
+
+    rerender(
+      <Table
+        columns={columns}
+        data={rows}
+        getRowId={getRowId}
+        caption="People"
+        searchable
+        searchValue="ali"
+        pageSize={2}
+        searchLabel="Buscar"
+        clearSearchLabel="Borrar búsqueda"
+        previousPageLabel="Página anterior"
+        nextPageLabel="Página siguiente"
+      />,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Buscar' }));
+    expect(screen.getByRole('textbox', { name: 'Buscar' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Borrar búsqueda', hidden: true })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Página anterior' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Página siguiente' })).toBeInTheDocument();
   });
 });

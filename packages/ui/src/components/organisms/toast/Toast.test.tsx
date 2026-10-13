@@ -119,4 +119,9 @@ describe('Toast CSS contract', () => {
       expect(screen.getByRole('status')).not.toHaveTextContent(/:/);
     }
   });
+
+  it('names the dismiss button with an overridable label', () => {
+    render(<Toast title="Saved" dismissLabel="Cerrar" />);
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
 });

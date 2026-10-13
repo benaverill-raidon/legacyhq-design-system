@@ -23,6 +23,8 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   expanded?: boolean;
   /** Whether to show the dismiss button. Defaults to `true`. */
   isDismissible?: boolean;
+  /** Accessible name for the dismiss button. Defaults to "Dismiss". */
+  dismissLabel?: string;
   /** Called when the dismiss button is clicked. */
   onDismiss?: () => void;
 }

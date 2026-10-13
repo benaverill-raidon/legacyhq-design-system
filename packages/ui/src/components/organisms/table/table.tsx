@@ -45,6 +45,8 @@ export function Table<Row>({
   searchValue,
   onSearchChange,
   searchPlaceholder = 'Search...',
+  searchLabel = 'Search',
+  clearSearchLabel = 'Clear search',
   toolbarActions,
   activeFilters,
   onClearFilters,
@@ -66,6 +68,8 @@ export function Table<Row>({
   onPageChange,
   pageSize,
   manualPagination = false,
+  previousPageLabel = 'Previous page',
+  nextPageLabel = 'Next page',
   totalItems,
   itemsPerPageOptions,
   onPageSizeChange,
@@ -268,7 +272,7 @@ export function Table<Row>({
                                 <IconButton
                                   appearance="subtle"
                                   size="xs"
-                                  aria-label="Clear search"
+                                  aria-label={clearSearchLabel}
                                   style={searchValue ? undefined : { visibility: 'hidden' }}
                                   tabIndex={searchValue ? undefined : -1}
                                   onClick={() => {
@@ -280,7 +284,7 @@ export function Table<Row>({
                                 </IconButton>
                               }
                               placeholder={searchPlaceholder}
-                              aria-label={searchPlaceholder}
+                              aria-label={searchLabel}
                               value={searchValue}
                               onChange={(event) => onSearchChange?.(event.currentTarget.value)}
                               onBlur={() => { if (!searchValue) setSearchExpanded(false); }}
@@ -293,7 +297,7 @@ export function Table<Row>({
                                 setSearchExpanded(true);
                                 requestAnimationFrame(() => searchRef.current?.focus());
                               }}
-                              aria-label={searchPlaceholder}
+                              aria-label={searchLabel}
                             >
                               <SearchIcon />
                             </IconButton>
@@ -518,7 +522,7 @@ export function Table<Row>({
                   size="sm"
                   disabled={currentPage <= 1}
                   onClick={() => handlePageChange(currentPage - 1)}
-                  aria-label="Previous page"
+                  aria-label={previousPageLabel}
                 >
                   <ChevronLeftIcon />
                 </IconButton>
@@ -527,7 +531,7 @@ export function Table<Row>({
                   size="sm"
                   disabled={currentPage >= resolvedPageCount}
                   onClick={() => handlePageChange(currentPage + 1)}
-                  aria-label="Next page"
+                  aria-label={nextPageLabel}
                 >
                   <ChevronRightIcon />
                 </IconButton>

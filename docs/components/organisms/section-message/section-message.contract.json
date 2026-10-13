@@ -93,6 +93,12 @@
       "default": false,
       "required": false
     },
+    "dismissLabel": {
+      "type": "string",
+      "default": "Dismiss",
+      "required": false,
+      "description": "Accessible name for the dismiss button."
+    },
     "onDismiss": {
       "type": "() => void",
       "default": null,

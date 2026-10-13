@@ -64,6 +64,7 @@
     "searchValue": { "type": "string", "required": false, "default": null, "description": "Controlled search text." },
     "onSearchChange": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called on every search field change." },
     "searchPlaceholder": { "type": "string", "required": false, "default": null, "description": "Also used as the search field's aria-label when set." },
+    "clearSearchLabel": { "type": "string", "required": false, "default": "Clear search", "description": "Accessible name for the search field's clear button." },
     "showScrollbar": { "type": "boolean", "required": false, "default": true, "description": "Matches Figma's own declared default. Maps to native overflow, not a custom scrollbar widget." },
     "maxHeight": { "type": "number | string", "required": false, "default": null, "description": "Caps the sections area's height before it scrolls." },
     "loading": { "type": "boolean", "required": false, "default": false, "description": "Replaces sections with a loading row." },

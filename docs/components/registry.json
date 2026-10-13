@@ -7292,6 +7292,12 @@
         "default": null,
         "description": "Also used as the search field's aria-label when set."
       },
+      "clearSearchLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Clear search",
+        "description": "Accessible name for the search field's clear button."
+      },
       "showScrollbar": {
         "type": "boolean",
         "required": false,
@@ -7969,6 +7975,12 @@
         "default": false,
         "description": null
       },
+      "dismissLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Dismiss",
+        "description": "Accessible name for the dismiss button."
+      },
       "onDismiss": {
         "type": "() => void",
         "required": false,
@@ -8206,8 +8218,20 @@
       "searchPlaceholder": {
         "type": "string",
         "required": false,
+        "default": "Search...",
+        "description": "Search field placeholder. Not used as its accessible name."
+      },
+      "searchLabel": {
+        "type": "string",
+        "required": false,
         "default": "Search",
-        "description": "Search field placeholder + accessible name."
+        "description": "Accessible name for the search field and the Icon Button that opens it."
+      },
+      "clearSearchLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Clear search",
+        "description": "Accessible name for the search field's clear button."
       },
       "toolbarActions": {
         "type": "React.ReactNode",
@@ -8334,6 +8358,18 @@
         "required": false,
         "default": false,
         "description": "Consumer paginates server-side; Table shows pageCount pages and does not slice."
+      },
+      "previousPageLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous page",
+        "description": "Accessible name for the footer's previous-page button."
+      },
+      "nextPageLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next page",
+        "description": "Accessible name for the footer's next-page button."
       },
       "resizableColumns": {
         "type": "boolean",
@@ -9009,6 +9045,12 @@
         "required": false,
         "default": true,
         "description": null
+      },
+      "dismissLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Dismiss",
+        "description": "Accessible name for the dismiss button."
       },
       "onDismiss": {
         "type": "() => void",

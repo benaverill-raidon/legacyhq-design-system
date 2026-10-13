@@ -83,6 +83,7 @@ role: status
 
 - [ ] `role="status"` by default; overridable (e.g. `alert`).
 - [ ] Status icon `aria-hidden`; dismiss button labelled "Dismiss".
+- [ ] The status is announced before the title as visually hidden text (`statusLabel`, defaulting to the appearance's name).
 - [ ] Meaning conveyed by text, not color alone.
 
 ## Examples to document

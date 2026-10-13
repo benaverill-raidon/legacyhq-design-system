@@ -150,4 +150,30 @@ describe('SectionMessage CSS contract', () => {
     expect(sectionMessageCss).toContain('border: var(--border-width-sm) solid transparent;');
     expect(sectionMessageCss).toContain('padding: var(--spacing-lg);');
   });
+
+  it('announces the status before the title, since the icon is decorative', () => {
+    const expected: Record<SectionMessageAppearance, string> = {
+      information: 'Information',
+      success: 'Success',
+      warning: 'Warning',
+      error: 'Error',
+    };
+    for (const [appearance, label] of Object.entries(expected) as Array<[SectionMessageAppearance, string]>) {
+      const { unmount } = render(
+        <SectionMessage appearance={appearance} title="Sync paused">
+          Reconnect to continue.
+        </SectionMessage>,
+      );
+      expect(screen.getByRole('status')).toHaveTextContent(`${label}: Sync paused`);
+      expect(screen.getByText(`${label}:`)).toHaveClass(styles.visuallyHidden);
+      unmount();
+    }
+
+    render(
+      <SectionMessage appearance="error" statusLabel="Erreur">
+        Upload failed.
+      </SectionMessage>,
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Erreur: Upload failed.');
+  });
 });

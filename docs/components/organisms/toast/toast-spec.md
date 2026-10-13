@@ -75,6 +75,7 @@ loading  -> Spinner (no tile)
 
 - Default `role="status"` (polite live region), overridable.
 - Leading icon decorative; dismiss button labelled "Dismiss".
+- Because the icon is decorative, `success`, `info`, `warning`, and `error` announce their status before the title as visually hidden text ("Success:", "Information:", "Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit). `default` and `loading` announce none.
 
 ## Storybook
 

@@ -102,4 +102,21 @@ describe('Toast CSS contract', () => {
     expect(toastCss).toMatch(/\.spinnerSlot \{[\s\S]*?color: var\(--color-content-loading\);/);
     expect(toastCss).toMatch(/\.root\[data-appearance='loading'\] \.title \{[\s\S]*?color: var\(--color-content-loading\);/);
   });
+
+  it('announces the status before the title, except for default and loading', () => {
+    const { rerender } = render(<Toast appearance="error" title="Upload failed" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Error: Upload failed');
+    expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
+
+    rerender(<Toast appearance="info" title="New version" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
+
+    rerender(<Toast appearance="success" statusLabel="Listo" title="Saved" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Listo: Saved');
+
+    for (const appearance of ['default', 'loading'] as const) {
+      rerender(<Toast appearance={appearance} title="Saving" isDismissible={false} />);
+      expect(screen.getByRole('status')).not.toHaveTextContent(/:/);
+    }
+  });
 });

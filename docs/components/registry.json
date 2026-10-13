@@ -5740,6 +5740,12 @@
         "default": true,
         "description": null
       },
+      "statusLabel": {
+        "type": "string",
+        "required": false,
+        "default": "the appearance's name (Warning, Error); none for default",
+        "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
+      },
       "actions": {
         "type": "React.ReactNode",
         "required": false,
@@ -5803,6 +5809,7 @@
       "defaultRole": "status",
       "roleOverridable": true,
       "iconDecorative": true,
+      "statusAnnounced": "Visually hidden statusLabel before the message for warning and error.",
       "colorNotSoleSignal": true
     },
     "relatedComponents": [
@@ -7932,6 +7939,12 @@
           "error"
         ]
       },
+      "statusLabel": {
+        "type": "string",
+        "required": false,
+        "default": "the appearance's name (Information, Success, Warning, Error)",
+        "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
+      },
       "title": {
         "type": "React.ReactNode",
         "required": false,
@@ -8029,6 +8042,7 @@
       "defaultRole": "status",
       "roleOverridable": true,
       "iconDecorative": true,
+      "statusAnnounced": "Visually hidden statusLabel before the title.",
       "colorNotSoleSignal": true,
       "dismissLabel": "Dismiss"
     },
@@ -8960,6 +8974,12 @@
           "loading"
         ]
       },
+      "statusLabel": {
+        "type": "string",
+        "required": false,
+        "default": "the appearance's name (Success, Information, Warning, Error); none for default and loading",
+        "description": "Visually hidden text read before the title, since the status icon is decorative. An empty string omits it."
+      },
       "title": {
         "type": "React.ReactNode",
         "required": true,
@@ -9068,6 +9088,7 @@
       "defaultRole": "status",
       "roleOverridable": true,
       "iconDecorative": true,
+      "statusAnnounced": "Visually hidden statusLabel before the title for success, info, warning, and error.",
       "dismissLabel": "Dismiss"
     },
     "relatedComponents": [

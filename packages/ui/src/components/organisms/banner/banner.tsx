@@ -22,12 +22,19 @@ const APPEARANCE_ICONS: Partial<Record<BannerAppearance, ComponentType<IconProps
   error: StatusErrorIcon,
 };
 
+/** What each appearance announces before the message; `default` carries no status. */
+const STATUS_LABELS: Partial<Record<BannerAppearance, string>> = {
+  warning: 'Warning',
+  error: 'Error',
+};
+
 export const Banner = React.memo(
   React.forwardRef<HTMLDivElement, BannerProps>(function Banner(
-    { appearance = 'default', children, showIcon = true, actions, className, role = 'status', ...rest },
+    { appearance = 'default', children, showIcon = true, statusLabel, actions, className, role = 'status', ...rest },
     forwardedRef,
   ) {
     const StatusIcon = APPEARANCE_ICONS[appearance];
+    const status = statusLabel ?? STATUS_LABELS[appearance];
 
     return (
       <div
@@ -47,6 +54,11 @@ export const Banner = React.memo(
             </span>
           ) : null}
 
+          {status ? (
+            <>
+              <span className={styles.visuallyHidden}>{status}:</span>{' '}
+            </>
+          ) : null}
           <span className={styles.text}>{children}</span>
         </div>
 

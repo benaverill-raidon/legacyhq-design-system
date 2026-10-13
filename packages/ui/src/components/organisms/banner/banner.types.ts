@@ -7,6 +7,11 @@ export interface BannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   appearance?: BannerAppearance;
   /** The banner message. Truncates to a single line with an ellipsis. */
   children: React.ReactNode;
+  /**
+   * Read by assistive technology before the message, since the status icon is decorative. Defaults
+   * to the appearance's name ("Warning", "Error"; `default` has none); pass a translation, or an empty string to omit it.
+   */
+  statusLabel?: string;
   /** Whether to show the leading status icon. Defaults to `true`. */
   showIcon?: boolean;
   /**

@@ -90,7 +90,8 @@ determine its height.
 - Default `role="status"` (a polite live region). Overridable - `role="alert"` for urgent errors, or
   removed for a purely decorative bar.
 - The leading icon slot is `aria-hidden`.
-- Appearance is conveyed by the message text, not by color alone.
+- Because the icon is decorative, `warning` and `error` announce their status before the message as visually hidden text ("Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit). `default` announces none.
+- Appearance is conveyed by text, not by color alone.
 
 ## Composition
 

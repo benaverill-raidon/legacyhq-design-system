@@ -102,6 +102,7 @@ The panel hugs its content vertically; the description wraps rather than truncat
 
 - Default `role="status"` (a polite live region). Overridable - `role="alert"` for urgent errors.
 - The status icon slot is `aria-hidden`.
+- Because the icon is decorative, the status is announced before the title as visually hidden text ("Information:", "Success:", "Warning:", "Error:"), from `statusLabel` (defaults to the appearance's name; pass a translation, or an empty string to omit).
 - The dismiss button is a labelled `IconButton` ("Dismiss").
 - Appearance is conveyed by the title/description text, not by color alone.
 

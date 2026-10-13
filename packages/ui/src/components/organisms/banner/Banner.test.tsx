@@ -136,4 +136,22 @@ describe('Banner CSS contract', () => {
     expect(bannerCss).toContain('.iconSlot :global([data-color]) {');
     expect(bannerCss).toMatch(/\.iconSlot :global\(\[data-color\]\) \{[\s\S]*?color: inherit;/);
   });
+
+  it('announces the status before the message, since the icon is decorative', () => {
+    const { rerender } = render(<Banner appearance="error">Payment failed</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Error: Payment failed');
+    expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
+
+    rerender(<Banner appearance="warning">Trial ends soon</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Warning: Trial ends soon');
+
+    rerender(<Banner appearance="warning" statusLabel="Advertencia">Trial ends soon</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Advertencia: Trial ends soon');
+
+    rerender(<Banner appearance="default">New features available</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent(/^New features available$/);
+
+    rerender(<Banner appearance="error" statusLabel="">Payment failed</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent(/^Payment failed$/);
+  });
 });

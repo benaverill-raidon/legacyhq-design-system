@@ -32,6 +32,14 @@ const APPEARANCE_CONFIG: Record<Exclude<ToastAppearance, 'loading'>, { tone: Ico
   error: { tone: 'red', Icon: StatusErrorIcon },
 };
 
+/** What each appearance announces before the title; `default` and `loading` carry no status. */
+const STATUS_LABELS: Partial<Record<ToastAppearance, string>> = {
+  success: 'Success',
+  info: 'Information',
+  warning: 'Warning',
+  error: 'Error',
+};
+
 function ToastLeadingIcon({ appearance }: { appearance: ToastAppearance }) {
   if (appearance === 'loading') {
     return (
@@ -54,6 +62,7 @@ export const Toast = React.memo(
   React.forwardRef<HTMLDivElement, ToastProps>(function Toast(
     {
       appearance = 'default',
+      statusLabel,
       title,
       description,
       actions,
@@ -66,6 +75,7 @@ export const Toast = React.memo(
     },
     forwardedRef,
   ) {
+    const status = statusLabel ?? STATUS_LABELS[appearance];
     const hasDescription = expanded && description !== undefined && description !== null;
     const hasActions = expanded && React.Children.toArray(actions).filter(Boolean).length > 0;
 
@@ -80,6 +90,11 @@ export const Toast = React.memo(
         <ToastLeadingIcon appearance={appearance} />
 
         <div className={styles.content}>
+          {status ? (
+            <>
+              <span className={styles.visuallyHidden}>{status}:</span>{' '}
+            </>
+          ) : null}
           <div className={styles.titleRow}>
             <div className={styles.title}>{title}</div>
             {isDismissible ? (

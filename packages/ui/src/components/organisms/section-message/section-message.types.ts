@@ -5,6 +5,11 @@ export type SectionMessageAppearance = 'information' | 'success' | 'warning' | '
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
   /** Semantic appearance - sets the tinted background, border, and status icon. Defaults to `information`. */
   appearance?: SectionMessageAppearance;
+  /**
+   * Read by assistive technology before the message, since the status icon is decorative. Defaults
+   * to the appearance's name ("Information", "Success", "Warning", "Error"); pass a translation, or an empty string to omit it.
+   */
+  statusLabel?: string;
   /** Optional bold title, shown above the description. Omit to render the description alone. */
   title?: React.ReactNode;
   /** The message body. */

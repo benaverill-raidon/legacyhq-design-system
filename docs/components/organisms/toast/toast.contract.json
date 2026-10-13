@@ -40,6 +40,7 @@
       "default": "default",
       "required": false
     },
+    "statusLabel": { "type": "string", "default": "the appearance's name (Success, Information, Warning, Error); none for default and loading", "required": false, "description": "Visually hidden text read before the title, since the status icon is decorative. An empty string omits it." },
     "title": { "type": "React.ReactNode", "required": true },
     "description": { "type": "React.ReactNode", "default": null, "required": false, "description": "Shown when expanded." },
     "actions": { "type": "React.ReactNode", "default": null, "required": false, "description": "Buttons, shown when expanded." },
@@ -78,6 +79,7 @@
     "defaultRole": "status",
     "roleOverridable": true,
     "iconDecorative": true,
+    "statusAnnounced": "Visually hidden statusLabel before the title for success, info, warning, and error.",
     "dismissLabel": "Dismiss"
   },
   "behaviorRules": [

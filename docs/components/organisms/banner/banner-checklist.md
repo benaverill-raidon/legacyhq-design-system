@@ -76,6 +76,7 @@ role: status
 
 - [ ] `role="status"` by default; overridable (e.g. `alert`).
 - [ ] Icon slot `aria-hidden`.
+- [ ] `warning` and `error` announce "Warning:" / "Error:" before the message (visually hidden, `statusLabel`); `default` announces none.
 - [ ] Meaning conveyed by text, not color alone.
 
 ## Examples to document

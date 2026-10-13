@@ -28,10 +28,19 @@ const APPEARANCE_ICON: Record<SectionMessageAppearance, { Icon: ComponentType<Ic
   error: { Icon: StatusErrorIcon, color: 'error' },
 };
 
+/** What each appearance announces before the message. */
+const STATUS_LABELS: Record<SectionMessageAppearance, string> = {
+  information: 'Information',
+  success: 'Success',
+  warning: 'Warning',
+  error: 'Error',
+};
+
 export const SectionMessage = React.memo(
   React.forwardRef<HTMLDivElement, SectionMessageProps>(function SectionMessage(
     {
       appearance = 'information',
+      statusLabel,
       title,
       children,
       actions,
@@ -55,6 +64,7 @@ export const SectionMessage = React.memo(
     }
 
     const { Icon, color } = APPEARANCE_ICON[appearance];
+    const status = statusLabel ?? STATUS_LABELS[appearance];
     const hasTitle = title !== undefined && title !== null;
     const hasActions = React.Children.toArray(actions).filter(Boolean).length > 0;
 
@@ -70,6 +80,11 @@ export const SectionMessage = React.memo(
         </span>
 
         <div className={styles.content}>
+          {status ? (
+            <>
+              <span className={styles.visuallyHidden}>{status}:</span>{' '}
+            </>
+          ) : null}
           {hasTitle ? <div className={styles.title}>{title}</div> : null}
           <div className={styles.description}>{children}</div>
           {hasActions ? <div className={styles.actions}>{actions}</div> : null}

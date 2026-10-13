@@ -65,6 +65,12 @@
       "default": true,
       "required": false
     },
+    "statusLabel": {
+      "type": "string",
+      "default": "the appearance's name (Warning, Error); none for default",
+      "required": false,
+      "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
+    },
     "actions": {
       "type": "React.ReactNode",
       "default": null,
@@ -129,6 +135,7 @@
     "defaultRole": "status",
     "roleOverridable": true,
     "iconDecorative": true,
+    "statusAnnounced": "Visually hidden statusLabel before the message for warning and error.",
     "colorNotSoleSignal": true
   },
   "behaviorRules": [

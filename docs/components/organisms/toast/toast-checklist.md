@@ -70,6 +70,7 @@ role: status
 ## Accessibility
 
 - [ ] `role="status"` by default; leading icon decorative; dismiss labelled.
+- [ ] Status appearances announce their status before the title (visually hidden `statusLabel`); `default` and `loading` announce none.
 
 ## Examples to document
 

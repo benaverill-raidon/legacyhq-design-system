@@ -19,15 +19,6 @@
           }
         }
       },
-      "color-content-subtler": {
-        "$type": "color",
-        "$value": "{Primitive.Value.color-brand-taupe-alpha-500-48}",
-        "$extensions": {
-          "com.legacyhq": {
-            "originalName": "color/content/subtler"
-          }
-        }
-      },
       "color-content-inverse-default": {
         "$type": "color",
         "$value": "{Primitive.Value.color-brand-taupe-solid-1100}",

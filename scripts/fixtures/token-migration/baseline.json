@@ -51,18 +51,30 @@
       "verification": "dark.css differs from the previous file by this one value and the added --elevation-shadow-overlay line."
     }
   ],
+  "tokenRemovals": [
+    {
+      "on": "2026-10-13",
+      "tokens": ["--color-content-subtler"],
+      "reason": "Figma Tokens v1.0.0 has no color/content/subtler variable, so code carried a leftover. Its only component use was Key Value Pair's field icons, where it measured 2.25:1 (Light) and 2.74:1 (Dark), below the 3:1 icons need; they now use the fields' own color-content-subtle.",
+      "verification": "light.css and dark.css each lose exactly this one declaration; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "bd6828d65541770e5f2bd2333fb8d773fc12deebcb3e909fe2d873e5375cb0cb", "declarations": 354 },
+        "dark.css": { "sha256LF": "248ce7daca82afc57c2d940cc8308e5002b753434e6986a3e116a36258b423f8", "declarations": 354 }
+      }
+    }
+  ],
   "files": {
     "tokens.css": {
       "sha256LF": "4086e7f4c4a1e5c80d46ff86124c3766657209afca5dfdf87ed8a166eb02403e",
       "declarations": 566
     },
     "light.css": {
-      "sha256LF": "bd6828d65541770e5f2bd2333fb8d773fc12deebcb3e909fe2d873e5375cb0cb",
-      "declarations": 354
+      "sha256LF": "aa46611c20ed8c0261e9d15a9eb41e1c4b58f844125f579f3877eb9e570b717a",
+      "declarations": 353
     },
     "dark.css": {
-      "sha256LF": "248ce7daca82afc57c2d940cc8308e5002b753434e6986a3e116a36258b423f8",
-      "declarations": 354
+      "sha256LF": "0b33850234e56db8eb8fec7e9072ce7e1450de81b87c241f4f5ce46bf66decdd",
+      "declarations": 353
     }
   }
 }

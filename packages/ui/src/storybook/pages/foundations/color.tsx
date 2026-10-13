@@ -19,7 +19,6 @@ import {
   MODES,
   palettes,
   primitiveColorNames,
-  ratioRange,
   semanticNames,
   surfaces,
   tokensIn,
@@ -404,8 +403,7 @@ function SemanticColor() {
             for text on bold or dark fills. <Code>brand</Code> and <Code>selected</Code> mark brand-led emphasis and the
             current choice. <Code>highlight</Code> is the translucent text-selection tint inside inputs. Status colors (
             <Code>error</Code>, <Code>warning</Code>, <Code>success</Code>, <Code>information</Code>) carry meaning, so always
-            pair them with text or an icon; never use color as the only signal. <Code>subtler</Code> is limited to
-            non-essential content (see Contrast).
+            pair them with text or an icon; never use color as the only signal.
           </p>
           <TokenTable names={tokensIn('content')} prefix="color-content-" kind="text" />
         </DocSubsection>
@@ -528,9 +526,6 @@ const bandLabel: Record<ContrastBand, { text: string; tone: LabelTone }> = {
 const surfaceLabel = (surface: string) => titleCase(surface.replace('color-elevation-surface-', '').replace('-default', ''));
 
 function Contrast() {
-  const subtler = MODES.map((mode) => ratioRange('color-content-subtler', mode));
-  const subtlerMin = Math.min(...subtler.map(({ min }) => min));
-  const subtlerMax = Math.max(...subtler.map(({ max }) => max));
   return (
     <DocSection number={3} title="Contrast">
       <p className={doc.body}>
@@ -610,12 +605,7 @@ function Contrast() {
       </div>
       <ul className={styles.notes}>
         <li className={doc.small}>
-          <Code>subtler</Code> measures between {subtlerMin.toFixed(1)}:1 and {subtlerMax.toFixed(1)}:1 and is for
-          non-essential, highly de-emphasized content only. Don’t use it for body copy, labels, instructions, controls, or
-          anything needed to understand or operate the interface.
-        </li>
-        <li className={doc.small}>
-          <Code>disabled</Code> is also below 4.5:1. WCAG doesn’t require contrast for inactive controls, so this applies to
+          <Code>disabled</Code> is below 4.5:1. WCAG doesn’t require contrast for inactive controls, so this applies to
           disabled states only.
         </li>
         <li className={doc.small}>

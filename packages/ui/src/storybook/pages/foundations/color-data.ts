@@ -237,7 +237,6 @@ export const palettes = (() => {
 export const CONTRAST_TEXT = [
   'color-content-default',
   'color-content-subtle',
-  'color-content-subtler',
   'color-content-disabled',
   'color-content-brand-primary-default',
   'color-content-selected',
@@ -248,7 +247,7 @@ export const CONTRAST_TEXT = [
 ];
 export const CONTRAST_SURFACES = ['color-elevation-surface-default', 'color-elevation-surface-raised-default', 'color-elevation-surface-sunken-default'];
 /** Below 4.5:1 by documented intent, so not reported as gaps (see the Contrast notes). */
-export const CONTRAST_LIMITED = ['color-content-subtler', 'color-content-disabled'];
+export const CONTRAST_LIMITED = ['color-content-disabled'];
 
 export type ContrastBand = 'text' | 'large' | 'low';
 export const bandOf = (ratio: number): ContrastBand => (ratio >= 4.5 ? 'text' : ratio >= 3 ? 'large' : 'low');
@@ -273,7 +272,3 @@ export const contrastGaps = contrast.flatMap(({ text, byMode }) =>
     : MODES.flatMap((mode) => byMode[mode].filter(({ ratio }) => ratio < 4.5).map(({ surface, ratio }) => ({ text, mode, surface, ratio }))),
 );
 
-export const ratioRange = (text: string, mode: Mode) => {
-  const ratios = contrast.find((row) => row.text === text)?.byMode[mode].map(({ ratio }) => ratio) ?? [];
-  return { min: Math.min(...ratios), max: Math.max(...ratios) };
-};

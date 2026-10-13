@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "status": "draft",
     "owner": "LegacyHQ Design System",
-    "lastReviewed": "2026-08-06",
+    "lastReviewed": "2026-10-13",
     "appliesTo": [
         "components"
     ],
@@ -45,6 +45,87 @@
                     "disabled (Checkbox, Switch, Radio, Button, IconButton) — native attribute, not isDisabled"
                 ]
             }
+        },
+        {
+            "id": "tone-is-meaning",
+            "name": "`tone` is meaning, `appearance` is visual style",
+            "status": "convention",
+            "description": "A prop that says what a component means (status, intent) is `tone`. A prop that changes how it looks without changing what it means is `appearance` (or `prominence` for the Button family's weight). The two never share a name.",
+            "rationale": [
+                "Separating emphasis from meaning is the reference pattern (Button: `prominence` x `tone`); one name per axis keeps every component readable the same way.",
+                "Banner, Section Message, Toast, and Modal Dialog used `appearance` for status until 2026-10-13; they now take `tone`, matching Button, Badge, Label, and Inline Message."
+            ],
+            "correct": {
+                "examples": [
+                    "tone (meaning): Button, Badge, Label, Inline Message, Banner, Section Message, Toast, Modal Dialog, Tag, Icon Tile",
+                    "appearance (style): Link, Icon Tile (default | bold), Skeleton, Progress Indicator"
+                ]
+            },
+            "knownViolations": [
+                "Toggle Button and Toggle Icon Button use `tone` (default | subtle) for visual style; kept by decision on 2026-10-13, and named the same in Figma.",
+                "Icon Button, Link Button, and Split Button still take the legacy `appearance` (default | primary | subtle) while Figma has moved them to `tone` + `prominence`; part of the pending Button-family revision."
+            ]
+        },
+        {
+            "id": "context-is-placement",
+            "name": "`context` says where a component is shown",
+            "status": "convention",
+            "description": "A component that renders differently inside another one takes `context: 'default' | 'inline'`. `inline` is the chromeless, in-a-row presentation (Figma's `context=inline`).",
+            "correct": {
+                "examples": [
+                    "Field, Text Field, Text Area, Select, Date Picker, Time Picker, Date Time Picker",
+                    "Field and the pickers pass their context to their control; Table's editable cells force it to inline."
+                ]
+            },
+            "knownViolations": []
+        },
+        {
+            "id": "shared-value-names",
+            "name": "One name per value across the system",
+            "status": "convention",
+            "description": "The same idea uses the same value name in every component, in the token names, and in Figma.",
+            "correct": {
+                "examples": [
+                    "Statuses: information | success | warning | error (never `info`)",
+                    "Sizes: xxs | xs | sm | md | lg | xl (never small/medium/large/extraLarge)",
+                    "Light-on-dark: inverse (never inverted); the Button family uses the `isInverse` boolean",
+                    "Round shapes: round (never circle); square otherwise",
+                    "The neutral palette: taupe (never gray), the palette's and Figma's name"
+                ]
+            },
+            "knownViolations": [
+                "Alignment mixes physical left | right (Dropdown Menu, Chip Group, Tag Group) with logical start | end (Table, Form) and compound topLeft (Popup). Not yet aligned."
+            ]
+        },
+        {
+            "id": "built-in-labels",
+            "name": "Built-in text is a prop",
+            "status": "convention",
+            "description": "Text a component writes itself (an icon-only control's name, a status prefix, a footer label) is a prop with an English default, so it can be translated: `<thing>Label` for a string, `get<Thing>Label` for text built from values.",
+            "correct": {
+                "examples": [
+                    "closeLabel, dismissLabel, clearSearchLabel, previousPageLabel, statusLabel, newTabLabel",
+                    "getRangeLabel(start, end, total), getPageCountLabel(pageCount), selectionCountLabel(count)"
+                ]
+            },
+            "knownViolations": [
+                "Chip names its remove control `removeAriaLabel` where the convention is `removeLabel` (Tag)."
+            ]
+        },
+        {
+            "id": "deprecated-aliases",
+            "name": "Renames keep the old name working",
+            "status": "convention",
+            "description": "When a prop or value is renamed, the old one stays accepted as a deprecated alias (typed `@deprecated`, mapped to the new one inside the component), because the LegacyHQ application's code can't be checked from this repo. Remove an alias only after the app has been searched.",
+            "correct": {
+                "examples": [
+                    "Toast and Inline Message accept `info` for `information`",
+                    "Banner, Section Message, Toast, and Modal Dialog accept `appearance` for `tone`",
+                    "Text Field, Text Area, and Select accept `appearance` / `tone` (subtle, inline) for `context`",
+                    "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`"
+                ]
+            },
+            "knownViolations": []
         }
     ],
     "decisionFramework": {
@@ -52,7 +133,9 @@
             "Does this prop correspond to a native HTML attribute?",
             "If yes: use the native name as-is.",
             "If no: is this state genuinely specific to this component's own behavior?",
-            "If yes: an `is*`-prefixed boolean is appropriate."
+            "If yes: an `is*`-prefixed boolean is appropriate.",
+            "Does this prop say what the component means, or how it looks? Meaning is `tone`; looks are `appearance`.",
+            "Does another component already have a name for this value? Use it."
         ],
         "defaultDecision": "Prefer the native attribute name whenever one exists.",
         "principle": "Don't invent a prop name where HTML already has one."

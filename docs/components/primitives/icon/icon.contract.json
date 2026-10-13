@@ -16,7 +16,14 @@
     "generationScript": "npm run generate:icons"
   },
   "figmaSource": {
-    "note": "Icon has no single Figma component node, unlike every other component in this design system - it's an asset library of many individual icon glyphs (a Figma page of loose symbols), not one component/variant-set. A direct Figma metadata lookup on the icons library page returned no resolvable node (confirmed 2026-08-06). The real source of truth is packages/ui/src/assets/icons/source/*.svg, generated into packages/ui/src/assets/icons/generated/*.tsx via `npm run generate:icons` - not a Figma node reference."
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "353:5385",
+    "componentName": "icon",
+    "variantCount": 4,
+    "glyphPage": { "pageNodeId": "13:19810", "pageName": "Icons", "glyphComponents": 245 },
+    "note": "The `icon` set is the wrapper Figma components place a glyph in: Size (sm | md), spacing (none | spacious (24px)), and an instance swap for the glyph. It maps to IconBase's size and spacing props; Figma's default is Size=sm, code's is md. The glyphs are separate components on the Icons page. Code's glyph source is packages/ui/src/assets/icons/source/*.svg (npm run generate:icons). Figma and code name some glyphs differently - see the icons block's openFindings in docs/foundations/token-governance.json. Replaces the 2026-08-06 note that Icon had no Figma node.",
+    "verifiedAt": "2026-10-13"
   },
   "useCases": [
     "Supporting a text label to speed up recognition",

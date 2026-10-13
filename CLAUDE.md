@@ -249,7 +249,14 @@ that just duplicate a semantic token under a different name (e.g. don't make
 - **Focus:** use the shared Focus Ring pattern (`primitives/focus-ring`)
   rather than a one-off focus style per component.
 - **Icons:** consistent size per component (e.g. Button always uses the
-  medium icon size regardless of button size) — no `iconSize` prop.
+  medium icon size regardless of button size) — no `iconSize` prop. `md` is
+  the default; `sm` is for dense contexts only. Icons inherit `currentColor`
+  by default, so they follow their text and its states; pass a named `color`
+  only when the icon means something its text doesn't. Icons are decorative
+  unless labelled: a status icon needs hidden text (Banner, Section Message,
+  Toast), and an icon-only control names the control. Rules and the open
+  Figma/code differences are in the `icons` block of token-governance.json;
+  Storybook's Foundations / Icons page documents them for people.
 - **Loading/busy states** preserve the visible label and use `aria-busy`
   rather than swapping the label or shifting layout.
 
@@ -264,6 +271,16 @@ token-governance.json). Current rules:
 - Reserve the `is*` prefix (`isLoading`, `isFullWidth`, `isExpanded`) for
   state with no native HTML equivalent — not for anything a native attribute
   already covers.
+- `tone` is meaning, `appearance` is visual style, and `context` is where a
+  component is shown (`default` | `inline`). Never give one axis two names.
+- One name per value everywhere (code, tokens, Figma): `information`, not
+  `info`; `sm`/`md`/`lg`, not `small`/`medium`; `inverse`, not `inverted`;
+  `round`, not `circle`; `taupe`, not `gray`.
+- Text a component writes itself is a prop with an English default, for
+  translation: `<thing>Label` for a string, `get<Thing>Label` for text built
+  from values.
+- A renamed prop or value stays accepted as a `@deprecated` alias, mapped
+  inside the component, because the LegacyHQ app can't be searched from here.
 
 Check that file before introducing a new prop name pattern.
 

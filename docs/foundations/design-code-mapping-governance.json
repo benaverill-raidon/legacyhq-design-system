@@ -24,7 +24,7 @@
       "shape": "simple",
       "appliesTo": "The vast majority of components - one component maps to exactly one Figma component or component set.",
       "fields": "{file, fileKey, componentSetNodeId (or componentNodeId if not a variant set), componentName, variantCount, verifiedAt}",
-      "examples": ["button", "checkbox", "focus-ring"]
+      "examples": ["button", "checkbox", "focus-ring", "icon (its `icon` wrapper set, plus a glyphPage pointer to the Icons page of glyph components; listed as a no-node exception until 2026-10-13)"]
     },
     {
       "shape": "multi-variant",
@@ -46,7 +46,6 @@
       "appliesTo": "A component that genuinely has no single Figma component node - documented explicitly rather than left silently absent, so it reads as a deliberate case, not an oversight.",
       "fields": "{note}",
       "examples": [
-        "icon (an asset library of many glyph symbols, not one component/variant-set - a direct Figma metadata lookup on its library page returned no resolvable node; real source of truth is packages/ui/src/assets/icons/source/*.svg via npm run generate:icons)",
         "logo (renders pre-exported SVG assets directly via dangerouslySetInnerHTML, not a live Figma component instance; real source of truth is packages/ui/src/assets/logos)"
       ]
     },

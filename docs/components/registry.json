@@ -139,9 +139,10 @@
       "color": {
         "type": "IconColor",
         "required": false,
-        "default": "default",
-        "description": "Semantic content color.",
+        "default": "inherit",
+        "description": "The surrounding text color (inherit, the default) or a semantic content color.",
         "enum": [
+          "inherit",
           "default",
           "subtle",
           "inverse",
@@ -194,6 +195,7 @@
         "spacious"
       ],
       "color": [
+        "inherit",
         "default",
         "subtle",
         "inverse",
@@ -214,9 +216,10 @@
         "spacious-container": "--size-300"
       },
       "color": {
+        "inherit": "none - the surrounding text color, through currentColor",
         "default": "--color-content-default",
         "subtle": "--color-content-subtle",
-        "inverse": "--color-content-inverse",
+        "inverse": "--color-content-inverse-default",
         "brand": "--color-content-brand-primary-default",
         "selected": "--color-content-selected",
         "success": "--color-content-success",

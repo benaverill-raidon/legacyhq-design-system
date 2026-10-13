@@ -53,9 +53,9 @@
     "color": {
       "type": "IconColor",
       "required": false,
-      "default": "default",
-      "enum": ["default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "disabled"],
-      "description": "Semantic content color."
+      "default": "inherit",
+      "enum": ["inherit", "default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "disabled"],
+      "description": "The surrounding text color (inherit, the default) or a semantic content color."
     },
     "title": {
       "type": "string",
@@ -92,9 +92,10 @@
       "spacious": { "purpose": "Centers the glyph in a larger, fixed touch/click-target box.", "className": "spacing_spacious", "token": "--size-300" }
     },
     "color": {
+      "inherit": { "className": "color_inherit", "token": null, "purpose": "Default. Takes the surrounding text color, so the icon follows its control through hover, selection, disabled, and inverse." },
       "default": { "className": "color_default", "token": "--color-content-default" },
       "subtle": { "className": "color_subtle", "token": "--color-content-subtle" },
-      "inverse": { "className": "color_inverse", "token": "--color-content-inverse" },
+      "inverse": { "className": "color_inverse", "token": "--color-content-inverse-default" },
       "brand": { "className": "color_brand", "token": "--color-content-brand-primary-default" },
       "selected": { "className": "color_selected", "token": "--color-content-selected" },
       "success": { "className": "color_success", "token": "--color-content-success" },
@@ -114,9 +115,10 @@
       "spacious-container": "--size-300"
     },
     "color": {
+      "inherit": "none - the surrounding text color, through currentColor",
       "default": "--color-content-default",
       "subtle": "--color-content-subtle",
-      "inverse": "--color-content-inverse",
+      "inverse": "--color-content-inverse-default",
       "brand": "--color-content-brand-primary-default",
       "selected": "--color-content-selected",
       "success": "--color-content-success",
@@ -146,9 +148,9 @@
   },
   "keyboardInteraction": [],
   "behaviorRules": [
-    "Icons inherit color via currentColor by default; do not hardcode fills.",
+    "Icons take the surrounding text color by default (color=inherit, through currentColor); set a semantic color only when the icon carries its own meaning or stands alone. Do not hardcode fills.",
     "svg is always focusable=\"false\" - icons are never independently tabbable.",
-    "Default size=md, spacing=none, color=default, decorative=true.",
+    "Default size=md, spacing=none, color=inherit, decorative=true.",
     "Apply data-size/data-spacing/data-color on the root for downstream CSS overrides (the same mechanism Icon Tile and Icon Button use to force color/size inheritance)."
   ],
   "compositionRules": [
@@ -183,7 +185,7 @@
   ],
   "acceptanceCriteria": [
     "Renders the glyph via a generated component sharing the full IconProps set.",
-    "Defaults to size=md, spacing=none, color=default, decorative=true.",
+    "Defaults to size=md, spacing=none, color=inherit, decorative=true.",
     "Supports all IconSize, IconSpacing, and IconColor values.",
     "decorative=false renders role=img with an accessible name from title.",
     "Supports className and testId.",

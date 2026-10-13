@@ -3,7 +3,12 @@ import type * as React from 'react';
 export type IconSize = 'sm' | 'md';
 export type IconSpacing = 'none' | 'spacious';
 
+/**
+ * `inherit` (the default) takes the color of the surrounding text, so the icon follows its control
+ * through hover, selection, disabled, and inverse. The others set a semantic content color.
+ */
 export type IconColor =
+  | 'inherit'
   | 'default'
   | 'subtle'
   | 'inverse'

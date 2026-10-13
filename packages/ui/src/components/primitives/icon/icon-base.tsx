@@ -9,7 +9,7 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 export const IconBase = React.memo(function IconBase({
   size = 'md',
   spacing = 'none',
-  color = 'default',
+  color = 'inherit',
   title,
   decorative = true,
   className,

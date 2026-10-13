@@ -105,13 +105,15 @@ Do not organize icons into separate folders by classification. Use metadata inst
 - spacious = icon sits inside a 24px container
 
 ### Color
-Icons consume color-content tokens.
+Icons take the surrounding text color by default (`inherit`); the other values consume color-content tokens.
 
 Supported colors:
+- inherit (default)
 - default
 - subtle
 - inverse
 - brand
+- selected
 - success
 - warning
 - error

@@ -7,7 +7,6 @@
   justify-content: center;
   inline-size: var(--icon-container-size);
   block-size: var(--icon-container-size);
-  color: var(--color-content-default);
   flex: 0 0 auto;
   line-height: 0;
   vertical-align: middle;
@@ -27,6 +26,11 @@
 
 .spacing_spacious {
   --icon-container-size: var(--size-300);
+}
+
+/* By default the icon sets no color of its own: it takes the surrounding text's, through currentColor. */
+.color_inherit {
+  color: inherit;
 }
 
 .color_default {

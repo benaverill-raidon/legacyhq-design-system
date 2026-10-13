@@ -25,7 +25,7 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
  * instead of a tile.
  */
 const TONE_CONFIG: Record<Exclude<ToastTone, 'loading'>, { tileTone: IconTileTone; Icon?: ComponentType<IconProps> }> = {
-  default: { tileTone: 'gray' },
+  default: { tileTone: 'taupe' },
   success: { tileTone: 'green', Icon: StatusSuccessIcon },
   information: { tileTone: 'blue', Icon: StatusInformationIcon },
   warning: { tileTone: 'orange', Icon: StatusWarningIcon },

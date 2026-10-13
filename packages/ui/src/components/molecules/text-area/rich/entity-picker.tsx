@@ -22,7 +22,7 @@ interface EntityPickerProps {
 }
 
 function toTileTone(tone: EntityTypeConfig['tone']): IconTileTone {
-  return tone && tone !== 'default' ? (tone as IconTileTone) : 'gray';
+  return tone && tone !== 'default' ? (tone as IconTileTone) : 'taupe';
 }
 
 /** A person/family row leads with an Avatar or Avatar Group (rendered inline so it hugs its width). */

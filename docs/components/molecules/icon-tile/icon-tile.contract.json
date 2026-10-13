@@ -21,11 +21,11 @@
     "variantCount": 200,
     "figmaVariantAxes": {
       "size": ["xxs (16px)", "xs (24px)", "sm (32px)", "md (40px)", "lg (48px)"],
-      "shape": ["square", "circle"],
-      "appearance": [
+      "shape": ["square", "round"],
+      "tone": [
         "red", "redBold", "orange", "orangeBold", "yellow", "yellowBold",
         "green", "greenBold", "teal", "tealBold", "blue", "blueBold",
-        "purple", "purpleBold", "magenta", "magentaBold", "gray", "grayBold",
+        "purple", "purpleBold", "magenta", "magentaBold", "taupe", "taupeBold",
         "brand", "brandBold"
       ]
     },
@@ -35,8 +35,8 @@
       "note": "Exposed as a component property, not a Figma slot (slots array was empty)."
     },
     "apiAdaptationNotes": [
-      "Figma's flattened 20-value `appearance` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
-      "Figma's `circle` shape value was renamed to `round` to match Icon Button's existing `shape` prop naming (`square` | `round`).",
+      "Figma's flattened 20-value `tone` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
+      "Figma's shape values are `square` | `round`, the same as Icon Button's `shape` prop (Figma's `circle` was renamed to `round` on 2026-10-13).",
       "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
     ]
   },
@@ -78,8 +78,8 @@
       "type": "IconTileTone",
       "required": false,
       "default": "brand",
-      "enum": ["gray", "brand", "red", "orange", "yellow", "green", "teal", "blue", "purple", "magenta"],
-      "description": "Hue/semantic meaning of the tile."
+      "enum": ["taupe", "brand", "red", "orange", "yellow", "green", "teal", "blue", "purple", "magenta"],
+      "description": "Hue/semantic meaning of the tile. gray, the earlier name for taupe, is still accepted."
     },
     "appearance": {
       "type": "IconTileAppearance",
@@ -123,7 +123,7 @@
   },
   "variants": {
     "tone": {
-      "gray": { "purpose": "Neutral emphasis.", "className": "tone_gray" },
+      "taupe": { "purpose": "Neutral emphasis.", "className": "tone_taupe" },
       "brand": { "purpose": "Brand emphasis.", "className": "tone_brand" },
       "red": { "purpose": "Red accent hue.", "className": "tone_red" },
       "orange": { "purpose": "Orange accent hue.", "className": "tone_orange" },

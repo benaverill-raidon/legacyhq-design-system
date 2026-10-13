@@ -24,7 +24,7 @@
     },
     "figmaDefaultVariant": "subtle",
     "apiAdaptationNotes": [
-      "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `circle`, following Icon Tile's shape-prop convention) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
+      "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `round`, the round name Icon Tile and Icon Button use) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
       "Figma's prototype has an AFTER_TIMEOUT reaction smart-animating between the `default` and `subtle` variants every 1.5s as a way to preview a pulse effect inside Figma - the component instead implements the pulse as a self-contained CSS opacity animation on a single variant, so it animates on its own regardless of which `appearance` is selected."
     ]
   },
@@ -65,8 +65,8 @@
       "type": "SkeletonShape",
       "required": false,
       "default": "rectangle",
-      "enum": ["rectangle", "circle"],
-      "description": "Corner treatment - circle is fully round, for avatar-shaped placeholders."
+      "enum": ["rectangle", "round"],
+      "description": "Corner treatment - round is fully round, for avatar-shaped placeholders. circle, the earlier name, is still accepted."
     },
     "label": {
       "type": "string",
@@ -88,7 +88,7 @@
     },
     "shape": {
       "rectangle": { "purpose": "Standard small corner radius for text lines, cards, and blocks.", "className": "shape_rectangle" },
-      "circle": { "purpose": "Fully round radius for avatar-shaped placeholders.", "className": "shape_circle" }
+      "round": { "purpose": "Fully round radius for avatar-shaped placeholders.", "className": "shape_round" }
     }
   },
   "sizing": {
@@ -101,7 +101,7 @@
   "tokens": {
     "radius": {
       "rectangle": "--border-radius-sm",
-      "circle": "--border-radius-full-round"
+      "round": "--border-radius-full-round"
     },
     "sizing": {
       "blockSizeDefault": "--size-250"
@@ -147,7 +147,7 @@
     "Skeleton has no children slot - compose multiple Skeletons to sketch a loading layout.",
     "Use Spinner instead if the final layout/shape is unknown.",
     "Use ProgressBar instead when progress is measurable.",
-    "Pair shape=circle with an equal inlineSize/blockSize in style for a true circle."
+    "Pair shape=round with an equal inlineSize/blockSize in style for a true circle."
   ],
   "contentRules": [
     "No children slot.",

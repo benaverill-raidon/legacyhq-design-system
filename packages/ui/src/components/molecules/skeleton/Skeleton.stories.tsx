@@ -4,7 +4,7 @@ import { Skeleton } from './skeleton';
 import type { SkeletonAppearance, SkeletonShape } from './skeleton.types';
 
 const appearances: SkeletonAppearance[] = ['default', 'subtle'];
-const shapes: SkeletonShape[] = ['rectangle', 'circle'];
+const shapes: SkeletonShape[] = ['rectangle', 'round'];
 
 const meta = {
   title: 'Components/Feedback/Skeleton',
@@ -87,7 +87,7 @@ export const Variants: Story = {
               <Skeleton
                 appearance={appearance}
                 shape={shape}
-                style={shape === 'circle' ? { inlineSize: '48px', blockSize: '48px' } : undefined}
+                style={shape === 'round' ? { inlineSize: '48px', blockSize: '48px' } : undefined}
               />
             </Cell>
           ))}
@@ -111,7 +111,7 @@ export const Composition: Story = {
 
       <Group title="List row with avatar">
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>
-          <Skeleton shape="circle" style={{ inlineSize: '40px', blockSize: '40px' }} />
+          <Skeleton shape="round" style={{ inlineSize: '40px', blockSize: '40px' }} />
           <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>
             <Skeleton style={{ inlineSize: '70%' }} />
             <Skeleton style={{ inlineSize: '40%' }} />

@@ -44,7 +44,7 @@ loading state).
 ### Shape
 
 `shape="rectangle"` (the default) uses the standard small corner radius, for text lines, cards, and
-image blocks. `shape="circle"` uses a fully round radius - reach for it for avatar placeholders, and
+image blocks. `shape="round"` uses a fully round radius - reach for it for avatar placeholders, and
 pair it with an equal `inlineSize`/`blockSize` in `style`.
 
 <Canvas of={SkeletonStories.Variants} />
@@ -79,7 +79,7 @@ The pulse animation is disabled automatically when the user has requested reduce
 **Do** size each Skeleton to match the content it's replacing.
 
 ```tsx
-<Skeleton shape="circle" style={{ inlineSize: '40px', blockSize: '40px' }} />
+<Skeleton shape="round" style={{ inlineSize: '40px', blockSize: '40px' }} />
 ```
 
 **Don't** leave every Skeleton at its default size when replacing content of a very different
@@ -116,9 +116,9 @@ assistive technology, not sighted users.
     </tr>
     <tr>
       <td><code>shape</code></td>
-      <td><code>'rectangle' | 'circle'</code></td>
+      <td><code>'rectangle' | 'round'</code></td>
       <td><code>'rectangle'</code></td>
-      <td>Corner treatment - <code>circle</code> is fully round, for avatar-shaped placeholders.</td>
+      <td>Corner treatment - <code>round</code> is fully round, for avatar-shaped placeholders. <code>circle</code>, the earlier name, is still accepted.</td>
     </tr>
     <tr>
       <td><code>label</code></td>

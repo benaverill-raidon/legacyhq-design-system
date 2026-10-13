@@ -29,7 +29,7 @@ Organism.
 ## Figma properties
 
 ```txt
-tone: default | success | error | warning | info | loading   (code: info is information)
+tone: default | success | error | warning | information | loading
 open: false | true   (code: expanded)
 title / description  (code: title / description)
 ```

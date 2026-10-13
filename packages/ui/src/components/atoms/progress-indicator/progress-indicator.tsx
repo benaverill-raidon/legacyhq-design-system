@@ -112,7 +112,7 @@ export const ProgressIndicator = React.memo(
     {
       currentStep,
       totalSteps,
-      appearance = 'default',
+      appearance: requestedAppearance = 'default',
       size = 'sm',
       label,
       getValueText,
@@ -126,6 +126,8 @@ export const ProgressIndicator = React.memo(
     },
     forwardedRef,
   ) {
+    // `inverted` is the deprecated name for `inverse`.
+    const appearance: ProgressIndicatorAppearance = requestedAppearance === 'inverted' ? 'inverse' : requestedAppearance;
     const normalizedTotalSteps = normalizeTotalSteps(totalSteps);
     const normalizedCurrentStep = normalizeCurrentStep(currentStep, normalizedTotalSteps);
     const accessibleNameProps = getAccessibleNameProps(ariaLabel, ariaLabelledBy, label);

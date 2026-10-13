@@ -325,4 +325,11 @@ describe('ProgressIndicator CSS contract', () => {
     expect(progressIndicatorCss).toContain('border-radius: var(--border-radius-full-round);');
     expect(progressIndicatorCss).toContain('.dotVisual {');
   });
+
+  it('uses inverse for light-on-dark, and still accepts the deprecated inverted', () => {
+    const { container, rerender } = render(<ProgressIndicator appearance="inverse" currentStep={1} totalSteps={3} label="Steps" />);
+    expect(container.firstElementChild).toHaveClass(styles.appearance_inverse);
+    rerender(<ProgressIndicator appearance="inverted" currentStep={1} totalSteps={3} label="Steps" />);
+    expect(container.firstElementChild).toHaveClass(styles.appearance_inverse);
+  });
 });

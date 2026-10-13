@@ -64,7 +64,7 @@ Not applicable - no text content.
 ## Variants
 
 ### Tone
-- gray, brand, red, orange, yellow, green, teal, blue, purple, magenta
+- taupe, brand, red, orange, yellow, green, teal, blue, purple, magenta (gray, the earlier name for taupe, is still accepted)
 
 ### Appearance
 - default, bold

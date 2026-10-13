@@ -48,7 +48,7 @@ role = 'status'
 status glyph (default has no glyph, so a dot stands in). `loading` shows a Spinner.
 
 ```txt
-default  -> IconTile tone gray, dot
+default  -> IconTile tone taupe, dot
 success  -> IconTile tone green, success glyph
 information -> IconTile tone blue, information glyph
 warning  -> IconTile tone orange, warning glyph

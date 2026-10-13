@@ -27,7 +27,7 @@
   --progress-indicator-selected-color: var(--color-background-brand-primary-bold-default);
 }
 
-.appearance_inverted {
+.appearance_inverse {
   --progress-indicator-selected-color: var(--color-background-neutral-subtle-default);
 }
 

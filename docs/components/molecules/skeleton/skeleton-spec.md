@@ -73,12 +73,12 @@ Skeleton
 | Shape | Description |
 |-----------|-------------|
 | rectangle | Standard small corner radius (the default) - text lines, cards, image blocks |
-| circle | Fully round radius - avatar-shaped placeholders; pair with equal width/height |
+| round | Fully round radius - avatar-shaped placeholders; pair with equal width/height (`circle`, the earlier name, is still accepted) |
 
 `shape` is not a Figma variant axis - it mirrors how Figma instances achieve a circular skeleton by
 overriding the instance's own corner radius rather than switching a named property. The component
 formalizes that as a `shape` prop for ergonomics, following this system's existing convention (see
-Icon Tile's `shape` prop) of a `rectangle`/`circle`-style enum instead of a raw radius override.
+Icon Tile's `shape` prop) of a `rectangle`/`round`-style enum instead of a raw radius override.
 
 ---
 
@@ -97,7 +97,7 @@ Not applicable.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | appearance | `'default' \| 'subtle'` | No | `'subtle'` |
-| shape | `'rectangle' \| 'circle'` | No | `'rectangle'` |
+| shape | `'rectangle' \| 'round'` | No | `'rectangle'` |
 | label | string | No | undefined |
 | className | string | No | undefined |
 | ...rest | `React.HTMLAttributes<HTMLDivElement>` | No | - |
@@ -149,7 +149,7 @@ token for a different meaning - text/content loading tint - so it was left alone
 repurposed).
 
 ### Radius
-`--border-radius-sm` (rectangle, default) or `--border-radius-full-round` (circle).
+`--border-radius-sm` (rectangle, default) or `--border-radius-full-round` (round).
 
 ### Sizing
 `inline-size: 100%` (fills container) by default; `block-size: var(--size-250)` (20px, one text

@@ -21,7 +21,7 @@ const meta = {
   argTypes: {
     currentStep: { control: { type: 'number', min: 1, step: 1 } },
     totalSteps: { control: { type: 'number', min: 1, step: 1 } },
-    appearance: { control: 'inline-radio', options: ['default', 'primary', 'inverted'] },
+    appearance: { control: 'inline-radio', options: ['default', 'primary', 'inverse'] },
     size: { control: 'inline-radio', options: sizes },
     label: { control: 'text' },
     getValueText: { control: false },
@@ -96,7 +96,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * The intentionally designed forms. `inverted` is shown separately on a dark surface because its
+ * The intentionally designed forms. `inverse` is shown separately on a dark surface because its
  * selected dot is white and disappears on a light background - it isn't a fourth entry in the same
  * row as the other three appearances.
  */
@@ -113,11 +113,11 @@ export const Variants: Story = {
       </Group>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Inverted (requires a dark or bold surface)</h3>
+        <h3 style={headingStyle}>Inverse (requires a dark or bold surface)</h3>
         <p style={captionStyle}>
-          The inverted selected dot renders in <code>color-content-inverse-default</code> (white) - correct
-          on a dark surface, invisible on a light one. This is why it isn&rsquo;t grouped with the
-          other three appearances above.
+          The inverse selected dot renders in <code>color-background-neutral-subtle-default</code>, a
+          light fill - correct on a dark surface, invisible on a light one. This is why it isn&rsquo;t
+          grouped with the other two appearances above.
         </p>
         <div
           data-theme="dark"
@@ -128,8 +128,8 @@ export const Variants: Story = {
             background: 'var(--color-elevation-surface-default)',
           }}
         >
-          <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Inverted journey" />
-          <ProgressIndicator appearance="inverted" size="md" currentStep={3} totalSteps={5} label="Inverted journey, md" />
+          <ProgressIndicator appearance="inverse" currentStep={2} totalSteps={4} label="Inverse journey" />
+          <ProgressIndicator appearance="inverse" size="md" currentStep={3} totalSteps={5} label="Inverse journey, md" />
         </div>
       </section>
     </div>
@@ -300,7 +300,7 @@ export const Content: Story = {
 
         <div style={darkCardStyle}>
           <div style={row}>
-            <ProgressIndicator appearance="inverted" size="md" currentStep={4} totalSteps={5} label="Document setup" />
+            <ProgressIndicator appearance="inverse" size="md" currentStep={4} totalSteps={5} label="Document setup" />
             <span style={captionStyle}>Review and confirm</span>
           </div>
         </div>
@@ -361,7 +361,7 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Dark surface</h3>
         <p style={captionStyle}>
           <code>default</code> and <code>primary</code> stay legible on a
-          dark surface without switching appearance - <code>inverted</code> is only needed when the
+          dark surface without switching appearance - <code>inverse</code> is only needed when the
           default selected color itself lacks contrast.
         </p>
         <div
@@ -375,7 +375,7 @@ export const EdgeCases: Story = {
         >
           <ProgressIndicator currentStep={2} totalSteps={4} label="Dark default" />
           <ProgressIndicator appearance="primary" currentStep={2} totalSteps={4} label="Dark primary" />
-          <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Dark inverted" />
+          <ProgressIndicator appearance="inverse" currentStep={2} totalSteps={4} label="Dark inverse" />
         </div>
       </section>
     </div>

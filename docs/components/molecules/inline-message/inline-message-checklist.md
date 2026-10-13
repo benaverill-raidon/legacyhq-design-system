@@ -119,7 +119,7 @@ inside Popup's default panel width.
 ## Validated Figma Details
 
 - `inline-message` component set: node `4589:2519`, file `Components v1.0.0`, variants `tone`
-  (default/info/success/warning/error) x `isOpen`; Figma's info is code's information.
+  (default/information/success/warning/error) x `isOpen`, the same names as code.
 - `figma-parts / inline-message-trigger` sub-component: node `2448:72904`, properties `titleText`,
   `showTitle`, `secondaryText`, `showSecondaryText`, `tone`, `state`
   (default/hover-open/focus/press).

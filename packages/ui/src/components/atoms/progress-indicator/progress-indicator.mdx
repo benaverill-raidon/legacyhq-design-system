@@ -56,8 +56,8 @@ useful in that flow - don't add it just because the callback exists.
 
 ### Appearance versus size
 
-`appearance` (`default`, `primary`, `inverted`) and `size` (`sm`, `md`) are independent
-axes - see Variants and Sizes. `inverted` is the one appearance that requires a dark or bold
+`appearance` (`default`, `primary`, `inverse`) and `size` (`sm`, `md`) are independent
+axes - see Variants and Sizes. `inverse` is the one appearance that requires a dark or bold
 surface: its selected dot uses `color-content-inverse-default` (white), which is invisible on a light
 background.
 
@@ -88,18 +88,18 @@ live example to tab through and click instead.
 
 ---
 
-**Do** use the `inverted` appearance only on a dark or bold surface.
+**Do** use the `inverse` appearance only on a dark or bold surface.
 
 ```tsx
 <div data-theme="dark">
-  <ProgressIndicator appearance="inverted" currentStep={4} totalSteps={5} label="Document setup" />
+  <ProgressIndicator appearance="inverse" currentStep={4} totalSteps={5} label="Document setup" />
 </div>
 ```
 
-**Don't** use `inverted` on a light surface - the selected dot disappears.
+**Don't** use `inverse` on a light surface - the selected dot disappears.
 
 ```tsx
-<ProgressIndicator appearance="inverted" currentStep={4} totalSteps={5} label="Document setup" />
+<ProgressIndicator appearance="inverse" currentStep={4} totalSteps={5} label="Document setup" />
 ```
 
 ---
@@ -144,9 +144,9 @@ live example to tab through and click instead.
     </tr>
     <tr>
       <td><code>appearance</code></td>
-      <td><code>'default' | 'primary' | 'inverted'</code></td>
+      <td><code>'default' | 'primary' | 'inverse'</code></td>
       <td><code>'default'</code></td>
-      <td>Selected-dot color. <code>inverted</code> requires a dark or bold surface.</td>
+      <td>Selected-dot color. <code>inverse</code> requires a dark or bold surface. <code>inverted</code>, its earlier name, is still accepted.</td>
     </tr>
     <tr>
       <td><code>size</code></td>

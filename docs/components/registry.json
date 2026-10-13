@@ -1705,7 +1705,7 @@
         "enum": [
           "default",
           "primary",
-          "inverted"
+          "inverse"
         ]
       },
       "size": {
@@ -1746,7 +1746,7 @@
       "appearance": [
         "default",
         "primary",
-        "inverted"
+        "inverse"
       ],
       "size": [
         "sm",
@@ -1758,7 +1758,7 @@
       "semantic": {
         "defaultSelected": "color-background-neutral-bold-default",
         "primarySelected": "color-background-brand-primary-bold-default",
-        "invertedSelected": "color-background-neutral-subtle-default",
+        "inverseSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
         "interactiveHover": "color-background-neutral-subtle-hover",
         "interactivePressed": "color-background-neutral-subtle-press",
@@ -3528,9 +3528,9 @@
         "type": "IconTileTone",
         "required": false,
         "default": "brand",
-        "description": "Hue/semantic meaning of the tile.",
+        "description": "Hue/semantic meaning of the tile. gray, the earlier name for taupe, is still accepted.",
         "enum": [
-          "gray",
+          "taupe",
           "brand",
           "red",
           "orange",
@@ -3606,7 +3606,7 @@
     ],
     "variants": {
       "tone": [
-        "gray",
+        "taupe",
         "brand",
         "red",
         "orange",
@@ -3766,9 +3766,9 @@
         ],
         "shape": [
           "square",
-          "circle"
+          "round"
         ],
-        "appearance": [
+        "tone": [
           "red",
           "redBold",
           "orange",
@@ -3785,8 +3785,8 @@
           "purpleBold",
           "magenta",
           "magentaBold",
-          "gray",
-          "grayBold",
+          "taupe",
+          "taupeBold",
           "brand",
           "brandBold"
         ]
@@ -3797,8 +3797,8 @@
         "note": "Exposed as a component property, not a Figma slot (slots array was empty)."
       },
       "apiAdaptationNotes": [
-        "Figma's flattened 20-value `appearance` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
-        "Figma's `circle` shape value was renamed to `round` to match Icon Button's existing `shape` prop naming (`square` | `round`).",
+        "Figma's flattened 20-value `tone` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
+        "Figma's shape values are `square` | `round`, the same as Icon Button's `shape` prop (Figma's `circle` was renamed to `round` on 2026-10-13).",
         "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
       ]
     }
@@ -4874,10 +4874,10 @@
         "type": "SkeletonShape",
         "required": false,
         "default": "rectangle",
-        "description": "Corner treatment - circle is fully round, for avatar-shaped placeholders.",
+        "description": "Corner treatment - round is fully round, for avatar-shaped placeholders. circle, the earlier name, is still accepted.",
         "enum": [
           "rectangle",
-          "circle"
+          "round"
         ]
       },
       "label": {
@@ -4902,14 +4902,14 @@
       ],
       "shape": [
         "rectangle",
-        "circle"
+        "round"
       ]
     },
     "subComponents": [],
     "tokens": {
       "radius": {
         "rectangle": "--border-radius-sm",
-        "circle": "--border-radius-full-round"
+        "round": "--border-radius-full-round"
       },
       "sizing": {
         "blockSizeDefault": "--size-250"
@@ -4963,7 +4963,7 @@
       },
       "figmaDefaultVariant": "subtle",
       "apiAdaptationNotes": [
-        "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `circle`, following Icon Tile's shape-prop convention) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
+        "Figma instances freely override width, height, and corner radius per usage rather than exposing them as named variants - the component formalizes the corner-radius axis as a `shape` prop (`rectangle` | `round`, the round name Icon Tile and Icon Button use) and leaves width/height to forwarded `style`/`className`, matching ProgressBar's existing convention for per-usage sizing.",
         "Figma's prototype has an AFTER_TIMEOUT reaction smart-animating between the `default` and `subtle` variants every 1.5s as a way to preview a pulse effect inside Figma - the component instead implements the pulse as a self-contained CSS opacity animation on a single variant, so it animates on its own regardless of which `appearance` is selected."
       ]
     },
@@ -9148,7 +9148,7 @@
           "shadow": "--elevation-shadow-overlay"
         },
         "iconTileTones": {
-          "default": "gray",
+          "default": "taupe",
           "success": "green",
           "information": "blue",
           "warning": "orange",
@@ -9181,7 +9181,7 @@
       "componentName": "toast",
       "variantCount": 11,
       "verifiedAt": "2026-09-02",
-      "notes": "Figma has tone (default/success/error/warning/info/loading) x open (false/true); Figma's info is code's information. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+      "notes": "Figma has tone (default/success/error/warning/information/loading) x open (false/true), the same names as code. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
     }
   },
   {

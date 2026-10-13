@@ -11,7 +11,7 @@
     "componentName": "toast",
     "variantCount": 11,
     "verifiedAt": "2026-09-02",
-    "notes": "Figma has tone (default/success/error/warning/info/loading) x open (false/true); Figma's info is code's information. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+    "notes": "Figma has tone (default/success/error/warning/information/loading) x open (false/true), the same names as code. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
   },
   "useCases": [
     "confirm a completed action",
@@ -72,7 +72,7 @@
         "description": "--color-content-subtle",
         "shadow": "--elevation-shadow-overlay"
       },
-      "iconTileTones": { "default": "gray", "success": "green", "information": "blue", "warning": "orange", "error": "red" }
+      "iconTileTones": { "default": "taupe", "success": "green", "information": "blue", "warning": "orange", "error": "red" }
     }
   },
   "accessibility": {

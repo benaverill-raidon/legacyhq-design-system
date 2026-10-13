@@ -1,7 +1,7 @@
 import type * as React from 'react';
 
 export type IconTileTone =
-  | 'gray'
+  | 'taupe'
   | 'brand'
   | 'red'
   | 'orange'
@@ -12,13 +12,16 @@ export type IconTileTone =
   | 'purple'
   | 'magenta';
 
+/** @deprecated Use `taupe`, the palette's name and Figma's. Still accepted. */
+export type DeprecatedIconTileTone = 'gray';
+
 export type IconTileAppearance = 'default' | 'bold';
 export type IconTileShape = 'square' | 'round';
 export type IconTileSize = 'xxs' | 'xs' | 'sm' | 'md' | 'lg';
 
 export interface IconTileProps {
   children: React.ReactNode;
-  tone?: IconTileTone;
+  tone?: IconTileTone | DeprecatedIconTileTone;
   appearance?: IconTileAppearance;
   shape?: IconTileShape;
   size?: IconTileSize;

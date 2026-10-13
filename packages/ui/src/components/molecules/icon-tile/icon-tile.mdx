@@ -37,7 +37,7 @@ The Figma source models hue and boldness as one flattened 20-value `appearance` 
 example `red`, `redBold`). This component splits that into two independent props, matching this
 system's existing convention of separating visual weight from meaning (see `Button`):
 
-- **`tone`** - the hue/semantic meaning: `gray`, `brand`, or one of eight accent hues.
+- **`tone`** - the hue/semantic meaning: `taupe` (neutral), `brand`, or one of eight accent hues.
 - **`appearance`** - the visual weight: `default` (a subtle tint) or `bold` (a solid, saturated
   fill with an inverse/white icon).
 
@@ -122,9 +122,9 @@ reinforces meaning that adjacent text already conveys - a feature title, a list 
     </tr>
     <tr>
       <td><code>tone</code></td>
-      <td><code>'gray' | 'brand' | 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple' | 'magenta'</code></td>
+      <td><code>'taupe' | 'brand' | 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple' | 'magenta'</code></td>
       <td><code>'brand'</code></td>
-      <td>Hue/semantic meaning of the tile.</td>
+      <td>Hue/semantic meaning of the tile. <code>gray</code>, the earlier name for <code>taupe</code>, is still accepted.</td>
     </tr>
     <tr>
       <td><code>appearance</code></td>

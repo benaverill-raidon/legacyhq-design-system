@@ -12,9 +12,9 @@
       "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />"
     },
     {
-      "name": "Inverted",
+      "name": "Inverse",
       "description": "Appears on a dark or bold surface.",
-      "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverted\" label=\"Document setup\" />"
+      "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />"
     },
     {
       "name": "Custom value text",

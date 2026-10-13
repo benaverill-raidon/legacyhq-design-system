@@ -57,7 +57,7 @@ IconTile
 
 | Tone | Description |
 |--------|-------------|
-| gray | Neutral emphasis |
+| taupe | Neutral emphasis (`gray`, the earlier name, is still accepted) |
 | brand | Brand emphasis |
 | red | Accent - red hue |
 | orange | Accent - orange hue |
@@ -120,7 +120,7 @@ Exactly one icon. No text, no multiple icons.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
-| tone | `'gray' \| 'brand' \| 'red' \| 'orange' \| 'yellow' \| 'green' \| 'teal' \| 'blue' \| 'purple' \| 'magenta'` | No | `'brand'` |
+| tone | `'taupe' \| 'brand' \| 'red' \| 'orange' \| 'yellow' \| 'green' \| 'teal' \| 'blue' \| 'purple' \| 'magenta'` | No | `'brand'` |
 | appearance | `'default' \| 'bold'` | No | `'default'` |
 | shape | `'square' \| 'round'` | No | `'square'` |
 | size | `'xxs' \| 'xs' \| 'sm' \| 'md' \| 'lg'` | No | `'md'` |
@@ -161,8 +161,8 @@ Background and icon color both come from the semantic accent-color layer, keyed 
 
 | Tone | Appearance | Background Token | Icon Color Token |
 |---------|------------|------------------------------------------------------|--------------------------------------------|
-| gray | default | `--color-background-accent-taupe-default-default` | `--color-content-default` |
-| gray | bold | `--color-background-accent-taupe-bold-default` | `--color-content-inverse` |
+| taupe | default | `--color-background-accent-taupe-default-default` | `--color-content-default` |
+| taupe | bold | `--color-background-accent-taupe-bold-default` | `--color-content-inverse` |
 | brand | default | `--color-background-brand-primary-default-default` | `--color-content-brand-primary-default` |
 | brand | bold | `--color-background-brand-primary-bold-default` | `--color-content-inverse` |
 | {hue} | default | `--color-background-accent-{hue}-default-default` | `--color-content-accent-{hue}-default` |

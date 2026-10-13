@@ -8,9 +8,11 @@ function mergeClassNames(...classNames: Array<string | undefined>) {
 
 export const Skeleton = React.memo(
   React.forwardRef<HTMLDivElement, SkeletonProps>(function Skeleton(
-    { appearance = 'subtle', shape = 'rectangle', label, className, ...rest },
+    { appearance = 'subtle', shape: requestedShape = 'rectangle', label, className, ...rest },
     forwardedRef,
   ) {
+    // `circle` is the deprecated name for `round`.
+    const shape = requestedShape === 'circle' ? 'round' : requestedShape;
     const hasLabel = Boolean(label);
     const classNames = mergeClassNames(
       styles.root,

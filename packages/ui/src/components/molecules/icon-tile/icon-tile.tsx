@@ -8,7 +8,7 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 
 export const IconTile = React.memo(function IconTile({
   children,
-  tone = 'brand',
+  tone: requestedTone = 'brand',
   appearance = 'default',
   shape = 'square',
   size = 'md',
@@ -16,6 +16,8 @@ export const IconTile = React.memo(function IconTile({
   ariaLabel,
   className,
 }: IconTileProps) {
+  // `gray` is the deprecated name for `taupe`.
+  const tone = requestedTone === 'gray' ? 'taupe' : requestedTone;
   const classNames = mergeClassNames(
     styles.root,
     styles[`tone_${tone}`],

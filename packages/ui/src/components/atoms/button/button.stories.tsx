@@ -49,10 +49,17 @@ const row: CSSProperties = {
   gap: 'var(--spacing-md)',
 };
 
+// Labels read --story-label / --story-heading when a backdrop sets them, so they stay legible on the
+// Inverse story's dark surface.
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
-  color: 'var(--color-content-subtle)',
+  color: 'var(--story-label, var(--color-content-subtle))',
 };
+
+const onDark = {
+  '--story-heading': 'var(--color-content-inverse-default)',
+  '--story-label': 'var(--color-content-inverse-default)',
+} as CSSProperties;
 
 const cardStyle: CSSProperties = {
   display: 'grid',
@@ -81,7 +88,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
         style={{
           margin: 0,
           font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
-          color: 'var(--color-content-default)',
+          color: 'var(--story-heading, var(--color-content-default))',
         }}
       >
         {title}
@@ -359,6 +366,7 @@ export const Inverse: Story = {
     <div
       style={{
         ...stack,
+        ...onDark,
         padding: 'var(--spacing-2xl)',
         borderRadius: 'var(--border-radius-md)',
         background: 'var(--color-background-neutral-bold-default)',

@@ -1,240 +1,263 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { ArrowRightIcon, CheckIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CombinationTable,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { ButtonGroup } from '../../molecules/button-group';
+import { LinkButton } from '../link-button';
+import { Button } from './button';
+import buttonStyles from './button.module.css';
 import * as ButtonStories from './button.stories';
+import contract from '../../../../../../docs/components/atoms/button/button.contract.json';
 
 <Meta of={ButtonStories} name="Docs" />
 
-# Button
+<Unstyled>
+<ComponentPage>
 
-Button triggers a user-initiated action - submitting a form, confirming a decision, opening a
-dialog, starting a workflow. Visual emphasis (`prominence`) and semantic intent (`tone`) are
-separate props, so a matter's severity doesn't dictate how loud it looks.
+<ComponentHeader
+  id="button"
+  example={
+    <ButtonGroup>
+      <Button prominence="primary">Save changes</Button>
+      <Button>Cancel</Button>
+      <Button prominence="tertiary">Preview</Button>
+    </ButtonGroup>
+  }
+>
+  Button starts an action the user chooses: submitting a form, confirming a decision, opening a
+  dialog or a menu, starting a workflow. How loud it is and what it means are separate choices.
+</ComponentHeader>
 
-<Canvas of={ButtonStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
 - Submitting or saving a form.
 - Continuing to the next step in a flow.
 - Opening a dialog or a menu.
 - Confirming or cancelling a decision.
-- Warning or destructive/error actions.
+- A destructive or warning action, with `tone`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For navigation.** Use `LinkButton` - it looks like a button but behaves like a link (right-click,
-  open in new tab, no `preventDefault` on click).
-- **For an icon-only control.** Button always requires a visible label. Use `IconButton`.
-- **For a toggleable selected state.** Use `ToggleButton` or `ToggleIconButton`.
-- **As a bare loading indicator with no user action attached.** Use `Spinner` directly.
-- **To recreate button behavior with ARIA roles on a non-button element.** Render a native `button`.
+- **Navigation:** <DocLink to="Components/Navigation/Link Button" />. It looks like a button and behaves like a link, so people can open it in a new tab.
+- **An icon-only action:** <DocLink to="Components/Actions/Icon Button" />. Button always has a visible label.
+- **A selected or unselected state:** <DocLink to="Components/Actions/Toggle Button" /> or <DocLink to="Components/Actions/Toggle Icon Button" />.
+- **Loading with no action attached:** <DocLink to="Components/Feedback/Spinner" /> on its own.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={ButtonStories.Content} />
+</Section>
 
-1. **Root** - a native `button`. Always required.
-2. **Leading** - either `iconBefore`, or the loading `Spinner` when `isLoading` is true. The two
-   never appear together; loading replaces the leading icon rather than sitting beside it.
-3. **Content** - the visible label. Required, and always stays visible - even while loading.
-4. **Trailing** - `iconAfter`, unaffected by loading.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <Button prominence="primary" size="lg" iconBefore={<CheckIcon />} iconAfter={<ArrowRightIcon />}>
+      Save and continue
+    </Button>
+  }
+>
+  <Part name="root" target={buttonStyles.button}>A native `button` element. Always present.</Part>
+  <Part name="leading" target={buttonStyles.leading}>`iconBefore`, or the loading Spinner in its place. Never both.</Part>
+  <Part name="content" target={buttonStyles.content}>The visible label. Required, and it stays visible while loading.</Part>
+  <Part name="trailing" target={buttonStyles.trailing}>`iconAfter`. Loading doesn't change it.</Part>
+</Anatomy>
 
-### Prominence versus tone
+</Section>
 
-`prominence` sets emphasis (`primary`, `secondary`, `tertiary`); `tone` sets semantic intent
-(`default`, `brand`, `warning`, `error`). They're independent props, but only these pairings are
-designed:
+<Section title="Variants">
 
-| Prominence  | default | brand | warning | error |
-| ----------- | ------- | ----- | ------- | ----- |
-| `primary`   | -       | ✓     | ✓       | ✓     |
-| `secondary` | ✓       | ✓     | -       | ✓     |
-| `tertiary`  | ✓       | ✓     | -       | -     |
+`prominence` sets how much attention a button draws; `tone` sets what the action means. They're
+separate props, but only these pairings are designed:
 
-(`primary` + `default` renders the same brand fill as `primary` + `brand`.) Any other pairing is
-valid but renders that prominence's default look - `tone="warning"` on a secondary button has no
-visual effect. Warning is primary only.
+<CombinationTable
+  rowAxis="prominence"
+  columnAxis="tone"
+  columns={['default', 'brand', 'warning', 'error']}
+  supported={contract.supportedCombinations}
+/>
 
-`prominence="secondary" tone="error"` is the outlined destructive action: an error-colored border
-and label with error-tinted hover/press overlays. Reach for it when a destructive action shouldn't be
-the loudest control in its group - e.g. "Remove" beside a primary "Save" - and keep
-`prominence="primary" tone="error"` for the confirming step of a destructive flow. See Variants.
+`primary` with `default` renders the same brand fill as `primary` with `brand`. Any other pairing is
+accepted but renders the prominence's default look, so `tone="warning"` on a secondary button changes
+nothing.
 
-### On dark surfaces
+`prominence="secondary" tone="error"` is the outlined destructive action. Use it when a destructive
+action shouldn't be the loudest control in its group, such as Remove beside a primary Save, and keep
+`prominence="primary" tone="error"` for the confirming step of a destructive flow.
 
-Set `isInverse` for buttons that sit on a dark or bold-colored surface - most commonly inside a
-`Banner`. It overrides the resting appearance treatment with a transparent fill and the inverse
-content token, and swaps the dark neutral hover/press overlays for the white *subtle* overlays so the
-button reads correctly against the dark background. Today it renders one look across appearances; an
-outlined (`default`) inverse treatment is planned. Disabled flattens the inverse look the same way
-it flattens `tone`.
+<Example of={ButtonStories.Variants} />
 
-<Canvas of={ButtonStories.Inverse} />
+<Subsection title="Sizes">
 
-### Icon usage
+Four control heights, from `xs` (24px) to `lg` (48px), shared with Icon Button, Text Field, and the
+other controls so they line up in a row. `lg` also sets the label one type size larger. Icons are the
+same size at every button size, and there's no prop to change them.
 
-Icons render at one fixed size regardless of `size` - Button intentionally has no icon-size prop.
-Use `iconBefore` and `iconAfter` for a labelled button with a supporting icon; never as a
-replacement for the label. See Edge Cases for why an icon-only Button breaks accessibility.
+<Example of={ButtonStories.Sizes} />
 
-### Loading behaviour
+</Subsection>
 
-Setting `isLoading` swaps the leading icon for a `Spinner`, keeps the label visible so the action
-stays legible, sets `aria-busy`, and suppresses `onClick` - all without changing the button's width.
-Don't pair `isLoading` with a separate disabled-looking treatment; the loading state already
-communicates "don't click this again."
+<Subsection title="On dark surfaces">
 
-### Full width
+Set `isInverse` on a button that sits on a dark or bold surface, most often inside a Banner. It drops
+the fill, uses the inverse text color, and swaps the dark hover and press overlays for light ones so
+the button reads against the background. One inverse look serves every prominence for now. Disabled
+flattens it the same way it flattens `tone`.
 
-Set `isFullWidth` when a button must fill its container - a form footer, a mobile action bar. It's a
-layout escape hatch, not a default; most buttons should size to their label.
+<Example of={ButtonStories.Inverse} />
 
-### Focus and hover
+</Subsection>
 
-Keyboard focus shows the same background fill as hover, on top of the outline ring from the shared
-`FocusRing` primitive - a keyboard user sees both signals together rather than a ring on an
-otherwise-unchanged button. This is consistent with how Avatar and Checkbox tie focus into their
-hover-equivalent treatment; don't add a focus style that looks unrelated to hover.
+</Section>
 
-## Do / Don't
+<Section title="Behavior">
 
-**Do** use `tone="error"` with `prominence="primary"` for the confirming destructive action, or with
-`prominence="secondary"` for a lower-emphasis destructive action.
+<Subsection title="Loading">
 
-```tsx
-<Button prominence="primary" tone="error">
-  Delete matter
-</Button>
-<Button prominence="secondary" tone="error">
-  Remove collaborator
-</Button>
-```
+`isLoading` puts a Spinner in the leading slot, in place of `iconBefore` or ahead of the label,
+keeps the label visible so the action stays legible, sets `aria-busy`, and ignores clicks. Because
+the spinner is added, a button without a leading icon gets slightly wider while it loads. Don't also
+make it look disabled; loading already says "don't click this again."
 
-**Don't** set `tone` on a pairing that isn't designed (e.g. warning on secondary, error on tertiary)
-expecting it to change how it looks.
+</Subsection>
 
-```tsx
-<Button prominence="tertiary" tone="error">Delete matter</Button>
-```
+<Subsection title="Opening a menu or panel">
 
----
+On a button that opens a menu or panel, set `isExpanded` to whether it's open. It sets
+`aria-expanded` and keeps the hover fill while the menu is open, at the button's own width. Leave it
+unset on a button that doesn't open anything.
 
-**Do** keep the label visible through a loading state.
+</Subsection>
 
-```tsx
-<Button prominence="primary" isLoading>
-  Save matter
-</Button>
-```
+<Subsection title="Width">
 
-**Don't** strip the label down to an icon or a spinner alone.
+Buttons size to their label. `isFullWidth` fills the container, for a form footer or a mobile action
+bar; it's a layout choice for those places, not a default.
 
-```tsx
-<Button prominence="primary" isLoading aria-label="Save" />
-```
+</Subsection>
 
----
+<Subsection title="Focus and hover">
 
-**Do** use `LinkButton` when the control navigates.
+Keyboard focus shows the hover fill together with the shared Focus Ring, so a keyboard user sees both
+signals at once. Don't give a button a focus style that looks unrelated to its hover.
 
-```tsx
-<LinkButton href="/matters/new">Start a new matter</LinkButton>
-```
+<Example of={ButtonStories.States} />
 
-**Don't** wire a `Button` to navigation with `onClick`.
+</Subsection>
 
-```tsx
-<Button onClick={() => navigate('/matters/new')}>Start a new matter</Button>
-```
+</Section>
 
-## API
+<Section title="Do and don't">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The visible label. Stays visible while loading.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Control height, padding, and (at <code>lg</code>) typography scale.</td>
-    </tr>
-    <tr>
-      <td><code>prominence</code></td>
-      <td><code>'primary' | 'secondary' | 'tertiary'</code></td>
-      <td><code>'secondary'</code></td>
-      <td>Visual emphasis. See Prominence versus tone for which tones each prominence carries.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'brand' | 'warning' | 'error'</code></td>
-      <td><code>'default'</code></td>
-      <td>Semantic intent. <code>brand</code>: every prominence. <code>error</code>: primary and secondary. <code>warning</code>: primary only.</td>
-    </tr>
-    <tr>
-      <td><code>isInverse</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>On-dark treatment for placement on dark/bold surfaces (e.g. Banner). Flattened by <code>disabled</code>.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Maps to the native <code>disabled</code> attribute. Flattens <code>tone</code> and <code>isInverse</code>.</td>
-    </tr>
-    <tr>
-      <td><code>isLoading</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Shows a leading <code>Spinner</code>, sets <code>aria-busy</code>, suppresses clicks.</td>
-    </tr>
-    <tr>
-      <td><code>isFullWidth</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Sets <code>inline-size: 100%</code>.</td>
-    </tr>
-    <tr>
-      <td><code>iconBefore</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Replaced by the spinner while loading.</td>
-    </tr>
-    <tr>
-      <td><code>iconAfter</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Unaffected by loading.</td>
-    </tr>
-    <tr>
-      <td><code>type</code></td>
-      <td><code>'button' | 'submit' | 'reset'</code></td>
-      <td><code>'button'</code></td>
-      <td>Defaults to <code>button</code> to avoid accidental form submission.</td>
-    </tr>
-  </tbody>
-</table>
+<Guidelines>
+<Do
+  caption={<>Use the error tone for a destructive action: primary for the confirming step, secondary when it shouldn't be the loudest control.</>}
+  code={`<Button prominence="primary" tone="error">Delete matter</Button>
+<Button prominence="secondary" tone="error">Remove collaborator</Button>`}
+>
+  <Button prominence="primary" tone="error">Delete matter</Button>
+  <Button prominence="secondary" tone="error">Remove collaborator</Button>
+</Do>
+<Dont
+  caption={<>Set a tone on a pairing that isn't designed and expect it to change the look. Tertiary has no error style.</>}
+  code={`<Button prominence="tertiary" tone="error">Delete matter</Button>`}
+>
+  <Button prominence="tertiary" tone="error">Delete matter</Button>
+</Dont>
+<Do caption="Keep the label visible while the action runs." code={`<Button prominence="primary" isLoading>Save matter</Button>`}>
+  <Button prominence="primary" isLoading>Save matter</Button>
+</Do>
+<Dont caption="Shrink a loading button to a spinner alone." code={`<Button prominence="primary" isLoading aria-label="Save" />`}>
+  <Button prominence="primary" isLoading aria-label="Save" />
+</Dont>
+<Do caption={<>Use Link Button when the control goes somewhere.</>} code={`<LinkButton href="/matters/new">Start a new matter</LinkButton>`}>
+  <LinkButton href="#">Start a new matter</LinkButton>
+</Do>
+<Dont caption="Navigate from a Button's click handler. People can't open it in a new tab or see where it goes." code={`<Button onClick={() => navigate('/matters/new')}>Start a new matter</Button>`} />
+</Guidelines>
 
-Any other native `button` prop is forwarded to the root element.
+</Section>
 
-## Related components
+<Section title="Accessibility">
 
-- **IconButton** - for icon-only actions.
-- **LinkButton** - for navigation styled as a button.
-- **ToggleButton** / **ToggleIconButton** - for a selected/unselected state.
-- **Spinner** - the primitive Button renders internally while loading.
-- **FocusRing** - the shared focus treatment Button composes rather than styling its own.
+- Button renders a native `button`, so it's focusable, announced as a button, and activated by Enter
+  and Space with no extra code. Don't rebuild it with `role="button"` on another element.
+- The visible label is the accessible name. Write it as the action ("Delete matter", not "OK"), and
+  don't rely on the error or warning color alone to carry the meaning.
+- `type` defaults to `button`, so a Button inside a form submits it only when you ask for `submit`.
+- `disabled` is the native attribute: the button leaves the tab order. A loading button stays
+  focusable, with `aria-busy` and `aria-disabled`, so focus doesn't jump while the action runs.
+- `isExpanded` sets `aria-expanded` on a button that opens a menu or panel.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the button. A disabled button is skipped.</Key>
+  <Key keys="Enter">Activates the button, unless it's loading.</Key>
+  <Key keys="Space">Activates the button, unless it's loading.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ButtonStories} native="button" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Button's stylesheet uses, by family, with the property it sets and when. "Base" is the
+button with no modifiers; a token listed for a prominence applies to every tone of it unless a tone
+overrides it.
+
+<TokensTable id="button" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Icon Button" /> for an icon-only action.
+- <DocLink to="Components/Navigation/Link Button" /> for navigation that looks like a button.
+- <DocLink to="Components/Actions/Toggle Button" /> and <DocLink to="Components/Actions/Toggle Icon Button" /> for a selected or unselected state.
+- <DocLink to="Components/Actions/Button Group" /> to lay out related buttons together.
+- <DocLink to="Components/Actions/Split Button" /> for a main action with a menu of related ones.
+- <DocLink to="Components/Feedback/Spinner" />, which Button shows while loading.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads button.types.ts, the design tokens read button.module.css, the pairings read
+  button.contract.json, and the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

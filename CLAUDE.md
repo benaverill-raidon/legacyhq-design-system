@@ -37,7 +37,9 @@ packages/ui/src/storybook/   # Storybook-only docs; never exported as components
                 # testable), css-usage (pure: which token each component
                 # uses for which property, following custom properties to
                 # where they're consumed) and component-css (Vite-only raw component CSS for
-                # those lookups). Extract here only once a second page needs it.
+                # those lookups), and component-page (the component Docs page
+                # standard; see "Component Docs pages" below). Extract here only
+                # once a second page needs it.
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
@@ -50,7 +52,9 @@ docs/
   components/exemplars.json   # generated, normalized cross-component exemplar index
   components/{primitives,atoms,molecules,organisms}/<component>/
     <component>.md             # usage doc: when to use, design intent,
-                                # a11y expectations, implementation constraints
+                                # a11y expectations, implementation constraints;
+                                # a pointer to the MDX Docs page once the
+                                # component is on the page standard
     <component>-spec.md        # detailed spec
     <component>-prompt.md      # prompt used to originally generate the component
     <component>-checklist.md   # QA / completion checklist
@@ -111,7 +115,7 @@ is ~1360 lines. Match the file(s) to your task shape:
 
 | Task shape | Read | Skip (for now) |
 |---|---|---|
-| Orienting on an untouched component | `.md` | everything else |
+| Orienting on an untouched component | `.md` (or the `.mdx` Docs page it points to) | everything else |
 | Adding/changing a prop | `.contract.json`, relevant section of `-spec.md` | `-prompt.md`, `-checklist.md` |
 | Styling/token-only change | `.md`, `token-governance.json` | `-prompt.md`, `-checklist.md` |
 | New variant / new anatomy part | `.md`, `-spec.md`, `.contract.json`, `.examples.json` | `-prompt.md` |
@@ -258,7 +262,9 @@ that just duplicate a semantic token under a different name (e.g. don't make
   Figma/code differences are in the `icons` block of token-governance.json;
   Storybook's Foundations / Icons page documents them for people.
 - **Loading/busy states** preserve the visible label and use `aria-busy`
-  rather than swapping the label or shifting layout.
+  rather than swapping the label or shifting layout. (Button's width still
+  changes while loading, and Figma swaps its label for the spinner; see the
+  loading note in button-spec.md.)
 
 ## Component API conventions
 
@@ -283,6 +289,28 @@ token-governance.json). Current rules:
   inside the component, because the LegacyHQ app can't be searched from here.
 
 Check that file before introducing a new prop name pattern.
+
+## Component Docs pages
+
+Each component's Storybook Docs page is `<component>.mdx` beside it, written
+to one standard with the blocks in `storybook/blocks/component-page.tsx`, in
+the Foundations look. Button is the reference page. Sections, in order: When
+to use, Anatomy, Variants (optional), Behavior (optional), Do and don't,
+Accessibility, API, Design tokens, Related components.
+
+- **Prose is written in the MDX; facts are generated.** The API table reads
+  the TypeScript props and their JSDoc through Storybook's docgen, so every
+  member of `<Name>Props` needs a description comment (`@deprecated` ones are
+  listed separately). The tokens table reads the component's CSS module. The
+  header's facts (category, tier, Figma source) come from registry.json.
+  Status isn't shown yet.
+- **Live examples are stories** (`<Example of={...}>`); Do/Don't pairs render
+  real components with the code beneath. Anatomy numbers parts found by their
+  CSS-module classes, named as in the contract.
+- `component-pages.test.ts` (part of `npm test`) checks every converted page:
+  section order, required sections, its own component id, the anatomy part
+  names against the contract, and JSDoc on every prop. Once a page is
+  converted, its `.md` becomes a pointer to the MDX.
 
 ## When building/editing a component
 

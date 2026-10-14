@@ -240,7 +240,7 @@ Background, border, and content color changes across hover/press/focus transitio
 transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
 ```
 
-Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do not hardcode a duration or easing curve directly on the component — consume the semantic motion token so retiming propagates system-wide.
+Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do not hardcode a duration or easing curve directly on the component — consume the semantic motion token so retiming propagates system-wide. Button has no press-state scale or other transform motion: press feedback is color only.
 
 ### Size Token Mapping
 

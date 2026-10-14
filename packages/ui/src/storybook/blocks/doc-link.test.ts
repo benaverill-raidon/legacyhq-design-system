@@ -35,7 +35,8 @@ const docsTitles = new Set(
   }),
 );
 
-const docLinks = filesIn(`${SRC}/storybook`, /\.(mdx|tsx)$/).flatMap((path) =>
+// Storybook-only pages and blocks, and the component Docs pages written with them.
+const docLinks = [...filesIn(`${SRC}/storybook`, /\.(mdx|tsx)$/), ...filesIn(`${SRC}/components`, /\.mdx$/)].flatMap((path) =>
   [...(readFileSync(path, 'utf8') as string).matchAll(/<DocLink\b([^>]*)>/g)].map(([, attributes]) => ({
     path,
     attributes,

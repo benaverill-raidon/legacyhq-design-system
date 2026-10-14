@@ -365,7 +365,7 @@
     "Use children for label content.",
     "Use native button props when needed.",
     "Use semantic design tokens.",
-    "Preserve label width during loading."
+    "Keep the label visible during loading."
   ],
   "dont": [
     "Do not use Button for navigation-only behavior.",

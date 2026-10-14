@@ -460,11 +460,11 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="Loading preserves the label and its width">
+      <Group title="Loading keeps the label visible">
         <Cell label="Default">
           <Button prominence="primary">Save changes</Button>
         </Cell>
-        <Cell label="Loading (same width)">
+        <Cell label="Loading adds a spinner">
           <Button prominence="primary" isLoading>
             Save changes
           </Button>

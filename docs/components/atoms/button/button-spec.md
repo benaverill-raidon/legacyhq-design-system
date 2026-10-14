@@ -32,7 +32,7 @@ Button
 └─ trailing icon
 ```
 
-The loading spinner replaces the leading content area while preserving the original label/content width.
+The loading spinner takes the leading slot - in place of `iconBefore`, or ahead of the label when there is none - and the label stays visible at its own width. The button itself can change width: it grows by the spinner and gap when it had no leading icon (117px to 137px at `md`), and the spinner (`sm`) is 4px narrower than a leading icon. Figma's loading variant instead replaces the label with the spinner; reconciling the two is open.
 
 ## Public API
 

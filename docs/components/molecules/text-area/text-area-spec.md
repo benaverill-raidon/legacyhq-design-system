@@ -107,9 +107,10 @@ textarea matches `:autofill` (`.root:has(.textarea:autofill)`), or under the doc
 `data-force-state='autofill'` pin, except when disabled. Each context keeps its resting stroke. Per
 explicit design feedback (2026-10-14), hover replaces the tint (the hover rules outrank the autofill
 rule and set the `background` shorthand), while focus and invalid keep it; and `context=inline`
-shows the tint only while focused, or invalid and not hovered - a deliberate difference from
-Figma's inline variant, which shows it at rest. The browser's own `!important` autofill fill on the
-textarea is hidden with `background-clip: text`, and `-webkit-text-fill-color` and `caret-color`
+shows the tint only while focused - a deliberate difference from Figma's inline variant, which
+shows it at rest. The token is 16% opacity since 2026-10-14 (it was 8%). The browser's own
+`!important` autofill fill on the textarea is hidden with `background-clip: text`, and
+`-webkit-text-fill-color` and `caret-color`
 replace its forced text color. There's no transition: a long-transition workaround would need a raw
 timing the motion rules don't allow. See Text Field's spec for the full reasoning.
 
@@ -120,7 +121,7 @@ bottom-only 2px focus line (`border/focus` on the bottom border, +1px via a bott
 box-shadow); invalid shows a bottom-only error border (`border/error`) the same way; disabled stays
 transparent. Bottom corners are square; top corners keep the size's radius - mirroring Text Field's
 `context="inline"`. Autofilled, it stays chromeless at rest and shows the raised surface with the
-autofill tint only while focused, or invalid and not hovered. For a field inside a row, such as Key
+autofill tint only while focused. For a field inside a row, such as Key
 Value Pair wrapped in Inline Edit.
 
 ### Token naming note
@@ -195,7 +196,7 @@ does not render the action slot when iconAfter is absent
 context=inline is chromeless at rest, with Figma's hover fill and bottom-only states
 autofill: layers the autofill token over the raised surface
 autofill: shows the tint on context=default whenever autofilled or pinned, except when disabled
-autofill: keeps context=inline chromeless at rest (tint only while focused, or invalid and not hovered)
+autofill: keeps context=inline chromeless at rest (tint only while focused)
 autofill: keeps each context's resting stroke
 autofill: lets hover replace the tint (hover rules set the background shorthand)
 autofill: hides the browser's own fill by clipping the textarea's background to its text

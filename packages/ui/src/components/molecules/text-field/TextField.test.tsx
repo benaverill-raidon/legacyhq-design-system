@@ -253,10 +253,10 @@ describe('TextField', () => {
       expect(selectors[0]).toBe(".context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill'])");
     });
 
-    it('keeps context=inline chromeless at rest: the tint shows only while focused, or invalid and not hovered', () => {
+    it('keeps context=inline chromeless at rest: the tint shows only while focused', () => {
       expect(selectors).toHaveLength(2);
       expect(selectors[1]).toBe(
-        ".context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):is(:focus-within, [data-invalid='true']:not(:hover))",
+        ".context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):focus-within",
       );
     });
 

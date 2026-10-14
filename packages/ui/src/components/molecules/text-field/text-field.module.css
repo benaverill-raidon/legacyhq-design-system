@@ -187,13 +187,13 @@
  * - Hover replaces the tint. The hover rules above outrank this one and set the `background`
  *   shorthand, which clears it.
  * - context=inline stays chromeless at rest, like any inline field, and shows the tint only while
- *   focused or invalid. Figma's inline variant shows it at rest.
+ *   focused. Figma's inline variant shows it at rest.
  * The stroke is never touched, so focus and invalid borders show over the tint. A disabled field
  * shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only pin.
  * No transition of its own: the change fades with `.root`'s, which reduced motion switches off.
  */
 .context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']),
-.context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):is(:focus-within, [data-invalid='true']:not(:hover)) {
+.context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):focus-within {
   background: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default)), var(--color-elevation-surface-raised-default);
 }
 

@@ -349,7 +349,7 @@
   --color-data-viz-catergory-bold-yellow: var(--color-data-viz-category-bold-yellow);
   --color-data-viz-category-bold-red: var(--color-red-solid-500);
   --color-data-viz-catergory-bold-red: var(--color-data-viz-category-bold-red);
-  --color-background-autofill-default: var(--color-brand-prussian-alpha-500-08);
+  --color-background-autofill-default: var(--color-brand-prussian-alpha-500-16);
   --color-background-brand-secondary-overlay-blanket: var(--color-brand-taupe-alpha-1200-64);
   --color-border-brand-primary-subtle: var(--color-brand-prussian-solid-900);
   --color-elevation-surface-deep-default: var(--color-brand-taupe-solid-1300);

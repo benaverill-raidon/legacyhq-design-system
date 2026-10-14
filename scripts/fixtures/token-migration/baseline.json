@@ -49,6 +49,18 @@
       "to": "rgba(0, 0, 0, 0)",
       "reason": "Figma's Dark overlay effect style draws the inner ring transparent; the variable was solid taupe 500, so code showed a visible ring in Dark only. Changed first in Figma (Tokens v1.0.0, variable ID unchanged), then here. Light was already transparent.",
       "verification": "dark.css differs from the previous file by this one value and the added --elevation-shadow-overlay line."
+    },
+    {
+      "on": "2026-10-14",
+      "tokens": ["--color-background-autofill-default (Light and Dark)"],
+      "from": "var(--color-brand-prussian-alpha-900-08) (Light), var(--color-brand-prussian-alpha-500-08) (Dark)",
+      "to": "var(--color-brand-prussian-alpha-900-16) (Light), var(--color-brand-prussian-alpha-500-16) (Dark)",
+      "reason": "The autofill tint on Text Field and Text Area read too faint at 8%; design raised it to 16%. Changed first in Figma (Tokens v1.0.0, Semantic: Color, both modes re-aliased to the existing 16% primitives, variable ID unchanged), then here. No new tokens.",
+      "verification": "light.css and dark.css each differ from the previous file by this one value; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "aa46611c20ed8c0261e9d15a9eb41e1c4b58f844125f579f3877eb9e570b717a", "declarations": 353 },
+        "dark.css": { "sha256LF": "0b33850234e56db8eb8fec7e9072ce7e1450de81b87c241f4f5ce46bf66decdd", "declarations": 353 }
+      }
     }
   ],
   "tokenRemovals": [
@@ -69,11 +81,11 @@
       "declarations": 566
     },
     "light.css": {
-      "sha256LF": "aa46611c20ed8c0261e9d15a9eb41e1c4b58f844125f579f3877eb9e570b717a",
+      "sha256LF": "1e91120d8aa0eda8ff25feb4b753b1dd9df100ed55e394d39946e22c84dcbba0",
       "declarations": 353
     },
     "dark.css": {
-      "sha256LF": "0b33850234e56db8eb8fec7e9072ce7e1450de81b87c241f4f5ce46bf66decdd",
+      "sha256LF": "f8bf509dc2c0df47b3125d214afa03558f7368321ad87490adcddb80d74d2b74",
       "declarations": 353
     }
   }

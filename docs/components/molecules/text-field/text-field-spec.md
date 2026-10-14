@@ -21,8 +21,8 @@ bare input, so it doesn't belong at the atom tier.
 - `state=autofill` layers `color/background/autofill/default` over
   `color/elevation/surface/raised/default` in both contexts, and keeps each context's resting stroke
   (`color/border/input` 1px on `default`, none on `inline`). Code applies it when the native input
-  matches `:autofill`, except that hover replaces it and `inline` shows it only while focused or
-  invalid - see Design Decisions and Design Tokens below.
+  matches `:autofill`, except that hover replaces it and `inline` shows it only while focused - see
+  Design Decisions and Design Tokens below. The token is 16% opacity since 2026-10-14 (it was 8%).
 - Component properties: `placeholderText` (TEXT), `value` (TEXT), `elemBeforeInput` (BOOLEAN),
   `elemAfterInput` (BOOLEAN), `slot <elemAfterInput>` (INSTANCE_SWAP) - `showCaret` and
   `placeholder` (BOOLEAN) exist only to drive Figma's own mockup between placeholder/value text and
@@ -143,9 +143,10 @@ difference from Figma:
 - **Hover replaces the tint.** The hover rules outrank the autofill rule and set the `background`
   shorthand, which clears the tint, so an autofilled field hovers exactly like any other. Focus and
   invalid change only the border, so the tint stays under them.
-- **`context="inline"` stays chromeless at rest.** It shows the tint (over the raised surface) only
-  while focused, or while invalid and not hovered. Figma's inline autofill variant shows the
-  filled box at rest; code keeps an inline field looking inline until someone interacts with it.
+- **`context="inline"` stays chromeless at rest.** Once a suggestion is picked and the field is
+  left, it looks like any other inline field, invalid included. It shows the tint (over the raised
+  surface) only while focused. Figma's inline autofill variant shows the filled box at rest; code
+  keeps an inline field looking inline until someone interacts with it.
 
 Browsers paint their own autofill fill and text color on the native input (Chrome's blue, Safari's
 yellow) from their user-agent stylesheet with `!important`, which author CSS can't override. The
@@ -330,7 +331,7 @@ Hover only ever shows on an inactive field - once the field is focus/typing, the
 is suppressed regardless of pointer position, so focus/typing and hover styling never compete.
 Hovering an autofilled field shows the ordinary hover row above - hover replaces the tint.
 
-`context="inline"` shows the autofill tint only while focused, or invalid and not hovered. At rest
+`context="inline"` shows the autofill tint only while focused. At rest
 an autofilled inline field looks like any other inline field: transparent, no visible line.
 
 `context="inline"` starts from a transparent background and border at rest, then uses the exact
@@ -416,7 +417,7 @@ is a real boolean prop.
       raised surface, with no browser autofill fill on the input; hover replaces the tint, focus and
       invalid keep it (check the pinned States story and a real autofill in Edge Cases)
 - [ ] An autofilled `context="inline"` field is chromeless at rest and shows the tint only while
-      focused, or invalid and not hovered
+      focused
 - [ ] Light mode works
 - [ ] Dark mode works
 

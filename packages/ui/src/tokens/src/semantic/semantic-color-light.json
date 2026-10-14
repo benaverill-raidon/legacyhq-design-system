@@ -2837,7 +2837,7 @@
       },
       "color-background-autofill-default": {
         "$type": "color",
-        "$value": "{Primitive.Value.color-brand-prussian-alpha-900-08}",
+        "$value": "{Primitive.Value.color-brand-prussian-alpha-900-16}",
         "$extensions": {
           "com.legacyhq": {
             "originalName": "color/background/autofill/default"

@@ -37,7 +37,7 @@ bordered look, rounded on all four corners) is correct for nearly every other ca
 When the browser autofills the field (a saved name, email, or address), the frame shows Figma's
 `state=autofill`: the translucent `color-background-autofill-default` tint over the raised surface.
 Hover replaces the tint with the ordinary hover background. `context="inline"` stays chromeless at
-rest like any inline field, and shows the tint only while focused or invalid. The browser's own
+rest like any inline field, and shows the tint only while focused. The browser's own
 autofill fill (Chrome's blue, Safari's yellow) is hidden, so the field looks the same in every
 browser. It's a live state (`:autofill`), not a prop; the browser clears it when the person edits
 the value.

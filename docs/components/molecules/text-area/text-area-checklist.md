@@ -63,7 +63,7 @@ Figma's `autofill` layers `color/background/autofill/default` over the raised su
 contexts, keeping each context's resting stroke; code applies it when the textarea matches
 `:autofill` and hides the browser's own autofill fill (background clipped to the text). Per design
 feedback: hover replaces the tint, focus and invalid keep it, and `context=inline` stays chromeless
-at rest, showing the tint only while focused or invalid (a deliberate difference from Figma).
+at rest, showing the tint only while focused (a deliberate difference from Figma).
 
 ---
 
@@ -115,12 +115,11 @@ exactly as Figma binds it.
 - inline: chromeless at rest, square bottom corners, hover background + bottom-only border on
   hover/focus/invalid, keeps padding and top radius ✓
 - Key Value Pair embedding with inline TextArea + iconAfter ✓
-- autofill (pinned, 2026-10-13): raised surface + `rgba(0, 54, 85, 0.08)` tint in light,
-  `rgba(106, 173, 212, 0.08)` in dark; `border/input` 1px on default ✓. Real browser autofill
+- autofill (pinned, 2026-10-14): raised surface + `rgba(0, 54, 85, 0.16)` tint in light,
+  `rgba(106, 173, 212, 0.16)` in dark; `border/input` 1px on default ✓. Real browser autofill
   (Edge Cases) hides the browser's own fill - confirmed by hand 2026-10-14 ✓
 - autofill design feedback (2026-10-14): hover shows `raised/hover` with no tint; focus and invalid
-  keep the tint under their border; inline is transparent at rest and tinted while focused or
-  invalid (not hovered) ✓
+  keep the tint under their border; inline is transparent at rest and tinted only while focused ✓
 
 ---
 
@@ -130,7 +129,8 @@ exactly as Figma binds it.
   the sm removal) / context (default, inline) / state / isDisabled / isInvalid. 64 variants after the
   removal (was 96 with three sizes), re-confirmed live 2026-10-13.
 - `state=autofill` (8 variants: type x size x context): fills `color/elevation/surface/raised/default`
-  then `color/background/autofill/default` at 8%; stroke `color/border/input` 1px on
+  then `color/background/autofill/default` (16% since 2026-10-14, raised from 8% in the Tokens
+  file); stroke `color/border/input` 1px on
   `context=default`, none on `context=inline`; value text `color/content/default`.
 - The visual frame (fill/border/radius) is bound on the component node; the inner `Container` frame
   carries only padding.

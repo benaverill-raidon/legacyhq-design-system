@@ -207,12 +207,13 @@
 }
 
 /*
- * Autofill - the same treatment as Text Field: Figma's `--color-background-autofill-default` over
- * `--color-elevation-surface-raised-default`, with each context's resting stroke kept, except that
- * hover replaces the tint (the hover rules above outrank this one and clear it) and context=inline
- * shows it only while focused, staying chromeless at rest - both per explicit design feedback. A disabled field shows its disabled look instead. `[data-force-state='autofill']` is the
- * documentation-only pin. No transition of its own - the change fades with `.root`'s, which reduced
- * motion switches off.
+ * Autofill - the same treatment as Text Field, per Figma and explicit design feedback: context=default
+ * layers `--color-background-autofill-default` over `--color-elevation-surface-raised-default`,
+ * keeping its resting stroke; context=inline stays chromeless at rest (as Figma's inline autofill
+ * variant does) and shows the tint only while focused. Hover replaces the tint (the hover rules above
+ * outrank this one and clear it); focus and invalid keep it. A disabled field shows its disabled look
+ * instead. `[data-force-state='autofill']` is the documentation-only pin. No transition of its own -
+ * the change fades with `.root`'s, which reduced motion switches off.
  */
 .context_default:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']),
 .context_inline:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']):focus-within {

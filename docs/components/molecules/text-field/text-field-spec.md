@@ -18,11 +18,12 @@ bare input, so it doesn't belong at the atom tier.
   typing, filled, autofill) x `isDisabled` (false, true) x `isInvalid` (false, true) = 48 variants
   (not fully crossed - `isInvalid` is only demonstrated on `filled`, `isDisabled` only on `default`;
   re-checked 2026-10-13)
-- `state=autofill` layers `color/background/autofill/default` over
-  `color/elevation/surface/raised/default` in both contexts, and keeps each context's resting stroke
-  (`color/border/input` 1px on `default`, none on `inline`). Code applies it when the native input
-  matches `:autofill`, except that hover replaces it and `inline` shows it only while focused - see
-  Design Decisions and Design Tokens below. The token is 16% opacity since 2026-10-14 (it was 8%).
+- `state=autofill`: `context=default` layers `color/background/autofill/default` over
+  `color/elevation/surface/raised/default` and keeps its `color/border/input` 1px stroke;
+  `context=inline` has no fill or stroke, the same as inline `filled` (its fills were removed on
+  2026-10-14, per design feedback). Code applies this when the native input matches `:autofill`,
+  and also shows the tint on a focused inline field - see Design Decisions and Design Tokens below.
+  The token is 16% opacity since 2026-10-14 (it was 8%).
 - Component properties: `placeholderText` (TEXT), `value` (TEXT), `elemBeforeInput` (BOOLEAN),
   `elemAfterInput` (BOOLEAN), `slot <elemAfterInput>` (INSTANCE_SWAP) - `showCaret` and
   `placeholder` (BOOLEAN) exist only to drive Figma's own mockup between placeholder/value text and
@@ -131,22 +132,22 @@ Hover is suppressed once the field is focus/typing (`:focus-within`, or the pinn
 `data-force-state='focus'` reference used for the static Storybook state) - hover should only ever
 be visible on an inactive field, per explicit design feedback. This applies to both contexts.
 
-Autofill starts from Figma's `state=autofill` variants (re-checked 2026-10-13 in both contexts): the
-frame's `background` layers `--color-background-autofill-default` (a translucent brand tint) over
-`--color-elevation-surface-raised-default`, and each context keeps its resting stroke. The rule
-matches `:has(.input:autofill)`, or the documentation-only `data-force-state='autofill'` pin, and
-skips a disabled field. Figma shows autofill only on its own, but in a browser the value stays
-autofilled while the person hovers, focuses, or gets an error on the field. Per explicit design
-feedback (2026-10-14), code settles those combinations two ways, one of them a deliberate
-difference from Figma:
+Autofill follows Figma's `state=autofill` variants (re-checked 2026-10-13; inline updated
+2026-10-14, per design feedback). On `context="default"` the frame's `background` layers
+`--color-background-autofill-default` (a translucent brand tint) over
+`--color-elevation-surface-raised-default`, keeping the resting stroke. The rule matches
+`:has(.input:autofill)`, or the documentation-only `data-force-state='autofill'` pin, and skips a
+disabled field. Figma shows autofill only at rest, but in a browser the value stays autofilled
+while the person hovers, focuses, or gets an error on the field. Per explicit design feedback
+(2026-10-14), code settles those combinations like this:
 
 - **Hover replaces the tint.** The hover rules outrank the autofill rule and set the `background`
   shorthand, which clears the tint, so an autofilled field hovers exactly like any other. Focus and
   invalid change only the border, so the tint stays under them.
 - **`context="inline"` stays chromeless at rest.** Once a suggestion is picked and the field is
-  left, it looks like any other inline field, invalid included. It shows the tint (over the raised
-  surface) only while focused. Figma's inline autofill variant shows the filled box at rest; code
-  keeps an inline field looking inline until someone interacts with it.
+  left, it looks like any other inline field, invalid included - as Figma's inline autofill
+  variant does. It shows the tint (over the raised surface) only while focused, which Figma
+  doesn't draw.
 
 Browsers paint their own autofill fill and text color on the native input (Chrome's blue, Safari's
 yellow) from their user-agent stylesheet with `!important`, which author CSS can't override. The

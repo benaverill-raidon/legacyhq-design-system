@@ -107,8 +107,9 @@ textarea matches `:autofill` (`.root:has(.textarea:autofill)`), or under the doc
 `data-force-state='autofill'` pin, except when disabled. Each context keeps its resting stroke. Per
 explicit design feedback (2026-10-14), hover replaces the tint (the hover rules outrank the autofill
 rule and set the `background` shorthand), while focus and invalid keep it; and `context=inline`
-shows the tint only while focused - a deliberate difference from Figma's inline variant, which
-shows it at rest. The token is 16% opacity since 2026-10-14 (it was 8%). The browser's own
+stays chromeless at rest - as Figma's inline autofill variants do since their fills were removed
+on 2026-10-14 - showing the tint only while focused. The token is 16% opacity since 2026-10-14 (it
+was 8%). The browser's own
 `!important` autofill fill on the textarea is hidden with `background-clip: text`, and
 `-webkit-text-fill-color` and `caret-color`
 replace its forced text color. There's no transition: a long-transition workaround would need a raw

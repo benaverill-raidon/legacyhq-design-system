@@ -181,15 +181,16 @@
 }
 
 /*
- * Autofill. Figma's `state=autofill` layers the translucent `--color-background-autofill-default`
- * over `--color-elevation-surface-raised-default` and keeps each context's resting stroke
- * (re-checked 2026-10-13). Code follows it with two differences, per explicit design feedback:
+ * Autofill, per Figma's `state=autofill` and explicit design feedback (2026-10-14): context=default
+ * layers the translucent `--color-background-autofill-default` over
+ * `--color-elevation-surface-raised-default`, keeping its resting stroke. context=inline stays
+ * chromeless at rest, like any inline field (Figma's inline autofill variant has no fill), and
+ * shows the same tint only while focused. Two combinations Figma doesn't draw:
  * - Hover replaces the tint. The hover rules above outrank this one and set the `background`
  *   shorthand, which clears it.
- * - context=inline stays chromeless at rest, like any inline field, and shows the tint only while
- *   focused. Figma's inline variant shows it at rest.
- * The stroke is never touched, so focus and invalid borders show over the tint. A disabled field
- * shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only pin.
+ * - Focus and invalid keep it: the stroke is never touched, so their borders show over the tint.
+ * A disabled field shows its disabled look instead. `[data-force-state='autofill']` is the
+ * documentation-only pin.
  * No transition of its own: the change fades with `.root`'s, which reduced motion switches off.
  */
 .context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']),

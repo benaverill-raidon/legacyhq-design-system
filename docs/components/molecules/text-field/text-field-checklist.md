@@ -84,8 +84,8 @@ Required:
 - Autofill - Figma's `state=autofill`: `--color-background-autofill-default` over the raised surface,
   with each context's resting stroke, when the input matches `:autofill` (or the
   documentation-only `data-force-state="autofill"` pin). Hover replaces the tint; focus and invalid
-  keep it. `context="inline"` stays chromeless at rest and shows the tint only while focused (a
-  deliberate difference from Figma, per design feedback). The browser's own autofill fill on the
+  keep it. `context="inline"` stays chromeless at rest, as Figma's inline autofill variant does, and
+  shows the tint only while focused (per design feedback). The browser's own autofill fill on the
   input is hidden by clipping its background to the text.
 
 Not Required:

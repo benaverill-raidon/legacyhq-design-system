@@ -164,13 +164,13 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Continue' })).toHaveClass(styles.fullWidth);
   });
 
-  it('supports isExpanded', () => {
+  it('marks an open menu trigger with isExpanded, keeping its own width', () => {
     const { rerender } = render(<Button isExpanded>Expand</Button>);
     const button = screen.getByRole('button', { name: 'Expand' });
 
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(button).toHaveAttribute('data-expanded', 'true');
-    expect(button).toHaveClass(styles.expanded);
+    expect(button).not.toHaveClass(styles.fullWidth);
 
     rerender(<Button isExpanded={false}>Expand</Button>);
 
@@ -294,7 +294,7 @@ describe('Button', () => {
   it('provides an outlined error treatment for prominence=secondary using the semantic error tokens', () => {
     const rest = buttonCss.match(/\.prominence_secondary\.tone_error \{([^}]*)\}/);
     const hover = buttonCss.match(
-      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\) \{([^}]*)\}/,
+      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\],\s*\[data-expanded='true'\]\s*\) \{([^}]*)\}/,
     );
     const press = buttonCss.match(
       /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(:active, \[data-force-state='press'\]\) \{([^}]*)\}/,

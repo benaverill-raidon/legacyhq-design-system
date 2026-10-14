@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArrowRightIcon, CheckIcon, CloseIcon, DeleteIcon } from '../../../assets/icons';
+import { ArrowRightIcon, CaretDownIcon, CheckIcon, CloseIcon, DeleteIcon } from '../../../assets/icons';
 import { Button } from './button';
 import type { ButtonSize } from './button.types';
 
@@ -484,12 +484,17 @@ export const Content: Story = {
         </div>
       </Group>
 
-      <Group title="Expanded">
-        <div style={{ inlineSize: '320px' }}>
-          <Button isExpanded prominence="primary">
-            Expand
+      <Group title="Expanded (an open menu trigger keeps its hover fill)">
+        <Cell label="Closed">
+          <Button isExpanded={false} iconAfter={<CaretDownIcon />}>
+            Actions
           </Button>
-        </div>
+        </Cell>
+        <Cell label="Open">
+          <Button isExpanded iconAfter={<CaretDownIcon />}>
+            Actions
+          </Button>
+        </Cell>
       </Group>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>

@@ -56,7 +56,6 @@ export const Button = React.memo(
           styles[`tone_${tone}`],
           isInverse && styles.inverse,
           isFullWidth && styles.fullWidth,
-          isExpanded && styles.expanded,
           focusRingClassNames.focusRing,
           focusRingClassNames.focusRingDefault,
           className,

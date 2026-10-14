@@ -81,10 +81,12 @@ No fixed limit - native `maxLength` applies if the consumer sets it.
 
 Required:
 - Default, hover, focus, disabled, invalid
-- Autofill - Figma's `state=autofill`: `--color-background-autofill-default` over the raised surface
-  in both contexts, with each context's resting stroke, when the input matches `:autofill` (or the
-  documentation-only `data-force-state="autofill"` pin). The browser's own autofill fill on the input
-  is hidden by clipping its background to the text, and the tint stays through hover and focus.
+- Autofill - Figma's `state=autofill`: `--color-background-autofill-default` over the raised surface,
+  with each context's resting stroke, when the input matches `:autofill` (or the
+  documentation-only `data-force-state="autofill"` pin). Hover replaces the tint; focus and invalid
+  keep it. `context="inline"` stays chromeless at rest and shows the tint only while focused or
+  invalid (a deliberate difference from Figma, per design feedback). The browser's own autofill fill
+  on the input is hidden by clipping its background to the text.
 
 Not Required:
 - A separate "typing" or "filled" state - both fall out of native `:placeholder-shown` plus

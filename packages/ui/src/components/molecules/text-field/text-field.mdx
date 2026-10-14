@@ -63,13 +63,14 @@ painting the "thicker" look on focus/invalid via `box-shadow` only, so the place
 and the typing caret never shift horizontally. Hover is suppressed once the field is focused/typing:
 hover styling is only ever visible on an inactive field.
 
-When the browser autofills the field, the frame shows Figma's autofill state in both contexts: the
-translucent `color-background-autofill-default` tint over the raised surface, so an inline field
-gains the raised surface too. The browser's own autofill fill on the input is hidden (its
-background is clipped to the text), so the field looks the same in every browser, and the tint
-stays while the field is hovered or focused. The pinned reference above shows the frame only; to
-see the browser's fill being hidden, pick a saved suggestion in the "Real browser autofill" fields
-under Edge Cases.
+When the browser autofills the field, the frame shows Figma's autofill state: the translucent
+`color-background-autofill-default` tint over the raised surface. Hover replaces the tint with the
+ordinary hover background; focus and invalid keep it. `context="inline"` stays chromeless at rest
+like any inline field, and shows the tint only once focused or invalid - so its pinned reference
+above looks like an ordinary filled field. The browser's own autofill fill on the input is hidden
+(its background is clipped to the text), so the field looks the same in every browser. The pinned
+references show the frame only; to see the browser's fill being hidden, pick a saved suggestion in
+the "Real browser autofill" fields under Edge Cases.
 
 ## Content
 

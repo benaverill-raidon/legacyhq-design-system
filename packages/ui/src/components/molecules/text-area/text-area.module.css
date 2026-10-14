@@ -129,11 +129,11 @@
 /*
  * Hover tint only ever shows on an inactive field - suppressed once focused/typing, matching Text
  * Field (and its explicit design feedback). Keys off `:focus-within` (the wrapper contains the
- * focusable textarea) rather than `:focus` directly. Hover sets `background-color` only, never the
- * `background` shorthand, so it keeps the autofill tint layer (see Autofill below).
+ * focusable textarea) rather than `:focus` directly. The `background` shorthand also clears the
+ * autofill tint, so hover replaces it (see Autofill below).
  */
 .root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background-color: var(--color-elevation-surface-raised-hover);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -177,7 +177,7 @@
 }
 
 .context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background-color: var(--color-elevation-surface-raised-hover);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -207,17 +207,17 @@
 }
 
 /*
- * Autofill - the same treatment as Text Field, confirmed from Figma's `state=autofill` variants
- * (re-checked 2026-10-13): `--color-background-autofill-default` layered over
- * `--color-elevation-surface-raised-default` in both contexts, with each context's resting stroke
- * kept (1px `--color-border-input` on context=default, none on context=inline). The tint is a
- * background-image layer, so hover still changes the surface under it and focus/invalid the border;
- * a disabled field shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only pin. No
- * transition of its own - the surface change fades with `.root`'s, which reduced motion switches off.
+ * Autofill - the same treatment as Text Field: Figma's `--color-background-autofill-default` over
+ * `--color-elevation-surface-raised-default`, with each context's resting stroke kept, except that
+ * hover replaces the tint (the hover rules above outrank this one and clear it) and context=inline
+ * shows it only while focused or invalid, staying chromeless at rest - both per explicit design
+ * feedback. A disabled field shows its disabled look instead. `[data-force-state='autofill']` is the
+ * documentation-only pin. No transition of its own - the change fades with `.root`'s, which reduced
+ * motion switches off.
  */
-.root:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']) {
-  background-color: var(--color-elevation-surface-raised-default);
-  background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));
+.context_default:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']),
+.context_inline:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']):is(:focus-within, [data-invalid='true']:not(:hover)) {
+  background: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default)), var(--color-elevation-surface-raised-default);
 }
 
 /*

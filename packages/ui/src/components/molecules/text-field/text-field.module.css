@@ -35,11 +35,11 @@
  * static regression reference - documentation-only, not part of the public API, the same
  * convention Button and Checkbox use. Hover is suppressed once the field is focused/typing (real
  * `:focus-within`, or the pinned `data-force-state='focus'` reference) - hover only ever shows on
- * an inactive field, per explicit design feedback. Hover sets `background-color` only, never the
- * `background` shorthand, so it keeps the autofill tint layer (see Autofill below).
+ * an inactive field, per explicit design feedback. The `background` shorthand also clears the
+ * autofill tint, so hover replaces it (see Autofill below).
  */
 .root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background-color: var(--color-elevation-surface-raised-hover);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -136,7 +136,7 @@
 }
 
 .context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background-color: var(--color-elevation-surface-raised-hover);
+  background: var(--color-elevation-surface-raised-hover);
 }
 
 /*
@@ -181,19 +181,20 @@
 }
 
 /*
- * Autofill, confirmed from Figma's `state=autofill` variants (re-checked 2026-10-13): the frame
- * layers the translucent `--color-background-autofill-default` over
- * `--color-elevation-surface-raised-default`, and keeps each context's resting stroke - 1px
- * `--color-border-input` on context=default, none on context=inline. So context=inline, transparent
- * at rest, shows the raised surface while autofilled. The tint is a background-image layer, so the
- * hover rules above still change the surface under it, and focus/invalid still change the border.
- * A disabled field shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only
- * pin for Storybook. No transition of its own: the surface change fades with `.root`'s existing
- * one, which the reduced-motion block already switches off.
+ * Autofill. Figma's `state=autofill` layers the translucent `--color-background-autofill-default`
+ * over `--color-elevation-surface-raised-default` and keeps each context's resting stroke
+ * (re-checked 2026-10-13). Code follows it with two differences, per explicit design feedback:
+ * - Hover replaces the tint. The hover rules above outrank this one and set the `background`
+ *   shorthand, which clears it.
+ * - context=inline stays chromeless at rest, like any inline field, and shows the tint only while
+ *   focused or invalid. Figma's inline variant shows it at rest.
+ * The stroke is never touched, so focus and invalid borders show over the tint. A disabled field
+ * shows its disabled look instead. `[data-force-state='autofill']` is the documentation-only pin.
+ * No transition of its own: the change fades with `.root`'s, which reduced motion switches off.
  */
-.root:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']) {
-  background-color: var(--color-elevation-surface-raised-default);
-  background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));
+.context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']),
+.context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):is(:focus-within, [data-invalid='true']:not(:hover)) {
+  background: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default)), var(--color-elevation-surface-raised-default);
 }
 
 /*
@@ -334,7 +335,7 @@
 }
 
 .root[data-editable-cell]:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
-  background-color: var(--color-background-neutral-overlay-bold-hover);
+  background: var(--color-background-neutral-overlay-bold-hover);
   border-radius: 0;
 }
 

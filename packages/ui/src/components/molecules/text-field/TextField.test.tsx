@@ -233,31 +233,43 @@ describe('TextField', () => {
 
   it('has one inline look, Figma\'s: no separate chromeless-without-hover duplicate', () => {
     expect(textFieldCss).not.toMatch(/appearance_/);
-    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background-color: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
   });
 
   describe('autofill', () => {
     const css = textFieldCss.replace(/\/\*[\s\S]*?\*\//g, '');
-    const frameRule = css.match(
-      /\.root:not\(\[data-disabled='true'\]\):is\(:has\(\.input:autofill\), \[data-force-state='autofill'\]\)\s*\{([^}]*)\}/,
-    );
+    const frameRule = css.match(/([^{}]*:has\(\.input:autofill\)[^{}]*)\{([^}]*)\}/);
+    // Split the selector list at its top-level commas, not the ones inside :is().
+    const selectors = frameRule?.[1].trim().split(/,\s*(?=\.context_)/) ?? [];
     const inputRule = css.match(/\.input:autofill\s*\{([^}]*)\}/);
 
-    it('layers the autofill token over the raised surface when the input is autofilled or pinned, except when disabled', () => {
-      expect(frameRule?.[1]).toContain('background-color: var(--color-elevation-surface-raised-default);');
-      expect(frameRule?.[1]).toContain(
-        'background-image: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default));',
+    it('layers the autofill token over the raised surface, as Figma does', () => {
+      expect(frameRule?.[2]).toContain(
+        'background: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default)), var(--color-elevation-surface-raised-default);',
+      );
+    });
+
+    it('shows the tint on context=default whenever the input is autofilled or pinned, except when disabled', () => {
+      expect(selectors[0]).toBe(".context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill'])");
+    });
+
+    it('keeps context=inline chromeless at rest: the tint shows only while focused, or invalid and not hovered', () => {
+      expect(selectors).toHaveLength(2);
+      expect(selectors[1]).toBe(
+        ".context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):is(:focus-within, [data-invalid='true']:not(:hover))",
       );
     });
 
     it("keeps each context's resting stroke, as Figma does", () => {
-      expect(frameRule?.[1]).not.toMatch(/border|box-shadow/);
+      expect(frameRule?.[2]).not.toMatch(/border|box-shadow/);
     });
 
-    it('keeps the tint through hover: hover rules set background-color, never the shorthand that clears the tint layer', () => {
-      const hoverRules = [...css.matchAll(/([^{}]*:hover[^{}]*)\{([^}]*)\}/g)];
-      expect(hoverRules.length).toBeGreaterThan(0);
-      for (const [, , body] of hoverRules) expect(body).not.toMatch(/(^|[\s;])background\s*:/);
+    it('lets hover replace the tint: the hover rules outrank it and set the background shorthand, which clears it', () => {
+      const hoverRule = (context: string) =>
+        css.match(new RegExp(`\\.${context}:not\\(\\[data-disabled='true'\\]\\):not\\(:focus-within\\)[^{]*:is\\(:hover, \\[data-force-state='hover'\\]\\)\\s*\\{([^}]*)\\}`))?.[1];
+
+      expect(hoverRule('root')).toContain('background: var(--color-elevation-surface-raised-hover);');
+      expect(hoverRule('context_inline')).toContain('background: var(--color-elevation-surface-raised-hover);');
     });
 
     it("hides the browser's own autofill fill by clipping the input's background to its text", () => {

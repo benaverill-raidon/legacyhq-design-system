@@ -61,8 +61,9 @@ Live pseudo-classes (`:hover`, `:focus`, `:autofill`) with a documentation-only 
 pin. `typing` and `filled` (Figma states) need no distinct styling — they render as default/focus.
 Figma's `autofill` layers `color/background/autofill/default` over the raised surface in both
 contexts, keeping each context's resting stroke; code applies it when the textarea matches
-`:autofill`, hides the browser's own autofill fill (background clipped to the text), and keeps the
-tint through hover and focus.
+`:autofill` and hides the browser's own autofill fill (background clipped to the text). Per design
+feedback: hover replaces the tint, focus and invalid keep it, and `context=inline` stays chromeless
+at rest, showing the tint only while focused or invalid (a deliberate difference from Figma).
 
 ---
 
@@ -115,9 +116,11 @@ exactly as Figma binds it.
   hover/focus/invalid, keeps padding and top radius ✓
 - Key Value Pair embedding with inline TextArea + iconAfter ✓
 - autofill (pinned, 2026-10-13): raised surface + `rgba(0, 54, 85, 0.08)` tint in light,
-  `rgba(106, 173, 212, 0.08)` in dark; `border/input` 1px on default, no visible line on inline;
-  matches Figma's md variants in both contexts ✓. The browser's own fill being hidden needs a real
-  autofill (Edge Cases) - not checked in Storybook's automated pass
+  `rgba(106, 173, 212, 0.08)` in dark; `border/input` 1px on default ✓. Real browser autofill
+  (Edge Cases) hides the browser's own fill - confirmed by hand 2026-10-14 ✓
+- autofill design feedback (2026-10-14): hover shows `raised/hover` with no tint; focus and invalid
+  keep the tint under their border; inline is transparent at rest and tinted while focused or
+  invalid (not hovered) ✓
 
 ---
 

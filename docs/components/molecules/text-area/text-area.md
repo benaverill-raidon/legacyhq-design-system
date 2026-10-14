@@ -44,8 +44,9 @@ once there's a real use case - the same note Text Field carries - but isn't part
   reference, the same convention Text Field, Button, and Checkbox use.
 - When the browser autofills the field (a saved address, say), the frame shows Figma's
   `state=autofill`, the same as Text Field: the translucent `color-background-autofill-default` tint
-  over the raised surface, in both contexts. The browser's own autofill fill is hidden, so the field
-  looks the same in every browser, and hover, focus, and invalid still apply while it's on.
+  over the raised surface. Hover replaces the tint with the ordinary hover background.
+  `context="inline"` stays chromeless at rest and shows the tint only while focused or invalid. The
+  browser's own autofill fill is hidden, so the field looks the same in every browser.
 - Selected text is tinted with the shared `color-content-highlight` token - a translucent brand
   `::selection` background applied identically across Text Field, Text Area, and Rich Text Area
   (background only; the text color is left untouched).

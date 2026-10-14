@@ -133,7 +133,7 @@ export const States: Story = {
           <Cell label="Focus">
             <TextField context={context} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
           </Cell>
-          <Cell label="Autofill">
+          <Cell label={context === 'inline' ? 'Autofill (tint shows on focus)' : 'Autofill'}>
             <TextField context={context} defaultValue="jordan.lee@example.com" aria-label="Autofill" data-force-state="autofill" />
           </Cell>
           <Cell label="Invalid">

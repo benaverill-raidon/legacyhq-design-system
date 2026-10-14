@@ -140,7 +140,7 @@ export const States: Story = {
           <Cell label="Focus">
             <TextArea context={context} rows={3} placeholder="Placeholder" aria-label="Focus" data-force-state="focus" />
           </Cell>
-          <Cell label="Autofill">
+          <Cell label={context === 'inline' ? 'Autofill (tint shows on focus)' : 'Autofill'}>
             <TextArea context={context} rows={3} defaultValue={'221 Main Street\nApartment 4'} aria-label="Autofill" data-force-state="autofill" />
           </Cell>
           <Cell label="Invalid">

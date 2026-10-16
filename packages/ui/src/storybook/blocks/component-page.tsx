@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Story } from '@storybook/addon-docs/blocks';
 import { CheckIcon, CloseIcon } from '../../assets/icons';
 import { componentCss } from './component-css';
-import { headerFacts, propRows, registryEntry, rootClassOf, tokenRows, TOKEN_FAMILIES } from './component-page-data';
-import type { ComponentPageSection, DocgenInfo, PropRow } from './component-page-data';
+import { headerFacts, placePins, propRows, registryEntry, rootClassOf, tokenRows, TOKEN_FAMILIES } from './component-page-data';
+import type { ComponentPageSection, DocgenInfo, PinBox, PropRow } from './component-page-data';
 import { breakable, Code, doc, DocHeader, DocPage, DocSubsection } from './doc-page';
 import styles from './component-page.module.css';
 
@@ -103,26 +103,21 @@ export function Part(_props: PartProps) {
   return null;
 }
 
-type Box = { x: number; y: number; width: number; height: number };
-
-/** How far above the specimen (or below its root) the part numbers sit, in px. */
-const PIN_LIFT = 40;
-
-const contains = (outer: Box, inner: Box) =>
-  outer !== inner && outer.x <= inner.x && outer.y <= inner.y && outer.x + outer.width >= inner.x + inner.width && outer.y + outer.height >= inner.y + inner.height;
-
 /**
  * A live specimen with each part outlined and numbered, and the numbered list beside it. Parts are
  * found by their CSS-module class; one that isn't found is listed as missing, so a renamed class
- * shows on the page. A part that holds others (the root) is numbered below the specimen.
+ * shows on the page. Placement is placePins': numbers above a row of parts (the root's below), or to
+ * the left of a column of them.
  */
 export function Anatomy({ specimen, children }: { specimen: React.ReactNode; children: React.ReactNode }) {
   const parts = React.Children.toArray(children)
     .filter((child): child is React.ReactElement<PartProps> => React.isValidElement(child) && child.type === Part)
     .map((child) => child.props);
   const stageRef = React.useRef<HTMLDivElement>(null);
-  const [boxes, setBoxes] = React.useState<Array<Box | null>>([]);
+  const [boxes, setBoxes] = React.useState<Array<PinBox | null>>([]);
   const targets = parts.map((part) => part.target ?? '').join(' ');
+  const pins = placePins(boxes);
+  const side = pins.some((pin) => pin?.side === 'left');
 
   React.useLayoutEffect(() => {
     const stage = stageRef.current;
@@ -143,26 +138,22 @@ export function Anatomy({ specimen, children }: { specimen: React.ReactNode; chi
     observer.observe(stage);
     void document.fonts?.ready.then(measure);
     return () => observer.disconnect();
-  }, [targets]);
+    // Re-measure when the side layout's extra room moves the specimen.
+  }, [targets, side]);
 
-  const specimenTop = Math.min(...boxes.map((box) => box?.y ?? Infinity));
   return (
     <div className={styles.anatomy}>
-      <div ref={stageRef} className={`${styles.stage} ${styles.anatomyStage}`}>
+      <div ref={stageRef} className={`${styles.stage} ${styles.anatomyStage} ${side ? styles.anatomyStageSide : ''}`}>
         <div className={styles.specimen}>{specimen}</div>
         {boxes.map((box, index) => {
-          if (!box) return null;
-          const below = boxes.some((other) => other && contains(box, other));
-          // Numbers sit in one row above the specimen (or below, for the root), each with a leader
-          // line to its part, so they never land on the specimen itself.
-          const top = below ? box.y + box.height : specimenTop - PIN_LIFT;
-          const height = below ? PIN_LIFT : box.y - top;
+          const pin = pins[index];
+          if (!box || !pin) return null;
           return (
             <React.Fragment key={index}>
               <span className={styles.outline} style={{ left: box.x, top: box.y, width: box.width, height: box.height }} aria-hidden="true" />
               <span
-                className={`${styles.pin} ${below ? styles.pinBelow : ''}`}
-                style={{ left: box.x + box.width / 2, top, height }}
+                className={`${styles.pin} ${styles[`pin_${pin.side}`]}`}
+                style={pin.side === 'left' ? { left: pin.x, top: pin.y, width: pin.length } : { left: pin.x, top: pin.y, height: pin.length }}
                 aria-hidden="true"
               >
                 <span className={styles.pinNumber}>{index + 1}</span>
@@ -356,16 +347,25 @@ function PropTable({ rows }: { rows: PropRow[] }) {
  * the table can't drift from the code. Deprecated props are listed after, with what replaces them.
  * `of` is the stories module, whose meta names the component; pass `component` instead for a second
  * component on the same page (Radio Group beside Radio). `native` names the element whose other
- * attributes the component forwards.
+ * attributes the component forwards; `classNameOn` names a different element when `className` goes
+ * elsewhere (Text Field passes attributes to its input and `className` to its frame).
  */
-export function PropsTable({ of, component, native }: { of?: StoriesModule; component?: unknown; native?: string }) {
+export function PropsTable({ of, component, native, classNameOn }: { of?: StoriesModule; component?: unknown; native?: string; classNameOn?: string }) {
   const { current, deprecated } = propRows(docgenOf(component ?? of?.default.component));
   return (
     <>
       <PropTable rows={current} />
       {native && (
         <p className={doc.caption}>
-          Any other <Code>{`<${native}>`}</Code> attribute is passed to the root element, and <Code>className</Code> is added to its classes.
+          {classNameOn ? (
+            <>
+              Any other <Code>{`<${native}>`}</Code> attribute is passed to the {native}, and <Code>className</Code> is added to the {classNameOn}.
+            </>
+          ) : (
+            <>
+              Any other <Code>{`<${native}>`}</Code> attribute is passed to the root element, and <Code>className</Code> is added to its classes.
+            </>
+          )}
         </p>
       )}
       {deprecated.length > 0 && (
@@ -424,6 +424,13 @@ export function TokensTable({ id, root }: { id: string; root?: string }) {
       </table>
     </div>
   );
+}
+
+// --- Code in prose ----------------------------------------------------------------------------
+
+/** A code sample in running prose, such as a value's shape. Pass the code as a string. */
+export function CodeSample({ code }: { code: string }) {
+  return <pre className={doc.codeBlock}>{code}</pre>;
 }
 
 // --- Related components -----------------------------------------------------------------------

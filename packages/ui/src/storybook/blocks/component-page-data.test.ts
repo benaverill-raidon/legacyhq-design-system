@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { broadest, figmaFact, formatDate, headerFacts, propRows, registryEntry, rootClassOf, splitDescription, tokenRows, whenOf } from './component-page-data';
+import { broadest, figmaFact, formatDate, headerFacts, isStacked, PIN_GAP, PIN_LIFT, placePins, propRows, registryEntry, rootClassOf, splitDescription, tokenRows, whenOf } from './component-page-data';
 
 const buttonCss: string = readFileSync('packages/ui/src/components/atoms/button/button.module.css', 'utf8');
 
@@ -21,6 +21,66 @@ describe('header facts', () => {
   it('lists the category label, the tier, and the Figma source', () => {
     expect(headerFacts(registryEntry('button'))).toEqual(['Actions', 'Atom', 'Figma: button, 176 variants, checked Sep 1, 2026']);
     expect(headerFacts(registryEntry('logo'))).toEqual(['Foundations', 'Primitive']);
+  });
+});
+
+describe('anatomy numbers', () => {
+  it('numbers a row of parts above the specimen, and the root below it', () => {
+    const root = { x: 0, y: 0, width: 200, height: 40 };
+    const leading = { x: 10, y: 12, width: 16, height: 16 };
+    const content = { x: 34, y: 10, width: 120, height: 20 };
+    const trailing = { x: 170, y: 12, width: 16, height: 16 };
+    const pins = placePins([root, leading, content, trailing, null]);
+    expect(pins[0]).toEqual({ x: 100, y: 40, length: PIN_LIFT, side: 'below' });
+    expect(pins.slice(1, 4).map((pin) => [pin?.x, pin?.side])).toEqual([
+      [18, 'above'],
+      [94, 'above'],
+      [178, 'above'],
+    ]);
+    expect(pins[1]).toMatchObject({ y: -PIN_LIFT, length: 12 + PIN_LIFT });
+    expect(pins[4]).toBeNull();
+  });
+
+  it('spreads numbers that would collide, as far as their parts allow', () => {
+    const wide = placePins([
+      { x: 0, y: 0, width: 16, height: 16 },
+      { x: 16, y: 0, width: 30, height: 16 },
+    ]);
+    expect(wide.map((pin) => pin?.x)).toEqual([8, 8 + PIN_GAP]);
+    // Two 16px icons side by side: the second number moves as far as its icon reaches.
+    const narrow = placePins([
+      { x: 0, y: 0, width: 16, height: 16 },
+      { x: 16, y: 0, width: 16, height: 16 },
+    ]);
+    expect(narrow.map((pin) => pin?.x)).toEqual([8, 28]);
+  });
+
+  it('numbers a column of parts on the left, and the part that holds them above its corner', () => {
+    const field = { x: 0, y: 0, width: 300, height: 100 };
+    const label = { x: 0, y: 0, width: 300, height: 20 };
+    const control = { x: 0, y: 28, width: 300, height: 40 };
+    const message = { x: 0, y: 76, width: 300, height: 24 };
+    expect(isStacked([field, label, control, message])).toBe(true);
+    const pins = placePins([field, label, control, message]);
+    expect(pins[0]).toEqual({ x: PIN_GAP / 2, y: -PIN_LIFT, length: PIN_LIFT, side: 'above' });
+    expect(pins.slice(1).map((pin) => [pin?.side, pin?.x, pin?.y])).toEqual([
+      ['left', -PIN_LIFT, 10],
+      ['left', -PIN_LIFT, 48],
+      ['left', -PIN_LIFT, 88],
+    ]);
+  });
+
+  it('numbers a part nested in a row above or below the specimen, not on another part', () => {
+    const field = { x: 0, y: 0, width: 300, height: 100 };
+    const label = { x: 0, y: 0, width: 120, height: 20 };
+    const required = { x: 110, y: 2, width: 8, height: 16 };
+    const control = { x: 0, y: 28, width: 300, height: 40 };
+    const message = { x: 0, y: 76, width: 300, height: 24 };
+    const icon = { x: 0, y: 80, width: 16, height: 16 };
+    const pins = placePins([field, label, required, control, message, icon]);
+    expect(pins.map((pin) => pin?.side)).toEqual(['above', 'left', 'above', 'left', 'left', 'below']);
+    expect(pins[2]).toMatchObject({ x: 114, y: -PIN_LIFT, length: 2 + PIN_LIFT });
+    expect(pins[5]).toMatchObject({ x: 8, y: 96, length: 4 + PIN_LIFT });
   });
 });
 
@@ -61,6 +121,12 @@ describe('design tokens', () => {
     expect(whenOf('.button.inverse:not(:disabled)', 'button')).toBe('inverse');
     expect(whenOf('.fullWidth', 'button')).toBe('full width');
     expect(whenOf(".root[aria-disabled='true']", 'root')).toBe('disabled');
+    expect(whenOf('.input:focus', 'root')).toBe('input · focus');
+    expect(whenOf(".root:has(.input:autofill), .root[data-force-state='autofill']", 'root')).toBe('input · autofill');
+    expect(whenOf(".root[data-editable-cell]:not([data-invalid='true']):is(:focus-within)", 'root')).toBe('editable cell · focus');
+    expect(whenOf(".root[data-context='inline'][data-size='md']", 'root')).toBe('inline · md');
+    expect(whenOf('.editor :global(.rta-active)', 'root')).toBe('editor · rta active');
+    expect(whenOf(".input:checked, .root[aria-checked='true']", 'root')).toBe('input · checked');
   });
 
   it("finds a stylesheet's root class: the first one it styles", () => {

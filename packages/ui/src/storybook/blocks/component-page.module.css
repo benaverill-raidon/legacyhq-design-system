@@ -154,23 +154,45 @@
   pointer-events: none;
 }
 
+.anatomyStageSide {
+  padding-inline-start: calc(var(--spacing-2xl) + var(--spacing-4xl));
+}
+
+/* A part's number and its leader line; placePins says where, and on which side. */
 .pin {
   position: absolute;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  transform: translateX(-50%);
   pointer-events: none;
 }
 
-.pinBelow {
+.pin_above {
+  flex-direction: column;
+  transform: translateX(-50%);
+}
+
+.pin_below {
   flex-direction: column-reverse;
+  transform: translateX(-50%);
+}
+
+.pin_left {
+  flex-direction: row;
+  transform: translateY(-50%);
 }
 
 .pinLine {
   flex: 1;
-  inline-size: var(--border-width-sm);
   background: var(--color-border-bolder);
+}
+
+.pin_above .pinLine,
+.pin_below .pinLine {
+  inline-size: var(--border-width-sm);
+}
+
+.pin_left .pinLine {
+  block-size: var(--border-width-sm);
 }
 
 .pinNumber,

@@ -81,9 +81,9 @@ import * as FieldStories from './Field.stories';
     </Field>
   }
 >
-  <Part name="root">The whole column, which stacks the label, the control, and the message.</Part>
+  <Part name="root" target={fieldStyles.root}>The whole column, which stacks the label, the control, and the message.</Part>
   <Part name="label" target={fieldStyles.label}>A native `label` pointing at the control. Left out when there's no `label`.</Part>
-  <Part name="required">The `*` after the label, shown when `required` is set. Decorative: the control's own `required` carries the meaning.</Part>
+  <Part name="required" target={fieldStyles.required}>The `*` after the label, shown when `required` is set. Decorative: the control's own `required` carries the meaning.</Part>
   <Part name="control" target={textFieldStyles.root}>The one control you pass as `children`, at full width. Field passes it the wiring it needs.</Part>
   <Part name="message" target={fieldStyles.message}>Helper, error, or success text, added to the control's description. Left out when there's no `message`.</Part>
   <Part name="messageIcon" target={fieldStyles.messageIcon}>A status icon before an error or success message. Decorative.</Part>

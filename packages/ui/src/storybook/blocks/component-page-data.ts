@@ -76,6 +76,91 @@ export function headerFacts(entry: RegistryEntry) {
   return [groupLabel(entry.category), titleCase(entry.tier), ...(figma ? [`Figma: ${figma}`] : [])];
 }
 
+// --- Anatomy ---------------------------------------------------------------------------------
+
+export type PinBox = { x: number; y: number; width: number; height: number };
+export type Pin = { x: number; y: number; length: number; side: 'above' | 'below' | 'left' };
+
+/** How far from the specimen the part numbers sit, and the least distance between two of them, in px. */
+export const PIN_LIFT = 40;
+export const PIN_GAP = 28;
+
+const holds = (outer: PinBox, inner: PinBox) =>
+  outer !== inner && outer.x <= inner.x && outer.y <= inner.y && outer.x + outer.width >= inner.x + inner.width && outer.y + outer.height >= inner.y + inner.height;
+
+/** Whether the parts sit in a column (any two overlap across most of the narrower one's width). */
+export function isStacked(boxes: PinBox[]) {
+  const leaves = boxes.filter((box) => !boxes.some((other) => holds(box, other)));
+  return leaves.some((a, i) =>
+    leaves.slice(i + 1).some((b) => {
+      const overlap = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
+      return overlap > Math.min(a.width, b.width) / 2;
+    }),
+  );
+}
+
+/** Spreads positions at least PIN_GAP apart, in order, keeping each inside its own [low, high] when it can. */
+function spread(items: Array<{ index: number; at: number; low: number; high: number }>) {
+  const placed = new Map<number, number>();
+  let previous = -Infinity;
+  for (const item of [...items].sort((a, b) => a.at - b.at)) {
+    const at = Math.min(Math.max(item.at, previous + PIN_GAP), Math.max(item.high, item.low));
+    placed.set(item.index, at);
+    previous = at;
+  }
+  return placed;
+}
+
+/**
+ * Where each part's number goes, with a leader line to the part. Parts in a row are numbered above
+ * the specimen, and a part that holds others (the root) below it. Parts in a column are numbered to
+ * the left, so a line never crosses another part, and a part that holds them is numbered above its
+ * top-left corner. Numbers that would collide are spread apart.
+ */
+export function placePins(boxes: Array<PinBox | null>): Array<Pin | null> {
+  const present = boxes.filter((box): box is PinBox => Boolean(box));
+  if (!present.length) return boxes.map(() => null);
+  const isContainer = (box: PinBox) => present.some((other) => holds(box, other));
+  const top = Math.min(...present.map((box) => box.y));
+  const left = Math.min(...present.map((box) => box.x));
+  const inset = 4;
+  const across = (pick: (box: PinBox) => boolean, at: (box: PinBox) => number) =>
+    spread(boxes.flatMap((box, index) => (box && pick(box) ? [{ index, at: at(box), low: box.x + inset, high: box.x + box.width - inset }] : [])));
+
+  if (isStacked(present)) {
+    // The outermost part (holding all the others) is numbered above its corner; the rows it stacks
+    // are numbered on the left; a part nested inside a row is numbered above the specimen when it's
+    // in the first row, otherwise below it.
+    const outer = present.find((box) => present.every((other) => other === box || holds(box, other)));
+    const isRow = (box: PinBox) => box !== outer && !present.some((other) => other !== outer && holds(other, box));
+    const firstRowTop = Math.min(...present.filter(isRow).map((box) => box.y));
+    const bottom = Math.max(...present.map((box) => box.y + box.height));
+    const parentOf = (box: PinBox) => present.find((other) => other !== outer && holds(other, box));
+    const nestedAbove = (box: PinBox) => !isRow(box) && box !== outer && parentOf(box)?.y === firstRowTop;
+    const ys = spread(boxes.flatMap((box, index) => (box && isRow(box) ? [{ index, at: box.y + box.height / 2, low: box.y + inset, high: box.y + box.height - inset }] : [])));
+    const corners = across((box) => box === outer, (box) => box.x + PIN_GAP / 2);
+    const nestedTop = across(nestedAbove, (box) => box.x + box.width / 2);
+    const nestedBottom = across((box) => !isRow(box) && box !== outer && !nestedAbove(box), (box) => box.x + box.width / 2);
+    const x = left - PIN_LIFT;
+    return boxes.map((box, index) => {
+      if (!box) return null;
+      if (corners.has(index)) return { x: corners.get(index)!, y: box.y - PIN_LIFT, length: PIN_LIFT, side: 'above' };
+      if (nestedTop.has(index)) return { x: nestedTop.get(index)!, y: top - PIN_LIFT, length: box.y - (top - PIN_LIFT), side: 'above' };
+      if (nestedBottom.has(index)) return { x: nestedBottom.get(index)!, y: box.y + box.height, length: bottom - (box.y + box.height) + PIN_LIFT, side: 'below' };
+      return { x, y: ys.get(index)!, length: box.x - x, side: 'left' };
+    });
+  }
+
+  const above = across((box) => !isContainer(box), (box) => box.x + box.width / 2);
+  const below = across(isContainer, (box) => box.x + box.width / 2);
+  return boxes.map((box, index) => {
+    if (!box) return null;
+    if (below.has(index)) return { x: below.get(index)!, y: box.y + box.height, length: PIN_LIFT, side: 'below' };
+    const y = top - PIN_LIFT;
+    return { x: above.get(index)!, y, length: box.y - y, side: 'above' };
+  });
+}
+
 // --- API -------------------------------------------------------------------------------------
 
 /** The shape of one prop in the `__docgenInfo` Storybook's react-docgen plugin attaches. */
@@ -160,13 +245,19 @@ export const BASE = 'base';
 /** States a selector puts the component in, as page words. Order is the order they're listed. */
 const STATES: Array<[RegExp, string]> = [
   [/:hover|\[data-force-state='hover'\]/, 'hover'],
-  [/:focus-visible|:focus-within|\[data-force-state='focus'\]/, 'focus'],
+  [/:focus-visible|:focus-within|:focus(?![\w-])|\[data-force-state='focus'\]/, 'focus'],
   [/:active|\[data-force-state='press'\]/, 'pressed'],
-  [/\[data-expanded='true'\]/, 'expanded'],
+  [/:checked|\[aria-checked='true'\]|\[data-checked='true'\]/, 'checked'],
+  [/\[aria-selected='true'\]|\[aria-pressed='true'\]|\[data-selected='true'\]/, 'selected'],
+  [/\[data-expanded='true'\]|\[aria-expanded='true'\]/, 'expanded'],
+  [/:autofill|\[data-force-state='autofill'\]/, 'autofill'],
   [/\[data-loading='true'\]/, 'loading'],
-  [/\[data-invalid='true'\]/, 'invalid'],
+  [/\[data-invalid='true'\]|\[aria-invalid='true'\]/, 'invalid'],
   [/:disabled|\[data-disabled='true'\]|\[aria-disabled='true'\]/, 'disabled'],
 ];
+
+/** Data attributes that are states (above), not modes; any other `[data-x]` names a mode. */
+const STATE_ATTRIBUTES = new Set(['force-state', 'checked', 'selected', 'expanded', 'loading', 'invalid', 'disabled']);
 
 /** Removes `:not(...)` so what a selector excludes doesn't read as a state it's in. */
 const withoutNot = (selector: string) => {
@@ -207,10 +298,15 @@ const selectorList = (selectors: string) => {
  * says nothing. A disabled rule reads as just disabled, since disabled wins over hover and press.
  */
 export function whenOf(selector: string, rootClass: string) {
-  const plain = withoutNot(selector).replace(/:global\([^)]*\)/g, '');
+  // `:global(.x)` is a class like any other; `:not(...)` says what the rule excludes, not a state.
+  const plain = withoutNot(selector).replace(/:global\(([^)]*)\)/g, '$1');
+  const words = (name: string) => name.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/-/g, ' ').toLowerCase();
   const classes = [...plain.matchAll(/\.([A-Za-z][\w-]*)/g)].map(([, name]) => name).filter((name) => name !== rootClass);
-  const words = (name: string) => name.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
-  const values = [...new Set(classes.map((name) => (name.includes('_') ? name.split('_').slice(1).join(' ') : words(name))))];
+  // `[data-editable-cell]` -> editable cell; `[data-context='inline']` -> inline.
+  const modes = [...plain.matchAll(/\[data-([\w-]+)(?:=['"]?([^'"\]]+)['"]?)?\]/g)]
+    .filter(([, name]) => !STATE_ATTRIBUTES.has(name))
+    .map(([, name, value]) => (value && value !== 'true' ? value : words(name)));
+  const values = [...new Set([...classes.map((name) => (name.includes('_') ? name.split('_').slice(1).join(' ') : words(name))), ...modes])];
   const states = STATES.filter(([pattern]) => pattern.test(plain)).map(([, label]) => label);
   const shown = states.includes('disabled') ? ['disabled'] : states;
   return [...values, ...(shown.length ? [shown.join(' / ')] : [])].join(' · ') || BASE;

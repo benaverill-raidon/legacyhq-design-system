@@ -60,6 +60,7 @@ describe('design tokens', () => {
     expect(whenOf('.prominence_tertiary:disabled:hover', 'button')).toBe('tertiary · disabled');
     expect(whenOf('.button.inverse:not(:disabled)', 'button')).toBe('inverse');
     expect(whenOf('.fullWidth', 'button')).toBe('full width');
+    expect(whenOf(".root[aria-disabled='true']", 'root')).toBe('disabled');
   });
 
   it("finds a stylesheet's root class: the first one it styles", () => {
@@ -87,5 +88,21 @@ describe('design tokens', () => {
     // An open menu trigger keeps the hover fill.
     expect(find('color-background-brand-primary-bold-hover', 'background')?.when).toEqual(['primary · hover / focus / expanded']);
     expect(find('fade-quick', 'transition')?.when).toEqual(['base']);
+  });
+
+  it("follows a stylesheet's own custom properties instead of listing them, and files component tokens", () => {
+    const rows = tokenRows(
+      `.root {
+  --root-size: var(--component-slider-handle-width-md);
+  --other-radius: var(--border-radius-sm);
+  inline-size: var(--root-size);
+  border-radius: var(--other-radius);
+}`,
+      'root',
+    );
+    expect(rows.map(({ family, token, property }) => `${family}: ${token} -> ${property}`)).toEqual([
+      'Radius: border-radius-sm -> border-radius',
+      'Component: component-slider-handle-width-md -> inline-size',
+    ]);
   });
 });

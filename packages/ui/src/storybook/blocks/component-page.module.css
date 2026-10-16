@@ -93,6 +93,15 @@
   background: var(--color-elevation-surface-raised-default);
 }
 
+/* The header's example: several items sit in a row, wrapping, rather than stacking. */
+.headerStage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: center;
+}
+
 .example {
   display: grid;
   gap: var(--spacing-sm);

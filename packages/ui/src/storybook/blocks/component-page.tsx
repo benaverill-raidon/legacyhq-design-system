@@ -30,7 +30,7 @@ export function ComponentHeader({ id, example, children }: { id: string; example
   return (
     <div className={styles.header}>
       <DocHeader title={displayName(entry.name)} lede={children} context={headerFacts(entry).join(' · ')} />
-      {example && <div className={styles.stage}>{example}</div>}
+      {example && <div className={`${styles.stage} ${styles.headerStage}`}>{example}</div>}
     </div>
   );
 }

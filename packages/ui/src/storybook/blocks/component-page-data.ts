@@ -129,9 +129,9 @@ export function propRows(info: DocgenInfo | undefined) {
 
 // --- Design tokens ---------------------------------------------------------------------------
 
-export type TokenFamily = 'Color' | 'Typography' | 'Spacing' | 'Size' | 'Radius' | 'Border width' | 'Motion' | 'Elevation' | 'Other';
+export type TokenFamily = 'Color' | 'Typography' | 'Spacing' | 'Size' | 'Radius' | 'Border width' | 'Motion' | 'Elevation' | 'Component' | 'Other';
 
-export const TOKEN_FAMILIES: TokenFamily[] = ['Color', 'Typography', 'Spacing', 'Size', 'Radius', 'Border width', 'Motion', 'Elevation', 'Other'];
+export const TOKEN_FAMILIES: TokenFamily[] = ['Color', 'Typography', 'Spacing', 'Size', 'Radius', 'Border width', 'Motion', 'Elevation', 'Component', 'Other'];
 
 export const familyOf = (token: string): TokenFamily =>
   token.startsWith('color-')
@@ -150,7 +150,9 @@ export const familyOf = (token: string): TokenFamily =>
                 ? 'Motion'
                 : token.startsWith('elevation-')
                   ? 'Elevation'
-                  : 'Other';
+                  : token.startsWith('component-')
+                    ? 'Component'
+                    : 'Other';
 
 /** The condition of a rule on the root class alone. */
 export const BASE = 'base';
@@ -163,7 +165,7 @@ const STATES: Array<[RegExp, string]> = [
   [/\[data-expanded='true'\]/, 'expanded'],
   [/\[data-loading='true'\]/, 'loading'],
   [/\[data-invalid='true'\]/, 'invalid'],
-  [/:disabled|\[data-disabled='true'\]/, 'disabled'],
+  [/:disabled|\[data-disabled='true'\]|\[aria-disabled='true'\]/, 'disabled'],
 ];
 
 /** Removes `:not(...)` so what a selector excludes doesn't read as a state it's in. */
@@ -249,13 +251,15 @@ export function tokenRows(css: string, rootClass: string): TokenRow[] {
   const readersOf = (custom: string) =>
     [...new Set(rules.flatMap(({ declarations }) => declarations.filter(({ value }) => new RegExp(`var\\(\\s*${custom}\\b`).test(value)).map(({ property }) => property)))];
 
+  // The stylesheet's own custom properties aren't tokens: they're followed to what reads them.
+  const declared = new Set(rules.flatMap(({ declarations }) => declarations.map(({ property }) => property).filter((property) => property.startsWith('--'))));
   const rows = new Map<string, TokenRow>();
   for (const { selectors, declarations } of rules) {
     if (selectors.startsWith('@') || /^(from|to|\d+%)$/.test(selectors)) continue;
     const when = selectorList(selectors).map((selector) => whenOf(selector, rootClass));
     for (const { property, value } of declarations) {
       for (const [, token] of value.matchAll(/var\(\s*--([\w-]+)/g)) {
-        if (token.startsWith(`${rootClass}-`)) continue;
+        if (declared.has(`--${token}`)) continue;
         const role = typographyRole(token);
         const properties = role ? ['font'] : property.startsWith('--') ? readersOf(property).filter((reader) => !reader.startsWith('--')) : [property];
         for (const used of properties.length ? properties : [property]) {

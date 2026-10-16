@@ -27,13 +27,14 @@ export interface LinkButtonProps
    */
   isInverse?: boolean;
   /**
-   * Anchors have no native `disabled`, so this sets `aria-disabled`, removes the link from the tab
-   * order, and ignores clicks. The `href` stays in the markup.
+   * Anchors have no native `disabled`, so this removes the `href` (nothing can open it, not even the
+   * context menu), sets `aria-disabled`, and takes the link out of the tab order.
    */
   isDisabled?: boolean;
   /**
-   * Shows a Spinner over the content without changing the size, sets `aria-busy`, and ignores clicks,
-   * so the link doesn't navigate. The label stays the accessible name.
+   * Shows a Spinner over the content without changing the size, sets `aria-busy` and `aria-disabled`,
+   * and removes the `href` so the link can't be opened. It stays focusable, and the label stays the
+   * accessible name.
    */
   isLoading?: boolean;
   /** An icon before the label, to support it, never to replace it. */
@@ -46,6 +47,8 @@ export interface LinkButtonProps
   target?: React.HTMLAttributeAnchorTarget;
   /** The native `rel`. When set, it replaces the `noopener noreferrer` default for `_blank`. */
   rel?: string;
+  /** Hidden text read after the label when `target="_blank"`. Defaults to "(opens in a new tab)". */
+  newTabLabel?: string;
   /** Not called while the link button is disabled or loading. */
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }

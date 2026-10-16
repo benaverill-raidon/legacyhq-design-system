@@ -114,7 +114,7 @@ export const IconButton = React.memo(
         disabled={disabled}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
-        aria-expanded={isExpanded ? true : ariaExpanded}
+        aria-expanded={isExpanded != null ? isExpanded : ariaExpanded}
         aria-busy={isLoading ? true : undefined}
         aria-disabled={isLoading ? true : undefined}
         data-loading={isLoading ? 'true' : undefined}

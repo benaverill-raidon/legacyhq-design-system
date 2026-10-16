@@ -71,6 +71,8 @@ interface ToggleButtonProps
   size?: ToggleButtonSize;
   tone?: ToggleButtonTone;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   iconBefore?: React.ReactNode;
   iconAfter?: React.ReactNode;
@@ -84,7 +86,7 @@ interface ToggleButtonProps
 size: md
 tone: default
 isSelected: false
-isDisabled: false
+disabled: false
 type: button
 ```
 

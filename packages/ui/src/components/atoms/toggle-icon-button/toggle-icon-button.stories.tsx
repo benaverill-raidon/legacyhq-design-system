@@ -23,7 +23,7 @@ const meta = {
     tone: 'default',
     shape: 'square',
     isSelected: false,
-    isDisabled: false,
+    disabled: false,
     'aria-label': 'Grid view',
     children: <LayoutTwoColumnsSidebarLeftIcon />,
   },
@@ -32,7 +32,7 @@ const meta = {
     tone: { control: 'inline-radio', options: ['default', 'subtle'] },
     shape: { control: 'inline-radio', options: ['square', 'round'] },
     isSelected: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     children: { control: false },
     className: { control: false },
     onClick: { control: false },
@@ -199,7 +199,7 @@ export const States: Story = {
           </ToggleIconButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleIconButton aria-label="Grid view" isDisabled>
+          <ToggleIconButton aria-label="Grid view" disabled>
             <LayoutTwoColumnsSidebarLeftIcon />
           </ToggleIconButton>
         </Cell>
@@ -227,7 +227,7 @@ export const States: Story = {
           </ToggleIconButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleIconButton aria-label="Grid view" isSelected isDisabled>
+          <ToggleIconButton aria-label="Grid view" isSelected disabled>
             <LayoutTwoColumnsSidebarLeftIcon />
           </ToggleIconButton>
         </Cell>
@@ -334,7 +334,7 @@ export const EdgeCases: Story = {
             <ToggleIconButton aria-label="Subtle" tone="subtle">
               <LayoutTwoColumnsSidebarLeftIcon />
             </ToggleIconButton>
-            <ToggleIconButton aria-label="Disabled" isDisabled>
+            <ToggleIconButton aria-label="Disabled" disabled>
               <LayoutTwoColumnsSidebarLeftIcon />
             </ToggleIconButton>
           </div>

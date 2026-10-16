@@ -15,14 +15,14 @@ const meta = {
     size: 'md',
     tone: 'default',
     isSelected: false,
-    isDisabled: false,
+    disabled: false,
   },
   argTypes: {
     children: { control: 'text' },
     size: { control: 'inline-radio', options: sizes },
     tone: { control: 'inline-radio', options: ['default', 'subtle'] },
     isSelected: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     iconBefore: { control: false },
     iconAfter: { control: false },
     className: { control: false },
@@ -169,7 +169,7 @@ export const States: Story = {
           <ToggleButton data-force-state="press">Label</ToggleButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleButton isDisabled>Label</ToggleButton>
+          <ToggleButton disabled>Label</ToggleButton>
         </Cell>
       </Group>
 
@@ -193,7 +193,7 @@ export const States: Story = {
           </ToggleButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleButton isSelected isDisabled>
+          <ToggleButton isSelected disabled>
             Label
           </ToggleButton>
         </Cell>
@@ -300,7 +300,7 @@ export const EdgeCases: Story = {
             <ToggleButton>Unselected</ToggleButton>
             <ToggleButton isSelected>Selected</ToggleButton>
             <ToggleButton tone="subtle">Subtle</ToggleButton>
-            <ToggleButton isDisabled>Disabled</ToggleButton>
+            <ToggleButton disabled>Disabled</ToggleButton>
           </div>
         </div>
       </section>

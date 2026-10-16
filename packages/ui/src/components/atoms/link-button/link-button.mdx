@@ -136,17 +136,18 @@ technology it's busy, and the link stays in the tab order.
 
 <Subsection title="Disabled">
 
-Anchors have no `disabled` attribute, so `isDisabled` sets `aria-disabled="true"`, takes the link
-out of the tab order, and ignores clicks. The `href` stays, so the browser's own ways of opening a
-link, such as its context menu, still reach the destination. If a page must be unreachable, guard
-the route too.
+Anchors have no `disabled` attribute, so `isDisabled` removes the `href`, sets
+`aria-disabled="true"`, and takes the link out of the tab order. With no `href`, nothing can open it:
+not a click, a middle click, or the browser's context menu. A loading link button works the same
+way, except that it stays focusable.
 
 </Subsection>
 
 <Subsection title="Opening in a new tab">
 
-With `target="_blank"` and no `rel`, Link Button adds `rel="noopener noreferrer"`. A `rel` you pass
-replaces that default rather than adding to it, so pass one only when you need something else.
+With `target="_blank"`, Link Button adds hidden text after the label, "(opens in a new tab)" (set it
+with `newTabLabel`), and, with no `rel`, adds `rel="noopener noreferrer"`. A `rel` you pass replaces
+that default rather than adding to it, so pass one only when you need something else.
 
 </Subsection>
 
@@ -208,11 +209,12 @@ signals at once.
   new tab, and shows where it goes. Don't give it `role="button"`.
 - The visible label is the accessible name. Name the destination ("View invoice", not "Click
   here"). The icons are hidden from assistive technology.
-- `isDisabled` sets `aria-disabled="true"` and `tabindex="-1"`, so the link leaves the tab order
-  and assistive technology reports it as unavailable.
-- A loading link button stays focusable, with `aria-busy`, and its label stays its accessible name.
-- With `target="_blank"`, Link Button adds no hidden "opens in a new tab" text, unlike Link. Say so
-  in the label or nearby text when it matters.
+- `isDisabled` removes the `href` and sets `aria-disabled="true"` and `tabindex="-1"`, so the link
+  leaves the tab order and assistive technology reports it as unavailable.
+- A loading link button stays focusable, with `aria-busy` and `aria-disabled`, and its label stays
+  its accessible name.
+- With `target="_blank"`, the accessible name ends with "(opens in a new tab)", in hidden text, as on
+  Link.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the link button. A disabled one is skipped.</Key>
@@ -234,10 +236,7 @@ Every token Link Button's stylesheet uses, by family, with the property it sets 
 the link button with no modifiers; a token listed for an appearance applies to every tone of it
 unless a tone overrides it.
 
-Link Button's disabled rules key off `aria-disabled`, which this table doesn't read as a state yet,
-so the three `-disabled` tokens show under their appearances: they apply only while `isDisabled` is
-set. Under Other, `button-border-radius` is the stylesheet's own variable for the corner radius,
-set per size from the radius tokens.
+
 
 <TokensTable id="link-button" />
 

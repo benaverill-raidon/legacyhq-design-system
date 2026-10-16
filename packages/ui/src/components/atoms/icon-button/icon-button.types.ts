@@ -27,8 +27,8 @@ export interface IconButtonProps
    */
   isLoading?: boolean;
   /**
-   * Whether the menu or panel this button opens is open. While `true`, sets `aria-expanded` and keeps
-   * the hover fill. While `false`, it sets no `aria-expanded` of its own.
+   * Whether the menu or panel this button opens is open. Sets `aria-expanded` to match, and keeps the
+   * hover fill while open. Leave it unset on a button that doesn't open anything.
    */
   isExpanded?: boolean;
   /**

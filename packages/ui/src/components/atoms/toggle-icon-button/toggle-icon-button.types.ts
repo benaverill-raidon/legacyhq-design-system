@@ -7,7 +7,7 @@ export type ToggleIconButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 export type ToggleIconButtonShape = 'square' | 'round';
 
 export interface ToggleIconButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** The square's side and its corner radius, on the same control heights as Icon Button. */
   size?: ToggleIconButtonSize;
   /**
@@ -23,9 +23,11 @@ export interface ToggleIconButtonProps
    */
   isSelected?: boolean;
   /**
-   * Sets the native `disabled` attribute: the button leaves the tab order and ignores clicks. It
-   * overrides the selected look; `aria-pressed` stays.
+   * The native attribute: the button leaves the tab order and ignores clicks. It overrides the
+   * selected look; `aria-pressed` stays.
    */
+  disabled?: boolean;
+  /** @deprecated Use the native `disabled`, as every other control does. Still accepted. */
   isDisabled?: boolean;
   /** The icon. It's hidden from assistive technology, so name the button with `aria-label`. */
   children: React.ReactNode;

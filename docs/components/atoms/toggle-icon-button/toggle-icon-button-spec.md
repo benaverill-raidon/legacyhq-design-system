@@ -73,6 +73,8 @@ interface ToggleIconButtonProps
   tone?: ToggleIconButtonTone;
   shape?: ToggleIconButtonShape;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   children: React.ReactNode;
 }
@@ -86,7 +88,7 @@ const defaultProps = {
   tone: 'default',
   shape: 'square',
   isSelected: false,
-  isDisabled: false,
+  disabled: false,
   type: 'button',
 };
 ```
@@ -341,7 +343,7 @@ size
 tone
 shape
 isSelected
-isDisabled
+disabled
 aria-label
 ```
 

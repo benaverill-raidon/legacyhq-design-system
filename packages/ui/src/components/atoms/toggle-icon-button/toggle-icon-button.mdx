@@ -139,7 +139,7 @@ tooltip shows on a disabled one too. The `aria-label` stays the name either way.
 
 <Subsection title="Disabled">
 
-`isDisabled` sets the native `disabled` attribute, so the button leaves the tab order and ignores
+`disabled` is the native attribute, so the button leaves the tab order and ignores
 clicks. Disabled looks the same selected or not, but `aria-pressed` still reports the state.
 
 </Subsection>
@@ -221,8 +221,7 @@ only its fill, to the selected hover and press fills.
   `role="switch"`.
 - When it's wrapped in Tooltip, the tooltip is linked with `aria-describedby` while it shows, so it
   adds a description and never replaces the name.
-- `isDisabled` sets the native `disabled` attribute: the button leaves the tab order, and
-  `aria-pressed` stays.
+- `disabled` is the native attribute: the button leaves the tab order, and `aria-pressed` stays.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the button. A disabled button is skipped.</Key>

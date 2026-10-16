@@ -109,6 +109,12 @@ describe('ToggleButton', () => {
   });
 
   it('disabled sets native disabled', () => {
+    render(<ToggleButton disabled>Disabled</ToggleButton>);
+
+    expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
+  });
+
+  it('still accepts the deprecated isDisabled', () => {
     render(<ToggleButton isDisabled>Disabled</ToggleButton>);
 
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
@@ -118,7 +124,7 @@ describe('ToggleButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <ToggleButton isDisabled onClick={handleClick}>
+      <ToggleButton disabled onClick={handleClick}>
         Disabled
       </ToggleButton>,
     );

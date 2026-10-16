@@ -299,6 +299,16 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'More actions' })).toHaveAttribute('aria-expanded', 'true');
   });
 
+  it('marks a closed menu trigger with aria-expanded="false", as Button does', () => {
+    render(
+      <IconButton aria-label="More actions" isExpanded={false} tooltip={false}>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'More actions' })).toHaveAttribute('aria-expanded', 'false');
+  });
+
   it('supports custom className', () => {
     render(
       <IconButton aria-label="Custom" className="custom-icon-button" data-testid="icon-button" tooltip={false}>

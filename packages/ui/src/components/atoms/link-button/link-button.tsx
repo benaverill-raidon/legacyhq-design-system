@@ -34,6 +34,7 @@ export const LinkButton = React.memo(
       rel,
       onClick,
       tabIndex,
+      newTabLabel = '(opens in a new tab)',
       ...rest
     },
     forwardedRef,
@@ -57,10 +58,14 @@ export const LinkButton = React.memo(
       <a
         {...rest}
         ref={forwardedRef}
-        href={href}
+        // While disabled or loading there's no href, so nothing can open it: not a click, a middle
+        // click, or the context menu. role="link" keeps it announced as an (unavailable) link, and a
+        // loading one stays focusable.
+        href={isInactive ? undefined : href}
+        role={isInactive ? 'link' : undefined}
         target={target}
         rel={getLinkButtonRel(target, rel)}
-        tabIndex={isDisabled ? -1 : tabIndex}
+        tabIndex={isDisabled ? -1 : isLoading ? (tabIndex ?? 0) : tabIndex}
         className={mergeClassNames(
           styles.linkButton,
           styles[`size_${size}`],
@@ -71,7 +76,7 @@ export const LinkButton = React.memo(
           focusRingClassNames.focusRingDefault,
           className,
         )}
-        aria-disabled={isDisabled ? true : undefined}
+        aria-disabled={isInactive ? true : undefined}
         aria-busy={isLoading ? true : undefined}
         data-disabled={isDisabled ? 'true' : undefined}
         data-loading={isLoading ? 'true' : undefined}
@@ -84,6 +89,14 @@ export const LinkButton = React.memo(
         ) : null}
 
         <span className={styles.content}>{children}</span>
+
+        {/* A flex container doesn't render this space, but it separates the label in the name. */}
+        {target === '_blank' ? (
+          <>
+            {' '}
+            <span className={styles.visuallyHidden}>{newTabLabel}</span>
+          </>
+        ) : null}
 
         {iconAfter ? (
           <span className={styles.trailing} aria-hidden="true">

@@ -160,10 +160,9 @@ technology the action is running.
 
 <Subsection title="Opening a menu or panel">
 
-On an Icon Button that opens a menu or panel, set `isExpanded` while it's open. It sets
-`aria-expanded="true"` and keeps the hover fill. While `isExpanded` is false, Icon Button sets no
-`aria-expanded` of its own, unlike Button. <DocLink to="Components/Actions/Dropdown Menu" /> sets it
-on its trigger for you; on a trigger you wire yourself, also pass `aria-expanded={isOpen}`.
+On an Icon Button that opens a menu or panel, set `isExpanded` to whether it's open, as on Button.
+It sets `aria-expanded` to match and keeps the hover fill while open. Leave it unset on a button that
+doesn't open anything. <DocLink to="Components/Actions/Dropdown Menu" /> wires its trigger for you.
 
 </Subsection>
 
@@ -235,7 +234,7 @@ signals at once.
   description and never replaces the name.
 - `disabled` is the native attribute: the button leaves the tab order. A loading button stays
   focusable, with `aria-busy` and `aria-disabled`, so focus doesn't jump while the action runs.
-- `isExpanded` sets `aria-expanded="true"` on a button whose menu or panel is open.
+- `isExpanded` sets `aria-expanded` on a button that opens a menu or panel: `true` while it's open, `false` while it's closed.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the button and shows its tooltip. A disabled button is skipped.</Key>

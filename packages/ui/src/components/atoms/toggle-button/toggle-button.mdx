@@ -123,7 +123,7 @@ bold and italic, give each its own state.
 
 <Subsection title="Disabled">
 
-`isDisabled` sets the native `disabled` attribute, so the button leaves the tab order and ignores
+`disabled` is the native attribute, so the button leaves the tab order and ignores
 clicks. Disabled looks the same selected or not, but `aria-pressed` still reports the state.
 
 </Subsection>
@@ -186,8 +186,7 @@ only its fill, to the selected hover and press fills.
   `role="switch"`.
 - The visible label is the accessible name. Keep it the same in both states; the pressed state
   already says whether it's on. The icons are hidden from assistive technology.
-- `isDisabled` sets the native `disabled` attribute: the button leaves the tab order, and
-  `aria-pressed` stays.
+- `disabled` is the native attribute: the button leaves the tab order, and `aria-pressed` stays.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the button. A disabled button is skipped.</Key>

@@ -5,7 +5,7 @@ export type ToggleButtonTone = 'default' | 'subtle';
 export type ToggleButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
 export interface ToggleButtonProps
-  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Control height, padding, and corner radius. `lg` also sets the label one type size larger. */
   size?: ToggleButtonSize;
   /**
@@ -19,9 +19,11 @@ export interface ToggleButtonProps
    */
   isSelected?: boolean;
   /**
-   * Sets the native `disabled` attribute: the button leaves the tab order and ignores clicks. It
-   * overrides the selected look; `aria-pressed` stays.
+   * The native attribute: the button leaves the tab order and ignores clicks. It overrides the
+   * selected look; `aria-pressed` stays.
    */
+  disabled?: boolean;
+  /** @deprecated Use the native `disabled`, as every other control does. Still accepted. */
   isDisabled?: boolean;
   /** An icon before the label, to support it, never to replace it. */
   iconBefore?: React.ReactNode;

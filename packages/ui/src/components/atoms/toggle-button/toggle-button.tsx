@@ -13,7 +13,8 @@ export const ToggleButton = React.memo(
       size = 'md',
       tone = 'default',
       isSelected = false,
-      isDisabled = false,
+      disabled: requestedDisabled,
+      isDisabled,
       iconBefore,
       iconAfter,
       children,
@@ -23,6 +24,9 @@ export const ToggleButton = React.memo(
     },
     forwardedRef,
   ) {
+    // `isDisabled` is the deprecated name for the native `disabled`.
+    const disabled = requestedDisabled ?? isDisabled ?? false;
+
     return (
       <button
         {...rest}
@@ -37,7 +41,7 @@ export const ToggleButton = React.memo(
           focusRingClassNames.focusRingDefault,
           className,
         )}
-        disabled={isDisabled}
+        disabled={disabled}
         aria-pressed={isSelected}
         data-selected={isSelected ? 'true' : 'false'}
       >

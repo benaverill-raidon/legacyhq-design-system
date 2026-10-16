@@ -36,7 +36,12 @@
   content: counter(component-section);
 }
 
-/* Markdown written in the MDX, between the blocks. */
+/*
+ * Markdown written in the MDX, between the blocks. Markdown's lists carry no class (or an empty
+ * one), and
+ * every rule skips what sits inside a live example, so none of this reaches a component's own lists
+ * (Breadcrumbs, Pagination) whatever order the stylesheets load in.
+ */
 .prose {
   display: grid;
   gap: var(--spacing-lg);
@@ -47,25 +52,23 @@
   max-inline-size: 72ch;
 }
 
-.prose :where(ul) {
+.prose :where(ul, ol):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
   display: grid;
   gap: var(--spacing-xs);
   padding-inline-start: var(--spacing-lg);
   list-style: disc;
 }
 
-.prose :where(ol) {
-  display: grid;
-  gap: var(--spacing-xs);
-  padding-inline-start: var(--spacing-lg);
+.prose :where(ol):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
   list-style: decimal;
 }
 
-.prose :where(strong) {
+.prose :where(strong):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
   font-weight: var(--typography-heading-xxs-font-weight);
 }
 
-.prose :where(p, li) > code {
+/* Storybook renders markdown code with a class of its own, so code is matched by where it sits. */
+.prose :where(p, li):not(:where(.stage, .guidelineExample) *) > code {
   padding: var(--spacing-none) var(--spacing-xxs);
   border: none;
   border-radius: var(--border-radius-xs);

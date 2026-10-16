@@ -95,6 +95,8 @@ type PartProps = {
   name: string;
   /** The CSS-module class on the part's element, e.g. `buttonStyles.leading`. */
   target?: string;
+  /** Which match of `target` is the part, counting from 1, when the class is on several elements. Defaults to 1. */
+  nth?: number;
   children: React.ReactNode;
 };
 
@@ -115,7 +117,7 @@ export function Anatomy({ specimen, children }: { specimen: React.ReactNode; chi
     .map((child) => child.props);
   const stageRef = React.useRef<HTMLDivElement>(null);
   const [boxes, setBoxes] = React.useState<Array<PinBox | null>>([]);
-  const targets = parts.map((part) => part.target ?? '').join(' ');
+  const targets = parts.map((part) => (part.target ? `${part.target}#${part.nth ?? 1}` : '')).join(' ');
   const pins = placePins(boxes);
   const side = pins.some((pin) => pin?.side === 'left');
 
@@ -125,8 +127,9 @@ export function Anatomy({ specimen, children }: { specimen: React.ReactNode; chi
     const measure = () => {
       const origin = stage.getBoundingClientRect();
       setBoxes(
-        targets.split(' ').map((target) => {
-          const element = target ? stage.querySelector(`.${CSS.escape(target)}`) : null;
+        targets.split(' ').map((entry) => {
+          const [target, nth] = entry.split('#');
+          const element = target ? stage.querySelectorAll(`.${CSS.escape(target)}`)[Number(nth) - 1] : null;
           if (!element) return null;
           const rect = element.getBoundingClientRect();
           return { x: rect.left - origin.left, y: rect.top - origin.top, width: rect.width, height: rect.height };

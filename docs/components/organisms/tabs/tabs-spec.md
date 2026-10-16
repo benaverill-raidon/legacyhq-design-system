@@ -83,7 +83,8 @@ showBorder = true
 
 ## Behavior
 
-- Render the tab list from `tabs`; select the first enabled tab by default (or `defaultValue`).
+- Render the tab list from `tabs` (data-driven, matching Menu's style); select the first enabled tab
+  by default (or `defaultValue`).
 - Controlled with `value` + `onValueChange`; uncontrolled otherwise.
 - Wire each `TabPanel` to its tab and show only the selected panel.
 - Roving tabindex - only the selected tab is tabbable.

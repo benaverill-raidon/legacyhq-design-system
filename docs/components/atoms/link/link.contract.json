@@ -37,7 +37,8 @@
   "anatomy": [
     "anchor",
     "content",
-    "automatic external-link icon"
+    "automatic external-link icon",
+    "new-tab label"
   ],
   "props": {
     "href": {

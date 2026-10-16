@@ -10,7 +10,9 @@ users jump directly to any page.
 Use Pagination below a paged table, list, or search-results view to navigate between pages.
 
 ### Tier
-Molecule
+Molecule. It composes existing atoms (`ToggleButton` for each page number, `IconButton` for
+previous/next) into one unit with its own layout algorithm (which pages to show, where to collapse
+into an ellipsis) that no single atom owns.
 
 ### Design Reference
 - Figma Component: `pagination` (single component, not a variant set - node `2152:14872`, file

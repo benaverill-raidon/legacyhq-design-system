@@ -1,131 +1,252 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { TabPanel } from './tab-panel';
+import { Tabs } from './tabs';
+import tabsStyles from './tabs.module.css';
 import * as TabsStories from './Tabs.stories';
+
+export const matterTabs = [
+  { value: 'overview', label: 'Overview' },
+  { value: 'activity', label: 'Activity' },
+  { value: 'documents', label: 'Documents' },
+];
 
 <Meta of={TabsStories} name="Docs" />
 
-# Tabs
+<Unstyled>
+<ComponentPage>
 
-Tabs let people switch between related views in the same context. `Tabs` renders an accessible tab
-bar from a `tabs` array and manages the selected value (controlled or uncontrolled); optional
-`TabPanel` children render each view and are wired to their tab automatically.
+<ComponentHeader
+  id="tabs"
+  example={
+    <Tabs tabs={matterTabs} defaultValue="overview" aria-label="Matter sections">
+      <TabPanel value="overview">A summary of the matter, its parties, and its status.</TabPanel>
+      <TabPanel value="activity">Everything that has happened on the matter, newest first.</TabPanel>
+      <TabPanel value="documents">Every filing, exhibit, and draft on the matter.</TabPanel>
+    </Tabs>
+  }
+>
+  Tabs switch between a few views of the same subject without leaving the page: the tab bar picks the
+  view, and the panel under it shows it.
+</ComponentHeader>
 
-<Canvas of={TabsStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Switching between peer views of the same subject (Overview / Activity / Documents).
-- Organizing a page section into a few related panels without navigating away.
+- Peer views of one subject, such as a matter's Overview, Activity, and Documents.
+- Splitting a section of a page into a few related panels people can switch between in any order.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For navigation between pages/routes.** Use links or a navigation component.
-- **For a sequence of steps.** Use a Progress Tracker / stepper.
-- **For many (10+) sections.** Consider a different pattern (a select, a side nav).
+- **Going to another page:** <DocLink to="Components/Navigation/Link" />. Tabs change what this page shows; they don't navigate.
+- **Steps in a flow:** <DocLink to="Components/Navigation/Progress Tracker" />, for steps taken in order.
+- **Paging through results:** <DocLink to="Components/Navigation/Pagination" />.
+- **Many sections:** <DocLink to="Components/Forms/Select" /> or a side navigation. Tabs fit a few.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Tab list** - a `role="tablist"` row of tab buttons.
-2. **Tab** - a `role="tab"` button with `aria-selected` and `aria-controls`.
-3. **Indicator** - `line` draws a 3px underline on the selected tab over a shared bottom border;
-   `contained` fills the selected tab as a pill.
-4. **Panel** - an optional `TabPanel` (`role="tabpanel"`), labelled by its tab and shown only when
-   selected.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Types
+<Anatomy
+  specimen={
+    <Tabs tabs={matterTabs} defaultValue="overview" aria-label="Matter sections">
+      <TabPanel value="overview">A summary of the matter, its parties, and its status.</TabPanel>
+      <TabPanel value="activity">Everything that has happened on the matter.</TabPanel>
+      <TabPanel value="documents">Every filing, exhibit, and draft on the matter.</TabPanel>
+    </Tabs>
+  }
+>
+  <Part name="tablist" target={tabsStyles.tablist}>The `role="tablist"` row of tabs. For `line`, a line runs under it.</Part>
+  <Part name="tab" target={tabsStyles.tab}>A native `button` with `role="tab"` for each entry in `tabs`, its label in `heading-xs`.</Part>
+  <Part name="indicator">Drawn on the selected tab, so it isn't outlined here: a 3px line over the tab list's line for `line`, the selected fill for `contained`.</Part>
+  <Part name="panel" target={tabsStyles.panel}>An optional `TabPanel` for each tab, labelled by it and shown only while it's selected.</Part>
+</Anatomy>
 
-<Canvas of={TabsStories.Types} />
+</Section>
 
-`type="line"` (the default) is an underlined tab bar over a bottom border - the everyday choice.
-`type="contained"` renders pill tabs inside a raised, rounded, bordered segmented container and suits
-denser or card-like surfaces. `showBorder` (default on) toggles the border - the bottom line for
-`line`, the container border for `contained`.
+<Section title="Variants">
 
-### Controlled and uncontrolled
+`type` sets the style. `line`, the default, is a row of tabs over a line, with the selected tab
+underlined in the selected color: the everyday choice. `contained` puts the tabs in a raised,
+rounded container and fills the selected one as a pill, for a denser surface such as a card. In both,
+unselected tabs use the subtle color and darken on hover. `showBorder` turns off the line under a
+`line` tab list or the border of a `contained` one; it's on by default for both.
 
-Pass `value` + `onValueChange` to control the selection, or `defaultValue` to let Tabs manage it
-(defaulting to the first enabled tab). See the Controlled story.
+<Example of={TabsStories.Types} />
 
-### Panels are optional
+</Section>
 
-Provide a `TabPanel` per tab value as children and Tabs wires the ARIA (`aria-controls` /
-`aria-labelledby`) and visibility for you. If you render panels elsewhere, use the `Tabs` bar on its
-own and switch content off `value` yourself.
+<Section title="Behavior">
 
-### Accessibility
+<Subsection title="Selection">
 
-The tab list is a `role="tablist"`; give it an `aria-label` (or `aria-labelledby`). Selection follows
-the arrow keys (Left/Right, wrapping) with **Home**/**End**, skipping disabled tabs; only the
-selected tab is in the tab order (roving tabindex), and **Tab** then moves into the panel. Focus uses
-the shared Focus Ring. Disabled tabs use the native `disabled` attribute.
+Tabs manages the selection on its own, starting from `defaultValue` or the first enabled tab. To
+control it, pass `value` and update it from `onValueChange`, which is called with a tab's `value`
+whenever it's clicked or reached with the keyboard. Selection follows focus: moving to a tab with the
+arrow keys selects it, with no extra Enter.
 
-## API
+<Example of={TabsStories.Controlled} caption="Controlled: the parent holds the value and shows it above the tabs." />
 
-### `Tabs`
+</Subsection>
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>tabs</code></td>
-      <td><code>{`{ value, label, disabled? }[]`}</code></td>
-      <td>-</td>
-      <td>Required. The tabs, in order.</td>
-    </tr>
-    <tr>
-      <td><code>type</code></td>
-      <td><code>'line' | 'contained'</code></td>
-      <td><code>'line'</code></td>
-      <td>Underline indicator, or pill tabs.</td>
-    </tr>
-    <tr>
-      <td><code>value</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Controlled selected value.</td>
-    </tr>
-    <tr>
-      <td><code>defaultValue</code></td>
-      <td><code>string</code></td>
-      <td>first enabled</td>
-      <td>Initial value for uncontrolled usage.</td>
-    </tr>
-    <tr>
-      <td><code>onValueChange</code></td>
-      <td><code>(value: string) =&gt; void</code></td>
-      <td>-</td>
-      <td>Called with the next value.</td>
-    </tr>
-    <tr>
-      <td><code>showBorder</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Shows the border: the bottom line (line) or the container border (contained).</td>
-    </tr>
-    <tr>
-      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Labels the tab list.</td>
-    </tr>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Panels, typically <code>TabPanel</code> elements.</td>
-    </tr>
-  </tbody>
-</table>
+<Subsection title="Panels">
 
-### `TabPanel`
+Give Tabs a `TabPanel` for each tab `value`, as its children, and it wires each panel to its tab
+and shows only the selected one. A panel's content is rendered only while its tab is selected, so
+state inside it resets when you switch away. Panels are optional: render the tab bar alone and
+switch the content yourself from `value`.
 
-`value` (required) ties the panel to a tab; `children` is its content. Any other native `div` prop is
-forwarded.
+</Subsection>
 
-## Related components
+<Subsection title="Disabled tabs">
 
-- **Menu** - a data-driven list of actions.
-- **Progress Tracker** - for a sequence of steps rather than peer views.
+A tab with `disabled` uses the native attribute: it's muted, can't be clicked, and the arrow keys
+skip it. `showBorder={false}` is shown here too.
+
+<Example of={TabsStories.States} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Name the tab list for what it switches." code={`<Tabs tabs={tabs} aria-label="Matter sections" />`}>
+  <Tabs tabs={matterTabs} defaultValue="overview" aria-label="Matter sections" />
+</Do>
+<Dont caption="Leave the tab list unnamed, so it's announced as a bare tab list." code={`<Tabs tabs={tabs} />`} />
+<Do caption="Use Tabs for views people switch between in any order." code={`<Tabs
+    tabs={[
+      { value: 'overview', label: 'Overview' },
+      { value: 'activity', label: 'Activity' },
+      { value: 'documents', label: 'Documents' },
+    ]}
+    aria-label="Matter sections"
+/>`}>
+  <Tabs tabs={matterTabs} defaultValue="activity" aria-label="Matter sections" />
+</Do>
+<Dont caption="Use Tabs for the steps of a flow, where the order matters; use Progress Tracker." code={`<Tabs
+    tabs={[
+      { value: 'details', label: '1. Details' },
+      { value: 'parties', label: '2. Parties' },
+      { value: 'review', label: '3. Review' },
+    ]}
+    aria-label="Matter setup"
+/>`}>
+  <Tabs
+    tabs={[
+      { value: 'details', label: '1. Details' },
+      { value: 'parties', label: '2. Parties' },
+      { value: 'review', label: '3. Review' },
+    ]}
+    defaultValue="details"
+    aria-label="Matter setup"
+  />
+</Dont>
+<Do caption="Keep to a few tabs with short labels that fit on one line." code={`<Tabs tabs={tabs} type="contained" aria-label="Matter sections" />`}>
+  <Tabs tabs={matterTabs} type="contained" defaultValue="overview" aria-label="Matter sections" />
+</Do>
+<Dont caption="Add more tabs than fit: the tab list doesn't wrap or scroll, so the last tabs run out of their container." code={`<Tabs tabs={tenSections} aria-label="Matter sections" />`} />
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The tab list has `role="tablist"` and `aria-orientation="horizontal"`. `aria-label` or
+  `aria-labelledby` names it; both go on the tab list, not the root. Always set one.
+- Each tab is a native `button` with `role="tab"`, `aria-selected`, and `aria-controls` set to its
+  panel's id. `aria-controls` is set even when you render no `TabPanel`.
+- Only the selected tab is in the tab order; the arrow keys move between tabs. Disabled tabs use
+  the native `disabled` attribute and are skipped.
+- Each `TabPanel` has `role="tabpanel"`, is labelled by its tab, and has `tabindex="0"`, so Tab
+  moves from the tab list to the panel. Unselected panels are `hidden`.
+- Tabs show the shared Focus Ring.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the selected tab, then out of the tab list to the panel.</Key>
+  <Key keys="Arrow Right">Moves to and selects the next enabled tab, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Down">Does the same as Arrow Right.</Key>
+  <Key keys="Arrow Left">Moves to and selects the previous enabled tab, wrapping from the first to the last.</Key>
+  <Key keys="Arrow Up">Does the same as Arrow Left.</Key>
+  <Key keys="Home">Moves to and selects the first enabled tab.</Key>
+  <Key keys="End">Moves to and selects the last enabled tab.</Key>
+  <Key keys="Enter">Selects the focused tab, which the arrow keys have already selected.</Key>
+  <Key keys="Space">Selects the focused tab, which the arrow keys have already selected.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={TabsStories} native="div" />
+
+Each entry in `tabs` takes a `value`, its stable id; a `label`; and `disabled`.
+
+<Subsection title="Tab Panel">
+
+<PropsTable component={TabPanel} native="div" />
+
+</Subsection>
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Tabs' stylesheet uses, by family, with the property it sets and when. Rules for one
+`type` read as `line` or `contained`; the 3px line under the selected `line` tab is a pseudo-element
+on the selected tab.
+
+<TokensTable id="tabs" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Navigation/Progress Tracker" /> for the steps of a flow, taken in order.
+- <DocLink to="Components/Navigation/Link" /> for going to another page.
+- <DocLink to="Components/Navigation/Pagination" /> for paging through results.
+- <DocLink to="Components/Actions/Menu" /> for a list of actions.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API tables read tabs.types.ts, the design tokens read tabs.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

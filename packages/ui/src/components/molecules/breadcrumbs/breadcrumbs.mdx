@@ -1,182 +1,233 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Breadcrumbs } from './breadcrumbs';
+import breadcrumbsStyles from './breadcrumbs.module.css';
 import * as BreadcrumbsStories from './Breadcrumbs.stories';
 
 <Meta of={BreadcrumbsStories} name="Docs" />
 
-# Breadcrumbs
+<Unstyled>
+<ComponentPage>
 
-Breadcrumbs are a navigation system used to show a user's location in a site or app - an ordered
-trail from a root section down to the current page, letting people jump back to any ancestor in
-one step.
+<ComponentHeader
+  id="breadcrumbs"
+  example={
+    <Breadcrumbs
+      items={[
+        { label: 'Matters', href: '#' },
+        { label: 'Estate of Ada Lovelace', href: '#' },
+        { label: 'Documents' },
+      ]}
+    />
+  }
+>
+  Breadcrumbs shows where a page sits in a hierarchy: a trail from the top section down to the current
+  page, with a link back to each level above it.
+</ComponentHeader>
 
-<Canvas of={BreadcrumbsStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Deep or nested sections - multi-level settings, nested folders/categories.
-- Anywhere "how did I get here, and how do I go back" is a real question.
+- A page deep in a hierarchy, such as a document inside a matter inside a client.
+- Letting people jump back to any level above the current page in one step.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a shallow or single-level app.** Breadcrumbs adds hierarchy signal that doesn't exist.
-- **For linear flow progress with unvisited future steps.** Use `ProgressIndicator` instead - that's
-  progress through a sequence, not a location trail.
-- **More than once per page.**
+- **Steps in a flow:** <DocLink to="Components/Navigation/Progress Tracker" /> for named steps, or <DocLink to="Components/Navigation/Progress Indicator" />. A trail shows where a page is, not how far someone has got.
+- **Views of the same page:** <DocLink to="Components/Navigation/Tabs" />.
+- **One link back to a single parent:** <DocLink to="Components/Navigation/Link" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Breadcrumbs renders a `nav` landmark containing an `ol` of `li` items. A `/` separator precedes
-every item except the first. Every item with an `href` renders as the real `Link` atom; the item
-without one - always the last - renders as non-interactive text carrying `aria-current="page"`.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### The current page isn't a link
+<Anatomy
+  specimen={
+    <Breadcrumbs
+      items={[
+        { label: 'Matters', href: '#' },
+        { label: 'Estate of Ada Lovelace', href: '#' },
+        { label: 'Documents' },
+      ]}
+    />
+  }
+>
+  <Part name="root" target={breadcrumbsStyles.root}>A `nav` landmark named "Breadcrumb" by default.</Part>
+  <Part name="list" target={breadcrumbsStyles.list}>An ordered list of the levels, in a single row.</Part>
+  <Part name="item" target={breadcrumbsStyles.item}>One list item per entry in `items`, in order.</Part>
+  <Part name="separator" target={breadcrumbsStyles.separator}>A `/` before every item but the first. Hidden from assistive technology.</Part>
+  <Part name="link" target={breadcrumbsStyles.link}>A subtle, medium Link, for every item with an `href`.</Part>
+  <Part name="current" target={breadcrumbsStyles.current}>Text marked `aria-current="page"`, for the item without an `href`: the current page.</Part>
+</Anatomy>
 
-The Figma source demo renders all 8 example crumbs identically, as `Link` instances. This component
-deliberately diverges from that literal sample: whichever item in `items` has no `href` renders as
-plain, non-interactive text instead - matching the WAI-ARIA Breadcrumb Pattern, where the current
-page is announced (`aria-current="page"`) but not clickable. In practice, that's always the last
-item - omit `href` there and the component takes care of the rest.
+</Section>
 
-<Canvas of={BreadcrumbsStories.Composition} />
+<Section title="Behavior">
 
-### Adding icons
+<Subsection title="The current page">
 
-`iconBefore` and `iconAfter` accept any `ReactNode` - typically a small icon from the generated icon
-set (`size="sm"` reads well against the trail's text size).
+Whether an item is a link depends only on its `href`. Give every level above the current page an
+`href`, and leave it off the current page, the last item: it renders as text marked
+`aria-current="page"`, not a link to the page you're on. If the last item has an `href`, it renders
+as a link and nothing is marked current. An item in the middle without one renders as current text
+too.
 
-### No visited-link color, no current-item color difference
+<Example of={BreadcrumbsStories.Composition} caption="Two-level and deeper trails, a leading icon, a single item, a custom name, and a trail in a page header." />
 
-Every item in the trail - ancestor links and the current page - renders in the same subtle color.
-Two deliberate departures from `Link`'s default look, both per explicit design feedback:
+</Subsection>
 
-- The current-page item does not use a bolder "default" text color to set it apart - `href`
-  presence/absence and `aria-current="page"` already say "you are here" without a color cue on top.
-- An ancestor link's `:visited` state (the real, browser-history-driven purple swap `Link` applies
-  elsewhere) is suppressed - whether you've clicked a URL before isn't a signal a location trail
-  should surface.
+<Subsection title="One color for the whole trail">
 
-## Do / Don't
+Every item uses the subtle content color, the links and the current page alike, so the trail reads
+as one quiet line. Links don't turn purple once visited: whether you've opened a page before isn't
+something a location trail shows. The links underline on hover and show the shared Focus Ring; the
+current page does neither.
 
-**Do** omit `href` on the current (last) item.
+</Subsection>
 
-```tsx
-<Breadcrumbs
-  items={[
-    { label: 'Settings', href: '/settings' },
-    { label: 'Account' },
-  ]}
-/>
-```
+<Subsection title="Icons">
 
-**Don't** give every item an href, including the current page.
+`iconBefore` and `iconAfter` put an icon beside an item's label, such as a home icon on the first
+level. Breadcrumbs doesn't size the icon, so pass the size you want, as the story does with `sm`.
 
-```tsx
-<Breadcrumbs
-  items={[
-    { label: 'Settings', href: '/settings' },
-    { label: 'Account', href: '/settings/account' },
-  ]}
-/>
-```
+</Subsection>
 
----
+<Subsection title="Long trails">
 
-**Do** use Breadcrumbs for a real hierarchy.
+The trail stays on one line: it doesn't wrap, truncate, or collapse middle levels. Keep labels short
+so a deep trail still fits its container.
 
-```tsx
-<Breadcrumbs items={[{ label: 'Docs', href: '/docs' }, { label: 'Components' }]} />
-```
+</Subsection>
 
-**Don't** use Breadcrumbs to show progress through a linear, not-yet-visited flow.
+</Section>
 
-```tsx
-{
-  /* Use ProgressIndicator instead. */
-}
-<Breadcrumbs items={[{ label: 'Step 1' }, { label: 'Step 2' }, { label: 'Step 3' }]} />;
-```
+<Section title="Do and don't">
 
-## API
+<Guidelines>
+<Do caption="Leave href off the current page, so it's text marked as the current page." code={`<Breadcrumbs
+    items={[
+      { label: 'Matters', href: '/matters' },
+      { label: 'Estate of Ada Lovelace' },
+    ]}
+/>`}>
+  <Breadcrumbs items={[{ label: 'Matters', href: '#' }, { label: 'Estate of Ada Lovelace' }]} />
+</Do>
+<Dont caption="Give the current page an href, which makes it a link to itself and marks nothing as current." code={`<Breadcrumbs
+    items={[
+      { label: 'Matters', href: '/matters' },
+      { label: 'Estate of Ada Lovelace', href: '/matters/42' },
+    ]}
+/>`}>
+  <Breadcrumbs items={[{ label: 'Matters', href: '#' }, { label: 'Estate of Ada Lovelace', href: '#' }]} />
+</Dont>
+<Do caption="Use Breadcrumbs for levels of a hierarchy." code={`<Breadcrumbs
+    items={[
+      { label: 'Clients', href: '/clients' },
+      { label: 'Ada Lovelace', href: '/clients/7' },
+      { label: 'Matters' },
+    ]}
+/>`}>
+  <Breadcrumbs items={[{ label: 'Clients', href: '#' }, { label: 'Ada Lovelace', href: '#' }, { label: 'Matters' }]} />
+</Do>
+<Dont caption="Use it for the steps of a flow, where every unvisited step is marked as the current page." code={`<Breadcrumbs items={[{ label: 'Details' }, { label: 'Parties' }, { label: 'Review' }]} />`}>
+  <Breadcrumbs items={[{ label: 'Details' }, { label: 'Parties' }, { label: 'Review' }]} />
+</Dont>
+</Guidelines>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>items</code></td>
-      <td><code>BreadcrumbItem[]</code></td>
-      <td>-</td>
-      <td>Required. Ordered trail, root first, current page last.</td>
-    </tr>
-    <tr>
-      <td><code>ariaLabel</code></td>
-      <td><code>string</code></td>
-      <td><code>'Breadcrumb'</code></td>
-      <td>Accessible name for the <code>nav</code> landmark.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>nav</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+</Section>
 
-### `BreadcrumbItem`
+<Section title="Accessibility">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The visible content for this level.</td>
-    </tr>
-    <tr>
-      <td><code>href</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Presence makes the item a <code>Link</code>; absence marks it as the current page.</td>
-    </tr>
-    <tr>
-      <td><code>target</code></td>
-      <td><code>React.HTMLAttributeAnchorTarget</code></td>
-      <td><code>'_self'</code></td>
-      <td>Forwarded to <code>Link</code>.</td>
-    </tr>
-    <tr>
-      <td><code>iconBefore</code> / <code>iconAfter</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional icon rendered before/after the label.</td>
-    </tr>
-    <tr>
-      <td><code>onClick</code></td>
-      <td><code>React.MouseEventHandler&lt;HTMLAnchorElement&gt;</code></td>
-      <td>-</td>
-      <td>Forwarded to <code>Link</code>; only applies to non-current items.</td>
-    </tr>
-  </tbody>
-</table>
+- The root is a `nav` landmark named by `ariaLabel`, "Breadcrumb" by default. Translate it with the
+  rest of your interface. Breadcrumbs takes `ariaLabel`, not `aria-label`, and passes no other
+  attributes to the `nav`.
+- The levels are an ordered list, so assistive technology announces how many there are.
+- Each level above the current page is a Link: announced as a link, in the tab order, with the
+  shared Focus Ring.
+- The current page is text with `aria-current="page"`, so it's announced as the current page and
+  isn't focusable.
+- The `/` separators and any icons are hidden from assistive technology.
 
-## Related components
+<Keyboard>
+  <Key keys="Tab">Moves focus to the next link in the trail. The current page is skipped.</Key>
+  <Key keys="Enter">Follows the focused link.</Key>
+</Keyboard>
 
-- **Link** - the atom every non-current crumb wraps.
-- **Progress Indicator** - for step-based progress through a flow, rather than a location trail.
+</Section>
+
+<Section title="API">
+
+<PropsTable of={BreadcrumbsStories} />
+
+<Subsection title="Breadcrumb item">
+
+Each entry in `items` takes:
+
+- `label`, required: the visible text for the level.
+- `href`: makes the item a Link. Leave it off the current page.
+- `target`: passed to the Link. `_blank` adds Link's new-tab icon and hidden text.
+- `onClick`: passed to the Link, so only an item with an `href` calls it.
+- `iconBefore` and `iconAfter`: an icon before or after the label, hidden from assistive technology.
+
+</Subsection>
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Breadcrumbs' own stylesheet uses, by family, with the property it sets and when. The
+links take their tokens from Link. Under Other, `link-color` is Link's own variable, which
+Breadcrumbs reads to undo the visited color. `link-color-press` is a variable Link no longer sets,
+since it has no pressed style, so that row has no value to apply.
+
+<TokensTable id="breadcrumbs" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Navigation/Link" />, which renders each level above the current page.
+- <DocLink to="Components/Navigation/Progress Tracker" /> for the named steps of a flow.
+- <DocLink to="Components/Navigation/Tabs" /> for switching between views of one page.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment on the links.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads breadcrumbs.types.ts, the design tokens read breadcrumbs.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

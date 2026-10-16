@@ -8,10 +8,12 @@
 Link
 ├─ anchor element
 ├─ text content
-└─ optional external-link icon
+├─ optional external-link icon
+└─ optional new-tab label (visually hidden)
 ```
 
-The external-link icon is rendered automatically when `target="_blank"` is used.
+The external-link icon and the visually hidden `newTabLabel` text are rendered automatically when
+`target="_blank"` is used.
 
 ## Location
 ```txt
@@ -129,8 +131,8 @@ Expected mappings:
 - default: link default token
 - visited default: link visited default token (content/accent/purple/default)
 - subtle: content/text subtle token
-- inverse: content/text inverse token; inverse visited = content/accent/purple/subtle in Figma
-  (code uses content/accent/purple/default until that token ships)
+- inverse: content/text inverse token; inverse visited = content/accent/purple/subtle (matches
+  Figma). Hover and focus on an inverse link return it to the inverse color, visited or not.
 
 If the system uses `--color-text-*` instead of `--color-content-*`, use the generated token names from the current token output.
 
@@ -219,7 +221,7 @@ Test:
 - Link text is visible and readable
 - Light and dark themes work
 - Hover underlines
-- Pressed underlines
+- No pressed treatment
 - Visited color uses native `:visited`
 - External icon appears for `_blank`
 - External icon does not appear for `_self`

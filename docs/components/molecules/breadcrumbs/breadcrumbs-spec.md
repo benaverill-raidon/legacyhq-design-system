@@ -9,7 +9,9 @@ Breadcrumbs are a navigation system used to show a user's location in a site or 
 Use Breadcrumbs to render an ordered trail of ancestor links ending in the current page.
 
 ### Tier
-Molecule
+Molecule. It composes the `Link` atom (each ancestor in the trail) and a plain text label (the
+current page) into one ordered-list unit with its own layout (separators, spacing) that no single
+atom owns.
 
 ### Design Reference
 - Figma Component: `breadcrumbs` (single component, not a variant set - node `2026:746`, file
@@ -55,7 +57,9 @@ Breadcrumbs
 - Single root `nav` landmark
 - One `ol` > `li` per item, in the order given
 - A `/` separator precedes every item except the first
-- Every item except the last renders as a `Link`; the last always renders as non-interactive text
+- Every item with an `href` renders as a `Link`; every item without one renders as non-interactive
+  text with `aria-current="page"`. In practice only the last item omits `href`; if it has one, it
+  renders as a link and nothing is marked current
 - Each item may include an optional icon before and/or after its label
 
 ---

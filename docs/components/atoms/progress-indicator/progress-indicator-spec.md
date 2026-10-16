@@ -74,9 +74,11 @@ The Figma-only `indicator-dot` remains private anatomy.
 
 - `default`: neutral selected dot.
 - `primary`: brand selected dot.
-- `inverse`: inverse selected dot for dark surfaces.
+- `inverse`: inverse selected dot for bold surfaces (`color-background-neutral-subtle-default`:
+  light in the light theme, dark in the dark theme).
 
-Do not expose Figma's internal `inverse` name publicly.
+`inverted`, the earlier public name for `inverse`, is still accepted as a deprecated alias and maps
+to `inverse` inside the component.
 
 ## Sizes
 
@@ -117,8 +119,8 @@ default selected: color-background-neutral-bold-default
 primary selected: color-background-brand-primary-bold-default
 inverse selected: color-background-neutral-subtle-default
 unselected border: color-border-bold
-interactive hover: color-background-neutral-subtle-hover
-interactive pressed: color-background-neutral-subtle-press
+interactive hover: color-background-neutral-overlay-bold-hover
+interactive pressed: color-background-neutral-overlay-bold-press
 ```
 
 Verify the actual generated CSS variable names before implementation.
@@ -161,7 +163,8 @@ When `onStepChange` is provided:
 - Normalize `totalSteps` to at least `1`.
 - Dots are buttons only when `onStepChange` is provided.
 - Do not add completed-step styling.
-- Do not animate unless explicitly requested later.
+- The interactive dot's hover/press fill and the selected/unselected color swap both transition
+  with the `fade-quick` motion recipe, switched off under `prefers-reduced-motion: reduce`.
 
 ## Implementation constraints
 
@@ -197,9 +200,11 @@ Controls for `currentStep`, `totalSteps`, `appearance`, `size`, and `label`.
 
 ### Variants
 
-Show the appearance axis alone (`default`, `primary`), then `inverse` separately on a
-dark surface - it isn't grouped with the other two because its selected dot is white and
-disappears on a light background.
+Show the appearance axis alone (`default`, `primary`), then `inverse` separately on a bold
+surface (`color-background-neutral-bold-default`, not `data-theme="dark"`) - it isn't grouped with
+the other two because its selected dot (`color-background-neutral-subtle-default`) disappears on the
+page's own surface. In the dark theme that token is dark, so inverse inside `data-theme="dark"`
+shows no selected dot.
 
 ### Sizes
 
@@ -220,8 +225,8 @@ compositions - including an externally-controlled Previous/Next pagination examp
 ### Edge Cases
 
 Show a single-step journey, out-of-range `currentStep`/`totalSteps` values clamping safely, many
-steps in a narrow container (dots do not wrap), and default/primary/inverse together on
-a dark surface.
+steps in a narrow container (dots do not wrap), and default/primary/inverse together in the dark
+theme, where default and primary stay legible and inverse's selected dot is dark.
 
 Do not create one story per variant permutation unless necessary.
 

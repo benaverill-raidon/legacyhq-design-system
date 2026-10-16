@@ -80,7 +80,7 @@ import * as SpinnerStories from './spinner.stories';
 
 Spinner has one look. `size` is its only visual option: 12, 16, 24, or 48px for `sm`, `md`, `lg`,
 and `xl`, with `lg` the default. At `xl` the arc is drawn at 32px inside the 48px box. The stroke
-gets thicker with size.
+is 1px at `sm`, 2px at `md` and `lg`, and 3px at `xl`, from the border-width tokens.
 
 <Example of={SpinnerStories.Sizes} />
 

@@ -123,9 +123,10 @@ What the stylesheet uses today: the semantic `--size-spinner-sm/md/lg/xl` tokens
 for the root, and `--border-width-sm` (sm), `--border-width-md` (md, lg), and `--border-width-lg`
 (xl) for the arc's `stroke-width`; no `--component-spinner-*` tokens exist. At `xl` the SVG is drawn
 at `--size-400` (32px) inside the 48px root, via `calc(var(--size-400) / var(--size-spinner-xl) *
-100%)`; at the other sizes it fills the root. The arc's `stroke-width` is in the SVG's 24-unit
-viewBox space, so it scales with the drawn size: about 0.5px at `sm`, 1.3px at `md`, 2px at `lg`,
-and 4px at `xl`. The rotation uses the `--spin-loop` motion recipe (860ms, loop easing).
+100%)`; at the other sizes it fills the root. The arc has `vector-effect: non-scaling-stroke`,
+so its `stroke-width` renders at the token's width whatever the drawn size: 1px at `sm`, 2px at `md`
+and `lg`, and 3px at `xl`. (Before, it was in the SVG's 24-unit viewBox space and scaled with the
+drawn size, to about 0.5px at `sm` and 4px at `xl`.) The rotation uses the `--spin-loop` motion recipe (860ms, loop easing).
 
 The recommendations below are the original plan, kept for the Figma comparison.
 

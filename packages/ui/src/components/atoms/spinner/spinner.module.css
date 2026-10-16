@@ -46,10 +46,15 @@
   transform-origin: center;
 }
 
+/*
+ * The stroke is a border-width token, in screen pixels: non-scaling-stroke keeps it from scaling with
+ * the 24-unit viewBox, which drew it at about 0.5px at sm and 4px at xl.
+ */
 .arc {
   fill: none;
   stroke: currentColor;
   stroke-width: var(--spinner-stroke-width);
+  vector-effect: non-scaling-stroke;
   stroke-linecap: butt;
   transform-origin: center;
 }

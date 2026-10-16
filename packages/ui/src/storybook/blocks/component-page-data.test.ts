@@ -16,6 +16,8 @@ describe('header facts', () => {
     expect(figmaFact(registryEntry('progress-bar').figmaSource)).toMatch(/^progress-bar-linear \+ progress-bar-circular, checked /);
     expect(figmaFact(registryEntry('radio').figmaSource)).toMatch(/^radio \+ /);
     expect(figmaFact(registryEntry('logo').figmaSource)).toBeNull();
+    // A component with its own set and a separate part set names its own.
+    expect(figmaFact(registryEntry('inline-message').figmaSource)).toMatch(/^inline-message, \d+ variants, checked /);
   });
 
   it('lists the category label, the tier, and the Figma source', () => {

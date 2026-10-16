@@ -157,7 +157,7 @@
     {
       "field": "subComponents",
       "canonicalShape": "Array<{name, anatomy, props}>, always present ([] when unused)",
-      "note": "Handles the Radio contract.json, which documents Radio and RadioGroup in one file (no top-level anatomy/props, nested under radio/radioGroup keys instead). Detected structurally so a future multi-component file is handled the same way."
+      "note": "Handles the Radio contract.json, which documents Radio and RadioGroup in one file, nested under radio/radioGroup keys. Detected by those keys, so its top-level anatomy (which the Docs page labels Radio's parts from) becomes the entry's anatomy without hiding the sub-components."
     }
   ],
   "contentCompleteness": {

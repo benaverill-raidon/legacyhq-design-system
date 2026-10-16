@@ -170,10 +170,10 @@ function normalizeComponent({ id, tier, raw, relPath }) {
   // (validateAgainstSchema treats null leaves as valid), so check presence explicitly here.
   if (!raw.category) throw new Error(`${name}: missing "category" (see classification in component-registry-governance.json)`);
 
-  // Radio documents two components (Radio + RadioGroup) in one file: no top-level
-  // anatomy/props, instead nested under `radio`/`radioGroup` keys. Detected structurally
-  // (not by component name) so any future multi-component file is handled the same way.
-  const isMultiComponent = !('anatomy' in raw) && !('props' in raw) && ('radio' in raw || 'radioGroup' in raw);
+  // Radio documents two components (Radio + RadioGroup) in one file, nested under `radio`/
+  // `radioGroup` keys. Detected by those keys, so a top-level anatomy (the Docs page labels the
+  // main component's parts from it) doesn't hide the sub-components.
+  const isMultiComponent = 'radio' in raw || 'radioGroup' in raw;
 
   let anatomy;
   let props;
@@ -191,8 +191,8 @@ function normalizeComponent({ id, tier, raw, relPath }) {
         props: normalizeProps(sub.props, subCtx),
       });
     }
-    anatomy = [];
-    props = {};
+    anatomy = 'anatomy' in raw ? normalizeAnatomy(raw.anatomy, name) : [];
+    props = 'props' in raw ? normalizeProps(raw.props, name) : {};
   } else {
     anatomy = normalizeAnatomy(raw.anatomy, name);
     props = normalizeProps(raw.props, name);

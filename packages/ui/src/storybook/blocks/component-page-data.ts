@@ -59,8 +59,10 @@ export function formatDate(iso: string) {
 /** Where the component lives in Figma, as text: `button, 176 variants, checked Sep 1, 2026`. */
 export function figmaFact(source: FigmaSource | null | undefined) {
   if (!source) return null;
-  const names = source.variantComponents ?? source.subComponents;
-  const name = names ? names.map((part) => part.componentName).join(' + ') : (source.componentName ?? source.componentSetName);
+  // The component's own set when it names one; otherwise the separate sets it's made of.
+  const main = source.componentName ?? source.componentSetName;
+  const names = main ? undefined : (source.variantComponents ?? source.subComponents);
+  const name = names ? names.map((part) => part.componentName).join(' + ') : main;
   if (!name) return null;
   const variants = !names && source.variantCount ? `, ${source.variantCount} variants` : '';
   const checked = source.verifiedAt ? `, checked ${formatDate(source.verifiedAt)}` : '';

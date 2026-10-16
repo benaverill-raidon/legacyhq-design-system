@@ -58,9 +58,14 @@
   --text-area-radius: var(--border-radius-xl);
 }
 
-/* The textarea fills the wrapper, inheriting its padding from the wrapper's gap/padding. */
+/*
+ * The textarea fills the wrapper, inheriting its padding from the wrapper's gap/padding. The wrapper
+ * owns the resize handle (so the frame grows with the drag); the textarea stretches to fill it and
+ * has no handle of its own.
+ */
 .textarea {
   flex: 1 1 auto;
+  align-self: stretch;
   min-inline-size: 0;
   border: none;
   outline: none;
@@ -73,7 +78,7 @@
   font-weight: var(--typography-body-md-font-weight);
   line-height: var(--typography-body-md-line-height);
   letter-spacing: var(--typography-body-md-letter-spacing);
-  resize: inherit;
+  resize: none;
 }
 
 .size_lg .textarea {

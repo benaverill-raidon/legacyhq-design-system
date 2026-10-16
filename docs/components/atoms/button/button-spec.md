@@ -27,12 +27,13 @@ index.ts
 
 ```txt
 Button
-├─ leading icon or loading spinner
+├─ leading icon
 ├─ content
-└─ trailing icon
+├─ trailing icon
+└─ spinner, over the content while loading
 ```
 
-The loading spinner takes the leading slot - in place of `iconBefore`, or ahead of the label when there is none - and the label stays visible at its own width. The button itself can change width: it grows by the spinner and gap when it had no leading icon (117px to 137px at `md`), and the spinner (`sm`) is 4px narrower than a leading icon. Figma's loading variant instead replaces the label with the spinner; reconciling the two is open.
+Loading holds the button's size: the spinner sits centered over the content, and the label and icons keep their space, hidden, so nothing shifts or reflows. The label stays the accessible name. The spinner is `md`, the size of Button's icons. This matches Figma's loading variant, which shows the spinner alone, while keeping the resting width.
 
 ## Public API
 
@@ -148,25 +149,17 @@ When `disabled` is true:
 
 When `isLoading` is true:
 
-- render a Spinner in the leading content area
-- preserve the original content width
+- render a Spinner centered over the content
+- hide the label and icons with opacity, so they keep their space and the label stays the accessible name
+- keep the button's width and height exactly
 - prevent repeated activation
-- apply loading visual behavior
-- keep the action label visible when possible
-
-The intended loading pattern is:
 
 ```txt
-[ spinner  Save changes ]
+[  Save changes  ]   resting
+[       ◌        ]   loading: same size, label still the accessible name
 ```
 
-not:
-
-```txt
-[ spinner ]
-```
-
-Button should not shrink when loading starts.
+Button never changes size when loading starts or ends.
 
 ### Full Width
 
@@ -470,7 +463,7 @@ Test:
 - supports the inverse treatment (isInverse)
 - disabled behavior
 - loading behavior
-- loading preserves label/content
+- loading holds the button's size
 - full width class
 - iconBefore rendering
 - iconAfter rendering

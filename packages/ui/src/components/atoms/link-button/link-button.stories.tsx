@@ -355,7 +355,7 @@ export const Content: Story = {
             Open client
           </LinkButton>
         </Cell>
-        <Cell label="Loading replaces the leading icon">
+        <Cell label="Loading, with a leading icon">
           <LinkButton href="/clients" iconBefore={<CheckIcon />} isLoading>
             Open client
           </LinkButton>

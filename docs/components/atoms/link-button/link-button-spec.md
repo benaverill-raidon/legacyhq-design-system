@@ -55,7 +55,7 @@ not:
 LinkButton
 ├─ anchor root
 │  ├─ leading icon, optional
-│  ├─ spinner, loading only
+│  ├─ spinner, over the content while loading
 │  ├─ label
 │  └─ trailing icon, optional
 └─ focus ring
@@ -177,7 +177,7 @@ When `isLoading` is true:
 Recommended loading model:
 
 ```txt
-Spinner replaces leading content area while preserving label width.
+Loading holds the link button's size: the spinner sits centered over the content, and the label and icons keep their space, hidden, so nothing shifts or reflows. The label stays the accessible name.
 ```
 
 ## Icon behavior
@@ -188,7 +188,7 @@ Match Button.
 - `iconAfter` renders after label.
 - Icons use md size.
 - Gap follows Button.
-- Loading replaces leading content area with Spinner.
+- Loading shows a Spinner over the content and holds the link button's size.
 - Do not expose icon size prop.
 
 ## Size mapping

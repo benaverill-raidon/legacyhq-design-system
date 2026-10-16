@@ -21,7 +21,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * hover and press overlays. `disabled` overrides it.
    */
   isInverse?: boolean;
-  /** Shows a Spinner in the leading slot, keeps the label visible, sets `aria-busy`, and ignores clicks. */
+  /**
+   * Shows a Spinner over the content without changing the button's size, sets `aria-busy`, and ignores
+   * clicks. The label stays the accessible name.
+   */
   isLoading?: boolean;
   /** Fills the width of the container, for a form footer or a mobile action bar. */
   isFullWidth?: boolean;
@@ -30,9 +33,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    * while open. Leave it unset on a button that doesn't open anything.
    */
   isExpanded?: boolean;
-  /** An icon before the label, to support it, never to replace it. The Spinner takes its place while loading. */
+  /** An icon before the label, to support it, never to replace it. */
   iconBefore?: React.ReactNode;
-  /** An icon after the label, such as an arrow to continue or a caret for a menu. Stays while loading. */
+  /** An icon after the label, such as an arrow to continue or a caret for a menu. */
   iconAfter?: React.ReactNode;
   /** The visible label. Required: for an icon-only action, use Icon Button. */
   children: React.ReactNode;

@@ -39,7 +39,6 @@ export const LinkButton = React.memo(
     forwardedRef,
   ) {
     const isInactive = isDisabled || isLoading;
-    const hasLeading = isLoading || Boolean(iconBefore);
 
     const handleClick = React.useCallback(
       (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -78,9 +77,9 @@ export const LinkButton = React.memo(
         data-loading={isLoading ? 'true' : undefined}
         onClick={handleClick}
       >
-        {hasLeading ? (
-          <span className={styles.leading} aria-hidden={isLoading ? undefined : true}>
-            {isLoading ? <Spinner size="sm" /> : iconBefore}
+        {iconBefore ? (
+          <span className={styles.leading} aria-hidden="true">
+            {iconBefore}
           </span>
         ) : null}
 
@@ -89,6 +88,13 @@ export const LinkButton = React.memo(
         {iconAfter ? (
           <span className={styles.trailing} aria-hidden="true">
             {iconAfter}
+          </span>
+        ) : null}
+
+        {/* While loading, the spinner sits over the content, which keeps its space and stays the accessible name. */}
+        {isLoading ? (
+          <span className={styles.spinner} aria-hidden="true">
+            <Spinner size="md" />
           </span>
         ) : null}
       </a>

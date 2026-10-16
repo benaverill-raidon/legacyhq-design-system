@@ -98,6 +98,20 @@ describe('Button', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
+  it('holds its size while loading: the spinner sits over the content, which keeps its space', () => {
+    render(
+      <Button isLoading iconBefore={<CheckIcon />}>
+        Save changes
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Save changes' });
+
+    expect(button.querySelector(`.${styles.leading} svg`)).toBeInTheDocument();
+    expect(button.querySelector(`.${styles.spinner}`)).toHaveAttribute('aria-hidden', 'true');
+    expect(buttonCss).toMatch(/\.button\[data-loading='true'\] > :is\(\.leading, \.content, \.trailing\) \{\s*opacity: 0;/);
+    expect(buttonCss).toMatch(/\.spinner \{\s*position: absolute;\s*inset: 0;/);
+  });
+
   it('applies disabled behavior to primary semantic tone buttons', () => {
     render(
       <Button prominence="primary" tone="error" disabled>

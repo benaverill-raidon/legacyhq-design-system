@@ -42,8 +42,6 @@ export const Button = React.memo(
       [disabled, isLoading, onClick],
     );
 
-    const hasLeading = isLoading || Boolean(iconBefore);
-
     return (
       <button
         {...rest}
@@ -69,9 +67,9 @@ export const Button = React.memo(
         data-expanded={isExpanded ? 'true' : undefined}
         onClick={handleClick}
       >
-        {hasLeading ? (
-          <span className={styles.leading} aria-hidden={isLoading ? undefined : true}>
-            {isLoading ? <Spinner size="sm" /> : iconBefore}
+        {iconBefore ? (
+          <span className={styles.leading} aria-hidden="true">
+            {iconBefore}
           </span>
         ) : null}
 
@@ -80,6 +78,13 @@ export const Button = React.memo(
         {iconAfter ? (
           <span className={styles.trailing} aria-hidden="true">
             {iconAfter}
+          </span>
+        ) : null}
+
+        {/* While loading, the spinner sits over the content, which keeps its space and stays the accessible name. */}
+        {isLoading ? (
+          <span className={styles.spinner} aria-hidden="true">
+            <Spinner size="md" />
           </span>
         ) : null}
       </button>

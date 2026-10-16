@@ -210,8 +210,8 @@ already-exercised path.
   Dropdown Menu); its accessible name and tooltip both come from `secondaryActionLabel`.
 - `disabled` disables both segments together (native `disabled` on both, matching how Figma's own
   `isDisabled` axis covers the whole component, not one segment).
-- `isLoading` applies Button's own loading treatment (`aria-busy`/`aria-disabled`, spinner replacing
-  `iconBefore`) to the primary action only, and additionally disables the secondary action (native
+- `isLoading` applies Button's own loading treatment (`aria-busy`/`aria-disabled`, a spinner over the
+  content while the button keeps its size) to the primary action only, and additionally disables the secondary action (native
   `disabled`) - picking a different action while the primary one is mid-flight would be confusing,
   and Figma's own `isOpen`/`isDisabled` variants never model "open while loading" as a state to
   design around.

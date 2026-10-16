@@ -83,9 +83,10 @@ import contract from '../../../../../../docs/components/atoms/button/button.cont
   }
 >
   <Part name="root" target={buttonStyles.button}>A native `button` element. Always present.</Part>
-  <Part name="leading" target={buttonStyles.leading}>`iconBefore`, or the loading Spinner in its place. Never both.</Part>
-  <Part name="content" target={buttonStyles.content}>The visible label. Required, and it stays visible while loading.</Part>
-  <Part name="trailing" target={buttonStyles.trailing}>`iconAfter`. Loading doesn't change it.</Part>
+  <Part name="leading" target={buttonStyles.leading}>`iconBefore`, an optional icon that supports the label.</Part>
+  <Part name="content" target={buttonStyles.content}>The visible label. Required: it's the button's accessible name, loading or not.</Part>
+  <Part name="trailing" target={buttonStyles.trailing}>`iconAfter`, an optional icon such as an arrow or a caret.</Part>
+  <Part name="spinner">Shown only while loading, centered over the content, which keeps its space.</Part>
 </Anatomy>
 
 </Section>
@@ -139,10 +140,12 @@ flattens it the same way it flattens `tone`.
 
 <Subsection title="Loading">
 
-`isLoading` puts a Spinner in the leading slot, in place of `iconBefore` or ahead of the label,
-keeps the label visible so the action stays legible, sets `aria-busy`, and ignores clicks. Because
-the spinner is added, a button without a leading icon gets slightly wider while it loads. Don't also
-make it look disabled; loading already says "don't click this again."
+`isLoading` shows a Spinner centered over the content and ignores clicks. The button keeps its
+exact size: the label and icons stay in place, hidden, so nothing around it shifts and the text
+doesn't reflow. The label stays the accessible name, and `aria-busy` tells assistive technology the
+action is running. Don't also make it look disabled; loading already says "don't click this again."
+
+<Example of={ButtonStories.Content} caption="Content: icon placement, loading, width, and the open state, in context." />
 
 </Subsection>
 
@@ -189,11 +192,13 @@ signals at once. Don't give a button a focus style that looks unrelated to its h
 >
   <Button prominence="tertiary" tone="error">Delete matter</Button>
 </Dont>
-<Do caption="Keep the label visible while the action runs." code={`<Button prominence="primary" isLoading>Save matter</Button>`}>
+<Do caption="Set isLoading on the button that started the action. It keeps its size, and its label stays the accessible name." code={`<Button prominence="primary" isLoading>Save matter</Button>`}>
+  <Button prominence="primary">Save matter</Button>
   <Button prominence="primary" isLoading>Save matter</Button>
 </Do>
-<Dont caption="Shrink a loading button to a spinner alone." code={`<Button prominence="primary" isLoading aria-label="Save" />`}>
-  <Button prominence="primary" isLoading aria-label="Save" />
+<Dont caption="Swap the label for a progress message. The button resizes, and the text around it moves." code={`<Button prominence="primary">{saving ? 'Saving your changes…' : 'Save matter'}</Button>`}>
+  <Button prominence="primary">Save matter</Button>
+  <Button prominence="primary">Saving your changes…</Button>
 </Dont>
 <Do caption={<>Use Link Button when the control goes somewhere.</>} code={`<LinkButton href="/matters/new">Start a new matter</LinkButton>`}>
   <LinkButton href="#">Start a new matter</LinkButton>
@@ -211,7 +216,8 @@ signals at once. Don't give a button a focus style that looks unrelated to its h
   don't rely on the error or warning color alone to carry the meaning.
 - `type` defaults to `button`, so a Button inside a form submits it only when you ask for `submit`.
 - `disabled` is the native attribute: the button leaves the tab order. A loading button stays
-  focusable, with `aria-busy` and `aria-disabled`, so focus doesn't jump while the action runs.
+  focusable, with `aria-busy` and `aria-disabled`, so focus doesn't jump while the action runs, and
+  its label stays its accessible name.
 - `isExpanded` sets `aria-expanded` on a button that opens a menu or panel.
 
 <Keyboard>

@@ -31,9 +31,9 @@ middle-click to open in a background tab).
 <Canvas of={LinkButtonStories.Content} />
 
 1. **Root** - a native `a`, always requiring `href`.
-2. **Leading** - either `iconBefore`, or the loading `Spinner` when `isLoading` is true, exactly like
+2. **Leading** - `iconBefore`, exactly like
    Button.
-3. **Content** - the visible label. Required, and stays visible while loading.
+3. **Content** - the visible label. Required, and it stays the accessible name while loading, when a `Spinner` sits over the content and the link button keeps its size.
 4. **Trailing** - `iconAfter`, unaffected by loading.
 
 ## Usage guidance
@@ -134,7 +134,7 @@ the route server-side if it truly must be unreachable.
       <td><code>children</code></td>
       <td><code>React.ReactNode</code></td>
       <td>-</td>
-      <td>Required. The visible label. Stays visible while loading.</td>
+      <td>Required. The visible label, and the accessible name while loading.</td>
     </tr>
     <tr>
       <td><code>size</code></td>
@@ -170,13 +170,13 @@ the route server-side if it truly must be unreachable.
       <td><code>isLoading</code></td>
       <td><code>boolean</code></td>
       <td><code>false</code></td>
-      <td>Shows a leading <code>Spinner</code>, sets <code>aria-busy</code>, suppresses clicks.</td>
+      <td>Shows a <code>Spinner</code> over the content without changing the size, sets <code>aria-busy</code>, suppresses clicks.</td>
     </tr>
     <tr>
       <td><code>iconBefore</code></td>
       <td><code>React.ReactNode</code></td>
       <td>-</td>
-      <td>Replaced by the spinner while loading.</td>
+      <td>Hidden with the rest of the content while loading.</td>
     </tr>
     <tr>
       <td><code>iconAfter</code></td>

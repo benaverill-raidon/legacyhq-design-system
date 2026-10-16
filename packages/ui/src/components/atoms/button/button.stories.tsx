@@ -468,16 +468,16 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="Loading keeps the label visible">
+      <Group title="Loading holds the size">
         <Cell label="Default">
           <Button prominence="primary">Save changes</Button>
         </Cell>
-        <Cell label="Loading adds a spinner">
+        <Cell label="Loading">
           <Button prominence="primary" isLoading>
             Save changes
           </Button>
         </Cell>
-        <Cell label="Loading replaces a leading icon">
+        <Cell label="Loading, with a leading icon">
           <Button prominence="primary" iconBefore={<CheckIcon />} isLoading>
             Save changes
           </Button>

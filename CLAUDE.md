@@ -261,10 +261,11 @@ that just duplicate a semantic token under a different name (e.g. don't make
   Toast), and an icon-only control names the control. Rules and the open
   Figma/code differences are in the `icons` block of token-governance.json;
   Storybook's Foundations / Icons page documents them for people.
-- **Loading/busy states** preserve the visible label and use `aria-busy`
-  rather than swapping the label or shifting layout. (Button's width still
-  changes while loading, and Figma swaps its label for the spinner; see the
-  loading note in button-spec.md.)
+- **Loading/busy states hold the control's size.** The spinner sits centered
+  over the content; the label and icons keep their space (hidden with
+  opacity, so the label stays the accessible name), and `aria-busy` marks it.
+  Never swap the label for a different-width message. Button and Link Button
+  do this, and Split Button inherits it.
 
 ## Component API conventions
 

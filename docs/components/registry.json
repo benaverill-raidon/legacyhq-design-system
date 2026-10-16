@@ -851,7 +851,7 @@
       },
       {
         "name": "leading",
-        "description": "leading icon slot or loading spinner"
+        "description": "leading icon slot"
       },
       {
         "name": "content",
@@ -860,6 +860,10 @@
       {
         "name": "trailing",
         "description": "trailing icon slot"
+      },
+      {
+        "name": "spinner",
+        "description": "loading spinner, centered over the content while loading"
       }
     ],
     "props": {

@@ -1,6 +1,7 @@
 .button {
   --button-border-radius: var(--border-radius-sm);
   --focus-ring-offset: var(--spacing-xxs);
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -334,5 +335,21 @@
 
 .leading :global([data-color]),
 .trailing :global([data-color]) {
+  color: inherit;
+}
+
+/*
+ * Loading holds the button's size: the content keeps its space (and stays the accessible name, since
+ * opacity leaves it in the accessibility tree) while the spinner sits centered over it.
+ */
+.button[data-loading='true'] > :is(.leading, .content, .trailing) {
+  opacity: 0;
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   color: inherit;
 }

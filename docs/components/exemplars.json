@@ -1143,7 +1143,7 @@
       {
         "name": "Default horizontal group",
         "description": "Two related actions in a row.",
-        "jsx": "<ButtonGroup>\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "jsx": "<ButtonGroup>\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
         "props": {}
       },
       {
@@ -1163,7 +1163,7 @@
       {
         "name": "Labelled group",
         "description": "role=group is added automatically once aria-label is present.",
-        "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
         "props": {
           "aria-label": "Document actions"
         }
@@ -1183,8 +1183,8 @@
       },
       {
         "name": "Segmented/exclusive selection",
-        "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
-        "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+        "jsx": "<ButtonGroup>\n  <Button prominence={view === 'list' ? 'primary' : 'secondary'} onClick={() => setView('list')}>List</Button>\n  <Button prominence={view === 'grid' ? 'primary' : 'secondary'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
+        "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity. Lay out Toggle Buttons in the group instead, with isSelected from the parent's state."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1434,7 +1434,7 @@
       {
         "name": "Duplicating the label as an aria-label",
         "jsx": "<Field label=\"Email\">\n  <TextField type=\"email\" aria-label=\"Email\" />\n</Field>",
-        "reason": "Field's label already names the control via htmlFor. A duplicate aria-label is redundant and can override the visible label as the accessible name."
+        "reason": "Field's label already names the control, via htmlFor and the aria-labelledby Field adds. A control with its own aria-label keeps it and Field leaves aria-labelledby off, so a duplicate aria-label is redundant and can override the visible label as the accessible name."
       },
       {
         "name": "Error state without the control's own invalid",
@@ -1854,15 +1854,21 @@
         "props": {}
       },
       {
-        "name": "Sizes, appearance and states",
-        "description": "The frame axes are Text Area's, unchanged.",
-        "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea appearance=\"subtle\" aria-label=\"Subtle\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
+        "name": "Sizes, context and states",
+        "description": "The frame axes are Text Area's, unchanged: sm/md/lg sizes and the default/inline context. The deprecated `appearance` still works (subtle and inline map to context=\"inline\").",
+        "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea context=\"inline\" aria-label=\"Inline\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
         "props": {
           "size": "lg",
-          "appearance": "subtle",
+          "context": "inline",
           "invalid": true,
           "disabled": true
         }
+      },
+      {
+        "name": "Labelled by Field",
+        "description": "Field names the editor by aria-labelledby (a label's htmlFor can't name a div) and passes its message, error, and required, which the editor sets as aria-describedby, aria-invalid, and aria-required.",
+        "jsx": "<Field label=\"Notes\" message=\"Type / to link a matter\" state=\"error\" required>\n  <RichTextArea value={value} onChange={setValue} onSearch={search} />\n</Field>",
+        "props": {}
       }
     ],
     "antiExamples": [
@@ -1880,11 +1886,6 @@
         "name": "Storing the value as HTML",
         "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
         "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
-      },
-      {
-        "name": "Relying on it as an accessible combobox",
-        "jsx": "<RichTextArea aria-label=\"Assign work\" value={value} onChange={setValue} onSearch={search} />",
-        "reason": "The picker does not set aria-activedescendant yet, so a screen reader user gets no announcement of the active entity while arrowing. Keyboard operation works, but don't make this the only path to a required task until that's wired."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1992,8 +1993,8 @@
         }
       },
       {
-        "name": "Circle for an avatar",
-        "description": "A circular placeholder sized to match an Avatar.",
+        "name": "Round shape for an avatar",
+        "description": "A round placeholder sized to match an Avatar.",
         "jsx": "<Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
         "props": {
           "shape": "round",
@@ -2073,8 +2074,8 @@
       },
       {
         "name": "Loading primary action",
-        "description": "isLoading applies Button's own loading treatment to the primary action and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
-        "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Saving...\n</SplitButton>",
+        "description": "isLoading applies Button's own loading treatment to the primary action (a Spinner over the label, size held, label kept as the accessible name) and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
+        "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Save\n</SplitButton>",
         "props": {
           "isLoading": true
         }
@@ -2089,11 +2090,9 @@
       },
       {
         "name": "Forwarding other Button props",
-        "description": "Every other ButtonProps prop (tone, iconBefore, iconAfter, any native button attribute) forwards straight to the primary action via {...rest}.",
-        "jsx": "<SplitButton\n  tone=\"warning\"\n  iconBefore={<AlertIcon decorative />}\n  secondaryActionLabel=\"More options\"\n  sections={alternatives}\n  onClick={() => flagForReview()}\n>\n  Flag for review\n</SplitButton>",
-        "props": {
-          "tone": "warning"
-        }
+        "description": "Other ButtonProps (iconBefore, iconAfter, any native button attribute) forward to the primary action only via {...rest}; prominence is overridden by appearance's mapping.",
+        "jsx": "<SplitButton\n  iconBefore={<SendIcon decorative />}\n  secondaryActionLabel=\"More send options\"\n  sections={sendAlternatives}\n  onClick={() => send()}\n>\n  Send\n</SplitButton>",
+        "props": {}
       }
     ],
     "antiExamples": [
@@ -2110,7 +2109,12 @@
       {
         "name": "Expecting a 'subtle' appearance",
         "jsx": "<SplitButton appearance=\"subtle\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
-        "reason": "appearance is deliberately narrower than Button's own ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
+        "reason": "appearance is deliberately narrow ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
+      },
+      {
+        "name": "Setting a tone",
+        "jsx": "<SplitButton appearance=\"primary\" tone=\"error\" secondaryActionLabel=\"More delete options\" sections={deleteAlternatives} onClick={() => remove()}>\n  Delete matter\n</SplitButton>",
+        "reason": "tone forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
       }
     ],
     "exemplarCompleteness": "full"

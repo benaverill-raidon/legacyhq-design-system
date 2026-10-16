@@ -1079,6 +1079,9 @@
     "path": "docs/components/atoms/checkbox/checkbox.contract.json",
     "anatomy": [
       {
+        "name": "root"
+      },
+      {
         "name": "input"
       },
       {
@@ -1088,7 +1091,7 @@
         "name": "label"
       },
       {
-        "name": "helperText"
+        "name": "required indicator"
       }
     ],
     "props": {},
@@ -1132,10 +1135,10 @@
         "name": "icon"
       },
       {
-        "name": "spinner(optional)"
+        "name": "spinner"
       },
       {
-        "name": "tooltip(optional)"
+        "name": "tooltip"
       }
     ],
     "props": {
@@ -1318,6 +1321,9 @@
       },
       {
         "name": "automatic external-link icon"
+      },
+      {
+        "name": "new-tab label"
       }
     ],
     "props": {
@@ -1474,6 +1480,9 @@
       },
       {
         "name": "optional trailing icon"
+      },
+      {
+        "name": "spinner"
       }
     ],
     "props": {},
@@ -1491,8 +1500,14 @@
     "variants": {
       "appearance": [
         "default",
-        "subtle",
-        "bold"
+        "primary",
+        "subtle"
+      ],
+      "tone": [
+        "default",
+        "brand",
+        "warning",
+        "error"
       ]
     },
     "subComponents": [],
@@ -1577,6 +1592,7 @@
         "default": "md",
         "description": null,
         "enum": [
+          "sm",
           "md",
           "lg"
         ]
@@ -1595,6 +1611,7 @@
       }
     },
     "sizes": [
+      "sm",
       "md",
       "lg"
     ],
@@ -1828,7 +1845,23 @@
     "category": "forms",
     "status": "stable",
     "path": "docs/components/atoms/radio/radio.contract.json",
-    "anatomy": [],
+    "anatomy": [
+      {
+        "name": "root"
+      },
+      {
+        "name": "input"
+      },
+      {
+        "name": "indicator"
+      },
+      {
+        "name": "label"
+      },
+      {
+        "name": "required indicator"
+      }
+    ],
     "props": {},
     "sizes": [],
     "slots": [
@@ -1837,184 +1870,7 @@
       "errorMessage"
     ],
     "variants": {},
-    "subComponents": [
-      {
-        "name": "Radio",
-        "anatomy": [
-          {
-            "name": "root label/wrapper"
-          },
-          {
-            "name": "native input[type=\"radio\"]"
-          },
-          {
-            "name": "visual indicator (unchecked/checked icons swapped on :checked)"
-          },
-          {
-            "name": "label text"
-          },
-          {
-            "name": "optional required indicator (standalone usage only)"
-          }
-        ],
-        "props": {
-          "label": {
-            "type": "React.ReactNode",
-            "required": false,
-            "default": null,
-            "description": "Visible label. Omit only when aria-label/aria-labelledby is set."
-          },
-          "checked": {
-            "type": "boolean",
-            "required": false,
-            "default": null,
-            "description": null
-          },
-          "defaultChecked": {
-            "type": "boolean",
-            "required": false,
-            "default": null,
-            "description": null
-          },
-          "invalid": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": null
-          },
-          "required": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": "Maps to native required. Appends a visible required indicator after the label."
-          },
-          "disabled": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": "Maps to native disabled."
-          },
-          "className": {
-            "type": "string",
-            "required": false,
-            "default": null,
-            "description": "Composes with the root label's class list."
-          },
-          "inputClassName": {
-            "type": "string",
-            "required": false,
-            "default": null,
-            "description": "Composes with the native input's class list."
-          },
-          "onCheckedChange": {
-            "type": "(checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void",
-            "required": false,
-            "default": null,
-            "description": null
-          }
-        }
-      },
-      {
-        "name": "RadioGroup",
-        "anatomy": [
-          {
-            "name": "fieldset root"
-          },
-          {
-            "name": "legend / group label (with optional required indicator)"
-          },
-          {
-            "name": "optional description"
-          },
-          {
-            "name": "options (from the options prop, or children)"
-          },
-          {
-            "name": "optional error message"
-          }
-        ],
-        "props": {
-          "label": {
-            "type": "React.ReactNode",
-            "required": false,
-            "default": null,
-            "description": "Rendered as the fieldset legend; the group's accessible name."
-          },
-          "description": {
-            "type": "React.ReactNode",
-            "required": false,
-            "default": null,
-            "description": null
-          },
-          "errorMessage": {
-            "type": "React.ReactNode",
-            "required": false,
-            "default": null,
-            "description": "Connected to the fieldset with aria-describedby when present."
-          },
-          "name": {
-            "type": "string",
-            "required": false,
-            "default": null,
-            "description": "Shared across every option generated from options. Auto-generated when omitted."
-          },
-          "value": {
-            "type": "string",
-            "required": false,
-            "default": null,
-            "description": null
-          },
-          "defaultValue": {
-            "type": "string",
-            "required": false,
-            "default": null,
-            "description": null
-          },
-          "options": {
-            "type": "RadioGroupOption[]",
-            "required": false,
-            "default": null,
-            "description": "Generates one Radio per entry. Takes precedence over children when provided."
-          },
-          "children": {
-            "type": "React.ReactNode",
-            "required": false,
-            "default": null,
-            "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted."
-          },
-          "orientation": {
-            "type": "'vertical' | 'horizontal'",
-            "required": false,
-            "default": "vertical",
-            "description": "horizontal wraps via flex-wrap rather than overflowing."
-          },
-          "required": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": "Group-level required indicator, shown after the legend."
-          },
-          "invalid": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": "Sets aria-invalid on the fieldset and every generated option."
-          },
-          "disabled": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "description": "Disables the fieldset and every generated option."
-          },
-          "onValueChange": {
-            "type": "(value: string, event: React.ChangeEvent<HTMLInputElement>) => void",
-            "required": false,
-            "default": null,
-            "description": null
-          }
-        }
-      }
-    ],
+    "subComponents": [],
     "tokens": {
       "semantic": {
         "defaultContent": "color-content-default",
@@ -2097,13 +1953,25 @@
     "path": "docs/components/atoms/slider/slider.contract.json",
     "anatomy": [
       {
+        "name": "label"
+      },
+      {
         "name": "track"
       },
       {
-        "name": "thumb"
+        "name": "active track"
       },
       {
         "name": "steps"
+      },
+      {
+        "name": "handle"
+      },
+      {
+        "name": "value indicator"
+      },
+      {
+        "name": "input"
       }
     ],
     "props": {},
@@ -2168,6 +2036,9 @@
       },
       {
         "name": "indicator"
+      },
+      {
+        "name": "label"
       }
     ],
     "props": {},
@@ -2211,6 +2082,12 @@
     "path": "docs/components/atoms/switch/switch.contract.json",
     "anatomy": [
       {
+        "name": "root"
+      },
+      {
+        "name": "input"
+      },
+      {
         "name": "track"
       },
       {
@@ -2223,7 +2100,7 @@
         "name": "label"
       },
       {
-        "name": "helperText"
+        "name": "required indicator"
       }
     ],
     "props": {
@@ -3280,7 +3157,7 @@
       },
       {
         "name": "label",
-        "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id. Omitted when label is not provided."
+        "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id, and its own id is the control's aria-labelledby. Omitted when label is not provided."
       },
       {
         "name": "required",
@@ -3288,7 +3165,7 @@
       },
       {
         "name": "control",
-        "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus context='inline' when Field's context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
+        "description": "The wrapped control (the slot), cloned to receive id / aria-labelledby / aria-describedby / aria-invalid / required, plus context='inline' when Field's context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
       },
       {
         "name": "message",
@@ -3310,7 +3187,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Label text, rendered in a real native label[htmlFor]. Omit only when the control is labelled another way; then no label is rendered."
+        "description": "Label text, rendered in a real native label[htmlFor]; the control also gets aria-labelledby naming it, unless it has its own aria-label or aria-labelledby. Omit only when the control is labelled another way; then no label is rendered."
       },
       "message": {
         "type": "React.ReactNode",
@@ -3432,10 +3309,11 @@
       "role": null,
       "requirements": [
         "The label is a real label[htmlFor] pointing at the control's id (generated when the control has none), so the control gets its accessible name from the label - no aria-label on the control.",
+        "The label also has an id, which Field passes to the control as aria-labelledby unless the control has its own aria-label or aria-labelledby, so a control htmlFor can't reach (Rich Text Area's div editor, Date Time Picker's group) is named too.",
         "The message is linked to the control via aria-describedby, merged with any aria-describedby the control already carries.",
         "state='error' sets aria-invalid on the control; an explicit control aria-invalid always wins.",
         "required forwards native required to the control; the visible '*' is aria-hidden.",
-        "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/context (or deprecated appearance/tone) are never overwritten.",
+        "Field only fills in wiring the control left unset - the control's own id/aria-labelledby/aria-invalid/aria-describedby/required/context (or deprecated appearance/tone) are never overwritten, and a control's own aria-label keeps Field from adding aria-labelledby.",
         "Use Field for one control only; a group of controls needs fieldset/legend instead of a single label[htmlFor]."
       ]
     },
@@ -3505,12 +3383,14 @@
       },
       "apiAdaptationNotes": [
         "Field renders its own label and message rather than reusing the Label atom / Inline Message molecule - the Figma <label>/<message> code-parts use different typography (heading/xxs, body/sm) and a smaller state set (default/error/valid) than those components expose.",
-        "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop.",
+        "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop. Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming aria-invalid as invalid, so their border follows; Text Field and Text Area need invalid.",
         "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
         "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
         "context is a single shared axis in Figma (the same 'context' property, default/inline, sits on <field>, text-field, text-area, select, etc.), so Field propagates context='inline' to the control by injecting context='inline' - Text Field, Text Area, and Select take the same context prop with the same values. The control's own context (or a deprecated appearance/tone) wins. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
         "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
-        "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
+        "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-labelledby naming the label unless the control has its own aria-label or aria-labelledby, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
+        "The label has an id as well as htmlFor, and Field passes that id to the control as aria-labelledby, because htmlFor only names a labelable native element. That is what names Rich Text Area's contenteditable div and Date Time Picker's group.",
+        "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs.",
         "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
       ]
     }
@@ -3974,6 +3854,10 @@
     "status": "stable",
     "path": "docs/components/molecules/inline-message/inline-message.contract.json",
     "anatomy": [
+      {
+        "name": "root",
+        "description": "The row: a native <button type=\"button\"> when content is provided, otherwise a plain div. No padding of its own; carries the hover/focus/open tint and the Focus Ring when it's a button."
+      },
       {
         "name": "icon",
         "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
@@ -4454,7 +4338,24 @@
     "category": "forms",
     "status": "beta",
     "path": "docs/components/molecules/rich-text-area/rich-text-area.contract.json",
-    "anatomy": [],
+    "anatomy": [
+      {
+        "name": "editor",
+        "description": "The frame and the editable surface in one: Text Area's frame tokens around the text and the inline tags. It sits in a div.wrapper, the same size, which positions the picker and takes className."
+      },
+      {
+        "name": "tag",
+        "description": "One per linked entity: a non-editable host span with a NavTag (a Tag atom, an <a> when href is set) portaled into it, so the caret treats the tag as one unit."
+      },
+      {
+        "name": "slashInput",
+        "description": "Only while a / command is active: the typed /query in a small bordered box inside the text, showing searchPlaceholder until a query is typed."
+      },
+      {
+        "name": "picker",
+        "description": "Only while a / command is active: the floating list of matching entities, grouped by type - the Menu organism with its search hidden, positioned under the query."
+      }
+    ],
     "props": {
       "value": {
         "type": "RichTextValue",
@@ -4490,20 +4391,32 @@
         "type": "TextAreaSize",
         "required": false,
         "default": "md",
-        "description": "Text Area's frame sizing - padding, radius, font.",
+        "description": "Text Area's frame sizing - padding, radius, font. sm keeps md's corners, inline padding, and text, with Text Area's tighter block padding (--spacing-075).",
         "enum": [
+          "sm",
           "md",
           "lg"
+        ]
+      },
+      "context": {
+        "type": "TextAreaContext",
+        "required": false,
+        "default": "default",
+        "description": "Where it's shown, as on Text Area and Figma's text-area. default = the bordered field. inline = chromeless at rest; the hover background and a bottom line in color-border-input on hover (not while invalid or focused), and a 2px bottom line on focus or error.",
+        "enum": [
+          "default",
+          "inline"
         ]
       },
       "appearance": {
         "type": "TextAreaAppearance",
         "required": false,
-        "default": "default",
-        "description": "Text Area's appearance axis (Figma names it `tone`).",
+        "default": null,
+        "description": "Deprecated - use context. subtle and inline map to context='inline', default to 'default'. Still accepted; an explicit context wins.",
         "enum": [
           "default",
-          "subtle"
+          "subtle",
+          "inline"
         ]
       },
       "resize": {
@@ -4522,13 +4435,19 @@
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Sets aria-invalid and paints the error border."
+        "description": "Sets aria-invalid and paints the error border, which stays while the editor has focus."
       },
       "disabled": {
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Turns off contenteditable, removes the editor from the tab order, and suppresses the slash command."
+        "description": "Turns off contenteditable, removes the editor from the tab order, sets aria-disabled, and suppresses the slash command."
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Sets aria-required on the editor (a div has no native required). Field passes it when its own required is set."
       },
       "placeholder": {
         "type": "string",
@@ -4552,7 +4471,7 @@
         "type": "number",
         "required": false,
         "default": 3,
-        "description": "Approximate initial height in line-height units, applied as the `--rta-rows` custom property."
+        "description": "Starting height in line-height units, applied as the `--rta-rows` custom property to the editor's min-height. The editor grows past it as content is added."
       },
       "className": {
         "type": "string",
@@ -4564,47 +4483,62 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Applied to the editor element, for pairing with a <label htmlFor>."
+        "description": "Applied to the editor element. A <label htmlFor> cannot name it - the editor is a div, not a labelable element - so pair a visible label through aria-labelledby (Field does this with its label's id)."
       },
       "aria-label": {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Accessible name for the editor. Required unless aria-labelledby or a wired label is used."
+        "description": "Accessible name for the editor. Required unless aria-labelledby is used."
       },
       "aria-labelledby": {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Accessible name by reference."
+        "description": "Accessible name by reference. Field passes its label's id."
+      },
+      "aria-describedby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of elements that describe the editor, such as Field's message."
+      },
+      "aria-invalid": {
+        "type": "boolean | 'true' | 'false'",
+        "required": false,
+        "default": null,
+        "description": "true or 'true' marks the editor invalid, as invalid does (aria-invalid plus the error border). Field passes it for an error."
       }
     },
     "sizes": [
+      "sm",
       "md",
       "lg"
     ],
     "slots": [],
     "variants": {
-      "appearance": [
+      "context": [
         "default",
-        "subtle"
+        "inline"
       ]
     },
     "subComponents": [],
     "tokens": {
       "frame": "All of Text Area's frame tokens, unchanged - surface, border, radius, padding, typography per size.",
-      "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-sm`.",
+      "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-md`.",
       "tagHost": "Layout only - the Tag atom carries its own tone tokens.",
       "picker": "The Menu organism's own panel tokens; the panel caps at 280px and scrolls.",
       "note": "No new tokens. Frame reuse is what makes the rich mode read as the same field as Text Area."
     },
     "accessibility": {
-      "role": "textbox (a contenteditable div), aria-multiline=\"true\"",
-      "label": "No built-in label - pass aria-label / aria-labelledby, or wire a <label htmlFor> to `id`.",
-      "invalid": "aria-invalid reflects the invalid prop.",
-      "disabled": "contenteditable is turned off and tabIndex is -1; the slash command does not fire.",
+      "role": "textbox (a contenteditable div), aria-multiline=\"true\", aria-haspopup=\"menu\"",
+      "label": "No built-in label - pass aria-label, or aria-labelledby pointing at a visible label. A <label htmlFor> wired to `id` does not name it, because the editor is a div. Field names it anyway by passing its label's id as aria-labelledby, and its aria-describedby, aria-invalid, and required (as aria-required) land on the editor too.",
+      "invalid": "aria-invalid reflects the invalid prop, or an aria-invalid of true/'true' passed in.",
+      "required": "required sets aria-required on the editor.",
+      "description": "aria-describedby is set on the editor as given (Field passes its message's id).",
+      "disabled": "contenteditable is turned off, tabIndex is -1, and aria-disabled is set; the slash command does not fire.",
       "tags": "Each tag renders a Tag with tabIndex -1 so the caret walk is not interrupted by tab stops; a tag with `href` is a real <a> and is reachable from the rendered content.",
-      "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. The keyboard-active row is marked with a class. See knownLimitations - this is not yet wired to aria-activedescendant."
+      "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. While the picker is open, aria-controls names its Menu and aria-activedescendant points at the highlighted row (each row's id is `<pickerId>-option-<index>`), so the active entity is announced; both are removed when it closes. Tab closes the picker and lets focus move on."
     },
     "relatedComponents": [
       "TextArea",
@@ -4630,7 +4564,8 @@
         "The value is a flat node array (`RichTextValue`) - runs of text interleaved with entity nodes - not HTML or Markdown. It is what you persist; serialize it however your store needs. Storing HTML would leak the editor's DOM shape into consumers' data.",
         "Hydrates from `value` once, then runs uncontrolled - the DOM is the source of truth while editing, with `onChange` reporting each serialized change. A contenteditable surface cannot be re-rendered from props on every keystroke without destroying the caret.",
         "The `/` query lives in an inline editable span inside the editor (the Figma `type-cursor` look), so the picker panel has no search field of its own - `showSearch={false}`. This matches Figma and mirrors how Select types in the trigger while the panel only lists options.",
-        "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. See knownLimitations for the accessibility consequence.",
+        "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. The editor's aria-activedescendant points assistive technology at that row (the picker gives each row the id `<pickerId>-option-<index>`), and aria-controls names the picker's Menu while it is open.",
+        "Figma's text-area `context` axis (default/inline) is the `context` prop, as on Text Area. It replaces the earlier `appearance` prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline map to context=inline, default to context=default; an explicit context wins.",
         "Each tag is a non-editable host span with a `NavTag` portaled into it. contenteditable would otherwise let the caret walk into the tag's internals; a host span keeps each tag atomic to the caret while still being a real React subtree.",
         "`NavTag` is a preset over the Tag atom, not a new component - Tag already does tone (color), `elemBefore` (icon), and `href` (navigation). An entityType only needs to resolve to a tone plus an icon.",
         "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
@@ -5036,7 +4971,7 @@
         "type": "SplitButtonAppearance",
         "required": false,
         "default": "default",
-        "description": "Applied to both segments. Narrower than Button's own appearance - no 'subtle', matching every verified Figma variant.",
+        "description": "Applied to both segments: default maps to Button prominence=\"secondary\" plus IconButton appearance=\"default\"; primary maps to both primary. No 'subtle', matching every verified Figma variant.",
         "enum": [
           "default",
           "primary"
@@ -5075,8 +5010,8 @@
       "tone": {
         "type": "ButtonTone",
         "required": false,
-        "default": "neutral",
-        "description": "Forwarded to the primary action, unchanged from Button's own prop."
+        "default": "default",
+        "description": "Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)."
       },
       "iconBefore": {
         "type": "React.ReactNode",
@@ -5118,7 +5053,7 @@
     },
     "subComponents": [],
     "tokens": {
-      "note": "split-button.module.css declares no raw values other than 0 (squared corners). The divider uses border-width-sm, size-control-xs/sm/md/lg, color-border-input/color-content-brand-primary-subtle/color-border-disabled. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
+      "note": "split-button.module.css declares no raw values other than 0 (squared corners). The divider uses border-width-sm, size-control-xs/sm/md/lg, color-border-input/color-border-brand-primary-subtle/color-border-disabled. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
     },
     "accessibility": {
       "primaryActionRole": "button (Button, unmodified)",
@@ -5305,7 +5240,20 @@
     "category": "forms",
     "status": "stable",
     "path": "docs/components/molecules/text-area/text-area.contract.json",
-    "anatomy": [],
+    "anatomy": [
+      {
+        "name": "root",
+        "description": "The frame: border, background, radius, and padding. Reacts to :hover, :focus-within, and the textarea's :autofill (via :has), and carries the resize axis and the autoResize class."
+      },
+      {
+        "name": "textarea",
+        "description": "The real native textarea, transparent and borderless inside the frame. Receives every forwarded native attribute and the ref."
+      },
+      {
+        "name": "iconAfter",
+        "description": "Optional trailing icon or interactive control (e.g. an edit IconButton), pinned to the top of the frame. Never forced aria-hidden."
+      }
+    ],
     "props": {
       "size": {
         "type": "TextAreaSize",
@@ -6753,7 +6701,7 @@
       },
       {
         "name": "menu",
-        "description": "A Menu, rendered with every DropdownMenu prop besides children/open/onOpenChange/alignment/id/className forwarded to it unchanged."
+        "description": "A Menu, rendered with the Menu props DropdownMenu forwards (an explicit list: clearSearchLabel is accepted by the type but not forwarded, and fullWidth is set from matchTriggerWidth)."
       }
     ],
     "props": {
@@ -7287,12 +7235,12 @@
         "description": "One per entry in a section's `items` - a native button row with optional leading/title-leading/trailing slots, a label, and an optional description."
       },
       {
-        "name": "loading-row",
-        "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel."
+        "name": "loading row",
+        "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel, in a role=\"status\" row."
       },
       {
-        "name": "empty-message",
-        "description": "Shown in place of sections when search filters out every item."
+        "name": "empty message",
+        "description": "Shown in place of the rows when none are left to show - search filtered every item out, or there are no items."
       }
     ],
     "props": {

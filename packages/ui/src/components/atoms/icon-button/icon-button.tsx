@@ -60,7 +60,7 @@ export const IconButton = React.memo(
       isInverse = false,
       disabled = false,
       isLoading = false,
-      isExpanded = false,
+      isExpanded,
       tooltip,
       className,
       children,
@@ -114,11 +114,12 @@ export const IconButton = React.memo(
         disabled={disabled}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        // isExpanded wins; without it, an aria-expanded a wrapper passes (Popup does) stays.
         aria-expanded={isExpanded != null ? isExpanded : ariaExpanded}
         aria-busy={isLoading ? true : undefined}
         aria-disabled={isLoading ? true : undefined}
         data-loading={isLoading ? 'true' : undefined}
-        data-expanded={isExpanded ? 'true' : undefined}
+        data-expanded={(isExpanded ?? (ariaExpanded === true || ariaExpanded === 'true')) ? 'true' : undefined}
         onClick={handleClick}
       >
         <span className={styles.content} aria-hidden={isLoading ? undefined : true}>

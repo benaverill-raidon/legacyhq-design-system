@@ -336,4 +336,15 @@ describe('Button', () => {
       ".button.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {",
     );
   });
+
+  it('keeps an aria-expanded a wrapper passes (as Popup does) when isExpanded is unset', () => {
+    const { rerender } = render(<Button aria-label="Actions" aria-expanded>Actions</Button>);
+    const trigger = screen.getByRole('button', { name: 'Actions' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('data-expanded', 'true');
+
+    rerender(<Button aria-label="Actions" aria-expanded={false}>Actions</Button>);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).not.toHaveAttribute('data-expanded');
+  });
 });

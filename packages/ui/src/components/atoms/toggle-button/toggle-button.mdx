@@ -1,170 +1,238 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { CheckIcon, FilterIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { ButtonGroup } from '../../molecules/button-group';
+import { Switch } from '../switch';
+import { ToggleButton } from './toggle-button';
+import toggleButtonStyles from './toggle-button.module.css';
 import * as ToggleButtonStories from './toggle-button.stories';
 
 <Meta of={ToggleButtonStories} name="Docs" />
 
-# Toggle Button
+<Unstyled>
+<ComponentPage>
 
-Toggle Button is a Button-family atom that lets a user switch a button between selected and
-unselected states, while remaining visible as a button rather than a switch or checkbox.
+<ComponentHeader
+  id="toggle-button"
+  example={
+    <ButtonGroup>
+      <ToggleButton isSelected>Unread</ToggleButton>
+      <ToggleButton>Flagged</ToggleButton>
+      <ToggleButton>Has attachments</ToggleButton>
+    </ButtonGroup>
+  }
+>
+  Toggle Button turns an option on or off and shows which it is: a filter, a view setting, a
+  formatting style. It stays a button, announced as pressed or not pressed.
+</ComponentHeader>
 
-<Canvas of={ToggleButtonStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Text formatting controls (bold, italic, underline).
-- View mode or display preference controls.
-- Filter controls that stay visibly toggled on.
-- Editor toolbar options with a persistent pressed state.
+- A filter that stays on until it's turned off.
+- A view or display setting in a toolbar, such as showing archived items.
+- Formatting in an editor toolbar, when there's room for a label.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Navigation.** Use `LinkButton`.
-- **A momentary action with no persistent state.** Use `Button`.
-- **A setting that turns something on/off immediately**, outside a toolbar/toolbar-like context. Use
-  `Switch`.
-- **An icon-only selected control.** Use `ToggleIconButton`.
-- **A mutually exclusive group of options.** Compose multiple Toggle Buttons with your own
-  single-selection logic (see Content), since there's no dedicated group component yet.
+- **A one-off action:** <DocLink to="Components/Actions/Button" />.
+- **No room for a label:** <DocLink to="Components/Actions/Toggle Icon Button" />.
+- **A setting that takes effect right away, outside a toolbar:** <DocLink to="Components/Forms/Switch" />.
+- **An on or off choice in a form:** <DocLink to="Components/Forms/Checkbox" />. Toggle Button holds no form value.
+- **Navigation:** <DocLink to="Components/Navigation/Link Button" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={ToggleButtonStories.Content} />
+</Section>
 
-- **Root** - a native `<button type="button">`, exposing `aria-pressed` rather than `aria-selected`,
-  `aria-expanded`, or `role="switch"`.
-- **Leading icon** - optional, decorative (`aria-hidden`).
-- **Label** - the button's content.
-- **Trailing icon** - optional, decorative (`aria-hidden`).
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <ToggleButton size="lg" isSelected iconBefore={<FilterIcon />} iconAfter={<CheckIcon />}>
+      Unread
+    </ToggleButton>
+  }
+>
+  <Part name="button" target={toggleButtonStyles.toggleButton}>A native `button` element with `aria-pressed`. Always present.</Part>
+  <Part name="optional leading icon" target={toggleButtonStyles.leading}>`iconBefore`, an icon that supports the label.</Part>
+  <Part name="label" target={toggleButtonStyles.content}>The visible label. Required: it's the accessible name.</Part>
+  <Part name="optional trailing icon" target={toggleButtonStyles.trailing}>`iconAfter`, an icon after the label.</Part>
+</Anatomy>
 
-### The parent owns selection
+</Section>
 
-`isSelected` is fully controlled - Toggle Button does not manage its own selected state internally.
-Pair it with your own state (a single boolean, or a small "which one is active" value when several
-buttons represent one choice) - see Content for both patterns.
+<Section title="Variants">
 
-### Tone
+Here `tone` is the visual style, not a meaning: `default` has a border and `subtle` has none, in
+every state. Selected uses the same fill and text color for both, and only `default` shows the
+selected border. Using `tone` for style is a recorded exception to the system's naming, kept on
+purpose.
 
-`default` has a visible border at rest; `subtle` has no border until hover/selected. Both use the
-same `color-content-subtle` resting text color and the same selected/disabled treatment - tone only
-changes the resting-state border, not the meaning of the button.
+<Example of={ToggleButtonStories.Variants} />
 
-### Sizes
+<Subsection title="Sizes">
 
-`xs`, `sm`, `md` (the default), and `lg` scale height, padding, and corner radius together. The
-leading/trailing icon always renders at its own default size regardless of `size` - matching
-Button's convention of a single constant icon size with no separate `iconSize` prop.
+Four control heights, from `xs` (24px) to `lg` (48px), the same as Button so the two line up in a
+row. `lg` also sets the label one type size larger. Icons are the same size at every toggle button
+size, and there's no prop to change them.
 
-### Disabled always wins over selected
+<Example of={ToggleButtonStories.Sizes} />
 
-Figma has no unique visual treatment for "selected and disabled" - disabled styling fully overrides
-the selected appearance rather than blending with it. See States.
+</Subsection>
 
-## Do / Don't
+</Section>
 
-**Do** let the parent control `isSelected` from its own state.
+<Section title="Behavior">
 
-```tsx
-const [selected, setSelected] = useState(false);
+<Subsection title="The parent owns the state">
 
-<ToggleButton isSelected={selected} onClick={() => setSelected((current) => !current)}>
-  Bold
-</ToggleButton>;
-```
+Toggle Button never changes on its own: `isSelected` comes from your state, and your `onClick` flips
+it. When several buttons stand for one choice, such as a view mode, keep the chosen value in the
+parent and select the button that matches it. When each option is on or off by itself, such as
+bold and italic, give each its own state.
 
-**Don't** reach for Toggle Button for a one-off action with no persistent pressed meaning - use
-`Button` instead.
+<Example of={ToggleButtonStories.Content} caption="Independent formatting options, a view mode that's one choice, and a pair of filters." />
 
-```tsx
-<ToggleButton onClick={handleSave}>Save changes</ToggleButton>
-```
+</Subsection>
 
----
+<Subsection title="Disabled">
 
-**Do** use `Switch` for an immediate on/off setting outside a toolbar context.
+`isDisabled` sets the native `disabled` attribute, so the button leaves the tab order and ignores
+clicks. Disabled looks the same selected or not, but `aria-pressed` still reports the state.
 
-```tsx
-<Switch label="Email notifications" />
-```
+</Subsection>
 
-**Don't** repurpose Toggle Button as a settings switch - it has no `role="switch"` semantics and
-reads to assistive technology as a pressable button, not a binary setting.
+<Subsection title="Width">
 
-```tsx
-<ToggleButton isSelected={notificationsEnabled}>Email notifications</ToggleButton>
-```
+Toggle Buttons size to their label and never wrap it. A label longer than the space overflows its
+container, so keep labels short.
 
-## API
+</Subsection>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The label content.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Scales height, padding, and corner radius. Icon size stays constant.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'subtle'</code></td>
-      <td><code>'default'</code></td>
-      <td>Whether the resting state shows a visible border.</td>
-    </tr>
-    <tr>
-      <td><code>isSelected</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Fully controlled by the parent. Sets <code>aria-pressed</code> and the selected visual treatment.</td>
-    </tr>
-    <tr>
-      <td><code>isDisabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>disabled</code>. Overrides selected styling entirely.</td>
-    </tr>
-    <tr>
-      <td><code>iconBefore</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Leading icon.</td>
-    </tr>
-    <tr>
-      <td><code>iconAfter</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Trailing icon.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>button</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Subsection title="Focus and hover">
 
-Any other native `button` attribute is forwarded to the root element. `type` defaults to
-`"button"`, so it never accidentally submits a form.
+Keyboard focus shows the hover fill together with the shared Focus Ring, selected or not, so a
+keyboard user sees both signals at once. A selected button keeps its border and text color and steps
+only its fill, to the selected hover and press fills.
 
-## Related components
+<Example of={ToggleButtonStories.States} />
 
-- **Button** - for a momentary action with no persistent selected state.
-- **ToggleIconButton** - for an icon-only selected control.
-- **Switch** - for an immediate on/off setting outside a toolbar context.
-- **LinkButton** - for navigation styled as a button.
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Use Toggle Button for an option that stays on until it's turned off." code={`<ToggleButton isSelected={showArchived} onClick={() => setShowArchived(!showArchived)}>
+  Show archived
+</ToggleButton>`}>
+  <ToggleButton isSelected>Show archived</ToggleButton>
+  <ToggleButton>Show archived</ToggleButton>
+</Do>
+<Dont caption="Use it for a one-off action, which is announced as not pressed and doesn't stay on." code={`<ToggleButton onClick={saveChanges}>Save changes</ToggleButton>`}>
+  <ToggleButton>Save changes</ToggleButton>
+</Dont>
+<Do caption="Keep the label the same, and let the selected look and aria-pressed show the state." code={`<ToggleButton isSelected={showArchived}>Show archived</ToggleButton>`}>
+  <ToggleButton isSelected>Show archived</ToggleButton>
+</Do>
+<Dont caption="Change the label with the state, so people hear Hide archived, pressed, and can't tell what pressing does." code={`<ToggleButton isSelected={showArchived}>
+  {showArchived ? 'Hide archived' : 'Show archived'}
+</ToggleButton>`}>
+  <ToggleButton isSelected>Hide archived</ToggleButton>
+</Dont>
+<Do caption="Use Switch for a setting that takes effect right away, outside a toolbar." code={`<Switch label="Email notifications" />`}>
+  <Switch label="Email notifications" />
+</Do>
+<Dont caption="Use Toggle Button as a settings switch, which is announced as a pressable button, not an on and off setting." code={`<ToggleButton isSelected={notificationsOn}>Email notifications</ToggleButton>`}>
+  <ToggleButton isSelected>Email notifications</ToggleButton>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Toggle Button renders a native `button`, so it's focusable and activated by Enter and Space with
+  no extra code. `type` defaults to `button`, so it submits a form only when you ask for `submit`.
+- `isSelected` sets `aria-pressed` to `true` or `false`, so assistive technology announces a toggle
+  button, pressed or not pressed. It doesn't use `aria-selected`, `aria-expanded`, or
+  `role="switch"`.
+- The visible label is the accessible name. Keep it the same in both states; the pressed state
+  already says whether it's on. The icons are hidden from assistive technology.
+- `isDisabled` sets the native `disabled` attribute: the button leaves the tab order, and
+  `aria-pressed` stays.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the button. A disabled button is skipped.</Key>
+  <Key keys="Enter">Activates the button, which calls `onClick`, where you flip `isSelected`.</Key>
+  <Key keys="Space">Activates the button, which calls `onClick`, where you flip `isSelected`.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ToggleButtonStories} native="button" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Toggle Button's stylesheet uses, by family, with the property it sets and when. "Base"
+is the button with no modifiers; a token listed for a tone applies at every size. Under Other,
+`toggle-button-border-radius` is the stylesheet's own variable for the corner radius, set per size
+from the radius tokens.
+
+<TokensTable id="toggle-button" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Toggle Icon Button" /> for the same control with only an icon.
+- <DocLink to="Components/Actions/Button" /> for a one-off action.
+- <DocLink to="Components/Forms/Switch" /> for a setting that takes effect right away.
+- <DocLink to="Components/Forms/Checkbox" /> for an on or off choice in a form.
+- <DocLink to="Components/Actions/Button Group" /> to lay out related toggle buttons together.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads toggle-button.types.ts, the design tokens read toggle-button.module.css, and
+  the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

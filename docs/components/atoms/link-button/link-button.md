@@ -1,23 +1,9 @@
 # Link Button
 
-## Purpose
-A Link Button navigates users while adopting the visual appearance of a Button.
+Link Button's usage guidance is its Storybook Docs page (Components / Navigation / Link Button),
+written in [`link-button.mdx`](../../../../packages/ui/src/components/atoms/link-button/link-button.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-Use when navigation should be visually emphasized as a button.
-
-## When not to use
-Do not use for actions that only affect the current page. Use Button instead.
-
-## Design intent
-Preserve native link semantics while sharing Button appearance, sizing, and interaction patterns.
-
-Shares Button's `isInverse` on-dark treatment - an orthogonal boolean (not a `tone` value) for a Link Button placed on a dark or bold-colored surface such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press overlays, and is flattened by `isDisabled` like tone.
-
-Shares Button's motion treatment: hover/press/focus color transitions use `fade-quick`. No press-state scale or other transform-based motion - press feedback is color-only.
-
-## Accessibility
-Must expose an accessible name, retain anchor semantics, and provide a visible focus indicator.
-
-## Related
-Button, Link, Icon Button.
+For implementation detail, see [`link-button-spec.md`](link-button-spec.md); for the
+machine-readable contract, [`link-button.contract.json`](link-button.contract.json).

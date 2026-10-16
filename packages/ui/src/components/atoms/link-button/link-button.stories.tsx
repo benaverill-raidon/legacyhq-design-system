@@ -52,10 +52,17 @@ const row: CSSProperties = {
   gap: 'var(--spacing-md)',
 };
 
+// Labels read --story-label / --story-heading when a backdrop sets them, so they stay legible on the
+// Inverse story's dark surface.
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
-  color: 'var(--color-content-subtle)',
+  color: 'var(--story-label, var(--color-content-subtle))',
 };
+
+const onDark = {
+  '--story-heading': 'var(--color-content-inverse-default)',
+  '--story-label': 'var(--color-content-inverse-default)',
+} as CSSProperties;
 
 const cardStyle: CSSProperties = {
   display: 'grid',
@@ -73,7 +80,7 @@ function sectionHeading(text: string) {
       style={{
         margin: 0,
         font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
-        color: 'var(--color-content-default)',
+        color: 'var(--story-heading, var(--color-content-default))',
       }}
     >
       {text}
@@ -120,9 +127,10 @@ function ControlledLinkPreview() {
 export const Playground: Story = {};
 
 /**
- * The intentionally designed forms. `tone` only has a visual effect on `appearance="primary"` -
- * `default` and `subtle` render identically across tones, exactly like Button - so this page shows
- * appearance alone, then primary crossed with tone, rather than a full appearance x tone grid.
+ * The intentionally designed forms. `tone` only has a visual effect on `appearance="primary"`, and
+ * only for `warning` and `error` - `default` and `subtle` render identically across tones - so this
+ * page shows appearance alone, then primary crossed with tone, rather than a full appearance x tone
+ * grid.
  */
 export const Variants: Story = {
   render: () => (
@@ -283,6 +291,7 @@ export const Inverse: Story = {
     <div
       style={{
         ...stack,
+        ...onDark,
         padding: 'var(--spacing-2xl)',
         borderRadius: 'var(--border-radius-md)',
         background: 'var(--color-background-neutral-bold-default)',

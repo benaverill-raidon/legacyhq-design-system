@@ -1,24 +1,10 @@
 # Toggle Icon Button
 
-## Purpose
-A Toggle Icon Button allows users to switch between selected and unselected states using an icon-only button.
+Toggle Icon Button's usage guidance is its Storybook Docs page (Components / Actions / Toggle Icon
+Button), written in
+[`toggle-icon-button.mdx`](../../../../packages/ui/src/components/atoms/toggle-icon-button/toggle-icon-button.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-Use for persistent icon-based controls where space is limited.
-
-## When not to use
-Do not use for navigation or when the action cannot be understood without text.
-
-## Design intent
-Provide the compact footprint of an Icon Button while maintaining a persistent pressed state. The
-icon itself is never resized by the component, and `shape="round"` is a full circle at every size.
-
-Shares Icon Button's hover/press/focus `fade-quick` color transitions. No press-state scale, and
-becoming selected is a plain color change with no pop/scale motion - transform-based feedback has
-been removed from this component, matching Toggle Button.
-
-## Accessibility
-Requires an accessible name, exposes `aria-pressed`, provides visible focus, and should be paired with a tooltip.
-
-## Related
-Toggle Button, Icon Button, Tooltip.
+For implementation detail, see [`toggle-icon-button-spec.md`](toggle-icon-button-spec.md); for the
+machine-readable contract, [`toggle-icon-button.contract.json`](toggle-icon-button.contract.json).

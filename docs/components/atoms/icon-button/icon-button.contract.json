@@ -15,8 +15,8 @@
   "anatomy": [
     "button",
     "icon",
-    "spinner(optional)",
-    "tooltip(optional)"
+    "spinner",
+    "tooltip"
   ],
   "props": {
     "tooltip": {

@@ -188,6 +188,12 @@ Match Button icon behavior:
 
 Do not expose icon size as a public prop.
 
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Button. There's no press-state
+scale, and becoming selected is a plain color change with no pop or scale: transform-based
+feedback was removed from this component.
+
 ## Focus behavior
 
 Use shared Focus Ring utility/classes.

@@ -37,6 +37,9 @@ interface IconButtonProps
 }
 ```
 
+The disabled prop is the native `disabled`, passed straight to the `button`, not a custom
+`isDisabled`.
+
 ## Accessible name
 
 Every Icon Button must have an accessible name.
@@ -159,6 +162,11 @@ Button's `isInverse`. It overrides the resting appearance fill with:
 
 Declared after the appearance rules so it wins the cascade at equal specificity; the higher-
 specificity `:disabled` rules still flatten it. For placement on dark/bold surfaces such as Banner.
+
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Button. There's no press-state
+scale or other transform: press feedback is color only.
 
 ## Focus and refs
 

@@ -1,24 +1,9 @@
 # Toggle Button
 
-## Purpose
-A Toggle Button allows users to switch between selected and unselected states while remaining visually represented as a button.
+Toggle Button's usage guidance is its Storybook Docs page (Components / Actions / Toggle Button),
+written in [`toggle-button.mdx`](../../../../packages/ui/src/components/atoms/toggle-button/toggle-button.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-Use for persistent on/off formatting, filtering, or view options.
-
-## When not to use
-Do not use for navigation or momentary actions.
-
-## Design intent
-Combine the familiarity of a button with a persistent selected state. The icon-to-text gap is a
-constant 6px at every size, and the icon itself is never resized by the component, matching Button.
-
-Shares Button's hover/press/focus `fade-quick` color transitions. No press-state scale, and
-becoming selected is a plain color change with no pop/scale motion - transform-based feedback has
-been removed from this component.
-
-## Accessibility
-Expose pressed state using `aria-pressed`, support keyboard interaction, and provide visible focus.
-
-## Related
-Button, Icon Button, Toggle Icon Button.
+For implementation detail, see [`toggle-button-spec.md`](toggle-button-spec.md); for the
+machine-readable contract, [`toggle-button.contract.json`](toggle-button.contract.json).

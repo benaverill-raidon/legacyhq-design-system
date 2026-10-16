@@ -240,6 +240,11 @@ Tone styles should match Button for:
 It uses LinkButton's `[aria-disabled='true']` guard rather than the native `:disabled` pseudo, and
 is flattened by `isDisabled` like tone.
 
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Button. There's no press-state
+scale or other transform: press feedback is color only.
+
 ## Focus behavior
 
 Use the shared Focus Ring utility/classes.

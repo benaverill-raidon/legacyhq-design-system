@@ -26,7 +26,8 @@
     "anchor",
     "optional leading icon",
     "label",
-    "optional trailing icon"
+    "optional trailing icon",
+    "spinner"
   ],
   "props": {},
   "variants": {

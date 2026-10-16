@@ -252,6 +252,12 @@ Recommended priority:
 disabled > selected > press > hover > default
 ```
 
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Icon Button. There's no
+press-state scale, and becoming selected is a plain color change with no pop or scale:
+transform-based feedback was removed from this component, matching Toggle Button.
+
 ## Focus behavior
 
 Use the shared Focus Ring utility/classes.

@@ -2,13 +2,13 @@ import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
-  CheckIcon,
-  EditIcon,
   LayoutOneColumnIcon,
   LayoutTwoColumnsSidebarLeftIcon,
-  SearchIcon,
   StarStarredIcon,
   StarUnstarredIcon,
+  TextBoldIcon,
+  TextItalicIcon,
+  TextUnderlineIcon,
 } from '../../../assets/icons';
 import { ToggleIconButton } from './toggle-icon-button';
 import type { ToggleIconButtonSize } from './toggle-icon-button.types';
@@ -159,11 +159,7 @@ function LiveToggleExample() {
   const [selected, setSelected] = React.useState(false);
 
   return (
-    <ToggleIconButton
-      aria-label={selected ? 'Saved to favorites' : 'Save to favorites'}
-      isSelected={selected}
-      onClick={() => setSelected((current) => !current)}
-    >
+    <ToggleIconButton aria-label="Favorite" isSelected={selected} onClick={() => setSelected((current) => !current)}>
       {selected ? <StarStarredIcon /> : <StarUnstarredIcon />}
     </ToggleIconButton>
   );
@@ -244,6 +240,7 @@ export const States: Story = {
   ),
 };
 
+/** Two buttons stand for one choice, so the parent keeps the chosen value and selects the match. */
 function ViewModeExample() {
   const [selected, setSelected] = React.useState<'grid' | 'list'>('grid');
 
@@ -259,19 +256,22 @@ function ViewModeExample() {
   );
 }
 
+/** Each formatting option is on or off by itself, so each button has its own boolean. */
 function FormattingToolbarExample() {
-  const [selected, setSelected] = React.useState<'bold' | 'search' | 'edit'>('bold');
+  const [bold, setBold] = React.useState(true);
+  const [italic, setItalic] = React.useState(false);
+  const [underline, setUnderline] = React.useState(false);
 
   return (
     <div style={row}>
-      <ToggleIconButton aria-label="Bold" isSelected={selected === 'bold'} onClick={() => setSelected('bold')}>
-        <CheckIcon />
+      <ToggleIconButton aria-label="Bold" isSelected={bold} onClick={() => setBold((current) => !current)}>
+        <TextBoldIcon />
       </ToggleIconButton>
-      <ToggleIconButton aria-label="Search" isSelected={selected === 'search'} onClick={() => setSelected('search')}>
-        <SearchIcon />
+      <ToggleIconButton aria-label="Italic" isSelected={italic} onClick={() => setItalic((current) => !current)}>
+        <TextItalicIcon />
       </ToggleIconButton>
-      <ToggleIconButton aria-label="Edit" isSelected={selected === 'edit'} onClick={() => setSelected('edit')}>
-        <EditIcon />
+      <ToggleIconButton aria-label="Underline" isSelected={underline} onClick={() => setUnderline((current) => !current)}>
+        <TextUnderlineIcon />
       </ToggleIconButton>
     </div>
   );
@@ -294,10 +294,10 @@ export const Content: Story = {
       <div style={cardStyle}>
         <h3 style={headingStyle}>Favorite/save toggle</h3>
         <div style={row}>
-          <ToggleIconButton aria-label="Saved to favorites" isSelected>
+          <ToggleIconButton aria-label="Favorite" isSelected>
             <StarStarredIcon />
           </ToggleIconButton>
-          <ToggleIconButton aria-label="Save to favorites">
+          <ToggleIconButton aria-label="Favorite">
             <StarUnstarredIcon />
           </ToggleIconButton>
         </div>

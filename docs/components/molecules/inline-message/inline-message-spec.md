@@ -197,7 +197,7 @@ All six tones side by side, each with `content` provided.
 ### EdgeCases story
 
 - Alignment falling back automatically near a viewport edge
-- Long detail content wrapping inside Popup's default width
+- Long detail content (Popup's default panel is `max-content` wide, so it doesn't wrap)
 - Dark surface
 
 ## Testing Requirements
@@ -218,8 +218,16 @@ All six tones side by side, each with `content` provided.
 ## Known Limitations
 
 - No `disabled` prop - not evidenced in Figma's own component set.
-- No built-in max-width/truncation behavior for the title/secondary text row itself (Popup's panel
-  already wraps long `content`).
+- No built-in max-width/truncation behavior for the title/secondary text row itself: both are
+  `white-space: nowrap`.
+- Long `content` doesn't wrap either: Popup's default panel is `inline-size: max-content` with no
+  maximum, so a long sentence renders as one line and can run past the viewport (the EdgeCases
+  "Migration in progress" sample measures 1358px wide in a 1024px viewport).
+- The status icon (and the `default` dot) is `aria-hidden`, and unlike Banner, Section Message, and
+  Toast there's no visually hidden status text, so the tone isn't announced; the title has to carry
+  it in words.
+- Popup portals the panel to the end of `document.body` and doesn't move focus, so Tab from the
+  trigger continues through the page, not into the panel. The panel has no `role`.
 
 ## Future Enhancements
 

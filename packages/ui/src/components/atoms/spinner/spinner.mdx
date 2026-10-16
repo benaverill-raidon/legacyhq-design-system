@@ -1,141 +1,219 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../button';
+import { ProgressBar } from '../progress-bar';
+import { Spinner } from './spinner';
+import spinnerStyles from './spinner.module.css';
 import * as SpinnerStories from './spinner.stories';
 
 <Meta of={SpinnerStories} name="Docs" />
 
-# Spinner
+<Unstyled>
+<ComponentPage>
 
-Spinner is a compact animated indicator that communicates indeterminate loading - work is in
-progress, but there's no known percentage to report.
+<ComponentHeader
+  id="spinner"
+  example={
+    <>
+      <Spinner label="Loading matters" />
+      <Button prominence="primary" isLoading>
+        Save matter
+      </Button>
+    </>
+  }
+>
+  Spinner shows that work is in progress when you can't say how far along it is. It takes the color
+  of the text around it, and screen readers skip it unless you give it a label.
+</ComponentHeader>
 
-<Canvas of={SpinnerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A small area of the UI is loading and the duration can't be measured.
-- A button or inline form action is processing.
-- A panel, table, card, or async section is waiting on data.
+- A wait you can't measure in one part of the page: a panel, a table, a card.
+- A loading row, beside text that says what's loading.
+- A standalone loading state with no text nearby, with `label`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **When progress can be measured.** Use `ProgressBar` once you know a real percentage, or
-  `ProgressIndicator` for step-based progress.
-- **For a page-level loading state.** Prefer a skeleton or page-level loading pattern instead of a
-  single spinner.
-- **When the wait is so brief that motion adds visual noise rather than clarity.**
+- **Progress you can measure:** <DocLink to="Components/Feedback/Progress Bar" />.
+- **Content loading into a layout you already know:** <DocLink to="Components/Feedback/Skeleton" />, which holds the layout's shape.
+- **A button whose action is running:** <DocLink to="Components/Actions/Button" />'s `isLoading`, which shows a Spinner for you and keeps the button's size.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={SpinnerStories.Content} />
+</Section>
 
-- **Root** - an inline `span` sized entirely by the `size` prop. Decorative (`aria-hidden="true"`,
-  no role) by default, or `role="status"` with `aria-live="polite"` when `label` is provided.
-- **SVG arc** - a fixed 90-degree partial circle that rotates continuously. Always
-  `aria-hidden="true"` and `focusable="false"`, regardless of `label`.
-- **Visually hidden label** - rendered only when `label` is provided, giving assistive technology a
-  loading announcement without adding visible text.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy specimen={<Spinner size="xl" label="Loading matters" />}>
+  <Part name="container" target={spinnerStyles.spinner}>The root `span`, sized by `size`. It carries the accessibility attributes.</Part>
+  <Part name="indicator" target={spinnerStyles.svg}>An SVG quarter-circle arc in the current text color, which rotates. Always hidden from assistive technology.</Part>
+  <Part name="label">Visually hidden text, rendered only when `label` is set.</Part>
+</Anatomy>
 
-### Sizes are the only visual axis
+</Section>
 
-Four fixed sizes - `sm` (12px), `md` (16px), `lg` (24px, the default), and `xl` (48px) - see Sizes.
-There's no separate Variants page: Spinner has one appearance, not a set of visual styles. There's
-no States page either: Spinner is non-interactive and has no hover, press, focus, or disabled
-state to preview - `label` is the only thing that changes its accessibility tree, and that's covered
-in Content above.
+<Section title="Variants">
 
-### Decorative vs. accessible loading
+Spinner has one look. `size` is its only visual option: 12, 16, 24, or 48px for `sm`, `md`, `lg`,
+and `xl`, with `lg` the default. At `xl` the arc is drawn at 32px inside the 48px box. The stroke
+gets thicker with size.
 
-Default usage is silent - `aria-hidden="true"` with no role - meant to sit next to visible loading
-text you already provide. Pass `label` only when the Spinner is the sole loading signal, so
-assistive technology gets a status announcement without duplicating visible text.
+<Example of={SpinnerStories.Sizes} />
 
-### Reduced motion
+<Subsection title="Color">
 
-Spinner listens for `prefers-reduced-motion: reduce` and stops the continuous rotation while keeping
-the arc visible, rather than swapping to a different component or disappearing - see Edge Cases.
+Spinner has no color of its own. The arc is drawn in `currentColor`, so it takes the color of the
+text it sits in: a Button's label color, an error message, or plain body text. There's no `tone` or
+`color` prop; set the color on the surrounding text.
 
-### Color always inherits
+</Subsection>
 
-Spinner has no color of its own - the arc is drawn with `stroke: currentColor` and the root uses
-`color: inherit`, so it always takes the current text color of whatever it sits inside: a Button's
-per-appearance/tone color, a colored heading, or plain body text. There's no `color` or `tone` prop
-to set it directly - see Edge Cases for it picking up an arbitrary ambient color.
+</Section>
 
-## Do / Don't
+<Section title="Behavior">
 
-**Do** pair a decorative Spinner with visible loading text.
+<Subsection title="Decorative or announced">
 
-```tsx
-<p>
+Without `label`, Spinner is hidden from assistive technology, for a spinner next to visible text
+that already says what's loading. With `label`, it becomes a polite status region that holds the
+label as visually hidden text, for a spinner that's the only sign of loading.
+
+<Example of={SpinnerStories.Content} caption="Standalone, beside text, inside a loading Button, and in a card." />
+
+</Subsection>
+
+<Subsection title="Motion">
+
+The arc turns continuously with the `spin-loop` motion recipe, one turn every 860ms. With reduced
+motion it stops, and the arc stays visible rather than being swapped for something else.
+
+<Example of={SpinnerStories.EdgeCases} caption="Reduced motion, color taken from the surrounding text, and a dark surface." />
+
+</Subsection>
+
+<Subsection title="Inside other components">
+
+Button and Link Button show a `md` Spinner centered over their content while `isLoading`, and Icon
+Button shows a `sm` one in place of its icon. Switch, Menu's loading row, and Toast's loading tone
+use one too. Use those loading states rather than adding a Spinner yourself.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Pair a decorative spinner with visible text that says what's loading."
+  code={`<p>
   <Spinner size="sm" />
   Loading matters
-</p>
-```
+</p>`}
+>
+  <Spinner size="sm" />
+  Loading matters
+</Do>
+<Dont caption="Show a spinner with no label and no text, which screen readers skip entirely." code={`<Spinner />`}>
+  <Spinner />
+</Dont>
+<Do caption="Set isLoading on the button whose action is running." code={`<Button prominence="primary" isLoading>Save matter</Button>`}>
+  <Button prominence="primary" isLoading>
+    Save matter
+  </Button>
+</Do>
+<Dont
+  caption="Swap a Spinner into a button's label, which resizes the button and doesn't mark it busy."
+  code={`<Button prominence="primary">
+  <Spinner size="md" /> Saving…
+</Button>`}
+>
+  <Button prominence="primary">
+    <Spinner size="md" /> Saving…
+  </Button>
+</Dont>
+<Do caption="Use Progress Bar when you can measure how far along the work is." code={`<ProgressBar value={42} label="Uploading client files" />`}>
+  <ProgressBar value={42} label="Uploading client files" />
+</Do>
+<Dont caption="Put a percentage in a spinner's label, where sighted users never see it." code={`<Spinner label="Uploading, 42% complete" />`}>
+  <Spinner label="Uploading, 42% complete" />
+</Dont>
+</Guidelines>
 
-**Don't** rely on a decorative Spinner as the only loading signal - screen reader users get nothing.
+</Section>
 
-```tsx
-<Spinner />
-```
+<Section title="Accessibility">
 
----
+- Spinner renders a `span` holding an SVG arc. The SVG is always `aria-hidden` and not focusable.
+- Without `label`, the `span` is `aria-hidden` and has no role. Put it beside visible text that says
+  what's loading, or the wait is silent for screen reader users.
+- With `label`, the `span` gets `role="status"` and `aria-live="polite"`, and the label is inside it
+  as visually hidden text.
+- Spinner sets `role`, `aria-live`, and `aria-hidden` itself, so values you pass for them are
+  replaced.
+- It isn't focusable and has no keyboard interaction.
+- Reduced motion stops the rotation. The arc is drawn in the surrounding text color, so it has that
+  text's contrast.
 
-**Do** give a standalone Spinner a `label` when there's no visible loading text nearby.
+</Section>
 
-```tsx
-<Spinner label="Loading matters" />
-```
+<Section title="API">
 
-**Don't** use Spinner for a process you can actually measure.
+<PropsTable of={SpinnerStories} native="span" />
 
-```tsx
-<Spinner label="Uploading, 42% complete" />
-```
+</Section>
 
-Use `ProgressBar` instead, so the percentage is both visible and correctly announced.
+<Section title="Design tokens">
 
-## API
+Every token Spinner's stylesheet uses, by family, with the property it sets and when. "Base" is the
+spinner with no modifiers, which is the `lg` size. There's no color token: the arc uses
+`currentColor`.
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'sm' | 'md' | 'lg' | 'xl'</code></td>
-      <td><code>'lg'</code></td>
-      <td>The only visual axis - controls the rendered diameter and stroke width.</td>
-    </tr>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>When set, exposes <code>role="status"</code>/<code>aria-live="polite"</code> and renders
-      the text as a visually hidden accessible name. Omit it when adjacent visible text already
-      announces the loading state.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>span</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+<TokensTable id="spinner" />
 
-Any other native `span` attribute is forwarded to the root element. Spinner is not
-keyboard-focusable and has no interactive or disabled state.
+</Section>
 
-## Related components
+<Section title="Related components">
 
-- **ProgressBar** - for determinate, measurable progress.
-- **ProgressIndicator** - for step-based, rather than percentage-based, progress.
-- **Button** - composes a small decorative Spinner internally for its `isLoading` state.
+<Related>
+
+- <DocLink to="Components/Feedback/Progress Bar" /> for progress you can measure.
+- <DocLink to="Components/Feedback/Skeleton" /> for content loading into a layout you already know.
+- <DocLink to="Components/Actions/Button" />, <DocLink to="Components/Navigation/Link Button" />, and <DocLink to="Components/Actions/Icon Button" />, which show a Spinner while loading.
+- <DocLink to="Foundations/Motion" />, where the `spin-loop` recipe is defined.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads spinner.types.ts, the design tokens read spinner.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

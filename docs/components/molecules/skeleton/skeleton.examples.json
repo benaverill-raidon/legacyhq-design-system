@@ -16,8 +16,8 @@
       }
     },
     {
-      "name": "Circle for an avatar",
-      "description": "A circular placeholder sized to match an Avatar.",
+      "name": "Round shape for an avatar",
+      "description": "A round placeholder sized to match an Avatar.",
       "jsx": "<Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
       "props": {
         "shape": "round",

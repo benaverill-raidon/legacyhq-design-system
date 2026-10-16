@@ -11,7 +11,7 @@
 - [ ] Exports `ProgressBar`.
 - [ ] Supports `value: number`.
 - [ ] Supports `variant: 'linear' | 'circular'`.
-- [ ] Supports `size: 'md' | 'lg'`.
+- [ ] Supports `size: 'sm' | 'md' | 'lg'`.
 - [ ] Defaults to linear/md.
 - [ ] Supports `label`.
 - [ ] Supports `getValueText`.
@@ -30,8 +30,9 @@
 
 - [ ] Width is fluid.
 - [ ] No fixed Figma canvas width is copied.
-- [ ] `md`: 20px root / 12px track / 4px inset.
-- [ ] `lg`: 32px root / 24px track / 4px inset.
+- [ ] `sm`: 24px root / 16px track / 4px inset.
+- [ ] `md`: 32px root / 24px track / 4px inset.
+- [ ] `lg`: 40px root / 32px track / 4px inset.
 - [ ] Progress fill and remaining track are both fully-rounded pills at every value.
 - [ ] Progress fill floats inset within the track (block axis + inline-start), sized to the fill fraction of the padded inner width.
 - [ ] Only the remaining track carries the bold border; the progress fill has none.
@@ -41,8 +42,9 @@
 - [ ] Uses inline SVG.
 - [ ] Does not use Figma-exported donut images.
 - [ ] Diameter is 72px.
-- [ ] `md` track thickness is 12px.
-- [ ] `lg` track thickness is 24px.
+- [ ] `sm` track thickness is 16px.
+- [ ] `md` track thickness is 24px.
+- [ ] `lg` track thickness is 32px.
 - [ ] Progress begins at 12 o'clock.
 - [ ] Progress advances clockwise.
 - [ ] Progress arc is inset within the track ring by the pad (4px), matching the linear inset.
@@ -80,7 +82,7 @@
 - [ ] Variants exists.
 - [ ] Examples exists.
 - [ ] Both variants are shown.
-- [ ] Both sizes are shown.
+- [ ] Every size is shown.
 - [ ] Values 0, 10, 20, 50, 80, and 100 are demonstrated.
 - [ ] Realistic process examples are included.
 

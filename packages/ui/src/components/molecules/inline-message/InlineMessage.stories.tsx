@@ -131,8 +131,8 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Falls back automatically near a viewport edge</h3>
         <p style={captionStyle}>
-          Inline Message always prefers `bottomLeft` and delegates viewport-fit fallback to Popup -
-          click a row pinned to this row&apos;s edge to see it reposition on its own.
+          Inline Message always prefers <code>bottomLeft</code> and delegates viewport-fit fallback to
+          Popup: click a row pinned to this row&apos;s edge to see it reposition on its own.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <InlineMessage title="Left edge" tone="information" content="Repositioned automatically near the left edge." />
@@ -141,7 +141,7 @@ export const EdgeCases: Story = {
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Long detail content wraps inside Popup&apos;s default width</h3>
+        <h3 style={headingStyle}>Long detail content doesn&apos;t wrap: the popup is as wide as its content</h3>
         <InlineMessage
           title="Migration in progress"
           tone="information"

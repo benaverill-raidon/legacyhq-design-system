@@ -52,8 +52,8 @@ supplemental enough that it shouldn't always be visible or take up permanent lay
 - `content`: optional detail revealed in a popup on click
 
 ### Character Limits
-No fixed limit on `title`/`secondaryText` - keep them short enough for one line. `content` wraps
-inside Popup's default panel width.
+No fixed limit on `title`/`secondaryText` - keep them short enough for one line. Keep `content`
+short too: Popup's default panel is `max-content` wide with no maximum, so a long line doesn't wrap.
 
 ---
 
@@ -156,6 +156,6 @@ Inline Message / Content
 Inline Message / EdgeCases
 ```
 
-- **Variants** - all six tones, each with `content` provided.
+- **Variants** - all five tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content`, a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long detail content, dark surface.

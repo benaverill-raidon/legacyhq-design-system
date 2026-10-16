@@ -18,7 +18,7 @@ atom
 
 ```ts
 export type ProgressBarVariant = 'linear' | 'circular';
-export type ProgressBarSize = 'md' | 'lg';
+export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
 export interface ProgressBarProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -59,6 +59,12 @@ root
    └─ progress circle
 ```
 
+In the DOM the linear remaining track comes first and spans the whole track, with the progress
+segment layered on top of it. The circular track circle is drawn as two circles: a bold-border
+circle (`.circularTrackBorder`) and the surface track circle (`.circularTrack`) 2px narrower on top
+of it. A `div` (`.circularViewport`) wraps the SVG. Both the linear track and the circular viewport
+are `aria-hidden`.
+
 The Figma-only `progress-segment` and `track-segment` parts should not become public React components. Implement them as private anatomy inside Progress Bar.
 
 Both linear segments are fully-rounded pills (`border-radius-full-round`) at every value, and the
@@ -74,7 +80,7 @@ Use when horizontal space is available and the relationship between completed an
 - Fluid width; do not reproduce Figma's fixed 404px width.
 - Progress fills from inline-start to inline-end.
 - The progress fill and the remaining track are both fully-rounded pills at every value.
-- The progress fill is inset within the bordered remaining track by the pad (4px, both sizes) on the block axis and both inline edges, so it floats inside the track. Its inline size is the fill fraction of the track's inner (padded) width, so at 100% it leaves an equal pad on the inline-end edge.
+- The progress fill is inset within the bordered remaining track by the pad (4px, every size) on the block axis and both inline edges, so it floats inside the track. Its inline size is the fill fraction of the track's inner (padded) width, so at 100% it leaves an equal pad on the inline-end edge.
 - Only the remaining track carries the bold border; the progress fill has none.
 - Use logical properties so direction can be adapted later without restructuring.
 
@@ -87,7 +93,7 @@ Use when horizontal space is constrained or the indicator is paired with a compa
 - Progress begins at 12 o'clock.
 - Progress advances clockwise.
 - Use `stroke-dasharray` and `stroke-dashoffset`, or an equivalent SVG implementation.
-- The progress arc is inset within the track ring by the pad (4px, both sizes) on both radial edges, matching the linear inset, so a light gap of track shows around the fill.
+- The progress arc is inset within the track ring by the pad (4px, every size) on both radial edges, matching the linear inset, so a light gap of track shows around the fill.
 - The progress arc is capped with rounded ends (`stroke-linecap: round`) and carries no border.
 - At value 0, render nothing: hide the track ring and its border.
 - Do not use images generated from Figma.
@@ -100,15 +106,25 @@ The `size` prop controls track thickness and the progress inset (pad). The linea
 
 | Size | Root block size | Track thickness | Progress inset (pad) |
 |---|---:|---:|---:|
-| `md` | 20px | 12px | 4px |
-| `lg` | 32px | 24px | 4px |
+| `sm` | 24px | 16px | 4px |
+| `md` | 32px | 24px | 4px |
+| `lg` | 40px | 32px | 4px |
+
+Track thickness is the `component-progress-bar-track-size-*` token, which is the progress fill's
+thickness; the bordered remaining track fills the whole root block size.
 
 ### Circular
 
 | Size | Diameter | Track thickness | Progress inset (pad) |
 |---|---:|---:|---:|
-| `md` | 72px | 12px | 4px |
-| `lg` | 72px | 24px | 4px |
+| `sm` | 72px | 16px | 4px |
+| `md` | 72px | 24px | 4px |
+| `lg` | 72px | 32px | 4px |
+
+The circular geometry is set in `progress-bar.tsx`, not tokens: a 72-unit viewBox, a ring radius of
+28/24/20 for `sm`/`md`/`lg` so the ring's outer edge always meets the 72px box, a bold border stroke
+of the track thickness, the surface track stroke 2px narrower (a 1px border shows on each edge), and
+the progress arc 8px narrower (the 4px inset on each edge).
 
 ## Value behavior
 

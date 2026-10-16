@@ -1,148 +1,212 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Spinner } from '../../atoms/spinner';
+import { Skeleton } from './skeleton';
+import skeletonStyles from './skeleton.module.css';
 import * as SkeletonStories from './Skeleton.stories';
 
 <Meta of={SkeletonStories} name="Docs" />
 
-# Skeleton
+<Unstyled>
+<ComponentPage>
 
-Skeleton is a placeholder shape shown in place of content that hasn't finished loading yet. It
-pulses gently to signal that something is on its way, without committing to layout-shifting spinner
-copy or a blank void.
+<ComponentHeader
+  id="skeleton"
+  example={
+    <>
+      <Skeleton shape="round" style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }} />
+      <Skeleton style={{ inlineSize: '16rem' }} />
+    </>
+  }
+>
+  Skeleton is a placeholder shape that stands in for content while it loads: a line of text, an
+  avatar, an image. Sized to match, it keeps the layout's shape, so nothing jumps when the real
+  content arrives.
+</ComponentHeader>
 
-<Canvas of={SkeletonStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Content (text, an avatar, an image, a card) is being fetched and its final layout is already
-  known.
-- You want to preserve the shape of a layout while its real content streams in, reducing perceived
-  load time and layout shift.
+- Text, an avatar, an image, or a card that's loading into a layout you already know.
+- Sketching a whole loading layout, by putting several skeletons together.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **The final shape is unknown.** Use `Spinner` for an indeterminate wait instead of guessing at a
-  layout.
-- **Progress is measurable.** Use `ProgressBar` when you know how far along an operation is.
-- **The content is already available but slow to compute.** Consider a `Spinner` inline instead of
-  reserving a whole layout's worth of placeholder shapes.
+- **A wait whose result has no known shape:** <DocLink to="Components/Feedback/Spinner" />.
+- **Progress you can measure:** <DocLink to="Components/Feedback/Progress Bar" />.
+- **A control whose action is running:** the control's own loading state, such as <DocLink to="Components/Actions/Button" />'s `isLoading`.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Skeleton is a single rounded `div`. It has no children by default - width, height, and shape are
-set per usage (via `style`, `className`, or the `shape` prop) to match whatever content it stands
-in for: a text line, an avatar circle, an image block.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Appearance
+<Anatomy specimen={<Skeleton label="Loading profile" style={{ inlineSize: '16rem' }} />}>
+  <Part name="root" target={skeletonStyles.root}>A `div` that's the placeholder itself: filled, rounded, and pulsing. It has no children of its own.</Part>
+  <Part name="label">Visually hidden text, rendered only when `label` is set.</Part>
+</Anatomy>
 
-`appearance="subtle"` (the default) is a lighter placeholder, for dense layouts where a stronger
-placeholder would compete with real content elsewhere on the screen. `appearance="default"` is a
-touch more visible - reach for it when the skeleton is the only thing on screen (e.g. a full-page
-loading state).
+</Section>
 
-### Shape
+<Section title="Variants">
 
-`shape="rectangle"` (the default) uses the standard small corner radius, for text lines, cards, and
-image blocks. `shape="round"` uses a fully round radius - reach for it for avatar placeholders, and
-pair it with an equal `inlineSize`/`blockSize` in `style`.
+`appearance` sets how visible the fill is. `subtle`, the default, is lighter, for dense layouts
+where real content sits nearby. `default` is stronger, for a loading state that fills the screen.
+`shape` sets the corners: `rectangle`, the default, has small rounded corners for text lines,
+cards, and images; `round` is fully rounded, for an avatar. `circle`, the earlier name for `round`,
+is still accepted.
 
-<Canvas of={SkeletonStories.Variants} />
+<Example of={SkeletonStories.Variants} />
 
-### Sizing
+<Subsection title="Sizing">
 
-Skeleton has no fixed size scale - it fills its container's inline size by default and is exactly
-one line tall (`--size-250`, 20px). Override `style` or `className` per usage to match the content
-it's standing in for.
+Skeleton has no size scale. By default it fills its container's width and is one text line tall
+(20px). Set its size with `style` or `className` to match the content it stands in for, and give a
+`round` skeleton an equal width and height, or it becomes a pill.
 
-<Canvas of={SkeletonStories.Composition} />
+<Example of={SkeletonStories.Composition} caption="Text lines, a list row with an avatar, a card, and a labelled skeleton." />
 
-### Accessible labelling
+</Subsection>
 
-Skeleton is `aria-hidden` by default, since a loading region typically has its own surrounding
-context (a page heading, a "Loading" state managed elsewhere). Pass `label` when a Skeleton (or
-group of them) is the sole indicator that content is loading - this switches it to
-`role="status"`/`aria-live="polite"` with a visually-hidden announcement, the same pattern `Spinner`
-uses.
+</Section>
 
-```tsx
-<Skeleton label="Loading profile" />
-```
+<Section title="Behavior">
 
-### Reduced motion
+<Subsection title="Pulse">
 
-The pulse animation is disabled automatically when the user has requested reduced motion
-(`prefers-reduced-motion: reduce`).
+Every skeleton pulses, fading to half opacity and back every 1.5s with the `pulse-loop` motion
+recipe, whatever its appearance. With reduced motion it holds still at full opacity.
 
-## Do / Don't
+</Subsection>
 
-**Do** size each Skeleton to match the content it's replacing.
+<Subsection title="Decorative or announced">
 
-```tsx
-<Skeleton shape="round" style={{ inlineSize: '40px', blockSize: '40px' }} />
-```
+Without `label`, a skeleton is hidden from assistive technology, for a region that already says
+it's loading, such as a heading or a status message nearby. With `label`, it becomes a polite
+status region that holds the label as visually hidden text. When skeletons are the only sign that a
+region is loading, label one of them, not each.
 
-**Don't** leave every Skeleton at its default size when replacing content of a very different
-shape - it reads as a rendering bug, not a loading state.
+</Subsection>
 
----
+</Section>
 
-**Do** pass `label` when a Skeleton is the only signal that a region is loading.
+<Section title="Do and don't">
 
-```tsx
-<Skeleton label="Loading profile" />
-```
+<Guidelines>
+<Do
+  caption="Size each skeleton to match the content it stands in for."
+  code={`<Skeleton
+  shape="round"
+  style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }}
+/>
+<Skeleton style={{ inlineSize: '12rem' }} />`}
+>
+  <Skeleton shape="round" style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }} />
+  <Skeleton style={{ inlineSize: '12rem' }} />
+</Do>
+<Dont caption="Leave skeletons at the default size for content of another shape, which reads as a rendering bug." code={`<Skeleton shape="round" />
+<Skeleton />`}>
+  <Skeleton shape="round" />
+  <Skeleton />
+</Dont>
+<Do
+  caption="Label one skeleton when skeletons are the only sign that the region is loading."
+  code={`<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+<Skeleton style={{ inlineSize: '8rem' }} />`}
+>
+  <Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+  <Skeleton style={{ inlineSize: '8rem' }} />
+</Do>
+<Dont
+  caption="Add visible loading text beside a labelled skeleton, so screen readers hear it twice."
+  code={`<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+<span>Loading profile…</span>`}
+>
+  <Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+  Loading profile…
+</Dont>
+<Do caption="Use Spinner when you don't know the shape of what's coming." code={`<Spinner label="Searching matters" />`}>
+  <Spinner label="Searching matters" />
+</Do>
+<Dont
+  caption="Guess at a layout with skeletons for results whose shape you don't know."
+  code={`<Skeleton />
+<Skeleton />
+<Skeleton />`}
+/>
+</Guidelines>
 
-**Don't** add visible loading copy next to a Skeleton that already has a `label` - the label is for
-assistive technology, not sighted users.
+</Section>
 
-## API
+<Section title="Accessibility">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'subtle'</code></td>
-      <td><code>'subtle'</code></td>
-      <td>Visual weight of the placeholder fill.</td>
-    </tr>
-    <tr>
-      <td><code>shape</code></td>
-      <td><code>'rectangle' | 'round'</code></td>
-      <td><code>'rectangle'</code></td>
-      <td>Corner treatment - <code>round</code> is fully round, for avatar-shaped placeholders. <code>circle</code>, the earlier name, is still accepted.</td>
-    </tr>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Accessible loading announcement. When set, renders <code>role="status"</code> with
-        <code>aria-live="polite"</code> instead of <code>aria-hidden</code>.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root's class list.</td>
-    </tr>
-    <tr>
-      <td>...rest</td>
-      <td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td>
-      <td>-</td>
-      <td>Forwarded to the root <code>div</code>, including <code>style</code> for per-usage sizing.</td>
-    </tr>
-  </tbody>
-</table>
+- Skeleton renders a `div`. It isn't focusable and has no keyboard interaction.
+- Without `label`, the `div` is `aria-hidden` and has no role.
+- With `label`, the `div` gets `role="status"` and `aria-live="polite"`, and the label is inside it
+  as visually hidden text.
+- Skeleton sets `role`, `aria-live`, and `aria-hidden` itself, so values you pass for them are
+  replaced.
+- Reduced motion stops the pulse.
 
-## Related components
+</Section>
 
-- **Spinner** - for an indeterminate wait when the final layout isn't known yet.
-- **ProgressBar** - for a measurable, quantified loading state.
+<Section title="API">
+
+<PropsTable of={SkeletonStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Skeleton's stylesheet uses, by family, with the property it sets and when. "Base" is the
+skeleton with no modifiers. The fill is Skeleton's own pair of component tokens, set per theme:
+`component-skeleton-color-default` and `component-skeleton-color-subtle`.
+
+<TokensTable id="skeleton" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Feedback/Spinner" /> for a wait whose result has no known shape.
+- <DocLink to="Components/Feedback/Progress Bar" /> for progress you can measure.
+- <DocLink to="Components/Data Display/Avatar" />, which a `round` skeleton often stands in for.
+- <DocLink to="Foundations/Motion" />, where the `pulse-loop` recipe is defined.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads skeleton.types.ts, the design tokens read skeleton.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

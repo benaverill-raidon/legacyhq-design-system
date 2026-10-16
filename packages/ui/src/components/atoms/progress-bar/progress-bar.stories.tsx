@@ -144,7 +144,7 @@ export const States: Story = {
   render: () => (
     <div style={stack}>
       <Group title="Linear">
-        <div style={{ display: 'grid', gap: 'var(--spacing-lg)' }}>
+        <div style={{ display: 'grid', gap: 'var(--spacing-lg)', inlineSize: '100%' }}>
           {[
             ['Empty (0%)', 0],
             ['In progress (42%)', 42],
@@ -201,7 +201,7 @@ export const Content: Story = {
         {sectionHeading('Custom value text overrides the announced percentage')}
         <p style={captionStyle}>
           <code>getValueText</code> replaces the default &quot;N%&quot; announcement with domain-specific
-          wording, while the visible fill still reflects the raw <code>value</code>.
+          wording, while the fill still shows the clamped <code>value</code>.
         </p>
         <div style={linearFrameStyle}>
           <ProgressBar value={60} label="Document preparation" getValueText={() => '6 of 10 documents prepared'} />
@@ -216,7 +216,7 @@ export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
       <Group title="Out-of-range values clamp to 0-100">
-        <div style={{ display: 'grid', gap: 'var(--spacing-lg)' }}>
+        <div style={{ display: 'grid', gap: 'var(--spacing-lg)', inlineSize: '100%' }}>
           {[
             ['value={-20} renders as 0%', -20],
             ['value={150} renders as 100%', 150],

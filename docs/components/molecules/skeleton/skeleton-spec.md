@@ -13,6 +13,10 @@ card - reducing perceived load time and layout shift versus a spinner or blank r
 ### Tier
 Molecule
 
+Skeleton is a molecule, not an atom, because it composes a sized, colored surface with a motion
+treatment (the pulse) into a single named unit with its own variant surface (appearance, shape)
+that neither piece owns alone - similar to how Icon Tile composes a colored container with an icon.
+
 ### Design Reference
 - Figma Component: `skeleton` (component set, node `1565:3291`, file `Components v1.0.0`)
 - Variant axis: `appearance` (2) = 2 variants (`default`, `subtle`)

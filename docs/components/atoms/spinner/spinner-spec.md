@@ -119,6 +119,16 @@ same-named override in a different CSS Module just races it on source order for 
 
 ### Size Tokens
 
+What the stylesheet uses today: the semantic `--size-spinner-sm/md/lg/xl` tokens (12/16/24/48px)
+for the root, and `--border-width-sm` (sm), `--border-width-md` (md, lg), and `--border-width-lg`
+(xl) for the arc's `stroke-width`; no `--component-spinner-*` tokens exist. At `xl` the SVG is drawn
+at `--size-400` (32px) inside the 48px root, via `calc(var(--size-400) / var(--size-spinner-xl) *
+100%)`; at the other sizes it fills the root. The arc's `stroke-width` is in the SVG's 24-unit
+viewBox space, so it scales with the drawn size: about 0.5px at `sm`, 1.3px at `md`, 2px at `lg`,
+and 4px at `xl`. The rotation uses the `--spin-loop` motion recipe (860ms, loop easing).
+
+The recommendations below are the original plan, kept for the Figma comparison.
+
 Recommended component-level tokens:
 
 ```css
@@ -225,13 +235,12 @@ Spinner
 ```
 
 Variants and States are intentionally omitted: Spinner has one visual style (no variant axis
-beyond size) and no interactive states (non-interactive, decorative by default) - the Docs API
-section documents why.
+beyond size) and no interactive states (non-interactive, decorative by default).
 
 - **Playground** - every prop wired to a control.
 - **Sizes** - `sm` / `md` / `lg` / `xl` side by side (replaces a Variants page).
-- **Content** - standalone decorative and labeled loading, inline with text, button loading, and a
-  card/panel loading composition.
+- **Content** - standalone decorative and labeled loading, inline with text, a loading Button
+  (`isLoading`), and a card/panel loading composition.
 - **EdgeCases** - reduced motion (documented, since Storybook can't force the media query for one
   story) and a dark surface example.
 

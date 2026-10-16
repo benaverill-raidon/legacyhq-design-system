@@ -33,6 +33,10 @@
   ],
   "anatomy": [
     {
+      "name": "root",
+      "description": "The row: a native <button type=\"button\"> when content is provided, otherwise a plain div. No padding of its own; carries the hover/focus/open tint and the Focus Ring when it's a button."
+    },
+    {
       "name": "icon",
       "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
     },
@@ -201,7 +205,7 @@
   ],
   "contentRules": [
     "Keep title and secondaryText short enough for one line - neither has built-in truncation.",
-    "content wraps inside Popup's own default panel width."
+    "Keep content short: Popup's default panel is max-content wide with no maximum, so a long line of content does not wrap and can run past the viewport edge."
   ],
   "responsiveRules": [],
   "themeRules": [

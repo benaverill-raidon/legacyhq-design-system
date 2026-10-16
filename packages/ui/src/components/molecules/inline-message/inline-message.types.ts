@@ -32,11 +32,16 @@ export interface InlineMessageProps {
    * click outside closes the popup.
    */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Read by assistive technology before the title, since the status icon is decorative. Defaults to
+   * the tone's name (Information, Success, Warning, Error); none for `default`. An empty string omits it.
+   */
+  statusLabel?: string;
   /** Added to the row's classes. */
   className?: string;
   /**
-   * Documentation only: shows the hover or focus tint without interaction, for Storybook
-   * references. Not part of the public API. `press` has no style of its own.
+   * Documentation only: shows the hover, focus, or pressed tint without interaction, for Storybook
+   * references. Not part of the public API.
    */
   'data-force-state'?: 'hover' | 'focus' | 'press';
 }

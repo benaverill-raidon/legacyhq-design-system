@@ -180,4 +180,46 @@ describe('InlineMessage', () => {
     expect(container.querySelector('button')).toHaveClass(styles.tone_information);
     expect(container.querySelector('[data-color="information"]')).toBeInTheDocument();
   });
+
+  it('says the status in hidden text before the title, since the icon is decorative', () => {
+    render(<InlineMessage tone="warning" title="Unsaved changes" />);
+    expect(screen.getByText('Warning:')).toHaveClass(styles.visuallyHidden);
+
+    cleanup();
+    render(<InlineMessage tone="error" title="Sync failed" content="Details" />);
+    expect(screen.getByRole('button', { name: 'Error: Sync failed' })).toBeInTheDocument();
+
+    cleanup();
+    render(<InlineMessage title="Draft" statusLabel="" />);
+    expect(screen.queryByText(/:$/)).not.toBeInTheDocument();
+  });
+
+  it('moves focus into the popup when it opens, so its links come next in tab order', () => {
+    render(<InlineMessage tone="information" title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Information: Migration' }));
+
+    const dialog = screen.getByRole('dialog', { name: 'Information: Migration' });
+    expect(dialog).toHaveFocus();
+  });
+
+  it('closes and returns focus to the row when Tab leaves the popup, or on Escape', () => {
+    render(<InlineMessage title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    const trigger = screen.getByRole('button', { name: 'Migration' });
+
+    fireEvent.click(trigger);
+    const link = screen.getByRole('link', { name: 'Read the notes' });
+    link.focus();
+    fireEvent.keyDown(link, { key: 'Tab' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+
+    fireEvent.click(trigger);
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("styles the pressed state with each tone's press overlay", () => {
+    expect(inlineMessageCss).toMatch(/\.tone_error\.trigger:is\(:active, \[data-force-state='press'\]\) \{\s*background: var\(--color-background-error-overlay-press\);/);
+  });
 });

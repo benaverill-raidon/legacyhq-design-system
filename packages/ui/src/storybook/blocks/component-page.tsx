@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Story } from '@storybook/addon-docs/blocks';
 import { CheckIcon, CloseIcon } from '../../assets/icons';
 import { componentCss } from './component-css';
-import { headerFacts, propRows, registryEntry, tokenRows, TOKEN_FAMILIES } from './component-page-data';
+import { headerFacts, propRows, registryEntry, rootClassOf, tokenRows, TOKEN_FAMILIES } from './component-page-data';
 import type { ComponentPageSection, DocgenInfo, PropRow } from './component-page-data';
 import { breakable, Code, doc, DocHeader, DocPage, DocSubsection } from './doc-page';
 import styles from './component-page.module.css';
@@ -315,7 +315,7 @@ export function Key({ keys, children }: { keys: string; children: React.ReactNod
 
 type StoriesModule = { default: { component?: unknown } };
 
-const docgenOf = (stories: StoriesModule) => (stories.default.component as { __docgenInfo?: DocgenInfo } | undefined)?.__docgenInfo;
+const docgenOf = (component: unknown) => (component as { __docgenInfo?: DocgenInfo } | undefined)?.__docgenInfo;
 
 /** A JSDoc description with its `code` spans set as code. */
 function described(text: string) {
@@ -354,10 +354,12 @@ function PropTable({ rows }: { rows: PropRow[] }) {
 /**
  * The props, read from the component's TypeScript types and their comments (Storybook's docgen), so
  * the table can't drift from the code. Deprecated props are listed after, with what replaces them.
- * `native` names the element whose other attributes the component forwards.
+ * `of` is the stories module, whose meta names the component; pass `component` instead for a second
+ * component on the same page (Radio Group beside Radio). `native` names the element whose other
+ * attributes the component forwards.
  */
-export function PropsTable({ of, native }: { of: StoriesModule; native?: string }) {
-  const { current, deprecated } = propRows(docgenOf(of));
+export function PropsTable({ of, component, native }: { of?: StoriesModule; component?: unknown; native?: string }) {
+  const { current, deprecated } = propRows(docgenOf(component ?? of?.default.component));
   return (
     <>
       <PropTable rows={current} />
@@ -381,11 +383,13 @@ export function PropsTable({ of, native }: { of: StoriesModule; native?: string 
 const cssOf = (id: string) => Object.entries(componentCss).find(([path]) => path.replace(/\\/g, '/').endsWith(`/${id}.module.css`))?.[1] ?? '';
 
 /**
- * Every token the component's own stylesheet uses, by family: the property it sets and when.
- * `root` is the class on the root element (`button`, `root`); rules on it alone read as "base".
+ * Every token the component's own stylesheet (`<id>.module.css`) uses, by family: the property it
+ * sets and when. `root` is the class on the root element, the stylesheet's first class unless given;
+ * rules on it alone read as "base".
  */
-export function TokensTable({ id, root = id }: { id: string; root?: string }) {
-  const rows = tokenRows(cssOf(id), root);
+export function TokensTable({ id, root }: { id: string; root?: string }) {
+  const css = cssOf(id);
+  const rows = tokenRows(css, root ?? rootClassOf(css));
   const families = TOKEN_FAMILIES.filter((family) => rows.some((row) => row.family === family));
   return (
     <div className={styles.tableScroll}>

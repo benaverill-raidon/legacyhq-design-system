@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { broadest, figmaFact, formatDate, headerFacts, propRows, registryEntry, splitDescription, tokenRows, whenOf } from './component-page-data';
+import { broadest, figmaFact, formatDate, headerFacts, propRows, registryEntry, rootClassOf, splitDescription, tokenRows, whenOf } from './component-page-data';
 
 const buttonCss: string = readFileSync('packages/ui/src/components/atoms/button/button.module.css', 'utf8');
 
@@ -60,6 +60,11 @@ describe('design tokens', () => {
     expect(whenOf('.prominence_tertiary:disabled:hover', 'button')).toBe('tertiary · disabled');
     expect(whenOf('.button.inverse:not(:disabled)', 'button')).toBe('inverse');
     expect(whenOf('.fullWidth', 'button')).toBe('full width');
+  });
+
+  it("finds a stylesheet's root class: the first one it styles", () => {
+    expect(rootClassOf(buttonCss)).toBe('button');
+    expect(rootClassOf('/* .note */\n.root {\n}\n.child {\n}')).toBe('root');
   });
 
   it('drops a condition a broader one covers', () => {

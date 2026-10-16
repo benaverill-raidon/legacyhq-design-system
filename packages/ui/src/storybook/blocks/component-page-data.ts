@@ -228,6 +228,9 @@ export function broadest(conditions: string[]) {
   );
 }
 
+/** The first class a stylesheet styles, which is its root element's (`.button`, `.root`). */
+export const rootClassOf = (css: string) => withoutComments(css).match(/^\s*\.([A-Za-z][\w-]*)/m)?.[1] ?? '';
+
 export type TokenRow = { family: TokenFamily; token: string; property: string; when: string[] };
 
 const typographyRole = (token: string) => token.match(/^(typography-[a-z]+-[a-z0-9]+)-/)?.[1];

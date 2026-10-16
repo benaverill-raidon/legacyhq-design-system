@@ -35,6 +35,26 @@
       "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
     ]
   },
+  "anatomy": [
+    {
+      "part": "root",
+      "element": "div.root",
+      "required": true,
+      "description": "The frame: border, background, radius, and padding. Reacts to :hover, :focus-within, and the textarea's :autofill (via :has), and carries the resize axis and the autoResize class."
+    },
+    {
+      "part": "textarea",
+      "element": "textarea",
+      "required": true,
+      "description": "The real native textarea, transparent and borderless inside the frame. Receives every forwarded native attribute and the ref."
+    },
+    {
+      "part": "iconAfter",
+      "element": "span.action (not aria-hidden)",
+      "required": false,
+      "description": "Optional trailing icon or interactive control (e.g. an edit IconButton), pinned to the top of the frame. Never forced aria-hidden."
+    }
+  ],
   "props": {
     "size": {
       "type": "TextAreaSize",

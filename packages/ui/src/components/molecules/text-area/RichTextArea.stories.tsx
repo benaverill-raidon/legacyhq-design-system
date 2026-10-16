@@ -124,11 +124,42 @@ function PrefilledDemo() {
 
 function StatesDemo() {
   const [a, setA] = useState<RichTextValue>([{ type: 'text', text: 'This note needs attention' }]);
-  const [b, setB] = useState<RichTextValue>([{ type: 'text', text: 'Read-only note' }]);
+  const [b, setB] = useState<RichTextValue>([{ type: 'text', text: 'Disabled note' }]);
   return (
     <div style={stack}>
       <RichTextArea value={a} onChange={setA} onSearch={search} recents={RECENTS} entityConfig={entityConfig} invalid aria-label="Invalid" rows={2} />
       <RichTextArea value={b} onChange={setB} onSearch={search} recents={RECENTS} entityConfig={entityConfig} disabled aria-label="Disabled" rows={2} />
+    </div>
+  );
+}
+
+const VARIANT_VALUE: RichTextValue = [
+  { type: 'text', text: 'Call ' },
+  { type: 'entity', entity: { id: 'a2', entityType: 'account', label: 'Ben Averill', href: '#a2' } },
+  { type: 'text', text: ' about the trust schedule.' },
+];
+
+function VariantsDemo() {
+  return (
+    <div style={stack}>
+      {(['md', 'lg'] as const).flatMap((size) =>
+        (['default', 'subtle'] as const).map((appearance) => (
+          <div key={`${size}-${appearance}`} style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
+            <RichTextArea
+              value={VARIANT_VALUE}
+              onChange={() => {}}
+              onSearch={search}
+              recents={RECENTS}
+              entityConfig={entityConfig}
+              size={size}
+              appearance={appearance}
+              rows={2}
+              aria-label={`Note, ${size}, ${appearance}`}
+            />
+            <span style={caption}>{`size="${size}" appearance="${appearance}"`}</span>
+          </div>
+        )),
+      )}
     </div>
   );
 }
@@ -141,3 +172,6 @@ export const Prefilled: Story = { render: () => <PrefilledDemo /> };
 
 /** Invalid and disabled reuse Text Area's frame treatment. */
 export const States: Story = { render: () => <StatesDemo /> };
+
+/** The two sizes in the default and subtle appearances. The editor reads `value` once, so it leads from there. */
+export const Variants: Story = { render: () => <VariantsDemo /> };

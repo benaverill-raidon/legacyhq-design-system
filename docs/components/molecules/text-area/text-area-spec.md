@@ -125,6 +125,10 @@ transparent. Bottom corners are square; top corners keep the size's radius - mir
 autofill tint only while focused. For a field inside a row, such as Key
 Value Pair wrapped in Inline Edit.
 
+**Text selection** is tinted with `--color-content-highlight`, the translucent brand `::selection`
+background shared with Text Field and Rich Text Area. Only the background is set; the text color is
+left alone. `::selection` and `::-moz-selection` are separate rules, as in Text Field.
+
 ### Token naming note
 
 Figma's text-area binds a newer `background/input/*` (default/hovered/pressed) and `border/focused`

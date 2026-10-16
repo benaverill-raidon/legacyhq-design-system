@@ -61,33 +61,49 @@ export interface EntityTypeConfig {
 }
 
 export interface RichTextAreaProps {
-  /** Controlled value - the node array. */
+  /**
+   * The starting content, as a node array. Read once, when the editor mounts; after that the editor
+   * leads, and `onChange` reports each change.
+   */
   value: RichTextValue;
+  /** Called with the whole node array after every edit, including adding or deleting a tag. */
   onChange: (value: RichTextValue) => void;
-  /** Resolves the `/query` into grouped entity results (async supported). */
+  /** Returns the grouped results for the typed query, directly or as a promise. Called with `''` when the list opens, unless `recents` is given. */
   onSearch: EntitySearch;
-  /** Shown when the picker opens with an empty query. If omitted, `onSearch('')` is used. */
+  /** Shown when the list opens, before a query is typed. If omitted, `onSearch('')` is used. */
   recents?: EntitySection[];
-  /** Maps each entityType to a tag tone + default icon (for tags and section headings). */
+  /**
+   * The tag tone and default icon for each `entityType`, used for tags and section headings. Merges
+   * over the built-in tones for `account`, `person`, `matter`, `roadmap`, and `document`.
+   */
   entityConfig?: Record<string, EntityTypeConfig>;
-  /** md / lg - reuses Text Area's frame sizing. */
+  /** `md` or `lg`, with Text Area's padding, corners, and text size. `sm` is accepted but renders as `md`. */
   size?: TextAreaSize;
-  /** default / subtle - reuses Text Area's appearance. */
+  /**
+   * `default` is the bordered field; `subtle` has no border or background until hovered or focused.
+   * Use one of those two: `inline` is accepted but has no styles yet.
+   */
   appearance?: TextAreaAppearance;
-  /** Which edges the user can drag to resize the editor. Defaults to `vertical`, like Text Area. */
+  /** Which way someone can drag the editor to resize it. Defaults to `vertical`, like Text Area. */
   resize?: TextAreaResize;
+  /** Shows the error border and sets `aria-invalid` on the editor. */
   invalid?: boolean;
+  /** Turns off editing, takes the editor out of the tab order, and stops the `/` command. */
   disabled?: boolean;
   /** Shown when the editor is empty. */
   placeholder?: string;
-  /** Placeholder inside the `/` slash-input before a query is typed. Defaults to "Type to search". */
+  /** Placeholder inside the `/` query box before a query is typed. Defaults to "Type to search". */
   searchPlaceholder?: string;
   /** Message when a search returns nothing. Defaults to "No matches". */
   emptyMessage?: React.ReactNode;
-  /** Approximate initial height, in rows (line-height units). Defaults to 3. */
+  /** The editor's starting height, in lines; it grows as the text gets longer. Defaults to 3. */
   rows?: number;
+  /** Added to the wrapper around the editor. */
   className?: string;
+  /** Set on the editor. A `label` with `htmlFor` can't name it, because it isn't a native control; use `aria-labelledby`. */
   id?: string;
+  /** The editor's accessible name, when there's no visible label. */
   'aria-label'?: string;
+  /** The id of a visible label that names the editor. */
   'aria-labelledby'?: string;
 }

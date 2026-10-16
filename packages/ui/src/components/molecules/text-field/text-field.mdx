@@ -1,199 +1,312 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { CloseIcon, SearchIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { IconButton } from '../../atoms/icon-button';
+import { FormRow } from '../../organisms/form';
+import { Field } from '../field';
+import { TextField } from './text-field';
+import textFieldStyles from './text-field.module.css';
 import * as TextFieldStories from './TextField.stories';
 
 <Meta of={TextFieldStories} name="Docs" />
 
-# Text Field
+<Unstyled>
+<ComponentPage>
 
-Text Field is a molecule that lets a user write or edit a single line of text. It renders a real
-native `<input>` inside a bordered frame, composes an optional leading icon/text slot and an
-optional trailing icon/action slot around it, and is the foundation for every free-text entry point
-in the product. It's a molecule rather than an atom because its trailing slot can compose a real
-Icon Button or Button.
+<ComponentHeader
+  id="text-field"
+  example={
+    <FormRow>
+      <Field label="Client email">
+        <TextField type="email" defaultValue="jordan.lee@example.com" />
+      </Field>
+      <Field label="Retainer">
+        <TextField iconBefore="$" inputMode="decimal" defaultValue="2500.00" />
+      </Field>
+    </FormRow>
+  }
+>
+  Text Field lets someone type or edit one line of text: a name, an email address, a search term, an
+  amount. It's a native input in a bordered frame, with room for an icon or prefix before the text and
+  an icon or action after it.
+</ComponentHeader>
 
-<Canvas of={TextFieldStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Any short, single-line text entry - names, emails, search terms, quantities.
-- Use the native `type` attribute (`email`, `password`, `search`, `tel`, `url`, `number`, ...) to
-  get the right keyboard and built-in browser validation for the data being collected.
+- A short value typed on one line: a name, an email address, a phone number, an amount.
+- A search box, with a search icon before the text.
+- A field someone can clear, with an Icon Button after the text.
+- A value edited in place inside a row, with `context="inline"`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Multi-line content.** There is no textarea mode.
-- **A value chosen from a fixed set of options.** Use Select instead.
+- **Text that runs over several lines:** <DocLink to="Components/Forms/Text Area" />.
+- **Text that links to records:** <DocLink to="Components/Forms/Rich Text Area" />.
+- **A value from a fixed set of options:** <DocLink to="Components/Forms/Select" />.
+- **A date or a time:** <DocLink to="Components/Forms/Date Picker" /> or <DocLink to="Components/Forms/Time Picker" />.
 
-## Sizes and context
+</UseInstead>
+</Usage>
 
-<Canvas of={TextFieldStories.Variants} />
+</Section>
 
-`context="default"` (the standard bordered look, rounded on all four corners) is correct for
-nearly every case. `context="inline"` (Figma's `context=inline`) is for a field inside a row - a
-search box, an inline-edit field, a Key Value Pair value - that shouldn't visually compete with
-surrounding content until someone interacts with it. It has no visible border or background at
-rest. Confirmed directly from Figma, it never shows a full box border: hover shows the raised-hover
-background and a 1px bottom border, focus and invalid paint a 2px bottom line, and its bottom
-corners are always square regardless of size. It rests at the same 1px bottom border-width
-`context="default"` uses at rest, at every state - focus and invalid paint the thicker look via
-`box-shadow` only, never a real `border-bottom-width` change, so the input text never shifts
-vertically. Hovering an invalid `context="inline"` field keeps the error border color rather than
-resetting it.
+<Section title="Anatomy">
 
-The older `appearance` prop is deprecated but still accepted: `subtle` and `inline` both map to
-`context="inline"`.
+<Anatomy
+  specimen={
+    <TextField
+      size="lg"
+      aria-label="Search matters"
+      defaultValue="Averill Living Trust"
+      iconBefore={<SearchIcon />}
+      iconAfter={
+        <IconButton appearance="subtle" shape="square" size="xs" aria-label="Clear">
+          <CloseIcon />
+        </IconButton>
+      }
+    />
+  }
+>
+  <Part name="root" target={textFieldStyles.root}>The frame: border, background, and corners. It shows hover, focus, and autofill for the input inside it.</Part>
+  <Part name="iconBefore" target={textFieldStyles.before}>An optional icon or short text prefix, such as `$`. Decorative, and hidden from assistive technology.</Part>
+  <Part name="leadingContent">Optional content between the prefix and the input that can hold controls. Select uses it for its multi-select chips; not shown here.</Part>
+  <Part name="input" target={textFieldStyles.input}>The native `input`. Every other attribute you pass goes here.</Part>
+  <Part name="iconAfter" target={textFieldStyles.action}>An optional icon, Label, or control, such as an Icon Button that clears the field.</Part>
+</Anatomy>
 
-## States
+</Section>
 
-Hover, focus, and autofill below are pinned via `data-force-state` (documentation-only) so they're
-visible side by side; invalid and disabled are real props.
+<Section title="Variants">
 
-<Canvas of={TextFieldStories.States} />
+`size` and `context` are separate props, and every pairing is designed.
 
-Figma models `hover`/`focus`/`typing`/`filled`/`autofill` as if they were variants to pick between.
-They aren't real props here - they all fall out of native `:hover`, `:focus-within`, `:autofill`,
-and the input's own placeholder/value, exactly like a plain `<input>` already behaves. `invalid` is
-the one real boolean prop among them, and it renders its thicker error border regardless of focus -
-confirmed directly from Figma's node data, not a focus-only effect.
+<Example of={TextFieldStories.Variants} />
 
-Focus/typing replaces the resting border color directly - the same pattern `invalid` already uses -
-rather than adding an outline ring around the existing border. Border *width* never literally
-changes, though: `context="default"` rests at 1px at every state (rest, hover, focus, invalid),
-painting the "thicker" look on focus/invalid via `box-shadow` only, so the placeholder/value text
-and the typing caret never shift horizontally. Hover is suppressed once the field is focused/typing:
-hover styling is only ever visible on an inactive field.
+<Subsection title="Sizes">
 
-When the browser autofills the field, the frame shows Figma's autofill state: the translucent
-`color-background-autofill-default` tint over the raised surface. Hover replaces the tint with the
-ordinary hover background; focus and invalid keep it. `context="inline"` stays chromeless at rest
-like any inline field, and shows the tint only once focused - so its pinned reference
-above looks like an ordinary filled field. The browser's own autofill fill on the input is hidden
-(its background is clipped to the text), so the field looks the same in every browser. The pinned
-references show the frame only; to see the browser's fill being hidden, pick a saved suggestion in
-the "Real browser autofill" fields under Edge Cases.
+Three heights: `sm` (32px), `md` (40px), and `lg` (48px), shared with Button, Select, and the other
+controls so they line up in a row. `lg` also sets the text one type size larger, with more padding
+and rounder corners.
 
-## Content
+</Subsection>
 
-<Canvas of={TextFieldStories.Content} />
+<Subsection title="Context">
 
-Text Field has no label of its own - pair it with a native `<label htmlFor>` pointing at the
-input's `id`, or pass `aria-label`/`aria-labelledby` directly, exactly as you would for a bare
-`<input>`.
+`context` says where the field sits. `default` is the bordered field for forms. `inline` is for a
+field inside a row of other content, such as a Key Value Pair value or a search box in a menu: it has
+no border or background until someone hovers it, then shows the hover background and a line along
+the bottom. Focus and invalid show a thicker line in the focus or error color, and the bottom corners
+are always square.
 
-`iconBefore` and `iconAfter` are not symmetric. `iconBefore` accepts an icon or a short text prefix
-(e.g. a currency symbol) and is always decorative (`aria-hidden`) - it can never carry an
-interactive control. `iconAfter` accepts an icon, or a real interactive control such as an
-`IconButton` (most commonly a clear/dismiss action) or a `Button` - it is never forced
-`aria-hidden`, so an interactive control placed there stays focusable and keeps its own accessible
-name. When building a clearable field, pass a real `IconButton` (`appearance="subtle"`,
-`shape="square"`) rather than a bare icon standing in for a button.
+Field passes `context="inline"` to its control when the Field is inline. Inside a Table's editable
+cell, Text Field takes the cell's size and the inline context, whatever you pass. The older
+`appearance` prop still works: `subtle` and `inline` both mean `context="inline"`.
 
-<Canvas of={TextFieldStories.EdgeCases} />
+</Subsection>
 
-## Do / Don't
+</Section>
 
-**Do** pair Text Field with a real label.
+<Section title="Behavior">
 
-```tsx
-<label htmlFor="email">Email</label>
-<TextField id="email" type="email" />
-```
+<Subsection title="States">
 
-**Don't** rely on placeholder text as the only accessible name.
+There's no `state` prop. Hover, focus, and autofill come from the browser; `invalid` and `disabled`
+are props. Focus changes the border to the focus color and thickens it on the inside, so the text
+never moves. Hover shows only while the field isn't focused. An invalid field keeps its thicker error
+border whether or not it has focus, and hovering doesn't hide it.
 
-```tsx
-<TextField placeholder="Email" />
-```
+<Example of={TextFieldStories.States} caption="Hover, focus, and autofill are pinned for this reference; invalid and disabled are the real props." />
 
----
+</Subsection>
 
-**Do** use the native `type` for the right keyboard and built-in validation.
+<Subsection title="Autofill">
 
-```tsx
-<TextField type="email" />
-```
+When the browser fills in a saved value, a `default` field shows the autofill tint over its surface.
+Hovering replaces the tint with the usual hover background; focus and invalid keep it. An `inline`
+field stays clear at rest and shows the tint only while it's focused. The browser's own autofill
+color is hidden, so the field looks the same in every browser.
 
-**Don't** reach for Text Field when the value comes from a fixed set of options.
+</Subsection>
 
-```tsx
-{
-  /* Use Select instead. */
-}
-<TextField placeholder="Choose a country" />;
-```
+<Subsection title="Before and after the text">
 
-## API
+`iconBefore` holds an icon or a short text prefix, such as `$`. It's decorative and hidden from
+assistive technology, so don't put anything there that the label doesn't already say. A text prefix
+uses the larger body text at every size.
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Frame height, padding, and typography.</td>
-    </tr>
-    <tr>
-      <td><code>context</code></td>
-      <td><code>'default' | 'inline'</code></td>
-      <td><code>'default'</code></td>
-      <td>Bordered box, or chromeless until hovered or focused for a field inside a row (Figma's <code>context</code>).</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'subtle' | 'inline'</code></td>
-      <td>-</td>
-      <td>Deprecated - use <code>context</code>. <code>subtle</code> and <code>inline</code> map to <code>context="inline"</code>.</td>
-    </tr>
-    <tr>
-      <td><code>invalid</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Sets <code>aria-invalid</code> and the error border, regardless of focus.</td>
-    </tr>
-    <tr>
-      <td><code>iconBefore</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional leading icon or short text prefix. Always decorative.</td>
-    </tr>
-    <tr>
-      <td><code>iconAfter</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional trailing icon or interactive control (e.g. an IconButton clear action). Never forced <code>aria-hidden</code>.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root frame's class list.</td>
-    </tr>
-    <tr>
-      <td><code>inputClassName</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the native input's class list.</td>
-    </tr>
-    <tr>
-      <td>...rest</td>
-      <td><code>React.InputHTMLAttributes&lt;HTMLInputElement&gt;</code></td>
-      <td>-</td>
-      <td>Forwarded to the native input - <code>type</code>, <code>value</code>, <code>placeholder</code>, <code>disabled</code>, <code>onChange</code>, etc.</td>
-    </tr>
-  </tbody>
-</table>
+`iconAfter` holds an icon, a Label for a unit, or a real control: an Icon Button with
+`appearance="subtle"` and `shape="square"` to clear the field, or a Button when the action needs a
+word. It isn't hidden, so a control there keeps its own name and tab stop.
 
-## Related components
+`leadingContent` sits between the two and can hold controls. Select uses it for its multi-select
+chips. It shrinks and clips so the field stays on one line.
 
-- **Checkbox**, **Radio**, **Switch** - the other native-form-control atoms in this system.
-- **Select** - for choosing from a fixed set of options instead of typing free text.
-- **Icon Button** - the recommended real control for an interactive `iconAfter` clear action.
-- **Button** - for an interactive `iconAfter` action that needs a text label.
+<Example of={TextFieldStories.Content} caption="Content: placeholder and value, an icon and a text prefix, a clear action, a unit, and a native label." />
+
+</Subsection>
+
+<Subsection title="Width">
+
+Text Field fills the width of its container, so set the width on the container. A value longer than
+the field scrolls inside the input.
+
+<Example of={TextFieldStories.EdgeCases} caption="Edge cases: a long value, a full-width field, real browser autofill to try, and a dark surface." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give the field a visible label with Field, which also names it for assistive technology."
+  code={`<Field label="Email">
+    <TextField type="email" />
+</Field>`}
+>
+  <Field label="Email">
+    <TextField type="email" />
+  </Field>
+</Do>
+<Dont caption="Use the placeholder as the label. It disappears as soon as someone types." code={`<TextField type="email" placeholder="Email" />`}>
+  <TextField type="email" placeholder="Email" />
+</Dont>
+<Do
+  caption="Pair invalid with a message that says how to fix the value."
+  code={`<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
+    <TextField type="email" invalid defaultValue="jordan.lee@" />
+</Field>`}
+>
+  <Field label="Email" state="error" message="Enter an email address, like name@example.com.">
+    <TextField type="email" invalid defaultValue="jordan.lee@" />
+  </Field>
+</Do>
+<Dont
+  caption="Mark the field invalid with no message. The red border alone doesn't say what's wrong."
+  code={`<Field label="Email">
+    <TextField type="email" invalid defaultValue="jordan.lee@" />
+</Field>`}
+>
+  <Field label="Email">
+    <TextField type="email" invalid defaultValue="jordan.lee@" />
+  </Field>
+</Dont>
+<Do
+  caption="Put a real Icon Button in iconAfter for a clear action, with its own label."
+  code={`<TextField
+    aria-label="Filter"
+    value={value}
+    onChange={(event) => setValue(event.target.value)}
+    iconAfter={
+      <IconButton appearance="subtle" shape="square" size="xs" aria-label="Clear" onClick={() => setValue('')}>
+        <CloseIcon />
+      </IconButton>
+    }
+/>`}
+>
+  <TextField
+    aria-label="Filter"
+    defaultValue="Averill"
+    iconAfter={
+      <IconButton appearance="subtle" shape="square" size="xs" aria-label="Clear">
+        <CloseIcon />
+      </IconButton>
+    }
+  />
+</Do>
+<Dont caption="Make a bare icon clickable. Keyboard users can't reach it, and it has no name." code={`<TextField aria-label="Filter" iconAfter={<CloseIcon onClick={() => setValue('')} />} />`} />
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Text Field renders a native `input` inside a `div` frame, so it's focusable and announced as a text
+  field, or as the role its `type` gives it, such as a search box. Typing, autofill, spellcheck, and
+  copy and paste work with no extra code.
+- It has no label of its own. Wrap it in Field, which wires a native `label` to it, or pass
+  `aria-label` or `aria-labelledby`. A placeholder isn't a label.
+- `invalid` sets `aria-invalid` on the input. In a Field, the error message is added to the input's
+  description, so the error has words as well as a color.
+- `disabled` is the native attribute: the input leaves the tab order and can't be edited.
+- `iconBefore` is hidden from assistive technology. `iconAfter` isn't, so a control there is its own
+  tab stop after the input, with its own accessible name.
+- Focus shows on the field's own border, in the focus color, rather than as the shared Focus Ring
+  around it.
+
+Text Field adds no keys of its own; the native input handles typing and editing.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the input, then to any control in `iconAfter`. A disabled field is skipped.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+Any other `input` attribute, such as `type`, `value`, `placeholder`, or `onChange`, is passed to the
+native input, and so is `ref`. `className` is added to the frame's classes.
+
+<PropsTable of={TextFieldStories} />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Text Field's stylesheet uses, by family, with the property it sets and when. "Base" is
+the field with no modifiers; `default` and `inline` are the contexts, and a token listed for a size
+applies to both contexts.
+
+<TokensTable id="text-field" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Field" /> to add a label, a helper or error message, and a required marker.
+- <DocLink to="Components/Forms/Text Area" /> for text that runs over several lines.
+- <DocLink to="Components/Forms/Select" /> for a value from a fixed set of options. It's built on Text Field.
+- <DocLink to="Components/Forms/Date Picker" /> and <DocLink to="Components/Forms/Time Picker" /> for dates and times.
+- <DocLink to="Components/Actions/Icon Button" /> for a clear action in `iconAfter`.
+- <DocLink to="Components/Data Display/Label" /> for a unit or status after the text.
+- <DocLink to="Components/Forms/Inline Edit" /> to edit a value in place, with confirm and cancel actions.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads text-field.types.ts, the design tokens read text-field.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

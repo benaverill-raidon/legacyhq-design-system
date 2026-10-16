@@ -1,206 +1,291 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { EditIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../field';
+import { TextField } from '../text-field';
+import { TextArea } from './text-area';
+import textAreaStyles from './text-area.module.css';
 import * as TextAreaStories from './TextArea.stories';
 
 <Meta of={TextAreaStories} name="Docs" />
 
-# Text Area
+<Unstyled>
+<ComponentPage>
 
-Text Area is the multi-line counterpart of Text Field: a real native `<textarea>` in the same bordered
-frame, for writing or editing content that spans several lines — notes, descriptions, comments. It
-shares Text Field's size, context, invalid, and state treatment token-for-token. The frame styling
-lives on a wrapper `<div>` (the same pattern Text Field uses) so it can host an optional trailing
-icon/action slot (`iconAfter`).
+<ComponentHeader
+  id="text-area"
+  example={
+    <Field label="Notes" message="Shared with everyone working on this matter.">
+      <TextArea rows={3} defaultValue={'Signed engagement letter received.\nAwaiting the trust schedule from the client.'} />
+    </Field>
+  }
+>
+  Text Area lets someone write or edit text that runs over several lines: notes, descriptions,
+  comments. It's a native textarea in the same frame as Text Field, and it can grow with its content.
+</ComponentHeader>
 
-<Canvas of={TextAreaStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Any genuinely multi-line free text — notes, descriptions, comments, message bodies.
-- Set `rows` for a fixed initial height, or opt into `autoResize` to grow with content.
+- Notes, descriptions, comments, and message bodies.
+- Any free text that can run past one line.
+- A multi-line value edited in place inside a row, with `context="inline"`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A single-line value.** Use Text Field.
-- **A value chosen from a fixed set of options.** Use Select.
-- **Inline entity tags.** Use Rich Text Area, Figma's `type=rich-inline` (see below).
+- **A value on one line:** <DocLink to="Components/Forms/Text Field" />.
+- **Text that links to records:** <DocLink to="Components/Forms/Rich Text Area" />.
+- **A value from a fixed set of options:** <DocLink to="Components/Forms/Select" />.
 
-## Sizes and context
+</UseInstead>
+</Usage>
 
-<Canvas of={TextAreaStories.Variants} />
+</Section>
 
-`context="default"` is the standard bordered box, rounded on all four corners — correct for nearly
-every case. `context="inline"` has no visible border or background at rest — hover shows the
-raised-hover background and a bottom border, focus and invalid paint a 2px bottom line, and its bottom
-corners stay square. It's for a field inside a row, such as a Key Value Pair value. `context` is the
-same name and axis as its Text Field sibling and Figma's `context`. The older `appearance` prop is
-deprecated but still accepted: `subtle` and `inline` both map to `context="inline"`. Sizes match Text
-Field (`body-md` at sm/md, `body-lg` at lg; radius steps up to `xl` at lg). The compact `sm` option
-supports small editable key/value rows.
+<Section title="Anatomy">
 
-## States
+<Anatomy
+  specimen={
+    <TextArea
+      rows={3}
+      aria-label="Notes"
+      defaultValue={'Signed engagement letter received.\nAwaiting the trust schedule from the client.'}
+      iconAfter={<EditIcon color="subtle" />}
+    />
+  }
+>
+  <Part name="root" target={textAreaStyles.root}>The frame: border, background, corners, and padding. It shows hover, focus, and autofill for the text inside it, and it's what resizes.</Part>
+  <Part name="textarea" target={textAreaStyles.textarea}>The native `textarea`. Every other attribute you pass goes here, and so does `ref`.</Part>
+  <Part name="iconAfter" target={textAreaStyles.action}>An optional icon or control at the end of the frame, pinned to the top as the text grows.</Part>
+</Anatomy>
 
-Hover, focus, and autofill below are pinned via `data-force-state` (documentation-only); invalid and
-disabled are real props.
+</Section>
 
-<Canvas of={TextAreaStories.States} />
+<Section title="Variants">
 
-Figma models `hover`/`focus`/`typing`/`filled`/`autofill` as if they were variants to pick between.
-They aren't real props — they fall out of native `:hover`/`:focus`/`:autofill` and the textarea's own
-placeholder/value. `invalid` is the one real boolean among them. Focus and invalid replace the border
-color and paint the thicker (2px) edge with an inset `box-shadow` rather than a real `border-width`
-change, so the multi-line text never shifts by a pixel. Hover is suppressed once the field is focused.
+`size` and `context` are separate props, and they work the same way as Text Field's.
 
-An autofilled field (a saved address, say) gets the same treatment as Text Field: the translucent
-`color-background-autofill-default` tint over the raised surface, with the browser's own autofill
-fill on the textarea hidden. Hover replaces the tint with the ordinary hover background; focus and
-invalid keep it. `context="inline"` stays chromeless at rest and shows the tint only once focused, so its pinned reference above looks like an ordinary filled field. The pinned
-references show the frame only; the "Real browser autofill" fields under Edge Cases show the
-browser's fill being hidden.
+<Example of={TextAreaStories.Variants} />
 
-## Resizing
+<Subsection title="Sizes">
 
-<Canvas of={TextAreaStories.Resize} />
+`size` sets the padding, corner radius, and text size. `sm` and `md` use the body text; `lg` uses
+the larger body text, with more padding and rounder corners. Figma draws `md` and `lg`; `sm` is a
+code-only option for compact key and value rows. The height comes from `rows`, or from `autoResize`,
+which starts each size at the control height: 32px, 40px, or 48px.
 
-`resize` maps to the CSS `resize` property, defaulting to `vertical` — content can grow downward
-without a drag breaking the surrounding layout. Use `none` to lock the height for a fixed layout;
-content still scrolls natively. A disabled field cannot be resized.
+</Subsection>
 
-<Canvas of={TextAreaStories.AutoResize} />
+<Subsection title="Context">
 
-`autoResize` is opt-in. It starts at the matching TextField control height (sm/md/lg), grows with
-existing or entered content, and shrinks when text is removed. `maxRows` defaults to six visible
-lines, after which the textarea scrolls vertically. This mode overrides `rows` and manual resizing.
-It also recalculates when the field width changes, so wrapped text fits its container.
+`default` is the bordered field for forms. `inline` is for a field inside a row of other content,
+such as a Key Value Pair value: it has no border or background until someone hovers it, then shows
+the hover background and a line along the bottom. Focus and invalid show a thicker line in the focus
+or error color, and the bottom corners are always square.
 
-For editable key/value rows, compose `<TextArea autoResize size={size} context="inline" />`
-inside `<InlineEdit actionPlacement="end" actionAlignment="start">`. The row grows in normal flow;
-allow space to its trailing side for the actions. Enter inserts a newline, Ctrl/Cmd+Enter confirms,
-and Escape cancels.
+Field passes `context="inline"` to its control when the Field is inline. The older `appearance`
+prop still works: `subtle` and `inline` both mean `context="inline"`.
 
-## Content
+</Subsection>
 
-<Canvas of={TextAreaStories.Content} />
+</Section>
 
-Text Area has no label of its own — pair it with a native `<label htmlFor>` pointing at its `id`, or
-pass `aria-label`. There is no built-in character-count or helper chrome; compose those around it, as
-the counted example shows.
+<Section title="Behavior">
 
-<Canvas of={TextAreaStories.EdgeCases} />
+<Subsection title="States">
 
-## Trailing icon
+There's no `state` prop. Hover, focus, and autofill come from the browser; `invalid` and `disabled`
+are props. Focus changes the border to the focus color and thickens it on the inside, so the text
+never moves. Hover shows only while the field isn't focused, and an invalid field keeps its error
+border through hover and focus.
 
-<Canvas of={TextAreaStories.IconAfter} />
+Autofill works as it does in Text Field: a `default` field shows the autofill tint over its surface,
+hovering replaces it, and focus and invalid keep it. An `inline` field shows the tint only while
+it's focused. The browser's own autofill color is hidden, so the field looks the same in every
+browser.
 
-`iconAfter` places an icon or interactive control (like an edit IconButton) at the trailing end of the
-frame. The slot is not `aria-hidden` — it may hold a real focusable action. `context="inline"`
-combined with `iconAfter` is the standard pattern for embedding inside a Key Value Pair.
+<Example of={TextAreaStories.States} caption="Hover, focus, and autofill are pinned for this reference; invalid and disabled are the real props." />
 
-## Do / Don't
+</Subsection>
 
-**Do** pair Text Area with a real label and a sensible `rows`.
+<Subsection title="Resizing">
 
-```tsx
-<label htmlFor="notes">Notes</label>
-<TextArea id="notes" rows={4} />
-```
+`resize` sets which way someone can drag the field: `vertical` (the default), `horizontal`, `both`,
+or `none`. Vertical lets the field grow taller without changing its width, so a drag can't push it
+out of its column. Use `none` for a fixed layout; long text still scrolls. A disabled field can't be
+resized.
 
-**Don't** use it for a single line, or rely on the placeholder as the only accessible name.
+<Example of={TextAreaStories.Resize} />
 
-```tsx
-<TextArea rows={1} placeholder="Name" />
-```
+</Subsection>
 
-## API
+<Subsection title="Growing with content">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Padding, radius, and font size.</td>
-    </tr>
-    <tr>
-      <td><code>context</code></td>
-      <td><code>'default' | 'inline'</code></td>
-      <td><code>'default'</code></td>
-      <td>Bordered box, or chromeless until hovered or focused for a field inside a row (Figma's <code>context</code>).</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'subtle' | 'inline'</code></td>
-      <td>-</td>
-      <td>Deprecated - use <code>context</code>. <code>subtle</code> and <code>inline</code> map to <code>context="inline"</code>.</td>
-    </tr>
-    <tr>
-      <td><code>invalid</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Sets <code>aria-invalid</code> and the error border.</td>
-    </tr>
-    <tr>
-      <td><code>resize</code></td>
-      <td><code>'none' | 'vertical' | 'horizontal' | 'both'</code></td>
-      <td><code>'vertical'</code></td>
-      <td>Which edges the user can drag. Disabled fields lock to none.</td>
-    </tr>
-    <tr>
-      <td><code>autoResize</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Grow and shrink with content, using the size token as the minimum height.</td>
-    </tr>
-    <tr>
-      <td><code>maxRows</code></td>
-      <td><code>number</code></td>
-      <td><code>6</code></td>
-      <td>Visible line limit in auto-resize mode; additional content scrolls vertically.</td>
-    </tr>
-    <tr>
-      <td><code>iconAfter</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>A trailing icon or interactive control (e.g. an edit pencil IconButton).</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the wrapper's class list.</td>
-    </tr>
-    <tr>
-      <td>...rest</td>
-      <td><code>React.TextareaHTMLAttributes&lt;HTMLTextAreaElement&gt;</code></td>
-      <td>-</td>
-      <td>Forwarded to the native textarea — <code>rows</code>, <code>value</code>, <code>placeholder</code>, <code>maxLength</code>, <code>disabled</code>, <code>onChange</code>, etc. A ref forwards to the <code>&lt;textarea&gt;</code>.</td>
-    </tr>
-  </tbody>
-</table>
+`autoResize` makes the field grow as text is added and shrink as it's removed. It starts at the
+control height for its size and stops growing at `maxRows` lines, 6 unless you set it, then scrolls.
+It replaces `rows` and the drag handle, and it measures again when the field's width changes.
 
-## `type=rich-inline` is Rich Text Area
+For a value edited in place, put `<TextArea autoResize context="inline" />` inside an Inline Edit
+with `actionPlacement="end"` and `actionAlignment="start"`. Inline Edit leaves Enter for new lines:
+Ctrl+Enter or Cmd+Enter confirms, and Escape cancels.
 
-Figma's second `type`, `rich-inline`, is an **inline entity-tagging** mode — not rich-text
-formatting. While typing, a user presses **`/`** to open a searchable, grouped list of entities to
-link, and each choice is inserted inline as a **navigational tag** — a colored, icon-bearing chip that
-links to that entity. It looks identical to `default` in the static mockup; the whole difference is
-behavior.
+<Example of={TextAreaStories.AutoResize} />
 
-In code it's a separate component, **Rich Text Area**, rather than a `type` prop: its value (text
-mixed with tags), its callbacks (`onSearch`), and its editable surface (`contenteditable`, not a
-plain `<textarea>`) share nothing with Text Area's. So Text Area exposes no `type` prop.
+</Subsection>
 
-## Related components
+<Subsection title="Trailing icon">
 
-- **Text Field** — single-line free text; shares the frame token-for-token.
-- **Select** — for choosing from a fixed set of options instead of typing free text.
-- **Rich Text Area** — multi-line text with inline entity tags (Figma's `type=rich-inline`).
-- **Label** — for a trailing unit/status pill (as Text Field uses).
-- **Key Value Pair** — embeds Text Area with `context="inline"` and `iconAfter` for inline editing.
+`iconAfter` puts an icon or a control at the end of the frame, pinned to the top so it stays put as
+the text grows. It isn't hidden from assistive technology, so an Icon Button there keeps its own
+name and tab stop.
+
+<Example of={TextAreaStories.IconAfter} />
+
+</Subsection>
+
+<Subsection title="Labels and counts">
+
+Text Area has no label, helper text, or character count of its own. Wrap it in Field for the label
+and a message; a count is text you show beside it.
+
+<Example of={TextAreaStories.Content} caption="Content: placeholder and value, and a native label with a live count." />
+
+<Example of={TextAreaStories.EdgeCases} caption="Edge cases: a long value that scrolls, a full-width field, real browser autofill to try, and a dark surface." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give the field a label with Field, and say any limit in the message."
+  code={`<Field label="Bio" message="Up to 240 characters.">
+    <TextArea rows={4} maxLength={240} />
+</Field>`}
+>
+  <Field label="Bio" message="Up to 240 characters.">
+    <TextArea rows={4} maxLength={240} />
+  </Field>
+</Do>
+<Dont caption="Put the label and the limit in the placeholder. Both disappear as soon as someone types." code={`<TextArea rows={4} placeholder="Bio, up to 240 characters" />`}>
+  <TextArea rows={4} placeholder="Bio, up to 240 characters" />
+</Dont>
+<Do
+  caption="Use Text Field for a value on one line."
+  code={`<Field label="Matter name">
+    <TextField />
+</Field>`}
+>
+  <Field label="Matter name">
+    <TextField />
+  </Field>
+</Do>
+<Dont
+  caption="Use a one-row Text Area for a single line. Enter adds a new line, and the field can be dragged taller."
+  code={`<Field label="Matter name">
+    <TextArea rows={1} />
+</Field>`}
+>
+  <Field label="Matter name">
+    <TextArea rows={1} />
+  </Field>
+</Dont>
+<Do caption="Keep the default vertical resize, so people can make the field taller without changing its width." code={`<TextArea rows={4} aria-label="Notes" />`}>
+  <TextArea rows={4} aria-label="Notes" />
+</Do>
+<Dont caption="Allow horizontal resizing in a form. A drag can push the field past its column." code={`<TextArea rows={4} resize="both" aria-label="Notes" />`} />
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Text Area renders a native `textarea` inside a `div` frame, so it's focusable and announced as a
+  multi-line text field. Typing, wrapping, scrolling, autofill, and spellcheck work with no extra
+  code.
+- It has no label of its own. Wrap it in Field, which wires a native `label` to it, or pass
+  `aria-label` or `aria-labelledby`. A placeholder isn't a label.
+- `invalid` sets `aria-invalid` on the textarea. In a Field, the error message is added to its
+  description, so the error has words as well as a color.
+- `disabled` is the native attribute: the textarea leaves the tab order and can't be edited or
+  resized.
+- `iconAfter` isn't hidden, so a control there is its own tab stop after the textarea, with its own
+  accessible name.
+- Focus shows on the frame's own border, in the focus color, rather than as the shared Focus Ring
+  around it.
+
+Text Area adds no keys of its own; the native textarea handles typing and editing.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the textarea, then to any control in `iconAfter`. A disabled field is skipped.</Key>
+  <Key keys="Enter">Starts a new line.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+Any other `textarea` attribute, such as `value`, `placeholder`, `maxLength`, or `onChange`, is passed
+to the native textarea, and so is `ref`. `className` is added to the frame's classes.
+
+<PropsTable of={TextAreaStories} />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Text Area's stylesheet uses, by family, with the property it sets and when. "Base" is
+the field with no modifiers; `default` and `inline` are the contexts, and a token listed for a size
+applies to both contexts.
+
+<TokensTable id="text-area" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Text Field" /> for a value on one line. Text Area shares its frame and states.
+- <DocLink to="Components/Forms/Rich Text Area" /> for text that links to records, with tags typed in after `/`.
+- <DocLink to="Components/Forms/Field" /> to add a label, a helper or error message, and a required marker.
+- <DocLink to="Components/Forms/Inline Edit" /> to edit a value in place, with confirm and cancel actions.
+- <DocLink to="Components/Actions/Icon Button" /> for an action in `iconAfter`.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads text-area.types.ts, the design tokens read text-area.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

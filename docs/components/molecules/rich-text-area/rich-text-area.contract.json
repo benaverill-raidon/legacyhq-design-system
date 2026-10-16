@@ -35,24 +35,30 @@
       "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
     ]
   },
+  "anatomy": [
+    { "part": "editor", "element": "div.editor (role=textbox, aria-multiline, contenteditable)", "required": true, "description": "The frame and the editable surface in one: Text Area's frame tokens around the text and the inline tags. It sits in a div.wrapper, the same size, which positions the picker and takes className." },
+    { "part": "tag", "element": "span.tagHost (contenteditable=false) > Tag", "required": false, "description": "One per linked entity: a non-editable host span with a NavTag (a Tag atom, an <a> when href is set) portaled into it, so the caret treats the tag as one unit." },
+    { "part": "slashInput", "element": "span.slashInput (data-slash)", "required": false, "description": "Only while a / command is active: the typed /query in a small bordered box inside the text, showing searchPlaceholder until a query is typed." },
+    { "part": "picker", "element": "div.picker > Menu", "required": false, "description": "Only while a / command is active: the floating list of matching entities, grouped by type - the Menu organism with its search hidden, positioned under the query." }
+  ],
   "props": {
     "value": { "type": "RichTextValue", "required": true, "default": null, "description": "The node array: `{ type: 'text', text }` runs interleaved with `{ type: 'entity', entity }` nodes. Read on mount to hydrate the editor; the DOM leads from then on." },
     "onChange": { "type": "(value: RichTextValue) => void", "required": true, "default": null, "description": "Called with the re-serialized node array after every edit, including tag insertion and deletion." },
     "onSearch": { "type": "EntitySearch", "required": true, "default": null, "description": "`(query: string) => EntitySection[] | Promise<EntitySection[]>`. Resolves the `/query` into grouped results. Called with '' when the picker opens unless `recents` is supplied." },
     "recents": { "type": "EntitySection[]", "required": false, "default": null, "description": "Shown when the picker opens with an empty query, instead of calling `onSearch('')`." },
     "entityConfig": { "type": "Record<string, EntityTypeConfig>", "required": false, "default": null, "description": "Maps each entityType to a tag `tone` and a default `icon`, used for both the inserted tag and the section heading tile. Merges over the built-in defaults." },
-    "size": { "type": "TextAreaSize", "required": false, "default": "md", "enum": ["md", "lg"], "description": "Text Area's frame sizing - padding, radius, font." },
-    "appearance": { "type": "TextAreaAppearance", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "Text Area's appearance axis (Figma names it `tone`)." },
+    "size": { "type": "TextAreaSize", "required": false, "default": "md", "enum": ["md", "lg"], "description": "Text Area's frame sizing - padding, radius, font. The type also accepts sm, which has no styles here and renders as md." },
+    "appearance": { "type": "TextAreaAppearance", "required": false, "default": "default", "enum": ["default", "subtle"], "description": "Text Area's older appearance axis: default (bordered) or subtle (no border or background until hovered or focused). Text Area and Text Field now call this axis context, as Figma does; Rich Text Area has not moved yet. The type also accepts inline, which has no styles here." },
     "resize": { "type": "TextAreaResize", "required": false, "default": "vertical", "enum": ["none", "vertical", "horizontal", "both"], "description": "Which edges the user can drag." },
     "invalid": { "type": "boolean", "required": false, "default": false, "description": "Sets aria-invalid and paints the error border." },
     "disabled": { "type": "boolean", "required": false, "default": false, "description": "Turns off contenteditable, removes the editor from the tab order, and suppresses the slash command." },
     "placeholder": { "type": "string", "required": false, "default": null, "description": "Shown while the editor is empty. Rendered from `data-placeholder` as an absolutely-positioned overlay, so it never sits in the text flow or displaces the caret." },
     "searchPlaceholder": { "type": "string", "required": false, "default": "Type to search", "description": "Placeholder inside the `/` mini-input before a query is typed." },
     "emptyMessage": { "type": "React.ReactNode", "required": false, "default": "No matches", "description": "Shown in the picker when a search returns nothing." },
-    "rows": { "type": "number", "required": false, "default": 3, "description": "Approximate initial height in line-height units, applied as the `--rta-rows` custom property." },
+    "rows": { "type": "number", "required": false, "default": 3, "description": "Starting height in line-height units, applied as the `--rta-rows` custom property to the editor's min-height. The editor grows past it as content is added." },
     "className": { "type": "string", "required": false, "default": null, "description": "Composes onto the wrapper." },
-    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the editor element, for pairing with a <label htmlFor>." },
-    "aria-label": { "type": "string", "required": false, "default": null, "description": "Accessible name for the editor. Required unless aria-labelledby or a wired label is used." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Applied to the editor element. A <label htmlFor> cannot name it - the editor is a div, not a labelable element - so pair a visible label through aria-labelledby." },
+    "aria-label": { "type": "string", "required": false, "default": null, "description": "Accessible name for the editor. Required unless aria-labelledby is used." },
     "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Accessible name by reference." }
   },
   "sizes": ["md", "lg"],
@@ -65,15 +71,15 @@
   },
   "accessibility": {
     "role": "textbox (a contenteditable div), aria-multiline=\"true\"",
-    "label": "No built-in label - pass aria-label / aria-labelledby, or wire a <label htmlFor> to `id`.",
+    "label": "No built-in label - pass aria-label, or aria-labelledby pointing at a visible label. A <label htmlFor> wired to `id` does not name it, because the editor is a div; Field cannot label it for the same reason, and its aria-describedby/aria-invalid/required are not accepted props.",
     "invalid": "aria-invalid reflects the invalid prop.",
-    "disabled": "contenteditable is turned off and tabIndex is -1; the slash command does not fire.",
+    "disabled": "contenteditable is turned off and tabIndex is -1; the slash command does not fire. aria-disabled is not set, so assistive technology is not told the editor is disabled.",
     "tags": "Each tag renders a Tag with tabIndex -1 so the caret walk is not interrupted by tab stops; a tag with `href` is a real <a> and is reachable from the rendered content.",
     "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. The keyboard-active row is marked with a class. See knownLimitations - this is not yet wired to aria-activedescendant."
   },
   "tokens": {
     "frame": "All of Text Area's frame tokens, unchanged - surface, border, radius, padding, typography per size.",
-    "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-sm`.",
+    "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-md`.",
     "tagHost": "Layout only - the Tag atom carries its own tone tokens.",
     "picker": "The Menu organism's own panel tokens; the panel caps at 280px and scrolls.",
     "note": "No new tokens. Frame reuse is what makes the rich mode read as the same field as Text Area."
@@ -106,7 +112,7 @@
     "The `/` mini-input relies on the browser keeping typing inside an inline editable span. Verified in Chrome (Storybook's engine); Firefox and Safari can let the caret drift out of an inline element at its boundary, and no caret-correction guard is in place yet.",
     "Backspace does not yet delete a tag as a single unit in every position - a tag is atomic to the caret, but the surrounding deletion cases are not fully hardened.",
     "Multi-line serialization handles `<br>` but has not been hardened against every paste shape; pasted rich HTML is not sanitized into the node model.",
-    "No auto-resize-to-content; height comes from `rows` and the resize grip.",
+    "No maxRows: the editor grows with its content from the `rows` minimum without limit, and dragging the resize grip sets a fixed height, after which it scrolls.",
     "Tests cover rendering, hydration, the slash lifecycle, picker keyboard, and serialization. They cannot cover real caret behavior - jsdom does not simulate contenteditable typing - so caret correctness is verified live in Storybook, not in CI."
   ],
   "futureEnhancements": [

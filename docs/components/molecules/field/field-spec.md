@@ -149,6 +149,13 @@ Field (div.root, flex column, data-state/context/size)
   `id`/`aria-describedby`/`aria-invalid`/`required`. It only fills in unset props, so a control that
   declares its own id or aria state is never surprised. `cloneElement` is the same pattern Inline
   Edit already uses in this system.
+- **The wiring only lands if the control forwards it.** The injected props are ordinary props, so
+  they reach the native element only when the control passes them on. Text Field and Text Area
+  spread their remaining props onto the native `<input>`/`<textarea>`, so all of it lands. Select
+  takes `id` (so the label names its input) but doesn't accept `aria-describedby`, `aria-invalid`,
+  or `required`, so its message isn't linked and `state="error"` doesn't mark it invalid unless
+  Select's own `invalid` is set. Rich Text Area's editor is a `div`, which a `<label htmlFor>` can't
+  name, and it accepts none of the other injected props.
 - **`context` is one shared axis across the field AND its control - so it propagates.** In Figma,
   the same `context` property (default/inline) sits on the `<field>`, the Text Field, the Text Area,
   the Select, etc. An inline field is a borderless (inline) control with its label/message aligned

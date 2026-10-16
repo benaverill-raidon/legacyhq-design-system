@@ -32,8 +32,8 @@ wrapper (position: relative - the picker anchors to it)
 | `onSearch` | `(query: string) => EntitySection[] \| Promise<EntitySection[]>` | yes | - |
 | `recents` | `EntitySection[]` | no | - |
 | `entityConfig` | `Record<string, EntityTypeConfig>` | no | built-in defaults |
-| `size` | `'md' \| 'lg'` | no | `md` |
-| `appearance` | `'default' \| 'subtle'` | no | `default` |
+| `size` | `'md' \| 'lg'` (the type also accepts `'sm'`, which has no styles and renders as `md`) | no | `md` |
+| `appearance` | `'default' \| 'subtle'` (the type also accepts `'inline'`, which has no styles, including no focus border) | no | `default` |
 | `resize` | `'none' \| 'vertical' \| 'horizontal' \| 'both'` | no | `vertical` |
 | `invalid` | `boolean` | no | `false` |
 | `disabled` | `boolean` | no | `false` |
@@ -56,6 +56,27 @@ type RichTextValue = RichTextNode[];
 `RichTextEntity` is `{ id, entityType, label, href? }`. Adjacent text runs are merged on
 serialization; `<br>` becomes `\n`; empty text nodes are dropped.
 
+The component hydrates from `value` once, on mount, then runs uncontrolled: the DOM is the source of
+truth while editing (a `contenteditable` surface can't be re-rendered from props on each keystroke
+without losing the caret), and `onChange` reports each serialized change. A later `value` is
+ignored; remount the component (for example with a new `key`) to replace its content. The value is
+deliberately not HTML or Markdown, so the editor's DOM shape never leaks into stored data.
+
+### Entities and tags
+
+`onSearch` returns grouped sections, one per entity type, each rendered as a Menu section with a 16px
+(`xxs`) IconTile heading whose tone follows `entityConfig`. A row whose `leadingElement` is an Avatar
+or Avatar Group renders it inline in the label, hugging its width, with no description line
+(Figma's Families and People list); other rows lead with `leadingElement` or the type's icon.
+`entityConfig` merges over `DEFAULT_ENTITY_CONFIG` (`account`/`person` blue, `matter` teal,
+`roadmap` purple, `document` default) and drives both the heading tile and the inserted tag.
+
+Each tag is a `NavTag` - a preset over the Tag atom (`size="sm"`, the type's tone and icon,
+`tabIndex={-1}`, an `<a>` when `href` is set) - portaled into a `contenteditable="false"` host span
+with `user-select: none`, which keeps the tag atomic to the caret. Selected text gets the shared
+`--color-content-highlight` `::selection` tint (set on `.editor`); a tag's `user-select: none`
+keeps it from being highlighted as text.
+
 ## Geometry and tokens
 
 The frame is Text Area's, unchanged - see
@@ -63,10 +84,10 @@ The frame is Text Area's, unchanged - see
 
 | part | treatment |
 | --- | --- |
-| slashInput | Text Field's small-input look - raised surface, `border/input`, `border-radius-sm` |
+| slashInput | Text Field's small-input look - raised surface, `border/input`, `border-radius-md` |
 | tagHost | layout only; the Tag atom carries its own tone tokens |
 | picker | Menu's panel tokens, capped at 280px with `overflow-y: auto` |
-| rows | `--rta-rows` custom property drives min-height in line-height units |
+| rows | `--rta-rows` custom property drives min-height in line-height units; the editor grows past it with content (no maximum) until the resize grip sets a fixed height |
 
 No new tokens. Frame reuse is what makes the rich mode read as the same field as Text Area.
 
@@ -99,8 +120,12 @@ Focus never leaves the editor. The active row is marked with the `rta-active` cl
 ## Accessibility
 
 - `role="textbox"`, `aria-multiline="true"`, `aria-invalid` from `invalid`.
-- Named by `aria-label` / `aria-labelledby`, or a `<label htmlFor>` wired to `id`.
-- Disabled: `contenteditable=false`, `tabIndex=-1`, slash command suppressed.
+- Named by `aria-label` or `aria-labelledby`. A `<label htmlFor>` wired to `id` does **not** name it:
+  the editor is a `div`, and a label can only point at a labelable (native) element. Field can't
+  label it for the same reason, and Rich Text Area doesn't accept the `aria-describedby`,
+  `aria-invalid`, or `required` Field injects.
+- Disabled: `contenteditable=false`, `tabIndex=-1`, slash command suppressed. `aria-disabled` is not
+  set, so assistive technology isn't told the editor is disabled.
 - Tags carry `tabIndex={-1}` so caret traversal isn't interrupted by tab stops.
 - **Gap:** no `aria-activedescendant` on the editor, so the active picker row is not announced.
   Keyboard operation works; the announcement does not. First item in future considerations.
@@ -129,5 +154,5 @@ test run.
 - Wire `aria-activedescendant` plus row ids so the active entity is announced.
 - Caret-correction guard for Firefox/Safari at the inline span boundary.
 - Harden backspace-deletes-a-tag; sanitize pasted HTML into the node model.
-- Optional auto-resize-to-content.
+- A `maxRows` limit, like Text Area's `autoResize`.
 - Additional triggers (`@`) driven by the same picker.

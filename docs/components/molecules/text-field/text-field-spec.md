@@ -55,6 +55,7 @@ bare input, so it doesn't belong at the atom tier.
 TextField
 └─ div (bordered frame)
    ├─ span.before (optional, iconBefore - icon or text, always aria-hidden)
+   ├─ span.leadingContent (optional, leadingContent - interactive in-frame content, not aria-hidden)
    ├─ input (native, flex: 1)
    └─ span.action (optional, iconAfter - icon, an interactive IconButton/Button, or a non-interactive Label pill, never forced aria-hidden)
 ```
@@ -67,8 +68,14 @@ TextField
   component (`type: icon | button | label`) - and is never forced `aria-hidden`, since it
   frequently holds a real focusable control (most commonly a clear action). The `label` case is
   non-interactive, like a Label pill for a unit or status tag.
+- The optional `leadingContent` slot sits between `iconBefore` and the input, sharing the input's
+  row. Unlike `iconBefore` it is not `aria-hidden` and may hold real controls - it exists so a
+  token/multi-select field (Select) can render removable chips inside the frame without a second
+  bordered frame. It is `flex: 0 1 auto` with `min-inline-size: 0` and `overflow: hidden`, so it
+  shrinks and clips rather than pushing the input out of view, keeping the field single-line. Not
+  derived from a Text Field Figma variant; omit it for an ordinary field.
 - No label, no helper text, no error message - Figma's source component is the bare input frame
-  only (see Design Decisions)
+  only (see Design Decisions); wrap it in Field for those
 
 ---
 
@@ -272,6 +279,7 @@ No fixed limit - native `maxLength` applies if set.
 | appearance (deprecated) | `'default' \| 'subtle' \| 'inline'` | No | undefined |
 | invalid | boolean | No | `false` |
 | iconBefore | ReactNode | No | undefined |
+| leadingContent | ReactNode | No | undefined |
 | iconAfter | ReactNode | No | undefined |
 | className | string | No | undefined |
 | inputClassName | string | No | undefined |
@@ -341,6 +349,12 @@ same hover/focus/invalid tokens as `context="default"` once interacted with - th
 hover, and `--color-border-focus` / `--color-border-error` on the bottom edge only - confirmed
 directly from Figma's bound variables on the inline variants, not assumed symmetry.
 
+### Text selection
+Selected text inside the input is tinted with `--color-content-highlight`, a translucent brand
+`::selection` background shared with Text Area and Rich Text Area. Only the background is set; the
+text color stays the browser default. `::selection` and `::-moz-selection` are separate rules,
+because an engine drops a whole selector list that contains a pseudo-element it doesn't recognize.
+
 ### Sizing
 See the Size table above.
 
@@ -351,7 +365,20 @@ See the Size table above.
 ### Default
 Renders a native `<input>` inside a bordered frame. All interaction states are native
 (`:hover`, `:focus-within`, `:placeholder-shown`, `:autofill`, `:disabled`) except `invalid`, which
-is a real boolean prop.
+is a real boolean prop. The ref forwards to the `<input>`; `className` goes on the frame and every
+other attribute on the input.
+
+### Editable table cell
+Inside a Table column with `cellAppearance="editable"`, Table provides `EditableCellContext`
+(`primitives/editable-cell-context`) with the table's `size`. Text Field then overrides its own `size`
+with the cell's size and forces `context="inline"`, whatever the caller passed, and sets
+`data-editable-cell` on the frame. In that mode the frame is 64px tall (40px for an `sm` cell) with
+`--spacing-lg` start padding, square corners while hovered or focused, a hover background of
+`--color-background-neutral-overlay-bold-hover`, a bottom border that rests on
+`--editable-cell-divider`, and the placeholder in `--color-content-default`. A click anywhere on the
+cell's padding or glyphs focuses and clicks the input, unless it lands on an input, button, or link;
+the trailing slot ignores pointer events except for a real button or link inside it. Popup content
+resets the context, so a Text Field inside a popup opened from a cell is unaffected.
 
 ---
 

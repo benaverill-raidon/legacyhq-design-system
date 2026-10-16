@@ -25,9 +25,13 @@ type SliderStyle = React.CSSProperties & {
 };
 
 interface SliderBaseComponentProps extends SliderProps {
+  /** Internal: where the fill starts, at `min` (`standard`) or at zero (`centered`). */
   fillMode: SliderFillMode;
+  /** Internal: the `min` used when the caller passes none. */
   defaultMin: number;
+  /** Internal: the `max` used when the caller passes none. */
   defaultMax: number;
+  /** Internal: the `defaultValue` used when the caller passes none. */
   defaultDefaultValue: number;
 }
 

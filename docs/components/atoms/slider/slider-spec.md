@@ -256,6 +256,18 @@ Do not show persistent value bubbles by default.
 
 For `SliderRange`, each handle may show its own value indicator while active.
 
+## Pointer and Focus Implementation
+
+- The native range input has `pointer-events: none`; the `.control` element owns pointer handling,
+  with pointer capture while dragging. A press away from the handle moves the value to that point
+  (on SliderRange, the nearer handle moves), then dragging continues from there.
+- Because the pressed element and the focused input are never the same node, focus is moved with an
+  explicit `.focus()` call. Chromium's `:focus-visible` heuristic then treats it as keyboard focus,
+  so `usePointerFocusRing` marks pointer-originated focus with `data-pointer-focus="true"` and the
+  CSS excludes it; any keydown while focused clears the mark, so keyboard use shows the ring again.
+- The visible ring is drawn on the handle (`outline` of `--border-width-md` in `--color-border-focus`),
+  and the input's own outline is removed.
+
 ## Behavior
 
 ### Slider

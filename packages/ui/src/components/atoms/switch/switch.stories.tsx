@@ -280,7 +280,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Long label wraps in a narrow container</h3>
         <p style={captionStyle}>
-          The control stays anchored to the first line of a wrapped label rather than shrinking.
+          The control keeps its size and stays centered on the wrapped label, not on the first line.
         </p>
         <div
           style={{

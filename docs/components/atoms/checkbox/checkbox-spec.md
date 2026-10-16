@@ -187,6 +187,13 @@ Recommended mappings, subject to available token names:
 - `indeterminate` sets the native input `indeterminate` property via ref/effect.
 - `indeterminate` visually overrides checked.
 
+## Motion
+
+- The hover, press, and focus overlay behind the indicator fades in with the `fade-quick` motion
+  recipe, not a hardcoded duration, and is switched off under `prefers-reduced-motion: reduce`.
+- The check mark and the indeterminate mark appear instantly on toggle, with no scale-up or other
+  transform-based animation.
+
 ## Accessibility
 
 - Must use native checkbox input.

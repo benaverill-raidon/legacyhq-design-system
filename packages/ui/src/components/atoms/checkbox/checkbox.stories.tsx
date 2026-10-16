@@ -391,7 +391,7 @@ export const EdgeCases: Story = {
           Narrow container
         </h3>
         <p style={captionStyle}>
-          The label wraps and the control stays anchored to the first line rather than shrinking.
+          The label wraps; the control keeps its size and stays centered on the text, not on the first line.
         </p>
         <div
           style={{

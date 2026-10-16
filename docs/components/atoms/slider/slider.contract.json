@@ -37,9 +37,13 @@
     "Precise text input"
   ],
   "anatomy": [
+    "label",
     "track",
-    "thumb",
-    "steps"
+    "active track",
+    "steps",
+    "handle",
+    "value indicator",
+    "input"
   ],
   "props": {},
   "variants": {

@@ -205,7 +205,9 @@ live Figma component to actually be 6px (`--measurement-6`), 2px tighter than th
 - Support a subtle Material-inspired thumb expansion (`scaleX(1.16)`), triggered on both hover and
   pressed - not pressed alone - so the cue starts as soon as the pointer arrives rather than only
   on click.
-- Use CSS transitions.
+- Use CSS transitions: the track color fades with the `fade-quick` motion recipe, and the thumb
+  slides with `move-quick` (the spring recipe), since it's a physical reposition rather than a
+  color change.
 - Respect `prefers-reduced-motion` by reducing or removing movement.
 - Animation should feel smooth but not decorative enough to delay interaction feedback.
 

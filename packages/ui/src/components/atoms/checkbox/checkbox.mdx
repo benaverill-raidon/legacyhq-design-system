@@ -1,184 +1,267 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Checkbox } from './checkbox';
+import { CheckboxGroup } from './checkbox-group';
+import checkboxStyles from './checkbox.module.css';
 import * as CheckboxStories from './checkbox.stories';
 
 <Meta of={CheckboxStories} name="Docs" />
 
-# Checkbox
+<Unstyled>
+<ComponentPage>
 
-Checkbox is a native, label-inclusive control for selecting one or more independent options. It
-supports a partial-selection (indeterminate) state alongside the usual checked/unchecked value.
+<ComponentHeader
+  id="checkbox"
+  example={
+    <CheckboxGroup
+      label="Send matter updates by"
+      defaultValue={['email']}
+      options={[
+        { value: 'email', label: 'Email' },
+        { value: 'sms', label: 'SMS' },
+        { value: 'in-app', label: 'In-app' },
+      ]}
+    />
+  }
+>
+  Checkbox turns one option on or off, on its own or as one of a set where any number can be
+  chosen. The choice is saved with the form. Checkbox Group labels a set of them.
+</ComponentHeader>
 
-<Canvas of={CheckboxStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Selecting one or more independent options from a set.
-- Toggling an item in a list or a table.
-- Confirming agreement or acceptance.
-- Selecting multiple rows in a table, including a "select all" control in an indeterminate state.
+- Choosing any number of options from a short set, with Checkbox Group.
+- A single yes or no in a form, such as agreeing to a policy.
+- A "select all" over a list, with `indeterminate` when only some are selected.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **When only one option can be selected from a set.** Use `Radio`.
-- **When the choice immediately changes a system setting**, rather than marking a selection for a
-  later action. Consider `Switch`.
-- **As a purely decorative control** with no real selection behind it.
+- **Exactly one option from a set:** <DocLink to="Components/Forms/Radio" />.
+- **A setting that takes effect right away:** <DocLink to="Components/Forms/Switch" />.
+- **Selecting rows in a table:** <DocLink to="Components/Data Display/Table" /> with `selectable`, which adds the checkboxes and the select-all for you.
+- **Many options, or a list that needs search:** <DocLink to="Components/Forms/Select" />, which can choose several.
+- **An on or off filter in a toolbar:** <DocLink to="Components/Actions/Toggle Button" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={CheckboxStories.Content} />
+</Section>
 
-1. **Root** - a `label` wrapping the whole control, so clicking the label text toggles the input.
-2. **Input** - the native `input[type="checkbox"]`, visually hidden but present and focusable.
-3. **Indicator** - the visible box: empty, filled, or a dash for indeterminate.
-4. **Label text** - optional. When absent, `aria-label` or `aria-labelledby` is required.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy specimen={<Checkbox label="I agree to the retention policy" required defaultChecked />}>
+  <Part name="root" target={checkboxStyles.root}>A native `label` around the whole control, so clicking the text toggles it too.</Part>
+  <Part name="input" target={checkboxStyles.input}>The native checkbox, transparent and 32px square. It takes clicks and focus and holds the form value.</Part>
+  <Part name="indicator" target={checkboxStyles.indicatorFocus}>The 24px box: empty, checked, or a dash for indeterminate. Decorative.</Part>
+  <Part name="label" target={checkboxStyles.labelText}>`label`, the visible text and the accessible name. Optional, but then `aria-label` is required.</Part>
+  <Part name="required indicator" target={checkboxStyles.requiredIndicator}>A `*` after the label, shown when `required` is set.</Part>
+</Anatomy>
 
-### Checked, unchecked, and indeterminate
+</Section>
 
-Indeterminate is a distinct value, not a visual overlay on checked - it's meant for a "select all"
-control whose children are partially selected. Set `indeterminate` explicitly; it doesn't derive
-from `checked`, and the two combine (a checkbox can be `checked` and rendered `indeterminate` at
-the same time) exactly as controlled forms need. See States.
+<Section title="Behavior">
 
-### Controlled and uncontrolled usage
+<Subsection title="States">
 
-Checkbox works either way: pass `checked` for a controlled value, or `defaultChecked` to let the
-native input own its state. `onCheckedChange` receives the next boolean value alongside the native
-change event, so you don't need to read `event.target.checked` yourself.
+Checked and unchecked come from `checked` or `defaultChecked`. `indeterminate`, `invalid`, and
+`disabled` are separate props that each change the look. Invalid draws the box in the error color;
+disabled dims the box and the label.
 
-### Labelling
+<Example of={CheckboxStories.States} />
 
-A visible `label` is the default and preferred path. Omit it only in a dense context - a table row,
-a compact toolbar - where an adjacent visible label already exists, and supply `aria-label` or
-`aria-labelledby` instead. Checkbox has no dev-time warning for a missing accessible name today, so
-this is easy to get wrong silently - see Edge Cases.
+</Subsection>
 
-### Invalid state
+<Subsection title="Partial selection">
 
-`invalid` sets `aria-invalid` and switches the hover/press treatment, but color alone doesn't
-carry the meaning - pair it with a visible message via `aria-describedby`, as in Edge Cases.
+Set `indeterminate` on a checkbox that stands for a group whose items are only partly selected,
+such as a "select all" above a list. It shows a dash whatever `checked` is, and it doesn't change on
+its own: a click still toggles `checked` and calls `onCheckedChange`, and you work out the next
+`indeterminate` from the items.
 
-## Do / Don't
+</Subsection>
 
-**Do** set `indeterminate` explicitly for a "select all" control over a partial selection.
+<Subsection title="Controlled or uncontrolled">
 
-```tsx
-<Checkbox aria-label="Select all rows" indeterminate />
-```
+Pass `checked` with `onCheckedChange` to keep the value in your state, or `defaultChecked` to let
+the input keep it. `onCheckedChange` gets the next value as a boolean, then the change event.
 
-**Don't** rely on `checked` alone to represent a partial selection - it isn't the same state.
+</Subsection>
 
-```tsx
-<Checkbox aria-label="Select all rows" checked={someButNotAllSelected} />
-```
+<Subsection title="Checkbox Group">
 
----
+Checkbox Group renders a `fieldset` with your `label` as its `legend`, then the options, then
+`errorMessage`. Pass `options` and it renders a Checkbox for each, gives them one `name`, and keeps
+the checked values as an array in `value` or `defaultValue`. Pass `children` instead for a layout of
+your own; the group then passes those checkboxes nothing, so set their names, values, and states
+yourself.
 
-**Do** supply `aria-label` when a visible label isn't rendered.
+Options stack by default; `orientation="horizontal"` sets them in a row that wraps. `required` on
+the group only adds the `*` after the legend. It doesn't make any checkbox required, so check that
+at least one is chosen and show `errorMessage` with `invalid` when none is.
 
-```tsx
-<Checkbox aria-label="Select current row" />
-```
+<Example of={CheckboxStories.GroupVariants} />
 
-**Don't** omit both the label and `aria-label` - the control becomes unnamed for assistive technology.
+</Subsection>
 
-```tsx
-<Checkbox />
-```
+<Subsection title="Labels">
 
----
+The box sits before the label and is centered on it, so when a label wraps to several lines the box
+lines up with the middle of the text, not the first line. Keep labels short enough to fit on one
+line where you can.
 
-**Do** pair `invalid` with a visible, described error.
+<Example of={CheckboxStories.Content} caption="Content: label text, required, a checkbox named by aria-label, a long label, and checkboxes in a fieldset, a table, and a form." />
 
-```tsx
-<Checkbox invalid aria-describedby="checkbox-error" label="I agree" />
-```
+</Subsection>
 
-**Don't** rely on the invalid color alone to communicate the problem.
+<Subsection title="Focus and hover">
 
-```tsx
-<Checkbox invalid label="I agree" />
-```
+Hover, press, and keyboard focus show a round overlay behind the box, in the brand color when it's
+checked or indeterminate and in a neutral color otherwise. Keyboard focus adds the shared Focus Ring
+around the box. An invalid checkbox keeps the neutral overlay in every state.
 
-## API
+</Subsection>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
-    </tr>
-    <tr>
-      <td><code>checked</code></td>
-      <td><code>boolean</code></td>
-      <td>-</td>
-      <td>Controlled checked value.</td>
-    </tr>
-    <tr>
-      <td><code>defaultChecked</code></td>
-      <td><code>boolean</code></td>
-      <td>-</td>
-      <td>Initial value for uncontrolled usage.</td>
-    </tr>
-    <tr>
-      <td><code>indeterminate</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Partial-selection value. Independent of <code>checked</code>.</td>
-    </tr>
-    <tr>
-      <td><code>invalid</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Sets <code>aria-invalid</code> and the invalid visual treatment.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>disabled</code> - the control is not interactive.</td>
-    </tr>
-    <tr>
-      <td><code>required</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>required</code>. Appends a visible indicator after the label.</td>
-    </tr>
-    <tr>
-      <td><code>onCheckedChange</code></td>
-      <td><code>(checked: boolean, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
-      <td>-</td>
-      <td>Fires on toggle with the next value already resolved.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>label</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+</Section>
 
-Any other native `input` prop (`name`, `value`, `aria-describedby`, and so on) is forwarded to the
-underlying input.
+<Section title="Do and don't">
 
-Checkbox has no `size` prop - its visual size and interaction target are fixed - so this Docs page
-has no Sizes section, and no Variants section since it has no visual style axis like an appearance
-or tone.
+<Guidelines>
+<Do
+  caption="Show a partial selection with indeterminate on the checkbox that stands for the group."
+  code={`<Checkbox label="All matters" indeterminate={someSelected && !allSelected} checked={allSelected} />`}
+>
+  <Checkbox label="All matters" indeterminate />
+  <Checkbox label="Probate review" defaultChecked />
+  <Checkbox label="Trust update" />
+</Do>
+<Dont caption="Check the group's checkbox when only some of its items are checked. It reads as all of them." code={`<Checkbox label="All matters" checked={someSelected} />`}>
+  <Checkbox label="All matters" defaultChecked />
+  <Checkbox label="Probate review" defaultChecked />
+  <Checkbox label="Trust update" />
+</Dont>
+<Do caption="Name a checkbox that has no visible label with aria-label, such as one in a list row." code={`<Checkbox aria-label="Select Probate review" />`}>
+  <Checkbox aria-label="Select Probate review" />
+</Do>
+<Dont caption="Leave out both label and aria-label. The box still shows, but assistive technology can't say what it's for, and nothing warns you." code={`<Checkbox />`} />
+<Do caption="Explain an error in words with errorMessage, and set invalid with it." code={`<CheckboxGroup label="Send matter updates by" invalid errorMessage="Choose at least one way to send updates." options={options} />`}>
+  <CheckboxGroup
+    label="Send matter updates by"
+    invalid
+    errorMessage="Choose at least one way to send updates."
+    options={[
+      { value: 'email', label: 'Email' },
+      { value: 'sms', label: 'SMS' },
+    ]}
+  />
+</Do>
+<Dont caption="Rely on the red boxes alone. They don't say what's wrong, and not everyone can see the color." code={`<CheckboxGroup label="Send matter updates by" invalid options={options} />`}>
+  <CheckboxGroup
+    label="Send matter updates by"
+    invalid
+    options={[
+      { value: 'email', label: 'Email' },
+      { value: 'sms', label: 'SMS' },
+    ]}
+  />
+</Dont>
+</Guidelines>
 
-## Related components
+</Section>
 
-- **Radio** - for mutually exclusive choices.
-- **Switch** - when a choice takes effect immediately rather than marking a selection.
+<Section title="Accessibility">
+
+- Checkbox renders a native `input type="checkbox"` inside a `label`, so it's focusable, announced
+  as a checkbox, toggled by Space, and named by the label text. Don't rebuild it with
+  `role="checkbox"` on another element.
+- Without a visible label, name it with `aria-label` or `aria-labelledby`. Nothing warns you when
+  both are missing.
+- `indeterminate` sets the input's native `indeterminate` and `aria-checked="mixed"`, so it's
+  announced as mixed, not as checked or unchecked.
+- `invalid` sets `aria-invalid`. Connect a message to a single checkbox with `aria-describedby`.
+  Checkbox Group connects its `description` and `errorMessage` for you, to the fieldset and to each
+  checkbox from `options`.
+- `disabled` and `required` are the native attributes: a disabled checkbox leaves the tab order. The
+  `*` is part of the label text, so it's read with the name.
+- Checkbox Group is a `fieldset` named by its `legend`, so assistive technology can read the
+  question with the options. `invalid` on the group also sets `aria-invalid` on the fieldset.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the checkbox. A disabled checkbox is skipped.</Key>
+  <Key keys="Space">Toggles the checkbox.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+`ref` points to the native input.
+
+<PropsTable of={CheckboxStories} native="input" classNameOn="root label" />
+
+<Subsection title="Checkbox Group">
+
+Each option in `options` takes `value`, `label`, and its own `disabled`, `invalid`, and `required`.
+
+<PropsTable component={CheckboxGroup} native="fieldset" />
+
+</Subsection>
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Checkbox's stylesheet uses, by family, with the property it sets and when. "Base" is an
+unchecked checkbox. The same stylesheet styles Checkbox Group, so its legend, description, and error
+message rows are here too.
+
+<TokensTable id="checkbox" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Radio" /> for exactly one choice from a set.
+- <DocLink to="Components/Forms/Switch" /> for a setting that takes effect right away.
+- <DocLink to="Components/Data Display/Table" />, whose `selectable` rows use Checkbox, with a select-all.
+- <DocLink to="Components/Forms/Select" /> for choosing several options from a long list.
+- <DocLink to="Components/Actions/Toggle Button" /> for an on or off filter in a toolbar.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API tables read checkbox.types.ts, the design tokens read checkbox.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

@@ -20,10 +20,11 @@
     "Mutually exclusive choices"
   ],
   "anatomy": [
+    "root",
     "input",
     "indicator",
     "label",
-    "helperText"
+    "required indicator"
   ],
   "props": {},
   "variants": {},

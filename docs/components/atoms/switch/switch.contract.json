@@ -22,11 +22,13 @@
     "Deferred form submission"
   ],
   "anatomy": [
+    "root",
+    "input",
     "track",
     "thumb",
     "icon",
     "label",
-    "helperText"
+    "required indicator"
   ],
   "props": {
     "showIcons": {

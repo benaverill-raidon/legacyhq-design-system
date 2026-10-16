@@ -4,6 +4,10 @@ import styles from './radio.module.css';
 import type { RadioProps } from './radio.types';
 
 type InternalRadioProps = RadioProps & {
+  /**
+   * Whether `required` also shows the `*` after the label. Radio Group turns it off for options that
+   * are required only because the group is; leave it unset elsewhere.
+   */
   showRequiredIndicator?: boolean;
 };
 

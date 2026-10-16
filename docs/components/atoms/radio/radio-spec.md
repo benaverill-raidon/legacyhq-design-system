@@ -210,6 +210,13 @@ RadioGroup default spacing should be vertical with no visible gap between radio 
 - Focus should appear around the 32px interaction target / visual indicator area.
 - Use `:focus-visible` behavior through the Focus Ring primitive.
 
+## Motion
+
+- The hover, press, and focus overlay behind the indicator fades in with the `fade-quick` motion
+  recipe, not a hardcoded duration, and is switched off under `prefers-reduced-motion: reduce`.
+- The selected dot appears instantly on toggle, with no scale-up or other transform-based
+  animation, matching Checkbox.
+
 ## Token Mapping
 
 Use semantic CSS variables only. Do not hardcode visual design values unless a token does not exist and the implementation documents the gap.

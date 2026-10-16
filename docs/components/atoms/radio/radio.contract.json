@@ -40,13 +40,20 @@
     "A single, immediate on/off setting (use Switch)",
     "Hand-wiring shared name/selection state across standalone Radio instances instead of using RadioGroup"
   ],
+  "anatomy": [
+    "root",
+    "input",
+    "indicator",
+    "label",
+    "required indicator"
+  ],
   "radio": {
     "anatomy": [
-      "root label/wrapper",
-      "native input[type=\"radio\"]",
-      "visual indicator (unchecked/checked icons swapped on :checked)",
-      "label text",
-      "optional required indicator (standalone usage only)"
+      "root",
+      "input",
+      "indicator",
+      "label",
+      "required indicator"
     ],
     "props": {
       "label": {

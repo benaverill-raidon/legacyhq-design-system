@@ -1,19 +1,9 @@
 # Checkbox
 
-## Purpose
-Checkbox allows users to select one or more independent options.
+Checkbox's usage guidance is its Storybook Docs page (Components / Forms / Checkbox), written in
+[`checkbox.mdx`](../../../../packages/ui/src/components/atoms/checkbox/checkbox.mdx): when to use it,
+anatomy, behavior, do and don't, accessibility, API (Checkbox and Checkbox Group), and design
+tokens. The API tables and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-- Multiple independent selections
-- Boolean settings
-
-## Accessibility
-Uses a native checkbox input and supports keyboard interaction and visible focus.
-
-## Design intent
-The hover/press/focus overlay behind the indicator fades in using the `fade-quick` semantic motion token rather than a hardcoded duration.
-
-The check mark (and indeterminate mark) appear instantly on toggle, with no scale-up or other transform-based animation.
-
-## Related
-Radio, Switch
+For implementation detail, see [`checkbox-spec.md`](checkbox-spec.md); for the machine-readable
+contract, [`checkbox.contract.json`](checkbox.contract.json).

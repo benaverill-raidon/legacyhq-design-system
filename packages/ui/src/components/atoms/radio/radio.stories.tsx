@@ -135,19 +135,19 @@ export const States: Story = {
 
       <Group title="Checked">
         <Cell label="Default">
-          <Radio label="Label" name="state-checked" value="default" defaultChecked />
+          <Radio label="Label" name="state-checked-default" value="default" defaultChecked />
         </Cell>
         <Cell label="Hover">
-          <Radio label="Label" name="state-checked" value="hover" className="previewHover" defaultChecked />
+          <Radio label="Label" name="state-checked-hover" value="hover" className="previewHover" defaultChecked />
         </Cell>
         <Cell label="Focus visible">
-          <Radio label="Label" name="state-checked" value="focus" className="previewFocus" defaultChecked />
+          <Radio label="Label" name="state-checked-focus" value="focus" className="previewFocus" defaultChecked />
         </Cell>
         <Cell label="Press">
-          <Radio label="Label" name="state-checked" value="press" className="previewPress" defaultChecked />
+          <Radio label="Label" name="state-checked-press" value="press" className="previewPress" defaultChecked />
         </Cell>
         <Cell label="Disabled">
-          <Radio label="Label" name="state-checked" value="disabled" disabled defaultChecked />
+          <Radio label="Label" name="state-checked-disabled" value="disabled" disabled defaultChecked />
         </Cell>
       </Group>
 
@@ -307,7 +307,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Narrow container</h3>
         <p style={captionStyle}>
-          The label wraps and the control stays anchored to the first line rather than shrinking.
+          The label wraps; the control keeps its size and stays centered on the text, not on the first line.
         </p>
         <div
           style={{

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
+import { RichTextArea } from '../text-area';
 import { TextField } from '../text-field';
 import { Field } from './field';
 import fieldStyles from './field.module.css';
@@ -25,6 +26,29 @@ describe('Field', () => {
     expect(label.tagName).toBe('LABEL');
     expect(label).toHaveAttribute('for', input.id);
     expect(input.id).toBeTruthy();
+  });
+
+  it('also names the control by aria-labelledby, so a non-native control like Rich Text Area is named', () => {
+    render(
+      <Field label="Notes" message="Type / to link a matter" state="error" required>
+        <RichTextArea value={[]} onChange={() => {}} onSearch={() => []} />
+      </Field>,
+    );
+
+    const editor = screen.getByRole('textbox', { name: 'Notes' });
+    expect(editor).toHaveAccessibleDescription('Type / to link a matter');
+    expect(editor).toHaveAttribute('aria-invalid', 'true');
+    expect(editor).toHaveAttribute('aria-required', 'true');
+  });
+
+  it('leaves a control its own aria-label', () => {
+    render(
+      <Field label="Email">
+        <TextField aria-label="Work email" />
+      </Field>,
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Work email' })).not.toHaveAttribute('aria-labelledby');
   });
 
   it('keeps the control_s own id instead of overriding it', () => {

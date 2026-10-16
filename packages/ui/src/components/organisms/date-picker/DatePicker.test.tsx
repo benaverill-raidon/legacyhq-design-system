@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { DatePicker } from './date-picker';
 
 const css = readFileSync(
@@ -134,5 +135,18 @@ describe('DatePicker CSS contract', () => {
     const rule = css.match(/\.triggerInput \{([\s\S]*?)\}/)?.[1] ?? '';
     expect(rule).toContain('cursor: pointer;');
     expect(rule).toContain('caret-color: transparent;');
+  });
+
+  it('takes the wiring Field passes on its input, not its wrapper', () => {
+    render(
+      <Field label="Due date" message="The court's filing deadline" state="error" required>
+        <DatePicker />
+      </Field>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Due date' });
+    expect(input).toHaveAccessibleDescription("The court's filing deadline");
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toBeRequired();
   });
 });

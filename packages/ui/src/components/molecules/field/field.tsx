@@ -40,6 +40,8 @@ export const Field = React.memo(function Field({
   const resolvedControlId = (childProps.id as string | undefined) ?? controlId ?? `${reactId}-control`;
   const hasMessage = message !== null && message !== undefined;
   const messageId = hasMessage ? `${reactId}-message` : undefined;
+  const hasLabel = label !== null && label !== undefined;
+  const labelId = hasLabel ? `${reactId}-label` : undefined;
   const isError = state === 'error';
 
   // Merge, rather than replace, any aria-describedby the control already carries, so Field's message
@@ -52,6 +54,9 @@ export const Field = React.memo(function Field({
   // whatever the control already declares.
   const injectedProps: Record<string, unknown> = {
     id: resolvedControlId,
+    // The label names the control by id as well as by htmlFor, so a control that isn't a native
+    // input (Rich Text Area's editor) is named too. A name the control already has wins.
+    'aria-labelledby': childProps['aria-labelledby'] ?? (childProps['aria-label'] ? undefined : labelId),
     'aria-describedby': describedBy,
     'aria-invalid': childProps['aria-invalid'] ?? (isError ? true : undefined),
     required: (childProps.required as boolean | undefined) ?? (required || undefined),
@@ -85,8 +90,8 @@ export const Field = React.memo(function Field({
       data-context={context}
       data-size={size}
     >
-      {label !== null && label !== undefined ? (
-        <label htmlFor={resolvedControlId} className={mergeClassNames(styles.label, labelClassName)}>
+      {hasLabel ? (
+        <label id={labelId} htmlFor={resolvedControlId} className={mergeClassNames(styles.label, labelClassName)}>
           {label}
           {required ? (
             <span className={styles.required} aria-hidden="true">

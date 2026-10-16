@@ -57,7 +57,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
     appearance,
     placeholder,
     disabled = false,
-    invalid = false,
+    invalid: requestedInvalid = false,
     searchValue,
     onSearchChange,
     emptyMessage = 'No matches',
@@ -65,7 +65,11 @@ export const Select = React.memo(function Select(props: SelectProps) {
     className,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    required,
   } = props;
+  const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
 
   // `tone` and `appearance` are deprecated names for `context`: their subtle and inline values are inline.
   const legacy = tone ?? appearance;
@@ -285,6 +289,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        required={required}
       />
     </DropdownMenu>
   );

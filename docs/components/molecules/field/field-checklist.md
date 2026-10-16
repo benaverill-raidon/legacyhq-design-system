@@ -9,7 +9,8 @@ Field
 Molecule
 
 ### Related Components
-- Text Field, Text Area, Select (the controls Field wraps)
+- Text Field, Text Area, Select (the controls Field wraps most often), plus Rich Text Area, Date
+  Picker, Time Picker, and Date Time Picker, which also take its wiring
 - Label (the standalone pill/overline label atom - distinct from Field's built-in form label)
 - Inline Message, Section Message (standalone messages - distinct from Field's per-control message)
 
@@ -19,8 +20,8 @@ Molecule
 
 ### What problem does this component solve?
 Gives a single form control a label above it and optional helper/error text below it, and does the
-`htmlFor` / `aria-describedby` / `aria-invalid` / `required` wiring once instead of at every call
-site.
+`htmlFor` / `aria-labelledby` / `aria-describedby` / `aria-invalid` / `required` wiring once
+instead of at every call site.
 
 ### Why does it need to exist?
 Text Field, Text Area, and Select render only their control frame with no label of their own. Every
@@ -93,8 +94,11 @@ Not Required:
 ## Accessibility
 
 ### Does the control need a separate label?
-No - Field's `label` is a real `<label htmlFor>` and becomes the control's accessible name. Don't
-also pass an `aria-label` to the control.
+No - Field's `label` is a real `<label htmlFor>` and becomes the control's accessible name. Field
+also points the control's `aria-labelledby` at the label's id, so a control `htmlFor` can't reach
+(Rich Text Area's `div` editor, Date Time Picker's group) is named too. Don't also pass an
+`aria-label` to the control: Field then leaves `aria-labelledby` off, and the `aria-label` replaces
+the visible label as the name.
 
 ### How is the message announced?
 Via `aria-describedby` on the control, merged with any `aria-describedby` the control already has.
@@ -107,7 +111,9 @@ No - it's `aria-hidden`. The forwarded native `required` is what conveys the req
 
 ### What must the consumer still do?
 Set the control's own visual error prop (e.g. `<TextField invalid />`) alongside `state="error"` -
-Field sets `aria-invalid` but not the control's border. Match `size` on Field and the control.
+Field sets `aria-invalid` but not the control's border. (Select, the date/time pickers, and Rich
+Text Area treat an incoming `aria-invalid` as `invalid`, so their border follows; Text Field and
+Text Area need `invalid`.) Match `size` on Field and the control.
 
 ---
 

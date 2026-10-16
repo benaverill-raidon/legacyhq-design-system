@@ -113,23 +113,23 @@ export const note = [
 
 <Section title="Variants">
 
-Two sizes and two appearances, on Text Area's frame.
+Three sizes and two contexts, on Text Area's frame.
 
 <Example of={RichTextAreaStories.Variants} />
 
 <Subsection title="Sizes">
 
-`md` and `lg`, with Text Area's padding, corners, and text size. `sm` isn't styled yet and renders
-as `md`.
+`sm`, `md`, and `lg`, with Text Area's padding, corners, and text size. `sm` keeps `md`'s corners
+and text with tighter padding above and below, as on Text Area.
 
 </Subsection>
 
-<Subsection title="Appearance">
+<Subsection title="Context">
 
-`default` is the bordered field. `subtle` has no border or background until someone hovers it, then
-shows the hover background; focus and invalid show a line along the bottom. This is the axis Text
-Area and Text Field now call `context`; Rich Text Area still names it `appearance`, and only
-`default` and `subtle` are styled.
+`context`, as on Text Area: `default` is the bordered field. `inline` has no border or background at
+rest; hover shows the hover background and a line along the bottom, and focus and invalid show a
+2px line along the bottom. The older `appearance` prop still works: `subtle` and `inline` map to
+`context="inline"`.
 
 </Subsection>
 
@@ -180,8 +180,8 @@ edit, and a new `value` passed later is ignored.
 
 The editor starts `rows` lines tall, 3 unless you set it, and grows as the text gets longer, with
 no limit. Dragging the resize handle, vertical by default, sets a fixed height, and the text
-scrolls from there. `invalid` shows Text Area's error border, but in the `default` appearance the
-focus border replaces it while the editor has focus. `disabled` turns off editing.
+scrolls from there. `invalid` shows Text Area's error border, and it stays while the editor has
+focus. `disabled` turns off editing.
 
 <Example of={RichTextAreaStories.States} />
 
@@ -245,15 +245,13 @@ setNote([]);`}
 - The editor is a `div` with `role="textbox"`, `aria-multiline="true"`, and `contenteditable`, in the
   tab order. It isn't a native control, so it has no form `name` and isn't sent with a form.
 - Name it with `aria-label`, or `aria-labelledby` pointing at a visible label. A `label` with
-  `htmlFor` doesn't name it, because a label can only point at a native control. For the same reason,
-  Field can't label it yet.
+  `htmlFor` doesn't name it, because a label can only point at a native control. Field names it by
+  `aria-labelledby`, and passes its message, error, and `required` (as `aria-required`).
 - `invalid` sets `aria-invalid` on the editor.
-- `disabled` turns off editing and takes the editor out of the tab order, but it doesn't set
-  `aria-disabled`, so assistive technology isn't told it's disabled.
-- While the list is open, focus stays in the editor so typing keeps reaching the query. The
-  highlighted record is shown visually only: the editor doesn't set `aria-activedescendant` or
-  `aria-expanded`, so a screen reader doesn't announce the list or the highlighted record. The keys
-  still work.
+- `disabled` turns off editing, takes the editor out of the tab order, and sets `aria-disabled`.
+- The editor has `aria-haspopup="menu"`. While the list is open, focus stays in the editor so typing
+  keeps reaching the query; `aria-controls` names the list, and `aria-activedescendant` points at
+  the highlighted record, so a screen reader follows the highlight.
 - Tags aren't tab stops. A tag with an `href` is a link.
 
 <Keyboard>
@@ -262,6 +260,7 @@ setNote([]);`}
   <Key keys="ArrowUp">With the list open, moves the highlight up, stopping at the first record.</Key>
   <Key keys="Enter">With the list open, links the highlighted record as a tag followed by a space. Otherwise starts a new line.</Key>
   <Key keys="Escape">With the list open, closes it and keeps what was typed as plain text.</Key>
+  <Key keys="Tab">With the list open, closes it and moves focus on, keeping what was typed as text.</Key>
   <Key keys="Space">While typing a query, ends the link and closes the list; what was typed stays as text.</Key>
   <Key keys="Tab">Moves focus to the editor and out of it. A disabled editor is skipped.</Key>
 </Keyboard>

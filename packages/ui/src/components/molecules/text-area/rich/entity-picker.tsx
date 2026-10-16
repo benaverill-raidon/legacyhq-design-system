@@ -10,6 +10,8 @@ import styles from './rich-text-area.module.css';
 import type { EntityOption, EntitySection, EntityTypeConfig } from './rich-text-area.types';
 
 interface EntityPickerProps {
+  /** The list's id, which the editor's aria-controls names; each row gets `<id>-option-<index>`. */
+  id: string;
   /** Caret-relative position within the editor wrapper. */
   position: { left: number; top: number };
   sections: EntitySection[];
@@ -59,7 +61,7 @@ function toMenuItem(option: EntityOption, entityConfig?: Record<string, EntityTy
  * rows (scrolling past a capped height). Focus stays in the editor, so the keyboard-active row is
  * marked with a class (the aria-activedescendant pattern) rather than by moving focus.
  */
-export function EntityPicker({ position, sections, loading, emptyMessage, entityConfig, activeIndex, onSelect }: EntityPickerProps) {
+export function EntityPicker({ id, position, sections, loading, emptyMessage, entityConfig, activeIndex, onSelect }: EntityPickerProps) {
   const panelRef = React.useRef<HTMLDivElement>(null);
 
   const menuSections: MenuSection[] = sections.map((section) => {
@@ -82,6 +84,7 @@ export function EntityPicker({ position, sections, loading, emptyMessage, entity
     if (!panel) return;
     const items = panel.querySelectorAll<HTMLElement>('[role^="menuitem"]');
     items.forEach((el, index) => {
+      el.id = `${id}-option-${index}`;
       if (index === activeIndex) {
         el.classList.add('rta-active');
         // Guarded: jsdom has no scrollIntoView, and marking the active row matters
@@ -91,11 +94,12 @@ export function EntityPicker({ position, sections, loading, emptyMessage, entity
         el.classList.remove('rta-active');
       }
     });
-  }, [activeIndex, sections, loading]);
+  }, [id, activeIndex, sections, loading]);
 
   return (
     <div ref={panelRef} className={styles.picker} style={{ left: position.left, top: position.top }}>
       <Menu
+        id={id}
         sections={menuSections}
         showSearch={false}
         size="md"

@@ -89,14 +89,39 @@ describe('RichTextArea', () => {
       expect(editor).toHaveClass(styles.resize_vertical);
     });
 
-    it('applies size and appearance', () => {
+    it('applies size and context', () => {
       render(
-        <RichTextArea value={[]} onChange={noop} onSearch={() => []} size="lg" appearance="subtle" aria-label="Note" />,
+        <RichTextArea value={[]} onChange={noop} onSearch={() => []} size="lg" context="inline" aria-label="Note" />,
       );
 
       const editor = getEditor();
       expect(editor).toHaveClass(styles.size_lg);
-      expect(editor).toHaveClass(styles.appearance_subtle);
+      expect(editor).toHaveClass(styles.context_inline);
+    });
+
+    it('still accepts the deprecated appearance, mapping subtle and inline to the inline context', () => {
+      render(<RichTextArea value={[]} onChange={noop} onSearch={() => []} appearance="subtle" aria-label="Note" />);
+      expect(getEditor()).toHaveClass(styles.context_inline);
+    });
+
+    it('takes the wiring Field passes: description, required, invalid, and its label', () => {
+      render(
+        <>
+          <span id="label">Notes</span>
+          <span id="help">Mention a matter with /</span>
+          <RichTextArea value={[]} onChange={noop} onSearch={() => []} aria-labelledby="label" aria-describedby="help" aria-invalid required />
+        </>,
+      );
+      const editor = screen.getByRole('textbox', { name: 'Notes' });
+      expect(editor).toHaveAccessibleDescription('Mention a matter with /');
+      expect(editor).toHaveAttribute('aria-required', 'true');
+      expect(editor).toHaveAttribute('aria-invalid', 'true');
+      expect(editor).toHaveAttribute('data-invalid', 'true');
+    });
+
+    it('marks a disabled editor with aria-disabled', () => {
+      render(<RichTextArea value={[]} onChange={noop} onSearch={() => []} disabled aria-label="Note" />);
+      expect(getEditor()).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('applies each resize option as a class', () => {
@@ -336,6 +361,34 @@ describe('RichTextArea', () => {
       await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument());
       expect(getSlashSpan()).toBeNull();
       expect(editor.textContent).toContain('/ben');
+    });
+
+    it('points assistive technology at the highlighted row while the list is open', async () => {
+      render(<RichTextArea value={[]} onChange={noop} onSearch={() => PEOPLE} recents={PEOPLE} aria-label="Note" />);
+
+      const editor = getEditor();
+      expect(editor).toHaveAttribute('aria-haspopup', 'menu');
+      expect(editor).not.toHaveAttribute('aria-activedescendant');
+      pressSlash(editor);
+      const menu = await screen.findByRole('menu', { name: 'Entities to link' });
+
+      expect(document.getElementById(editor.getAttribute('aria-controls') ?? '')).toContainElement(menu);
+      await waitFor(() => expect(document.getElementById(editor.getAttribute('aria-activedescendant') ?? '')).toHaveTextContent('Ben Averill'));
+      fireEvent.keyDown(editor, { key: 'ArrowDown' });
+      await waitFor(() => expect(document.getElementById(editor.getAttribute('aria-activedescendant') ?? '')).not.toHaveTextContent('Ben Averill'));
+    });
+
+    it('closes the list when Tab moves focus on', async () => {
+      render(<RichTextArea value={[]} onChange={noop} onSearch={() => PEOPLE} recents={PEOPLE} aria-label="Note" />);
+
+      const editor = getEditor();
+      pressSlash(editor);
+      await screen.findByRole('menu', { name: 'Entities to link' });
+
+      fireEvent.keyDown(editor, { key: 'Tab' });
+
+      await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument());
+      expect(editor).not.toHaveAttribute('aria-controls');
     });
 
     it('leaves the picker closed for ordinary typing', () => {

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { DateTimePicker } from './date-time-picker';
 import styles from './date-time-picker.module.css';
 
@@ -114,5 +115,20 @@ describe('DateTimePicker CSS contract', () => {
     expect(css).toContain('margin-inline-start: calc(-1 * var(--border-width-sm));');
     expect(css).toMatch(/\.date > div \{[\s\S]*?border-start-end-radius: 0;[\s\S]*?border-end-end-radius: 0;/);
     expect(css).toMatch(/\.time > div \{[\s\S]*?border-start-start-radius: 0;[\s\S]*?border-end-start-radius: 0;/);
+  });
+
+  it('takes the wiring Field passes: the label names the group, and both inputs get the error and required', () => {
+    render(
+      <Field label="Hearing" message="Both a date and a time" state="error" required>
+        <DateTimePicker />
+      </Field>,
+    );
+
+    const group = screen.getByRole('group', { name: 'Hearing' });
+    expect(group).toHaveAccessibleDescription('Both a date and a time');
+    for (const input of within(group).getAllByRole('textbox')) {
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input).toBeRequired();
+    }
   });
 });

@@ -163,7 +163,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
     size = 'md',
     context = 'default',
     disabled = false,
-    invalid = false,
+    invalid: requestedInvalid = false,
     placeholder,
     minuteStep = 5,
     format = defaultFormat,
@@ -178,10 +178,15 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
     className,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    required,
     ...rest
   },
   forwardedRef,
 ) {
+  // Field's wiring goes to the input, not the wrapper div that takes the other attributes.
+  const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
   const cellSize = useEditableCellSize();
   const isValueControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
@@ -369,6 +374,8 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
           aria-haspopup="dialog"
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          required={required}
           data-force-state={isOpen ? 'focus' : undefined}
           iconAfter={
             <span className={styles.iconBox} aria-hidden="true">

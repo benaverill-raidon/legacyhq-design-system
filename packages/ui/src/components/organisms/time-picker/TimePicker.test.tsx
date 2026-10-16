@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { TimePicker } from './time-picker';
 
 const css = readFileSync(
@@ -159,5 +160,18 @@ describe('TimePicker CSS contract', () => {
     expect(css).toMatch(
       /\.option\[data-selected='true'\] \{[\s\S]*?background: var\(--color-background-selected-default-default\);[\s\S]*?color: var\(--color-content-selected\);/,
     );
+  });
+
+  it('takes the wiring Field passes on its input, not its wrapper', () => {
+    render(
+      <Field label="Start time" message="In your time zone" state="error" required>
+        <TimePicker />
+      </Field>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Start time' });
+    expect(input).toHaveAccessibleDescription('In your time zone');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toBeRequired();
   });
 });

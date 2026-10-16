@@ -55,4 +55,10 @@ export interface TimePickerProps
   /** Accessible label for the field. */
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  /** Ids of elements that describe the input, such as Field's message. Set on the input, not the wrapper. */
+  'aria-describedby'?: string;
+  /** Marks the input invalid, as `invalid` does. Field passes it for an error. */
+  'aria-invalid'?: boolean | 'true' | 'false';
+  /** Sets the input's native `required`. Field passes it when its `required` is set. */
+  required?: boolean;
 }

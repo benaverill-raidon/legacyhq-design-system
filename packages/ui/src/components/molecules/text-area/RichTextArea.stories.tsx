@@ -143,8 +143,8 @@ function VariantsDemo() {
   return (
     <div style={stack}>
       {(['md', 'lg'] as const).flatMap((size) =>
-        (['default', 'subtle'] as const).map((appearance) => (
-          <div key={`${size}-${appearance}`} style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
+        (['default', 'inline'] as const).map((context) => (
+          <div key={`${size}-${context}`} style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
             <RichTextArea
               value={VARIANT_VALUE}
               onChange={() => {}}
@@ -152,11 +152,11 @@ function VariantsDemo() {
               recents={RECENTS}
               entityConfig={entityConfig}
               size={size}
-              appearance={appearance}
+              context={context}
               rows={2}
-              aria-label={`Note, ${size}, ${appearance}`}
+              aria-label={`Note, ${size}, ${context}`}
             />
-            <span style={caption}>{`size="${size}" appearance="${appearance}"`}</span>
+            <span style={caption}>{`size="${size}" context="${context}"`}</span>
           </div>
         )),
       )}
@@ -173,5 +173,5 @@ export const Prefilled: Story = { render: () => <PrefilledDemo /> };
 /** Invalid and disabled reuse Text Area's frame treatment. */
 export const States: Story = { render: () => <StatesDemo /> };
 
-/** The two sizes in the default and subtle appearances. The editor reads `value` once, so it leads from there. */
+/** The sizes in the default and inline contexts. The editor reads `value` once, so it leads from there. */
 export const Variants: Story = { render: () => <VariantsDemo /> };

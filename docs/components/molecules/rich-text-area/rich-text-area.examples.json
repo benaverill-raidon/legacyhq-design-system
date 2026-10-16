@@ -32,10 +32,16 @@
       "props": {}
     },
     {
-      "name": "Sizes, appearance and states",
-      "description": "The frame axes are Text Area's, unchanged.",
-      "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea appearance=\"subtle\" aria-label=\"Subtle\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
-      "props": { "size": "lg", "appearance": "subtle", "invalid": true, "disabled": true }
+      "name": "Sizes, context and states",
+      "description": "The frame axes are Text Area's, unchanged: sm/md/lg sizes and the default/inline context. The deprecated `appearance` still works (subtle and inline map to context=\"inline\").",
+      "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea context=\"inline\" aria-label=\"Inline\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
+      "props": { "size": "lg", "context": "inline", "invalid": true, "disabled": true }
+    },
+    {
+      "name": "Labelled by Field",
+      "description": "Field names the editor by aria-labelledby (a label's htmlFor can't name a div) and passes its message, error, and required, which the editor sets as aria-describedby, aria-invalid, and aria-required.",
+      "jsx": "<Field label=\"Notes\" message=\"Type / to link a matter\" state=\"error\" required>\n  <RichTextArea value={value} onChange={setValue} onSearch={search} />\n</Field>",
+      "props": {}
     }
   ],
   "antiExamples": [
@@ -53,11 +59,6 @@
       "name": "Storing the value as HTML",
       "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
       "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
-    },
-    {
-      "name": "Relying on it as an accessible combobox",
-      "jsx": "<RichTextArea aria-label=\"Assign work\" value={value} onChange={setValue} onSearch={search} />",
-      "reason": "The picker does not set aria-activedescendant yet, so a screen reader user gets no announcement of the active entity while arrowing. Keyboard operation works, but don't make this the only path to a required task until that's wired."
     }
   ]
 }

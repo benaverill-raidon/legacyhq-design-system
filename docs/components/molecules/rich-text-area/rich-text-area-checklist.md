@@ -38,7 +38,6 @@ unrelated APIs and two unrelated value types.
 - **Plain multi-line text** - use TextArea. Without entities to link, this trades native `<textarea>`
   behavior for nothing.
 - **Choosing one value from a fixed set** - use Select.
-- **A required, screen-reader-critical flow** - the picker isn't announced yet (see Accessibility).
 - **Rich-text formatting** - this is entity tagging, not bold/italic/lists. There's no formatting model.
 
 ---
@@ -46,10 +45,11 @@ unrelated APIs and two unrelated value types.
 ## Variants
 
 ### size
-`md` / `lg` - Text Area's frame sizing.
+`sm` / `md` / `lg` - Text Area's frame sizing (`sm` is `md` with tighter block padding).
 
-### appearance
-`default` / `subtle` - Text Area's appearance axis (Figma calls it `tone`).
+### context
+`default` / `inline` - Text Area's `context` axis, the same name Figma's text-area uses. `appearance`
+is a deprecated alias: `subtle` and `inline` map to `inline`, `default` to `default`.
 
 ### resize
 `none` / `vertical` / `horizontal` / `both`, default `vertical`.
@@ -62,24 +62,26 @@ There is no variant axis for the rich behavior itself - the component *is* the b
 
 | state | treatment |
 | --- | --- |
-| default / hover / focus | Text Area's frame states, unchanged |
-| invalid | `aria-invalid` + error border |
-| disabled | not editable, not focusable, slash command suppressed |
+| default / hover / focus | Text Area's frame states, unchanged (in the `inline` context, hover adds a bottom line in `color-border-input`) |
+| invalid | `aria-invalid` + error border, which stays while the editor has focus |
+| disabled | not editable, not focusable, `aria-disabled`, slash command suppressed |
 | empty | `data-empty` drives the absolutely-positioned placeholder overlay |
-| picker open | floating panel anchored at the caret; focus stays in the editor |
+| picker open | floating panel anchored at the caret; focus stays in the editor, whose `aria-controls` names the panel and `aria-activedescendant` the highlighted row |
 
 ---
 
 ## Accessibility
 
-- `role="textbox"` with `aria-multiline="true"`.
-- Named by `aria-label` / `aria-labelledby` / `<label htmlFor>` wired to `id`.
-- `aria-invalid` reflects `invalid`.
-- Disabled removes it from the tab order and turns off editing.
+- `role="textbox"` with `aria-multiline="true"` and `aria-haspopup="menu"`.
+- Named by `aria-label` / `aria-labelledby`. A `<label htmlFor>` wired to `id` can't name it (the
+  editor is a `div`), so Field names it by passing its label's id as `aria-labelledby`.
+- `aria-invalid` reflects `invalid`, or an `aria-invalid` passed in (Field passes it on error).
+- `required` sets `aria-required`; `aria-describedby` (Field's message) is set on the editor.
+- Disabled removes it from the tab order, turns off editing, and sets `aria-disabled`.
 - Tags use `tabIndex={-1}` so caret traversal isn't broken up by tab stops; an `href` tag is a real `<a>`.
-- **Known gap:** no `aria-activedescendant`. The active picker row is marked with a class only, so
-  arrowing through entities is silent to assistive tech. Keyboard operation works. This is the first
-  item in future considerations and is recorded in the contract's `knownLimitations`.
+- While the picker is open, `aria-controls` names its Menu and `aria-activedescendant` points at the
+  highlighted row (each row's id is `<pickerId>-option-<index>`), so arrowing through entities is
+  announced. Tab closes the picker and moves focus on.
 
 ---
 
@@ -88,7 +90,7 @@ There is no variant axis for the rich behavior itself - the component *is* the b
 No new tokens.
 
 - **Frame** - all of Text Area's: surface, border, radius, padding, typography per size.
-- **`/` mini-input** - Text Field's small-input look (raised surface, `border/input`, `border-radius-sm`).
+- **`/` mini-input** - Text Field's small-input look (raised surface, `border/input`, `border-radius-md`).
 - **Tag host** - layout only; the Tag atom carries its own tone tokens.
 - **Picker** - the Menu organism's panel tokens, capped at 280px and scrolling.
 
@@ -104,7 +106,8 @@ No new tokens.
 4. **Query typed inline, panel shows options only** (`showSearch={false}`) - matches Figma, and mirrors
    how Select types in the trigger.
 5. **Focus stays in the editor** while the picker is open, so typing keeps reaching the query. The
-   active row is marked by class - the reason the `aria-activedescendant` gap exists.
+   active row is marked by class and named by the editor's `aria-activedescendant`, which is why the
+   picker gives each row an id.
 6. **Tags are portals into non-editable host spans**, which keeps each tag atomic to the caret while
    still being a real React subtree.
 7. **`NavTag` is a preset over Tag**, not a new component - Tag already does tone, icon and navigation.
@@ -112,6 +115,8 @@ No new tokens.
    newer one; empty queries resolve immediately from `recents`.
 9. **`scrollIntoView` is called optionally** - jsdom lacks it, and an unguarded call throws inside any
    consumer's test run.
+10. **`context`, with `appearance` kept as a deprecated alias** - the axis takes Text Area's and
+    Figma's name; `subtle` and `inline` map to `inline`, so existing call sites keep working.
 
 ---
 
@@ -146,6 +151,6 @@ No new tokens.
 - Tone and icon per entity type
 - Prefilled from stored content
 - People rows with avatars
-- Sizes, appearance and states
-- Anti-examples: using it for plain text; driving `value` per keystroke; storing HTML; relying on it
-  as an accessible combobox
+- Sizes, context and states
+- Labelled by Field
+- Anti-examples: using it for plain text; driving `value` per keystroke; storing HTML

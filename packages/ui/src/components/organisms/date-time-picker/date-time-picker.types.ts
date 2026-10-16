@@ -50,4 +50,8 @@ export interface DateTimePickerProps
   /** Accessible label for the combined control. */
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  /** Marks both inputs invalid, as `invalid` does. Field passes it for an error. */
+  'aria-invalid'?: boolean | 'true' | 'false';
+  /** Sets the native `required` on both inputs. Field passes it when its `required` is set. */
+  required?: boolean;
 }

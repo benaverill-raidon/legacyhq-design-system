@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../field';
 import { Select } from './select';
 import type { SelectOption } from './select.types';
 import textFieldStyles from '../text-field/text-field.module.css';
@@ -259,5 +260,18 @@ describe('Select', () => {
     expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.context_inline);
     rerender(<Select options={OPTIONS} value={null} onChange={vi.fn()} />);
     expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass(textFieldStyles.context_default);
+  });
+
+  it('takes the wiring Field passes: its label, message, error, and required', () => {
+    render(
+      <Field label="Matter type" message="Pick the closest match" state="error" required>
+        <Select options={OPTIONS} value={null} onChange={vi.fn()} />
+      </Field>,
+    );
+
+    const input = screen.getByRole('combobox', { name: 'Matter type' });
+    expect(input).toHaveAccessibleDescription('Pick the closest match');
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toBeRequired();
   });
 });

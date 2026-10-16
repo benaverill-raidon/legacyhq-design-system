@@ -12,13 +12,14 @@
 .editor {
   --rta-radius: var(--border-radius-lg);
   --rta-padding: var(--spacing-sm);
+  --rta-padding-block: var(--rta-padding);
 
   position: relative;
   display: block;
   box-sizing: border-box;
   inline-size: 100%;
-  min-block-size: calc(var(--rta-rows, 3) * var(--typography-body-md-line-height) + 2 * var(--rta-padding));
-  padding: var(--rta-padding);
+  min-block-size: calc(var(--rta-rows, 3) * var(--typography-body-md-line-height) + 2 * var(--rta-padding-block));
+  padding: var(--rta-padding-block) var(--rta-padding);
   border: var(--border-width-sm) solid var(--color-border-input);
   border-radius: var(--rta-radius);
   background: var(--color-elevation-surface-raised-default);
@@ -70,6 +71,11 @@
   }
 }
 
+/* sm keeps md's corners and text, with Text Area's tighter block padding. */
+.size_sm {
+  --rta-padding-block: var(--spacing-075);
+}
+
 .size_md {
   --rta-padding: var(--spacing-sm);
   --rta-radius: var(--border-radius-lg);
@@ -95,7 +101,7 @@
 .editor[data-empty='true']::before {
   content: attr(data-placeholder);
   position: absolute;
-  inset-block-start: var(--rta-padding);
+  inset-block-start: var(--rta-padding-block);
   inset-inline-start: var(--rta-padding);
   color: var(--color-content-subtle);
   pointer-events: none;
@@ -107,13 +113,15 @@
 
 /* Focus/invalid paint the thicker border via inset box-shadow, never a real width change - so the
    text never shifts, exactly like Text Area. */
-.editor.appearance_default:focus {
+.editor.context_default:focus {
   background: var(--color-elevation-surface-raised-default);
   border-color: var(--color-border-focus);
   box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-focus);
 }
 
-.editor[data-invalid='true'] {
+/* Listed with :focus so the error border stays while the editor is focused, as on Text Area. */
+.editor[data-invalid='true'],
+.editor.context_default[data-invalid='true']:focus {
   border-color: var(--color-border-error);
   box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-error);
 }
@@ -133,8 +141,8 @@
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-/* Subtle appearance - transparent box, bottom accent only, matching Text Area's subtle. */
-.appearance_subtle {
+/* Inline context: a transparent box with only a bottom line, matching Text Area's inline context. */
+.context_inline {
   border-color: transparent;
   background: transparent;
   border-width: 0 0 var(--border-width-sm) 0;
@@ -142,12 +150,17 @@
   border-bottom-right-radius: 0;
 }
 
-.editor.appearance_subtle:focus {
+.editor.context_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus):hover {
+  border-bottom-color: var(--color-border-input);
+}
+
+.editor.context_inline:focus {
   border-bottom-color: var(--color-border-focus);
   box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-focus);
 }
 
-.editor.appearance_subtle[data-invalid='true'] {
+.editor.context_inline[data-invalid='true'],
+.editor.context_inline[data-invalid='true']:focus {
   border-bottom-color: var(--color-border-error);
   box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-error);
 }

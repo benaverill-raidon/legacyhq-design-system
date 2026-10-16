@@ -1,6 +1,6 @@
 import type * as React from 'react';
 import type { TagTone } from '../../../atoms/tag';
-import type { TextAreaAppearance, TextAreaResize, TextAreaSize } from '../text-area.types';
+import type { TextAreaAppearance, TextAreaContext, TextAreaResize, TextAreaSize } from '../text-area.types';
 
 /**
  * The editor's value is a flat array of nodes - runs of plain text interleaved with entity tags -
@@ -77,19 +77,23 @@ export interface RichTextAreaProps {
    * over the built-in tones for `account`, `person`, `matter`, `roadmap`, and `document`.
    */
   entityConfig?: Record<string, EntityTypeConfig>;
-  /** `md` or `lg`, with Text Area's padding, corners, and text size. `sm` is accepted but renders as `md`. */
+  /** `sm`, `md`, or `lg`, with Text Area's padding, corners, and text size. */
   size?: TextAreaSize;
   /**
-   * `default` is the bordered field; `subtle` has no border or background until hovered or focused.
-   * Use one of those two: `inline` is accepted but has no styles yet.
+   * Where it's shown, as on Text Area: `default` is the bordered field; `inline` is chromeless at rest,
+   * with the hover background and a bottom line on hover, and a 2px bottom line on focus or error.
    */
+  context?: TextAreaContext;
+  /** @deprecated Use `context`: `subtle` and `inline` map to `context="inline"`. Still accepted. */
   appearance?: TextAreaAppearance;
   /** Which way someone can drag the editor to resize it. Defaults to `vertical`, like Text Area. */
   resize?: TextAreaResize;
   /** Shows the error border and sets `aria-invalid` on the editor. */
   invalid?: boolean;
-  /** Turns off editing, takes the editor out of the tab order, and stops the `/` command. */
+  /** Turns off editing, takes the editor out of the tab order, sets `aria-disabled`, and stops the `/` command. */
   disabled?: boolean;
+  /** Sets `aria-required` on the editor. Field passes it when its `required` is set. */
+  required?: boolean;
   /** Shown when the editor is empty. */
   placeholder?: string;
   /** Placeholder inside the `/` query box before a query is typed. Defaults to "Type to search". */
@@ -100,10 +104,14 @@ export interface RichTextAreaProps {
   rows?: number;
   /** Added to the wrapper around the editor. */
   className?: string;
-  /** Set on the editor. A `label` with `htmlFor` can't name it, because it isn't a native control; use `aria-labelledby`. */
+  /** Set on the editor. A `label` with `htmlFor` can't name it, because it isn't a native control; use `aria-labelledby` (Field does). */
   id?: string;
   /** The editor's accessible name, when there's no visible label. */
   'aria-label'?: string;
-  /** The id of a visible label that names the editor. */
+  /** The id of a visible label that names the editor. Field passes its label's id. */
   'aria-labelledby'?: string;
+  /** Ids of elements that describe the editor, such as Field's message. */
+  'aria-describedby'?: string;
+  /** Marks the editor invalid, as `invalid` does. Field passes it for an error. */
+  'aria-invalid'?: boolean | 'true' | 'false';
 }

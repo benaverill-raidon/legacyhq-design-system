@@ -127,15 +127,16 @@ Select; it does nothing useful for a checkbox, radio, or switch.
 <Subsection title="What Field wires up">
 
 Field clones its one child and fills in the props the child left unset: an `id` for the label to
-point at, `aria-describedby` for the message, `aria-invalid` for the error state, and `required`.
+point at, `aria-labelledby` naming the label (so a control that isn't a native input is named too),
+`aria-describedby` for the message, `aria-invalid` for the error state, and `required`.
 The control's own props always win, so its `id`, `aria-invalid`, and `required` are never
 overwritten, and an `aria-describedby` it already has keeps its place, with the message added after
 it. Because Field clones its child, `children` must be one element, not text, a fragment, or
 several elements.
 
-These props reach the control's native element only if the control passes them on. Text Field and
-Text Area do. Select takes `id`, so the label names it, but not `aria-describedby`, `aria-invalid`,
-or `required` yet.
+Every form control in the system passes them on: Text Field, Text Area, Select, Date Picker, and
+Time Picker to their input; Rich Text Area to its editor; Date Time Picker names its group and marks
+both inputs.
 
 <Example of={FieldStories.AnyControl} caption="The same label, message, and state on a Text Field and a Text Area." />
 
@@ -229,16 +230,16 @@ change them as the value changes.
 - Field renders a `div` with a native `label` above the control and a message `div` below it. It has
   no role or focus stop of its own, and clicking the label focuses the control.
 - The label's `htmlFor` points at the control's `id`: the control's own, else `controlId`, else one
-  Field generates. That makes the label the control's accessible name.
+  Field generates. The control also gets `aria-labelledby` naming the label, unless it has its own
+  `aria-label` or `aria-labelledby`, in which case that name wins.
 - The message's id is added to the control's `aria-describedby`, after any description the control
   already has, so it's read when the control gets focus.
 - `state="error"` sets `aria-invalid` on the control unless the control sets its own. The status icon
   is hidden from assistive technology, so the message text has to carry the meaning.
 - `required` passes the native `required` to the control, and the `*` is hidden, so the requirement
   is announced once.
-- The wiring works when the control passes these props to its native element, as Text Field and Text
-  Area do. Select gets its name from the label, but its message isn't linked yet. Rich Text Area
-  can't take a `label` at all; name it with `aria-labelledby`.
+- Every form control in the system passes this wiring to its native element, including Rich Text
+  Area's editor, which a `label` alone can't name.
 - Wrap one control. A label names one control, so a group of radios or checkboxes needs Radio Group
   or Checkbox Group, which use a fieldset and a legend.
 
@@ -267,7 +268,7 @@ inline context's indent.
 <Related>
 
 - <DocLink to="Components/Forms/Text Field" /> and <DocLink to="Components/Forms/Text Area" />, the controls Field wraps most often.
-- <DocLink to="Components/Forms/Select" />, which Field can label; its message isn't linked yet.
+- <DocLink to="Components/Forms/Select" />, which Field labels and describes like any other control.
 - <DocLink to="Components/Forms/Form" /> to lay out Fields in sections and rows, with a heading and actions.
 - <DocLink to="Components/Forms/Radio" /> and <DocLink to="Components/Forms/Checkbox" />, whose groups label a set of options with a legend.
 - <DocLink to="Components/Feedback/Inline Message" /> and <DocLink to="Components/Feedback/Section Message" /> for a message about more than one control.

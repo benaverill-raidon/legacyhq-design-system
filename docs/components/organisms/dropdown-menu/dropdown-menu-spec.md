@@ -7,6 +7,13 @@ exactly one thing neither already provides - a fixed, always-opens-below alignme
 matching Figma's `dropdown-menu` component exactly - and pairs Popup's `padding="none"` with Menu as
 its content, since Menu already carries all of its own edge padding.
 
+**Design reference.** Figma's `dropdown-menu` crosses a `trigger` axis (nine example trigger types:
+button, icon-button, avatar, link-button, several chips, tag, a page selector) with `alignment` and
+`isOpen`. None of the trigger types became a variant prop: `children` stays a generic
+`React.ReactElement`, matching Popup's own `children` model. Every Figma instance nests a `menu`,
+never arbitrary content, so `DropdownMenuProps` extends `MenuProps` instead of taking an opaque
+`content` prop as Popup does.
+
 ## Anatomy
 
 ```txt
@@ -44,6 +51,13 @@ matchTriggerWidth: false
 Every `MenuProps` default (`size: sm`, `showSearch: true`, `showScrollbar: true`, `loading: false`,
 `loadingLabel: 'Loading…'`, `emptyMessage: 'No results'`) applies unchanged, since those props pass
 straight through to the rendered Menu.
+
+DropdownMenu forwards an explicit list of Menu props (`sections`, `size`, `showSearch`,
+`searchValue`, `onSearchChange`, `searchPlaceholder`, `showScrollbar`, `maxHeight`, `loading`,
+`loadingLabel`, `emptyMessage`, `aria-label`, `aria-labelledby`), not a rest spread. Two inherited
+`MenuProps` members are accepted by the type but dropped: `clearSearchLabel` (added to Menu later and
+never forwarded, so a Dropdown Menu's clear button is always "Clear search" and can't be translated)
+and `fullWidth` (set from `matchTriggerWidth` instead, below).
 
 `anchorRef` and `matchTriggerWidth` forward to Popup (see popup-spec). `matchTriggerWidth` also drives
 the inner Menu's `fullWidth` — a trigger-matched panel needs its Menu to stretch to the panel width
@@ -91,7 +105,18 @@ sections={[{ id: 's', items: [{ id: 'delete', label: 'Delete', onSelect: () => {
 ## Accessibility
 
 Entirely inherited:
-- Popup sets `aria-expanded`/`aria-controls` on the trigger, reflecting `open`.
+- Popup sets `aria-expanded`/`aria-controls` on the trigger, reflecting `open`, by cloning it. That
+  only reaches the DOM when the trigger passes `aria-expanded` through. The system's own triggers
+  don't, unless `isExpanded` is set: Button renders `aria-expanded={isExpanded != null ? isExpanded :
+  undefined}` after its rest spread, which drops the cloned value, and IconButton defaults
+  `isExpanded` to `false` and renders `isExpanded != null ? isExpanded : ariaExpanded`, which
+  replaces it with `false`. Consumers set `isExpanded={open}` on Button/IconButton triggers (the
+  stories and the Docs page do); the tests use a plain `<button>`, so they don't catch this.
+- No `aria-haspopup` is set on the trigger.
+- No focus management: opening doesn't move focus (Menu's search field `autoFocus`es when shown),
+  the panel is portaled to the end of `document.body`, so with `showSearch={false}` Tab from the
+  trigger reaches the panel's rows only after every other focusable element on the page, and
+  Escape (a document-level listener while open) doesn't return focus to the trigger.
 - Menu's own sections container carries `role="menu"`, `aria-label`/`aria-labelledby` (forwarded
   from DropdownMenu's own props of the same name), and owns all per-item roles and roving-tabindex
   keyboard navigation.
@@ -119,10 +144,14 @@ DropdownMenu
 └─ EdgeCases
 ```
 
+Every story's Button/IconButton trigger sets `isExpanded={open}` (see Accessibility).
+
 ### Alignment story
 
 All three `alignment` values, each independently open, to show the below-trigger positioning and
-horizontal edge alignment.
+horizontal edge alignment. The triggers are spread across the width so the open panels don't
+overlap. On the Docs page it renders in an iframe (`parameters.docs.story.inline: false`), since
+open panels are portaled and would otherwise float over the page.
 
 ### Content story
 
@@ -132,3 +161,4 @@ matching Figma's own range without a `trigger` variant prop in code.
 ### EdgeCases story
 
 Multiple sections in one panel, with selection closing the dropdown from each item's own `onSelect`.
+Open on load, so it also renders in an iframe on the Docs page.

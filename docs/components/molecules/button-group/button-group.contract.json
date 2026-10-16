@@ -144,7 +144,7 @@
   "relatedComponents": ["Button", "IconButton", "ToggleButton"],
   "do": [
     "Use for a toolbar or action row of related, independent buttons.",
-    "Set size/appearance/tone directly on each child Button.",
+    "Set size/prominence/tone directly on each child Button.",
     "Add aria-label when the group's purpose isn't obvious from context."
   ],
   "dont": [

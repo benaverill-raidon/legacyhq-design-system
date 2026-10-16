@@ -138,6 +138,9 @@ selected and disabled.
   visible items, wrapping at either end.
 - `Home`/`End` jump to the first/last enabled, visible item.
 - `Enter`/`Space` activate the focused item for free, since it's a real `<button>`.
+- None of this has a Figma variant: it's a code-level accessibility decision for the ARIA menu
+  pattern, delivering Popup's documented future enhancement ("a documented recipe for wiring
+  keyboard arrow navigation once Dropdown Menu exists").
 - A disabled item is excluded entirely from the roving-tabindex cycle - never focusable via arrow
   navigation, Tab, or click-then-arrow.
 - The active id is derived on every render (`enabledIds.includes(activeId) ? activeId :
@@ -151,11 +154,12 @@ selected and disabled.
   decorative only (icons, or a plain glyph) - never a real interactive control. Each row is a native
   `<button>`; nesting a focusable `<input>` (a real `Checkbox`/`Radio`) or another `<button>` inside
   it is invalid HTML and creates two conflicting activation paths for the same row.
-- Pass `spacing="spacious"` on every `leadingElement`/`trailingElement` icon (size stays at Icon's
-  own `md` default). Menu's `elemBefore`/`elemAfter` wrapper is a fixed 24px (`--size-300`) box
-  regardless of content, matching Figma's own elemBefore/elemAfter component exactly - an icon
-  without `spacing="spacious"` renders undersized and off-center inside it rather than filling it
-  the way Figma's own `Size: md` + `spacing: spacious (24px)` icon does.
+- Menu's `elemBefore`/`elemAfter` wrapper is a fixed 24px (`--size-300`) box regardless of
+  content, matching Figma's own elemBefore/elemAfter component exactly, and it centers its content
+  (`inline-flex`, `align-items`/`justify-content: center`). An `md` icon therefore renders as a
+  16px glyph at the same 4px inset with or without `spacing="spacious"` (measured in Storybook);
+  the stories pass `spacing="spacious"` to mirror Figma's `Size: md` + `spacing: spacious (24px)`
+  icon, but alignment doesn't depend on it.
 - Menu never closes anything on `onSelect` - a consumer wanting a selection to close a containing
   Dropdown Menu wires `onOpenChange(false)` from the item's own `onSelect`.
 
@@ -169,6 +173,20 @@ selected and disabled.
 - `disabled` is the native `<button disabled>` attribute - `:disabled` styling and
   `toBeDisabled()`-style assertions work without any extra ARIA.
 - No default accessible name for the `menu` role - pass `aria-label` or `aria-labelledby`.
+- Section headings are plain `div` text inside the `menu` role - no `role="group"` or
+  `aria-labelledby` ties a heading to its rows. Dividers carry `role="separator"`.
+- The search field is outside the `role="menu"` element (keydown is handled on the sections
+  container only), so the arrow keys don't move from the field into the rows; Tab does (through the
+  clear button when it's shown). The field's accessible name is `searchPlaceholder ?? 'Search'` -
+  the "Search" fallback is a hard-coded English string, not a prop.
+- The search field is `autoFocus`ed whenever it mounts. In a Dropdown Menu that means on open; on a
+  page that renders a searchable Menu inline (including a Storybook Docs page), it takes focus and
+  scrolls the page to it on load. The Docs page renders only one searchable Menu, in the header,
+  for that reason.
+- Menu doesn't handle Escape; a containing Dropdown Menu (Popup) does.
+- While `loading`, the loading row is `role="status"` (the Spinner itself has no label, so it's
+  hidden) and the `role="menu"` element isn't rendered. The empty message is plain text inside the
+  menu, with no live region.
 
 ## Styling and tokens
 

@@ -11,7 +11,8 @@ Use Button Group to lay out two or more related `Button`/`IconButton` elements i
 with a single, consistent gap between them.
 
 ### Tier
-Molecule
+Molecule: it composes Button/IconButton atoms into a named layout unit with its own variant
+surface (`orientation`), without adding any visual treatment of its own.
 
 ### Design Reference
 - Figma Component: `button-group` (component set, node `1690:7026`, file `Components v1.0.0`)
@@ -50,7 +51,7 @@ ButtonGroup
 ### Structure Notes
 - Single root container (`div`)
 - Any number of `children` (typically `Button`/`IconButton` elements)
-- No owned button styling - size, appearance, and tone are set on each child directly
+- No owned button styling - size, prominence, and tone are set on each child directly
 - No wrapping - matches Figma's `layoutWrap: NO_WRAP`
 
 ---
@@ -112,13 +113,15 @@ independent actions, not a single composite control.
 - No label provided: plain `div`, no `role`.
 - `aria-label` or `aria-labelledby` provided: `role="group"` is added automatically, so the set of
   actions is announced as a named group.
+- The component sets `role` itself after spreading rest props, so a consumer-passed `role` (e.g.
+  `toolbar`) is replaced: by `group` when labelled, removed when not.
 
 Example:
 
 ```tsx
 <ButtonGroup aria-label="Document actions">
-  <Button appearance="primary">Save</Button>
-  <Button appearance="subtle">Cancel</Button>
+  <Button prominence="primary">Save</Button>
+  <Button prominence="tertiary">Cancel</Button>
 </ButtonGroup>
 ```
 

@@ -76,7 +76,7 @@ Yes - `children` is the primary action's own label, exactly like Button's own `c
 - default (default)
 - primary
 
-Narrower than Button's own `appearance` (no `subtle`) - matches every verified Figma variant
+Narrower than Button's own range (no `subtle`) - matches every verified Figma variant
 exactly; Figma never shows a subtle split button.
 
 ### Size
@@ -84,7 +84,7 @@ exactly; Figma never shows a subtle split button.
 
 ### Token Mapping
 No new tokens - the divider (`border-width-sm`, `size-control-xs/sm/md/lg`, `color-border-input` /
-`color-content-brand-primary-subtle` / `color-border-disabled`) and the squared corners (`0`, an
+`color-border-brand-primary-subtle` / `color-border-disabled`) and the squared corners (`0`, an
 explicitly-ignored value in the token-governance stylelint rule) are the only styling Split Button
 owns. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own.
 

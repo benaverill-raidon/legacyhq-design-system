@@ -1,138 +1,267 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DeleteIcon, EditIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import buttonStyles from '../../atoms/button/button.module.css';
+import { IconButton } from '../../atoms/icon-button';
+import { ToggleButton } from '../../atoms/toggle-button';
+import { ButtonGroup } from './button-group';
+import buttonGroupStyles from './button-group.module.css';
 import * as ButtonGroupStories from './ButtonGroup.stories';
 
 <Meta of={ButtonGroupStories} name="Docs" />
 
-# Button Group
+<Unstyled>
+<ComponentPage>
 
-Button Group gives users access to a set of frequently performed, related actions, laid out with
-consistent spacing in a row or a column. It is a layout wrapper, not a control - it adds no visual
-styling of its own and does not manage selection or focus between its children.
+<ComponentHeader
+  id="button-group"
+  example={
+    <>
+      <ButtonGroup>
+        <Button prominence="primary">Save matter</Button>
+        <Button>Preview</Button>
+        <Button prominence="tertiary">Cancel</Button>
+      </ButtonGroup>
+      <ButtonGroup aria-label="Row actions">
+        <IconButton aria-label="Edit">
+          <EditIcon />
+        </IconButton>
+        <IconButton aria-label="Delete">
+          <DeleteIcon />
+        </IconButton>
+      </ButtonGroup>
+    </>
+  }
+>
+  Button Group lays out related buttons in a row or a column, with one gap between them. It's layout
+  only: each button keeps its own look, focus, and keyboard behavior.
+</ComponentHeader>
 
-<Canvas of={ButtonGroupStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A toolbar of related, independent actions.
-- A dialog's primary/secondary/tertiary action row.
-- A form's action buttons.
+- A dialog's or a form's actions, such as Save and Cancel.
+- A toolbar of related actions, such as Edit and Delete on a row.
+- Stacked actions in a narrow space, with `orientation="vertical"`.
+- Laying out Toggle Buttons that sit together, such as a set of filters.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For mutually exclusive selection.** Button Group does not manage selection state or
-  exclusivity - it's a layout wrapper, not a segmented control.
-- **For a single button.** Button Group adds no value over a bare `Button`.
-- **To visually join/connect buttons.** Figma's source keeps every button fully rounded and
-  separated by a consistent gap, never seamlessly merged.
+- **A main action with a few related alternatives:** <DocLink to="Components/Actions/Split Button" />, which joins the two into one shape.
+- **More actions than fit in a row:** <DocLink to="Components/Actions/Dropdown Menu" />, opened from a Button or an Icon Button. Button Group doesn't wrap.
+- **One action:** <DocLink to="Components/Actions/Button" /> on its own. A group of one adds nothing.
+- **Choosing between options, such as a list or grid view:** <DocLink to="Components/Actions/Toggle Button" /> in the group, with the chosen value in your state. Button Group holds no selection.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Button Group has one part: a `div` root that lays out its `children` - typically `Button` and/or
-`IconButton` elements - with a consistent 8px gap. There is no owned button styling; every color,
-radius, and typography value comes from the children themselves.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Choosing an orientation
+<Anatomy
+  specimen={
+    <ButtonGroup>
+      <Button prominence="primary">Save matter</Button>
+      <Button>Preview</Button>
+      <Button prominence="tertiary">Cancel</Button>
+    </ButtonGroup>
+  }
+>
+  <Part name="root" target={buttonGroupStyles.root}>A `div` that sets the direction and the 8px gap. It has no fill, border, or padding of its own.</Part>
+  <Part name="children" target={buttonStyles.button}>The buttons you pass, in order. Each keeps its own size and style, and none is stretched to match another.</Part>
+</Anatomy>
 
-`orientation="horizontal"` (the default) lays buttons out in a row. `orientation="vertical"` stacks
-them in a column. Figma calls these `inline`/`stacked`; the component renames them to
-`horizontal`/`vertical` to match `RadioGroup`'s existing orientation vocabulary, so every
-"group of controls" component in this library uses the same two words.
+</Section>
 
-<Canvas of={ButtonGroupStories.Variants} />
+<Section title="Variants">
 
-### Accessible labelling
+<Subsection title="Orientation">
 
-Button Group adds no keyboard behavior of its own - each child button keeps its native Tab order,
-exactly as if it weren't wrapped. Add `aria-label` or `aria-labelledby` only when the set of
-actions needs a name that isn't already obvious from context (a heading, a dialog title); doing so
-automatically adds `role="group"` so the set is announced together.
+`horizontal`, the default, lays the buttons out in a row; `vertical` stacks them in a column. Both
+use the same 8px gap, and neither wraps, so use `vertical` where a row won't fit. The group is only
+as wide as its buttons. In a vertical group, give each button `isFullWidth` to make them all as wide
+as the widest one.
 
-<Canvas of={ButtonGroupStories.Composition} />
+<Example of={ButtonGroupStories.Variants} caption="Horizontal and vertical, with two, three, and four buttons." />
 
-## Do / Don't
+</Subsection>
 
-**Do** set size, appearance, and tone directly on each child `Button`.
+</Section>
 
-```tsx
-<ButtonGroup>
-  <Button appearance="primary">Save</Button>
-  <Button appearance="subtle">Cancel</Button>
-</ButtonGroup>
-```
+<Section title="Behavior">
 
-**Don't** expect Button Group to restyle or join its children into one shape.
+<Subsection title="Layout only">
 
-```tsx
-{
-  /* Button Group will not merge these into a single segmented control. */
-}
-<ButtonGroup>
-  <Button>List</Button>
-  <Button>Grid</Button>
-</ButtonGroup>;
-```
+Button Group doesn't pass anything to its buttons. Set `size`, `prominence`, and `tone` on each
+button; the group never changes them. Buttons line up along their top edge rather than stretching,
+so buttons of different sizes look uneven side by side.
 
----
+</Subsection>
 
-**Do** add `aria-label` when the group's purpose isn't obvious from context.
+<Subsection title="Naming the group">
 
-```tsx
-<ButtonGroup aria-label="Document actions">
-  <Button appearance="primary">Save</Button>
-  <Button appearance="subtle">Cancel</Button>
-</ButtonGroup>
-```
+Give the group an `aria-label`, or point `aria-labelledby` at visible text, when nothing nearby says
+what its buttons are for, such as a toolbar of icon-only actions. A name also gives the group
+`role="group"`, so screen readers announce the name when focus enters it. Without a name, the group
+is a plain `div` with no role.
 
-**Don't** wrap a single button in Button Group.
+<Example of={ButtonGroupStories.Composition} caption="A dialog's actions, a toolbar of Icon Buttons, and stacked full-width form actions." />
 
-```tsx
-<ButtonGroup>
-  <Button>Save</Button>
-</ButtonGroup>
-```
+</Subsection>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. Typically <code>Button</code>/<code>IconButton</code> elements.</td>
-    </tr>
-    <tr>
-      <td><code>orientation</code></td>
-      <td><code>'horizontal' | 'vertical'</code></td>
-      <td><code>'horizontal'</code></td>
-      <td>Layout direction.</td>
-    </tr>
-    <tr>
-      <td>...rest</td>
-      <td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td>
-      <td>-</td>
-      <td>
-        Forwarded to the root <code>div</code>, including <code>aria-label</code> /
-        <code>aria-labelledby</code> and <code>className</code>.
-      </td>
-    </tr>
-  </tbody>
-</table>
+<Section title="Do and don't">
 
-Button Group has no `size`, `appearance`, or `tone` prop - those belong on each child button
-directly, since Button Group contributes only spacing and direction.
+<Guidelines>
+<Do
+  caption="Use Toggle Buttons for a choice between views, and select the one that matches your state."
+  code={`<ButtonGroup aria-label="View">
+    <ToggleButton isSelected={view === 'list'} onClick={() => setView('list')}>List</ToggleButton>
+    <ToggleButton isSelected={view === 'grid'} onClick={() => setView('grid')}>Grid</ToggleButton>
+</ButtonGroup>`}
+>
+  <ButtonGroup aria-label="View">
+    <ToggleButton isSelected>List</ToggleButton>
+    <ToggleButton>Grid</ToggleButton>
+  </ButtonGroup>
+</Do>
+<Dont
+  caption="Build the choice from plain Buttons. Nothing shows or announces which view is on."
+  code={`<ButtonGroup>
+    <Button onClick={() => setView('list')}>List</Button>
+    <Button onClick={() => setView('grid')}>Grid</Button>
+</ButtonGroup>`}
+>
+  <ButtonGroup>
+    <Button>List</Button>
+    <Button>Grid</Button>
+  </ButtonGroup>
+</Dont>
+<Do
+  caption="Give every button in the group the same size."
+  code={`<ButtonGroup>
+    <Button size="sm" prominence="primary">Save</Button>
+    <Button size="sm">Cancel</Button>
+</ButtonGroup>`}
+>
+  <ButtonGroup>
+    <Button size="sm" prominence="primary">Save</Button>
+    <Button size="sm">Cancel</Button>
+  </ButtonGroup>
+</Do>
+<Dont
+  caption="Mix sizes and expect the group to even them out. It doesn't resize or stretch its buttons."
+  code={`<ButtonGroup>
+    <Button size="lg" prominence="primary">Save</Button>
+    <Button size="sm">Cancel</Button>
+</ButtonGroup>`}
+>
+  <ButtonGroup>
+    <Button size="lg" prominence="primary">Save</Button>
+    <Button size="sm">Cancel</Button>
+  </ButtonGroup>
+</Dont>
+<Do
+  caption="Name a group whose purpose isn't clear from what's around it, such as a toolbar of icon-only actions."
+  code={`<ButtonGroup aria-label="Row actions">
+    <IconButton aria-label="Edit"><EditIcon /></IconButton>
+    <IconButton aria-label="Delete"><DeleteIcon /></IconButton>
+</ButtonGroup>`}
+>
+  <ButtonGroup aria-label="Row actions">
+    <IconButton aria-label="Edit">
+      <EditIcon />
+    </IconButton>
+    <IconButton aria-label="Delete">
+      <DeleteIcon />
+    </IconButton>
+  </ButtonGroup>
+</Do>
+<Dont
+  caption="Repeat a name the context already gives. In a dialog footer, the dialog's title already says what the buttons are for."
+  code={`<ModalDialog
+    title="Discard unsaved changes?"
+    footer={<ButtonGroup aria-label="Discard unsaved changes actions">…</ButtonGroup>}
+    …
+/>`}
+/>
+</Guidelines>
 
-## Related components
+</Section>
 
-- **Button** / **Icon Button** - the atoms Button Group always wraps.
-- **Toggle Button** - for a persistent-selection control instead of a set of independent actions.
+<Section title="Accessibility">
+
+- Button Group renders a `div`. Without a name it has no role, and assistive technology reads its
+  buttons as if they weren't wrapped.
+- An `aria-label` or `aria-labelledby` adds `role="group"`, so the name is announced when focus
+  enters the group. Button Group sets the role itself, so a `role` you pass is replaced.
+- The group is never a focus stop. Each button stays in the tab order on its own, in the order you
+  pass them, and there's no arrow-key movement between them, because they're separate actions, not
+  one control.
+
+Button Group adds no keys of its own. Tab moves through its buttons in order, and each button
+handles its own Enter and Space.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ButtonGroupStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Button Group's stylesheet sets only the gap between buttons. Every color, size, radius, and type
+style comes from the buttons inside it.
+
+<TokensTable id="button-group" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Button" /> and <DocLink to="Components/Actions/Icon Button" />, the buttons a group usually holds.
+- <DocLink to="Components/Actions/Toggle Button" /> for options that stay on or off, laid out in a group.
+- <DocLink to="Components/Actions/Split Button" /> for a main action joined to a menu of related ones.
+- <DocLink to="Components/Actions/Dropdown Menu" /> for actions that don't fit in a row.
+- <DocLink to="Components/Overlays/Modal Dialog" />, whose footer actions you lay out with Button Group.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads button-group.types.ts, the design tokens read button-group.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

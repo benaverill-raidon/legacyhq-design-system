@@ -112,7 +112,7 @@ export const Composition: Story = {
         <div style={cardStyle}>
           <h3 style={headingStyle}>Discard unsaved changes?</h3>
           <p style={captionStyle}>This can&apos;t be undone.</p>
-          <ButtonGroup aria-label="Dialog actions">
+          <ButtonGroup>
             <Button prominence="tertiary">Cancel</Button>
             <Button prominence="primary" tone="error">
               Discard

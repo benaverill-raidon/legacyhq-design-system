@@ -32,6 +32,8 @@ const row: CSSProperties = {
 
 const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)' };
 
+const spread: CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' };
+
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
   color: 'var(--color-content-subtle)',
@@ -84,7 +86,9 @@ export const Playground: Story = {
           searchPlaceholder="Search actions"
           sections={[{ id: 'actions', heading: 'Actions', items }]}
         >
-          <Button onClick={() => setOpen((current) => !current)}>Actions</Button>
+          <Button isExpanded={open} onClick={() => setOpen((current) => !current)}>
+            Actions
+          </Button>
         </DropdownMenu>
       );
     }
@@ -108,19 +112,25 @@ export const Alignment: Story = {
           showSearch={false}
           sections={[{ id: 'actions', items: actionItems() }]}
         >
-          <Button onClick={() => setOpen((current) => !current)}>{alignment}</Button>
+          <Button isExpanded={open} onClick={() => setOpen((current) => !current)}>
+            {alignment}
+          </Button>
         </DropdownMenu>
       );
     }
 
+    // Spread across the width so the three open panels don't overlap one another.
     return (
-      <div style={row}>
+      <div style={spread}>
         <AlignmentDropdown alignment="left" />
         <AlignmentDropdown alignment="center" />
         <AlignmentDropdown alignment="right" />
       </div>
     );
   },
+  // On the Docs page the open panels would float over the page, so the story renders in its own
+  // frame there, tall enough to hold them.
+  parameters: { docs: { story: { inline: false, height: '280px' } } },
 };
 
 /** Any focusable control works as the trigger, matching Figma's own range (button, icon-button, avatar, tag, chip, ...). */
@@ -136,7 +146,7 @@ export const Content: Story = {
           showSearch={false}
           sections={[{ id: 'actions', items: actionItems().map((item) => ({ ...item, onSelect: () => setOpen(false) })) }]}
         >
-          <IconButton aria-label="Row actions" appearance="subtle" onClick={() => setOpen((current) => !current)}>
+          <IconButton aria-label="Row actions" appearance="subtle" isExpanded={open} onClick={() => setOpen((current) => !current)}>
             <MoreVertIcon size="sm" decorative />
           </IconButton>
         </DropdownMenu>
@@ -203,7 +213,9 @@ export const EdgeCases: Story = {
             },
           ]}
         >
-          <Button onClick={() => setOpen((current) => !current)}>Actions</Button>
+          <Button isExpanded={open} onClick={() => setOpen((current) => !current)}>
+            Actions
+          </Button>
         </DropdownMenu>
       );
     }
@@ -211,10 +223,12 @@ export const EdgeCases: Story = {
     return (
       <div style={stack}>
         <Group title="Multiple sections, closes on select">
-          <p style={captionStyle}>Selecting any row here calls onOpenChange(false) from the item&apos;s own onSelect.</p>
+          <p style={captionStyle}>Choosing any row closes the menu, from that item&apos;s own onSelect.</p>
           <MultiSectionDropdown />
         </Group>
       </div>
     );
   },
+  // Open on load: on the Docs page it renders in its own frame so the panel doesn't float over the page.
+  parameters: { docs: { story: { inline: false, height: '440px' } } },
 };

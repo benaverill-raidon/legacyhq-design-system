@@ -38,7 +38,7 @@
   "anatomy": [
     { "name": "trigger", "description": "The single child element (children) - any focusable control. Cloned by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls." },
     { "name": "panel", "description": "Popup's own default visual skin (background/border/radius/shadow), rendered with padding=\"none\"." },
-    { "name": "menu", "description": "A Menu, rendered with every DropdownMenu prop besides children/open/onOpenChange/alignment/id/className forwarded to it unchanged." }
+    { "name": "menu", "description": "A Menu, rendered with the Menu props DropdownMenu forwards (an explicit list: clearSearchLabel is accepted by the type but not forwarded, and fullWidth is set from matchTriggerWidth)." }
   ],
   "props": {
     "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "The single trigger element." },

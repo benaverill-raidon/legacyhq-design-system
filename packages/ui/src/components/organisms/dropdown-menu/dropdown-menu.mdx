@@ -1,139 +1,317 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as React from 'react';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { ArchiveIcon, CaretDownIcon, CopyIcon, DeleteIcon, EditIcon, MoreVertIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import buttonStyles from '../../atoms/button/button.module.css';
+import { IconButton } from '../../atoms/icon-button';
+import { DropdownMenu } from './dropdown-menu';
 import * as DropdownMenuStories from './DropdownMenu.stories';
+
+export const matterActions = (close) => [
+  {
+    id: 'actions',
+    items: [
+      { id: 'rename', label: 'Rename', leadingElement: <EditIcon spacing="spacious" decorative />, onSelect: close },
+      { id: 'duplicate', label: 'Duplicate', leadingElement: <CopyIcon spacing="spacious" decorative />, onSelect: close },
+      { id: 'archive', label: 'Archive', leadingElement: <ArchiveIcon spacing="spacious" decorative />, onSelect: close },
+      { id: 'delete', label: 'Delete', leadingElement: <DeleteIcon spacing="spacious" decorative />, onSelect: close },
+    ],
+  },
+];
+
+export const ActionsDropdown = ({ showSearch = false }) => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <DropdownMenu
+      aria-label="Matter actions"
+      open={open}
+      onOpenChange={setOpen}
+      showSearch={showSearch}
+      searchPlaceholder="Search actions"
+      sections={matterActions(() => setOpen(false))}
+    >
+      <Button iconAfter={<CaretDownIcon />} isExpanded={open} onClick={() => setOpen((current) => !current)}>
+        Actions
+      </Button>
+    </DropdownMenu>
+  );
+};
+
+export const RowActionsDropdown = () => {
+  const [open, setOpen] = React.useState(false);
+  return (
+    <DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} alignment="right" showSearch={false} sections={matterActions(() => setOpen(false))}>
+      <IconButton aria-label="Row actions" appearance="subtle" isExpanded={open} onClick={() => setOpen((current) => !current)}>
+        <MoreVertIcon />
+      </IconButton>
+    </DropdownMenu>
+  );
+};
 
 <Meta of={DropdownMenuStories} name="Docs" />
 
-# Dropdown Menu
+<Unstyled>
+<ComponentPage>
 
-Dropdown Menu pairs any trigger element with a Menu panel, floated and dismissed via Popup. It is
-deliberately thin: positioning and dismissal come entirely from Popup (`padding="none"`, so Menu's
-own search field and rows sit flush against Popup's card skin), and search/sectioning/selection/
-keyboard navigation come entirely from Menu. Dropdown Menu itself adds exactly one thing neither of
-those already provides: a fixed, always-opens-below alignment vocabulary
-(`'left' | 'center' | 'right'`) matching Figma's own `dropdown-menu` component exactly.
+<ComponentHeader
+  id="dropdown-menu"
+  example={
+    <>
+      <ActionsDropdown />
+      <RowActionsDropdown />
+    </>
+  }
+>
+  Dropdown Menu opens a Menu of actions or options from a trigger you choose, such as a Button, an
+  Icon Button, or an Avatar. It places the panel below the trigger and reports Escape and clicks
+  outside; your state decides whether it's open.
+</ComponentHeader>
 
-<Canvas of={DropdownMenuStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A click-to-open action menu anchored to a button, icon button, avatar, tag, or any other trigger.
-- Anywhere Figma's `dropdown-menu` component set is the design source - it always pairs a trigger
-  with a `menu` instance, which is exactly this composition.
+- A set of actions behind one button, such as Actions or a row's More actions.
+- Options to check or choose from a toolbar, such as View options or Sort by.
+- An account menu opened from an Avatar.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A non-interactive hover hint.** Use Tooltip.
-- **Content that isn't a list of actions/options.** Use Popup directly with your own `content` for
-  anything that isn't Menu-shaped (a confirmation, a status message) - Dropdown Menu always renders
-  a Menu, by design.
+- **Choosing a value in a form:** <DocLink to="Components/Forms/Select" />. Menu rows hold no form value.
+- **A main action with a few alternatives:** <DocLink to="Components/Actions/Split Button" />.
+- **A hint on hover or focus:** <DocLink to="Components/Overlays/Tooltip" />.
+- **Floating content that isn't a list of actions, such as a short form:** <DocLink to="Components/Overlays/Popup" /> with your own content.
+- **A list that's always on the page:** <DocLink to="Components/Actions/Menu" /> on its own.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-- **Trigger** (`children`) - any single focusable element. Figma's own component set demonstrates
-  nine trigger types (button, icon-button, avatar, link-button, several chip variants, tag, a page
-  selector) - none of them are modeled as a variant prop in code. Compose whatever trigger fits;
-  Popup clones it to attach a measurement ref and `aria-expanded`/`aria-controls`.
-- **Panel** - Popup's own default visual skin (background, border, radius, shadow), with
-  `padding="none"` so Menu's search field and rows carry all of their own edge padding, matching the
-  Figma source's dropdown-menu instance exactly (its `panelSurface`/`content`/`menu` node chain
-  measures zero outer padding).
-- **Menu** - every other prop on `DropdownMenu` (`sections`, `size`, `showSearch`,
-  `searchValue`/`onSearchChange`, `showScrollbar`, `maxHeight`, `loading`, `emptyMessage`, ...) is
-  Menu's own prop, forwarded unchanged.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Just pass Menu's props directly
+<Anatomy
+  specimen={
+    <DropdownMenu aria-label="Matter actions" open={false} sections={matterActions()}>
+      <Button iconAfter={<CaretDownIcon />}>Actions</Button>
+    </DropdownMenu>
+  }
+>
+  <Part name="trigger" target={buttonStyles.button}>The one element you pass as `children`. It's cloned to add a ref and `aria-expanded` and `aria-controls`.</Part>
+  <Part name="panel">Popup's surface, with no padding, added at the end of the page while `open`. It floats, so it isn't outlined on this specimen.</Part>
+  <Part name="menu">A Menu inside the panel, built from the Menu props you pass, such as `sections`.</Part>
+</Anatomy>
 
-`DropdownMenuProps` extends `MenuProps` (minus `id`/`className`, which apply to Popup's panel
-instead) - you don't construct a `<Menu>` yourself:
+</Section>
 
-```tsx
-const [open, setOpen] = useState(false);
+<Section title="Variants">
+
+<Subsection title="Alignment">
+
+`alignment` sets which edge of the trigger the panel lines up with: `left`, the default, `center`,
+or `right`. It always opens below the trigger, as in Figma, where it fits. Where it doesn't, it
+moves to the position that overflows the viewport least, trying the same alignment above first,
+and it's kept inside the viewport.
+
+<Example of={DropdownMenuStories.Alignment} caption="Left, center, and right, each open below its trigger." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Your state opens and closes it">
+
+Dropdown Menu never opens or closes itself. Keep `open` in your state, toggle it from the trigger's
+`onClick`, and pass `onOpenChange`, which is called with `false` on Escape or a press outside the
+trigger and the panel. Choosing an item doesn't close the menu, because Menu doesn't know it's in
+one: set `open` to false from the item's `onSelect`. While closed, only the trigger renders.
+
+<Example of={DropdownMenuStories.Playground} caption="Open it, search, and choose an action: the item's onSelect closes the menu." />
+
+</Subsection>
+
+<Subsection title="Triggers">
+
+Any one element can be the trigger: a Button, an Icon Button, an Avatar, a Tag. It's cloned to add a
+ref, for positioning, and `aria-expanded` and `aria-controls`, so it must pass those on to its DOM
+element. On a Button or an Icon Button, also set `isExpanded={open}`: it keeps the hover fill while
+the menu is open, and without it, Button drops the `aria-expanded` that Dropdown Menu adds and Icon
+Button reports `false`.
+
+<Example of={DropdownMenuStories.Content} caption="An Icon Button and an Avatar as triggers." />
+
+</Subsection>
+
+<Subsection title="Position and width">
+
+The panel sits 8px below the trigger and stays at least 8px inside the viewport. It moves with the
+trigger as the page scrolls or resizes, and hides while the trigger is scrolled out of view. Its
+width is the Menu's `size`. `matchTriggerWidth` makes it as wide as the trigger instead, and
+`anchorRef` positions it against another element, as Select does with its field frame.
+
+</Subsection>
+
+<Subsection title="Several sections">
+
+Menu's sections, headings, and dividers all work inside the panel.
+
+<Example of={DropdownMenuStories.EdgeCases} caption="Two sections with headings; choosing any row closes the menu." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Pass onOpenChange, toggle from the trigger, and close from each item's onSelect."
+  code={`const [open, setOpen] = useState(false);
 
 <DropdownMenu
-  aria-label="Matter actions"
-  open={open}
-  onOpenChange={setOpen}
-  sections={[{ id: 'actions', items: [{ id: 'rename', label: 'Rename', onSelect: handleRename }] }]}
+    aria-label="Matter actions"
+    open={open}
+    onOpenChange={setOpen}
+    showSearch={false}
+    sections={[{ id: 'actions', items: [
+        { id: 'rename', label: 'Rename', onSelect: () => { rename(); setOpen(false); } },
+    ] }]}
 >
-  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>
-</DropdownMenu>;
-```
+    <Button isExpanded={open} onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`}
+>
+  <ActionsDropdown />
+</Do>
+<Dont
+  caption="Leave out onOpenChange. Escape and clicks outside can't close the menu."
+  code={`<DropdownMenu open={open} sections={sections}>
+    <Button onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`}
+/>
+<Do
+  caption="Pass the button itself as the trigger, with isExpanded set to open."
+  code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
+    <IconButton aria-label="Row actions" isExpanded={open} onClick={() => setOpen(!open)}>
+        <MoreVertIcon />
+    </IconButton>
+</DropdownMenu>`}
+>
+  <RowActionsDropdown />
+</Do>
+<Dont
+  caption="Wrap the trigger in another element. The wrapper gets aria-expanded and aria-controls, and the button doesn't."
+  code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
+    <span>
+        <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
+            <MoreVertIcon />
+        </IconButton>
+    </span>
+</DropdownMenu>`}
+/>
+<Do caption="Turn search off for a short list of actions." code={`<DropdownMenu showSearch={false} … />`}>
+  <ActionsDropdown />
+</Do>
+<Dont caption="Leave the search field on for four actions. It's on by default, and it takes focus when the menu opens." code={`<DropdownMenu searchPlaceholder="Search actions" … />`}>
+  <ActionsDropdown showSearch />
+</Dont>
+</Guidelines>
 
-### Dropdown Menu doesn't close itself on selection
+</Section>
 
-Same rule as Menu: wire `onOpenChange(false)` from the selected item's own `onSelect`, since neither
-Menu nor Dropdown Menu assumes a selection should close the panel.
+<Section title="Accessibility">
 
-```tsx
-sections={[{
-  id: 'actions',
-  items: [{
-    id: 'delete',
-    label: 'Delete',
-    onSelect: () => {
-      handleDelete();
-      setOpen(false);
-    },
-  }],
-}]}
-```
+- Dropdown Menu adds no element around the trigger, which keeps its own role and name. While open,
+  a panel with no role is added at the end of the page, holding a Menu with `role="menu"`. Name it
+  with `aria-label` or `aria-labelledby`, which Dropdown Menu passes to the Menu.
+- The trigger gets `aria-expanded`, and `aria-controls` pointing at the panel while it's open. On a
+  Button or an Icon Button, set `isExpanded={open}` too, so the state is announced. Dropdown Menu
+  doesn't set `aria-haspopup`; set `aria-haspopup="menu"` on the trigger yourself.
+- Opening the menu moves focus only when there's a search field, which takes focus. Without one,
+  focus stays on the trigger, and because the panel is at the end of the page, Tab reaches its rows
+  only after everything else on the page.
+- While the menu is open, Escape calls `onOpenChange(false)` wherever focus is. Focus isn't moved
+  back to the trigger, so if it was in the panel, it's left on the page.
+- Inside the panel, the rows work as Menu's do: one tab stop, and arrow keys between rows.
 
-### Alignment always opens below the trigger
+<Keyboard>
+  <Key keys="Enter">On the trigger, runs its `onClick`, which opens or closes the menu.</Key>
+  <Key keys="Space">On the trigger, the same as Enter.</Key>
+  <Key keys="Tab">With a search field, moves from it to the clear button, then into the rows. Without one, moves from the trigger to the next control on the page.</Key>
+  <Key keys="Arrow Down">In the rows, moves to the next enabled row, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Up">In the rows, moves to the previous enabled row, wrapping from the first to the last.</Key>
+  <Key keys="Home">In the rows, moves to the first enabled row.</Key>
+  <Key keys="End">In the rows, moves to the last enabled row.</Key>
+  <Key keys="Escape">While the menu is open, calls `onOpenChange(false)`, wherever focus is.</Key>
+</Keyboard>
 
-`alignment` (`'left' | 'center' | 'right'`, default `'left'`) maps to Popup's `bottomLeft` /
-`bottomCenter` / `bottomRight` - matching Figma's `dropdown-menu` component, which has no
-top/bottom axis at all, only left/center/right. Popup's own viewport-fit fallback still applies
-underneath: if there's no room below, it measures the remaining alignments (starting with the
-`top*` counterpart) and resolves to whichever overflows the viewport least - a capability Figma
-doesn't model, inherited for free from Popup.
+</Section>
 
-<Canvas of={DropdownMenuStories.Alignment} />
+<Section title="API">
 
-### Any trigger works
+<PropsTable of={DropdownMenuStories} />
 
-<Canvas of={DropdownMenuStories.Content} />
+Dropdown Menu's other props are Menu's, passed to the Menu in the panel: `sections`, `size`,
+`showSearch`, `searchValue`, `onSearchChange`, `searchPlaceholder`, `showScrollbar`, `maxHeight`,
+`loading`, `loadingLabel`, `emptyMessage`, `aria-label`, and `aria-labelledby`. See
+<DocLink to="Components/Actions/Menu" /> for what each does. Two Menu props are accepted but not
+passed on: `clearSearchLabel`, so the clear button is always named "Clear search", and `fullWidth`,
+which `matchTriggerWidth` sets instead.
 
-<Canvas of={DropdownMenuStories.EdgeCases} />
+</Section>
 
-## Do / Don't
+<Section title="Design tokens">
 
-**Do** pass Menu's own props (`sections`, `showSearch`, ...) directly to `DropdownMenu`.
+Dropdown Menu has no stylesheet of its own. The panel is Popup's surface with `padding="none"`, so
+these are Popup's tokens and its padding rows don't apply; the rows' tokens are on Menu's page.
 
-**Don't** try to pass arbitrary `content` the way Popup allows - Dropdown Menu always renders a
-Menu; use Popup directly for non-Menu-shaped floating content.
+<TokensTable id="popup" />
 
----
+</Section>
 
-**Do** close the dropdown from the selected item's own `onSelect`.
+<Section title="Related components">
 
-**Don't** expect selecting an item to close the dropdown automatically - neither Menu nor Dropdown
-Menu assumes that.
+<Related>
 
-## API
+- <DocLink to="Components/Actions/Menu" />, the list in the panel, and every Menu prop.
+- <DocLink to="Components/Overlays/Popup" />, the floating panel underneath, for content that isn't a menu.
+- <DocLink to="Components/Actions/Split Button" />, a main action with a Dropdown Menu of alternatives.
+- <DocLink to="Components/Forms/Select" />, which opens its options in a Dropdown Menu and holds a form value.
+- <DocLink to="Components/Actions/Button" /> and <DocLink to="Components/Actions/Icon Button" />, the usual triggers.
 
-`DropdownMenuProps` = `MenuProps` (minus `id`/`className`) plus:
+</Related>
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>children</code></td><td><code>React.ReactElement</code></td><td>-</td><td>Required. The single trigger element.</td></tr>
-    <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Required. Controlled visibility.</td></tr>
-    <tr><td><code>onOpenChange</code></td><td><code>(open: boolean) =&gt; void</code></td><td>-</td><td>Called with <code>false</code> on Escape or an outside click.</td></tr>
-    <tr><td><code>alignment</code></td><td><code>'left' | 'center' | 'right'</code></td><td><code>'left'</code></td><td>Maps to Popup's bottomLeft/bottomCenter/bottomRight.</td></tr>
-    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Apply to Popup's floating panel, not to Menu's root.</td></tr>
-  </tbody>
-</table>
+</Section>
 
-Every other prop (`sections`, `size`, `showSearch`, `searchValue`, `onSearchChange`,
-`searchPlaceholder`, `showScrollbar`, `maxHeight`, `loading`, `loadingLabel`, `emptyMessage`,
-`aria-label`, `aria-labelledby`) is `MenuProps`, forwarded to the Menu rendered inside the panel -
-see Menu's own docs.
+<DocFooter>
+  The API table reads dropdown-menu.types.ts, the design tokens read popup.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
 
-## Related components
-
-- **Popup** - the floating-panel primitive underneath, used with `padding="none"`.
-- **Menu** - the panel content, with every one of its own props forwarded through.
+</ComponentPage>
+</Unstyled>

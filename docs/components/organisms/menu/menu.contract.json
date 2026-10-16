@@ -53,8 +53,8 @@
     { "name": "divider", "description": "Renders above every section, matching Figma's per-section leading separator - except the very first section when showSearch is false, since a divider there would float at the top edge with nothing above it to divide from.", "group": "section" },
     { "name": "heading", "description": "Optional section label with an optional leading icon.", "group": "section" },
     { "name": "item", "description": "One per entry in a section's `items` - a native button row with optional leading/title-leading/trailing slots, a label, and an optional description." },
-    { "name": "loading-row", "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel." },
-    { "name": "empty-message", "description": "Shown in place of sections when search filters out every item." }
+    { "name": "loading row", "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel, in a role=\"status\" row." },
+    { "name": "empty message", "description": "Shown in place of the rows when none are left to show - search filtered every item out, or there are no items." }
   ],
   "props": {
     "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "Rendered top to bottom." },
@@ -113,7 +113,7 @@
   ],
   "compositionRules": [
     "Compose leadingElement/trailingElement from icons or plain decorative glyphs only - never a real Checkbox/Radio/Button/IconButton, which would nest a focusable control inside the row's own <button>.",
-    "Pass `spacing=\"spacious\"` on every elemBefore/elemAfter icon (size defaults to `md` already) so it renders as a 16px glyph centered in Menu's fixed 24px (--size-300) slot, matching Figma's own elemBefore/elemAfter component exactly - a bare Icon with no spacing prop renders undersized and off-center in the slot.",
+    "Menu's fixed 24px (--size-300) elemBefore/elemAfter slot centers its content, so an `md` icon renders as a 16px glyph centered in it with or without `spacing=\"spacious\"`; pass `spacing=\"spacious\"` to mirror Figma's own `Size: md` + `spacing: spacious (24px)` icon.",
     "For a checkbox-style row, use `CheckboxFillIcon`/`CheckboxEmptyIcon`; for a radio-style row, `RadioCheckedIcon`/`RadioUncheckedIcon` - the exact icons Figma's own menu-item uses for these states, not a generic checkmark. Set color=\"subtle\" on the unchecked icon; the checked one takes the row's selected color.",
     "A leadingElement icon needs no color prop: icons take the surrounding text color, so it follows the row through selected (color/content/selected, the same variable as the row text) and disabled.",
     "Use selected+selectionType per item for a checkbox- or radio-style row rather than reaching for a menu-level selection mode - a single Menu can mix plain action rows with a selectable group this way.",

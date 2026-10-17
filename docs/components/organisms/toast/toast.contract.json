@@ -92,7 +92,7 @@
   ],
   "compositionRules": [
     "Prefer showing toasts through ToastGroup and the toast() API rather than rendering Toast directly.",
-    "Pass Buttons (typically size xs, subtle) to actions.",
+    "Pass Buttons (typically size xs, prominence tertiary) to actions.",
     "Use the loading tone for a pending operation and update the same id when it resolves."
   ],
   "contentRules": [

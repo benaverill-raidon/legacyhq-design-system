@@ -29,7 +29,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)' };
+// One shrinkable column: a grid item's minimum width is its content's, and Banner's one-line
+// message would otherwise widen the column instead of truncating.
+const stack: CSSProperties = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--spacing-lg)' };
 
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
@@ -40,7 +42,7 @@ const captionStyle: CSSProperties = {
 /**
  * The two-action composition the Banner is designed around. `default` and `error` sit on a dark
  * background so their actions use the inverse treatment; the `warning` bar carries dark content, so
- * its actions use `tone="warning"` (which needs `appearance="primary"` to render) instead.
+ * its actions use `tone="warning"` (which needs `prominence="primary"` to render) instead.
  */
 function BannerActions({ tone = 'default' }: { tone?: BannerTone }) {
   if (tone === 'warning') {
@@ -70,7 +72,7 @@ function BannerActions({ tone = 'default' }: { tone?: BannerTone }) {
 
 function Labelled({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--spacing-xs)' }}>
       <span style={captionStyle}>{label}</span>
       {children}
     </div>
@@ -84,7 +86,7 @@ export const Playground: Story = {
   },
 };
 
-/** The three semantic tones, each with its status icon and inverse-tone actions. */
+/** The three tones, each with its status icon and actions that match the bar. */
 export const Tones: Story = {
   render: () => (
     <div style={stack}>

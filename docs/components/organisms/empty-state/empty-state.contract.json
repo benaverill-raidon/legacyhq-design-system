@@ -116,7 +116,7 @@
   "accessibility": {
     "nativeElement": "div",
     "defaultRole": null,
-    "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. Pass a real heading element as `heading` when a document-outline heading is needed."
+    "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. The heading is a styled div with no heading semantics; a heading element passed in keeps the browser's own heading size and margins, so there is no clean way yet to give it a level."
   },
   "behaviorRules": [
     "Render a centered vertical stack: optional illustration, then a message block (heading, description, actions).",

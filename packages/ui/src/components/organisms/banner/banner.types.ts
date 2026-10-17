@@ -5,23 +5,29 @@ export type BannerTone = 'default' | 'warning' | 'error';
 export type BannerAppearance = BannerTone;
 
 export interface BannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
-  /** Semantic tone - sets the bold background and the leading status icon. Defaults to `default`. */
+  /** What the announcement means. Sets the bar's color and its status icon. Defaults to `default`. */
   tone?: BannerTone;
   /** @deprecated Renamed to `tone`, the name every component uses for meaning. Still accepted. */
   appearance?: BannerTone;
-  /** The banner message. Truncates to a single line with an ellipsis. */
+  /** The message. It stays on one line and is cut off with an ellipsis when it doesn't fit. */
   children: React.ReactNode;
   /**
-   * Read by assistive technology before the message, since the status icon is decorative. Defaults
-   * to the tone's name ("Warning", "Error"; `default` has none); pass a translation, or an empty string to omit it.
+   * Visually hidden text read before the message, since the icon is decorative. Defaults to the
+   * tone's name, "Warning" or "Error"; `default` has none. Pass a translation, or an empty string to
+   * leave it out.
    */
   statusLabel?: string;
-  /** Whether to show the leading status icon. Defaults to `true`. */
+  /** Shows the status icon, or the dot for `default`. The status text is still read without it. */
   showIcon?: boolean;
   /**
-   * Optional trailing actions - typically a ButtonGroup of Buttons. Match them to the bar: use
-   * `isInverse` on the dark `default`/`error` bars, and `tone="warning"` (with `appearance="primary"`)
-   * on the amber `warning` bar.
+   * One or two actions after the message, such as Buttons in a Button Group. On the dark `default`
+   * and `error` bars, set `isInverse` on them; on the `warning` bar, use `prominence="primary"` with
+   * `tone="warning"`.
    */
   actions?: React.ReactNode;
+  /**
+   * Defaults to `status`, a polite live region. Use `alert` for an urgent error that must interrupt
+   * what the user is doing.
+   */
+  role?: React.AriaRole;
 }

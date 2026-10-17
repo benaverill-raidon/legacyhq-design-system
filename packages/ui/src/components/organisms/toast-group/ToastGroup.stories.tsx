@@ -46,8 +46,8 @@ function undoAction() {
 /**
  * Trigger toasts from anywhere with the imperative `toast()` API. They stack in the bottom-right;
  * hover (or focus into) the stack to expand it into a vertical list. Toasts auto-dismiss after their
- * duration (paused while the stack is hovered), can be swiped away, and collapse behind a max of
- * `maxVisible`.
+ * duration (the timers stop while the stack is expanded and start over when it collapses), can be
+ * swiped away, and show at most `maxVisible` at once.
  */
 export const Playground: Story = {
   render: (args) => (

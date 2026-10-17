@@ -3,15 +3,25 @@ import type { DeprecatedToastTone, ToastTone } from '../toast/toast.types';
 
 /** Options accepted by `toast()` and its variants. */
 export interface ToastOptions {
-  /** Stable id. Reuse it to update an existing toast in place (e.g. loading -> success). */
+  /**
+   * The toast's id. Reuse it to update that toast in place, keeping its place in the stack; options
+   * you leave out keep their earlier values.
+   */
   id?: string;
+  /** The Toast's `tone`. The `toast.success`, `.error`, `.warning`, `.info`, and `.loading` helpers set it. */
   tone?: ToastTone | DeprecatedToastTone;
   /** @deprecated Renamed to `tone`. Still accepted. */
   appearance?: ToastTone | DeprecatedToastTone;
+  /** Supporting text, shown while the stack is expanded. */
   description?: React.ReactNode;
+  /** Actions, usually extra-small tertiary Buttons, shown while the stack is expanded. */
   actions?: React.ReactNode;
-  /** Auto-dismiss delay in ms. `Infinity` (or 0) keeps the toast until dismissed. Defaults to 5000. */
+  /**
+   * How long the toast stays, in milliseconds. `Infinity` or `0` keeps it until it's dismissed.
+   * Defaults to the group's `duration`, and to `Infinity` for `toast.loading`.
+   */
   duration?: number;
+  /** Shows the dismiss button. Defaults to `true`. */
   isDismissible?: boolean;
 }
 

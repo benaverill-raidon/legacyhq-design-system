@@ -122,11 +122,11 @@
       },
       "color": {
         "defaultBackground": "--color-background-neutral-bold-default",
-        "defaultContent": "--color-content-inverse",
+        "defaultContent": "--color-content-inverse-default",
         "warningBackground": "--color-background-warning-bold-default",
         "warningContent": "--color-content-warning-bold",
         "errorBackground": "--color-background-error-bold-default",
-        "errorContent": "--color-content-inverse"
+        "errorContent": "--color-content-inverse-default"
       }
     }
   },

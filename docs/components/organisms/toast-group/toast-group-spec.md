@@ -50,7 +50,13 @@ Reuse an `id` to update a toast in place (loading -> success/error).
 - **Expand.** Pointer enter or focus-in sets the expanded state (and pauses timers); pointer leave or
   focus-out (outside the region) collapses it.
 - **Auto-dismiss.** Each toast dismisses after its `duration` (default from the group; `Infinity`/0
-  disables it). Timers pause while expanded.
+  disables it). Timers are cleared while expanded and restart from the full duration when the
+  stack collapses (they don't resume). Hidden (queued, past `maxVisible`) toasts run their timers
+  too, so a queued toast can expire before it is shown.
+- **Update in place.** `add` merges the new options over the old item (`{ ...old, ...new }`), so an
+  option left out keeps its earlier value - including `duration: Infinity` from `toast.loading`.
+- **`toast.dismiss`** removes from the store immediately (no exit fade); only the dismiss button
+  and swipe run the fade first.
 - **Swipe.** Pointer drag past 80px dismisses; otherwise it snaps back. The transform transition is
   disabled while dragging so the toast follows the pointer.
 - **Exit.** Dismissal fades the toast out with `--fade-long` (300ms), and the toast is removed from the
@@ -67,7 +73,13 @@ Reuse an `id` to update a toast in place (loading -> success/error).
 ## Accessibility
 
 - The region is an `aria-label`led list; each toast is a polite `role="status"`.
-- Focusing into the stack expands it and pauses auto-dismiss.
+- Focusing into the stack expands it and stops auto-dismiss.
+- The `ol` renders only while there are toasts (returns `null` otherwise), and each Toast mounts with
+  its `role="status"` and text together; there is no persistent live region.
+- Hidden (queued) items are `opacity: 0` and `pointer-events: none` only: they stay in the
+  accessibility tree and their dismiss buttons stay in the tab order.
+- Not portaled: the list renders where `ToastGroup` is mounted (fixed-positioned), which sets its
+  place in the tab order. No hotkey, and Escape does not dismiss.
 
 ## Storybook
 

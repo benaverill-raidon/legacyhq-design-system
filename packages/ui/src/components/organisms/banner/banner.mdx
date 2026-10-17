@@ -1,122 +1,247 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
+import { Toast } from '../toast';
+import { Banner } from './banner';
+import bannerStyles from './banner.module.css';
 import * as BannerStories from './Banner.stories';
 
 <Meta of={BannerStories} name="Docs" />
 
-# Banner
+<Unstyled>
+<ComponentPage>
 
-Banner is a full-width, page-level announcement bar. It sits at the top of a page or region to carry
-a single high-visibility message - scheduled maintenance, a system status, a version update - on a
-bold-colored background, with optional inline actions.
+<ComponentHeader
+  id="banner"
+  example={
+    <Banner
+      actions={
+        <ButtonGroup>
+          <Button size="sm" isInverse>View schedule</Button>
+          <Button size="sm" isInverse>Dismiss</Button>
+        </ButtonGroup>
+      }
+    >
+      Scheduled maintenance is planned for Saturday night. Filing will be unavailable for two hours.
+    </Banner>
+  }
+>
+  Banner is a full-width bar across the top of a page or a major region, for one announcement that
+  applies to everything below it: planned maintenance, a service problem, a new version.
+</ComponentHeader>
 
-<Canvas of={BannerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A persistent, page-level announcement that applies to the whole page or a major region.
-- Communicating system status - maintenance, degraded service, an outage, a new release.
-- A message that warrants a full-width bar rather than an inline note.
+- Planned maintenance or downtime.
+- A service problem that affects the whole page, such as a lost connection.
+- A new version of the application, or a change that affects everyone.
+- A warning about the account or workspace, such as a trial that's ending.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For an inline, in-context status next to a field or row.** Use `InlineMessage`.
-- **For a transient, auto-dismissing notification.** Use `Toast`.
-- **For a contained, boxed message inside a section of the page.** Use `SectionMessage`.
-- **For a blocking confirmation or decision.** Use `ModalDialog`.
+- **A status inside a section, form, or panel:** <DocLink to="Components/Feedback/Section Message" />. Its description can run to several lines.
+- **A short status beside what it's about:** <DocLink to="Components/Feedback/Inline Message" />.
+- **A passing confirmation, such as a save:** <DocLink to="Components/Feedback/Toast Group" />'s `toast()`, which shows a <DocLink to="Components/Feedback/Toast" />.
+- **A decision the user has to make before going on:** <DocLink to="Components/Overlays/Modal Dialog" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={BannerStories.Content} />
+</Section>
 
-1. **Root** - a full-width bar with the tone's bold background. Its height hugs the single
-   message row plus block padding.
-2. **Icon** - a leading status icon (`warning`/`error`) or a plain dot, inheriting the banner's
-   content color. Toggle it off with `showIcon={false}`.
-3. **Message** - the `children`. Truncates to a single line with an ellipsis rather than wrapping.
-4. **Actions** - optional trailing actions, typically inverse-tone `Button`s or a `ButtonGroup`.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
+      We couldn't reach the server. Some data may be out of date.
+    </Banner>
+  }
+>
+  <Part name="root" target={bannerStyles.banner}>A `div` as wide as its container, in the tone's color. Its height follows its content, with 8px above and below.</Part>
+  <Part name="icon" target={bannerStyles.iconSlot}>The status icon for `warning` and `error`, or a dot for `default`, in the bar's text color. Decorative; `showIcon` turns it off.</Part>
+  <Part name="message" target={bannerStyles.text}>`children`, on one line. Text that doesn't fit is cut off with an ellipsis.</Part>
+  <Part name="actions" target={bannerStyles.actions}>Optional, after the message: one or two Buttons. Not rendered without `actions`.</Part>
+</Anatomy>
 
-### Tone
+</Section>
 
-`tone` sets both the bold background and the leading status icon: `default` (a dark bar with a
-dot), `warning` (amber, with dark content), and `error` (red, with inverse content). There is no
-separate tone axis - the tone is the semantic signal.
+<Section title="Variants">
 
-<Canvas of={BannerStories.Tones} />
+`tone` sets the bar's color and its icon: `default` is a dark taupe bar with a dot, `warning` an
+orange bar with dark text and the warning icon, and `error` a red bar with the error icon. The text,
+icon, and dot share one color per tone. `appearance`, the earlier name for `tone`, is still accepted.
 
-### Actions match the bar
+<Example of={BannerStories.Tones} />
 
-On the `default` and `error` bars the background is dark, so actions use the on-dark treatment - pass
-`isInverse` `Button`s (or a `ButtonGroup` of them). The `warning` bar is amber with dark content, so
-its actions use `tone="warning"` Buttons (with `prominence="primary"`) rather than
-the inverse treatment. Either way, keep the action count low (one or two); Banner is an announcement,
-not a toolbar.
+<Subsection title="Actions on the bar">
 
-### The message is one line
+Banner doesn't style its actions, so match them to the bar. On the dark `default` and `error` bars,
+set `isInverse` on each Button: no fill, light text, and light hover and press overlays. The
+`warning` bar has dark text, so its Buttons use `prominence="primary"` with `tone="warning"` instead.
+Keep to one or two actions; Banner is an announcement, not a toolbar.
 
-The message truncates to a single line with an ellipsis so the bar stays one row tall. Keep it short
-and lead with the essential information; put any detail behind an action rather than in a longer
-message that would be cut off.
+</Subsection>
 
-### Accessibility
+</Section>
 
-Banner renders with `role="status"` by default - a polite live region, so a banner that appears
-dynamically is announced without interrupting. Override `role` when the semantics differ: use
-`role="alert"` for an urgent error that must interrupt, or remove it for a purely decorative bar.
-The leading icon is decorative (`aria-hidden`); the tone is conveyed by the message text, not
-by color alone.
+<Section title="Behavior">
 
-## API
+<Subsection title="One line">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The message. Truncates to a single line.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'warning' | 'error'</code></td>
-      <td><code>'default'</code></td>
-      <td>Bold background and leading status icon.</td>
-    </tr>
-    <tr>
-      <td><code>showIcon</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Whether to render the leading status icon.</td>
-    </tr>
-    <tr>
-      <td><code>actions</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional trailing actions - pass <code>isInverse</code> Buttons.</td>
-    </tr>
-    <tr>
-      <td><code>role</code></td>
-      <td><code>string</code></td>
-      <td><code>'status'</code></td>
-      <td>Overridable - e.g. <code>'alert'</code> for urgent errors.</td>
-    </tr>
-  </tbody>
-</table>
+The message never wraps, so the bar stays one row tall. Text that doesn't fit is cut off with an
+ellipsis, and there's no tooltip or other way to see the rest. Lead with what matters and put the
+detail behind an action. The actions keep their size; the message gives up the space.
 
-Any other native `div` prop is forwarded to the root element.
+As a direct child of a flex or grid container, Banner's minimum width is its whole message, so a
+long message makes the bar wider than its container instead of cutting it off. In a grid, give the
+column `minmax(0, 1fr)`, as these examples do; in a flex layout, keep the message short.
 
-## Related components
+<Example of={BannerStories.EdgeCases} caption="A long message cut off at the edge, and a bar in a 360px container." />
 
-- **InlineMessage** - an inline, in-context status row.
-- **Toast** - a transient, auto-dismissing notification.
-- **SectionMessage** - a contained, boxed message within a section.
-- **Button** / **ButtonGroup** - the inverse-tone actions Banner composes.
+</Subsection>
+
+<Subsection title="Content">
+
+The message is the only required part. `showIcon={false}` removes the icon or dot, but not the
+status text read before the message. Without `actions`, the message takes the full width.
+
+<Example of={BannerStories.Content} caption="Message only, no icon, two actions, and a single action on the error bar." />
+
+</Subsection>
+
+<Subsection title="Dismissing">
+
+Banner has no close button and no dismissed state. If people can dismiss it, put a Dismiss Button in
+`actions` and stop rendering the Banner from its click handler.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Set isInverse on Buttons that sit on the dark default and error bars."
+  code={`<Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
+    We couldn't reach the server.
+</Banner>`}
+>
+  <Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
+    We couldn't reach the server.
+  </Banner>
+</Do>
+<Dont
+  caption="Put an ordinary Button on a dark bar, where its outline and text are hard to see."
+  code={`<Banner tone="error" actions={<Button size="sm">Retry</Button>}>
+    We couldn't reach the server.
+</Banner>`}
+>
+  <Banner tone="error" actions={<Button size="sm">Retry</Button>}>
+    We couldn't reach the server.
+  </Banner>
+</Dont>
+<Do
+  caption="Keep the message short, and put the detail behind an action."
+  code={`<Banner actions={<Button size="sm" isInverse>See what's new</Button>}>
+    A new version is available.
+</Banner>`}
+>
+  <Banner actions={<Button size="sm" isInverse>See what's new</Button>}>A new version is available.</Banner>
+</Do>
+<Dont
+  caption="Write a paragraph. It's cut off at the edge of the bar, and nobody can read the rest."
+  code={`<Banner>
+    A new version is available, with faster search, a redesigned matter list, and changes
+    to how deadlines are calculated for courts that close on state holidays.
+</Banner>`}
+/>
+<Do caption="Use Toast Group's toast() to confirm something the user just did." code={`toast.success('Changes saved');`}>
+  <Toast tone="success" title="Changes saved" />
+</Do>
+<Dont caption="Use a Banner for a passing confirmation that doesn't concern the whole page." code={`<Banner>Changes saved.</Banner>`}>
+  <Banner>Changes saved.</Banner>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Banner renders a `div` with `role="status"`, a polite live region: a change to its message while
+  it's on the page is read without interrupting. A Banner that's added with its message already in
+  it may not be read out as it appears, depending on the screen reader.
+- Pass `role="alert"` for an urgent error that must interrupt, or another role when the bar plays a
+  different part on the page.
+- The icon and dot are hidden from assistive technology. For `warning` and `error`, visually hidden
+  text, "Warning:" or "Error:", is read before the message, so the meaning doesn't depend on color.
+  `default` reads none. Translate it with `statusLabel`.
+- The full message is in the page even when it's cut off, so screen readers read all of it, but
+  sighted users only see what fits.
+- The bar isn't focusable. Its actions are reached with Tab, in page order.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={BannerStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Banner's stylesheet uses, by family, with the property it sets and when. "Base" is the
+bar with no modifiers; each tone sets the background and the text color, which the icon and dot
+take on.
+
+<TokensTable id="banner" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Feedback/Section Message" /> for a status inside a section, with a longer description.
+- <DocLink to="Components/Feedback/Inline Message" /> for a short status beside what it's about.
+- <DocLink to="Components/Feedback/Toast Group" /> and <DocLink to="Components/Feedback/Toast" /> for a passing notification.
+- <DocLink to="Components/Overlays/Modal Dialog" /> for a decision that blocks the task.
+- <DocLink to="Components/Actions/Button" />, whose `isInverse` treatment is made for the dark bars.
+- <DocLink to="Components/Actions/Button Group" /> to lay out two actions.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads banner.types.ts, the design tokens read banner.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

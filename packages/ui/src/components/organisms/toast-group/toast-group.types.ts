@@ -1,10 +1,17 @@
 export interface ToastGroupProps {
-  /** How many toasts are shown stacked before the rest collapse behind them. Defaults to 3. */
+  /**
+   * How many toasts show at once, stacked or expanded. Newer toasts push older ones out of view; they
+   * come back as the visible ones are dismissed.
+   */
   maxVisible?: number;
-  /** Default auto-dismiss delay in ms for toasts that don't set their own. Defaults to 5000. */
+  /**
+   * How long a toast stays, in milliseconds, when its own `duration` isn't set. The timers stop while
+   * the stack is hovered or focused.
+   */
   duration?: number;
-  /** Accessible label for the notification region. Defaults to 'Notifications'. */
+  /** The list's accessible name. Defaults to "Notifications"; pass a translation. */
   label?: string;
+  /** Added to the list's classes. */
   className?: string;
 }
 

@@ -23,13 +23,18 @@ export type ToastTone = 'default' | 'success' | 'information' | 'warning' | 'err
 // 'info', the earlier name, is still accepted as a deprecated alias of 'information'.
 
 export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  tone?: ToastTone;
+  tone?: ToastTone | 'info';
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: ToastTone | 'info';
+  statusLabel?: string;
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
   expanded?: boolean;
   isDismissible?: boolean;
+  dismissLabel?: string;
   onDismiss?: () => void;
+  role?: React.AriaRole;
 }
 ```
 
@@ -70,7 +75,9 @@ loading  -> Spinner (no tile)
 
 - Render the Icon Tile (per-tone tone) or the Spinner for `loading`.
 - Always render the title; render the description and actions only when `expanded` and provided.
-- Show the dismiss button unless `isDismissible` is false; call `onDismiss` on click.
+- Show the dismiss button unless `isDismissible` is false; call `onDismiss` on click. Toast never
+  hides itself; the caller (Toast Group) removes it.
+- The dismiss Icon Button passes `tooltip={false}` (Section Message's keeps the default tooltip).
 
 ## Accessibility
 

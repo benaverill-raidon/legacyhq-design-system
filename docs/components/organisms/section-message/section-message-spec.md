@@ -26,11 +26,16 @@ export type SectionMessageTone = 'information' | 'success' | 'warning' | 'error'
 
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
   tone?: SectionMessageTone;
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: SectionMessageTone;
+  statusLabel?: string;
   title?: React.ReactNode;
   children: React.ReactNode;
   actions?: React.ReactNode;
   isDismissible?: boolean;
+  dismissLabel?: string;
   onDismiss?: () => void;
+  role?: React.AriaRole;
 }
 ```
 
@@ -103,7 +108,13 @@ The panel hugs its content vertically; the description wraps rather than truncat
 - Default `role="status"` (a polite live region). Overridable - `role="alert"` for urgent errors.
 - The status icon slot is `aria-hidden`.
 - Because the icon is decorative, the status is announced before the title as visually hidden text ("Information:", "Success:", "Warning:", "Error:"), from `statusLabel` (defaults to the tone's name; pass a translation, or an empty string to omit).
-- The dismiss button is an `IconButton` labelled by `dismissLabel` ("Dismiss" by default).
+- The dismiss button is an `IconButton` labelled by `dismissLabel` ("Dismiss" by default). It keeps
+  Icon Button's default tooltip, so the label also shows on hover and focus (Toast passes
+  `tooltip={false}`).
+- Dismissed state is internal (`useState`); the component returns `null` once dismissed and has no
+  prop to show it again, so a caller remounts it (a new `key`) to bring it back. Focus is not moved
+  when the focused dismiss button is removed.
+- The title is a `div`, not a heading element.
 - Tone is conveyed by the title/description text, not by color alone.
 
 ## Storybook

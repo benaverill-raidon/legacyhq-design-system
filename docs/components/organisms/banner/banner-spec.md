@@ -24,9 +24,13 @@ export type BannerTone = 'default' | 'warning' | 'error';
 
 export interface BannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   tone?: BannerTone;
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: BannerTone;
   children: React.ReactNode;
+  statusLabel?: string;
   showIcon?: boolean;
   actions?: React.ReactNode;
+  role?: React.AriaRole;
 }
 ```
 
@@ -46,7 +50,7 @@ variants: `default`, `warning`, `error`.
 ### Default
 
 - background: `color-background-neutral-bold-default`
-- content/icon: `color-content-inverse`
+- content/icon: `color-content-inverse-default`
 - icon: a plain dot (no dedicated default status glyph, matching Figma and Inline Message)
 
 ### Warning
@@ -58,7 +62,7 @@ variants: `default`, `warning`, `error`.
 ### Error
 
 - background: `color-background-error-bold-default`
-- content/icon: `color-content-inverse`
+- content/icon: `color-content-inverse-default`
 - icon: the error status glyph
 
 ## Layout and tokens
@@ -67,7 +71,7 @@ variants: `default`, `warning`, `error`.
 - padding-block: `--spacing-sm` (8px)
 - root gap (message ↔ actions): `--spacing-sm` (8px)
 - message gap (icon ↔ text): `--spacing-xs` (4px)
-- actions gap: `--spacing-xs` (4px)
+- actions gap: `--spacing-sm` (8px)
 - icon slot size: `--size-300` (matches the Icon primitive's `spacing="spacious"` container)
 - dot size: `--size-marker-sm`
 - message typography: `body-md`
@@ -99,6 +103,8 @@ determine its height.
   `ButtonGroup` of them). On `warning` (amber, dark content) use `tone="warning"` Buttons (with
   `prominence="primary"`) instead of the inverse treatment.
 - Keep the action count low (one or two).
+- Banner has no dismiss behavior of its own. A dismissible banner puts a Dismiss Button in
+  `actions` and the caller stops rendering it.
 
 ## Storybook
 

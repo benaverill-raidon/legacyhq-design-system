@@ -74,7 +74,11 @@ All content is centered (`align-items: center`, `text-align: center`).
 - No default `role` - Empty State is plain content, not a live region.
 - When swapped in dynamically, the surrounding region should announce the change (`role="status"` or
   `aria-live`).
-- Pass a real heading element as `heading` when a document-outline heading is needed.
+- The heading renders in a `div` with the `heading-md` styles; it has no heading semantics. A
+  heading element passed as `heading` keeps the user agent's heading size and margins (Empty State
+  doesn't reset them), so there's no clean way yet to give it a level.
+- The illustration is not hidden by Empty State; a decorative one must hide itself (Icon Tile does
+  by default; images need `alt=""`).
 
 ## Storybook
 

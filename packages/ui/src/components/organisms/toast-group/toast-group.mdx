@@ -1,109 +1,288 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CodeSample,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { Toast } from '../toast';
+import { ToastGroup } from './toast-group';
+import { toast } from './toast-store';
 import * as ToastGroupStories from './ToastGroup.stories';
 
 <Meta of={ToastGroupStories} name="Docs" />
 
-# Toast Group
+<Unstyled>
+<ComponentPage>
 
-Toast Group pins a stack of `Toast`s to the bottom-right of the viewport and provides the imperative
-`toast()` API. Toasts stack in a compact, three-dimensional pile; hovering (or focusing into) the
-stack expands it into a spaced vertical list. Toasts auto-dismiss, pause while the stack is hovered,
-and can be swiped away.
-
-<Canvas of={ToastGroupStories.Playground} />
-
-## Setup
-
-Mount **one** `ToastGroup` near the root of the app, then call `toast()` from anywhere:
-
-```tsx
-import { ToastGroup, toast } from '@ui/components/organisms/toast-group';
-
-function App() {
-  return (
+<ComponentHeader
+  id="toast-group"
+  example={
     <>
-      <YourApp />
+      <Button
+        prominence="primary"
+        onClick={() => toast.success('Changes saved', { description: 'Your matter is up to date.' })}
+      >
+        Save changes
+      </Button>
+      <Button
+        onClick={() => {
+          const id = toast.loading('Uploading contract.pdf…');
+          window.setTimeout(() => toast.success('contract.pdf uploaded', { id, duration: 5000 }), 2000);
+        }}
+      >
+        Upload a file
+      </Button>
+      <Button prominence="tertiary" onClick={() => toast.dismiss()}>
+        Clear all
+      </Button>
       <ToastGroup />
     </>
-  );
+  }
+>
+  Toast Group shows toasts in a stack in the bottom corner of the window. Mount it once, then call
+  `toast()` from anywhere: it stacks the toasts, expands them when someone reaches for them, and
+  takes them away when their time is up. Try the buttons; the toasts appear at the bottom right.
+</ComponentHeader>
+
+<Section title="When to use">
+
+<Usage>
+<UseFor>
+
+- Every toast in the application, through one Toast Group near the root.
+- A confirmation from anywhere in the code, without passing state down to a component.
+- Work that takes a while: show `toast.loading`, then replace it with the result.
+
+</UseFor>
+<UseInstead>
+
+- **A status that has to stay until it's dealt with:** <DocLink to="Components/Feedback/Section Message" />.
+- **An announcement for the whole page:** <DocLink to="Components/Feedback/Banner" />.
+- **A decision the user has to make before going on:** <DocLink to="Components/Overlays/Modal Dialog" />.
+- **One card inside your own layout:** <DocLink to="Components/Feedback/Toast" /> on its own.
+
+</UseInstead>
+</Usage>
+
+</Section>
+
+<Section title="Anatomy">
+
+<Anatomy specimen={<Toast tone="success" title="Changes saved" expanded={false} />}>
+  <Part name="region">An `ol` named by `label`, fixed 20px from the bottom and end edges of the window and 368px wide, narrower on a small screen. It's added only while there's a toast, and it's fixed to the window, so it isn't outlined on this specimen; use the buttons above to see it.</Part>
+  <Part name="item">An `li` around each Toast, like the one shown here. It's moved and scaled for the stack, the expanded list, and a swipe.</Part>
+</Anatomy>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Setup">
+
+Mount one Toast Group, at the end of the app's root so it comes last in the tab order, and call
+`toast()` from anywhere. Toast Group stays where it's mounted in the page; it's only drawn in the
+corner. Every Toast Group shows every toast, so a second one shows each toast twice.
+
+<CodeSample
+  code={`import { ToastGroup, toast } from '@ui/components/organisms/toast-group';
+
+function App() {
+    return (
+      <>
+        <Routes />
+        <ToastGroup />
+      </>
+    );
 }
 
-// later, from anywhere:
-toast.success('Changes saved', { description: 'Your matter is up to date.' });
-```
+// Anywhere in the app:
+toast.success('Changes saved', { description: 'Your matter is up to date.' });`}
+/>
 
-## The `toast()` API
+</Subsection>
 
-```ts
-toast(title, options?)            // default tone
+<Subsection title="The toast() API">
+
+Each call adds a toast at the front of the stack and returns its id. The helpers set `tone`;
+`toast.info` sets `information`, and `toast.loading` also sets `duration` to `Infinity`.
+`toast.dismiss(id)` removes one toast at once, without the fade, and `toast.dismiss()` removes them
+all.
+
+<CodeSample
+  code={`toast(title, options?)            // default tone
 toast.success(title, options?)
 toast.error(title, options?)
 toast.warning(title, options?)
-toast.info(title, options?)
-toast.loading(title, options?)    // no auto-dismiss by default
-toast.dismiss(id?)                // dismiss one, or all when id is omitted
-```
+toast.info(title, options?)       // information
+toast.loading(title, options?)    // stays until updated or dismissed
+toast.dismiss(id?)                // one toast, or all of them
 
-`options`: `{ id?, description?, actions?, duration?, isDismissible?, tone? }`. Reuse an `id`
-to update a toast in place - the common pattern for a `loading` toast that resolves:
+options: { id, tone, description, actions, duration, isDismissible }`}
+/>
 
-```tsx
-const id = toast.loading('Uploading your file...');
-await upload();
-toast.success('File uploaded', { id });
-```
+</Subsection>
 
-## Behavior
+<Subsection title="Updating a toast">
 
-- **Stacking.** The newest toast is at the front; at most `maxVisible` (default 3) are shown at once
-  and the rest are queued, moving into view as visible toasts dismiss. Hover or focus expands the
-  visible toasts into a spaced vertical list (still capped at `maxVisible`).
-- **Auto-dismiss.** Each toast dismisses after its `duration` (default 5000ms; `loading` toasts stay
-  until updated or dismissed). The timers pause while the stack is hovered or focused.
-- **Swipe to dismiss.** Drag a toast sideways past a threshold to dismiss it.
-- **Reduced motion.** Transitions collapse to instant under `prefers-reduced-motion`.
+Call `toast()` again with the same `id` to replace that toast in place; it keeps its spot in the
+stack. Options you leave out keep their earlier values, and that includes the `Infinity` duration
+from `toast.loading`. Pass a `duration` when you replace a loading toast, or the result stays until
+someone dismisses it.
 
-## Accessibility
+<CodeSample
+  code={`const id = toast.loading('Uploading contract.pdf…');
+await upload(file);
+toast.success('contract.pdf uploaded', { id, duration: 5000 });`}
+/>
 
-The stack is an `aria-label`led list region; each toast is a polite `role="status"`. Focusing into
-the stack (Tab) expands it and pauses auto-dismiss, so keyboard users can reach the dismiss buttons
-and actions. Toasts should carry non-essential, redundant information - never put the only copy of a
-critical message or the only path to an action in a toast.
+</Subsection>
 
-## API
+<Subsection title="Stacking">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>maxVisible</code></td>
-      <td><code>number</code></td>
-      <td><code>3</code></td>
-      <td>How many toasts show stacked before the rest collapse behind them.</td>
-    </tr>
-    <tr>
-      <td><code>duration</code></td>
-      <td><code>number</code></td>
-      <td><code>5000</code></td>
-      <td>Default auto-dismiss delay (ms) for toasts that don't set their own.</td>
-    </tr>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>string</code></td>
-      <td><code>'Notifications'</code></td>
-      <td>Accessible label for the region.</td>
-    </tr>
-  </tbody>
-</table>
+The newest toast is at the front. Collapsed, up to `maxVisible` toasts show, three by default: each
+older one peeks 16px above the one in front and is drawn 5% smaller, and every toast shows its title
+alone. Hovering the stack, or moving focus into it, spreads the visible toasts into a list with 8px
+between them and shows their descriptions and actions. Toasts past `maxVisible` wait, invisible and
+not clickable, and move into view as the ones in front go. To see it, press Save changes at the top
+of this page a few times, then hover the stack or Tab into it.
 
-## Related components
+</Subsection>
 
-- **Toast** - the individual card this group stacks.
-- **SectionMessage** / **Banner** - for persistent, non-transient messages.
+<Subsection title="Timing and dismissing">
+
+Each toast is removed after its `duration`, or the group's: 5 seconds by default. The timers stop
+while the stack is expanded and start over from the full duration when it collapses. A waiting toast's
+timer runs too, so it can time out before it's ever shown. A toast also goes when its dismiss button
+is clicked, or when it's dragged sideways more than 80px; a shorter drag springs back. It fades out,
+then it's removed.
+
+</Subsection>
+
+<Subsection title="Motion">
+
+Toasts move with the `move-long` recipe and fade in and out with `fade-long`, both 300ms. While a
+toast is being dragged it follows the pointer with no transition. Under reduced motion every
+transition is instant.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Mount one Toast Group at the end of the app's root."
+  code={`<>
+    <Routes />
+    <ToastGroup />
+</>`}
+/>
+<Dont
+  caption="Mount a Toast Group in each page or feature. Each one shows every toast, so they appear more than once."
+  code={`<MattersPage>
+    <MatterList />
+    <ToastGroup />
+</MattersPage>`}
+/>
+<Do
+  caption="Give the result of a loading toast a duration, so it goes away on its own."
+  code={`toast.success('contract.pdf uploaded', { id, duration: 5000 });`}
+/>
+<Dont
+  caption="Replace a loading toast without a duration. The result keeps loading's Infinity and stays until it's dismissed."
+  code={`toast.success('contract.pdf uploaded', { id });`}
+/>
+<Do caption="Use a toast for news people can miss without harm." code={`toast.success('Matter archived');`}>
+  <Toast tone="success" title="Matter archived" expanded={false} />
+</Do>
+<Dont caption="Use a toast for something people must see or act on. It disappears on its own." code={`toast.error('Your session expired. Sign in again to save your work.');`}>
+  <Toast tone="error" title="Your session expired. Sign in again to save your work." expanded={false} />
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Toast Group renders an `ol`, named by `label`, with each toast in an `li`. Each Toast is a
+  `role="status"` live region with its status read before its title.
+- The list is added to the page only with its first toast, and each toast arrives with its text
+  already in it, so screen readers may not announce a new toast. There's no live region that stays on
+  the page for toasts to be added to.
+- Moving focus into the stack expands it and stops the timers, so keyboard users can reach each
+  toast's dismiss button and actions before they go. Moving focus out collapses it again.
+- The list sits where Toast Group is mounted in the page, so that's where it comes in the tab order.
+  There's no key to jump to it, and Escape doesn't dismiss a toast.
+- Waiting toasts past `maxVisible` are invisible but still on the page: screen readers can read them,
+  and Tab reaches their dismiss buttons.
+- Swiping is for pointers only; the dismiss button does the same from the keyboard.
+- Under reduced motion every transition is instant.
+
+<Keyboard>
+  <Key keys="Tab">Moves into the stack, which expands it and stops the timers, then through each toast's dismiss button and actions.</Key>
+  <Key keys="Shift + Tab">Moves back; leaving the stack collapses it.</Key>
+  <Key keys="Enter">On a dismiss button, fades the toast out and removes it.</Key>
+  <Key keys="Space">On a dismiss button, fades the toast out and removes it.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ToastGroupStories} />
+
+Toast Group doesn't pass other attributes through to the list. The options `toast()` takes are listed
+under The toast() API above, and described in `toast-store.ts`.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Toast Group's stylesheet uses, by family, with the property it sets and when. The stack's
+other numbers, the 16px peek, 5% scale step, 8px gap, and 80px swipe, are constants in
+toast-group.tsx, and the 368px width is set in the stylesheet, so none of them is a token.
+
+<TokensTable id="toast-group" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Feedback/Toast" />, the card each item shows.
+- <DocLink to="Components/Feedback/Section Message" /> for a status that stays in the page.
+- <DocLink to="Components/Feedback/Banner" /> for an announcement across the whole page.
+- <DocLink to="Components/Overlays/Modal Dialog" /> for a decision that blocks the task.
+- <DocLink to="Foundations/Motion" />, where `move-long` and `fade-long` are defined.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads toast-group.types.ts, and the design tokens read toast-group.module.css, so
+  they follow the code. Toast Group has no Figma component; registry.json records it as code-only.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

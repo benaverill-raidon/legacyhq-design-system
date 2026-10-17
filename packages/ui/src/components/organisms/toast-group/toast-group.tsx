@@ -17,14 +17,23 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
+/** One stack item (internal). */
 interface StackedToastProps {
+  /** The toast to show, from the store. */
   item: ToastItem;
+  /** Its depth in the stack; 0 is the front (newest). */
   index: number;
+  /** Whether the stack is expanded into a list. */
   expanded: boolean;
+  /** Whether it's past `maxVisible` and waiting, invisible. */
   hidden: boolean;
+  /** Its distance from the bottom in the expanded list, in px. */
   offset: number;
+  /** The group's default duration, used when the toast has none. */
   duration: number;
+  /** Reports the item's height, for the expanded layout. */
   onHeight: (id: string, height: number) => void;
+  /** Removes the toast from the store, after its exit fade. */
   onDismiss: (id: string) => void;
 }
 

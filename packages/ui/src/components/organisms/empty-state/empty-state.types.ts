@@ -4,16 +4,21 @@ export type EmptyStateType = 'inherited' | 'informative';
 
 export interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   /**
-   * Background treatment. `inherited` (default) is transparent and blends into the surface beneath
-   * it; `informative` fills a sunken surface panel.
+   * The background. `inherited` is transparent, so it takes on the surface beneath it; `informative`
+   * fills a sunken panel. Defaults to `inherited`.
    */
   type?: EmptyStateType;
-  /** Optional illustration or image, centered above the heading (~80x80 in the reference design). */
+  /**
+   * A picture above the heading, such as an Icon Tile or a spot illustration, centered. Empty State
+   * doesn't size it; the reference design is about 80px square.
+   */
   illustration?: React.ReactNode;
-  /** Optional heading, centered above the description. */
+  /** A bold line above the description, centered. It's a styled `div`, not a heading element. */
   heading?: React.ReactNode;
-  /** The description. */
+  /** The description, centered. The only required content. */
   children: React.ReactNode;
-  /** Optional actions - typically Buttons and/or a Link, centered below the description. */
+  /**
+   * Actions below the description, centered: usually one Button, two in a Button Group, or a Link.
+   */
   actions?: React.ReactNode;
 }

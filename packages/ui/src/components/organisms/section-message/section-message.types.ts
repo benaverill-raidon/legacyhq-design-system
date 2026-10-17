@@ -5,28 +5,34 @@ export type SectionMessageTone = 'information' | 'success' | 'warning' | 'error'
 export type SectionMessageAppearance = SectionMessageTone;
 
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
-  /** Semantic tone - sets the tinted background, border, and status icon. Defaults to `information`. */
+  /** What the message means. Sets the background, the border, and the status icon. Defaults to `information`. */
   tone?: SectionMessageTone;
   /** @deprecated Renamed to `tone`, the name every component uses for meaning. Still accepted. */
   appearance?: SectionMessageTone;
   /**
-   * Read by assistive technology before the message, since the status icon is decorative. Defaults
-   * to the tone's name ("Information", "Success", "Warning", "Error"); pass a translation, or an empty string to omit it.
+   * Visually hidden text read before the title, since the icon is decorative. Defaults to the tone's
+   * name: "Information", "Success", "Warning", or "Error". Pass a translation, or an empty string to
+   * leave it out.
    */
   statusLabel?: string;
-  /** Optional bold title, shown above the description. Omit to render the description alone. */
+  /** A bold line above the description. Leave it out for a description on its own. */
   title?: React.ReactNode;
-  /** The message body. */
+  /** The description. It wraps onto as many lines as it needs. */
   children: React.ReactNode;
   /**
-   * Optional trailing actions - typically `LinkButton` elements. Wrap multiple actions in a
-   * `ButtonGroup` (which lays them out as a row); a single action can be passed bare.
+   * Actions below the description, usually Link Buttons. Put two or more in a Button Group; pass a
+   * single one on its own. Section Message adds no separators between them.
    */
   actions?: React.ReactNode;
-  /** Show a dismiss button in the top-right corner. Defaults to `false`. */
+  /** Shows a dismiss button in the top corner. Dismissing hides the message for as long as it's mounted. */
   isDismissible?: boolean;
-  /** Accessible name for the dismiss button. Defaults to "Dismiss". */
+  /** The dismiss button's accessible name and tooltip. Defaults to "Dismiss"; pass a translation. */
   dismissLabel?: string;
-  /** Called when the dismiss button is clicked. The message also hides itself. */
+  /** Called when the dismiss button is clicked. The message hides itself either way. */
   onDismiss?: () => void;
+  /**
+   * Defaults to `status`, a polite live region. Use `alert` for an urgent error that must interrupt
+   * what the user is doing.
+   */
+  role?: React.AriaRole;
 }

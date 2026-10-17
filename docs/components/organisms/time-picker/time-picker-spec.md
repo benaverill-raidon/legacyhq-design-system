@@ -15,8 +15,8 @@ selection.
 3. **Popup** - a `role="dialog"` panel (padding `none`) anchored to the field frame.
 4. **Columns** - three `role="listbox"` columns (hours, minutes, AM/PM), each a scroll container of
    `role="option"` buttons with a roving tabindex.
-5. **Footer** - Cancel + Confirm `Button`s (appearance `subtle`, size `xs`); changes are staged until
-   Confirm.
+5. **Footer** - Cancel + Confirm `Button`s (`prominence="tertiary"`, size `xs`); changes are staged
+   until confirmed.
 
 ## Public API
 
@@ -49,6 +49,9 @@ export interface TimePickerProps
   id?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  'aria-describedby'?: string;      // set on the input, not the wrapper
+  'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid
+  required?: boolean;               // the input's native required
 }
 ```
 
@@ -75,10 +78,19 @@ hoursLabel = 'Hours'; minutesLabel = 'Minutes'; meridiemLabel = 'AM/PM'
 - Read-only field shows the formatted time (or placeholder) + a clock icon.
 - Click / Enter / Space / ArrowDown / ArrowUp open the popup; opening focuses the selected hour.
 - Three listbox columns: hours (12-hour: 12, 1-11), minutes (0-59 by `minuteStep`), AM/PM.
-- Column changes are staged in local state and previewed live in the field. **Confirm or an outside
-  click** commits (builds a Date - preserving the value's date part, else today - and fires
+- Column changes are staged in local state and previewed live in the field. **Confirm, an outside
+  click, or a second click on the field** commits (builds a Date - preserving the value's date part, else today - and fires
   `onChange`, then closes); **Cancel or Escape** discards and closes.
-- The incoming value's minute is snapped to the nearest step for the initial selection.
+- The incoming value's minute is snapped to the nearest step for the initial selection
+  (`Math.round(minute / step) * step % 60`). Known bug: a minute that rounds up to 60 wraps to `00`
+  without carrying the hour (10:58 with step 5 opens on 10:00), and an outside click commits the
+  staged value even when nothing changed, so opening and clicking away saves 10:00. A step that
+  doesn't divide 60 can also snap to a minute that isn't an option.
+- An invalid `minuteStep` (not finite, or below 1) falls back to 5; a fractional one is truncated.
+- The AM/PM option text is hard-coded English (`'AM'`/`'PM'`); only the column labels and buttons
+  are props.
+- In a Table editable cell (`data-table-cell` on the panel), options are start-aligned with a
+  selected inset rule, and the footer is 40px tall.
 - Controlled/uncontrolled `value` and `open`; disabled does not open.
 
 ## Layout and tokens
@@ -97,6 +109,10 @@ hoursLabel = 'Hours'; minutesLabel = 'Minutes'; meridiemLabel = 'AM/PM'
 - Keyboard: ArrowUp/Down + Home/End within a column, Tab between columns; Escape / Cancel discard,
   Confirm / outside click commit.
 - Focus uses the shared Focus Ring; opening moves focus to the selected hour.
+- Field's wiring (`id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`) goes to the
+  input, not the wrapper. Browsers don't validate `required` on a read-only input.
+- Known gaps (2026-10-17): the dialog panel has no accessible name; tabbing out of the panel leaves
+  it open.
 
 ## Storybook
 

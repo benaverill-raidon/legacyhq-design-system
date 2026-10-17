@@ -9,25 +9,25 @@ export interface DatePickerCalendarProps
   value?: Date | null;
   /** Initial selected date for uncontrolled usage. */
   defaultValue?: Date | null;
-  /** Called with the newly selected date. */
+  /** Called with the day someone picks. Not called for a disabled day. */
   onChange?: (date: Date) => void;
-  /** Controlled displayed month (any date within the month is accepted). */
+  /** Controlled month on view. Any date in the month works. */
   month?: Date;
-  /** Initial displayed month for uncontrolled usage. Defaults to the selected date's month, else today's. */
+  /** Initial month on view for uncontrolled usage. Defaults to the selected date's month, else today's. */
   defaultMonth?: Date;
-  /** Called with the first day of the month when the displayed month changes. */
+  /** Called with the first day of the month when the month on view changes. */
   onMonthChange?: (month: Date) => void;
-  /** Earliest selectable date (inclusive). */
+  /** Earliest date that can be picked, inclusive. */
   min?: Date;
-  /** Latest selectable date (inclusive). */
+  /** Latest date that can be picked, inclusive. */
   max?: Date;
-  /** Return `true` to disable a specific date (in addition to `min`/`max`). */
+  /** Return `true` to disable a date, in addition to `min` and `max`. */
   isDateDisabled?: (date: Date) => boolean;
-  /** First day of the week. Defaults to `0` (Sunday). */
+  /** First day of the week, `0` (Sunday) to `6` (Saturday). Defaults to `0`. */
   weekStartsOn?: Weekday;
-  /** The date treated as "today" (for the today marker). Defaults to the current date. */
+  /** The date marked as today. Defaults to the current date. */
   today?: Date;
-  /** BCP 47 locale for the month title and weekday names. Defaults to the runtime locale. */
+  /** BCP 47 locale for the month title, weekday names, and each day's accessible name. Defaults to the browser's. It doesn't set the week start. */
   locale?: string;
   /** Accessible label for the previous-month button. Defaults to `Previous month`. */
   previousMonthLabel?: string;

@@ -29,7 +29,6 @@ const meta = {
     defaultValue: { control: false },
     onChange: { control: false },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '360px' }}>{Story()}</div>],
 } satisfies Meta<typeof TimePicker>;
 
 export default meta;

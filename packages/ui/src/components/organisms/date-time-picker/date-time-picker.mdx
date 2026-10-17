@@ -1,80 +1,237 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../../molecules/field';
+import { DateTimePicker } from './date-time-picker';
+import dateTimePickerStyles from './date-time-picker.module.css';
 import * as DateTimePickerStories from './DateTimePicker.stories';
+
+export const HEARING = new Date(2026, 2, 24, 9, 30);
+export const TODAY = new Date(2026, 2, 9);
 
 <Meta of={DateTimePickerStories} name="Docs" />
 
-# Date/Time Picker
+<Unstyled>
+<ComponentPage>
 
-Date/Time Picker combines a Date Picker and a Time Picker into one control - a date half on the left
-and a time half on the right - over a single `Date` value.
+<ComponentHeader
+  id="date-time-picker"
+  example={
+    <Field label="Hearing" required message="Court time, Eastern.">
+      <DateTimePicker defaultValue={HEARING} today={TODAY} />
+    </Field>
+  }
+>
+  Date Time Picker lets someone choose a date and a time as one value. It's a Date Picker and a Time
+  Picker joined into one field, each half with its own popup.
+</ComponentHeader>
 
-<Canvas of={DateTimePickerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Capturing a specific moment: a date **and** a time (a meeting start, a deadline, a reminder).
+- One moment that needs a day and a time: a hearing, a meeting, a deadline at a set hour.
+- A reminder or a scheduled send.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Only a date** - use the Date Picker.
-- **Only a time** - use the Time Picker.
+- **Only a date:** <DocLink to="Components/Forms/Date Picker" />.
+- **Only a time of day:** <DocLink to="Components/Forms/Time Picker" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Date half** - a Date Picker (calendar popup) showing the date part.
-2. **Divider** - the two field frames collapse into a single shared border between the halves.
-3. **Time half** - a Time Picker (hours / minutes / AM-PM popup) showing the time part.
+</Section>
 
-The two halves read as one field: a single rounded outline with squared inner corners and a divider.
-Each half keeps its own popup, states, and keyboard model.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy specimen={<DateTimePicker defaultValue={HEARING} today={TODAY} aria-label="Hearing" />}>
+  <Part name="root" target={dateTimePickerStyles.root}>A `div` with `role="group"` that holds both halves and takes any other attribute you pass.</Part>
+  <Part name="date" target={dateTimePickerStyles.date}>A Date Picker showing the day, 240px wide. Its inner corners are square.</Part>
+  <Part name="time" target={dateTimePickerStyles.time}>A Time Picker showing the time, 240px wide. It overlaps the date half by one border width, so the two borders read as one line, and its inner corners are square.</Part>
+</Anatomy>
 
-### Sizes and contexts
+</Section>
 
-<Canvas of={DateTimePickerStories.Sizes} />
+<Section title="Variants">
 
-`size` (`sm`/`md`/`lg`) and `context` (`default` bordered / `inline` borderless) pass through to both
-halves so they stay in step.
+<Subsection title="Sizes">
 
-<Canvas of={DateTimePickerStories.Contexts} />
+Three heights: `sm` (32px), `md` (40px), and `lg` (48px), the same as Text Field. `size` goes to both
+halves, so they always match.
 
-### One shared value
+<Example of={DateTimePickerStories.Sizes} />
 
-<Canvas of={DateTimePickerStories.Controlled} />
+</Subsection>
 
-Both halves are driven by a single `Date`. Picking a **date** keeps the current time; confirming a
-**time** keeps the current date. `onChange` fires with the combined `Date` whenever either half
-changes. Date constraints (`min`, `max`, `isDateDisabled`, `weekStartsOn`) go to the calendar;
-`minuteStep` goes to the time selector.
+<Subsection title="Context">
 
-### Accessibility
+`context` goes to both halves. `default` is the bordered control for forms. `inline` is for a
+control inside a row of other content: no border or background until someone hovers a half.
 
-The control is a `role="group"`; give it an `aria-label` (or `aria-labelledby`). Each half is an
-independent field with its own accessible name (`dateLabel` / `timeLabel`, defaulting to `Date` /
-`Time`), popup, and keyboard model - see the Date Picker and Time Picker docs.
+<Example of={DateTimePickerStories.Contexts} />
 
-## API
+</Subsection>
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>The combined date-and-time (controlled / uncontrolled).</td></tr>
-    <tr><td><code>onChange</code></td><td><code>(value: Date) =&gt; void</code></td><td>-</td><td>Called with the combined value when either half changes.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size (both halves).</td></tr>
-    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless (both halves).</td></tr>
-    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Applied to both halves.</td></tr>
-    <tr><td><code>min</code> / <code>max</code> / <code>isDateDisabled</code> / <code>weekStartsOn</code></td><td>-</td><td>-</td><td>Passed to the calendar.</td></tr>
-    <tr><td><code>minuteStep</code></td><td><code>number</code></td><td><code>5</code></td><td>Passed to the time selector.</td></tr>
-    <tr><td><code>datePlaceholder</code> / <code>timePlaceholder</code></td><td><code>string</code></td><td>-</td><td>Per-half placeholders.</td></tr>
-    <tr><td><code>dateLabel</code> / <code>timeLabel</code></td><td><code>string</code></td><td>Date / Time</td><td>Per-half accessible names.</td></tr>
-  </tbody>
-</table>
+</Section>
 
-## Related components
+<Section title="Behavior">
 
-- **Date Picker** - the date half on its own.
-- **Time Picker** - the time half on its own.
-- **Date Picker Calendar** - the calendar the date half opens.
+<Subsection title="One value">
+
+Both halves show one `Date`. Picking a date keeps the time already chosen, or midnight when there's
+none. Confirming a time keeps the date already chosen, or `today` when there's none, which defaults
+to the current date. Each change calls `onChange` with the whole date and time.
+
+<Example of={DateTimePickerStories.Controlled} />
+
+</Subsection>
+
+<Subsection title="Each half">
+
+The date half works like Date Picker: picking a day closes its calendar. The time half works like
+Time Picker: choices are held until they're confirmed. Each half opens its own popup, and there's no
+prop to open one from outside. `min`, `max`, `isDateDisabled`, and `weekStartsOn` go to the calendar;
+`minuteStep` goes to the time columns; `locale` goes to both. `datePlaceholder`, `timePlaceholder`,
+`dateFormat`, and `timeFormat` set each half's empty text and format.
+
+</Subsection>
+
+<Subsection title="States">
+
+`disabled` disables both halves. `invalid` gives both the error border and sets `aria-invalid` on
+both inputs; in a Field with `state="error"`, Field sets it for you.
+
+</Subsection>
+
+<Subsection title="Width">
+
+The control is 480px wide: two 240px halves, side by side on one line.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give the control one label with Field. It names the group, and each half adds Date or Time."
+  code={`<Field label="Hearing">
+    <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`}
+>
+  <Field label="Hearing">
+    <DateTimePicker defaultValue={HEARING} today={TODAY} />
+  </Field>
+</Do>
+<Dont
+  caption="Leave it without a label. Date and Time alone don't say what the moment is."
+  code={`<DateTimePicker value={hearing} onChange={setHearing} />`}
+>
+  <DateTimePicker defaultValue={HEARING} today={TODAY} />
+</Dont>
+<Do
+  caption="Translate dateLabel and timeLabel along with the Field's label. They name the two halves."
+  code={`<Field label="Audiencia">
+    <DateTimePicker dateLabel="Fecha" timeLabel="Hora" />
+</Field>`}
+>
+  <Field label="Audiencia">
+    <DateTimePicker dateLabel="Fecha" timeLabel="Hora" defaultValue={HEARING} today={TODAY} />
+  </Field>
+</Do>
+<Dont
+  caption="Translate only the label. The halves are still named Date and Time."
+  code={`<Field label="Audiencia">
+    <DateTimePicker />
+</Field>`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The control is a `div` with `role="group"`. Name it with Field, whose label names the group, or
+  with `aria-label` or `aria-labelledby`. `aria-label` is ignored when `aria-labelledby` is set.
+- Field's label points at the group, which can't take focus, so clicking the label doesn't focus
+  either half.
+- Each half is a read-only `input` named by `dateLabel` or `timeLabel`, "Date" and "Time" by default,
+  so it's announced with the group's name around it.
+- In a Field, the message describes the group. An error sets `aria-invalid` on both inputs, and
+  `required` sets both inputs' native `required`. Browsers don't check `required` on a read-only
+  input, so check for an empty value yourself.
+- Each half's popup, focus, and announcements are its own: see <DocLink to="Components/Forms/Date Picker" />
+  and <DocLink to="Components/Forms/Time Picker" />.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the date half, then to the time half. A disabled control is skipped.</Key>
+  <Key keys="Enter">Opens the focused half's calendar or time columns.</Key>
+  <Key keys="Space">Opens the focused half's calendar or time columns.</Key>
+  <Key keys="Arrow Down">Opens the focused half's calendar or time columns.</Key>
+  <Key keys="Arrow Up">Opens the focused half's calendar or time columns.</Key>
+  <Key keys="Escape">Closes the open half and returns focus to its field. The time half throws away its choices.</Key>
+</Keyboard>
+
+The keys inside each popup are on the Date Picker, Date Picker Calendar, and Time Picker pages.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={DateTimePickerStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Date Time Picker's own stylesheet only joins the halves: it pulls the time half back by one border
+width so the two borders overlap. Each half uses Date Picker's and Time Picker's tokens.
+
+<TokensTable id="date-time-picker" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Field" /> to add a label, a message, and a required marker.
+- <DocLink to="Components/Forms/Date Picker" />, the date half, for a date on its own.
+- <DocLink to="Components/Forms/Time Picker" />, the time half, for a time of day on its own.
+- <DocLink to="Components/Forms/Date Picker Calendar" />, the calendar the date half opens.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads date-time-picker.types.ts, the design tokens read date-time-picker.module.css,
+  and the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

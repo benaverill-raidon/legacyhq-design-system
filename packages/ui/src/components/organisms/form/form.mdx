@@ -1,157 +1,364 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { Field } from '../../molecules/field';
+import { TextArea } from '../../molecules/text-area';
+import { TextField } from '../../molecules/text-field';
+import { DatePicker } from '../date-picker';
+import { Form, FormFooter, FormRow, FormSection } from './form';
+import formStyles from './form.module.css';
 import * as FormStories from './Form.stories';
+
+export const stop = (event) => event.preventDefault();
 
 <Meta of={FormStories} name="Docs" />
 
-# Form
+<Unstyled>
+<ComponentPage>
 
-Form is a layout organism: a native `<form>` with an optional header (title, description, and the
-"\* indicates a required field" legend) that arranges its fields into sections and rows and puts the
-actions in a footer. It owns the header and the spacing between blocks - the fields themselves come
-from **Field** (wrapping a Text Field, Select, Text Area, ...) that you pass as children, and
-submission, validation, and each field's own state stay native and yours.
+<ComponentHeader
+  id="form"
+  example={
+    <Form title="New matter" description="Open a matter for an existing client." requiredLegend onSubmit={stop}>
+      <FormSection title="Client">
+        <FormRow>
+          <Field label="First name" required>
+            <TextField defaultValue="Jordan" />
+          </Field>
+          <Field label="Last name" required>
+            <TextField defaultValue="Lee" />
+          </Field>
+        </FormRow>
+        <Field label="Email" message="We'll send the engagement letter here.">
+          <TextField type="email" defaultValue="jordan.lee@example.com" />
+        </Field>
+      </FormSection>
+      <FormSection title="Matter">
+        <FormRow>
+          <Field label="Matter name" required>
+            <TextField defaultValue="Lee Living Trust" />
+          </Field>
+          <Field label="Opened">
+            <DatePicker defaultValue={new Date(2026, 2, 9)} today={new Date(2026, 2, 9)} />
+          </Field>
+        </FormRow>
+      </FormSection>
+      <FormFooter>
+        <Button prominence="tertiary">Cancel</Button>
+        <Button prominence="primary" type="submit">Create matter</Button>
+      </FormFooter>
+    </Form>
+  }
+>
+  Form lays out a set of fields someone fills in and submits together: a header, sections of fields,
+  rows that put fields side by side, and a footer for the actions. It renders a native `form` and
+  leaves the fields, their state, and submitting to you.
+</ComponentHeader>
 
-<Canvas of={FormStories.Repository} />
+<Section title="When to use">
 
-## Parts
+<Usage>
+<UseFor>
 
-Form is composed of four separately-exported parts, matching the Figma code-parts:
+- Any set of fields submitted together: a new matter, a client's details, settings.
+- Grouping a long form into titled sections.
+- Putting short, related fields on one line, such as first and last name.
 
-- **`Form`** - the native `<form>` plus the header, rendered from `title` / `description` /
-  `requiredLegend`.
-- **`FormSection`** - a vertical group of fields with an optional heading; adds the top spacing that
-  separates groups.
-- **`FormRow`** - lays fields out as equal-width columns on one line (up to 4).
-- **`FormFooter`** - the actions, aligned to the `end` (default) or `start`.
+</UseFor>
+<UseInstead>
 
-```tsx
-<Form title="Create a new repository" requiredLegend onSubmit={handleSubmit}>
-  <FormSection>
+- **One control on its own, such as a search box:** <DocLink to="Components/Forms/Field" />, or the control with its own label.
+- **A value edited in place, outside a form:** <DocLink to="Components/Forms/Inline Edit" />.
+- **A short form in a dialog:** <DocLink to="Components/Overlays/Modal Dialog" />, with the fields inside it.
+
+</UseInstead>
+</Usage>
+
+</Section>
+
+<Section title="Anatomy">
+
+<Anatomy
+  specimen={
+    <Form title="New matter" description="Open a matter for an existing client." requiredLegend onSubmit={stop}>
+      <FormSection title="Client">
+        <FormRow>
+          <Field label="First name" required>
+            <TextField defaultValue="Jordan" />
+          </Field>
+          <Field label="Last name" required>
+            <TextField defaultValue="Lee" />
+          </Field>
+        </FormRow>
+      </FormSection>
+      <FormFooter>
+        <Button prominence="tertiary">Cancel</Button>
+        <Button prominence="primary" type="submit">Create matter</Button>
+      </FormFooter>
+    </Form>
+  }
+>
+  <Part name="root" target={formStyles.root}>The native `form`, as wide as its container. It takes any other attribute you pass, such as `onSubmit` and `noValidate`.</Part>
+  <Part name="header" target={formStyles.header}>Shown when `title`, `description`, or `requiredLegend` is set.</Part>
+  <Part name="title" target={formStyles.title}>`title`, as text in a `div`, not a heading.</Part>
+  <Part name="description" target={formStyles.description}>`description`, as a paragraph. The required legend is a second paragraph with the same style.</Part>
+  <Part name="requiredMark" target={formStyles.requiredMark}>The legend's `*`, in the error color, the same mark Field shows on a required field.</Part>
+  <Part name="section" target={formStyles.section}>A FormSection: a group of fields with an optional title, spaced from what's above it.</Part>
+  <Part name="row" target={formStyles.row}>A FormRow: its fields side by side, in equal columns.</Part>
+  <Part name="footer" target={formStyles.footer}>A FormFooter: the actions, at the end of the line by default.</Part>
+</Anatomy>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Header">
+
+`title` and `description` make the header, and `requiredLegend` adds the line "\* indicates a
+required field", with the `*` in the error color to match Field's required mark. Set it when any
+field is required. Without all three, there's no header.
+
+<Example of={FormStories.Playground} />
+
+</Subsection>
+
+<Subsection title="Sections">
+
+A FormSection groups related fields and puts space above them, so it separates them from the header
+or the section before. Its `title` is optional. Put Fields straight in a section to stack them one per
+line, at the full width.
+
+<Example of={FormStories.Sections} />
+
+</Subsection>
+
+<Subsection title="Rows">
+
+A FormRow puts its fields side by side in equal columns. Figma designs rows of up to four. A row
+stays on one line at every width: it doesn't stack on a narrow screen, so keep rows to short fields
+that fit.
+
+<Example of={FormStories.Rows} />
+
+</Subsection>
+
+<Subsection title="Footer">
+
+A FormFooter holds the actions, with more space above it than between sections. `align="end"`, the
+default, puts them at the end of the line; `align="start"` puts them at the start. It spaces its
+Buttons the way Button Group does, so put the Buttons straight in it.
+
+<Example of={FormStories.FooterAlignment} />
+
+</Subsection>
+
+<Subsection title="Submitting">
+
+Form keeps no state of its own. It's a native `form`, so `onSubmit` fires when someone presses a
+`type="submit"` Button, or Enter in a single-line field, and the browser checks `required` and other
+constraints first unless you set `noValidate`. Each field's value, error, and message are yours,
+through Field.
+
+<Example of={FormStories.EdgeCases} caption="Edge cases: a form with no header, and a form on a dark surface." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give the submitting Button type submit, so it submits the form."
+  code={`<FormFooter>
+    <Button prominence="tertiary" onClick={onCancel}>Cancel</Button>
+    <Button prominence="primary" type="submit">Create matter</Button>
+</FormFooter>`}
+>
+  <Form onSubmit={stop}>
+    <FormFooter>
+      <Button prominence="tertiary">Cancel</Button>
+      <Button prominence="primary" type="submit">Create matter</Button>
+    </FormFooter>
+  </Form>
+</Do>
+<Dont
+  caption="Leave the submitting Button's type unset. Button defaults to type button, so it doesn't submit."
+  code={`<FormFooter>
+    <Button prominence="primary">Create matter</Button>
+</FormFooter>`}
+/>
+<Do
+  caption="Put short, related fields in a row, such as city, state, and ZIP."
+  code={`<FormRow>
+    <Field label="City"><TextField /></Field>
+    <Field label="State"><TextField /></Field>
+    <Field label="ZIP"><TextField inputMode="numeric" /></Field>
+</FormRow>`}
+>
+  <Form onSubmit={stop}>
     <FormRow>
-      <Field label="Owner" required>
-        <Select options={owners} value={owner} onChange={setOwner} />
+      <Field label="City">
+        <TextField defaultValue="Trenton" />
       </Field>
-      <Field label="Repository name" required>
-        <TextField placeholder="my-project" />
+      <Field label="State">
+        <TextField defaultValue="NJ" />
+      </Field>
+      <Field label="ZIP">
+        <TextField inputMode="numeric" defaultValue="08608" />
       </Field>
     </FormRow>
-    <Field label="Description">
-      <TextArea placeholder="A short description" />
-    </Field>
-  </FormSection>
-  <FormFooter align="end">
-    <Button appearance="subtle" type="button">Cancel</Button>
-    <Button appearance="primary" type="submit">Create repository</Button>
-  </FormFooter>
-</Form>
-```
+  </Form>
+</Do>
+<Dont
+  caption="Put a long field beside an unrelated one to save space. The row never stacks, so both get cramped."
+  code={`<FormRow>
+    <Field label="Notes"><TextArea /></Field>
+    <Field label="Email"><TextField type="email" /></Field>
+</FormRow>`}
+>
+  <Form onSubmit={stop}>
+    <FormRow>
+      <Field label="Notes">
+        <TextArea defaultValue="Client prefers a call before any filing." />
+      </Field>
+      <Field label="Email">
+        <TextField type="email" defaultValue="jordan.lee@example.com" />
+      </Field>
+    </FormRow>
+  </Form>
+</Dont>
+<Do
+  caption="Set requiredLegend when the form marks required fields, so the * is explained."
+  code={`<Form title="New matter" requiredLegend>
+    <FormSection>
+        <Field label="Matter name" required><TextField /></Field>
+    </FormSection>
+</Form>`}
+>
+  <Form title="New matter" requiredLegend onSubmit={stop}>
+    <FormSection>
+      <Field label="Matter name" required>
+        <TextField />
+      </Field>
+    </FormSection>
+  </Form>
+</Do>
+<Dont
+  caption="Mark fields required with no legend. Not everyone knows what the * means."
+  code={`<Form title="New matter">
+    <FormSection>
+        <Field label="Matter name" required><TextField /></Field>
+    </FormSection>
+</Form>`}
+>
+  <Form title="New matter" onSubmit={stop}>
+    <FormSection>
+      <Field label="Matter name" required>
+        <TextField />
+      </Field>
+    </FormSection>
+  </Form>
+</Dont>
+</Guidelines>
 
-## When to use
+</Section>
 
-- Any collection of fields the user fills in and submits together.
-- Use **Field** for each control (it wires the label, message, and validation state); use **Form**
-  to lay those fields out and add the title/actions.
+<Section title="Accessibility">
 
-## When not to use
+- Form renders a native `form`, so submitting with Enter or a submit button, and the browser's own
+  checks, work with no extra code.
+- A form is announced as a form landmark only when it has a name, and `title` doesn't give it one.
+  Pass `aria-label` or `aria-labelledby` if people should find the form by landmark.
+- The title and the section titles are text in a `div`, not headings, so they aren't in the page's
+  heading outline. Put the page's own heading above the form when it needs one. A FormSection is a
+  `div`, not a `fieldset`, so its title isn't announced with the fields in it.
+- The required legend is read as text, `*` included. Field hides its own `*` from assistive
+  technology and sets the control's native `required` instead.
+- Each field's name, description, and error come from Field. Form doesn't change them.
 
-- **A single control on its own.** Use Field (or the bare control) directly - a Form is for a set of
-  fields submitted together.
-- **A page section that isn't a form.** Form renders a real `<form>`; use plain layout for
-  non-form content.
+Form adds no keys of its own; the browser handles moving through fields and submitting.
 
-## Header
+<Keyboard>
+  <Key keys="Tab">Moves through the fields and the footer's buttons, in the order they're written.</Key>
+  <Key keys="Enter">In a single-line field, submits the form, as the browser does when the form has a submit button.</Key>
+</Keyboard>
 
-<Canvas of={FormStories.Playground} />
+</Section>
 
-`title` renders at `heading/lg` and `description` at `body/md`. `requiredLegend` adds the standard
-"\* indicates a required field" line with the `*` in the error colour - the same marker Field shows
-on a required field, so the legend and the fields agree. Omit all three and Form renders no header.
+<Section title="API">
 
-## Sections and rows
+<PropsTable of={FormStories} native="form" />
 
-<Canvas of={FormStories.Sections} />
+<Subsection title="FormSection">
 
-A `FormSection` groups related fields and adds the top spacing that separates it from the header or
-the previous section; its `title` is optional. Inside a section, stack Fields one per line, or wrap
-them in a `FormRow` to place up to four on one line as equal-width columns.
+<PropsTable component={FormSection} native="div" />
 
-<Canvas of={FormStories.Rows} />
+</Subsection>
 
-## Footer
+<Subsection title="FormRow">
 
-<Canvas of={FormStories.FooterAlignment} />
+<PropsTable component={FormRow} native="div" />
 
-`FormFooter` holds the actions and sits below the body with extra top spacing. `align="end"`
-(default) pushes the actions to the right - the conventional place for a primary submit; `align="start"`
-puts them on the left. Give the submit `Button` `type="submit"` so it triggers the form's `onSubmit`.
+</Subsection>
 
-<Canvas of={FormStories.EdgeCases} />
+<Subsection title="FormFooter">
 
-## Accessibility
+<PropsTable component={FormFooter} native="div" />
 
-- Form renders a real `<form>`, so native submission (Enter in a field, a `type="submit"` button)
-  and browser validation work for free.
-- Each field's labelling and description come from **Field** - Form does not re-wire them.
-- The section title is presentational text; use your page's own heading structure if a field group
-  needs a semantic heading.
+</Subsection>
 
-## API
+</Section>
 
-### Form
+<Section title="Design tokens">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Header title (heading/lg).</td></tr>
-    <tr><td><code>description</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Supporting text under the title (body/md).</td></tr>
-    <tr><td><code>requiredLegend</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Shows the "* indicates a required field" legend.</td></tr>
-    <tr><td><code>headerClassName</code></td><td><code>string</code></td><td>-</td><td>Composes with the header's class list.</td></tr>
-    <tr><td>...rest</td><td><code>React.FormHTMLAttributes</code></td><td>-</td><td>Forwarded to the native <code>&lt;form&gt;</code> (<code>onSubmit</code>, <code>name</code>, <code>noValidate</code>, ...).</td></tr>
-  </tbody>
-</table>
+Every token Form's stylesheet uses, by family, with the property it sets and when. "Base" is the form
+element; the header, title, description, sections, rows, and footer are its parts. All the space
+between parts sits on the parts themselves, so a form without a header doesn't start with a gap.
 
-### FormSection
+<TokensTable id="form" />
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Optional section heading (heading/sm).</td></tr>
-    <tr><td><code>titleClassName</code></td><td><code>string</code></td><td>-</td><td>Composes with the title's class list.</td></tr>
-    <tr><td>...rest</td><td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td><td>-</td><td>Forwarded to the section element.</td></tr>
-  </tbody>
-</table>
+</Section>
 
-### FormRow
+<Section title="Related components">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td>children</td><td><code>React.ReactNode</code></td><td>-</td><td>Up to 4 fields, laid out as equal columns.</td></tr>
-    <tr><td>...rest</td><td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td><td>-</td><td>Forwarded to the row element.</td></tr>
-  </tbody>
-</table>
+<Related>
 
-### FormFooter
+- <DocLink to="Components/Forms/Field" />, which gives each control its label, message, and required mark.
+- <DocLink to="Components/Forms/Text Field" />, <DocLink to="Components/Forms/Text Area" />, and <DocLink to="Components/Forms/Select" />, the controls most forms hold.
+- <DocLink to="Components/Forms/Date Picker" /> and <DocLink to="Components/Forms/Time Picker" /> for dates and times.
+- <DocLink to="Components/Actions/Button" /> for the footer's actions.
+- <DocLink to="Components/Overlays/Modal Dialog" /> for a short form in a dialog.
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>align</code></td><td><code>'start' | 'end'</code></td><td><code>'end'</code></td><td>Horizontal alignment of the actions.</td></tr>
-    <tr><td>...rest</td><td><code>React.HTMLAttributes&lt;HTMLDivElement&gt;</code></td><td>-</td><td>Forwarded to the footer element.</td></tr>
-  </tbody>
-</table>
+</Related>
 
-## Related components
+</Section>
 
-- **Field** - wraps each control with its label, message, and validation state; the building block
-  Form arranges.
-- **Text Field, Select, Text Area** - the controls a Field wraps.
-- **Button** - the form actions placed in the footer.
+<DocFooter>
+  The API tables read form.types.ts, the design tokens read form.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

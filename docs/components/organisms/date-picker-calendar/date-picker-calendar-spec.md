@@ -59,7 +59,7 @@ nextYearLabel = 'Next year'
 ## Day states (from Figma `day`)
 
 - **default** (in-month): `content/subtle` text, no background.
-- **hover / press**: `background/neutral/overlay/hover` / `.../press`, text `content/default`.
+- **hover / press**: `background/neutral/overlay/bold/hover` / `.../bold/press`, text `content/default`.
 - **focus**: shared Focus Ring (`border/focus`).
 - **selected**: `background/selected/default/default` + `border/selected` + `content/selected`
   (hover/press use the selected `hover`/`press` surface tokens).
@@ -82,6 +82,9 @@ nextYearLabel = 'Next year'
 - `min`/`max` (inclusive) disable out-of-range days and block year/month nav when the whole target
   month is out of range; `isDateDisabled` disables individual dates.
 - Roving tabindex; WAI-ARIA grid keyboard model; the focused day is kept inside the displayed month.
+- Keyboard moves are not bounded by `min`/`max` or `isDateDisabled` (the header buttons are): focus
+  can land on, and the month can move to, days that can't be picked.
+- Header nav keeps the focused day number, clamped to the target month's length.
 
 ## Accessibility
 

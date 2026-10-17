@@ -46,8 +46,10 @@ export interface DateTimePickerProps
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string;
   timeLabel?: string;
-  'aria-label'?: string;
+  'aria-label'?: string;            // ignored when aria-labelledby is set
   'aria-labelledby'?: string;
+  'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid, on both inputs
+  required?: boolean;               // native required on both inputs
 }
 ```
 
@@ -76,6 +78,11 @@ dateLabel = 'Date'; timeLabel = 'Time'
 - The root is a `role="group"`; label it (`aria-label` / `aria-labelledby`).
 - Each half is an independent field with its own accessible name, `role="dialog"` popup, and keyboard
   model - see the Date Picker and Time Picker specs.
+- In a Field: the label names the group (`aria-labelledby`), `id` and the message's `aria-describedby`
+  land on the group `div`, and the error (`aria-invalid`) and `required` go to both inputs. The
+  label's `htmlFor` points at the group, which isn't labelable, so clicking it focuses nothing.
+- `today` also supplies the date when a time is confirmed with no value.
+- No `open`/`onOpenChange`: each half manages its own popup.
 
 ## Storybook
 

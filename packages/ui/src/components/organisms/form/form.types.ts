@@ -4,43 +4,43 @@ export type FormFooterAlign = 'start' | 'end';
 
 export interface FormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'title'> {
   /**
-   * Form title, rendered in the header at `heading/lg`. Presentational text - wrap the form in your
-   * page's own heading structure, or pass a heading element as the node, if you need semantics.
+   * The header title, at `heading/lg`. It renders as text in a `div`, not as a heading, and doesn't
+   * name the form.
    */
   title?: React.ReactNode;
-  /** Supporting description shown under the title at `body/md`. */
+  /** Supporting text under the title, at `body/md`. */
   description?: React.ReactNode;
   /**
-   * Renders the standard "* indicates a required field" legend in the header, with the `*` in the
-   * error colour - the same `*` Field shows on a required field. Independent of `description`.
+   * Adds the "* indicates a required field" line to the header, with the `*` in the error color, the
+   * same `*` Field shows on a required field. Independent of `description`.
    */
   requiredLegend?: boolean;
-  /** The form body: FormSection / FormRow groups, and a FormFooter for the actions. */
+  /** The form body: FormSections, and a FormFooter for the actions. */
   children?: React.ReactNode;
-  /** Composes with the header's class list. */
+  /** Added to the header's classes. */
   headerClassName?: string;
 }
 
 export interface FormSectionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  /** Optional section heading, rendered at `heading/sm`. Omit for an untitled grouping. */
+  /** Optional title above the section's fields, at `heading/sm`. Text in a `div`, not a heading. */
   title?: React.ReactNode;
-  /** The section body: FormRows, or single controls (Fields) stacked one per line. */
+  /** The section body: Fields stacked one per line, and FormRows. */
   children?: React.ReactNode;
-  /** Composes with the section title's class list. */
+  /** Added to the section title's classes. */
   titleClassName?: string;
 }
 
 export interface FormRowProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * The fields laid out as equal-width columns on one line (Figma supports up to 4). Each direct
-   * child becomes one column; on narrow viewports the row collapses to a single column.
+   * The fields, as equal-width columns on one line (Figma designs up to 4). Each direct child is one
+   * column, and the row stays on one line at every width.
    */
   children?: React.ReactNode;
 }
 
 export interface FormFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Horizontal alignment of the actions. `end` (right) is the default; `start` aligns them left. */
+  /** Which side the actions sit on: `end` (right, the default) or `start` (left). */
   align?: FormFooterAlign;
-  /** The footer actions - typically a Cancel and a submit Button. */
+  /** The actions, usually Buttons: a submit Button and often a Cancel. */
   children?: React.ReactNode;
 }

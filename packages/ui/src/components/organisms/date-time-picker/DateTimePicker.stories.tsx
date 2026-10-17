@@ -31,7 +31,6 @@ const meta = {
     max: { control: false },
     isDateDisabled: { control: false },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '380px' }}>{Story()}</div>],
 } satisfies Meta<typeof DateTimePicker>;
 
 export default meta;

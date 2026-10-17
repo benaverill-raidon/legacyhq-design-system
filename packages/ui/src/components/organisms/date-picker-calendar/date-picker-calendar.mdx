@@ -1,96 +1,254 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../../molecules/field';
+import { DatePicker } from '../date-picker';
+import { DatePickerCalendar } from './date-picker-calendar';
+import calendarStyles from './date-picker-calendar.module.css';
 import * as DatePickerCalendarStories from './DatePickerCalendar.stories';
+
+export const TODAY = new Date(2026, 2, 9);
+export const isWeekend = (date) => date.getDay() === 0 || date.getDay() === 6;
 
 <Meta of={DatePickerCalendarStories} name="Docs" />
 
-# Date Picker Calendar
+<Unstyled>
+<ComponentPage>
 
-Date Picker Calendar is the month-grid panel for choosing a single date. It is the content that fills
-the popup surface of the upcoming Date Picker and Date/Time Picker, and can be used anywhere a date
-needs to be picked from a calendar.
+<ComponentHeader id="date-picker-calendar" example={<DatePickerCalendar defaultValue={new Date(2026, 2, 17)} today={TODAY} />}>
+  Date Picker Calendar is a month of days to pick one date from, with buttons to move between months
+  and years. It's the calendar inside Date Picker's popup, and it can sit on its own in a panel that
+  stays open.
+</ComponentHeader>
 
-<Canvas of={DatePickerCalendarStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Inside a date field's popup, to pick a day.
-- Any inline "pick a date" surface (a scheduling panel, a filter).
+- A date picked in a panel that stays open, such as a scheduling sidebar.
+- A date filter beside a list, where the calendar is always on view.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a full field + popup** - that is the Date Picker (which wraps this calendar); use it when you
-  need an input.
-- **For picking a time** - use the Time Picker; Date/Time Picker combines both.
-- **For a small set of preset dates** - a Select or Radio group may be simpler.
+- **A date field in a form:** <DocLink to="Components/Forms/Date Picker" />, which opens this calendar from a field.
+- **A date and a time together:** <DocLink to="Components/Forms/Date Time Picker" />.
+- **A time of day:** <DocLink to="Components/Forms/Time Picker" />.
+- **A few fixed dates:** <DocLink to="Components/Forms/Select" /> or <DocLink to="Components/Forms/Radio" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Month header** - previous-year (`«`), previous-month (`‹`), the month + year title, next-month
-   (`›`), and next-year (`»`) controls. The four controls are Icon Buttons (`subtle`, `xs`, square).
-2. **Weekday header** - a `columnheader` per weekday, starting on `weekStartsOn`.
-3. **Day grid** - a `role="grid"` of six weeks; each day is a button in a `gridcell`. Out-of-month
-   days are shown for context but muted; today is underlined; the selected day fills the selected
-   surface.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Selection
+<Anatomy specimen={<DatePickerCalendar defaultValue={TODAY} today={TODAY} />}>
+  <Part name="root" target={calendarStyles.root}>A `div` with padding and no background of its own: the popup or panel around it provides the surface.</Part>
+  <Part name="header" target={calendarStyles.header}>Four Icon Buttons around the title: previous year, previous month, next month, next year.</Part>
+  <Part name="title" target={calendarStyles.title}>The month and year on view. It names the grid and announces a change of month.</Part>
+  <Part name="grid" target={calendarStyles.grid}>A table of seven weekday headings over six weeks of days, starting on `weekStartsOn`.</Part>
+  <Part name="day" target={calendarStyles.day} nth={9}>A button for each day. Days from the months before and after are shown muted; today is underlined; the chosen day, shown here, is filled.</Part>
+</Anatomy>
 
-Uncontrolled, the calendar owns the selection (`defaultValue`) and the displayed month
-(`defaultMonth`). For controlled usage, pass `value` + `onChange` (see the Controlled story). The
-calendar is **transparent** - the surrounding popup provides the surface and elevation.
+</Section>
 
-### Restricting dates
+<Section title="Behavior">
 
-<Canvas of={DatePickerCalendarStories.MinMax} />
+<Subsection title="Picking a day">
 
-`min` / `max` bound the selectable range (inclusive); out-of-range days are disabled and the
-year/month nav is blocked once the whole target month is out of range. `isDateDisabled(date)` disables
-individual dates:
+A click on a day picks it and calls `onChange`. A day from the month before or after can be picked
+too, and the calendar moves to its month. Without `value`, the calendar keeps the pick itself,
+starting from `defaultValue`; with `value`, it shows only what you pass.
 
-<Canvas of={DatePickerCalendarStories.DisabledWeekends} />
+<Example of={DatePickerCalendarStories.Controlled} />
 
-### Week start
+</Subsection>
 
-<Canvas of={DatePickerCalendarStories.WeekStartsMonday} />
+<Subsection title="Moving between months">
 
-`weekStartsOn` (0 = Sunday, the default; 1 = Monday, ...) sets the first column. Month, year, and
-weekday names come from `locale`.
+The header buttons move back or forward one month or one year, and the title changes with them.
+The calendar opens on `defaultMonth`, else the chosen date's month, else today's. Pass `month` and
+`onMonthChange` to control the month on view.
 
-### Accessibility
+</Subsection>
 
-The grid is a `role="grid"` labelled by the month title (`aria-live` so month changes are announced).
-Days use a roving tabindex - only one day is in the tab order. Arrow keys move by day and week,
-**Home**/**End** jump to the start/end of the week, **PageUp**/**PageDown** change month
-(with **Shift**, year), and **Enter**/**Space** select. Focus uses the shared Focus Ring. Today is
-`aria-current="date"`; the selected day's cell is `aria-selected`; disabled days are `aria-disabled`.
+<Subsection title="Restricting dates">
 
-## API
+`min` and `max` set the earliest and latest dates that can be picked, and `isDateDisabled` rules out
+single dates, such as weekends. Ruled-out days are muted and can't be picked. A month or year button
+is disabled when every day of the month it would show is out of range.
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>value</code></td><td><code>Date | null</code></td><td>-</td><td>Controlled selected date.</td></tr>
-    <tr><td><code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Initial selection (uncontrolled).</td></tr>
-    <tr><td><code>onChange</code></td><td><code>(date: Date) =&gt; void</code></td><td>-</td><td>Called with the selected date.</td></tr>
-    <tr><td><code>month</code></td><td><code>Date</code></td><td>-</td><td>Controlled displayed month.</td></tr>
-    <tr><td><code>defaultMonth</code></td><td><code>Date</code></td><td>selection / today</td><td>Initial displayed month.</td></tr>
-    <tr><td><code>onMonthChange</code></td><td><code>(month: Date) =&gt; void</code></td><td>-</td><td>Called when the displayed month changes.</td></tr>
-    <tr><td><code>min</code> / <code>max</code></td><td><code>Date</code></td><td>-</td><td>Selectable range (inclusive).</td></tr>
-    <tr><td><code>isDateDisabled</code></td><td><code>(date: Date) =&gt; boolean</code></td><td>-</td><td>Disable individual dates.</td></tr>
-    <tr><td><code>weekStartsOn</code></td><td><code>0-6</code></td><td><code>0</code></td><td>First day of the week.</td></tr>
-    <tr><td><code>today</code></td><td><code>Date</code></td><td>current date</td><td>The date marked "today".</td></tr>
-    <tr><td><code>locale</code></td><td><code>string</code></td><td>runtime</td><td>Month / weekday names.</td></tr>
-  </tbody>
-</table>
+<Example of={DatePickerCalendarStories.MinMax} caption="Only 4 to 24 March can be picked, so the month and year buttons are disabled." />
 
-Nav button labels are configurable via `previousMonthLabel`, `nextMonthLabel`, `previousYearLabel`,
-`nextYearLabel`.
+<Example of={DatePickerCalendarStories.DisabledWeekends} caption="isDateDisabled rules out weekends." />
 
-## Related components
+</Subsection>
 
-- **Date Picker** - a date field that opens this calendar in a popup.
-- **Date/Time Picker** - date plus time selection.
-- **Icon Button** - the month/year nav controls.
+<Subsection title="Week start and language">
+
+`weekStartsOn` sets the first column, from `0` (Sunday, the default) to `6` (Saturday). `locale`
+sets the language of the month, the weekday names, and each day's accessible name. It doesn't change
+the week start, so set both for a region whose week starts on Monday.
+
+<Example of={DatePickerCalendarStories.WeekStartsMonday} />
+
+</Subsection>
+
+<Subsection title="Day states">
+
+Days of the month on view use the subtle text color, and turn the default color on a neutral fill
+when hovered. Today uses the selected text color with a short line under the number. The chosen day
+has the selected fill, border, and text. Days outside the month, and days that can't be picked, use
+the disabled text color. The calendar itself has no fill: the stories here wrap it in Popup's
+surface, as Date Picker does.
+
+<Example of={DatePickerCalendarStories.Playground} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Use Date Picker for a date field in a form. It opens this calendar and handles focus."
+  code={`<Field label="Filing deadline">
+    <DatePicker value={deadline} onChange={setDeadline} />
+</Field>`}
+>
+  <Field label="Filing deadline">
+    <DatePicker defaultValue={new Date(2026, 2, 24)} today={TODAY} />
+  </Field>
+</Do>
+<Dont
+  caption="Build your own field and popup around the calendar. You'd have to rebuild the focus and the closing that Date Picker already has."
+  code={`<Popup open={open} onOpenChange={setOpen} content={<DatePickerCalendar onChange={setDeadline} />}>
+    <TextField readOnly value={formatted} onClick={() => setOpen(true)} />
+</Popup>`}
+/>
+<Do
+  caption="Set weekStartsOn along with locale for a region whose week starts on Monday."
+  code={`<DatePickerCalendar locale="en-GB" weekStartsOn={1} />`}
+>
+  <DatePickerCalendar locale="en-GB" weekStartsOn={1} defaultValue={TODAY} today={TODAY} />
+</Do>
+<Dont
+  caption="Set only locale and expect the week to change. The names change, and the week still starts on Sunday."
+  code={`<DatePickerCalendar locale="en-GB" />`}
+>
+  <DatePickerCalendar locale="en-GB" defaultValue={TODAY} today={TODAY} />
+</Dont>
+<Do
+  caption="Rule out days that can't be picked with min, max, or isDateDisabled, so people can see which ones are available."
+  code={`<DatePickerCalendar min={today} isDateDisabled={isWeekend} onChange={setDate} />`}
+>
+  <DatePickerCalendar min={TODAY} isDateDisabled={isWeekend} defaultValue={new Date(2026, 2, 10)} today={TODAY} />
+</Do>
+<Dont
+  caption="Let every day look available and ignore the wrong ones in onChange. The pick seems to do nothing."
+  code={`<DatePickerCalendar onChange={(date) => !isWeekend(date) && setDate(date)} />`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The days are a `table` with `role="grid"`, named by the month title. The title is a polite live
+  region, so a change of month is announced.
+- Each weekday heading shows a short name and is named with the full one, such as "Monday".
+- Each day is a native `button` in a `gridcell`, named with its full date, such as "Monday, March 9,
+  2026". Today has `aria-current="date"`, and the chosen day's cell has `aria-selected="true"`.
+- A day that can't be picked has `aria-disabled="true"` and stays focusable, so people can move
+  across it. The keys aren't limited by `min` and `max` either: focus can move to a day outside them,
+  but that day can't be picked.
+- Only one day is in the tab order. It starts on the chosen day, or today, when that's in the month
+  on view, else on the first of the month. The keys below move focus from there, and focus shows the
+  shared Focus Ring.
+- The header buttons are Icon Buttons named "Previous year", "Previous month", "Next month", and
+  "Next year". Change the names with `previousYearLabel`, `previousMonthLabel`, `nextMonthLabel`,
+  and `nextYearLabel`, for example to translate them. A disabled button leaves the tab order.
+
+<Keyboard>
+  <Key keys="Tab">Moves through the enabled month and year buttons, then to the one focusable day.</Key>
+  <Key keys="Arrow Left">Moves to the previous day.</Key>
+  <Key keys="Arrow Right">Moves to the next day.</Key>
+  <Key keys="Arrow Up">Moves to the same day last week.</Key>
+  <Key keys="Arrow Down">Moves to the same day next week.</Key>
+  <Key keys="Home">Moves to the first day of the week, by `weekStartsOn`.</Key>
+  <Key keys="End">Moves to the last day of the week.</Key>
+  <Key keys="Page Up">Moves to the same day last month, or the month's last day when it's shorter.</Key>
+  <Key keys="Page Down">Moves to the same day next month, or the month's last day when it's shorter.</Key>
+  <Key keys="Shift + Page Up">Moves to the same day last year.</Key>
+  <Key keys="Shift + Page Down">Moves to the same day next year.</Key>
+  <Key keys="Enter">Picks the focused day, unless it can't be picked.</Key>
+  <Key keys="Space">Picks the focused day, unless it can't be picked.</Key>
+</Keyboard>
+
+When a key moves focus to a day in another month, the calendar shows that month.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={DatePickerCalendarStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token the calendar's stylesheet uses, by family, with the property it sets and when. "Base" is
+the panel with no state; the day states come from the day's data attributes. The header buttons use
+Icon Button's tokens, and focus uses the Focus Ring's. Today's 2px line is a fixed value, not a
+token.
+
+<TokensTable id="date-picker-calendar" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Date Picker" /> for a date field that opens this calendar.
+- <DocLink to="Components/Forms/Date Time Picker" /> for a date and a time as one value.
+- <DocLink to="Components/Forms/Time Picker" /> for a time of day.
+- <DocLink to="Components/Actions/Icon Button" />, the month and year buttons.
+- <DocLink to="Components/Overlays/Popup" />, the surface Date Picker puts the calendar on.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment on the days.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads date-picker-calendar.types.ts, the design tokens read
+  date-picker-calendar.module.css, and the Figma source comes from registry.json, so they follow the
+  code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

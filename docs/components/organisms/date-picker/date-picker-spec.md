@@ -45,6 +45,9 @@ export interface DatePickerProps
   id?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  'aria-describedby'?: string;      // set on the input, not the wrapper
+  'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid
+  required?: boolean;               // the input's native required
 }
 ```
 
@@ -92,6 +95,13 @@ format = locale short date (year numeric, month/day 2-digit, e.g. 03/09/2026)
 - Trigger: read-only input, `aria-haspopup="dialog"`; Popup sets `aria-expanded`/`aria-controls`.
 - Panel: `role="dialog"`; focus moves into the calendar grid on open and returns to the field on close.
 - The calendar provides the grid roles, roving tabindex, and keyboard model.
+- Field's wiring (`id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`) goes to the
+  input, not the wrapper `div`; every other attribute goes to the wrapper. Browsers skip constraint
+  validation on a read-only input, so native `required` is announced but never checked.
+- Known gaps (2026-10-17): the `role="dialog"` panel has no accessible name; the panel is portaled
+  to the end of `document.body` and Popup dismisses only on Escape or an outside pointerdown, so
+  tabbing out of it leaves it open.
+- The default `format` is `toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' })`.
 
 ## Storybook
 

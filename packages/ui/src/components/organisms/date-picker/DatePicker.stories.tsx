@@ -32,8 +32,6 @@ const meta = {
     max: { control: false },
     isDateDisabled: { control: false },
   },
-  // Give the popup room to open within the story canvas.
-  decorators: [(Story) => <div style={{ minBlockSize: '380px' }}>{Story()}</div>],
 } satisfies Meta<typeof DatePicker>;
 
 export default meta;

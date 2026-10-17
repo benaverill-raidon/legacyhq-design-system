@@ -183,8 +183,8 @@ surface, as Date Picker does.
 - Each day is a native `button` in a `gridcell`, named with its full date, such as "Monday, March 9,
   2026". Today has `aria-current="date"`, and the chosen day's cell has `aria-selected="true"`.
 - A day that can't be picked has `aria-disabled="true"` and stays focusable, so people can move
-  across it. The keys aren't limited by `min` and `max` either: focus can move to a day outside them,
-  but that day can't be picked.
+  across it. The keys stop at `min` and `max`: a move that would go past them lands on that first or
+  last day instead, as the disabled header buttons stop at the month.
 - Only one day is in the tab order. It starts on the chosen day, or today, when that's in the month
   on view, else on the first of the month. The keys below move focus from there, and focus shows the
   shared Focus Ring.
@@ -208,7 +208,8 @@ surface, as Date Picker does.
   <Key keys="Space">Picks the focused day, unless it can't be picked.</Key>
 </Keyboard>
 
-When a key moves focus to a day in another month, the calendar shows that month.
+When a key moves focus to a day in another month, the calendar shows that month. A move past `min`
+or `max` stops on that day.
 
 </Section>
 

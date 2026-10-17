@@ -23,14 +23,14 @@
   "anatomy": [
     { "name": "root", "element": "div", "required": true, "description": "wrapper; defaults to a 240px field width, shrinks to its container" },
     { "name": "trigger", "element": "TextField (input)", "required": true, "description": "read-only time display + trailing clock icon; aria-haspopup=dialog" },
-    { "name": "popup", "element": "Popup (role=dialog)", "required": true, "description": "anchored to the field frame" },
+    { "name": "popup", "element": "Popup", "required": true, "description": "anchored to the field frame; its content is the named role=dialog" },
     { "name": "columns", "element": "three role=listbox", "required": true, "description": "hours / minutes / AM-PM; roving tabindex; selected option highlighted" },
     { "name": "footer", "required": true, "description": "Cancel + Confirm buttons; changes are staged until Confirm" }
   ],
   "props": {
     "value": { "type": "Date | null", "required": false, "description": "Controlled time (only h:m used)." },
     "defaultValue": { "type": "Date | null", "required": false },
-    "onChange": { "type": "(value: Date) => void", "required": false, "description": "Called on Confirm." },
+    "onChange": { "type": "(value: Date) => void", "required": false, "description": "Called on Confirm, or when a changed selection is dismissed (outside click, second field click, Tab out). Not called for a time equal to the current value." },
     "open": { "type": "boolean", "required": false },
     "defaultOpen": { "type": "boolean", "required": false },
     "onOpenChange": { "type": "(open: boolean) => void", "required": false },
@@ -48,9 +48,13 @@
     "hoursLabel": { "type": "string", "default": "Hours", "required": false },
     "minutesLabel": { "type": "string", "default": "Minutes", "required": false },
     "meridiemLabel": { "type": "string", "default": "AM/PM", "required": false },
+    "amLabel": { "type": "string", "default": "AM", "required": false, "description": "Text of the morning option." },
+    "pmLabel": { "type": "string", "default": "PM", "required": false, "description": "Text of the afternoon option." },
+    "dialogLabel": { "type": "string", "default": "Choose a time", "required": false, "description": "Accessible name for the panel dialog." },
     "id": { "type": "string", "required": false },
     "aria-label": { "type": "string", "required": false },
-    "aria-labelledby": { "type": "string", "required": false }
+    "aria-labelledby": { "type": "string", "required": false },
+    "required": { "type": "boolean", "required": false, "description": "Native required on the input, plus a hidden input the form's validation checks (a read-only input is never validated)." }
   },
   "variants": {
     "size": ["sm", "md", "lg"],
@@ -78,16 +82,18 @@
   },
   "accessibility": {
     "trigger": "read-only input, aria-haspopup=\"dialog\"",
-    "expanded": "aria-expanded + aria-controls set by Popup while open",
-    "panelRole": "dialog",
+    "expanded": "aria-expanded, and aria-controls pointing at the dialog while open, set by Time Picker",
+    "panelRole": "dialog (the panel content), named by dialogLabel",
+    "required": "native required on the read-only input, plus a hidden input (tabIndex -1, aria-hidden) that the form's constraint validation checks; focusing it sends focus on to the field",
     "columns": "role=listbox with role=option children; aria-selected on the chosen option; roving tabindex",
-    "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm or an outside click commits",
+    "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm commits; Tab out of the panel commits a changed selection, closes, and returns focus",
     "focus": "shared Focus Ring; opening moves focus to the selected hour"
   },
   "keyboardInteraction": [
     "ArrowUp / ArrowDown move the selection within a column; Home / End jump to the first / last option.",
     "Tab moves between the hours, minutes, and AM/PM columns.",
     "Escape discards the staged change, closes the popup, and returns focus to the field.",
+    "Tab past Confirm, or Shift+Tab before the chosen hour, closes the popup (saving a changed selection) and returns focus to the field.",
     "Confirm commits the staged time; Cancel discards it."
   ],
   "behaviorRules": [
@@ -95,8 +101,10 @@
     "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Open a Popup with three listbox columns (hours 12-hour, minutes by minuteStep, AM/PM).",
     "Preview the staged selection live in the field while open.",
-    "Commit the staged selection on Confirm or an outside click (onChange + close); discard it on Cancel or Escape (close).",
-    "Snap the incoming value's minute to the nearest step for the initial selection.",
+    "Commit the staged selection on Confirm (onChange + close); an outside click, a second field click, or Tab out commits only a changed selection, else just closes; discard it on Cancel or Escape (close).",
+    "Never call onChange with a time equal to the current value.",
+    "Open the incoming value's minute on the largest minute option at or below it, keeping the hour.",
+    "Offer only minutes below 60 (0, step, 2*step, ...).",
     "Controlled/uncontrolled value and open; do not open when disabled."
   ],
   "compositionRules": [
@@ -137,7 +145,10 @@
   "acceptanceCriteria": [
     "Renders a field with the formatted time and a closed popup; placeholder when empty.",
     "Opens three columns with the current time selected.",
-    "Previews the staged selection live in the field; Confirm or an outside click commits; Cancel or Escape discards.",
+    "Previews the staged selection live in the field; Confirm or a changed outside click commits; Cancel or Escape discards.",
+    "Opening and dismissing with no change doesn't call onChange; 10:58 with step 5 opens on 10:55.",
+    "Tab / Shift+Tab out of the panel closes it and returns focus to the field.",
+    "A required, empty Time Picker fails the form's validation.",
     "Supports controlled value and open.",
     "Respects minuteStep.",
     "Moves focus into the columns on open; closes on Escape returning focus.",

@@ -56,6 +56,11 @@ export interface DatePickerProps
   'aria-describedby'?: string;
   /** Marks the input invalid, as `invalid` does. Field passes it for an error. */
   'aria-invalid'?: boolean | 'true' | 'false';
-  /** Sets the input's native `required`. Field passes it when its `required` is set. */
+  /**
+   * Marks the field required, and makes the form's own validation check it: submitting with no date
+   * stops the submit and points at the field. Field passes it when its `required` is set.
+   */
   required?: boolean;
+  /** Accessible name for the calendar dialog. Defaults to `Choose a date`. */
+  dialogLabel?: string;
 }

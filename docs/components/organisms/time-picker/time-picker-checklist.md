@@ -27,8 +27,12 @@ Organism.
 - [ ] Popup with three listbox columns: hours (12-hour), minutes (by minuteStep), AM/PM.
 - [ ] Options use the Figma menu-item states (selected = selected surface + selected content; hover =
       neutral overlay). Native scrollbars (vs Figma's custom scrollbar chrome).
-- [ ] Staged selection previewed live in the field: Confirm or an outside click commits (onChange +
-      close); Cancel or Escape discards.
+- [ ] Staged selection previewed live in the field: Confirm commits (onChange + close); an outside
+      click, a second field click, or Tab out commits only a changed selection; Cancel or Escape
+      discards. No onChange for a time equal to the current value.
+- [ ] A value between steps opens on the step before it (same hour); only existing minutes offered.
+- [ ] AM/PM option text from `amLabel` / `pmLabel`; the dialog named by `dialogLabel`.
+- [ ] `required` adds a hidden native input that the form validates (a read-only input never is).
 - [ ] Value carried on a Date (h:m) for clean Date/Time Picker composition. 12-hour + AM/PM (24-hour
       future).
 - [ ] Controlled + uncontrolled value and open; disabled does not open.
@@ -58,7 +62,8 @@ interface TimePickerProps
   alignment?: PopupAlignment;
   confirmLabel?: string; cancelLabel?: string;
   hoursLabel?: string; minutesLabel?: string; meridiemLabel?: string;
-  id?: string; 'aria-label'?: string; 'aria-labelledby'?: string;
+  amLabel?: string; pmLabel?: string; dialogLabel?: string;
+  id?: string; 'aria-label'?: string; 'aria-labelledby'?: string; required?: boolean;
 }
 ```
 
@@ -79,9 +84,10 @@ format: locale 12-hour time (04:30 PM)
 
 ## Accessibility
 
-- [ ] trigger read-only input, aria-haspopup=dialog; aria-expanded/aria-controls via Popup.
-- [ ] role=dialog panel; role=listbox columns with role=option (aria-selected); roving tabindex.
-- [ ] ArrowUp/Down + Home/End within a column; Tab between columns; Escape/Cancel close + return focus.
+- [ ] trigger read-only input, aria-haspopup=dialog; aria-expanded + aria-controls (pointing at the dialog).
+- [ ] named role=dialog panel; role=listbox columns with role=option (aria-selected); roving tabindex.
+- [ ] ArrowUp/Down + Home/End within a column; Tab between columns; Escape/Cancel close + return focus;
+      Tab out of the panel closes + returns focus.
 
 ## Examples to document
 
@@ -94,7 +100,9 @@ format: locale 12-hour time (04:30 PM)
 
 - [ ] Field renders formatted time; placeholder when empty.
 - [ ] Opens three columns with current time selected; focus into columns.
-- [ ] Live preview; Confirm or outside click commits + closes; Cancel or Escape discards + closes.
+- [ ] Live preview; Confirm or a changed outside click commits + closes; Cancel or Escape discards + closes.
+- [ ] Unchanged dismissal / Confirm doesn't call onChange; 10:58 opens on 10:55; step 35 offers 00, 35.
+- [ ] Tab / Shift+Tab out closes + returns focus; amLabel / pmLabel; dialogLabel; required validation.
 - [ ] Controlled value; respects minuteStep; disabled does not open.
 - [ ] CSS contract (3 equal columns, 32px options, selected tokens).
 - [ ] Uses MUI: no. Uses Tailwind: no.

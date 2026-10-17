@@ -6,6 +6,7 @@
  * (data-force-state="focus"). Defaults to Figma's 240px field width, but shrinks to its container.
  */
 .root {
+  position: relative;
   display: inline-block;
   inline-size: 240px;
   max-inline-size: 100%;
@@ -34,4 +35,18 @@
   justify-content: center;
   inline-size: var(--size-300);
   block-size: var(--size-300);
+}
+
+/*
+ * A read-only input is never validated, so a hidden native input holds the value for the form's
+ * `required` check. It lies over the field, so the browser's "fill in this field" message points at
+ * the field, and it takes no clicks.
+ */
+.validation {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  pointer-events: none;
 }

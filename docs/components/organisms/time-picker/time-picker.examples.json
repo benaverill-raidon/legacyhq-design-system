@@ -29,7 +29,7 @@
   "antiExamples": [
     {
       "name": "Expecting a value on every column change",
-      "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm or an outside click, not per change.",
+      "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm, or when a changed selection is dismissed, not per change.",
       "jsx": "<TimePicker onChange={commitImmediately} /> {/* onChange runs on commit, not per column change */}"
     },
     {

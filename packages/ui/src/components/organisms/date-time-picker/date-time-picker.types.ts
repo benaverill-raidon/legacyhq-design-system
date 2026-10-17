@@ -47,6 +47,11 @@ export interface DateTimePickerProps
   dateLabel?: string;
   /** Accessible label for the time field. Defaults to `Time`. */
   timeLabel?: string;
+  /**
+   * Id for the date input, not the group. Field sets it, so clicking Field's label focuses the date
+   * field while the label still names the group through `aria-labelledby`.
+   */
+  id?: string;
   /** Names the group when there's no visible label. Ignored when `aria-labelledby` is set. */
   'aria-label'?: string;
   /** Ids of the elements that name the group. Field passes its label's id. */

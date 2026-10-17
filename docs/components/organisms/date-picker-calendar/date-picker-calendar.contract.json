@@ -81,7 +81,7 @@
       "cellBlockSize": "--size-400",
       "motion": "--fade-quick"
     },
-    "componentAllowed": ["cell size (size-500 x size-400)", "today underline thickness (2px)"],
+    "componentAllowed": ["cell size (size-500 x size-400)", "today underline thickness (--border-width-md, 2px: a stroke, so a border-width token)"],
     "componentForbidden": ["color aliases", "radius aliases", "typography aliases", "spacing aliases"]
   },
   "accessibility": {
@@ -99,6 +99,7 @@
     "ArrowLeft/Right move by one day; ArrowUp/Down by one week.",
     "Home/End jump to the first/last day of the week.",
     "PageUp/PageDown change month; Shift+PageUp/PageDown change year.",
+    "Every key move stops at min/max: a move past them lands on the min or max day.",
     "Enter/Space select the focused day (native button)."
   ],
   "behaviorRules": [

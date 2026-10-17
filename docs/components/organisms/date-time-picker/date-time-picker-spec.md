@@ -46,10 +46,11 @@ export interface DateTimePickerProps
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string;
   timeLabel?: string;
+  id?: string;                      // goes to the date input, not the group
   'aria-label'?: string;            // ignored when aria-labelledby is set
   'aria-labelledby'?: string;
   'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid, on both inputs
-  required?: boolean;               // native required on both inputs
+  required?: boolean;               // required on both halves; the form validates each
 }
 ```
 
@@ -78,9 +79,12 @@ dateLabel = 'Date'; timeLabel = 'Time'
 - The root is a `role="group"`; label it (`aria-label` / `aria-labelledby`).
 - Each half is an independent field with its own accessible name, `role="dialog"` popup, and keyboard
   model - see the Date Picker and Time Picker specs.
-- In a Field: the label names the group (`aria-labelledby`), `id` and the message's `aria-describedby`
-  land on the group `div`, and the error (`aria-invalid`) and `required` go to both inputs. The
-  label's `htmlFor` points at the group, which isn't labelable, so clicking it focuses nothing.
+- In a Field: the label names the group (`aria-labelledby`), and the message's `aria-describedby`
+  lands on the group `div`. Field's `id` goes to the date input, so the label's `htmlFor` points at
+  it and clicking the label focuses the date half (and, as on a Date Picker in a Field, the forwarded
+  click opens its calendar); the date input keeps its own name, `dateLabel`. The error
+  (`aria-invalid`) and `required` go to both inputs, and each half's hidden validation input makes the
+  form check that both a date and a time are set.
 - `today` also supplies the date when a time is confirmed with no value.
 - No `open`/`onOpenChange`: each half manages its own popup.
 
@@ -100,5 +104,8 @@ confirming a time keeps the date
 is controlled by value
 disables both fields
 applies size and context on the group
+points Field's label at the date input; the label still names the group
+puts its id on the date input, not the group
+required: an empty control fails the form's validation
 CSS contract: collapsed shared border + squared inner corners
 ```

@@ -82,8 +82,9 @@ nextYearLabel = 'Next year'
 - `min`/`max` (inclusive) disable out-of-range days and block year/month nav when the whole target
   month is out of range; `isDateDisabled` disables individual dates.
 - Roving tabindex; WAI-ARIA grid keyboard model; the focused day is kept inside the displayed month.
-- Keyboard moves are not bounded by `min`/`max` or `isDateDisabled` (the header buttons are): focus
-  can land on, and the month can move to, days that can't be picked.
+- Keyboard moves stop at `min`/`max`, as the header buttons do: a move past them lands on the `min`
+  or `max` day. They aren't bounded by `isDateDisabled`: focus can land on a disabled day (it stays
+  focusable), which can't be picked.
 - Header nav keeps the focused day number, clamped to the target month's length.
 
 ## Accessibility

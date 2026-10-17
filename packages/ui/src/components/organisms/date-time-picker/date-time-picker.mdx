@@ -177,13 +177,13 @@ The control is 480px wide: two 240px halves, side by side on one line.
 
 - The control is a `div` with `role="group"`. Name it with Field, whose label names the group, or
   with `aria-label` or `aria-labelledby`. `aria-label` is ignored when `aria-labelledby` is set.
-- Field's label points at the group, which can't take focus, so clicking the label doesn't focus
-  either half.
+- Field's label points at the date input, so clicking the label focuses the date half and opens
+  its calendar. The label still names the group, and the date input keeps its own name, "Date".
 - Each half is a read-only `input` named by `dateLabel` or `timeLabel`, "Date" and "Time" by default,
   so it's announced with the group's name around it.
 - In a Field, the message describes the group. An error sets `aria-invalid` on both inputs, and
-  `required` sets both inputs' native `required`. Browsers don't check `required` on a read-only
-  input, so check for an empty value yourself.
+  `required` sets both inputs' native `required`. The form then checks both halves: submitting
+  without a date or a time stops the submit, and the browser points at the empty half.
 - Each half's popup, focus, and announcements are its own: see <DocLink to="Components/Forms/Date Picker" />
   and <DocLink to="Components/Forms/Time Picker" />.
 

@@ -31,6 +31,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
       timeFormat,
       dateLabel = 'Date',
       timeLabel = 'Time',
+      id,
       className,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
@@ -40,7 +41,9 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
     },
     forwardedRef,
   ) {
-    // Field's error and required apply to both inputs; its description stays on the group.
+    // Field's error and required apply to both inputs; its description stays on the group. Its `id`
+    // goes to the date input, so clicking Field's label focuses the date; the group is still named by
+    // the label through aria-labelledby.
     const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
     const isValueControlled = value !== undefined;
     const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
@@ -103,6 +106,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
         data-context={context}
       >
         <DatePicker
+          id={id}
           className={styles.date}
           value={selected}
           onChange={handleDateChange}

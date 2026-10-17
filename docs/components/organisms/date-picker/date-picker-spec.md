@@ -11,8 +11,8 @@ and the Date Picker Calendar organism (content).
 1. **Root** - a `div` wrapper (defaults to a 240px field width, shrinks to its container).
 2. **Trigger** - a read-only `TextField` (input) showing the formatted date + a trailing calendar
    icon; `aria-haspopup="dialog"`. The field frame is measured for popup anchoring.
-3. **Popup** - a `role="dialog"` panel (padding `none`) anchored to the field frame, holding the
-   calendar.
+3. **Popup** - a panel (padding `none`) anchored to the field frame, holding the calendar, which is
+   the `role="dialog"`, named by `dialogLabel` (Popup's panel takes no label).
 4. **Calendar** - `DatePickerCalendar`, receiving the selection and date constraints.
 
 ## Public API
@@ -47,7 +47,8 @@ export interface DatePickerProps
   'aria-labelledby'?: string;
   'aria-describedby'?: string;      // set on the input, not the wrapper
   'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid
-  required?: boolean;               // the input's native required
+  required?: boolean;               // native required + a hidden input the form validates
+  dialogLabel?: string;             // the calendar dialog's name; 'Choose a date'
 }
 ```
 
@@ -75,9 +76,14 @@ format = locale short date (year numeric, month/day 2-digit, e.g. 03/09/2026)
 
 - Read-only field shows the formatted selected date (or placeholder) + a calendar icon.
 - Click / Enter / Space / ArrowDown / ArrowUp open the popup; opening moves focus into the calendar
-  grid.
+  grid, a frame later (Popup keeps the panel hidden until it's positioned).
 - Selecting a day fills the field, closes the popup, and returns focus to the field.
 - Escape closes and returns focus; outside click dismisses without moving focus.
+- Tab past the panel's last stop (the focusable day), or Shift+Tab before its first, closes it and
+  returns focus to the field, as Dropdown Menu does: tab order runs field, calendar, rest of page.
+- `required` also renders a hidden native input (`tabIndex=-1`, `aria-hidden`, laid over the field,
+  no pointer events) holding the date as `YYYY-MM-DD`, so the form's constraint validation checks it;
+  when the browser focuses it for an empty value, focus moves on to the field.
 - Controlled/uncontrolled `value` and `open`.
 - `min`/`max`/`isDateDisabled`/`weekStartsOn`/`today`/`locale` pass through to the calendar.
 - Disabled does not open.
@@ -92,15 +98,15 @@ format = locale short date (year numeric, month/day 2-digit, e.g. 03/09/2026)
 
 ## Accessibility
 
-- Trigger: read-only input, `aria-haspopup="dialog"`; Popup sets `aria-expanded`/`aria-controls`.
-- Panel: `role="dialog"`; focus moves into the calendar grid on open and returns to the field on close.
+- Trigger: read-only input, `aria-haspopup="dialog"`, `aria-expanded`, and `aria-controls` pointing
+  at the dialog while open (set by Date Picker; Popup's `manageTriggerAria` is off).
+- Dialog: the calendar root, `role="dialog"`, named by `dialogLabel` (`Choose a date`). Focus moves
+  into the grid on open, and back to the field on select, Escape, or Tab out.
 - The calendar provides the grid roles, roving tabindex, and keyboard model.
 - Field's wiring (`id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`) goes to the
   input, not the wrapper `div`; every other attribute goes to the wrapper. Browsers skip constraint
-  validation on a read-only input, so native `required` is announced but never checked.
-- Known gaps (2026-10-17): the `role="dialog"` panel has no accessible name; the panel is portaled
-  to the end of `document.body` and Popup dismisses only on Escape or an outside pointerdown, so
-  tabbing out of it leaves it open.
+  validation on a read-only input, so `required` also adds the hidden validation input above: an
+  empty required Date Picker stops the form's submit and the browser's message points at the field.
 - The default `format` is `toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' })`.
 
 ## Storybook
@@ -119,12 +125,15 @@ renders a field with the formatted date and a closed popup
 shows the placeholder when empty
 opens on click and marks the field expanded
 opens with Enter and Arrow Down
-moves focus into the calendar on open
+moves focus into the calendar when opened, once the panel is shown
+names the calendar dialog (dialogLabel, default 'Choose a date')
+closes and returns focus to the field on Tab / Shift+Tab out of the calendar
 selects a day: fills the field, closes, returns focus (uncontrolled)
 controlled by value: onChange fires; field changes only on value change
 closes on Escape and returns focus
 does not open when disabled
 passes min/max through to the calendar
-exposes a role=dialog panel via aria-controls
+points the field at the dialog with aria-controls while open
+required: an empty value fails the form's validation; a date, or disabled, passes; focus goes on to the field
 CSS contract: 240px default width; read-only trigger cursor + no caret
 ```

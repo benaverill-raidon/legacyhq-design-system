@@ -47,6 +47,7 @@
     "timeFormat": { "type": "(value: Date, locale?: string) => string", "required": false },
     "dateLabel": { "type": "string", "default": "Date", "required": false },
     "timeLabel": { "type": "string", "default": "Time", "required": false },
+    "id": { "type": "string", "required": false, "description": "Id for the date input, not the group. Field sets it, so clicking its label focuses the date half." },
     "aria-label": { "type": "string", "required": false },
     "aria-labelledby": { "type": "string", "required": false }
   },
@@ -68,6 +69,7 @@
     "rootRole": "group",
     "label": "aria-label or aria-labelledby on the group",
     "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
+    "fieldWiring": "Field's label names the group via aria-labelledby; Field's id goes to the date input, so the label's htmlFor focuses the date half; required makes the form validate both halves",
     "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
   },
   "behaviorRules": [
@@ -117,6 +119,8 @@
     "Supports controlled value.",
     "Disables both halves.",
     "Applies size and context on the group.",
+    "In a Field, the label points at the date input and still names the group.",
+    "A required, empty control fails the form's validation.",
     "Joins the halves (collapsed border + squared inner corners).",
     "Does not use MUI or Tailwind.",
     "Storybook and tests compile."

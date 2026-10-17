@@ -118,8 +118,8 @@ Down, and Arrow Up open it from the keyboard. Opening moves focus to the chosen 
 or to today when nothing is chosen. While the calendar is open, the field keeps its focus style.
 
 Picking a day fills the field, calls `onChange`, closes the calendar, and returns focus to the field.
-Escape closes it and returns focus too. A click outside closes it and leaves focus where the click
-put it.
+Escape closes it and returns focus too, and so does Tab past the calendar's last stop, or Shift+Tab
+before its first. A click outside closes it and leaves focus where the click put it.
 
 The field is read-only: people pick from the calendar and can't type a date.
 
@@ -142,6 +142,15 @@ single dates, such as weekends. Ruled-out days are muted in the calendar and can
 The field shows the date in the locale's short format, such as 03/09/2026 in US English. Pass
 `format` to show it another way. Set a `placeholder` that matches the format, so an empty field shows
 what the value will look like.
+
+</Subsection>
+
+<Subsection title="Required">
+
+`required` makes the form check for a date: submitting with an empty field stops the submit, and the
+browser's message points at the field. A read-only input is never checked by the browser, so Date
+Picker adds a hidden input that holds the date for the check. In a Field, `required` also adds the
+`*` to the label.
 
 </Subsection>
 
@@ -222,24 +231,25 @@ inline context.
 
 <Section title="Accessibility">
 
-- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`.
-  Popup sets `aria-expanded` on it, and `aria-controls` pointing at the panel while it's open.
+- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`,
+  `aria-expanded`, and `aria-controls` pointing at the calendar while it's open.
 - Name it with Field, which wires its label to the input, or with `aria-label` or
   `aria-labelledby`. These go to the input, not the wrapper.
 - In a Field, the message is added to the input's description, an error sets `aria-invalid`, and
-  `required` sets the input's native `required`. Browsers don't check `required` on a read-only
-  input, so check for an empty value yourself.
-- The panel is a `dialog`, added at the end of the page. It has no accessible name yet; that's a
-  known bug. Inside it, the calendar is a grid labelled by its month: see
-  <DocLink to="Components/Forms/Date Picker Calendar" /> for how it's announced.
-- Opening moves focus into the calendar; picking a day or pressing Escape returns it to the field.
-  Tabbing away from an open calendar leaves it open until Escape or a click outside; that's a known
-  bug.
+  `required` sets the input's native `required`, which is announced. The hidden input that the form
+  checks is out of the tab order and hidden from assistive technology; when the browser points at
+  it, focus goes on to the field.
+- The calendar is a `dialog` named "Choose a date", added at the end of the page. Change the name
+  with `dialogLabel`, for example to translate it. Inside it, the days are a grid labelled by the
+  month: see <DocLink to="Components/Forms/Date Picker Calendar" /> for how it's announced.
+- Opening moves focus into the calendar. Picking a day, Escape, and Tab out of the calendar close it
+  and return focus to the field, so the tab order runs field, calendar, then the rest of the page.
 - The calendar icon is decorative and hidden from assistive technology.
 - `disabled` is the native attribute: the input leaves the tab order.
 
 <Keyboard>
-  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the calendar, moves through its month and year buttons, then its focused day.</Key>
+  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the calendar, moves through its month and year buttons, then its focused day; from the day, closes the calendar and returns focus to the field.</Key>
+  <Key keys="Shift + Tab">In the calendar, moves back; from its first button, closes the calendar and returns focus to the field.</Key>
   <Key keys="Enter">On the field, opens the calendar. On a day, picks it and closes the calendar, unless the day is disabled.</Key>
   <Key keys="Space">On the field, opens the calendar. On a day, picks it and closes the calendar, unless the day is disabled.</Key>
   <Key keys="Arrow Down">On the field, opens the calendar. In the calendar, moves to the same day next week.</Key>

@@ -145,9 +145,11 @@ export const DatePickerCalendar = React.forwardRef<HTMLDivElement, DatePickerCal
     const dayRefs = React.useRef(new Map<string, HTMLButtonElement>());
 
     // Keep the focused date inside the displayed month (e.g. when `month` is controlled externally).
+    // Rebuilt from the timestamp, so the effect runs only when the month really changes.
     React.useEffect(() => {
+      const monthStart = new Date(displayedMonthTime);
       setFocusedDate((previous) =>
-        isSameMonth(previous, displayedMonth) ? previous : clampToMonth(previous, displayedMonth),
+        isSameMonth(previous, monthStart) ? previous : clampToMonth(previous, monthStart),
       );
     }, [displayedMonthTime]);
 
@@ -247,6 +249,12 @@ export const DatePickerCalendar = React.forwardRef<HTMLDivElement, DatePickerCal
           return;
       }
       event.preventDefault();
+      // Keyboard moves stop at min and max, as the header's buttons do.
+      if (min && next < startOfDay(min)) {
+        next = startOfDay(min);
+      } else if (max && next > startOfDay(max)) {
+        next = startOfDay(max);
+      }
       moveFocus(next);
     };
 

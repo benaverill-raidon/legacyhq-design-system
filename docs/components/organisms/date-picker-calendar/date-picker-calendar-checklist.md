@@ -92,7 +92,7 @@ nav labels: Previous/Next month, Previous/Next year
 ## Accessibility
 
 - [ ] `role="grid"` labelled by the aria-live title; weekday columnheaders with full-name labels.
-- [ ] roving tabindex; Arrow/Home/End/PageUp/PageDown/Enter/Space.
+- [ ] roving tabindex; Arrow/Home/End/PageUp/PageDown/Enter/Space; key moves stop at min/max.
 - [ ] today `aria-current="date"`; selected cell `aria-selected`; disabled `aria-disabled`.
 - [ ] shared Focus Ring.
 

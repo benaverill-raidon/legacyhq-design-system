@@ -126,19 +126,21 @@ The field is read-only: people pick from the columns and can't type a time.
 <Subsection title="Confirming and cancelling">
 
 Choices in the columns are held until they're confirmed, and the field shows them as they change.
-Confirm, a click outside the panel, or a second click on the field saves them: `onChange` is called
-and the panel closes. A click outside saves even when nothing changed. Cancel or Escape throws the
-choices away, and the field goes back to the saved time. Confirm, Cancel, Escape, and a second click
-return focus to the field; a click outside leaves it where the click put it.
+Confirm saves them: `onChange` is called and the panel closes. A click outside the panel, a second
+click on the field, or Tab out of the panel saves them too, but only if something was changed;
+otherwise the panel just closes. `onChange` isn't called for a time that's the same as the saved one.
+Cancel or Escape throws the choices away, and the field goes back to the saved time. Confirm,
+Cancel, Escape, a second click, and Tab out return focus to the field; a click outside leaves it
+where the click put it.
 
 </Subsection>
 
 <Subsection title="Minute step">
 
 `minuteStep` sets the minutes between the options in the minutes column, counting from 00, and
-defaults to 5. A saved time whose minutes fall between steps opens on the nearest step, and saving
-keeps that step. When the minutes round up to the next hour, such as 10:58, it opens on 10:00 instead
-of 11:00; that's a known bug.
+defaults to 5. A step that doesn't divide the hour offers only the minutes that exist: 35 gives 00
+and 35. A saved time whose minutes fall between steps opens on the step before them, so 10:58 opens
+on 10:55. Saving then keeps that step; closing without a change keeps 10:58.
 
 <Example of={TimePickerStories.MinuteStep} caption="A 15-minute step: 00, 15, 30, and 45." />
 
@@ -156,8 +158,17 @@ minutes from it, or use Date Time Picker when the day matters.
 
 The field shows the time in the locale's 12-hour format, such as 04:30 PM in US English. Pass `format`
 to show it another way. The columns are always 12-hour. `confirmLabel`, `cancelLabel`, `hoursLabel`,
-`minutesLabel`, and `meridiemLabel` change the panel's words, for example to translate them. The AM
-and PM options themselves are always in English; that's a known gap.
+`minutesLabel`, `meridiemLabel`, `amLabel`, `pmLabel`, and `dialogLabel` change the panel's words, for
+example to translate them.
+
+</Subsection>
+
+<Subsection title="Required">
+
+`required` makes the form check for a time: submitting with an empty field stops the submit, and the
+browser's message points at the field. A read-only input is never checked by the browser, so Time
+Picker adds a hidden input that holds the time for the check. In a Field, `required` also adds the
+`*` to the label.
 
 </Subsection>
 
@@ -231,11 +242,14 @@ context, and the panel lines its options up at the start with a line beside the 
       cancelLabel="Cancelar"
       hoursLabel="Horas"
       minutesLabel="Minutos"
+      amLabel="a. m."
+      pmLabel="p. m."
+      dialogLabel="Elegir una hora"
     />
 </Field>`}
 >
   <Field label="Hora de la audiencia">
-    <TimePicker defaultValue={NINE_THIRTY} confirmLabel="Confirmar" cancelLabel="Cancelar" hoursLabel="Horas" minutesLabel="Minutos" />
+    <TimePicker defaultValue={NINE_THIRTY} confirmLabel="Confirmar" cancelLabel="Cancelar" hoursLabel="Horas" minutesLabel="Minutos" amLabel="a. m." pmLabel="p. m." dialogLabel="Elegir una hora" />
   </Field>
 </Do>
 <Dont
@@ -250,27 +264,28 @@ context, and the panel lines its options up at the start with a line beside the 
 
 <Section title="Accessibility">
 
-- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`.
-  Popup sets `aria-expanded` on it, and `aria-controls` pointing at the panel while it's open.
+- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`,
+  `aria-expanded`, and `aria-controls` pointing at the panel while it's open.
 - Name it with Field, which wires its label to the input, or with `aria-label` or
   `aria-labelledby`. These go to the input, not the wrapper.
 - In a Field, the message is added to the input's description, an error sets `aria-invalid`, and
-  `required` sets the input's native `required`. Browsers don't check `required` on a read-only
-  input, so check for an empty value yourself.
-- The panel is a `dialog`, added at the end of the page. It has no accessible name yet; that's a
-  known bug.
+  `required` sets the input's native `required`, which is announced. The hidden input that the form
+  checks is out of the tab order and hidden from assistive technology; when the browser points at
+  it, focus goes on to the field.
+- The panel is a `dialog` named "Choose a time", added at the end of the page. Change the name with
+  `dialogLabel`, for example to translate it.
 - Each column is a `listbox` named by `hoursLabel`, `minutesLabel`, or `meridiemLabel`. Its options
   are native buttons with `role="option"`, and the chosen one has `aria-selected="true"`. Only the
   chosen option in each column is in the tab order, and moving with the arrow keys chooses as it
   goes. Focus shows the shared Focus Ring.
-- Opening moves focus to the chosen hour. Confirm, Cancel, and Escape return focus to the field.
-  Tabbing away from the open panel leaves it open until Escape or a click outside; that's a known
-  bug.
+- Opening moves focus to the chosen hour. Confirm, Cancel, Escape, and Tab out of the panel close
+  it and return focus to the field, so the tab order runs field, panel, then the rest of the page.
 - The clock icon is decorative and hidden from assistive technology.
 - `disabled` is the native attribute: the input leaves the tab order.
 
 <Keyboard>
-  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the panel, moves from hours to minutes, AM or PM, Cancel, and Confirm.</Key>
+  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the panel, moves from hours to minutes, AM or PM, Cancel, and Confirm; from Confirm, closes the panel, saving any change, and returns focus to the field.</Key>
+  <Key keys="Shift + Tab">In the panel, moves back; from the hours, closes the panel, saving any change, and returns focus to the field.</Key>
   <Key keys="Enter">On the field, opens the panel. On an option, chooses it; on a button, presses it.</Key>
   <Key keys="Space">On the field, opens the panel. On an option, chooses it; on a button, presses it.</Key>
   <Key keys="Arrow Down">On the field, opens the panel. In a column, chooses the next option.</Key>

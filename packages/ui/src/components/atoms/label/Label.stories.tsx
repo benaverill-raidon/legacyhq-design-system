@@ -211,9 +211,9 @@ export const EdgeCases: Story = {
       <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         {sectionHeading('Long content overflows rather than wrapping or truncating')}
         <p style={captionStyle}>
-          Label sets <code>white-space: nowrap</code> and has no ellipsis - content longer than the
-          recommended 1-3 words overflows visibly. Truncation beyond normal inline layout is
-          explicitly out of scope for this component.
+          Label sets <code>white-space: nowrap</code> and has no ellipsis, so content longer than the
+          recommended 1-3 words is wider than a narrow container. This container clips its overflow.
+          Truncation beyond normal inline layout is explicitly out of scope for this component.
         </p>
         <Cell label="Recommended length">
           <Label tone="warning" emphasis="bold">

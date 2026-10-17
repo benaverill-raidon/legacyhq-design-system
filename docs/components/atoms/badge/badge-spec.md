@@ -99,7 +99,10 @@ Badge is not interactive.
 ### ARIA
 
 Support:
-- aria-label
+- `ariaLabel`, rendered as `aria-label` on the root `span`. The span has no role, and ARIA prohibits
+  naming an element with the generic role, so screen readers may ignore it; visible context next to
+  the badge is the reliable way to explain a count.
+- No other attribute is forwarded: Badge doesn't spread remaining props onto its span.
 
 Example:
 
@@ -121,10 +124,10 @@ Suggested mappings:
 
 | Tone | Background Token | Text Token |
 |---------|------------------|-------------|
-| default | surface/default | content/default |
-| brand | background/brand | content/inverse |
-| success | background/success | content/inverse |
-| error | background/error | content/inverse |
+| default | `--color-background-neutral-bold-default` | `--color-content-inverse-default` |
+| brand | `--color-background-brand-primary-bold-default` | `--color-content-inverse-default` |
+| success | `--color-background-success-bold-default` | `--color-content-inverse-default` |
+| error | `--color-background-error-bold-default` | `--color-content-inverse-default` |
 
 ### Typography
 Use typography tokens.
@@ -154,11 +157,8 @@ No animation.
 None
 
 ### Used By
-- Navigation
-- Button
-- Table
-- Card
-- List Item
+No component composes Badge today. It's placed beside navigation items, table cells, cards, and
+list items by the code that renders them.
 
 ---
 

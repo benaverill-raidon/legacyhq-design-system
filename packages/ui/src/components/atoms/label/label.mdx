@@ -1,147 +1,208 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../../molecules/field';
+import { TextField } from '../../molecules/text-field';
+import { Tag } from '../tag';
+import { Label } from './label';
+import labelStyles from './label.module.css';
 import * as LabelStories from './Label.stories';
 
 <Meta of={LabelStories} name="Docs" />
 
-# Label
+<Unstyled>
+<ComponentPage>
 
-Label is a compact, non-interactive marker for an item's status, category, or classification -
-built for fast scanning, not for action.
+<ComponentHeader
+  id="label"
+  example={
+    <>
+      <p>
+        Estate review <Label tone="success">Active</Label>
+      </p>
+      <p>
+        Compliance task <Label tone="warning">At risk</Label>
+      </p>
+      <p>
+        Trust amendment <Label tone="law">Law</Label>
+      </p>
+    </>
+  }
+>
+  Label marks an item's status or category with a word or two, such as Active, At risk, or Law. It's
+  text on a colored fill, read in place, and nothing happens when people click it.
+</ComponentHeader>
 
-<Canvas of={LabelStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A status indicator - active, at risk, blocked, complete.
-- A classification or category tag on a card, table row, or list item.
-- A small metadata marker, including domain-specific ones like `law` or `wealth`.
+- The status of a record: Draft, Active, At risk, Blocked, Complete.
+- A category or a classification on a card, a table row, or a list item.
+- Whether an item belongs to law or wealth, with `tone="law"` or `tone="wealth"`.
+- A short qualifier inside a Text Field, after the input.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **As a button, link, or dropdown trigger.** Label is deliberately non-interactive and must never
-  be keyboard-focusable.
-- **As a removable tag or a user-entered chip.** Use `Tag` for anything the user adds or removes.
-- **As a filter or selectable value.** If it needs to be clicked or toggled, it isn't a Label.
-- **As the only source of meaning for something critical.** Color and a tone name aren't enough on
-  their own - pair Label with a heading, column name, or adjacent text that gives it context.
+- **Naming a form control:** <DocLink to="Components/Forms/Field" />, whose `label` is a real `label` element tied to the control.
+- **A count or a change in a number:** <DocLink to="Components/Data Display/Badge" />.
+- **A reference that links to a record, or that people can remove:** <DocLink to="Components/Data Display/Tag" />.
+- **A filter people apply or change:** <DocLink to="Components/Forms/Chip" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={LabelStories.Content} />
+</Section>
 
-Label has one part: a `span` that renders its `children` directly, in whatever case the caller
-passes. There is no icon slot, no dismiss control, and no separate container - the text *is* the
-label.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy specimen={<Label tone="information">Research</Label>}>
+  <Part name="container" target={labelStyles.label}>A `span`: the colored fill, sized by its text. It has no border, icon, or remove control.</Part>
+  <Part name="text">The `children`, rendered straight into the container on one line, in the case you pass.</Part>
+</Anatomy>
 
-### Tone versus emphasis
+</Section>
 
-`tone` carries the semantic meaning (`default`, `information`, `warning`, `error`,
-`success`, plus the domain-specific `law` and `wealth`); `emphasis` (`subtle` or `bold`) is purely a
-visual weight independent of that meaning. `bold` always uses an inverse-content fill; `subtle`
-always keeps a softer background with tone-colored text. Choose emphasis for visual hierarchy in the
-surrounding layout, not to change what the tone communicates.
+<Section title="Variants">
 
-### Content length
+`tone` says what the label means; `emphasis` sets how much it stands out. They're separate props, and
+every tone comes in both emphases. `default` is neutral. `information`, `warning`, `error`, and
+`success` are statuses, and their `subtle` text takes the status color. `law` and `wealth` mark an
+item's product category, in the brand blue and in green.
 
-Keep text to 1-3 words - a status or category name, not a sentence. Label sets `white-space: nowrap`
-and applies no ellipsis, so longer content overflows visibly rather than wrapping or truncating.
-Treat visible overflow as a signal to shorten the text, not something to style around - truncation
-beyond normal inline layout is intentionally out of scope for this component. See Edge Cases.
+`subtle`, the default, is a tinted fill for most labels. `bold` is a solid fill, for a label that has
+to stand out in a busy row. Choose the emphasis for the layout, not to change the meaning.
 
-### Case handling
+<Example of={LabelStories.Variants} />
 
-Label no longer applies an uppercase transform - its heading typography now renders in whatever
-case the caller passes. Pass text already in the case you want it displayed.
+<Subsection title="Sizes">
 
-## Do / Don't
+`md`, the default, sets the text in `heading-xs` with 8px of padding at each side. `sm` uses
+`heading-xxs` and 4px, for dense tables and compact cards. Corners are 4px at both sizes.
 
-**Do** pass concise text already in the case you want displayed.
+<Example of={LabelStories.Sizes} />
 
-```tsx
-<Label tone="success">Active</Label>
-```
+</Subsection>
 
----
+</Section>
 
-**Do** pair Label with adjacent text so tone isn't the only signal.
+<Section title="Behavior">
 
-```tsx
-<span>
-  Compliance task <Label tone="warning">At risk</Label>
-</span>
-```
+<Subsection title="Text and length">
 
-**Don't** let a bare Label stand in for a status column or heading.
+Label renders its text exactly as you pass it, with no change of case. It doesn't wrap and has no
+ellipsis, so text longer than a few words overflows its container rather than shortening. Keep it to
+one to three words.
 
-```tsx
-<Label tone="warning">At risk</Label>
-```
+<Example of={LabelStories.EdgeCases} caption="Long text in a narrow container, several labels wrapping in a row, and a dark surface." />
 
----
+</Subsection>
 
-**Do** use `Tag` when the value is user-entered or removable.
+<Subsection title="Not interactive">
 
-```tsx
-<Tag onRemove={handleRemove}>Custom filter</Tag>
-```
+Label has no hover, focus, pressed, or disabled look. It's information about an item, read alongside
+it.
 
-**Don't** reach for Label when the content needs to be interactive.
+<Example of={LabelStories.Content} caption="Labels in a table, a card, and a row." />
 
-```tsx
-<Label onClick={handleRemove}>Custom filter</Label>
-```
+</Subsection>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. Label text - 1 to 3 words recommended.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'sm' | 'md'</code></td>
-      <td><code>'md'</code></td>
-      <td>Padding and typography scale.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'information' | 'warning' | 'error' | 'success' | 'law' | 'wealth'</code></td>
-      <td><code>'default'</code></td>
-      <td>Semantic meaning.</td>
-    </tr>
-    <tr>
-      <td><code>emphasis</code></td>
-      <td><code>'subtle' | 'bold'</code></td>
-      <td><code>'subtle'</code></td>
-      <td>Visual weight, independent of tone.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root's class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Section title="Do and don't">
 
-Any other native `span` attribute is forwarded to the root element. Label has no `isDisabled` or
-interactive state - it is non-interactive by design, so this Docs page has no States section.
+<Guidelines>
+<Do caption="Keep the text to a status or a category name." code={`<Label tone="warning">At risk</Label>`}>
+  <Label tone="warning">At risk</Label>
+</Do>
+<Dont caption="Write a sentence in a Label. It doesn't wrap, so in a narrow space it runs past its container." code={`<Label tone="warning">Needs review before the filing deadline</Label>`}>
+  <Label tone="warning">Needs review before the filing deadline</Label>
+</Dont>
+<Do caption="Use Tag for a value that links to a record or that people can remove." code={`<Tag href="/trusts/123" tone="green">Averill Family Living Trust</Tag>`}>
+  <Tag href="#" tone="green">Averill Family Living Trust</Tag>
+</Do>
+<Dont caption="Add a click handler to a Label. It isn't focusable, so keyboard users can't reach it." code={`<Label tone="information" onClick={openTrust}>Averill Family Living Trust</Label>`} />
+<Do caption="Name a form control with Field, whose label is tied to the control." code={`<Field label="Matter name">
+    <TextField />
+</Field>`}>
+  <Field label="Matter name">
+    <TextField />
+  </Field>
+</Do>
+<Dont caption="Use Label above a control as its name. It isn't a form label, so the control stays unnamed." code={`<Label>Matter name</Label>
+<TextField />`} />
+</Guidelines>
 
-## Related components
+</Section>
 
-- **Badge** - for a bare numeric count rather than a text classification.
-- **Tag** - for a removable or user-entered value.
+<Section title="Accessibility">
+
+- Label renders a `span` with no role, so its text is read in place, as part of the content around it.
+  It isn't focusable and has no keyboard interaction.
+- It isn't a form label: it isn't tied to a control, and clicking it focuses nothing. To name a
+  control, use <DocLink to="Components/Forms/Field" />.
+- The text carries the meaning. Write the status in words; the tone's color supports it but isn't
+  read out.
+- Other attributes you pass go to the span, so a label you make clickable is still a `span` that
+  keyboard users can't reach. Use a real control instead.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={LabelStories} native="span" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Label's stylesheet uses, by family, with the property it sets and when. Each size and
+each tone and emphasis pair sets the stylesheet's own variables, which the base rule reads, so a
+token shows the pairing that sets it. The heights (20px for `sm`, 24px for `md`) are raw minimums,
+not tokens.
+
+<TokensTable id="label" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Badge" /> for a count or a change in a number.
+- <DocLink to="Components/Data Display/Tag" /> for a reference that links to a record or can be removed.
+- <DocLink to="Components/Forms/Field" /> for the label that names a form control.
+- <DocLink to="Components/Forms/Text Field" />, which can show a Label after its input.
+- <DocLink to="Components/Forms/Chip" /> for a filter people apply or change.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads label.types.ts, the design tokens read label.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

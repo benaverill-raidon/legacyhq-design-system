@@ -28,6 +28,7 @@
   ],
   "anatomy": [
     "container",
+    "content area",
     "optional leading icon",
     "label",
     "optional remove button"

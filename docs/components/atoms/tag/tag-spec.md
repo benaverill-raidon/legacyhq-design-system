@@ -267,9 +267,21 @@ When `isDisabled` is true:
 - Set `tabIndex={-1}` for anchor content
 - Set native `disabled` on remove button
 
+## Motion and attribute routing
+
+The hover/press background on the interactive content (link or interactive button) and on the
+remove button fades with the `fade-quick` motion recipe, switched off under
+`prefers-reduced-motion: reduce`. Every tone swaps a solid `background-color` between its
+`-default`/`-hover`/`-press` tokens; the `--tag-background-*-layer` variables are always `none`.
+
+`tabIndex` and `aria-describedby` go to the link or the interactive button (in a removable linked tag,
+the content anchor), never to the wrapper. The display-only span and a removable tag without `href`
+drop them. `onClick` and `isInteractive` are ignored by a removable tag without `href`, whose content
+is a plain span; with `href`, `onClick` runs from the anchor's click handler, not while disabled.
+
 ## Leading element
 
-`elemBefore` supports icons, avatars, or other compact visual content.
+`elemBefore` supports icons or other compact visual content. Its box is a constant 16px (`--size-icon-md`), and Icon components inside it are resized to fit; content larger than 16px, such as an Avatar, isn't resized.
 
 ```tsx
 <Tag elemBefore={<AssetIcon />}>Ben’s Investments</Tag>

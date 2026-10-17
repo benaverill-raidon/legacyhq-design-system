@@ -112,8 +112,8 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="With ariaLabel (count needs context)">
-        <Cell label="Visible '1', announced fully">
+      <Group title="With ariaLabel">
+        <Cell label="Visible '1', with an aria-label">
           <Badge ariaLabel="1 unread notification">1</Badge>
         </Cell>
       </Group>
@@ -177,8 +177,8 @@ export const EdgeCases: Story = {
           Narrow container
         </h3>
         <p style={captionStyle}>
-          Badge does not wrap or shrink its text - a long value inside a narrow container overflows
-          visibly rather than truncating silently.
+          Badge does not wrap or shrink its text, so a long value is wider than a narrow container.
+          This container clips its overflow.
         </p>
         <div
           style={{

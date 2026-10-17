@@ -37,6 +37,9 @@ const photoB = portrait({ top: '#d8c3a5', bottom: '#8c6f4e', figure: '#3c2f26' }
 const photoC = portrait({ top: '#b9c9a8', bottom: '#5f7a52', figure: '#e8d3bb' });
 const brokenImage = 'https://invalid.localhost/this-image-does-not-exist.png';
 
+/** The photograph stand-ins, for the Docs page's examples. Not a story. */
+export const avatarPhotos = { photoA, photoB, photoC };
+
 const SIZES: AvatarSize[] = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl'];
 
 const row: React.CSSProperties = {
@@ -92,6 +95,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 const meta = {
   title: 'Components/Data Display/Avatar',
   component: Avatar,
+  excludeStories: ['avatarPhotos'],
   args: {
     size: 'md',
     name: 'Ben Averill',

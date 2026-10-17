@@ -105,9 +105,9 @@
   "sizes": [
     {
       "name": "default",
-      "minInlineSize": "spacing-200",
-      "blockSize": "spacing-200",
-      "paddingInline": "spacing-050"
+      "minInlineSize": "size-200",
+      "blockSize": "size-200",
+      "paddingInline": "spacing-xs"
     }
   ],
   "states": ["default"],
@@ -137,20 +137,20 @@
     },
     "color": {
       "default": {
-        "background": "--color-elevation-surface-default",
-        "content": "--color-content-default"
+        "background": "--color-background-neutral-bold-default",
+        "content": "--color-content-inverse-default"
       },
       "brand": {
-        "background": "--color-background-brand-bold-default",
-        "content": "--color-content-inverse"
+        "background": "--color-background-brand-primary-bold-default",
+        "content": "--color-content-inverse-default"
       },
       "success": {
         "background": "--color-background-success-bold-default",
-        "content": "--color-content-inverse"
+        "content": "--color-content-inverse-default"
       },
       "error": {
         "background": "--color-background-error-bold-default",
-        "content": "--color-content-inverse"
+        "content": "--color-content-inverse-default"
       }
     }
   },

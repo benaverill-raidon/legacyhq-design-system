@@ -114,7 +114,7 @@ emphasis = 'subtle'
 | `sm` padding-inline | `--spacing-xs` |
 | `md` padding-block | `--spacing-xxs` |
 | `md` padding-inline | `--spacing-sm` |
-| Border radius | `--border-radius-xs` |
+| Border radius | `--border-radius-sm` (4px at both sizes) |
 
 ### Typography Tokens
 

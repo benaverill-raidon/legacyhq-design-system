@@ -125,10 +125,10 @@ describe('Foundations / Radius copy', () => {
   });
 
   it('cites contained Tabs as the nested example', () => {
-    const list = rule('tabs', ".root[data-type='contained'] .tablist");
+    const list = rule('tabs', ".root[data-appearance='contained'] .tablist");
     expect(list).toMatch(radius('xl'));
     expect(list).toMatch(/padding: var\(--spacing-xs\)/);
-    expect(rule('tabs', ".root[data-type='contained'] .tab")).toMatch(radius('lg'));
+    expect(rule('tabs', ".root[data-appearance='contained'] .tab")).toMatch(radius('lg'));
   });
 
   it('describes md as used only by Rich Text Area’s slash input', () => {

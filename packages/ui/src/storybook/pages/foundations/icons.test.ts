@@ -154,7 +154,7 @@ describe('Foundations / Icons copy', () => {
 
   it('cites how components name and announce icons', () => {
     expect(sourceOf('atoms/icon-button/icon-button.tsx')).toContain('IconButton requires either `aria-label` or `aria-labelledby`');
-    for (const path of ['organisms/banner/banner.tsx', 'organisms/section-message/section-message.tsx', 'organisms/toast/toast.tsx']) {
+    for (const path of ['organisms/banner/banner.tsx', 'organisms/section-message/section-message.tsx', 'organisms/toast/toast-status.ts']) {
       expect(sourceOf(path)).toMatch(/error: 'Error'/);
     }
     expect(sourceOf('organisms/toast/toast.types.ts')).toContain('dismissLabel?: string;');

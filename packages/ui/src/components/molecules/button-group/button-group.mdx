@@ -127,7 +127,7 @@ so buttons of different sizes look uneven side by side.
 Give the group an `aria-label`, or point `aria-labelledby` at visible text, when nothing nearby says
 what its buttons are for, such as a toolbar of icon-only actions. A name also gives the group
 `role="group"`, so screen readers announce the name when focus enters it. Without a name, the group
-is a plain `div` with no role.
+is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces either.
 
 <Example of={ButtonGroupStories.Composition} caption="A dialog's actions, a toolbar of Icon Buttons, and stacked full-width form actions." />
 
@@ -219,7 +219,8 @@ is a plain `div` with no role.
 - Button Group renders a `div`. Without a name it has no role, and assistive technology reads its
   buttons as if they weren't wrapped.
 - An `aria-label` or `aria-labelledby` adds `role="group"`, so the name is announced when focus
-  enters the group. Button Group sets the role itself, so a `role` you pass is replaced.
+  enters the group. A `role` you pass wins over it, named or not, such as `toolbar`; a toolbar is
+  one tab stop with arrow keys between its controls, which you then add yourself.
 - The group is never a focus stop. Each button stays in the tab order on its own, in the order you
   pass them, and there's no arrow-key movement between them, because they're separate actions, not
   one control.

@@ -133,10 +133,10 @@ export const SearchableMenu = () => {
   <Part name="search">A Text Field above the sections, `size="md"` and `context="inline"`, with a clear button once there's text. Shown by default and focused when the Menu mounts, so this specimen leaves it off; the example at the top shows it.</Part>
   <Part name="section" target={menuStyles.section}>One per entry in `sections`: its divider, an optional heading, and its rows.</Part>
   <Part name="divider" target={menuStyles.divider}>A 1px line above each section, left off the first one when there's no search field above it.</Part>
-  <Part name="heading" target={menuStyles.heading}>Optional text above a section's rows, with an optional icon.</Part>
+  <Part name="heading" target={menuStyles.heading}>Optional text above a section's rows, with an optional icon. It names the section's group.</Part>
   <Part name="item" target={menuStyles.item}>A native `button` row: an optional 24px slot before and after, the label, and an optional description under it.</Part>
   <Part name="loading row">Replaces the sections while `loading`: a Spinner and `loadingLabel`.</Part>
-  <Part name="empty message">`emptyMessage`, shown in place of the rows when none are left, such as when a search matches nothing.</Part>
+  <Part name="empty message">`emptyMessage`, shown in place of the rows when none are left, such as when a search matches nothing, and announced politely.</Part>
 </Anatomy>
 
 </Section>
@@ -186,12 +186,13 @@ For checkbox-style and radio-style rows, put the matching icon in `leadingElemen
 <Subsection title="Search">
 
 `showSearch`, on by default, puts a search field above the sections and focuses it when the Menu
-mounts, which in a Dropdown Menu means every time it opens. Menu filters, but it keeps no search
+mounts; in a Dropdown Menu, it takes focus every time the menu opens. `searchLabel` names the
+field, "Search" by default, and `searchPlaceholder` is an optional hint shown inside it. Menu filters, but it keeps no search
 state: pass `searchValue` and `onSearchChange`, as the example at the top does. Rows stay when their
 label or description contains the text, ignoring case. Only string labels and descriptions can be
 matched, so a row with neither always stays. Sections left with no rows are hidden, and when nothing
-is left, `emptyMessage` shows instead. The clear button appears once there's text, and sets the
-search back to empty.
+is left, `emptyMessage` shows instead, and screen readers announce it. The clear button appears once
+there's text, and sets the search back to empty.
 
 Turn the field off with `showSearch={false}` when the list is short, or when the search lives
 elsewhere, as Select's does.
@@ -209,8 +210,8 @@ default, they scroll past it; with `showScrollbar` off, rows past `maxHeight` ar
 <Subsection title="Menu doesn't close">
 
 Menu has no open state and doesn't know whether it's in a Dropdown Menu, a card, or a sidebar. It
-only calls `onSelect`. To close a containing Dropdown Menu after a choice, set its `open` to false
-from the item's `onSelect`.
+only calls `onSelect`. A Dropdown Menu closes itself after a choice and returns focus to its
+trigger; call `event.preventDefault()` in the item's `onSelect` to keep it open.
 
 </Subsection>
 
@@ -327,15 +328,18 @@ from the item's `onSelect`.
   announced.
 - A row's text is its accessible name. The slots before and after it, and a heading's icon, are
   hidden from assistive technology, so an icon can't carry meaning a row's text doesn't.
-- Section headings are plain text in the menu, not labels for their rows. Dividers have
-  `role="separator"`.
+- A section with a heading is a `role="group"` named by the heading (`aria-labelledby`), so its
+  rows are announced with it. A section without one is no group. Dividers have `role="separator"`.
 - One row at a time is in the tab order: the last one focused, or else the first enabled one. The
   arrow keys move focus between rows. Disabled rows can't be focused and are skipped. Rows use the
   shared Focus Ring, drawn inside the row.
-- The search field sits outside the menu role. It's named by `searchPlaceholder`, or "Search", and
-  takes focus when the Menu mounts. The arrow keys don't move from it into the rows; Tab does.
-- While `loading`, the loading row has `role="status"`, so `loadingLabel` is announced, and there's
-  no menu role until it finishes. The empty message is plain text and isn't announced on its own.
+- The search field sits outside the menu role. It's named by `searchLabel`, "Search" by default,
+  not by its placeholder, and takes focus when the Menu mounts. The arrow keys don't move from it
+  into the rows; Tab does.
+- A polite live region (`role="status"`), outside the menu role, announces `loadingLabel` while
+  `loading`, when there's no menu role, and `emptyMessage` when the rows run out after the Menu has
+  rendered, such as when a search stops matching. A Menu that first renders empty shows the message
+  without announcing it.
 
 <Keyboard>
   <Key keys="Tab">From the search field, moves to the clear button if it's shown, then to the rows' tab stop. From a row, leaves the menu.</Key>
@@ -347,7 +351,7 @@ from the item's `onSelect`.
   <Key keys="Space">Activates the focused row and calls its `onSelect`.</Key>
 </Keyboard>
 
-Menu doesn't handle Escape. In a Dropdown Menu, Escape closes the panel.
+Menu doesn't handle Escape. In a Dropdown Menu, Escape closes the panel and returns focus to the trigger.
 
 </Section>
 
@@ -361,7 +365,7 @@ Each entry in `sections` is a `MenuSection`:
 
 - `id` (required): unique within the Menu.
 - `items` (required): the section's rows, in order.
-- `heading`: text above the rows. It isn't a label for assistive technology.
+- `heading`: text above the rows. It names the section as a group for assistive technology.
 - `headingLeadingElement`: an icon before the heading, hidden from assistive technology.
 
 Each entry in `items` is a `MenuItem`:
@@ -375,7 +379,7 @@ Each entry in `items` is a `MenuItem`:
 - `selected`: shows the row as selected. Announced only with `selectionType`.
 - `selectionType`: `checkbox` or `radio`. Sets the row's role and `aria-checked`.
 - `disabled`: the native attribute. The row can't be focused or chosen.
-- `onSelect`: called on click, Enter, or Space.
+- `onSelect`: called on click, Enter, or Space. In a Dropdown Menu, the menu then closes, unless it calls `event.preventDefault()`.
 
 </Subsection>
 

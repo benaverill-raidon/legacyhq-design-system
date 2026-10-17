@@ -6,15 +6,18 @@ export type DropdownMenuAlignment = 'left' | 'center' | 'right';
 export interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
   /**
    * The trigger: one element, such as a Button, an Icon Button, or an Avatar. It's cloned to add a
-   * ref and `aria-expanded`/`aria-controls`, so it must pass them to its DOM element. On a Button or
-   * an Icon Button, also set `isExpanded={open}`. Open the menu from the trigger's `onClick`.
+   * ref, `aria-haspopup="menu"` (unless it sets its own), and `aria-expanded`/`aria-controls`, so it
+   * must pass them to its DOM element. Open the menu from the trigger's `onClick`. Focus returns to
+   * it when the menu closes from inside. A `role="combobox"` trigger, like Select's field, keeps
+   * focus while the menu is open and closes it itself.
    */
   children: React.ReactElement;
   /** Whether the panel is open. Your state owns it; Dropdown Menu never changes it. While `false`, only the trigger renders. */
   open: boolean;
   /**
-   * Called with `false` on Escape anywhere on the page, or on a press outside the trigger and the
-   * panel. Set `open` from it. It isn't called when an item is chosen: close the menu from `onSelect`.
+   * Called with `false` on Escape anywhere on the page, a press outside the trigger and the panel,
+   * Tab out of the panel, or choosing an item (unless its `onSelect` calls `event.preventDefault()`).
+   * Set `open` from it.
    */
   onOpenChange?: (open: boolean) => void;
   /**

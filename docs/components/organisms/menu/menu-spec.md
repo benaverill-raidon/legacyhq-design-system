@@ -66,6 +66,7 @@ interface MenuProps {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
+  searchLabel?: string; // default 'Search'
   showScrollbar?: boolean;
   maxHeight?: number | string;
   loading?: boolean;
@@ -160,8 +161,8 @@ selected and disabled.
   16px glyph at the same 4px inset with or without `spacing="spacious"` (measured in Storybook);
   the stories pass `spacing="spacious"` to mirror Figma's `Size: md` + `spacing: spacious (24px)`
   icon, but alignment doesn't depend on it.
-- Menu never closes anything on `onSelect` - a consumer wanting a selection to close a containing
-  Dropdown Menu wires `onOpenChange(false)` from the item's own `onSelect`.
+- Menu never closes anything on `onSelect`. A containing Dropdown Menu wraps each item's
+  `onSelect` and closes itself afterwards, unless the `onSelect` calls `event.preventDefault()`.
 
 ## Accessibility
 
@@ -173,20 +174,27 @@ selected and disabled.
 - `disabled` is the native `<button disabled>` attribute - `:disabled` styling and
   `toBeDisabled()`-style assertions work without any extra ARIA.
 - No default accessible name for the `menu` role - pass `aria-label` or `aria-labelledby`.
-- Section headings are plain `div` text inside the `menu` role - no `role="group"` or
-  `aria-labelledby` ties a heading to its rows. Dividers carry `role="separator"`.
+- A section with a `heading` renders its body as `role="group"` with `aria-labelledby` pointing at
+  the heading's generated id, so the rows are announced with it; a section without a heading has no
+  group. Dividers carry `role="separator"`.
 - The search field is outside the `role="menu"` element (keydown is handled on the sections
   container only), so the arrow keys don't move from the field into the rows; Tab does (through the
-  clear button when it's shown). The field's accessible name is `searchPlaceholder ?? 'Search'` -
-  the "Search" fallback is a hard-coded English string, not a prop.
-- The search field is `autoFocus`ed whenever it mounts. In a Dropdown Menu that means on open; on a
+  clear button when it's shown). The field's accessible name is `searchLabel` (default "Search",
+  translatable, as Table's); `searchPlaceholder` is only the placeholder hint.
+- The search field is `autoFocus`ed whenever it mounts. Inside a Dropdown Menu, that `autoFocus`
+  can't take effect in a browser (Popup keeps the panel `visibility: hidden` until positioned), so
+  Dropdown Menu focuses the field itself a frame later, on open. On a
   page that renders a searchable Menu inline (including a Storybook Docs page), it takes focus and
   scrolls the page to it on load. The Docs page renders only one searchable Menu, in the header,
   for that reason.
 - Menu doesn't handle Escape; a containing Dropdown Menu (Popup) does.
-- While `loading`, the loading row is `role="status"` (the Spinner itself has no label, so it's
-  hidden) and the `role="menu"` element isn't rendered. The empty message is plain text inside the
-  menu, with no live region.
+- One `role="status"` element (a polite live region) sits after the `role="menu"` element from the
+  first render. While `loading`, it holds the loading row (the Spinner itself has no label) and the
+  `role="menu"` element isn't rendered. The empty message is announced through it when the rows run
+  out after the first render (a search stops matching, or loading ends with nothing); when the Menu
+  first renders already empty, the message is shown outside the live region, so it isn't announced
+  on top of whatever took focus. "Rows ran out" is previous-render state adjusted during render,
+  not an effect.
 
 ## Styling and tokens
 
@@ -197,10 +205,10 @@ introducing new ones:
 - Default row text: `--color-content-default` (label), `--color-content-subtle` (description).
 - Hover/press row background: `--color-background-neutral-overlay-bold-hover` /
   `-overlay-press`.
-- Selected row background: `--color-background-brand-primary-subtle-default` (and the
-  `-hover`/`-press` variants on interaction) - Figma's `isSelected` fills
-  (`#e5f6ff`/`#ccecff`/`#b3e3ff`) resolved exactly to these already-existing tokens
-  (`brand.prussian.solid.100/200/300`), so no new color token was needed for the background.
+- Selected row background: `--color-background-selected-default-default` (and the
+  `-hover`/`-press` variants on interaction; focus shares the hover fill) - Figma's
+  `color/background/selected/default/*` variables. It previously borrowed
+  `--color-background-brand-primary-subtle-*`, the closest match before a `selected` family existed.
 - Selected row text and icon: `--color-content-selected` - a genuinely distinct Figma variable
   (`color/content/selected`, verified via `figma.variables.getVariableByIdAsync`, own light/dark
   mode values) that happens to equal `--color-content-brand-primary-default`'s value in both themes
@@ -215,16 +223,15 @@ introducing new ones:
   transcription error caught in review.
 - `elemBefore`/`elemAfter`: a fixed `--size-300` (24px) box on both axes, independent of whatever
   icon or glyph is inside, matching Figma's fixed-size slot exactly.
-- Section body padding: `--spacing-xs` (4px) top, `--spacing-sm` (8px) bottom - asymmetric, not a
-  uniform `padding-block`, matching the exact values on Figma's `<section>/list` → `Container`.
+- Section body padding: a symmetric `--spacing-xs` (4px) `padding-block`, matching Figma's
+  `<section>/list` → `Container` (paddingTop 4, paddingBottom 4).
 - Selected-row indicator: a 2px inset left `box-shadow` (`--border-width-md`
-  `--color-border-brand-primary-default`), not `border-left` - Figma's own stroke on this state is
+  `--color-border-selected`, Figma's `color/border/selected`), not `border-left` - Figma's own stroke on this state is
   `strokeAlign: INSIDE` with `paddingLeft` completely unchanged (still `spacing/md`, identical to
   every other row), meaning the indicator paints inside the row's existing bounds. A real
   `border-left` would add to the box size in CSS and visibly shift selected rows 2px right relative
   to unselected ones - a regression caught by comparing rendered output against Figma directly.
-  `--color-border-brand-primary-default` resolves to the exact same primitive
-  (`brand.prussian.solid.900`/`#003655`) Figma's own stroke variable does.
+  It previously used `--color-border-brand-primary-default`.
 - Label typography: `--typography-body-md-*` (14px, matching Figma's measured `menu-item` title).
   Description/heading typography: `--typography-body-sm-*` (12px).
 - Search field: rendered as `size="md"` with TextField's `context="inline"`

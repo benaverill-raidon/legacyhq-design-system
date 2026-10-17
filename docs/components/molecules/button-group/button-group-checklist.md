@@ -87,7 +87,8 @@ Button Group itself is non-interactive - all interactive states belong to its ch
 
 ### Does the group need a label?
 Only when the set of actions isn't already named by surrounding context (a heading, a dialog
-title). When a label is present, `role="group"` is applied automatically.
+title). When a label is present, `role="group"` is applied automatically, unless you pass your own
+`role` (e.g. `toolbar`), which always wins.
 
 ### Is aria-label needed?
 Optional - passed through as a native `div` attribute, not a bespoke prop.

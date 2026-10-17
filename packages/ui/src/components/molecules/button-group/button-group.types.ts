@@ -17,4 +17,9 @@ export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   'aria-label'?: string;
   /** The id of visible text that names the set of actions. Like `aria-label`, it adds `role="group"`. */
   'aria-labelledby'?: string;
+  /**
+   * Replaces the role Button Group sets, such as `toolbar` for a set of controls that should be one
+   * tab stop (you then add its arrow-key handling). Without it, a named group is `group`.
+   */
+  role?: React.AriaRole;
 }

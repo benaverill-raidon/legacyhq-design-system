@@ -102,9 +102,10 @@
     "role": null,
     "group": {
       "supported": true,
-      "appliedWhen": "aria-label or aria-labelledby is present",
+      "appliedWhen": "aria-label or aria-labelledby is present, and no role is passed",
       "value": "group"
     },
+    "consumerRole": "A role passed by the consumer (e.g. toolbar) wins over group, labelled or not.",
     "requirements": [
       "Do not add roving tabindex or arrow-key navigation - children keep native Tab order.",
       "Do not add a role without an accompanying accessible name.",

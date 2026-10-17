@@ -84,8 +84,9 @@ Width only - row height always follows content, at any size.
 - Label text: `--color-content-default`; description: `--color-content-subtle`
 - Hover background: `--color-background-neutral-overlay-bold-hover`
 - Press background: `--color-background-neutral-overlay-bold-press`
-- Selected background: `--color-background-brand-primary-subtle-default` (+ `-hover`/`-press`
-  on interaction); selected text: `--color-content-brand-primary-default`
+- Selected background: `--color-background-selected-default-default` (+ `-hover`/`-press`
+  on interaction); selected text and icons: `--color-content-selected`; selected indicator:
+  `--color-border-selected`
 - Disabled text: `--color-content-disabled`
 - Divider: `--color-border-default`
 - Row spacing: `--spacing-sm` gap, `--spacing-md` inline padding, `--spacing-xs` block padding
@@ -120,7 +121,10 @@ item is excluded from the cycle entirely.
 `role="menu"` on the sections container; each row is `menuitem` by default, or
 `menuitemcheckbox`/`menuitemradio` (with `aria-checked`) when `selectionType` is set. Exactly one
 enabled row carries `tabIndex={0}` at a time; the rest are `-1`. No default accessible name for the
-menu role - pass `aria-label`/`aria-labelledby`.
+menu role - pass `aria-label`/`aria-labelledby`. A headed section is `role="group"` named by its
+heading (`aria-labelledby`). The search field is named by `searchLabel` (default "Search"). A polite
+`role="status"` live region carries the loading row and, once the rows run out after the first
+render, the empty message.
 
 ### Is this an interactive component?
 Yes - every row is a real, clickable/focusable `<button>`.
@@ -164,7 +168,7 @@ Final implementation decisions:
   early draft nested a real `Checkbox`/`Radio` there and hit invalid-HTML nesting (an `<input>`
   inside the row's own `<button>`).
 - Menu never manages open/close state or assumes it's inside a Dropdown Menu - `onSelect` is its
-  only signal back to the consumer.
+  only signal back to the consumer (a Dropdown Menu closes itself after it).
 - `showScrollbar` maps to native `overflow-y`, not Figma's decorative custom scrollbar-thumb
   graphic - a deliberate scope simplification, tracked in `knownLimitations`.
 - Roving-tabindex active id is derived on every render, not synced via a `useEffect` (avoids

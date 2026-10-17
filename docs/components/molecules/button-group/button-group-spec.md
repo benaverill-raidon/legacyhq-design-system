@@ -113,8 +113,9 @@ independent actions, not a single composite control.
 - No label provided: plain `div`, no `role`.
 - `aria-label` or `aria-labelledby` provided: `role="group"` is added automatically, so the set of
   actions is announced as a named group.
-- The component sets `role` itself after spreading rest props, so a consumer-passed `role` (e.g.
-  `toolbar`) is replaced: by `group` when labelled, removed when not.
+- A consumer-passed `role` (e.g. `toolbar`) wins, labelled or not: `role={role ?? (named ? 'group'
+  : undefined)}`. A `toolbar` is one tab stop with arrow keys between its controls, which the
+  consumer then adds.
 
 Example:
 
@@ -198,6 +199,7 @@ no state of its own.
 ### Accessibility
 - [ ] No label: no role, plain div
 - [ ] aria-label present: role="group" and the label are both exposed
+- [ ] A consumer's own role (e.g. toolbar) is kept, labelled or not
 - [ ] Each child button remains independently focusable via Tab
 
 ---

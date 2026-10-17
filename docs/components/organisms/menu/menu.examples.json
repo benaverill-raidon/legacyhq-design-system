@@ -26,9 +26,9 @@
       "props": { "showSearch": false }
     },
     {
-      "name": "Selection closes a containing Dropdown Menu",
-      "description": "Menu never closes anything itself - wire onOpenChange(false) from each item's own onSelect.",
-      "jsx": "<Menu\n  aria-label=\"Matter actions\"\n  showSearch={false}\n  sections={[{\n    id: 'actions',\n    items: [{\n      id: 'delete',\n      label: 'Delete',\n      onSelect: () => {\n        handleDelete();\n        setOpen(false);\n      },\n    }],\n  }]}\n/>",
+      "name": "Keeping a containing Dropdown Menu open after a choice",
+      "description": "Menu never closes anything itself; a containing Dropdown Menu closes after an item's onSelect unless it calls event.preventDefault() - here, so a checkbox row can be toggled repeatedly.",
+      "jsx": "<Menu\n  aria-label=\"View options\"\n  showSearch={false}\n  sections={[{\n    id: 'view',\n    items: [{\n      id: 'drafts',\n      label: 'Show drafts',\n      selectionType: 'checkbox',\n      selected: showDrafts,\n      onSelect: (event) => {\n        event.preventDefault();\n        toggleDrafts();\n      },\n    }],\n  }]}\n/>",
       "props": { "showSearch": false }
     },
     {
@@ -45,9 +45,9 @@
       "reason": "Each row renders as a real <button>. Nesting Checkbox's real <input> inside it is invalid HTML (a focusable control inside another one) and creates two conflicting ways to activate the same row - one via the button's own onClick, one via the checkbox's onChange. Use a decorative icon/glyph instead and let selected/selectionType carry the real state, or toggle the row's own onSelect."
     },
     {
-      "name": "Expecting Menu to close a containing Dropdown Menu",
+      "name": "Nesting a Menu inside a Dropdown Menu",
       "jsx": "<DropdownMenu open={open} onOpenChange={setOpen}>\n  <Button>Actions</Button>\n  <Menu sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]} />\n</DropdownMenu>",
-      "reason": "Menu has no idea it's inside a Dropdown Menu and never calls onOpenChange itself. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+      "reason": "DropdownMenu has no children-as-content slot: its one child is the trigger, and it builds its own Menu from the sections you pass it (and closes after a choice). Pass sections to DropdownMenu directly instead of nesting a Menu."
     }
   ]
 }

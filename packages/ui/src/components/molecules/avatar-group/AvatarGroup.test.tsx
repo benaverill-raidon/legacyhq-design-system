@@ -92,13 +92,13 @@ describe('AvatarGroup', () => {
     expect(handleSelect.mock.calls[0][0]).toMatchObject({ id: 'person-5', name: 'Person 5' });
   });
 
-  it('does not close the overflow panel on its own when a truncated avatar is selected', () => {
+  it('closes the overflow panel, returning focus to the trigger, when a truncated avatar is selected', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} />);
 
     fireEvent.click(screen.getByRole('button', { name: '+1' }));
     fireEvent.click(screen.getByRole('menuitem', { name: 'Person 5' }));
 
-    expect(screen.getByRole('menu')).toBeInTheDocument();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
   it('closes the overflow panel on an outside click and on Escape, inherited from Popup', () => {

@@ -112,7 +112,9 @@ a real `<button>` (IconButton) with Enter/Space activation native; arrow keys/Ho
 navigate the open panel (Menu).
 
 ### What ARIA is applied?
-`aria-expanded`/`aria-controls` on the secondary action (Popup, via Dropdown Menu); `role="menu"`
+`aria-haspopup="menu"`/`aria-expanded`/`aria-controls` on the secondary action (Dropdown Menu and
+Popup); focus moves into the menu on open and back to the caret on choose, Escape, or Tab out;
+`role="menu"`
 with an accessible name (`secondaryActionLabel`) and per-item `menuitem` rows on the panel (Menu);
 `aria-busy`/`aria-disabled` on the primary action while loading (Button's own existing behavior).
 
@@ -173,9 +175,11 @@ Final implementation decisions:
   via CSS logical properties (`border-start-end-radius`/`border-end-end-radius` and their mirror),
   not physical properties, so the layout stays correct in RTL contexts - matching Tag's own
   wrapper/remove-button precedent.
-- `IconButton`'s own `isExpanded` prop is not passed to the secondary action - verified directly
-  that it has no visual effect in code today, and `Popup` (via Dropdown Menu) already overwrites
-  `aria-expanded` via its own trigger-cloning regardless.
+- `IconButton`'s own `isExpanded` prop is not passed to the secondary action - left unset,
+  `IconButton` keeps the `aria-expanded` that `Popup` (via Dropdown Menu) injects, and its hover
+  fill follows it.
+- Choosing a menu item closes the menu and returns focus to the caret (Dropdown Menu), so the
+  internal `open` state needs no `onOpenChange` prop.
 - Verified directly that `IconButton`'s own tooltip-auto-wrapping (triggered by passing
   `aria-label`) does not interfere with `Popup`'s trigger-cloning (`ref`/`aria-expanded` still reach
   the real `<button>`) - the same combination already exists, unremarked, in Dropdown Menu's own

@@ -132,9 +132,10 @@ as Button, and the divider matches it.
 <Subsection title="The menu">
 
 The caret opens a Menu below the Split Button, lined up with its right edge; if there's no room
-there, it opens where it fits best. The menu has no search field. Escape or a click outside closes
-it. Choosing an item runs that item's `onSelect`, and the menu stays open: Split Button keeps its
-open state to itself, so an item can't close it.
+there, it opens where it fits best. The menu has no search field. Opening it moves focus to the
+first item. Choosing an item runs that item's `onSelect`, then closes the menu and returns focus to
+the caret; an `onSelect` that calls `event.preventDefault()` keeps it open. Escape or Tab out of the
+menu closes it and returns focus to the caret, and a click outside closes it.
 
 <Example of={SplitButtonStories.Content} caption="Realistic main actions, each with two close alternatives." />
 
@@ -226,21 +227,20 @@ to the wrapping `div`. There's no full-width Split Button.
   and the caret, an Icon Button. The divider is hidden from assistive technology.
 - The main action's label is its accessible name. The caret's name is `secondaryActionLabel`, which
   also shows as its tooltip and names the menu.
-- While the menu is open, the caret's `aria-controls` points at it. Its `aria-expanded` currently
-  stays `false` even while open, because Icon Button replaces the value it's given; that's a known
-  bug.
+- The caret has `aria-haspopup="menu"` and `aria-expanded`, which is `true` while the menu is open,
+  when its `aria-controls` points at the menu.
 - The menu is a Menu, announced as a menu, with each action a menu item.
-- Opening the menu doesn't move focus into it, and the menu is added at the end of the page, so Tab
-  reaches it only after everything that follows the Split Button. Arrow keys move between items once
-  focus is inside.
+- The menu is added at the end of the page, so opening it moves focus to its first item, and
+  choosing an item, Escape, or Tab out of it returns focus to the caret. Arrow keys move between
+  items.
 - While loading, the main action stays focusable, with `aria-busy` and `aria-disabled`, and the
   caret is natively disabled. `disabled` takes both halves out of the tab order.
 
 <Keyboard>
-  <Key keys="Tab">Moves to the main action, then to the caret. A disabled half is skipped, and so is the caret while loading.</Key>
-  <Key keys="Enter">On the main action, runs it unless it's loading. On the caret, opens or closes the menu.</Key>
+  <Key keys="Tab">Moves to the main action, then to the caret. A disabled half is skipped, and so is the caret while loading. In the menu, Tab or Shift+Tab closes it and returns focus to the caret.</Key>
+  <Key keys="Enter">On the main action, runs it unless it's loading. On the caret, opens the menu and moves focus to its first item. On an item, chooses it, closes the menu, and returns focus to the caret.</Key>
   <Key keys="Space">The same as Enter.</Key>
-  <Key keys="Escape">Closes the menu. If focus was in the menu, it goes back to the page, not to the caret.</Key>
+  <Key keys="Escape">Closes the menu and returns focus to the caret.</Key>
   <Key keys="Arrow Down">In the menu, moves to the next item, wrapping from the last to the first.</Key>
   <Key keys="Arrow Up">In the menu, moves to the previous item, wrapping from the first to the last.</Key>
   <Key keys="Home">In the menu, moves to the first item.</Key>

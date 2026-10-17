@@ -359,6 +359,59 @@ describe('Menu', () => {
     expect(menuCss).not.toMatch(/^\.menu\s*\{[^}]*border:/m);
   });
 
+  it('names the search field with searchLabel, defaulting to "Search", not with the placeholder', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchPlaceholder="Find an action" sections={actionSections()} />);
+    expect(screen.getByRole('textbox', { name: 'Search' })).toHaveAttribute('placeholder', 'Find an action');
+
+    rerender(<Menu aria-label="Actions" searchLabel="Rechercher" sections={actionSections()} />);
+    expect(screen.getByRole('textbox', { name: 'Rechercher' })).toBeInTheDocument();
+  });
+
+  it('groups a headed section, named by its heading; an unheaded section is no group', () => {
+    render(
+      <Menu
+        aria-label="Matter"
+        showSearch={false}
+        sections={[
+          { id: 'plain', items: [{ id: 'open', label: 'Open' }] },
+          { id: 'danger', heading: 'Danger zone', items: [{ id: 'delete', label: 'Delete' }] },
+        ]}
+      />,
+    );
+
+    const groups = screen.getAllByRole('group');
+    expect(groups).toHaveLength(1);
+    expect(screen.getByRole('group', { name: 'Danger zone' })).toContainElement(screen.getByRole('menuitem', { name: 'Delete' }));
+    expect(screen.getByRole('group', { name: 'Danger zone' })).not.toContainElement(screen.getByRole('menuitem', { name: 'Open' }));
+  });
+
+  it('announces the empty message politely when the rows run out, but not when it first renders empty', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchValue="zzz" emptyMessage="No matches" sections={actionSections()} />);
+    const status = screen.getByRole('status');
+    expect(screen.getByText('No matches')).toBeInTheDocument();
+    expect(status).toBeEmptyDOMElement();
+
+    rerender(<Menu aria-label="Actions" searchValue="" emptyMessage="No matches" sections={actionSections()} />);
+    expect(screen.queryByText('No matches')).not.toBeInTheDocument();
+
+    rerender(<Menu aria-label="Actions" searchValue="qqq" emptyMessage="No matches" sections={actionSections()} />);
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toHaveTextContent('No matches');
+    expect(screen.getAllByText('No matches')).toHaveLength(1);
+  });
+
+  it('announces the loading row in the same live region, and the empty message when loading ends with nothing', () => {
+    const { rerender } = render(<Menu aria-label="Actions" showSearch={false} sections={actionSections()} />);
+    const status = screen.getByRole('status');
+    expect(status).toBeEmptyDOMElement();
+
+    rerender(<Menu aria-label="Actions" showSearch={false} loading loadingLabel="Loading people" sections={[]} />);
+    expect(status).toHaveTextContent('Loading people');
+
+    rerender(<Menu aria-label="Actions" showSearch={false} emptyMessage="Nobody found" sections={[]} />);
+    expect(status).toHaveTextContent('Nobody found');
+  });
+
   it('names the clear-search button with an overridable label', () => {
     const { rerender } = render(<Menu aria-label="Actions" searchValue="ren" onSearchChange={() => {}} sections={actionSections()} />);
     expect(screen.getByRole('button', { name: 'Clear search' })).toBeInTheDocument();

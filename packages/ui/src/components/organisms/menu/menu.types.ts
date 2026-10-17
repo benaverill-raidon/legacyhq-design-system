@@ -34,14 +34,18 @@ export interface MenuItem {
   selectionType?: MenuItemSelectionType;
   /** Disables the row with the native attribute: it can't be focused, the arrow keys skip it, and `onSelect` isn't called. */
   disabled?: boolean;
-  /** Called when the row is clicked, or activated with Enter or Space. Menu doesn't close anything; close a Dropdown Menu from here. */
+  /**
+   * Called when the row is clicked, or activated with Enter or Space. Menu on its own doesn't close
+   * anything. In a Dropdown Menu, choosing a row then closes the menu and returns focus to the
+   * trigger; call `event.preventDefault()` here to keep it open, such as for a checkbox row.
+   */
   onSelect?: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => void;
 }
 
 export interface MenuSection {
   /** Unique within the Menu; used as the React key. */
   id: string;
-  /** Text above the section's rows. It's visual only: it doesn't label the rows for assistive technology. */
+  /** Text above the section's rows. A headed section is a `role="group"` named by its heading, so the rows are announced with it. */
   heading?: React.ReactNode;
   /** An icon before the heading. Hidden from assistive technology. */
   headingLeadingElement?: React.ReactNode;
@@ -67,19 +71,24 @@ export interface MenuProps {
   searchValue?: string;
   /** Called with the field's text on every change, and with `''` when the clear button is pressed. */
   onSearchChange?: (value: string) => void;
-  /** The search field's placeholder and its accessible name. Without it, the field is named "Search" and shows no placeholder. */
+  /** The search field's placeholder, a hint shown while it's empty. None by default. It doesn't name the field: `searchLabel` does. */
   searchPlaceholder?: string;
+  /** The search field's accessible name. Defaults to "Search". */
+  searchLabel?: string;
   /** The accessible name and tooltip of the clear button, which shows once `searchValue` isn't empty. */
   clearSearchLabel?: string;
   /** Lets the sections scroll once they're taller than `maxHeight`; without it, the extra rows are cut off. On by default, as in Figma. */
   showScrollbar?: boolean;
   /** The tallest the sections can be, in pixels or any CSS length. No limit by default. */
   maxHeight?: number | string;
-  /** Replaces the sections with a loading row, a Spinner and `loadingLabel`, announced as a status. The search field stays usable. */
+  /** Replaces the sections with a loading row, a Spinner and `loadingLabel`, in a polite live region. The search field stays usable. */
   loading?: boolean;
   /** The loading row's text. */
   loadingLabel?: React.ReactNode;
-  /** Shown in place of the rows when none are left, such as when a search matches nothing. */
+  /**
+   * Shown in place of the rows when none are left, such as when a search matches nothing. It's
+   * announced politely when the rows run out after the Menu has rendered, not when it first renders empty.
+   */
   emptyMessage?: React.ReactNode;
   /** Fills the container's width instead of a fixed `size` width, for a panel sized to its trigger, as Dropdown Menu's `matchTriggerWidth` does. */
   fullWidth?: boolean;

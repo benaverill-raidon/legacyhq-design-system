@@ -18,7 +18,7 @@ export interface SplitButtonProps extends Omit<ButtonProps, 'appearance' | 'isFu
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   /**
    * The related actions in the menu the caret opens, as Menu sections. Each item's `onSelect` runs
-   * the action; choosing an item doesn't close the menu.
+   * the action; choosing an item then closes the menu and returns focus to the caret.
    */
   sections: MenuSection[];
   /**

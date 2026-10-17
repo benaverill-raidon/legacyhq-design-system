@@ -108,9 +108,10 @@ introduced.
 Split Button holds exactly one piece of state - `open` - to drive the secondary action's
 `DropdownMenu`, identical in shape to Tag Group's and Avatar Group's own `overflowOpen`.
 
-That state is internal and not exposed (no `open`/`onOpenChange` prop), and Dropdown Menu only
-reports Escape and outside clicks. So choosing a menu item runs its `onSelect` but leaves the panel
-open; a consumer's `onSelect` has no way to close it.
+That state is internal and not exposed (no `open`/`onOpenChange` prop). It doesn't need to be:
+Dropdown Menu calls `onOpenChange(false)` on Escape, an outside press, Tab out of the panel, and
+when an item is chosen (after its `onSelect`), and returns focus to the caret. An item's `onSelect`
+can keep the panel open by calling `event.preventDefault()`.
 
 Which props reach which segment: `size`, `appearance` (mapped), and `disabled` go to both;
 `isLoading` goes to the primary action and disables the secondary one; `onClick`, `tone`,
@@ -206,14 +207,10 @@ component (`shape="square"`) with a single icon child - `caret_down` (resolved d
 Figma instance's own bound component key; matches this codebase's existing `CaretDownIcon`
 one-for-one, not a new or different glyph).
 
-Split Button does not pass `isExpanded` to the secondary action. That was decided when
-`IconButton`'s `isExpanded` had no visual effect and Popup's trigger-cloning was expected to own
-`aria-expanded`. Both have since changed: `IconButton` now keeps its hover fill while `isExpanded`
-(`[data-expanded='true']` rules in icon-button.module.css), and it defaults `isExpanded` to `false`
-and renders `aria-expanded={isExpanded != null ? isExpanded : ariaExpanded}`, so the `aria-expanded`
-Popup injects is always replaced by `false`. Today the caret reports `aria-expanded="false"` even
-while the panel is open (it does get `aria-controls`), and doesn't hold the hover fill while open.
-Passing `isExpanded={open}` here, or fixing IconButton's default, would resolve both.
+Split Button does not pass `isExpanded` to the secondary action, and doesn't need to: `IconButton`
+leaves `isExpanded` unset by default and keeps the `aria-expanded` Popup injects (and its
+`data-expanded` hover fill follows it), so the caret reports `aria-expanded="true"` while the panel
+is open. Dropdown Menu also adds `aria-haspopup="menu"` to it.
 
 **IconButton's own tooltip-wrapping is safe as a Popup trigger.** `IconButton` auto-wraps itself in
 `Tooltip` whenever an explicit `aria-label` is given (its own existing behavior, unrelated to Split
@@ -230,14 +227,13 @@ already-exercised path.
 ## Accessibility
 
 - The primary action keeps Button's own documented accessibility unchanged.
-- The secondary action is a real `IconButton` - `aria-controls` comes from Popup (via Dropdown Menu)
-  while open; `aria-expanded` is meant to as well, but currently stays `false` (see "Secondary
-  action" above). Its accessible name and tooltip both come from `secondaryActionLabel`, which also
-  names the Menu (`role="menu"`).
-- Opening the panel doesn't move focus into it, and Popup portals the panel to the end of
-  `document.body`, so Tab reaches the menu items only after every focusable element that follows
-  the Split Button. Escape closes the panel from anywhere; if focus was inside it, focus falls to
-  the document rather than returning to the caret.
+- The secondary action is a real `IconButton` with `aria-haspopup="menu"` (Dropdown Menu),
+  `aria-expanded`, and `aria-controls` while open (Popup, via Dropdown Menu). Its accessible name
+  and tooltip both come from `secondaryActionLabel`, which also names the Menu (`role="menu"`).
+- Dropdown Menu follows the menu-button pattern: opening the panel moves focus to its first enabled
+  item, and choosing an item, Escape, or Tab/Shift+Tab out of the panel closes it and returns focus
+  to the caret, so the panel's place at the end of `document.body` doesn't put it last in the tab
+  order. Escape closes the panel from anywhere.
 - `disabled` disables both segments together (native `disabled` on both, matching how Figma's own
   `isDisabled` axis covers the whole component, not one segment).
 - `isLoading` applies Button's own loading treatment (`aria-busy`/`aria-disabled`, a spinner over the
@@ -289,6 +285,9 @@ calls onClick when the primary action is activated
 renders the secondary action with its own accessible name, distinct from the primary label
 opens a menu holding the given sections when the secondary action is activated
 calls a menu item's own onSelect when chosen
+closes the menu and returns focus to the caret when an item is chosen
+marks the caret as opening a menu, and announces whether it is open
+moves focus into the menu when it opens, and back to the caret on Escape
 closes the dropdown on Escape, inherited from Popup
 disables both the primary and secondary actions when disabled is set
 disables the secondary action while the primary action is loading

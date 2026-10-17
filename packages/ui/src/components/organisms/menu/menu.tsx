@@ -111,6 +111,7 @@ export const Menu = React.memo(function Menu({
   searchValue,
   onSearchChange,
   searchPlaceholder,
+  searchLabel = 'Search',
   clearSearchLabel = 'Clear search',
   showScrollbar = true,
   maxHeight,
@@ -124,6 +125,7 @@ export const Menu = React.memo(function Menu({
   'aria-labelledby': ariaLabelledBy,
 }: MenuProps) {
   const itemRefs = React.useRef(new Map<string, HTMLButtonElement>());
+  const headingIdPrefix = React.useId();
 
   const visibleSections = React.useMemo<VisibleSection[]>(() => {
     const query = searchValue ?? '';
@@ -184,6 +186,19 @@ export const Menu = React.memo(function Menu({
 
   const hasAnyVisibleItems = visibleSections.some(({ items }) => items.length > 0);
 
+  // The empty message is announced politely when the rows run out after the Menu has rendered,
+  // such as when a search stops matching or loading ends with nothing. When the Menu first renders
+  // already empty, it's shown outside the live region, so it isn't announced on top of whatever
+  // took focus. (Previous-render state, adjusted during render rather than in an effect.)
+  const isEmpty = !loading && !hasAnyVisibleItems;
+  const [wasEmpty, setWasEmpty] = React.useState(isEmpty);
+  const [announceEmpty, setAnnounceEmpty] = React.useState(false);
+  if (isEmpty !== wasEmpty) {
+    setWasEmpty(isEmpty);
+    setAnnounceEmpty(isEmpty);
+  }
+  const emptyRow = isEmpty ? <div className={styles.empty}>{emptyMessage}</div> : null;
+
   return (
     <div id={id} className={mergeClassNames(styles.menu, fullWidth ? styles.fullWidth : styles[`size_${size}`], className)}>
       {showSearch ? (
@@ -201,7 +216,7 @@ export const Menu = React.memo(function Menu({
             value={searchValue}
             onChange={(event) => onSearchChange?.(event.target.value)}
             placeholder={searchPlaceholder}
-            aria-label={searchPlaceholder ?? 'Search'}
+            aria-label={searchLabel}
             iconAfter={
               searchValue ? (
                 <IconButton aria-label={clearSearchLabel} appearance="subtle" size="sm" onClick={() => onSearchChange?.('')}>
@@ -212,12 +227,7 @@ export const Menu = React.memo(function Menu({
           />
         </div>
       ) : null}
-      {loading ? (
-        <div className={styles.loadingRow} role="status">
-          <Spinner size="sm" />
-          <span>{loadingLabel}</span>
-        </div>
-      ) : (
+      {loading ? null : (
         <div
           role="menu"
           tabIndex={-1}
@@ -227,37 +237,52 @@ export const Menu = React.memo(function Menu({
           style={maxHeight ? { maxHeight } : undefined}
           onKeyDown={handleKeyDown}
         >
-          {visibleSections.map(({ section, items }, index) => (
-            <div key={section.id} className={styles.section}>
-              {index > 0 || showSearch ? <div className={styles.divider} role="separator" /> : null}
-              <div className={styles.sectionBody}>
-                {section.heading ? (
-                  <div className={styles.heading}>
-                    {section.headingLeadingElement ? (
-                      <span className={styles.headingIcon} aria-hidden="true">
-                        {section.headingLeadingElement}
-                      </span>
-                    ) : null}
-                    <span>{section.heading}</span>
+          {visibleSections.map(({ section, items }, index) => {
+            // A headed section is a group named by its heading, so the rows are read with it.
+            const headingId = section.heading ? `${headingIdPrefix}-heading-${index}` : undefined;
+            return (
+              <div key={section.id} className={styles.section}>
+                {index > 0 || showSearch ? <div className={styles.divider} role="separator" /> : null}
+                <div className={styles.sectionBody} role={headingId ? 'group' : undefined} aria-labelledby={headingId}>
+                  {section.heading ? (
+                    <div className={styles.heading} id={headingId}>
+                      {section.headingLeadingElement ? (
+                        <span className={styles.headingIcon} aria-hidden="true">
+                          {section.headingLeadingElement}
+                        </span>
+                      ) : null}
+                      <span>{section.heading}</span>
+                    </div>
+                  ) : null}
+                  <div className={styles.list}>
+                    {items.map((item) => (
+                      <MenuItemRow
+                        key={item.id}
+                        item={item}
+                        isRovingTabStop={item.id === activeId}
+                        registerRef={registerRef}
+                        onFocus={setActiveId}
+                      />
+                    ))}
                   </div>
-                ) : null}
-                <div className={styles.list}>
-                  {items.map((item) => (
-                    <MenuItemRow
-                      key={item.id}
-                      item={item}
-                      isRovingTabStop={item.id === activeId}
-                      registerRef={registerRef}
-                      onFocus={setActiveId}
-                    />
-                  ))}
                 </div>
               </div>
-            </div>
-          ))}
-          {!hasAnyVisibleItems ? <div className={styles.empty}>{emptyMessage}</div> : null}
+            );
+          })}
         </div>
       )}
+      {announceEmpty ? null : emptyRow}
+      {/* One polite live region for the loading row and the empty message, present from the first render. */}
+      <div role="status">
+        {loading ? (
+          <div className={styles.loadingRow}>
+            <Spinner size="sm" />
+            <span>{loadingLabel}</span>
+          </div>
+        ) : announceEmpty ? (
+          emptyRow
+        ) : null}
+      </div>
     </div>
   );
 });

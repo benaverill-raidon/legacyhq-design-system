@@ -36,9 +36,9 @@
     "Floating content that isn't a list of actions/options - use Popup directly with your own content"
   ],
   "anatomy": [
-    { "name": "trigger", "description": "The single child element (children) - any focusable control. Cloned by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls." },
+    { "name": "trigger", "description": "The single child element (children) - any focusable control. Cloned by DropdownMenu to receive a ref (for returning focus) and aria-haspopup=\"menu\" (unless it sets its own), then by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls." },
     { "name": "panel", "description": "Popup's own default visual skin (background/border/radius/shadow), rendered with padding=\"none\"." },
-    { "name": "menu", "description": "A Menu, rendered with the Menu props DropdownMenu forwards (an explicit list: clearSearchLabel is accepted by the type but not forwarded, and fullWidth is set from matchTriggerWidth)." }
+    { "name": "menu", "description": "A Menu, rendered with every Menu prop DropdownMenu accepts (an explicit list; fullWidth is also set by matchTriggerWidth), with each item's onSelect wrapped to close the panel." }
   ],
   "props": {
     "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "The single trigger element." },
@@ -70,22 +70,24 @@
   },
   "states": ["closed", "open"],
   "accessibility": {
-    "triggeredBy": ["consumer-controlled - same as Popup, Dropdown Menu attaches no open/close handler itself"],
+    "triggeredBy": ["consumer-controlled - same as Popup; Dropdown Menu attaches no open handler, and reports closing through onOpenChange(false)"],
     "ariaExpanded": "set on the trigger by Popup, reflecting open",
     "ariaControls": "set on the trigger by Popup, pointing at the panel id while open",
     "role": "menu (set by the inner Menu, not by DropdownMenu/Popup directly)",
-    "focusManagement": "left to the consumer, same as Popup and Menu - neither moves focus into the panel on open"
+    "ariaHaspopup": "menu, set on the trigger by DropdownMenu unless the trigger sets its own",
+    "focusManagement": "menu-button pattern: opening moves focus to the search field or the first enabled row (one animation frame later, once Popup has made the panel visible); choosing an item, Escape, or Tab/Shift+Tab out of the panel returns focus to the trigger. Skipped for a role=\"combobox\" trigger (Select), which keeps focus."
   },
   "behaviorRules": [
     "open is a required, fully controlled prop, inherited from Popup - no internal open state, no defaultOpen.",
     "Always renders a Menu as Popup's content - there is no way to pass arbitrary non-Menu content (use Popup directly for that).",
     "alignment only ever resolves to a bottom* Popup alignment as the preference - Popup's own top*/opposite-side fallback still applies if that overflows the viewport.",
-    "Never calls onOpenChange from a Menu item's onSelect - selection closing the dropdown is entirely the consumer's responsibility, wired from within each item's own onSelect.",
+    "Choosing an item runs its onSelect, then returns focus to the trigger and calls onOpenChange(false) - unless that onSelect called event.preventDefault(), which keeps the panel open (e.g. a checkbox row). Not applied for a role=\"combobox\" trigger.",
+    "Tab past the panel's last tab stop, or Shift+Tab before its first, calls onOpenChange(false) and returns focus to the trigger.",
     "Renders nothing but the trigger when open is false, identical to Popup."
   ],
   "compositionRules": [
     "Pass Menu's own props (sections, showSearch, etc.) directly to DropdownMenu - do not construct a separate <Menu> and try to pass it as content.",
-    "Wire onOpenChange(false) from inside a selected item's own onSelect when a selection should close the dropdown."
+    "Call event.preventDefault() in an item's onSelect when choosing it should keep the dropdown open."
   ],
   "contentRules": [],
   "responsiveRules": [
@@ -101,26 +103,28 @@
   "relatedComponents": ["Popup", "Menu"],
   "do": [
     "Pass Menu's own props directly to DropdownMenu rather than constructing a separate Menu element.",
-    "Close the dropdown from a selected item's own onSelect."
+    "Let choosing an item close the dropdown; call event.preventDefault() in onSelect only to keep it open."
   ],
   "dont": [
     "Do not expect a content prop for non-Menu floating content - use Popup directly instead.",
-    "Do not expect selecting an item to close the dropdown automatically."
+    "Do not wrap the trigger in another element - the wrapper, not the button, gets the ARIA and the returned focus."
   ],
   "acceptanceCriteria": [
     "Renders only the trigger when open is false; renders the trigger plus a role=\"menu\" panel when open is true.",
     "Sets aria-expanded/aria-controls on the trigger, reflecting open (inherited from Popup).",
     "Maps alignment left/center/right to Popup's bottomLeft/bottomCenter/bottomRight exactly, defaulting to left.",
-    "Calls onOpenChange(false) on Escape and on an outside click by default (inherited from Popup); does not call it for a click on a menu item itself.",
-    "Forwards every Menu prop (sections, size, showSearch, searchValue/onSearchChange, searchPlaceholder, showScrollbar, maxHeight, loading, loadingLabel, emptyMessage, aria-label, aria-labelledby) to the rendered Menu unchanged.",
+    "Calls onOpenChange(false) on Escape and on an outside click by default (inherited from Popup), on Tab out of the panel, and after a chosen item's onSelect unless it called event.preventDefault().",
+    "Sets aria-haspopup=\"menu\" on the trigger unless it sets its own.",
+    "Moves focus into the panel on open (search field, else first enabled row) and returns it to the trigger on choose, Escape, and Tab out.",
+    "Forwards every Menu prop (sections, size, showSearch, searchValue/onSearchChange, searchPlaceholder, searchLabel, clearSearchLabel, showScrollbar, maxHeight, loading, loadingLabel, emptyMessage, fullWidth, aria-label, aria-labelledby) to the rendered Menu; sections with each onSelect wrapped.",
     "Renders the panel with Popup's default visual skin and padding=\"none\", so Menu sits flush against it.",
     "Supports a custom id/className on the panel (Popup's, not Menu's root)."
   ],
   "knownLimitations": [
     "No support for non-Menu panel content - a consumer needing that composes Popup directly instead.",
-    "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead, no built-in focus-first-item-on-open)."
+    "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead)."
   ],
   "futureEnhancements": [
-    "An optional built-in 'focus the first Menu item on open' behavior, once Menu itself grows an imperative or prop-driven way to request it."
+    "Arrow Down/Up on the trigger to open the menu on its first/last row (the full menu-button keyboard model)."
   ]
 }

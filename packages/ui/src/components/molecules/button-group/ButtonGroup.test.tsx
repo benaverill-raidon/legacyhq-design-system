@@ -60,6 +60,23 @@ describe('ButtonGroup', () => {
     expect(screen.getByTestId('group')).not.toHaveAttribute('role');
   });
 
+  it("keeps a consumer's own role, labelled or not, instead of replacing it with group", () => {
+    const { rerender } = render(
+      <ButtonGroup role="toolbar" aria-label="Formatting">
+        <Button>Bold</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByRole('toolbar', { name: 'Formatting' })).toBeInTheDocument();
+    expect(screen.queryByRole('group')).not.toBeInTheDocument();
+
+    rerender(
+      <ButtonGroup role="toolbar" data-testid="group">
+        <Button>Bold</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByTestId('group')).toHaveAttribute('role', 'toolbar');
+  });
+
   it('renders role=group when aria-label is present', () => {
     render(
       <ButtonGroup aria-label="Document actions">

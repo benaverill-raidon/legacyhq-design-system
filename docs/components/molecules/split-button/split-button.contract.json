@@ -87,7 +87,8 @@
   "keyboardInteraction": [
     "Tab moves between the primary action and the secondary action, in DOM order",
     "Enter/Space activates either segment (native button behavior)",
-    "Escape closes the open panel (inherited from Popup, via Dropdown Menu)",
+    "Opening the panel moves focus to its first enabled item; choosing an item, or Tab/Shift+Tab out of the panel, closes it and returns focus to the caret (Dropdown Menu)",
+    "Escape closes the open panel and returns focus to the caret (Dropdown Menu)",
     "Arrow keys/Home/End/Enter navigate and activate rows inside the open panel (inherited from Menu)"
   ],
   "behaviorRules": [
@@ -96,7 +97,8 @@
     "isLoading applies only to the primary action (Button's own loading treatment) but additionally sets the secondary action's own disabled to disabled || isLoading.",
     "appearance and size are applied uniformly to both segments - there is no per-segment mixing in Figma's own variant set.",
     "showSearch is hardcoded to false and alignment to 'right' on the internal DropdownMenu - neither is exposed as a SplitButtonProps prop.",
-    "Does not pass isExpanded to the secondary action's IconButton - redundant, since Popup already manages aria-expanded via trigger-cloning."
+    "Choosing a menu item runs its onSelect, then closes the panel and returns focus to the caret (Dropdown Menu calls onOpenChange(false)); an onSelect that calls event.preventDefault() keeps it open.",
+    "Does not pass isExpanded to the secondary action's IconButton - redundant, since IconButton keeps the aria-expanded Popup injects via trigger-cloning."
   ],
   "compositionRules": [
     "Pass every other Button prop (tone, iconBefore, iconAfter, any native button attribute) directly on SplitButtonProps - they forward straight to the primary action via {...rest}.",
@@ -134,7 +136,7 @@
   ],
   "knownLimitations": [
     "No built-in support for more than a small, static list of actions - very large sections arrays inherit Menu's own eager-rendering behavior (no virtualization).",
-    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead, no built-in focus-first-item-on-open)."
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead)."
   ],
   "futureEnhancements": [
     "A renderSecondaryAction/custom-icon escape hatch, if a real use case needs something other than the caret.",

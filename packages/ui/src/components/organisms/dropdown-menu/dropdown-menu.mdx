@@ -85,8 +85,8 @@ export const RowActionsDropdown = () => {
   }
 >
   Dropdown Menu opens a Menu of actions or options from a trigger you choose, such as a Button, an
-  Icon Button, or an Avatar. It places the panel below the trigger and reports Escape and clicks
-  outside; your state decides whether it's open.
+  Icon Button, or an Avatar. It places the panel below the trigger, moves focus into it, and reports
+  when it should close; your state decides whether it's open.
 </ComponentHeader>
 
 <Section title="When to use">
@@ -121,7 +121,7 @@ export const RowActionsDropdown = () => {
     </DropdownMenu>
   }
 >
-  <Part name="trigger" target={buttonStyles.button}>The one element you pass as `children`. It's cloned to add a ref and `aria-expanded` and `aria-controls`.</Part>
+  <Part name="trigger" target={buttonStyles.button}>The one element you pass as `children`. It's cloned to add a ref, `aria-haspopup`, `aria-expanded`, and `aria-controls`.</Part>
   <Part name="panel">Popup's surface, with no padding, added at the end of the page while `open`. It floats, so it isn't outlined on this specimen.</Part>
   <Part name="menu">A Menu inside the panel, built from the Menu props you pass, such as `sections`.</Part>
 </Anatomy>
@@ -148,21 +148,32 @@ and it's kept inside the viewport.
 <Subsection title="Your state opens and closes it">
 
 Dropdown Menu never opens or closes itself. Keep `open` in your state, toggle it from the trigger's
-`onClick`, and pass `onOpenChange`, which is called with `false` on Escape or a press outside the
-trigger and the panel. Choosing an item doesn't close the menu, because Menu doesn't know it's in
-one: set `open` to false from the item's `onSelect`. While closed, only the trigger renders.
+`onClick`, and pass `onOpenChange`. It's called with `false` on Escape, a press outside the trigger
+and the panel, Tab out of the panel, and when an item is chosen, after the item's `onSelect`. To keep
+the menu open after a choice, such as for a checkbox row, call `event.preventDefault()` in that
+`onSelect`. While closed, only the trigger renders.
 
-<Example of={DropdownMenuStories.Playground} caption="Open it, search, and choose an action: the item's onSelect closes the menu." />
+<Example of={DropdownMenuStories.Playground} caption="Open it, search, and choose an action: choosing closes the menu." />
+
+</Subsection>
+
+<Subsection title="Focus">
+
+Opening the menu moves focus into it: to the search field when there is one, otherwise to the first
+enabled row. Choosing an item, Escape, or Tab out of the panel returns focus to the trigger, so the
+tab order runs trigger, menu, then the rest of the page, though the panel is added at the end of
+the page. If an item's `onSelect` moves focus elsewhere, such as into a dialog it opens, focus stays
+there. A trigger with `role="combobox"`, like Select's field, keeps focus while the menu is open,
+since typing filters it, and closes the menu itself.
 
 </Subsection>
 
 <Subsection title="Triggers">
 
 Any one element can be the trigger: a Button, an Icon Button, an Avatar, a Tag. It's cloned to add a
-ref, for positioning, and `aria-expanded` and `aria-controls`, so it must pass those on to its DOM
-element. On a Button or an Icon Button, also set `isExpanded={open}`: it keeps the hover fill while
-the menu is open, and without it, Button drops the `aria-expanded` that Dropdown Menu adds and Icon
-Button reports `false`.
+ref, for positioning and returning focus, `aria-haspopup="menu"` (unless it sets its own), and
+`aria-expanded` and `aria-controls`, so it must pass those on to its DOM element. Button and Icon
+Button keep the `aria-expanded` Dropdown Menu adds, and keep their hover fill while it's `true`.
 
 <Example of={DropdownMenuStories.Content} caption="An Icon Button and an Avatar as triggers." />
 
@@ -173,7 +184,8 @@ Button reports `false`.
 The panel sits 8px below the trigger and stays at least 8px inside the viewport. It moves with the
 trigger as the page scrolls or resizes, and hides while the trigger is scrolled out of view. Its
 width is the Menu's `size`. `matchTriggerWidth` makes it as wide as the trigger instead, and
-`anchorRef` positions it against another element, as Select does with its field frame.
+`anchorRef` positions it against another element, as Select does with its field frame. Menu's
+`fullWidth` makes the panel as wide as its widest row.
 
 </Subsection>
 
@@ -181,7 +193,7 @@ width is the Menu's `size`. `matchTriggerWidth` makes it as wide as the trigger 
 
 Menu's sections, headings, and dividers all work inside the panel.
 
-<Example of={DropdownMenuStories.EdgeCases} caption="Two sections with headings; choosing any row closes the menu." />
+<Example of={DropdownMenuStories.EdgeCases} caption="Two sections with headings, each announced as a group; choosing any row closes the menu." />
 
 </Subsection>
 
@@ -191,7 +203,7 @@ Menu's sections, headings, and dividers all work inside the panel.
 
 <Guidelines>
 <Do
-  caption="Pass onOpenChange, toggle from the trigger, and close from each item's onSelect."
+  caption="Pass onOpenChange and toggle from the trigger. Choosing an item calls onOpenChange(false)."
   code={`const [open, setOpen] = useState(false);
 
 <DropdownMenu
@@ -200,24 +212,24 @@ Menu's sections, headings, and dividers all work inside the panel.
     onOpenChange={setOpen}
     showSearch={false}
     sections={[{ id: 'actions', items: [
-        { id: 'rename', label: 'Rename', onSelect: () => { rename(); setOpen(false); } },
+        { id: 'rename', label: 'Rename', onSelect: rename },
     ] }]}
 >
-    <Button isExpanded={open} onClick={() => setOpen(!open)}>Actions</Button>
+    <Button onClick={() => setOpen(!open)}>Actions</Button>
 </DropdownMenu>`}
 >
   <ActionsDropdown />
 </Do>
 <Dont
-  caption="Leave out onOpenChange. Escape and clicks outside can't close the menu."
+  caption="Leave out onOpenChange. Choosing an item, Escape, and clicks outside can't close the menu."
   code={`<DropdownMenu open={open} sections={sections}>
     <Button onClick={() => setOpen(!open)}>Actions</Button>
 </DropdownMenu>`}
 />
 <Do
-  caption="Pass the button itself as the trigger, with isExpanded set to open."
+  caption="Pass the button itself as the trigger."
   code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
-    <IconButton aria-label="Row actions" isExpanded={open} onClick={() => setOpen(!open)}>
+    <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
         <MoreVertIcon />
     </IconButton>
 </DropdownMenu>`}
@@ -225,7 +237,7 @@ Menu's sections, headings, and dividers all work inside the panel.
   <RowActionsDropdown />
 </Do>
 <Dont
-  caption="Wrap the trigger in another element. The wrapper gets aria-expanded and aria-controls, and the button doesn't."
+  caption="Wrap the trigger in another element. The wrapper gets the ARIA and the returning focus, and the button doesn't."
   code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
     <span>
         <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
@@ -249,25 +261,25 @@ Menu's sections, headings, and dividers all work inside the panel.
 - Dropdown Menu adds no element around the trigger, which keeps its own role and name. While open,
   a panel with no role is added at the end of the page, holding a Menu with `role="menu"`. Name it
   with `aria-label` or `aria-labelledby`, which Dropdown Menu passes to the Menu.
-- The trigger gets `aria-expanded`, and `aria-controls` pointing at the panel while it's open. On a
-  Button or an Icon Button, set `isExpanded={open}` too, so the state is announced. Dropdown Menu
-  doesn't set `aria-haspopup`; set `aria-haspopup="menu"` on the trigger yourself.
-- Opening the menu moves focus only when there's a search field, which takes focus. Without one,
-  focus stays on the trigger, and because the panel is at the end of the page, Tab reaches its rows
-  only after everything else on the page.
-- While the menu is open, Escape calls `onOpenChange(false)` wherever focus is. Focus isn't moved
-  back to the trigger, so if it was in the panel, it's left on the page.
-- Inside the panel, the rows work as Menu's do: one tab stop, and arrow keys between rows.
+- The trigger gets `aria-haspopup="menu"` (unless it sets its own), `aria-expanded`, and
+  `aria-controls` pointing at the panel while it's open.
+- It follows the menu-button pattern: opening moves focus to the search field, or without one to the
+  first enabled row, and choosing an item, Escape, or Tab out of the panel closes it and returns
+  focus to the trigger. So the panel's place at the end of the page doesn't put it last in the tab
+  order.
+- While the menu is open, Escape calls `onOpenChange(false)` wherever focus is.
+- Inside the panel, the rows work as Menu's do: one tab stop, and arrow keys between rows. Headed
+  sections are groups named by their headings, and the empty message is announced politely.
 
 <Keyboard>
-  <Key keys="Enter">On the trigger, runs its `onClick`, which opens or closes the menu.</Key>
-  <Key keys="Space">On the trigger, the same as Enter.</Key>
-  <Key keys="Tab">With a search field, moves from it to the clear button, then into the rows. Without one, moves from the trigger to the next control on the page.</Key>
+  <Key keys="Enter">On the trigger, runs its `onClick`, which opens the menu and moves focus into it. On a row, chooses it, closes the menu, and returns focus to the trigger.</Key>
+  <Key keys="Space">The same as Enter.</Key>
+  <Key keys="Tab">With a search field, moves from it to the clear button, then into the rows. From the rows, or Shift+Tab from the search field, closes the menu and returns focus to the trigger.</Key>
   <Key keys="Arrow Down">In the rows, moves to the next enabled row, wrapping from the last to the first.</Key>
   <Key keys="Arrow Up">In the rows, moves to the previous enabled row, wrapping from the first to the last.</Key>
   <Key keys="Home">In the rows, moves to the first enabled row.</Key>
   <Key keys="End">In the rows, moves to the last enabled row.</Key>
-  <Key keys="Escape">While the menu is open, calls `onOpenChange(false)`, wherever focus is.</Key>
+  <Key keys="Escape">While the menu is open, calls `onOpenChange(false)`, wherever focus is. From inside the panel, also returns focus to the trigger.</Key>
 </Keyboard>
 
 </Section>
@@ -277,11 +289,11 @@ Menu's sections, headings, and dividers all work inside the panel.
 <PropsTable of={DropdownMenuStories} />
 
 Dropdown Menu's other props are Menu's, passed to the Menu in the panel: `sections`, `size`,
-`showSearch`, `searchValue`, `onSearchChange`, `searchPlaceholder`, `showScrollbar`, `maxHeight`,
-`loading`, `loadingLabel`, `emptyMessage`, `aria-label`, and `aria-labelledby`. See
-<DocLink to="Components/Actions/Menu" /> for what each does. Two Menu props are accepted but not
-passed on: `clearSearchLabel`, so the clear button is always named "Clear search", and `fullWidth`,
-which `matchTriggerWidth` sets instead.
+`showSearch`, `searchValue`, `onSearchChange`, `searchPlaceholder`, `searchLabel`,
+`clearSearchLabel`, `showScrollbar`, `maxHeight`, `loading`, `loadingLabel`, `emptyMessage`,
+`fullWidth`, `aria-label`, and `aria-labelledby`. See <DocLink to="Components/Actions/Menu" /> for
+what each does. `matchTriggerWidth` also sets `fullWidth`. Each item's `onSelect` is wrapped so that
+choosing it closes the menu.
 
 </Section>
 

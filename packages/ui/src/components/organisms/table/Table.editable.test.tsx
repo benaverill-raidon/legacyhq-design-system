@@ -50,16 +50,19 @@ describe('Table editable cells', () => {
     expect(save).not.toHaveBeenCalled();
     fireEvent.click(cancel);
     expect(input).toHaveValue('Review');
-    act(() => input.focus());
+    // Cancel, Enter, and Escape leave focus on the read-only field; a click starts editing again.
+    expect(input).toHaveFocus();
     fireEvent.click(input);
     fireEvent.change(input, { target: { value: 'Planning' } });
     fireEvent.keyDown(input, { key: 'Enter' });
     expect(save).toHaveBeenCalledExactlyOnceWith('Planning');
-    act(() => input.focus());
+    expect(input).toHaveFocus();
+    fireEvent.click(input);
     fireEvent.change(input, { target: { value: 'Discard' } });
     fireEvent.keyDown(input, { key: 'Escape' });
     expect(input).toHaveValue('Planning');
-    act(() => input.focus());
+    expect(input).toHaveFocus();
+    fireEvent.click(input);
     fireEvent.change(input, { target: { value: 'Final' } });
     act(() => input.blur());
     expect(save).toHaveBeenLastCalledWith('Final');

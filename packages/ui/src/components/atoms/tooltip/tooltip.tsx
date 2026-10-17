@@ -57,6 +57,53 @@ function isDisabledTrigger(
   return Boolean(element.props.disabled || element.props.isDisabled);
 }
 
+type TriggerProps = React.HTMLAttributes<HTMLElement> & {
+  disabled?: boolean;
+  isDisabled?: boolean;
+  ref?: React.Ref<HTMLElement>;
+  [key: string]: unknown;
+};
+
+function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
+  return (value: T | null) => {
+    refs.forEach((ref) => {
+      if (typeof ref === 'function') {
+        ref(value);
+      } else if (ref) {
+        (ref as React.MutableRefObject<T | null>).current = value;
+      }
+    });
+  };
+}
+
+/**
+ * Props a wrapper put on the Tooltip element itself (Popup's aria-expanded and aria-controls,
+ * Dropdown Menu's aria-haspopup, a data attribute, a handler), merged onto the child the way
+ * cloneElement would put them there: the wrapper's value wins, except that two handlers both run
+ * (the child's first), styles merge, and aria-describedby ids are kept from both.
+ */
+function mergeForwardedProps(forwarded: Record<string, unknown>, childProps: Record<string, unknown>) {
+  const merged: Record<string, unknown> = {};
+  Object.entries(forwarded).forEach(([key, value]) => {
+    // Popup sets aria-controls to undefined while closed; that mustn't erase the child's own.
+    if (value === undefined) return;
+    const childValue = childProps[key];
+    if (/^on[A-Z]/.test(key) && typeof value === 'function' && typeof childValue === 'function') {
+      merged[key] = (...args: unknown[]) => {
+        childValue(...args);
+        value(...args);
+      };
+    } else if (key === 'style' && value && childValue) {
+      merged[key] = { ...(childValue as React.CSSProperties), ...(value as React.CSSProperties) };
+    } else if (key === 'aria-describedby') {
+      merged[key] = mergeDescribedBy(childValue as string | undefined, value as string | undefined);
+    } else {
+      merged[key] = value;
+    }
+  });
+  return merged;
+}
+
 export const Tooltip = React.memo(function Tooltip({
   content,
   children,
@@ -64,6 +111,8 @@ export const Tooltip = React.memo(function Tooltip({
   disabled = false,
   delay = 300,
   className,
+  ref,
+  ...forwardedProps
 }: TooltipProps) {
   const tooltipId = React.useId();
   const showTimeoutRef = React.useRef<number | null>(null);
@@ -102,22 +151,25 @@ export const Tooltip = React.memo(function Tooltip({
   React.useEffect(() => () => clearShowTimer(), [clearShowTimer]);
 
   const hasContent = hasTooltipContent(content);
-  const child = React.Children.only(children) as React.ReactElement<
-    React.HTMLAttributes<HTMLElement> & {
-      disabled?: boolean;
-      isDisabled?: boolean;
-      'aria-describedby'?: string;
-    }
-  >;
+  const child = React.Children.only(children) as React.ReactElement<TriggerProps>;
+  const childRef = child.props.ref;
+  // Tooltip is often the child of a component that wires its trigger by cloning it (Popup, Dropdown
+  // Menu). What that wrapper sets on the Tooltip element - its ref, aria-expanded, aria-controls,
+  // aria-haspopup - belongs on the real trigger, so it's passed through to the child.
+  const mergedRef = React.useMemo(() => (ref ? mergeRefs(childRef, ref) : childRef), [childRef, ref]);
+  const forwarded = mergeForwardedProps(forwardedProps, child.props);
+  // The trigger's props as they'll end up, so Tooltip's own handlers below chain onto both.
+  const childProps: TriggerProps = { ...child.props, ...forwarded };
 
   if (!hasContent) {
-    return child;
+    return React.cloneElement(child, { ...forwarded, ref: mergedRef });
   }
 
   const isDisabledChildTrigger = isDisabledTrigger(child);
-  const childProps = child.props;
 
   const clonedChild = React.cloneElement(child, {
+    ...forwarded,
+    ref: mergedRef,
     'aria-describedby': disabled
       ? childProps['aria-describedby']
       : mergeDescribedBy(childProps['aria-describedby'], isVisible ? tooltipId : undefined),

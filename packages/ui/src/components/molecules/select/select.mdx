@@ -165,7 +165,8 @@ When nothing matches, the menu shows `emptyMessage`, "No matches" by default.
 
 <Subsection title="Choosing">
 
-In a single-select field, choosing a row calls `onChange` with its value and closes the menu.
+In a single-select field, choosing a row calls `onChange` with its value, closes the menu, and
+returns focus to the input.
 Choosing the chosen row again keeps it chosen: Select never clears a single value, so offer your
 own way to clear one if it's optional. In a multi-select field, choosing a row adds or removes its
 value, clears the typed text, and keeps the menu open. A chip's remove button removes its value, and
@@ -275,23 +276,25 @@ The field stays one line high. When chips run out of room, they shrink and clip 
   `aria-haspopup="menu"`, and `aria-autocomplete="list"`. Dropdown Menu sets `aria-expanded`, and
   `aria-controls` pointing at the menu while it's open.
 - Name it with Field, which wires its label to the input, or with `aria-label` or
-  `aria-labelledby`. The same name is passed to the menu; with only a native `label`, the menu has no
-  name.
+  `aria-labelledby`. The same name is passed to the menu. With only a native `label`, the menu is
+  named from that label when it opens: by reference when the label has an `id`, otherwise by its
+  text.
 - In a Field, the message is added to the input's description, and an error sets `aria-invalid`.
   `required` sets the input's native `required`.
 - The menu is a Menu, announced as a menu, added at the end of the page. Rows are `menuitemradio`
   in single-select and `menuitemcheckbox` in multi-select, with `aria-checked` on the chosen ones.
   Group headings aren't announced.
 - Opening and typing keep focus in the input. Arrow Down moves focus into the menu's first row.
-  A multi-select pick returns focus to the input. A single-select pick, or Escape from inside the
-  menu, closes it without moving focus back, so focus falls to the page; that's a known bug.
+  A pick, Escape, or Tab from inside the menu returns focus to the input; a single-select pick,
+  Escape, and Tab also close the menu. Focus moving anywhere outside the field and its menu closes
+  the menu.
 - Each chip's remove button is its own tab stop before the input, named "Remove" plus the value.
 - The caret is hidden from assistive technology and works only with a pointer; the keys below do
   the same from the input.
 - `disabled` is the native attribute: the input and the chips' remove buttons leave the tab order.
 
 <Keyboard>
-  <Key keys="Tab">Moves to each chip's remove button, then to the input. A disabled field is skipped. Tabbing away from an open menu leaves it open until Escape or a click outside; that's a known bug.</Key>
+  <Key keys="Tab">Moves to each chip's remove button, then to the input. A disabled field is skipped. Tabbing out of the field closes its menu. In the menu, Tab or Shift + Tab closes it and returns focus to the input.</Key>
   <Key keys="Arrow Down">In the input, opens the menu; when it's open, moves into the first row. In the menu, moves to the next row, wrapping to the first.</Key>
   <Key keys="Arrow Up">In the menu, moves to the previous row, wrapping to the last.</Key>
   <Key keys="Home">In the menu, moves to the first row.</Key>
@@ -299,7 +302,7 @@ The field stays one line high. When chips run out of room, they shrink and clip 
   <Key keys="Enter">In the input, opens a closed menu. On a row, chooses it.</Key>
   <Key keys="Space">In the input, opens a closed menu when nothing's typed. On a row, chooses it.</Key>
   <Key keys="Backspace">In an empty multi-select input, removes the last chosen value.</Key>
-  <Key keys="Escape">Closes the menu and clears the typed text.</Key>
+  <Key keys="Escape">Closes the menu and clears the typed text. From inside the menu, focus returns to the input.</Key>
 </Keyboard>
 
 </Section>
@@ -323,7 +326,7 @@ searchValue?: string;                // controls the typed text
 onSearchChange?: (value: string) => void;  // while set, Select doesn't filter
 emptyMessage?: React.ReactNode;      // default 'No matches'
 'aria-label'?: string;
-'aria-labelledby'?: string;          // passed to the input and the menu
+'aria-labelledby'?: string;          // passed to the input and the menu; else the menu takes a native label's name
 'aria-describedby'?: string;
 'aria-invalid'?: boolean | 'true' | 'false';
 required?: boolean;

@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Field } from '../field';
@@ -229,6 +229,140 @@ describe('Select', () => {
 
       expect(combobox()).toHaveAttribute('id', 'status-select');
       expect(combobox().closest(`.${textFieldStyles.root}`)).toHaveClass('custom-select');
+    });
+  });
+
+  describe('focus', () => {
+    function openAndEnterMenu() {
+      combobox().focus();
+      open();
+      fireEvent.keyDown(combobox(), { key: 'ArrowDown' });
+      const first = screen.getAllByRole('menuitemradio')[0];
+      expect(first).toHaveFocus();
+      return first;
+    }
+
+    it('returns focus to the field on Escape from inside the menu', () => {
+      render(<Select options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Status" />);
+      const item = openAndEnterMenu();
+
+      fireEvent.keyDown(item, { key: 'Escape' });
+
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      expect(combobox()).toHaveFocus();
+    });
+
+    it('returns focus to the field after a single-select pick', () => {
+      const onChange = vi.fn();
+      render(<Select options={OPTIONS} value={null} onChange={onChange} aria-label="Status" />);
+      openAndEnterMenu();
+
+      fireEvent.click(screen.getByRole('menuitemradio', { name: 'In review' }));
+
+      expect(onChange).toHaveBeenCalledWith('in-review');
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      expect(combobox()).toHaveFocus();
+    });
+
+    it.each([false, true])('closes the menu and returns focus to the field on Tab inside it (shift=%s)', (shiftKey) => {
+      render(<Select options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Status" />);
+      const item = openAndEnterMenu();
+
+      const notPrevented = fireEvent.keyDown(item, { key: 'Tab', shiftKey });
+
+      expect(notPrevented).toBe(false);
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+      expect(combobox()).toHaveFocus();
+    });
+
+    it('closes the menu when focus moves out of the field', () => {
+      render(
+        <>
+          <Select options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Status" />
+          <button type="button">Next</button>
+        </>,
+      );
+      combobox().focus();
+      open();
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+
+      act(() => screen.getByRole('button', { name: 'Next' }).focus());
+
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it('keeps the menu open while focus moves within the field, such as to a chip', () => {
+      render(<Select inputType="multi" options={OPTIONS} value={['draft']} onChange={vi.fn()} aria-label="Statuses" />);
+      combobox().focus();
+      open();
+
+      act(() => screen.getByRole('button', { name: 'Remove Draft' }).focus());
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+
+    it('keeps the menu open when the field loses focus to nothing in particular', () => {
+      render(<Select options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Status" />);
+      combobox().focus();
+      open();
+
+      fireEvent.focusOut(combobox(), { relatedTarget: null });
+
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+    });
+  });
+
+  describe('naming the menu', () => {
+    it('names the menu from a native label pointing at the field', () => {
+      render(
+        <>
+          <label htmlFor="status-field">Status</label>
+          <Select id="status-field" options={OPTIONS} value={null} onChange={vi.fn()} />
+        </>,
+      );
+      open();
+
+      expect(screen.getByRole('menu', { name: 'Status' })).toBeInTheDocument();
+    });
+
+    it('names the menu by reference when the native label has an id', () => {
+      render(
+        <>
+          <label id="status-label" htmlFor="status-field">
+            Status
+          </label>
+          <Select id="status-field" options={OPTIONS} value={null} onChange={vi.fn()} />
+        </>,
+      );
+      open();
+
+      const menu = screen.getByRole('menu', { name: 'Status' });
+      expect(menu).toHaveAttribute('aria-labelledby', 'status-label');
+    });
+
+    it('names the menu from a wrapping label', () => {
+      render(
+        // eslint-disable-next-line jsx-a11y/label-has-associated-control
+        <label>
+          Status
+          <Select options={OPTIONS} value="draft" onChange={vi.fn()} />
+        </label>,
+      );
+      open();
+
+      expect(screen.getByRole('menu', { name: 'Status' })).toBeInTheDocument();
+    });
+
+    it('prefers aria-label and aria-labelledby over a native label', () => {
+      render(
+        <>
+          <label htmlFor="status-field">Status</label>
+          <Select id="status-field" options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Matter status" />
+        </>,
+      );
+      open();
+
+      expect(screen.getByRole('menu', { name: 'Matter status' })).toBeInTheDocument();
     });
   });
 

@@ -34,7 +34,7 @@ interface ChipSegment {
   label: React.ReactNode;
   sections: MenuSection[];
   menuAriaLabel?: string;
-  tooltip?: React.ReactNode; // known bug: see "Dropdown segments"
+  tooltip?: React.ReactNode;
 }
 
 // shared by all modes
@@ -58,6 +58,7 @@ interface ChipSelectProps extends ChipCommonProps {
   mode: 'select';
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
   removeAriaLabel?: string;
+  labelText?: string; // the label as plain text, for the built names
 }
 
 interface ChipFilterProps extends ChipCommonProps {
@@ -67,6 +68,7 @@ interface ChipFilterProps extends ChipCommonProps {
   valuePreview?: React.ReactNode;
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
   removeAriaLabel?: string;
+  labelText?: string; // the label as plain text, for the built names
 }
 
 type ChipProps = ChipSearchProps | ChipSelectProps | ChipFilterProps;
@@ -85,7 +87,8 @@ justified because the alternative (all-optional props, silently ignored when irr
 size: md
 disabled: false
 isSelected: false      (search)
-removeAriaLabel: `Remove ${label}` when label is a string, otherwise `Remove`
+labelText: `label` when it is a string
+removeAriaLabel: `Remove ${labelText}` when there is label text, otherwise `Remove`
 ```
 
 `size` resolves as `size ?? groupSize ?? 'md'`. An explicit prop wins; otherwise Chip inherits the
@@ -254,24 +257,29 @@ shared flag on Chip would make them fight.
 `showSearch` is hardcoded `false`, matching Figma's own chip dropdown instances. Panel accessible
 names default to `${label} operator` / `${label} value` (composed from the property name and the
 segment's role) because the segment's own label is the current *value* - naming a panel "on" or
-"March 2" says nothing about what choosing from it does. `ChipSegment.menuAriaLabel` overrides it. With a non-string `label` there is no default name, so pass
-`menuAriaLabel`.
+"March 2" says nothing about what choosing from it does. `ChipSegment.menuAriaLabel` overrides it.
+The property name is `labelText`, or `label` when that is a string; with a JSX `label` and no
+`labelText` there is no default name, so pass `labelText` (or `menuAriaLabel`).
 
-**Known bug: `ChipSegment.tooltip`.** The segment then passes a `Tooltip` element to Dropdown Menu as
-its trigger. Popup clones that element with its ref and `aria-expanded`/`aria-controls`, and Tooltip
-drops all three: the trigger button gets no `aria-expanded`, and Popup has no element to measure, so
-the panel opens with `visibility: hidden` and never shows (checked in the running Storybook,
-2026-10-16).
+**Segment buttons are named by the property and their text.** Each operator/value button has
+`aria-labelledby` pointing at the label's text and then its own text span, so it reads "Due date
+March 2" rather than just "March 2". No text is added, so there's nothing to translate, and JSX on
+either side contributes its text. With `labelText`, a `hidden` span holding it is referenced instead
+of the visible label (a referenced hidden element still contributes its text).
 
-Since Dropdown Menu's focus fix (74c4b77), choosing a menu item runs the item's `onSelect`, then
-closes the menu and returns focus to the segment (an `onSelect` calling `preventDefault()` keeps it
-open); opening moves focus to the first row, and Escape or Tab out returns focus to the segment. With
-a `tooltip`, the trigger ref is still lost, so none of this focus handling can reach the segment.
+**`ChipSegment.tooltip`.** The segment then passes a `Tooltip` element to Dropdown Menu as its
+trigger. Tooltip forwards the ref and the props Popup and Dropdown Menu set on it (`aria-expanded`,
+`aria-controls`, `aria-haspopup`) to the segment button, so the menu is positioned and shown, and the
+focus handling below reaches the segment (fixed 2026-10-17; it had opened with `visibility: hidden`).
 
-**Long text doesn't truncate.** `.label`/`.segmentLabel` set `overflow: hidden; text-overflow:
-ellipsis`, but the segments keep `min-inline-size: auto`, so the chip never shrinks below its text
-width: in the 320px EdgeCases container a long filter chip runs past the edge instead of ending in an
-ellipsis.
+Choosing a menu item runs the item's `onSelect`, then closes the menu and returns focus to the
+segment (an `onSelect` calling `preventDefault()` keeps it open); opening moves focus to the first
+row, and Escape or Tab out returns focus to the segment.
+
+**Long text ends in an ellipsis.** The root has `max-inline-size: 100%`, every segment
+`min-inline-size: 0`, and `.label`/`.segmentLabel` clip with `text-overflow: ellipsis`, so a chip
+wider than its container shrinks to it: the label and value segments give up width in proportion to
+their text, and the remove button (`flex: none`), `elemBefore` and `valuePreview` keep their size.
 
 ## Accessibility
 
@@ -279,8 +287,12 @@ ellipsis.
   `aria-selected`, or a checkbox.
 - `filter`/`select` label segments are plain `<span>`s. Only the dropdown segments and remove button
   are controls.
-- Dropdown segments receive `aria-expanded`/`aria-controls` from Popup via Dropdown Menu.
-- The remove button always has an accessible name (`Remove ${label}` by default).
+- Dropdown segments receive `aria-expanded`/`aria-controls` from Popup via Dropdown Menu, and
+  `aria-haspopup="menu"` from Dropdown Menu, with or without a segment `tooltip`.
+- Dropdown segments are named by the property and their own text (`aria-labelledby`), e.g. "Due date
+  March 2".
+- The remove button always has an accessible name (`Remove ${labelText}` by default, `Remove` when
+  `label` is JSX and there's no `labelText`).
 - `elemBefore` and `valuePreview` are `aria-hidden` and must stay decorative - in search mode the
   segment is already a button, so a nested focusable element would be invalid HTML.
 - Every control uses the shared Focus Ring primitive.
@@ -319,6 +331,7 @@ search: disables the toggle when disabled
 select: renders a non-interactive label plus a remove button
 select: calls onRemove when the remove button is activated
 select: supports an explicit removeAriaLabel
+select: names the remove button from labelText when label is JSX
 filter: renders the label, the value segment, and a remove button
 filter: opens the value menu when the value segment is activated
 filter: calls a value menu item's own onSelect
@@ -328,6 +341,14 @@ filter: lets menuAriaLabel override the composed panel name
 filter: gives the operator and value segments independent menus
 filter: disables every segment when disabled
 filter: renders a value preview before the value text
+filter: names the operator and value buttons by the property and their own text
+filter: takes the property from a JSX label's text for the segment buttons
+filter: names the segments, menus, and remove button from labelText when label is JSX
+filter: keeps the "Remove" fallback with a JSX label and no labelText
+filter, segment tooltip: keeps aria-haspopup/aria-expanded/aria-controls on the segment
+filter, segment tooltip: opens a visible menu positioned against the segment
+filter, segment tooltip: returns focus to the segment on Escape
+ellipsizes long labels and values within the available width
 applies size and mode to the root for every mode
 defaults to size md
 supports a custom id/className on the root

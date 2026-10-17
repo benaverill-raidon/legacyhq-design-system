@@ -39,6 +39,13 @@ export const InlineEdit = React.memo(function InlineEdit({
     setIsEditing(true);
   };
 
+  // The field is the same element in both modes, so returning focus to it lands on the read-only
+  // value once editing ends. Focusing it while still editing doesn't restart editing (only the
+  // read-only clone starts editing on focus).
+  const focusField = () => {
+    rootRef.current?.querySelector<HTMLElement>(`.${styles.content} :is(input, textarea)`)?.focus();
+  };
+
   const confirm = () => {
     onConfirm?.(draft);
     setIsEditing(false);
@@ -49,6 +56,18 @@ export const InlineEdit = React.memo(function InlineEdit({
     setIsEditing(false);
   };
 
+  // The cancel and confirm buttons unmount when editing ends, so focus goes back to the field
+  // rather than to the page.
+  const confirmFromButton = () => {
+    focusField();
+    confirm();
+  };
+
+  const cancelFromButton = () => {
+    focusField();
+    cancel();
+  };
+
   const handleActionMouseDown = () => {
     suppressBlurRef.current = true;
   };
@@ -56,6 +75,8 @@ export const InlineEdit = React.memo(function InlineEdit({
   // Clicking (or Tab-ing) off the field - anywhere other than the cancel/confirm buttons - commits
   // the draft, the same as clicking confirm. Moving focus to the cancel/confirm buttons themselves
   // (by click or by Tab) must not trigger this - their own onClick already has the right behavior.
+  // An unchanged draft isn't confirmed: tabbing through the field and its buttons without typing
+  // just ends editing, so onConfirm only ever hears about an edit (or an explicit confirm).
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
     if (!isEditing) {
       return;
@@ -71,12 +92,17 @@ export const InlineEdit = React.memo(function InlineEdit({
       return;
     }
 
+    if (draft === value) {
+      setIsEditing(false);
+      return;
+    }
+
     confirm();
   };
 
-  // Blurring after a keyboard confirm/cancel would otherwise re-enter handleBlur with a stale
-  // isEditing closure (still true, since the setIsEditing(false) above hasn't committed yet),
-  // double-firing confirm - the same mousedown flag used for the action buttons suppresses it.
+  // Enter and Escape leave focus on the field, which turns read-only, so the person stays where
+  // they were; from a cancel/confirm button (Escape), focus moves to the field first, since the
+  // buttons unmount. Enter (or a click) on the read-only field starts editing again.
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (!isEditing || event.defaultPrevented || event.nativeEvent.isComposing) {
       return;
@@ -88,14 +114,26 @@ export const InlineEdit = React.memo(function InlineEdit({
       // Let focused action buttons handle Enter themselves (especially Cancel).
       if (event.target instanceof HTMLElement && event.target.closest('button')) return;
       event.preventDefault();
-      suppressBlurRef.current = true;
       confirm();
-      (event.target as HTMLElement).blur();
     } else if (event.key === 'Escape') {
-      suppressBlurRef.current = true;
+      focusField();
       cancel();
-      (event.target as HTMLElement).blur();
     }
+  };
+
+  // While read-only, the field may already have focus (after Enter or Escape), so focusing it again
+  // can't start editing: a click or Enter does. The child's own handlers still run first.
+  const childProps = children.props;
+  const handleReadOnlyClick = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    childProps.onClick?.(event);
+    if (!event.defaultPrevented) startEditing();
+  };
+  const handleReadOnlyKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    childProps.onKeyDown?.(event);
+    if (event.defaultPrevented || event.key !== 'Enter' || event.nativeEvent.isComposing) return;
+    // Also keeps Enter from submitting a surrounding form.
+    event.preventDefault();
+    startEditing();
   };
 
   // Clones the same child for both modes - a read-only clone (value, focusable but not editable,
@@ -112,8 +150,9 @@ export const InlineEdit = React.memo(function InlineEdit({
         value,
         readOnly: true,
         onFocus: startEditing,
+        onClick: handleReadOnlyClick,
+        onKeyDown: handleReadOnlyKeyDown,
         ...(cellSize ? {
-          onClick: startEditing,
           iconAfter: <span className={styles.editIcon} aria-hidden="true"><EditIcon size="md" decorative /></span>,
         } : {}),
       });
@@ -137,10 +176,10 @@ export const InlineEdit = React.memo(function InlineEdit({
 
       {isEditing && actionButtons ? (
         <ButtonGroup className={styles.actions}>
-          <IconButton size="xs" appearance="default" aria-label={cancelLabel} onMouseDown={handleActionMouseDown} onClick={cancel}>
+          <IconButton size="xs" appearance="default" aria-label={cancelLabel} onMouseDown={handleActionMouseDown} onClick={cancelFromButton}>
             <CloseIcon />
           </IconButton>
-          <IconButton size="xs" appearance="default" aria-label={confirmLabel} onMouseDown={handleActionMouseDown} onClick={confirm}>
+          <IconButton size="xs" appearance="default" aria-label={confirmLabel} onMouseDown={handleActionMouseDown} onClick={confirmFromButton}>
             <CheckIcon />
           </IconButton>
         </ButtonGroup>

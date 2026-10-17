@@ -385,7 +385,7 @@ export const Content: Story = {
 export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Long label and value in a 320px container" description="The chip stays on one line and doesn't shrink to fit, so it runs past the container.">
+      <Group title="Long label and value in a 320px container" description="The chip stays on one line within the container: the label and value end in an ellipsis.">
         <div style={{ inlineSize: '320px' }}>
           <Chip
             mode="filter"

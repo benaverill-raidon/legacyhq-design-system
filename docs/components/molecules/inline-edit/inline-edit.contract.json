@@ -37,7 +37,7 @@
       "Figma's 'state' axis (default/edit) is not implemented as a state or isEditing prop at all - editing state and the in-progress draft are owned entirely inside the component. Two earlier passes exposed isEditing externally (first fully controlled by the parent, then still controlled but toggleable); both were reverted after explicit design feedback that no real use case shows the confirm/cancel buttons before the field has been interacted with - editing must always start on click/focus.",
       "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
       "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
-      "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
+      "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys leave focus on the field, now read-only (they blurred it until 2026-10-17, dropping focus to the page); the action buttons move focus back to the field since they unmount. A click or Enter on the focused read-only field starts editing again.",
       "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
       "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation floats the action row instead (absolutely positioned 8px below the field at its trailing edge, or 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
     ]
@@ -59,7 +59,7 @@
   "props": {
     "value": { "type": "string", "required": true, "default": null, "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft." },
     "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "A single controlled input-like element (e.g. a TextField with context='inline') InlineEdit clones for both the read-only display and the editable control." },
-    "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit." },
+    "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged." },
     "onCancel": { "type": "() => void", "required": false, "default": null, "description": "Called when the cancel button (or Escape) discards the draft and reverts to value." },
     "actionButtons": { "type": "boolean", "required": false, "default": true, "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false." },
     "actionPlacement": { "type": "'below' | 'end'", "required": false, "default": "below", "description": "Where the action row floats: below the field at its trailing edge, or past its trailing edge. Neither takes space from the field; leave room for the buttons." },
@@ -88,27 +88,27 @@
       "No role or accessible name of its own - a transparent wrapper around the cloned child.",
       "confirmLabel/cancelLabel always set an aria-label on the internal IconButtons.",
       "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
-      "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither fires before editing starts.",
-      "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur); moving focus to the cancel/confirm buttons themselves does not.",
+      "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
+      "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
       "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
     ]
   },
   "keyboardInteraction": [
-    { "key": "Tab", "behavior": "Reaches the cloned child (readOnly, focusable), then, once editing, cancel, then confirm, in native DOM order. Tab-ing past confirm to outside the root calls onConfirm (auto-save on blur)." },
-    { "key": "Enter", "behavior": "Calls onConfirm with the draft and preventDefault, then blurs the field (deselecting it), only while editing." },
-    { "key": "Escape", "behavior": "Calls onCancel and reverts to value, then blurs the field (deselecting it), only while editing." }
+    { "key": "Tab", "behavior": "Reaches the cloned child (readOnly, focusable), then, once editing, cancel, then confirm, in native DOM order. Tab-ing past confirm to outside the root calls onConfirm (auto-save on blur) if the draft changed, otherwise just ends editing." },
+    { "key": "Enter", "behavior": "While editing, calls onConfirm with the draft and preventDefault; focus stays on the field, now read-only. On the focused read-only field, starts editing." },
+    { "key": "Escape", "behavior": "Calls onCancel and reverts to value, only while editing; focus ends on the read-only field." }
   ],
   "behaviorRules": [
     "Own isEditing and the in-progress draft internally - no external isEditing/state prop.",
     "Clone children via React.cloneElement for both states so the underlying DOM node (and focus) persists across the transition.",
-    "Not editing: clone with value, readOnly=true, onFocus starts editing and seeds the draft from value.",
+    "Not editing: clone with value, readOnly=true, onFocus starts editing and seeds the draft from value; onClick and onKeyDown (Enter) are wrapped to start editing too, after the child's own, for a field that already has focus.",
     "Editing: clone with the draft value and an onChange that updates it.",
     "Render the confirm/cancel IconButton pair only once editing has started && actionButtons is not false.",
     "Default actionButtons=true, confirmLabel='Confirm', cancelLabel='Cancel'.",
     "Confirm calls onConfirm(draft) and returns to not-editing. Cancel calls onCancel() and returns to not-editing, showing value again.",
-    "Enter/Escape key handling is scoped to the internal editing state and does nothing before editing starts.",
-    "Enter and Escape both blur the field after calling onConfirm/onCancel, deselecting it the same way clicking either action button does; the mousedown-set ref flag also suppresses the auto-confirm handleBlur would otherwise re-fire from this same-tick blur.",
-    "onBlur on the root: if the newly-focus element (event.relatedTarget) is outside the root, or unavailable, call confirm(); if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
+    "Enter/Escape confirm/cancel handling is scoped to the internal editing state and never fires before editing starts.",
+    "Enter and Escape leave focus on the field after calling onConfirm/onCancel (Escape from an action button moves it to the field first); the action buttons' clicks move focus to the field before ending the edit, since they unmount.",
+    "onBlur on the root: if the newly-focus element (event.relatedTarget) is outside the root, or unavailable, call confirm() when the draft differs from value, otherwise just end editing; if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
     "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button)."
   ],
   "compositionRules": [
@@ -150,8 +150,9 @@
     "actionButtons=false hides the buttons while still editing.",
     "Clicking confirm calls onConfirm with the typed draft and returns to read-only.",
     "Clicking cancel calls onCancel, reverts to value, and returns to read-only.",
-    "Enter calls onConfirm (with preventDefault) while editing, then blurs the field; Escape calls onCancel while editing, then blurs the field.",
-    "Enter/Escape do nothing before editing starts.",
+    "Enter calls onConfirm (with preventDefault) while editing and leaves focus on the read-only field; Escape calls onCancel while editing, with focus ending on the read-only field.",
+    "Enter/Escape never confirm or cancel before editing starts; Enter or a click on the focused read-only field starts editing.",
+    "Focus leaving with an unchanged draft ends editing without calling onConfirm.",
     "Clicking/Tab-ing focus outside the root while editing calls onConfirm with the draft and returns to read-only.",
     "Clicking cancel or confirm never also triggers an auto-confirm from the blur clicking them causes.",
     "confirmLabel/cancelLabel set the accessible names of the action buttons.",

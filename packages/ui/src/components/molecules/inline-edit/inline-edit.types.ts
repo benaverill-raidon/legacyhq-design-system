@@ -14,8 +14,10 @@ export interface InlineEditableProps {
   readOnly?: boolean;
   /** Accepted for the child's own use; Inline Edit doesn't set it. */
   autoFocus?: boolean;
-  /** Replaced while read-only inside a Table's editable cell: a click starts editing. */
+  /** Wrapped while read-only: it still runs, then a click starts editing (the field may already have focus). */
   onClick?: React.MouseEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  /** Wrapped while read-only: it still runs, then Enter starts editing (the field may already have focus). */
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   /** Inside a Table's editable cell, replaced by an edit icon while read-only and removed while editing. */
   iconAfter?: React.ReactNode;
 }
@@ -25,7 +27,11 @@ export interface InlineEditProps {
   value: string;
   /** A single controlled input-like element (e.g. `<TextField context="inline" />`) InlineEdit clones for both the read-only display and the editable control. */
   children: React.ReactElement<InlineEditableProps>;
-  /** Called with the draft when confirmed. Enter confirms single-line fields; Ctrl/Cmd+Enter confirms textareas. */
+  /**
+   * Called with the draft when confirmed: by the confirm button, Enter (Ctrl/Cmd+Enter in a
+   * textarea), or focus leaving Inline Edit. Leaving focus with an unchanged draft just ends editing
+   * without calling it.
+   */
   onConfirm?: (value: string) => void;
   /** Called when the cancel button (or Escape) discards the draft and reverts to `value`. */
   onCancel?: () => void;

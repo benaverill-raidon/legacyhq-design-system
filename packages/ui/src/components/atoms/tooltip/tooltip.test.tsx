@@ -1,12 +1,13 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { EditIcon } from '../../../assets/icons';
 import { Button } from '../button';
 import { IconButton } from '../icon-button';
+import { DropdownMenu } from '../../organisms/dropdown-menu';
 import { Tooltip } from './tooltip';
 import styles from './tooltip.module.css';
 
@@ -438,6 +439,147 @@ describe('Tooltip', () => {
 
     expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+  });
+
+  describe("passing a wrapper's props through to the trigger", () => {
+    it("forwards its ref to the child, merged with the child's own ref", () => {
+      const tooltipRef = React.createRef<HTMLElement>();
+      const childRef = React.createRef<HTMLButtonElement>();
+
+      render(
+        <Tooltip content="Edit" ref={tooltipRef}>
+          <button type="button" ref={childRef}>
+            Trigger
+          </button>
+        </Tooltip>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+      expect(tooltipRef.current).toBe(trigger);
+      expect(childRef.current).toBe(trigger);
+    });
+
+    it('forwards its ref even when there is no content to show', () => {
+      const tooltipRef = React.createRef<HTMLElement>();
+
+      render(
+        <Tooltip content="" ref={tooltipRef} aria-expanded={false}>
+          <button type="button">Trigger</button>
+        </Tooltip>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+      expect(tooltipRef.current).toBe(trigger);
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('passes aria and data attributes set on Tooltip to the child', () => {
+      render(
+        <Tooltip content="Edit" aria-expanded aria-controls="panel" aria-haspopup="menu" data-testid="wired">
+          <button type="button">Trigger</button>
+        </Tooltip>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      expect(trigger).toHaveAttribute('aria-controls', 'panel');
+      expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+      expect(trigger).toHaveAttribute('data-testid', 'wired');
+    });
+
+    it("keeps the child's own attribute when a wrapper passes undefined for it", () => {
+      render(
+        <Tooltip content="Edit" aria-controls={undefined}>
+          <button type="button" aria-controls="own">
+            Trigger
+          </button>
+        </Tooltip>,
+      );
+
+      expect(screen.getByRole('button', { name: 'Trigger' })).toHaveAttribute('aria-controls', 'own');
+    });
+
+    it("runs both the child's handler and the one set on Tooltip, and still shows on focus", () => {
+      const childFocus = vi.fn();
+      const wrapperFocus = vi.fn();
+
+      render(
+        <Tooltip content="Edit" onFocus={wrapperFocus}>
+          <button type="button" onFocus={childFocus}>
+            Trigger
+          </button>
+        </Tooltip>,
+      );
+
+      fireEvent.focus(screen.getByRole('button', { name: 'Trigger' }));
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(childFocus).toHaveBeenCalledTimes(1);
+      expect(wrapperFocus).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Edit');
+    });
+
+    it("merges an aria-describedby set on Tooltip with the child's and its own", () => {
+      render(
+        <Tooltip content="Edit" aria-describedby="hint">
+          <button type="button" aria-describedby="own">
+            Trigger
+          </button>
+        </Tooltip>,
+      );
+
+      const trigger = screen.getByRole('button', { name: 'Trigger' });
+      fireEvent.focus(trigger);
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      const ids = trigger.getAttribute('aria-describedby')?.split(' ');
+      expect(ids).toEqual(expect.arrayContaining(['own', 'hint', screen.getByRole('tooltip').id]));
+    });
+
+    it('lets Dropdown Menu wire a trigger wrapped in a Tooltip', async () => {
+      vi.useRealTimers();
+      function Wrapped() {
+        const [open, setOpen] = React.useState(false);
+        return (
+          <DropdownMenu
+            aria-label="Actions"
+            showSearch={false}
+            open={open}
+            onOpenChange={setOpen}
+            sections={[{ id: 'actions', items: [{ id: 'delete', label: 'Delete' }] }]}
+          >
+            <Tooltip content="More actions">
+              <button type="button" onClick={() => setOpen((current) => !current)}>
+                More
+              </button>
+            </Tooltip>
+          </DropdownMenu>
+        );
+      }
+
+      render(<Wrapped />);
+      const trigger = screen.getByRole('button', { name: 'More' });
+      expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
+      expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+      fireEvent.click(trigger);
+      const menu = screen.getByRole('menu', { name: 'Actions' });
+      expect(trigger).toHaveAttribute('aria-expanded', 'true');
+      const panel = menu.closest('[id]') as HTMLElement;
+      expect(trigger).toHaveAttribute('aria-controls', panel.id);
+      // Positioned against the trigger rather than left hidden for want of one.
+      expect(panel.style.visibility).not.toBe('hidden');
+
+      const item = screen.getByRole('menuitem', { name: 'Delete' });
+      await waitFor(() => expect(item).toHaveFocus());
+      fireEvent.keyDown(item, { key: 'Escape' });
+      expect(trigger).toHaveFocus();
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
   });
 
   it('maps Figma visual tokens and private anatomy constraints', () => {

@@ -121,7 +121,8 @@ grows, instead of centered on it.
 
 Inline Edit has no editing prop: editing always starts when the child gets focus, from a click or
 from Tab. Until then, the child is read-only and shows `value`. It's the same element in both
-states, so focus stays put when editing starts.
+states, so focus stays put when editing starts. When the read-only field already has focus, after
+an edit ends, a click or Enter starts editing again.
 
 <Example of={InlineEditStories.Content} caption="A live field, the sm and md sizes, and custom action labels." />
 
@@ -131,7 +132,9 @@ states, so focus stays put when editing starts.
 
 Confirm, or Enter in a Text Field, calls `onConfirm` with the draft. In a Text Area, Enter adds a
 line, and Ctrl+Enter or Cmd+Enter confirms. Cancel, or Escape, calls `onCancel` and shows `value`
-again. Either way the field goes back to read-only, and after Enter or Escape focus leaves the field.
+again. Either way the field goes back to read-only and keeps focus, so someone using a keyboard
+stays where they were: after Enter or Escape it never left, and after the cancel or confirm button
+it moves back to the field, since the buttons go away.
 
 Inline Edit doesn't change `value` itself. Set it in `onConfirm`; if you don't, the field shows the
 old value again after confirming.
@@ -142,8 +145,10 @@ old value again after confirming.
 
 While editing, moving focus anywhere outside Inline Edit, by a click or by Tab, confirms the draft,
 the same as the confirm button. Moving to the cancel or confirm button doesn't. Only cancel or
-Escape throws a draft away, so clicking elsewhere never loses an edit. It also means tabbing through
-without typing calls `onConfirm` with the unchanged value.
+Escape throws a draft away, so clicking elsewhere never loses an edit. If the draft is unchanged,
+leaving just ends editing without calling `onConfirm`, so tabbing through the field and its buttons
+doesn't report an edit that didn't happen. Enter or the confirm button still call `onConfirm` with
+an unchanged value, since someone chose to confirm.
 
 </Subsection>
 
@@ -230,13 +235,14 @@ field.
 - The cancel and confirm buttons are Icon Buttons named by `cancelLabel` and `confirmLabel`, which
   also show as their tooltips. Write them for the value, such as "Save title", when "Confirm" alone
   isn't clear. Their Button Group has no name, so it adds no group role.
-- After Enter or Escape, focus leaves the field and isn't moved anywhere else.
+- After Enter, Escape, cancel, or confirm, focus is on the read-only field, so it isn't lost to the
+  page. Enter or a click there starts editing again.
 
 <Keyboard>
-  <Key keys="Tab">Moves into the field, which starts editing; then to cancel, then to confirm. Moving focus out of Inline Edit confirms the draft.</Key>
-  <Key keys="Enter">In a Text Field, confirms the draft. On a focused cancel or confirm button, activates that button.</Key>
+  <Key keys="Tab">Moves into the field, which starts editing; then to cancel, then to confirm. Moving focus out of Inline Edit confirms a changed draft, and just ends editing when nothing changed.</Key>
+  <Key keys="Enter">In a Text Field, confirms the draft. On a focused cancel or confirm button, activates that button. On the read-only field, starts editing.</Key>
   <Key keys="Ctrl + Enter">In a Text Area, confirms the draft. Cmd + Enter does the same on a Mac.</Key>
-  <Key keys="Escape">Cancels the edit and shows `value` again.</Key>
+  <Key keys="Escape">Cancels the edit and shows `value` again, with focus on the field.</Key>
 </Keyboard>
 
 </Section>
@@ -247,7 +253,8 @@ field.
 
 The child must accept `value`, `onChange`, `onFocus`, and `readOnly`, which Inline Edit sets on it;
 Text Field and Text Area do. Inline Edit replaces the child's own `onChange` while editing and its
-`onFocus` while read-only.
+`onFocus` while read-only. While read-only it also wraps the child's `onClick` and `onKeyDown`: they
+still run, then a click or Enter starts editing.
 
 </Section>
 

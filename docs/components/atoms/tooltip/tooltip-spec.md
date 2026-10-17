@@ -17,15 +17,32 @@ Tooltip
 ## Public API
 
 ```ts
-interface TooltipProps {
+interface TooltipProps extends Omit<React.HTMLAttributes<HTMLElement>, 'content' | 'children' | 'className'> {
   content: React.ReactNode;
   children: React.ReactElement;
   truncate?: boolean;
   disabled?: boolean;
   delay?: number;
-  className?: string;
+  className?: string; // the bubble's, not the trigger's
+  ref?: React.Ref<HTMLElement>; // forwarded to the child
 }
 ```
+
+## Passing props through to the trigger
+
+Tooltip renders its child as the trigger, so anything a wrapper sets on the Tooltip element belongs
+on that child. Tooltip forwards its `ref` to the child (merged with the child's own ref) and passes
+every other prop it doesn't use itself to the child: `aria-*` and `data-*` attributes, `role`,
+`style` (merged with the child's), and event handlers (the child's runs first, then the one set on
+Tooltip, then Tooltip's own hover/focus behavior). A wrapper's value wins over the child's, except
+that `undefined` never erases the child's own value, and `aria-describedby` ids are kept from both.
+
+This is what lets a component that wires its trigger by cloning its child, such as Popup or Dropdown
+Menu, wrap a Tooltip: Popup's ref (which it measures to position the panel), `aria-expanded` and
+`aria-controls`, and Dropdown Menu's ref (for returning focus) and `aria-haspopup` all reach the real
+trigger. Chip's operator and value segments rely on it when a segment has a `tooltip`; before
+2026-10-17 Tooltip dropped them, so such a menu opened with `visibility: hidden` and the segment had
+no `aria-expanded`.
 
 ## Defaults
 
@@ -71,6 +88,8 @@ Tooltip content must remain non-interactive.
 - Preserve existing `aria-describedby` values.
 - Add the tooltip id to `aria-describedby` only while the tooltip is rendered.
 - Do not create extra keyboard tab stops.
+- Pass through the `aria-*` attributes a wrapper sets on Tooltip (see above), so a menu button's
+  `aria-expanded`/`aria-controls`/`aria-haspopup` aren't lost.
 - Tooltip content must not replace the trigger's accessible name.
 
 ## Disabled native controls

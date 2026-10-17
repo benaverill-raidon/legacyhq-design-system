@@ -8,6 +8,7 @@
 .root {
   display: inline-flex;
   align-items: stretch;
+  max-inline-size: 100%;
   vertical-align: middle;
 }
 
@@ -28,6 +29,7 @@
   font-size: var(--typography-body-md-font-size);
   font-weight: var(--typography-body-md-font-weight);
   line-height: var(--typography-body-md-line-height);
+  min-inline-size: 0;
   white-space: nowrap;
   transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
 }
@@ -75,6 +77,7 @@
 }
 
 .removeButton {
+  flex: none;
   color: var(--color-content-subtle);
   cursor: pointer;
 }
@@ -213,8 +216,15 @@
   color: inherit;
 }
 
+/*
+ * Long text ends in an ellipsis instead of running out of the container: the root is capped at its
+ * container's width, every segment may shrink below its text (min-inline-size: 0, set on .segment
+ * above), and the text inside clips. The label and value segments give up width in proportion to
+ * their text; the remove button and the leading/preview slots never shrink.
+ */
 .label,
 .segmentLabel {
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }

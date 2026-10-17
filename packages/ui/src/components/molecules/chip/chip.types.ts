@@ -33,16 +33,19 @@ interface ChipCommonProps {
 
 /** One dropdown-backed segment: visible text plus the menu it opens. */
 export interface ChipSegment {
-  /** The segment's visible text - the current operator ("on") or value ("2 statuses", "March 2"). */
+  /**
+   * The segment's visible text - the current operator ("on") or value ("2 statuses", "March 2").
+   * The button is named by the chip's label and this text together ("Due date March 2").
+   */
   label: React.ReactNode;
   /** Rows shown when this segment opens, same shape Menu/Dropdown Menu already use. */
   sections: MenuSection[];
-  /** Accessible name for this segment's own menu panel. */
-  menuAriaLabel?: string;
   /**
-   * Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context.
-   * Known bug: with a tooltip, the segment's menu opens hidden and the segment loses `aria-expanded`.
+   * Accessible name for this segment's own menu panel. Defaults to "<label> operator" or
+   * "<label> value", built from `labelText` or a string `label`; pass it when neither is set.
    */
+  menuAriaLabel?: string;
+  /** Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context. */
   tooltip?: React.ReactNode;
 }
 
@@ -78,8 +81,17 @@ export interface ChipSelectProps extends ChipCommonProps {
   mode: 'select';
   /** Every verified Figma `select` chip carries a remove button, so this is required. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string, otherwise `Remove`. */
+  /**
+   * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
+   * `label`), otherwise just "Remove".
+   */
   removeAriaLabel?: string;
+  /**
+   * The label as plain text, for the names Chip builds from it: the remove button ("Remove <label>").
+   * Defaults to `label` when that's a string; set it when `label` is JSX, or those names lose the
+   * property.
+   */
+  labelText?: string;
 }
 
 /**
@@ -108,8 +120,18 @@ export interface ChipFilterProps extends ChipCommonProps {
   valuePreview?: React.ReactNode;
   /** Called when the remove button is activated. Chip doesn't remove itself: drop the filter here. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string, otherwise `Remove`. */
+  /**
+   * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
+   * `label`), otherwise just "Remove".
+   */
   removeAriaLabel?: string;
+  /**
+   * The label as plain text, for the names Chip builds from it: the remove button ("Remove
+   * <label>"), the operator and value menus ("<label> value"), and the operator and value buttons,
+   * which are named by the label and their own text together ("Due date March 2"). Defaults to
+   * `label` when that's a string; set it when `label` is JSX, or those names lose the property.
+   */
+  labelText?: string;
 }
 
 /**

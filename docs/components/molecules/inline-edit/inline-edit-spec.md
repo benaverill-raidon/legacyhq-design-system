@@ -102,12 +102,13 @@ shows the two icon buttons) as a deliberate, explicit addition - standard inline
 even when `actionButtons={false}` hides the visible buttons (the only remaining way to confirm/cancel
 without wiring a separate control). `Enter` calls `event.preventDefault()` in addition to invoking
 `onConfirm`, so an editable control nested inside a native `<form>` doesn't also trigger an
-accidental form submission. Both keys also blur the field afterward, deselecting it the same way
-clicking the confirm/cancel buttons already does (moving focus off the field, rather than leaving it
-focused with the now-committed-or-reverted text still selected) - this reuses the same
-`mousedown`-set ref flag the action buttons use, since blurring synchronously inside the key handler
-would otherwise re-enter the blur-to-confirm handler with a stale (still-editing) closure and
-double-fire confirm.
+accidental form submission. Both keys leave focus on the field, which turns read-only, so a
+keyboard user stays where they were (until 2026-10-17 both blurred the field, dropping focus to the
+page). Escape pressed on a cancel/confirm button first moves focus to the field, since the buttons
+unmount; clicking either button does the same. Because the field may then already have focus, a
+click or `Enter` on the read-only field starts editing again (focus alone can't, as no focus event
+fires); the child's own `onClick`/`onKeyDown` still run first, and `Enter` calls `preventDefault`
+there too, so a read-only field in a `<form>` doesn't submit it.
 
 Clicking (or Tab-ing) away from the field while editing - anywhere other than the cancel/confirm
 buttons themselves - commits the draft, the same as clicking confirm, per explicit design feedback:
@@ -115,7 +116,9 @@ buttons themselves - commits the draft, the same as clicking confirm, per explic
 clicking confirm." This is implemented as an `onBlur` handler on the root: if the element about to
 receive focus (`event.relatedTarget`) is outside the root, or unavailable, the draft is committed;
 if it's one of Inline Edit's own cancel/confirm buttons, the blur is a no-op and that button's own
-`onClick` handles it instead. A `mousedown`-set ref flag on both buttons backs up this check for
+`onClick` handles it instead. A draft equal to `value` isn't committed on blur: editing just ends,
+without `onConfirm`, so tabbing through the field and both buttons without typing doesn't report an
+edit that didn't happen (Enter and the confirm button still call `onConfirm`, as explicit choices). A `mousedown`-set ref flag on both buttons backs up this check for
 browsers that don't reliably move focus to a clicked `<button>` (where `relatedTarget` would
 otherwise be unavailable even though the click landed on Inline Edit's own button) - without it,
 clicking cancel in such a browser could fire an incorrect auto-confirm from the blur immediately
@@ -178,17 +181,19 @@ Inline Edit, not the consumer, renders those buttons.
 
 - The cloned child stays focusable (via native Tab order) in both states - `readOnly` does not
   remove an element from the tab order, only `disabled` does.
-- Focusing the read-only clone (by click or by `Tab`) starts editing.
+- Focusing the read-only clone (by click or by `Tab`) starts editing. When it already has focus
+  (after an edit ends), a click or `Enter` starts editing.
 - `Tab` then reaches the cancel button, then the confirm button, in that order (matching the
   trailing button-group's own internal order confirmed from Figma: close/cancel first, check/confirm
   second).
-- `Enter` calls `onConfirm` with the current draft while editing a single-line field, then blurs the
-  field (deselecting it). In a textarea, `Enter` adds a line and `Ctrl`/`Cmd`+`Enter` confirms. On a
-  focused cancel/confirm button, `Enter` activates that button instead.
-- Tabbing through the field and both buttons without typing still calls `onConfirm` (with the
-  unchanged value) when focus leaves the root.
-- `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root, then
-  blurs the field (deselecting it).
+- `Enter` calls `onConfirm` with the current draft while editing a single-line field; focus stays on
+  the field, now read-only. In a textarea, `Enter` adds a line and `Ctrl`/`Cmd`+`Enter` confirms. On
+  a focused cancel/confirm button, `Enter` activates that button instead, and focus moves to the
+  field.
+- Tabbing through the field and both buttons without typing doesn't call `onConfirm`: with the draft
+  unchanged, focus leaving the root just ends editing.
+- `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root; focus
+  ends on the read-only field.
 - `Tab`-ing (or clicking) away from the field to anywhere *outside* Inline Edit while editing also
   calls `onConfirm` with the current draft - the same as clicking confirm. Moving focus to the
   cancel/confirm buttons themselves does not trigger this; their own click handler applies instead.
@@ -230,15 +235,15 @@ from the cloned child, and the confirm/cancel `IconButton`s carry their own toke
 
 ### Read-only (not editing)
 Renders the child cloned with `value` and `readOnly`, no action row. Starting to edit happens on
-`onFocus` of this clone (click or Tab).
+`onFocus` of this clone (click or Tab), or on a click or `Enter` when it already has focus.
 
 ### Editing
 Renders the child cloned with the in-progress draft and an `onChange` handler that updates it, plus
 a confirm/cancel `IconButton` pair below it (unless `actionButtons={false}`). `Enter`/`Escape` call
-`onConfirm`/`onCancel` respectively, in addition to the buttons themselves, then blur the field
-(deselecting it, the same as clicking either button already does); losing focus to anything outside
-Inline Edit (a click or a Tab) also calls `onConfirm` - clicking/Tab-ing off the field always saves,
-never silently discards. Confirming calls `onConfirm(draft)` and returns to read-only; cancelling
+`onConfirm`/`onCancel` respectively, in addition to the buttons themselves; after any of the four,
+focus is on the read-only field. Losing focus to anything outside Inline Edit (a click or a Tab) also
+calls `onConfirm` when the draft changed - clicking/Tab-ing off the field always saves, never
+silently discards - and just ends editing when it didn't. Confirming calls `onConfirm(draft)` and returns to read-only; cancelling
 discards the draft, calls `onCancel()`, and returns to read-only showing the original `value`.
 
 ---
@@ -294,13 +299,16 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 ### Functional
 - [ ] `onConfirm` fires with the typed draft when the confirm button is clicked
 - [ ] `onCancel` fires when the cancel button is clicked, and the field reverts to `value`
-- [ ] `Enter` calls `onConfirm` with the draft while editing, calls `preventDefault`, and blurs the
-      field afterward (deselecting it)
-- [ ] `Escape` calls `onCancel` while editing, reverting to `value`, and blurs the field afterward
-      (deselecting it)
-- [ ] `Enter`/`Escape` do nothing before editing has started
+- [ ] `Enter` calls `onConfirm` with the draft while editing, calls `preventDefault`, and leaves
+      focus on the field, now read-only
+- [ ] `Escape` calls `onCancel` while editing, reverting to `value`, with focus on the read-only
+      field (moved there from a cancel/confirm button)
+- [ ] Clicking cancel or confirm returns focus to the read-only field
+- [ ] `Enter`/`Escape` never confirm or cancel before editing has started; `Enter` or a click on the
+      focused read-only field starts editing
 - [ ] Clicking/Tab-ing away from the field to anywhere outside Inline Edit while editing calls
-      `onConfirm` with the draft (auto-save on blur), and returns to read-only
+      `onConfirm` with a changed draft (auto-save on blur), and returns to read-only
+- [ ] Tabbing through without changing the draft ends editing without calling `onConfirm`
 - [ ] Clicking cancel does not also trigger an auto-confirm from the blur clicking it causes
 - [ ] `className` applies to the root
 - [ ] Focus is preserved across the read→edit transition (same DOM node, cloned)

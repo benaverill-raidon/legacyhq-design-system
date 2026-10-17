@@ -39,7 +39,7 @@
       "type": "React.ReactElement",
       "required": true,
       "default": null,
-      "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby."
+      "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby. Tooltip also passes it its ref and every prop set on Tooltip that Tooltip doesn't use itself (aria-*, data-*, role, style merged, handlers run after the child's own; undefined never erases the child's value, aria-describedby ids are kept from both), so a wrapper that clones Tooltip (Popup's aria-expanded/aria-controls, Dropdown Menu's aria-haspopup) reaches the real trigger."
     },
     "truncate": {
       "type": "boolean",
@@ -63,7 +63,13 @@
       "type": "string",
       "required": false,
       "default": null,
-      "description": "Composes with the tooltip content element's class list."
+      "description": "Composes with the tooltip content element's class list (the bubble, not the trigger)."
+    },
+    "ref": {
+      "type": "React.Ref<HTMLElement>",
+      "required": false,
+      "default": null,
+      "description": "Forwarded to the child, merged with the child's own ref, so a wrapper that clones Tooltip (Popup, Dropdown Menu) can measure and focus the real trigger."
     }
   },
   "sizes": [],

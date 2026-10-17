@@ -150,6 +150,9 @@ Final implementation decisions:
   segment is itself a control, and the only one Figma gives an unselected state.
 - **Panel accessible names are composed** (`${label} operator` / `${label} value`) rather than taken
   from the segment label, which is the current value ("on", "March 2") and names a panel poorly.
+- **Segment buttons are named by the property and their text** ("Due date March 2") through
+  `aria-labelledby`, so no new text needs translating. `labelText` gives the property as text when
+  `label` is JSX, for these names, the panel names, and the remove button.
 - **`tone` is unexposed.** chip-base supports five tones but all 14 chip variants use
   `tone=default`, so a chip-level mapping would be extrapolated rather than verified.
 - **The seam rule applies to every segment, not just the leading one.** Each segment drops its own
@@ -223,5 +226,5 @@ Final implementation decisions:
 - [ ] Both sizes across all three modes
 - [ ] A live, selectable scope row
 - [ ] A realistic, removable filter bar
-- [ ] Long label/value truncation (known bug: segments don't shrink, so the chip overflows a narrow container)
+- [x] Long label/value truncation (the label and value end in an ellipsis within the container)
 - [ ] Dark surface

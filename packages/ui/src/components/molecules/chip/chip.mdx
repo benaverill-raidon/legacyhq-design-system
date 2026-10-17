@@ -195,12 +195,13 @@ Each segment takes a `ChipSegment`, whose `sections` are Menu's own sections:
     label: React.ReactNode;       // the current operator or value, shown in the segment
     sections: MenuSection[];      // the rows the segment's menu lists
     menuAriaLabel?: string;       // names the menu; defaults to "<label> operator" or "<label> value"
-    tooltip?: React.ReactNode;    // known bug: with a tooltip, the menu opens hidden
+    tooltip?: React.ReactNode;    // shown on hover and focus, such as the full value when it's cut off
 }`} />
 
 The menu is named after the property and the segment's role, such as "Due date value", because the
 segment's own text is the current value, which says nothing about what choosing does. That default
-needs a string `label`; otherwise, pass `menuAriaLabel`.
+needs the label as text: a string `label`, or `labelText` when `label` is JSX. Otherwise, pass
+`menuAriaLabel`.
 
 </Subsection>
 
@@ -228,9 +229,11 @@ selected, border included. The label's icon follows the label's text color throu
 
 <Subsection title="Long text">
 
-The chip stays on one line and sizes to its text. It doesn't shrink to fit a narrow container: a long
-label or value runs past the container's edge rather than ending in an ellipsis. Keep labels and
-values short, such as "3 people" rather than a list of names.
+The chip stays on one line and sizes to its text, up to the width of its container. Past that, the
+label and the value each end in an ellipsis, giving up width in proportion to their length; the
+remove button, `elemBefore`, and `valuePreview` keep their size. Keep labels and values short anyway,
+such as "3 people" rather than a list of names, and give a segment that may be cut off a `tooltip`
+with its full text.
 
 <Example of={ChipStories.EdgeCases} caption="Edge cases: a long label and value in a 320px container, no elemBefore, and a dark surface." />
 
@@ -264,25 +267,25 @@ values short, such as "3 people" rather than a list of names.
   <Chip mode="select" label="Trust" onRemove={() => {}} />
 </Dont>
 <Do
-  caption="Name the menu and the remove button yourself when the label isn't plain text."
+  caption="Give the label as text in labelText when label is JSX, so the menus and the remove button are named after it."
   code={`<Chip
     mode="filter"
     label={<strong>Status</strong>}
-    value={{ label: '2 statuses', sections, menuAriaLabel: 'Status value' }}
-    removeAriaLabel="Remove Status"
+    labelText="Status"
+    value={{ label: '2 statuses', sections }}
     onRemove={clearStatus}
 />`}
 >
   <Chip
     mode="filter"
     label={<strong>Status</strong>}
-    value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Status value' }}
-    removeAriaLabel="Remove Status"
+    labelText="Status"
+    value={{ label: '2 statuses', sections: statusSections }}
     onRemove={() => {}}
   />
 </Do>
 <Dont
-  caption={`Leave them to the defaults with a non-text label. The menu has no name, and the remove button is just "Remove".`}
+  caption={`Leave out labelText with a JSX label. The menu has no name, and the remove button is just "Remove".`}
   code={`<Chip mode="filter" label={<strong>Status</strong>} value={{ label: '2 statuses', sections }} onRemove={clearStatus} />`}
 />
 </Guidelines>
@@ -295,13 +298,15 @@ values short, such as "3 people" rather than a list of names.
   control.
 - A search chip's label segment is a native `button` with `aria-pressed`, the same semantics as
   Toggle Button. Its visible label is its name.
-- The operator and value segments are native buttons, named by their visible text, which is the
-  current operator or value. Dropdown Menu gives each `aria-haspopup="menu"` and `aria-expanded`,
-  and `aria-controls` while its menu is open.
+- The operator and value segments are native buttons, named by the label and their own text
+  together through `aria-labelledby`, such as "Due date April 15", since their text alone is only
+  the current operator or value. With `labelText`, its text stands in for the label. Dropdown Menu
+  gives each `aria-haspopup="menu"` and `aria-expanded`, and `aria-controls` while its menu is open,
+  with or without a segment `tooltip`.
 - Each menu is a Menu, announced as a menu and named "Due date value" or "Due date operator" by
   default, or by `menuAriaLabel`.
 - The remove button is a native button named by `removeAriaLabel`, `Remove` plus the label by
-  default. A "Remove" tooltip shows on hover and focus; it isn't the button's name, and it's not
+  default. The default names need the label as text: a string `label`, or `labelText`. A "Remove" tooltip shows on hover and focus; it isn't the button's name, and it's not
   shown while disabled.
 - `elemBefore` and `valuePreview` are hidden from assistive technology, so the label and value text
   must carry the meaning.
@@ -345,11 +350,13 @@ operator?: ChipSegment;
 valuePreview?: React.ReactNode;      // decorative, before the value text
 onRemove: (event) => void;           // required
 removeAriaLabel?: string;            // defaults to "Remove <label>"
+labelText?: string;                  // the label as text, for the built names; set it when label is JSX
 size?: 'md';                         // filter chips are md only
 
 // mode="select"
 onRemove: (event) => void;           // required
 removeAriaLabel?: string;            // defaults to "Remove <label>"
+labelText?: string;                  // the label as text, for the remove button's name
 
 // mode="search"
 isSelected?: boolean;                // default false; sets aria-pressed

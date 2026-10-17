@@ -92,7 +92,12 @@ Yes, always - via `confirmLabel`/`cancelLabel` props (default `'Confirm'`/`'Canc
 
 ### What happens if the user clicks/tabs away without pressing confirm or cancel?
 The draft is committed - the same as clicking confirm. Clicking/Tab-ing off the field always saves;
-it never silently discards. Only clicking cancel (or pressing Escape) discards the draft.
+it never silently discards. Only clicking cancel (or pressing Escape) discards the draft. An
+unchanged draft isn't committed: editing just ends, without `onConfirm`.
+
+### Where does focus go when an edit ends?
+To the read-only field. Enter and Escape leave it there; the cancel and confirm buttons move it back
+there, since they unmount. A click or Enter on the focused read-only field starts editing again.
 
 ---
 

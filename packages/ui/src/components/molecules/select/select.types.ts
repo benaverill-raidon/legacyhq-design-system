@@ -48,9 +48,12 @@ interface SelectCommonProps {
   onSearchChange?: (value: string) => void;
   /** Shown in the panel when the query matches no options. */
   emptyMessage?: React.ReactNode;
-  /** Accessible name for the trigger input; use when there is no visible <label> wired by id. */
+  /** Accessible name for the trigger input and its menu; use when there is no visible <label> wired by id. */
   'aria-label'?: string;
-  /** Ids of elements that name the input and the menu. Field passes its label's id. */
+  /**
+   * Ids of elements that name the input and the menu. Field passes its label's id. With neither this
+   * nor `aria-label`, the menu takes its name from the input's native `<label>`.
+   */
   'aria-labelledby'?: string;
   /** Ids of elements that describe the input, such as Field's message. */
   'aria-describedby'?: string;

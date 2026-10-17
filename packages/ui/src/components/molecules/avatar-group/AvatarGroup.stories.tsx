@@ -148,7 +148,7 @@ export const Content: Story = {
   ),
 };
 
-/** Selecting a truncated avatar from the overflow panel - Avatar Group never assumes what selection means; it calls `onOverflowAvatarSelect` and leaves navigation to the consumer. */
+/** Selecting a truncated avatar from the overflow panel - Avatar Group calls `onOverflowAvatarSelect`, the menu closes, and navigation is left to the consumer. */
 export const EdgeCases: Story = {
   render: () => {
     function SelectFromOverflowExample() {
@@ -197,7 +197,7 @@ export const EdgeCases: Story = {
 
     return (
       <div style={stack}>
-        <Group title="Selecting a truncated avatar" description="Avatar Group calls onOverflowAvatarSelect - it does not navigate or close the panel on its own.">
+        <Group title="Selecting a truncated avatar" description="Avatar Group calls onOverflowAvatarSelect and the menu closes - it does not navigate on its own.">
           <SelectFromOverflowExample />
         </Group>
         <SingleAvatarExample />

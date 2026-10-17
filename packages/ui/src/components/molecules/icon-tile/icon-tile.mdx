@@ -1,174 +1,236 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { CheckIcon, CloseIcon, DocumentsIcon, RealEstateIcon, StarStarredIcon, TaskIcon, TrustIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Badge } from '../../atoms/badge';
+import { IconTile } from './icon-tile';
+import iconTileStyles from './icon-tile.module.css';
 import * as IconTileStories from './IconTile.stories';
 
 <Meta of={IconTileStories} name="Docs" />
 
-# Icon Tile
+<Unstyled>
+<ComponentPage>
 
-Icon Tile pairs a single icon with a colored, sized background shape. It gives an icon more visual
-emphasis than a bare icon or an Icon Button affords - use it where an icon should read as a small
-piece of imagery, not as a clickable control.
+<ComponentHeader
+  id="icon-tile"
+  example={
+    <>
+      <IconTile tone="green">
+        <TrustIcon />
+      </IconTile>
+      <IconTile tone="blue">
+        <RealEstateIcon />
+      </IconTile>
+      <IconTile tone="teal">
+        <TaskIcon />
+      </IconTile>
+      <IconTile tone="purple">
+        <DocumentsIcon />
+      </IconTile>
+    </>
+  }
+>
+  Icon Tile sets one icon on a colored square or circle, so it reads as a small picture: a feature's
+  graphic, an empty state's illustration, or the leading visual that tells kinds of records apart.
+  It's never a control.
+</ComponentHeader>
 
-<Canvas of={IconTileStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A feature or benefit needs a small, colored icon graphic.
-- A list or card needs a leading visual that categorizes its content by color/hue.
-- An empty state needs a single colored icon as its illustration.
+- A feature or a benefit that needs a small, colored graphic.
+- The illustration in an empty state.
+- A leading visual in a card or a list row that sorts its content by kind.
+- A heading for a group of results, as Rich Text Area's record picker does with its 16px tiles.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **As a clickable control.** Icon Tile has no interactive states and no `onClick` - use
-  `IconButton` if the icon needs to respond to input.
-- **For a count or short text value.** Use `Badge` or `Tag` - Icon Tile has no text slot.
-- **With more than one icon.** Icon Tile centers exactly one icon.
+- **An action:** <DocLink to="Components/Actions/Icon Button" />. Icon Tile has no click handler and can't take focus.
+- **A count:** <DocLink to="Components/Data Display/Badge" />. Icon Tile has no place for text.
+- **A record or a category with a name:** <DocLink to="Components/Data Display/Tag" />.
+- **A person or a team:** <DocLink to="Components/Data Display/Avatar" />.
+- **An icon beside text that needs no emphasis:** the icon on its own, from <DocLink to="Foundations/Icons" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Icon Tile has two parts: a sized, colored `div` root, and a single icon (`children`) centered
-inside it. There is no text slot and no border by default.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Tone vs. appearance
+<Anatomy
+  specimen={
+    <IconTile tone="teal" size="lg">
+      <StarStarredIcon />
+    </IconTile>
+  }
+>
+  <Part name="root" target={iconTileStyles.root}>A `div` that draws the colored square or circle. It has no border.</Part>
+  <Part name="icon" target={iconTileStyles.icon}>The one icon you pass as `children`, centered, two-thirds the size of the tile and in the tile's icon color.</Part>
+</Anatomy>
 
-The Figma source models hue and boldness as one flattened 20-value `appearance` property (for
-example `red`, `redBold`). This component splits that into two independent props, matching this
-system's existing convention of separating visual weight from meaning (see `Button`):
+</Section>
 
-- **`tone`** - the hue/semantic meaning: `taupe` (neutral), `brand`, or one of eight accent hues.
-- **`appearance`** - the visual weight: `default` (a subtle tint) or `bold` (a solid, saturated
-  fill with an inverse/white icon).
+<Section title="Variants">
 
-<Canvas of={IconTileStories.Variants} />
+<Subsection title="Tone and appearance">
 
-### Choosing a shape
+`tone` picks the color: `taupe` for a neutral tile, `brand` for the product color, or one of eight
+accent colors. The accent colors have no fixed meaning; use them to tell kinds of things apart, not
+to say whether something is good or bad. `appearance` sets how strong the color is: `default` is a
+light tint with the icon in the tone's color, and `bold` is a solid fill with an inverse icon. Use
+`bold` for the one tile that should stand out, not for every tile in a row.
 
-`shape="square"` (the default) is a rounded-square container. `shape="round"` is fully circular -
-reach for it when the tile sits next to circular elements like `Avatar`.
+In Figma, one `tone` property holds both choices (`red`, `redBold`, and so on). Code splits it into
+`tone` and `appearance`, as Button splits meaning from emphasis. `gray`, the old name for `taupe`, is
+still accepted.
 
-<Canvas of={IconTileStories.Shapes} />
+<Example of={IconTileStories.Variants} />
 
-### Choosing a size
+</Subsection>
 
-Icon Tile has five sizes, `xxs` through `lg`. The icon inside is always sized to two-thirds of the
-tile - there's no separate icon-size prop to keep in sync.
+<Subsection title="Shapes">
 
-<Canvas of={IconTileStories.Sizes} />
+`square`, the default, has rounded corners: 4px at `xxs` and `xs`, 8px at `sm` and `md`, and 12px at
+`lg`. `round` is a circle; use it beside other round things, such as an Avatar.
 
-### Accessible labelling
+<Example of={IconTileStories.Shapes} />
 
-Icon Tile is `decorative` (aria-hidden) by default, because in most compositions the icon
-reinforces meaning that adjacent text already conveys - a feature title, a list label. Set
-`decorative={false}` with `ariaLabel` only when the tile is the *only* carrier of that meaning.
+</Subsection>
 
-<Canvas of={IconTileStories.Composition} />
+<Subsection title="Sizes">
 
-## Do / Don't
+Five sizes, from `xxs` (16px) to `lg` (48px), with `md` (40px) the default. The icon is always
+two-thirds of the tile, 32px in a 48px tile, so there's no icon size to set. Any icon from the icon
+set works as it is: the tile overrides its own size and color.
 
-**Do** let adjacent text carry the meaning and leave Icon Tile decorative.
+<Example of={IconTileStories.Sizes} />
 
-```tsx
-<div>
-  <IconTile tone="brand">
-    <CheckIcon />
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Leave the tile decorative when the text beside it says what it means."
+  code={`<IconTile tone="green">
+    <TrustIcon />
+</IconTile>
+<span>Averill Family Living Trust</span>`}
+>
+  <IconTile tone="green">
+    <TrustIcon />
   </IconTile>
-  <span>Automated backups</span>
-</div>
-```
-
-**Don't** wrap Icon Tile in a click handler to make it interactive.
-
-```tsx
-<IconTile onClick={openDetails}>
-  <CheckIcon />
+  <span>Averill Family Living Trust</span>
+</Do>
+<Dont
+  caption="Label a tile that repeats the text beside it. Screen readers then read the same thing twice."
+  code={`<IconTile tone="green" decorative={false} ariaLabel="Trust">
+    <TrustIcon />
 </IconTile>
-```
+<span>Averill Family Living Trust</span>`}
+/>
+<Do
+  caption="Name a tile that stands alone with decorative={false} and ariaLabel."
+  code={`<IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+    <CloseIcon />
+</IconTile>`}
+>
+  <IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+    <CloseIcon />
+  </IconTile>
+</Do>
+<Dont
+  caption="Set decorative={false} without ariaLabel. The tile becomes an image with no name."
+  code={`<IconTile tone="red" appearance="bold" decorative={false}>
+    <CloseIcon />
+</IconTile>`}
+/>
+<Do caption="Use Badge for a count." code={`<Badge>3</Badge>`}>
+  <Badge>3</Badge>
+</Do>
+<Dont caption="Put a number in a tile. It's built for one icon, and a decorative tile hides the number from screen readers." code={`<IconTile tone="blue">3</IconTile>`}>
+  <IconTile tone="blue">3</IconTile>
+</Dont>
+</Guidelines>
 
----
+</Section>
 
-**Do** use `decorative={false}` and `ariaLabel` when the tile stands alone.
+<Section title="Accessibility">
 
-```tsx
-<IconTile decorative={false} ariaLabel="Error">
-  <CloseIcon />
-</IconTile>
-```
+- Icon Tile renders a `div`. It isn't focusable, has no hover or pressed state, and takes no click
+  handler, so there's nothing to operate with the keyboard.
+- By default it's decorative: the root is `aria-hidden="true"` with no role, so assistive technology
+  skips it and the text beside it carries the meaning.
+- With `decorative={false}`, the root gets `role="img"` and `aria-label` from `ariaLabel`. Icon Tile
+  doesn't check that `ariaLabel` is set, so a tile without it is an image with no name.
+- The tone's color doesn't carry meaning on its own: pair the tile with text, or name it.
 
-**Don't** put text content inside Icon Tile.
+<Example of={IconTileStories.Composition} caption="Decorative tiles beside a feature list and an empty state's heading, and one tile named on its own." />
 
-```tsx
-<IconTile>3</IconTile>
-```
+</Section>
 
-## API
+<Section title="API">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. A single icon element, e.g. <code>&lt;CheckIcon /&gt;</code>.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'taupe' | 'brand' | 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue' | 'purple' | 'magenta'</code></td>
-      <td><code>'brand'</code></td>
-      <td>Hue/semantic meaning of the tile. <code>gray</code>, the earlier name for <code>taupe</code>, is still accepted.</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'bold'</code></td>
-      <td><code>'default'</code></td>
-      <td>Visual weight - <code>bold</code> is a solid fill with an inverse icon.</td>
-    </tr>
-    <tr>
-      <td><code>shape</code></td>
-      <td><code>'square' | 'round'</code></td>
-      <td><code>'square'</code></td>
-      <td>Container shape.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xxs' | 'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Overall tile size. Icon size is always two-thirds of this.</td>
-    </tr>
-    <tr>
-      <td><code>decorative</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>When <code>true</code>, the tile is <code>aria-hidden</code>. When <code>false</code>, renders <code>role="img"</code> with <code>ariaLabel</code>.</td>
-    </tr>
-    <tr>
-      <td><code>ariaLabel</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Accessible label, used only when <code>decorative</code> is <code>false</code>.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root's class list.</td>
-    </tr>
-  </tbody>
-</table>
+<PropsTable of={IconTileStories} />
 
-## Related components
+</Section>
 
-- **Icon** - the primitive Icon Tile always wraps as `children`.
-- **Avatar** - a similarly sized, similarly shaped container, but for a person/entity rather than a
-  symbol.
-- **Icon Button** - when the icon needs to be a clickable action instead of a static visual.
-- **Badge** / **Tag** - for numeric or text content instead of a standalone icon.
+<Section title="Design tokens">
+
+Every token Icon Tile's stylesheet uses, by family, with the property it sets and when. Each size
+sets the stylesheet's own size and corner variables, which the base rule reads, so a size token shows
+the size that sets it, and `md`'s, the defaults, show as base. Each tone and appearance pair sets the
+fill and the icon color.
+
+<TokensTable id="icon-tile" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Icon Button" /> for an icon that does something.
+- <DocLink to="Components/Data Display/Avatar" /> for a person or a team, in the same sizes.
+- <DocLink to="Components/Data Display/Badge" /> for a count.
+- <DocLink to="Components/Data Display/Tag" /> for a named record or category.
+- <DocLink to="Components/Feedback/Empty State" />, which takes an Icon Tile as its illustration.
+- <DocLink to="Components/Forms/Rich Text Area" />, whose record picker heads each group with a 16px Icon Tile.
+- <DocLink to="Foundations/Icons" />, the icons a tile holds.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads icon-tile.types.ts, the design tokens read icon-tile.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

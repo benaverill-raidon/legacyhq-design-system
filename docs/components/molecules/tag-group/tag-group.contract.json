@@ -108,7 +108,7 @@
       "type": "(tag: TagGroupItem, event) => void",
       "required": false,
       "default": null,
-      "description": "Called when a truncated tag is selected from the overflow panel. Tag Group does not navigate, remove, or close the panel on its own."
+      "description": "Called when a truncated tag is selected from the overflow panel. Dropdown Menu then closes the panel and returns focus to the overflow tag (unless the callback calls event.preventDefault()); Tag Group does not navigate or remove on its own."
     },
     "id": {
       "type": "string",
@@ -153,7 +153,7 @@
   "keyboardInteraction": [
     "Tab moves between visible tags (per their own navigability) and the overflow tag, in DOM order",
     "Enter/Space activates the overflow tag (native button behavior, inherited from Tag's isInteractive form)",
-    "Escape closes the open overflow panel (inherited from Popup, via Dropdown Menu)",
+    "Opening the overflow panel moves focus to its first enabled row; Escape, Tab out of the panel, or choosing a row closes it and returns focus to the overflow tag (inherited from Dropdown Menu)",
     "Arrow keys/Home/End/Enter navigate and activate rows inside the open overflow panel (inherited from Menu)"
   ],
   "behaviorRules": [
@@ -161,7 +161,7 @@
     "visibleTags = hasOverflow ? tags.slice(0, maxVisible) : tags; hiddenTags = hasOverflow ? tags.slice(maxVisible) : [].",
     "alignment only reorders the overflow tag relative to the visible tags - it never changes the visibleTags/hiddenTags split.",
     "Holds exactly one piece of state (overflowOpen) to drive the overflow DropdownMenu, which is itself fully controlled.",
-    "Never calls onOverflowTagSelect's implied navigation/removal automatically, and never closes the overflow panel on selection - only calls the callback itself, exactly like a Menu item's onSelect.",
+    "Never performs onOverflowTagSelect's implied navigation/removal automatically - only calls the callback. Dropdown Menu then closes the overflow panel and returns focus to the overflow tag, unless the callback calls event.preventDefault().",
     "Does not forward its own alignment prop to the nested DropdownMenu - always uses DropdownMenu's own default (left), matching the measured Figma value in both tab-group variants."
   ],
   "compositionRules": [
@@ -192,20 +192,20 @@
   ],
   "dont": [
     "Do not set size on an individual TagGroupItem - it is omitted from the type; set it once on TagGroupProps.",
-    "Do not expect selecting a truncated tag to navigate, remove, or close the panel automatically."
+    "Do not expect selecting a truncated tag to navigate or remove automatically - the panel row is not a link and has no remove button; wire onOverflowTagSelect."
   ],
   "acceptanceCriteria": [
     "Renders every tag with no overflow tag when maxVisible is omitted or tags.length <= maxVisible.",
     "Renders tags.slice(0, maxVisible) plus an overflow tag reading overflowLabel(hiddenCount) when tags.length > maxVisible.",
     "alignment=left (default) renders the overflow tag after the visible tags; alignment=right renders it before them - in both cases the same tags are visible.",
     "Activating the overflow tag opens a role=\"menu\" panel listing every truncated tag as a menuitem row.",
-    "Selecting a truncated tag calls onOverflowTagSelect(tag, event) and does not close the panel or perform navigation/removal on its own.",
+    "Selecting a truncated tag calls onOverflowTagSelect(tag, event), then closes the panel and returns focus to the overflow tag; it performs no navigation/removal on its own.",
     "Applies size uniformly to every visible tag and the overflow tag.",
     "Supports a custom id/className on the root and a custom overflowLabel/overflowMenuAriaLabel."
   ],
   "knownLimitations": [
     "No built-in virtualization - a very large tags array renders every visible tag eagerly, same as Menu's own sections.",
-    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the overflow panel (no typeahead, no built-in focus-first-item-on-open)."
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the overflow panel (no typeahead)."
   ],
   "futureEnhancements": [
     "A count-only overflow mode (numeric badge instead of a full Tag) for very dense layouts.",

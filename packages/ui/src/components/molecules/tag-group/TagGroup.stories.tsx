@@ -147,7 +147,7 @@ export const Content: Story = {
   },
 };
 
-/** Selecting a truncated tag from the overflow panel - Tag Group never assumes what selection means; it calls `onOverflowTagSelect` and leaves navigation/removal to the consumer. */
+/** Selecting a truncated tag from the overflow panel - Tag Group calls `onOverflowTagSelect`, the menu closes, and navigation/removal is left to the consumer. */
 export const EdgeCases: Story = {
   render: () => {
     function SelectFromOverflowExample() {
@@ -175,7 +175,7 @@ export const EdgeCases: Story = {
 
     return (
       <div style={stack}>
-        <Group title="Selecting a truncated tag" description="Tag Group calls onOverflowTagSelect - it does not navigate, remove, or close the panel on its own.">
+        <Group title="Selecting a truncated tag" description="Tag Group calls onOverflowTagSelect and the menu closes - it does not navigate or remove on its own.">
           <SelectFromOverflowExample />
         </Group>
         <SingleTagExample />

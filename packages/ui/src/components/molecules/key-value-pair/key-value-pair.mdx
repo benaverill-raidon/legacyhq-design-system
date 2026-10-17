@@ -1,0 +1,253 @@
+import * as React from 'react';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { EditIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { InlineEdit } from '../inline-edit';
+import { KeyValueList } from '../key-value-list';
+import { TextField } from '../text-field';
+import { KeyValuePair } from './key-value-pair';
+import keyValuePairStyles from './key-value-pair.module.css';
+import * as KeyValuePairStories from './KeyValuePair.stories';
+
+export function EditablePair({ label, initial, size }) {
+  const [value, setValue] = React.useState(initial);
+  return (
+    <KeyValuePair label={label} size={size} underline>
+      <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
+        <TextField size={size} context="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
+      </InlineEdit>
+    </KeyValuePair>
+  );
+}
+
+<Meta of={KeyValuePairStories} name="Docs" />
+
+<Unstyled>
+<ComponentPage>
+
+<ComponentHeader
+  id="key-value-pair"
+  example={
+    <KeyValueList>
+      <EditablePair label="Client name" initial="Jane Doe" />
+      <KeyValuePair label="Account type" value="Revocable trust" underline />
+      <KeyValuePair label="Date opened" value="March 15, 2024" />
+    </KeyValueList>
+  }
+>
+  Key Value Pair shows one detail of a record as a row: what it is on the left, its value on the
+  right. The value is text, or an inline field people can edit in place.
+</ComponentHeader>
+
+<Section title="When to use">
+
+<Usage>
+<UseFor>
+
+- The details of a record, one per row: a client's name, an account type, a status, a date.
+- A detail people can correct where it's shown, with an inline Text Field, Text Area, or Select in
+  Inline Edit.
+- Several details in a column, inside a Key Value List.
+
+</UseFor>
+<UseInstead>
+
+- **A form that collects several values:** <DocLink to="Components/Forms/Field" /> in a <DocLink to="Components/Forms/Form" />, with visible labels, help, and errors.
+- **Many records compared side by side:** <DocLink to="Components/Data Display/Table" />.
+- **The records linked to a record:** <DocLink to="Components/Data Display/Tag Group" />.
+
+</UseInstead>
+</Usage>
+
+</Section>
+
+<Section title="Anatomy">
+
+<Anatomy
+  specimen={
+    <KeyValueList>
+      <KeyValuePair label="Account type" value="Trust" underline />
+    </KeyValueList>
+  }
+>
+  <Part name="root" target={keyValuePairStyles.root}>A `div` that holds the key and the value in a row, 16px apart, and draws the divider with `underline`.</Part>
+  <Part name="key" target={keyValuePairStyles.key}>A `dt` with the `label`, in the subtle text color, 40% of the row's width.</Part>
+  <Part name="value" target={keyValuePairStyles.value}>A `dd` that fills the rest of the row: the `value` text, or the inline control in `children`.</Part>
+</Anatomy>
+
+</Section>
+
+<Section title="Variants">
+
+<Subsection title="Static or editable">
+
+Pass `value` for a read-only value, shown as text. For a value people can edit, pass an inline Text
+Field, Text Area, or Select as `children`, with `context="inline"`, usually inside Inline Edit so the
+change is confirmed or cancelled. `children` replaces `value` when both are set. The control keeps
+its own inline look, with its hover fill, but its corners are square inside the row. In Figma, this
+is the pair's `context`: `static` or `inline`.
+
+<Example of={KeyValuePairStories.InlineEditable} caption="Text Field and Text Area in Inline Edit, and a Select, beside static pairs." />
+
+</Subsection>
+
+<Subsection title="Sizes">
+
+`sm`, `md`, the default, and `lg` set the row's minimum height to 32, 40, or 48px, the control
+heights, and the text to `body-sm`, `body-md`, or `body-lg`. The key and a static value are inset
+8px from their column's edge, 12px at `lg`. The size doesn't reach an inline control: give the
+control the same `size`, so its height and text match the row.
+
+<Example of={KeyValuePairStories.Sizes} />
+
+</Subsection>
+
+<Subsection title="Underline">
+
+`underline` draws a 1px divider under the row. In a list, it usually goes on every pair but the
+last, so the list doesn't end on a line.
+
+<Example of={KeyValuePairStories.Underline} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Long values">
+
+The key takes 40% of the row at every size, and the value fills the rest; there's no prop to change
+the split. Long text wraps in its column. The key stays at the top of the row, and a static value is
+centered in the row's height. An inline Text Area with `autoResize` grows the row as it grows, and the
+rows below move down.
+
+<Example of={KeyValuePairStories.GrowingNotes} caption="Inline notes that are short, wrapped, and past the six lines they show before scrolling, at each size." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Put pairs in a Key Value List, which renders the dl their dt and dd need."
+  code={`<KeyValueList>
+    <KeyValuePair label="Account type" value="Trust" underline />
+    <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`}
+>
+  <KeyValueList>
+    <KeyValuePair label="Account type" value="Trust" underline />
+    <KeyValuePair label="Status" value="Active" />
+  </KeyValueList>
+</Do>
+<Dont
+  caption="Use pairs without a list around them. A dt and a dd outside a dl aren't valid HTML, and screen readers don't announce them as a list."
+  code={`<div>
+    <KeyValuePair label="Account type" value="Trust" />
+</div>`}
+/>
+<Do
+  caption="Give an inline control an aria-label that matches the key."
+  code={`<KeyValuePair label="Client name">
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+        <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+</KeyValuePair>`}
+/>
+<Dont
+  caption="Leave the control unnamed. The key isn't linked to the field, so the field has no accessible name."
+  code={`<KeyValuePair label="Client name">
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+        <TextField context="inline" />
+    </InlineEdit>
+</KeyValuePair>`}
+/>
+<Do
+  caption="Give the inline control the pair's size."
+  code={`<KeyValuePair size="lg" label="Client name">
+    <TextField size="lg" context="inline" aria-label="Client name" />
+</KeyValuePair>`}
+/>
+<Dont
+  caption="Size only the pair. The control stays 40px tall in a 48px row, and its text is smaller than the key's."
+  code={`<KeyValuePair size="lg" label="Client name">
+    <TextField context="inline" aria-label="Client name" />
+</KeyValuePair>`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Key Value Pair renders a `div` holding a `dt` for the key and a `dd` for the value. Inside a Key
+  Value List's `dl`, that's a valid description list: screen readers announce the list and its items.
+  Outside a `dl`, the `dt` and `dd` aren't valid HTML.
+- The key isn't linked to an inline control in the value, so it doesn't name it. Give the control an
+  `aria-label`, usually the key's text.
+- The pair itself isn't focusable and has no keyboard behavior. An inline control and Inline Edit's
+  buttons keep their own focus and keys.
+- The key uses the subtle text color and the value the default one, so the value reads first.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={KeyValuePairStories} />
+
+Key Value Pair doesn't pass other attributes to its root.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Key Value Pair's stylesheet uses, by family, with the property it sets and when. "Base" is
+the `md` row; the inline control in the value keeps its own tokens, listed on its page.
+
+<TokensTable id="key-value-pair" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Key Value List" />, the `dl` that holds the pairs.
+- <DocLink to="Components/Forms/Inline Edit" /> to confirm or cancel an edit to an inline value.
+- <DocLink to="Components/Forms/Text Field" />, <DocLink to="Components/Forms/Text Area" />, and <DocLink to="Components/Forms/Select" />, with `context="inline"`, for an editable value.
+- <DocLink to="Components/Forms/Field" /> for a labelled field in a form.
+- <DocLink to="Components/Data Display/Table" /> for many records side by side.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads key-value-pair.types.ts, the design tokens read key-value-pair.module.css, and
+  the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

@@ -173,26 +173,26 @@
       "round": "--border-radius-full-round"
     },
     "color": {
-      "gray_default": { "background": "--color-background-accent-taupe-default-default", "content": "--color-content-default" },
-      "gray_bold": { "background": "--color-background-accent-taupe-bold-default", "content": "--color-content-inverse" },
+      "taupe_default": { "background": "--color-background-accent-taupe-default-default", "content": "--color-content-default" },
+      "taupe_bold": { "background": "--color-background-accent-taupe-bold-default", "content": "--color-content-inverse-default" },
       "brand_default": { "background": "--color-background-brand-primary-default-default", "content": "--color-content-brand-primary-default" },
-      "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse" },
+      "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse-default" },
       "red_default": { "background": "--color-background-accent-red-default-default", "content": "--color-content-accent-red-default" },
-      "red_bold": { "background": "--color-background-accent-red-bold-default", "content": "--color-content-inverse" },
+      "red_bold": { "background": "--color-background-accent-red-bold-default", "content": "--color-content-inverse-default" },
       "orange_default": { "background": "--color-background-accent-orange-default-default", "content": "--color-content-accent-orange-default" },
-      "orange_bold": { "background": "--color-background-accent-orange-bold-default", "content": "--color-content-inverse" },
+      "orange_bold": { "background": "--color-background-accent-orange-bold-default", "content": "--color-content-inverse-default" },
       "yellow_default": { "background": "--color-background-accent-yellow-default-default", "content": "--color-content-accent-yellow-default" },
-      "yellow_bold": { "background": "--color-background-accent-yellow-bold-default", "content": "--color-content-inverse" },
+      "yellow_bold": { "background": "--color-background-accent-yellow-bold-default", "content": "--color-content-inverse-default" },
       "green_default": { "background": "--color-background-accent-green-default-default", "content": "--color-content-accent-green-default" },
-      "green_bold": { "background": "--color-background-accent-green-bold-default", "content": "--color-content-inverse" },
+      "green_bold": { "background": "--color-background-accent-green-bold-default", "content": "--color-content-inverse-default" },
       "teal_default": { "background": "--color-background-accent-teal-default-default", "content": "--color-content-accent-teal-default" },
-      "teal_bold": { "background": "--color-background-accent-teal-bold-default", "content": "--color-content-inverse" },
+      "teal_bold": { "background": "--color-background-accent-teal-bold-default", "content": "--color-content-inverse-default" },
       "blue_default": { "background": "--color-background-accent-blue-default-default", "content": "--color-content-accent-blue-default" },
-      "blue_bold": { "background": "--color-background-accent-blue-bold-default", "content": "--color-content-inverse" },
+      "blue_bold": { "background": "--color-background-accent-blue-bold-default", "content": "--color-content-inverse-default" },
       "purple_default": { "background": "--color-background-accent-purple-default-default", "content": "--color-content-accent-purple-default" },
-      "purple_bold": { "background": "--color-background-accent-purple-bold-default", "content": "--color-content-inverse" },
+      "purple_bold": { "background": "--color-background-accent-purple-bold-default", "content": "--color-content-inverse-default" },
       "magenta_default": { "background": "--color-background-accent-magenta-default-default", "content": "--color-content-accent-magenta-default" },
-      "magenta_bold": { "background": "--color-background-accent-magenta-bold-default", "content": "--color-content-inverse" }
+      "magenta_bold": { "background": "--color-background-accent-magenta-bold-default", "content": "--color-content-inverse-default" }
     }
   },
   "accessibility": {

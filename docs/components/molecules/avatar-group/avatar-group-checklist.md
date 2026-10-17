@@ -51,7 +51,7 @@ team rosters, document collaborator lists.
 
 ### When should this component NOT be used?
 - A single person - use Avatar directly
-- Non-person entities (firms, trusts, accounts) - Avatar Group inherits Avatar's own scope
+- Choosing people - Avatar Group only displays them
 
 ---
 
@@ -85,7 +85,7 @@ square dimensions, its background, and its typography all reuse existing tokens 
 - the dedicated negative-valued semantic token family for exactly this, not the generic `spacing-*`
 scale; `color-elevation-surface-raised-default`; `color-border-inverse`;
 `color-elevation-surface-sunken-default/hover/press` - the overflow trigger's background,
-overriding Button's own subtle-appearance background entirely; `typography-body-sm/md/lg` - the
+overriding Button's own tertiary background entirely; `typography-body-sm/md/lg` - the
 overflow trigger's text, overriding Button's own per-size heading-based type scale;
 `border-radius-full-round`; `border-width-sm`; `size-control-xs/sm/md/lg`). See
 `avatar-group-spec.md`'s overlap table and "Overflow trigger" section for the exact per-size
@@ -160,7 +160,7 @@ Final implementation decisions:
 - The overflow trigger's Figma part (`figma-parts / more-trigger`) is, one level deeper, the real
   `Button` component with several instance-level overrides verified across all 16 of its own
   size x state variants - not a bespoke new component: forced square size, fully-rounded corner
-  radius, a `sunken`-surface background instead of Button's own subtle-appearance background, and
+  radius, a `sunken`-surface background instead of Button's own tertiary background, and
   Body/SM-MD-LG-LG typography instead of Button's own per-size heading-based type scale. Code reuses
   `Button` directly with the same overrides applied via CSS, rather than reimplementing a circular
   button from scratch.

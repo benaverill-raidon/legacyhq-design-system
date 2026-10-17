@@ -155,9 +155,10 @@ something reimplemented inside Tag Group.
 
 ## Selection never assumes anything
 
-Same rule as Menu and Dropdown Menu: Tag Group does not navigate to a truncated tag's `href`, does
-not call its `onRemove`, and does not close the overflow panel when a truncated tag is selected. It
-only calls `onOverflowTagSelect(tag, event)`. A consumer wanting any of those wires it from there:
+Tag Group does not navigate to a truncated tag's `href` and does not call its `onRemove` when a
+truncated tag is selected. It only calls `onOverflowTagSelect(tag, event)`; Dropdown Menu then
+closes the overflow panel and returns focus to the overflow tag, unless the callback calls
+`event.preventDefault()`. A consumer wanting navigation or removal wires it from there:
 
 ```tsx
 onOverflowTagSelect={(tag, event) => {
@@ -229,7 +230,7 @@ renders the overflow tag trailing when alignment is left (default)
 renders the overflow tag leading when alignment is right
 opens a menu holding the remaining truncated tags when the overflow tag is activated
 calls onOverflowTagSelect with the selected truncated tag
-does not close the overflow panel on its own when a truncated tag is selected
+closes the overflow panel, returning focus to the trigger, when a truncated tag is selected
 closes the overflow panel on outside click / Escape, inherited from Popup
 supports a custom overflowLabel
 defaults the overflow menu accessible name to "{count} more tags"

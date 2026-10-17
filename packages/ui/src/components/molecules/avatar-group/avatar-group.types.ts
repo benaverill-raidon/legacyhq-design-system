@@ -9,24 +9,27 @@ export interface AvatarGroupItem extends Omit<AvatarProps, 'size' | 'id'> {
 }
 
 export interface AvatarGroupProps {
-  /** The full set of avatars, visible and truncated. */
+  /** Every person in the group, in order, visible or not. Each item takes Avatar's props except `size`, plus a unique `id`. */
   avatars: AvatarGroupItem[];
-  /** Once `avatars.length` exceeds this, only the first `maxVisible` render as avatars - the rest are truncated behind the overflow trigger. No truncation when omitted. */
+  /** How many avatars show before the rest move behind the overflow button. At least 1 always shows. With no `maxVisible`, every avatar shows and there's no overflow button. */
   maxVisible?: number;
-  /** Applied uniformly to every rendered avatar, including the overflow trigger - matching Figma, which has no per-avatar size mixing within one group. */
+  /** The size of every avatar and of the overflow button: 24, 32, 40, or 48px from `xs` to `lg`. */
   size?: AvatarGroupSize;
-  /** Overflow trigger text, given the truncated count. Defaults to `+${hiddenCount}`, matching Figma exactly. */
+  /** The overflow button's text, from the number of hidden people. Defaults to `+3` for three. */
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
-  /** Accessible name for the overflow panel (a Menu). Defaults to `${hiddenCount} more people`. */
+  /** The overflow menu's accessible name. Defaults to “3 more people” for three. */
   overflowMenuAriaLabel?: string;
   /**
-   * Called when a truncated avatar is selected from the overflow panel. Avatar Group does not
-   * navigate or close the panel on its own - same "never assume" rule as Menu and Dropdown Menu.
+   * Called with the person and the event when someone chooses a hidden person from the overflow
+   * menu. The menu then closes and focus returns to the overflow button. Avatar Group does nothing
+   * else, so navigate from here.
    */
   onOverflowAvatarSelect?: (
     avatar: AvatarGroupItem,
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
   ) => void;
+  /** The root element's `id`. */
   id?: string;
+  /** Added to the root element's classes. */
   className?: string;
 }

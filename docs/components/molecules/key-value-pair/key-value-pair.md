@@ -1,64 +1,9 @@
 # Key Value Pair
 
-Key Value Pair maps a descriptive label (key) to a static or inline-editable value for scannable
-metadata presentation. It renders semantic `<dt>`/`<dd>` elements inside a horizontal row, with the
-key taking a fixed 40% width and the value filling the rest.
+Key Value Pair's usage guidance is its Storybook Docs page (Components / Data Display / Key Value Pair),
+written in [`key-value-pair.mdx`](../../../../packages/ui/src/components/molecules/key-value-pair/key-value-pair.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-
-- Displaying metadata as label/value rows — client name, account type, status, dates.
-- Inline-editable fields: pass a TextField, TextArea, or Select with `context="inline"` as
-  children, paired with an `iconAfter` edit icon for the inline-edit affordance.
-
-## When not to use
-
-- **A full form layout.** Use the Form organism with Field molecules — Key Value Pair is for
-  compact metadata display, not form building.
-- **A data table.** If metadata has many rows with sortable/filterable columns, a table is more
-  appropriate.
-
-## Sizes
-
-Three sizes (`sm`, `md`, `lg`) control padding-block and typography:
-
-| Size | Padding block | Typography |
-|------|--------------|------------|
-| sm | `--spacing-xs` | body-sm |
-| md (default) | `--spacing-sm` | body-md |
-| lg | `--spacing-md` | body-lg |
-
-## Static vs. editable
-
-Pass a plain `value` string for read-only display. For inline editing, provide children — a
-TextField or TextArea with `context="inline"` and an `iconAfter` edit icon. Children take
-precedence over `value` when both are provided. Inline fields keep their standard hover background
-and get square corners inside the value slot, matching Figma's Key Value Pair.
-
-## Underline
-
-Set `underline` to add a 1px bottom border between pairs. The last item in a list typically omits
-it to avoid a double-border with the list's edge.
-
-## API
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `label` | `string` | (required) | The key label displayed in the left column. |
-| `value` | `React.ReactNode` | - | Static value text. Ignored when `children` is provided. |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Controls padding and typography. |
-| `underline` | `boolean` | `false` | Adds a bottom border divider. |
-| `className` | `string` | - | Composes with the root element's class list. |
-| `children` | `React.ReactNode` | - | Inline-editable control (TextField/TextArea/Select with `context="inline"`). Takes precedence over `value`. |
-
-## Accessibility
-
-- Renders `<dt>` for the key and `<dd>` for the value — semantically meaningful inside a `<dl>`.
-- Wrap in a Key Value List (`<dl>`) for screen readers to announce the list structure.
-- Inline-editable children are responsible for their own accessible name (via `aria-label`).
-
-## Related components
-
-- **Key Value List** — wraps pairs in a `<dl>`.
-- **Text Field** — `context="inline"` for single-line inline editing inside a pair.
-- **Text Area** — `context="inline"` for multi-line inline editing inside a pair.
-- **Field** — for full form layouts with labels, validation, and helper text.
+For implementation detail, see [`key-value-pair-spec.md`](key-value-pair-spec.md); for the machine-readable contract,
+[`key-value-pair.contract.json`](key-value-pair.contract.json).

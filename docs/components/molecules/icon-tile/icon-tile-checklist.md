@@ -112,6 +112,6 @@ Optional, only meaningful when `decorative={false}`.
 ---
 
 ## Notes
-The Figma component models `tone` and `appearance` (bold) as one flattened 20-value `appearance`
+The Figma component models `tone` and `appearance` (bold) as one flattened 20-value `tone`
 variant. The React API splits these into two independent props to follow this design system's
 existing convention (see Button) of separating visual weight from semantic meaning.

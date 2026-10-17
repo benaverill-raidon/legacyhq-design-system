@@ -1,0 +1,213 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { KeyValuePair } from '../key-value-pair';
+import keyValuePairStyles from '../key-value-pair/key-value-pair.module.css';
+import { KeyValueList } from './key-value-list';
+import keyValueListStyles from './key-value-list.module.css';
+import * as KeyValueListStories from './KeyValueList.stories';
+
+<Meta of={KeyValueListStories} name="Docs" />
+
+<Unstyled>
+<ComponentPage>
+
+<ComponentHeader
+  id="key-value-list"
+  example={
+    <KeyValueList>
+      <KeyValuePair label="Client name" value="Jane Doe" underline />
+      <KeyValuePair label="Account type" value="Revocable trust" underline />
+      <KeyValuePair label="Status" value="Active" underline />
+      <KeyValuePair label="Date opened" value="March 15, 2024" />
+    </KeyValueList>
+  }
+>
+  Key Value List stacks Key Value Pairs into one column of details, such as a record's summary or a
+  detail panel. It renders the `dl` that makes the pairs a description list.
+</ComponentHeader>
+
+<Section title="When to use">
+
+<Usage>
+<UseFor>
+
+- A record's details, one Key Value Pair per row: a summary card, a side panel, a settings overview.
+- A mix of read-only details and details people can edit in place.
+
+</UseFor>
+<UseInstead>
+
+- **A form that collects several values:** <DocLink to="Components/Forms/Form" />, with a <DocLink to="Components/Forms/Field" /> for each value.
+- **Many records compared side by side:** <DocLink to="Components/Data Display/Table" />.
+
+</UseInstead>
+</Usage>
+
+</Section>
+
+<Section title="Anatomy">
+
+<Anatomy
+  specimen={
+    <KeyValueList>
+      <KeyValuePair label="Client name" value="Jane Doe" underline />
+      <KeyValuePair label="Status" value="Active" />
+    </KeyValueList>
+  }
+>
+  <Part name="root" target={keyValueListStyles.root}>A `dl` that stacks the rows with no gap, margin, or padding of its own.</Part>
+  <Part name="children" target={keyValuePairStyles.root}>The Key Value Pairs, one per row. Each sets its own height, size, and divider.</Part>
+</Anatomy>
+
+</Section>
+
+<Section title="Variants">
+
+<Subsection title="Underlined or clean">
+
+Figma has two list variants: underlined, with a divider between rows, and clean, with none. In code,
+the divider is each pair's `underline`, so set it on every pair but the last for the underlined look,
+and on none for the clean one.
+
+<Example of={KeyValueListStories.StaticUnderlined} />
+
+<Example of={KeyValueListStories.StaticClean} />
+
+</Subsection>
+
+<Subsection title="Sizes">
+
+The list has no size of its own. Give every pair in it the same `size`, so the rows share a height
+and text size.
+
+<Example of={KeyValueListStories.Sizes} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Static and editable rows">
+
+Read-only pairs and pairs with an inline control sit in the same list, and keep the same key column
+and divider. A row grows with its value, and the rows below move down.
+
+<Example of={KeyValueListStories.MixedEditable} caption="A Text Field and a Text Area in Inline Edit, between static pairs." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Name the list with a heading outside it, and put only pairs inside."
+  code={`<h3>Account</h3>
+<KeyValueList>
+    <KeyValuePair label="Account type" value="Trust" underline />
+    <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`}
+/>
+<Dont
+  caption="Put a heading or other content in the list. A dl can hold only dt and dd groups, so the markup isn't valid."
+  code={`<KeyValueList>
+    <h3>Account</h3>
+    <KeyValuePair label="Account type" value="Trust" />
+</KeyValueList>`}
+/>
+<Do
+  caption="Give every pair in a list the same size."
+  code={`<KeyValueList>
+    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+    <KeyValuePair size="sm" label="Status" value="Active" />
+</KeyValueList>`}
+>
+  <KeyValueList>
+    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+    <KeyValuePair size="sm" label="Status" value="Active" />
+  </KeyValueList>
+</Do>
+<Dont
+  caption="Mix sizes in one list. The rows change height and text size from one to the next."
+  code={`<KeyValueList>
+    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+    <KeyValuePair size="lg" label="Status" value="Active" />
+</KeyValueList>`}
+>
+  <KeyValueList>
+    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+    <KeyValuePair size="lg" label="Status" value="Active" />
+  </KeyValueList>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Key Value List renders a `dl`, and each Key Value Pair inside it a `div` with a `dt` and a `dd`.
+  Screen readers can announce it as a list and read each key with its value.
+- The `dl` has no name. Name the group with a heading before it when the page has several.
+- The list isn't focusable and has no keyboard behavior; the inline controls in its pairs keep their
+  own.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={KeyValueListStories} />
+
+Key Value List doesn't pass other attributes to its `dl`.
+
+</Section>
+
+<Section title="Design tokens">
+
+Key Value List's stylesheet sets no tokens: it only stacks the pairs and clears the `dl`'s default
+margin and padding, so the table below is empty. The pairs' tokens are on Key Value Pair's page.
+
+<TokensTable id="key-value-list" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Key Value Pair" />, each row in the list.
+- <DocLink to="Components/Forms/Inline Edit" /> for rows people can edit in place.
+- <DocLink to="Components/Data Display/Card" /> to hold a list as a record's summary.
+- <DocLink to="Components/Data Display/Table" /> for many records side by side.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads key-value-list.types.ts, the design tokens read key-value-list.module.css, and
+  the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

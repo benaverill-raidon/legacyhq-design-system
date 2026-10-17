@@ -48,6 +48,12 @@
       "element": "dl",
       "required": true,
       "description": "Flex column container. Resets browser default dl margin/padding."
+    },
+    {
+      "part": "children",
+      "element": "KeyValuePair (div with dt and dd)",
+      "required": true,
+      "description": "The Key Value Pairs, one per row. Each sets its own height, size, and underline divider."
     }
   ],
   "accessibility": {

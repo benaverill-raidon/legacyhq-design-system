@@ -394,6 +394,7 @@ export function TokensTable({ id, root }: { id: string; root?: string }) {
   const css = cssOf(id);
   const rows = tokenRows(css, root ?? rootClassOf(css));
   const families = TOKEN_FAMILIES.filter((family) => rows.some((row) => row.family === family));
+  if (!rows.length) return <p className={doc.caption}>This stylesheet reads no design tokens.</p>;
   return (
     <div className={styles.tableScroll}>
       <table className={`${doc.table} ${styles.tokens}`}>

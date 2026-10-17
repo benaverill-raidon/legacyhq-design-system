@@ -196,6 +196,15 @@ export function splitDescription(description = '') {
   return { text, deprecated: deprecated ? deprecated[1].trim() || 'Deprecated.' : null };
 }
 
+/**
+ * A default as the table shows it. A default that's a function (docgen gives its whole source) isn't
+ * shown; the prop's description says what it does.
+ */
+export function shownDefault(value: string | undefined) {
+  if (value === undefined) return null;
+  return /=>|^function\b|\n/.test(value.trim()) ? null : value;
+}
+
 /** The API table's rows, in declaration order: current props, then deprecated ones. */
 export function propRows(info: DocgenInfo | undefined) {
   const rows: PropRow[] = Object.entries(info?.props ?? {})
@@ -205,7 +214,7 @@ export function propRows(info: DocgenInfo | undefined) {
       return {
         name,
         type: typeOf(prop),
-        defaultValue: prop.defaultValue?.value ?? null,
+        defaultValue: shownDefault(prop.defaultValue?.value),
         required: Boolean(prop.required),
         description: text,
         deprecated,

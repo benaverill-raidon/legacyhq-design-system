@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { broadest, figmaFact, formatDate, headerFacts, isStacked, PIN_GAP, PIN_LIFT, placePins, propRows, registryEntry, rootClassOf, splitDescription, tokenRows, whenOf } from './component-page-data';
+import { broadest, shownDefault, figmaFact, formatDate, headerFacts, isStacked, PIN_GAP, PIN_LIFT, placePins, propRows, registryEntry, rootClassOf, splitDescription, tokenRows, whenOf } from './component-page-data';
 
 const buttonCss: string = readFileSync('packages/ui/src/components/atoms/button/button.module.css', 'utf8');
 
@@ -87,6 +87,13 @@ describe('anatomy numbers', () => {
 });
 
 describe('API rows', () => {
+  it("leaves a function's source out of the Default column", () => {
+    expect(shownDefault("'md'")).toBe("'md'");
+    expect(shownDefault('(count) => `+${count}`')).toBeNull();
+    expect(shownDefault('function defaultFormat(date) {\n  return date;\n}')).toBeNull();
+    expect(shownDefault(undefined)).toBeNull();
+  });
+
   it('splits @deprecated off a description', () => {
     expect(splitDescription('@deprecated Renamed to `tone`. Still accepted.')).toEqual({ text: '', deprecated: 'Renamed to `tone`. Still accepted.' });
     expect(splitDescription('Semantic tone.')).toEqual({ text: 'Semantic tone.', deprecated: null });

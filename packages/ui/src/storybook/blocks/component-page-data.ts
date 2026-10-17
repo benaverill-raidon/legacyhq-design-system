@@ -346,8 +346,9 @@ export function tokenRows(css: string, rootClass: string): TokenRow[] {
     selectors: selectors.trim(),
     declarations: [...body.matchAll(/(--[\w-]+|[a-z-]+)\s*:\s*([^;]+);/g)].map(([, property, value]) => ({ property, value })),
   }));
+  // A whole variable name: --tag-background-hover must not match inside --tag-background-hover-layer.
   const readersOf = (custom: string) =>
-    [...new Set(rules.flatMap(({ declarations }) => declarations.filter(({ value }) => new RegExp(`var\\(\\s*${custom}\\b`).test(value)).map(({ property }) => property)))];
+    [...new Set(rules.flatMap(({ declarations }) => declarations.filter(({ value }) => new RegExp(`var\\(\\s*${custom}(?![\\w-])`).test(value)).map(({ property }) => property)))];
 
   // The stylesheet's own custom properties aren't tokens: they're followed to what reads them.
   const declared = new Set(rules.flatMap(({ declarations }) => declarations.map(({ property }) => property).filter((property) => property.startsWith('--'))));

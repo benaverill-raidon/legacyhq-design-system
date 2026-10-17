@@ -158,6 +158,22 @@ describe('design tokens', () => {
     expect(find('fade-quick', 'transition')?.when).toEqual(['base']);
   });
 
+  it('follows a custom property by its whole name, not a longer one that starts the same', () => {
+    const rows = tokenRows(
+      `.root {
+  --root-fill: var(--color-background-neutral-bold-default);
+  --root-fill-layer: linear-gradient(var(--color-background-selected-default-default), transparent);
+  background: var(--root-fill);
+  background-image: var(--root-fill-layer);
+}`,
+      'root',
+    );
+    expect(rows.map(({ token, property }) => `${token} -> ${property}`)).toEqual([
+      'color-background-neutral-bold-default -> background',
+      'color-background-selected-default-default -> background-image',
+    ]);
+  });
+
   it("follows a stylesheet's own custom properties instead of listing them, and files component tokens", () => {
     const rows = tokenRows(
       `.root {

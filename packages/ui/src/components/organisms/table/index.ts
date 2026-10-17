@@ -4,6 +4,7 @@ export type {
   SortDirection,
   TableAlign,
   TableColumn,
+  TableHeadingLevel,
   TableProps,
   TableSize,
   TableSort,

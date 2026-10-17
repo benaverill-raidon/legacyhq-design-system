@@ -8,6 +8,9 @@ export type SortDirection = 'asc' | 'desc';
 /** Horizontal alignment of a column's header and cells. */
 export type TableAlign = 'start' | 'center' | 'end';
 
+/** The heading level of the table's `title`: `h1` to `h6`. */
+export type TableHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
 /** A row's stable identity - the value returned by `getRowId`. */
 export type RowId = string | number;
 
@@ -50,7 +53,10 @@ export interface TableColumn<Row> {
    * for any other column. Follows the same identifier-vs-else rule as Link's `emphasis`.
    */
   emphasis?: 'strong' | 'default';
-  /** Names the column in its sort button and resize handle when `header` is not plain text. Defaults to `header` when it's a string, else `key`. */
+  /**
+   * Names the column when `header` is not plain text: its header cell, its sort button, and its resize
+   * handle. Defaults to `header` when it's a string, else `key`.
+   */
   headerLabel?: string;
   /**
    * The value the built-in client-side sort compares (defaults to `row[key]`). Ignored when
@@ -74,13 +80,15 @@ export interface TableProps<Row> {
   size?: TableSize;
   /**
    * The table's accessible name, rendered as a visually hidden `<caption>`. Falls back to `title`. A
-   * string also names the scroll region. Always give the table a name with one of these.
+   * string also names the scroll region (else `scrollRegionLabel`). Always give the table a name with one of these.
    */
   caption?: React.ReactNode;
 
   // --- Header region ---
-  /** The title above the table, rendered as an `h2`. Also names the table when there's no `caption`. */
+  /** The title above the table, rendered as a heading at `headingLevel`. Also names the table when there's no `caption`. */
   title?: React.ReactNode;
+  /** The heading level of `title`, 1 to 6, to fit the page's outline. Defaults to 2. */
+  headingLevel?: TableHeadingLevel;
   /** Supporting text below the title. */
   description?: React.ReactNode;
   /** Actions such as a primary Button, at the end of the toolbar's button group, after `toolbarActions`. Hidden while rows are selected. */
@@ -91,8 +99,10 @@ export interface TableProps<Row> {
   toolbar?: React.ReactNode;
   /** Shows the search Icon Button, which opens a search field. Table doesn't filter `data`: filter it yourself in `onSearchChange`. */
   searchable?: boolean;
-  /** The search text. Pass it with `onSearchChange`: the field's clear button, and whether it stays open when it loses focus, depend on it. */
+  /** The search text, controlled. Pass it with `onSearchChange`. Without it, Table keeps the text itself. */
   searchValue?: string;
+  /** The search text to start with, when `searchValue` isn't controlled. The field starts open when it isn't empty. */
+  defaultSearchValue?: string;
   /** Called with the new search text as the person types, and with an empty string when they clear it. */
   onSearchChange?: (value: string) => void;
   /** The search field's placeholder. Defaults to "Search...". Not used as its accessible name. */
@@ -145,7 +155,7 @@ export interface TableProps<Row> {
    * (typically Buttons). The count of selected rows is shown on the left.
    */
   bulkActions?: React.ReactNode;
-  /** Formats the selection bar's count. Defaults to "2 selected". */
+  /** Formats the selection bar's count, which is also announced politely when it changes. Defaults to "2 selected". */
   selectionCountLabel?: (count: number) => string;
 
   // --- Pagination ---
@@ -155,7 +165,11 @@ export interface TableProps<Row> {
   pageCount?: number;
   /** Called with the page the person moves to from the footer. */
   onPageChange?: (page: number) => void;
-  /** Rows per page. Turns on client-side pagination unless `manualPagination` is set, and sets the footer's page-size Select. */
+  /**
+   * Rows per page. Turns on client-side pagination unless `manualPagination` is set, and sets the footer's
+   * page-size Select. With `manualPagination`, it places the range text; without it, the rows passed
+   * count as one page.
+   */
   pageSize?: number;
   /** You paginate on the server: Table doesn't slice `data`, and shows `pageCount` pages. */
   manualPagination?: boolean;
@@ -165,19 +179,28 @@ export interface TableProps<Row> {
   nextPageLabel?: string;
   /** Accessible name for the footer's navigation region. Defaults to "<name> pagination", or "Table pagination". */
   paginationLabel?: string;
-  /** The footer's page-size label and its Select's accessible name. Defaults to "Items per page". */
+  /** The footer's page-size label, shown as given, which also names its Select. Defaults to "Items per page:". */
   itemsPerPageLabel?: string;
-  /** The footer's range text. Defaults to "1–10 of 42 items". */
+  /**
+   * The footer's range text, from the first and last row shown and the total. Defaults to
+   * "11–20 of 42 items", or "0–0 of 0 items" with no rows.
+   */
   getRangeLabel?: (start: number, end: number, total: number) => string;
   /** Accessible name for the footer's page Select. Defaults to "Page". */
   pageLabel?: string;
-  /** The text after the page Select. Defaults to "of 5 pages". */
+  /** The text after the page Select. Defaults to "of 5 pages", or "of 1 page". */
   getPageCountLabel?: (pageCount: number) => string;
 
   // --- Footer ---
-  /** Total number of items, for the footer's range text. Defaults to the number of rows. */
+  /**
+   * Total number of items, for the footer's range text. Defaults to the number of rows in `data`, so pass
+   * it with `manualPagination`.
+   */
   totalItems?: number;
-  /** The page sizes the footer's "Items per page" Select offers. The Select shows only when this is set. */
+  /**
+   * The page sizes the footer's "Items per page" Select offers. The Select shows only when this is set,
+   * and keeps the footer shown when every row fits on one page, so the person can pick a smaller size.
+   */
   itemsPerPageOptions?: number[];
   /** Called with the new page size when the person picks one in the footer. */
   onPageSizeChange?: (pageSize: number) => void;
@@ -185,14 +208,22 @@ export interface TableProps<Row> {
   // --- Columns ---
   /** Lets people resize columns by dragging a header's trailing edge, or with the Arrow keys on its handle. */
   resizableColumns?: boolean;
+  /** Accessible name for a column's resize handle, from the column's name. Defaults to "Resize Name". */
+  getResizeLabel?: (columnLabel: string) => string;
 
   // --- States ---
   /** Shows skeleton rows instead of data, and sets `aria-busy` on the table. */
   loading?: boolean;
   /** How many skeleton rows to show while `loading`. */
   skeletonRowCount?: number;
-  /** Content shown when there are no rows. Defaults to a "No results" heading and description. */
+  /** Content shown when there are no rows. Defaults to `emptyHeadingLabel` over `emptyDescriptionLabel`. */
   empty?: React.ReactNode;
+  /** The default empty content's heading, when `empty` isn't set. Defaults to "No results". */
+  emptyHeadingLabel?: string;
+  /** The default empty content's description, when `empty` isn't set. Defaults to "There is nothing to show here yet.". */
+  emptyDescriptionLabel?: string;
+  /** Accessible name for the scroll region around the table when neither `caption` nor `title` is a string. Defaults to "Table". */
+  scrollRegionLabel?: string;
 
   /** Added to the root element's classes. */
   className?: string;

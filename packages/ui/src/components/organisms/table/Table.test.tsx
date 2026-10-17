@@ -62,7 +62,7 @@ describe('Table', () => {
     // Unsorted: original order.
     expect(bodyRowNames()).toEqual(['Charlie', 'Alice', 'Bob']);
 
-    const nameHeaderButton = screen.getByRole('button', { name: 'Sort by Name' });
+    const nameHeaderButton = screen.getByRole('button', { name: 'Name' });
     fireEvent.click(nameHeaderButton);
     expect(bodyRowNames()).toEqual(['Alice', 'Bob', 'Charlie']);
     expect(screen.getByRole('columnheader', { name: /Name/ })).toHaveAttribute('aria-sort', 'ascending');
@@ -82,7 +82,7 @@ describe('Table', () => {
       <Table columns={columns} data={rows} getRowId={getRowId} caption="People" manualSort onSortChange={onSortChange} />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Sort by Name' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Name' }));
     expect(onSortChange).toHaveBeenCalledWith({ columnKey: 'name', direction: 'asc' });
     // manualSort: order unchanged (the consumer re-fetches).
     expect(bodyRowNames()).toEqual(['Charlie', 'Alice', 'Bob']);
@@ -190,7 +190,7 @@ describe('Table', () => {
     expect(screen.getByText('2 selected')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
     // The selection bar lives in the toolbar; column headers stay visible.
-    expect(screen.getByRole('button', { name: 'Sort by Name' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Name' })).toBeInTheDocument();
     // The select-all checkbox stays in the header.
     expect(screen.getByRole('checkbox', { name: 'Select all rows' })).toBeInTheDocument();
   });
@@ -319,7 +319,7 @@ describe('Table', () => {
     expect(within(footer).getByText(/1–2 of 3 items/)).toBeInTheDocument();
     expect(within(footer).getByText(/of 2 pages/)).toBeInTheDocument();
 
-    const pageSizeSelect = within(footer).getByRole('combobox', { name: 'Items per page' });
+    const pageSizeSelect = within(footer).getByRole('combobox', { name: 'Items per page:' });
     expect(pageSizeSelect).toHaveValue('2');
 
     fireEvent.mouseDown(pageSizeSelect);
@@ -389,10 +389,257 @@ describe('Table', () => {
     );
 
     const footer = screen.getByRole('navigation', { name: 'Paginación' });
-    expect(within(footer).getByText('Elementos por página:')).toBeInTheDocument();
+    // The label is shown as given: Table adds no colon of its own.
+    expect(within(footer).getByText('Elementos por página')).toBeInTheDocument();
+    expect(within(footer).queryByText('Elementos por página:')).not.toBeInTheDocument();
     expect(within(footer).getByRole('combobox', { name: 'Elementos por página' })).toBeInTheDocument();
     expect(within(footer).getByText('1-2 de 3')).toBeInTheDocument();
     expect(within(footer).getByRole('combobox', { name: 'Página' })).toBeInTheDocument();
     expect(within(footer).getByText('de 2')).toBeInTheDocument();
+  });
+
+  it('shows the default page-size label with its colon, naming the page-size Select', () => {
+    render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" pageSize={2} itemsPerPageOptions={[2, 5]} />);
+
+    const footer = screen.getByRole('navigation', { name: /pagination/i });
+    expect(within(footer).getByText('Items per page:')).toBeInTheDocument();
+    expect(within(footer).getByRole('combobox', { name: 'Items per page:' })).toBeInTheDocument();
+  });
+
+  it('keeps the footer, and its page-size Select, when one page holds every row', () => {
+    function Harness() {
+      const [size, setSize] = useState(2);
+      return (
+        <Table
+          columns={columns}
+          data={rows}
+          getRowId={getRowId}
+          caption="People"
+          pageSize={size}
+          itemsPerPageOptions={[2, 5]}
+          onPageSizeChange={setSize}
+        />
+      );
+    }
+    render(<Harness />);
+
+    let footer = screen.getByRole('navigation', { name: /pagination/i });
+    fireEvent.mouseDown(within(footer).getByRole('combobox', { name: 'Items per page:' }));
+    fireEvent.click(screen.getByRole('menuitemradio', { name: '5' }));
+
+    // Every row fits on one page, but the person can still pick a smaller page size.
+    footer = screen.getByRole('navigation', { name: /pagination/i });
+    const pageSizeSelect = within(footer).getByRole('combobox', { name: 'Items per page:' });
+    expect(pageSizeSelect).toHaveValue('5');
+    expect(within(footer).getByText('1–3 of 3 items')).toBeInTheDocument();
+    expect(within(footer).getByText('of 1 page')).toBeInTheDocument();
+    expect(within(footer).getByRole('button', { name: 'Next page' })).toBeDisabled();
+    expect(bodyRowNames()).toHaveLength(3);
+  });
+
+  it('hides the footer at one page when there are no page-size options', () => {
+    render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" pageSize={5} />);
+
+    expect(screen.queryByRole('navigation')).not.toBeInTheDocument();
+  });
+
+  it('computes the range from the page and page size with manualPagination', () => {
+    const pageRows = (pageNumber: number) =>
+      Array.from({ length: pageNumber === 3 ? 2 : 5 }, (_, i) => ({
+        id: (pageNumber - 1) * 5 + i + 1,
+        name: `Person ${(pageNumber - 1) * 5 + i + 1}`,
+        score: i,
+      }));
+    function Harness() {
+      const [page, setPage] = useState(1);
+      return (
+        <Table
+          columns={columns}
+          data={pageRows(page)}
+          getRowId={getRowId}
+          caption="People"
+          manualPagination
+          page={page}
+          pageCount={3}
+          pageSize={5}
+          totalItems={12}
+          onPageChange={setPage}
+        />
+      );
+    }
+    render(<Harness />);
+
+    const footer = () => screen.getByRole('navigation', { name: /pagination/i });
+    expect(within(footer()).getByText('1–5 of 12 items')).toBeInTheDocument();
+
+    fireEvent.click(within(footer()).getByRole('button', { name: 'Next page' }));
+    expect(within(footer()).getByText('6–10 of 12 items')).toBeInTheDocument();
+
+    fireEvent.click(within(footer()).getByRole('button', { name: 'Next page' }));
+    expect(within(footer()).getByText('11–12 of 12 items')).toBeInTheDocument();
+  });
+
+  it('uses the rows passed as the page size with manualPagination when pageSize is not set', () => {
+    render(
+      <Table
+        columns={columns}
+        data={rows}
+        getRowId={getRowId}
+        caption="People"
+        manualPagination
+        page={2}
+        pageCount={4}
+        totalItems={12}
+      />,
+    );
+
+    expect(screen.getByText('4–6 of 12 items')).toBeInTheDocument();
+  });
+
+  it('shows an empty range when there are no rows', () => {
+    render(
+      <Table columns={columns} data={[]} getRowId={getRowId} caption="People" pageSize={5} itemsPerPageOptions={[5, 10]} />,
+    );
+
+    expect(screen.getByText('0–0 of 0 items')).toBeInTheDocument();
+  });
+
+  it('keeps its own search text when searchValue is not passed', () => {
+    const onSearchChange = vi.fn();
+    render(
+      <Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable onSearchChange={onSearchChange} />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Search' }));
+    const search = screen.getByRole('textbox', { name: 'Search' });
+    fireEvent.change(search, { target: { value: 'ali' } });
+    expect(search).toHaveValue('ali');
+    expect(onSearchChange).toHaveBeenLastCalledWith('ali');
+
+    // The field stays open with its text when it loses focus, and its clear button works.
+    fireEvent.blur(search);
+    expect(screen.getByRole('textbox', { name: 'Search' })).toHaveValue('ali');
+    const clear = screen.getByRole('button', { name: 'Clear search' });
+    fireEvent.click(clear);
+    expect(screen.getByRole('textbox', { name: 'Search' })).toHaveValue('');
+    expect(onSearchChange).toHaveBeenLastCalledWith('');
+
+    // Empty again, it closes when it loses focus.
+    fireEvent.blur(screen.getByRole('textbox', { name: 'Search' }));
+    expect(screen.queryByRole('textbox', { name: 'Search' })).not.toBeInTheDocument();
+  });
+
+  it('starts uncontrolled search from defaultSearchValue, open', () => {
+    render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable defaultSearchValue="bob" />);
+
+    expect(screen.getByRole('textbox', { name: 'Search' })).toHaveValue('bob');
+    expect(screen.getByRole('button', { name: 'Clear search' })).toBeInTheDocument();
+  });
+
+  it('names each column header by its column name alone', () => {
+    render(
+      <Table
+        columns={[
+          ...columns,
+          { key: 'notes', header: 'Notes' },
+          { key: 'icon', header: <span aria-hidden="true">★</span>, headerLabel: 'Favorite', sortable: true },
+        ]}
+        data={rows}
+        getRowId={getRowId}
+        caption="People"
+      />,
+    );
+
+    const headers = screen.getAllByRole('columnheader');
+    expect(headers.map((header) => header.getAttribute('aria-sort'))).toEqual(['none', 'none', null, 'none']);
+    expect(headers[0]).toHaveAccessibleName('Name');
+    expect(headers[1]).toHaveAccessibleName('Score');
+    expect(headers[2]).toHaveAccessibleName('Notes');
+    expect(headers[3]).toHaveAccessibleName('Favorite');
+    // The sort button is named by the visible header (or headerLabel); its state is aria-sort on the header.
+    expect(screen.getByRole('button', { name: 'Name' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Favorite' })).toBeInTheDocument();
+  });
+
+  it('gives each resize handle its value, minimum, and maximum from the start', () => {
+    render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" />);
+
+    const handle = screen.getByRole('separator', { name: 'Resize Name' });
+    const now = Number(handle.getAttribute('aria-valuenow'));
+    const min = Number(handle.getAttribute('aria-valuemin'));
+    const max = Number(handle.getAttribute('aria-valuemax'));
+    expect(handle).toHaveAttribute('aria-valuenow');
+    expect(handle).toHaveAttribute('aria-valuemax');
+    expect(min).toBe(64);
+    expect(now).toBeGreaterThanOrEqual(min);
+    expect(max).toBeGreaterThanOrEqual(now);
+
+    fireEvent.keyDown(handle, { key: 'ArrowRight' });
+    const widened = Number(handle.getAttribute('aria-valuenow'));
+    expect(widened).toBe(now + 16);
+    expect(Number(handle.getAttribute('aria-valuemax'))).toBeGreaterThanOrEqual(widened);
+  });
+
+  it('keeps a resized column within the scroll region', () => {
+    const regionWidth = vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockReturnValue(200);
+    try {
+      render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" />);
+      const handle = screen.getByRole('separator', { name: 'Resize Name' });
+      expect(handle).toHaveAttribute('aria-valuemax', '200');
+      for (let i = 0; i < 12; i += 1) fireEvent.keyDown(handle, { key: 'ArrowRight' });
+      expect(handle).toHaveAttribute('aria-valuenow', '200');
+    } finally {
+      regionWidth.mockRestore();
+    }
+  });
+
+  it('renders the title at headingLevel, h2 by default', () => {
+    const { rerender } = render(<Table columns={columns} data={rows} getRowId={getRowId} title="Members" />);
+    expect(screen.getByRole('heading', { level: 2, name: 'Members' })).toBeInTheDocument();
+
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} title="Members" headingLevel={3} />);
+    expect(screen.getByRole('heading', { level: 3, name: 'Members' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
+  });
+
+  it('announces selection count changes politely, not the initial selection', () => {
+    render(
+      <Table columns={columns} data={rows} getRowId={getRowId} caption="People" selectable defaultSelectedIds={[1, 2]} />,
+    );
+
+    const status = screen.getByRole('status');
+    expect(status).toHaveAttribute('aria-live', 'polite');
+    expect(status).toHaveTextContent('');
+
+    fireEvent.click(screen.getAllByRole('checkbox', { name: 'Select row' })[2]);
+    expect(status).toHaveTextContent('3 selected');
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Select all rows' }));
+    expect(status).toHaveTextContent('0 selected');
+  });
+
+  it('lets its built-in text be replaced, for translation', () => {
+    const { rerender } = render(
+      <Table
+        columns={columns}
+        data={[]}
+        getRowId={getRowId}
+        caption={<span>Personas</span>}
+        emptyHeadingLabel="Sin resultados"
+        emptyDescriptionLabel="Todavía no hay nada aquí."
+        scrollRegionLabel="Tabla"
+        getResizeLabel={(column) => `Cambiar el ancho de ${column}`}
+      />,
+    );
+
+    expect(screen.getByText('Sin resultados')).toBeInTheDocument();
+    expect(screen.getByText('Todavía no hay nada aquí.')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Tabla' })).toBeInTheDocument();
+    expect(screen.getByRole('separator', { name: 'Cambiar el ancho de Name' })).toBeInTheDocument();
+
+    rerender(<Table columns={columns} data={[]} getRowId={getRowId} caption={<span>People</span>} />);
+    expect(screen.getByText('No results')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Table' })).toBeInTheDocument();
+    expect(screen.getByRole('separator', { name: 'Resize Name' })).toBeInTheDocument();
   });
 });

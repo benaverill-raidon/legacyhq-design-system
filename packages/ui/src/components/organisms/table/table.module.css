@@ -161,8 +161,9 @@
   table-layout: fixed;
 }
 
-/* Visually-hidden accessible name for the table. */
-.caption {
+/* Visually hidden: the table's accessible name, and the live region announcing the selection count. */
+.caption,
+.announcer {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;

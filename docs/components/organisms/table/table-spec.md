@@ -57,7 +57,7 @@ and the default empty content is Table's own markup, not Empty State.
 ```text
 Table (div.table, data-size)
 ├─ div.header                                        [when title / description]
-│  ├─ h2.title (heading/lg)
+│  ├─ h{headingLevel}.title (heading/lg; h2 by default)
 │  └─ p.description (body/md, content/subtle)
 └─ div.tableBody (data-has-footer; no border/radius)
    ├─ div.toolbar                                     [when toolbar / search / toolbarActions / actions /
@@ -68,22 +68,24 @@ Table (div.table, data-size)
    │  │     ├─ span.selectionCount (selectionCountLabel)
    │  │     └─ div.bulkActions (bulkActions)
    │  └─ div.activeFiltersRow (div.activeFilters: activeFilters + Clear filters Button at the end)
+   ├─ span.announcer (role=status, aria-live=polite; visually hidden)  [when selectable, no `toolbar`]
    ├─ div.scroll (role=region, tabIndex 0, border-block-start)
    │  └─ table.grid (data-resized, data-has-editable-cells; caption = visually-hidden name; aria-busy while loading)
    │     ├─ colgroup                                       [once a column is resized or a row selected]
    │     ├─ thead.thead > tr
    │     │   ├─ th.selectHeaderCell (Checkbox select-all)     [when selectable]
-   │     │   └─ th.headerCell (scope=col, aria-sort; sortable → button.sortButton label + sort arrow;
-   │     │        span.resizeHandle role=separator at the trailing edge  [when resizable])
+   │     │   └─ th.headerCell (scope=col, aria-sort, aria-labelledby → its span.headerLabel, or
+   │     │        aria-label = headerLabel; sortable → button.sortButton label + sort arrow;
+   │     │        span.resizeHandle role=separator, aria-valuenow/min/max, at the trailing edge  [when resizable])
    │     └─ tbody
    │        ├─ tr.row (data-selected)
    │        │  ├─ td.selectCell (Checkbox)                   [when selectable]
    │        │  └─ td.cell (data-align, data-emphasis, data-editable; render(row) or row[key])
    │        ├─ skeleton rows                                  [when loading]
    │        └─ empty row (td.emptyCell colSpan) → `empty`, or div.emptyContainer
-   │             ("No results" + "There is nothing to show here yet.")  [when no rows]
-   └─ div.footer (role=navigation)  [when more than one page]
-      ├─ div.footerGroup: "Items per page:" + Select [when itemsPerPageOptions], range text
+   │             (emptyHeadingLabel + emptyDescriptionLabel)  [when no rows]
+   └─ div.footer (role=navigation)  [when more than one page, or itemsPerPageOptions]
+      ├─ div.footerGroup: itemsPerPageLabel ("Items per page:") naming its Select [when itemsPerPageOptions], range text
       └─ div.footerGroup: page Select, page-count text, div.footerNav (previous / next Icon Buttons)
 ```
 
@@ -114,22 +116,35 @@ Table (div.table, data-size)
   focus it and use ArrowLeft / ArrowRight. Hover shows a colour change on the handle; press/active
   extends it with 2px (--spacing-xxs) padding top and bottom. The first resize freezes every
   column's width (the grid becomes `table-layout: fixed`), so resizing one column doesn't reflow the
-  others and the widths persist across page/data changes. Opt out with `resizableColumns={false}` or
-  `column.resizable === false`.
+  others and the widths persist across page/data changes. A column is 64px at the least and the
+  scroll region's width at the most; the handle reports its width (`aria-valuenow`) from the first
+  render, with those bounds as `aria-valuemin` / `aria-valuemax`. Opt out with
+  `resizableColumns={false}` or `column.resizable === false`.
 - **Emphasis.** `column.emphasis='strong'` renders an identifier cell at the heading weight; other
   cells stay at the body weight.
 - **Pagination.** Client-side when `pageSize` is set (Table slices + owns the page); server-driven
-  when `manualPagination` (Table shows `pageCount` pages). The footer renders only when there's more
-  than one page, so choosing a page size that fits every row also hides the page-size Select. With
-  `manualPagination`, the default range text is computed as 1 to `totalItems` (or the row count)
-  whatever the page. `onPageSizeChange` reports a pick; the consumer updates `pageSize`.
+  when `manualPagination` (Table shows `pageCount` pages). The footer renders when there's more than
+  one page or when `itemsPerPageOptions` is set, so choosing a page size that fits every row keeps
+  the page-size Select. The range is the page's first row to its last: `(page - 1) * pageSize + 1` to
+  that plus the rows shown, minus one, capped at the total (`0–0` with no rows). With
+  `manualPagination`, pass `pageSize` and `totalItems`; without `pageSize` the rows passed count as one
+  page. `onPageSizeChange` reports a pick; the consumer updates `pageSize`.
 - **Search.** `searchable` renders a search Icon Button that expands into a 280px Text Field and
-  focuses it; the field collapses on blur when `searchValue` is empty, and its clear button shows only
-  when `searchValue` is non-empty. Table never filters `data`. Search is effectively controlled:
-  without `searchValue` the clear button never shows and the field collapses on every blur.
-- **Footer text.** Every piece of it is a prop with an English default, so it can be translated:
-  `paginationLabel`, `itemsPerPageLabel`, `getRangeLabel(start, end, total)`, `pageLabel`,
-  `getPageCountLabel(pageCount)`, `previousPageLabel`, and `nextPageLabel`.
+  focuses it; the field collapses on blur when the search text is empty, and its clear button shows
+  only when it isn't. Table never filters `data`. The text is uncontrolled by default (Table keeps it;
+  `defaultSearchValue` starts it, and the field starts open when that isn't empty) or controlled with
+  `searchValue`; `onSearchChange` reports every change either way.
+- **Selection announcement.** While Table shows its own selection bar (`selectable`, no `toolbar`), a
+  visually hidden polite live region announces `selectionCountLabel(count)` when the count changes,
+  including to 0, but not on the first render.
+- **Built-in text.** Every piece of it is a prop with an English default, so it can be translated:
+  `paginationLabel`, `itemsPerPageLabel` (shown as given; the default "Items per page:" carries its
+  colon), `getRangeLabel(start, end, total)`, `pageLabel`, `getPageCountLabel(pageCount)` ("of 1 page",
+  "of 5 pages"), `previousPageLabel`, `nextPageLabel`, `getResizeLabel(columnLabel)`,
+  `emptyHeadingLabel`, `emptyDescriptionLabel`, and `scrollRegionLabel`.
+- **Column header names.** Each `th` is named by its label alone (`aria-labelledby` its label span, or
+  `aria-label` = `headerLabel`), so the resize handle's name inside it isn't read as part of each
+  cell's column. A sort button is named by the same label; the sort state is `aria-sort` on the `th`.
 - **Toolbar.** Row 1: a right-aligned button group - search, then `toolbarActions` Icon Buttons,
   then `actions` - or the selection bar while rows are selected. Row 2: `activeFilters` (Chip
   `mode="filter"` pills + an optional "+" add-filter Icon Button) + a "Clear filters" Button
@@ -137,8 +152,8 @@ Table (div.table, data-size)
   both rows, including the selection bar. The scroll region's top border separates the toolbar from
   the grid.
 - **States.** `loading` → skeleton rows + `aria-busy`; empty `data` → the `empty` slot (default: a
-  "No results" heading and "There is nothing to show here yet." on `--color-elevation-surface-deep-default`;
-  that text isn't a prop).
+  "No results" heading and "There is nothing to show here yet." on `--color-elevation-surface-deep-default`,
+  from `emptyHeadingLabel` and `emptyDescriptionLabel`).
 
 ---
 
@@ -239,12 +254,18 @@ that context. Text uses InlineEdit + TextField; the other three render their own
   `manualSort`, which only fires `onSortChange`).
 - `selectable` adds a Checkbox column with a header select-all that goes indeterminate; selection is
   controllable.
-- `pageSize` paginates client-side; `manualPagination` shows `pageCount` pages; search is controlled.
+- `pageSize` paginates client-side; `manualPagination` shows `pageCount` pages, with the range text
+  placed by `page` and `pageSize`; the footer stays while there are page sizes to pick from.
+- Search works uncontrolled (`defaultSearchValue`) or controlled (`searchValue`).
+- Column headers are named by their label alone; resize handles report value, minimum, and maximum
+  from the start; selection count changes are announced politely; `title` renders at `headingLevel`.
 - `loading` shows skeleton rows + `aria-busy`; an empty data set shows the empty slot.
 - Rows have no click behavior; selection is checkbox-only.
 - Composes `className` + `data-size`; uses only semantic tokens; works in light and dark themes.
 - Storybook includes Basic, Sortable, Selectable, Pagination, Sizes, WithToolbar, Loading, Empty, and
   FullShell.
 - Tests cover render/default+custom cell, sort (client + manual), selection + select-all/indeterminate +
-  checkbox-only, the selection bar, resize handles, emphasis, client pagination, loading, empty,
-  search, toolbar slots, footer text props, and size/className.
+  checkbox-only, the selection bar and its announcement, resize handles and their values, column
+  header names, emphasis, client and manual pagination ranges, the one-page footer, loading, empty,
+  controlled and uncontrolled search, toolbar slots, built-in text props, heading level, and
+  size/className.

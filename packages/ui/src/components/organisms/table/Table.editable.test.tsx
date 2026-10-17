@@ -23,7 +23,7 @@ describe('Table editable cells', () => {
     expect(screen.getByLabelText('Cell').parentElement).toHaveAttribute('data-editable-cell', size);
     expect(screen.getByLabelText('Cell').parentElement).toHaveAttribute('data-context', 'inline');
     for (const name of ['Standalone', 'Regular', 'Search']) {
-      expect(screen.getByLabelText(name).parentElement).not.toHaveAttribute('data-editable-cell');
+      expect(screen.getByLabelText(name, { selector: 'input' }).parentElement).not.toHaveAttribute('data-editable-cell');
     }
   });
 
@@ -41,7 +41,7 @@ describe('Table editable cells', () => {
         ]} />;
     }
     render(<Example />);
-    const input = screen.getByLabelText('Name');
+    const input = screen.getByLabelText('Name', { selector: 'input' });
     act(() => input.focus());
     fireEvent.change(input, { target: { value: 'Planning' } });
     const cancel = screen.getByRole('button', { name: 'Cancel' });
@@ -98,13 +98,13 @@ describe('Table editable cells', () => {
       { key: 'time', header: 'Time', cellAppearance: 'editable', render: () =>
         <TimePicker aria-label="Time" value={new Date(2026, 2, 9, 16, 30)} onChange={timeChange} /> },
     ]} />);
-    const date = screen.getByLabelText('Date');
+    const date = screen.getByLabelText('Date', { selector: 'input' });
     fireEvent.click(date.parentElement!);
     expect(date.parentElement).toHaveAttribute('data-force-state', 'focus');
     expect(screen.getByRole('dialog').querySelector('[data-editable-cell]')).toBeNull();
     fireEvent.click(screen.getByRole('grid').querySelector('button[tabindex="0"]')!);
     expect(dateChange).toHaveBeenCalledTimes(1);
-    const time = screen.getByLabelText('Time');
+    const time = screen.getByLabelText('Time', { selector: 'input' });
     fireEvent.click(time.parentElement!);
     fireEvent.click(within(screen.getByRole('listbox', { name: 'Hours' })).getByRole('option', { name: '05' }));
     expect(time.parentElement).toHaveAttribute('data-force-state', 'focus');

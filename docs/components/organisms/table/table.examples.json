@@ -23,7 +23,7 @@
     },
     {
       "name": "Server-driven (manual sort + pagination)",
-      "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
+      "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  pageSize={pageSize}\n  totalItems={totalCount}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
       "props": { "manualSort": true, "manualPagination": true }
     },
     {

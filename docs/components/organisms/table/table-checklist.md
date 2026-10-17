@@ -91,11 +91,12 @@ Yes - a real `<table>` with `thead`/`tbody`/`th scope="col"`/`td` and a visually
 
 ### Is sorting accessible?
 Yes - sortable headers set `aria-sort` (ascending/descending/none) and wrap the label in a `<button>`
-labelled "Sort by {column}".
+named by the column's label. Each header cell is named by its label alone, so the resize handle inside
+it isn't read with every cell.
 
 ### Is selection accessible?
 Yes - real Checkboxes; the header select-all is labelled and goes indeterminate for a partial
-selection.
+selection. Changes to the selected count are announced in a polite live region.
 
 ### Can it be operated by keyboard?
 Yes - toolbar controls, sort buttons, checkboxes, in-cell controls, and pagination are all reachable;
@@ -118,7 +119,8 @@ Give the table an accessible name; pass a stable `getRowId` when selecting; keep
 Column-config driven (`columns` + `data`); cells render arbitrary content via `column.render` rather
 than a component-per-content-type. Batteries-included but controllable: sorting and selection are
 owned by default with controlled overrides; pagination is client-side (`pageSize`) or server-driven
-(`manualPagination`); search is controlled. Columns resize by default (drag / Arrow keys). Selection
+(`manualPagination`); search is uncontrolled by default or controlled with `searchValue`. Columns
+resize by default (drag / Arrow keys); each handle reports its width from the start. Selection
 is checkbox-only (rows are never clickable); selecting rows shows a selection bar (count +
 `bulkActions`) in place of the toolbar's buttons. Follow the interaction rules: checkbox = selection, Link = navigation (strong Link for
 the identifier, default for other entity links), Button = action; in-row controls act independently.

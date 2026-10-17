@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "status": "draft",
     "owner": "LegacyHQ Design System",
-    "lastReviewed": "2026-10-13",
+    "lastReviewed": "2026-10-17",
     "appliesTo": [
         "components"
     ],
@@ -27,7 +27,9 @@
                 "prop": "disabled",
                 "example": "Checkbox, Switch, Radio, Button, IconButton"
             },
-            "knownViolations": []
+            "knownViolations": [
+                "Link Button takes isDisabled: an anchor has no native disabled attribute, so it removes the href and sets aria-disabled instead. Kept deliberately."
+            ]
         },
         {
             "id": "is-prefix-scope",
@@ -42,7 +44,8 @@
                 "examples": [
                     "isLoading (Button, IconButton) — no native equivalent",
                     "isFullWidth (Button) — no native equivalent",
-                    "disabled (Checkbox, Switch, Radio, Button, IconButton) — native attribute, not isDisabled"
+                    "disabled (Checkbox, Switch, Radio, Button, IconButton) — native attribute, not isDisabled",
+                    "disabled (Toggle Button, Toggle Icon Button, Tag, Avatar) since 2026-10-13..17; their isDisabled is a deprecated alias"
                 ]
             }
         },
@@ -58,12 +61,14 @@
             "correct": {
                 "examples": [
                     "tone (meaning): Button, Badge, Label, Inline Message, Banner, Section Message, Toast, Modal Dialog, Tag, Icon Tile",
-                    "appearance (style): Link, Icon Tile (default | bold), Skeleton, Progress Indicator"
+                    "appearance (style): Link, Icon Tile (default | bold), Skeleton, Progress Indicator, Tabs (line | contained), Empty State (inherited | informative)"
                 ]
             },
             "knownViolations": [
                 "Toggle Button and Toggle Icon Button use `tone` (default | subtle) for visual style; kept by decision on 2026-10-13, and named the same in Figma.",
-                "Icon Button, Link Button, and Split Button still take the legacy `appearance` (default | primary | subtle) while Figma has moved them to `tone` + `prominence`; part of the pending Button-family revision."
+                "Icon Button, Link Button, and Split Button still take the legacy `appearance` (default | primary | subtle) while Figma has moved them to `tone` + `prominence`; part of the pending Button-family revision.",
+                "Tag’s tone holds accent colors with no fixed meaning (blue, green, purple, …), which by this rule is appearance. Not yet decided: rename in code and Figma, or keep as Toggle Button’s is kept.",
+                "Split Button’s tone reaches only its main action (Icon Button has no tone yet), so the two halves can disagree. Waiting on the Button-family revision."
             ]
         },
         {
@@ -73,7 +78,7 @@
             "description": "A component that renders differently inside another one takes `context: 'default' | 'inline'`. `inline` is the chromeless, in-a-row presentation (Figma's `context=inline`).",
             "correct": {
                 "examples": [
-                    "Field, Text Field, Text Area, Select, Date Picker, Time Picker, Date Time Picker",
+                    "Field, Text Field, Text Area, Rich Text Area, Select, Date Picker, Time Picker, Date Time Picker",
                     "Field and the pickers pass their context to their control; Table's editable cells force it to inline."
                 ]
             },
@@ -105,11 +110,14 @@
             "correct": {
                 "examples": [
                     "closeLabel, dismissLabel, clearSearchLabel, previousPageLabel, statusLabel, newTabLabel",
-                    "getRangeLabel(start, end, total), getPageCountLabel(pageCount), selectionCountLabel(count)"
+                    "getRangeLabel(start, end, total), getPageCountLabel(pageCount), selectionCountLabel(count)",
+                    "searchLabel (Menu, Table), getStepLabel (Progress Indicator), requiredLabel (Checkbox Group), selectedLabel / getPresenceLabel / getStatusLabel (Avatar), unnamedLabel (Avatar Group), labelText (Chip)",
+                    "dialogLabel (Date Picker, Time Picker), amLabel / pmLabel (Time Picker)"
                 ]
             },
             "knownViolations": [
-                "Chip names its remove control `removeAriaLabel` where the convention is `removeLabel` (Tag)."
+                "Chip names its remove control `removeAriaLabel` where the convention is `removeLabel` (Tag).",
+                "Select names its chips’ remove buttons in English (Remove <label>). Form’s required legend (“indicates a required field”) is hard-coded. Date Time Picker can’t pass its halves’ labels through (dialogLabel, amLabel, pmLabel, Confirm/Cancel, column and month names)."
             ]
         },
         {
@@ -122,7 +130,8 @@
                     "Toast and Inline Message accept `info` for `information`",
                     "Banner, Section Message, Toast, and Modal Dialog accept `appearance` for `tone`",
                     "Text Field, Text Area, and Select accept `appearance` / `tone` (subtle, inline) for `context`",
-                    "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`"
+                    "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`",
+                    "Toggle Button, Toggle Icon Button, Tag, and Avatar accept isDisabled for disabled; Rich Text Area accepts appearance for context; Tabs accepts type for appearance; Empty State accepts type for appearance; Breadcrumbs, Pagination, and Badge accept ariaLabel (Badge: for label)"
                 ]
             },
             "knownViolations": []

@@ -165,22 +165,10 @@
     "purpose": "Surfaces real content gaps (not shape drift) as a queryable signal instead of only living in prose a reader might skip.",
     "knownContentGaps": [
       {
-        "component": "Avatar",
-        "file": "docs/components/atoms/avatar/avatar.contract.json",
-        "issue": "4 top-level keys only (name, anatomy, props, tokens) - missing purpose, useCases, states, accessibility, behaviorRules, do/dont, acceptanceCriteria entirely.",
-        "resolution": "Author the missing sections from the real avatar.tsx behavior next time Avatar is substantively touched. Not something the registry generator can or should paper over - filling this in requires real component analysis, not normalization."
-      },
-      {
-        "component": "Tooltip",
-        "file": "docs/components/atoms/tooltip/tooltip.contract.json",
-        "issue": "11 top-level keys - missing useCases, props (!), sizes, slots, do/dont, acceptanceCriteria.",
-        "resolution": "Same as Avatar - author when next substantively touched."
-      },
-      {
         "component": "IconButton",
         "file": "docs/components/atoms/icon-button/icon-button.contract.json",
         "issue": "12 top-level keys - missing tokens entirely, plus useCases, do/dont, acceptanceCriteria.",
-        "resolution": "Same as Avatar - author when next substantively touched."
+        "resolution": "Author the missing sections from the real icon-button.tsx behavior when Icon Button is next substantively touched (Avatar and Tooltip were filled in on 2026-10-17, during the Docs page rollout)."
       }
     ]
   },

@@ -34,6 +34,7 @@ interface ChipSegment {
   label: React.ReactNode;
   sections: MenuSection[];
   menuAriaLabel?: string;
+  tooltip?: React.ReactNode; // known bug: see "Dropdown segments"
 }
 
 // shared by all modes
@@ -241,9 +242,8 @@ Figma models **no** selected+disabled chip-base variant, so disabled fully overr
 (including resetting the border to `color-border-input`) rather than blending them - the precedent
 Toggle Button and Toggle Icon Button already set for that same gap.
 
-`chip-base`'s `tone` axis (default/error/warning/success/information) is deliberately unexposed: all
-14 chip variants use `tone=default`, so any chip-level tone mapping would be extrapolated from the
-part rather than verified.
+`chip-base`'s `tone` axis was dropped in Figma's 2026-08-27 simplification, and every chip variant
+used `tone=default` before that, so Chip has no `tone` prop.
 
 ## Dropdown segments
 
@@ -254,7 +254,24 @@ shared flag on Chip would make them fight.
 `showSearch` is hardcoded `false`, matching Figma's own chip dropdown instances. Panel accessible
 names default to `${label} operator` / `${label} value` (composed from the property name and the
 segment's role) because the segment's own label is the current *value* - naming a panel "on" or
-"March 2" says nothing about what choosing from it does. `ChipSegment.menuAriaLabel` overrides it.
+"March 2" says nothing about what choosing from it does. `ChipSegment.menuAriaLabel` overrides it. With a non-string `label` there is no default name, so pass
+`menuAriaLabel`.
+
+**Known bug: `ChipSegment.tooltip`.** The segment then passes a `Tooltip` element to Dropdown Menu as
+its trigger. Popup clones that element with its ref and `aria-expanded`/`aria-controls`, and Tooltip
+drops all three: the trigger button gets no `aria-expanded`, and Popup has no element to measure, so
+the panel opens with `visibility: hidden` and never shows (checked in the running Storybook,
+2026-10-16).
+
+Since Dropdown Menu's focus fix (74c4b77), choosing a menu item runs the item's `onSelect`, then
+closes the menu and returns focus to the segment (an `onSelect` calling `preventDefault()` keeps it
+open); opening moves focus to the first row, and Escape or Tab out returns focus to the segment. With
+a `tooltip`, the trigger ref is still lost, so none of this focus handling can reach the segment.
+
+**Long text doesn't truncate.** `.label`/`.segmentLabel` set `overflow: hidden; text-overflow:
+ellipsis`, but the segments keep `min-inline-size: auto`, so the chip never shrinks below its text
+width: in the 320px EdgeCases container a long filter chip runs past the edge instead of ending in an
+ellipsis.
 
 ## Accessibility
 
@@ -335,6 +352,6 @@ tooltip: keeps aria-label as the accessible name
 
 - Expose `tone` once a real Figma chip variant uses a non-default tone.
 - An `isRemovable={false}` escape hatch, if a real non-removable filter/select appears.
-- A `ChipGroup`, if filter bars need Tag Group's truncation behavior.
+- Truncation in Chip Group, if filter bars need Tag Group's "+N more" behavior.
 
 Do not implement these unless requested.

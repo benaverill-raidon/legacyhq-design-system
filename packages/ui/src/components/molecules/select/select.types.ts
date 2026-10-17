@@ -16,13 +16,16 @@ export interface SelectOption {
   icon?: React.ReactNode;
   /** Optional secondary text under the label in the option row. */
   description?: React.ReactNode;
+  /** Shows the row but it can't be chosen, and the arrow keys skip it. */
   disabled?: boolean;
   /** Optional group heading; consecutive options sharing a group render under one section heading. */
   group?: string;
 }
 
 interface SelectCommonProps {
+  /** The options, in order. Options with the same `group` in a row are listed under one heading. */
   options: SelectOption[];
+  /** The field's height: `sm` (32px), `md` (40px), or `lg` (48px). Multi-select chips are `sm`, or `md` in an `lg` field. */
   size?: SelectSize;
   /** `default` (bordered) or `inline` (chromeless until hovered or focused), as Text Field's. Defaults to `default`. */
   context?: SelectContext;
@@ -32,19 +35,22 @@ interface SelectCommonProps {
   appearance?: SelectTone;
   /** Placeholder shown when nothing is selected. */
   placeholder?: string;
+  /** Disables the input with the native attribute: it can't open, and multi-select chips can't be removed. */
   disabled?: boolean;
   /** Renders the invalid treatment (red border) and sets aria-invalid on the input. */
   invalid?: boolean;
   /**
-   * Controlled search text. Omit to let Select manage typeahead itself; provide it (with
-   * onSearchChange) to control filtering externally - e.g. async option loading.
+   * Controlled search text, shown in the input while the menu is open. Omit it to let Select keep the
+   * text itself. Pair it with `onSearchChange` to filter externally, e.g. for async option loading.
    */
   searchValue?: string;
+  /** Called with the typed text. While it's set, Select stops filtering the options itself: pass the matching ones. */
   onSearchChange?: (value: string) => void;
   /** Shown in the panel when the query matches no options. */
   emptyMessage?: React.ReactNode;
   /** Accessible name for the trigger input; use when there is no visible <label> wired by id. */
   'aria-label'?: string;
+  /** Ids of elements that name the input and the menu. Field passes its label's id. */
   'aria-labelledby'?: string;
   /** Ids of elements that describe the input, such as Field's message. */
   'aria-describedby'?: string;
@@ -52,21 +58,29 @@ interface SelectCommonProps {
   'aria-invalid'?: boolean | 'true' | 'false';
   /** Sets the input's native `required`. Field passes it when its `required` is set. */
   required?: boolean;
+  /** Set on the input, so a native `label` can point at it. Field passes one. */
   id?: string;
+  /** Added to the field frame's classes. */
   className?: string;
 }
 
 /** Single-select: one value, chosen from radio rows; the trigger shows the selected label. */
 export interface SelectSingleProps extends SelectCommonProps {
+  /** `single`, the default: one value, chosen from radio rows. */
   inputType?: 'single';
+  /** The chosen option's `value`, or `null` for none. */
   value: string | null;
+  /** Called with the option chosen. Select never clears the value itself. */
   onChange: (value: string | null) => void;
 }
 
 /** Multi-select: an array of values, chosen from checkbox rows; the trigger shows removable chips. */
 export interface SelectMultiProps extends SelectCommonProps {
+  /** `multi`: several values, chosen from checkbox rows and shown as chips. */
   inputType: 'multi';
+  /** The chosen options' values, in the order they were chosen. */
   value: string[];
+  /** Called with the next array when a row is toggled, a chip is removed, or Backspace removes the last chip. */
   onChange: (value: string[]) => void;
 }
 

@@ -48,10 +48,10 @@ Molecule
 InlineEdit
 └─ div (root, column layout, no visual chrome of its own)
    ├─ div.content (full width, holds the cloned child - read-only or editable depending on state)
-   └─ span.actions (optional, only once editing has started && actionButtons; below content,
-      right-aligned)
-      ├─ IconButton (cancel/close)
-      └─ IconButton (confirm/check)
+   └─ ButtonGroup.actions (optional, only once editing has started && actionButtons; absolutely
+      positioned below the field at its trailing edge, or past that edge with actionPlacement="end")
+      ├─ IconButton (cancel/close), size xs
+      └─ IconButton (confirm/check), size xs
 ```
 
 ### Structure Notes
@@ -75,10 +75,12 @@ consumer would want to render the confirm/cancel buttons before the field is int
 
 Figma's literal `state=edit` layout puts the action buttons trailing in the *same row* as the field,
 which means the field has to shrink to make room for them once editing starts. Per explicit design
-feedback, this implementation instead stacks the action row *below* the field (`flex-direction:
-column`, action row `align-self: flex-end` to stay anchored to the trailing/right edge) - the field
-keeps its full width whether or not it's being edited, and the layout never shifts the field's own
-size when the action buttons appear.
+feedback, this implementation instead floats the action row: it's absolutely positioned 8px
+(`--spacing-sm`) below the field at its trailing edge, or with `actionPlacement="end"` 8px past the
+field's trailing edge (centered on it, or with `actionAlignment="start"` held at the first line's
+control height so it stays put as a multi-line field grows). The field keeps its full width whether
+or not it's being edited, the layout never shifts, and the buttons float over whatever sits below or
+beside the field, so the container has to leave room for them.
 
 Figma's `state=default` variant contains no read-mode UI at all - not even a text value or an edit
 trigger. Rather than invent a separate one, Inline Edit clones the *same* single child for both
@@ -158,6 +160,8 @@ Not applicable - Inline Edit has no text content of its own.
 | onConfirm | `(value: string) => void` | No | undefined |
 | onCancel | `() => void` | No | undefined |
 | actionButtons | boolean | No | `true` |
+| actionPlacement | `'below' \| 'end'` | No | `'below'` |
+| actionAlignment | `'center' \| 'start'` | No | `'center'` |
 | confirmLabel | string | No | `'Confirm'` |
 | cancelLabel | string | No | `'Cancel'` |
 | className | string | No | undefined |
@@ -178,8 +182,11 @@ Inline Edit, not the consumer, renders those buttons.
 - `Tab` then reaches the cancel button, then the confirm button, in that order (matching the
   trailing button-group's own internal order confirmed from Figma: close/cancel first, check/confirm
   second).
-- `Enter` calls `onConfirm` with the current draft while editing, from anywhere inside the root, then
-  blurs the field (deselecting it).
+- `Enter` calls `onConfirm` with the current draft while editing a single-line field, then blurs the
+  field (deselecting it). In a textarea, `Enter` adds a line and `Ctrl`/`Cmd`+`Enter` confirms. On a
+  focused cancel/confirm button, `Enter` activates that button instead.
+- Tabbing through the field and both buttons without typing still calls `onConfirm` (with the
+  unchanged value) when focus leaves the root.
 - `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root, then
   blurs the field (deselecting it).
 - `Tab`-ing (or clicking) away from the field to anywhere *outside* Inline Edit while editing also
@@ -198,17 +205,20 @@ Inline Edit, not the consumer, renders those buttons.
 ## Design Tokens
 
 ### Spacing
-Gap between the content row and the action row is `--spacing-sm` (8px). Gap between the two action
-buttons themselves is also `--spacing-sm` (8px), matching the Button Group standard. (This was
-updated from the original `--spacing-xs`/4px Figma `itemSpacing`; keep the code and Figma in sync.)
+The action row floats `--spacing-sm` (8px) from the field: below it, or past its trailing edge with
+`actionPlacement="end"`. The gap between the two action buttons is `--spacing-xs` (4px), matching
+Figma's `itemSpacing: 4`; `.root .actions` overrides Button Group's default 8px.
 
 ### Layout
 The root diverges from Figma's own single-row layout, per explicit design feedback: `display: flex`,
 `flex-direction: column`, `align-items: stretch`, so the field always keeps its full width instead
 of sharing a row with (and shrinking to make room for) the action buttons. The content area is
-`inline-size: 100%`; the action row sits below it and is `align-self: flex-end`, anchoring the
-confirm/cancel pair to the trailing/right edge of the field rather than Figma's literal
-same-row-trailing placement. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
+`inline-size: 100%`; the action row is absolutely positioned (`z-index: 1`) below the field at its
+trailing edge, or past that edge with `actionPlacement="end"`, rather than Figma's literal
+same-row-trailing placement. Inside a Table's editable cell (`data-editable-cell`), the read-only
+child gets an edit icon in `iconAfter` and starts editing on click too; while editing, the actions
+sit inside the cell at its trailing edge, vertically centered, the child reserves padding for them,
+and it shows a focus-colored bottom line. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
 `TextField`'s own convention of filling its container by default.
 
 No color, radius, or typography tokens are owned by Inline Edit itself - all visual styling comes
@@ -236,7 +246,9 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 ## Dependencies
 
 ### Uses
-- Icon Button (atom) - the confirm/cancel actions, `size="sm"`, default `shape`/`appearance`
+- Icon Button (atom) - the confirm/cancel actions, `size="xs"`, `appearance="default"`, repainted
+  with the neutral-subtle fill
+- Button Group (molecule) - holds the action pair (a documented tier exception)
 - Text Field (molecule) - the most common cloned control today, typically `context="inline"`
 
 ### Used By
@@ -274,8 +286,8 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 - [ ] The field keeps its full width whether or not the action row is showing (never shrinks to make
       room for the buttons)
 - [ ] `actionButtons={false}` hides the icon-button pair while still editing
-- [ ] Gap between the field and the action row matches `--spacing-sm` (8px); gap between the two
-      action buttons themselves also matches `--spacing-sm` (8px)
+- [ ] The action row floats `--spacing-sm` (8px) from the field; the gap between the two action
+      buttons is `--spacing-xs` (4px)
 - [ ] Light mode works
 - [ ] Dark mode works
 

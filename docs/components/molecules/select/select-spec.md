@@ -55,7 +55,10 @@ interface SelectCommonProps {
   onSearchChange?: (value: string) => void;
   emptyMessage?: React.ReactNode;
   'aria-label'?: string;
-  'aria-labelledby'?: string;
+  'aria-labelledby'?: string;   // passed to the input and the Menu
+  'aria-describedby'?: string;  // Field's message
+  'aria-invalid'?: boolean | 'true' | 'false';
+  required?: boolean;
   id?: string;
   className?: string;
 }
@@ -139,8 +142,15 @@ design.
   `aria-expanded`/`aria-controls` on it.
 - **Open** on click, typing, or ArrowDown. Focus stays in the input.
 - **ArrowDown** (when open) moves focus into the Menu; its roving tabindex takes over.
-- **Type** filters; **Escape** / outside-click closes and returns focus to the input.
-- **single**: choosing a row calls `onChange(value)` and closes; the trigger shows the label.
+- **Type** filters; **Escape** / outside-click closes. Focus isn't moved: if it was in the Menu, the
+  Menu unmounts and focus falls to the page. `handleOpenChange`'s comment says it returns focus to the
+  input, but the code only returns early (known bug).
+- **Enter** opens a closed field; **Space** does too when the query is empty.
+- **single**: choosing a row calls `onChange(value)` and closes; the trigger shows the label. Focus
+  isn't returned to the input, so after a pick from the Menu it falls to the page (known bug). Select
+  never calls `onChange(null)`; clearing a single value is up to the consumer.
+- **While open**, the single trigger's input is the query field: it's emptied, and the current label
+  is shown as its placeholder.
 - **multi**: choosing toggles the value, keeps the panel open, clears the query; values are removable
   chips. **Backspace** on an empty query removes the last chip.
 

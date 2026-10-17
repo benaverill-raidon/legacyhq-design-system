@@ -223,5 +223,5 @@ Final implementation decisions:
 - [ ] Both sizes across all three modes
 - [ ] A live, selectable scope row
 - [ ] A realistic, removable filter bar
-- [ ] Long label/value truncation
+- [ ] Long label/value truncation (known bug: segments don't shrink, so the chip overflows a narrow container)
 - [ ] Dark surface

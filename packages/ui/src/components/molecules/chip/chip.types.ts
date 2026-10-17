@@ -25,7 +25,9 @@ interface ChipCommonProps {
   size?: ChipSize;
   /** Disables every segment at once (native `disabled` on each real control). */
   disabled?: boolean;
+  /** Set on the root `div`. */
   id?: string;
+  /** Added to the root `div`'s classes. */
   className?: string;
 }
 
@@ -37,7 +39,10 @@ export interface ChipSegment {
   sections: MenuSection[];
   /** Accessible name for this segment's own menu panel. */
   menuAriaLabel?: string;
-  /** Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context. */
+  /**
+   * Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context.
+   * Known bug: with a tooltip, the segment's menu opens hidden and the segment loses `aria-expanded`.
+   */
   tooltip?: React.ReactNode;
 }
 
@@ -50,6 +55,7 @@ export interface ChipSegment {
  * consumer holding the state, the same way Toggle Button works.
  */
 export interface ChipSearchProps extends ChipCommonProps {
+  /** `search`: a selectable search scope. The label segment is a toggle button. */
   mode: 'search';
   /** Selected search chips carry the `selected` token family; unselected ones read as a plain chip. */
   isSelected?: boolean;
@@ -68,10 +74,11 @@ export interface ChipSearchProps extends ChipCommonProps {
 /** `select` - one already-applied selection/property, with a remove affordance. No dropdowns. (This
  * is the chip a Select renders for each multi-select value.) */
 export interface ChipSelectProps extends ChipCommonProps {
+  /** `select`: one applied value, with a remove button. */
   mode: 'select';
   /** Every verified Figma `select` chip carries a remove button, so this is required. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string. */
+  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string, otherwise `Remove`. */
   removeAriaLabel?: string;
 }
 
@@ -80,6 +87,7 @@ export interface ChipSelectProps extends ChipCommonProps {
  * current value (each dropdown-backed), and a remove affordance.
  */
 export interface ChipFilterProps extends ChipCommonProps {
+  /** `filter`: an active filter, with a value menu, an optional operator menu, and a remove button. */
   mode: 'filter';
   /**
    * Filter chips exist only at `md` in Figma - the `sm` filter variants were removed (`select` and
@@ -98,7 +106,9 @@ export interface ChipFilterProps extends ChipCommonProps {
   operator?: ChipSegment;
   /** Preview of the current selection, rendered before the value text (an Avatar Group, status icons, ...). */
   valuePreview?: React.ReactNode;
+  /** Called when the remove button is activated. Chip doesn't remove itself: drop the filter here. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string, otherwise `Remove`. */
   removeAriaLabel?: string;
 }
 

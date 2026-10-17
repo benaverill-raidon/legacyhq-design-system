@@ -121,6 +121,7 @@ export const Alignment: Story = {
 /**
  * `size` reaches every Chip through context rather than by cloning children, so a Chip still inherits
  * it through a wrapper, a `.map`, or a conditional. Setting `size` on an individual Chip still wins.
+ * Filter chips are md only, so the sm group holds search and select chips.
  */
 export const Sizes: Story = {
   render: () => (
@@ -129,13 +130,7 @@ export const Sizes: Story = {
         <ChipGroup size="sm">
           <Chip mode="search" label="Matters" isSelected />
           <Chip mode="search" label="Documents" />
-          <Chip
-            mode="filter"
-            label="Status"
-            elemBefore={<TaskNotStartedIcon decorative />}
-            value={{ label: '2 statuses', sections: statusSections() }}
-            onRemove={() => {}}
-          />
+          <Chip mode="select" label="Trusts" onRemove={() => {}} />
         </ChipGroup>
       </Group>
       <Group title="size: md (32px) - default">

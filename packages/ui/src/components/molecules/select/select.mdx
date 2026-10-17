@@ -1,128 +1,388 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as React from 'react';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CodeSample,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { RadioGroup } from '../../atoms/radio';
+import { FormRow } from '../../organisms/form';
+import chipStyles from '../chip/chip.module.css';
+import { Field } from '../field';
+import { Select } from './select';
+import selectStyles from './select.module.css';
 import * as SelectStories from './Select.stories';
+
+export const statusOptions = [
+  { value: 'draft', label: 'Draft' },
+  { value: 'in-review', label: 'In review' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'filed', label: 'Filed' },
+  { value: 'archived', label: 'Archived' },
+];
+
+export const peopleOptions = [
+  { value: 'jordan', label: 'Jordan Ellis' },
+  { value: 'priya', label: 'Priya Nair' },
+  { value: 'sam', label: 'Sam Okafor' },
+  { value: 'mei', label: 'Mei Lin' },
+];
+
+export function StatusSelect({ placeholder, label = 'Matter status', initial = 'in-review', bare = false }) {
+  const [value, setValue] = React.useState(initial);
+  const select = <Select options={statusOptions} value={value} onChange={setValue} placeholder={placeholder} />;
+  return bare ? select : <Field label={label}>{select}</Field>;
+}
+
+export function AssigneeSelect() {
+  const [value, setValue] = React.useState(['jordan', 'priya']);
+  return (
+    <Field label="Assignees">
+      <Select inputType="multi" options={peopleOptions} value={value} onChange={setValue} placeholder="Add assignees" />
+    </Field>
+  );
+}
 
 <Meta of={SelectStories} name="Docs" />
 
-# Select
+<Unstyled>
+<ComponentPage>
 
-Select lets someone pick one option — or several — from a searchable list, shown in a field-styled
-trigger. It's a combobox: type to filter, then choose from a dropdown.
+<ComponentHeader
+  id="select"
+  example={
+    <FormRow>
+      <StatusSelect />
+      <AssigneeSelect />
+    </FormRow>
+  }
+>
+  Select lets someone choose one value, or several, from a list of options. It's a field they can
+  type in to filter the list, with the options in a menu below it.
+</ComponentHeader>
 
-<Canvas of={SelectStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Choosing from a medium-to-long list where type-to-filter helps: a status, a matter type, an
-  assignee.
-- Choosing several values at once — `inputType="multi"` shows them as removable chips.
+- Choosing one value from a list that's long enough to filter: a status, a matter type, a person.
+- Choosing several values from a list, shown as removable chips (`inputType="multi"`).
+- Editing a value in place in a row, such as a Table cell, with `context="inline"`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A short, always-visible exclusive set** → Radio.
-- **A binary on/off** → Switch or Checkbox.
-- **Free text with no fixed options** → TextField.
-- **A menu of actions, not values** → Dropdown Menu directly.
+- **A few options that should all be on view:** <DocLink to="Components/Forms/Radio" />, or <DocLink to="Components/Forms/Checkbox" /> for several.
+- **On or off:** <DocLink to="Components/Forms/Switch" /> or <DocLink to="Components/Forms/Checkbox" />.
+- **Free text with no fixed options:** <DocLink to="Components/Forms/Text Field" />.
+- **A date or a time:** <DocLink to="Components/Forms/Date Picker" /> or <DocLink to="Components/Forms/Time Picker" />.
+- **A menu of actions, not values:** <DocLink to="Components/Actions/Dropdown Menu" />.
 
-## Single vs multi
+</UseInstead>
+</Usage>
 
-Select's props are a discriminated union on `inputType` (default `single`), so single's scalar value
-and multi's array can't be crossed. Single shows the chosen label in the trigger; multi shows
-removable chips.
+</Section>
 
-<Canvas of={SelectStories.InputTypes} />
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <Select
+      inputType="multi"
+      options={peopleOptions}
+      value={['jordan', 'priya']}
+      onChange={() => {}}
+      aria-label="Assignees"
+    />
+  }
+>
+  <Part name="trigger" target={selectStyles.trigger}>A Text Field whose input is the combobox: it shows the chosen label, or the text being typed while the menu is open.</Part>
+  <Part name="chips" target={chipStyles.root}>Multi-select only. A removable select Chip for each chosen value, inside the field before the input.</Part>
+  <Part name="caret" target={selectStyles.caret}>A caret after the input that opens and closes the menu on click. It turns over while the menu is open.</Part>
+  <Part name="panel">A Dropdown Menu below the field, as wide as the field, listing the options. Shown only while open.</Part>
+</Anatomy>
 
-### Options are a flat list, not Menu sections
+</Section>
 
-Pass `SelectOption[]` — `{ value, label, icon?, description?, disabled?, group? }`. Select maps it
-into the Menu itself, owning each row's selected state, its radio (single) / checkbox (multi)
-semantics, and the typeahead filter. Grouping is automatic from each option's `group` field.
+<Section title="Variants">
 
-```tsx
-<Select
-  options={[
-    { value: 'trust', label: 'Trust', group: 'Estate' },
-    { value: 'will', label: 'Will', group: 'Estate' },
-    { value: 'llc', label: 'LLC formation', group: 'Business' },
-  ]}
-  value={value}
-  onChange={setValue}
+<Subsection title="Single and multi">
+
+`inputType` decides how many values someone can choose, and the props are typed by it: `value` is a
+string or `null` for `single`, the default, and an array for `multi`. A single-select field shows
+the chosen option's label, and its menu rows are radio rows. A multi-select field shows each chosen
+value as a select Chip before the input, and its rows are checkbox rows.
+
+<Example of={SelectStories.InputTypes} />
+
+</Subsection>
+
+<Subsection title="Sizes and context">
+
+Three heights: `sm` (32px), `md` (40px), and `lg` (48px), the same as Text Field. Chips are `sm` in
+an `sm` or `md` field and `md` in an `lg` one. `context` is Text Field's: `default` is the bordered
+field for forms, and `inline` has no border or fill until someone hovers or focuses it, for a field
+inside a row. Field passes `context="inline"` when it's inline. `tone` and `appearance` are older
+names for `context`, still accepted: `subtle` and `inline` both mean `inline`.
+
+<Example of={SelectStories.Variants} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Opening and filtering">
+
+A click anywhere on the field opens the menu, and the caret opens or closes it. Typing opens it too,
+and filters the options to those whose label contains the text, ignoring case. While the menu is
+open, a single-select field's input holds what's typed, with the current choice as its placeholder.
+When nothing matches, the menu shows `emptyMessage`, "No matches" by default.
+
+<Example of={SelectStories.Typeahead} caption="Type a name to filter; type something else to see the empty message." />
+
+</Subsection>
+
+<Subsection title="Choosing">
+
+In a single-select field, choosing a row calls `onChange` with its value and closes the menu.
+Choosing the chosen row again keeps it chosen: Select never clears a single value, so offer your
+own way to clear one if it's optional. In a multi-select field, choosing a row adds or removes its
+value, clears the typed text, and keeps the menu open. A chip's remove button removes its value, and
+Backspace in an empty input removes the last one.
+
+</Subsection>
+
+<Subsection title="Groups">
+
+Give options a `group`, and options with the same group in a row are listed under that heading. The
+headings are visual only.
+
+<Example of={SelectStories.Grouped} />
+
+</Subsection>
+
+<Subsection title="Your own filtering">
+
+With `onSearchChange`, Select stops filtering and calls it with the typed text, so you can pass the
+matching options yourself, such as results from a server. Pass `searchValue` too to control the text.
+
+<CodeSample code={`<Select
+    options={matches}
+    value={client}
+    onChange={setClient}
+    searchValue={query}
+    onSearchChange={setQuery}
+    aria-label="Client"
+/>`} />
+
+</Subsection>
+
+<Subsection title="States">
+
+`invalid` gives the field Text Field's error border and sets `aria-invalid`; in a Field with
+`state="error"`, Field sets it for you. `disabled` disables the input, so the menu can't open, and
+disables the chips' remove buttons.
+
+<Example of={SelectStories.States} />
+
+</Subsection>
+
+<Subsection title="Many values">
+
+The field stays one line high. When chips run out of room, they shrink and clip rather than wrap.
+
+<Example of={SelectStories.EdgeCases} caption="Edge cases: every value chosen, a disabled option, and a dark surface." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give Select a visible label with Field, which also names it and its menu."
+  code={`<Field label="Matter status">
+    <Select options={statusOptions} value={status} onChange={setStatus} />
+</Field>`}
+>
+  <StatusSelect />
+</Do>
+<Dont
+  caption="Use the placeholder as the label. It's gone once a value is chosen, and it isn't a name."
+  code={`<Select options={statusOptions} value={status} onChange={setStatus} placeholder="Matter status" />`}
+>
+  <StatusSelect bare initial={null} placeholder="Matter status" />
+</Dont>
+<Do
+  caption="Use Radio Group for two or three options that should all be on view."
+  code={`<RadioGroup label="Billing" options={billingOptions} value={billing} onValueChange={setBilling} />`}
+>
+  <RadioGroup
+    label="Billing"
+    name="select-docs-billing"
+    defaultValue="hourly"
+    options={[
+      { value: 'hourly', label: 'Hourly' },
+      { value: 'flat', label: 'Flat fee' },
+    ]}
+  />
+</Do>
+<Dont
+  caption="Hide two options behind a Select. It takes a click to see either."
+  code={`<Field label="Billing">
+    <Select options={[hourly, flatFee]} value={billing} onChange={setBilling} />
+</Field>`}
 />
-```
+<Do
+  caption="Use a Dropdown Menu for a list of actions."
+  code={`<DropdownMenu sections={matterActions} open={open} onOpenChange={setOpen} aria-label="Matter actions">
+    <Button isExpanded={open} onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`}
+/>
+<Dont
+  caption="Run actions from a Select's onChange. Its rows are announced as options to choose, not actions to run."
+  code={`<Select options={[{ value: 'archive', label: 'Archive' }, { value: 'delete', label: 'Delete' }]} value={null} onChange={runAction} />`}
+/>
+</Guidelines>
 
-<Canvas of={SelectStories.Grouped} />
+</Section>
 
-### Typeahead
+<Section title="Accessibility">
 
-Type in the trigger to filter. When the query matches nothing, the panel shows `emptyMessage`. To
-filter externally (async loading), pass `searchValue` + `onSearchChange` and Select stops filtering
-internally.
+- The trigger is a native `input` in Text Field's frame, with `role="combobox"`,
+  `aria-haspopup="menu"`, and `aria-autocomplete="list"`. Dropdown Menu sets `aria-expanded`, and
+  `aria-controls` pointing at the menu while it's open.
+- Name it with Field, which wires its label to the input, or with `aria-label` or
+  `aria-labelledby`. The same name is passed to the menu; with only a native `label`, the menu has no
+  name.
+- In a Field, the message is added to the input's description, and an error sets `aria-invalid`.
+  `required` sets the input's native `required`.
+- The menu is a Menu, announced as a menu, added at the end of the page. Rows are `menuitemradio`
+  in single-select and `menuitemcheckbox` in multi-select, with `aria-checked` on the chosen ones.
+  Group headings aren't announced.
+- Opening and typing keep focus in the input. Arrow Down moves focus into the menu's first row.
+  A multi-select pick returns focus to the input. A single-select pick, or Escape from inside the
+  menu, closes it without moving focus back, so focus falls to the page; that's a known bug.
+- Each chip's remove button is its own tab stop before the input, named "Remove" plus the value.
+- The caret is hidden from assistive technology and works only with a pointer; the keys below do
+  the same from the input.
+- `disabled` is the native attribute: the input and the chips' remove buttons leave the tab order.
 
-<Canvas of={SelectStories.Typeahead} />
+<Keyboard>
+  <Key keys="Tab">Moves to each chip's remove button, then to the input. A disabled field is skipped. Tabbing away from an open menu leaves it open until Escape or a click outside; that's a known bug.</Key>
+  <Key keys="Arrow Down">In the input, opens the menu; when it's open, moves into the first row. In the menu, moves to the next row, wrapping to the first.</Key>
+  <Key keys="Arrow Up">In the menu, moves to the previous row, wrapping to the last.</Key>
+  <Key keys="Home">In the menu, moves to the first row.</Key>
+  <Key keys="End">In the menu, moves to the last row.</Key>
+  <Key keys="Enter">In the input, opens a closed menu. On a row, chooses it.</Key>
+  <Key keys="Space">In the input, opens a closed menu when nothing's typed. On a row, chooses it.</Key>
+  <Key keys="Backspace">In an empty multi-select input, removes the last chosen value.</Key>
+  <Key keys="Escape">Closes the menu and clears the typed text.</Key>
+</Keyboard>
 
-### It's the menu accessibility pattern
+</Section>
 
-The input is `role="combobox"` with `aria-haspopup="menu"`; the panel is a `role="menu"` with
-`menuitemradio`/`menuitemcheckbox` rows. This matches Figma's own composition (a text input opening a
-dropdown-menu) and reuses Menu wholesale. Opening keeps focus in the input; ArrowDown moves into the
-menu; Escape returns focus to the input. It is deliberately not a strict combobox/listbox with
-`aria-activedescendant` — see the spec.
+<Section title="API">
 
-## Sizes, contexts, states
+Select's props are a union typed by `inputType`, and the generated table can't list them yet:
+Storybook's docgen skips a union of props types. Until it can, these are the props, from
+select.types.ts.
 
-`size` sets the trigger height (32/40/48), the panel width, and the chip size together. `context` is
-the same axis as TextField's: `inline` is chromeless until hovered or focused, for a field inside a
-row.
+<PropsTable of={SelectStories} />
 
-<Canvas of={SelectStories.Variants} />
+<CodeSample code={`// Both input types
+options: SelectOption[];             // required
+size?: 'sm' | 'md' | 'lg';           // default 'md'
+context?: 'default' | 'inline';      // default 'default'
+placeholder?: string;
+disabled?: boolean;
+invalid?: boolean;                   // sets aria-invalid on the input
+searchValue?: string;                // controls the typed text
+onSearchChange?: (value: string) => void;  // while set, Select doesn't filter
+emptyMessage?: React.ReactNode;      // default 'No matches'
+'aria-label'?: string;
+'aria-labelledby'?: string;          // passed to the input and the menu
+'aria-describedby'?: string;
+'aria-invalid'?: boolean | 'true' | 'false';
+required?: boolean;
+id?: string;                         // on the input
+className?: string;                  // added to the field frame
 
-<Canvas of={SelectStories.States} />
+// inputType="single" (the default)
+value: string | null;                // required
+onChange: (value: string | null) => void;  // required
 
-## Do / Don't
+// inputType="multi"
+inputType: 'multi';
+value: string[];                     // required
+onChange: (value: string[]) => void; // required
 
-**Do** give the combobox an accessible name.
+// Each option
+{ value: string; label: string; icon?: React.ReactNode; description?: React.ReactNode;
+  disabled?: boolean; group?: string }
 
-```tsx
-<Select options={options} value={value} onChange={setValue} aria-label="Matter status" />
-```
+// Deprecated, still accepted: use context
+tone?: 'default' | 'subtle' | 'inline';
+appearance?: 'default' | 'subtle' | 'inline';`} />
 
-**Don't** pass Menu sections — Select takes a flat option list and builds the rows itself.
+An option's `icon` is decorative: it shows in its row and on its chip, hidden from assistive
+technology.
 
-```tsx
-{/* No `sections` prop — group via each option's `group` field instead. */}
-```
+</Section>
 
-## API
+<Section title="Design tokens">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>options</code></td><td><code>SelectOption[]</code></td><td>-</td><td>Required. <code>{'{ value, label, icon?, description?, disabled?, group? }'}</code>.</td></tr>
-    <tr><td><code>value</code></td><td><code>string | null</code> / <code>string[]</code></td><td>-</td><td>Required. Scalar for single, array for multi.</td></tr>
-    <tr><td><code>onChange</code></td><td><code>(value) =&gt; void</code></td><td>-</td><td>Required. Next selection.</td></tr>
-    <tr><td><code>inputType</code></td><td><code>'single' | 'multi'</code></td><td><code>'single'</code></td><td>Discriminates the union.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Trigger height, panel width, chip size.</td></tr>
-    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Same as TextField's <code>context</code>. Deprecated aliases <code>tone</code> / <code>appearance</code> still work: <code>'subtle'</code> and <code>'inline'</code> map to <code>'inline'</code>.</td></tr>
-    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Shown when nothing is selected.</td></tr>
-    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Blocks opening; disables chip removal.</td></tr>
-    <tr><td><code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Red border + aria-invalid.</td></tr>
-    <tr><td><code>searchValue</code> / <code>onSearchChange</code></td><td><code>string</code> / <code>(v) =&gt; void</code></td><td>-</td><td>Control the query externally (async filtering).</td></tr>
-    <tr><td><code>emptyMessage</code></td><td><code>React.ReactNode</code></td><td><code>"No matches"</code></td><td>Panel content when nothing matches.</td></tr>
-    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Accessible name for the combobox.</td></tr>
-    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Applied to the trigger input / frame.</td></tr>
-  </tbody>
-</table>
+Select's stylesheet styles only the caret: its color, its color when disabled, the motion of its
+turn, and its size inside a Table cell. `--field-icon-color` is an override Text Field's icons share;
+nothing sets it today, so the caret uses `color-content-subtle`. The field, the chips, and the menu
+use their own components' tokens.
 
-## Edge cases
+<TokensTable id="select" />
 
-<Canvas of={SelectStories.EdgeCases} />
+</Section>
 
-## Related components
+<Section title="Related components">
 
-- **TextField** — the trigger frame (extended with an in-frame `leadingContent` slot for chips).
-- **Chip** — multi-select values.
-- **Dropdown Menu / Menu** — the option panel.
-- **Radio** — the right choice for a short, fixed, exclusive set.
+<Related>
+
+- <DocLink to="Components/Forms/Field" /> to add a label, a message, and a required marker.
+- <DocLink to="Components/Forms/Text Field" />, the field Select is built on.
+- <DocLink to="Components/Forms/Chip" />, which shows each multi-select value.
+- <DocLink to="Components/Actions/Dropdown Menu" />, the menu, and <DocLink to="Components/Actions/Menu" />, the rows inside it.
+- <DocLink to="Components/Forms/Radio" /> and <DocLink to="Components/Forms/Checkbox" /> for a few options on view.
+- <DocLink to="Components/Forms/Date Picker" /> and <DocLink to="Components/Forms/Time Picker" /> for dates and times.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The design tokens read select.module.css, and the Figma source comes from registry.json, so they
+  follow the code. The props listed under API are copied from select.types.ts by hand until the
+  generated table can read them.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

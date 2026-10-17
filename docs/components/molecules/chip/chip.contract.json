@@ -256,14 +256,14 @@
     "No segment may be wrapped - every segment must remain a direct child of the root. The seam and corner rules are all structural (:first-child / :last-child / :not(:last-child)), so any wrapper (a Tooltip around a disabled child, a positioning div, anything that renders DOM) detaches that segment from the pill."
   ],
   "responsiveRules": [
-    "Segments never wrap; long labels and values ellipsize so the chip stays a single line.",
+    "Segments never wrap, so the chip stays a single line. Long labels and values are meant to ellipsize, but the segments don't shrink (min-inline-size: auto), so today a long chip runs past a narrow container instead (known bug).",
     "Each segment menu inherits Popup's viewport-aware alignment fallback and outside-dismissal."
   ],
   "themeRules": [
     "Fully token-driven - no component-level light/dark branching. Verified in both themes."
   ],
   "tokens": {
-    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
+    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, typography-body-md-*, fade-quick for the color transition, plus the color families listed under figmaSource.tokenMapping. The slots have no fixed size (they hug their content), and the only literal is the 0 that suppresses interior borders."
   },
   "relatedComponents": [
     "Tag",

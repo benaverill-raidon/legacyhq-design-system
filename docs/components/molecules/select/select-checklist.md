@@ -89,8 +89,8 @@ Not required:
 
 ### Does this support keyboard navigation?
 Yes. Type to filter; ArrowDown opens/moves into the menu; Enter/arrows/Home/End navigate rows
-(Menu's own); Backspace removes the last chip (multi, empty query); Escape closes and returns focus
-to the input.
+(Menu's own); Backspace removes the last chip (multi, empty query); Escape closes (focus is
+returned to the input only if it was already there; from the menu it falls to the page - known bug).
 
 ### What ARIA is applied?
 `role="combobox"` + `aria-haspopup="menu"` + `aria-autocomplete="list"` on the input;

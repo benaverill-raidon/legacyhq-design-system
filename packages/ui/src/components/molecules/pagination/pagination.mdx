@@ -63,7 +63,7 @@ import * as PaginationStories from './Pagination.stories';
   <Part name="root" target={paginationStyles.root}>A `nav` landmark named "Pagination" by default.</Part>
   <Part name="list" target={paginationStyles.list}>An ordered list of the controls, in a single row.</Part>
   <Part name="previous" target={iconButtonStyles.root}>A subtle, small Icon Button with a left chevron. Disabled on the first page.</Part>
-  <Part name="page" target={toggleButtonStyles.toggleButton}>A small, subtle Toggle Button for each page shown, a 32px square whatever the number. The current page is selected.</Part>
+  <Part name="page" target={toggleButtonStyles.toggleButton}>A `button` for each page shown, with a small, subtle Toggle Button's look: a 32px square whatever the number. The current page is selected.</Part>
   <Part name="ellipsis" target={paginationStyles.ellipsis}>`…` where pages are left out. Text, not a control, and hidden from assistive technology.</Part>
   <Part name="next" target={iconButtonStyles.root} nth={2}>A subtle, small Icon Button with a right chevron, at the end of the row. Disabled on the last page.</Part>
 </Anatomy>
@@ -77,8 +77,9 @@ import * as PaginationStories from './Pagination.stories';
 Pagination keeps no state: it shows `currentPage` of `totalPages` and calls `onPageChange` with the
 page someone chose, the page number or the one before or after. Update `currentPage` in response,
 from component state or the URL. Choosing the current page calls `onPageChange` with the same page.
-`currentPage` isn't clamped, so keep it between 1 and `totalPages`. Previous is disabled on the
-first page and Next on the last.
+`currentPage` is rounded down and clamped between 1 and `totalPages`. Previous is disabled on the
+first page and Next on the last. When Previous or Next has focus and reaching the end disables it,
+focus moves to the current page, so it isn't lost.
 
 </Subsection>
 
@@ -126,18 +127,19 @@ near either end of a long range.
 
 <Section title="Accessibility">
 
-- The root is a `nav` landmark named by `ariaLabel`, "Pagination" by default. Translate it, and
-  give each Pagination on a page its own name. Pagination takes `ariaLabel`, not `aria-label`, and
-  passes no other attributes to the `nav`.
+- The root is a `nav` landmark named by `aria-label`, "Pagination" by default. Translate it, and
+  give each Pagination on a page its own name, or name it by a visible heading with
+  `aria-labelledby`, which replaces it. `ariaLabel`, the old name, still works.
 - Previous and Next are Icon Buttons named by `previousLabel` and `nextLabel`, which also show as
   their tooltip on hover and focus. At either end, the button is natively `disabled` and leaves the
-  tab order.
-- Each page is a Toggle Button named by `getPageLabel`, "Page 3" by default, around the visible
-  number. The current page has `aria-current="page"`; as a Toggle Button, every page also sets
-  `aria-pressed`, true only on the current one.
+  tab order; if it had focus, focus moves to the current page.
+- Each page is a native `button` named by `getPageLabel`, "Page 3" by default, around the visible
+  number. The current page has `aria-current="page"`, so it's announced once, as the current page.
+  Pages take Toggle Button's look but not its `aria-pressed`: a page is a position, not an on or
+  off option.
 - The ellipsis is hidden from assistive technology, so the left-out pages aren't announced; the
   names of the pages on either side, such as "Page 20", say where the range jumps.
-- Every control shows the shared Focus Ring from Icon Button and Toggle Button.
+- Every control shows the shared Focus Ring.
 
 <Keyboard>
   <Key keys="Tab">Moves focus through Previous, each page, and Next, in order. A disabled Previous or Next is skipped.</Key>
@@ -149,7 +151,7 @@ near either end of a long range.
 
 <Section title="API">
 
-<PropsTable of={PaginationStories} />
+<PropsTable of={PaginationStories} native="nav" />
 
 `getPaginationRange(currentPage, totalPages, siblingCount, boundaryCount)`, exported beside
 Pagination, returns the range it shows, page numbers and `'ellipsis'`, for a custom layout.
@@ -159,8 +161,9 @@ Pagination, returns the range it shows, page numbers and `'ellipsis'`, for a cus
 <Section title="Design tokens">
 
 Every token Pagination's own stylesheet uses, by family, with the property it sets and when. The
-buttons take their tokens from Icon Button and Toggle Button. Under Size, the `inline-size` row for
-item is the fixed width of each page button, and the other two size the ellipsis to match.
+buttons take their tokens from Icon Button and Toggle Button's stylesheet. Under Size, the
+`inline-size` row for page is the fixed width of each page button, and the other two size the
+ellipsis to match.
 
 <TokensTable id="pagination" />
 
@@ -170,7 +173,7 @@ item is the fixed width of each page button, and the other two size the ellipsis
 
 <Related>
 
-- <DocLink to="Components/Actions/Toggle Button" />, each page button.
+- <DocLink to="Components/Actions/Toggle Button" />, whose look each page button takes.
 - <DocLink to="Components/Actions/Icon Button" />, the Previous and Next buttons.
 - <DocLink to="Components/Navigation/Progress Indicator" /> for position in a sequence of steps.
 - <DocLink to="Components/Navigation/Tabs" /> for switching between views of one page.

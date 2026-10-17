@@ -136,9 +136,10 @@ from the browser's history through `:visited`, so it can't be pinned in a story.
 
 <Subsection title="Long text and no disabled state">
 
-Long link text wraps inside the link instead of truncating, and the new-tab icon wraps with it.
-Link is an inline flex box, so in a sentence, a link that doesn't fit the rest of a line moves to
-the next line whole rather than breaking partway with the text around it.
+Long link text wraps instead of truncating. Link is inline, so in a sentence its text breaks across
+lines with the words around it. A new-tab link is an inline flex box that keeps the icon beside its
+text: its text still wraps inside the link and the icon wraps with it, but when it doesn't fit the
+rest of a line, the whole link moves to the next one.
 
 Link has no disabled state: if a destination isn't available, show plain text instead of a link.
 

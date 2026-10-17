@@ -72,7 +72,7 @@ import * as ProgressIndicatorStories from './progress-indicator.stories';
 <Section title="Anatomy">
 
 <Anatomy specimen={<ProgressIndicator currentStep={1} totalSteps={5} size="md" label="Client onboarding" />}>
-  <Part name="root" target={progressIndicatorStyles.root}>A `div` with `role="progressbar"`, which carries the name and the announced position.</Part>
+  <Part name="root" target={progressIndicatorStyles.root}>A `div` that carries the name: a `progressbar` with the announced position, or, with `onStepChange`, a `group` around the dot buttons.</Part>
   <Part name="dots" target={progressIndicatorStyles.dots}>The row of dots, one per step, with no gap between their spaces.</Part>
   <Part name="selectedDot" target={progressIndicatorStyles.dotSelected}>The current step: a filled dot. Exactly one is selected.</Part>
   <Part name="unselectedDot" target={progressIndicatorStyles.dotUnselected}>Every other step: an outlined dot. There's no separate look for completed steps.</Part>
@@ -118,7 +118,8 @@ buttons belong to the surrounding flow, not to the indicator.
 
 Pass `onStepChange` to let people jump to a step. Each dot becomes a button that calls it with its
 step number, with a hover and press fill and the shared Focus Ring; update `currentStep` in
-response. Without it, the dots are decorative and can't be focused. Add it only when jumping to any
+response. The indicator is then a group of buttons rather than a progressbar, so assistive
+technology reaches every dot. Without it, the dots are decorative and can't be focused. Add it only when jumping to any
 step makes sense, such as in a carousel.
 
 <Example of={ProgressIndicatorStories.Content} caption="Different totals, custom value text, compositions, and Back and Next buttons that own the step." />
@@ -161,16 +162,19 @@ around it scroll or give it room.
 
 <Section title="Accessibility">
 
-- The root is a `div` with `role="progressbar"`, `aria-valuemin="1"`, `aria-valuemax` set to the
-  number of steps, and `aria-valuenow` set to the current step. Pass `role` to change the role.
+- Without `onStepChange`, the root is a `div` with `role="progressbar"`, `aria-valuemin="1"`,
+  `aria-valuemax` set to the number of steps, and `aria-valuenow` set to the current step. Pass
+  `role` to change the role.
 - `aria-valuetext` is "Step 2 of 5" by default. Pass `getValueText` when the journey has its own
   words, such as "Section 2 of 4"; it wins over an `aria-valuetext` you pass.
 - The name comes from `aria-label`, then `aria-labelledby`, then `label`. Name the journey, such as
   "Client onboarding".
 - Without `onStepChange`, the dots are hidden from assistive technology and the indicator isn't in
   the tab order.
-- With `onStepChange`, each dot is a native `button` named "Go to step 3", and the current one has
-  `aria-current="step"`. The name isn't configurable yet.
+- With `onStepChange`, the root is a `group` with the same name and no value, since a progressbar's
+  children are presentational and its buttons might not be exposed. Each dot is a native `button`
+  named by `getStepLabel`, "Go to step 3" by default, and the current one has
+  `aria-current="step"`. Translate `getStepLabel` with the rest of your interface.
 - The current dot is filled and the others are outlined, so position doesn't depend on color alone.
 
 <Keyboard>

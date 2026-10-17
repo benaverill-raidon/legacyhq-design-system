@@ -144,7 +144,8 @@ Use a semantic spacing token for icon gap, such as spacing-025 or the closest av
 
 ## Styling requirements
 The Link should:
-- render inline-flex when an external icon is present
+- render inline otherwise, so long link text wraps with the sentence around it
+- render inline-flex only when an external icon is present, keeping the icon beside its text
 - align icon and text visually
 - use tokenized typography
 - use tokenized colors

@@ -15,13 +15,17 @@ export interface BreadcrumbItem {
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }
 
-export interface BreadcrumbsProps {
+export interface BreadcrumbsProps extends Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
   /**
    * The trail, root first and the current page last. An item with an `href` renders as a Link; one
    * without renders as text marked `aria-current="page"`.
    */
   items: BreadcrumbItem[];
-  /** The `nav` landmark's accessible name. Defaults to "Breadcrumb". */
+  /** The `nav` landmark's accessible name. Defaults to "Breadcrumb". Ignored when `aria-labelledby` is set. */
+  'aria-label'?: string;
+  /** Names the `nav` by the id of a visible heading. When set, no `aria-label` is rendered. */
+  'aria-labelledby'?: string;
+  /** @deprecated Use the native `aria-label`, as Tabs and Progress Tracker do. Still accepted. */
   ariaLabel?: string;
   /** Added to the root `nav`'s classes. */
   className?: string;

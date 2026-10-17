@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { focusRingClassNames } from '../../primitives/focus-ring';
@@ -270,17 +270,11 @@ describe('ProgressIndicator', () => {
 
     render(<ControlledExample />);
 
-    expect(screen.getByRole('progressbar', { name: 'Controlled example' })).toHaveAttribute(
-      'aria-valuenow',
-      '1',
-    );
+    expect(screen.getByRole('button', { name: 'Go to step 1' })).toHaveAttribute('aria-current', 'step');
 
     fireEvent.click(screen.getByRole('button', { name: 'Go to step 4' }));
 
-    expect(screen.getByRole('progressbar', { name: 'Controlled example' })).toHaveAttribute(
-      'aria-valuenow',
-      '4',
-    );
+    expect(screen.getByRole('button', { name: 'Go to step 1' })).not.toHaveAttribute('aria-current');
     expect(screen.getByRole('button', { name: 'Go to step 4' })).toHaveAttribute(
       'aria-current',
       'step',
@@ -297,20 +291,46 @@ describe('ProgressIndicator', () => {
     expect(styles.dotVisual).toEqual(expect.any(String));
   });
 
-  it('keeps the root progress semantics when dots become interactive', () => {
+  it('puts interactive dots in a named group, not a progressbar, whose children are presentational', () => {
     render(
       <ProgressIndicator
         currentStep={2}
         totalSteps={5}
         label="Interactive progress"
+        getValueText={(step, total) => `Section ${step} of ${total}`}
         onStepChange={() => undefined}
       />,
     );
 
-    expect(screen.getByRole('progressbar', { name: 'Interactive progress' })).toHaveAttribute(
-      'aria-valuenow',
-      '2',
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    const group = screen.getByRole('group', { name: 'Interactive progress' });
+    expect(group).not.toHaveAttribute('aria-valuenow');
+    expect(group).not.toHaveAttribute('aria-valuetext');
+    expect(within(group).getAllByRole('button')).toHaveLength(5);
+    expect(within(group).getByRole('button', { name: 'Go to step 2' })).toHaveAttribute('aria-current', 'step');
+  });
+
+  it('names the dot buttons with getStepLabel, given the step and the total', () => {
+    const getStepLabel = vi.fn((step: number, total: number) => `Ir al paso ${step} de ${total}`);
+    render(
+      <ProgressIndicator
+        currentStep={1}
+        totalSteps={3}
+        label="Pasos"
+        getStepLabel={getStepLabel}
+        onStepChange={() => undefined}
+      />,
     );
+
+    expect(screen.getByRole('button', { name: 'Ir al paso 3 de 3' })).toBeInTheDocument();
+    expect(getStepLabel).toHaveBeenCalledWith(2, 3);
+  });
+
+  it('keeps progressbar semantics when the dots are decorative', () => {
+    render(<ProgressIndicator currentStep={2} totalSteps={5} label="Passive progress" />);
+
+    expect(screen.queryByRole('group')).not.toBeInTheDocument();
+    expect(screen.getByRole('progressbar', { name: 'Passive progress' })).toHaveAttribute('aria-valuenow', '2');
   });
 });
 

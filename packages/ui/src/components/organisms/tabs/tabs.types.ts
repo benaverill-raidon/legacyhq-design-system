@@ -1,6 +1,8 @@
 import type * as React from 'react';
 
-export type TabsType = 'line' | 'contained';
+export type TabsAppearance = 'line' | 'contained';
+/** @deprecated Use `TabsAppearance`, the name for the `appearance` prop. */
+export type TabsType = TabsAppearance;
 
 export interface TabItem {
   /** Stable identifier for the tab and its panel. */
@@ -16,10 +18,15 @@ export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'o
    * The visual style: `line` underlines the selected tab, and `contained` fills it as a pill inside
    * a raised container.
    */
-  type?: TabsType;
+  appearance?: TabsAppearance;
+  /** @deprecated Use `appearance`, the name every component uses for a visual style. Still accepted. */
+  type?: TabsAppearance;
   /** The tabs, in order: each one's `value`, `label`, and whether it's `disabled`. */
   tabs: TabItem[];
-  /** The selected tab's `value`, to control the selection. Update it from `onValueChange`. */
+  /**
+   * The selected tab's `value`, to control the selection. Update it from `onValueChange`. If it
+   * matches no enabled tab, the first enabled tab is still the one Tab reaches.
+   */
   value?: string;
   /** The tab selected first, when Tabs manages the selection. Defaults to the first enabled tab. */
   defaultValue?: string;
@@ -34,7 +41,10 @@ export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'o
   'aria-label'?: string;
   /** Names the tab list by the id of a visible heading, instead of `aria-label`. */
   'aria-labelledby'?: string;
-  /** The panels: a `TabPanel` for each tab `value`. Optional, so the tab bar can be used alone. */
+  /**
+   * The panels: a `TabPanel` for each tab `value`. Optional, so the tab bar can be used alone. A tab
+   * points at its panel with `aria-controls` only while that `TabPanel` is rendered.
+   */
   children?: React.ReactNode;
 }
 

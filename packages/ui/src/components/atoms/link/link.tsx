@@ -50,6 +50,7 @@ export const Link = React.memo(
           styles[`appearance_${appearance}`],
           styles[`size_${size}`],
           styles[`emphasis_${emphasis}`],
+          isExternal && styles.external,
           focusRingClassNames.focusRing,
           focusRingClassNames.focusRingDefault,
           className,

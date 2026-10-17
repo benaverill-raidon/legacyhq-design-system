@@ -165,9 +165,9 @@ so a deep trail still fits its container.
 
 <Section title="Accessibility">
 
-- The root is a `nav` landmark named by `ariaLabel`, "Breadcrumb" by default. Translate it with the
-  rest of your interface. Breadcrumbs takes `ariaLabel`, not `aria-label`, and passes no other
-  attributes to the `nav`.
+- The root is a `nav` landmark named by `aria-label`, "Breadcrumb" by default. Translate it with the
+  rest of your interface, or name it by a visible heading with `aria-labelledby`, which replaces it.
+  `ariaLabel`, the old name, still works.
 - The levels are an ordered list, so assistive technology announces how many there are.
 - Each level above the current page is a Link: announced as a link, in the tab order, with the
   shared Focus Ring.
@@ -184,7 +184,7 @@ so a deep trail still fits its container.
 
 <Section title="API">
 
-<PropsTable of={BreadcrumbsStories} />
+<PropsTable of={BreadcrumbsStories} native="nav" />
 
 <Subsection title="Breadcrumb item">
 
@@ -204,8 +204,8 @@ Each entry in `items` takes:
 
 Every token Breadcrumbs' own stylesheet uses, by family, with the property it sets and when. The
 links take their tokens from Link. Under Other, `link-color` is Link's own variable, which
-Breadcrumbs reads to undo the visited color. `link-color-press` is a variable Link no longer sets,
-since it has no pressed style, so that row has no value to apply.
+Breadcrumbs reads to undo the visited color. Link has no pressed style, so a pressed visited link
+keeps that color too.
 
 <TokensTable id="breadcrumbs" />
 

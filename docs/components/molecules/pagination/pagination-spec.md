@@ -10,8 +10,8 @@ users jump directly to any page.
 Use Pagination below a paged table, list, or search-results view to navigate between pages.
 
 ### Tier
-Molecule. It composes existing atoms (`ToggleButton` for each page number, `IconButton` for
-previous/next) into one unit with its own layout algorithm (which pages to show, where to collapse
+Molecule. It composes existing atoms (`IconButton` for previous/next, and `ToggleButton`'s
+stylesheet for each page number) into one unit with its own layout algorithm (which pages to show, where to collapse
 into an ellipsis) that no single atom owns.
 
 ### Design Reference
@@ -57,8 +57,10 @@ Pagination
 
 ### Structure Notes
 - Root `nav` landmark, `ol` of page controls in visual order (previous, pages/ellipses, next)
-- Every page number is a real `ToggleButton`; the current page has `isSelected` and
-  `aria-current="page"`
+- Every page number is a native `<button>` with `ToggleButton`'s look (its stylesheet's
+  `toggleButton`, `size_sm`, `tone_subtle`, and, on the current page, `selected` classes). Not a
+  `ToggleButton` itself: that always sets `aria-pressed`, and a page is a position, not an on/off
+  option. The current page has the selected look and `aria-current="page"` only
 - The ellipsis is non-interactive text, not a button - confirmed directly from the Figma node tree
   (plain "..." text at `--color-content-subtle`, no button wrapper), despite the component-search
   metadata's description suggesting a subtle button
@@ -115,16 +117,20 @@ Numeric page numbers only (1-based). No custom page labels.
 
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
-| currentPage | number | Yes | - |
-| totalPages | number | Yes | - |
+| currentPage | number | Yes | - (rounded down, clamped to `1`..`totalPages`) |
+| totalPages | number | Yes | - (rounded down) |
 | onPageChange | `(page: number) => void` | Yes | - |
 | siblingCount | number | No | `1` |
 | boundaryCount | number | No | `1` |
 | previousLabel | string | No | `'Previous page'` |
 | nextLabel | string | No | `'Next page'` |
 | getPageLabel | `(page: number) => string` | No | `` (page) => `Page ${page}` `` |
-| ariaLabel | string | No | `'Pagination'` |
+| aria-label | string | No | `'Pagination'` (ignored when `aria-labelledby` is set) |
+| aria-labelledby | string | No | undefined |
+| ariaLabel | string | No | Deprecated alias for `aria-label`, still accepted |
 | className | string | No | undefined |
+
+Any other `nav` attribute (`id`, `data-*`, ...) and the `ref` are forwarded to the root `nav`.
 
 ---
 
@@ -150,16 +156,19 @@ This is a pure function (`getPaginationRange`), unit-tested independently of ren
 ## Accessibility
 
 ### Keyboard Support
-Native button keyboard behavior for every control (`ToggleButton`/`IconButton` are both real
+Native button keyboard behavior for every control (page numbers and `IconButton`s are all real
 `<button>` elements) - Tab moves through them in order; Enter/Space activates the focused control.
+When the focused Previous or Next becomes disabled (the first or last page is reached), focus moves
+to the current page button rather than being lost.
 No roving tabindex or arrow-key navigation is implemented - each button is independently focusable,
 same reasoning as Button Group.
 
 ### ARIA
 
-- Root: `nav` landmark with `aria-label` (default `'Pagination'`).
-- Current page: `aria-current="page"` in addition to `ToggleButton`'s own `isSelected`/
-  `aria-pressed`.
+- Root: `nav` landmark with `aria-label` (default `'Pagination'`), or `aria-labelledby` in its
+  place.
+- Current page: `aria-current="page"` only - no page sets `aria-pressed`, so the current page is
+  announced once.
 - Previous/next: `aria-label` (`previousLabel`/`nextLabel`), `disabled` at the first/last page.
 - Ellipsis: rendered as plain text, `aria-hidden="true"` (it conveys no information beyond what's
   already visually obvious from the gap between adjacent numbers).
@@ -175,7 +184,7 @@ Example:
 ## Design Tokens
 
 ### Layout
-- Page/nav button size: `size="sm"` on both `ToggleButton` and `IconButton` (`--size-control-sm`,
+- Page/nav button size: Toggle Button's `size_sm` look and `IconButton size="sm"` (`--size-control-sm`,
   32px) - matches Figma's 32x32 slots exactly.
 - Gap between controls: `--spacing-xs` (4px) - Figma's `pages` frame itself used 0 itemSpacing
   (each 32px slot already includes its own visual padding), but a small explicit gap between the
@@ -183,8 +192,8 @@ Example:
   Limitations.
 
 ### Colors
-- Page numbers: inherited entirely from `ToggleButton` (`tone="subtle"`, `isSelected` for the
-  current page).
+- Page numbers: inherited entirely from `ToggleButton`'s stylesheet (`tone_subtle`, `selected` for
+  the current page).
 - Previous/Next: inherited entirely from `IconButton` (`appearance="subtle"`).
 - Ellipsis: `--color-content-subtle`.
 
@@ -237,8 +246,7 @@ held internally - the consumer owns `currentPage`.
 
 ### Visual
 - [ ] Page buttons and nav buttons match Figma's 32x32 sizing
-- [ ] Selected page shows brand-tinted background/border (via `ToggleButton`'s own `isSelected`
-      styling)
+- [ ] Selected page shows the selected background (via `ToggleButton`'s own `selected` styling)
 - [ ] Ellipsis renders as plain muted text, not a button
 - [ ] Light mode works
 - [ ] Dark mode works
@@ -249,11 +257,13 @@ held internally - the consumer owns `currentPage`.
 - [ ] Clicking a page number calls onPageChange with that page
 - [ ] Clicking previous/next calls onPageChange with currentPage -1/+1
 - [ ] Previous is disabled on page 1; next is disabled on the last page
+- [ ] currentPage outside 1..totalPages is clamped
+- [ ] A focused previous/next that becomes disabled hands focus to the current page
 - [ ] Renders correctly when totalPages is small enough that no ellipsis is needed
 
 ### Accessibility
 - [ ] nav has an accessible name (default "Pagination")
-- [ ] The current page has aria-current="page"
+- [ ] The current page has aria-current="page", and no page has aria-pressed
 - [ ] Previous/next have accessible names
 - [ ] The ellipsis is aria-hidden
 - [ ] Each control remains independently focusable via Tab

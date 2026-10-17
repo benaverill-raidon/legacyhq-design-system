@@ -47,6 +47,7 @@ If it triggers an action instead of navigation, use Button.
 - Hover underline: yes (no press/active state - Figma has only default + hover)
 - Visited: native CSS `:visited`, no `hasVisited` prop
 - External icon appears automatically for `target="_blank"`
+- Display: inline, so long link text wraps with the sentence; inline-flex only with the external icon
 - No disabled state
 - No router abstraction in v1
 - No `iconBefore` in v1

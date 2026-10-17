@@ -51,7 +51,7 @@ function getDefaultValueText(currentStep: number, totalSteps: number) {
   return `Step ${currentStep} of ${totalSteps}`;
 }
 
-function getStepButtonLabel(step: number) {
+function defaultGetStepLabel(step: number) {
   return `Go to step ${step}`;
 }
 
@@ -61,6 +61,7 @@ function renderDots(
   appearance: ProgressIndicatorAppearance,
   size: ProgressIndicatorSize,
   onStepChange: ((step: number) => void) | undefined,
+  getStepLabel: (step: number, totalSteps: number) => string,
 ) {
   return Array.from({ length: totalSteps }, (_, index) => {
     const stepNumber = index + 1;
@@ -85,7 +86,7 @@ function renderDots(
           type="button"
           className={dotTargetClassName}
           data-selected={isSelected ? 'true' : undefined}
-          aria-label={getStepButtonLabel(stepNumber)}
+          aria-label={getStepLabel(stepNumber, totalSteps)}
           aria-current={isSelected ? 'step' : undefined}
           onClick={() => onStepChange(stepNumber)}
         >
@@ -117,6 +118,7 @@ export const ProgressIndicator = React.memo(
       label,
       getValueText,
       onStepChange,
+      getStepLabel = defaultGetStepLabel,
       className,
       role,
       'aria-label': ariaLabel,
@@ -137,23 +139,32 @@ export const ProgressIndicator = React.memo(
       styles[`size_${size}`],
       className,
     );
+    const isInteractive = Boolean(onStepChange);
     const resolvedValueText = getValueText
       ? getValueText(normalizedCurrentStep, normalizedTotalSteps)
       : (ariaValueText ?? getDefaultValueText(normalizedCurrentStep, normalizedTotalSteps));
+    // A progressbar's children are presentational, so assistive technology may not expose buttons
+    // inside one. Interactive dots sit in a named group instead, and the current dot carries
+    // `aria-current="step"`; only the decorative indicator is a progressbar with a value.
+    const semanticProps = isInteractive
+      ? { role: role ?? 'group' }
+      : {
+          role: role ?? 'progressbar',
+          'aria-valuemin': 1,
+          'aria-valuemax': normalizedTotalSteps,
+          'aria-valuenow': normalizedCurrentStep,
+          'aria-valuetext': resolvedValueText,
+        };
 
     return (
       <div
         {...rest}
         {...accessibleNameProps}
+        {...semanticProps}
         ref={forwardedRef}
-        role={role ?? 'progressbar'}
-        aria-valuemin={1}
-        aria-valuemax={normalizedTotalSteps}
-        aria-valuenow={normalizedCurrentStep}
-        aria-valuetext={resolvedValueText}
         className={rootClassName}
         data-appearance={appearance}
-        data-interactive={onStepChange ? 'true' : undefined}
+        data-interactive={isInteractive ? 'true' : undefined}
         data-size={size}
       >
         <div className={styles.dots}>
@@ -163,6 +174,7 @@ export const ProgressIndicator = React.memo(
             appearance,
             size,
             onStepChange,
+            getStepLabel,
           )}
         </div>
       </div>

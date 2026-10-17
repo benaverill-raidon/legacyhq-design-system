@@ -161,6 +161,9 @@ describe('ProgressTracker CSS contract', () => {
     );
     // Hover: colour change to content/default, and underline removed.
     expect(css).toMatch(/\.link\.link:hover \{[\s\S]*?color: var\(--color-content-default\);/);
-    expect(css).toMatch(/\.link\.link:hover,\s*\n\s*\.link\.link:active \{[\s\S]*?text-decoration-line: none;/);
+    expect(css).toMatch(/\.link\.link:hover \{[\s\S]*?text-decoration-line: none;/);
+    // Link has no pressed style, so the tracker sets no press variable or :active rule for it.
+    expect(css).not.toContain('--link-color-visited-press');
+    expect(css).not.toContain(':active');
   });
 });

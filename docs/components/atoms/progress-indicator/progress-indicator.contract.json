@@ -27,7 +27,7 @@
     "Labeled stepper"
   ],
   "anatomy": {
-    "root": "Owns progress semantics and layout.",
+    "root": "Owns the name and layout: a progressbar when passive, a group around the dot buttons when interactive.",
     "dots": "Sequence of selected and unselected dots.",
     "selectedDot": "Represents the current step.",
     "unselectedDot": "Represents every other step."
@@ -72,6 +72,12 @@
     "onStepChange": {
       "type": "(step: number) => void",
       "required": false
+    },
+    "getStepLabel": {
+      "type": "(step: number, totalSteps: number) => string",
+      "required": false,
+      "default": "(step) => `Go to step ${step}`",
+      "description": "Accessible name for each dot button when onStepChange is provided."
     }
   },
   "variants": {
@@ -109,8 +115,8 @@
       "primarySelected": "color-background-brand-primary-bold-default",
       "inverseSelected": "color-background-neutral-subtle-default",
       "unselectedBorder": "color-border-bold",
-      "interactiveHover": "color-background-neutral-subtle-hover",
-      "interactivePressed": "color-background-neutral-subtle-press",
+      "interactiveHover": "color-background-neutral-overlay-bold-hover",
+      "interactivePressed": "color-background-neutral-overlay-bold-press",
       "radius": "border-radius-full-round",
       "spacing": "spacing-0"
     },
@@ -126,11 +132,13 @@
     ]
   },
   "accessibility": {
-    "role": "progressbar",
+    "role": "progressbar when passive; group when onStepChange is provided (a progressbar's children are presentational, so its buttons may not be exposed)",
     "ariaValueMin": 1,
     "ariaValueMax": "normalized totalSteps",
     "ariaValueNow": "normalized currentStep",
     "defaultAriaValueText": "Step {currentStep} of {totalSteps}",
+    "valueAttributes": "passive only (aria-valuemin/max/now/text on the progressbar)",
+    "defaultStepLabel": "Go to step {step} (getStepLabel)",
     "nameSources": [
       "aria-label",
       "aria-labelledby",
@@ -168,7 +176,7 @@
   ],
   "themeRules": [
     "Use semantic tokens only.",
-    "Inverse appearance must remain visible on dark surfaces.",
+    "Inverse is for a bold surface (color-background-neutral-bold-default), in either theme: its selected dot (color-background-neutral-subtle-default) is light in the light theme and dark in the dark theme, so it inverts with that surface. On a surface that stays dark in both themes, it is not visible in the dark theme (open question; needs a token decision).",
     "Do not reference primitive colors directly."
   ],
   "implementationNotes": [
@@ -188,7 +196,7 @@
     "Use for relative position in a finite journey.",
     "Provide an accessible journey name.",
     "Render a dynamic number of dots.",
-    "Use inverse appearance on dark surfaces.",
+    "Use inverse appearance on a bold surface.",
     "Use onStepChange when direct dot selection is helpful."
   ],
   "dont": [
@@ -203,7 +211,7 @@
     "Exactly one dot is selected.",
     "Current step and total steps normalize safely.",
     "All appearances and sizes match Figma intent.",
-    "Passive and interactive progress semantics are correct.",
+    "Passive dots sit in a progressbar; interactive dots sit in a named group, with aria-current=\"step\" on the current dot.",
     "Interactive dots use native buttons and the shared Focus Ring.",
     "No hardcoded colors or Figma image assets.",
     "Storybook and tests compile."

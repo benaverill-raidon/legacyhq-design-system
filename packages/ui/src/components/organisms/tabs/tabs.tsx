@@ -11,7 +11,8 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 
 export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   {
-    type = 'line',
+    appearance: requestedAppearance,
+    type,
     tabs,
     value,
     defaultValue,
@@ -25,11 +26,35 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   },
   forwardedRef,
 ) {
+  // `type` is the deprecated name for `appearance`.
+  const appearance = requestedAppearance ?? type ?? 'line';
   const baseId = React.useId();
   const isControlled = value !== undefined;
   const firstEnabledValue = tabs.find((tab) => !tab.disabled)?.value;
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? firstEnabledValue);
   const activeValue = isControlled ? value : internalValue;
+  // The tab Tab reaches: the selected tab, or the first enabled one when the selection matches no
+  // enabled tab, so the tab list is never left out of the tab order.
+  const tabStopValue = tabs.some((tab) => tab.value === activeValue && !tab.disabled) ? activeValue : firstEnabledValue;
+
+  // Values of the TabPanels currently rendered (counted, in case two share a value): a tab sets
+  // aria-controls only when its panel exists, so it never points at a missing id.
+  const [panelCounts, setPanelCounts] = React.useState<ReadonlyMap<string, number>>(() => new Map());
+  const registerPanel = React.useCallback((panelValue: string) => {
+    const change = (delta: number) =>
+      setPanelCounts((previous) => {
+        const next = new Map(previous);
+        const count = (next.get(panelValue) ?? 0) + delta;
+        if (count > 0) {
+          next.set(panelValue, count);
+        } else {
+          next.delete(panelValue);
+        }
+        return next;
+      });
+    change(1);
+    return () => change(-1);
+  }, []);
 
   const tabRefs = React.useRef(new Map<string, HTMLButtonElement>());
 
@@ -46,7 +71,7 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
     [isControlled, onValueChange],
   );
 
-  // Both types show their border by default: the bottom line for `line`, the container border for
+  // Both appearances show their border by default: the bottom line for `line`, the container border for
   // `contained`. `showBorder` turns it off.
   const bordered = showBorder ?? true;
 
@@ -85,13 +110,13 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
   };
 
   const context = React.useMemo<TabsContextValue>(
-    () => ({ activeValue, type, getTabId, getPanelId }),
-    [activeValue, type, getTabId, getPanelId],
+    () => ({ activeValue, appearance, getTabId, getPanelId, registerPanel }),
+    [activeValue, appearance, getTabId, getPanelId, registerPanel],
   );
 
   return (
     <TabsContext.Provider value={context}>
-      <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)} data-type={type}>
+      <div {...rest} ref={forwardedRef} className={mergeClassNames(styles.root, className)} data-appearance={appearance}>
         <div
           role="tablist"
           aria-label={ariaLabel}
@@ -116,8 +141,8 @@ export const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(function Tabs(
                 role="tab"
                 id={getTabId(tab.value)}
                 aria-selected={selected}
-                aria-controls={getPanelId(tab.value)}
-                tabIndex={selected ? 0 : -1}
+                aria-controls={panelCounts.has(tab.value) ? getPanelId(tab.value) : undefined}
+                tabIndex={tab.value === tabStopValue ? 0 : -1}
                 disabled={tab.disabled}
                 className={mergeClassNames(styles.tab, focusRingClassNames.focusRing, focusRingClassNames.focusRingDefault)}
                 onClick={() => select(tab.value)}

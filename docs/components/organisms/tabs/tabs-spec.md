@@ -2,15 +2,16 @@
 
 ## Overview
 
-Tabs is an accessible tab bar (over optional panels) with two types, `line` and `contained`. It
+Tabs is an accessible tab bar (over optional panels) with two appearances, `line` and `contained`. It
 belongs to the organism tier and composes the shared Focus Ring primitive. `TabPanel` is a companion
 component for the panels.
 
 ## Anatomy
 
-1. **Root** - a `div` (`data-type`) laid out as a column: the tab list, then the panels.
+1. **Root** - a `div` (`data-appearance`) laid out as a column: the tab list, then the panels.
 2. **Tab list** - a `div role="tablist"` (`aria-label`/`aria-labelledby`, `aria-orientation`).
-3. **Tab** - a `button role="tab"` with `id`, `aria-selected`, `aria-controls`, roving `tabindex`,
+3. **Tab** - a `button role="tab"` with `id`, `aria-selected`, `aria-controls` (only while its
+   `TabPanel` is rendered), roving `tabindex`,
    and the native `disabled` attribute.
 4. **Indicator** - `line`: a 3px `::after` underline on the selected tab over the tab list's bottom
    border; `contained`: a selected-surface pill.
@@ -20,12 +21,16 @@ component for the panels.
 ## Public API
 
 ```ts
-export type TabsType = 'line' | 'contained';
+export type TabsAppearance = 'line' | 'contained';
+/** @deprecated */
+export type TabsType = TabsAppearance;
 
 export interface TabItem { value: string; label: React.ReactNode; disabled?: boolean; }
 
 export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  type?: TabsType;
+  appearance?: TabsAppearance;
+  /** @deprecated Use `appearance`. Still accepted. */
+  type?: TabsAppearance;
   tabs: TabItem[];
   value?: string;
   defaultValue?: string;
@@ -45,14 +50,15 @@ export interface TabPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 ## Default Props
 
 ```txt
-type = 'line'
+appearance = 'line'
 defaultValue = first enabled tab
 showBorder = true
 ```
 
 ## Variants
 
-`type` sets the visual style.
+`appearance` sets the visual style (`type` is its deprecated alias; Figma still calls the axis
+`type`).
 
 ### Line (default)
 
@@ -86,8 +92,11 @@ showBorder = true
 - Render the tab list from `tabs` (data-driven, matching Menu's style); select the first enabled tab
   by default (or `defaultValue`).
 - Controlled with `value` + `onValueChange`; uncontrolled otherwise.
-- Wire each `TabPanel` to its tab and show only the selected panel.
-- Roving tabindex - only the selected tab is tabbable.
+- Wire each `TabPanel` to its tab and show only the selected panel. A tab sets `aria-controls` only
+  while its `TabPanel` is rendered (panels register with Tabs through context), so a tab bar used
+  alone has no dangling id references.
+- Roving tabindex - only the selected tab is tabbable; if `value`/`defaultValue` matches no enabled
+  tab, the first enabled tab is the tab stop.
 - Arrow keys (wrapping) + Home/End move selection, skipping disabled tabs (automatic activation).
 - Do not select disabled tabs.
 
@@ -117,6 +126,6 @@ moves selection with arrow keys, skipping disabled tabs
 supports Home and End
 does not select a disabled tab
 supports controlled selection
-applies the type on the root
+applies the appearance on the root (and the deprecated type)
 CSS contract: line indicator over the border; contained selected fill + border + radius
 ```

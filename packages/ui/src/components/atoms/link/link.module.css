@@ -11,10 +11,11 @@
    */
   border-radius: var(--border-radius-xs);
 
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  width: fit-content;
+  /*
+   * Inline, so long link text wraps with the sentence around it instead of moving to the next line
+   * whole. Only a link with the new-tab icon is a flex box (`.external`, below).
+   */
+  display: inline;
   color: var(--link-color);
   font-family: var(--typography-heading-xs-font-family);
   font-size: var(--typography-heading-xs-font-size);
@@ -92,6 +93,17 @@
 
 .emphasis_default {
   font-weight: var(--typography-body-md-font-weight);
+}
+
+/*
+ * With `target="_blank"`, the link is an inline flex box that keeps the new-tab icon centred beside
+ * its text: long text still wraps inside the link, and the icon wraps with it.
+ */
+.external {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: fit-content;
 }
 
 .content {

@@ -27,9 +27,9 @@
     {
       "name": "Custom accessible name",
       "description": "Overriding the default 'Breadcrumb' nav label.",
-      "jsx": "<Breadcrumbs\n  ariaLabel=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
+      "jsx": "<Breadcrumbs\n  aria-label=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
       "props": {
-        "ariaLabel": "You are here"
+        "aria-label": "You are here"
       }
     },
     {

@@ -103,16 +103,15 @@
 /*
  * Navigable (visited) step labels reuse the Link atom, but the tracker's <items> states differ from
  * Link's subtle defaults: there is no :visited (purple) treatment, and hover changes colour only
- * (subtle -> `content/default`) with no underline. The doubled `.link.link` selector outranks the
- * Link atom's own single-class rules regardless of stylesheet order.
+ * (subtle -> `content/default`) with no underline. Link has no pressed style, so there's none to
+ * override. The doubled `.link.link` selector outranks the Link atom's own single-class rules
+ * regardless of stylesheet order.
  */
 .link.link {
   --link-color-visited: var(--color-content-subtle);
-  --link-color-visited-press: var(--color-content-default);
 }
 
-.link.link:hover,
-.link.link:active {
+.link.link:hover {
   text-decoration-line: none;
 }
 

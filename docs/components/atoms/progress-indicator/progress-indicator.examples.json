@@ -13,7 +13,7 @@
     },
     {
       "name": "Inverse",
-      "description": "Appears on a dark or bold surface.",
+      "description": "Appears on a bold surface (color-background-neutral-bold-default).",
       "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />"
     },
     {

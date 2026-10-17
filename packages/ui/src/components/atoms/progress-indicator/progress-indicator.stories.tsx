@@ -25,6 +25,7 @@ const meta = {
     size: { control: 'inline-radio', options: sizes },
     label: { control: 'text' },
     getValueText: { control: false },
+    getStepLabel: { control: false },
     onStepChange: { control: false },
     className: { control: false },
     style: { control: false },
@@ -217,7 +218,7 @@ export const States: Story = {
         <Cell label="Passive (decorative, non-focusable)">
           <ProgressIndicator currentStep={2} totalSteps={4} label="Passive journey" />
         </Cell>
-        <Cell label="Interactive (native buttons, aria-current on selected)">
+        <Cell label="Interactive (a group of native buttons, aria-current on selected)">
           <ProgressIndicator currentStep={2} totalSteps={4} label="Interactive journey" onStepChange={() => undefined} />
         </Cell>
       </Group>

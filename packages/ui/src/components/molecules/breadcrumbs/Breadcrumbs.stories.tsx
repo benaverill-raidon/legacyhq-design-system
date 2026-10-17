@@ -15,10 +15,11 @@ const meta = {
   component: Breadcrumbs,
   args: {
     items: defaultItems,
-    ariaLabel: 'Breadcrumb',
+    'aria-label': 'Breadcrumb',
   },
   argTypes: {
     items: { control: false },
+    ariaLabel: { control: false },
     className: { control: false },
   },
 } satisfies Meta<typeof Breadcrumbs>;
@@ -89,7 +90,7 @@ export const Composition: Story = {
 
       <Group title="Custom accessible name">
         <Breadcrumbs
-          ariaLabel="You are here"
+          aria-label="You are here"
           items={[{ label: 'Docs', href: '/docs' }, { label: 'Components' }]}
         />
       </Group>

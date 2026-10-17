@@ -93,13 +93,13 @@ export const matterTabs = [
 
 <Section title="Variants">
 
-`type` sets the style. `line`, the default, is a row of tabs over a line, with the selected tab
+`appearance` sets the style. `line`, the default, is a row of tabs over a line, with the selected tab
 underlined in the selected color: the everyday choice. `contained` puts the tabs in a raised,
 rounded container and fills the selected one as a pill, for a denser surface such as a card. In both,
 unselected tabs use the subtle color and darken on hover. `showBorder` turns off the line under a
 `line` tab list or the border of a `contained` one; it's on by default for both.
 
-<Example of={TabsStories.Types} />
+<Example of={TabsStories.Appearances} />
 
 </Section>
 
@@ -119,7 +119,8 @@ arrow keys selects it, with no extra Enter.
 <Subsection title="Panels">
 
 Give Tabs a `TabPanel` for each tab `value`, as its children, and it wires each panel to its tab
-and shows only the selected one. A panel's content is rendered only while its tab is selected, so
+and shows only the selected one. A tab points at its panel with `aria-controls` only while that
+`TabPanel` is rendered, so a tab bar used alone points at nothing. A panel's content is rendered only while its tab is selected, so
 state inside it resets when you switch away. Panels are optional: render the tab bar alone and
 switch the content yourself from `value`.
 
@@ -171,8 +172,8 @@ skip it. `showBorder={false}` is shown here too.
     aria-label="Matter setup"
   />
 </Dont>
-<Do caption="Keep to a few tabs with short labels that fit on one line." code={`<Tabs tabs={tabs} type="contained" aria-label="Matter sections" />`}>
-  <Tabs tabs={matterTabs} type="contained" defaultValue="overview" aria-label="Matter sections" />
+<Do caption="Keep to a few tabs with short labels that fit on one line." code={`<Tabs tabs={tabs} appearance="contained" aria-label="Matter sections" />`}>
+  <Tabs tabs={matterTabs} appearance="contained" defaultValue="overview" aria-label="Matter sections" />
 </Do>
 <Dont caption="Add more tabs than fit: the tab list doesn't wrap or scroll, so the last tabs run out of their container." code={`<Tabs tabs={tenSections} aria-label="Matter sections" />`} />
 </Guidelines>
@@ -183,10 +184,11 @@ skip it. `showBorder={false}` is shown here too.
 
 - The tab list has `role="tablist"` and `aria-orientation="horizontal"`. `aria-label` or
   `aria-labelledby` names it; both go on the tab list, not the root. Always set one.
-- Each tab is a native `button` with `role="tab"`, `aria-selected`, and `aria-controls` set to its
-  panel's id. `aria-controls` is set even when you render no `TabPanel`.
-- Only the selected tab is in the tab order; the arrow keys move between tabs. Disabled tabs use
-  the native `disabled` attribute and are skipped.
+- Each tab is a native `button` with `role="tab"` and `aria-selected`. A tab whose `TabPanel` is
+  rendered also has `aria-controls` set to the panel's id; without a panel, it has none.
+- Only the selected tab is in the tab order; the arrow keys move between tabs. If `value` or
+  `defaultValue` matches no enabled tab, the first enabled tab takes its place in the tab order.
+  Disabled tabs use the native `disabled` attribute and are skipped.
 - Each `TabPanel` has `role="tabpanel"`, is labelled by its tab, and has `tabindex="0"`, so Tab
   moves from the tab list to the panel. Unselected panels are `hidden`.
 - Tabs show the shared Focus Ring.
@@ -222,7 +224,7 @@ Each entry in `tabs` takes a `value`, its stable id; a `label`; and `disabled`.
 <Section title="Design tokens">
 
 Every token Tabs' stylesheet uses, by family, with the property it sets and when. Rules for one
-`type` read as `line` or `contained`; the 3px line under the selected `line` tab is a pseudo-element
+`appearance` read as `line` or `contained`; the 3px line under the selected `line` tab is a pseudo-element
 on the selected tab.
 
 <TokensTable id="tabs" />

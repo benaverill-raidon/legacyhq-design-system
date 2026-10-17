@@ -1,5 +1,6 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
+import * as React from 'react';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -84,10 +85,38 @@ describe('Breadcrumbs', () => {
     expect(screen.getByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
   });
 
-  it('supports a custom ariaLabel', () => {
+  it('takes the native aria-label', () => {
+    render(<Breadcrumbs items={items} aria-label="You are here" />);
+
+    expect(screen.getByRole('navigation', { name: 'You are here' })).toBeInTheDocument();
+  });
+
+  it('still accepts the deprecated ariaLabel', () => {
     render(<Breadcrumbs items={items} ariaLabel="You are here" />);
 
     expect(screen.getByRole('navigation', { name: 'You are here' })).toBeInTheDocument();
+  });
+
+  it('names the nav by aria-labelledby instead of the default label', () => {
+    render(
+      <>
+        <h2 id="trail-heading">Location</h2>
+        <Breadcrumbs items={items} aria-labelledby="trail-heading" />
+      </>,
+    );
+
+    const nav = screen.getByRole('navigation', { name: 'Location' });
+    expect(nav).not.toHaveAttribute('aria-label');
+  });
+
+  it('forwards other attributes and the ref to the root nav', () => {
+    const ref = React.createRef<HTMLElement>();
+    render(<Breadcrumbs ref={ref} items={items} data-testid="trail" id="trail" />);
+
+    const nav = screen.getByTestId('trail');
+    expect(nav.tagName).toBe('NAV');
+    expect(nav).toHaveAttribute('id', 'trail');
+    expect(ref.current).toBe(nav);
   });
 
   it('applies className to the root nav', () => {
@@ -112,8 +141,10 @@ describe('Breadcrumbs', () => {
     expect(breadcrumbsCss).not.toMatch(/\.current \{[\s\S]*?color: var\(--color-content-default\);/);
   });
 
-  it("overrides Link's :visited color back to its normal resting/press color", () => {
+  it("overrides Link's :visited color back to its resting color, and reads no variable Link doesn't set", () => {
     expect(breadcrumbsCss).toMatch(/\.item \.link:visited \{[\s\S]*?color: var\(--link-color\);/);
-    expect(breadcrumbsCss).toMatch(/\.item \.link:visited:active \{[\s\S]*?color: var\(--link-color-press\);/);
+    // Link has no pressed color, so a pressed visited ancestor keeps the resting color too.
+    expect(breadcrumbsCss).not.toContain(':active');
+    expect(breadcrumbsCss).not.toContain('--link-color-press');
   });
 });

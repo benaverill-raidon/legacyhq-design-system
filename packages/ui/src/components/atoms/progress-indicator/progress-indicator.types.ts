@@ -25,11 +25,20 @@ export interface ProgressIndicatorProps
   size?: ProgressIndicatorSize;
   /** The journey's accessible name, such as "Client onboarding". Used when there's no `aria-label` or `aria-labelledby`. */
   label?: string;
-  /** Builds the announced value from the current step and the total. Defaults to "Step 2 of 5". */
+  /**
+   * Builds the announced value from the current step and the total. Defaults to "Step 2 of 5".
+   * Used only without `onStepChange`, when the indicator is a progressbar.
+   */
   getValueText?: (currentStep: number, totalSteps: number) => string;
   /**
-   * Makes each dot a button that calls this with its step number. Progress Indicator stays
-   * controlled: update `currentStep` yourself. Without it, the dots are decorative.
+   * Makes each dot a button that calls this with its step number, and the root a named group in
+   * place of a progressbar. Progress Indicator stays controlled: update `currentStep` yourself.
+   * Without it, the dots are decorative.
    */
   onStepChange?: (step: number) => void;
+  /**
+   * Builds each dot button's accessible name from its step and the total, with `onStepChange`.
+   * Defaults to "Go to step 3".
+   */
+  getStepLabel?: (step: number, totalSteps: number) => string;
 }

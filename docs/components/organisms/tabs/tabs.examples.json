@@ -5,13 +5,13 @@
       "name": "Line tabs (uncontrolled)",
       "description": "The default underlined tab bar with panels.",
       "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'><TabPanel value='a'>Overview</TabPanel><TabPanel value='b'>Activity</TabPanel></Tabs>",
-      "props": { "type": "line", "defaultValue": "a", "aria-label": "Sections" }
+      "props": { "appearance": "line", "defaultValue": "a", "aria-label": "Sections" }
     },
     {
       "name": "Contained tabs",
       "description": "Pill tabs for a denser or card-like surface.",
-      "jsx": "<Tabs type='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
-      "props": { "type": "contained", "defaultValue": "a" }
+      "jsx": "<Tabs appearance='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
+      "props": { "appearance": "contained", "defaultValue": "a" }
     },
     {
       "name": "Controlled",
@@ -28,7 +28,7 @@
     {
       "name": "No bottom border",
       "description": "Hide the line's bottom border.",
-      "jsx": "<Tabs type='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
+      "jsx": "<Tabs appearance='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
       "props": { "showBorder": false }
     }
   ],

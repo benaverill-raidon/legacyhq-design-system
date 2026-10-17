@@ -129,7 +129,7 @@ Verify the actual generated CSS variable names before implementation.
 
 Progress Indicator remains controlled by `currentStep` and `totalSteps`. External previous and next buttons belong to surrounding composition, not to the component itself.
 
-Apply to the root:
+Without `onStepChange`, apply to the root:
 
 ```txt
 role="progressbar"
@@ -138,20 +138,24 @@ aria-valuemax={normalizedTotalSteps}
 aria-valuenow={normalizedCurrentStep}
 ```
 
+With `onStepChange`, the root is `role="group"` with the same accessible name and no value
+attributes: a progressbar's children are presentational, so assistive technology may not expose
+buttons inside one.
+
 Accessible naming priority:
 
 1. `aria-label`
 2. `aria-labelledby`
 3. `label`
 
-Default `aria-valuetext` is `Step X of Y`.
+Default `aria-valuetext` is `Step X of Y` (progressbar only).
 
 Passive dots are decorative and hidden from assistive technology.
 
 When `onStepChange` is provided:
 
 - each dot is a native `button`
-- each button uses the accessible label `Go to step X`
+- each button is named by `getStepLabel(step, totalSteps)`, `Go to step X` by default
 - the selected dot uses `aria-current="step"`
 - focus uses the shared Focus Ring implementation
 

@@ -25,42 +25,59 @@ function ItemContent({ iconBefore, iconAfter, label }: Pick<BreadcrumbItem, 'ico
   );
 }
 
-export const Breadcrumbs = React.memo(function Breadcrumbs({
-  items,
-  ariaLabel = 'Breadcrumb',
-  className,
-}: BreadcrumbsProps) {
-  return (
-    <nav aria-label={ariaLabel} className={mergeClassNames(styles.root, className)}>
-      <ol className={styles.list}>
-        {items.map((item, index) => (
-          <li key={index} className={styles.item}>
-            {index > 0 ? (
-              <span className={styles.separator} aria-hidden="true">
-                /
-              </span>
-            ) : null}
-            {item.href ? (
-              <Link
-                href={item.href}
-                target={item.target}
-                appearance="subtle"
-                size="md"
-                className={styles.link}
-                onClick={item.onClick}
-              >
-                <ItemContent iconBefore={item.iconBefore} iconAfter={item.iconAfter} label={item.label} />
-              </Link>
-            ) : (
-              <span className={styles.current} aria-current="page">
-                <ItemContent iconBefore={item.iconBefore} iconAfter={item.iconAfter} label={item.label} />
-              </span>
-            )}
-          </li>
-        ))}
-      </ol>
-    </nav>
-  );
-});
+export const Breadcrumbs = React.memo(
+  React.forwardRef<HTMLElement, BreadcrumbsProps>(function Breadcrumbs(
+    {
+      items,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      ariaLabel: deprecatedAriaLabel,
+      className,
+      ...rest
+    },
+    forwardedRef,
+  ) {
+    // `ariaLabel` is the deprecated name for the native `aria-label`.
+    const label = ariaLabel ?? deprecatedAriaLabel ?? 'Breadcrumb';
+
+    return (
+      <nav
+        {...rest}
+        ref={forwardedRef}
+        aria-label={ariaLabelledBy ? undefined : label}
+        aria-labelledby={ariaLabelledBy}
+        className={mergeClassNames(styles.root, className)}
+      >
+        <ol className={styles.list}>
+          {items.map((item, index) => (
+            <li key={index} className={styles.item}>
+              {index > 0 ? (
+                <span className={styles.separator} aria-hidden="true">
+                  /
+                </span>
+              ) : null}
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  target={item.target}
+                  appearance="subtle"
+                  size="md"
+                  className={styles.link}
+                  onClick={item.onClick}
+                >
+                  <ItemContent iconBefore={item.iconBefore} iconAfter={item.iconAfter} label={item.label} />
+                </Link>
+              ) : (
+                <span className={styles.current} aria-current="page">
+                  <ItemContent iconBefore={item.iconBefore} iconAfter={item.iconAfter} label={item.label} />
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    );
+  }),
+);
 
 Breadcrumbs.displayName = 'Breadcrumbs';

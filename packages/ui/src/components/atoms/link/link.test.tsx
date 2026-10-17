@@ -161,6 +161,24 @@ describe('Link', () => {
     expect(screen.getByRole('link', { name: 'Clients' })).toBeInTheDocument();
   });
 
+  it('is a flex box only with the new-tab icon, so other link text flows with the sentence', () => {
+    const { rerender } = render(<Link href="/clients">Clients</Link>);
+    expect(screen.getByRole('link', { name: 'Clients' })).not.toHaveClass(styles.external);
+
+    rerender(
+      <Link href="https://example.com" target="_blank">
+        Clients
+      </Link>,
+    );
+    expect(screen.getByRole('link', { name: 'Clients (opens in a new tab)' })).toHaveClass(styles.external);
+
+    const rootRule = linkCss.match(/\.root \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    const externalRule = linkCss.match(/\.external \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(rootRule).toContain('display: inline;');
+    expect(rootRule).not.toContain('inline-flex');
+    expect(externalRule).toContain('display: inline-flex;');
+  });
+
   it('does not render an external icon for self target', () => {
     const { container } = render(<Link href="/clients">Clients</Link>);
 

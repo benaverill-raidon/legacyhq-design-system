@@ -50,9 +50,9 @@
     {
       "name": "Custom accessible labels",
       "description": "Overriding the default nav/previous/next labels.",
-      "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  ariaLabel=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
+      "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  aria-label=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
       "props": {
-        "ariaLabel": "Search results pages",
+        "aria-label": "Search results pages",
         "previousLabel": "Previous results",
         "nextLabel": "Next results"
       }

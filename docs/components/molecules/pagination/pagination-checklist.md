@@ -83,7 +83,8 @@ Yes - `nav` always has an accessible name, defaulting to `"Pagination"`. Previou
 accessible names (`previousLabel`/`nextLabel`).
 
 ### Is aria-current needed?
-Yes, always, on the current page button.
+Yes, always, on the current page button - and only that: page buttons take Toggle Button's look
+but not its `aria-pressed`, so the current page is announced once.
 
 ---
 

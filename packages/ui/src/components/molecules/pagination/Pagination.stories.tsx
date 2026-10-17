@@ -22,7 +22,9 @@ const meta = {
     previousLabel: { control: 'text' },
     nextLabel: { control: 'text' },
     getPageLabel: { control: false },
-    ariaLabel: { control: 'text' },
+    'aria-label': { control: 'text' },
+    'aria-labelledby': { control: false },
+    ariaLabel: { control: false },
     className: { control: false },
   },
 } satisfies Meta<typeof Pagination>;
@@ -53,22 +55,25 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function ControlledPagination(props: {
-  totalPages: number;
+function ControlledPagination({
+  initialPage,
+  onPageChange,
+  ...props
+}: Omit<React.ComponentProps<typeof Pagination>, 'currentPage' | 'onPageChange'> & {
   initialPage?: number;
-  siblingCount?: number;
-  boundaryCount?: number;
+  onPageChange?: (page: number) => void;
 }) {
-  const [page, setPage] = React.useState(props.initialPage ?? 1);
+  const [page, setPage] = React.useState(initialPage ?? 1);
 
   return (
     <div style={{ display: 'grid', gap: 'var(--spacing-sm)', justifyItems: 'start' }}>
       <Pagination
+        {...props}
         currentPage={page}
-        totalPages={props.totalPages}
-        siblingCount={props.siblingCount}
-        boundaryCount={props.boundaryCount}
-        onPageChange={setPage}
+        onPageChange={(next) => {
+          setPage(next);
+          onPageChange?.(next);
+        }}
       />
       <span style={captionStyle}>
         Page {page} of {props.totalPages}
@@ -77,9 +82,12 @@ function ControlledPagination(props: {
   );
 }
 
-/** Prop exploration - a controlled wrapper holds currentPage in state so the controls are live. */
+/**
+ * Prop exploration - a controlled wrapper holds currentPage in state so the controls are live. Every
+ * other arg passes straight through; changing the currentPage control restarts from that page.
+ */
 export const Playground: Story = {
-  render: (args) => <ControlledPagination totalPages={args.totalPages} initialPage={args.currentPage} />,
+  render: ({ currentPage, ...args }) => <ControlledPagination key={currentPage} initialPage={currentPage} {...args} />,
 };
 
 /** How the page range changes shape depending on where the current page sits. */

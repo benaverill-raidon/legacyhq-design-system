@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CheckboxEmptyIcon, CheckboxFillIcon, CheckboxIndeterminateIcon } from '../../../assets/icons';
 import { focusRingClassNames } from '../../primitives/focus-ring';
+import { CheckboxGroupContext } from './checkbox-group-context';
 import styles from './checkbox.module.css';
 import type { CheckboxProps } from './checkbox.types';
 
@@ -40,6 +41,9 @@ export const Checkbox = React.memo(
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
     const inputRef = React.useRef<HTMLInputElement | null>(null);
+    // A disabled Checkbox Group disables every checkbox inside it, from `options` or `children`.
+    const group = React.useContext(CheckboxGroupContext);
+    const isDisabled = disabled || group.disabled;
     // Documentation-only, forwarded to `.input` as-is via `...rest`; read here only to also apply
     // it to the root label, since hover/press styling keys off the label rather than the input.
     const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
@@ -60,7 +64,7 @@ export const Checkbox = React.memo(
     return (
       <label
         className={mergeClassNames(styles.root, className)}
-        data-disabled={disabled ? 'true' : undefined}
+        data-disabled={isDisabled ? 'true' : undefined}
         data-indeterminate={indeterminate ? 'true' : undefined}
         data-invalid={invalid ? 'true' : undefined}
         data-force-state={dataForceState}
@@ -78,7 +82,7 @@ export const Checkbox = React.memo(
             type="checkbox"
             checked={checked}
             defaultChecked={defaultChecked}
-            disabled={disabled}
+            disabled={isDisabled}
             required={required}
             aria-invalid={invalid ? true : ariaInvalid}
             aria-checked={indeterminate ? 'mixed' : ariaChecked}
@@ -108,7 +112,12 @@ export const Checkbox = React.memo(
         {label !== undefined ? (
           <span className={styles.labelText}>
             {label}
-            {required ? <span className={styles.requiredIndicator}>*</span> : null}
+            {/* Decorative: the native `required` is what assistive technology announces. */}
+            {required ? (
+              <span className={styles.requiredIndicator} aria-hidden="true">
+                *
+              </span>
+            ) : null}
           </span>
         ) : null}
       </label>

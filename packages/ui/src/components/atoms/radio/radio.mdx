@@ -100,8 +100,8 @@ Radio Group is a native `fieldset` that holds, in order:
 <Subsection title="States">
 
 Selected and unselected come from `checked` or `defaultChecked`, or from the group's `value`.
-`invalid` draws the circle in the error color and changes nothing else. `disabled` dims the circle
-and the label.
+`invalid` draws the circle in the error color and changes nothing else. `disabled` draws the circle
+and the label in the disabled color, as Checkbox does.
 
 <Example of={RadioStories.States} />
 
@@ -111,14 +111,15 @@ and the label.
 
 Radios that share a `name` are one choice: selecting one clears the others. Pass `options` and Radio
 Group renders a Radio for each, gives them one `name`, and keeps the selected value in `value` or
-`defaultValue`. Pass `children` instead for a layout of your own; the group then passes those radios
-nothing, so give them one `name` and set their checked values and states yourself.
+`defaultValue`. Pass `children` instead for a layout of your own: give those radios one `name` and
+set their checked values and other states yourself. The group's `disabled` and `required` still
+reach them, so a disabled group's radios look disabled too.
 
-Options stack by default; `orientation="horizontal"` sets them in a row that wraps. `required` makes
-every option from `options` natively required, so the browser asks for a choice, and puts the `*`
-after the legend rather than after each option.
+Options stack by default; `orientation="horizontal"` sets them in a row that wraps, with space
+between the options. `required` makes every radio in the group natively required, so the browser
+asks for a choice, and puts the `*` after the legend rather than after each option.
 
-<Example of={RadioStories.Content} caption="Content: label text, required, a radio named by aria-label, a long label, and groups from options and from children, controlled, horizontal, required, and disabled." />
+<Example of={RadioStories.Content} caption="Content: label text, required, a radio named by aria-label, a long label, and groups from options and from children, controlled, horizontal, required, and disabled from options and from children." />
 
 </Subsection>
 
@@ -141,8 +142,8 @@ circle lines up with the middle of the text, not the first line. Keep option lab
 <Subsection title="Focus and hover">
 
 Hover and press show a round overlay behind the circle, in the brand color when it's selected and in
-a neutral color otherwise. Keyboard focus shows the same overlay with a ring in the focus color
-around the circle. Radio draws that ring itself, so it doesn't use the shared Focus Ring.
+a neutral color otherwise. Keyboard focus shows the same overlay and adds the shared Focus Ring
+around the circle, as on Checkbox.
 
 </Subsection>
 
@@ -225,8 +226,9 @@ around the circle. Radio draws that ring itself, so it doesn't use the shared Fo
   with the options. Its `description` and `errorMessage` are added to the description of the
   fieldset and of each radio from `options`.
 - `invalid` sets `aria-invalid` on the radio, or on the fieldset and each radio from `options`.
-- `disabled` and `required` are the native attributes: a disabled radio leaves the tab order. The
-  `*` is part of the label or legend text, so it's read with the name.
+- `disabled` and `required` are the native attributes: a disabled radio leaves the tab order, and a
+  required one is announced as required. The `*` is hidden from assistive technology, so it isn't
+  read as part of the name. A required Radio Group makes each of its radios natively required.
 
 <Keyboard>
   <Key keys="Tab">Moves focus into the group, to the selected radio, or to the first one when none is selected. The next Tab leaves the group.</Key>
@@ -272,6 +274,7 @@ message rows are here too.
 - <DocLink to="Components/Forms/Switch" /> for a single on or off setting that takes effect right away.
 - <DocLink to="Components/Actions/Toggle Button" /> for a choice in a toolbar.
 - <DocLink to="Components/Forms/Field" />, which labels a single control; use Radio Group for a set.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
 
 </Related>
 

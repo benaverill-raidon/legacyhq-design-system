@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Checkbox } from './checkbox';
+import { CheckboxGroupContext } from './checkbox-group-context';
 import styles from './checkbox.module.css';
 import type { CheckboxGroupProps } from './checkbox.types';
 
@@ -17,6 +18,7 @@ export const CheckboxGroup = React.memo(function CheckboxGroup({
   options,
   children,
   required = false,
+  requiredLabel = 'required',
   invalid = false,
   disabled = false,
   orientation = 'vertical',
@@ -36,6 +38,7 @@ export const CheckboxGroup = React.memo(function CheckboxGroup({
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<string[]>(defaultValue ?? []);
   const currentValue = isControlled ? value : internalValue;
+  const context = React.useMemo(() => ({ disabled }), [disabled]);
 
   const handleCheckedChange = React.useCallback(
     (optionValue: string, checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +61,7 @@ export const CheckboxGroup = React.memo(function CheckboxGroup({
       label={option.label}
       checked={isControlled ? currentValue.includes(option.value) : undefined}
       defaultChecked={!isControlled ? (defaultValue ?? []).includes(option.value) : undefined}
-      disabled={disabled || option.disabled}
+      disabled={option.disabled}
       invalid={invalid || option.invalid}
       required={option.required}
       aria-describedby={describedBy || undefined}
@@ -79,7 +82,19 @@ export const CheckboxGroup = React.memo(function CheckboxGroup({
       {label !== undefined ? (
         <legend className={styles.legend}>
           {label}
-          {required ? <span className={styles.requiredIndicator}>*</span> : null}
+          {/*
+            Checkboxes have no native group-level requirement, so the legend says it in words for
+            assistive technology; the `*` is only visual.
+          */}
+          {required ? (
+            <>
+              <span className={styles.requiredIndicator} aria-hidden="true">
+                *
+              </span>
+              {/* A flex container doesn't render this space, but it separates the label in the name. */}{' '}
+              <span className={styles.visuallyHidden}>{requiredLabel}</span>
+            </>
+          ) : null}
         </legend>
       ) : null}
       {description ? (
@@ -87,7 +102,9 @@ export const CheckboxGroup = React.memo(function CheckboxGroup({
           {description}
         </div>
       ) : null}
-      <div className={styles.options}>{renderedOptions ?? children}</div>
+      <CheckboxGroupContext.Provider value={context}>
+        <div className={styles.options}>{renderedOptions ?? children}</div>
+      </CheckboxGroupContext.Provider>
       {errorMessage ? (
         <div id={errorId} className={styles.errorMessage}>
           {errorMessage}

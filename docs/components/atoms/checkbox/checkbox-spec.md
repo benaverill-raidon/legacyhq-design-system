@@ -70,7 +70,20 @@ When `checked` and `indeterminate` are both true, indeterminate wins visually.
 - `required: false`
 - `required: true`
 
-Required state displays an asterisk after the label when a visible label is present.
+Required state displays an asterisk after the label when a visible label is present. The
+asterisk is `aria-hidden`; the native `required` attribute is what assistive technology announces.
+
+### Checkbox Group
+
+- A `fieldset` named by its `legend` (`label`), with `description`, the options, and `errorMessage`.
+- `disabled` sets the fieldset's native `disabled` and, through context, shows every Checkbox
+  inside it as disabled, from `options` or `children`.
+- `required` shows an `aria-hidden` `*` after the legend and adds visually hidden `requiredLabel`
+  text (default `required`) to the legend, so the group's name announces it. Checkboxes have no
+  native group-level requirement, and `aria-required` isn't allowed on a `group`, so no checkbox is
+  made natively required; validating "at least one" stays the consumer's job.
+- `orientation="vertical"` stacks options with no gap; `horizontal` puts `spacing-lg` between them
+  (`column-gap`) and wraps. Figma has no Checkbox Group, so the horizontal gap is a code decision.
 
 ## Props / API
 

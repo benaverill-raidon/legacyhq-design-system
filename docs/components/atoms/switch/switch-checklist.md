@@ -27,7 +27,7 @@ Atom component.
 - Label should clearly describe the setting being controlled.
 - Use concise, action-neutral labels such as “Email notifications,” not “Turn on email notifications.”
 - Avoid labels that require users to infer what on/off means.
-- Required indicator appears after the visible label when required.
+- Required indicator appears after the visible label when required, `aria-hidden`, spaced by `spacing-xxs`.
 - If no visible label is provided, an accessible label is required.
 
 ## Accessibility Requirements

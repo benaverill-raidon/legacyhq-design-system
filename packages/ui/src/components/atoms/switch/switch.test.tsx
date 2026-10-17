@@ -235,6 +235,18 @@ describe('Switch', () => {
     expect(screen.getByText('*')).toHaveClass(styles.requiredIndicator);
   });
 
+  it('hides the required * from assistive technology, so the name is the label alone', () => {
+    render(<Switch label="Required" required />);
+
+    expect(screen.getByRole('switch', { name: 'Required' })).toBeRequired();
+    expect(screen.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('spaces the required * like Checkbox and Radio, at every size', () => {
+    expect(switchCss).toMatch(/\.requiredIndicator \{[^}]*margin-inline-start: var\(--spacing-xxs\);/s);
+    expect(switchCss).not.toMatch(/\.requiredIndicator \{[^}]*thumb-inset/s);
+  });
+
   it('supports custom className', () => {
     const { container } = render(<Switch label="Custom" className="custom-switch" />);
 

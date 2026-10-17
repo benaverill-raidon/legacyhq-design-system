@@ -157,6 +157,73 @@ describe('RadioGroup', () => {
 
     expect(first).toHaveFocus();
   });
+  it('hides the legend * from assistive technology and announces the requirement natively', () => {
+    render(<RadioGroup label="Required" name="required" required options={options} />);
+
+    expect(screen.getByRole('group', { name: 'Required' })).toBeInTheDocument();
+    expect(screen.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+    screen.getAllByRole('radio').forEach((radio) => {
+      expect(radio).toBeRequired();
+    });
+  });
+
+  it('keeps a per-option * on that option only', () => {
+    render(
+      <RadioGroup
+        label="Contact"
+        name="contact"
+        options={[
+          { value: 'email', label: 'Email', required: true },
+          { value: 'phone', label: 'Phone' },
+        ]}
+      />,
+    );
+
+    expect(screen.getAllByText('*')).toHaveLength(1);
+    expect(screen.getByRole('radio', { name: 'Email' })).toBeRequired();
+    expect(screen.getByRole('radio', { name: 'Phone' })).not.toBeRequired();
+  });
+
+  it('makes radios from children required when the group is, without their own *', () => {
+    render(
+      <RadioGroup label="Composed" required>
+        <Radio label="Composed one" name="composed" value="one" />
+        <Radio label="Composed two" name="composed" value="two" />
+      </RadioGroup>,
+    );
+
+    expect(screen.getByRole('radio', { name: 'Composed one' })).toBeRequired();
+    expect(screen.getByRole('radio', { name: 'Composed two' })).toBeRequired();
+    expect(screen.getAllByText('*')).toHaveLength(1);
+  });
+
+  it('shows radios from children as disabled when the group is disabled', () => {
+    render(
+      <RadioGroup label="Composed" disabled>
+        <Radio label="Composed one" name="composed" value="one" />
+        <Radio label="Composed two" name="composed" value="two" />
+      </RadioGroup>,
+    );
+
+    screen.getAllByRole('radio').forEach((radio) => {
+      expect(radio).toBeDisabled();
+      expect(radio.closest('label')).toHaveAttribute('data-disabled', 'true');
+    });
+  });
+
+  it('shows radios from options as disabled when the group is disabled', () => {
+    render(<RadioGroup label="Disabled" name="disabled" disabled options={options} />);
+
+    screen.getAllByRole('radio').forEach((radio) => {
+      expect(radio.closest('label')).toHaveAttribute('data-disabled', 'true');
+    });
+  });
+
+  it('spaces horizontal options apart, and keeps wrapped rows flush', () => {
+    expect(radioCss).toMatch(/\.orientation_horizontal \.options \{[^}]*column-gap: var\(--spacing-lg\);/s);
+    expect(radioCss).not.toMatch(/\.orientation_horizontal \.options \{[^}]*row-gap/s);
+  });
+
   it('uses zero group gap for compact radio groups', () => {
     expect(radioCss).toMatch(/\.options \{[^}]*gap: var\(--spacing-none\);/);
     expect(radioCss).not.toContain('gap: -');

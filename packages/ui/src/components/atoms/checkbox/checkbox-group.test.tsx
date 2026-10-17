@@ -117,6 +117,56 @@ describe('CheckboxGroup', () => {
     expect(screen.getAllByText('*')).toHaveLength(1);
   });
 
+  it('announces a required group in its name and hides the * from assistive technology', () => {
+    render(<CheckboxGroup label="Channels" name="required" required options={options} />);
+
+    expect(screen.getByRole('group', { name: 'Channels required' })).toBeInTheDocument();
+    expect(screen.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+    // The group's requirement is "at least one", so no single checkbox is natively required.
+    screen.getAllByRole('checkbox').forEach((checkbox) => {
+      expect(checkbox).not.toBeRequired();
+    });
+  });
+
+  it('takes a translated requiredLabel', () => {
+    render(<CheckboxGroup label="Canaux" name="required" required requiredLabel="obligatoire" options={options} />);
+
+    expect(screen.getByRole('group', { name: 'Canaux obligatoire' })).toBeInTheDocument();
+  });
+
+  it('leaves the name alone when the group is not required', () => {
+    render(<CheckboxGroup label="Channels" name="optional" options={options} />);
+
+    expect(screen.getByRole('group', { name: 'Channels' })).toBeInTheDocument();
+  });
+
+  it('shows checkboxes from children as disabled when the group is disabled', () => {
+    render(
+      <CheckboxGroup label="Composed" disabled>
+        <Checkbox label="Composed one" name="composed" value="one" />
+        <Checkbox label="Composed two" name="composed" value="two" />
+      </CheckboxGroup>,
+    );
+
+    screen.getAllByRole('checkbox').forEach((checkbox) => {
+      expect(checkbox).toBeDisabled();
+      expect(checkbox.closest('label')).toHaveAttribute('data-disabled', 'true');
+    });
+  });
+
+  it('shows checkboxes from options as disabled when the group is disabled', () => {
+    render(<CheckboxGroup label="Disabled" name="disabled" disabled options={options} />);
+
+    screen.getAllByRole('checkbox').forEach((checkbox) => {
+      expect(checkbox.closest('label')).toHaveAttribute('data-disabled', 'true');
+    });
+  });
+
+  it('spaces horizontal options apart, and keeps wrapped rows flush', () => {
+    expect(checkboxCss).toMatch(/\.orientation_horizontal \.options \{[^}]*column-gap: var\(--spacing-lg\);/s);
+    expect(checkboxCss).not.toMatch(/\.orientation_horizontal \.options \{[^}]*row-gap/s);
+  });
+
   it('supports invalid group', () => {
     render(<CheckboxGroup label="Invalid" name="invalid" invalid options={options} />);
 

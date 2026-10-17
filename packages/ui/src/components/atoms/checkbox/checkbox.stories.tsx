@@ -62,9 +62,18 @@ const legendStyle: CSSProperties = {
   color: 'var(--color-content-subtle)',
 };
 
+// Matches Checkbox Group's errorMessage: body-md in the error color.
+const errorTextStyle: CSSProperties = {
+  margin: 0,
+  font: 'var(--typography-body-md-font-weight) var(--typography-body-md-font-size) / var(--typography-body-md-line-height) var(--typography-body-md-font-family)',
+  color: 'var(--color-content-error)',
+};
+
 const tableStyle: CSSProperties = { width: '100%', borderCollapse: 'collapse' };
 
 const cellStyle: CSSProperties = {
+  font: 'var(--typography-body-md-font-weight) var(--typography-body-md-font-size) / var(--typography-body-md-line-height) var(--typography-body-md-font-family)',
+  color: 'var(--color-content-default)',
   padding: 'var(--spacing-sm)',
   borderBlockEnd: 'var(--border-width-sm) solid var(--color-border-default)',
   textAlign: 'start',
@@ -340,6 +349,13 @@ export const GroupVariants: Story = {
           <Checkbox label="Custom B" name="custom" value="b" />
         </CheckboxGroup>
       </Group>
+
+      <Group title="Disabled children composition">
+        <CheckboxGroup label="Custom layout" disabled>
+          <Checkbox label="Custom A" name="custom-disabled" value="a" defaultChecked />
+          <Checkbox label="Custom B" name="custom-disabled" value="b" />
+        </CheckboxGroup>
+      </Group>
     </div>
   ),
 };
@@ -373,7 +389,7 @@ export const EdgeCases: Story = {
               invalid
               aria-describedby="checkbox-error"
             />
-            <p id="checkbox-error" style={legendStyle}>
+            <p id="checkbox-error" style={errorTextStyle}>
               Select this option before continuing.
             </p>
           </div>

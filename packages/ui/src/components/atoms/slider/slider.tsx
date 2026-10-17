@@ -519,7 +519,15 @@ export function SliderBaseComponent(
         </div>
 
         <div className={styles.handles} aria-hidden="true">
-          <span className={mergeClassNames(styles.handle, styles.handleSingle)} data-slider-handle="single">
+          <span
+            className={mergeClassNames(
+              styles.handle,
+              styles.handleSingle,
+              focusRingClassNames.focusRing,
+              focusRingClassNames.focusRingDefault,
+            )}
+            data-slider-handle="single"
+          >
             <span className={styles.handleVisual} />
           </span>
         </div>
@@ -528,12 +536,7 @@ export function SliderBaseComponent(
           {...rest}
           ref={inputRef}
           id={inputId}
-          className={mergeClassNames(
-            styles.input,
-            styles.singleInput,
-            focusRingClassNames.focusRing,
-            focusRingClassNames.focusRingDefault,
-          )}
+          className={mergeClassNames(styles.input, styles.singleInput)}
           style={style}
           type="range"
           min={min}
@@ -587,20 +590,3 @@ export const Slider = React.memo(
 );
 
 Slider.displayName = 'Slider';
-
-export const SliderCentered = React.memo(
-  React.forwardRef<HTMLInputElement, SliderProps>(function SliderCentered(props, forwardedRef) {
-    return (
-      <SliderBase
-        {...props}
-        ref={forwardedRef}
-        fillMode="centered"
-        defaultMin={-100}
-        defaultMax={100}
-        defaultDefaultValue={0}
-      />
-    );
-  }),
-);
-
-SliderCentered.displayName = 'SliderCentered';

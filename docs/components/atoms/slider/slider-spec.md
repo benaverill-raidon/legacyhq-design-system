@@ -134,8 +134,8 @@ export interface SliderBaseProps {
   orientation?: SliderOrientation;
   size?: SliderSize;
   disabled?: boolean;
-  showStops?: boolean;
-  stops?: number[];
+  showSteps?: boolean;
+  steps?: number[];
   showValue?: boolean;
   className?: string;
 }
@@ -157,12 +157,15 @@ export interface SliderProps
 export interface SliderCenteredProps extends SliderProps {}
 
 export interface SliderRangeProps
-  extends Omit<SliderBaseProps, 'stops'> {
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue' | 'onChange'>,
+    SliderBaseProps {
   value?: [number, number];
   defaultValue?: [number, number];
+  minDistance?: number;
+  disableSwap?: boolean;
   minLabel?: string;
   maxLabel?: string;
-  stops?: number[];
+  name?: string;
   onValueChange?: (
     value: [number, number],
     event: React.ChangeEvent<HTMLInputElement>
@@ -181,7 +184,7 @@ step = 1
 defaultValue = 0
 orientation = 'horizontal'
 size = 'md'
-showStops = false
+showSteps = false
 showValue = false
 ```
 
@@ -194,7 +197,7 @@ step = 1
 defaultValue = 0
 orientation = 'horizontal'
 size = 'md'
-showStops = false
+showSteps = false
 showValue = false
 ```
 
@@ -205,10 +208,14 @@ min = 0
 max = 100
 step = 1
 defaultValue = [25, 75]
+minDistance = 1
+disableSwap = false
 orientation = 'horizontal'
 size = 'md'
-showStops = false
+showSteps = false
 showValue = false
+minLabel = 'Minimum value'
+maxLabel = 'Maximum value'
 ```
 
 ## Variants
@@ -232,29 +239,29 @@ showValue = false
 - focus
 - disabled
 
-## Stops
+## Steps
 
-`showStops` displays track stops.
+Dots always mark `min` and `max`. `showSteps` adds a dot at each step between them.
 
-If `stops` is provided, render those numeric stop positions.
+If `steps` is provided, render those numeric step positions (they place dots only; `step` still
+decides where the handle snaps).
 
-If `stops` is omitted, derive stops from `min`, `max`, and `step` only when the total number of stops is reasonable.
+If `steps` is omitted, derive dots from `min`, `max`, and `step` only when that gives 25 values or fewer.
 
 Do not render excessive stops that would harm performance or visual clarity.
 
 ## Value Indicator
 
-`showValue` is false by default.
+The value indicator (a native `output` bubble above the handle) shows on hover, keyboard focus,
+and while dragging, whatever `showValue` is.
 
-When true, show the value indicator in these states:
+`showValue` (false by default) keeps it showing. A horizontal slider with `showValue` makes room
+for it: the control gets a top margin of the bubble's height (`body-sm` line height plus
+`spacing-xs` padding top and bottom) plus `spacing-sm`, so the bubble sits between the label and the
+track and never overlaps the label. Without `showValue`, the bubble shows over whatever is above
+while the slider is in use. On vertical sliders it sits beside the handle.
 
-- hover
-- focus
-- dragging / active
-
-Do not show persistent value bubbles by default.
-
-For `SliderRange`, each handle may show its own value indicator while active.
+For `SliderRange`, both values show.
 
 ## Pointer and Focus Implementation
 
@@ -265,8 +272,10 @@ For `SliderRange`, each handle may show its own value indicator while active.
   explicit `.focus()` call. Chromium's `:focus-visible` heuristic then treats it as keyboard focus,
   so `usePointerFocusRing` marks pointer-originated focus with `data-pointer-focus="true"` and the
   CSS excludes it; any keydown while focused clears the mark, so keyboard use shows the ring again.
-- The visible ring is drawn on the handle (`outline` of `--border-width-md` in `--color-border-focus`),
-  and the input's own outline is removed.
+- The visible ring is the shared Focus Ring, drawn on the handle: the handle carries the Focus
+  Ring classes, and the outline uses their `--focus-ring-width`, `--focus-ring-color`, and
+  `--focus-ring-offset` (the primitive's default offset, not a spacing token). The input fills the
+  whole control, so its own outline is removed.
 
 ## Behavior
 
@@ -288,9 +297,11 @@ For `SliderRange`, each handle may show its own value indicator while active.
 - Use two native range inputs internally.
 - One input controls lower value.
 - One input controls upper value.
-- Lower handle cannot exceed upper handle.
-- Upper handle cannot go below lower handle.
+- The values stay sorted and at least `minDistance` apart (1 by default; `0` lets the handles meet).
+- A handle moved past the other trades places with it, so the lower value always comes first; with
+  `disableSwap`, a handle stops at the other one instead.
 - Active fill appears between both handles.
+- The lower value submits under `name`, the upper under `name` with `Max` appended.
 
 ## Percentage Calculations
 
@@ -413,7 +424,9 @@ For `SliderRange`:
 
 - both range inputs need accessible labels
 - recommended default labels are `Minimum value` and `Maximum value`
-- allow override through `minLabel` and `maxLabel`
+- allow override through `minLabel` and `maxLabel` (translatable)
+- the root is a `group` named by `label`, `aria-labelledby`, or `aria-label`, and each handle's
+  name starts with that name, then `minLabel` or `maxLabel`
 
 ## Storybook Structure
 
@@ -476,9 +489,9 @@ Test:
 - size classes
 - `SliderCentered` centered fill calculations
 - `SliderRange` renders two inputs
-- `SliderRange` prevents handles from crossing
+- `SliderRange` keeps values sorted (handles swap unless `disableSwap`)
 - `SliderRange` calls callback with tuple value
-- showStops rendering
+- showSteps rendering
 - showValue behavior
 - custom className
 

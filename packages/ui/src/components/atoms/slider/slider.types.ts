@@ -5,8 +5,9 @@ export type SliderSize = 'xs' | 'sm' | 'md';
 
 export interface SliderBaseProps {
   /**
-   * The visible label above the track. It names the slider; on Slider Range it's read before each
-   * handle's own name.
+   * The visible label above the track. It names the slider; on Slider Range it names the range's
+   * group and is read before each handle's own name. Without it, name the slider or range with
+   * `aria-label` or `aria-labelledby`.
    */
   label?: React.ReactNode;
   /** The lowest value. Defaults to `0`, or `-100` on Slider Centered. */
@@ -37,7 +38,10 @@ export interface SliderBaseProps {
    * decides where the handle snaps.
    */
   steps?: number[];
-  /** Keeps the value bubble above the handle showing. Without it, the bubble shows on hover, focus, and drag. */
+  /**
+   * Keeps the value bubble above the handle showing, and makes room for it between the label and
+   * the track. Without it, the bubble shows on hover, focus, and drag, over whatever is above.
+   */
   showValue?: boolean;
   /** Added to the root element's classes. */
   className?: string;
@@ -77,9 +81,15 @@ export interface SliderRangeProps
    * other trades places with it.
    */
   disableSwap?: boolean;
-  /** The lower handle's accessible name, read after `label`. */
+  /**
+   * The lower handle's accessible name, read after the range's name (`label`, `aria-labelledby`,
+   * or `aria-label`). Defaults to `Minimum value`; pass a translation.
+   */
   minLabel?: string;
-  /** The upper handle's accessible name, read after `label`. */
+  /**
+   * The upper handle's accessible name, read after the range's name (`label`, `aria-labelledby`,
+   * or `aria-label`). Defaults to `Maximum value`; pass a translation.
+   */
   maxLabel?: string;
   /** The form name: the lower value submits under `name`, the upper under `name` with `Max` added. */
   name?: string;

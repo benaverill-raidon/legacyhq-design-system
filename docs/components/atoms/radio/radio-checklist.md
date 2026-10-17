@@ -93,10 +93,12 @@ RadioGroup:
 
 - Label typography: `body-md`.
 - Default RadioGroup layout: vertical.
-- Default RadioGroup gap: `0`.
+- Default RadioGroup gap: `0`; horizontal groups put `spacing-lg` between options.
 - Radio visual size: 24px (`size-choice-indicator`).
 - Interaction target: 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
-- Required indicator appears after the group label/legend.
+- Required indicator appears after the group label/legend, `aria-hidden`; the radios are natively required.
+- A disabled RadioGroup shows every radio inside it as disabled, from `options` or `children`.
+- Disabled radios use the disabled content color only (no extra opacity), matching Checkbox.
 - Selected radio uses selected bold background and inverse content for the inner mark.
 - Figma uses shapes; implementation should draw the private indicator with CSS anatomy.
 - Radio control shapes must not be added to the shared icon library.

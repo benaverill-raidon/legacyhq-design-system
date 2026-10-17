@@ -105,7 +105,12 @@ export const Switch = React.memo(
         {label !== undefined ? (
           <span className={styles.labelText}>
             {label}
-            {required ? <span className={styles.requiredIndicator}>*</span> : null}
+            {/* Decorative: the native `required` is what assistive technology announces. */}
+            {required ? (
+              <span className={styles.requiredIndicator} aria-hidden="true">
+                *
+              </span>
+            ) : null}
           </span>
         ) : null}
       </label>

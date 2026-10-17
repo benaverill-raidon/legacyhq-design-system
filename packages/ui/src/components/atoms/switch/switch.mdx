@@ -170,8 +170,9 @@ are switched off when someone asks for reduced motion.
   stays in the tab order. The Spinner is hidden from assistive technology, so `aria-busy` carries the
   state.
 - The track, thumb, and marks are hidden from assistive technology.
-- `disabled` and `required` are the native attributes: a disabled switch leaves the tab order. The
-  `*` is part of the label text, so it's read with the name.
+- `disabled` and `required` are the native attributes: a disabled switch leaves the tab order, and a
+  required one is announced as required. The `*` is hidden from assistive technology, so it isn't
+  read as part of the name.
 - Keyboard focus shows the shared Focus Ring around the track.
 
 <Keyboard>

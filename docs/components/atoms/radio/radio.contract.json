@@ -80,13 +80,13 @@
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Maps to native required. Appends a visible required indicator after the label."
+        "description": "Maps to native required, which is announced. Appends a visible required indicator after the label, aria-hidden so it isn't read as part of the name."
       },
       "disabled": {
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Maps to native disabled."
+        "description": "Maps to native disabled. A disabled RadioGroup also disables it, and it looks disabled."
       },
       "className": {
         "type": "string",
@@ -155,19 +155,19 @@
       "children": {
         "type": "React.ReactNode",
         "required": false,
-        "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted."
+        "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted. The group's disabled and required still reach them, through context."
       },
       "orientation": {
         "type": "'vertical' | 'horizontal'",
         "required": false,
         "default": "vertical",
-        "description": "horizontal wraps via flex-wrap rather than overflowing."
+        "description": "horizontal sets options in a row with spacing-lg between them, and wraps via flex-wrap rather than overflowing."
       },
       "required": {
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Group-level required indicator, shown after the legend."
+        "description": "Makes every radio in the group natively required (from options or children). Shows a required indicator after the legend, aria-hidden."
       },
       "invalid": {
         "type": "boolean",
@@ -179,7 +179,7 @@
         "type": "boolean",
         "required": false,
         "default": false,
-        "description": "Disables the fieldset and every generated option."
+        "description": "Disables the fieldset and shows every radio in the group as disabled, from options or children."
       },
       "onValueChange": {
         "type": "(value: string, event: React.ChangeEvent<HTMLInputElement>) => void",
@@ -291,8 +291,8 @@
     "RadioGroup passes a shared name to every Radio generated from options.",
     "RadioGroup is controlled via value/onValueChange and uncontrolled via defaultValue.",
     "RadioGroup renders generated options from options when provided; otherwise renders children.",
-    "A disabled RadioGroup disables every option generated from options.",
-    "required on RadioGroup applies at the group/question level, not per option."
+    "A disabled RadioGroup disables every radio inside it, from options or children, and they look disabled.",
+    "required on RadioGroup applies at the group/question level: one aria-hidden * after the legend, and every radio natively required."
   ],
   "compositionRules": [
     "Radio is almost always used inside RadioGroup rather than standalone.",
@@ -301,11 +301,11 @@
   ],
   "contentRules": [
     "Labels should be concise and unique within a group.",
-    "Required indicator appears after the label/legend text.",
+    "Required indicator appears after the label/legend text and is aria-hidden; the native required attribute is what's announced.",
     "RadioGroup's label should name the accessible question or prompt, not an individual option."
   ],
   "responsiveRules": [
-    "RadioGroup orientation is vertical by default with no gap between options.",
+    "RadioGroup orientation is vertical by default with no gap between options; horizontal puts spacing-lg between options (Figma has no horizontal radio-group, so this is a code decision).",
     "orientation=\"horizontal\" wraps via flex-wrap once the container is too narrow, rather than overflowing."
   ],
   "themeRules": [
@@ -317,9 +317,10 @@
     "CSS Modules.",
     "Decorative RadioCheckedIcon/RadioUncheckedIcon swapped via CSS on the :checked selector, not conditional rendering.",
     "Shared Focus Ring primitive utility classes for the focus-visible ring.",
-    "Radio predates the shared data-force-state convention used by Checkbox/Button/Avatar - hover, press, and focus previews use previewHover/previewPress/previewFocus classes instead.",
+    "Radio predates the shared data-force-state convention used by Checkbox/Button/Avatar - hover, press, and focus previews use previewHover/previewPress/previewFocus classes instead; previewFocus also pins the shared Focus Ring, drawn from its variables.",
     "Do not add radio control shapes to the shared icon library beyond the existing RadioCheckedIcon/RadioUncheckedIcon.",
-    "Do not use the browser default radio appearance or an SVG-only input."
+    "Do not use the browser default radio appearance or an SVG-only input.",
+    "The input carries the Focus Ring classes with --focus-ring-offset inset to the 24px indicator, as Checkbox does; disabled uses the disabled content color only, with no extra opacity."
   ],
   "relatedComponents": [
     "Checkbox",

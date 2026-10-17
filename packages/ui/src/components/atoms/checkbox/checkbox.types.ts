@@ -21,9 +21,15 @@ export interface CheckboxProps
    * color. Pair it with a visible message.
    */
   invalid?: boolean;
-  /** The native `disabled` attribute: the checkbox can't be changed and leaves the tab order. */
+  /**
+   * The native `disabled` attribute: the checkbox can't be changed and leaves the tab order. A
+   * disabled Checkbox Group disables it too.
+   */
   disabled?: boolean;
-  /** The native `required` attribute. Shows a `*` after the label when there is one. */
+  /**
+   * The native `required` attribute, which assistive technology announces. Shows a `*` after the
+   * label when there is one; the `*` is hidden from assistive technology.
+   */
   required?: boolean;
   /** Called when the user toggles the checkbox, with the next checked value and the change event. */
   onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,7 +46,7 @@ export interface CheckboxGroupOption {
   disabled?: boolean;
   /** Marks this option as invalid only. */
   invalid?: boolean;
-  /** Makes this option natively required and shows a `*` after its label. */
+  /** Makes this option natively required and shows a `*` after its label, hidden from assistive technology. */
   required?: boolean;
 }
 
@@ -64,19 +70,25 @@ export interface CheckboxGroupProps extends Omit<React.FieldsetHTMLAttributes<HT
   options?: CheckboxGroupOption[];
   /**
    * Checkboxes you lay out yourself, used when `options` isn't set. Set `name`, the checked value,
-   * and states on each one: the group passes them nothing, though a disabled fieldset still disables them.
+   * and their other states on each one. The group's `disabled` still reaches them.
    */
   children?: React.ReactNode;
   /**
-   * Shows a `*` after the legend. It doesn't make any checkbox required, so check that at least one
-   * is chosen yourself.
+   * Marks the question as required: shows a `*` after the legend and adds `requiredLabel` to the
+   * group's name, so assistive technology announces it. It doesn't make any checkbox required, so
+   * check that at least one is chosen yourself.
    */
   required?: boolean;
+  /**
+   * The word added, hidden, to the group's name when `required` is set, for assistive technology.
+   * Defaults to `required`; pass a translation.
+   */
+  requiredLabel?: string;
   /** Sets `aria-invalid` on the fieldset and marks every option from `options` invalid. */
   invalid?: boolean;
   /**
-   * Sets the fieldset's native `disabled`, which disables every checkbox inside it, and shows the
-   * options from `options` as disabled.
+   * Sets the fieldset's native `disabled`, which disables every checkbox inside it, and shows every
+   * checkbox in the group as disabled, from `options` or `children`.
    */
   disabled?: boolean;
   /** Stacks the options (`vertical`) or sets them in a row that wraps (`horizontal`). */

@@ -16,11 +16,14 @@ export interface RadioProps
    * color. Pair it with a visible message.
    */
   invalid?: boolean;
-  /** The native `required` attribute. Shows a `*` after the label when there is one. */
+  /**
+   * The native `required` attribute, which assistive technology announces. Shows a `*` after the
+   * label when there is one; the `*` is hidden from assistive technology.
+   */
   required?: boolean;
   /**
    * The native `disabled` attribute: the radio can't be selected and leaves the tab order. The
-   * circle and label are dimmed.
+   * circle and label take the disabled color. A disabled Radio Group disables it too.
    */
   disabled?: boolean;
   /** Added to the root `label` element's classes. */
@@ -43,7 +46,7 @@ export interface RadioGroupOption {
   disabled?: boolean;
   /** Marks this option as invalid only. */
   invalid?: boolean;
-  /** Makes this option natively required and shows a `*` after its label. */
+  /** Makes this option natively required and shows a `*` after its label, hidden from assistive technology. */
   required?: boolean;
 }
 
@@ -67,19 +70,20 @@ export interface RadioGroupProps extends Omit<React.FieldsetHTMLAttributes<HTMLF
   options?: RadioGroupOption[];
   /**
    * Radios you lay out yourself, used when `options` isn't set. Give them one `name` and set the
-   * checked value and states on each: the group passes them nothing, though a disabled fieldset still disables them.
+   * checked value and their other states on each. The group's `disabled` and `required` still reach them.
    */
   children?: React.ReactNode;
   /**
-   * Makes every radio from `options` natively required, so the browser asks for a choice, and shows
-   * a `*` after the legend.
+   * Makes every radio in the group natively required, from `options` or `children`, so the browser
+   * asks for a choice and assistive technology announces it. Shows a `*` after the legend, hidden
+   * from assistive technology.
    */
   required?: boolean;
   /** Sets `aria-invalid` on the fieldset and marks every option from `options` invalid. */
   invalid?: boolean;
   /**
-   * Sets the fieldset's native `disabled`, which disables every radio inside it, and shows the
-   * options from `options` as disabled.
+   * Sets the fieldset's native `disabled`, which disables every radio inside it, and shows every
+   * radio in the group as disabled, from `options` or `children`.
    */
   disabled?: boolean;
   /** Stacks the options (`vertical`) or sets them in a row that wraps (`horizontal`). */

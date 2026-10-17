@@ -10,6 +10,7 @@
   --slider-track-active-color: var(--color-data-viz-sequence-prussian-900);
   --slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);
   --slider-step-color: var(--color-content-brand-primary-default);
+  --slider-value-indicator-block-size: calc(var(--typography-body-sm-line-height) + var(--spacing-xs) * 2);
 
   display: grid;
   gap: var(--spacing-sm);
@@ -46,6 +47,15 @@
 
 .label {
   color: var(--color-content-default);
+}
+
+/*
+ * A value bubble that always shows (`showValue`) sits above the handle, so the control makes room
+ * for it: the bubble's height plus the gap below it. Otherwise it would land in the label row.
+ * Vertical sliders show it beside the handle instead.
+ */
+.root[data-orientation='horizontal'][data-show-value='true'] .control {
+  margin-block-start: calc(var(--slider-value-indicator-block-size) + var(--spacing-sm));
 }
 
 .control {
@@ -240,6 +250,11 @@
 }
 
 /*
+ * The keyboard ring is the shared Focus Ring, drawn on the visible handle: the native input fills
+ * the whole control, so its own outline is turned off above. The handle carries the Focus Ring
+ * classes (its color, width, and offset variables), and this rule draws the outline from them when
+ * the handle's input has keyboard focus, as the primitive does on :focus-visible.
+ *
  * `:not([data-pointer-focus='true'])` excludes focus that landed on the input as a side effect of
  * our own pointerdown/drag handling (see usePointerFocusRing in slider.tsx) - clicking or dragging
  * the handle must not show a focus ring, only real keyboard focus should.
@@ -250,8 +265,8 @@
 .control:has(.rangeInputLower[data-preview-state='focus']) .handleLower,
 .control:has(.rangeInputUpper:focus-visible:not([data-pointer-focus='true'])) .handleUpper,
 .control:has(.rangeInputUpper[data-preview-state='focus']) .handleUpper {
-  outline: var(--border-width-md) solid var(--color-border-focus);
-  outline-offset: var(--spacing-xs);
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .root[data-disabled='true'] {
@@ -335,6 +350,8 @@
   inset-block-end: calc(100% + var(--spacing-sm));
   inset-inline-start: var(--slider-value-position);
   z-index: 4;
+  box-sizing: border-box;
+  block-size: var(--slider-value-indicator-block-size);
   padding-block: var(--spacing-xs);
   padding-inline: var(--spacing-sm);
   border-radius: var(--border-radius-sm);

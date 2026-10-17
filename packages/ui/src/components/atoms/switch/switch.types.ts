@@ -17,7 +17,10 @@ export interface SwitchProps
   defaultChecked?: boolean;
   /** The native `disabled` attribute: the switch can't be changed and leaves the tab order. */
   disabled?: boolean;
-  /** The native `required` attribute. Shows a `*` after the label when there is one. */
+  /**
+   * The native `required` attribute, which assistive technology announces. Shows a `*` after the
+   * label when there is one; the `*` is hidden from assistive technology.
+   */
   required?: boolean;
   /**
    * Shows a Spinner in the track and ignores toggles while a change is saved. The switch stays

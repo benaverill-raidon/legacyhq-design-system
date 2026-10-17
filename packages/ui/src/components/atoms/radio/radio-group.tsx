@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Radio } from './radio';
+import { RadioGroupContext } from './radio-group-context';
 import styles from './radio.module.css';
 import type { RadioGroupProps } from './radio.types';
 
@@ -34,6 +35,7 @@ export const RadioGroup = React.memo(function RadioGroup({
     .filter(Boolean)
     .join(' ');
   const isControlled = value !== undefined;
+  const context = React.useMemo(() => ({ disabled, required }), [disabled, required]);
 
   const handleCheckedChange = React.useCallback(
     (optionValue: string, checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +54,9 @@ export const RadioGroup = React.memo(function RadioGroup({
       label={option.label}
       checked={isControlled ? value === option.value : undefined}
       defaultChecked={!isControlled ? defaultValue === option.value : undefined}
-      disabled={disabled || option.disabled}
+      disabled={option.disabled}
       invalid={invalid || option.invalid}
-      required={required || option.required}
-      showRequiredIndicator={Boolean(option.required)}
+      required={option.required}
       aria-describedby={describedBy || undefined}
       onCheckedChange={(checked, event) => handleCheckedChange(option.value, checked, event)}
     />
@@ -74,7 +75,12 @@ export const RadioGroup = React.memo(function RadioGroup({
       {label !== undefined ? (
         <legend className={styles.legend}>
           {label}
-          {required ? <span className={styles.requiredIndicator}>*</span> : null}
+          {/* Decorative: every radio in the group is natively required, which is what's announced. */}
+          {required ? (
+            <span className={styles.requiredIndicator} aria-hidden="true">
+              *
+            </span>
+          ) : null}
         </legend>
       ) : null}
       {description ? (
@@ -82,7 +88,9 @@ export const RadioGroup = React.memo(function RadioGroup({
           {description}
         </div>
       ) : null}
-      <div className={styles.options}>{renderedOptions ?? children}</div>
+      <RadioGroupContext.Provider value={context}>
+        <div className={styles.options}>{renderedOptions ?? children}</div>
+      </RadioGroupContext.Provider>
       {errorMessage ? (
         <div id={errorId} className={styles.errorMessage}>
           {errorMessage}

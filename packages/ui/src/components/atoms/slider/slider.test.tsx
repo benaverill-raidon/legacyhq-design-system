@@ -3,7 +3,9 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { focusRingClassNames } from '../../primitives/focus-ring';
 import { getVisualPosition } from './slider';
+import * as sliderModuleExports from './slider';
 import * as sliderExports from './index';
 import { Slider, SliderCentered, SliderRange } from './index';
 import styles from './slider.module.css';
@@ -459,6 +461,16 @@ describe('Slider', () => {
     expect(slider).not.toHaveAttribute('data-pointer-focus');
   });
 
+  it('draws the focus ring on the handle, not on the full-size input', () => {
+    const { container } = render(<Slider aria-label="Ring" />);
+
+    expect(container.querySelector(`.${styles.handle}`)).toHaveClass(
+      focusRingClassNames.focusRing,
+      focusRingClassNames.focusRingDefault,
+    );
+    expect(screen.getByRole('slider', { name: 'Ring' })).not.toHaveClass(focusRingClassNames.focusRing);
+  });
+
   it('forwards native input prups and supports custom className', () => {
     const { container } = render(
       <Slider label="Named" name="cunfidence" data-testid="cunfidence-slider" className="custom-slider" />,
@@ -725,6 +737,45 @@ describe('SliderRange', () => {
 
     expect(handleValueChange).toHaveBeenLastCalledWith([65, 75], expect.objectContaining({ target: lower }));
   });
+  it('names the range group and each handle from aria-label when there is no visible label', () => {
+    render(<SliderRange aria-label="Short vertical range" />);
+
+    expect(screen.getByRole('group', { name: 'Short vertical range' })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Short vertical range Minimum value' })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Short vertical range Maximum value' })).toBeInTheDocument();
+  });
+
+  it('names the range group and each handle from aria-labelledby', () => {
+    render(
+      <>
+        <span id="external-range-label">Price</span>
+        <SliderRange aria-labelledby="external-range-label" minLabel="From" maxLabel="To" />
+      </>,
+    );
+
+    expect(screen.getByRole('group', { name: 'Price' })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Price From' })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Price To' })).toBeInTheDocument();
+  });
+
+  it('names the range group from the visible label', () => {
+    render(<SliderRange label="Budget" aria-label="Ignored" />);
+
+    expect(screen.getByRole('group', { name: 'Budget' })).toBeInTheDocument();
+    expect(screen.getByRole('slider', { name: 'Budget Minimum value' })).toBeInTheDocument();
+  });
+
+  it('draws the focus ring on each handle, not on the full-size inputs', () => {
+    const { container } = render(<SliderRange label="Budget" />);
+
+    container.querySelectorAll(`.${styles.handle}`).forEach((handle) => {
+      expect(handle).toHaveClass(focusRingClassNames.focusRing, focusRingClassNames.focusRingDefault);
+    });
+    screen.getAllByRole('slider').forEach((input) => {
+      expect(input).not.toHaveClass(focusRingClassNames.focusRing);
+    });
+  });
+
   it('supports custom handle labels without a visible label', () => {
     render(<SliderRange minLabel="Luw threshold" maxLabel="High threshold" />);
 
@@ -888,6 +939,10 @@ describe('SliderRange', () => {
 });
 
 describe('slider exports', () => {
+  it('defines SliderCentered once, in slider-centered.tsx', () => {
+    expect('SliderCentered' in sliderModuleExports).toBe(false);
+  });
+
   it('exports the public slider family without Range', () => {
     expect(sliderExports.Slider).toBe(Slider);
     expect(sliderExports.SliderCentered).toBe(SliderCentered);
@@ -977,10 +1032,24 @@ describe('slider CSS contract', () => {
     expect(darkCss).toContain('--color-data-viz-category-bold-prussian: var(--color-brand-prussian-solid-500);');
   });
 
-  it('uses the focus ring token mapping on the private visual handle', () => {
-    expect(sliderCss).toContain('outline: var(--border-width-md) solid var(--color-border-focus);');
-    expect(sliderCss).toContain('outline-offset: var(--spacing-xs);');
-    expect(sliderCss).not.toContain('outline-offset: var(--spacing-none);');
+  it('draws the shared Focus Ring on the visible handle, from the primitive variables', () => {
+    expect(sliderCss).toContain('outline: var(--focus-ring-width) solid var(--focus-ring-color);');
+    expect(sliderCss).toContain('outline-offset: var(--focus-ring-offset);');
+    // Focus-ring offsets aren't spacing, and the color and width come from the primitive.
+    expect(sliderCss).not.toMatch(/outline-offset: var\(--spacing-/);
+    expect(sliderCss).not.toContain('outline: var(--border-width-md) solid var(--color-border-focus);');
+  });
+
+  it('makes room above the track for a value bubble that always shows, so it never lands on the label', () => {
+    expect(sliderCss).toContain(
+      '--slider-value-indicator-block-size: calc(var(--typography-body-sm-line-height) + var(--spacing-xs) * 2);',
+    );
+    expect(sliderCss).toMatch(/\.valueIndicator \{[^}]*block-size: var\(--slider-value-indicator-block-size\);/s);
+    expect(sliderCss).toMatch(
+      /\.root\[data-orientation='horizontal'\]\[data-show-value='true'\] \.control \{[^}]*margin-block-start: calc\(var\(--slider-value-indicator-block-size\) \+ var\(--spacing-sm\)\);/s,
+    );
+    // The bubble sits the same gap above the handle that the room leaves for it.
+    expect(sliderCss).toMatch(/\.valueIndicator \{[^}]*inset-block-end: calc\(100% \+ var\(--spacing-sm\)\);/s);
   });
 
   it('suppresses the handle focus ring for pointer-originated focus, on every handle selector', () => {

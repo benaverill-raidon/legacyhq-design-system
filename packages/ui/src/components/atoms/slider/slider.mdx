@@ -111,7 +111,9 @@ keep the two in line.
 
 The bubble above the handle shows the value on hover, keyboard focus, and while dragging. Set
 `showValue` to keep it showing, when people need to read the number without touching the slider.
-On Slider Range both values show.
+A slider with `showValue` makes room for the bubble between the label and the track, so the two
+never overlap. Without it, the bubble shows over whatever is above while you use the slider. On
+Slider Range both values show.
 
 </Subsection>
 
@@ -129,8 +131,8 @@ comes first. Set `disableSwap` to stop a handle at the other one instead.
 
 Press anywhere on the track and the handle jumps there; on Slider Range, the nearer handle does.
 Then drag. Pressing or dragging moves focus to the input without a focus ring; the ring around the
-handle shows only for keyboard focus. Slider draws that ring itself, so it doesn't use the shared
-Focus Ring. Hover and press change the handle's color, and pressing narrows it.
+handle shows only for keyboard focus. It's the shared Focus Ring, drawn around the handle rather
+than the input, which fills the whole control. Hover and press change the handle's color, and pressing narrows it.
 
 <Example of={SliderStories.States} />
 
@@ -174,14 +176,14 @@ Focus Ring. Hover and press change the handle's color, and pressing narrows it.
 - Slider renders a native `input type="range"`, so it's announced as a slider with its value, and the
   keyboard works with no extra code. `label` is a native `label` for it; without one, pass
   `aria-label` or `aria-labelledby`, which go to the input.
-- Slider Range renders two range inputs. Each is named by `label` and then its own `minLabel` or
-  `maxLabel` ("Minimum value" and "Maximum value" by default). Other attributes, `aria-label`
-  included, go to the root `div`, so without `label` the handles are named by `minLabel` and
-  `maxLabel` alone.
+- Slider Range renders two range inputs inside a `group`. The range's name comes from `label`, or
+  from `aria-labelledby` or `aria-label` when there's no visible label; it names the group, and each
+  handle is named by it and then its own `minLabel` or `maxLabel` ("Minimum value" and "Maximum
+  value" by default, so pass translations). Other attributes go to the root `div`.
 - The track, steps, and drawn handle are hidden from assistive technology. The value bubble is a
   native `output` linked to its input.
 - `disabled` is the native attribute: the slider leaves the tab order and ignores the pointer.
-- Focus shows as a ring around the handle, for keyboard focus only.
+- Focus shows as the shared Focus Ring around the handle, for keyboard focus only.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the slider. On Slider Range, to the lower handle, then the upper. A disabled slider is skipped.</Key>

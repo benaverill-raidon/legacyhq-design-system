@@ -59,6 +59,8 @@ const cardStyle: CSSProperties = {
 const tableStyle: CSSProperties = { width: '100%', borderCollapse: 'collapse' };
 
 const cellStyle: CSSProperties = {
+  font: 'var(--typography-body-md-font-weight) var(--typography-body-md-font-size) / var(--typography-body-md-line-height) var(--typography-body-md-font-family)',
+  color: 'var(--color-content-default)',
   padding: 'var(--spacing-sm)',
   borderBlockEnd: 'var(--border-width-sm) solid var(--color-border-default)',
   textAlign: 'start',
@@ -109,8 +111,9 @@ function LiveSelectionExample() {
 /**
  * The checked-value states crossed with interaction and system states. Radio predates the shared
  * `data-force-state` convention (Checkbox, Button, and Avatar use it) - its own CSS pins hover,
- * pressed, and focus with `previewHover` / `previewPress` / `previewFocus` classes instead. The
- * Live group is where real click-driven, mutually-exclusive selection is verified by hand.
+ * pressed, and focus with `previewHover` / `previewPress` / `previewFocus` classes instead;
+ * `previewFocus` pins the shared Focus Ring too. The Live group is where real click-driven,
+ * mutually-exclusive selection is verified by hand.
  */
 export const States: Story = {
   render: () => (
@@ -275,6 +278,13 @@ export const Content: Story = {
 
         <div style={cardStyle}>
           <RadioGroup label="Disabled group" name="disabled-group" disabled defaultValue="email" options={options} />
+        </div>
+
+        <div style={cardStyle}>
+          <RadioGroup label="Disabled group (children composition)" disabled>
+            <Radio label="Draft" name="disabled-children" value="draft" defaultChecked />
+            <Radio label="Final" name="disabled-children" value="final" />
+          </RadioGroup>
         </div>
       </section>
     </div>

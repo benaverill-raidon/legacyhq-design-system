@@ -81,7 +81,7 @@ SliderRange:
 - orientation: `horizontal`, `vertical`
 - size: `xs`, `sm`, `md`
 - state: default, hover, press, focus, disabled
-- showStops: boolean
+- showSteps: boolean
 - showValue: boolean
 
 ## Accessibility Requirements
@@ -100,8 +100,8 @@ Slider components must:
 SliderRange must:
 
 - provide accessible labels for both handles
-- prevent min handle from passing max handle
-- prevent max handle from passing min handle
+- keep the lower value below the upper: a handle moved past the other swaps with it, or stops at it with `disableSwap`
+- name the range (a `group`) from `label`, `aria-labelledby`, or `aria-label`, and prefix each handle's name with it
 - expose each handle as a native range input
 
 ## Content Rules

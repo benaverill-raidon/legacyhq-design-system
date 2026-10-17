@@ -196,7 +196,8 @@ live Figma component to actually be 6px (`--measurement-6`), 2px tighter than th
 - Use `aria-checked` only if needed; native checked state should usually be sufficient with `role="switch"`.
 - Do not add custom keyboard handlers unless native behavior is insufficient.
 - Do not use `div role="switch"`.
-- Required indicator appears after visible label.
+- Required indicator appears after visible label, spaced by `spacing-xxs` at both sizes (as on
+  Checkbox and Radio), and is `aria-hidden`: the native `required` is what's announced.
 - Disabled state uses native `disabled` attribute.
 
 ## Animation Requirements
@@ -261,7 +262,8 @@ Show:
 - labeled switch
 - switch without visible label (`aria-label` only)
 - setting row usage
-- form usage
+- a switch that applies its setting immediately (no submit button), with `isLoading` while it saves -
+  not a form with a submit button, which is the "deferred form submission" anti-pattern
 - dark theme example
 
 ### EdgeCases

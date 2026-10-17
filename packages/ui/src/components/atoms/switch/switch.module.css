@@ -188,7 +188,7 @@
 }
 
 .requiredIndicator {
-  margin-inline-start: var(--component-switch-md-thumb-inset);
+  margin-inline-start: var(--spacing-xxs);
   color: var(--color-content-error);
 }
 

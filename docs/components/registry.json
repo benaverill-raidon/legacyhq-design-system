@@ -9,7 +9,7 @@
     "anatomy": [
       {
         "name": "wrapped element",
-        "description": "The single focusable element the focus classes are applied to. FocusRing has no DOM node of its own - it clones its child."
+        "description": "The focusable element that carries the focus classes: the child FocusRing clones, or an element a component gives focusRingClassNames. Focus Ring has no DOM node of its own; the ring is that element's outline."
       }
     ],
     "props": {
@@ -282,7 +282,11 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Renders the selected logo SVG asset directly; carries data-logo-type/data-logo-size."
+        "description": "Sets the height from size, carries data-logo-type/data-logo-size and the title attribute, and is aria-hidden when decorative. The SVG markup is set inside it."
+      },
+      {
+        "name": "artwork",
+        "description": "The approved SVG for the type, sized to the root's height. Informative: role=img with aria-label; decorative: aria-hidden. Its fills read --logo-mark-color and --color-content-default."
       }
     ],
     "props": {
@@ -606,19 +610,23 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Owns size, data attributes, focus ring classes, and accessibility attributes."
+        "description": "A span with role=\"img\", or a native button when interactive. Owns size, data attributes, focus ring classes, and the accessible name."
       },
       {
         "name": "surface",
-        "description": "Painted circular surface that owns radius, the full-size light or dark fallback SVG, and selected or interaction overlays."
+        "description": "The circle: the surface fill, the hover and press overlay (::after), and the selected ring (::before)."
+      },
+      {
+        "name": "content",
+        "description": "The image from src, or the light or dark fallback artwork for entityType when there's no usable image. Clipped to the circle."
       },
       {
         "name": "badgeContainer",
-        "description": "Dedicated placement container for presence or status."
+        "description": "Shown only with a presence or status: a disc in the surface color at the bottom-end corner that sets the badge off from the image."
       },
       {
         "name": "badgeIcon",
-        "description": "The actual presence dot or status icon inside the badge container, including the inverse border."
+        "description": "The presence or status glyph inside the badge container, ringed with the inverse border color."
       }
     ],
     "props": {
@@ -654,9 +662,52 @@
           "person",
           "team"
         ]
+      },
+      "isSelected": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "disabled": {
+        "type": "boolean",
+        "required": false,
+        "default": false,
+        "description": null
+      },
+      "isDisabled": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": null
+      },
+      "selectedLabel": {
+        "type": "string",
+        "required": false,
+        "default": "selected",
+        "description": null
+      },
+      "getPresenceLabel": {
+        "type": "(presence: 'online' | 'offline' | 'busy') => string",
+        "required": false,
+        "default": "English: online, offline, busy",
+        "description": null
+      },
+      "getStatusLabel": {
+        "type": "(status: 'accepted' | 'declined') => string",
+        "required": false,
+        "default": "English: accepted, declined",
+        "description": null
       }
     },
-    "sizes": [],
+    "sizes": [
+      "xxs",
+      "xs",
+      "sm",
+      "md",
+      "lg",
+      "xl"
+    ],
     "slots": [],
     "variants": {},
     "subComponents": [],
@@ -682,16 +733,42 @@
         "--component-avatar-badge-icon-size-xl"
       ],
       "semantic": {
+        "surface": "--color-elevation-surface-raised-default",
+        "fallbackIcon": "--color-content-subtle",
+        "onlineAcceptedBadge": "--color-content-success",
         "offlineBadge": "--color-content-subtle",
-        "selectedBorder": "--color-border-selected",
-        "badgeBorder": "--color-border-inverse",
-        "hover": "--color-interaction-hover",
-        "press": "--color-interaction-press"
+        "busyDeclinedBadge": "--color-content-error",
+        "selectedBorder": "--color-border-brand-primary-default",
+        "badgeBorder": "--color-border-inverse-default",
+        "hover": "--color-background-neutral-overlay-bold-hover",
+        "press": "--color-background-neutral-overlay-bold-press",
+        "selectedHover": "--color-background-brand-primary-overlay-hover",
+        "selectedPress": "--color-background-brand-primary-overlay-press",
+        "selectedRingWidth": "--border-width-md",
+        "radius": "--border-radius-full-round",
+        "focusRingOffset": "--spacing-xxs",
+        "overlayMotion": "--fade-quick",
+        "selectedRingMotion": "--move-quick"
       }
     },
-    "accessibility": {},
-    "relatedComponents": [],
-    "contentCompleteness": "stub",
+    "accessibility": {
+      "role": "img on the static span; native button when interactive",
+      "accessibleName": "aria-labelledby, else aria-label, name, or alt, in that order. To a name from aria-label, name, or alt, Avatar appends selectedLabel (static avatars only) and the visible badge's word from getStatusLabel or getPresenceLabel, with English defaults (selected; online, offline, busy; accepted, declined). Nothing is appended with aria-labelledby.",
+      "image": "The img is alt=\"\" and aria-hidden; the fallback artwork is aria-hidden.",
+      "decorative": "decorative hides a static avatar (aria-hidden, no role, no name). Ignored when interactive.",
+      "missingNameWarning": "In development, Avatar warns in the console when a non-decorative avatar has no accessible name.",
+      "selection": "An interactive avatar given isSelected (true or false) sets aria-pressed and doesn't add the selected word to its name; without isSelected it has no aria-pressed. A static avatar (role=\"img\") can't be pressed, so a selected one carries selectedLabel in its name.",
+      "focus": "Shared Focus Ring on the interactive button, offset by --spacing-xxs."
+    },
+    "relatedComponents": [
+      "AvatarGroup",
+      "Chip",
+      "Badge",
+      "Label",
+      "IconButton",
+      "FocusRing"
+    ],
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -740,11 +817,17 @@
           "error"
         ]
       },
+      "label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "The count in words, such as \"3 unread messages\". Rendered as visually hidden text that screen readers read in place of the visible value, which is aria-hidden."
+      },
       "ariaLabel": {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Accessible label when the visible value needs additional context."
+        "description": "Deprecated alias for label, rendered the same way. label wins when both are set."
       },
       "className": {
         "type": "string",
@@ -787,20 +870,20 @@
       },
       "color": {
         "default": {
-          "background": "--color-elevation-surface-default",
-          "content": "--color-content-default"
+          "background": "--color-background-neutral-bold-default",
+          "content": "--color-content-inverse-default"
         },
         "brand": {
-          "background": "--color-background-brand-bold-default",
-          "content": "--color-content-inverse"
+          "background": "--color-background-brand-primary-bold-default",
+          "content": "--color-content-inverse-default"
         },
         "success": {
           "background": "--color-background-success-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "error": {
           "background": "--color-background-error-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         }
       }
     },
@@ -808,18 +891,20 @@
       "interactive": false,
       "focusable": false,
       "role": null,
-      "ariaLabel": {
-        "supported": true,
-        "prop": "ariaLabel",
-        "mapsTo": "aria-label",
-        "useWhen": "Visible numeric value needs additional context."
-      },
       "requirements": [
         "Do not add button behavior.",
         "Do not add keyboard interaction.",
-        "Use ariaLabel when the visible value is ambiguous.",
+        "Set label when the visible value is ambiguous.",
         "Ensure color contrast meets requirements for all tones."
-      ]
+      ],
+      "textAlternative": {
+        "supported": true,
+        "prop": "label",
+        "deprecatedAlias": "ariaLabel",
+        "mapsTo": "visually hidden text; the visible value gets aria-hidden",
+        "why": "The span has no role, and ARIA prohibits aria-label on the generic role, so screen readers may ignore it.",
+        "useWhen": "The words beside the badge don't say what the number counts."
+      }
     },
     "relatedComponents": [
       "Tag",
@@ -1097,8 +1182,7 @@
     "props": {},
     "sizes": [],
     "slots": [
-      "label",
-      "helperText"
+      "label"
     ],
     "variants": {},
     "subComponents": [],
@@ -1110,7 +1194,7 @@
       "Radio",
       "Switch"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -1455,7 +1539,7 @@
       },
       "notes": [
         "emphasis is a weight axis: strong = heading weight (600), default = body weight (400). Figma default emphasis is 'strong'.",
-        "hasVisited applies to every appearance including inverse; inverse visited is content/accent/purple/subtle in Figma (that token is not yet in the generated set, so code uses content/accent/purple/default as the closest available).",
+        "hasVisited applies to every appearance including inverse; inverse visited is content/accent/purple/subtle in Figma, and in code.",
         "Figma's Link has only default + hover states - there is no press/active treatment.",
         "Default appearance colour is content/brand/primary/default (matches Figma)."
       ]
@@ -1701,7 +1785,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Owns progress semantics and layout."
+        "description": "Owns the name and layout: a progressbar when passive, a group around the dot buttons when interactive."
       },
       {
         "name": "dots",
@@ -1767,6 +1851,12 @@
         "required": false,
         "default": null,
         "description": null
+      },
+      "getStepLabel": {
+        "type": "(step: number, totalSteps: number) => string",
+        "required": false,
+        "default": "(step) => `Go to step ${step}`",
+        "description": "Accessible name for each dot button when onStepChange is provided."
       }
     },
     "sizes": [
@@ -1792,8 +1882,8 @@
         "primarySelected": "color-background-brand-primary-bold-default",
         "inverseSelected": "color-background-neutral-subtle-default",
         "unselectedBorder": "color-border-bold",
-        "interactiveHover": "color-background-neutral-subtle-hover",
-        "interactivePressed": "color-background-neutral-subtle-press",
+        "interactiveHover": "color-background-neutral-overlay-bold-hover",
+        "interactivePressed": "color-background-neutral-overlay-bold-press",
         "radius": "border-radius-full-round",
         "spacing": "spacing-0"
       },
@@ -1809,11 +1899,13 @@
       ]
     },
     "accessibility": {
-      "role": "progressbar",
+      "role": "progressbar when passive; group when onStepChange is provided (a progressbar's children are presentational, so its buttons may not be exposed)",
       "ariaValueMin": 1,
       "ariaValueMax": "normalized totalSteps",
       "ariaValueNow": "normalized currentStep",
       "defaultAriaValueText": "Step {currentStep} of {totalSteps}",
+      "valueAttributes": "passive only (aria-valuemin/max/now/text on the progressbar)",
+      "defaultStepLabel": "Go to step {step} (getStepLabel)",
       "nameSources": [
         "aria-label",
         "aria-labelledby",
@@ -1870,7 +1962,184 @@
       "errorMessage"
     ],
     "variants": {},
-    "subComponents": [],
+    "subComponents": [
+      {
+        "name": "Radio",
+        "anatomy": [
+          {
+            "name": "root"
+          },
+          {
+            "name": "input"
+          },
+          {
+            "name": "indicator"
+          },
+          {
+            "name": "label"
+          },
+          {
+            "name": "required indicator"
+          }
+        ],
+        "props": {
+          "label": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Visible label. Omit only when aria-label/aria-labelledby is set."
+          },
+          "checked": {
+            "type": "boolean",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "defaultChecked": {
+            "type": "boolean",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "invalid": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": null
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Maps to native required, which is announced. Appends a visible required indicator after the label, aria-hidden so it isn't read as part of the name."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Maps to native disabled. A disabled RadioGroup also disables it, and it looks disabled."
+          },
+          "className": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Composes with the root label's class list."
+          },
+          "inputClassName": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Composes with the native input's class list."
+          },
+          "onCheckedChange": {
+            "type": "(checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void",
+            "required": false,
+            "default": null,
+            "description": null
+          }
+        }
+      },
+      {
+        "name": "RadioGroup",
+        "anatomy": [
+          {
+            "name": "fieldset root"
+          },
+          {
+            "name": "legend / group label (with optional required indicator)"
+          },
+          {
+            "name": "optional description"
+          },
+          {
+            "name": "options (from the options prop, or children)"
+          },
+          {
+            "name": "optional error message"
+          }
+        ],
+        "props": {
+          "label": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Rendered as the fieldset legend; the group's accessible name."
+          },
+          "description": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "errorMessage": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Connected to the fieldset with aria-describedby when present."
+          },
+          "name": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": "Shared across every option generated from options. Auto-generated when omitted."
+          },
+          "value": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "defaultValue": {
+            "type": "string",
+            "required": false,
+            "default": null,
+            "description": null
+          },
+          "options": {
+            "type": "RadioGroupOption[]",
+            "required": false,
+            "default": null,
+            "description": "Generates one Radio per entry. Takes precedence over children when provided."
+          },
+          "children": {
+            "type": "React.ReactNode",
+            "required": false,
+            "default": null,
+            "description": "Custom layout of manually-wired Radio instances. Used only when options is omitted. The group's disabled and required still reach them, through context."
+          },
+          "orientation": {
+            "type": "'vertical' | 'horizontal'",
+            "required": false,
+            "default": "vertical",
+            "description": "horizontal sets options in a row with spacing-lg between them, and wraps via flex-wrap rather than overflowing."
+          },
+          "required": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Makes every radio in the group natively required (from options or children). Shows a required indicator after the legend, aria-hidden."
+          },
+          "invalid": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Sets aria-invalid on the fieldset and every generated option."
+          },
+          "disabled": {
+            "type": "boolean",
+            "required": false,
+            "default": false,
+            "description": "Disables the fieldset and shows every radio in the group as disabled, from options or children."
+          },
+          "onValueChange": {
+            "type": "(value: string, event: React.ChangeEvent<HTMLInputElement>) => void",
+            "required": false,
+            "default": null,
+            "description": null
+          }
+        }
+      }
+    ],
     "tokens": {
       "semantic": {
         "defaultContent": "color-content-default",
@@ -1976,11 +2245,12 @@
     ],
     "props": {},
     "sizes": [
+      "xs",
+      "sm",
       "md"
     ],
     "slots": [
-      "label",
-      "helperText"
+      "label"
     ],
     "variants": {
       "type": [
@@ -2116,8 +2386,7 @@
       "md"
     ],
     "slots": [
-      "label",
-      "helperText"
+      "label"
     ],
     "variants": {},
     "subComponents": [],
@@ -2150,6 +2419,9 @@
     "anatomy": [
       {
         "name": "container"
+      },
+      {
+        "name": "content area"
       },
       {
         "name": "optional leading icon"
@@ -2375,7 +2647,7 @@
         "type": "React.ReactElement",
         "required": true,
         "default": null,
-        "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby."
+        "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby. Tooltip also passes it its ref and every prop set on Tooltip that Tooltip doesn't use itself (aria-*, data-*, role, style merged, handlers run after the child's own; undefined never erases the child's value, aria-describedby ids are kept from both), so a wrapper that clones Tooltip (Popup's aria-expanded/aria-controls, Dropdown Menu's aria-haspopup) reaches the real trigger."
       },
       "truncate": {
         "type": "boolean",
@@ -2399,7 +2671,13 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Composes with the tooltip content element's class list."
+        "description": "Composes with the tooltip content element's class list (the bubble, not the trigger)."
+      },
+      "ref": {
+        "type": "React.Ref<HTMLElement>",
+        "required": false,
+        "default": null,
+        "description": "Forwarded to the child, merged with the child's own ref, so a wrapper that clones Tooltip (Popup, Dropdown Menu) can measure and focus the real trigger."
       }
     },
     "sizes": [],
@@ -2409,7 +2687,7 @@
     "tokens": {
       "semantic": [
         "--color-background-neutral-bold-default",
-        "--color-content-inverse",
+        "--color-content-inverse-default",
         "--typography-body-sm-font-family",
         "--spacing-xxs",
         "--spacing-xs",
@@ -2461,7 +2739,7 @@
       },
       {
         "name": "overflow trigger",
-        "description": "Present only when avatars.length > maxVisible. A Button (appearance=\"subtle\"), reshaped via CSS into a circle matching Avatar's own diameter, reading overflowLabel(hiddenAvatars.length), wrapped in a DropdownMenu."
+        "description": "Present only when avatars.length > maxVisible. A Button (prominence=\"tertiary\"), reshaped via CSS into a circle matching Avatar's own diameter, reading overflowLabel(hiddenAvatars.length), wrapped in a DropdownMenu."
       },
       {
         "name": "overflow panel",
@@ -2509,7 +2787,7 @@
         "type": "(avatar: AvatarGroupItem, event) => void",
         "required": false,
         "default": null,
-        "description": "Called when a truncated avatar is selected from the overflow panel. Avatar Group does not navigate or close the panel on its own."
+        "description": "Called when a truncated avatar is selected from the overflow panel. Dropdown Menu then closes the panel and returns focus to the overflow trigger (unless the callback calls event.preventDefault()); Avatar Group does not navigate on its own."
       },
       "id": {
         "type": "string",
@@ -2534,7 +2812,7 @@
     "variants": {},
     "subComponents": [],
     "tokens": {
-      "note": "avatar-group.module.css declares no raw values - overlap (overlap-sm/md/lg), both separating rings (color-elevation-surface-raised-default, color-border-inverse, border-width-sm), the overflow trigger's forced circle (border-radius-full-round, size-control-xs/sm/md/lg). Every other value is Avatar's, Button's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
+      "note": "avatar-group.module.css declares no raw values - overlap (overlap-sm/md/lg), both separating rings (color-elevation-surface-raised-default, color-border-inverse-default, border-width-sm), the overflow trigger's forced circle (border-radius-full-round, size-control-xs/sm/md/lg). Every other value is Avatar's, Button's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
     },
     "accessibility": {
       "overflowTriggerRole": "button (Button, unmodified)",
@@ -2562,7 +2840,7 @@
       "structure": "12 variants cross `size` (xs/sm/md/lg, matching Avatar's own xs/sm/md/lg exactly - xxs and xl are not part of Avatar Group; default lg) x `number` (2/3/4, default 4, the count of visible avatars), plus a `showMore` boolean component property (defaultValue: true). Each variant is layoutMode HORIZONTAL with a negative itemSpacing (measured per size: xs -4, sm -4, md -8, lg -12), containing `number` `avatar` instances (each an instance-level override of the real avatar component - unmodified apart from an added separating-ring stroke, color/elevation/surface/raised/default, 1px, OUTSIDE-aligned) followed by one `dropdown-menu` instance (trigger=more-avatar, alignment=left, isOpen=false) whose trigger slot holds a `figma-parts / more-trigger` instance. That part, traced one level deeper (all 16 of its own size x state variants individually re-measured, not sampled from one), is itself a real `button` (Button) instance (appearance=subtle in code, called tone=subtle in Figma's own variant name - the same Figma-vs-code naming divergence Tag's own tone/appearance split already has) with buttonText bound to a fixed illustrative count (\"+3\"/\"+4\" depending on sample) and five instance-level overrides verified across every size/state combination: fixed square inline-size equal to its own block-size; a fully-rounded corner radius (999 on all 16); background overridden to color/elevation/surface/sunken/default - identically on all 16 variants (every size x every state, including hover/press/focus), which reads as an unfinished mockup rather than an intentional static/no-hover-feedback design, since every other interactive control in this system gives hover/press feedback; typography overridden to Body/SM, MD, LG, LG for xs/sm/md/lg (not Button's own per-size heading-based type scale - lg reuses the same Body/LG style as md rather than stepping up); and padding-inline of 6/8/12/16 for xs/sm/md/lg, which for sm/md/lg happens to already equal Button's own natural per-size padding-inline default (8/12/16) - only xs (6) doesn't match Button's own default (8), and 6 isn't on the spacing scale at all. That button instance carries its own separating-ring stroke too, color/border/inverse (a different, deliberately verified token from the avatars' own ring), 1px, OUTSIDE-aligned. The nested dropdown-menu's own content slot is empty in the static file (isOpen=false, never toggled open in the source), same as Tag Group's own dropdown-menu instance.",
       "apiAdaptationNotes": [
         "Figma's `number` (2/3/4, a fixed illustrative axis) and `showMore` (a boolean, defaultValue true) are both replaced by a single derived `hasOverflow = avatars.length > maxVisible` boolean - the same 'closed demo becomes an open, data-driven prop' adaptation Tag Group already made for its own tab-group source. A consumer cannot set showMore inconsistently with the real truncated count, since there is no separate manual toggle.",
-        "The figma-parts / more-trigger part is not implemented as a bespoke new component - it is, verified across all 16 of its own size x state variants (not sampled from one), the real Button component with instance-level overrides (forced square inline-size, fully-rounded corner radius, a sunken-surface background instead of Button's own subtle-appearance background, and Body/SM-MD-LG-LG typography instead of Button's own per-size heading-based type scale). Code reuses Button directly (appearance=\"subtle\") and applies each override via a CSS class passed through Button's own className prop, rather than reimplementing a circular button from scratch or inventing a new Button variant.",
+        "The figma-parts / more-trigger part is not implemented as a bespoke new component - it is, verified across all 16 of its own size x state variants (not sampled from one), the real Button component with instance-level overrides (forced square inline-size, fully-rounded corner radius, a sunken-surface background instead of Button's own subtle-appearance background, and Body/SM-MD-LG-LG typography instead of Button's own per-size heading-based type scale). Code reuses Button directly (prominence=\"tertiary\") and applies each override via a CSS class passed through Button's own className prop, rather than reimplementing a circular button from scratch or inventing a new Button variant.",
         "Every one of the 16 more-trigger variants (all 4 sizes x all 4 states - default/hover/press/focus) measures the identical background fill (color/elevation/surface/sunken/default) - Figma models no visual hover/press differentiation for this part at all. Treated as an unfinished mockup rather than intentional static styling, since no other interactive control in this system omits hover/press feedback: code still differentiates hover (color/elevation/surface/sunken/hover) and press (color/elevation/surface/sunken/press) using the same token family's sibling values, which already exist for exactly this purpose.",
         "Button's own per-size min-block-size tokens (--size-control-xs/sm/md/lg) were verified to measure identically to Avatar's own per-size tokens (--size-avatar-xs/sm/md/lg) at every one of the four shared sizes - this correspondence is what makes 'force Button's inline-size to match its own block-size' produce a circle exactly matching Avatar's own diameter, not an approximation.",
         "The two separating-ring tokens (color-elevation-surface-raised-default around each avatar, color-border-inverse around the overflow trigger) were verified as distinct Figma variables individually, not assumed interchangeable just because both resolve to solid white in the light-mode file being inspected - using the wrong one would only surface as a visual bug in dark mode.",
@@ -2612,11 +2890,23 @@
         "default": null,
         "description": "Ordered list of trail entries, root first, current page last."
       },
-      "ariaLabel": {
+      "aria-label": {
         "type": "string",
         "required": false,
         "default": "Breadcrumb",
-        "description": "Accessible name for the nav landmark."
+        "description": "Accessible name for the nav landmark. Ignored when aria-labelledby is set."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the nav by the id of a visible heading, in place of aria-label."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Deprecated alias for aria-label, still accepted."
       },
       "className": {
         "type": "string",
@@ -2644,7 +2934,7 @@
         "separator": "--typography-body-md-*"
       },
       "color": {
-        "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/press color (see compositionRules)",
+        "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting color (see compositionRules)",
         "current": "--color-content-subtle",
         "separator": "--color-content-subtle"
       }
@@ -2770,9 +3060,10 @@
       "role": null,
       "group": {
         "supported": true,
-        "appliedWhen": "aria-label or aria-labelledby is present",
+        "appliedWhen": "aria-label or aria-labelledby is present, and no role is passed",
         "value": "group"
       },
+      "consumerRole": "A role passed by the consumer (e.g. toolbar) wins over group, labelled or not.",
       "requirements": [
         "Do not add roving tabindex or arrow-key navigation - children keep native Tab order.",
         "Do not add a role without an accompanying accessible name.",
@@ -2925,8 +3216,14 @@
       "removeAriaLabel": {
         "type": "string",
         "required": false,
-        "default": "Remove ${label}",
-        "description": "filter and select. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
+        "default": "Remove ${labelText}",
+        "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`."
+      },
+      "labelText": {
+        "type": "string",
+        "required": false,
+        "default": "label, when it is a string",
+        "description": "filter and select. The label as plain text, for the names Chip builds from it: the remove button (`Remove ${labelText}`), and in filter mode the operator/value panels (`${labelText} operator` / `${labelText} value`) and the operator/value buttons, which are named by the property and their own text (`aria-labelledby`, e.g. \"Due date March 2\"). Set it when label is JSX, or those names lose the property."
       },
       "id": {
         "type": "string",
@@ -2958,14 +3255,14 @@
     },
     "subComponents": [],
     "tokens": {
-      "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
+      "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, typography-body-md-*, fade-quick for the color transition, plus the color families listed under figmaSource.tokenMapping. The slots have no fixed size (they hug their content), and the only literal is the 0 that suppresses interior borders."
     },
     "accessibility": {
       "searchRole": "native button with aria-pressed, matching Toggle Button",
       "labelSegment": "a plain non-interactive span in filter/select mode - it names the property rather than acting on it",
-      "dropdownSegments": "native buttons; aria-expanded/aria-controls supplied by Popup via Dropdown Menu",
+      "dropdownSegments": "native buttons named by the property and their own text through aria-labelledby (\"Due date March 2\"; labelText stands in for a JSX label); aria-expanded/aria-controls supplied by Popup and aria-haspopup by Dropdown Menu, also when the segment has a tooltip (Tooltip forwards them to the button)",
       "menuRole": "menu (from Menu), named from the property and segment role by default",
-      "removeButton": "native button with an accessible name (`Remove ${label}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
+      "removeButton": "native button with an accessible name (`Remove ${labelText}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
       "decorativeSlots": "elemBefore and valuePreview are aria-hidden - the label and value text already carry the meaning",
       "focus": "shared Focus Ring primitive on every real control",
       "labelIcon": "inherits the label colour, so it stays legible across subtle/selected/disabled without the consumer restating it"
@@ -3537,13 +3834,13 @@
         "round": "--border-radius-full-round"
       },
       "color": {
-        "gray_default": {
+        "taupe_default": {
           "background": "--color-background-accent-taupe-default-default",
           "content": "--color-content-default"
         },
-        "gray_bold": {
+        "taupe_bold": {
           "background": "--color-background-accent-taupe-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "brand_default": {
           "background": "--color-background-brand-primary-default-default",
@@ -3551,7 +3848,7 @@
         },
         "brand_bold": {
           "background": "--color-background-brand-primary-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "red_default": {
           "background": "--color-background-accent-red-default-default",
@@ -3559,7 +3856,7 @@
         },
         "red_bold": {
           "background": "--color-background-accent-red-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "orange_default": {
           "background": "--color-background-accent-orange-default-default",
@@ -3567,7 +3864,7 @@
         },
         "orange_bold": {
           "background": "--color-background-accent-orange-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "yellow_default": {
           "background": "--color-background-accent-yellow-default-default",
@@ -3575,7 +3872,7 @@
         },
         "yellow_bold": {
           "background": "--color-background-accent-yellow-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "green_default": {
           "background": "--color-background-accent-green-default-default",
@@ -3583,7 +3880,7 @@
         },
         "green_bold": {
           "background": "--color-background-accent-green-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "teal_default": {
           "background": "--color-background-accent-teal-default-default",
@@ -3591,7 +3888,7 @@
         },
         "teal_bold": {
           "background": "--color-background-accent-teal-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "blue_default": {
           "background": "--color-background-accent-blue-default-default",
@@ -3599,7 +3896,7 @@
         },
         "blue_bold": {
           "background": "--color-background-accent-blue-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "purple_default": {
           "background": "--color-background-accent-purple-default-default",
@@ -3607,7 +3904,7 @@
         },
         "purple_bold": {
           "background": "--color-background-accent-purple-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         },
         "magenta_default": {
           "background": "--color-background-accent-magenta-default-default",
@@ -3615,7 +3912,7 @@
         },
         "magenta_bold": {
           "background": "--color-background-accent-magenta-bold-default",
-          "content": "--color-content-inverse"
+          "content": "--color-content-inverse-default"
         }
       }
     },
@@ -3708,15 +4005,15 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Transparent layout wrapper - flex row, no color/border tokens of its own."
+        "description": "Layout wrapper with no color or border tokens of its own: a full-width column holding the content, with the action row positioned absolutely against it."
       },
       {
         "name": "content",
-        "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing."
+        "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing. Full width in both states."
       },
       {
         "name": "actions",
-        "description": "Trailing cancel/confirm IconButton pair, wrapped in a ButtonGroup for the row layout; renders only once editing has started, when actionButtons is not false. The .actions class positions the group (align-self: flex-end) and tightens its gap to 4px (--spacing-xs), overriding Button Group's default 8px for this icon-only pair."
+        "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill."
       }
     ],
     "props": {
@@ -3736,7 +4033,7 @@
         "type": "(value: string) => void",
         "required": false,
         "default": null,
-        "description": "Called with the draft value when the confirm button (or Enter) commits the edit."
+        "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged."
       },
       "onCancel": {
         "type": "() => void",
@@ -3749,6 +4046,18 @@
         "required": false,
         "default": true,
         "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false."
+      },
+      "actionPlacement": {
+        "type": "'below' | 'end'",
+        "required": false,
+        "default": "below",
+        "description": "Where the action row floats: below the field at its trailing edge, or past its trailing edge. Neither takes space from the field; leave room for the buttons."
+      },
+      "actionAlignment": {
+        "type": "'center' | 'start'",
+        "required": false,
+        "default": "center",
+        "description": "With actionPlacement=\"end\": center the actions on the field, or keep them level with its first line (one control height) as a multi-line field grows."
       },
       "confirmLabel": {
         "type": "string",
@@ -3777,7 +4086,7 @@
     "subComponents": [],
     "tokens": {
       "layout": {
-        "rootGap": "--spacing-sm (8px, between the field and the action row, stacked in a column)",
+        "actionsOffset": "--spacing-sm (8px between the field and the floating action row, below it or past its trailing edge)",
         "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
       }
     },
@@ -3789,8 +4098,8 @@
         "No role or accessible name of its own - a transparent wrapper around the cloned child.",
         "confirmLabel/cancelLabel always set an aria-label on the internal IconButtons.",
         "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
-        "Enter calls onConfirm (with the draft, and preventDefault) while editing; Escape calls onCancel while editing. Neither fires before editing starts.",
-        "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur); moving focus to the cancel/confirm buttons themselves does not.",
+        "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
+        "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
         "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
       ]
     },
@@ -3840,9 +4149,9 @@
         "Figma's 'state' axis (default/edit) is not implemented as a state or isEditing prop at all - editing state and the in-progress draft are owned entirely inside the component. Two earlier passes exposed isEditing externally (first fully controlled by the parent, then still controlled but toggleable); both were reverted after explicit design feedback that no real use case shows the confirm/cancel buttons before the field has been interacted with - editing must always start on click/focus.",
         "state=default renders nothing but an empty slot - no read-only text, no pencil/edit icon, confirmed via screenshot. Rather than invent a separate read-mode display, Inline Edit clones the SAME single children element for both states via React.cloneElement (readOnly+value when not editing, draft+onChange when editing) - the same DOM node persists across the transition, so focus is never lost when editing starts on focus.",
         "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
-        "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys blur the field afterward (deselecting it), matching what clicking either action button already does - the same mousedown-set ref flag the action buttons use suppresses handleBlur's auto-confirm from re-firing off this same-tick blur.",
+        "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys leave focus on the field, now read-only (they blurred it until 2026-10-17, dropping focus to the page); the action buttons move focus back to the field since they unmount. A click or Enter on the focused read-only field starts editing again.",
         "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
-        "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation stacks the action row below the field instead (flex-direction: column, 8px gap, action row align-self: flex-end to anchor to the trailing/right edge) so the field keeps its full width in both states."
+        "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation floats the action row instead (absolutely positioned 8px below the field at its trailing edge, or 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
       ]
     }
   },
@@ -3972,6 +4281,7 @@
       ],
       "focusable": "only when content is provided (renders a real button)",
       "role": null,
+      "panelRole": "dialog (non-modal), named by the title; focused when the popup opens, one animation frame after Popup has positioned it",
       "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
       "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
     },
@@ -4011,6 +4321,10 @@
       {
         "name": "root",
         "description": "Flex column container. Resets browser default dl margin/padding."
+      },
+      {
+        "name": "children",
+        "description": "The Key Value Pairs, one per row. Each sets its own height, size, and underline divider."
       }
     ],
     "props": {
@@ -4064,7 +4378,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Flex row (align-items: baseline) holding the key and value. Carries the size class and optional underline border."
+        "description": "Flex row (align-items: flex-start, gap spacing-lg, min-block-size size-control-*) holding the key and value. Carries the size class, data-size, and the optional underline border."
       },
       {
         "name": "key",
@@ -4092,7 +4406,7 @@
         "type": "KeyValuePairSize",
         "required": false,
         "default": "md",
-        "description": "Controls padding-block and typography.",
+        "description": "Sets the row's minimum height (size-control-sm/md/lg) and typography (body-sm/md/lg). Does not size an inline control in children.",
         "enum": [
           "sm",
           "md",
@@ -4140,9 +4454,14 @@
       },
       "spacing": {
         "gap": "--spacing-lg",
-        "paddingBlock_sm": "--spacing-xs",
-        "paddingBlock_md": "--spacing-sm",
-        "paddingBlock_lg": "--spacing-md"
+        "keyAndStaticValueInset": "--spacing-sm",
+        "keyAndStaticValueInset_lg": "--spacing-md"
+      },
+      "sizing": {
+        "minBlockSize_sm": "--size-control-sm",
+        "minBlockSize_md": "--size-control-md",
+        "minBlockSize_lg": "--size-control-lg",
+        "underline_width": "--border-width-sm"
       },
       "typography": {
         "sm": "--typography-body-sm-*",
@@ -4169,7 +4488,7 @@
       "componentName": "key-value-pair",
       "variantCount": 22,
       "verifiedAt": "2026-09-17",
-      "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea/Select with context='inline' - Figma uses the standard Text Field/Text Area/Select context=inline instances there.",
+      "note": "22 variants across size (sm/md/lg), context (static/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea/Select with context='inline' - Figma uses the standard Text Field/Text Area/Select context=inline instances there.",
       "apiAdaptationNotes": [
         "Figma's context=static renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
         "The key (label) uses <dt> and the value uses <dd> for semantic HTML, expecting the parent Key Value List to render a <dl>.",
@@ -4202,7 +4521,7 @@
       },
       {
         "name": "page",
-        "description": "One per visible page number; isSelected + aria-current=\"page\" on the current page."
+        "description": "One per visible page number; selected look + aria-current=\"page\" on the current page, no aria-pressed."
       },
       {
         "name": "ellipsis",
@@ -4218,7 +4537,7 @@
         "type": "number",
         "required": true,
         "default": null,
-        "description": "1-based current page."
+        "description": "1-based current page, rounded down and clamped to 1..totalPages."
       },
       "totalPages": {
         "type": "number",
@@ -4262,11 +4581,23 @@
         "default": "(page) => `Page ${page}`",
         "description": "aria-label generator for each page button."
       },
-      "ariaLabel": {
+      "aria-label": {
         "type": "string",
         "required": false,
         "default": "Pagination",
-        "description": "Accessible name for the nav landmark."
+        "description": "Accessible name for the nav landmark. Ignored when aria-labelledby is set."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the nav by the id of a visible heading, in place of aria-label."
+      },
+      "ariaLabel": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Deprecated alias for aria-label, still accepted."
       },
       "className": {
         "type": "string",
@@ -4297,9 +4628,9 @@
       "role": null,
       "landmark": "nav",
       "requirements": [
-        "nav must always have an accessible name (ariaLabel, default 'Pagination').",
-        "The current page control must carry aria-current=\"page\".",
-        "Previous/next must have accessible names and must be disabled at the first/last page.",
+        "nav must always have an accessible name (aria-label, default 'Pagination', or aria-labelledby).",
+        "The current page control must carry aria-current=\"page\" and no aria-pressed, so it is announced once.",
+        "Previous/next must have accessible names and must be disabled at the first/last page; when the focused one becomes disabled, focus moves to the current page.",
         "The ellipsis must be aria-hidden and non-interactive."
       ]
     },
@@ -4327,7 +4658,7 @@
       "apiAdaptationNotes": [
         "Figma's one demo (currentPage=1, totalPages=20) shows 12 consecutive pages before collapsing to an ellipsis + page 20 - a width-fitting demo, not a literal algorithm. The component instead implements the standard sibling+boundary-count windowing algorithm (getPaginationRange), which with default siblingCount=1/boundaryCount=1 renders '1 2 … 20' for the same inputs. A consumer can raise siblingCount to get a wider range closer to Figma's sample.",
         "Figma's per-item VARIANT prop name 'tone' on both toggle-button and icon-button instances maps to this codebase's existing ToggleButtonTone/IconButtonAppearance prop values ('subtle'), not a new prop Pagination needs to invent.",
-        "aria-current=\"page\" is added on top of ToggleButton's own isSelected/aria-pressed, since ToggleButton alone has no concept of 'current page in a sequence'."
+        "Page numbers take ToggleButton's look (its stylesheet's toggleButton/size_sm/tone_subtle/selected classes on a native button) but not its semantics: ToggleButton always sets aria-pressed, and a page is a position, so the current page carries only aria-current=\"page\"."
       ]
     }
   },
@@ -4590,6 +4921,10 @@
         "description": "multi-select only. One removable Chip (mode=select) per selected value, inside the trigger; sm chips in sm/md triggers, md chips in lg."
       },
       {
+        "name": "caret",
+        "description": "A CaretDownIcon in the trigger's iconAfter slot, hidden from assistive technology. It turns over while the panel is open, toggles the panel on mousedown, and takes content/disabled when the field is disabled. The only part Select styles itself."
+      },
+      {
         "name": "panel",
         "description": "A Dropdown Menu (Popup + Menu) of option rows - menuitemradio for single, menuitemcheckbox for multi - with an empty message when the query matches nothing."
       }
@@ -4623,7 +4958,7 @@
         "type": "SelectSize",
         "required": false,
         "default": "md",
-        "description": "Trigger height 32/40/48; also sets the panel width and chip size.",
+        "description": "Trigger height 32/40/48; also sets the chip size. The panel matches the field frame's width at every size.",
         "enum": [
           "sm",
           "md",
@@ -4690,7 +5025,7 @@
         "type": "(value: string) => void",
         "required": false,
         "default": null,
-        "description": "Called as the query changes."
+        "description": "Called as the query changes. While it's set, Select stops filtering internally - pass the matching options yourself."
       },
       "emptyMessage": {
         "type": "React.ReactNode",
@@ -4708,7 +5043,25 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Same, by reference."
+        "description": "Same, by reference. Passed to both the input and the menu; Field passes its label's id."
+      },
+      "aria-describedby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Ids of elements that describe the input, such as Field's message."
+      },
+      "aria-invalid": {
+        "type": "boolean | 'true' | 'false'",
+        "required": false,
+        "default": null,
+        "description": "Marks the input invalid, as invalid does. Field passes it for an error."
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Sets the input's native required. Field passes it when its required is set."
       },
       "id": {
         "type": "string",
@@ -4751,7 +5104,8 @@
       "ariaControls": "set on the input by Popup, pointing at the panel while open",
       "panelRoles": "role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows carrying aria-checked",
       "invalid": "aria-invalid on the input when invalid",
-      "focusModel": "opening keeps focus in the input; ArrowDown moves into the Menu (its roving tabindex); Escape/outside-click close and return focus to the input",
+      "focusModel": "opening keeps focus in the input; ArrowDown moves into the Menu (its roving tabindex); Escape from inside the Menu returns focus to the input, an outside click leaves focus where it landed; Tab/Shift+Tab inside the Menu closes it and returns focus to the input; focus moving outside the field and Menu (e.g. Tab out of the input) closes the Menu; every pick returns focus to the input",
+      "menuName": "aria-label/aria-labelledby when given; otherwise taken from the input's native <label> when the menu opens (aria-labelledby its ids, or aria-label its text)",
       "note": "Deliberately the menu a11y pattern, matching Figma's text-input + dropdown-menu composition, not the strict combobox/listbox + aria-activedescendant pattern - see apiAdaptationNotes."
     },
     "relatedComponents": [
@@ -4784,7 +5138,7 @@
         "The trigger is the existing TextField molecule. TextField needed one additive extension - a `leadingContent` slot rendered inside the frame, before the input, NOT aria-hidden (unlike the decorative `iconBefore`) - so multi-select chips render inside the field without a second bordered frame or restating TextField's state CSS. The slot shrinks and clips to keep the field single-line, matching Figma's NO_WRAP trigger. Same 'extend the atom to fill a composition gap' move as Tag's isInteractive and Avatar's entityType.",
         "`context` (default/inline) is passed straight to the TextField trigger - the same prop, values, and Figma axis name (`context`) as Text Field and Text Area, so a wrapper drives all three with one prop. Field's inline context injects context='inline' into whatever control it wraps unless the control sets its own.",
         "`tone` and `appearance` are deprecated aliases for `context` (SelectTone: default/subtle/inline), still accepted: subtle and inline both map to context='inline', default to 'default'. An explicit `context` wins over either.",
-        "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape/outside-click close and return focus to the input. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
+        "A11y is the menu pattern, not the strict ARIA combobox/listbox pattern - a deliberate choice matching Figma's own composition (a text input + a dropdown-menu). The input is role=combobox with aria-haspopup=menu and aria-autocomplete=list; the panel is Menu's role=menu with menuitemradio (single) / menuitemcheckbox (multi) rows. Opening keeps focus in the input; ArrowDown moves focus into the Menu, whose existing roving-tabindex takes over; Escape, Tab, or a pick from inside the Menu returns focus to the input; focus leaving the field and menu closes the menu. A strict listbox (role=listbox/option + aria-activedescendant, focus staying in the input) would not reuse Menu at all and would diverge from how Figma composed it.",
         "Typeahead filtering is Select's own (case-insensitive substring on label) and passed to Menu as pre-filtered sections with showSearch=false - the user chose the trigger itself as the search field over Menu's own built-in search box. A controlled searchValue + onSearchChange hands filtering to the caller (e.g. async loading), in which case Select stops filtering internally.",
         "Multi-select values are removable two ways, matching the confirmed product intent: an ✕ on each Chip (Chip mode=select's own remove button) and re-picking the row in the open menu (checkbox toggles off). Backspace on an empty query removes the last chip. Figma's chip-base shows isRemovable=false, but that is the static mockup state.",
         "The panel always matches the field frame's width and left edge. The trigger child that carries the merged ref + aria-expanded/aria-controls is the inset input (where that a11y wiring belongs), but Select also passes the field frame (the input's parentElement, via a callback ref) as Dropdown Menu's `anchorRef` and sets `matchTriggerWidth`. Popup then measures, positions, width-matches, and scopes its outside-click boundary to the frame - not the ~9px-inset input - and the inner Menu fills that width via `fullWidth`. This keeps the input's single-child trigger + a11y contract intact while the dropdown lines up flush with the visible control. Verified live: panel width and left both equal the frame's on single and multi.",
@@ -5170,7 +5524,7 @@
         "type": "(tag: TagGroupItem, event) => void",
         "required": false,
         "default": null,
-        "description": "Called when a truncated tag is selected from the overflow panel. Tag Group does not navigate, remove, or close the panel on its own."
+        "description": "Called when a truncated tag is selected from the overflow panel. Dropdown Menu then closes the panel and returns focus to the overflow tag (unless the callback calls event.preventDefault()); Tag Group does not navigate or remove on its own."
       },
       "id": {
         "type": "string",
@@ -5795,11 +6149,11 @@
         },
         "color": {
           "defaultBackground": "--color-background-neutral-bold-default",
-          "defaultContent": "--color-content-inverse",
+          "defaultContent": "--color-content-inverse-default",
           "warningBackground": "--color-background-warning-bold-default",
           "warningContent": "--color-content-warning-bold",
           "errorBackground": "--color-background-error-bold-default",
-          "errorContent": "--color-content-inverse"
+          "errorContent": "--color-content-inverse-default"
         }
       }
     },
@@ -6064,7 +6418,7 @@
       },
       {
         "name": "popup",
-        "description": "anchored to the field frame; holds the calendar"
+        "description": "anchored to the field frame; holds the calendar, which is the named role=dialog"
       },
       {
         "name": "calendar",
@@ -6212,6 +6566,18 @@
         "required": false,
         "default": null,
         "description": null
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Native required on the input, plus a hidden input the form's validation checks (a read-only input is never validated)."
+      },
+      "dialogLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Choose a date",
+        "description": "Accessible name for the calendar dialog."
       }
     },
     "sizes": [],
@@ -6239,10 +6605,11 @@
     },
     "accessibility": {
       "trigger": "read-only input, aria-haspopup=\"dialog\"",
-      "expanded": "aria-expanded + aria-controls set by Popup while open",
-      "panelRole": "dialog",
-      "openFocus": "focus moves into the calendar grid on open",
-      "dismiss": "Escape or selecting a day closes and returns focus to the field; outside click dismisses without moving focus",
+      "expanded": "aria-expanded, and aria-controls pointing at the dialog while open, set by Date Picker",
+      "panelRole": "dialog (the calendar root), named by dialogLabel",
+      "openFocus": "focus moves into the calendar grid on open, once the panel is shown",
+      "dismiss": "Escape, selecting a day, or Tab / Shift+Tab out of the calendar closes and returns focus to the field; outside click dismisses without moving focus",
+      "required": "native required on the read-only input, plus a hidden input (tabIndex -1, aria-hidden) that the form's constraint validation checks; focusing it sends focus on to the field",
       "calendar": "the DatePickerCalendar provides the grid semantics and keyboard model"
     },
     "relatedComponents": [
@@ -6426,7 +6793,7 @@
       },
       "componentAllowed": [
         "cell size (size-500 x size-400)",
-        "today underline thickness (2px)"
+        "today underline thickness (--border-width-md, 2px: a stroke, so a border-width token)"
       ],
       "componentForbidden": [
         "color aliases",
@@ -6621,6 +6988,12 @@
         "default": "Time",
         "description": null
       },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Id for the date input, not the group. Field sets it, so clicking its label focuses the date half."
+      },
       "aria-label": {
         "type": "string",
         "required": false,
@@ -6659,6 +7032,7 @@
       "rootRole": "group",
       "label": "aria-label or aria-labelledby on the group",
       "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
+      "fieldWiring": "Field's label names the group via aria-labelledby; Field's id goes to the date input, so the label's htmlFor focuses the date half; required makes the form validate both halves",
       "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
     },
     "relatedComponents": [
@@ -6693,7 +7067,7 @@
     "anatomy": [
       {
         "name": "trigger",
-        "description": "The single child element (children) - any focusable control. Cloned by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls."
+        "description": "The single child element (children) - any focusable control. Cloned by DropdownMenu to receive a ref (for returning focus) and aria-haspopup=\"menu\" (unless it sets its own), then by the underlying Popup to receive a measurement ref and aria-expanded/aria-controls."
       },
       {
         "name": "panel",
@@ -6701,7 +7075,7 @@
       },
       {
         "name": "menu",
-        "description": "A Menu, rendered with the Menu props DropdownMenu forwards (an explicit list: clearSearchLabel is accepted by the type but not forwarded, and fullWidth is set from matchTriggerWidth)."
+        "description": "A Menu, rendered with every Menu prop DropdownMenu accepts (an explicit list; fullWidth is also set by matchTriggerWidth), with each item's onSelect wrapped to close the panel."
       }
     ],
     "props": {
@@ -6861,12 +7235,13 @@
     },
     "accessibility": {
       "triggeredBy": [
-        "consumer-controlled - same as Popup, Dropdown Menu attaches no open/close handler itself"
+        "consumer-controlled - same as Popup; Dropdown Menu attaches no open handler, and reports closing through onOpenChange(false)"
       ],
       "ariaExpanded": "set on the trigger by Popup, reflecting open",
       "ariaControls": "set on the trigger by Popup, pointing at the panel id while open",
       "role": "menu (set by the inner Menu, not by DropdownMenu/Popup directly)",
-      "focusManagement": "left to the consumer, same as Popup and Menu - neither moves focus into the panel on open"
+      "ariaHaspopup": "menu, set on the trigger by DropdownMenu unless the trigger sets its own",
+      "focusManagement": "menu-button pattern: opening moves focus to the search field or the first enabled row (one animation frame later, once Popup has made the panel visible); choosing an item, Escape, or Tab/Shift+Tab out of the panel returns focus to the trigger. Skipped for a role=\"combobox\" trigger (Select), which keeps focus."
     },
     "relatedComponents": [
       "Popup",
@@ -6900,7 +7275,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "centered vertical stack; informative fills a sunken surface, inherited is transparent"
+        "description": "centered vertical stack; appearance informative fills a sunken surface, inherited is transparent"
       },
       {
         "name": "illustration",
@@ -6908,7 +7283,7 @@
       },
       {
         "name": "heading",
-        "description": "optional bold heading (heading-md), centered"
+        "description": "optional bold heading (heading-md), centered; a real heading element at headingLevel (default h2), margins reset"
       },
       {
         "name": "description",
@@ -6920,11 +7295,21 @@
       }
     ],
     "props": {
-      "type": {
+      "appearance": {
         "type": "enum",
         "required": false,
         "default": "inherited",
-        "description": null,
+        "description": "The background: inherited is transparent, informative fills a sunken surface. Figma names this property `type`.",
+        "enum": [
+          "inherited",
+          "informative"
+        ]
+      },
+      "type": {
+        "type": "enum",
+        "required": false,
+        "default": null,
+        "description": "Deprecated alias for appearance (Figma's property name). Still accepted; appearance wins when both are set.",
         "enum": [
           "inherited",
           "informative"
@@ -6941,6 +7326,20 @@
         "required": false,
         "default": null,
         "description": null
+      },
+      "headingLevel": {
+        "type": "enum",
+        "required": false,
+        "default": 2,
+        "description": "The heading element's level (h1-h6). Doesn't change how it looks.",
+        "enum": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
       },
       "children": {
         "type": "React.ReactNode",
@@ -6969,7 +7368,7 @@
       "actions"
     ],
     "variants": {
-      "type": [
+      "appearance": [
         "inherited",
         "informative"
       ]
@@ -6997,7 +7396,7 @@
     "accessibility": {
       "nativeElement": "div",
       "defaultRole": null,
-      "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. Pass a real heading element as `heading` when a document-outline heading is needed."
+      "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. The heading is a real heading element at headingLevel (default h2); its margins are reset and the heading-md styles replace the browser's heading size, so every level looks the same."
     },
     "relatedComponents": [
       "SectionMessage",
@@ -7016,7 +7415,7 @@
       "componentName": "empty-state",
       "variantCount": 2,
       "verifiedAt": "2026-09-01",
-      "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The `type` variant is inherited (transparent) vs informative (sunken surface background). The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both types."
+      "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The Figma `type` variant is inherited (transparent) vs informative (sunken surface background); code names it `appearance` (the system's name for visual style) and keeps `type` as a deprecated alias. The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both appearances."
     }
   },
   {
@@ -7228,7 +7627,7 @@
       },
       {
         "name": "heading",
-        "description": "Optional section label with an optional leading icon."
+        "description": "Optional section label with an optional leading icon. A headed section is role=\"group\", aria-labelledby its heading."
       },
       {
         "name": "item",
@@ -7236,11 +7635,11 @@
       },
       {
         "name": "loading row",
-        "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel, in a role=\"status\" row."
+        "description": "Replaces the sections area entirely when `loading` is true - a Spinner plus loadingLabel, inside Menu's polite role=\"status\" live region."
       },
       {
         "name": "empty message",
-        "description": "Shown in place of the rows when none are left to show - search filtered every item out, or there are no items."
+        "description": "Shown in place of the rows when none are left to show - search filtered every item out, or there are no items. Announced through the same live region when the rows run out after the first render; shown without announcement when the Menu first renders empty."
       }
     ],
     "props": {
@@ -7289,7 +7688,13 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Also used as the search field's aria-label when set."
+        "description": "The search field's placeholder hint. Not its accessible name (see searchLabel)."
+      },
+      "searchLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Search",
+        "description": "The search field's accessible name."
       },
       "clearSearchLabel": {
         "type": "string",
@@ -7325,7 +7730,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": "No results",
-        "description": "Shown when search filters out every item."
+        "description": "Shown when no rows are left, such as when search filters out every item; announced politely when the rows run out after the first render."
       },
       "id": {
         "type": "string",
@@ -7383,12 +7788,12 @@
         "disabled": "--color-content-disabled",
         "rowHover": "--color-background-neutral-overlay-bold-hover",
         "rowPress": "--color-background-neutral-overlay-bold-press",
-        "selectedBackground": "--color-background-brand-primary-subtle-default",
-        "selectedBackgroundHovered": "--color-background-brand-primary-subtle-hover",
-        "selectedBackgroundPressed": "--color-background-brand-primary-subtle-press",
+        "selectedBackground": "--color-background-selected-default-default",
+        "selectedBackgroundHovered": "--color-background-selected-default-hover (also on keyboard focus)",
+        "selectedBackgroundPressed": "--color-background-selected-default-press",
         "selectedText": "--color-content-selected",
-        "selectedIndicator": "--color-border-brand-primary-default (2px inset left box-shadow, --border-width-md - see behaviorRules)",
-        "iconSelected": "IconColor \"selected\" (--color-content-selected) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true; applies to any leadingElement icon whenever the row is selected, not just checkbox/radio-style rows.",
+        "selectedIndicator": "--color-border-selected (2px inset left box-shadow, --border-width-md - see behaviorRules)",
+        "iconSelected": "The row's own color via currentColor (--color-content-selected on a selected row) - verified on a PLAIN elemBefore icon (not just checkbox/radio), which binds to the same color/content/selected variable id as the row's own text when isSelected=true. An icon in the slot takes no color prop; it follows the row, including the checked checkbox/radio glyph.",
         "iconUnselected": "IconColor \"default\" (--color-content-default) for a plain unselected action row's icon; IconColor \"subtle\" (--color-content-subtle) specifically for the checkbox-empty/radio-unchecked glyphs, which are their own distinct low-emphasis indicator - both verified directly on their respective vector fills.",
         "divider": "--color-border-default"
       },
@@ -7398,8 +7803,7 @@
         "rowPaddingBlock": "--spacing-xs",
         "titleRowGap": "--spacing-sm (gap between titleLeadingElement and label, inside the title row)",
         "elemBeforeAfterSize": "--size-300 (fixed 24px box, independent of content)",
-        "sectionPaddingTop": "--spacing-xs",
-        "sectionPaddingBottom": "--spacing-sm",
+        "sectionPaddingBlock": "--spacing-xs (symmetric, top and bottom)",
         "headingPadding": "--spacing-sm / --spacing-md"
       },
       "typography": {
@@ -7407,7 +7811,7 @@
         "description": "--typography-body-sm-* (12px)",
         "heading": "--typography-body-sm-*"
       },
-      "note": "Selected-row background reuses existing semantic tokens (Figma's isSelected fills #e5f6ff/#ccecff/#b3e3ff resolved exactly to color-background-brand-primary-subtle-default/-hover/-press, already the brand.prussian.solid.100/200/300 aliases). Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive. `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
+      "note": "Selected rows consume the dedicated `selected` semantic family, re-verified against Figma's menu-item bindings: color/background/selected/default/{default,hover,press} for the fill (code: --color-background-selected-default-*), color/border/selected for the indicator (--color-border-selected), color/content/selected for text and icons (--color-content-selected). The fill previously borrowed color-background-brand-primary-subtle-*, the closest match before a selected family existed. Selected-row TEXT AND ICON color is a new semantic token, `--color-content-selected` (packages/ui/src/tokens/src/semantic/semantic-color-light.json and -dark.json) - it happens to equal `--color-content-brand-primary-default`'s value in both themes (prussian-900 light / prussian-500 dark), but Figma binds the title/description text to a genuinely distinct variable, `color/content/selected` (different variable id, own light/dark mode values, confirmed via figma.variables.getVariableByIdAsync - not the same variable as content/brand/primary/default, just a currently-identical one), so code mirrors that real distinction rather than collapsing it. Also added: IconColor `selected` on the shared Icon primitive. `--component-menu-width-*` is the only NEW dimension token (packages/ui/src/tokens/src/component/menu.json) - 192/240/288px don't land on the semantic spacing scale (max --spacing-4xl is 40px), matching Tooltip's precedent of a dedicated component-tier dimension token for an off-scale Figma value."
     },
     "accessibility": {
       "role": "menu (on the sections container)",
@@ -7464,9 +7868,9 @@
       ],
       "apiAdaptationNotes": [
         "Figma models menu-item content as free-floating slots inside a component-set variant grid (state x isSelected x isDisabled), not a data structure. Code inverts this into a `sections: MenuSection[]` prop - each item a plain object (`MenuItem`) - so a real list of N items doesn't require N manually-composed component instances.",
-        "leadingElement/trailingElement are typed as arbitrary React.ReactNode but are documented as decorative-only in code: a real interactive Checkbox/Radio/Button nested inside the row's own <button> would be invalid HTML. This matches Figma exactly, not just a code-side precaution - the file's own 'checkboxes'/'radios' slot-content demos (menu-item Parts group) swap elemBefore's nested icon INSTANCE_SWAP property to the icon components `checkbox_fill`/`checkbox-empty`/`radio_checked`/`radio_unchecked` (colored `color/content/brand/primary/default` when checked, `color/content/subtle` when not - i.e. IconColor `brand`/`subtle`), never to a real Checkbox/Radio component. Selection semantics are carried by the row's own `selected`/`selectionType`, not by whatever's rendered in the slot. Every elemBefore icon (including plain, non-selectable action rows) uses the icon wrapper's `Size: md` + `spacing: spacious (24px)` component properties - code maps this to Icon's `spacing=\"spacious\"` (size=\"md\" is already Icon's own default).",
+        "leadingElement/trailingElement are typed as arbitrary React.ReactNode but are documented as decorative-only in code: a real interactive Checkbox/Radio/Button nested inside the row's own <button> would be invalid HTML. This matches Figma exactly, not just a code-side precaution - the file's own 'checkboxes'/'radios' slot-content demos (menu-item Parts group) swap elemBefore's nested icon INSTANCE_SWAP property to the icon components `checkbox_fill`/`checkbox-empty`/`radio_checked`/`radio_unchecked` (the checked glyph takes the row's own color - `color/content/selected` on a selected row, via currentColor, with no IconColor of its own - and the unchecked glyph is `color/content/subtle`, i.e. IconColor `subtle`), never to a real Checkbox/Radio component. Selection semantics are carried by the row's own `selected`/`selectionType`, not by whatever's rendered in the slot. Every elemBefore icon (including plain, non-selectable action rows) uses the icon wrapper's `Size: md` + `spacing: spacious (24px)` component properties - code maps this to Icon's `spacing=\"spacious\"` (size=\"md\" is already Icon's own default).",
         "selectionType ('checkbox' | 'radio') is a code-level addition with no direct Figma component property - inferred from the same 'checkboxes'/'radios' slot-content demos above, which show real-world compositions where isSelected pairs with a checkbox/radio-shaped row. Modeled per-item rather than as a menu-level 'selectionMode' so a single menu can mix plain action rows with a selectable group.",
-        "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-brand-primary-default`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
+        "isSelected=true adds a 2px left indicator with `strokeAlign: INSIDE` and `paddingLeft` left completely unchanged (still spacing/md, identical to every other row) - code maps this to an inset box-shadow (`--border-width-md` `--color-border-selected`, Figma's `color/border/selected`) rather than `border-left`, since a real border-left would add to the row's box size in CSS and shift selected-row content 2px right relative to unselected rows, which Figma's own inside-aligned stroke does not do.",
         "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
         "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
       ]
@@ -7603,7 +8007,7 @@
         "type": "boolean",
         "required": false,
         "default": true,
-        "description": "Close when Escape is pressed."
+        "description": "Close when Escape is pressed and nothing opened above the dialog (a menu, a tooltip, another dialog) is still open."
       },
       "closeOnBackdropClick": {
         "type": "boolean",
@@ -7681,7 +8085,7 @@
       "focusable": true,
       "role": "dialog",
       "requirements": [
-        "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name.",
+        "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name. With neither, it warns in development.",
         "Focus moves into the panel on open, is trapped on Tab/Shift+Tab, and is restored to the trigger on close.",
         "Escape (closeOnEscape) and a genuine backdrop click (closeOnBackdropClick) request close via onClose.",
         "Page scroll is locked while open.",
@@ -8086,27 +8490,27 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Flex column of the header, the card, spaced by --spacing-lg."
+        "description": "Flex column holding the header and the table body. Fills its container's width."
       },
       {
         "name": "header",
-        "description": "Rendered when there's a title, description, or actions. Heading area (title heading/lg + description body/md subtle) + right-aligned actions."
+        "description": "Rendered when there's a title or description: the title (heading/lg), a heading at headingLevel (h2 by default), over a description (body/md, content/subtle)."
       },
       {
         "name": "tableBody",
-        "description": "Raised surface (no border or radius per Figma) holding the toolbar, the grid scroll region, and the footer. data-has-footer marks whether a pagination footer is shown."
-      },
-      {
-        "name": "selectionBar",
-        "description": "When one or more rows are selected, the column-header <th> cells are REPLACED by this row: the select-all Checkbox stays, then the selected count (left) + `bulkActions` (right) on a brand-primary-subtle band."
+        "description": "Holds the toolbar, the grid's scroll region, and the footer, with no border or radius. data-has-footer marks whether the pagination footer is shown."
       },
       {
         "name": "toolbar",
-        "description": "Rendered for `toolbar`, `searchable`, `toolbarActions`, `onClearFilters`, or `activeFilters`. Row 1: search (left, flex-grow) + toolbarActions (right). Row 2: activeFilters Chips + Clear all filters. Bottom border separator."
+        "description": "Rendered for `toolbar`, `searchable`, `toolbarActions`, `actions`, `onClearFilters`, `activeFilters`, or a selection. Row 1: a right-aligned button group (search, then `toolbarActions`, then `actions`), or the selection bar while rows are selected. Row 2: `activeFilters` and the Clear filters button. `toolbar` replaces both rows."
+      },
+      {
+        "name": "selectionBar",
+        "description": "Shown while one or more rows are selected, in place of the toolbar's button group: the selected count, then `bulkActions`, on the selected background with a selected border."
       },
       {
         "name": "scroll",
-        "description": "The horizontally/vertically scrollable, keyboard-focusable region wrapping the <table>."
+        "description": "The scrollable, keyboard-focusable region around the <table>, named by a string caption or title (or scrollRegionLabel, 'Table'). Its top border separates the grid from the toolbar."
       },
       {
         "name": "grid",
@@ -8114,11 +8518,11 @@
       },
       {
         "name": "headerCell",
-        "description": "Sticky header cell (elevation/surface/default band, content/subtle heading/xs); sortable columns wrap the label + sort arrow in a <button>."
+        "description": "Sticky header cell (elevation/surface/sunken background, content/subtle heading/xs), named by its label alone; sortable columns wrap the label and sort arrow in a <button> named by the same label."
       },
       {
         "name": "resizeHandle",
-        "description": "Drag handle at the header cell's trailing edge (Figma's drag-handle divider); resizes the column by pointer drag or Arrow keys. Shown when resizableColumns and column.resizable !== false."
+        "description": "Drag handle at the header cell's trailing edge; resizes the column by pointer drag or ArrowLeft/ArrowRight, between 64px and the scroll region's width, and reports the width from the first render. Named by getResizeLabel. Shown when resizableColumns and column.resizable !== false."
       },
       {
         "name": "selectionColumn",
@@ -8126,15 +8530,15 @@
       },
       {
         "name": "row",
-        "description": "Body row; a bottom row divider on its cells (dropped when it is the only row). Hover background only when selection is enabled (neutral overlay); brand-tinted when selected."
+        "description": "Body row with a bottom divider on its cells (dropped for a lone row, or the last row when there's no footer). Every row has a neutral-overlay hover; a selected row is brand-tinted."
       },
       {
         "name": "cell",
-        "description": "Body cell; body/md (heading weight when column.emphasis='strong' for an identifier); renders `column.render(row)` or `row[key]`."
+        "description": "Body cell; body/md (heading weight when column.emphasis='strong'); renders `column.render(row)` or `String(row[key])`. An editable cell's control fills it."
       },
       {
         "name": "footer",
-        "description": "Centered Pagination (no top border); shown when pagination is enabled and there's more than one page."
+        "description": "Pagination footer, shown when there's more than one page or itemsPerPageOptions is set: the items-per-page Select (named by its visible label) and range text on the left, the page Select, page count, and previous/next Icon Buttons on the right, over a top border."
       }
     ],
     "props": {
@@ -8176,7 +8580,13 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Header title (heading/lg)."
+        "description": "Header title (heading/lg), rendered as a heading at headingLevel. Names the table when there's no caption."
+      },
+      "headingLevel": {
+        "type": "1 | 2 | 3 | 4 | 5 | 6",
+        "required": false,
+        "default": 2,
+        "description": "The heading level of title, to fit the page's outline."
       },
       "description": {
         "type": "React.ReactNode",
@@ -8188,13 +8598,13 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Right-aligned header actions (Buttons + overflow Icon Button)."
+        "description": "Actions such as a primary Button, at the end of the toolbar's button group after toolbarActions. Hidden while rows are selected."
       },
       "toolbar": {
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Replaces the entire built-in toolbar."
+        "description": "Replaces the entire built-in toolbar, including search, actions, active filters, and the selection bar."
       },
       "searchable": {
         "type": "boolean",
@@ -8206,13 +8616,19 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Controlled search value."
+        "description": "Controlled search text. Without it, Table keeps the text itself."
+      },
+      "defaultSearchValue": {
+        "type": "string",
+        "required": false,
+        "default": "''",
+        "description": "The search text to start with when searchValue isn't controlled; the field starts open when it isn't empty."
       },
       "onSearchChange": {
         "type": "(value: string) => void",
         "required": false,
         "default": null,
-        "description": "Search change handler."
+        "description": "Called with the new search text as the person types, and with '' when they clear it. Controlled or not."
       },
       "searchPlaceholder": {
         "type": "string",
@@ -8248,13 +8664,13 @@
         "type": "() => void",
         "required": false,
         "default": null,
-        "description": "When set, renders a 'Clear all filters' action at the trailing edge of the chip row."
+        "description": "When set, renders a Clear filters button at the trailing edge of the active-filters row."
       },
       "clearFiltersLabel": {
         "type": "string",
         "required": false,
-        "default": "Clear all filters",
-        "description": null
+        "default": "Clear filters",
+        "description": "The Clear filters button's text."
       },
       "sort": {
         "type": "TableSort | null",
@@ -8326,7 +8742,7 @@
         "type": "(count: number) => string",
         "required": false,
         "default": "(n) => `${n} selected`",
-        "description": "Formats the selection-bar count."
+        "description": "Formats the selection-bar count, which a polite live region also announces when it changes (not on the first render)."
       },
       "page": {
         "type": "number",
@@ -8350,7 +8766,7 @@
         "type": "number",
         "required": false,
         "default": null,
-        "description": "Rows per page; enables client-side pagination."
+        "description": "Rows per page; enables client-side pagination. With manualPagination it places the range text (without it, the rows passed count as one page)."
       },
       "manualPagination": {
         "type": "boolean",
@@ -8379,14 +8795,14 @@
       "itemsPerPageLabel": {
         "type": "string",
         "required": false,
-        "default": "Items per page",
-        "description": "The footer's page-size label and its Select's accessible name."
+        "default": "Items per page:",
+        "description": "The footer's page-size label, shown as given (Table adds no colon), which also names its Select."
       },
       "getRangeLabel": {
         "type": "(start: number, end: number, total: number) => string",
         "required": false,
         "default": "(start, end, total) => `${start}–${end} of ${total} items`",
-        "description": "The footer's range text."
+        "description": "The footer's range text, from the page's first and last row shown and the total (0–0 with no rows)."
       },
       "pageLabel": {
         "type": "string",
@@ -8397,7 +8813,7 @@
       "getPageCountLabel": {
         "type": "(pageCount: number) => string",
         "required": false,
-        "default": "(pageCount) => `of ${pageCount} pages`",
+        "default": "(pageCount) => `of ${pageCount} pages` ('of 1 page' for one)",
         "description": "The text after the footer's page Select."
       },
       "resizableColumns": {
@@ -8405,6 +8821,12 @@
         "required": false,
         "default": true,
         "description": "Allow dragging column-header edges (and Arrow keys on the handle) to resize columns."
+      },
+      "getResizeLabel": {
+        "type": "(columnLabel: string) => string",
+        "required": false,
+        "default": "(columnLabel) => `Resize ${columnLabel}`",
+        "description": "Accessible name for a column's resize handle."
       },
       "loading": {
         "type": "boolean",
@@ -8421,8 +8843,26 @@
       "empty": {
         "type": "React.ReactNode",
         "required": false,
-        "default": "an Empty State",
+        "default": "emptyHeadingLabel over emptyDescriptionLabel on a deep surface",
         "description": "Shown when there are no rows."
+      },
+      "emptyHeadingLabel": {
+        "type": "string",
+        "required": false,
+        "default": "No results",
+        "description": "The default empty content's heading."
+      },
+      "emptyDescriptionLabel": {
+        "type": "string",
+        "required": false,
+        "default": "There is nothing to show here yet.",
+        "description": "The default empty content's description."
+      },
+      "scrollRegionLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Table",
+        "description": "Accessible name for the scroll region when neither caption nor title is a string."
       },
       "className": {
         "type": "string",
@@ -8460,9 +8900,9 @@
     "tokens": {
       "color": {
         "cardSurface": "--color-elevation-surface-raised-default",
-        "headerBackground": "--color-elevation-surface-default",
+        "headerBackground": "--color-elevation-surface-sunken-default",
         "headerText": "--color-content-subtle",
-        "selectionBarBackground": "--color-background-brand-primary-subtle-default",
+        "selectionBarBackground": "--color-background-selected-default-default (border --color-border-selected, text --color-content-selected)",
         "border": "--color-border-default",
         "cellText": "--color-content-default",
         "descriptionText": "--color-content-subtle",
@@ -8478,8 +8918,8 @@
         "headingGap": "--spacing-md",
         "cellInlinePadding": "--spacing-sm",
         "outerGutter": "--spacing-2xl (md, 24px) / --spacing-lg (sm, 16px)",
-        "toolbarPadding": "--spacing-lg / --spacing-2xl",
-        "footerPadding": "--spacing-lg / --spacing-2xl",
+        "toolbarPadding": "block --spacing-2xl / --spacing-sm, inline --spacing-2xl (md); block --spacing-lg / --spacing-sm, inline --spacing-lg (sm)",
+        "footerPadding": "block --spacing-lg (md) / --spacing-sm (sm), inline --spacing-lg",
         "headerCellHeight": "40px (md) / 32px (sm)",
         "rowHeight": "64px (md) / 40px (sm)",
         "selectionColumnWidth": "40px"
@@ -8496,9 +8936,10 @@
       "role": "table",
       "requirements": [
         "A semantic <table> with thead/tbody/th(scope=col)/td and a visually-hidden <caption> (or the title) as the accessible name - always give it a name.",
-        "Sortable headers set aria-sort (ascending/descending/none) and wrap the label in a <button labelled 'Sort by {column}'>.",
+        "Each column header is named by its label alone (not the controls inside it). Sortable headers set aria-sort (ascending/descending/none) and wrap the label in a <button> named by the same label.",
+        "When the selected count changes, a polite live region announces selectionCountLabel(count); it is silent on the first render.",
         "The selection column uses real Checkboxes; the header select-all is labelled and goes indeterminate when only some visible rows are selected. Selection is checkbox-only - rows are never clickable, so controls inside a row act independently.",
-        "Column resize handles are role=separator (aria-orientation=vertical), keyboard-focusable, and operable with Arrow keys.",
+        "Column resize handles are role=separator (aria-orientation=vertical), keyboard-focusable, operable with Arrow keys, and report aria-valuenow (the width in px), aria-valuemin (64), and aria-valuemax (the scroll region's width) from the first render.",
         "The scrollable grid is a keyboard-focusable role=region with an accessible name (WCAG 2.1.1).",
         "The loading state sets aria-busy on the table; skeletons are decorative.",
         "Row content composed via render must remain accessible (e.g. give action buttons labels)."
@@ -8588,9 +9029,9 @@
         "Column-config driven, not slot-composed. Figma lays the grid out as columns, each a stack of a header cell + body cells of one content type; the code takes `columns` (with `key`, `header`, `sortable`, `align`, `width`, `render`) + `data` and renders a semantic row-oriented <table>. This scales to a data-heavy app (many similar 'All X' pages) far better than hand-composed rows.",
         "Cells render arbitrary content via `column.render` rather than a component-per-content-type. Figma's 20+ `column / <type>` parts are examples of what a cell can hold (Tag, Avatar, Link, Badge, Button, ...); baking a renderer for each would be a combinatorial, low-value surface. The one structural exception is the selection Checkbox column (`selectable`).",
         "Batteries-included but controllable. Sorting and selection are owned by default (uncontrolled: `defaultSort` / `defaultSelectedIds`) with controlled overrides (`sort`+`onSortChange`, `selectedIds`+`onSelectionChange`). The built-in sort reorders `data` client-side; `manualSort` hands sorting to the consumer (server-side).",
-        "Pagination is controlled or client-side. Pass `pageSize` for client-side slicing (the table computes the page count and owns the page), or `manualPagination` + `page`/`pageCount`/`onPageChange` for server-driven paging. Search is always controlled (`searchValue`/`onSearchChange`) - the consumer owns the data query.",
-        "The toolbar renders the shell (search + `toolbarActions` Icon Buttons + active-filter Chip mode='filter' pills + Clear all filters); the filter/configure dropdowns are consumer-owned, since specific filter categories do not generalise. Pass `toolbar` to replace the built-in toolbar entirely.",
-        "Accessibility: a real <table> with a visually-hidden <caption> (or the `title`) for the accessible name; sortable headers set aria-sort and wrap the label in a <button>; the scroll region is a keyboard-focusable role=region; `aria-busy` marks the loading state.",
+        "Pagination is controlled or client-side. Pass `pageSize` for client-side slicing (the table computes the page count and owns the page), or `manualPagination` + `page`/`pageCount`/`onPageChange` for server-driven paging. Search text is uncontrolled by default (`defaultSearchValue`) or controlled (`searchValue`); either way `onSearchChange` reports it and the consumer owns the data query.",
+        "The toolbar renders the shell (search + `toolbarActions` Icon Buttons + active-filter Chip mode='filter' pills + Clear filters); the filter/configure dropdowns are consumer-owned, since specific filter categories do not generalise. Pass `toolbar` to replace the built-in toolbar entirely.",
+        "Accessibility: a real <table> with a visually-hidden <caption> (or the `title`) for the accessible name; each header cell is named by its label alone (aria-labelledby its label, or aria-label = headerLabel); sortable headers set aria-sort and wrap the label in a <button> named by the same label; the scroll region is a keyboard-focusable role=region; `aria-busy` marks the loading state.",
         "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/default, header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
         "Deferred from v1 (Figma page is in-progress): single-select (radio) column, the per-column ⋮ menu, column resize/reorder, sticky first column, and row expansion. The sortable header + selection Checkbox cover the primary interactions."
       ]
@@ -8610,7 +9051,7 @@
       },
       {
         "name": "tab",
-        "description": "aria-selected + aria-controls; roving tabindex"
+        "description": "aria-selected, and aria-controls while its TabPanel is rendered; roving tabindex"
       },
       {
         "name": "indicator",
@@ -8628,11 +9069,21 @@
         "default": null,
         "description": "{ value, label, disabled? }[]"
       },
-      "type": {
+      "appearance": {
         "type": "enum",
         "required": false,
         "default": "line",
-        "description": null,
+        "description": "Visual style. Figma names this axis `type`.",
+        "enum": [
+          "line",
+          "contained"
+        ]
+      },
+      "type": {
+        "type": "enum",
+        "required": false,
+        "default": null,
+        "description": "Deprecated alias for appearance, still accepted.",
         "enum": [
           "line",
           "contained"
@@ -8684,7 +9135,7 @@
     "sizes": [],
     "slots": [],
     "variants": {
-      "type": [
+      "appearance": [
         "line",
         "contained"
       ]
@@ -8769,7 +9220,7 @@
       },
       {
         "name": "popup",
-        "description": "anchored to the field frame"
+        "description": "anchored to the field frame; its content is the named role=dialog"
       },
       {
         "name": "columns",
@@ -8797,7 +9248,7 @@
         "type": "(value: Date) => void",
         "required": false,
         "default": null,
-        "description": "Called on Confirm."
+        "description": "Called on Confirm, or when a changed selection is dismissed (outside click, second field click, Tab out). Not called for a time equal to the current value."
       },
       "open": {
         "type": "boolean",
@@ -8910,6 +9361,24 @@
         "default": "AM/PM",
         "description": null
       },
+      "amLabel": {
+        "type": "string",
+        "required": false,
+        "default": "AM",
+        "description": "Text of the morning option."
+      },
+      "pmLabel": {
+        "type": "string",
+        "required": false,
+        "default": "PM",
+        "description": "Text of the afternoon option."
+      },
+      "dialogLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Choose a time",
+        "description": "Accessible name for the panel dialog."
+      },
       "id": {
         "type": "string",
         "required": false,
@@ -8927,6 +9396,12 @@
         "required": false,
         "default": null,
         "description": null
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Native required on the input, plus a hidden input the form's validation checks (a read-only input is never validated)."
       }
     },
     "sizes": [],
@@ -8962,10 +9437,11 @@
     },
     "accessibility": {
       "trigger": "read-only input, aria-haspopup=\"dialog\"",
-      "expanded": "aria-expanded + aria-controls set by Popup while open",
-      "panelRole": "dialog",
+      "expanded": "aria-expanded, and aria-controls pointing at the dialog while open, set by Time Picker",
+      "panelRole": "dialog (the panel content), named by dialogLabel",
+      "required": "native required on the read-only input, plus a hidden input (tabIndex -1, aria-hidden) that the form's constraint validation checks; focusing it sends focus on to the field",
       "columns": "role=listbox with role=option children; aria-selected on the chosen option; roving tabindex",
-      "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm or an outside click commits",
+      "keyboard": "ArrowUp/ArrowDown + Home/End within a column; Tab between columns; Escape / Cancel discard and close; Confirm commits; Tab out of the panel commits a changed selection, closes, and returns focus",
       "focus": "shared Focus Ring; opening moves focus to the selected hour"
     },
     "relatedComponents": [
@@ -9204,13 +9680,13 @@
         "type": "number",
         "required": false,
         "default": 3,
-        "description": "How many toasts show stacked before the rest collapse behind them."
+        "description": "How many toasts show at once, stacked or expanded; the rest wait, inert and aria-hidden with their timers paused, and move into view as visible toasts dismiss."
       },
       "duration": {
         "type": "number",
         "required": false,
         "default": 5000,
-        "description": "Default auto-dismiss delay (ms) for toasts that don't set their own."
+        "description": "Default auto-dismiss delay (ms) for toasts that don't set their own, counted while a toast is in view; paused while the stack is hovered or focused and resumed with the time left."
       },
       "label": {
         "type": "string",
@@ -9246,9 +9722,11 @@
     "accessibility": {
       "nativeElement": "ol",
       "regionLabelled": true,
-      "toastRole": "status",
+      "toastRole": "none",
+      "liveRegion": "an always-mounted, visually hidden role=\"status\" element (aria-atomic=\"false\") beside the list",
       "focusExpandsAndPauses": true,
-      "notes": "Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions."
+      "queuedToastsInert": true,
+      "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden."
     },
     "relatedComponents": [
       "Toast",

@@ -271,7 +271,19 @@
       {
         "name": "Disabled interactive avatar",
         "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
-        "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />",
+        "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />",
+        "props": {}
+      },
+      {
+        "name": "Selectable interactive avatar",
+        "description": "An avatar people pick: given isSelected, the button is a toggle with aria-pressed, and its name is \"Ben Averill, busy\" without the word selected.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />",
+        "props": {}
+      },
+      {
+        "name": "Translated status words",
+        "description": "The words Avatar adds to the accessible name are props with English defaults.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />",
         "props": {}
       },
       {
@@ -301,11 +313,11 @@
       },
       {
         "name": "Unread notification count",
-        "description": "Badge with accessible context for an otherwise ambiguous value.",
-        "jsx": "<Badge ariaLabel=\"1 unread notification\">1</Badge>",
+        "description": "Badge with a text alternative for an otherwise ambiguous value: screen readers read the label, as hidden text, in place of the number.",
+        "jsx": "<Badge label=\"1 unread notification\">1</Badge>",
         "props": {
           "children": "1",
-          "ariaLabel": "1 unread notification"
+          "label": "1 unread notification"
         }
       },
       {
@@ -345,12 +357,17 @@
       {
         "name": "Interactive badge",
         "jsx": "<Badge onClick={handleClick}>1</Badge>",
-        "reason": "Badge is non-interactive and does not support action behavior."
+        "reason": "Badge is non-interactive: it isn't focusable and has no button role, so a click handler on it can't be reached by keyboard. Use Button or Icon Button."
       },
       {
         "name": "Status text",
         "jsx": "<Badge>Active</Badge>",
         "reason": "Use Tag or Label for status/classification text."
+      },
+      {
+        "name": "aria-label on the badge",
+        "jsx": "<Badge aria-label=\"1 unread notification\">1</Badge>",
+        "reason": "The span has no role, so screen readers may ignore aria-label. Use label, which Badge renders as hidden text."
       }
     ],
     "exemplarCompleteness": "full"
@@ -586,7 +603,7 @@
       {
         "name": "Bold",
         "description": null,
-        "jsx": "<Label appearance='bold'>Approved</Label>",
+        "jsx": "<Label emphasis='bold'>Approved</Label>",
         "props": {}
       }
     ],
@@ -608,7 +625,7 @@
       {
         "name": "External",
         "description": null,
-        "jsx": "<Link href='https://example.com' external>Documentation</Link>",
+        "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>",
         "props": {}
       }
     ],
@@ -703,7 +720,7 @@
       },
       {
         "name": "Inverse",
-        "description": "Appears on a dark or bold surface.",
+        "description": "Appears on a bold surface (color-background-neutral-bold-default).",
         "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />",
         "props": {}
       },
@@ -904,13 +921,13 @@
       {
         "name": "Removable",
         "description": null,
-        "jsx": "<Tag onRemove={() => handleRemove('filter')}>Filter</Tag>",
+        "jsx": "<Tag isRemovable onRemove={() => handleRemove('filter')}>Filter</Tag>",
         "props": {}
       },
       {
         "name": "Linked & Removable",
         "description": null,
-        "jsx": "<Tag href='/asset/1' onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+        "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
         "props": {}
       }
     ],
@@ -1108,9 +1125,9 @@
       {
         "name": "Custom accessible name",
         "description": "Overriding the default 'Breadcrumb' nav label.",
-        "jsx": "<Breadcrumbs\n  ariaLabel=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
+        "jsx": "<Breadcrumbs\n  aria-label=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
         "props": {
-          "ariaLabel": "You are here"
+          "aria-label": "You are here"
         }
       },
       {
@@ -1236,17 +1253,17 @@
         }
       },
       {
-        "name": "Smaller size for a dense filter bar",
-        "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing.",
-        "jsx": "<Chip\n  mode=\"filter\"\n  size=\"sm\"\n  label=\"Status\"\n  value={{ label: 'Any', sections: statusSections }}\n  onRemove={() => clearFilter('status')}\n/>",
+        "name": "Smaller size for a dense row",
+        "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing. sm exists for select and search chips; filter chips are md only.",
+        "jsx": "<Chip mode=\"select\" size=\"sm\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
         "props": {
-          "mode": "filter",
+          "mode": "select",
           "size": "sm"
         }
       },
       {
         "name": "Naming a panel explicitly",
-        "description": "Panels default to `${label} value` / `${label} operator`. Override when the composed name would read poorly, or when label is not a plain string.",
+        "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
         "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
         "props": {
           "mode": "filter"
@@ -1272,7 +1289,7 @@
       {
         "name": "Expecting a tone prop",
         "jsx": "<Chip mode=\"select\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
-        "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
+        "reason": "Chip has no tone axis: Figma's chip-base tone axis was dropped in the 2026-08-27 simplification, and every chip variant used tone=default before it. TypeScript rejects it."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1793,9 +1810,9 @@
       {
         "name": "Custom accessible labels",
         "description": "Overriding the default nav/previous/next labels.",
-        "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  ariaLabel=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
+        "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  aria-label=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
         "props": {
-          "ariaLabel": "Search results pages",
+          "aria-label": "Search results pages",
           "previousLabel": "Previous results",
           "nextLabel": "Next results"
         }
@@ -2710,7 +2727,7 @@
       {
         "name": "Basic action menu from a button",
         "description": "The common case - a button trigger opening a searchable action list.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Matter actions\"\n  open={open}\n  onOpenChange={setOpen}\n  searchPlaceholder=\"Search actions\"\n  sections={[{\n    id: 'actions',\n    heading: 'Actions',\n    items: [\n      { id: 'rename', label: 'Rename', onSelect: () => { handleRename(); setOpen(false); } },\n      { id: 'delete', label: 'Delete', onSelect: () => { handleDelete(); setOpen(false); } },\n    ],\n  }]}\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</DropdownMenu>",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Matter actions\"\n  open={open}\n  onOpenChange={setOpen}\n  searchPlaceholder=\"Search actions\"\n  sections={[{\n    id: 'actions',\n    heading: 'Actions',\n    items: [\n      { id: 'rename', label: 'Rename', onSelect: handleRename },\n      { id: 'delete', label: 'Delete', onSelect: handleDelete },\n    ],\n  }]}\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</DropdownMenu>",
         "props": {
           "searchPlaceholder": "Search actions"
         }
@@ -2718,7 +2735,7 @@
       {
         "name": "Icon-button row menu, no search",
         "description": "A dense row-level '...' menu - showSearch is false since a 3-4 item list doesn't need filtering.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  showSearch={false}\n  sections={[{ id: 'actions', items: [{ id: 'archive', label: 'Archive', onSelect: () => setOpen(false) }] }]}\n>\n  <IconButton aria-label=\"Row actions\" appearance=\"subtle\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  showSearch={false}\n  sections={[{ id: 'actions', items: [{ id: 'archive', label: 'Archive', onSelect: handleArchive }] }]}\n>\n  <IconButton aria-label=\"Row actions\" appearance=\"subtle\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
         "props": {
           "showSearch": false
         }
@@ -2740,9 +2757,9 @@
         "reason": "DropdownMenu has no content prop - it always renders a Menu built from sections. For arbitrary non-Menu floating content, compose Popup directly instead of forcing it through DropdownMenu."
       },
       {
-        "name": "Expecting a selection to close the dropdown automatically",
-        "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]}>\n  <Button onClick={() => setOpen(true)}>Actions</Button>\n</DropdownMenu>",
-        "reason": "Neither Menu nor DropdownMenu calls onOpenChange on selection. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+        "name": "A checkbox menu that closes after every toggle",
+        "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} showSearch={false} sections={[{ id: 'view', items: [{ id: 'drafts', label: 'Show drafts', selectionType: 'checkbox', selected: showDrafts, onSelect: toggleDrafts }] }]}>\n  <Button onClick={() => setOpen((current) => !current)}>View options</Button>\n</DropdownMenu>",
+        "reason": "Choosing an item closes the dropdown after its onSelect, so toggling several options means reopening it each time. Call event.preventDefault() in onSelect to keep it open: onSelect: (event) => { event.preventDefault(); toggleDrafts(); }."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2767,9 +2784,9 @@
       {
         "name": "No results (informative)",
         "description": "A self-contained empty state on a sunken surface panel, with two actions.",
-        "jsx": "<EmptyState type=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
+        "jsx": "<EmptyState appearance=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
         "props": {
-          "type": "informative",
+          "appearance": "informative",
           "illustration": "spot illustration",
           "heading": "No results found",
           "actions": "ButtonGroup",
@@ -2824,7 +2841,7 @@
       {
         "name": "Titled form with a required legend and end-aligned actions",
         "description": null,
-        "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button appearance=\"subtle\" type=\"button\">Cancel</Button>\n    <Button appearance=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
+        "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button prominence=\"tertiary\" type=\"button\">Cancel</Button>\n    <Button prominence=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
         "props": {
           "title": "Create a new repository",
           "requiredLegend": true
@@ -2833,13 +2850,13 @@
       {
         "name": "Two fields on one row",
         "description": null,
-        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button appearance=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button prominence=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
         "props": {}
       },
       {
         "name": "Multiple titled sections",
         "description": null,
-        "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button appearance=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
+        "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button prominence=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
         "props": {
           "title": "Project settings",
           "requiredLegend": true
@@ -2848,7 +2865,7 @@
       {
         "name": "Start-aligned footer",
         "description": null,
-        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button appearance=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button prominence=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
         "props": {}
       },
       {
@@ -2871,7 +2888,7 @@
       },
       {
         "name": "A non-submit primary action",
-        "jsx": "<FormFooter><Button appearance=\"primary\" onClick={save}>Save</Button></FormFooter>",
+        "jsx": "<FormFooter><Button prominence=\"primary\" onClick={save}>Save</Button></FormFooter>",
         "reason": "Give the submit Button type=\"submit\" so Enter-to-submit and the form's onSubmit work; don't rely on onClick alone."
       },
       {
@@ -2921,9 +2938,9 @@
         }
       },
       {
-        "name": "Selection closes a containing Dropdown Menu",
-        "description": "Menu never closes anything itself - wire onOpenChange(false) from each item's own onSelect.",
-        "jsx": "<Menu\n  aria-label=\"Matter actions\"\n  showSearch={false}\n  sections={[{\n    id: 'actions',\n    items: [{\n      id: 'delete',\n      label: 'Delete',\n      onSelect: () => {\n        handleDelete();\n        setOpen(false);\n      },\n    }],\n  }]}\n/>",
+        "name": "Keeping a containing Dropdown Menu open after a choice",
+        "description": "Menu never closes anything itself; a containing Dropdown Menu closes after an item's onSelect unless it calls event.preventDefault() - here, so a checkbox row can be toggled repeatedly.",
+        "jsx": "<Menu\n  aria-label=\"View options\"\n  showSearch={false}\n  sections={[{\n    id: 'view',\n    items: [{\n      id: 'drafts',\n      label: 'Show drafts',\n      selectionType: 'checkbox',\n      selected: showDrafts,\n      onSelect: (event) => {\n        event.preventDefault();\n        toggleDrafts();\n      },\n    }],\n  }]}\n/>",
         "props": {
           "showSearch": false
         }
@@ -2946,9 +2963,9 @@
         "reason": "Each row renders as a real <button>. Nesting Checkbox's real <input> inside it is invalid HTML (a focusable control inside another one) and creates two conflicting ways to activate the same row - one via the button's own onClick, one via the checkbox's onChange. Use a decorative icon/glyph instead and let selected/selectionType carry the real state, or toggle the row's own onSelect."
       },
       {
-        "name": "Expecting Menu to close a containing Dropdown Menu",
+        "name": "Nesting a Menu inside a Dropdown Menu",
         "jsx": "<DropdownMenu open={open} onOpenChange={setOpen}>\n  <Button>Actions</Button>\n  <Menu sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]} />\n</DropdownMenu>",
-        "reason": "Menu has no idea it's inside a Dropdown Menu and never calls onOpenChange itself. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+        "reason": "DropdownMenu has no children-as-content slot: its one child is the trigger, and it builds its own Menu from the sections you pass it (and closes after a choice). Pass sections to DropdownMenu directly instead of nesting a Menu."
       }
     ],
     "exemplarCompleteness": "full"
@@ -3215,7 +3232,7 @@
       {
         "name": "Server-driven (manual sort + pagination)",
         "description": null,
-        "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
+        "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  pageSize={pageSize}\n  totalItems={totalCount}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
         "props": {
           "manualSort": true,
           "manualPagination": true
@@ -3275,7 +3292,7 @@
         "description": "The default underlined tab bar with panels.",
         "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'><TabPanel value='a'>Overview</TabPanel><TabPanel value='b'>Activity</TabPanel></Tabs>",
         "props": {
-          "type": "line",
+          "appearance": "line",
           "defaultValue": "a",
           "aria-label": "Sections"
         }
@@ -3283,9 +3300,9 @@
       {
         "name": "Contained tabs",
         "description": "Pill tabs for a denser or card-like surface.",
-        "jsx": "<Tabs type='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
+        "jsx": "<Tabs appearance='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
         "props": {
-          "type": "contained",
+          "appearance": "contained",
           "defaultValue": "a"
         }
       },
@@ -3306,7 +3323,7 @@
       {
         "name": "No bottom border",
         "description": "Hide the line's bottom border.",
-        "jsx": "<Tabs type='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
+        "jsx": "<Tabs appearance='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
         "props": {
           "showBorder": false
         }
@@ -3368,7 +3385,7 @@
       {
         "name": "Expecting a value on every column change",
         "jsx": "<TimePicker onChange={commitImmediately} /> {/* onChange runs on commit, not per column change */}",
-        "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm or an outside click, not per change."
+        "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm, or when a changed selection is dismissed, not per change."
       },
       {
         "name": "Unlabelled field",
@@ -3460,7 +3477,7 @@
       },
       {
         "name": "Loading updated to success",
-        "description": "Reuse the id to update a loading toast in place when it resolves.",
+        "description": "Reuse the id to update a loading toast in place when it resolves; the result gets the group's duration unless you pass one.",
         "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
         "props": {}
       },

@@ -176,19 +176,19 @@ export const Variants: Story = {
   ),
 };
 
-/** Popup is a positioning/dismissal primitive - it renders whatever content a consumer gives it. */
+/** Popup renders whatever content it's given: these are the shapes Dropdown Menu and Inline Message build on. */
 export const Content: Story = {
   render: () => (
     <div style={stack}>
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Action menu</h3>
-        <p style={captionStyle}>The shape Dropdown Menu will build on - a list of actions, role=&quot;menu&quot;.</p>
+        <p style={captionStyle}>The shape Dropdown Menu builds on: a list of actions, role=&quot;menu&quot;.</p>
         <PopupDemo label="Row actions" role="menu" />
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Short message</h3>
-        <p style={captionStyle}>The shape Inline Message will build on - the panel hugs a single line of text.</p>
+        <p style={captionStyle}>The shape Inline Message builds on: the panel hugs a single line of text.</p>
         <PopupDemo
           label="Show message"
           role="status"
@@ -207,7 +207,7 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Falls back when the preferred alignment would overflow</h3>
         <p style={captionStyle}>
           Each trigger below prefers an alignment that would clip against the viewport edge it sits
-          near - open one to see it reposition to whichever alignment actually fits.
+          near. Open one to see it move to the alignment that fits.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <PopupDemo label="Top-left corner" alignment="topLeft" />
@@ -218,7 +218,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Escape and outside click dismiss by default</h3>
         <p style={captionStyle}>
-          Open the popup, then press Escape or click anywhere outside it - both call
+          Open the popup, then press Escape or click anywhere outside it. Both call
           <code> onOpenChange(false)</code>.
         </p>
         <PopupDemo label="Dismissible popup" />
@@ -227,8 +227,8 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Dismissal opted out</h3>
         <p style={captionStyle}>
-          With both flags off, only the trigger itself can close the popup - useful for content that
-          should persist regardless of stray clicks, like Inline Message.
+          With both flags off, only the trigger itself can close the popup, for content that should
+          stay open through stray clicks and Escape.
         </p>
         <PopupDemo label="Persistent popup" closeOnEscape={false} closeOnOutsideClick={false} />
       </section>

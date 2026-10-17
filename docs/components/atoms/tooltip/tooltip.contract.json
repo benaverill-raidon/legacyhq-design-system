@@ -79,7 +79,7 @@
   "tokens": {
     "semantic": [
       "--color-background-neutral-bold-default",
-      "--color-content-inverse",
+      "--color-content-inverse-default",
       "--typography-body-sm-font-family",
       "--spacing-xxs",
       "--spacing-xs",

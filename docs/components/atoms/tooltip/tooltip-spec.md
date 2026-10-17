@@ -114,7 +114,10 @@ passing `alignment="topCenter"`, `role="tooltip"`, `manageTriggerAria={false}`, 
   `topCenter`, then `bottomCenter`, matching Popup's same-alignment-opposite-side fallback
   preference) when the preferred one would overflow
 - recalculating on trigger/panel resize, window resize, and scroll
-- the mount fade animation
+- the mount fade animation (`fade-quick`)
+
+There is no matching fade-out: React removes the bubble as soon as it hides, so the exit is
+instant. Animating the exit would mean deferring the unmount until the animation finishes.
 
 Tooltip does not use Popup's own dismissal (`closeOnEscape`/`closeOnOutsideClick` are both `false`)
 because Tooltip already owns dismissal itself via hover/focus/blur/Escape-on-the-trigger, which
@@ -130,7 +133,7 @@ tradeoff for having positioning logic originate from one place across every Popu
 ## Styling and tokens
 
 Tooltip uses semantic color, typography, spacing, and radius tokens: background
-(`color-background-neutral-bold-default`), content color (`color-content-inverse`), corner radius
+(`color-background-neutral-bold-default`), content color (`color-content-inverse-default`), corner radius
 (`border-radius-sm`, 4px), vertical padding (`spacing-xxs`, 2px), and content gap (`spacing-xs`,
 4px) - all verified directly against Figma's tooltip-primitive frame.
 
@@ -139,11 +142,9 @@ Horizontal padding is `--spacing-075` (6px), matching Figma. A prior implementat
 
 There is no arrow/caret pointing at the trigger - Figma's tooltip is a plain rounded rectangle.
 
-Tooltip-specific layout constraints remain private implementation values:
-
-- z-index: `1`
-- truncated max width: `420px`
-- wrapped max width: `240px`
+The max widths are component tokens: `--component-tooltip-max-width-truncated` (420px) and
+`--component-tooltip-max-width-wrapped` (240px). `--component-tooltip-z-index` (1) exists in the
+token data but no stylesheet reads it; the bubble's `z-index: 1` comes from Popup's panel.
 
 ## Icon-only controls
 
@@ -159,11 +160,14 @@ External composition remains supported:
 
 ```tsx
 <Tooltip content="Custom explanation">
-  <IconButton aria-label="Edit" tooltip={false}>
+  <IconButton aria-label="Edit">
     <EditIcon />
   </IconButton>
 </Tooltip>
 ```
+
+Icon Button reads `TooltipScopeContext` (`tooltip-context.ts`, provided by every Tooltip) and skips
+its own `aria-label` tooltip inside a Tooltip, so `tooltip={false}` isn't needed here.
 
 ## Storybook
 

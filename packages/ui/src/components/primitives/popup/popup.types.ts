@@ -5,62 +5,34 @@ export type PopupAlignment = 'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft'
 export type PopupPadding = 'none' | 'sm' | 'md' | 'lg';
 
 export interface PopupProps {
-  /** The single trigger element the popup is anchored to. Cloned to attach a measurement ref and `aria-expanded`/`aria-controls`. */
+  /** The trigger: one element, which Popup clones to add a ref and, with `manageTriggerAria`, `aria-expanded` and `aria-controls`. */
   children: React.ReactElement;
-  /** Content rendered inside the floating panel while `open` is true. */
+  /** What the panel shows while `open` is true. It can be interactive. */
   content: React.ReactNode;
-  /** Controlled visibility - Popup renders nothing when false. */
+  /** Whether the panel is shown. Popup has no state of its own: when `false`, only the trigger renders. */
   open: boolean;
-  /** Called with `false` when Escape or an outside click should dismiss the popup. Popup does not change its own visibility - the consumer updates `open` in response. */
+  /** Called with `false` on Escape or a press outside the trigger and the panel. Popup doesn't close itself: set `open` in response. */
   onOpenChange?: (open: boolean) => void;
-  /** Which side of the trigger the panel opens on, and how it aligns. Falls back to whichever alignment overflows the viewport least. */
+  /** The side of the trigger the panel opens on and the edge it lines up with. A preference: if it overflows the viewport, the panel moves to the alignment that overflows least. */
   alignment?: PopupAlignment;
-  /** Dismiss on Escape. Defaults to true. */
+  /** Calls `onOpenChange(false)` when Escape is pressed while open, wherever focus is. */
   closeOnEscape?: boolean;
-  /** Dismiss on a pointer press outside the trigger and panel. Defaults to true. */
+  /** Calls `onOpenChange(false)` on a pointer press outside the trigger and the panel. */
   closeOnOutsideClick?: boolean;
-  /** Id applied to the floating panel; also wired to the trigger's `aria-controls` while open. Generated when omitted. */
+  /** The panel's id, which the trigger's `aria-controls` points to while open. Generated when omitted. */
   id?: string;
-  /** ARIA role for the floating panel. No default - the role depends on what the consumer is building (menu, dialog, alert, ...). */
+  /** The panel's role, such as `menu`, `dialog`, or `tooltip`. There's no default: pass the role of what you're building. */
   role?: React.AriaRole;
-  /** Composes with the panel's class list. */
+  /** Added to the panel's classes. */
   className?: string;
-  /**
-   * Skips Popup's own visual skin (background, border, padding, radius, shadow) on the panel,
-   * leaving only the structural positioning (fixed placement, content-hugging size, fade
-   * animation). Set this when a consumer needs Popup's positioning/dismissal but has an entirely
-   * different visual design of its own (e.g. Tooltip). Defaults to false.
-   */
+  /** Leaves off Popup's surface (background, border, padding, radius, shadow), keeping position and the fade. For a different look of your own, as Tooltip has. */
   unstyled?: boolean;
-  /**
-   * Padding for Popup's own visual skin, mapped to the spacing scale. Defaults to `'lg'`
-   * (`--spacing-lg`), matching Figma's `popup` component. Use `'sm'`/`'md'` for denser content
-   * (e.g. a menu's rows), or `'none'` for a consumer whose content manages its own edge padding
-   * entirely (e.g. Dropdown Menu's Menu panel) - all three still share Popup's
-   * background/border/radius/shadow. Ignored when `unstyled` is true.
-   */
+  /** The surface's padding: 0, 8, 12, or 16px from `none` to `lg`. Ignored when `unstyled` is set. */
   padding?: PopupPadding;
-  /**
-   * Sets `aria-expanded`/`aria-controls` on the trigger while true (the default). Set to false
-   * when the consumer already manages the trigger's own ARIA relationship to the panel content
-   * (e.g. Tooltip uses `aria-describedby`, since `aria-expanded`/`aria-controls` are disclosure-
-   * widget attributes that don't apply to a supplemental hint).
-   */
+  /** Sets `aria-expanded` and `aria-controls` on the trigger. Turn it off when the trigger relates to the panel another way, as Tooltip's `aria-describedby` does. */
   manageTriggerAria?: boolean;
-  /**
-   * Element to measure for positioning and for the outside-click boundary, instead of the cloned
-   * trigger child. Use when the child that carries `aria-expanded`/the merged ref is smaller than
-   * the visual control it lives inside - e.g. Select's trigger is a text `<input>` (where the ARIA
-   * belongs) inset within a bordered field frame, and the panel should align to and match the
-   * frame, not the inset input. The trigger child still receives the merged ref and ARIA; only
-   * measurement and the dismissal boundary follow this element. Falls back to the trigger child.
-   */
+  /** An element to position against, match in width, and treat as inside for outside presses, in place of the trigger. Date Picker and Time Picker pass their field frame, which holds the trigger. */
   anchorRef?: React.RefObject<HTMLElement | null>;
-  /**
-   * Sizes the panel to the measured trigger (the `anchorRef` element, or the trigger child) rather
-   * than letting it hug its own content - so a field's dropdown matches the field's width. Defaults
-   * to false. The consumer's panel content must be able to fill that width (Dropdown Menu passes
-   * `fullWidth` to its Menu for exactly this).
-   */
+  /** Makes the panel as wide as the trigger, or the `anchorRef` element, instead of its content. The content has to be able to fill that width. */
   matchTriggerWidth?: boolean;
 }

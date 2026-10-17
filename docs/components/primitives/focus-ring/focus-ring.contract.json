@@ -34,7 +34,7 @@
       "part": "wrapped element",
       "element": "React.ReactElement (via FocusRing) or any element (via focusRingClassNames)",
       "required": true,
-      "description": "The single focusable element the focus classes are applied to. FocusRing has no DOM node of its own - it clones its child."
+      "description": "The focusable element that carries the focus classes: the child FocusRing clones, or an element a component gives focusRingClassNames. Focus Ring has no DOM node of its own; the ring is that element's outline."
     }
   ],
   "props": {

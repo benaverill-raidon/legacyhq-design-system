@@ -311,3 +311,36 @@ None.
 - Inset focus ring
 - Focus ring utility package
 - Per-component radius inheritance strategy
+
+---
+
+## Composition and custom properties (as built)
+
+There are two entry points to the same CSS. The `FocusRing` component clones its single child and
+merges `focusRing` + `focusRingDefault` (or only `focusRingDisabled` when `disabled`) onto its
+`className`. `focusRingClassNames` exports the same three classes for a component to compose onto
+its own element alongside its own classes. Every system component that shows the ring (Button, Icon
+Button, Link, Link Button, Toggle Button, Toggle Icon Button, Tag, Avatar, Checkbox, Radio, Switch,
+Slider, Chip, Inline Message, Pagination, Menu, Tabs, Date Picker Calendar, Time Picker, Progress
+Indicator) composes `focusRingClassNames`; none wraps a child in `<FocusRing>`.
+
+`.focusRing` declares three custom properties - `--focus-ring-color` (`--color-border-focus`),
+`--focus-ring-width` (`--border-width-md`), and `--focus-ring-offset` (a raw `2px`) - and the
+`:focus-visible` rule reads them. A component tunes its ring by redeclaring them on its own root
+class: Button, Icon Button, Tag, and the toggles set `--focus-ring-offset: var(--spacing-xxs)`;
+Checkbox and Radio set a negative offset so the ring circles the visible box, not the larger hit
+target; Menu rows set `calc(-1 * var(--border-width-md))` so the ring paints inside the row.
+Components that draw the ring on a different element than the one carrying the class (Radio's
+input, Slider's thumb, Avatar) write their own `outline` rule reading the same variables. The
+redeclaration and `.focusRing` have equal specificity, so it relies on the component's stylesheet
+loading after Focus Ring's, which import order gives today.
+
+`.focusRing` also sets `border-radius: inherit`. On a component whose own stylesheet sets a radius
+this loses to that rule (same specificity, later in the cascade); on an element with no radius of
+its own it takes the parent's radius.
+
+`[data-force-state='focus']` shows the ring without focus, so Storybook can present the focused
+state as a static reference. It's documentation-only, not part of the public API.
+
+`focusRingDisabled` sets `outline: none` on `:focus-visible`, which also removes the browser's
+default outline.

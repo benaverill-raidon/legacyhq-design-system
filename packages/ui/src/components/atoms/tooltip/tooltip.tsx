@@ -58,8 +58,11 @@ function isDisabledTrigger(
 }
 
 type TriggerProps = React.HTMLAttributes<HTMLElement> & {
+  /** A native control's disabled state, which makes Tooltip wrap the trigger for hover. */
   disabled?: boolean;
+  /** A component's disabled state, read the same way as `disabled`. */
   isDisabled?: boolean;
+  /** The trigger's own ref, merged with the one set on Tooltip. */
   ref?: React.Ref<HTMLElement>;
   [key: string]: unknown;
 };

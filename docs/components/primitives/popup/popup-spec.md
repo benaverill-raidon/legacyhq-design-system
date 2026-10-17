@@ -134,8 +134,9 @@ own copy, which it did before Popup existed:
   the opposite side (e.g. `topCenter` -> `bottomCenter`) wins over an unrelated alignment, so a
   consumer's horizontal-alignment intent survives the fallback.
 - Recalculates on trigger/panel resize (via `ResizeObserver`), window resize, and scroll.
-- The gap between trigger and panel is a fixed `--spacing-sm` (8px), matching the Figma component's
-  own `itemSpacing` - not exposed as a prop.
+- The gap between trigger and panel is `--spacing-sm` (8px), matching the Figma component's own
+  `itemSpacing` - not exposed as a prop. Inside an editable Table cell (`EditableCellContext`) it's
+  `--spacing-xs` (4px). The panel also stays at least `--spacing-sm` inside the viewport.
 - When the trigger's bounding rect ends up fully outside the viewport on any one of its four edges
   (checked every time position recalculates), the panel is hidden (`visibility: hidden`,
   `data-trigger-out-of-view="true"`) instead of being clamped to the nearest viewport edge.
@@ -183,6 +184,14 @@ The panel hugs its content on both axes (`display: inline-flex`, no explicit wid
 than filling an ambient container - this matches the Figma component's inner `Slot`, which is set
 to `HUG` on both `layoutSizingHorizontal` and `layoutSizingVertical`.
 
+The panel fades in on mount with the `fade-quick` motion recipe, as a CSS `@keyframes` animation
+rather than a `transition`, since the panel mounts and unmounts instead of toggling a class. There's
+no exit animation: the panel is removed as soon as `open` is false. Under
+`prefers-reduced-motion: reduce` the animation's duration is 0ms.
+
+The panel's `z-index` is a raw `1`, below Modal Dialog's and Toast Group's `1000`, so a Popup opened
+inside a Modal Dialog renders behind it (recorded layering task).
+
 Content items inside the panel get `--spacing-xs` (4px) of gap when there's more than one, matching
 the Figma component's own inner `itemSpacing`.
 
@@ -214,8 +223,7 @@ Show all six `alignment` values, each with its own independently-clicked trigger
 ### Content story
 
 Show Popup as the foundation for a menu-shaped consumer (`role="menu"`) and a short-message-shaped
-consumer (`role="status"`), previewing the two documented future consumers (Dropdown Menu, Inline
-Message) without building either.
+consumer (`role="status"`), the shapes Dropdown Menu and Inline Message build on.
 
 ### EdgeCases story
 

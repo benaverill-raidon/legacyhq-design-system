@@ -8,52 +8,38 @@ export type ModalWidth = 'sm' | 'md' | 'lg' | 'xl';
 export type DeprecatedModalWidth = 'small' | 'medium' | 'large' | 'extraLarge';
 
 export interface ModalDialogProps {
-  /** Whether the dialog is shown. Controlled by the consumer. */
+  /** Whether the dialog is shown. The dialog has no state of its own. */
   open: boolean;
-  /**
-   * Called when the dialog requests to close - the close button, Escape, or a backdrop click. The
-   * consumer sets `open` to false in response (the dialog never closes itself).
-   */
+  /** Called when the dialog asks to close: the close button, Escape, or a backdrop click. Set `open` to `false` in response; the dialog never closes itself. */
   onClose: () => void;
-  /**
-   * The dialog title, rendered as the header heading and used as the dialog's accessible name
-   * (`aria-labelledby`). Omit only when the dialog is labelled another way - then pass `aria-label`.
-   */
+  /** The heading in the header, and the dialog's accessible name through `aria-labelledby`. Without one, pass `aria-label`. */
   title?: React.ReactNode;
-  /**
-   * Semantic intent. `warning` / `error` prepend a status icon to the title (in the matching
-   * colour); `default` shows none. It does not tone the footer buttons - pair `tone="error"`
-   * with a matching Confirm button (e.g. `<Button prominence="primary" tone="error">`).
-   */
+  /** What the dialog means. `warning` and `error` put a status icon before the title; neither changes the footer buttons, so give the Confirm button the same `tone`. */
   tone?: ModalTone;
-  /** @deprecated Renamed to `tone`, the name every component uses for meaning. Still accepted. */
+  /** @deprecated Use `tone`, the name every component uses for meaning. Still accepted. */
   appearance?: ModalTone;
-  /** Panel width: sm (400px), md (600px), lg (752px), or xl (968px). */
+  /** The panel's width: 400, 600, 752, or 968px from `sm` to `xl`. It narrows to fit a small viewport. The long names are deprecated and still accepted. */
   width?: ModalWidth | DeprecatedModalWidth;
-  /** The dialog body. Scrolls within the panel when it is taller than the viewport allows. */
+  /** The body. It scrolls inside the panel when it's taller than the viewport allows, with the header and footer in place. */
   children?: React.ReactNode;
-  /** The footer actions (e.g. a Cancel and a Confirm Button), rendered right-aligned. Omit for none. */
+  /** The actions, such as Cancel and a Confirm Button, aligned to the end. Leave it out for no footer. */
   footer?: React.ReactNode;
-  /** Show the header close (X) button. Default true. */
+  /** Shows the close (X) button in the header. */
   showCloseButton?: boolean;
-  /** Accessible label for the close button. Default "Close". */
+  /** The close button's accessible name. */
   closeLabel?: string;
-  /**
-   * Called when the header expand (maximize) button is clicked. Provide it to show an Expand button
-   * before Close in the header; when both are shown they share a Button Group. Omit for no expand
-   * button (the default).
-   */
+  /** Shows an Expand button before Close, and is called when it's pressed. With both buttons, they share a Button Group. */
   onExpand?: () => void;
-  /** Accessible label / tooltip for the expand button. Default "Expand". */
+  /** The Expand button's accessible name. */
   expandLabel?: string;
-  /** Close when Escape is pressed. Default true. */
+  /** Calls `onClose` when Escape is pressed. */
   closeOnEscape?: boolean;
-  /** Close when the backdrop (outside the panel) is clicked. Default true. */
+  /** Calls `onClose` when a press starts and ends on the backdrop, outside the panel. */
   closeOnBackdropClick?: boolean;
-  /** Element to focus when the dialog opens. Defaults to the panel itself. */
+  /** The element to focus when the dialog opens. Without it, the panel takes focus. */
   initialFocusRef?: React.RefObject<HTMLElement | null>;
-  /** Accessible name for the dialog when there is no `title`. */
+  /** The dialog's accessible name when there's no `title`. Ignored when there is one. */
   'aria-label'?: string;
-  /** Composes with the panel's class list. */
+  /** Added to the panel's classes. */
   className?: string;
 }

@@ -392,3 +392,26 @@ Show realistic placements:
 - Animated loading logo
 - Automated SVG optimization
 - Tokenized logo color strategy
+
+---
+
+## As built
+
+- The root is a `span` (`.logo`) whose `block-size` is `--logo-height`, set per size from
+  `--size-logo-xxs`...`--size-logo-lg` (16/24/32/40/48px). The SVG markup for the type is injected
+  with `dangerouslySetInnerHTML`, with `class` (`.svg`: `block-size: 100%`, width auto),
+  `focusable="false"`, and either `role="img" aria-label="..."` (label escaped) or
+  `aria-hidden="true"` added to its `<svg>` tag. `.type_mark .svg` keeps a 1:1 aspect ratio.
+- Accessible name order: `ariaLabel`, then `title`, then `"LegacyHQ"`. `title` is also set as the
+  root's `title` attribute (native tooltip), including when the logo is decorative; when decorative
+  the root also gets `aria-hidden`.
+- Color lives in the SVG files: the mark's paths fill `var(--logo-mark-color, #003655)` and the
+  wordmark's `var(--color-content-default, #282727)`. `.logo` sets `--logo-mark-color` to
+  `--color-content-brand-primary-default` and `color` to `--color-content-default`, so both follow
+  the theme of the scope the logo renders in. The `[data-theme='dark'] .logo` rule redeclares the
+  same value and changes nothing.
+- Logo accepts only the props in `LogoProps`; it doesn't spread other attributes (no `style`, no
+  native `aria-label`).
+- `logo-wordmark.svg` has a fixed `clipPath` id (`clip0_3800_68191`), so two wordmarks on one page
+  repeat the id. Both clip paths are identical, so nothing renders differently.
+

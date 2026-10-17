@@ -29,7 +29,8 @@
     "Combining with other graphics outside the mark/wordmark/full variants"
   ],
   "anatomy": [
-    { "part": "root", "element": "span (inline SVG via dangerouslySetInnerHTML)", "required": true, "description": "Renders the selected logo SVG asset directly; carries data-logo-type/data-logo-size." }
+    { "part": "root", "element": "span (inline SVG via dangerouslySetInnerHTML)", "required": true, "description": "Sets the height from size, carries data-logo-type/data-logo-size and the title attribute, and is aria-hidden when decorative. The SVG markup is set inside it." },
+    { "part": "artwork", "element": "svg (from packages/ui/src/assets/logos)", "required": true, "description": "The approved SVG for the type, sized to the root's height. Informative: role=img with aria-label; decorative: aria-hidden. Its fills read --logo-mark-color and --color-content-default." }
   ],
   "props": {
     "type": {

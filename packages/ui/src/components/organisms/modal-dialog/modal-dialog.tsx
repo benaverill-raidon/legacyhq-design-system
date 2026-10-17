@@ -173,45 +173,51 @@ export const ModalDialog = React.memo(function ModalDialog({
     backdropMouseDownRef.current = false;
   };
 
-  return createPortal(
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className={styles.backdrop} onMouseDown={handleBackdropMouseDown} onMouseUp={handleBackdropMouseUp}>
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title != null ? titleId : undefined}
-        aria-label={title == null ? ariaLabel : undefined}
-        tabIndex={-1}
-        className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
-        data-tone={tone}
-        data-has-header={hasHeader ? 'true' : undefined}
-        data-has-footer={footer != null ? 'true' : undefined}
-      >
-        {hasHeader ? (
-          <div className={styles.header}>
-            <div className={styles.titleArea}>
-              {status ? (
-                <span className={styles.statusIcon} aria-hidden="true">
-                  <status.Icon size="md" color={status.color} />
-                </span>
-              ) : null}
-              {title != null ? (
-                <h2 id={titleId} className={styles.title}>
-                  {title}
-                </h2>
-              ) : null}
-            </div>
-            {headerActions}
+  // The fragment adds nothing to the DOM; it lets Storybook's docgen (react-docgen) recognize this
+  // as a component, which it doesn't for a bare createPortal return, so the Docs API table renders.
+  return (
+    <>
+      {createPortal(
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+        <div className={styles.backdrop} onMouseDown={handleBackdropMouseDown} onMouseUp={handleBackdropMouseUp}>
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title != null ? titleId : undefined}
+            aria-label={title == null ? ariaLabel : undefined}
+            tabIndex={-1}
+            className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
+            data-tone={tone}
+            data-has-header={hasHeader ? 'true' : undefined}
+            data-has-footer={footer != null ? 'true' : undefined}
+          >
+            {hasHeader ? (
+              <div className={styles.header}>
+                <div className={styles.titleArea}>
+                  {status ? (
+                    <span className={styles.statusIcon} aria-hidden="true">
+                      <status.Icon size="md" color={status.color} />
+                    </span>
+                  ) : null}
+                  {title != null ? (
+                    <h2 id={titleId} className={styles.title}>
+                      {title}
+                    </h2>
+                  ) : null}
+                </div>
+                {headerActions}
+              </div>
+            ) : null}
+
+            <div className={styles.body}>{children}</div>
+
+            {footer != null ? <div className={styles.footer}>{footer}</div> : null}
           </div>
-        ) : null}
-
-        <div className={styles.body}>{children}</div>
-
-        {footer != null ? <div className={styles.footer}>{footer}</div> : null}
-      </div>
-    </div>,
-    document.body,
+        </div>,
+        document.body,
+      )}
+    </>
   );
 });
 

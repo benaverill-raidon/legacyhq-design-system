@@ -1,176 +1,291 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DownloadIcon, EditIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../button';
+import { IconButton } from '../icon-button';
+import iconButtonStyles from '../icon-button/icon-button.module.css';
+import { Tooltip } from './tooltip';
+import tooltipStyles from './tooltip.module.css';
 import * as TooltipStories from './tooltip.stories';
 
 <Meta of={TooltipStories} name="Docs" />
 
-# Tooltip
+<Unstyled>
+<ComponentPage>
 
-Tooltip is a floating, non-actionable label that explains a UI element or feature. It wraps a
-single trigger element and shows supplemental content on hover or keyboard focus.
+<ComponentHeader
+  id="tooltip"
+  example={
+    <>
+      <Tooltip content="Edit the matter's details">
+        <IconButton aria-label="Edit">
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip content="Exports the visible rows as a CSV file">
+        <Button iconBefore={<DownloadIcon />}>Export</Button>
+      </Tooltip>
+    </>
+  }
+>
+  Tooltip shows a short hint about a control when someone hovers over it or focuses it. The hint adds
+  to the control's own name and never replaces it. It isn't for links or buttons: people can't reach
+  them in a tooltip.
+</ComponentHeader>
 
-<Canvas of={TooltipStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Explaining an icon-only control whose meaning isn't obvious from its accessible name alone.
-- Clarifying why a control is disabled.
-- Short supplemental context that isn't essential to completing the task.
+- Saying more about an icon-only control than its name does.
+- A short reason a control is disabled, alongside visible text when people need it to go on.
+- A brief, supplemental explanation that people can do without.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Essential information the user needs to complete a task.** Tooltips have low discoverability
-  and don't work on touch-only devices - put anything essential in visible UI instead.
-- **As the only accessible name for a control.** The trigger still needs its own `aria-label` or
-  visible text; Tooltip content supplements it, and never replaces it.
-- **Interactive content.** Tooltip content is non-actionable - it can't contain a button, link, or
-  form control.
+- **Information people need to finish the task:** visible text, such as a <DocLink to="Components/Forms/Field" /> message or a <DocLink to="Components/Feedback/Section Message" />.
+- **The tooltip on an Icon Button that repeats its name:** <DocLink to="Components/Actions/Icon Button" /> shows its `aria-label` as a tooltip on its own.
+- **Floating content with links, buttons, or fields:** <DocLink to="Components/Overlays/Popup" />, or <DocLink to="Components/Actions/Dropdown Menu" /> for actions.
+- **A status with more detail behind it:** <DocLink to="Components/Feedback/Inline Message" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={TooltipStories.Content} />
+</Section>
 
-- **Trigger** - the single child element `Tooltip` wraps. It's cloned to receive pointer/focus
-  handlers and `aria-describedby`, without changing its own rendered output.
-- **Content layer** - a `role="tooltip"` element rendered by [Popup](?path=/docs/components-overlays-popup--docs)
-  with `unstyled` set, so Tooltip supplies its own visual skin (a small dark pill) while Popup owns
-  positioning, the portal, and the mount animation.
+<Section title="Anatomy">
 
-There's no arrow/caret pointing at the trigger - Figma's own tooltip is a plain rounded rectangle.
+<Anatomy
+  specimen={
+    <>
+      <Tooltip content="Edit the matter's details">
+        <IconButton aria-label="Edit">
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip content="Select a row to export it">
+        <IconButton aria-label="Export" disabled>
+          <DownloadIcon />
+        </IconButton>
+      </Tooltip>
+    </>
+  }
+>
+  <Part name="trigger" target={iconButtonStyles.root}>The one element you pass as `children`. Tooltip clones it to add its hover and focus handlers and, while the tooltip shows, `aria-describedby`.</Part>
+  <Part name="disabled-pointer-wrapper" target={tooltipStyles.triggerWrapper}>A `span` around a disabled trigger, which may not get pointer events of its own, so hovering it still shows the tooltip. It isn't focusable.</Part>
+  <Part name="content">The bubble: a `role="tooltip"` element in a Popup, added at the end of the page while it shows. It floats, so it isn't outlined here; hover a trigger to see it.</Part>
+</Anatomy>
 
-## Usage guidance
+</Section>
 
-### No Sizes or States pages
+<Section title="Variants">
 
-Tooltip has no `size` prop - it sizes itself to its content, up to `truncate`'s max width. There's
-also no static States page: the only "state" is shown/hidden, which is exactly what hovering or
-focusing the Playground trigger already demonstrates live - a pinned static reference wouldn't show
-anything a screenshot of the box itself doesn't already.
+<Subsection title="Truncated or wrapped">
 
-### Positioning is entirely Popup's job
+`truncate` is on by default: the text stays on one line up to 420px wide and ends with an ellipsis.
+Turn it off for a longer hint, which wraps at 240px. There's no size and no placement prop; the
+bubble fits its text.
 
-Tooltip has no `placement` prop anymore. It always requests Popup's `topCenter` alignment and lets
-Popup's own viewport-fit fallback (the same mechanism every Popup-based component gets) reposition
-it when that would overflow - see EdgeCases for it visibly repositioning near a viewport edge. This
-is a deliberate simplification: previously `placement` let a caller manually pick one of four sides,
-but centralizing positioning in Popup means most callers get sensible viewport-fit behavior for
-free instead of needing to pick a side themselves.
+<Example of={TooltipStories.Variants} caption="One truncated and one wrapped tooltip, then a disabled trigger and a tooltip turned off." />
 
-### Truncate vs. wrap
+</Subsection>
 
-`truncate` (default `true`) keeps content to a single ellipsized line up to 420px wide. Set it to
-`false` for content long enough to need wrapping, up to 240px wide before it wraps - see Variants.
+</Section>
 
-### Disabled controls still get an explanation
+<Section title="Behavior">
 
-A disabled native control (`<button disabled>`, or a component's `isDisabled`) can't receive pointer
-events itself, so hovering it directly would never trigger a tooltip. Tooltip detects this and wraps
-the trigger in a non-focusable pointer-only wrapper instead, so hovering still reveals the
-explanation without creating an extra keyboard tab stop or making the control appear interactive to
-screen reader users - see Content.
+<Subsection title="Showing and hiding">
 
-### External composition with icon buttons
+The tooltip shows `delay` milliseconds (300 by default) after the pointer enters the trigger or the
+trigger takes focus, and hides at once when the pointer leaves, focus leaves, or someone presses
+Escape on the trigger. The bubble ignores the pointer, so moving onto it hides it too. It fades in
+with `fade-quick` and leaves at once. `disabled` turns the tooltip off and leaves the trigger as it
+is.
 
-`IconButton` and `ToggleIconButton` can render their own internal tooltip, or be wrapped externally
-when the tooltip message should say something different from the accessible name - pass
-`tooltip={false}` to suppress the internal one and avoid rendering two. See Content.
+A handler you set on the trigger runs first; if it calls `event.preventDefault()`, Tooltip skips
+its own show or hide for that event.
 
-## Do / Don't
+<Example of={TooltipStories.Content} caption="Icon Buttons, Toggle Icon Buttons, a disabled trigger, and a Button, each with a tooltip." />
 
-**Do** give the trigger its own accessible name, independent of the tooltip content.
+</Subsection>
 
-```tsx
-<Tooltip content="Edit this matter's details">
-  <IconButton aria-label="Edit" tooltip={false}>
+<Subsection title="Position">
+
+The bubble opens above the trigger, centered, 8px away. Near the edge of the viewport it moves to
+the position that fits, below first. It's positioned by Popup, at the end of the page, so an
+`overflow: hidden` container doesn't clip it.
+
+It sits at z-index 1, below Modal Dialog and Toast Group, so a tooltip on a control inside a Modal
+Dialog shows behind the dialog. That's a known issue.
+
+<Example of={TooltipStories.EdgeCases} caption="Fallback near the viewport edge, a tooltip on keyboard focus, and one on a dark surface." />
+
+</Subsection>
+
+<Subsection title="Disabled controls">
+
+A disabled control may not get pointer events, so Tooltip wraps a disabled trigger in a `span` that
+shows the tooltip on hover. It counts a native `button`, `input`, `select`, or `textarea` with
+`disabled`, or a component with `disabled` or `isDisabled`, as disabled. The span isn't focusable,
+and a disabled control is skipped by Tab, so keyboard users never see this tooltip: don't make it
+the only place a reason is given.
+
+</Subsection>
+
+<Subsection title="Icon Button and wrapping components">
+
+Icon Button shows its `aria-label` as a tooltip on its own, and leaves it out inside a Tooltip, so
+the two never stack up. Wrap an Icon Button in Tooltip only when the hint should say more than its
+name.
+
+Tooltip passes its `ref` and every prop it doesn't use itself to the trigger: `aria-*` and `data-*`
+attributes, `role`, `style`, and event handlers. So a component that clones its child, such as
+Popup or Dropdown Menu, can wrap a Tooltip, and the attributes it adds still reach the real trigger.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give the trigger its own name, and use the tooltip to add to it."
+  code={`<Tooltip content="Edit the matter's details">
+    <IconButton aria-label="Edit">
+        <EditIcon />
+    </IconButton>
+</Tooltip>`}
+>
+  <Tooltip content="Edit the matter's details">
+    <IconButton aria-label="Edit">
+      <EditIcon />
+    </IconButton>
+  </Tooltip>
+</Do>
+<Dont
+  caption="Rely on the tooltip to name the control. It's only a description, and only while it shows."
+  code={`<Tooltip content="Edit">
+    <button type="button">
+        <EditIcon />
+    </button>
+</Tooltip>`}
+/>
+<Do caption="Let an Icon Button show its own name as its tooltip." code={`<IconButton aria-label="Edit">
+    <EditIcon />
+</IconButton>`}>
+  <IconButton aria-label="Edit">
     <EditIcon />
   </IconButton>
-</Tooltip>
-```
+</Do>
+<Dont
+  caption="Wrap an Icon Button in Tooltip only to repeat its name."
+  code={`<Tooltip content="Edit">
+    <IconButton aria-label="Edit">
+        <EditIcon />
+    </IconButton>
+</Tooltip>`}
+/>
+<Do caption="Keep a tooltip to a short hint people can do without." code={`<Tooltip content="Exports the visible rows as a CSV file">
+    <Button>Export</Button>
+</Tooltip>`}>
+  <Tooltip content="Exports the visible rows as a CSV file">
+    <Button>Export</Button>
+  </Tooltip>
+</Do>
+<Dont caption="Put what people need to go on only in a tooltip on a disabled button. Keyboard users can't focus it, so they never see it." code={`<Tooltip content="Accept the terms before you continue">
+    <Button disabled>Continue</Button>
+</Tooltip>`}>
+  <Tooltip content="Accept the terms before you continue">
+    <Button disabled>Continue</Button>
+  </Tooltip>
+</Dont>
+</Guidelines>
 
-**Don't** rely on tooltip content as the only description of what a control does.
+</Section>
 
-```tsx
-<Tooltip content="Edit">
-  <IconButton tooltip={false}>
-    <EditIcon />
-  </IconButton>
-</Tooltip>
-```
+<Section title="Accessibility">
 
----
+- Tooltip adds no element around an enabled trigger, which keeps its own role and name. Give the
+  trigger a name of its own: visible text, or `aria-label` on an icon-only control.
+- While it shows, the bubble is a `role="tooltip"` element at the end of the page, and the trigger's
+  `aria-describedby` includes its id, alongside any ids the trigger already had. When it hides, the
+  id is removed.
+- It shows on keyboard focus as well as hover, and never takes focus itself. It adds no tab stop,
+  including the `span` around a disabled trigger.
+- Its text is read as a description, not as content people can move to, so it can't hold links,
+  buttons, or fields.
+- A disabled trigger can't take focus, so its tooltip is shown only on hover.
+- Escape hides it only while the trigger has focus; a tooltip shown by hover hides when the pointer
+  leaves.
 
-**Do** let a disabled control still explain itself via Tooltip.
+<Keyboard>
+  <Key keys="Tab">Moves focus to the trigger, which shows the tooltip after the delay. Moving focus away hides it.</Key>
+  <Key keys="Escape">While the trigger has focus, hides the tooltip.</Key>
+</Keyboard>
 
-```tsx
-<Tooltip content="Disabled until a record is selected">
-  <IconButton aria-label="Edit" disabled tooltip={false}>
-    <EditIcon />
-  </IconButton>
-</Tooltip>
-```
+</Section>
 
-**Don't** put content in a tooltip that the user needs in order to proceed - use visible UI instead.
+<Section title="API">
 
-```tsx
-<Tooltip content="You must accept the terms before continuing">
-  <Button disabled>Continue</Button>
-</Tooltip>
-```
+<PropsTable of={TooltipStories} />
 
-## API
+Any other prop set on Tooltip, such as an `aria-*` or `data-*` attribute, `role`, `style`, or an
+event handler, is passed to the trigger. The value set on Tooltip wins, except that both event
+handlers run (the trigger's first), styles merge, `aria-describedby` ids are kept from both, and
+`undefined` never removes the trigger's own value.
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>content</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. No tooltip behavior is attached at all when this is empty (<code>null</code>, <code>undefined</code>, or a blank string).</td>
-    </tr>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactElement</code></td>
-      <td>-</td>
-      <td>Required. A single trigger element - cloned to add the pointer/focus handlers and <code>aria-describedby</code>.</td>
-    </tr>
-    <tr>
-      <td><code>truncate</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Single ellipsized line (420px max) vs. wrapped text (240px max before wrapping).</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Suppresses the tooltip entirely - not just visually hidden.</td>
-    </tr>
-    <tr>
-      <td><code>delay</code></td>
-      <td><code>number</code></td>
-      <td><code>300</code></td>
-      <td>Milliseconds of hover/focus before the tooltip appears.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the tooltip content element's class list.</td>
-    </tr>
-  </tbody>
-</table>
+</Section>
 
-## Related components
+<Section title="Design tokens">
 
-- **Popup** - the shared floating-panel primitive Tooltip renders through for positioning, the
-  portal, and dismissal. Reach for Popup directly when building something interactive/dismissible
-  rather than a non-interactive hint.
-- **IconButton** / **ToggleIconButton** - can render an internal tooltip, or be wrapped externally.
-- **Label** - for a persistent, always-visible description instead of a hover-revealed one.
+Every token Tooltip's stylesheet uses, by family, with the property it sets and when. "Base" is the
+bubble; its position, its 8px gap from the trigger, and its fade come from Popup's tokens.
+
+<TokensTable id="tooltip" root="content" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Overlays/Popup" />, which positions the bubble, for floating content that holds links or buttons.
+- <DocLink to="Components/Actions/Icon Button" /> and <DocLink to="Components/Actions/Toggle Icon Button" />, the usual triggers. Icon Button shows its own tooltip.
+- <DocLink to="Components/Forms/Field" />, for a description that's always visible.
+- <DocLink to="Components/Feedback/Inline Message" />, for a status whose details people open.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads tooltip.types.ts, the design tokens read tooltip.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

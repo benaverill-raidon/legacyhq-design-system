@@ -104,6 +104,17 @@ ModalDialog (portal -> document.body)
 | Body inset / typography | `--spacing-2xl` / `--typography-body-md-*` |
 | Footer padding / action gap | `--spacing-lg` `--spacing-2xl` / `--spacing-sm` |
 
+The backdrop's `z-index` is a raw `1000`. Popup-based components (Tooltip, Dropdown Menu, the
+pickers, Inline Message) render at Popup's `z-index: 1`, so inside a dialog they appear behind it,
+including the default tooltips of the header's Close and Expand Icon Buttons (recorded layering
+task). The Escape listener is on `document` in the capture phase and calls `stopPropagation()`, so
+Escape closes the dialog before anything inside it, such as an open Dropdown Menu, sees the key.
+There's no exit animation; the dialog unmounts when `open` is false.
+
+The component returns its portal wrapped in a fragment. That adds nothing to the DOM; react-docgen
+(Storybook's docgen) doesn't recognize a function that returns a bare `createPortal(...)` call as a
+component, and the Docs page's API table is generated from it.
+
 ---
 
 ## Design Decisions

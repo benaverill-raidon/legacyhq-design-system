@@ -121,8 +121,9 @@ bubble fits its text.
 
 The tooltip shows `delay` milliseconds (300 by default) after the pointer enters the trigger or the
 trigger takes focus, and hides at once when the pointer leaves, focus leaves, or someone presses
-Escape on the trigger. The bubble ignores the pointer, so moving onto it hides it too. It fades in
-with `fade-quick` and leaves at once. `disabled` turns the tooltip off and leaves the trigger as it
+Escape, wherever focus is. The pointer can move from the trigger onto the bubble without hiding it
+(a strip fills the gap between them), so people who zoom in can read it; it hides when the pointer
+leaves both. It fades in with `fade-quick` and leaves at once. `disabled` turns the tooltip off and leaves the trigger as it
 is.
 
 A handler you set on the trigger runs first; if it calls `event.preventDefault()`, Tooltip skips
@@ -138,8 +139,8 @@ The bubble opens above the trigger, centered, 8px away. Near the edge of the vie
 the position that fits, below first. It's positioned by Popup, at the end of the page, so an
 `overflow: hidden` container doesn't clip it.
 
-It sits at z-index 1, below Modal Dialog and Toast Group, so a tooltip on a control inside a Modal
-Dialog shows behind the dialog. That's a known issue.
+It sits above Modal Dialog and Toast Group, with every Popup, so a tooltip on a control inside a
+dialog, such as its Close button, shows over the dialog.
 
 <Example of={TooltipStories.EdgeCases} caption="Fallback near the viewport edge, a tooltip on keyboard focus, and one on a dark surface." />
 
@@ -239,12 +240,14 @@ Popup or Dropdown Menu, can wrap a Tooltip, and the attributes it adds still rea
 - Its text is read as a description, not as content people can move to, so it can't hold links,
   buttons, or fields.
 - A disabled trigger can't take focus, so its tooltip is shown only on hover.
-- Escape hides it only while the trigger has focus; a tooltip shown by hover hides when the pointer
-  leaves.
+- Escape hides it however it was shown, by hover or focus, without moving focus. Inside a menu or
+  dialog, the first Escape hides the tooltip and the next closes what's under it.
+- The bubble can be hovered: moving the pointer onto it keeps it open, so it can be read when zoomed
+  in; it hides when the pointer leaves both, when focus leaves the trigger, or on Escape.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the trigger, which shows the tooltip after the delay. Moving focus away hides it.</Key>
-  <Key keys="Escape">While the trigger has focus, hides the tooltip.</Key>
+  <Key keys="Escape">Hides a visible tooltip, whether hover or focus showed it. A menu or dialog under it stays open until the next Escape.</Key>
 </Keyboard>
 
 </Section>

@@ -106,7 +106,8 @@
     "Clone the single child element and merge the focus classes onto its className.",
     "Default borderWidth is default (--border-width-md).",
     "disabled=true suppresses the outline via focusRingClassNames.focusRingDisabled instead of the width-specific class.",
-    "border-radius: inherit, so the ring shape always matches whatever element it wraps.",
+    "No border-radius of its own: the outline follows the element's own border-radius, which the component sets, never a parent's.",
+    "--focus-ring-offset is a registered, non-inheriting property with a 2px initial value (@property) that .focusRing doesn't declare, so a component's own --focus-ring-offset on the ring element wins whatever order stylesheets load in.",
     "Support className composition."
   ],
   "compositionRules": [

@@ -89,6 +89,7 @@ Not Required:
 
 ### Does it have the right dialog semantics?
 Yes - `role="dialog"` + `aria-modal="true"`, named by `title` (`aria-labelledby`) or `aria-label`.
+With neither, it warns in development.
 
 ### Is focus handled?
 Yes - focus moves into the panel on open, is trapped on Tab within it, and returns to the trigger on
@@ -96,7 +97,8 @@ close. `initialFocusRef` overrides the initial target.
 
 ### How is it dismissed?
 The close button, Escape (`closeOnEscape`), and a backdrop click (`closeOnBackdropClick`) - all call
-`onClose`. The close button is labelled "Close" (`closeLabel`). The optional expand button (`onExpand`,
+`onClose`. Escape closes only the topmost layer: a menu, picker, or tooltip open in the dialog
+closes first, and of two stacked dialogs only the top one closes. The close button is labelled "Close" (`closeLabel`). The optional expand button (`onExpand`,
 labelled `expandLabel`) is a separate action - it does not dismiss.
 
 ### Is the status icon meaningful?

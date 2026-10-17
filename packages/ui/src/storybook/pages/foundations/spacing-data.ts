@@ -147,7 +147,8 @@ const BORROWED: Array<[kind: UseKind, key: string]> = [
  * tokens, since both point to the same missing focus-ring offset token.
  */
 export const RAW_FOCUS_RING_OFFSETS: Record<string, RegExp> = {
-  'focus-ring': /--focus-ring-offset:\s*\d+px/,
+  // Focus Ring sets its 2px as the registered property's initial value (@property).
+  'focus-ring': /--focus-ring-offset(?:\s*\{[^}]*initial-value)?:\s*\d+px/,
   table: /outline-offset:\s*\d+px/,
 };
 

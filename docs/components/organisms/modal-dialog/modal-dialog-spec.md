@@ -73,8 +73,11 @@ ModalDialog (portal -> document.body)
 - **Portal.** `createPortal` into `document.body`; renders nothing when `open` is false.
 - **Focus.** On open, focus moves to `initialFocusRef` or the panel; Tab / Shift+Tab is trapped
   within the panel; on close (unmount), focus is restored to the previously-focused element.
-- **Dismissal.** Escape (capture-phase keydown, `closeOnEscape`); a press-and-release on the backdrop
-  itself (`closeOnBackdropClick`) - a drag that ends on the backdrop does not close it.
+- **Dismissal.** Escape (`closeOnEscape`), only when the dialog is the topmost open layer; a
+  press-and-release on the backdrop itself (`closeOnBackdropClick`) - a drag that ends on the
+  backdrop does not close it.
+- **Naming.** Named by `title` (`aria-labelledby`) or `aria-label`; with neither, it warns in
+  development (`console.warn`, skipped when `import.meta.env.PROD`), as Icon Button does.
 - **Scroll lock.** `document.body.style.overflow = 'hidden'` while open, restored on close.
 - **Tone.** `warning` / `error` prepend a decorative status icon to the title; does not tone
   the footer buttons.
@@ -104,11 +107,20 @@ ModalDialog (portal -> document.body)
 | Body inset / typography | `--spacing-2xl` / `--typography-body-md-*` |
 | Footer padding / action gap | `--spacing-lg` `--spacing-2xl` / `--spacing-sm` |
 
-The backdrop's `z-index` is a raw `1000`. Popup-based components (Tooltip, Dropdown Menu, the
-pickers, Inline Message) render at Popup's `z-index: 1`, so inside a dialog they appear behind it,
-including the default tooltips of the header's Close and Expand Icon Buttons (recorded layering
-task). The Escape listener is on `document` in the capture phase and calls `stopPropagation()`, so
-Escape closes the dialog before anything inside it, such as an open Dropdown Menu, sees the key.
+The backdrop's `z-index` is set inline from `LAYERS.dialog` (1000) in `primitives/layers.ts`, the
+one place the overlay stacking order lives. Popup-based components (Tooltip, Dropdown Menu, the
+pickers, Inline Message) render at `LAYERS.popup` (1200), so inside a dialog they appear above it,
+including the default tooltips of the header's Close and Expand Icon Buttons. `LAYERS.toast` (1100)
+puts toasts between the two.
+
+Escape: the dialog registers as a layer with `useLayer` from `primitives/layers.ts`, the stack
+Popup uses too, and listens on `document` in the bubble phase. It calls `onClose` only when it's
+the topmost open layer and nothing has already handled the key (`preventDefault()`), and claiming
+the key calls `preventDefault()` itself. So Escape in an open Dropdown Menu, picker, or tooltip in
+the dialog closes that first, and with two stacked dialogs only the top one closes. A control that
+handles Escape itself without `preventDefault()` (Inline Edit's cancel) still lets the dialog close
+too. The Tab focus trap stays a capture-phase listener. Layers order by when they open, so a popup
+and a dialog that both mount open in the same render order child-first (the popup under the dialog).
 There's no exit animation; the dialog unmounts when `open` is false.
 
 The component returns its portal wrapped in a fragment. That adds nothing to the DOM; react-docgen

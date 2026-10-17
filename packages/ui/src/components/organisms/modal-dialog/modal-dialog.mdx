@@ -212,8 +212,8 @@ button and calls `onExpand`, and what expanding does is up to you.
 <Subsection title="Without a title or a footer">
 
 Leave out `footer` for a dialog that only informs; people close it with the Close button or
-Escape. Without a visible `title`, name the dialog with `aria-label`. The header still shows while
-it holds the Close button.
+Escape. Without a visible `title`, name the dialog with `aria-label`; in development, a dialog with
+neither logs a warning. The header still shows while it holds the Close button.
 
 <Example of={ModalDialogStories.EdgeCases} />
 
@@ -221,10 +221,14 @@ it holds the Close button.
 
 <Subsection title="Layering and motion">
 
-The backdrop sits at z-index 1000. Tooltip, Dropdown Menu, the pickers, and Inline Message open in
-a Popup at z-index 1, so inside a dialog they show behind it, including the tooltips of its own
-Close and Expand buttons. And because the dialog handles Escape before anything inside it, Escape
-closes the dialog rather than a menu open in it. Both are known issues.
+Tooltip, Dropdown Menu, the pickers, and Inline Message open in a Popup, which sits above the
+dialog, so they show over it, including the tooltips of its own Close and Expand buttons. A dialog
+opened from inside another shows over the first. The order (dialog, then toast, then popup) is kept
+in one place, `primitives/layers.ts`.
+
+Escape closes only the topmost layer: an open menu, picker, or tooltip in the dialog closes first,
+and the next Escape closes the dialog; with two dialogs open, only the top one closes. A control
+inside that handles Escape itself, such as Inline Message's popup, keeps it.
 
 The backdrop fades in and the panel fades in while rising 8px, both with `fade-quick`; with
 reduced motion, the dialog appears at once. It leaves at once when it closes.
@@ -309,7 +313,8 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 <Section title="Accessibility">
 
 - The panel has `role="dialog"` and `aria-modal="true"`. It's named by its `title`, through
-  `aria-labelledby`, or by `aria-label` when there's no title; with neither, it has no name.
+  `aria-labelledby`, or by `aria-label` when there's no title; with neither, it has no name, and
+  it warns in development.
 - Opening moves focus into the dialog, Tab and Shift+Tab stay inside it, and closing returns focus
   to the element that had it before. The panel itself can take focus, so focus stays in the dialog
   even when it holds no controls.
@@ -323,7 +328,7 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 <Keyboard>
   <Key keys="Tab">Moves to the next control in the dialog, and from the last back to the first.</Key>
   <Key keys="Shift + Tab">Moves to the previous control, and from the first, or the panel, to the last.</Key>
-  <Key keys="Escape">Calls `onClose`, unless `closeOnEscape` is `false`.</Key>
+  <Key keys="Escape">Calls `onClose`, unless `closeOnEscape` is `false`, when nothing opened above the dialog (a menu, a tooltip, another dialog) is still open: that closes first.</Key>
 </Keyboard>
 
 </Section>

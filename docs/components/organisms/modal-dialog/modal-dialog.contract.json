@@ -75,7 +75,7 @@
     "closeLabel": { "type": "string", "required": false, "default": "Close", "description": "Accessible label for the close button." },
     "onExpand": { "type": "() => void", "required": false, "default": null, "description": "Called when the header expand (maximize) button is clicked. Provide it to show an Expand button before Close (grouped in a Button Group when both are shown)." },
     "expandLabel": { "type": "string", "required": false, "default": "Expand", "description": "Accessible label / tooltip for the expand button." },
-    "closeOnEscape": { "type": "boolean", "required": false, "default": true, "description": "Close when Escape is pressed." },
+    "closeOnEscape": { "type": "boolean", "required": false, "default": true, "description": "Close when Escape is pressed and nothing opened above the dialog (a menu, a tooltip, another dialog) is still open." },
     "closeOnBackdropClick": { "type": "boolean", "required": false, "default": true, "description": "Close when the backdrop is clicked." },
     "initialFocusRef": { "type": "React.RefObject<HTMLElement | null>", "required": false, "default": null, "description": "Element to focus on open. Defaults to the panel." },
     "aria-label": { "type": "string", "required": false, "default": null, "description": "Accessible name when there is no title." },
@@ -120,7 +120,7 @@
     "focusable": true,
     "role": "dialog",
     "requirements": [
-      "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name.",
+      "role='dialog' + aria-modal='true'; named by title (aria-labelledby) or aria-label - always give it an accessible name. With neither, it warns in development.",
       "Focus moves into the panel on open, is trapped on Tab/Shift+Tab, and is restored to the trigger on close.",
       "Escape (closeOnEscape) and a genuine backdrop click (closeOnBackdropClick) request close via onClose.",
       "Page scroll is locked while open.",
@@ -130,7 +130,7 @@
     ]
   },
   "keyboardInteraction": [
-    "Escape closes the dialog (when closeOnEscape).",
+    "Escape closes the dialog (when closeOnEscape) only when it is the topmost open layer: an open menu, picker, or tooltip inside it, or a dialog stacked on it, closes first.",
     "Tab / Shift+Tab cycle focus within the panel and never leave it.",
     "Focus returns to the element that opened the dialog when it closes."
   ],
@@ -166,10 +166,12 @@
   "implementationNotes": [
     "Use React.memo; createPortal into document.body; render null when closed or on the server.",
     "Focus trap via a capture-phase keydown listener; scroll lock via document.body.style.overflow.",
+    "Escape via a bubble-phase document keydown listener and useLayer (primitives/layers.ts), the layer stack Popup shares: acts only when the dialog is the topmost open layer and the key isn't already preventDefault()-ed, then calls preventDefault() itself.",
+    "The backdrop's z-index is LAYERS.dialog from primitives/layers.ts, set inline, below Toast Group (LAYERS.toast) and Popup (LAYERS.popup). z-index is not a design token.",
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colours, spacing, radius, or typography (panel px widths and z-index are not token-gated).",
+    "No hardcoded colours, spacing, radius, or typography (panel px widths are not token-gated; z-index comes from LAYERS in primitives/layers.ts).",
     "Do not build on the Popup primitive - it is a positioned popover, not a modal."
   ],
   "relatedComponents": ["Button", "Icon Button", "Button Group", "Toast", "Dropdown Menu", "Menu"],
@@ -202,7 +204,7 @@
   "knownLimitations": [
     "No enter/exit transition beyond a light fade-in.",
     "The breadcrumb header appearance is not a dedicated prop (pass breadcrumbs as title + aria-label).",
-    "Single-modal assumption - nested/stacked modals are not specially handled."
+    "Stacked modals: Escape closes only the top one and a later dialog paints over an earlier one, but each open dialog keeps its own Tab trap and scroll lock; the traps aren't coordinated."
   ],
   "futureEnhancements": [
     "Enter/exit transitions (scale/fade) with reduced-motion support.",

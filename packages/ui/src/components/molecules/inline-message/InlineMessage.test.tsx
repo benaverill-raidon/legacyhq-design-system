@@ -1,6 +1,6 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { focusRingClassNames } from '../../primitives/focus-ring';
@@ -194,12 +194,28 @@ describe('InlineMessage', () => {
     expect(screen.queryByText(/:$/)).not.toBeInTheDocument();
   });
 
-  it('moves focus into the popup when it opens, so its links come next in tab order', () => {
+  it('moves focus into the popup when it opens, so its links come next in tab order', async () => {
     render(<InlineMessage tone="information" title="Migration" content={<a href="#notes">Read the notes</a>} />);
     fireEvent.click(screen.getByRole('button', { name: 'Information: Migration' }));
 
     const dialog = screen.getByRole('dialog', { name: 'Information: Migration' });
-    expect(dialog).toHaveFocus();
+    await waitFor(() => expect(dialog).toHaveFocus());
+  });
+
+  it('moves focus only once Popup has shown the panel, so the first open works too', async () => {
+    // A browser won't focus an element under visibility: hidden, which Popup sets until it has
+    // positioned the panel. jsdom would, so this makes focus() behave as a browser's does.
+    const focus = HTMLElement.prototype.focus;
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus').mockImplementation(function (this: HTMLElement) {
+      if (this.closest('[style*="visibility: hidden"]')) return;
+      focus.call(this);
+    });
+
+    render(<InlineMessage title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Migration' }));
+
+    await waitFor(() => expect(screen.getByRole('dialog', { name: 'Migration' })).toHaveFocus());
+    focusSpy.mockRestore();
   });
 
   it('closes and returns focus to the row when Tab leaves the popup, or on Escape', () => {

@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LAYERS } from '../../primitives/layers';
 import { ToastGroup } from './toast-group';
 import { toast } from './toast-store';
 
@@ -70,6 +71,18 @@ describe('ToastGroup', () => {
     });
 
     expect(screen.getByRole('list', { name: 'Notifications' })).toHaveTextContent('Event created');
+  });
+
+  it('stacks above Modal Dialog and below Popup', () => {
+    render(<ToastGroup />);
+
+    act(() => {
+      toast('Event created', { duration: Infinity });
+    });
+
+    expect(screen.getByRole('list', { name: 'Notifications' })).toHaveStyle({ zIndex: String(LAYERS.toast) });
+    expect(LAYERS.dialog).toBeLessThan(LAYERS.toast);
+    expect(LAYERS.toast).toBeLessThan(LAYERS.popup);
   });
 
   it('sets the tone from the toast variant helpers', () => {

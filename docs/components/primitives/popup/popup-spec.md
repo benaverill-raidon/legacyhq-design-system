@@ -71,6 +71,13 @@ What Popup does own, once `open` becomes true:
 - Positioning the panel relative to the trigger.
 - Calling `onOpenChange(false)` on Escape (`closeOnEscape`, default `true`) and on a pointer press
   outside both the trigger and the panel (`closeOnOutsideClick`, default `true`).
+- Escape goes to the topmost open layer only. Every open Popup registers as a layer
+  (`useLayer` in `primitives/layers.ts`, shared with Modal Dialog), even with `closeOnEscape`
+  off, and acts on Escape only when it's the most recently opened layer still open; claiming the
+  key calls `preventDefault()`, and an Escape that content inside already handled that way isn't
+  claimed. So a menu or tooltip opened inside a dialog, or inside another Popup, closes first.
+- Reading the trigger child's own ref from `child.props.ref` (React 19 passes `ref` as a prop;
+  `element.ref` is deprecated and warns in development), merged with Popup's measurement ref.
 
 Popup does not change its own visibility in response to Escape/outside click - it only calls
 `onOpenChange`. If the consumer doesn't provide `onOpenChange`, dismissal has no visible effect,
@@ -189,8 +196,10 @@ rather than a `transition`, since the panel mounts and unmounts instead of toggl
 no exit animation: the panel is removed as soon as `open` is false. Under
 `prefers-reduced-motion: reduce` the animation's duration is 0ms.
 
-The panel's `z-index` is a raw `1`, below Modal Dialog's and Toast Group's `1000`, so a Popup opened
-inside a Modal Dialog renders behind it (recorded layering task).
+The panel's `z-index` is set inline from `LAYERS.popup` (1200) in `primitives/layers.ts`, the one
+place the overlay stacking order lives: Modal Dialog (`LAYERS.dialog`, 1000), then Toast Group
+(`LAYERS.toast`, 1100), then Popup. So a Popup opened inside a Modal Dialog or over the toast stack
+renders above it. z-index isn't a design token (it has no Figma counterpart or theme).
 
 Content items inside the panel get `--spacing-xs` (4px) of gap when there's more than one, matching
 the Figma component's own inner `itemSpacing`.

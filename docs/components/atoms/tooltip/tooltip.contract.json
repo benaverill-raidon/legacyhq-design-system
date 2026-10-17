@@ -94,14 +94,14 @@
     "describedByWhileVisible": true
   },
   "behaviorRules": [
-    "Owns trigger behavior via composition (hover, focus, blur, pointer leave, Escape).",
+    "Owns trigger behavior via composition (hover, focus, blur, pointer leave); Escape comes through Popup.",
     "Supports disabled native controls with a non-focusable pointer wrapper.",
     "Does not render or attach behavior when content is absent.",
     "Skips internal behavior when consumer handlers prevent default.",
     "Renders through Popup with unstyled set - Popup owns positioning, the portal, and the mount animation; Tooltip owns its own visual skin.",
     "Always requests Popup's topCenter alignment - no placement prop; Popup's own viewport-fit fallback (topCenter -> bottomCenter -> the remaining four) handles the rest.",
     "Sets manageTriggerAria={false} on Popup - Tooltip's own aria-describedby is the correct ARIA pattern here, not Popup's disclosure-widget aria-expanded/aria-controls.",
-    "Sets closeOnEscape={false} and closeOnOutsideClick={false} on Popup - Tooltip's own hover/focus/blur/Escape-on-trigger dismissal predates Popup and has different semantics than a generic dismissible popup."
+    "Sets closeOnOutsideClick={false} on Popup (a hover hint has no outside click) and leaves closeOnEscape on, hiding when Popup calls onOpenChange(false), so Escape dismisses a tooltip shown by hover or focus, and as the topmost layer it closes before a menu or dialog under it."
   ],
   "compositionRules": [
     "Give the trigger its own accessible name, independent of the tooltip content.",
@@ -127,7 +127,7 @@
   ],
   "acceptanceCriteria": [
     "Renders the trigger child; attaches no behavior when content is empty.",
-    "Shows on hover (after delay) and keyboard focus; hides on pointer leave, blur, and Escape.",
+    "Shows on hover (after delay) and keyboard focus; hides on pointer leave, blur, and Escape (wherever focus is). The bubble is hoverable: moving the pointer from the trigger onto it keeps it open, and a ::before strip bridges the gap (WCAG 1.4.13).",
     "Sets role=tooltip and wires aria-describedby only while visible, preserving any existing value.",
     "Supports disabled native controls via a non-focusable pointer wrapper with no extra tab stop.",
     "Preserves consumer event handlers and honors preventDefault().",

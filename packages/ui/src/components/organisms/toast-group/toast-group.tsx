@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Toast } from '../toast';
 import { resolveToastTone, TOAST_STATUS_LABELS } from '../toast/toast-status';
+import { LAYERS } from '../../primitives/layers';
 import { toastStore } from './toast-store';
 import type { ToastItem } from './toast-store';
 import styles from './toast-group.module.css';
@@ -259,7 +260,8 @@ export function ToastGroup({ maxVisible = 3, duration = DEFAULT_DURATION, label 
         aria-label={label}
         className={mergeClassNames(styles.region, className)}
         data-expanded={expanded ? 'true' : undefined}
-        style={regionHeight ? { blockSize: `${regionHeight}px` } : undefined}
+        // Above Modal Dialog and below Popup: see primitives/layers.ts.
+        style={{ zIndex: LAYERS.toast, ...(regionHeight ? { blockSize: `${regionHeight}px` } : {}) }}
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
         onFocusCapture={() => setFocusWithin(true)}

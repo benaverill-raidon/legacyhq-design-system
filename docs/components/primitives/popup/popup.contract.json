@@ -208,7 +208,7 @@
     ]
   },
   "keyboardInteraction": [
-    "Escape calls onOpenChange(false) when closeOnEscape is true (default).",
+    "Escape calls onOpenChange(false) when closeOnEscape is true (default) and this Popup is the topmost open layer (popup or Modal Dialog); a menu or tooltip inside a dialog closes before the dialog.",
     "No other keyboard behavior is owned by Popup - content-specific navigation (e.g. arrow keys in a menu) belongs to the consumer."
   ],
   "behaviorRules": [
@@ -218,6 +218,9 @@
     "Positions via a portal at document.body with position: fixed, recalculating on trigger/panel resize, window resize, and scroll.",
     "Tries the preferred alignment first, then the same alignment on the opposite side, then the remaining four, and resolves to whichever overflows the viewport least, exposed via data-alignment.",
     "Escape (document keydown) and outside pointer press (document pointerdown, capture phase) both gate on their respective closeOn* prop before calling onOpenChange.",
+    "Every open Popup is a layer (useLayer in primitives/layers.ts, shared with Modal Dialog), even with closeOnEscape off. Escape is acted on only by the topmost open layer, once per key press: claiming it calls preventDefault(), and an Escape already handled with preventDefault() inside is left alone.",
+    "The panel's z-index is LAYERS.popup from primitives/layers.ts, set inline, above Modal Dialog (LAYERS.dialog) and Toast Group (LAYERS.toast), so a Popup opened from inside a dialog or a toast shows over it. z-index is not a design token.",
+    "The trigger child's own ref is read from child.props.ref (React 19), not the deprecated element.ref, and merged with Popup's measurement ref.",
     "A pointer press inside the panel or on the trigger itself never triggers outside-click dismissal.",
     "Renders nothing but the cloned trigger when open is false - no empty portal node stays mounted.",
     "unstyled=true omits Popup's own visual skin class (and the padding class) from the panel entirely, leaving only structural positioning and the mount animation - the base .panel class never carries visual styling, so there's no cross-module CSS override needed.",

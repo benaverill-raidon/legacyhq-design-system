@@ -12,7 +12,7 @@ export interface ModalDialogProps {
   open: boolean;
   /** Called when the dialog asks to close: the close button, Escape, or a backdrop click. Set `open` to `false` in response; the dialog never closes itself. */
   onClose: () => void;
-  /** The heading in the header, and the dialog's accessible name through `aria-labelledby`. Without one, pass `aria-label`. */
+  /** The heading in the header, and the dialog's accessible name through `aria-labelledby`. Without one, pass `aria-label`; with neither, the dialog warns in development. */
   title?: React.ReactNode;
   /** What the dialog means. `warning` and `error` put a status icon before the title; neither changes the footer buttons, so give the Confirm button the same `tone`. */
   tone?: ModalTone;
@@ -32,7 +32,7 @@ export interface ModalDialogProps {
   onExpand?: () => void;
   /** The Expand button's accessible name. */
   expandLabel?: string;
-  /** Calls `onClose` when Escape is pressed. */
+  /** Calls `onClose` when Escape is pressed, unless something opened above the dialog (a menu, a tooltip, another dialog) is still open: that closes first. */
   closeOnEscape?: boolean;
   /** Calls `onClose` when a press starts and ends on the backdrop, outside the panel. */
   closeOnBackdropClick?: boolean;

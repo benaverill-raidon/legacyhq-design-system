@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { EditableCellContext, useEditableCellSize } from '../editable-cell-context';
+import { LAYERS, useLayer } from '../layers';
 import styles from './popup.module.css';
 import type { PopupAlignment, PopupPadding, PopupProps } from './popup.types';
 
@@ -147,6 +148,9 @@ export const Popup = React.memo(function Popup({
   const [position, setPosition] = React.useState<{ top: number; left: number } | null>(null);
   const [panelWidth, setPanelWidth] = React.useState<number | null>(null);
   const [triggerOutOfView, setTriggerOutOfView] = React.useState(false);
+  // Every open Popup is a layer, even with closeOnEscape off, so a dialog under it doesn't take
+  // the Escape that belongs to it.
+  const claimEscape = useLayer(open);
 
   // The element the panel positions against and matches width to - the anchor (e.g. a field frame)
   // when given, otherwise the cloned trigger child itself.
@@ -228,8 +232,10 @@ export const Popup = React.memo(function Popup({
       return;
     }
 
+    // Only the topmost open layer acts on Escape (see layers.ts): a popup opened inside a dialog,
+    // or on top of another popup, closes first.
     function handleKeyDown(event: KeyboardEvent) {
-      if (closeOnEscape && event.key === 'Escape') {
+      if (closeOnEscape && claimEscape(event)) {
         onOpenChange?.(false);
       }
     }
@@ -256,13 +262,14 @@ export const Popup = React.memo(function Popup({
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('pointerdown', handlePointerDown, true);
     };
-  }, [open, closeOnEscape, closeOnOutsideClick, onOpenChange, getMeasureEl]);
+  }, [open, closeOnEscape, closeOnOutsideClick, onOpenChange, getMeasureEl, claimEscape]);
 
   const child = React.Children.only(children) as React.ReactElement<
     React.HTMLAttributes<HTMLElement> & { 'aria-controls'?: string; ref?: React.Ref<HTMLElement> }
   >;
   const childProps = child.props;
-  const childRef = (child as React.ReactElement & { ref?: React.Ref<HTMLElement> }).ref;
+  // React 19 passes ref as a prop; reading element.ref is deprecated (and warns in development).
+  const childRef = childProps.ref;
 
   const clonedChild = React.cloneElement(child, {
     ref: mergeRefs(childRef, triggerRef),
@@ -291,10 +298,12 @@ export const Popup = React.memo(function Popup({
               )}
               data-alignment={resolvedAlignment}
               data-trigger-out-of-view={triggerOutOfView ? 'true' : undefined}
+              // z-index comes from the one layer scale (layers.ts): above dialogs and toasts.
               style={
                 triggerOutOfView || !position
-                  ? { visibility: 'hidden' }
+                  ? { zIndex: LAYERS.popup, visibility: 'hidden' }
                   : {
+                      zIndex: LAYERS.popup,
                       top: `${position.top}px`,
                       left: `${position.left}px`,
                       ...(matchTriggerWidth && panelWidth !== null ? { width: `${panelWidth}px` } : {}),

@@ -116,6 +116,8 @@ export const InlineEdit = React.memo(function InlineEdit({
       event.preventDefault();
       confirm();
     } else if (event.key === 'Escape') {
+      // Handled here, so a Modal Dialog around the field doesn't close on the same key press.
+      event.preventDefault();
       focusField();
       cancel();
     }

@@ -146,7 +146,7 @@ and secondary text, so keep all three short.
   <InlineMessage tone="success" title="Synced" content="Synced." />
 </Dont>
 <Do
-  caption="Write a title that says the status, since the icon isn't announced."
+  caption="Write a title that says what happened. Assistive technology hears only the status word before it, not the icon."
   code={`<InlineMessage
   tone="error"
   title="Filing rejected"
@@ -155,7 +155,7 @@ and secondary text, so keep all three short.
 >
   <InlineMessage tone="error" title="Filing rejected" content="The court returned the filing: the signature page is missing." />
 </Do>
-<Dont caption="Leave the status to the icon and its color, with a title that doesn't say it." code={`<InlineMessage tone="error" title="Filing" secondaryText="Updated today" />`}>
+<Dont caption="Leave what happened to the icon and its color, with a title that doesn't say it." code={`<InlineMessage tone="error" title="Filing" secondaryText="Updated today" />`}>
   <InlineMessage tone="error" title="Filing" secondaryText="Updated today" />
 </Dont>
 <Do caption="Keep the detail to a sentence of plain text." code={`<InlineMessage
@@ -184,18 +184,21 @@ and secondary text, so keep all three short.
 - The button's accessible name is its title and secondary text. Don't put links or other controls
   in them, since they'd be nested inside a button.
 - Popup sets `aria-expanded` on the button, and `aria-controls` pointing at the popup while it's
-  open. The popup has no role of its own.
-- Focus stays on the button when the popup opens, and Escape closes it. The popup is rendered at the
-  end of the page, so Tab moves on through the page rather than into it.
-- The status icon and the `default` dot are hidden from assistive technology, and Inline Message
-  adds no hidden status text, unlike Section Message. The title has to carry the status in words.
+  open. The popup is a non-modal `dialog` named by the title.
+- The popup is rendered at the end of the page, so it takes focus when it opens, once it's in
+  place, even the first time; its links and buttons come next in Tab order. Tab past its last item,
+  Shift+Tab before its first, or Escape closes it and returns focus to the row.
+- The status icon and the `default` dot are hidden from assistive technology. As in Section
+  Message, the tone's name is read before the title as hidden text ("Error: Filing rejected"); it's
+  `statusLabel`, for translation, and `default` has none.
 - Without `content`, the row is a plain `div` that isn't focusable.
 
 <Keyboard>
   <Key keys="Tab">Moves focus to the row when it has `content`. A row without it is skipped.</Key>
   <Key keys="Enter">Opens or closes the popup.</Key>
   <Key keys="Space">Opens or closes the popup.</Key>
-  <Key keys="Escape">Closes the popup. Focus stays on the row.</Key>
+  <Key keys="Tab">In the popup, moves through its items; past the last, closes it and returns focus to the row.</Key>
+  <Key keys="Escape">Closes the popup and returns focus to the row.</Key>
 </Keyboard>
 
 </Section>

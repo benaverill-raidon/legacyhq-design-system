@@ -10,9 +10,9 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
 - [ ] Use `role="tooltip"`.
 - [ ] Open on pointer hover.
 - [ ] Open on keyboard focus.
-- [ ] Close on pointer leave.
+- [ ] Close on pointer leave, but stay open while the pointer moves onto the bubble (WCAG 1.4.13).
 - [ ] Close on blur.
-- [ ] Close on Escape.
+- [ ] Close on Escape, whether hover or focus showed it, before a menu or dialog under it.
 - [ ] Preserve existing child event handlers.
 - [ ] Skip internal behavior when a consumer handler calls `event.preventDefault()`.
 - [ ] Preserve existing `aria-describedby` values.

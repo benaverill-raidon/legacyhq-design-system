@@ -119,6 +119,8 @@ export const Tooltip = React.memo(function Tooltip({
 }: TooltipProps) {
   const tooltipId = React.useId();
   const showTimeoutRef = React.useRef<number | null>(null);
+  // What the pointer hovers to show the tooltip: the trigger, or the span around a disabled one.
+  const hoverTargetRef = React.useRef<HTMLElement | null>(null);
   const [isVisible, setIsVisible] = React.useState(false);
 
   const clearShowTimer = React.useCallback(() => {
@@ -153,13 +155,59 @@ export const Tooltip = React.memo(function Tooltip({
 
   React.useEffect(() => () => clearShowTimer(), [clearShowTimer]);
 
+  // The bubble is hoverable (WCAG 1.4.13): moving the pointer from the trigger onto the bubble
+  // keeps it open, and it hides once the pointer leaves both. Its ::before bridges the gap.
+  const isInBubble = React.useCallback(
+    (target: EventTarget | null) =>
+      target instanceof Node && Boolean(document.getElementById(tooltipId)?.contains(target)),
+    [tooltipId],
+  );
+  const handleHoverLeave = React.useCallback(
+    (event: React.PointerEvent<HTMLElement>) => {
+      if (!isInBubble(event.relatedTarget)) {
+        hideImmediately();
+      }
+    },
+    [isInBubble, hideImmediately],
+  );
+
+  const isOpen = isVisible && !disabled;
+  React.useEffect(() => {
+    const bubble = isOpen ? document.getElementById(tooltipId) : null;
+    if (!bubble) return undefined;
+    const handleBubbleLeave = (event: PointerEvent) => {
+      const target = event.relatedTarget;
+      if (!(target instanceof Node && hoverTargetRef.current?.contains(target))) {
+        hideImmediately();
+      }
+    };
+    bubble.addEventListener('pointerleave', handleBubbleLeave);
+    return () => bubble.removeEventListener('pointerleave', handleBubbleLeave);
+  }, [isOpen, tooltipId, hideImmediately]);
+
+  // Escape hides a visible tooltip however it was shown (WCAG 1.4.13). Popup handles the key, so
+  // the tooltip, as the topmost layer, closes before a menu or dialog under it.
+  const handleOpenChange = React.useCallback(
+    (next: boolean) => {
+      if (!next) {
+        hideImmediately();
+      }
+    },
+    [hideImmediately],
+  );
+
   const hasContent = hasTooltipContent(content);
   const child = React.Children.only(children) as React.ReactElement<TriggerProps>;
   const childRef = child.props.ref;
+  const isDisabledChildTrigger = isDisabledTrigger(child);
   // Tooltip is often the child of a component that wires its trigger by cloning it (Popup, Dropdown
   // Menu). What that wrapper sets on the Tooltip element - its ref, aria-expanded, aria-controls,
-  // aria-haspopup - belongs on the real trigger, so it's passed through to the child.
-  const mergedRef = React.useMemo(() => (ref ? mergeRefs(childRef, ref) : childRef), [childRef, ref]);
+  // aria-haspopup - belongs on the real trigger, so it's passed through to the child. A disabled
+  // trigger is hovered through the span around it, which takes hoverTargetRef instead.
+  const mergedRef = React.useMemo(
+    () => mergeRefs(childRef, ref, isDisabledChildTrigger ? undefined : hoverTargetRef),
+    [childRef, ref, isDisabledChildTrigger],
+  );
   const forwarded = mergeForwardedProps(forwardedProps, child.props);
   // The trigger's props as they'll end up, so Tooltip's own handlers below chain onto both.
   const childProps: TriggerProps = { ...child.props, ...forwarded };
@@ -167,8 +215,6 @@ export const Tooltip = React.memo(function Tooltip({
   if (!hasContent) {
     return React.cloneElement(child, { ...forwarded, ref: mergedRef });
   }
-
-  const isDisabledChildTrigger = isDisabledTrigger(child);
 
   const clonedChild = React.cloneElement(child, {
     ...forwarded,
@@ -189,7 +235,7 @@ export const Tooltip = React.memo(function Tooltip({
             if (!callHandler(childProps.onPointerLeave, event)) {
               return;
             }
-            hideImmediately();
+            handleHoverLeave(event);
           },
           onFocus: (event: React.FocusEvent<HTMLElement>) => {
             if (!callHandler(childProps.onFocus, event)) {
@@ -203,26 +249,17 @@ export const Tooltip = React.memo(function Tooltip({
             }
             hideImmediately();
           },
-          onKeyDown: (event: React.KeyboardEvent<HTMLElement>) => {
-            if (!callHandler(childProps.onKeyDown, event)) {
-              return;
-            }
-            if (event.key === 'Escape') {
-              hideImmediately();
-            }
-          },
         }),
   });
 
   const trigger = isDisabledChildTrigger ? (
     <span
+      ref={hoverTargetRef}
       className={styles.triggerWrapper}
       onPointerEnter={() => {
         scheduleShow();
       }}
-      onPointerLeave={() => {
-        hideImmediately();
-      }}
+      onPointerLeave={handleHoverLeave}
     >
       {clonedChild}
     </span>
@@ -233,12 +270,12 @@ export const Tooltip = React.memo(function Tooltip({
   return (
     <TooltipScopeContext.Provider value={true}>
       <Popup
-        open={isVisible && !disabled}
+        open={isOpen}
+        onOpenChange={handleOpenChange}
         alignment="topCenter"
         role="tooltip"
         id={tooltipId}
         manageTriggerAria={false}
-        closeOnEscape={false}
         closeOnOutsideClick={false}
         unstyled
         className={mergeClassNames(styles.content, truncate ? styles.truncate : styles.wrap, className)}

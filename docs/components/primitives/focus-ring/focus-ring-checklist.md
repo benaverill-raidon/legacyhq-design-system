@@ -160,7 +160,10 @@ Final implementation decisions:
 - Also provide a thin React wrapper.
 - Use outset ring only.
 - Use 2px outline offset.
-- Radius should inherit from the focused element where possible.
+- The ring follows the focused element's own radius; Focus Ring sets no `border-radius` (no
+  `inherit` from the parent).
+- A component's `--focus-ring-offset` wins regardless of stylesheet order (registered,
+  non-inheriting property with a 2px initial value).
 - Default variant uses 2px.
 - Use `:focus-visible`.
 - Use `--color-border-focus`.

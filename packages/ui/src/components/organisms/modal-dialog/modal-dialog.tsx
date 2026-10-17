@@ -4,6 +4,7 @@ import { CloseIcon, GrowDiagonalIcon, StatusErrorIcon, StatusWarningIcon } from 
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../../molecules/button-group';
+import { LAYERS, useLayer } from '../../primitives/layers';
 import styles from './modal-dialog.module.css';
 import type { DeprecatedModalWidth, ModalDialogProps, ModalTone, ModalWidth } from './modal-dialog.types';
 
@@ -27,6 +28,19 @@ const FOCUSABLE_SELECTOR = [
   'textarea:not([disabled])',
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
+
+/** A dialog needs a name: `title` (through aria-labelledby) or `aria-label`. */
+function warnForMissingAccessibleName(title: React.ReactNode, ariaLabel?: string) {
+  if (import.meta.env?.PROD) {
+    return;
+  }
+
+  if (title != null || ariaLabel) {
+    return;
+  }
+
+  console.warn('ModalDialog requires a `title` or an `aria-label` for an accessible name.');
+}
 
 function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
@@ -61,6 +75,15 @@ export const ModalDialog = React.memo(function ModalDialog({
   // Read the latest onClose inside the always-attached listener without re-subscribing each render.
   const onCloseRef = React.useRef(onClose);
   onCloseRef.current = onClose;
+  // The dialog is a layer: Escape closes it only when nothing opened above it (a menu, a tooltip,
+  // another dialog) is still open. See primitives/layers.ts.
+  const claimEscape = useLayer(open);
+
+  React.useEffect(() => {
+    if (open) {
+      warnForMissingAccessibleName(title, ariaLabel);
+    }
+  }, [open, title, ariaLabel]);
 
   // Focus management: remember what was focused, move focus into the dialog, restore it on close.
   React.useEffect(() => {
@@ -89,19 +112,30 @@ export const ModalDialog = React.memo(function ModalDialog({
     };
   }, [open]);
 
-  // Escape to close, and trap Tab focus inside the panel.
+  // Escape closes the dialog when it's the topmost layer. It listens in the bubble phase, so a
+  // control inside that handles Escape itself and calls preventDefault() keeps it.
   React.useEffect(() => {
     if (!open || typeof document === 'undefined') {
       return;
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (closeOnEscape && event.key === 'Escape') {
-        event.stopPropagation();
+      if (closeOnEscape && claimEscape(event)) {
         onCloseRef.current();
-        return;
       }
+    }
 
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, closeOnEscape, claimEscape]);
+
+  // Trap Tab focus inside the panel.
+  React.useEffect(() => {
+    if (!open || typeof document === 'undefined') {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key !== 'Tab' || !panelRef.current) {
         return;
       }
@@ -129,7 +163,7 @@ export const ModalDialog = React.memo(function ModalDialog({
 
     document.addEventListener('keydown', handleKeyDown, true);
     return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [open, closeOnEscape]);
+  }, [open]);
 
   if (!open || typeof document === 'undefined') {
     return null;
@@ -179,7 +213,13 @@ export const ModalDialog = React.memo(function ModalDialog({
     <>
       {createPortal(
         // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div className={styles.backdrop} onMouseDown={handleBackdropMouseDown} onMouseUp={handleBackdropMouseUp}>
+        <div
+          className={styles.backdrop}
+          // z-index comes from the one layer scale (primitives/layers.ts): below popups and toasts.
+          style={{ zIndex: LAYERS.dialog }}
+          onMouseDown={handleBackdropMouseDown}
+          onMouseUp={handleBackdropMouseUp}
+        >
           <div
             ref={panelRef}
             role="dialog"

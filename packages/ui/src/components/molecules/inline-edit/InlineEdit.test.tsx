@@ -139,6 +139,18 @@ describe('InlineEdit', () => {
     expect(screen.getByLabelText('Title')).toHaveAttribute('readOnly');
   });
 
+  it('claims the Escape that cancels, so a dialog around the field stays open', () => {
+    render(
+      <InlineEdit value="Q3 Planning">
+        <input aria-label="Title" />
+      </InlineEdit>,
+    );
+
+    fireEvent.focus(screen.getByLabelText('Title'));
+    // fireEvent returns false when the event's default was prevented.
+    expect(fireEvent.keyDown(screen.getByLabelText('Title'), { key: 'Escape' })).toBe(false);
+  });
+
   it('Enter still confirms when actionButtons is false and the buttons are not rendered', () => {
     const onConfirm = vi.fn();
     render(

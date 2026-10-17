@@ -349,11 +349,11 @@
                 "color-elevation-shadow-overflow-color"
             ]
         },
-        "layering": "Stacking order (z-index) is a separate concern: it is not paired with elevation and isn't tokenized yet.",
+        "layering": "Stacking order (z-index) is a separate concern: it is not paired with elevation and isn't tokenized (Figma has no stacking order, and it doesn't change with the theme). The overlay order lives in one code file, packages/ui/src/components/primitives/layers.ts: LAYERS.dialog (1000, Modal Dialog) < LAYERS.toast (1100, Toast Group) < LAYERS.popup (1200, Popup and everything built on it), set inline by the components. The same file keeps the stack of open layers that Escape goes to (useLayer), so Escape closes the topmost popup or dialog first. In-page stacking (a control's own parts) stays local to each component.",
         "openFindings": {
             "recorded": "2026-10-08",
             "findings": [
-                "Popup-based overlays (z-index 1) render behind an open Modal Dialog (z-index 1000); Toast Group and Modal Dialog tie at 1000. Tracked as a separate layering task.",
+                "Resolved 2026-10-17: Popup-based overlays (z-index 1) rendered behind an open Modal Dialog (z-index 1000), including the dialog's own Close and Expand tooltips. Popup and Modal Dialog now take z-index from LAYERS in primitives/layers.ts (popup 1200 above dialog 1000), and Escape goes to the topmost open layer. Toast Group's stack takes LAYERS.toast (1100), between the two.",
                 "Four Light taupe alpha primitives (alpha-1100-12/16/24/32) are twice as opaque as their names and Figma (0.16/0.32/0.48/0.64), so the Light overlay shadow renders at 32%/64% instead of Figma's 16%/32%, and Light border-default and press fills are affected too. Tracked separately.",
                 "Storybook applies the theme to a wrapper div, so portaled overlays (Popup, Modal Dialog) render with Light tokens in Dark mode. Tracked separately.",
                 "Figma: color/elevation/shadow/overlay/spread and /perimeter don't exist as variables, and the effect styles aren't bound to variables (they hard-code the same values)."

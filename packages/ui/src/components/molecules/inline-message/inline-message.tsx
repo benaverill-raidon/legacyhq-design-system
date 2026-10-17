@@ -93,7 +93,11 @@ export const InlineMessage = React.memo(function InlineMessage({
   React.useEffect(() => {
     const panel = panelRef.current;
     if (!isOpen || !panel) return undefined;
-    panel.focus();
+    // Wait a frame, as Dropdown Menu does: Popup keeps the panel at visibility: hidden until it has
+    // positioned it, and a hidden element can't take focus, so focusing now fails on the first open.
+    const frame = window.requestAnimationFrame(() => {
+      if (!panel.contains(document.activeElement)) panel.focus();
+    });
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -110,7 +114,10 @@ export const InlineMessage = React.memo(function InlineMessage({
       }
     };
     panel.addEventListener('keydown', handleKeyDown);
-    return () => panel.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      panel.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen, closeToTrigger]);
 
   const row = (

@@ -9,10 +9,10 @@
  *     title/close-area icon gap 8 (spacing/sm); title = heading/md
  *   - footer: padding 16/24/24/24 (spacing/lg top, spacing/2xl x3), action gap 8 (spacing/sm)
  */
+/* z-index is set inline from LAYERS.dialog (primitives/layers.ts), below popups and toasts. */
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;

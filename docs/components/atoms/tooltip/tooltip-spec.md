@@ -65,10 +65,17 @@ Tooltip opens on:
 
 Tooltip closes on:
 
-- pointer leave
+- pointer leave, unless the pointer moves onto the bubble (it then closes when the pointer leaves
+  the bubble, other than back onto the trigger)
 - blur
-- Escape
+- Escape, wherever focus is and whether hover or focus showed it (WCAG 1.4.13), through Popup's
+  `closeOnEscape`; as the topmost layer, it closes before a menu or dialog under it
 - `disabled={true}`
+
+The bubble is hoverable (WCAG 1.4.13): it takes pointer events, and a `::before` strip as tall as
+Popup's gap (`--spacing-sm`) on the trigger's side, chosen by the panel's `data-alignment`, bridges
+the gap so the pointer can cross from trigger to bubble. Leaving the trigger for the bubble (by
+`relatedTarget`) doesn't hide it; leaving the bubble for anywhere but the trigger does.
 
 Preserve consumer event handlers. If a consumer handler calls `event.preventDefault()`, Tooltip must skip its corresponding internal behavior.
 
@@ -107,7 +114,7 @@ Requirements:
 
 Tooltip renders through `Popup` (`packages/ui/src/components/primitives/popup`) with `unstyled` set,
 passing `alignment="topCenter"`, `role="tooltip"`, `manageTriggerAria={false}`, and both
-`closeOnEscape`/`closeOnOutsideClick` set to `false`. Popup owns:
+`closeOnOutsideClick` set to `false`. Popup owns:
 
 - the portal at `document.body`, avoiding clipping inside overflow containers
 - positioning relative to the trigger, and falling back across its six alignments (starting with
@@ -115,13 +122,17 @@ passing `alignment="topCenter"`, `role="tooltip"`, `manageTriggerAria={false}`, 
   preference) when the preferred one would overflow
 - recalculating on trigger/panel resize, window resize, and scroll
 - the mount fade animation (`fade-quick`)
+- Escape: Tooltip leaves `closeOnEscape` on and hides when Popup calls `onOpenChange(false)`, so
+  Escape reaches a tooltip shown by hover too, and only the topmost layer acts on it
+- the stacking order: the bubble sits at `LAYERS.popup`, above Modal Dialog and Toast Group
 
 There is no matching fade-out: React removes the bubble as soon as it hides, so the exit is
 instant. Animating the exit would mean deferring the unmount until the animation finishes.
 
-Tooltip does not use Popup's own dismissal (`closeOnEscape`/`closeOnOutsideClick` are both `false`)
-because Tooltip already owns dismissal itself via hover/focus/blur/Escape-on-the-trigger, which
-predates Popup and has different semantics (a hover-triggered hint has no "outside click" concept).
+Tooltip does not use Popup's outside-click dismissal (`closeOnOutsideClick` is `false`): a
+hover-triggered hint has no "outside click" concept, and it owns hover/focus/blur itself. It used
+to handle Escape itself too, only on the trigger's `keydown`, so a tooltip shown by hover couldn't
+be dismissed; it now uses Popup's Escape.
 Tooltip also does not use Popup's `aria-expanded`/`aria-controls` wiring (`manageTriggerAria={false}`)
 since those are disclosure-widget attributes that don't apply to a supplemental hint - Tooltip's own
 `aria-describedby` wiring, unchanged, is the correct ARIA pattern here.
@@ -144,7 +155,8 @@ There is no arrow/caret pointing at the trigger - Figma's tooltip is a plain rou
 
 The max widths are component tokens: `--component-tooltip-max-width-truncated` (420px) and
 `--component-tooltip-max-width-wrapped` (240px). `--component-tooltip-z-index` (1) exists in the
-token data but no stylesheet reads it; the bubble's `z-index: 1` comes from Popup's panel.
+token data but no stylesheet reads it; the bubble's z-index is Popup's `LAYERS.popup`
+(`primitives/layers.ts`), since z-index isn't tokenized.
 
 ## Icon-only controls
 

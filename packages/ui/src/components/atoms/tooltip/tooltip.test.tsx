@@ -8,6 +8,7 @@ import { EditIcon } from '../../../assets/icons';
 import { Button } from '../button';
 import { IconButton } from '../icon-button';
 import { DropdownMenu } from '../../organisms/dropdown-menu';
+import { ModalDialog } from '../../organisms/modal-dialog';
 import { Tooltip } from './tooltip';
 import styles from './tooltip.module.css';
 
@@ -176,6 +177,79 @@ describe('Tooltip', () => {
     fireEvent.keyDown(trigger, { key: 'Escape' });
 
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('hides a tooltip shown by hover on Escape, wherever focus is (WCAG 1.4.13)', () => {
+    render(
+      <Tooltip content="Edit">
+        <button type="button">Trigger</button>
+      </Tooltip>,
+    );
+
+    fireEvent.pointerEnter(screen.getByRole('button', { name: 'Trigger' }));
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('takes the Escape before a dialog under it, so only the tooltip hides', () => {
+    const onClose = vi.fn();
+    render(
+      <ModalDialog open onClose={onClose} title="Title">
+        <Tooltip content="Edit">
+          <button type="button">Trigger</button>
+        </Tooltip>
+      </ModalDialog>,
+    );
+
+    fireEvent.pointerEnter(screen.getByRole('button', { name: 'Trigger' }));
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('stays open while the pointer moves from the trigger onto the bubble, and hides when it leaves both', () => {
+    render(
+      <>
+        <Tooltip content="Edit">
+          <button type="button">Trigger</button>
+        </Tooltip>
+        <p>Elsewhere</p>
+      </>,
+    );
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+
+    fireEvent.pointerEnter(trigger);
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+    const bubble = screen.getByRole('tooltip');
+
+    fireEvent.pointerLeave(trigger, { relatedTarget: bubble.firstElementChild });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    // Back onto the trigger keeps it too.
+    fireEvent.pointerLeave(bubble, { relatedTarget: trigger });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+
+    fireEvent.pointerLeave(trigger, { relatedTarget: bubble });
+    fireEvent.pointerLeave(bubble, { relatedTarget: screen.getByText('Elsewhere') });
+    expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+  });
+
+  it('lets the bubble take the pointer, bridging the gap to its trigger', () => {
+    expect(tooltipCss).not.toMatch(/pointer-events:\s*none/);
+    expect(tooltipCss).toMatch(/\.content::before \{[^}]*block-size: var\(--spacing-sm\);/);
+    expect(tooltipCss).toMatch(/\.content\[data-alignment\^='top'\]::before \{\s*inset-block-start: 100%;/);
+    expect(tooltipCss).toMatch(/\.content\[data-alignment\^='bottom'\]::before \{\s*inset-block-end: 100%;/);
   });
 
   it('sets role tooltip', () => {

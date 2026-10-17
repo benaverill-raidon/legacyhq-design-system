@@ -226,8 +226,13 @@ All six tones side by side, each with `content` provided.
 - The status icon (and the `default` dot) is `aria-hidden`, and unlike Banner, Section Message, and
   Toast there's no visually hidden status text, so the tone isn't announced; the title has to carry
   it in words.
-- Popup portals the panel to the end of `document.body` and doesn't move focus, so Tab from the
-  trigger continues through the page, not into the panel. The panel has no `role`.
+- Popup portals the panel to the end of `document.body`, so Inline Message moves focus into it: the
+  panel content is a non-modal `role="dialog"` named by the title, focused when it opens. The focus
+  waits one animation frame (as Dropdown Menu's does), because Popup keeps the panel at
+  `visibility: hidden` until it has positioned it and a hidden element can't take focus; focusing
+  straight away failed on the first open. Tab past its last item, Shift+Tab before its first, or
+  Escape (handled on the panel, with `preventDefault()`, so a Modal Dialog under it stays open)
+  closes it and returns focus to the row.
 
 ## Future Enhancements
 

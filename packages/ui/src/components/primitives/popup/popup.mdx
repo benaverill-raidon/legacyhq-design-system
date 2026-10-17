@@ -196,8 +196,10 @@ trigger is scrolled out of view, without changing `open`. It's as wide as its co
 `matchTriggerWidth` makes it as wide as the trigger instead, and `anchorRef` positions it against
 another element, as the pickers do with their field frame.
 
-The panel sits at z-index 1, below Modal Dialog and Toast Group, so a Popup opened from inside a
-Modal Dialog shows behind it. That's a known issue.
+The panel sits above Modal Dialog and Toast Group, so a Popup opened from inside a dialog or a
+toast shows over it. The order (dialog, then toast, then popup) is kept in one place,
+`primitives/layers.ts`; z-index isn't a design token. Popups open on top of one another in the
+order they open.
 
 </Subsection>
 
@@ -281,11 +283,14 @@ off when the user prefers reduced motion.
   and name it on the content.
 - Popup doesn't move or return focus. Because the panel is added at the end of the page, move focus
   into interactive content when it opens and back to the trigger when it closes.
-- While open, Escape calls `onOpenChange(false)` wherever focus is, unless `closeOnEscape` is off.
+- While open, Escape calls `onOpenChange(false)` wherever focus is, unless `closeOnEscape` is off,
+  but only when this Popup is the topmost open layer: a menu or tooltip opened inside a Modal
+  Dialog, or inside another Popup, closes first, and the next Escape goes to the layer under it.
+  An Escape that content inside already handled with `preventDefault()` is left alone.
 - The fade is turned off when the user prefers reduced motion.
 
 <Keyboard>
-  <Key keys="Escape">While open, calls `onOpenChange(false)`, wherever focus is. Popup doesn't move focus; return it to the trigger yourself.</Key>
+  <Key keys="Escape">While open, calls `onOpenChange(false)`, wherever focus is, when this is the topmost open Popup or dialog. Popup doesn't move focus; return it to the trigger yourself.</Key>
 </Keyboard>
 
 </Section>

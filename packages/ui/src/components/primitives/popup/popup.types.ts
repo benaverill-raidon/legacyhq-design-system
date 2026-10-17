@@ -15,7 +15,7 @@ export interface PopupProps {
   onOpenChange?: (open: boolean) => void;
   /** The side of the trigger the panel opens on and the edge it lines up with. A preference: if it overflows the viewport, the panel moves to the alignment that overflows least. */
   alignment?: PopupAlignment;
-  /** Calls `onOpenChange(false)` when Escape is pressed while open, wherever focus is. */
+  /** Calls `onOpenChange(false)` when Escape is pressed while open, wherever focus is, if this is the topmost open Popup or dialog: one opened inside a Modal Dialog or another Popup closes first. Even with it off, an open Popup keeps the layers under it from taking Escape. */
   closeOnEscape?: boolean;
   /** Calls `onOpenChange(false)` on a pointer press outside the trigger and the panel. */
   closeOnOutsideClick?: boolean;

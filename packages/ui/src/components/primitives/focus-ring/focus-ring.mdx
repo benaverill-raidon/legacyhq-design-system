@@ -121,8 +121,11 @@ same classes to its `className`, after the element's own.
 <Subsection title="Tuning it for a component">
 
 The ring reads three custom properties: `--focus-ring-color`, `--focus-ring-width`, and
-`--focus-ring-offset`, 2px by default. A component changes its ring by setting them on its own root
-class, never by writing a new outline. Button, Icon Button, and Tag set the offset to
+`--focus-ring-offset`, 2px by default. A component changes its ring by setting them on the class of
+the element that carries the ring, never by writing a new outline. The offset doesn't inherit, and
+Focus Ring sets no value of its own for it, so a component's offset applies whatever order
+stylesheets load in, and an element that sets none gets 2px. The ring's corners are the element's
+own `border-radius`; Focus Ring sets no radius. Button, Icon Button, and Tag set the offset to
 `--spacing-xxs`; Checkbox and Radio set a negative one so the ring circles the box, not the larger
 area you can click; Menu rows set a negative one so it's drawn inside the row. A component that
 draws the ring on another element, such as Slider's thumb, reads the same properties in its own

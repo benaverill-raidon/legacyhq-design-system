@@ -86,6 +86,9 @@ short too: Popup's default panel is `max-content` wide with no maximum, so a lon
 - [ ] Supports controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
 - [ ] The detail panel dismisses on Escape and on an outside click, inherited from Popup's own
       defaults - the same as clicking the row again.
+- [ ] Opening moves focus into the popup (a non-modal dialog named by the title) on the first open
+      too: the focus waits a frame for Popup to position and show the panel. Tab past its last item,
+      Shift+Tab before its first, or Escape returns focus to the row.
 
 ## Design Decisions
 

@@ -1,6 +1,6 @@
+/* z-index is set inline from LAYERS.popup (primitives/layers.ts), above Modal Dialog and Toast Group. */
 .panel {
   position: fixed;
-  z-index: 1;
   inline-size: max-content;
   animation: popupFadeIn var(--fade-quick);
 }

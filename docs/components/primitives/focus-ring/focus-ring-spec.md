@@ -185,7 +185,8 @@ Mapping:
 | default | `--border-width-md` |
 
 ### Radius
-Focus Ring should inherit or align with the focused element radius where possible.
+The ring follows the focused element's own radius: an outline takes the shape of the element's
+`border-radius`, which the component sets. Focus Ring sets no radius of its own.
 
 ### Offset
 Use `2px` outline offset for v1.
@@ -310,7 +311,8 @@ None.
 - Tokenized focus offset
 - Inset focus ring
 - Focus ring utility package
-- Per-component radius inheritance strategy
+- Per-component ring radius different from the element's own (an outline can't do this; it would
+  need a pseudo-element ring)
 
 ---
 
@@ -324,20 +326,25 @@ Button, Link, Link Button, Toggle Button, Toggle Icon Button, Tag, Avatar, Check
 Slider, Chip, Inline Message, Pagination, Menu, Tabs, Date Picker Calendar, Time Picker, Progress
 Indicator) composes `focusRingClassNames`; none wraps a child in `<FocusRing>`.
 
-`.focusRing` declares three custom properties - `--focus-ring-color` (`--color-border-focus`),
-`--focus-ring-width` (`--border-width-md`), and `--focus-ring-offset` (a raw `2px`) - and the
-`:focus-visible` rule reads them. A component tunes its ring by redeclaring them on its own root
-class: Button, Icon Button, Tag, and the toggles set `--focus-ring-offset: var(--spacing-xxs)`;
-Checkbox and Radio set a negative offset so the ring circles the visible box, not the larger hit
-target; Menu rows set `calc(-1 * var(--border-width-md))` so the ring paints inside the row.
-Components that draw the ring on a different element than the one carrying the class (Radio's
-input, Slider's thumb, Avatar) write their own `outline` rule reading the same variables. The
-redeclaration and `.focusRing` have equal specificity, so it relies on the component's stylesheet
-loading after Focus Ring's, which import order gives today.
+The `:focus-visible` rule reads three custom properties. `.focusRing` declares two of them,
+`--focus-ring-color` (`--color-border-focus`) and `--focus-ring-width` (`--border-width-md`).
+`--focus-ring-offset` is a registered property (`@property`, `syntax: '<length>'`,
+`inherits: false`, `initial-value: 2px`, a raw length since there's no focus-offset token), and
+`.focusRing` declares no value for it. A component tunes its offset by setting
+`--focus-ring-offset` on the class of the element that carries the ring: Button, Icon Button, Tag,
+and the toggles set `var(--spacing-xxs)`; Checkbox and Radio set a negative offset so the ring
+circles the visible box, not the larger hit target; Menu rows set `calc(-1 * var(--border-width-md))`
+so the ring paints inside the row. With nothing from Focus Ring to tie with, that value wins
+whatever order the stylesheets load in, and because the property doesn't inherit, an element that
+sets none gets 2px, never a parent's offset. Components that draw the ring on a different element
+than the one carrying the class (Radio's preview state, Slider's thumb, Avatar) write their own
+`outline` rule reading the same variables.
 
-`.focusRing` also sets `border-radius: inherit`. On a component whose own stylesheet sets a radius
-this loses to that rule (same specificity, later in the cascade); on an element with no radius of
-its own it takes the parent's radius.
+The ring's radius is the element's own `border-radius`, since an outline follows it. Focus Ring
+used to set `border-radius: inherit` on `.focusRing`, which overrode or lost to a component's own
+radius only by stylesheet order, and gave an element with no radius its parent's. It sets none now.
+A computed-style comparison of every Storybook story found no element whose radius or offset
+changed, so nothing relied on either.
 
 `[data-force-state='focus']` shows the ring without focus, so Storybook can present the focused
 state as a static reference. It's documentation-only, not part of the public API.

@@ -109,8 +109,8 @@ Visible:
 Accessible:
 1 unread notification
 
-### Is aria-label needed?
-Optional
+### Is a text alternative needed?
+Optional. Set `label` (rendered as visually hidden text, not `aria-label`) when the words beside the badge don't say what it counts.
 
 ---
 

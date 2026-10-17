@@ -32,8 +32,10 @@ export interface TagProps extends React.HTMLAttributes<HTMLElement> {
   isRemovable?: boolean;
   /**
    * Greys the tag out. A link gets `aria-disabled`, leaves the tab order, and doesn't navigate; the
-   * remove button and an interactive tag are natively disabled.
+   * remove button and an interactive tag are natively disabled. A display-only tag only changes its look.
    */
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted and treated the same; `disabled` wins when both are set. */
   isDisabled?: boolean;
   /**
    * Renders a tag with no `href` as a `button`, for a tag that opens something, such as Tag Group's

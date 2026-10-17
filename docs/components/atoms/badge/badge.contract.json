@@ -69,11 +69,19 @@
       "enum": ["default", "brand", "success", "error"],
       "description": "Visual tone for badge emphasis or semantic meaning."
     },
+    "label": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "The count in words, such as \"3 unread messages\". Rendered as visually hidden text that screen readers read in place of the visible value, which is aria-hidden."
+    },
     "ariaLabel": {
       "type": "string",
       "required": false,
       "default": null,
-      "description": "Accessible label when the visible value needs additional context."
+      "deprecated": true,
+      "replacedBy": "label",
+      "description": "Deprecated alias for label, rendered the same way. label wins when both are set."
     },
     "className": {
       "type": "string",
@@ -158,18 +166,20 @@
     "interactive": false,
     "focusable": false,
     "role": null,
-    "ariaLabel": {
-      "supported": true,
-      "prop": "ariaLabel",
-      "mapsTo": "aria-label",
-      "useWhen": "Visible numeric value needs additional context."
-    },
     "requirements": [
       "Do not add button behavior.",
       "Do not add keyboard interaction.",
-      "Use ariaLabel when the visible value is ambiguous.",
+      "Set label when the visible value is ambiguous.",
       "Ensure color contrast meets requirements for all tones."
-    ]
+    ],
+    "textAlternative": {
+      "supported": true,
+      "prop": "label",
+      "deprecatedAlias": "ariaLabel",
+      "mapsTo": "visually hidden text; the visible value gets aria-hidden",
+      "why": "The span has no role, and ARIA prohibits aria-label on the generic role, so screen readers may ignore it.",
+      "useWhen": "The words beside the badge don't say what the number counts."
+    }
   },
   "keyboardInteraction": [],
   "behaviorRules": [
@@ -178,7 +188,8 @@
     "Do not add hover, press, active, loading, or disabled states.",
     "Default tone is default.",
     "Apply data-tone equal to the selected tone.",
-    "Support className composition."
+    "Support className composition.",
+    "Forward other span attributes (id, title, data-*, native aria-*) to the root span."
   ],
   "compositionRules": [
     "Badge may appear inside navigation, tables, lists, cards, buttons, and summaries.",
@@ -209,7 +220,7 @@
   "relatedComponents": ["Tag", "Label", "Tooltip", "Button", "IconButton"],
   "do": [
     "Use for short numeric values.",
-    "Use ariaLabel for ambiguous counts.",
+    "Use label for ambiguous counts.",
     "Use success for positive deltas.",
     "Use error for negative deltas.",
     "Keep implementation simple."
@@ -227,13 +238,13 @@
     "Defaults tone to default.",
     "Supports all BadgeTone values.",
     "Applies data-tone for selected tone.",
-    "Supports ariaLabel mapped to aria-label.",
+    "Supports label as visually hidden text with the visible value aria-hidden; ariaLabel is a deprecated alias.",
     "Supports className.",
     "Uses border-radius-sm.",
     "Uses tokenized typography, spacing, radius, and colors.",
     "Does not render interactive semantics.",
     "Storybook includes Playground, Variants, and Examples.",
-    "Tests cover children, default tone, selected tone, ariaLabel, className, and radius token usage."
+    "Tests cover children, default tone, selected tone, label and the deprecated ariaLabel, attribute forwarding, className, and radius token usage."
   ],
   "knownLimitations": [
     "No overflow formatting such as 99+.",

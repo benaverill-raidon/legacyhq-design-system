@@ -21,9 +21,15 @@ export interface AvatarProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   presence?: AvatarPresence;
   /** A reply, such as to an invitation, shown as the badge and added to the accessible name: `accepted` or `declined`. Takes precedence over `presence`. */
   status?: AvatarStatus;
-  /** Draws the brand ring inside the edge and adds "selected" to the accessible name. For an interactive avatar that people pick. */
+  /**
+   * Draws the brand ring inside the edge, for an avatar people pick. On an interactive avatar, setting
+   * it (`true` or `false`) makes the button a toggle with `aria-pressed`; leave it unset for an avatar
+   * that only opens something. On a static avatar it adds `selectedLabel` to the accessible name.
+   */
   isSelected?: boolean;
   /** Dims the avatar. On an interactive avatar it also sets the native `disabled`, so it can't be focused or clicked. */
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted and treated the same; `disabled` wins when both are set. */
   isDisabled?: boolean;
   /** Renders a native `button` instead of a `span`, with hover, press, and focus styles. Passing `onClick` does the same. */
   isInteractive?: boolean;
@@ -38,8 +44,23 @@ export interface AvatarProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   /** The native button type, when the avatar is interactive. Defaults to `button`. */
   type?: 'button' | 'submit' | 'reset';
-  /** Replaces `name` as the accessible name. Avatar still adds "selected" and the badge after it. */
+  /**
+   * The word added to a selected static avatar's accessible name, after the name. Defaults to
+   * "selected"; set it to translate it. An interactive avatar uses `aria-pressed` instead.
+   */
+  selectedLabel?: string;
+  /**
+   * Returns the word added to the accessible name for a `presence`. Defaults to the value itself in
+   * English: "online", "offline", or "busy". Set it to translate them.
+   */
+  getPresenceLabel?: (presence: Exclude<AvatarPresence, 'none'>) => string;
+  /**
+   * Returns the word added to the accessible name for a `status`. Defaults to the value itself in
+   * English: "accepted" or "declined". Set it to translate them.
+   */
+  getStatusLabel?: (status: Exclude<AvatarStatus, 'none'>) => string;
+  /** Replaces `name` as the accessible name. Avatar still adds the selected word, on a static avatar, and the badge after it. */
   'aria-label'?: string;
-  /** Names the avatar from other text on the page. Avatar then adds nothing, so selection and the badge aren't announced. */
+  /** Names the avatar from other text on the page. Avatar then adds nothing, so the badge isn't announced; an interactive avatar's `aria-pressed` still is. */
   'aria-labelledby'?: string;
 }

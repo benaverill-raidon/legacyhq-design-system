@@ -65,6 +65,28 @@ ring growing rather than a color change. Both transitions are set to 0ms under
 ## Accessible name
 
 `aria-labelledby` wins and nothing is appended. Otherwise the base is `aria-label`, then `name`, then
-`alt`, and Avatar appends ", selected" and the visible badge's English word (online, offline, busy,
-accepted, declined). These words are hard-coded, not props. In development a console warning fires
-when a non-decorative avatar has no name.
+`alt`, and Avatar appends the selected word (static avatars only, see below) and the visible badge's
+word. The words are props with English defaults, for translation (component-api-governance
+`built-in-labels`):
+
+| Prop | Default | Used for |
+|---|---|---|
+| `selectedLabel` | `"selected"` | a static avatar with `isSelected` |
+| `getPresenceLabel(presence)` | `"online"`, `"offline"`, `"busy"` | the presence badge |
+| `getStatusLabel(status)` | `"accepted"`, `"declined"` | the status badge (wins over presence) |
+
+In development a console warning fires when a non-decorative avatar has no name.
+
+## Selection
+
+An interactive avatar given `isSelected` (`true` or `false`) is a toggle button: it sets
+`aria-pressed`, and the selected word isn't added to its name, so the state isn't read twice. An
+interactive avatar without `isSelected` has no `aria-pressed`, so an avatar that only opens something
+isn't announced as a toggle. A static avatar (`role="img"`) can't carry a pressed state, so a selected
+static avatar keeps `selectedLabel` in its name.
+
+## Disabled
+
+`disabled` dims the avatar and, on an interactive avatar, sets the native `disabled` attribute.
+`isDisabled` is a deprecated alias, still accepted and mapped to `disabled` (component-api-governance
+`disabled-prop`); `disabled` wins when both are set.

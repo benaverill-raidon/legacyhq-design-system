@@ -84,8 +84,11 @@ Badge content should never wrap.
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
 | tone | 'default' \| 'brand' \| 'success' \| 'error' | No | 'default' |
-| ariaLabel | string | No | undefined |
+| label | string | No | undefined |
+| ariaLabel | string (deprecated: use `label`) | No | undefined |
 | className | string | No | undefined |
+
+Any other span attribute (`id`, `title`, `data-*`, native `aria-*`) is forwarded to the root `span`.
 
 ---
 
@@ -99,15 +102,17 @@ Badge is not interactive.
 ### ARIA
 
 Support:
-- `ariaLabel`, rendered as `aria-label` on the root `span`. The span has no role, and ARIA prohibits
-  naming an element with the generic role, so screen readers may ignore it; visible context next to
-  the badge is the reliable way to explain a count.
-- No other attribute is forwarded: Badge doesn't spread remaining props onto its span.
+- `label`, the count in words, such as "3 unread messages". Badge renders it as visually hidden text
+  inside the span and hides the visible value from assistive technology (`aria-hidden`), so screen
+  readers read the words in place of the number. It isn't an `aria-label`: the span has no role, and
+  ARIA prohibits naming an element with the generic role, so screen readers may ignore one.
+- `ariaLabel` is a deprecated alias for `label`, rendered the same way. `label` wins when both are set.
+- Native attributes, including `aria-describedby`, are forwarded to the root `span`.
 
 Example:
 
 ```tsx
-<Badge ariaLabel="1 unread notification">
+<Badge label="1 unread notification">
   1
 </Badge>
 ```
@@ -192,7 +197,7 @@ list items by the code that renders them.
 - [ ] className applies correctly
 
 ### Accessibility
-- [ ] aria-label works
+- [ ] `label` is read in place of the visible value (hidden text, not `aria-label`)
 - [ ] Contrast meets requirements
 
 ---

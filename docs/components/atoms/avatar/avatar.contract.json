@@ -74,6 +74,37 @@
       ],
       "default": "person",
       "note": "No Figma variant - see figmaSource.apiAdaptationNotes. Selects which fallback artwork renders when there is no src (or it fails to load)."
+    },
+    "isSelected": {
+      "type": "boolean",
+      "default": null,
+      "note": "Draws the selected ring. On an interactive avatar, a boolean (true or false) makes the button a toggle with aria-pressed; unset, there's no aria-pressed. On a static avatar it appends selectedLabel to the name."
+    },
+    "disabled": {
+      "type": "boolean",
+      "default": false,
+      "note": "Native-named disabled state. Sets the native disabled attribute on an interactive avatar."
+    },
+    "isDisabled": {
+      "type": "boolean",
+      "deprecated": true,
+      "replacedBy": "disabled",
+      "note": "Deprecated alias for disabled; disabled wins when both are set."
+    },
+    "selectedLabel": {
+      "type": "string",
+      "default": "selected",
+      "note": "The word appended to a selected static avatar's accessible name. A prop for translation."
+    },
+    "getPresenceLabel": {
+      "type": "(presence: 'online' | 'offline' | 'busy') => string",
+      "default": "English: online, offline, busy",
+      "note": "The word appended to the name for the presence badge. A prop for translation."
+    },
+    "getStatusLabel": {
+      "type": "(status: 'accepted' | 'declined') => string",
+      "default": "English: accepted, declined",
+      "note": "The word appended to the name for the status badge. A prop for translation."
     }
   },
   "sizes": [
@@ -134,11 +165,11 @@
   },
   "accessibility": {
     "role": "img on the static span; native button when interactive",
-    "accessibleName": "aria-labelledby, else aria-label, name, or alt, in that order. Avatar appends \"selected\" and the visible badge (online, offline, busy, accepted, declined) to a name from aria-label, name, or alt; nothing is appended with aria-labelledby.",
+    "accessibleName": "aria-labelledby, else aria-label, name, or alt, in that order. To a name from aria-label, name, or alt, Avatar appends selectedLabel (static avatars only) and the visible badge's word from getStatusLabel or getPresenceLabel, with English defaults (selected; online, offline, busy; accepted, declined). Nothing is appended with aria-labelledby.",
     "image": "The img is alt=\"\" and aria-hidden; the fallback artwork is aria-hidden.",
     "decorative": "decorative hides a static avatar (aria-hidden, no role, no name). Ignored when interactive.",
     "missingNameWarning": "In development, Avatar warns in the console when a non-decorative avatar has no accessible name.",
-    "selection": "Selection is announced only through \"selected\" in the name; the button doesn't set aria-pressed.",
+    "selection": "An interactive avatar given isSelected (true or false) sets aria-pressed and doesn't add the selected word to its name; without isSelected it has no aria-pressed. A static avatar (role=\"img\") can't be pressed, so a selected one carries selectedLabel in its name.",
     "focus": "Shared Focus Ring on the interactive button, offset by --spacing-xxs."
   },
   "keyboardInteraction": [
@@ -148,12 +179,12 @@
   ],
   "behaviorRules": [
     "Render a native button when isInteractive is true or onClick is a function; otherwise a span with role=\"img\".",
-    "The button defaults to type=\"button\" and uses the native disabled attribute for isDisabled.",
+    "The button defaults to type=\"button\" and uses the native disabled attribute for disabled (isDisabled is a deprecated alias; disabled wins when both are set).",
     "status takes precedence over presence; at most one badge renders.",
     "An image that fails to load is replaced by the fallback artwork; a new src resets the failure and is tried again.",
     "entityType selects the person or team fallback artwork and has no effect once an image loads.",
-    "isSelected draws an inset ring of --border-width-md in --color-border-brand-primary-default, on static and interactive avatars, and appends \"selected\" to the name.",
-    "isDisabled dims the avatar to 40% opacity and removes hover and press overlays.",
+    "isSelected draws an inset ring of --border-width-md in --color-border-brand-primary-default, on static and interactive avatars. An interactive avatar reports it with aria-pressed; a static one appends selectedLabel to the name.",
+    "disabled dims the avatar to 40% opacity and removes hover and press overlays.",
     "Hover and press overlays apply only to an interactive, enabled avatar."
   ],
   "relatedComponents": [
@@ -166,7 +197,7 @@
   ],
   "do": [
     "Give every meaningful avatar a name, even with a photo.",
-    "Let Avatar add selection and the badge to the accessible name.",
+    "Let Avatar announce selection (aria-pressed, or the selected word on a static avatar) and add the badge to the accessible name.",
     "Mark an avatar decorative when a visible name sits next to it."
   ],
   "dont": [
@@ -179,9 +210,11 @@
     "Renders a span with role=\"img\" by default and a button when interactive.",
     "Falls back to the entityType artwork without src or on image failure, and retries a new src.",
     "Status takes priority over presence.",
-    "Appends selected and badge state to the accessible name.",
+    "Appends the badge word, and on a static avatar the selected word, to the accessible name, from props with English defaults.",
     "Decorative static avatars are hidden from assistive technology.",
     "Disabled interactive avatars use the native disabled attribute.",
+    "The deprecated isDisabled still works.",
+    "An interactive avatar given isSelected sets aria-pressed.",
     "Interactive avatars use the shared Focus Ring.",
     "Forwards refs and className."
   ]

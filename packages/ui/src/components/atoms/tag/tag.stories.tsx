@@ -24,7 +24,7 @@ const meta = {
     href: undefined,
     target: '_self',
     isRemovable: false,
-    isDisabled: false,
+    disabled: false,
     isInteractive: false,
     elemBefore: undefined,
     removeLabel: undefined,
@@ -36,7 +36,8 @@ const meta = {
     href: { control: 'text' },
     target: { control: 'inline-radio', options: ['_self', '_blank'] },
     isRemovable: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    isDisabled: { control: false },
     isInteractive: { control: 'boolean' },
     elemBefore: {
       control: 'select',
@@ -244,7 +245,7 @@ export const States: Story = {
           </Tag>
         </Cell>
         <Cell label="Disabled">
-          <Tag href="/trusts/123" isDisabled>
+          <Tag href="/trusts/123" disabled>
             Trust
           </Tag>
         </Cell>
@@ -267,7 +268,7 @@ export const States: Story = {
           </Tag>
         </Cell>
         <Cell label="Disabled">
-          <Tag isRemovable isDisabled onRemove={() => undefined}>
+          <Tag isRemovable disabled onRemove={() => undefined}>
             Trust
           </Tag>
         </Cell>
@@ -297,7 +298,7 @@ export const States: Story = {
           </Tag>
         </Cell>
         <Cell label="Disabled">
-          <Tag isInteractive isDisabled onClick={() => undefined}>
+          <Tag isInteractive disabled onClick={() => undefined}>
             +5 more
           </Tag>
         </Cell>

@@ -12,11 +12,11 @@
     },
     {
       "name": "Unread notification count",
-      "description": "Badge with accessible context for an otherwise ambiguous value.",
-      "jsx": "<Badge ariaLabel=\"1 unread notification\">1</Badge>",
+      "description": "Badge with a text alternative for an otherwise ambiguous value: screen readers read the label, as hidden text, in place of the number.",
+      "jsx": "<Badge label=\"1 unread notification\">1</Badge>",
       "props": {
         "children": "1",
-        "ariaLabel": "1 unread notification"
+        "label": "1 unread notification"
       }
     },
     {
@@ -56,12 +56,17 @@
     {
       "name": "Interactive badge",
       "jsx": "<Badge onClick={handleClick}>1</Badge>",
-      "reason": "Badge is non-interactive and does not support action behavior."
+      "reason": "Badge is non-interactive: it isn't focusable and has no button role, so a click handler on it can't be reached by keyboard. Use Button or Icon Button."
     },
     {
       "name": "Status text",
       "jsx": "<Badge>Active</Badge>",
       "reason": "Use Tag or Label for status/classification text."
+    },
+    {
+      "name": "aria-label on the badge",
+      "jsx": "<Badge aria-label=\"1 unread notification\">1</Badge>",
+      "reason": "The span has no role, so screen readers may ignore aria-label. Use label, which Badge renders as hidden text."
     }
   ]
 }

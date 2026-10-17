@@ -101,8 +101,7 @@ const meta = {
     name: 'Ben Averill',
     presence: 'none',
     status: 'none',
-    isSelected: false,
-    isDisabled: false,
+    disabled: false,
     isInteractive: false,
     decorative: false,
     entityType: 'person',
@@ -115,6 +114,11 @@ const meta = {
     presence: { control: 'select', options: ['none', 'online', 'offline', 'busy'] },
     status: { control: 'select', options: ['none', 'accepted', 'declined'] },
     entityType: { control: 'inline-radio', options: ['person', 'team'] },
+    isSelected: { control: 'boolean' },
+    isDisabled: { control: false },
+    selectedLabel: { control: 'text' },
+    getPresenceLabel: { control: false },
+    getStatusLabel: { control: false },
     onClick: { control: false },
     className: { control: false },
   },
@@ -254,7 +258,7 @@ export const States: Story = {
           />
         </Cell>
         <Cell label="Disabled">
-          <Avatar src={photoA} name="Disabled" isInteractive isDisabled onClick={() => undefined} />
+          <Avatar src={photoA} name="Disabled" isInteractive disabled onClick={() => undefined} />
         </Cell>
       </Group>
 
@@ -298,7 +302,7 @@ export const States: Story = {
             name="Selected disabled"
             isInteractive
             isSelected
-            isDisabled
+            disabled
             onClick={() => undefined}
           />
         </Cell>
@@ -346,7 +350,7 @@ function LiveToggle() {
   return (
     <Avatar
       src={photoB}
-      name={selected ? 'Ben Averill, selected' : 'Ben Averill'}
+      name="Ben Averill"
       isInteractive
       isSelected={selected}
       presence="online"

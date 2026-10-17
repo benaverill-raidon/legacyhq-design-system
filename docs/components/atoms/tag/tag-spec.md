@@ -125,6 +125,8 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
   target?: React.AnchorHTMLAttributes<HTMLAnchorElement>['target'];
   rel?: string;
   isRemovable?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. */
   isDisabled?: boolean;
   isInteractive?: boolean;
   elemBefore?: React.ReactNode;
@@ -140,7 +142,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
 size: md
 tone: default
 isRemovable: false
-isDisabled: false
+disabled: false
 isInteractive: false
 removeLabel: Remove tag
 ```
@@ -201,7 +203,7 @@ Do not nest the remove button inside the anchor.
 
 ## Navigation
 
-When `href` is provided and `isDisabled` is false, the tag content should navigate to `href`.
+When `href` is provided and `disabled` is false, the tag content should navigate to `href`.
 
 Use native anchor behavior.
 
@@ -257,7 +259,11 @@ Remove tag
 
 ## Disabled behavior
 
-When `isDisabled` is true:
+Disabled state is the native-named `disabled` prop (component-api-governance `disabled-prop`).
+`isDisabled` is a deprecated alias, still accepted and mapped to `disabled`; `disabled` wins when
+both are set.
+
+When `disabled` is true:
 
 - Use disabled visual tokens
 - Suppress hover and press styling
@@ -274,9 +280,9 @@ remove button fades with the `fade-quick` motion recipe, switched off under
 `prefers-reduced-motion: reduce`. Every tone swaps a solid `background-color` between its
 `-default`/`-hover`/`-press` tokens; the `--tag-background-*-layer` variables are always `none`.
 
-`tabIndex` and `aria-describedby` go to the link or the interactive button (in a removable linked tag,
-the content anchor), never to the wrapper. The display-only span and a removable tag without `href`
-drop them. `onClick` and `isInteractive` are ignored by a removable tag without `href`, whose content
+`tabIndex` and `aria-describedby` go to the link or the interactive button when there is one (in a
+removable linked tag, the content anchor, not the wrapper). Otherwise they go to the root: the
+display-only span, or the wrapper span of a removable tag without `href`. They're never dropped. `onClick` and `isInteractive` are ignored by a removable tag without `href`, whose content
 is a plain span; with `href`, `onClick` runs from the anchor's click handler, not while disabled.
 
 ## Leading element
@@ -410,7 +416,7 @@ tone
 href
 target
 isRemovable
-isDisabled
+disabled
 elemBefore
 removeLabel
 ```
@@ -485,7 +491,11 @@ supports data-force-state hover/press preview on both the content and remove are
 renders a button when isInteractive is set with no href/isRemovable
 renders a button when onClick is provided with no href/isRemovable, even without isInteractive
 calls onClick when the interactive tag button is activated
-disables the interactive tag button natively when isDisabled is true
+disables the interactive tag button natively when disabled is true
+the deprecated isDisabled alias still disables the link, the remove button, and an interactive tag
+disabled wins over the deprecated isDisabled when both are set
+tabIndex and aria-describedby go to the root of a display-only tag and of a removable tag without href
+tabIndex and aria-describedby go to the link or the button when there is one
 uses the shared focus ring classes for the interactive tag button
 ```
 

@@ -15,7 +15,8 @@ const meta = {
   argTypes: {
     children: { control: 'text' },
     tone: { control: 'select', options: tones },
-    ariaLabel: { control: 'text' },
+    label: { control: 'text' },
+    ariaLabel: { control: false },
     className: { control: false },
   },
 } satisfies Meta<typeof Badge>;
@@ -112,9 +113,9 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="With ariaLabel">
-        <Cell label="Visible '1', with an aria-label">
-          <Badge ariaLabel="1 unread notification">1</Badge>
+      <Group title="With label">
+        <Cell label="Visible '1', read as its label">
+          <Badge label="1 unread notification">1</Badge>
         </Cell>
       </Group>
 
@@ -132,7 +133,7 @@ export const Content: Story = {
           <div style={cardStyle}>
             <span>Unread notifications</span>
             <div style={row}>
-              <Badge ariaLabel="1 unread notification">1</Badge>
+              <Badge label="1 unread notification">1</Badge>
               <Badge tone="brand">1</Badge>
             </div>
           </div>

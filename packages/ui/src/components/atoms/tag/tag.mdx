@@ -150,7 +150,7 @@ A link and its remove button are separate controls: each takes focus on its own,
 Ring at its own edges, and its own hover and pressed fill, which fades in with `fade-quick`. A
 display-only tag has no hover or focus look.
 
-`isDisabled` swaps the fill, border, and text for the disabled colors and turns off hover and press.
+`disabled` swaps the fill, border, and text for the disabled colors and turns off hover and press.
 A link gets `aria-disabled`, leaves the tab order, and doesn't navigate when clicked. The remove
 button and an interactive tag get the native `disabled`.
 
@@ -212,7 +212,7 @@ there's no tooltip with the full text. Tags in a wrapping row move to the next l
 - Icons in `elemBefore` are decorative by default, so the text alone names the tag.
 - A disabled link keeps its `href`, sets `aria-disabled`, and leaves the tab order, so screen reader
   users can still find it and hear that it's unavailable. Disabled buttons use the native `disabled`.
-  On a display-only tag, `isDisabled` only changes the look.
+  On a display-only tag, `disabled` only changes the look.
 - Focus shows the shared Focus Ring on the link, the remove button, or the interactive tag.
 - Tag doesn't move focus when it's removed. There's no Delete or Backspace shortcut: tags are removed
   with their button.
@@ -230,8 +230,8 @@ there's no tooltip with the full text. Tags in a wrapping row move to the next l
 <PropsTable of={TagStories} />
 
 Any other attribute goes to the root element (in a removable tag, the wrapper `span`), and `className`
-is added to its classes. `tabIndex` and `aria-describedby` go to the link or the button instead; a tag
-with neither drops them.
+is added to its classes. `tabIndex` and `aria-describedby` go to the link or the button when there is
+one, and to the root otherwise. `isDisabled` is the deprecated name for `disabled` and still works.
 
 </Section>
 

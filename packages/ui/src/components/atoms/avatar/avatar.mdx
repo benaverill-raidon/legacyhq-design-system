@@ -132,10 +132,12 @@ image with an overlay that fades in with `fade-quick`, and keyboard focus shows 
 
 `isSelected` draws a 2px brand ring inside the edge. The ring grows in with the `move-quick` recipe,
 and appears at once with reduced motion. Hover and press on a selected avatar use a brand overlay.
-The ring also shows on a static avatar, so keep `isSelected` for avatars people can pick.
+The ring also shows on a static avatar, so keep `isSelected` for avatars people can pick. Passing
+`isSelected`, `true` or `false`, to an interactive avatar makes it a toggle button with
+`aria-pressed`; leave it unset on an avatar that only opens something.
 
-`isDisabled` dims the avatar to 40% opacity and drops the hover and press overlays. On an
-interactive avatar it also sets the native `disabled`.
+`disabled` dims the avatar to 40% opacity and drops the hover and press overlays. On an interactive
+avatar it also sets the native `disabled`. `isDisabled` is its deprecated name and still works.
 
 <Example of={AvatarStories.States} caption="Hover, focus, and press are pinned for reference; the last row is live." />
 
@@ -159,7 +161,7 @@ place, and a new `src` is tried again. You don't need to check the URL first.
   <Avatar src={photoA} name="Ben Averill" />
 </Do>
 <Dont caption="Rely on the photo alone. The avatar has no accessible name, and a failed photo leaves an unnamed silhouette." code={`<Avatar src={photo} />`} />
-<Do caption="Let Avatar add the badge and selection to the name: this one reads “Ben Averill, selected, busy”." code={`<Avatar src={photo} name="Ben Averill" presence="busy" isSelected isInteractive onClick={select} />`}>
+<Do caption="Let Avatar add the badge to the name and report the selection: this one reads “Ben Averill, busy”, a pressed toggle button." code={`<Avatar src={photo} name="Ben Averill" presence="busy" isSelected isInteractive onClick={select} />`}>
   <Avatar src={photoB} name="Ben Averill" presence="busy" isSelected isInteractive onClick={() => undefined} />
 </Do>
 <Dont caption="Write the state into name yourself. It's read twice." code={`<Avatar name="Ben Averill, busy" presence="busy" />`} />
@@ -178,16 +180,19 @@ place, and a new `src` is tried again. You don't need to check the URL first.
 - A static avatar is a `span` with `role="img"`; an interactive one is a native `button` with
   `type="button"`. The photo is `alt=""` and hidden, so the root carries the name.
 - The name comes from `aria-labelledby`, else `aria-label`, `name`, or `alt`, in that order. Avatar
-  adds "selected" and the badge after it, as in "Ben Averill, selected, busy". With
-  `aria-labelledby` it adds nothing. The added words are English, and there's no prop to translate
-  them yet.
+  adds the badge after it, as in "Ben Averill, busy". With `aria-labelledby` it adds nothing.
+- The added words are props with English defaults, so they can be translated: `getPresenceLabel`
+  ("online", "offline", "busy"), `getStatusLabel` ("accepted", "declined"), and `selectedLabel`
+  ("selected").
 - In development, Avatar warns in the console when an avatar that isn't decorative has no name.
 - `decorative` hides a static avatar from assistive technology. It's ignored on an interactive
   avatar.
-- Selection is announced only through "selected" in the name. The button doesn't set
-  `aria-pressed`.
+- An interactive avatar given `isSelected` is a toggle button: it sets `aria-pressed`, which is
+  announced even with `aria-labelledby`, and "selected" isn't added to its name. Without `isSelected`
+  it has no `aria-pressed`. A static avatar can't be pressed, so a selected one adds `selectedLabel`
+  to its name: "Ben Averill, selected, busy".
 - The badges differ in shape as well as color: dot, ring, bar, check, and cross.
-- `isDisabled` sets the native `disabled` on an interactive avatar, so it leaves the tab order. On a
+- `disabled` sets the native `disabled` on an interactive avatar, so it leaves the tab order. On a
   static avatar it only dims it.
 - Focus shows the shared Focus Ring, 2px outside the circle.
 

@@ -72,7 +72,7 @@ import * as BadgeStories from './Badge.stories';
 
 <Anatomy specimen={<Badge tone="brand">12</Badge>}>
   <Part name="root" target={badgeStyles.badge}>A `span`: the filled box, sized by its content. Always present.</Part>
-  <Part name="text">The `children`, rendered straight into the root with no element of their own.</Part>
+  <Part name="text">The `children`, rendered straight into the root. With `label`, they sit in a `span` hidden from assistive technology, beside the label as visually hidden text.</Part>
 </Anatomy>
 
 </Section>
@@ -150,10 +150,13 @@ to the words that say what it counts.
 - Badge renders a `span` with no role. It isn't focusable and has no keyboard interaction.
 - Its text is read in place, as part of the text around it. Put the words that say what the number
   counts next to it, such as "Unread messages" before the badge.
+- When there are no such words, set `label`, such as "3 unread messages". Badge renders it as visually
+  hidden text and hides the visible number, so screen readers read the words instead of the number.
 - Keep the sign in a change (`+1`, `-1`). The `success` and `error` colors alone don't say which way
   it went.
-- `ariaLabel` sets `aria-label` on the span. ARIA doesn't allow a name on an element with no role, so
-  screen readers may ignore it and read the visible number. Don't rely on it as the only context.
+- `label` isn't an `aria-label`: ARIA doesn't allow a name on an element with no role, so screen
+  readers may ignore one. Don't pass `aria-label` to Badge. The deprecated `ariaLabel` prop now
+  renders as `label` does.
 
 </Section>
 
@@ -161,8 +164,8 @@ to the words that say what it counts.
 
 <PropsTable of={BadgeStories} />
 
-Badge doesn't pass other attributes to its span: `className` is added to its classes, and `ariaLabel`
-sets its `aria-label`.
+Any other attribute, such as `id`, `title`, or `aria-describedby`, goes to the span, and `className`
+is added to its classes.
 
 </Section>
 

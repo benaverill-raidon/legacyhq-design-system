@@ -2,7 +2,7 @@
   --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
   --label-min-block-size: 24px;
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
   --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);
@@ -12,6 +12,7 @@
   --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
 
   display: inline-flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -44,8 +45,9 @@
 }
 
 .size_md {
+  /* The 24px heading-xs line height sets the height, so there's no block padding. */
   --label-min-block-size: 24px;
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
   --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);

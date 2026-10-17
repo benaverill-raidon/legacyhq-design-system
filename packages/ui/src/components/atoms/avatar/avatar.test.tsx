@@ -110,10 +110,32 @@ describe('Avatar', () => {
   });
 
   it('supports disabled interactive avatars', () => {
+    const { container } = render(<Avatar name="Ben Averill" isInteractive disabled onClick={() => undefined} />);
+
+    const button = container.querySelector('button');
+    expect(button?.hasAttribute('disabled')).toBe(true);
+    expect(button?.getAttribute('data-disabled')).toBe('true');
+  });
+
+  it('dims a disabled static avatar', () => {
+    const { container } = render(<Avatar name="Ben Averill" disabled />);
+
+    expect(container.firstElementChild?.getAttribute('data-disabled')).toBe('true');
+    expect(container.firstElementChild?.hasAttribute('disabled')).toBe(false);
+  });
+
+  it('still accepts the deprecated isDisabled', () => {
     const { container } = render(<Avatar name="Ben Averill" isInteractive isDisabled onClick={() => undefined} />);
 
     const button = container.querySelector('button');
     expect(button?.hasAttribute('disabled')).toBe(true);
+    expect(button?.getAttribute('data-disabled')).toBe('true');
+  });
+
+  it('lets disabled win over the deprecated isDisabled', () => {
+    render(<Avatar name="Ben Averill" isInteractive disabled={false} isDisabled onClick={() => undefined} />);
+
+    expect(screen.getByRole('button', { name: 'Ben Averill' })).not.toBeDisabled();
   });
 
   it('supports decorative avatars', () => {
@@ -127,6 +149,80 @@ describe('Avatar', () => {
     render(<Avatar name="Ben Averill" isSelected presence="online" />);
 
     expect(screen.getByRole('img', { name: 'Ben Averill, selected, online' })).toBeTruthy();
+  });
+
+  it('sets aria-pressed on an interactive avatar given isSelected, without "selected" in its name', () => {
+    const { rerender } = render(
+      <Avatar name="Ben Averill" isInteractive isSelected presence="online" onClick={() => undefined} />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Ben Averill, online' })).toHaveAttribute('aria-pressed', 'true');
+
+    rerender(<Avatar name="Ben Averill" isInteractive isSelected={false} presence="online" onClick={() => undefined} />);
+    expect(screen.getByRole('button', { name: 'Ben Averill, online' })).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('leaves aria-pressed off an interactive avatar without isSelected', () => {
+    render(<Avatar name="Ben Averill" isInteractive onClick={() => undefined} />);
+
+    expect(screen.getByRole('button', { name: 'Ben Averill' })).not.toHaveAttribute('aria-pressed');
+  });
+
+  it('keeps the selected state with aria-labelledby, through aria-pressed', () => {
+    render(
+      <>
+        <span id="avatar-name">Ben Averill</span>
+        <Avatar aria-labelledby="avatar-name" isInteractive isSelected onClick={() => undefined} />
+      </>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Ben Averill' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('never puts aria-pressed on a static avatar', () => {
+    render(<Avatar name="Ben Averill" isSelected />);
+
+    expect(screen.getByRole('img', { name: 'Ben Averill, selected' })).not.toHaveAttribute('aria-pressed');
+  });
+
+  it('takes the words it adds to the name as props, for translation', () => {
+    const { rerender } = render(
+      <Avatar
+        name="Ben Averill"
+        isSelected
+        presence="busy"
+        selectedLabel="seleccionado"
+        getPresenceLabel={(presence) => ({ online: 'en línea', offline: 'desconectado', busy: 'ocupado' })[presence]}
+      />,
+    );
+
+    expect(screen.getByRole('img', { name: 'Ben Averill, seleccionado, ocupado' })).toBeTruthy();
+
+    rerender(
+      <Avatar
+        name="Ben Averill"
+        status="declined"
+        presence="busy"
+        getStatusLabel={(status) => ({ accepted: 'aceptado', declined: 'rechazado' })[status]}
+      />,
+    );
+    expect(screen.getByRole('img', { name: 'Ben Averill, rechazado' })).toBeTruthy();
+  });
+
+  it('uses English words by default for every presence and status', () => {
+    const cases = [
+      [{ presence: 'online' }, 'online'],
+      [{ presence: 'offline' }, 'offline'],
+      [{ presence: 'busy' }, 'busy'],
+      [{ status: 'accepted' }, 'accepted'],
+      [{ status: 'declined' }, 'declined'],
+    ] as const;
+
+    for (const [props, word] of cases) {
+      render(<Avatar name="Ben Averill" {...props} />);
+      expect(screen.getByRole('img', { name: 'Ben Averill, ' + word })).toBeTruthy();
+      cleanup();
+    }
   });
 
   it('gives status priority over presence', () => {

@@ -64,3 +64,6 @@ Use the same badge container and badge icon structure for every size. XL keeps v
 - [ ] Remove the deprecated `focus` presence variant from stories, tests, and docs.
 - [ ] Do not add disabled plus badge combinations back into examples.
 - [ ] Validate focus-visible styling.
+- [ ] Disabled state is the native `disabled` prop; the deprecated `isDisabled` still works, and `disabled` wins when both are set.
+- [ ] An interactive avatar given `isSelected` sets `aria-pressed` and leaves "selected" out of its name; one without `isSelected` has no `aria-pressed`.
+- [ ] The words added to the name (`selectedLabel`, `getPresenceLabel`, `getStatusLabel`) are props with English defaults.

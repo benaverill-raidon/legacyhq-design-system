@@ -79,7 +79,9 @@
     "Navigation and removal are separate interactive regions.",
     "Remove button uses independent hover, press, and focus states.",
     "Tag body uses tone-specific interaction states.",
-    "When there is no href and isRemovable is false, isInteractive (or a plain onClick) renders a native button instead of a non-interactive span - no navigation, no remove affordance, just a focusable click target."
+    "When there is no href and isRemovable is false, isInteractive (or a plain onClick) renders a native button instead of a non-interactive span - no navigation, no remove affordance, just a focusable click target.",
+    "Disabled state is the native-named disabled prop. isDisabled is a deprecated alias mapped to disabled; disabled wins when both are set.",
+    "tabIndex and aria-describedby go to the link or the interactive button when there is one (the content anchor in a removable linked tag); otherwise to the root span (display-only, or the wrapper of a removable tag without href)."
   ],
   "compositionRules": [
     "May contain icon.",
@@ -117,6 +119,8 @@
     "Correct sizing",
     "Visible focus",
     "Independent interaction states",
-    "Renders a native button (not a span) when isInteractive or onClick is set with no href/isRemovable"
+    "Renders a native button (not a span) when isInteractive or onClick is set with no href/isRemovable",
+    "Takes disabled; the deprecated isDisabled still works",
+    "Forwards tabIndex and aria-describedby in every form"
   ]
 }

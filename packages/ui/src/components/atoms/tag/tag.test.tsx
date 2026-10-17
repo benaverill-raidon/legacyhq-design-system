@@ -129,7 +129,7 @@ describe('Tag', () => {
     const handleRemove = vi.fn();
 
     render(
-      <Tag isRemovable isDisabled onRemove={handleRemove}>
+      <Tag isRemovable disabled onRemove={handleRemove}>
         Remove me
       </Tag>,
     );
@@ -159,7 +159,7 @@ describe('Tag', () => {
     const handleClick = vi.fn();
 
     render(
-      <Tag href="/trusts/123" isDisabled onClick={handleClick}>
+      <Tag href="/trusts/123" disabled onClick={handleClick}>
         Trust
       </Tag>,
     );
@@ -171,7 +171,7 @@ describe('Tag', () => {
 
   it('disabled disables remove button', () => {
     render(
-      <Tag isRemovable isDisabled onRemove={() => undefined}>
+      <Tag isRemovable disabled onRemove={() => undefined}>
         Trust
       </Tag>,
     );
@@ -181,7 +181,7 @@ describe('Tag', () => {
 
   it('sets aria-disabled for disabled navigational content', () => {
     render(
-      <Tag href="/trusts/123" isDisabled>
+      <Tag href="/trusts/123" disabled>
         Trust
       </Tag>,
     );
@@ -191,7 +191,7 @@ describe('Tag', () => {
 
   it('sets tabIndex -1 for disabled navigational content', () => {
     render(
-      <Tag href="/trusts/123" isDisabled>
+      <Tag href="/trusts/123" disabled>
         Trust
       </Tag>,
     );
@@ -258,9 +258,9 @@ describe('Tag', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('disables the interactive tag button natively when isDisabled is true', () => {
+  it('disables the interactive tag button natively when disabled is true', () => {
     render(
-      <Tag isInteractive isDisabled onClick={() => undefined}>
+      <Tag isInteractive disabled onClick={() => undefined}>
         Filter
       </Tag>,
     );
@@ -275,6 +275,97 @@ describe('Tag', () => {
       focusRingClassNames.focusRing,
       focusRingClassNames.focusRingDefault,
     );
+  });
+
+  describe('the deprecated isDisabled alias', () => {
+    it('still disables the link, the remove button, and an interactive tag', () => {
+      const { rerender } = render(
+        <Tag href="/trusts/123" isRemovable isDisabled onRemove={() => undefined}>
+          Trust
+        </Tag>,
+      );
+
+      expect(screen.getByRole('link', { name: 'Trust' })).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.getByRole('button', { name: 'Remove Trust' })).toBeDisabled();
+
+      rerender(
+        <Tag isInteractive isDisabled onClick={() => undefined}>
+          Filter
+        </Tag>,
+      );
+      expect(screen.getByRole('button', { name: 'Filter' })).toBeDisabled();
+    });
+
+    it('gives way to disabled when both are set', () => {
+      render(
+        <Tag isInteractive disabled={false} isDisabled onClick={() => undefined}>
+          Filter
+        </Tag>,
+      );
+
+      expect(screen.getByRole('button', { name: 'Filter' })).not.toBeDisabled();
+    });
+  });
+
+  describe('tabIndex and aria-describedby', () => {
+    it('go to the root of a display-only tag', () => {
+      const { container } = render(
+        <Tag tabIndex={0} aria-describedby="tag-help">
+          Estate plan
+        </Tag>,
+      );
+      const root = container.firstElementChild;
+
+      expect(root).toHaveClass(styles.root);
+      expect(root).toHaveAttribute('tabindex', '0');
+      expect(root).toHaveAttribute('aria-describedby', 'tag-help');
+    });
+
+    it('go to the wrapper of a removable tag without href', () => {
+      const { container } = render(
+        <Tag isRemovable onRemove={() => undefined} tabIndex={0} aria-describedby="tag-help">
+          Trust
+        </Tag>,
+      );
+      const root = container.firstElementChild;
+
+      expect(root).toHaveClass(styles.wrapper);
+      expect(root).toHaveAttribute('tabindex', '0');
+      expect(root).toHaveAttribute('aria-describedby', 'tag-help');
+      expect(screen.getByRole('button', { name: 'Remove Trust' })).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('go to the link, not the wrapper, of a removable tag with href', () => {
+      const { container } = render(
+        <Tag href="/trusts/123" isRemovable onRemove={() => undefined} tabIndex={-1} aria-describedby="tag-help">
+          Trust
+        </Tag>,
+      );
+      const link = screen.getByRole('link', { name: 'Trust' });
+
+      expect(link).toHaveAttribute('tabindex', '-1');
+      expect(link).toHaveAttribute('aria-describedby', 'tag-help');
+      expect(container.firstElementChild).not.toHaveAttribute('tabindex');
+      expect(container.firstElementChild).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('go to the link or the button when the whole tag is one', () => {
+      const { rerender } = render(
+        <Tag href="/trusts/123" tabIndex={-1} aria-describedby="tag-help">
+          Trust
+        </Tag>,
+      );
+      expect(screen.getByRole('link', { name: 'Trust' })).toHaveAttribute('aria-describedby', 'tag-help');
+      expect(screen.getByRole('link', { name: 'Trust' })).toHaveAttribute('tabindex', '-1');
+
+      rerender(
+        <Tag isInteractive tabIndex={-1} aria-describedby="tag-help">
+          Filter
+        </Tag>,
+      );
+      expect(screen.getByRole('button', { name: 'Filter' })).toHaveAttribute('aria-describedby', 'tag-help');
+      expect(screen.getByRole('button', { name: 'Filter' })).toHaveAttribute('tabindex', '-1');
+    });
   });
 
   it('forwards refs to the rendered root element', () => {

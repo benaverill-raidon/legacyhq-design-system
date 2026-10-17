@@ -41,3 +41,13 @@
   background: var(--color-background-error-bold-default);
   color: var(--color-content-inverse-default);
 }
+
+/* The `label` text: read by assistive technology in place of the value, not shown. */
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

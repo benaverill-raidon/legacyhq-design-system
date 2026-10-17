@@ -14,6 +14,7 @@ export type RowId = string | number;
 export interface TableSort {
   /** The `key` of the sorted column. */
   columnKey: string;
+  /** `asc` or `desc`. */
   direction: SortDirection;
 }
 
@@ -49,7 +50,7 @@ export interface TableColumn<Row> {
    * for any other column. Follows the same identifier-vs-else rule as Link's `emphasis`.
    */
   emphasis?: 'strong' | 'default';
-  /** Accessible label for the column when `header` is not plain text (used by the sort button). */
+  /** Names the column in its sort button and resize handle when `header` is not plain text. Defaults to `header` when it's a string, else `key`. */
   headerLabel?: string;
   /**
    * The value the built-in client-side sort compares (defaults to `row[key]`). Ignored when
@@ -63,95 +64,100 @@ export interface TableColumn<Row> {
 }
 
 export interface TableProps<Row> {
-  /** Column definitions, left to right. */
+  /** Column definitions, left to right. Each is a `TableColumn`: see Columns below. */
   columns: Array<TableColumn<Row>>;
-  /** The row data. Sorting/pagination are applied to this array (unless `manual*` is set). */
+  /** The row data. Sorting and pagination are applied to this array, unless `manualSort` or `manualPagination` is set. */
   data: Row[];
-  /** Stable id per row (for selection + React keys). Defaults to the row index. */
+  /** Returns a stable id per row, for selection and React keys. Defaults to the row's index in `data`, which changes when `data` is filtered or reordered, so pass a real id. */
   getRowId?: (row: Row, index: number) => RowId;
-  /** Row density. Default `md`. */
+  /** Row density: `md` (64px rows) or `sm` (40px rows). */
   size?: TableSize;
   /**
-   * Accessible name for the `<table>`, rendered as a visually-hidden `<caption>`. Falls back to
-   * `title`. Always give the table a name via one of these.
+   * The table's accessible name, rendered as a visually hidden `<caption>`. Falls back to `title`. A
+   * string also names the scroll region. Always give the table a name with one of these.
    */
   caption?: React.ReactNode;
 
   // --- Header region ---
-  /** Table title (heading), shown above the table. */
+  /** The title above the table, rendered as an `h2`. Also names the table when there's no `caption`. */
   title?: React.ReactNode;
-  /** Supporting description below the title. */
+  /** Supporting text below the title. */
   description?: React.ReactNode;
-  /** Right-aligned header actions (typically Buttons + an overflow Icon Button). */
+  /** Actions such as a primary Button, at the end of the toolbar's button group, after `toolbarActions`. Hidden while rows are selected. */
   actions?: React.ReactNode;
 
   // --- Toolbar region ---
-  /** Replaces the entire built-in toolbar (search + filters + clear + active filters) with your own. */
+  /** Replaces the whole built-in toolbar: search, `toolbarActions`, `actions`, active filters, and the selection bar. */
   toolbar?: React.ReactNode;
-  /** Show the built-in search field. */
+  /** Shows the search Icon Button, which opens a search field. Table doesn't filter `data`: filter it yourself in `onSearchChange`. */
   searchable?: boolean;
-  /** Controlled search value. */
+  /** The search text. Pass it with `onSearchChange`: the field's clear button, and whether it stays open when it loses focus, depend on it. */
   searchValue?: string;
+  /** Called with the new search text as the person types, and with an empty string when they clear it. */
   onSearchChange?: (value: string) => void;
+  /** The search field's placeholder. Defaults to "Search...". Not used as its accessible name. */
   searchPlaceholder?: string;
   /** Accessible name for the search field and the Icon Button that opens it. Defaults to "Search". */
   searchLabel?: string;
   /** Accessible name for the search field's clear button. Defaults to "Clear search". */
   clearSearchLabel?: string;
   /**
-   * Right-aligned toolbar actions beside the search field — typically the filter Icon Button (opens a
-   * filter dropdown menu) and the configure Icon Button (opens a settings popover). The Table
-   * renders the layout; the consumer owns the buttons and their dropdown/popover content.
+   * Toolbar actions after the search, typically a filter Icon Button that opens a Dropdown Menu and a
+   * configure Icon Button. Table lays them out; you own the buttons and what they open. Hidden while
+   * rows are selected.
    */
   toolbarActions?: React.ReactNode;
   /**
-   * Applied filter chips rendered below the search row. Pass Chip `mode="filter"` components and
-   * an optional "+" IconButton to add more filters. The consumer renders the chips directly so
-   * filter-chip segments (operator, value, remove) stay fully controlled.
+   * The applied filters, in a row below the toolbar's buttons: Chip `mode="filter"` components and an
+   * optional Icon Button to add one. You render and control the chips.
    */
   activeFilters?: React.ReactNode;
-  /** When provided, renders a "Clear filters" action at the trailing edge of the chip row. */
+  /** When set, shows a Clear filters button at the end of the active-filters row, which calls it. */
   onClearFilters?: () => void;
+  /** The Clear filters button's text. Defaults to "Clear filters". */
   clearFiltersLabel?: string;
 
   // --- Sorting ---
-  /** Controlled sort. Pair with `onSortChange`. */
+  /** The current sort, controlled. Pass it with `onSortChange`; `null` is unsorted. */
   sort?: TableSort | null;
-  /** Initial sort for the uncontrolled case. */
+  /** The sort to start with, when `sort` isn't controlled. */
   defaultSort?: TableSort | null;
+  /** Called with the next sort when a sortable header is pressed: ascending, then descending, then `null`. */
   onSortChange?: (sort: TableSort | null) => void;
-  /** The consumer sorts server-side; Table reflects sort state but does not reorder `data`. */
+  /** You sort on the server: Table shows the sort state and calls `onSortChange`, but doesn't reorder `data`. */
   manualSort?: boolean;
 
   // --- Selection (multi-select) ---
-  /** Enable the leading selection checkbox column with a header select-all. */
+  /** Adds a leading column of selection Checkboxes, with a select-all Checkbox in its header. */
   selectable?: boolean;
-  /** Controlled selected row ids. Pair with `onSelectionChange`. */
+  /** The selected row ids, controlled. Pass them with `onSelectionChange`. */
   selectedIds?: RowId[];
-  /** Initial selection for the uncontrolled case. */
+  /** The selection to start with, when `selectedIds` isn't controlled. */
   defaultSelectedIds?: RowId[];
+  /** Called with every selected row id when a selection Checkbox changes. */
   onSelectionChange?: (ids: RowId[]) => void;
-  /** Accessible label for the header select-all checkbox. Default "Select all rows". */
+  /** Accessible name for the header's select-all Checkbox. Defaults to "Select all rows". */
   selectionColumnLabel?: string;
-  /** Accessible label for a row's selection checkbox. Default "Select row". */
+  /** Accessible name for a row's selection Checkbox, such as "Select Ada Lovelace". Defaults to "Select row" for every row. */
   getSelectionLabel?: (row: Row, index: number) => string;
   /**
    * Bulk actions shown on the right of the selection bar when one or more rows are selected
    * (typically Buttons). The count of selected rows is shown on the left.
    */
   bulkActions?: React.ReactNode;
-  /** Formats the selection-bar count label. Default `(n) => `${n} selected``. */
+  /** Formats the selection bar's count. Defaults to "2 selected". */
   selectionCountLabel?: (count: number) => string;
 
   // --- Pagination ---
-  /** Controlled current page (1-based). */
+  /** The current page, counting from 1, controlled. Pass it with `onPageChange`. */
   page?: number;
-  /** Total page count (required for `manualPagination`). */
+  /** The number of pages, for `manualPagination`. */
   pageCount?: number;
+  /** Called with the page the person moves to from the footer. */
   onPageChange?: (page: number) => void;
-  /** Rows per page. Enables client-side pagination when `manualPagination` is not set. */
+  /** Rows per page. Turns on client-side pagination unless `manualPagination` is set, and sets the footer's page-size Select. */
   pageSize?: number;
-  /** The consumer paginates server-side; Table does not slice `data` and shows `pageCount` pages. */
+  /** You paginate on the server: Table doesn't slice `data`, and shows `pageCount` pages. */
   manualPagination?: boolean;
   /** Accessible name for the footer's previous-page button. Defaults to "Previous page". */
   previousPageLabel?: string;
@@ -169,26 +175,27 @@ export interface TableProps<Row> {
   getPageCountLabel?: (pageCount: number) => string;
 
   // --- Footer ---
-  /** Total number of items (used in the footer's "X–Y of Z items" label). */
+  /** Total number of items, for the footer's range text. Defaults to the number of rows. */
   totalItems?: number;
-  /** Available page-size options shown in the "Items per page" dropdown. */
+  /** The page sizes the footer's "Items per page" Select offers. The Select shows only when this is set. */
   itemsPerPageOptions?: number[];
-  /** Called when the user picks a different page size from the footer dropdown. */
+  /** Called with the new page size when the person picks one in the footer. */
   onPageSizeChange?: (pageSize: number) => void;
 
   // --- Columns ---
-  /** Allow dragging column-header edges to resize columns. Default true. */
+  /** Lets people resize columns by dragging a header's trailing edge, or with the Arrow keys on its handle. */
   resizableColumns?: boolean;
 
   // --- States ---
-  /** Show skeleton placeholder rows instead of data. */
+  /** Shows skeleton rows instead of data, and sets `aria-busy` on the table. */
   loading?: boolean;
-  /** Skeleton row count while `loading`. Default 5. */
+  /** How many skeleton rows to show while `loading`. */
   skeletonRowCount?: number;
-  /** Content shown when there are no rows. Defaults to a simple Empty State. */
+  /** Content shown when there are no rows. Defaults to a "No results" heading and description. */
   empty?: React.ReactNode;
 
-  /** Composes with the root element's class list. */
+  /** Added to the root element's classes. */
   className?: string;
+  /** The root element's `id`. */
   id?: string;
 }

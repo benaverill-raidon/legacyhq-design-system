@@ -6,6 +6,8 @@
 - Component set: `card`, `4968:153931` (30 variants).
 - Inspected via Figma Console on 2026-09-22, including bound variable names and native slot nodes.
 - User intent: a surface and border radius containing an unrestricted content slot.
+- Tier exception: Card lives with organisms as the container for complete content sections, although
+  the component itself is deliberately just a surface shell and imports no other UI components.
 
 ## API and structure
 

@@ -258,13 +258,13 @@ const STATES: Array<[RegExp, string]> = [
   [/:hover|\[data-force-state='hover'\]/, 'hover'],
   [/:focus-visible|:focus-within|:focus(?![\w-])|\[data-force-state='focus'\]/, 'focus'],
   [/:active|\[data-force-state='press'\]/, 'pressed'],
-  [/:checked|\[aria-checked='true'\]|\[data-checked='true'\]/, 'checked'],
-  [/\[aria-selected='true'\]|\[aria-pressed='true'\]|\[data-selected='true'\]/, 'selected'],
-  [/\[data-expanded='true'\]|\[aria-expanded='true'\]/, 'expanded'],
+  [/:checked|\[aria-checked='true'\]|\[data-checked(='true')?\]/, 'checked'],
+  [/\[aria-selected='true'\]|\[aria-pressed='true'\]|\[data-selected(='true')?\]/, 'selected'],
+  [/\[data-expanded(='true')?\]|\[aria-expanded='true'\]/, 'expanded'],
   [/:autofill|\[data-force-state='autofill'\]/, 'autofill'],
-  [/\[data-loading='true'\]/, 'loading'],
-  [/\[data-invalid='true'\]|\[aria-invalid='true'\]/, 'invalid'],
-  [/:disabled|\[data-disabled='true'\]|\[aria-disabled='true'\]/, 'disabled'],
+  [/\[data-loading(='true')?\]/, 'loading'],
+  [/\[data-invalid(='true')?\]|\[aria-invalid='true'\]/, 'invalid'],
+  [/:disabled|\[data-disabled(='true')?\]|\[aria-disabled='true'\]/, 'disabled'],
 ];
 
 /** Data attributes that are states (above), not modes; any other `[data-x]` names a mode. */

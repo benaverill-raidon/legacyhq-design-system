@@ -136,6 +136,7 @@ describe('design tokens', () => {
     expect(whenOf(".root[data-context='inline'][data-size='md']", 'root')).toBe('inline · md');
     expect(whenOf('.editor :global(.rta-active)', 'root')).toBe('editor · rta active');
     expect(whenOf(".input:checked, .root[aria-checked='true']", 'root')).toBe('input · checked');
+    expect(whenOf('.row[data-selected]:hover', 'table')).toBe('row · hover / selected');
   });
 
   it("finds a stylesheet's root class: the first one it styles", () => {

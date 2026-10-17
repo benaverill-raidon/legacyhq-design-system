@@ -163,4 +163,18 @@ describe('TagGroup', () => {
     const root = document.getElementById('custom-group') as HTMLElement;
     expect(root).toHaveClass('custom-class');
   });
+
+  it('treats a negative maxVisible as 0, showing only the overflow tag', () => {
+    render(<TagGroup tags={makeTags(3)} maxVisible={-2} />);
+    expect(screen.queryByText('Tag 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Tag 3')).not.toBeInTheDocument();
+  });
+
+  it('marks a hidden tag passed disabled as disabled in the overflow menu', () => {
+    const tags = makeTags(3);
+    tags[2] = { ...tags[2], disabled: true };
+    render(<TagGroup tags={tags} maxVisible={2} />);
+    fireEvent.click(screen.getByRole('button', { name: /more/i }));
+    expect(screen.getByRole('menuitem', { name: 'Tag 3' })).toBeDisabled();
+  });
 });

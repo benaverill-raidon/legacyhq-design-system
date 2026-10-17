@@ -199,4 +199,19 @@ describe('AvatarGroup', () => {
     const root = document.getElementById('custom-group') as HTMLElement;
     expect(root).toHaveClass('custom-class');
   });
+
+  it('marks a hidden person passed disabled as disabled in the overflow menu', () => {
+    const avatars = makeAvatars(3);
+    avatars[2] = { ...avatars[2], disabled: true };
+    render(<AvatarGroup avatars={avatars} maxVisible={2} />);
+    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    expect(screen.getByRole('menuitem', { name: 'Person 3' })).toBeDisabled();
+  });
+
+  it('names a hidden person with no name or alt by unnamedLabel, for translation', () => {
+    const avatars: AvatarGroupItem[] = [...makeAvatars(1), { id: 'nameless' }];
+    render(<AvatarGroup avatars={avatars} maxVisible={1} unnamedLabel="Sin nombre" />);
+    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    expect(screen.getByRole('menuitem', { name: 'Sin nombre' })).toBeInTheDocument();
+  });
 });

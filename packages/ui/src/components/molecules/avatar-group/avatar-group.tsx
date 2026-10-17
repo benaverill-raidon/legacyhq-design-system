@@ -14,8 +14,8 @@ function defaultOverflowLabel(hiddenCount: number) {
   return `+${hiddenCount}`;
 }
 
-function overflowItemLabel(avatar: AvatarGroupItem) {
-  return avatar.name ?? avatar.alt ?? 'Unnamed';
+function overflowItemLabel(avatar: AvatarGroupItem, unnamedLabel: string) {
+  return avatar.name ?? avatar.alt ?? unnamedLabel;
 }
 
 function warnForZeroVisibleAvatars(maxVisible: number | undefined) {
@@ -37,6 +37,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
   size = 'lg',
   overflowLabel = defaultOverflowLabel,
   overflowMenuAriaLabel,
+  unnamedLabel = 'Unnamed',
   onOverflowAvatarSelect,
   id,
   className,
@@ -67,7 +68,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
         id: 'overflow',
         items: hiddenAvatars.map((avatar) => ({
           id: avatar.id,
-          label: overflowItemLabel(avatar),
+          label: overflowItemLabel(avatar, unnamedLabel),
           leadingElement: (
             <Avatar
               src={avatar.src}
@@ -78,7 +79,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
               decorative
             />
           ),
-          disabled: avatar.isDisabled,
+          disabled: avatar.disabled ?? avatar.isDisabled,
           onSelect: (event) => onOverflowAvatarSelect?.(avatar, event),
         })),
       },

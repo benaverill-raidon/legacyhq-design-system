@@ -19,6 +19,8 @@ export interface AvatarGroupProps {
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
   /** The overflow menu's accessible name. Defaults to “3 more people” for three. */
   overflowMenuAriaLabel?: string;
+  /** The overflow menu's name for a hidden person with no `name` or `alt`. Defaults to "Unnamed". */
+  unnamedLabel?: string;
   /**
    * Called with the person and the event when someone chooses a hidden person from the overflow
    * menu. The menu then closes and focus returns to the overflow button. Avatar Group does nothing

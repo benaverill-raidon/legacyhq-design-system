@@ -31,7 +31,7 @@ type Story = StoryObj<typeof meta>;
 
 // One shrinkable column: a grid item's minimum width is its content's, and Banner's one-line
 // message would otherwise widen the column instead of truncating.
-const stack: CSSProperties = { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--spacing-lg)' };
+const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)' };
 
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
@@ -72,7 +72,7 @@ function BannerActions({ tone = 'default' }: { tone?: BannerTone }) {
 
 function Labelled({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--spacing-xs)' }}>
+    <div style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
       <span style={captionStyle}>{label}</span>
       {children}
     </div>
@@ -153,6 +153,15 @@ export const EdgeCases: Story = {
         <div style={{ inlineSize: '360px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
           <Banner tone="error" actions={<BannerActions />}>
             The connection was interrupted while saving your work.
+          </Banner>
+        </div>
+      </Labelled>
+
+      <Labelled label="In a flex row: still cut off at the container's edge">
+        <div style={{ display: 'flex', inlineSize: '480px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
+          <Banner>
+            A new version is available, with faster search, a redesigned matter list, and changes to how
+            deadlines are calculated.
           </Banner>
         </div>
       </Labelled>

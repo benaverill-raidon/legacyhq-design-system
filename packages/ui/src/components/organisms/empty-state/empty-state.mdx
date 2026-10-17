@@ -37,7 +37,7 @@ import * as EmptyStateStories from './EmptyState.stories';
   id="empty-state"
   example={
     <EmptyState
-      type="informative"
+      appearance="informative"
       illustration={<IconTile tone="blue" size="lg"><SearchIcon /></IconTile>}
       heading="No matters match these filters"
       actions={
@@ -83,7 +83,7 @@ import * as EmptyStateStories from './EmptyState.stories';
 <Anatomy
   specimen={
     <EmptyState
-      type="informative"
+      appearance="informative"
       illustration={<IconTile tone="green" size="lg"><CheckIcon /></IconTile>}
       heading="You're all caught up"
       actions={<Button prominence="tertiary">View all activity</Button>}
@@ -94,7 +94,7 @@ import * as EmptyStateStories from './EmptyState.stories';
 >
   <Part name="root" target={emptyStateStyles.root}>A `div` that centers everything in a column, with 20px padding. `informative` fills it with the sunken surface color; `inherited` leaves it transparent.</Part>
   <Part name="illustration" target={emptyStateStyles.illustration}>Optional: what you pass as `illustration`, 24px above the heading. Empty State doesn't size it.</Part>
-  <Part name="heading" target={emptyStateStyles.heading}>Optional bold line. A styled `div`, not a heading element.</Part>
+  <Part name="heading" target={emptyStateStyles.heading}>Optional bold line: an `h2`, or the level `headingLevel` sets. Every level looks the same.</Part>
   <Part name="description" target={emptyStateStyles.description}>`children`, the only required content, 16px below the heading.</Part>
   <Part name="actions" target={emptyStateStyles.actions}>Optional, 16px below the description: a Button, two in a Button Group, or a Link.</Part>
 </Anatomy>
@@ -103,11 +103,12 @@ import * as EmptyStateStories from './EmptyState.stories';
 
 <Section title="Variants">
 
-`type` sets the background, and nothing else: the content is the same in both. `inherited`, the
-default, is transparent, so it takes on the card, panel, or table it sits in. `informative` fills a
-sunken panel, for an empty state that stands on its own. The panel has no border or rounded corners.
+`appearance` sets the background, and nothing else: the content is the same in both. `inherited`,
+the default, is transparent, so it takes on the card, panel, or table it sits in. `informative` fills
+a sunken panel, for an empty state that stands on its own. The panel has no border or rounded
+corners. `type`, the earlier name for `appearance` and still Figma's name for it, is still accepted.
 
-<Example of={EmptyStateStories.Types} />
+<Example of={EmptyStateStories.Appearances} />
 
 </Section>
 
@@ -174,8 +175,8 @@ the heading to a few words and the description to a sentence or two.
 <Do caption="Use inherited inside a surface that already has its own background." code={`<EmptyState heading="No tasks">Tasks assigned to you appear here.</EmptyState>`}>
   <EmptyState heading="No tasks">Tasks assigned to you appear here.</EmptyState>
 </Do>
-<Dont caption="Use informative there too. The sunken panel draws a second box inside the first." code={`<EmptyState type="informative" heading="No tasks">Tasks assigned to you appear here.</EmptyState>`}>
-  <EmptyState type="informative" heading="No tasks">Tasks assigned to you appear here.</EmptyState>
+<Dont caption="Use informative there too. The sunken panel draws a second box inside the first." code={`<EmptyState appearance="informative" heading="No tasks">Tasks assigned to you appear here.</EmptyState>`}>
+  <EmptyState appearance="informative" heading="No tasks">Tasks assigned to you appear here.</EmptyState>
 </Dont>
 </Guidelines>
 
@@ -185,9 +186,10 @@ the heading to a few words and the description to a sentence or two.
 
 - Empty State renders a `div` with no role. It isn't focusable and isn't a live region; its actions
   are reached with Tab, in page order.
-- The heading is a styled `div`, so it isn't announced as a heading or listed among the page's
-  headings. A heading element passed as `heading` keeps the browser's own heading size and margins,
-  since Empty State doesn't reset them.
+- The heading is a real heading element, `h2` by default, so it's announced as a heading and listed
+  among the page's headings. Set `headingLevel` to fit the page's outline, usually one level below
+  the heading of the section the Empty State is in. The level doesn't change how it looks. Pass text
+  or inline content as `heading`, not another heading element.
 - Empty State doesn't hide the illustration from assistive technology. Mark a decorative one as
   decorative: Icon Tile is hidden by default, and an image needs `alt=""`.
 - When an Empty State replaces results, for example after a search, it isn't announced. Announce the
@@ -204,7 +206,7 @@ the heading to a few words and the description to a sentence or two.
 <Section title="Design tokens">
 
 Every token Empty State's stylesheet uses, by family, with the property it sets and when. "Base" is
-the `inherited` type; `informative` adds only the background.
+the `inherited` appearance; `informative` adds only the background.
 
 <TokensTable id="empty-state" />
 

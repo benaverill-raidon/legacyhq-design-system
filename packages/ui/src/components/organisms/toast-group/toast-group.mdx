@@ -45,7 +45,7 @@ import * as ToastGroupStories from './ToastGroup.stories';
       <Button
         onClick={() => {
           const id = toast.loading('Uploading contract.pdf…');
-          window.setTimeout(() => toast.success('contract.pdf uploaded', { id, duration: 5000 }), 2000);
+          window.setTimeout(() => toast.success('contract.pdf uploaded', { id }), 2000);
         }}
       >
         Upload a file
@@ -87,7 +87,7 @@ import * as ToastGroupStories from './ToastGroup.stories';
 <Section title="Anatomy">
 
 <Anatomy specimen={<Toast tone="success" title="Changes saved" expanded={false} />}>
-  <Part name="region">An `ol` named by `label`, fixed 20px from the bottom and end edges of the window and 368px wide, narrower on a small screen. It's added only while there's a toast, and it's fixed to the window, so it isn't outlined on this specimen; use the buttons above to see it.</Part>
+  <Part name="region">An `ol` named by `label`, fixed 20px from the bottom and end edges of the window and 368px wide, narrower on a small screen. It's added only while there's a toast, and it's fixed to the window, so it isn't outlined on this specimen; use the buttons above to see it. Beside it, a hidden live region stays on the page to announce the toasts.</Part>
   <Part name="item">An `li` around each Toast, like the one shown here. It's moved and scaled for the stack, the expanded list, and a swipe.</Part>
 </Anatomy>
 
@@ -122,7 +122,7 @@ toast.success('Changes saved', { description: 'Your matter is up to date.' });`}
 <Subsection title="The toast() API">
 
 Each call adds a toast at the front of the stack and returns its id. The helpers set `tone`;
-`toast.info` sets `information`, and `toast.loading` also sets `duration` to `Infinity`.
+`toast.info` sets `information`, and a `toast.loading` toast stays until it's updated or dismissed.
 `toast.dismiss(id)` removes one toast at once, without the fade, and `toast.dismiss()` removes them
 all.
 
@@ -143,14 +143,14 @@ options: { id, tone, description, actions, duration, isDismissible }`}
 <Subsection title="Updating a toast">
 
 Call `toast()` again with the same `id` to replace that toast in place; it keeps its spot in the
-stack. Options you leave out keep their earlier values, and that includes the `Infinity` duration
-from `toast.loading`. Pass a `duration` when you replace a loading toast, or the result stays until
-someone dismisses it.
+stack, and its timer starts over. Options you leave out keep their earlier values. The exception is
+a loading toast's duration: when it's replaced with another tone, the result gets the group's
+`duration` unless you pass one, so it goes away on its own.
 
 <CodeSample
   code={`const id = toast.loading('Uploading contract.pdf…');
 await upload(file);
-toast.success('contract.pdf uploaded', { id, duration: 5000 });`}
+toast.success('contract.pdf uploaded', { id });`}
 />
 
 </Subsection>
@@ -160,19 +160,20 @@ toast.success('contract.pdf uploaded', { id, duration: 5000 });`}
 The newest toast is at the front. Collapsed, up to `maxVisible` toasts show, three by default: each
 older one peeks 16px above the one in front and is drawn 5% smaller, and every toast shows its title
 alone. Hovering the stack, or moving focus into it, spreads the visible toasts into a list with 8px
-between them and shows their descriptions and actions. Toasts past `maxVisible` wait, invisible and
-not clickable, and move into view as the ones in front go. To see it, press Save changes at the top
-of this page a few times, then hover the stack or Tab into it.
+between them and shows their descriptions and actions. It stays spread out while either is true:
+moving the pointer away doesn't collapse it while focus is inside. Toasts past `maxVisible` wait,
+invisible and out of reach, and move into view as the ones in front go. To see it, press Save
+changes at the top of this page a few times, then hover the stack or Tab into it.
 
 </Subsection>
 
 <Subsection title="Timing and dismissing">
 
-Each toast is removed after its `duration`, or the group's: 5 seconds by default. The timers stop
-while the stack is expanded and start over from the full duration when it collapses. A waiting toast's
-timer runs too, so it can time out before it's ever shown. A toast also goes when its dismiss button
-is clicked, or when it's dragged sideways more than 80px; a shorter drag springs back. It fades out,
-then it's removed.
+Each toast is removed after it's been in view for its `duration`, or the group's: 5 seconds by
+default. The timers pause while the stack is expanded and carry on with the time that was left when
+it collapses. A waiting toast's timer doesn't start until it comes into view. A toast also goes when
+its dismiss button is clicked, or when it's dragged sideways more than 80px; a shorter drag springs
+back. It fades out, then it's removed.
 
 </Subsection>
 
@@ -204,12 +205,15 @@ transition is instant.
 </MattersPage>`}
 />
 <Do
-  caption="Give the result of a loading toast a duration, so it goes away on its own."
-  code={`toast.success('contract.pdf uploaded', { id, duration: 5000 });`}
+  caption="Replace a loading toast with its result, using the same id, so it keeps its place."
+  code={`const id = toast.loading('Uploading contract.pdf…');
+// when it's done:
+toast.success('contract.pdf uploaded', { id });`}
 />
 <Dont
-  caption="Replace a loading toast without a duration. The result keeps loading's Infinity and stays until it's dismissed."
-  code={`toast.success('contract.pdf uploaded', { id });`}
+  caption="Dismiss the loading toast and add a new one. The result jumps to the front of the stack, and the loading toast fades out separately."
+  code={`toast.dismiss(id);
+toast.success('contract.pdf uploaded');`}
 />
 <Do caption="Use a toast for news people can miss without harm." code={`toast.success('Matter archived');`}>
   <Toast tone="success" title="Matter archived" expanded={false} />
@@ -223,22 +227,24 @@ transition is instant.
 
 <Section title="Accessibility">
 
-- Toast Group renders an `ol`, named by `label`, with each toast in an `li`. Each Toast is a
-  `role="status"` live region with its status read before its title.
-- The list is added to the page only with its first toast, and each toast arrives with its text
-  already in it, so screen readers may not announce a new toast. There's no live region that stays on
-  the page for toasts to be added to.
-- Moving focus into the stack expands it and stops the timers, so keyboard users can reach each
-  toast's dismiss button and actions before they go. Moving focus out collapses it again.
+- Toast Group renders an `ol`, named by `label`, with each toast in an `li`, and each Toast's status
+  is read before its title.
+- A `role="status"` live region stays on the page, visually hidden, even with no toasts. Each toast's
+  status, title, and description are added to it when the toast comes into view, and again when the
+  toast is updated, so screen readers announce it politely. The cards in the list aren't live regions
+  themselves (`role="none"`), so a toast isn't announced twice.
+- Moving focus into the stack expands it and pauses the timers, so keyboard users can reach each
+  toast's dismiss button and actions before they go. It stays expanded while focus is inside, even if
+  the pointer leaves; moving focus out collapses it again.
 - The list sits where Toast Group is mounted in the page, so that's where it comes in the tab order.
   There's no key to jump to it, and Escape doesn't dismiss a toast.
-- Waiting toasts past `maxVisible` are invisible but still on the page: screen readers can read them,
-  and Tab reaches their dismiss buttons.
+- Waiting toasts past `maxVisible` are `inert` and `aria-hidden`: screen readers don't read them and
+  Tab skips them until they come into view.
 - Swiping is for pointers only; the dismiss button does the same from the keyboard.
 - Under reduced motion every transition is instant.
 
 <Keyboard>
-  <Key keys="Tab">Moves into the stack, which expands it and stops the timers, then through each toast's dismiss button and actions.</Key>
+  <Key keys="Tab">Moves into the stack, which expands it and pauses the timers, then through each toast's dismiss button and actions.</Key>
   <Key keys="Shift + Tab">Moves back; leaving the stack collapses it.</Key>
   <Key keys="Enter">On a dismiss button, fades the toast out and removes it.</Key>
   <Key keys="Space">On a dismiss button, fades the toast out and removes it.</Key>

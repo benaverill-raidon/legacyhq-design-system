@@ -86,7 +86,9 @@ determine its height.
   inherits the banner content color via the `[data-color]` override (the same pattern Button uses),
   not its own status color.
 - Omit the leading icon when `showIcon` is false.
-- Truncate the message to a single line with an ellipsis rather than wrapping.
+- Truncate the message to a single line with an ellipsis rather than wrapping. The root has
+  `min-inline-size: 0`, so as a flex or grid item it can shrink below its one-line message and the
+  message truncates in any container instead of widening the bar.
 - Render the actions region only when `actions` is provided.
 
 ## Accessibility

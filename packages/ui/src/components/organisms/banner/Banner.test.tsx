@@ -132,6 +132,13 @@ describe('Banner CSS contract', () => {
     expect(bannerCss).toMatch(/\.text \{[\s\S]*?text-overflow: ellipsis;[\s\S]*?white-space: nowrap;/);
   });
 
+  it('lets the bar shrink below its message as a flex or grid item, so the message truncates', () => {
+    // Without it, a flex or grid item's minimum width is its whole one-line message.
+    expect(bannerCss).toMatch(/\.banner \{[^}]*?min-inline-size: 0;/);
+    expect(bannerCss).toMatch(/\.message \{[^}]*?min-inline-size: 0;/);
+    expect(bannerCss).toMatch(/\.text \{[^}]*?min-inline-size: 0;[^}]*?overflow: hidden;/);
+  });
+
   it('lets the icon inherit the banner content color', () => {
     expect(bannerCss).toContain('.iconSlot :global([data-color]) {');
     expect(bannerCss).toMatch(/\.iconSlot :global\(\[data-color\]\) \{[\s\S]*?color: inherit;/);

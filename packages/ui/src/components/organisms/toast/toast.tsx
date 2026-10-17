@@ -13,6 +13,7 @@ import { Spinner } from '../../atoms/spinner';
 import { IconTile } from '../../molecules/icon-tile';
 import type { IconTileTone } from '../../molecules/icon-tile';
 import styles from './toast.module.css';
+import { resolveToastTone, TOAST_STATUS_LABELS } from './toast-status';
 import type { ToastProps, ToastTone } from './toast.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
@@ -30,14 +31,6 @@ const TONE_CONFIG: Record<Exclude<ToastTone, 'loading'>, { tileTone: IconTileTon
   information: { tileTone: 'blue', Icon: StatusInformationIcon },
   warning: { tileTone: 'orange', Icon: StatusWarningIcon },
   error: { tileTone: 'red', Icon: StatusErrorIcon },
-};
-
-/** What each tone announces before the title; `default` and `loading` carry no status. */
-const STATUS_LABELS: Partial<Record<ToastTone, string>> = {
-  success: 'Success',
-  information: 'Information',
-  warning: 'Warning',
-  error: 'Error',
 };
 
 function ToastLeadingIcon({ tone }: { tone: ToastTone }) {
@@ -78,9 +71,8 @@ export const Toast = React.memo(
     forwardedRef,
   ) {
     // `appearance` is the deprecated name for `tone`, and `info` for `information`.
-    const requested = requestedTone ?? appearance ?? 'default';
-    const tone: ToastTone = requested === 'info' ? 'information' : requested;
-    const status = statusLabel ?? STATUS_LABELS[tone];
+    const tone = resolveToastTone(requestedTone, appearance);
+    const status = statusLabel ?? TOAST_STATUS_LABELS[tone];
     const hasDescription = expanded && description !== undefined && description !== null;
     const hasActions = expanded && React.Children.toArray(actions).filter(Boolean).length > 0;
 
@@ -108,7 +100,6 @@ export const Toast = React.memo(
                 appearance="subtle"
                 size="xs"
                 aria-label={dismissLabel}
-                tooltip={false}
                 onClick={onDismiss}
               >
                 <CloseIcon />

@@ -180,7 +180,9 @@ work finishes rather than closed.
   `warning`, and `error`, visually hidden text with the tone's name, such as "Error:", is read before
   the title, so the meaning doesn't depend on color. `default` and `loading` read none, so the title
   has to say it. Translate it with `statusLabel`.
-- The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, with no tooltip.
+- The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, which also
+  shows as its tooltip on hover and focus, as on Section Message. In a Toast Group the tooltip is
+  drawn behind the stack for now, until overlays share one stacking order.
 - The card isn't focusable. Tab reaches the dismiss button first, since it sits beside the title,
   then the actions.
 - A collapsed toast doesn't render its description or actions at all, so they're neither read nor

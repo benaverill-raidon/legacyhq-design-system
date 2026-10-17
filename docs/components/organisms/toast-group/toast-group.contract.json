@@ -28,8 +28,8 @@
     { "name": "item", "element": "li", "required": true, "description": "an absolutely-positioned wrapper around a Toast, transformed for the stack/expanded layouts and swipe" }
   ],
   "props": {
-    "maxVisible": { "type": "number", "default": 3, "required": false, "description": "How many toasts show stacked before the rest collapse behind them." },
-    "duration": { "type": "number", "default": 5000, "required": false, "description": "Default auto-dismiss delay (ms) for toasts that don't set their own." },
+    "maxVisible": { "type": "number", "default": 3, "required": false, "description": "How many toasts show at once, stacked or expanded; the rest wait, inert and aria-hidden with their timers paused, and move into view as visible toasts dismiss." },
+    "duration": { "type": "number", "default": 5000, "required": false, "description": "Default auto-dismiss delay (ms) for toasts that don't set their own, counted while a toast is in view; paused while the stack is hovered or focused and resumed with the time left." },
     "label": { "type": "string", "default": "Notifications", "required": false },
     "className": { "type": "string", "default": null, "required": false }
   },
@@ -39,7 +39,7 @@
     "toast.error": "(title, options?) => id",
     "toast.warning": "(title, options?) => id",
     "toast.info": "(title, options?) => id",
-    "toast.loading": "(title, options?) => id  (no auto-dismiss by default)",
+    "toast.loading": "(title, options?) => id  (no auto-dismiss until it's updated to another tone, which then gets the group's duration unless one is passed)",
     "toast.dismiss": "(id?) => void  (dismiss one, or all when id is omitted)",
     "options": "{ id?, description?, actions?, duration?, isDismissible?, tone? }"
   },
@@ -58,18 +58,22 @@
   "accessibility": {
     "nativeElement": "ol",
     "regionLabelled": true,
-    "toastRole": "status",
+    "toastRole": "none",
+    "liveRegion": "an always-mounted, visually hidden role=\"status\" element (aria-atomic=\"false\") beside the list",
     "focusExpandsAndPauses": true,
-    "notes": "Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions."
+    "queuedToastsInert": true,
+    "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden."
   },
   "behaviorRules": [
     "Mount exactly one ToastGroup; call toast() from anywhere.",
     "Keep the newest toast at the front; show at most maxVisible toasts at once (collapsed or expanded) and queue the rest, moving them into view as visible toasts dismiss.",
     "Collapsed, stack the visible toasts in a 3D pile (older ones peek up and scale down); expand the visible toasts into a spaced vertical list on hover or focus.",
-    "Auto-dismiss each toast after its duration; pause the timers while the stack is hovered or focused.",
+    "Auto-dismiss each toast after it has been in view for its duration; pause the timers while the stack is hovered or focused, and resume them with the time left. Don't run a queued toast's timer.",
     "Support swipe/drag to dismiss past a threshold.",
     "Reduce transitions to instant under prefers-reduced-motion.",
-    "Update a toast in place when the same id is reused (loading -> success/error)."
+    "Update a toast in place when the same id is reused (loading -> success/error); a resolved loading toast gets the group's duration unless the update passes one.",
+    "Keep the stack expanded while focus is inside it, whatever the pointer does.",
+    "Keep a live region mounted and announce each toast through it when it comes into view or is updated; keep queued toasts inert and aria-hidden."
   ],
   "compositionRules": [
     "Render the Toast component for each item.",
@@ -102,7 +106,7 @@
     "Do not hardcode colors or spacing."
   ],
   "acceptanceCriteria": [
-    "Renders nothing when there are no toasts.",
+    "Renders only an empty live region when there are no toasts.",
     "Renders a toast triggered via the imperative API in an aria-labelled list.",
     "Sets the tone from the toast variant helpers.",
     "Updates a toast in place when the same id is reused.",
@@ -110,6 +114,10 @@
     "Auto-dismisses after the duration elapses.",
     "Keeps every toast in the DOM while stacked, newest first.",
     "Expands to reveal descriptions when the stack is hovered.",
+    "Gives a resolved loading toast the group's duration unless the update passes one.",
+    "Keeps queued toasts inert and aria-hidden, and starts their timers only once they're in view.",
+    "Announces new, updated, and newly visible toasts once through a persistent live region.",
+    "Pauses the timers on hover and focus and resumes them with the time left; stays expanded while focus is inside.",
     "Does not use MUI.",
     "Does not use Tailwind."
   ]

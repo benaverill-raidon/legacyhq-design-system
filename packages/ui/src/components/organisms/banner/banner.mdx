@@ -117,11 +117,10 @@ The message never wraps, so the bar stays one row tall. Text that doesn't fit is
 ellipsis, and there's no tooltip or other way to see the rest. Lead with what matters and put the
 detail behind an action. The actions keep their size; the message gives up the space.
 
-As a direct child of a flex or grid container, Banner's minimum width is its whole message, so a
-long message makes the bar wider than its container instead of cutting it off. In a grid, give the
-column `minmax(0, 1fr)`, as these examples do; in a flex layout, keep the message short.
+The bar can shrink below its message in any container, a flex row or a grid column included, so a
+long message is cut off at the container's edge rather than widening the bar.
 
-<Example of={BannerStories.EdgeCases} caption="A long message cut off at the edge, and a bar in a 360px container." />
+<Example of={BannerStories.EdgeCases} caption="A long message cut off at the edge, a bar in a 360px container, and one in a 480px flex row." />
 
 </Subsection>
 
@@ -180,7 +179,9 @@ Banner has no close button and no dismissed state. If people can dismiss it, put
     A new version is available, with faster search, a redesigned matter list, and changes
     to how deadlines are calculated for courts that close on state holidays.
 </Banner>`}
-/>
+>
+  <Banner>{"A new version is available, with faster search, a redesigned matter list, and changes to how deadlines are calculated for courts that close on state holidays."}</Banner>
+</Dont>
 <Do caption="Use Toast Group's toast() to confirm something the user just did." code={`toast.success('Changes saved');`}>
   <Toast tone="success" title="Changes saved" />
 </Do>

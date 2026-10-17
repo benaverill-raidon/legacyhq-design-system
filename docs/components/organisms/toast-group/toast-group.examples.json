@@ -15,7 +15,7 @@
     },
     {
       "name": "Loading updated to success",
-      "description": "Reuse the id to update a loading toast in place when it resolves.",
+      "description": "Reuse the id to update a loading toast in place when it resolves; the result gets the group's duration unless you pass one.",
       "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
       "props": {}
     },

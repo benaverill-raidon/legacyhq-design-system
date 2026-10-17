@@ -23,7 +23,8 @@ Organism.
       status icon - no separate tone axis.
 - [ ] The Figma `tone` variants match code: `default`, `warning`, `error`.
 - [ ] Height hugs content (single message row + block padding) rather than a fixed height.
-- [ ] The message truncates to a single line with an ellipsis instead of wrapping.
+- [ ] The message truncates to a single line with an ellipsis instead of wrapping, in any container
+      (the root has `min-inline-size: 0`, so a flex or grid parent can't be widened by the message).
 - [ ] `default` uses a plain dot (no dedicated status glyph), matching Figma and Inline Message.
 - [ ] The leading icon inherits the banner content color rather than its own status color.
 - [ ] Actions are passed in via a slot and expected to be inverse-tone Buttons / a Button Group.

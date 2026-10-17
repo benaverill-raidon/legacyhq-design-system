@@ -11,7 +11,7 @@
     "componentName": "empty-state",
     "variantCount": 2,
     "verifiedAt": "2026-09-01",
-    "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The `type` variant is inherited (transparent) vs informative (sunken surface background). The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both types."
+    "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The Figma `type` variant is inherited (transparent) vs informative (sunken surface background); code names it `appearance` (the system's name for visual style) and keeps `type` as a deprecated alias. The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both appearances."
   },
   "useCases": [
     "an empty list, table, or feed",
@@ -29,7 +29,7 @@
       "name": "root",
       "element": "div",
       "required": true,
-      "description": "centered vertical stack; informative fills a sunken surface, inherited is transparent"
+      "description": "centered vertical stack; appearance informative fills a sunken surface, inherited is transparent"
     },
     {
       "name": "illustration",
@@ -39,7 +39,8 @@
     {
       "name": "heading",
       "required": false,
-      "description": "optional bold heading (heading-md), centered"
+      "element": "h1-h6",
+      "description": "optional bold heading (heading-md), centered; a real heading element at headingLevel (default h2), margins reset"
     },
     {
       "name": "description",
@@ -53,11 +54,20 @@
     }
   ],
   "props": {
-    "type": {
+    "appearance": {
       "type": "enum",
       "values": ["inherited", "informative"],
       "default": "inherited",
-      "required": false
+      "required": false,
+      "description": "The background: inherited is transparent, informative fills a sunken surface. Figma names this property `type`."
+    },
+    "type": {
+      "type": "enum",
+      "values": ["inherited", "informative"],
+      "default": null,
+      "required": false,
+      "deprecated": true,
+      "description": "Deprecated alias for appearance (Figma's property name). Still accepted; appearance wins when both are set."
     },
     "illustration": {
       "type": "React.ReactNode",
@@ -68,6 +78,13 @@
       "type": "React.ReactNode",
       "default": null,
       "required": false
+    },
+    "headingLevel": {
+      "type": "enum",
+      "values": [1, 2, 3, 4, 5, 6],
+      "default": 2,
+      "required": false,
+      "description": "The heading element's level (h1-h6). Doesn't change how it looks."
     },
     "children": {
       "type": "React.ReactNode",
@@ -86,7 +103,7 @@
     }
   },
   "variants": {
-    "type": ["inherited", "informative"]
+    "appearance": ["inherited", "informative"]
   },
   "slots": [
     { "name": "illustration", "required": false, "allowedContent": "React.ReactNode" },
@@ -116,12 +133,13 @@
   "accessibility": {
     "nativeElement": "div",
     "defaultRole": null,
-    "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. The heading is a styled div with no heading semantics; a heading element passed in keeps the browser's own heading size and margins, so there is no clean way yet to give it a level."
+    "notes": "Plain content, not a live region. When swapped in dynamically, the surrounding region should announce the change. The heading is a real heading element at headingLevel (default h2); its margins are reset and the heading-md styles replace the browser's heading size, so every level looks the same."
   },
   "behaviorRules": [
     "Render a centered vertical stack: optional illustration, then a message block (heading, description, actions).",
     "Render the illustration, heading, and actions only when provided; the description is always rendered.",
-    "Fill a sunken surface background only for type=informative; keep type=inherited transparent.",
+    "Fill a sunken surface background only for appearance=informative; keep appearance=inherited transparent. Accept the deprecated type prop as an alias.",
+    "Render the heading as an h1-h6 at headingLevel (default 2), with its margins reset.",
     "Center all content and let long headings and descriptions wrap symmetrically."
   ],
   "compositionRules": [
@@ -159,7 +177,8 @@
     "Use Empty State for a legitimately empty view.",
     "Keep the description required and everything else optional.",
     "Give the user a clear action out of the empty state.",
-    "Use type=inherited inside a surface that already has a background."
+    "Use appearance=inherited inside a surface that already has a background.",
+    "Set headingLevel to fit the page's heading outline."
   ],
   "dont": [
     "Do not use Empty State for errors or loading.",
@@ -169,8 +188,10 @@
   "acceptanceCriteria": [
     "Renders the description.",
     "Renders the heading, illustration, and actions only when provided.",
-    "Defaults to the inherited (transparent) type.",
-    "Fills a sunken surface only for type=informative.",
+    "Defaults to the inherited (transparent) appearance.",
+    "Fills a sunken surface only for appearance=informative.",
+    "Still accepts the deprecated type prop.",
+    "Renders the heading as a real heading element, h2 by default or at headingLevel.",
     "Centers a vertical stack with the Figma spacing tokens.",
     "Uses heading-md for the heading and body-md for the description.",
     "Forwards the ref to the root element.",

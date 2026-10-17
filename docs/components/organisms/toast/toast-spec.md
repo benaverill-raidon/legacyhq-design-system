@@ -77,7 +77,10 @@ loading  -> Spinner (no tile)
 - Always render the title; render the description and actions only when `expanded` and provided.
 - Show the dismiss button unless `isDismissible` is false; call `onDismiss` on click. Toast never
   hides itself; the caller (Toast Group) removes it.
-- The dismiss Icon Button passes `tooltip={false}` (Section Message's keeps the default tooltip).
+- The dismiss Icon Button keeps Icon Button's default tooltip, which shows its accessible name
+  (`dismissLabel`) on hover and focus, the same as Section Message's. Inside Toast Group the tooltip
+  is drawn behind the stack for now: Popup's portal sits at `z-index: 1` and the group at `1000`
+  (the layering task recorded in token-governance.json's `elevation.layering`).
 
 ## Accessibility
 

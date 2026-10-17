@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Toast } from './toast';
@@ -71,6 +71,22 @@ describe('Toast', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows the dismiss button's name as its tooltip, like every Icon Button", () => {
+    vi.useFakeTimers();
+    try {
+      render(<Toast title="Saved" />);
+
+      fireEvent.pointerEnter(screen.getByRole('button', { name: 'Dismiss' }));
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Dismiss');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('omits the dismiss button when isDismissible is false', () => {

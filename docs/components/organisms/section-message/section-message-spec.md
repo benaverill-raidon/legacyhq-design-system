@@ -109,8 +109,8 @@ The panel hugs its content vertically; the description wraps rather than truncat
 - The status icon slot is `aria-hidden`.
 - Because the icon is decorative, the status is announced before the title as visually hidden text ("Information:", "Success:", "Warning:", "Error:"), from `statusLabel` (defaults to the tone's name; pass a translation, or an empty string to omit).
 - The dismiss button is an `IconButton` labelled by `dismissLabel` ("Dismiss" by default). It keeps
-  Icon Button's default tooltip, so the label also shows on hover and focus (Toast passes
-  `tooltip={false}`).
+  Icon Button's default tooltip, so the label also shows on hover and focus (Toast's dismiss button
+  does the same).
 - Dismissed state is internal (`useState`); the component returns `null` once dismissed and has no
   prop to show it again, so a caller remounts it (a new `key`) to bring it back. Focus is not moved
   when the focused dismiss button is removed.

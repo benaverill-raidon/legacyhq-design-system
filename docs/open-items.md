@@ -19,7 +19,8 @@ Some open items are already tracked next to their rules, and aren't repeated her
 2. Introduction / Overview: done.
 3. Foundations (Color, Typography, Spacing, Radius, Elevation, Motion, Icons): done.
 4. Component Docs page standard: done, for all 56 components.
-5. **Patterns: next.** Agree what it covers before writing pages.
+5. **Patterns: in progress.** Scope agreed: Messages and Feedback (done, the reference page),
+   Forms and Validation, Loading and Empty States, Collections.
 6. Templates.
 7. Status / maturity vocabulary: deferred until after Overview, and still waiting. Pages show no
    status yet.
@@ -73,6 +74,9 @@ Some open items are already tracked next to their rules, and aren't repeated her
 - Layers order by when they open. A popup and a dialog that mount already open in the same render
   stack with the popup under the dialog.
 - Table: two defaults are still built from English, the footer name and "Select row".
+- Toast Group's helper is `toast.info()`, which sets the `information` tone. By the one-name rule
+  it would be `toast.information()`, with `info` kept as a deprecated alias.
+- Field's `state` uses `valid` where every message component says `success`.
 
 ## Docs tooling
 

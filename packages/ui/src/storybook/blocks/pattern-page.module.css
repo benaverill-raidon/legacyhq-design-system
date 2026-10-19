@@ -1,0 +1,46 @@
+/*
+ * The pattern page standard (pattern-page.tsx), on top of the component page standard and
+ * doc-page's tables. Light only, like every docs page.
+ */
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+.choices :where(th, td) {
+  vertical-align: top;
+}
+
+.choices tbody th {
+  min-inline-size: 14rem;
+}
+
+/* One component per line when a situation has more than one answer. */
+.use {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: start;
+  white-space: nowrap;
+}
+
+.matrix {
+  inline-size: auto;
+}
+
+.matrix :where(th, td) {
+  padding-inline-end: var(--spacing-xl);
+}
+
+.yes {
+  display: inline-flex;
+  color: var(--color-content-success);
+}
+
+.components {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm) var(--spacing-xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

@@ -15,7 +15,8 @@ export function DocHeader({ title, lede, context }: { title: string; lede: React
   return (
     <header className={doc.header}>
       <h1 className={doc.h1}>{title}</h1>
-      <p className={doc.lede}>{lede}</p>
+      {/* A div: MDX wraps a multi-line summary in its own paragraph. */}
+      <div className={doc.lede}>{lede}</div>
       {context && <p className={doc.context}>{context}</p>}
     </header>
   );

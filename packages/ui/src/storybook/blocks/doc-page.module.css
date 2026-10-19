@@ -72,6 +72,10 @@
   letter-spacing: var(--typography-body-xl-letter-spacing);
 }
 
+.lede > p {
+  margin: 0;
+}
+
 .body {
   max-inline-size: 72ch;
 }

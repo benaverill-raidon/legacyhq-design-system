@@ -123,6 +123,15 @@ the rules are in the `classification` block of
 - [toast](docs/components/organisms/toast/toast.md)
 - [toast-group](docs/components/organisms/toast-group/toast-group.md)
 
+## Patterns (1)
+
+Guidance for combining components, as Storybook pages: which component to use when, rules,
+accessibility, and examples built from system components.
+
+- [messages-and-feedback](packages/ui/src/storybook/pages/patterns/messages-and-feedback.mdx):
+  choosing Banner, Section Message, Inline Message, Field's message, Toast, or Modal Dialog;
+  tone across them.
+
 ## Optional
 
 - `<name>-prompt.md` files (one per component): historical generation

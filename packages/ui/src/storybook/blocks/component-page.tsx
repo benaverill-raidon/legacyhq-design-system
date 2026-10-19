@@ -37,6 +37,11 @@ export function ComponentHeader({ id, example, children }: { id: string; example
 
 /** One numbered section; `title` is one of COMPONENT_PAGE_SECTIONS, which the page test checks. */
 export function Section({ title, children }: { title: ComponentPageSection; children: React.ReactNode }) {
+  return <NumberedSection title={title}>{children}</NumberedSection>;
+}
+
+/** A numbered section with any title, for other page standards built on this one (patterns). */
+export function NumberedSection({ title, children }: { title: string; children: React.ReactNode }) {
   const id = `section-${title.toLowerCase().replace(/[^a-z]+/g, '-')}`;
   return (
     <section className={`${doc.section} ${styles.section}`} aria-labelledby={id}>

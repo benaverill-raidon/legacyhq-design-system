@@ -7,8 +7,10 @@ const config = {
     // Listed first so Docs sorts above the stories it documents.
     "../packages/ui/src/components/**/*.mdx",
     "../packages/ui/src/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    // Storybook-only documentation pages (Introduction, Foundations, ...), titled via <Meta title="..." />.
-    "../packages/ui/src/storybook/pages/**/*.mdx"
+    // Storybook-only documentation pages (Introduction, Foundations, ...), titled via <Meta title="..." />,
+    // and the example stories pattern pages attach to with <Meta of={...} />.
+    "../packages/ui/src/storybook/pages/**/*.mdx",
+    "../packages/ui/src/storybook/pages/**/*.stories.@(ts|tsx)"
   ],
   "addons": [
     "@storybook/addon-docs",

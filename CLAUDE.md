@@ -25,7 +25,8 @@ packages/ui/src/components/
 
 packages/ui/src/storybook/   # Storybook-only docs; never exported as components
   pages/        # docs pages that aren't one component's docs (Introduction/
-                # Overview, ...): MDX with <Meta title="..." />, page-local
+                # Overview, Foundations, Patterns): MDX with <Meta title="..." />
+                # (or <Meta of={...} /> for a pattern's stories), page-local
                 # components and CSS Modules beside it
   blocks/       # docs building blocks shared across pages: DocLink (internal
                 # links by sidebar title, checked by doc-link.test.ts),
@@ -312,6 +313,27 @@ Accessibility, API, Design tokens, Related components.
   section order, required sections, its own component id, the anatomy part
   names against the contract, and JSDoc on every prop. Once a page is
   converted, its `.md` becomes a pointer to the MDX.
+
+## Pattern pages
+
+A pattern is guidance for combining components to solve a recurring product
+problem (Patterns / Messages and Feedback is the reference). Each is
+`storybook/pages/patterns/<pattern>.mdx` beside a `<pattern>.stories.tsx`
+of examples, written with `storybook/blocks/pattern-page.tsx`. Sections, all
+required, in order: The problem, Choosing, Examples, Rules, Accessibility,
+Do and don't, Components used.
+
+- **Examples are stories built only from system components**; a local CSS
+  Module may lay them out, never restyle them. Story title `Patterns/<Name>`.
+- **Facts are read from the code.** "Components used" and the header's count
+  come from the stories file's imports (`?raw`); tone tables
+  (`<ToneMatrix>`) read each component's `.types.ts`. Prose cites behavior
+  the components already document, and the page's test checks the cited
+  facts against the source.
+- `pattern-pages.test.ts` (part of `npm test`) checks sections, that the
+  examples import only system components, that everything the MDX renders is
+  in "Components used", that each listed component links to a real Docs page,
+  and the cited facts.
 
 ## When building/editing a component
 

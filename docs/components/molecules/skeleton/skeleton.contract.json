@@ -1,7 +1,13 @@
 {
   "name": "Skeleton",
   "category": "feedback",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "The subtle fill is faint on a raised surface. Needs a token change, made in Figma first."
+    }
+  ],
   "purpose": "Render a pulsing placeholder shape in place of content that hasn't finished loading, preserving the layout the real content will fill.",
   "intent": "Reduce perceived load time and layout shift, distinct from Spinner (no implied layout) and ProgressBar (measurable progress).",
   "nativeElement": "div",

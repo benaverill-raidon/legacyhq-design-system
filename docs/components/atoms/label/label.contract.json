@@ -1,7 +1,17 @@
 {
   "name": "Label",
   "category": "data-display",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
+    },
+    {
+      "kind": "gap",
+      "summary": "No icon slot, so a status with an icon (a task status) is composed beside the Label by hand."
+    }
+  ],
   "purpose": "Display short metadata.",
   "intent": "Compact semantic annotation.",
   "figmaSource": {

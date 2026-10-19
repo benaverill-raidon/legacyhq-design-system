@@ -48,7 +48,9 @@
   max-inline-size: 100%;
 }
 
-.prose > :where(p, ul, ol) {
+/* The same reading width for markdown inside a block one level down, such as a Subsection. */
+.prose > :where(p, ul, ol),
+.prose > div > :where(p, ul, ol):where(:not([class]), [class='']) {
   max-inline-size: 72ch;
 }
 
@@ -83,6 +85,31 @@
 .header {
   display: grid;
   gap: var(--spacing-2xl);
+}
+
+/* Known issues under the header: closed by default, so the page leads with the component. */
+.knownIssues {
+  max-inline-size: 72ch;
+  margin-block-start: var(--overlap-lg);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.knownIssues > summary {
+  color: var(--color-content-subtle);
+  cursor: pointer;
+}
+
+.issues {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: var(--spacing-sm) 0 0;
+  padding-inline-start: var(--spacing-lg);
+  list-style: disc;
+}
+
+.issueKind {
+  font-weight: var(--typography-heading-xxs-font-weight);
 }
 
 /* The frame every live example sits in. */

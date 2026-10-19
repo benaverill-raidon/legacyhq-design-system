@@ -1,7 +1,7 @@
 {
   "name": "Spinner",
   "category": "feedback",
-  "status": "stable",
+  "status": "beta",
   "purpose": "Indeterminate loading indicator.",
   "intent": "Communicate ongoing work.",
   "figmaSource": {

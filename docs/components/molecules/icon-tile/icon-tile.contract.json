@@ -1,7 +1,13 @@
 {
   "name": "IconTile",
   "category": "data-display",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "With `decorative={false}` and no label it has no accessible name, and no warning says so."
+    }
+  ],
   "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
   "intent": "Provide a non-interactive, scannable colored icon container distinct from Icon Button (interactive) and Badge/Tag (text content).",
   "nativeElement": "div",

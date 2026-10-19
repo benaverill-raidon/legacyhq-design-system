@@ -1,7 +1,13 @@
 {
   "name": "AvatarGroup",
   "category": "data-display",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "The overflow button is named only \"+3\", without saying what it reveals."
+    }
+  ],
   "purpose": "Lays out an overlapping stack of Avatars with an optional overflow trigger that opens a Dropdown Menu holding whichever people got truncated.",
   "intent": "A thin composition of Avatar (every visible avatar), Button (the overflow trigger, reshaped into a circle), and Dropdown Menu (the overflow panel), preconfigured for the bounded-people-list-with-overflow use case, rather than a third independent implementation of overlap layout or floating-panel behavior.",
   "tierNote": "Classified as a molecule, but its overflow panel composes Dropdown Menu (an organism, itself built from Menu + Popup) - the same deliberate, documented exception to CLAUDE.md's 'molecules compose only from atoms/primitives' rule that Tag Group already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here.",

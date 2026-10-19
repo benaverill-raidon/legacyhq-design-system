@@ -25,7 +25,9 @@ packages/ui/src/components/
 
 packages/ui/src/storybook/   # Storybook-only docs; never exported as components
   pages/        # docs pages that aren't one component's docs (Introduction/
-                # Overview, ...): MDX with <Meta title="..." />, page-local
+                # Overview, Foundations, Patterns, Templates): MDX with
+                # <Meta title="..." /> (or <Meta of={...} /> for a pattern's
+                # or template's stories), page-local
                 # components and CSS Modules beside it
   blocks/       # docs building blocks shared across pages: DocLink (internal
                 # links by sidebar title, checked by doc-link.test.ts),
@@ -291,6 +293,29 @@ token-governance.json). Current rules:
 
 Check that file before introducing a new prop name pattern.
 
+## Component status
+
+Every component has a status, authored as `status` in its `.contract.json`:
+`draft`, `beta`, `stable`, or `deprecated` (with `replacedBy`). What each
+means and the evidence it needs are `componentStatus` in
+`docs/foundations/component-registry-governance.json`. Beta needs a Docs
+page, tests, and a Figma source; Stable also needs a full contract, full
+examples, and **no known issues**.
+
+- **Known issues** are unresolved bugs, gaps, and open decisions about one
+  component: `knownIssues: [{ kind: bug | gap | decision, summary }]` in its
+  contract. Add one when you find a problem you aren't fixing; remove it when
+  it's fixed, and raise the status if the evidence now allows. Designed
+  boundaries are `knownLimitations` and don't affect status. Issues that
+  aren't about one component go in `docs/open-items.md`.
+- `component-status.test.ts` (part of `npm test`) fails if a status claims
+  more than the evidence supports, or if registry.json is stale: run
+  `npm run generate:exemplars` then `npm run generate:registry` after
+  changing a contract or examples file.
+- Status shows in each Docs page header (with the known issues), on
+  Introduction / Status, in the Overview's counts, and beside non-Stable
+  components in the sidebar (`.storybook/manager.js`).
+
 ## Component Docs pages
 
 Each component's Storybook Docs page is `<component>.mdx` beside it, written
@@ -303,8 +328,8 @@ Accessibility, API, Design tokens, Related components.
   the TypeScript props and their JSDoc through Storybook's docgen, so every
   member of `<Name>Props` needs a description comment (`@deprecated` ones are
   listed separately). The tokens table reads the component's CSS module. The
-  header's facts (category, tier, Figma source) come from registry.json.
-  Status isn't shown yet.
+  header's facts (category, tier, status, Figma source) and the component's
+  known issues come from registry.json.
 - **Live examples are stories** (`<Example of={...}>`); Do/Don't pairs render
   real components with the code beneath. Anatomy numbers parts found by their
   CSS-module classes, named as in the contract.
@@ -312,6 +337,51 @@ Accessibility, API, Design tokens, Related components.
   section order, required sections, its own component id, the anatomy part
   names against the contract, and JSDoc on every prop. Once a page is
   converted, its `.md` becomes a pointer to the MDX.
+
+## Pattern pages
+
+A pattern is guidance for combining components to solve a recurring product
+problem (Patterns / Messages and Feedback is the reference). Each is
+`storybook/pages/patterns/<pattern>.mdx` beside a `<pattern>.stories.tsx`
+of examples, written with `storybook/blocks/pattern-page.tsx`. Sections, all
+required, in order: The problem, Choosing, Examples, Rules, Accessibility,
+Do and don't, Components used.
+
+- **Examples are stories built only from system components** (and the
+  system's icons); a local CSS Module may lay them out, never restyle them.
+  Story title `Patterns/<Name>`. Mount at most one `ToastGroup` per page.
+- **Multi-line Do/Don't code samples are MDX exports** (`export const
+  sample1 = …`, then `code={sample1}`): MDX strips two spaces from
+  every line of a multi-line string written in a JSX attribute.
+- **Facts are read from the code.** "Components used" and the header's count
+  come from the stories file's imports (`?raw`); tone tables
+  (`<ToneMatrix>`) read each component's `.types.ts`. Prose cites behavior
+  the components already document, and the page's test checks the cited
+  facts against the source.
+- `pattern-pages.test.ts` (part of `npm test`) checks sections, that the
+  examples import only system components, that everything the MDX renders is
+  in "Components used", that each listed component links to a real Docs page,
+  and the cited facts. Each page also has its own `<pattern>.test.ts` for
+  the facts its prose states.
+
+## Template pages
+
+A template is a complete LegacyHQ workflow composed from system components:
+`storybook/pages/templates/<template>.mdx` beside its `.stories.tsx`, written
+with `storybook/blocks/template-page.tsx` on top of the pattern blocks.
+Sections, all required, in order: Purpose, The template, How it's built,
+Accessibility, Open questions, Components used. The same rules as pattern
+pages apply, and `pattern-pages.test.ts` checks both.
+
+- **How it's built** maps each region of the screen to the components it's
+  built with and the pattern it follows (`<Choices situation="Region"
+  use="Built with" columns={['Follows']}>`).
+- **Drafts say so.** Document Generation and Roadmap were built before their
+  designs were final (`<TemplateHeader draft>`): their product details are
+  placeholders, and every assumption is listed under Open questions. Only the
+  few facts the repo establishes (record types, task states, icons) are stated
+  as fact.
+- Templates show the content area of a screen; the system has no app shell.
 
 ## When building/editing a component
 

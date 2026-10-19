@@ -1,0 +1,253 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import {
+  Choice,
+  Choices,
+  CodeSample,
+  ComponentsUsed,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  PatternHeader,
+  PatternPage,
+  Section,
+  Subsection,
+  ToneMatrix,
+} from '../../blocks/pattern-page';
+import { Banner } from '../../../components/organisms/banner';
+import { Field } from '../../../components/molecules/field';
+import { SectionMessage } from '../../../components/organisms/section-message';
+import { TextField } from '../../../components/molecules/text-field';
+import * as Stories from './messages-and-feedback.stories';
+import storiesSource from './messages-and-feedback.stories.tsx?raw';
+
+{/* Multi-line code samples for Do and don't. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const keptSuccess = `<SectionMessage tone="success" title="Changes saved">
+  Your changes were saved.
+</SectionMessage>`;
+export const fieldError = `<Field label="Case number" state="error" message="Enter the case number as it appears on the court notice.">
+  <TextField invalid defaultValue="01482" />
+</Field>`;
+export const confirmDelete = `<ModalDialog tone="error" title="Delete this matter?" footer={
+  <ButtonGroup>
+    <Button prominence="tertiary">Cancel</Button>
+    <Button prominence="primary" tone="error">Delete matter</Button>
+  </ButtonGroup>
+}>
+  This deletes the matter, its documents, and its history. You can't undo it.
+</ModalDialog>`;
+export const okDialog = `<ModalDialog title="Saved" footer={<Button prominence="primary">OK</Button>}>
+  Your changes were saved.
+</ModalDialog>`;
+export const warnDeadline = `<SectionMessage tone="warning" title="The filing is due Friday">
+  Two documents still need signatures.
+</SectionMessage>`;
+export const errorDeadline = `<SectionMessage tone="error" title="The filing is due Friday">
+  Two documents still need signatures.
+</SectionMessage>`;
+
+<Meta of={Stories} name="Docs" />
+
+<Unstyled>
+<PatternPage>
+
+<PatternHeader title="Messages and Feedback" source={storiesSource}>
+  How LegacyHQ tells people what happened, what's wrong, and what they need to do. Six components
+  carry messages. Choose by how much of the interface the message is about, and by whether it can
+  pass, has to stay, or needs an answer. The tone is a separate choice, made the same way in each.
+</PatternHeader>
+
+<Section title="The problem">
+
+Every screen has something to report: a save that worked, a document missing a signature, a filing
+deadline, an outage. Without one rule, the same news arrives as a banner on one screen and a dialog
+on the next, and the look of a message stops telling people how much it matters.
+
+Two questions settle almost every case:
+
+- **What is the message about?** The whole page, one section, one item, or one form control. The
+  answer decides where it shows.
+- **Can it pass, does it have to stay, or does it need an answer?** A confirmation can go away on
+  its own. A problem someone has to fix stays until it's fixed. A decision stops the page until
+  it's made.
+
+</Section>
+
+<Section title="Choosing">
+
+<Choices situation="The message is about" columns={['Where it shows', 'How long it stays', 'Interrupts']}>
+  <Choice
+    situation="The whole application or page: planned maintenance, a lost connection, a change for everyone."
+    cells={['Across the top of the page or region.', 'While it applies. People dismiss it through its actions.', 'No']}
+  >
+    <DocLink to="Components/Feedback/Banner" />
+  </Choice>
+  <Choice
+    situation="One section, form, or panel: a restriction, a warning about its content, a summary of errors."
+    cells={['At the top of that section, in the flow of the page.', 'Until it’s dealt with, or until it’s dismissed when it has a dismiss button.', 'No']}
+  >
+    <DocLink to="Components/Feedback/Section Message" />
+  </Choice>
+  <Choice situation="One item, beside it: a sync state, a review count." cells={['On the line, beside the item.', 'While it’s true. More detail opens on click.', 'No']}>
+    <DocLink to="Components/Feedback/Inline Message" />
+  </Choice>
+  <Choice situation="One form control: a format, a limit, an error." cells={['Under the control.', 'Until the value is fixed.', 'No']}>
+    <DocLink to="Components/Forms/Field" />
+  </Choice>
+  <Choice
+    situation="An action that just finished, or work in the background."
+    cells={['Stacked in the bottom corner of the window.', '5 seconds, paused while it’s hovered or focused. A loading toast stays until it’s replaced.', 'No']}
+  >
+    <DocLink to="Components/Feedback/Toast Group" />
+    <DocLink to="Components/Feedback/Toast" />
+  </Choice>
+  <Choice
+    situation="A decision people have to make before going on: deleting, discarding changes."
+    cells={['Over the page, behind a backdrop.', 'Until it’s answered.', 'Yes: it blocks the page.']}
+  >
+    <DocLink to="Components/Overlays/Modal Dialog" />
+  </Choice>
+</Choices>
+
+<Subsection title="Tone is a separate choice">
+
+Each of them takes a `tone`: what the message means, named the same in every component. Not every
+component takes every tone. Banner is for what affects everyone, so it has warning and error but no
+success; confirm something that worked with a toast. The table is read from each component's
+TypeScript.
+
+<ToneMatrix components={['banner', 'section-message', 'inline-message', 'toast', 'modal-dialog']} />
+
+- **`information`:** something useful to know. Nothing is wrong.
+- **`success`:** something worked.
+- **`warning`:** something will go wrong, or needs attention, if nothing changes.
+- **`error`:** something went wrong, or is blocking. People have to act.
+- **`default`:** no status, a neutral message.
+- **`loading`:** Toast only, for work that's still running.
+
+Field marks one control with `state` instead, and pairs `error` with the control's own `invalid`:
+
+<ToneMatrix components={['field']} prop="state" />
+
+</Subsection>
+
+</Section>
+
+<Section title="Examples">
+
+<Example
+  of={Stories.AtTheirScope}
+  caption="Each message at its own scope. The maintenance Banner is about the whole page, the Section Message about the form, the Field's message about one control, and the Inline Message beside the action it reports on."
+/>
+
+<Example
+  of={Stories.Confirmations}
+  caption="Saving and uploading confirm with a toast, which leaves on its own. Deleting asks first, in a dialog named for what it does, and the toast confirms afterwards."
+/>
+
+<Example
+  of={Stories.FailureThatStays}
+  caption="Submit the filing. The failure stays beside the form, with the way to fix it, instead of passing in a toast."
+/>
+
+</Section>
+
+<Section title="Rules">
+
+- **One message per event.** Show it once, in the place that matches its scope. Don't confirm a
+  save with a toast and a Section Message.
+- **A problem people have to fix stays.** Put it beside what failed, in a Section Message or a
+  Field's message, not only in a toast that leaves after a few seconds. A toast can report background
+  work that failed when nothing on the screen needs fixing. For a form's errors, see
+  <DocLink to="Patterns/Forms and Validation" />.
+- **Toast actions are shortcuts.** Anything a toast offers, such as Undo, has to be possible
+  somewhere else too, because the toast goes away.
+- **Ask in a dialog only when the answer is needed now.** Name the confirm button for what it does,
+  such as "Delete matter", not "OK". A destructive action takes `tone="error"` on the dialog and on
+  its confirm button.
+- **Say what happened, then what to do.** The title says it in words, and the description or an
+  action says what comes next. The icon and color repeat the tone; they never carry it alone.
+- **Tone is meaning, not emphasis.** Use `error` only when something has gone wrong. A deadline
+  that's coming is a `warning`.
+
+</Section>
+
+<Section title="Accessibility">
+
+- Banner and Section Message are polite live regions (`role="status"`) by default, so a message
+  that appears is read out without moving focus. Use `role="alert"` only for an urgent error that
+  has to interrupt.
+- Toast Group announces each toast through one polite live region. Moving focus into the stack
+  pauses the timers, so keyboard users can reach a toast's actions before it goes.
+- Inline Message isn't a live region, so a change to it isn't read out. When people need to hear
+  the change as it happens, report it with a toast too.
+- Field's message is the control's description (`aria-describedby`), and `state="error"` sets
+  `aria-invalid` on the control.
+- Modal Dialog moves focus inside when it opens, keeps it there, and returns it to where it was when
+  it closes. Escape closes it.
+- Status icons are decorative. Banner, Section Message, Inline Message, and Toast read the tone's
+  name before the message (`statusLabel`), so the title doesn't repeat the tone, but it still has to
+  say what happened.
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Confirm a save with a toast, which leaves on its own." code={`toast.success('Changes saved');`} />
+<Dont caption="Keep a success message on the page after the work is done." code={keptSuccess}>
+  <SectionMessage tone="success" title="Changes saved">
+    Your changes were saved.
+  </SectionMessage>
+</Dont>
+<Do
+  caption="Put an error about one control under that control."
+  code={fieldError}
+>
+  <Field label="Case number" state="error" message="Enter the case number as it appears on the court notice.">
+    <TextField invalid defaultValue="01482" />
+  </Field>
+</Do>
+<Dont caption="Report one control's error across the whole page." code={`<Banner tone="error">The case number isn't valid.</Banner>`}>
+  <Banner tone="error">The case number isn't valid.</Banner>
+</Dont>
+<Do
+  caption="Ask only when the answer is needed now, with a button named for what it does."
+  code={confirmDelete}
+/>
+<Dont
+  caption="Stop the page for news that needs no answer."
+  code={okDialog}
+/>
+<Do
+  caption="Warn about what will go wrong if nothing changes."
+  code={warnDeadline}
+>
+  <SectionMessage tone="warning" title="The filing is due Friday">
+    Two documents still need signatures.
+  </SectionMessage>
+</Do>
+<Dont
+  caption="Use the error tone for emphasis, before anything has gone wrong."
+  code={errorDeadline}
+>
+  <SectionMessage tone="error" title="The filing is due Friday">
+    Two documents still need signatures.
+  </SectionMessage>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Components used">
+
+Every component the examples on this page are built from, read from their source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</PatternPage>
+</Unstyled>

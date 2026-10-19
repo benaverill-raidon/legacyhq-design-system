@@ -1,7 +1,13 @@
 {
   "name": "LinkButton",
   "category": "navigation",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Takes the legacy `appearance` while Button uses `prominence` for the same axis, pending its Figma revision (tone-is-meaning)."
+    }
+  ],
   "purpose": "Navigation styled as a button.",
   "intent": "Combine anchor semantics with Button visuals.",
   "figmaSource": {

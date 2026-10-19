@@ -1,7 +1,13 @@
 {
   "name": "ProgressIndicator",
   "category": "navigation",
-  "status": "specified",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "The inverse dot can't be seen on surfaces that stay dark. Needs a token, created in Figma first."
+    }
+  ],
   "purpose": "Show the user current position within a finite sequence of steps.",
   "intent": "Provide a compact representation of relative journey position, with optional direct step selection.",
   "figmaSource": {

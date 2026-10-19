@@ -1,7 +1,13 @@
 {
   "name": "Icon",
   "category": "foundations",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Not yet reconciled with Figma: 16 Figma-only and 2 code-only glyph names, a duplicate `menu`, 4 glyphs drawn differently, the wrapper's `Size=sm` default, and `incapacitated` = `life-insurance-policy`. Aligned from Figma first."
+    }
+  ],
   "purpose": "Render standardized icons throughout the design system.",
   "intent": "Provide one consistent icon system - sizing, spacing, and color inheritance - that every generated glyph shares, instead of each icon reinventing its own props.",
   "sourceFiles": {

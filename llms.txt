@@ -17,7 +17,8 @@ rules, and the task→file routing table that says which of a component's up to
   prop-naming rules. Load when adding/renaming a prop.
 - [registry.json](docs/components/registry.json): generated, normalized
   cross-component index (props/anatomy/sizes/slots/variants for all 58
-  components in one consistent shape). Load for structural queries across
+  components in one consistent shape, plus each one's status, known issues,
+  and the evidence behind its status). Load for structural queries across
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.
@@ -122,6 +123,32 @@ the rules are in the `classification` block of
 - [time-picker](docs/components/organisms/time-picker/time-picker.md)
 - [toast](docs/components/organisms/toast/toast.md)
 - [toast-group](docs/components/organisms/toast-group/toast-group.md)
+
+## Patterns (4)
+
+Guidance for combining components, as Storybook pages: which component to use when, rules,
+accessibility, and examples built from system components.
+
+- [messages-and-feedback](packages/ui/src/storybook/pages/patterns/messages-and-feedback.mdx):
+  choosing Banner, Section Message, Inline Message, Field's message, Toast, or Modal Dialog;
+  tone across them.
+- [forms-and-validation](packages/ui/src/storybook/pages/patterns/forms-and-validation.mdx):
+  choosing the control for an input; Form, Field, and required; showing errors and the summary;
+  submitting.
+- [loading-and-empty-states](packages/ui/src/storybook/pages/patterns/loading-and-empty-states.mdx):
+  Skeleton, Spinner, Progress Bar, busy controls, loading toasts; Empty State and failed loads.
+- [collections](packages/ui/src/storybook/pages/patterns/collections.mdx): Table, Card, or Key
+  Value List; search, sort, filter chips, paging; selection, bulk and row actions, editing in place.
+
+## Templates (2, drafts)
+
+Complete workflows composed from system components, as Storybook pages. Both were built ahead of
+their designs: the product details are placeholders, listed under each page's Open questions.
+
+- [document-generation](packages/ui/src/storybook/pages/templates/document-generation.mdx): a
+  guided flow for one matter: choose documents, confirm details, generate, review and send.
+- [roadmap](packages/ui/src/storybook/pages/templates/roadmap.mdx): a roadmap's tasks by stage,
+  their status, completion, filters, and editing in place.
 
 ## Optional
 

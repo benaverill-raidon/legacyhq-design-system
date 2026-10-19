@@ -1,6 +1,7 @@
 {
   "name": "Avatar",
   "category": "data-display",
+  "status": "beta",
   "purpose": "Show who a person or a team is: their photo, or shared fallback artwork when there isn't one, with at most one presence or status badge.",
   "intent": "A compact, circular identity marker that sits beside person-related content, or acts as a button for picking or filtering by person.",
   "nativeElement": "span (role=\"img\"), or button when isInteractive or onClick is set",

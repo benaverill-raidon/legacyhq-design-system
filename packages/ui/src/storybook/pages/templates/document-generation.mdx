@@ -1,0 +1,230 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import { Code } from '../../blocks/doc-page';
+import { Choice, Choices, ComponentsUsed, Example, Section, Subsection, TemplateHeader, TemplatePage } from '../../blocks/template-page';
+import * as Stories from './document-generation.stories';
+import storiesSource from './document-generation.stories.tsx?raw';
+
+<Meta of={Stories} name="Docs" />
+
+<Unstyled>
+<TemplatePage>
+
+<TemplateHeader title="Document Generation" source={storiesSource} draft>
+  Drawing up a package of documents for one matter from the firm's templates: choose the documents,
+  confirm the details they're drawn up with, generate them, then review the package and send it for
+  signature. A draft, composed from the system's components ahead of the designs.
+</TemplateHeader>
+
+<Section title="Purpose">
+
+LegacyHQ links records as accounts, people, matters, roadmaps, and documents, and the system already
+has a place for this work: icons for document generation, document templates, and signatures, a
+Progress Bar whose own examples generate a document package, and a Split Button that offers "Create
+from template". This template puts those pieces together as one workflow, for one matter, in a guided
+flow with named steps, which is what Progress Tracker is for.
+
+**This is a draft.** It was built before the designs for document generation were finished, so its
+content is placeholder: the steps, the documents in the package, the details they need, the statuses,
+and who signs. It shows how the system's components and patterns would carry the workflow, not how
+LegacyHQ works. Everything it assumes is listed under Open questions, to be settled against the
+designs.
+
+</Section>
+
+<Section title="The template">
+
+<Example
+  of={Stories.GenerateAPackage}
+  caption="The Lee estate plan. Continue with the package as chosen, then generate: the successor trustee isn't in the matter, so the summary takes focus and links to the field. Fill it in and generate again. The bar counts the documents as they're made, and the review lists them, with one that needs attention. Send them for signature, which asks first. Use the tracker or Back to return to an earlier step: what you entered is kept."
+/>
+
+<Example
+  of={Stories.GenerationFailsPartway}
+  caption="Generate the documents. The service stops after the first three: the error stays on the page, the three that were generated are kept, and trying again generates only the other two."
+/>
+
+<Example
+  of={Stories.MatterWithoutAClient}
+  caption="The Nguyen estate plan has no client, so there's no one to draw the documents up for. The tracker is disabled, and the message says what to add and where."
+/>
+
+</Section>
+
+<Section title="How it's built">
+
+The screen is the content area only, from the breadcrumbs down. Each step is one region at a time,
+under the tracker, and every value people enter is held above the steps, so going back keeps it.
+
+<Choices situation="Region" use="Built with" columns={['Follows']}>
+  <Choice situation="Where the page sits: the matter it belongs to, and the page heading." cells={['No pattern yet.']}>
+    <DocLink to="Components/Navigation/Breadcrumbs" />
+  </Choice>
+  <Choice
+    situation="The steps: Documents, Details, Generate, Review. Steps already done link back to themselves."
+    cells={[<>No pattern yet. Progress Tracker’s own guidance: “a guided flow with named steps”, named for the flow with <Code>aria-label</Code>.</>]}
+  >
+    <DocLink to="Components/Navigation/Progress Tracker" />
+  </Choice>
+  <Choice
+    situation="Choose documents: any number from a short set of templates, at least one."
+    cells={[<><DocLink to="Patterns/Forms and Validation" />. A choice in a form is a Checkbox Group, not Table selection, which is for acting on records.</>]}
+  >
+    <DocLink to="Components/Forms/Form" />
+    <DocLink to="Components/Forms/Checkbox" />
+    <DocLink to="Components/Actions/Button" />
+  </Choice>
+  <Choice
+    situation="Confirm the details: prefilled from the matter, with only the fields the chosen documents use."
+    cells={[<><DocLink to="Patterns/Forms and Validation" />: checked on submit, a summary at the top that takes focus and links to each field, and each field’s own error.</>]}
+  >
+    <DocLink to="Components/Forms/Form" />
+    <DocLink to="Components/Forms/Field" />
+    <DocLink to="Components/Forms/Text Field" />
+    <DocLink to="Components/Feedback/Section Message" />
+    <DocLink to="Components/Navigation/Link" />
+  </Choice>
+  <Choice
+    situation="Generate: work that can be counted, one document at a time."
+    cells={[<><DocLink to="Patterns/Loading and Empty States" />: measured work gets a Progress Bar, with the count beside it and in <Code>getValueText</Code>.</>]}
+  >
+    <DocLink to="Components/Feedback/Progress Bar" />
+  </Choice>
+  <Choice
+    situation="Generation that fails partway: what was generated, what wasn't, and how to try again."
+    cells={[<><DocLink to="Patterns/Messages and Feedback" />: a failure people have to deal with stays beside what failed. <DocLink to="Patterns/Loading and Empty States" />: a failure is an error, with a way to try again.</>]}
+  >
+    <DocLink to="Components/Feedback/Section Message" />
+    <DocLink to="Components/Data Display/Table" />
+    <DocLink to="Components/Data Display/Label" />
+  </Choice>
+  <Choice
+    situation="Review the package: the generated documents, each with its status and its actions."
+    cells={[<><DocLink to="Patterns/Collections" />: records compared across the same fields are a Table, each opened from a strong Link, its status a Label, its actions behind a trigger named for it.</>]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+    <DocLink to="Components/Data Display/Label" />
+    <DocLink to="Components/Navigation/Link" />
+    <DocLink to="Components/Actions/Dropdown Menu" />
+    <DocLink to="Components/Actions/Icon Button" />
+  </Choice>
+  <Choice
+    situation="A document that needs attention before it’s signed."
+    cells={[<><DocLink to="Patterns/Messages and Feedback" />: a warning about the content of one section, at its top, with one action.</>]}
+  >
+    <DocLink to="Components/Feedback/Section Message" />
+    <DocLink to="Components/Navigation/Link Button" />
+  </Choice>
+  <Choice
+    situation="The next action: send the package for signature, which can’t be taken back."
+    cells={[<><DocLink to="Patterns/Messages and Feedback" />: ask first in a dialog, with a button named for what it does, then confirm with a toast.</>]}
+  >
+    <DocLink to="Components/Actions/Button Group" />
+    <DocLink to="Components/Overlays/Modal Dialog" />
+    <DocLink to="Components/Feedback/Toast Group" />
+  </Choice>
+  <Choice
+    situation="A matter that doesn’t have what the documents need: no client."
+    cells={[<><DocLink to="Patterns/Messages and Feedback" />: a restriction on what people can do in this section, with the way to lift it.</>]}
+  >
+    <DocLink to="Components/Feedback/Section Message" />
+    <DocLink to="Components/Navigation/Link Button" />
+  </Choice>
+</Choices>
+
+<Subsection title="Choices the components made">
+
+- **Going back keeps everything.** The chosen documents and the details live above the steps, not in
+  them. Changing either and generating again makes the whole package again.
+- **Only the details the documents use.** Unchecking the will removes the executor from the details
+  step, and each field's helper text names the documents that use it. A blank field from the matter
+  says "Not in the matter yet."
+- **Generate is a step, but not a link back.** Progress Tracker links only the steps before the
+  current one, and only when they have an `href`. Generate has none, since returning to it means
+  confirming the details again. The tracker has no links at all while the documents are generating,
+  or once they've been sent.
+- **The result arrives as the next step.** When the last document is generated, the flow moves to
+  Review, and a toast says how many were made, as background work that finished does in
+  <DocLink to="Patterns/Messages and Feedback" />.
+
+</Subsection>
+
+</Section>
+
+<Section title="Accessibility">
+
+- **Headings.** The page heading, then one heading per step, then the table's title. In the product
+  they're an `h1`, an `h2`, and an `h3`. The examples here start at `h3`, so they sit inside this
+  page's outline. Form's title isn't a heading, so each step's heading is the screen's own.
+- **Landmarks.** Breadcrumbs is a `nav` named "Breadcrumb", and Progress Tracker a `nav` named for the
+  flow, "Document generation". Each step is a region named by its heading. The Review table is a
+  native `table`, named by its title.
+- **Where the step is.** The tracker's steps are an ordered list, so screen readers hear how many
+  there are, and the current one is marked `aria-current="step"`. Steps already done are links, in
+  the tab order; the others are text.
+- **Focus between steps.** Continue, Back, a tracker link, and the end of generation each move focus
+  to the new step's heading, which takes `tabIndex={-1}`, so screen readers start at the top of the
+  step and keyboard users don't land at the bottom of the page. Focus moves only after something
+  people did, never on first load.
+- **Focus after a failed submit.** It moves to the summary, which is a polite live region but may not
+  be read out when it appears with its content already in it. Each line links to its field and moves
+  focus there. Checkbox Group's `required` adds hidden text to its legend but makes no checkbox
+  required, so the step checks for at least one document itself.
+- **Focus after a failure.** When generation stops partway, focus moves to the error, whose action
+  tries again. Trying again removes the message, so focus goes back to the step's heading.
+- **Progress.** The Progress Bar is named for the work, and its value is read as "3 of 5 documents
+  generated" through `getValueText`. It isn't a live region, so each document isn't announced as it's
+  made; the result is, by the toast and by focus moving to Review. The same count is shown beside the
+  bar.
+- **The confirmation.** Modal Dialog moves focus inside when it opens and returns it when it closes.
+  After sending, the Send button is gone, so focus moves on to the step's heading, and the toast
+  confirms through Toast Group's polite live region.
+- **Row actions.** Each document's action trigger is named for it, such as "Actions for Last will and
+  testament".
+
+</Section>
+
+<Section title="Open questions">
+
+What the designs have to settle. Each is a placeholder in the template.
+
+- **Where the flow starts and ends.** From the matter, perhaps from a Split Button's "Create from
+  template"? Does it end back on the matter, or on its documents?
+- **The steps.** Four steps, named Documents, Details, Generate, and Review. Is Generate a step of its
+  own, or does it happen on Review? Is there a Cancel, and does leaving midway keep a draft?
+- **Which documents.** The six templates, the five in the estate plan package, and their names, are
+  invented. Where does the list come from: the matter's type, the firm's library, the state? A long
+  list needs search or a Select instead of a Checkbox Group (see <DocLink to="Patterns/Collections" />).
+  Are templates grouped, versioned, or chosen per client in a joint plan?
+- **Which details, and where they're saved.** The seven details, which document uses which, and that
+  all are required. Do edits here save back to the matter, or apply only to these documents? Can a
+  document be generated with a blank to fill in later?
+- **What a matter needs before generating.** Only a client, here. What else blocks it, and where do
+  people fix it?
+- **How generation runs.** One document at a time, counted on a bar. Can people leave the page while
+  it runs, or cancel it? Does going back and generating again redo every document, or only the ones
+  whose details changed?
+- **When it fails partway.** Are the generated documents kept, and does trying again redo only the
+  rest? Can people go on to Review with the documents that did generate?
+- **Statuses.** Ready, Needs review, and Awaiting signature, and their tones. What else can a generated
+  document be: a draft, edited, signed?
+- **Needs review.** Who flags a document (the template, the generator, an attorney), what for, and
+  does it stop the package from being sent?
+- **Row actions.** Download and Regenerate. Is there a preview, editing in place or in Word, or
+  removing a document from the package? What file format are the documents?
+- **Sending for signature.** To the client only, or to witnesses and a notary too? Through which
+  e-signature service? Does it ask first, and what happens after: a task, a roadmap step, the
+  documents filed on the matter?
+
+</Section>
+
+<Section title="Components used">
+
+Every component the template is built from, read from its source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</TemplatePage>
+</Unstyled>

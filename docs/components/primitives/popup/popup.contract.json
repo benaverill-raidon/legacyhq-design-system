@@ -1,7 +1,21 @@
 {
   "name": "Popup",
   "category": "overlays",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "No `aria-label` prop."
+    },
+    {
+      "kind": "bug",
+      "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
+    },
+    {
+      "kind": "gap",
+      "summary": "Alignment uses compound physical values (`topLeft`) where Table and Form use logical `start` | `end` (shared-value-names)."
+    }
+  ],
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
   "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
   "sourceFiles": {

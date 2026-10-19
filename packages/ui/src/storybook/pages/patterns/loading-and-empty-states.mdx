@@ -1,0 +1,368 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import { Code } from '../../blocks/doc-page';
+import {
+  Choice,
+  Choices,
+  ComponentsUsed,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  PatternHeader,
+  PatternPage,
+  Section,
+  Subsection,
+} from '../../blocks/pattern-page';
+import { Button } from '../../../components/atoms/button';
+import { Spinner } from '../../../components/atoms/spinner';
+import { Skeleton } from '../../../components/molecules/skeleton';
+import { EmptyState } from '../../../components/organisms/empty-state';
+import { SectionMessage } from '../../../components/organisms/section-message';
+import { Table } from '../../../components/organisms/table';
+import * as Stories from './loading-and-empty-states.stories';
+import storiesSource from './loading-and-empty-states.stories.tsx?raw';
+
+{/* Multi-line code samples for Do and don't, in the order they appear. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Skeleton label="Loading the matter summary" style={{ inlineSize: '14rem' }} />
+<Skeleton style={{ inlineSize: '18rem' }} />
+<Skeleton style={{ inlineSize: '8rem' }} />`;
+export const sample2 = `<Table
+  title="Matters"
+  columns={columns}
+  data={[]}
+  searchable
+  defaultSearchValue="Hendricks"
+  empty={
+    <EmptyState
+      heading="No matters match “Hendricks”"
+      actions={<Button prominence="tertiary">Clear search</Button>}
+    >
+      Check the spelling, or search for the client’s name.
+    </EmptyState>
+  }
+/>`;
+export const sample3 = `<SectionMessage
+  tone="error"
+  title="We couldn’t load the documents"
+  actions={<Button size="sm" onClick={reload}>Try again</Button>}
+>
+  The document service didn’t respond. Check your connection, then try again.
+</SectionMessage>`;
+export const sample4 = `<EmptyState heading="No documents">
+  The documents couldn’t be loaded.
+</EmptyState>`;
+
+<Meta of={Stories} name="Docs" />
+
+<Unstyled>
+<PatternPage>
+
+<PatternHeader title="Loading and Empty States" source={storiesSource}>
+  What a screen shows while its content is on the way, and when there's nothing to show. Choose the
+  loading state by what you know about what's coming: its shape, how much is left, or neither. Choose
+  what an empty space says by why it's empty.
+</PatternHeader>
+
+<Section title="The problem">
+
+Every screen waits for something: a matter's documents, a search, an upload, a save. Sometimes what
+arrives is nothing: a new matter with no documents yet, or a search that matched no one. Without one
+rule, the same wait is a skeleton on one screen and a spinner on the next, the page jumps when the
+content lands, and an empty list looks the same as one that failed to load.
+
+Three questions settle almost every case:
+
+- **What do you know about what's coming?** Its shape, how much of it is left, or neither. The
+  answer picks Skeleton, Progress Bar, or Spinner.
+- **Did someone just ask for it?** The control they pressed shows that it's busy. Work they don't
+  need to watch goes to a toast, so they can carry on.
+- **When nothing comes, why?** Nothing has been added yet, nothing matched, or the load failed. Each
+  says something different, and a failure is an error, not an empty state.
+
+</Section>
+
+<Section title="Choosing">
+
+<Choices situation="While this is loading" columns={['What shows', 'Holds the layout', 'Announced']}>
+  <Choice
+    situation="Content whose shape you know: a list, a summary, a card, a profile."
+    cells={[
+      'Placeholder shapes sized like the content, pulsing.',
+      'Yes, so nothing jumps when the content arrives.',
+      <>Nothing, unless one has a <Code>label</Code>: then a polite status. Label one, not each.</>,
+    ]}
+  >
+    <DocLink to="Components/Feedback/Skeleton" />
+  </Choice>
+  <Choice
+    situation="A table's rows."
+    cells={[
+      <>The headers, over rows of skeletons: <Code>skeletonRowCount</Code>, 5 by default.</>,
+      'Yes.',
+      <><Code>aria-busy</Code> on the table.</>,
+    ]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice
+    situation="Work you can measure: an upload, an import, a document package being generated."
+    cells={[
+      <>A bar or a ring filled to <Code>value</Code>, from 0 to 100. There's no indeterminate mode.</>,
+      'It stands in for the work, not for the result.',
+      <>A progress bar named by <Code>label</Code>, with the value as a percentage or <Code>getValueText</Code>. Changes aren't announced.</>,
+    ]}
+  >
+    <DocLink to="Components/Feedback/Progress Bar" />
+  </Choice>
+  <Choice
+    situation="A wait in one place whose result has no known shape: search results, a check that's running."
+    cells={[
+      'An arc turning in the color of the text around it, beside text that says what’s loading.',
+      'No. The result takes its own space when it arrives.',
+      <>Its <Code>label</Code> as a polite status. Without one, nothing, so put the text beside it.</>,
+    ]}
+  >
+    <DocLink to="Components/Feedback/Spinner" />
+  </Choice>
+  <Choice
+    situation="An action someone just started from a control: saving, submitting, opening."
+    cells={[
+      <>A Spinner over the label, with <Code>isLoading</Code>. Clicks are ignored until it’s done.</>,
+      'Yes. The control keeps its size, and the label keeps its space.',
+      <><Code>aria-busy</Code>. The label stays the name, and the control stays focusable.</>,
+    ]}
+  >
+    <DocLink to="Components/Actions/Button" />
+    <DocLink to="Components/Navigation/Link Button" />
+  </Choice>
+  <Choice
+    situation="Work that runs in the background while people carry on: generating, syncing, a long import."
+    cells={[
+      <>A loading toast, from <Code>toast.loading</Code>, until it’s replaced with the result.</>,
+      'Nothing on the page moves.',
+      'Its title, through Toast Group’s polite live region. Loading reads no status word.',
+    ]}
+  >
+    <DocLink to="Components/Feedback/Toast Group" />
+    <DocLink to="Components/Feedback/Toast" />
+  </Choice>
+</Choices>
+
+<DocLink to="Components/Forms/Switch" /> and <DocLink to="Components/Actions/Icon Button" /> take
+`isLoading` too, and <DocLink to="Components/Actions/Split Button" /> passes it to its main action.
+<DocLink to="Components/Actions/Menu" /> and <DocLink to="Components/Actions/Dropdown Menu" /> have
+their own `loading` row and `emptyMessage`. For the toast itself, how long it stays and what it says,
+see <DocLink to="Patterns/Messages and Feedback" />.
+
+<Subsection title="When there's nothing to show">
+
+What an empty space says depends on why it's empty. Empty State's `appearance` only sets its
+background (`inherited`, the default, or `informative`), so the kind of empty is in the words and
+the action you give it.
+
+<Choices situation="It's empty because" columns={['Say', 'Offer']}>
+  <Choice
+    situation="Nothing has been added yet: a new matter, a first visit."
+    cells={['What will appear here once there is something.', 'The action that adds the first one, such as “Upload a document”.']}
+  >
+    <DocLink to="Components/Feedback/Empty State" />
+  </Choice>
+  <Choice
+    situation="A search or filters matched nothing."
+    cells={['That nothing matched, naming the search.', <>A way to clear the search or the filters. See <DocLink to="Patterns/Collections" />.</>]}
+  >
+    <DocLink to="Components/Feedback/Empty State" />
+  </Choice>
+  <Choice situation="Everything has been dealt with: no new activity, no tasks left." cells={['That it’s done.', 'Optionally, a way to see what was there, such as “View all activity”.']}>
+    <DocLink to="Components/Feedback/Empty State" />
+  </Choice>
+  <Choice
+    situation="The content failed to load."
+    cells={[<>What failed, and why if you know, with <Code>tone="error"</Code>. It isn't empty: it's an error.</>, 'A way to try again.']}
+  >
+    <DocLink to="Components/Feedback/Section Message" />
+  </Choice>
+</Choices>
+
+In a table, pass the Empty State as Table's `empty`. Its default, "No results" over "There is
+nothing to show here yet.", doesn't say which kind of empty it is.
+
+</Subsection>
+
+</Section>
+
+<Section title="Examples">
+
+<Example
+  of={Stories.SkeletonThenContent}
+  caption="The matter summary has a known shape, so skeletons hold it while it loads. One skeleton is labelled, so screen readers hear “Loading the matter summary” once. Refresh to see it again."
+/>
+
+<Example
+  of={Stories.BusyControls}
+  caption="Save changes is busy while it saves, at the same size, and confirms with a toast. Generating the document package runs in the background, in a loading toast that's replaced with the result."
+/>
+
+<Example
+  of={Stories.UploadProgress}
+  caption="The upload can be counted, so a Progress Bar shows it, with the count beside it and in its value text. The signature check that follows can't be measured, so a Spinner sits beside text that says what's running."
+/>
+
+<Example
+  of={Stories.NothingYetOrNoResults}
+  caption="Two kinds of empty. The new matter has no documents yet, and offers to upload the first. The search matched no matters, names the search, and offers to clear it."
+/>
+
+<Example
+  of={Stories.LoadFailed}
+  caption="The table loads with skeleton rows under its headers. The first load fails, and an error says so, with a way to try again, instead of an empty table."
+/>
+
+</Section>
+
+<Section title="Rules">
+
+- **Hold the layout when you know it.** Size skeletons like the content they stand in for, so
+  nothing jumps when it arrives. When you don't know the shape, use a Spinner, not skeletons that
+  guess.
+- **Show the wait where the result will appear.** Skeletons stand where the content will be, a busy
+  control where people pressed, a toast for work they don't need to watch. Show one of them for each
+  wait, not two.
+- **Mark the control that started it busy.** Set `isLoading` on the Button or Link Button: it keeps
+  its size and its label, and ignores a second click. Don't swap the label for "Saving…", and don't
+  also make it look disabled.
+- **Only measured work gets a Progress Bar.** Set `value` from real progress, and put a count in
+  `getValueText`. With no real number, use a Spinner: a made-up value misleads.
+- **Background work goes in a toast that's replaced.** Start it with `toast.loading`, which stays
+  until it's updated, then call `toast.success` or `toast.error` with the same `id`, so the result
+  takes its place.
+- **Say which kind of empty it is.** Nothing yet says what will appear and offers to add the first.
+  No results names the search and offers to clear it. Never leave a bare "No data".
+- **A load that failed is an error, not an empty state.** Show a Section Message with
+  `tone="error"` in place of the content, with a way to try again. An Empty State would say there's
+  simply nothing there.
+
+</Section>
+
+<Section title="Accessibility">
+
+- Skeleton and Spinner are hidden from assistive technology unless they have a `label`. With one,
+  they're a polite live region (`role="status"`) that reads it. Label one skeleton in a region, not
+  each, and leave a Spinner unlabelled only beside visible text that says what's loading.
+- Button and Link Button set `aria-busy` and `aria-disabled` while `isLoading`, and stay focusable,
+  so focus doesn't jump while the action runs. The label stays the accessible name. Switch and Icon
+  Button set `aria-busy` too.
+- Table sets `aria-busy` while `loading`. Its skeleton rows are hidden from assistive technology.
+- Progress Bar has `role="progressbar"`, named by `label`, with its value read as a percentage or as
+  `getValueText`. It isn't a live region, so changes aren't announced on their own. Show the count
+  beside it for sighted people.
+- A loading toast is announced through Toast Group's polite live region. Loading reads no status
+  word before the title, so the title has to say what's running.
+- Empty State isn't a live region, and Table doesn't announce its rows running out. When a search
+  empties the results, announce it from a region that stays on the page, such as a status message
+  with the result count.
+- Section Message is a polite live region by default, so a failure that appears in place of the
+  content is read out.
+- With reduced motion, Skeleton stops pulsing, Spinner stops turning, and Progress Bar's fill
+  changes at once. The shapes stay, so the state is still shown.
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Hold a known layout with skeletons sized like its content, one of them labelled."
+  code={sample1}
+>
+  <div style={{ display: 'grid', gap: 'var(--spacing-sm)' }}>
+    <Skeleton label="Loading the matter summary" style={{ inlineSize: '14rem' }} />
+    <Skeleton style={{ inlineSize: '18rem' }} />
+    <Skeleton style={{ inlineSize: '8rem' }} />
+  </div>
+</Do>
+<Dont caption="Stand one Spinner in for a layout you know. The page jumps when the content arrives." code={`<Spinner label="Loading the matter summary" />`}>
+  <Spinner label="Loading the matter summary" />
+</Dont>
+<Do caption="Keep the button and its label while it saves. It holds its size, and it's marked busy." code={`<Button type="submit" prominence="primary" isLoading>Save changes</Button>`}>
+  <Button prominence="primary" isLoading>
+    Save changes
+  </Button>
+</Do>
+<Dont
+  caption="Swap the label for “Saving…” and disable the button. It changes width, leaves the tab order, and looks unavailable, not busy."
+  code={`<Button type="submit" prominence="primary" disabled>Saving…</Button>`}
+>
+  <Button prominence="primary" disabled>
+    Saving…
+  </Button>
+</Dont>
+<Do
+  caption="Name the search that found nothing, and offer to clear it."
+  code={sample2}
+>
+  <Table
+    title="Matters"
+    headingLevel={4}
+    columns={[
+      { key: 'matter', header: 'Matter' },
+      { key: 'client', header: 'Client' },
+    ]}
+    data={[]}
+    searchable
+    defaultSearchValue="Hendricks"
+    empty={
+      <EmptyState heading="No matters match “Hendricks”" headingLevel={5} actions={<Button prominence="tertiary">Clear search</Button>}>
+        Check the spelling, or search for the client’s name.
+      </EmptyState>
+    }
+  />
+</Do>
+<Dont
+  caption="Leave a search’s empty table on Table’s default text, which doesn’t say that the search found nothing."
+  code={`<Table title="Matters" columns={columns} data={[]} searchable defaultSearchValue="Hendricks" />`}
+>
+  <Table
+    title="Matters"
+    headingLevel={4}
+    columns={[
+      { key: 'matter', header: 'Matter' },
+      { key: 'client', header: 'Client' },
+    ]}
+    data={[]}
+    searchable
+    defaultSearchValue="Hendricks"
+  />
+</Dont>
+<Do
+  caption="Show a load that failed as an error, in place of the content, with a way to try again."
+  code={sample3}
+>
+  <SectionMessage tone="error" title="We couldn’t load the documents" actions={<Button size="sm">Try again</Button>}>
+    The document service didn’t respond. Check your connection, then try again.
+  </SectionMessage>
+</Do>
+<Dont
+  caption="Show the failure as an Empty State. It reads as though the matter simply has no documents."
+  code={sample4}
+>
+  <EmptyState heading="No documents" headingLevel={4}>
+    The documents couldn’t be loaded.
+  </EmptyState>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Components used">
+
+Every component the examples on this page are built from, read from their source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</PatternPage>
+</Unstyled>

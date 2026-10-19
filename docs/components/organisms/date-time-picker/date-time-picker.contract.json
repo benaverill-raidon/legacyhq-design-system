@@ -1,7 +1,13 @@
 {
   "name": "DateTimePicker",
   "category": "forms",
-  "status": "in-progress",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Can't pass its halves' labels through (dialogLabel, amLabel, pmLabel, Confirm and Cancel, column and month names)."
+    }
+  ],
   "purpose": "Capture a date and a time together in one control.",
   "intent": "A Date Picker and a Time Picker joined into a single field over one Date value.",
   "figmaSource": {

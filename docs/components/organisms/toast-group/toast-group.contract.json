@@ -1,7 +1,21 @@
 {
   "name": "ToastGroup",
   "category": "feedback",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "Dismissing a toast from the keyboard leaves focus on the page."
+    },
+    {
+      "kind": "gap",
+      "summary": "The helper is `toast.info()`, which sets the `information` tone; by the one-name rule it would be `toast.information()`, with `info` kept as an alias."
+    },
+    {
+      "kind": "decision",
+      "summary": "Toast's page says to turn dismissing off for a loading toast, but `toast.loading()` doesn't, and an `isDismissible: false` loading toast passes it on to its result."
+    }
+  ],
   "purpose": "Stack transient Toasts and provide the imperative toast() API.",
   "intent": "Pin a bottom-right stack of Toasts that collapses in a 3D pile and expands into a vertical list on hover, with auto-dismiss, pause-on-hover, and swipe-to-dismiss.",
   "figmaSource": {

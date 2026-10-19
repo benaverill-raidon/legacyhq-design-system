@@ -3,7 +3,9 @@
 What's still to decide or do after the Storybook docs work on `storybook-documentation`
 (Oct 2026). Remove an item once it's settled, and record the decision where its rule lives.
 
-Some open items are already tracked next to their rules, and aren't repeated here:
+**Issues with one component are its `knownIssues`**, in its `contract.json`: they hold it below
+Stable, and show on its Docs page and on Introduction / Status, which lists them all. This file
+keeps what isn't about one component. Some of that is tracked next to its rules too:
 
 - `docs/foundations/token-governance.json`: each family's `openFindings` (dimensions, elevation,
   motion, icons), e.g. raw row heights and panel widths, the Figma icon reconciliation.
@@ -19,10 +21,14 @@ Some open items are already tracked next to their rules, and aren't repeated her
 2. Introduction / Overview: done.
 3. Foundations (Color, Typography, Spacing, Radius, Elevation, Motion, Icons): done.
 4. Component Docs page standard: done, for all 56 components.
-5. **Patterns: next.** Agree what it covers before writing pages.
-6. Templates.
-7. Status / maturity vocabulary: deferred until after Overview, and still waiting. Pages show no
-   status yet.
+5. Patterns: done. Messages and Feedback (the reference page), Forms and Validation, Loading and
+   Empty States, Collections.
+6. Templates: drafts of Document Generation and Roadmap, built ahead of their designs. Revise
+   them against the designs when those are done; each page lists its assumptions under Open
+   questions.
+7. Status: done. Draft, Beta, Stable, Deprecated, authored in each contract and checked against the
+   evidence (componentStatus in component-registry-governance.json). 15 Stable, 43 Beta.
+8. **Next: every held item at once**: the known issues on Introduction / Status, and this file.
 
 ## Figma (publish and check)
 
@@ -30,58 +36,40 @@ Some open items are already tracked next to their rules, and aren't repeated her
   descriptions, and `spacing/075`.
 - Publish **Components v1.0.0**: the vocabulary renames (tone, context, information, inverse,
   taupe, round, Modal Dialog sm–xl).
-- Table header fill: the CSS uses `color-elevation-surface-sunken-default`, while the contract and
-  spec say `elevation/surface/default`. Read the fill on node `2956:29798`.
-- Field: the status icon is centered against a message that wraps. Is that intended?
+- The Figma checks and token requests that belong to one component (Table's header fill, Field's
+  status icon, the focus-ring offset and inverse ring, Toast's loading title, Progress Indicator's
+  inverse dot, Skeleton's fill, the icon reconciliation, the "more" icon) are those components'
+  known issues.
 
-## Tokens to create in Figma first
+## Across components
 
-- A focus-ring offset. Focus Ring and Table use a raw 2px, and other components borrow spacing
-  tokens or `spacing-none` for it.
-- An inverse focus ring, for the Button family and others on dark surfaces.
-- A Toast loading title color that passes contrast: it's 3.19:1 in light and 4.31:1 in dark.
-- Progress Indicator's inverse dot can't be seen on surfaces that stay dark.
-- Skeleton's subtle fill is faint on a raised surface.
-- `--component-tooltip-z-index` isn't read by anything, and z-index isn't tokenized (see
-  `primitives/layers.ts`). It's a candidate to remove.
-
-## Design decisions
-
-- **Split Button `tone`:** drop it or deprecate it until Icon Button has a tone. The evidence
-  points to deprecating.
-- **Button Group gap:** Figma's stacked variants are 8px, and the contract's 4 is stale. The
-  horizontal group gap uses `spacing-lg`, but Figma has no value for it.
-- **Tag `tone`:** it holds color names. Rename it to `appearance` (in code and Figma), or keep it
-  as Toggle Button's is kept.
-- **Link:** is the `strong` emphasis default intended? It matches the contract.
-- **Modal Dialog:** it has no exit animation, which is the documented current state. Should it
-  have one?
-- **Tooltip on a disabled control:** keyboard users can't reach it, as the spec intends. But the
-  contract lists "explaining why a control is disabled" as a use. Pick one.
-- **Tag Group:** its contract lists an active-filters use case. Keep it, or point to Chip?
-
-## Bugs and gaps still open
-
-- A removable Tag without `href` ignores `onClick`.
-- Dismissing a toast from the keyboard leaves focus on the page.
-- Icon Tile with `decorative={false}` and no label has no accessible name, and no warning.
-- Avatar Group's overflow button is named only "+3".
-- Slider Range submits `name` and `${name}Max`. Is that the intended form shape?
-- Slider's hover-only value bubble floats over the label.
 - Controls inside a plain `<fieldset disabled>` don't look disabled.
-- Popup has no `aria-label` prop.
-- Layers order by when they open. A popup and a dialog that mount already open in the same render
-  stack with the popup under the dialog.
-- Table: two defaults are still built from English, the footer name and "Select row".
+- Nothing gives focus a place to go when the control someone used unmounts (a removed chip, a
+  row that leaves the filtered view); Collections and Roadmap handle it locally.
 
 ## Docs tooling
 
-- Chip's and Select's union props leave the generated API table empty, so they're listed by hand.
-  Fix with react-docgen-typescript, or a PropsTable that merges the union's members.
+- Union prop types leave the generated API table empty (Chip and Select list theirs by hand; both
+  carry it as a known issue). Fix with react-docgen-typescript, or a PropsTable that merges a
+  union's members.
 - The Anatomy block can't outline portalled or fixed overlays (Popup, Tooltip, Modal Dialog,
   Toast Group).
-- The Inline Edit page shows a Key Value Pair on its own, without a `dl`.
+- **Code samples lose their indent on 51 component Docs pages** (180 samples): MDX strips two
+  spaces from every line of a multi-line string in a JSX attribute (`code={`...`}`). The pattern
+  pages write them as MDX exports instead, and their test enforces it; the component pages need
+  the same change (scriptable), plus the rule in component-pages.test.ts. Empty State's page
+  compensates with extra spaces, which an export would double.
+- Pattern blocks: "Components used" identifies components by folder, so Rich Text Area (in
+  `molecules/text-area`) would show as Text Area; `ToneMatrix` reads only string values (no table
+  of which controls take the boolean `invalid`) and only the first declaration of a prop, so it
+  can't read Chip's `mode` from its union of prop types.
 - Storybook's Dark toolbar themes only a wrapper, so portalled overlays render light in dark mode.
+  With the OS in dark mode, the canvas body is transparent and takes the browser's dark color while
+  the tokens stay light, so a story's own text reads dark on dark.
+- Only one Toast Group can mount per docs page, so a story's toasts show only when the story that
+  mounts it is on the page (Document Generation's failure story, viewed alone).
+- Template screens start their headings at `h3` so they sit inside the docs outline; the product's
+  own levels are stated in prose only. The blocks have no way to set a base level.
 
 ## Housekeeping
 

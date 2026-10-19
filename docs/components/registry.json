@@ -4,7 +4,6 @@
     "name": "FocusRing",
     "tier": "primitive",
     "category": "foundations",
-    "status": "stable",
     "path": "docs/components/primitives/focus-ring/focus-ring.contract.json",
     "anatomy": [
       {
@@ -92,6 +91,32 @@
       "componentName": "focus-ring",
       "variantCount": 1,
       "verifiedAt": "2026-08-19"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "No focus-offset token: the offset is a raw 2px, and other components borrow spacing tokens for theirs. Created in Figma first."
+      },
+      {
+        "kind": "gap",
+        "summary": "No inverse ring for dark surfaces, so the ring is low-contrast on dark fills. Created in Figma first."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -99,7 +124,6 @@
     "name": "Icon",
     "tier": "primitive",
     "category": "foundations",
-    "status": "stable",
     "path": "docs/components/primitives/icon/icon.contract.json",
     "anatomy": [
       {
@@ -270,6 +294,28 @@
       },
       "note": "The `icon` set is the wrapper Figma components place a glyph in: Size (sm | md), spacing (none | spacious (24px)), and an instance swap for the glyph. It maps to IconBase's size and spacing props; Figma's default is Size=sm, code's is md. The glyphs are separate components on the Icons page. Code's glyph source is packages/ui/src/assets/icons/source/*.svg (npm run generate:icons). Figma and code name some glyphs differently - see the icons block's openFindings in docs/foundations/token-governance.json. Replaces the 2026-08-06 note that Icon had no Figma node.",
       "verifiedAt": "2026-10-13"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Not yet reconciled with Figma: 16 Figma-only and 2 code-only glyph names, a duplicate `menu`, 4 glyphs drawn differently, the wrapper's `Size=sm` default, and `incapacitated` = `life-insurance-policy`. Aligned from Figma first."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -277,7 +323,6 @@
     "name": "Logo",
     "tier": "primitive",
     "category": "foundations",
-    "status": "stable",
     "path": "docs/components/primitives/logo/logo.contract.json",
     "anatomy": [
       {
@@ -394,6 +439,21 @@
     "contentCompleteness": "full",
     "figmaSource": {
       "note": "Logo has no single Figma component node in the same sense as other primitives/atoms - it renders pre-exported SVG assets (packages/ui/src/assets/logos) directly via dangerouslySetInnerHTML, not a live Figma component instance. No node reference is recorded (checked alongside Icon, 2026-08-06); treat the checked-in SVG assets as the source of truth."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -401,7 +461,6 @@
     "name": "Popup",
     "tier": "primitive",
     "category": "overlays",
-    "status": "stable",
     "path": "docs/components/primitives/popup/popup.contract.json",
     "anatomy": [
       {
@@ -598,6 +657,36 @@
         "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free.",
         "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "No `aria-label` prop."
+      },
+      {
+        "kind": "bug",
+        "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
+      },
+      {
+        "kind": "gap",
+        "summary": "Alignment uses compound physical values (`topLeft`) where Table and Form use logical `start` | `end` (shared-value-names)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -605,7 +694,6 @@
     "name": "Avatar",
     "tier": "atom",
     "category": "data-display",
-    "status": "undocumented",
     "path": "docs/components/atoms/avatar/avatar.contract.json",
     "anatomy": [
       {
@@ -779,6 +867,23 @@
       "apiAdaptationNotes": [
         "entityType has no corresponding Figma variant - added 2026-08-21 (re-verified against the avatar component set's own componentPropertyDefinitions, which only defines size/status/state/presence/isInteractive/isDisabled/selected - no team/entity axis) so Avatar's fallback artwork can distinguish an individual (the existing person silhouette) from a team/partner entity (a new two-person silhouette) when there is no src. The team silhouette is not invented art - it's the real, already-shipped team-and-partners icon glyph (packages/ui/src/assets/icons/source/team-and-partners.svg), rescaled and recolored to exactly match the person fallback's own template (a 200x200 flat-color square with a centered glyph, same two light/dark color pairs) rather than drawn from scratch."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -786,7 +891,6 @@
     "name": "Badge",
     "tier": "atom",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/atoms/badge/badge.contract.json",
     "anatomy": [
       {
@@ -921,6 +1025,21 @@
       "componentName": "badge",
       "variantCount": 5,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -928,7 +1047,6 @@
     "name": "Button",
     "tier": "atom",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/atoms/button/button.contract.json",
     "anatomy": [
       {
@@ -1153,6 +1271,28 @@
       "componentName": "button",
       "variantCount": 176,
       "verifiedAt": "2026-09-01"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "The `isLoading` JSDoc leaves out the `aria-disabled` it sets (the Docs page mentions it)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1160,7 +1300,6 @@
     "name": "Checkbox",
     "tier": "atom",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/atoms/checkbox/checkbox.contract.json",
     "anatomy": [
       {
@@ -1202,6 +1341,33 @@
       "componentName": "checkbox",
       "variantCount": 27,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "A single Checkbox has `invalid` but no way to show an error message, and wrapping it in Field replaces its own label as its name."
+      },
+      {
+        "kind": "decision",
+        "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs; they sit side by side in one form."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1209,7 +1375,6 @@
     "name": "IconButton",
     "tier": "atom",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/atoms/icon-button/icon-button.contract.json",
     "anatomy": [
       {
@@ -1282,6 +1447,34 @@
       "variantCount": 240,
       "verifiedAt": "2026-09-01",
       "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `appearance` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Takes the legacy `appearance` (default | primary | subtle) while Figma has moved it to `tone` and `prominence` (tone-is-meaning)."
+      },
+      {
+        "kind": "decision",
+        "summary": "Which \"more\" glyph is standard: `MoreHorizIcon` (this page) or `MoreVertIcon` (Dropdown Menu and Table row actions)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "contract",
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": false,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1289,7 +1482,6 @@
     "name": "Label",
     "tier": "atom",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/atoms/label/label.contract.json",
     "anatomy": [
       {
@@ -1387,6 +1579,33 @@
       "componentName": "label",
       "variantCount": 32,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
+      },
+      {
+        "kind": "gap",
+        "summary": "No icon slot, so a status with an icon (a task status) is composed beside the Label by hand."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1394,7 +1613,6 @@
     "name": "Link",
     "tier": "atom",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/atoms/link/link.contract.json",
     "anatomy": [
       {
@@ -1543,6 +1761,29 @@
         "Figma's Link has only default + hover states - there is no press/active treatment.",
         "Default appearance colour is content/brand/primary/default (matches Figma)."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Is the `strong` emphasis default intended? It matches the contract."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1550,7 +1791,6 @@
     "name": "LinkButton",
     "tier": "atom",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/atoms/link-button/link-button.contract.json",
     "anatomy": [
       {
@@ -1614,6 +1854,29 @@
       "variantCount": 200,
       "verifiedAt": "2026-09-01",
       "notes": "The Figma `tone` variant `inverse` maps to the code-level `isInverse` boolean (an orthogonal on-dark treatment), not to a code `tone` value. The inverse variants mirror the `subtle` tone (transparent fill) retinted to the inverse content + white subtle overlay tokens."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Takes the legacy `appearance` while Button uses `prominence` for the same axis, pending its Figma revision (tone-is-meaning)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1621,7 +1884,6 @@
     "name": "ProgressBar",
     "tier": "atom",
     "category": "feedback",
-    "status": "specified",
     "path": "docs/components/atoms/progress-bar/progress-bar.contract.json",
     "anatomy": [
       {
@@ -1773,6 +2035,33 @@
         }
       ],
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
+      },
+      {
+        "kind": "gap",
+        "summary": "The circular variant draws nothing at 0, track included, so a completion summary at 0 shows an empty space."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1780,7 +2069,6 @@
     "name": "ProgressIndicator",
     "tier": "atom",
     "category": "navigation",
-    "status": "specified",
     "path": "docs/components/atoms/progress-indicator/progress-indicator.contract.json",
     "anatomy": [
       {
@@ -1928,6 +2216,29 @@
       "componentName": "progress-indicator",
       "variantCount": 8,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "The inverse dot can't be seen on surfaces that stay dark. Needs a token, created in Figma first."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -1935,7 +2246,6 @@
     "name": "Radio",
     "tier": "atom",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/atoms/radio/radio.contract.json",
     "anatomy": [
       {
@@ -2211,6 +2521,29 @@
         }
       ],
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -2218,7 +2551,6 @@
     "name": "Slider",
     "tier": "atom",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/atoms/slider/slider.contract.json",
     "anatomy": [
       {
@@ -2291,6 +2623,37 @@
         }
       ],
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "A range submits `name` and `${name}Max`. Is that the intended form shape?"
+      },
+      {
+        "kind": "bug",
+        "summary": "The hover-only value bubble floats over the label."
+      },
+      {
+        "kind": "gap",
+        "summary": "No `invalid` state or message, and Field's page doesn't list it among the controls it wires."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -2298,7 +2661,6 @@
     "name": "Spinner",
     "tier": "atom",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/atoms/spinner/spinner.contract.json",
     "anatomy": [
       {
@@ -2341,6 +2703,23 @@
       "componentName": "spinner",
       "variantCount": 4,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -2348,7 +2727,6 @@
     "name": "Switch",
     "tier": "atom",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/atoms/switch/switch.contract.json",
     "anatomy": [
       {
@@ -2407,6 +2785,23 @@
       "componentName": "switch",
       "variantCount": 20,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -2414,7 +2809,6 @@
     "name": "Tag",
     "tier": "atom",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/atoms/tag/tag.contract.json",
     "anatomy": [
       {
@@ -2479,6 +2873,37 @@
       "apiAdaptationNotes": [
         "isInteractive has no corresponding Figma variant - added 2026-08-20 so Tag can be composed as a plain focusable button trigger (no navigation, no remove affordance) elsewhere in the system. Gated as isInteractive || typeof onClick === 'function', the same pattern Avatar already uses for its own isInteractive prop. First consumer: Tag Group's '+N more' overflow tag, which opens a Dropdown Menu on click."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "A removable Tag without `href` ignores `onClick`."
+      },
+      {
+        "kind": "decision",
+        "summary": "`tone` holds color names (blue, green, purple), which by tone-is-meaning is `appearance`. Rename it, or keep it as Toggle Button's is kept."
+      },
+      {
+        "kind": "decision",
+        "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -2486,7 +2911,6 @@
     "name": "ToggleButton",
     "tier": "atom",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/atoms/toggle-button/toggle-button.contract.json",
     "anatomy": [
       {
@@ -2547,6 +2971,23 @@
       "componentName": "toggle-button",
       "variantCount": 48,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -2554,7 +2995,6 @@
     "name": "ToggleIconButton",
     "tier": "atom",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/atoms/toggle-icon-button/toggle-icon-button.contract.json",
     "anatomy": [
       {
@@ -2613,6 +3053,23 @@
       "componentName": "toggle-icon-button",
       "variantCount": 96,
       "verifiedAt": "2026-08-06"
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -2620,7 +3077,6 @@
     "name": "Tooltip",
     "tier": "atom",
     "category": "overlays",
-    "status": "stable",
     "path": "docs/components/atoms/tooltip/tooltip.contract.json",
     "anatomy": [
       {
@@ -2719,6 +3175,33 @@
       "variantCount": 2,
       "verifiedAt": "2026-08-06",
       "note": "Figma's tooltip-primitive frame has no placement/positioning variant at all (only truncate and showTooltip) - the topCenter default and viewport-fit fallback are entirely a code-side decision, delegated to Popup rather than modeled in Tooltip's own Figma source."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Keyboard users can't reach a tooltip on a disabled control, as the spec intends, but the contract lists \"explaining why a control is disabled\" as a use. Pick one."
+      },
+      {
+        "kind": "gap",
+        "summary": "`--component-tooltip-z-index` is defined but unused: z-index lives in primitives/layers.ts. A candidate to remove in Figma."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "examples",
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": false,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -2726,7 +3209,6 @@
     "name": "AvatarGroup",
     "tier": "molecule",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/molecules/avatar-group/avatar-group.contract.json",
     "anatomy": [
       {
@@ -2848,6 +3330,28 @@
         "maxVisible is clamped to a minimum of 1 whenever there is overflow - Figma's own component set was edited (2026-08-21) to drop its number=4 variant, leaving number=1/2/3 (each always paired with the overflow trigger, never number=0) - confirming a 'some avatars must stay visible alongside the trigger' floor is real design intent, not a code-only guess. Re-verifying the exact current number/showMore variant grid was not possible at that time - the component set was mid-edit and Figma reported 'existing errors' when reading its componentPropertyDefinitions directly (duplicate number=2 variants were found across every size). The floor behavior itself does not depend on resolving that inconsistency.",
         "position: relative on .avatarRing and .overflowTrigger fixes a stacking-order bug verified live in a browser (not reproducible under jsdom): Avatar's own root is already position: relative, which - since neither wrapper creates its own stacking context - promotes it into .root's 'positioned' paint tier, a tier that always paints above plain static content regardless of DOM order. Button's own root is position: static, so without this the overflow trigger (last in DOM, meant to be on top) always lost to the avatar before it. Confirmed via document.elementFromPoint() at each overlap boundary both before and after the fix."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "The overflow button is named only \"+3\", without saying what it reveals."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -2855,7 +3359,6 @@
     "name": "Breadcrumbs",
     "tier": "molecule",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/molecules/breadcrumbs/breadcrumbs.contract.json",
     "anatomy": [
       {
@@ -3001,6 +3504,21 @@
         "The current-page item no longer uses --color-content-default to visually distinguish it from ancestor links - per explicit design feedback, that differentiation wasn't wanted; it now uses the same --color-content-subtle as Link's own appearance=subtle, so every item in the trail reads at the same visual weight.",
         "Link's own :visited treatment (a real browser-history-driven purple color swap) is intentionally overridden back to Link's normal resting/press color for every breadcrumb ancestor - per explicit design feedback, 'have you visited this URL before' isn't a signal breadcrumbs should surface, since it makes the trail read as a list of arbitrary hyperlinks rather than a location path. This is a documented, deliberate exception to the 'do not restyle Link's own hover/focus/press treatment' compositionRule below - it targets :visited specifically, not those states."
       ]
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -3008,7 +3526,6 @@
     "name": "ButtonGroup",
     "tier": "molecule",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/molecules/button-group/button-group.contract.json",
     "anatomy": [
       {
@@ -3106,6 +3623,28 @@
         "Figma's `inline`/`stacked` orientation values were renamed to `horizontal`/`vertical` to match this system's existing RadioGroup.orientation vocabulary.",
         "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "The space between buttons: Figma's stacked variants are 8px and the contract's 4px is stale; the horizontal gap uses `spacing-lg`, which Figma has no value for."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -3113,7 +3652,6 @@
     "name": "Chip",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/chip/chip.contract.json",
     "anatomy": [
       {
@@ -3325,6 +3863,32 @@
         "Each search chip is an independent on/off toggle, not a radio group - several can be on at once and Chip never coordinates siblings. Any one-of-N behaviour belongs to the consumer holding the state, the same way Toggle Button works.",
         "size resolves as size ?? groupSize ?? md, where groupSize comes from ChipSizeContext. Chip Group provides it via context rather than by cloning children, because cloning only reaches direct children - a Chip behind a Tooltip, from a map, or behind a conditional would silently miss it. Explicit per-Chip size still wins."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Names its remove control `removeAriaLabel`, where the convention is `removeLabel` (built-in-labels)."
+      },
+      {
+        "kind": "gap",
+        "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -3332,7 +3896,6 @@
     "name": "ChipGroup",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/chip-group/chip-group.contract.json",
     "anatomy": [
       {
@@ -3438,6 +4001,28 @@
         "Chip Group never manages selection. Figma's variants are all `isSelected=false` search chips, and search chips are independent on/off toggles - so any one-of-N coordination belongs to the consumer holding the state, exactly as with Toggle Button.",
         "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -3445,7 +4030,6 @@
     "name": "Field",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/field/field.contract.json",
     "anatomy": [
       {
@@ -3690,6 +4274,44 @@
         "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs.",
         "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "The status icon is centered against a message that wraps onto two lines. Check the intent in Figma."
+      },
+      {
+        "kind": "gap",
+        "summary": "`state` uses `valid` where every message component says `success` (shared-value-names)."
+      },
+      {
+        "kind": "decision",
+        "summary": "No rule says when errors show. Its \"Live validation\" story shows one from the first keystroke; Forms and Validation recommends checking on submit."
+      },
+      {
+        "kind": "decision",
+        "summary": "Its label is `heading-xxs` while Radio's and Checkbox's group legends are `body-md`, and the required `*` spacing differs."
+      },
+      {
+        "kind": "gap",
+        "summary": "Its AnyControl story says \"Bio is required.\", against its own Do (write the error as what to do)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -3697,7 +4319,6 @@
     "name": "IconTile",
     "tier": "molecule",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/molecules/icon-tile/icon-tile.contract.json",
     "anatomy": [
       {
@@ -3993,6 +4614,28 @@
         "Figma's shape values are `square` | `round`, the same as Icon Button's `shape` prop (Figma's `circle` was renamed to `round` on 2026-10-13).",
         "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "With `decorative={false}` and no label it has no accessible name, and no warning says so."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -4000,7 +4643,6 @@
     "name": "InlineEdit",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/inline-edit/inline-edit.contract.json",
     "anatomy": [
       {
@@ -4153,6 +4795,32 @@
         "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
         "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation floats the action row instead (absolutely positioned 8px below the field at its trailing edge, or 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "No error state, and it can't reject a draft: focus leaving the field always confirms."
+      },
+      {
+        "kind": "bug",
+        "summary": "Its Docs page shows a Key Value Pair on its own, without a `dl` (invalid HTML)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -4160,7 +4828,6 @@
     "name": "InlineMessage",
     "tier": "molecule",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/molecules/inline-message/inline-message.contract.json",
     "anatomy": [
       {
@@ -4308,6 +4975,21 @@
           "note": "The row itself - icon, titleText, secondaryText - nested inside the inline-message component's own `popup` instance as its trigger slot."
         }
       ]
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -4315,7 +4997,6 @@
     "name": "KeyValueList",
     "tier": "molecule",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/molecules/key-value-list/key-value-list.contract.json",
     "anatomy": [
       {
@@ -4366,6 +5047,23 @@
         "Figma models the underlined/clean distinction as list-level variants. In code, underline is a per-pair prop on KeyValuePair, giving finer control (e.g. omitting the underline on the last item).",
         "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "contract"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": false,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -4373,7 +5071,6 @@
     "name": "KeyValuePair",
     "tier": "molecule",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/molecules/key-value-pair/key-value-pair.contract.json",
     "anatomy": [
       {
@@ -4497,6 +5194,23 @@
         "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop.",
         "Inline fields in the value slot keep the standard context='inline' treatment, including the raised-hover background, matching Figma. Key Value Pair only squares their frames: .value [data-context='inline'] { border-radius: 0; }."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "contract"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": false,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -4504,7 +5218,6 @@
     "name": "Pagination",
     "tier": "molecule",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/molecules/pagination/pagination.contract.json",
     "anatomy": [
       {
@@ -4660,6 +5373,21 @@
         "Figma's per-item VARIANT prop name 'tone' on both toggle-button and icon-button instances maps to this codebase's existing ToggleButtonTone/IconButtonAppearance prop values ('subtle'), not a new prop Pagination needs to invent.",
         "Page numbers take ToggleButton's look (its stylesheet's toggleButton/size_sm/tone_subtle/selected classes on a native button) but not its semantics: ToggleButton always sets aria-pressed, and a page is a position, so the current page carries only aria-current=\"page\"."
       ]
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -4667,7 +5395,6 @@
     "name": "RichTextArea",
     "tier": "molecule",
     "category": "forms",
-    "status": "beta",
     "path": "docs/components/molecules/rich-text-area/rich-text-area.contract.json",
     "anatomy": [
       {
@@ -4902,6 +5629,23 @@
         "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
         "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "contract"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": false,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -4909,7 +5653,6 @@
     "name": "Select",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/select/select.contract.json",
     "anatomy": [
       {
@@ -5144,6 +5887,36 @@
         "The panel always matches the field frame's width and left edge. The trigger child that carries the merged ref + aria-expanded/aria-controls is the inset input (where that a11y wiring belongs), but Select also passes the field frame (the input's parentElement, via a callback ref) as Dropdown Menu's `anchorRef` and sets `matchTriggerWidth`. Popup then measures, positions, width-matches, and scopes its outside-click boundary to the frame - not the ~9px-inset input - and the inner Menu fills that width via `fullWidth`. This keeps the input's single-child trigger + a11y contract intact while the dropdown lines up flush with the visible control. Verified live: panel width and left both equal the frame's on single and multi.",
         "`inputType` is not offered as a runtime-mixable prop; a Select is single or multi for its lifetime, as its value type differs. This mirrors Chip's mode union."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Names its chips' remove buttons in English (`Remove <label>`), with no prop (built-in-labels)."
+      },
+      {
+        "kind": "gap",
+        "summary": "A single Select doesn't show the chosen option's icon; only menu rows and multi-select chips do."
+      },
+      {
+        "kind": "gap",
+        "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -5151,7 +5924,6 @@
     "name": "Skeleton",
     "tier": "molecule",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/molecules/skeleton/skeleton.contract.json",
     "anatomy": [
       {
@@ -5271,6 +6043,28 @@
         "Figma's prototype has an AFTER_TIMEOUT reaction smart-animating between the `default` and `subtle` variants every 1.5s as a way to preview a pulse effect inside Figma - the component instead implements the pulse as a self-contained CSS opacity animation on a single variant, so it animates on its own regardless of which `appearance` is selected."
       ]
     },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "The subtle fill is faint on a raised surface. Needs a token change, made in Figma first."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
+    },
     "sizingDetail": {
       "defaultInlineSize": "100% (fills container)",
       "defaultBlockSize": "--size-250 (20px, one text line)",
@@ -5282,7 +6076,6 @@
     "name": "SplitButton",
     "tier": "molecule",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/molecules/split-button/split-button.contract.json",
     "anatomy": [
       {
@@ -5448,6 +6241,32 @@
         "IconButton's own appearance_primary:disabled (and appearance_subtle:disabled) was fixed to stay borderless (border-color: transparent), matching Button's own disabled rule split and Figma's own disabled variants (identical fill regardless of tone, but primary/subtle drop the stroke entirely - verified directly against Figma's disabled component variants). It previously shared the same visible-border rule as appearance_default:disabled, so a disabled primary secondary action looked identical to a disabled default one. This is an IconButton-atom fix (icon-button.module.css), not Split-Button-specific, but Split Button's primary+disabled secondary action is what surfaced it.",
         "The primary-appearance divider's fill is bound to a Figma variable named color/border/brand/primary/subtle. That token now exists code-side (added in the brand-taupe token migration): prussian-300 in light, prussian-900 in dark - the exact Figma-matching token, now used for this divider. Its obvious-looking non-subtle sibling color-border-brand-primary-default does not work here - it resolves to the same prussian-900 primitive as the primary button's own background (color-background-brand-primary-bold-default), so a divider painted in it disappears against an identical-colored surface. Resolving Figma's fill node directly (not just the variable name) gives prussian-300, a light tint, not a darker/duller shade of prussian-900. Before the migration the divider used color-content-brand-primary-subtle as a stand-in - identical in light (prussian-300) but prussian-700 rather than prussian-900 in dark; it now uses color-border-brand-primary-subtle, reused here on a background-color the same way Slider's own active track-stop dot already reuses it for contrast against a bold fill (see slider.module.css's own comment). Caught live in Storybook twice: first the mistyped -subtle name resolved to nothing (fully transparent); after that fix, the syntactically-valid color-border-brand-primary substitute was present but exactly camouflaged against both buttons' own background."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "`tone` reaches only its main action (Icon Button has no tone yet), so the halves can disagree. Drop it, or deprecate it until Icon Button has one."
+      },
+      {
+        "kind": "gap",
+        "summary": "Takes the legacy `appearance` while Button uses `prominence` for the same axis, pending its Figma revision (tone-is-meaning)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -5455,7 +6274,6 @@
     "name": "TagGroup",
     "tier": "molecule",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/molecules/tag-group/tag-group.contract.json",
     "anatomy": [
       {
@@ -5585,6 +6403,32 @@
         "The overflow tag's trigger needed a plain, focusable, non-navigational, non-removable interactive form - a gap in Tag's own code API (Tag was previously focusable only via `href` or its remove button). Added `isInteractive` to Tag itself (see tag.contract.json's own apiAdaptationNotes) rather than reimplementing a one-off interactive wrapper inside Tag Group.",
         "Figma's nested `dropdown-menu` instance has an empty `content` slot in the static file (isOpen=false, never toggled open in the source), so the overflow panel's actual content (a Menu row per truncated tag) is a code-level design decision, not something measured from an open Figma variant - informed directly by Dropdown Menu's own established 'always renders a Menu built from sections' rule."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Its contract lists an active-filters use case, while its page, Chip's, and Label's say filters are Chips in a Chip Group."
+      },
+      {
+        "kind": "gap",
+        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -5592,7 +6436,6 @@
     "name": "TextArea",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/text-area/text-area.contract.json",
     "anatomy": [
       {
@@ -5762,6 +6605,23 @@
         "The `type=rich-inline` variant is implemented as a separate component, `RichTextArea` (molecules/text-area/rich). It is an inline entity-tagging mode - visually identical to `default`, the difference is entirely behavioral: `/` opens a grouped entity picker and each choice is inserted inline as a navigational tag. It is separate rather than a `type` prop because its value (a structured node array), its callbacks (`onSearch`), and its surface (contenteditable) are all disjoint from the plain <textarea>. TextArea therefore still exposes no `type` prop; reach for RichTextArea instead.",
         "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "contract"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": false,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -5769,7 +6629,6 @@
     "name": "TextField",
     "tier": "molecule",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/molecules/text-field/text-field.contract.json",
     "anatomy": [
       {
@@ -6042,6 +6901,21 @@
         "elemAfterInput gained a third `type` option in Figma - `label` - alongside `icon` and `button`, nesting a real Label atom instance (tone=default, emphasis=subtle, size sm/md). Since `iconAfter` is already `React.ReactNode` and `.action` is a plain centered flex wrapper, this required no component code change - only documenting the newly-supported content type.",
         "Gained an additive leadingContent slot so Select can render multi-select chips inside the field frame without a second bordered frame or duplicated state CSS. In-frame, before the input, not aria-hidden (unlike the decorative iconBefore); shrinks/clips to keep the field single-line. Additive and opt-in - existing TextField usage is unchanged. Not derived from a TextField Figma variant; it exists to serve Select, whose own select-trigger nests chips inside its text-field instance."
       ]
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -6049,7 +6923,6 @@
     "name": "Banner",
     "tier": "organism",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/organisms/banner/banner.contract.json",
     "anatomy": [
       {
@@ -6181,6 +7054,21 @@
       "variantCount": 3,
       "verifiedAt": "2026-09-01",
       "notes": "The Figma `tone` variants match code (default, warning, error). The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -6188,7 +7076,6 @@
     "name": "Card",
     "tier": "organism",
     "category": "data-display",
-    "status": "stable",
     "path": "docs/components/organisms/card/card.contract.json",
     "anatomy": [
       {
@@ -6398,6 +7285,28 @@
         "Border=true has an inside 1px default stroke; border=false has no stroke or reserved border width. All variants retain clipping, zero padding and gap, and no shadow.",
         "Surface=none has no fill and maps to transparent, independently of the border. It does not apply opacity to children."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "It spreads `onClick` and other props onto its `div`, while its page says it handles no events."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -6405,7 +7314,6 @@
     "name": "DatePicker",
     "tier": "organism",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/organisms/date-picker/date-picker.contract.json",
     "anatomy": [
       {
@@ -6633,6 +7541,21 @@
         "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
       },
       "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -6640,7 +7563,6 @@
     "name": "DatePickerCalendar",
     "tier": "organism",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/organisms/date-picker-calendar/date-picker-calendar.contract.json",
     "anatomy": [
       {
@@ -6835,6 +7757,21 @@
         "week-days": "figma-parts / week-days (2417:61453): one row of seven day cells; the grid stacks six of them."
       },
       "notes": "date-picker-calendar (2417:61761) is a single COMPONENT (no variants) composed of the parts above. The 'previous selection' day state is a range-preview state not implemented in this single-date v1. Out-of-month days are shown muted (content/disabled) but remain selectable (selecting switches month)."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -6842,7 +7779,6 @@
     "name": "DateTimePicker",
     "tier": "organism",
     "category": "forms",
-    "status": "in-progress",
     "path": "docs/components/organisms/date-time-picker/date-time-picker.contract.json",
     "anatomy": [
       {
@@ -7055,6 +7991,28 @@
         "time-picker": "a time-picker instance (240px) - the right half."
       },
       "notes": "WIP in Figma: only context x size is defined (no combined open/disabled/hover/filled states) - interaction states come from the inner pickers. The set is 480px (two 240px halves). In code the control composes the DatePicker and TimePicker organisms over one shared Date; the joined look is achieved by pulling the two field frames together (negative margin) and squaring their inner corners."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Can't pass its halves' labels through (dialogLabel, amLabel, pmLabel, Confirm and Cancel, column and month names)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -7062,7 +8020,6 @@
     "name": "DropdownMenu",
     "tier": "organism",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/organisms/dropdown-menu/dropdown-menu.contract.json",
     "anatomy": [
       {
@@ -7263,6 +8220,28 @@
         "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
         "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -7270,7 +8249,6 @@
     "name": "EmptyState",
     "tier": "organism",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/organisms/empty-state/empty-state.contract.json",
     "anatomy": [
       {
@@ -7416,6 +8394,21 @@
       "variantCount": 2,
       "verifiedAt": "2026-09-01",
       "notes": "Figma boolean properties (showIllustration, showHeading, showActions) map to optional slots in code (illustration/heading/actions omitted to hide). The Figma `type` variant is inherited (transparent) vs informative (sunken surface background); code names it `appearance` (the system's name for visual style) and keeps `type` as a deprecated alias. The Figma `inherited` variant had no content built (WIP); code renders the same centered content for both appearances."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -7423,7 +8416,6 @@
     "name": "Form",
     "tier": "organism",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/organisms/form/form.contract.json",
     "anatomy": [
       {
@@ -7603,6 +8595,32 @@
         "Fields may sit directly in a FormSection (single column, spaced by the section gap) or inside a FormRow (equal columns) - Figma always nests rows in sections, but the direct-field case is the common one and avoids a mandatory one-slot row.",
         "Form owns no form state - it renders a native <form> and forwards onSubmit and all native form attributes; validation and each field's state stay native / on Field."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "The required legend (\"indicates a required field\") is hard-coded English (built-in-labels)."
+      },
+      {
+        "kind": "gap",
+        "summary": "No way to list a summary's errors: Forms and Validation lays out a plain list itself."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -7610,7 +8628,6 @@
     "name": "Menu",
     "tier": "organism",
     "category": "actions",
-    "status": "stable",
     "path": "docs/components/organisms/menu/menu.contract.json",
     "anatomy": [
       {
@@ -7874,6 +8891,21 @@
         "showScrollbar's Figma value renders a custom decorative scrollbar-thumb graphic (a `<scrollbar-thumb>` instance, visible in the menus=2/3 variants once a `scrolling container` wraps the sections). Code maps this to native `overflow-y: auto`/`hidden` instead of reproducing the custom thumb widget - a deliberate simplification, not a design-parity gap that's expected to close later.",
         "Arrow-key roving-tabindex navigation (ArrowUp/Down/Home/End) has no Figma variant at all - it's a code-level accessibility decision for the ARIA menu pattern, delivering on Popup's own contract.json futureEnhancements note ('a documented recipe for wiring keyboard arrow navigation once Dropdown Menu exists')."
       ]
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -7881,7 +8913,6 @@
     "name": "ModalDialog",
     "tier": "organism",
     "category": "overlays",
-    "status": "stable",
     "path": "docs/components/organisms/modal-dialog/modal-dialog.contract.json",
     "anatomy": [
       {
@@ -8154,6 +9185,28 @@
         "Panel widths (inner) are 400/600/752/968 for sm/md/lg/xl; the panel shrinks below its width on narrow viewports via max-inline-size:100%.",
         "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "It has no exit animation, which is the documented current state. Should it have one?"
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -8161,7 +9214,6 @@
     "name": "ProgressTracker",
     "tier": "organism",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/organisms/progress-tracker/progress-tracker.contract.json",
     "anatomy": [
       {
@@ -8300,6 +9352,21 @@
         "items": "code-parts / <items> (node 2184:38493): the per-step segment, with size (md|lg) x isActive x hasVisited x isDisabled x state (default|hover|focus) x section (start|middle|end). section drives the outer-corner rounding; isActive/hasVisited drive the navy fill and its trailing rounded cap; the label is the `link` atom (appearance=subtle, size=md in both sizes)."
       },
       "notes": "The Figma component is built from per-step segments with per-edge borders (start=top/bottom/left, middle=top/bottom, end=top/bottom/right) so adjacent segments read as one continuous pill. In code this is a single track + single fill (width = currentStep / totalSteps); the fill's own full-round radius reproduces the rounded leading + trailing caps. Only visited (past) steps are interactive in Figma (hover/focus states exist only for isActive=false, hasVisited=true) - mirrored in code by rendering only visited steps with an href as links."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -8307,7 +9374,6 @@
     "name": "SectionMessage",
     "tier": "organism",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/organisms/section-message/section-message.contract.json",
     "anatomy": [
       {
@@ -8478,6 +9544,21 @@
       "variantCount": 4,
       "verifiedAt": "2026-09-01",
       "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` tone was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -8485,7 +9566,6 @@
     "name": "Table",
     "tier": "organism",
     "category": "data-display",
-    "status": "beta",
     "path": "docs/components/organisms/table/table.contract.json",
     "anatomy": [
       {
@@ -9035,6 +10115,68 @@
         "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/default, header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
         "Deferred from v1 (Figma page is in-progress): single-select (radio) column, the per-column ⋮ menu, column resize/reorder, sticky first column, and row expansion. The sortable header + selection Checkbox cover the primary interactions."
       ]
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
+      },
+      {
+        "kind": "gap",
+        "summary": "Two defaults are built from English inside it: the footer name and \"Select row\"."
+      },
+      {
+        "kind": "bug",
+        "summary": "Selection counts rows a filter now hides, and bulk actions act on them; its page only says selection is kept across pages and sorts."
+      },
+      {
+        "kind": "bug",
+        "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
+      },
+      {
+        "kind": "gap",
+        "summary": "Its default empty text (\"No results\" over \"There is nothing to show here yet.\") mixes two kinds of empty, and sits on the deep surface where a passed Empty State is transparent."
+      },
+      {
+        "kind": "gap",
+        "summary": "Nothing announces that a search found nothing: its only live region is the selection count."
+      },
+      {
+        "kind": "bug",
+        "summary": "Skeleton rows ignore a column's `align: 'end'`."
+      },
+      {
+        "kind": "gap",
+        "summary": "`activeFilters` renders in a plain div, and its WithToolbar and FullShell stories pass filter Chips without the named Chip Group Chip Group's page asks for."
+      },
+      {
+        "kind": "gap",
+        "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
+      },
+      {
+        "kind": "gap",
+        "summary": "The title is always `heading-lg`, so stacked tables can't rank under a page heading."
+      },
+      {
+        "kind": "gap",
+        "summary": "No row groups, so grouped rows are separate tables, each adding its own tab stop, and `activeFilters` belongs to one table."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -9042,7 +10184,6 @@
     "name": "Tabs",
     "tier": "organism",
     "category": "navigation",
-    "status": "stable",
     "path": "docs/components/organisms/tabs/tabs.contract.json",
     "anatomy": [
       {
@@ -9200,6 +10341,21 @@
         "tab": "code-parts / <tab> (node 2140:67951): the individual tab, with type (line/contained) x state (default/hover/focus) x isSelected"
       },
       "notes": "Figma `tabs` is the tab BAR only (no panels): type (line/contained) + showBorder. Panels are provided in code via optional TabPanel children. State model is controlled + uncontrolled."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -9207,7 +10363,6 @@
     "name": "TimePicker",
     "tier": "organism",
     "category": "forms",
-    "status": "stable",
     "path": "docs/components/organisms/time-picker/time-picker.contract.json",
     "anatomy": [
       {
@@ -9465,6 +10620,21 @@
         "popup": "the open state renders a popup > panelSurface > columns of code-parts/<menu-item> (selected = background/selected/default/default + content/selected) + a footer-item (a button-group with Cancel/Confirm buttons, tone=subtle, size=xs), each column with its own scrollbar."
       },
       "notes": "context passes straight to the Text Field's own context ('default' | 'inline'). The open state pins the field focus treatment (data-force-state='focus'). In code the popup uses the Popup primitive with three custom listbox columns (role=listbox/option) rather than the Menu organism, since selection is staged. While open the field previews the staged selection live; Confirm or an outside click commits, Cancel or Escape discards. Native scrollbars are used instead of Figma's custom scrollbar chrome. 12-hour with an AM/PM column (24-hour is a future addition)."
+    },
+    "status": "stable",
+    "knownIssues": [],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "stable",
+      "unmet": [],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": true
+      }
     }
   },
   {
@@ -9472,7 +10642,6 @@
     "name": "Toast",
     "tier": "organism",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/organisms/toast/toast.contract.json",
     "anatomy": [
       {
@@ -9656,6 +10825,28 @@
       "variantCount": 11,
       "verifiedAt": "2026-09-02",
       "notes": "Figma has tone (default/success/error/warning/information/loading) x open (false/true), the same names as code. `open` maps to the code `expanded` prop (collapsed = title only, expanded = description + actions). The leading visual is an IconTile (Figma tone=blue/green/... maps to IconTile tone); loading shows a Spinner. Toasts are shown/stacked by ToastGroup."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "The loading title's contrast is 3.19:1 in light and 4.31:1 in dark. Needs a token, created in Figma first."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   },
   {
@@ -9663,7 +10854,6 @@
     "name": "ToastGroup",
     "tier": "organism",
     "category": "feedback",
-    "status": "stable",
     "path": "docs/components/organisms/toast-group/toast-group.contract.json",
     "anatomy": [
       {
@@ -9742,6 +10932,36 @@
       "verifiedAt": "2026-09-02",
       "shape": "no-node-exception",
       "notes": "Code-only behavior component - there is no Figma component for the group. It stacks the `toast` component (node 1565:12728) and its stacking/hover-expand behavior follows shadcn/sonner. The behavior was specified by the design owner, not a Figma node."
+    },
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "Dismissing a toast from the keyboard leaves focus on the page."
+      },
+      {
+        "kind": "gap",
+        "summary": "The helper is `toast.info()`, which sets the `information` tone; by the one-name rule it would be `toast.information()`, with `info` kept as an alias."
+      },
+      {
+        "kind": "decision",
+        "summary": "Toast's page says to turn dismissing off for a loading toast, but `toast.loading()` doesn't, and an `isDismissible: false` loading toast passes it on to its result."
+      }
+    ],
+    "replacedBy": null,
+    "statusCheck": {
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
+      "evidence": {
+        "docsPage": true,
+        "tests": true,
+        "figma": true,
+        "contract": true,
+        "examples": true,
+        "noKnownIssues": false
+      }
     }
   }
 ]

@@ -1,7 +1,17 @@
 {
   "name": "Tooltip",
   "category": "overlays",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "Keyboard users can't reach a tooltip on a disabled control, as the spec intends, but the contract lists \"explaining why a control is disabled\" as a use. Pick one."
+    },
+    {
+      "kind": "gap",
+      "summary": "`--component-tooltip-z-index` is defined but unused: z-index lives in primitives/layers.ts. A candidate to remove in Figma."
+    }
+  ],
   "purpose": "Supplemental contextual information.",
   "intent": "Give a trigger element a short, non-interactive, hover/focus-revealed explanation without requiring it to carry its own accessible name.",
   "figmaSource": {

@@ -1,7 +1,7 @@
 {
   "name": "Switch",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
   "purpose": "Binary toggle control.",
   "intent": "Immediately enable or disable a setting.",
   "figmaSource": {

@@ -1,0 +1,237 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import { Code } from '../../blocks/doc-page';
+import { Choice, Choices, ComponentsUsed, Example, Section, Subsection, TemplateHeader, TemplatePage } from '../../blocks/template-page';
+import * as Stories from './roadmap.stories';
+import storiesSource from './roadmap.stories.tsx?raw';
+
+<Meta of={Stories} name="Docs" />
+
+<Unstyled>
+<TemplatePage>
+
+<TemplateHeader title="Roadmap" source={storiesSource} draft>
+  One client's roadmap: the tasks that take a matter from start to finish, grouped into stages, with
+  how much of it is done. People check what's left, mark tasks complete, and hand tasks on. This is a
+  draft, composed from the system ahead of the designs, so its content is placeholder.
+</TemplateHeader>
+
+<Section title="Purpose">
+
+A roadmap is one of the records LegacyHQ links to, beside accounts, people, matters, and documents.
+It's made of tasks that are not started, in progress, or complete, and it has a completion: how many
+of its tasks are done. The screen answers three questions for whoever opens it: how far along is
+this, what's left and who has it, and what changed.
+
+This template is a **draft**. It was built before the roadmap designs were finished, to see how far
+the system's components go on their own. The client, the matter, the stage names, the tasks, and who
+does them are placeholders for an estate plan, not how LegacyHQ works. Every assumption the screen
+makes is listed under Open questions, for the designs to settle.
+
+</Section>
+
+<Section title="The template">
+
+<Example
+  of={Stories.Roadmap}
+  caption="Open a task's actions and set its status: the completion updates and a toast confirms it. Change a task's assignee or due date in its cell. Add a filter for status or assignee, change its value from the chip, or remove it."
+/>
+
+<Example
+  of={Stories.NoMatchingTasks}
+  caption="Filters that match no task. An Empty State says so in place of the stages and offers to clear them; the results line says how many match."
+/>
+
+<Example
+  of={Stories.Loading}
+  caption="The roadmap loading. Its shape is known, so skeletons hold the header and the completion, and the table shows its headers over skeleton rows. One skeleton is labelled, so screen readers hear “Loading the roadmap” once."
+/>
+
+<Example
+  of={Stories.NoTasksYet}
+  caption="A new roadmap with no tasks. The header stays, and the Empty State offers to add the first task. Progress Bar draws no ring at 0, so the completion is only its words. Adding a task isn't drafted yet, so its button does nothing."
+/>
+
+</Section>
+
+<Section title="How it's built">
+
+<Choices situation="Region" use="Built with" columns={['Follows']}>
+  <Choice situation="Where the roadmap sits: the levels above it." cells={["Breadcrumbs' own guidance: a page deep in a hierarchy."]}>
+    <DocLink to="Components/Navigation/Breadcrumbs" />
+  </Choice>
+  <Choice
+    situation="The roadmap's name and its key facts: client, matter, owner, target date."
+    cells={[<><DocLink to="Patterns/Collections" />: one record in full is a Key Value List under its heading.</>]}
+  >
+    <DocLink to="Components/Data Display/Icon Tile" />
+    <DocLink to="Components/Data Display/Key Value List" />
+    <DocLink to="Components/Data Display/Key Value Pair" />
+    <DocLink to="Components/Data Display/Tag" />
+    <DocLink to="Components/Data Display/Avatar" />
+  </Choice>
+  <Choice
+    situation="How much of the roadmap is done."
+    cells={[<><DocLink to="Patterns/Loading and Empty States" />: only measured work gets a Progress Bar, with the count in <Code>getValueText</Code>.</>]}
+  >
+    <DocLink to="Components/Feedback/Progress Bar" />
+    <DocLink to="Components/Data Display/Card" />
+  </Choice>
+  <Choice
+    situation="Narrowing the tasks by status or assignee, and saying how many match."
+    cells={[<><DocLink to="Patterns/Collections" />: every filter that narrows the list shows as a filter Chip in a named group.</>]}
+  >
+    <DocLink to="Components/Forms/Chip Group" />
+    <DocLink to="Components/Forms/Chip" />
+    <DocLink to="Components/Actions/Dropdown Menu" />
+    <DocLink to="Components/Actions/Button" />
+  </Choice>
+  <Choice
+    situation="The tasks, one table per stage: each task's status, assignee, and due date."
+    cells={[<><DocLink to="Patterns/Collections" />: records compared across the same fields go in a Table; status is a Label.</>]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+    <DocLink to="Components/Data Display/Label" />
+    <DocLink to="Foundations/Icons" />
+  </Choice>
+  <Choice
+    situation="Reassigning a task, or moving its due date, without leaving the list."
+    cells={[<><DocLink to="Patterns/Collections" />: editable cells, each editor named for its row.</>]}
+  >
+    <DocLink to="Components/Forms/Select" />
+    <DocLink to="Components/Forms/Date Picker" />
+  </Choice>
+  <Choice
+    situation="Changing a task's status, and confirming it."
+    cells={[<><DocLink to="Patterns/Messages and Feedback" />: an action that just finished confirms with a toast.</>]}
+  >
+    <DocLink to="Components/Actions/Icon Button" />
+    <DocLink to="Components/Actions/Dropdown Menu" />
+    <DocLink to="Components/Feedback/Toast Group" />
+  </Choice>
+  <Choice
+    situation="Filters that match nothing, and a roadmap with no tasks yet."
+    cells={[<><DocLink to="Patterns/Loading and Empty States" />: say which kind of empty it is, and offer the way out.</>]}
+  >
+    <DocLink to="Components/Feedback/Empty State" />
+  </Choice>
+  <Choice
+    situation="The roadmap while it loads."
+    cells={[<><DocLink to="Patterns/Loading and Empty States" />: hold a known layout with skeletons, one of them labelled.</>]}
+  >
+    <DocLink to="Components/Feedback/Skeleton" />
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+</Choices>
+
+<Subsection title="Table, not Cards">
+
+Each task has the same fields, read across: its status, who has it, and when it's due. Table is for
+records compared side by side across the same fields, and for editing a few fields of many records
+in place. Card is for summaries that each have a layout of their own, and has no editing, sorting,
+or selection. Patterns / Collections says to choose by how people read the records, not by how many
+there are, so even a stage of two tasks is a table.
+
+Table has no row groups, so each stage is its own Table, titled with the stage's name and how many
+of its tasks are complete. They share one set of columns at fixed widths, with resizing off, so the
+columns line up from stage to stage. A stage with no task that matches the filters is left out.
+
+Card holds one thing: the completion summary, as Progress Bar suggests for its circular ring ("a
+compact completion summary on a card or a tile"). Progress Tracker isn't used for the stages: it's
+for a guided flow, and it shows position in a sequence, not completion.
+
+</Subsection>
+
+<Subsection title="Where the components stop">
+
+- **The status is an icon beside a Label.** Label has no icon slot, so the task icon sits before it
+  in the cell. The icon is decorative; the Label says the status in words.
+- **The assignee cell shows the name, not the Avatar.** A single Select shows the chosen option's
+  label only; its `icon` appears in the menu rows (and on multi-select chips). The Avatars show in
+  the menu, in the filter chip, and beside the owner's name.
+- **The filters sit above every stage, not in a Table.** Table's `activeFilters` belongs to one
+  table, and these filters narrow all of them, so they're a Chip Group of their own, with the Add
+  filter menu and a Clear filters button beside it.
+
+</Subsection>
+
+</Section>
+
+<Section title="Accessibility">
+
+- **Headings.** In the product, the roadmap's name is the page's `h1` and each stage a level below.
+  Here they start at `h3`, under this page's sections: the name is an `h3`, and each stage's Table
+  title, and either Empty State, an `h4`.
+- **Landmarks.** Breadcrumbs is a `nav` named "Breadcrumb". Each stage's table sits in a scroll
+  region named by its stage, which takes focus so it can be scrolled from the keyboard; that's one
+  tab stop per stage. The screen belongs inside the app's `main`, which the template doesn't draw.
+- **Names.** Every control in a row is named for its task: "Actions for Draft the health care
+  directives", "Assignee, Draft the health care directives", "Due date, Draft the health care
+  directives". The filters are a group named "Active filters"; each chip's value button is named by
+  its field and value, such as "Status Not started", and its remove button "Remove Status".
+- **Status in words.** The task icons, the Avatars, the filter chips' previews, and the menu rows'
+  icons are all decorative. The Label carries the status, and the visible name beside each Avatar
+  carries the person.
+- **Completion.** The ring is a progress bar named "Roadmap completion", read as "9 of 14 tasks
+  complete" rather than a percentage. It isn't a live region, so a change isn't read out by the ring:
+  the toast that confirms a status change says the new count.
+- **Focus after a status change.** Choosing a status closes the menu and returns focus to the task's
+  actions button. When the task no longer matches the filters, it leaves the list, so focus moves to
+  the results line instead, which says how many tasks match. Removing a filter chip and clearing the
+  filters from the Empty State move focus there too.
+- **Focus after an edit.** Picking a due date closes the calendar and returns focus to its field.
+  Choosing an assignee leaves focus in its field, unless the task leaves the filtered list, when
+  focus moves to the results line.
+- **Announced.** Toasts are read through Toast Group's polite live region, with their tone first:
+  "Success: Task complete", then the task and the new count. The results line is a polite live region
+  (`role="status"`), so a filter that changes the count is read out, including "0 of 14 tasks match"
+  when the Empty State replaces the stages, since Empty State isn't a live region itself.
+- **Loading.** One skeleton is labelled "Loading the roadmap", a polite status; the others are
+  hidden. The loading table sets `aria-busy`.
+
+</Section>
+
+<Section title="Open questions">
+
+Everything below is an assumption the draft makes, for the designs to settle.
+
+- **Where a roadmap lives.** Under its matter, as the breadcrumbs show (Matters, the matter, the
+  roadmap)? Or under the client, or both?
+- **The key facts.** Client, matter, owner, and target date are guesses. Which does a roadmap have,
+  and can they change here?
+- **Stages.** Does a roadmap have stages at all? What are they called, are they in a fixed order, and
+  does one have to finish before the next starts? Do finished stages collapse?
+- **Task fields.** Name, status, assignee, and due date are guesses. Do tasks carry more: a
+  description, documents, events, a priority? Does a task open a page of its own? Here its name is
+  plain text, not a link.
+- **Statuses.** The three task icons suggest not started, in progress, and complete. Are there others,
+  such as blocked or skipped?
+- **Assignees.** Can a task be assigned to the client, as some placeholder tasks are? To a team? To
+  nobody?
+- **Completion.** Is it the share of tasks complete, as here, or weighted by stage or task?
+  Progress Bar draws no ring at 0, so a roadmap with nothing complete shows only the count: is that
+  enough?
+- **Late tasks.** No placeholder task is overdue. How does a task past its due date show, and does a
+  complete task show when it was completed instead of when it was due?
+- **Adding and arranging tasks.** How tasks are added, removed, and reordered, and whether a
+  roadmap starts from a template. The Empty State's “Add a task” isn't wired.
+- **Saving in place.** Do an assignee and a due date save as soon as they change, with no
+  confirmation, as here? What happens when a save fails?
+- **Undo.** The toast has no Undo; setting the status back from the task's actions does it. Should
+  the toast offer Undo?
+- **Filters.** Are status and assignee the filters people need? Should the filters be remembered, and
+  should a stage with no matching task disappear, as here, or stay with its own empty row?
+- **Who's told.** Does completing a task, or the roadmap, notify the client or the assignee?
+
+</Section>
+
+<Section title="Components used">
+
+Every component the template is built from, read from its source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</TemplatePage>
+</Unstyled>

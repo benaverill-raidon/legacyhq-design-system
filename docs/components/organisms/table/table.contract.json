@@ -2,6 +2,52 @@
   "name": "Table",
   "category": "data-display",
   "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
+    },
+    {
+      "kind": "gap",
+      "summary": "Two defaults are built from English inside it: the footer name and \"Select row\"."
+    },
+    {
+      "kind": "bug",
+      "summary": "Selection counts rows a filter now hides, and bulk actions act on them; its page only says selection is kept across pages and sorts."
+    },
+    {
+      "kind": "bug",
+      "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
+    },
+    {
+      "kind": "gap",
+      "summary": "Its default empty text (\"No results\" over \"There is nothing to show here yet.\") mixes two kinds of empty, and sits on the deep surface where a passed Empty State is transparent."
+    },
+    {
+      "kind": "gap",
+      "summary": "Nothing announces that a search found nothing: its only live region is the selection count."
+    },
+    {
+      "kind": "bug",
+      "summary": "Skeleton rows ignore a column's `align: 'end'`."
+    },
+    {
+      "kind": "gap",
+      "summary": "`activeFilters` renders in a plain div, and its WithToolbar and FullShell stories pass filter Chips without the named Chip Group Chip Group's page asks for."
+    },
+    {
+      "kind": "gap",
+      "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
+    },
+    {
+      "kind": "gap",
+      "summary": "The title is always `heading-lg`, so stacked tables can't rank under a page heading."
+    },
+    {
+      "kind": "gap",
+      "summary": "No row groups, so grouped rows are separate tables, each adding its own tab stop, and `activeFilters` belongs to one table."
+    }
+  ],
   "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
   "intent": "A data-table shell: a section header (title + description), a toolbar (search + filter/configure icon buttons + actions + active-filter Chip mode='filter' pills), a column-config-driven grid (sortable headers, a selection column, row/loading/empty states), and a pagination footer. Driven by `columns` + `data`; sorting, selection, and search are owned by default (uncontrolled) with controlled overrides, and pagination is client-side or server-driven. Composes Text Field, Select, Checkbox, Icon Button, Button, and Skeleton (and hosts consumer-rendered Chips) into one complete section - which is why it lives at the organism tier.",
   "nativeElement": "table (semantic thead/tbody/th/td, with a visually-hidden caption)",

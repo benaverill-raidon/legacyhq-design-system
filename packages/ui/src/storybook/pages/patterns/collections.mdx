@@ -1,0 +1,398 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import { Code } from '../../blocks/doc-page';
+import {
+  Choice,
+  Choices,
+  ComponentsUsed,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  PatternHeader,
+  PatternPage,
+  Section,
+  Subsection,
+} from '../../blocks/pattern-page';
+import { MoreVertIcon } from '../../../assets/icons';
+import { IconButton } from '../../../components/atoms/icon-button';
+import { Label } from '../../../components/atoms/label';
+import { Link } from '../../../components/atoms/link';
+import { Chip } from '../../../components/molecules/chip';
+import { ChipGroup } from '../../../components/molecules/chip-group';
+import { KeyValueList } from '../../../components/molecules/key-value-list';
+import { KeyValuePair } from '../../../components/molecules/key-value-pair';
+import { TagGroup } from '../../../components/molecules/tag-group';
+import { Card } from '../../../components/organisms/card';
+import * as Stories from './collections.stories';
+import storiesSource from './collections.stories.tsx?raw';
+import styles from './collections.module.css';
+
+{/* Multi-line code samples for Do and don't, in the order they appear. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Card>
+  <article aria-labelledby="engagement-letter">
+    <h4 id="engagement-letter">
+      <Link href={'/documents/' + doc.id} emphasis="strong">
+        Engagement letter
+      </Link>
+    </h4>
+    <p>Uploaded Oct 9, 2026</p>
+  </article>
+</Card>`;
+export const sample2 = `<Card onClick={() => navigate('/documents/' + doc.id)}>
+  <h4>Engagement letter</h4>
+</Card>`;
+export const sample3 = `<ChipGroup aria-label="Active filters">
+  <Chip
+    mode="filter"
+    label="Status"
+    value={{ label: 'Open', sections: statusSections }}
+    onRemove={clearStatus}
+  />
+</ChipGroup>`;
+export const sample4 = `<IconButton
+  appearance="subtle"
+  aria-label={'Actions for ' + matter.name}
+>
+  <MoreVertIcon />
+</IconButton>`;
+export const sample5 = `<IconButton appearance="subtle" aria-label="Actions">
+  <MoreVertIcon />
+</IconButton>`;
+export const sample6 = `<h3>Rivera v. Atlantic Insurance</h3>
+<KeyValueList>
+  <KeyValuePair label="Client" value="Lucia Rivera" underline />
+  <KeyValuePair label="Status" value={<Label size="sm" tone="information">Open</Label>} />
+</KeyValueList>`;
+export const sample7 = `<Table
+  caption="Matter"
+  columns={[{ key: 'client', header: 'Client' }, { key: 'status', header: 'Status' }]}
+  data={[matter]}
+/>`;
+
+<Meta of={Stories} name="Docs" />
+
+export const statusSections = [
+  {
+    id: 'status',
+    items: ['Open', 'Awaiting signature', 'Closed'].map((label) => ({ id: label, label, selectionType: 'radio', selected: label === 'Open' })),
+  },
+];
+
+<Unstyled>
+<PatternPage>
+
+<PatternHeader title="Collections" source={storiesSource}>
+  How LegacyHQ shows many records, and lets people find, narrow, and act on them: matters, filings,
+  documents, clients. Choose the component by how people read the records. Table brings search,
+  sorting, selection, and paging with it; the data, the filters, and what the actions do stay yours.
+</PatternHeader>
+
+<Section title="The problem">
+
+Most of LegacyHQ is a list of something: the firm's matters, a matter's documents, a client's
+filings. People come to a list to find one record, to compare several, or to change many at once.
+Without one approach, one list sorts from its headers and the next from a menu, filters look
+different on every screen, and people can't tell what they're acting on.
+
+Three questions settle almost every case:
+
+- **How do people read the records?** Compared across the same fields, read one at a time, or one
+  record in full. The answer picks Table, Card, or Key Value List.
+- **How do they find the ones they want?** Searching, sorting, filtering, and paging each have one
+  control, and Table has a place for all of them.
+- **What do they do with them?** Open one, act on one, act on several, or change one field where it's
+  shown.
+
+</Section>
+
+<Section title="Choosing">
+
+<Choices situation="The records are" columns={['Reads as', 'People can']}>
+  <Choice
+    situation="Many of the same kind, compared across the same fields: matters, filings, trust balances."
+    cells={['One row per record, one column per field.', 'Search, sort, filter, select, page through, and edit in place.']}
+  >
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice
+    situation="Each read on its own, with a layout of its own: documents, recent matters."
+    cells={['One card per record, in a layout grid.', 'Open one from its link. Card has no selection, sorting, or paging.']}
+  >
+    <DocLink to="Components/Data Display/Card" />
+  </Choice>
+  <Choice situation="One record, in full: a matter's details." cells={['One row per field, the key beside the value.', 'Correct a field in place, with Inline Edit.']}>
+    <DocLink to="Components/Data Display/Key Value List" />
+    <DocLink to="Components/Data Display/Key Value Pair" />
+  </Choice>
+  <Choice
+    situation="A short set inside a record: its linked records, or its categories."
+    cells={[<>A row of Tags. Past <Code>maxVisible</Code>, the rest are behind “+3 more”.</>, 'Open a linked record.']}
+  >
+    <DocLink to="Components/Data Display/Tag Group" />
+  </Choice>
+  <Choice situation="The people on a record: a matter's team, a document's collaborators." cells={[<>A row of avatars. Past <Code>maxVisible</Code>, the rest are behind “+3”.</>, 'See everyone in the overflow menu.']}>
+    <DocLink to="Components/Data Display/Avatar Group" />
+  </Choice>
+</Choices>
+
+<Subsection title="Finding and narrowing">
+
+Table shows the controls and keeps their state; it never filters the rows. Filter `data` yourself, from
+the search text and the filters you hold.
+
+<Choices situation="People want to" columns={['What it does', 'You keep']}>
+  <Choice situation="Find records by name or text." cells={[<>Table’s <Code>searchable</Code> puts a search button in the toolbar, which opens a search field.</>, <>The filtering: narrow <Code>data</Code> in <Code>onSearchChange</Code>.</>]}>
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice
+    situation="Put the records in order by one field."
+    cells={[<>A column’s <Code>sortable</Code> makes its header a sort button: ascending, then descending, then back to the order of <Code>data</Code>.</>, <>Nothing, unless you sort on the server with <Code>manualSort</Code>.</>]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice
+    situation="Narrow by a field, and see and change what's applied: status, attorney, due date."
+    cells={['A filter chip shows the field and its value. The value opens a menu to change it, and a button removes the filter.', 'Which filters are on, and their values.']}
+  >
+    <DocLink to="Components/Forms/Chip" />
+    <DocLink to="Components/Forms/Chip Group" />
+  </Choice>
+  <Choice
+    situation="Narrow by one field that's always offered, from a long list: a matter, a client."
+    cells={['A field whose list filters as people type.', 'The value.']}
+  >
+    <DocLink to="Components/Forms/Select" />
+  </Choice>
+  <Choice situation="Narrow a search to a kind of record: Matters, Documents, People." cells={['A search chip per scope, each a toggle.', 'Which scopes are on. Chip Group doesn’t turn the others off.']}>
+    <DocLink to="Components/Forms/Chip" />
+    <DocLink to="Components/Forms/Chip Group" />
+  </Choice>
+</Choices>
+
+</Subsection>
+
+<Subsection title="Paging">
+
+<Choices situation="The records are" columns={['Pages', 'Page size']}>
+  <Choice
+    situation="In a Table."
+    cells={[<><Code>pageSize</Code> turns paging on, and the footer moves between pages. With <Code>manualPagination</Code>, you pass one page of rows and <Code>pageCount</Code>.</>, <><Code>itemsPerPageOptions</Code> adds a page-size Select to the footer.</>]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice
+    situation="Not in a table, with a known number of pages: a grid of cards, search results."
+    cells={[<>You keep <Code>currentPage</Code>, and update it from <Code>onPageChange</Code>.</>, 'Fixed: Pagination has no page-size control.']}
+  >
+    <DocLink to="Components/Navigation/Pagination" />
+  </Choice>
+  <Choice situation="Loaded a batch at a time, with no fixed number of pages." cells={['A button that loads the next batch.', 'Fixed.']}>
+    <DocLink to="Components/Actions/Button" />
+  </Choice>
+</Choices>
+
+</Subsection>
+
+<Subsection title="Acting on records">
+
+<Choices situation="People need to" columns={['How']}>
+  <Choice situation="Open a record." cells={['A strong Link in the column that identifies the row, or in a card’s heading. Never a row or a card that’s clickable.']}>
+    <DocLink to="Components/Navigation/Link" />
+  </Choice>
+  <Choice
+    situation="Act on several records at once."
+    cells={[<>Table’s <Code>selectable</Code> adds a Checkbox to each row. While any are selected, the selection bar replaces the toolbar’s buttons, with the count and your <Code>bulkActions</Code>.</>]}
+  >
+    <DocLink to="Components/Data Display/Table" />
+  </Choice>
+  <Choice situation="Act on one record." cells={['A trigger in the row, named for the row, opens a menu of its actions.']}>
+    <DocLink to="Components/Actions/Dropdown Menu" />
+    <DocLink to="Components/Actions/Icon Button" />
+  </Choice>
+  <Choice
+    situation="Change one field without leaving the list."
+    cells={[<>A column with <Code>cellAppearance: 'editable'</Code> returns its editor from <Code>render</Code>: Inline Edit around a Text Field, or a Select.</>]}
+  >
+    <DocLink to="Components/Forms/Inline Edit" />
+    <DocLink to="Components/Forms/Select" />
+  </Choice>
+  <Choice
+    situation="Do something that can't be undone, such as deleting."
+    cells={[<>Ask first, in a dialog named for what it does. See <DocLink to="Patterns/Messages and Feedback" />.</>]}
+  >
+    <DocLink to="Components/Overlays/Modal Dialog" />
+  </Choice>
+</Choices>
+
+</Subsection>
+
+</Section>
+
+<Section title="Examples">
+
+<Example
+  of={Stories.MattersTable}
+  caption="The firm's matters. Search, sort from a header, change or remove the Status filter, or add one. A new search or filter goes back to page 1. Select rows to delete them, which asks first, or open a row's actions from its Icon Button."
+/>
+
+<Example
+  of={Stories.EditInPlace}
+  caption="A filing's name corrected with Inline Edit, and its status chosen with Select, in editable cells. Each editor is named for its row."
+/>
+
+<Example
+  of={Stories.DocumentCards}
+  caption="Documents read one at a time, as cards in a grid. Each opens from its heading, and links its records with a Tag Group and its people with an Avatar Group. A Select narrows them to one matter, and Pagination pages them."
+/>
+
+<Example
+  of={Stories.MatterDetails}
+  caption="One matter in full, as a Key Value List under its heading. The attorney is corrected in place; the team and the linked records are groups inside the list."
+/>
+
+</Section>
+
+<Section title="Rules">
+
+- **Choose by how people read the records, not by how many there are.** Records compared across
+  the same fields go in a Table, even a short list. Records read one at a time, each with its own
+  layout, go in Cards.
+- **Open a record from a real link.** Put a strong Link in the column that identifies the row, or in
+  the card's heading. Rows and cards aren't click targets: a Table row is selected only through its
+  Checkbox, and Card handles no events.
+- **Give each table a stable row id.** Pass a `getRowId` that returns the record's id. Selection is
+  kept by id across pages and sorts, and the default id, the row's position in `data`, moves when
+  the data is filtered.
+- **Filter the data yourself, and go back to page 1.** Table shows the search and the filters but
+  doesn't narrow `data`. When the search or a filter changes, set the page back to 1, so people
+  start at the top of the new results.
+- **Show what's applied.** Every filter that narrows the list shows as a filter Chip, in Table's
+  `activeFilters` or a Chip Group above the list, and can be changed or removed there. Use Chips for
+  filters, not Tags: Tags are references to records.
+- **Say who a bulk action affects.** The selection bar counts every selected row, including rows on
+  other pages or hidden by a filter, and a bulk action applies to all of them. Name the count in its
+  confirmation, as "Delete 3 matters?" does.
+- **Confirm what can't be undone.** Deleting, from a row or in bulk, asks in a Modal Dialog with
+  `tone="error"`, then confirms with a toast, as <DocLink to="Patterns/Messages and Feedback" /> sets out.
+- **Say why a list is empty.** When a search or filter finds nothing, pass Table an `empty` Empty
+  State that says so and offers a way back, such as clearing the filters. The default says "There is
+  nothing to show here yet.", which is wrong for a search. <DocLink to="Patterns/Loading and Empty States" />
+  covers lists with nothing in them yet.
+- **Status is a Label.** Show a record's status in words with Label, whose tones mean something.
+  Badge is for counts of one to four characters.
+
+</Section>
+
+<Section title="Accessibility">
+
+- Table is a native `table`, named by a visually hidden `caption`: `caption`, or `title` when
+  there's no caption. Give every table one. A sortable header sets `aria-sort` to `ascending`,
+  `descending`, or `none`.
+- Name each row's selection Checkbox for its record with `getSelectionLabel`, such as "Select Rivera
+  v. Atlantic Insurance". Without it, every row's Checkbox is "Select row". When the selection
+  changes, a polite live region announces the count, such as "3 selected".
+- Name each row's action trigger and each editable cell's control for its row, such as "Actions for
+  Rivera v. Atlantic Insurance" or "Status, Petition for probate", so they can be told apart out of
+  context.
+- Name a Chip Group of filters, such as "Active filters": only a named group has `role="group"`. A
+  filter chip's value button is named by the field and its value together, such as "Status Open",
+  and its remove button "Remove Status".
+- Table's footer is a `navigation` region named for the table, such as "Matters pagination". A
+  Pagination on its own is a `nav` named "Pagination" by default, so give each on a page its own
+  name, as "Documents pagination" does.
+- Card is a plain `div` that screen readers don't announce. Give each card's content its own
+  semantics: an `article` named by its heading, in a list.
+- Key Value List is a `dl`, with no name of its own. Put a heading before it. An inline control in a
+  pair needs an `aria-label`, usually the key: the key doesn't name it.
+- Say what an Avatar Group's people are in the text around it, such as a "Team" key.
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Open a record from a strong Link in its card's heading, or in a table's identifier column."
+  code={sample1}
+>
+  <Card className={styles.specimen}>
+    <article className={styles.cardContent} aria-labelledby="collections-do-title">
+      <h4 id="collections-do-title" className={styles.cardTitle}>
+        <Link href="#document-engagement-letter" emphasis="strong">
+          Engagement letter
+        </Link>
+      </h4>
+      <p className={styles.meta}>Uploaded Oct 9, 2026</p>
+    </article>
+  </Card>
+</Do>
+<Dont
+  caption="Make a row or a card the click target. Keyboard and screen reader users can't reach it, and it competes with the row's Checkbox."
+  code={sample2}
+/>
+<Do
+  caption="Show each applied filter as a filter Chip, which people can change or remove, in a named group."
+  code={sample3}
+>
+  <ChipGroup aria-label="Active filters">
+    <Chip mode="filter" label="Status" value={{ label: 'Open', sections: statusSections }} onRemove={() => {}} />
+  </ChipGroup>
+</Do>
+<Dont
+  caption="Build filters from Tags. A Tag is a reference to a record: it can't show which value is applied or change it."
+  code={`<TagGroup tags={[{ id: 'status', label: 'Status: Open', isRemovable: true }]} />`}
+>
+  <TagGroup tags={[{ id: 'status', label: 'Status: Open', isRemovable: true, onRemove: () => {} }]} />
+</Dont>
+<Do
+  caption="Name each row's action trigger for its row."
+  code={sample4}
+>
+  <IconButton appearance="subtle" aria-label="Actions for Rivera v. Atlantic Insurance">
+    <MoreVertIcon />
+  </IconButton>
+</Do>
+<Dont
+  caption="Give every row's trigger the same name. Out of context, people hear “Actions” again and again, with no record."
+  code={sample5}
+>
+  <IconButton appearance="subtle" aria-label="Actions">
+    <MoreVertIcon />
+  </IconButton>
+</Dont>
+<Do
+  caption="Show one record's details as a Key Value List, under a heading."
+  code={sample6}
+>
+  <KeyValueList className={styles.specimen}>
+    <KeyValuePair label="Client" value="Lucia Rivera" underline />
+    <KeyValuePair
+      label="Status"
+      value={
+        <Label size="sm" tone="information">
+          Open
+        </Label>
+      }
+    />
+  </KeyValueList>
+</Do>
+<Dont
+  caption="Lay one record out as a one-row table. Its fields are read down, not compared across rows."
+  code={sample7}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Components used">
+
+Every component the examples on this page are built from, read from their source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</PatternPage>
+</Unstyled>

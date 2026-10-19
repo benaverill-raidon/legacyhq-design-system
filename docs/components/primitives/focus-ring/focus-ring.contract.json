@@ -1,7 +1,17 @@
 {
   "name": "FocusRing",
   "category": "foundations",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "No focus-offset token: the offset is a raw 2px, and other components borrow spacing tokens for theirs. Created in Figma first."
+    },
+    {
+      "kind": "gap",
+      "summary": "No inverse ring for dark surfaces, so the ring is low-contrast on dark fills. Created in Figma first."
+    }
+  ],
   "purpose": "Provide one consistent keyboard-focus indicator shared by every interactive component.",
   "intent": "Centralize :focus-visible styling so no component defines its own one-off focus treatment.",
   "sourceFiles": {

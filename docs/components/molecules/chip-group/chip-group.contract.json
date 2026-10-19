@@ -1,7 +1,13 @@
 {
   "name": "ChipGroup",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+    }
+  ],
   "purpose": "Lay out a wrapping row of Chips at one shared size and alignment.",
   "intent": "Give a row of Chips its measured wrap, gap, and alignment in one place, and remove the repetition (and the silent misalignment) of setting the same size on every chip by hand.",
   "sourceFiles": {

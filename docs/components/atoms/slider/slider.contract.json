@@ -1,7 +1,21 @@
 {
   "name": "Slider",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "A range submits `name` and `${name}Max`. Is that the intended form shape?"
+    },
+    {
+      "kind": "bug",
+      "summary": "The hover-only value bubble floats over the label."
+    },
+    {
+      "kind": "gap",
+      "summary": "No `invalid` state or message, and Field's page doesn't list it among the controls it wires."
+    }
+  ],
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",
   "figmaSource": {

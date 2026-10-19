@@ -19,7 +19,10 @@
       "tokens",
       "accessibility",
       "relatedComponents",
-      "contentCompleteness"
+      "contentCompleteness",
+      "knownIssues",
+      "replacedBy",
+      "statusCheck"
     ],
     "properties": {
       "id": { "type": "string" },
@@ -34,7 +37,34 @@
         "type": "string",
         "enum": ["actions", "forms", "feedback", "navigation", "data-display", "overlays", "foundations"]
       },
-      "status": { "type": "string" },
+      "status": {
+        "description": "How ready the component is, authored in contract.json. This enum is the single authoritative list of statuses; their meaning and the evidence each needs are in componentStatus in component-registry-governance.json.",
+        "type": "string",
+        "enum": ["draft", "beta", "stable", "deprecated"]
+      },
+      "knownIssues": {
+        "description": "Unresolved bugs, gaps, and open decisions about this component, authored in contract.json. Any hold it below Stable.",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["kind", "summary"],
+          "properties": {
+            "kind": { "type": "string", "enum": ["bug", "gap", "decision"] },
+            "summary": { "type": "string" }
+          }
+        }
+      },
+      "replacedBy": { "description": "For a deprecated component, the id of the one to use instead; null otherwise.", "type": "string" },
+      "statusCheck": {
+        "description": "Generated: the status the evidence supports, the evidence, and which of Stable's criteria it doesn't meet. component-status.test.ts checks it against the source tree.",
+        "type": "object",
+        "required": ["supported", "unmet", "evidence"],
+        "properties": {
+          "supported": { "type": "string", "enum": ["draft", "beta", "stable"] },
+          "unmet": { "type": "array", "items": { "type": "string" } },
+          "evidence": { "type": "object" }
+        }
+      },
       "path": { "type": "string" },
       "anatomy": {
         "type": "array",

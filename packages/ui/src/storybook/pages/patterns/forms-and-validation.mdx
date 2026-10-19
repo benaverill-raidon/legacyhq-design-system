@@ -1,0 +1,331 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocLink } from '../../blocks/doc-link';
+import { Code } from '../../blocks/doc-page';
+import {
+  Choice,
+  Choices,
+  ComponentsUsed,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  PatternHeader,
+  PatternPage,
+  Section,
+  Subsection,
+  ToneMatrix,
+} from '../../blocks/pattern-page';
+import { Button } from '../../../components/atoms/button';
+import { Checkbox } from '../../../components/atoms/checkbox';
+import { RadioGroup } from '../../../components/atoms/radio';
+import { Switch } from '../../../components/atoms/switch';
+import { Field } from '../../../components/molecules/field';
+import { Select } from '../../../components/molecules/select';
+import { TextField } from '../../../components/molecules/text-field';
+import { SectionMessage } from '../../../components/organisms/section-message';
+import * as Stories from './forms-and-validation.stories';
+import storiesSource from './forms-and-validation.stories.tsx?raw';
+
+export const BILLING = [
+  { value: 'hourly', label: 'Hourly' },
+  { value: 'flat', label: 'Flat fee' },
+  { value: 'contingency', label: 'Contingency' },
+];
+
+{/* Multi-line code samples for Do and don't, in the order they appear. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Billing">
+  <Select options={billing} value="flat" onChange={setBilling} />
+</Field>`;
+export const sample2 = `<SectionMessage tone="error" title="Fix 1 field to create the matter">
+  Docket number: enter it as it appears on the court notice.
+</SectionMessage>
+<Field label="Docket number" state="error" message="Enter the docket number as it appears on the court notice, such as MER-L-001482-26.">
+  <TextField invalid defaultValue="1482" />
+</Field>`;
+export const sample3 = `<SectionMessage tone="error" title="The form has errors">
+  Check your entries and try again.
+</SectionMessage>
+<Field label="Docket number">
+  <TextField defaultValue="1482" />
+</Field>`;
+
+<Meta of={Stories} name="Docs" />
+
+<Unstyled>
+<PatternPage>
+
+<PatternHeader title="Forms and Validation" source={storiesSource}>
+  How LegacyHQ builds a form and tells people what's wrong with it. Choose each control by the kind
+  of answer it takes, lay the controls out with Form, and let Field label and describe each one. When
+  a submit fails, say so once at the top of the form and again at each field, in words that say what
+  to do.
+</PatternHeader>
+
+<Section title="The problem">
+
+Most work in LegacyHQ starts with a form: opening a matter, adding a client, scheduling a hearing.
+Without one approach, the same answer is a Select on one screen and radios on the next, required
+fields go unmarked, and a failed submit leaves people hunting for what's wrong.
+
+Two questions settle most of it:
+
+- **What kind of answer is it?** A line of text, one choice from a few, a date. The answer decides
+  the control, and the control decides how it's labelled and how it shows an error.
+- **What's wrong, and where?** An error belongs beside the control it's about, in words that say
+  how to fix it. When a submit fails, a summary at the top says how many things need fixing and
+  takes people to each one.
+
+</Section>
+
+<Section title="Choosing">
+
+<Choices situation="The answer is" columns={['Label and message', 'An error']}>
+  <Choice
+    situation="One line of text: a name, an email address, a docket number, an amount."
+    cells={['Field', <>Field’s <Code>state="error"</Code> and <Code>message</Code>, with the control’s own <Code>invalid</Code>.</>]}
+  >
+    <DocLink to="Components/Forms/Text Field" />
+  </Choice>
+  <Choice situation="Text that runs over several lines: notes, a description." cells={['Field', 'The same as Text Field.']}>
+    <DocLink to="Components/Forms/Text Area" />
+  </Choice>
+  <Choice
+    situation="A note that mentions people, matters, or documents, each linked to its record."
+    cells={[
+      <>Field, which names the editor by <Code>aria-labelledby</Code>.</>,
+      <>The same as Text Field. It isn’t a native control, so it isn’t sent with the form, and the browser doesn’t check its <Code>required</Code>.</>,
+    ]}
+  >
+    <DocLink to="Components/Forms/Rich Text Area" />
+  </Choice>
+  <Choice
+    situation={<>One value from a list long enough to filter: a matter type, an attorney. Several, with <Code>inputType="multi"</Code>.</>}
+    cells={['Field', 'The same as Text Field.']}
+  >
+    <DocLink to="Components/Forms/Select" />
+  </Choice>
+  <Choice
+    situation="One answer from a few options people should see side by side."
+    cells={[<>Radio Group’s <Code>label</Code>, as the fieldset’s legend, and its <Code>description</Code>.</>, <>Radio Group’s <Code>errorMessage</Code>, with its <Code>invalid</Code>.</>]}
+  >
+    <DocLink to="Components/Forms/Radio" />
+  </Choice>
+  <Choice
+    situation="Any number of options from a short set, or a single yes or no saved with the form."
+    cells={[
+      <>Checkbox Group’s legend and <Code>description</Code> for a set; a single Checkbox’s own <Code>label</Code>.</>,
+      <>Checkbox Group’s <Code>errorMessage</Code>, with its <Code>invalid</Code>. A single Checkbox has <Code>invalid</Code> but no message: connect one with <Code>aria-describedby</Code>.</>,
+    ]}
+  >
+    <DocLink to="Components/Forms/Checkbox" />
+  </Choice>
+  <Choice
+    situation="A setting that takes effect as soon as it’s flipped, with no save step."
+    cells={[<>Its own <Code>label</Code>.</>, <>None: it isn’t part of a submit. <Code>isLoading</Code> shows it saving.</>]}
+  >
+    <DocLink to="Components/Forms/Switch" />
+  </Choice>
+  <Choice
+    situation="A value set by feel, or a low and a high bound, where the exact number doesn’t matter."
+    cells={[<>Its own <Code>label</Code>.</>, 'None: it has no invalid state or message.']}
+  >
+    <DocLink to="Components/Forms/Slider" />
+  </Choice>
+  <Choice
+    situation="One date, or one time of day: a deadline, a hearing time."
+    cells={['Field', <>The same as Text Field. With <Code>required</Code>, the browser checks it too.</>]}
+  >
+    <DocLink to="Components/Forms/Date Picker" />
+    <DocLink to="Components/Forms/Time Picker" />
+  </Choice>
+  <Choice
+    situation="A date and a time as one value: a hearing, a meeting."
+    cells={['Field, which names the pair as a group.', <><Code>invalid</Code> marks both halves.</>]}
+  >
+    <DocLink to="Components/Forms/Date Time Picker" />
+  </Choice>
+  <Choice
+    situation="One value changed where it’s shown, outside a form: a matter’s name, one detail."
+    cells={[<>The Key Value Pair or Field around it, or <Code>aria-label</Code>.</>, 'None of its own. Leaving the field confirms the draft.']}
+  >
+    <DocLink to="Components/Forms/Inline Edit" />
+  </Choice>
+</Choices>
+
+<Subsection title="Laying out the form">
+
+<DocLink to="Components/Forms/Form" /> lays out the controls and <DocLink to="Components/Forms/Field" /> labels each one.
+
+- **Form** gives the header: `title`, `description`, and `requiredLegend`, the line "\* indicates a
+  required field". Set it whenever a field is required.
+- **FormSection** groups related fields under an optional title. Fields in a section stack one per
+  line.
+- **FormRow** puts short, related fields side by side, such as first and last name. It never stacks
+  on a narrow screen, so keep long fields out of rows.
+- **Field** puts the label above the control and the message below it. The message is helper text
+  until there's an error. `required` shows the `*` and sets the control's native `required`.
+- **FormFooter** holds the actions. The submitting Button needs `type="submit"`: Button defaults to
+  `type="button"`.
+
+</Subsection>
+
+<Subsection title="Marking an error">
+
+Field marks one control with `state`. `error` colors the message, adds a status icon, and sets
+`aria-invalid` on the control; `valid` confirms a check passed. Field doesn't change the control's
+border, so pair `state="error"` with the control's own `invalid`. Radio Group and Checkbox Group take
+`invalid` and `errorMessage` instead. The table is read from Field's TypeScript.
+
+<ToneMatrix components={['field']} prop="state" />
+
+</Subsection>
+
+</Section>
+
+<Section title="Examples">
+
+<Example
+  of={Stories.MatterIntake}
+  caption="A matter intake form: sections, rows of short fields, required fields with the legend, and helper text where a field needs explaining. Each control matches its answer: Select for a list, Radio Group for three options, Checkbox Group for any number."
+/>
+
+<Example
+  of={Stories.SubmitAndValidate}
+  caption="Submit the form as it is. The summary takes focus and links to each field, and each field says what to do. Fix them and submit again: the button shows it's busy, and a toast confirms."
+/>
+
+<Example
+  of={Stories.OutsideAForm}
+  caption="No form needed. Inline Edit changes one value where it's shown, and a Switch applies a setting as soon as it's flipped, showing it's saving while it does."
+/>
+
+</Section>
+
+<Section title="Rules">
+
+- **Choose the control by the answer.** A choice saved when the form is submitted is a Checkbox;
+  a Switch takes effect right away, so it doesn't belong in a form with a submit button. A few
+  options people should compare are radios, not a Select.
+- **Label every control.** Field for one control, the legend of a Radio Group or Checkbox Group for
+  a set. Mark required fields with `required` and set the form's `requiredLegend`.
+- **Say what a field wants before anyone gets it wrong.** Helper text in Field's `message` gives the
+  format, the limit, or who sees the value. Leave it out when the label says enough.
+- **Check when people submit, then follow the value.** The system doesn't set the timing: Field
+  doesn't validate, and Form leaves checks to you or to the browser. Our guidance is to check on
+  submit and show every error at once, then update each field as its value changes, so an error
+  clears as soon as it's fixed.
+- **Show a failed submit at the top and at each field.** Put a Section Message with
+  `tone="error"` at the top of the form, naming each field that needs fixing and linking to it.
+  Each field shows its own error. Don't show only one or the other. The summary is a live region, so
+  change it on the next submit, not on every keystroke.
+- **Write each error as what to do.** "Enter the client's first and last name", not "Invalid input."
+- **Use your own check or the browser's, not both.** Form is a native `form`, so the browser checks
+  `required` and stops the submit with its own message unless you set `noValidate`. Set it when you
+  show the system's errors. Check a required Checkbox Group and a Rich Text Area yourself: the
+  browser checks neither.
+- **Show the submit is busy on its button.** Set `isLoading` on the submit Button while it saves. It
+  keeps its size and label, and ignores clicks. Don't disable it or swap the label for "Saving…".
+- **Confirm a save the way any message confirms.** A toast for a save that worked; a failure that
+  needs fixing stays on the page. See <DocLink to="Patterns/Messages and Feedback" />.
+- **Edit one value in place when it doesn't need a form.** Inline Edit has no error state, and
+  leaving the field confirms the draft, so a value that needs a check that can fail belongs in a
+  form, where Field can show the error.
+
+</Section>
+
+<Section title="Accessibility">
+
+- Field's label names the control, its message is the control's description (`aria-describedby`),
+  `state="error"` sets `aria-invalid`, and `required` sets the native `required`. The `*` is hidden,
+  so the requirement is announced once.
+- Radio Group and Checkbox Group are a `fieldset` named by the legend. Their `description` and
+  `errorMessage` describe the fieldset and each option from `options`. A required Checkbox Group
+  adds hidden text to the legend, such as "required", since checkboxes have no group requirement.
+- No component moves focus when a submit fails. Move it to the summary yourself: Section Message
+  takes a `ref` and `tabIndex={-1}`. It's a polite live region, but a message added with its content
+  already in it may not be read out as it appears, so move focus to it rather than rely on that.
+- Link each error in the summary to its field, and move focus to the field. The field then reads
+  its label and its error.
+- A loading Button sets `aria-busy`, and its label stays its accessible name.
+- Form is a landmark only when it's named, and its title and section titles aren't headings. Pass
+  `aria-label` or `aria-labelledby` if people should find it by landmark, and put the page's own
+  heading above it.
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Use a Checkbox for a choice that's saved when the form is submitted."
+  code={`<Checkbox label="Email the client a copy of the engagement letter" />`}
+>
+  <Checkbox label="Email the client a copy of the engagement letter" />
+</Do>
+<Dont
+  caption="Put a Switch in a form with a submit button. A Switch says the change has already happened."
+  code={`<Switch label="Email the client a copy of the engagement letter" />`}
+>
+  <Switch label="Email the client a copy of the engagement letter" />
+</Dont>
+<Do
+  caption="Show a few options people should compare as radios, all on view."
+  code={`<RadioGroup label="Billing" orientation="horizontal" defaultValue="flat" options={billing} />`}
+>
+  <RadioGroup label="Billing" orientation="horizontal" defaultValue="flat" options={BILLING} />
+</Do>
+<Dont
+  caption="Hide three options in a Select. People have to open it to see what they can choose."
+  code={sample1}
+>
+  <Field label="Billing">
+    <Select options={BILLING} value="flat" onChange={() => {}} />
+  </Field>
+</Dont>
+<Do
+  caption="Name what needs fixing in the summary, and say what to do at the field."
+  code={sample2}
+>
+  <SectionMessage tone="error" title="Fix 1 field to create the matter">
+    Docket number: enter it as it appears on the court notice.
+  </SectionMessage>
+  <Field label="Docket number" state="error" message="Enter the docket number as it appears on the court notice, such as MER-L-001482-26.">
+    <TextField invalid defaultValue="1482" />
+  </Field>
+</Do>
+<Dont
+  caption="Report the failure only at the top. People have to find the field themselves."
+  code={sample3}
+>
+  <SectionMessage tone="error" title="The form has errors">
+    Check your entries and try again.
+  </SectionMessage>
+  <Field label="Docket number">
+    <TextField defaultValue="1482" />
+  </Field>
+</Dont>
+<Do caption="Show the submit is busy with isLoading. The button keeps its size and its label." code={`<Button prominence="primary" type="submit" isLoading>Create matter</Button>`}>
+  <Button prominence="primary" type="submit" isLoading>
+    Create matter
+  </Button>
+</Do>
+<Dont caption="Disable the button and swap its label. It changes width, and the action's name is gone." code={`<Button prominence="primary" type="submit" disabled>Saving…</Button>`}>
+  <Button prominence="primary" type="submit" disabled>
+    Saving…
+  </Button>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Components used">
+
+Every component the examples on this page are built from, read from their source.
+
+<ComponentsUsed source={storiesSource} />
+
+</Section>
+
+</PatternPage>
+</Unstyled>

@@ -323,8 +323,12 @@ of examples, written with `storybook/blocks/pattern-page.tsx`. Sections, all
 required, in order: The problem, Choosing, Examples, Rules, Accessibility,
 Do and don't, Components used.
 
-- **Examples are stories built only from system components**; a local CSS
-  Module may lay them out, never restyle them. Story title `Patterns/<Name>`.
+- **Examples are stories built only from system components** (and the
+  system's icons); a local CSS Module may lay them out, never restyle them.
+  Story title `Patterns/<Name>`. Mount at most one `ToastGroup` per page.
+- **Multi-line Do/Don't code samples are MDX exports** (`export const
+  sample1 = …`, then `code={sample1}`): MDX strips two spaces from
+  every line of a multi-line string written in a JSX attribute.
 - **Facts are read from the code.** "Components used" and the header's count
   come from the stories file's imports (`?raw`); tone tables
   (`<ToneMatrix>`) read each component's `.types.ts`. Prose cites behavior
@@ -333,7 +337,8 @@ Do and don't, Components used.
 - `pattern-pages.test.ts` (part of `npm test`) checks sections, that the
   examples import only system components, that everything the MDX renders is
   in "Components used", that each listed component links to a real Docs page,
-  and the cited facts.
+  and the cited facts. Each page also has its own `<pattern>.test.ts` for
+  the facts its prose states.
 
 ## When building/editing a component
 

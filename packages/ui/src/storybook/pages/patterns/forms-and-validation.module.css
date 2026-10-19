@@ -1,0 +1,23 @@
+/*
+ * Layout for the Forms and Validation examples: where each part sits, never how it looks.
+ * The stack spaces the details from the setting below them. The details stop short of the edge,
+ * so Inline Edit's end-placed buttons have room outside the field. The error list spaces the
+ * summary's links.
+ */
+
+.stack {
+  display: grid;
+  gap: var(--spacing-xl);
+}
+
+.details {
+  inline-size: 80%;
+}
+
+.errorList {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding-inline-start: var(--spacing-lg);
+  list-style: disc;
+}

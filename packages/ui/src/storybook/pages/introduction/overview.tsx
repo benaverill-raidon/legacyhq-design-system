@@ -295,7 +295,12 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
     name: 'Patterns',
     status: 'In progress',
     purpose: 'Guidance for combining components to solve recurring product problems.',
-    availableNow: <DocLink size="sm" to="Patterns/Messages and Feedback" />,
+    availableNow: (
+      <>
+        <DocLink size="sm" to="Patterns/Messages and Feedback" /> · <DocLink size="sm" to="Patterns/Forms and Validation" /> ·{' '}
+        <DocLink size="sm" to="Patterns/Loading and Empty States" /> · <DocLink size="sm" to="Patterns/Collections" />
+      </>
+    ),
   },
   {
     name: 'Templates',

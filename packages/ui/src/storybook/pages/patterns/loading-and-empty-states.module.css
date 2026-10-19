@@ -1,0 +1,71 @@
+/*
+ * Layout for the Loading and Empty States examples: where each state sits, never how a component
+ * looks. Skeletons are sized here to the content they stand in for, as Skeleton's page says to
+ * (its own size is set with `className` or `style`). `.status` is the plain text beside a Spinner
+ * or Progress Bar that says what's running, which no component draws.
+ */
+
+.panel {
+  display: grid;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.stack {
+  display: grid;
+  gap: var(--spacing-3xl);
+}
+
+/* One placeholder row per Key Value Pair: the same height, with the key in the same 40% column. */
+.skeletonList {
+  display: grid;
+}
+
+.skeletonRow {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  align-items: center;
+  gap: var(--spacing-lg);
+  min-block-size: var(--size-control-md);
+  padding-inline-start: var(--spacing-sm);
+}
+
+/* Room for the 1px divider each pair but the last has, so the rows line up when the content lands. */
+.skeletonRow:not(:last-child) {
+  border-block-end: var(--border-width-sm) solid transparent;
+}
+
+.skeletonKey {
+  inline-size: 6rem;
+}
+
+.progress {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}

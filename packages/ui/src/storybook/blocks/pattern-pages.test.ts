@@ -93,10 +93,21 @@ describe('pattern pages', () => {
     expect(stories).toMatch(/export const \w+: Story/);
   });
 
+  it.each(pages.map((page) => [page.path, page]))('%s: writes multi-line code samples as exports, so they keep their indent', (_, { mdx }) => {
+    // MDX strips two spaces from every line of a multi-line string in a JSX attribute.
+    const inline = [...mdx.matchAll(/code=\{`([^`]*)`\}/g)].filter(([, code]) => code.includes('\n')).map(([, code]) => code.split('\n')[0]);
+    expect(inline).toEqual([]);
+  });
+
   it.each(pages.map((page) => [page.path, page]))('%s: builds its examples from system components only', (_, { stories }) => {
     const sources = [...stories.matchAll(/from\s+['"]([^'"]+)['"]/g)].map(([, source]) => source);
     const allowed = (source: string) =>
-      source === 'react' || source.startsWith('@storybook/') || /^(\.\.\/)+components\//.test(source) || /^\.\/[\w-]+\.module\.css$/.test(source);
+      source === 'react' ||
+      source.startsWith('@storybook/') ||
+      /^(\.\.\/)+components\//.test(source) ||
+      // The system's icons (Foundations / Icons), for Icon Button and icon slots.
+      /^(\.\.\/)+assets\/icons$/.test(source) ||
+      /^\.\/[\w-]+\.module\.css$/.test(source);
     expect(sources.filter((source) => !allowed(source))).toEqual([]);
   });
 

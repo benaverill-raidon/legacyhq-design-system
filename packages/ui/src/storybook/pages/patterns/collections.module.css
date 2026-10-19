@@ -1,0 +1,81 @@
+/*
+ * Layout for the Collections examples: where each piece sits, never how a component looks. The
+ * headings and the meta line are the examples' own content, so their type is set here.
+ */
+
+.collection {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.collectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+}
+
+.filter {
+  inline-size: min(100%, 280px);
+}
+
+.heading {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-md-font-family);
+  font-size: var(--typography-heading-md-font-size);
+  font-weight: var(--typography-heading-md-font-weight);
+  line-height: var(--typography-heading-md-line-height);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: var(--spacing-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  block-size: 100%;
+}
+
+.cardContent {
+  display: grid;
+  align-content: start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl);
+}
+
+.cardTop {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.cardTitle {
+  margin: 0;
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+}
+
+.meta {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.details {
+  max-inline-size: 560px;
+}
+
+.specimen {
+  inline-size: min(100%, 360px);
+}

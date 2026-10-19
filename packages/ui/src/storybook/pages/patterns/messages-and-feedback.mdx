@@ -22,6 +22,32 @@ import { TextField } from '../../../components/molecules/text-field';
 import * as Stories from './messages-and-feedback.stories';
 import storiesSource from './messages-and-feedback.stories.tsx?raw';
 
+{/* Multi-line code samples for Do and don't. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const keptSuccess = `<SectionMessage tone="success" title="Changes saved">
+  Your changes were saved.
+</SectionMessage>`;
+export const fieldError = `<Field label="Case number" state="error" message="Enter the case number as it appears on the court notice.">
+  <TextField invalid defaultValue="01482" />
+</Field>`;
+export const confirmDelete = `<ModalDialog tone="error" title="Delete this matter?" footer={
+  <ButtonGroup>
+    <Button prominence="tertiary">Cancel</Button>
+    <Button prominence="primary" tone="error">Delete matter</Button>
+  </ButtonGroup>
+}>
+  This deletes the matter, its documents, and its history. You can't undo it.
+</ModalDialog>`;
+export const okDialog = `<ModalDialog title="Saved" footer={<Button prominence="primary">OK</Button>}>
+  Your changes were saved.
+</ModalDialog>`;
+export const warnDeadline = `<SectionMessage tone="warning" title="The filing is due Friday">
+  Two documents still need signatures.
+</SectionMessage>`;
+export const errorDeadline = `<SectionMessage tone="error" title="The filing is due Friday">
+  Two documents still need signatures.
+</SectionMessage>`;
+
 <Meta of={Stories} name="Docs" />
 
 <Unstyled>
@@ -134,7 +160,8 @@ Field marks one control with `state` instead, and pairs `error` with the control
   save with a toast and a Section Message.
 - **A problem people have to fix stays.** Put it beside what failed, in a Section Message or a
   Field's message, not only in a toast that leaves after a few seconds. A toast can report background
-  work that failed when nothing on the screen needs fixing.
+  work that failed when nothing on the screen needs fixing. For a form's errors, see
+  <DocLink to="Patterns/Forms and Validation" />.
 - **Toast actions are shortcuts.** Anything a toast offers, such as Undo, has to be possible
   somewhere else too, because the toast goes away.
 - **Ask in a dialog only when the answer is needed now.** Name the confirm button for what it does,
@@ -170,21 +197,14 @@ Field marks one control with `state` instead, and pairs `error` with the control
 
 <Guidelines>
 <Do caption="Confirm a save with a toast, which leaves on its own." code={`toast.success('Changes saved');`} />
-<Dont
-  caption="Keep a success message on the page after the work is done."
-  code={`<SectionMessage tone="success" title="Changes saved">
-  Your changes were saved.
-</SectionMessage>`}
->
+<Dont caption="Keep a success message on the page after the work is done." code={keptSuccess}>
   <SectionMessage tone="success" title="Changes saved">
     Your changes were saved.
   </SectionMessage>
 </Dont>
 <Do
   caption="Put an error about one control under that control."
-  code={`<Field label="Case number" state="error" message="Enter the case number as it appears on the court notice.">
-  <TextField invalid defaultValue="01482" />
-</Field>`}
+  code={fieldError}
 >
   <Field label="Case number" state="error" message="Enter the case number as it appears on the court notice.">
     <TextField invalid defaultValue="01482" />
@@ -195,26 +215,15 @@ Field marks one control with `state` instead, and pairs `error` with the control
 </Dont>
 <Do
   caption="Ask only when the answer is needed now, with a button named for what it does."
-  code={`<ModalDialog tone="error" title="Delete this matter?" footer={
-  <ButtonGroup>
-    <Button prominence="tertiary">Cancel</Button>
-    <Button prominence="primary" tone="error">Delete matter</Button>
-  </ButtonGroup>
-}>
-  This deletes the matter, its documents, and its history. You can't undo it.
-</ModalDialog>`}
+  code={confirmDelete}
 />
 <Dont
   caption="Stop the page for news that needs no answer."
-  code={`<ModalDialog title="Saved" footer={<Button prominence="primary">OK</Button>}>
-  Your changes were saved.
-</ModalDialog>`}
+  code={okDialog}
 />
 <Do
   caption="Warn about what will go wrong if nothing changes."
-  code={`<SectionMessage tone="warning" title="The filing is due Friday">
-  Two documents still need signatures.
-</SectionMessage>`}
+  code={warnDeadline}
 >
   <SectionMessage tone="warning" title="The filing is due Friday">
     Two documents still need signatures.
@@ -222,9 +231,7 @@ Field marks one control with `state` instead, and pairs `error` with the control
 </Do>
 <Dont
   caption="Use the error tone for emphasis, before anything has gone wrong."
-  code={`<SectionMessage tone="error" title="The filing is due Friday">
-  Two documents still need signatures.
-</SectionMessage>`}
+  code={errorDeadline}
 >
   <SectionMessage tone="error" title="The filing is due Friday">
     Two documents still need signatures.

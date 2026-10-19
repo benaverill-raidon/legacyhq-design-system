@@ -364,6 +364,9 @@ change.)
 
 ## Notes
 
+- Open decisions, Figma follow-ups, and known bugs not tracked in a governance
+  file live in [`docs/open-items.md`](docs/open-items.md). Check it before
+  starting the next docs phase, and remove an item once it's settled.
 - This file should be updated as new architectural decisions get made (new
   component tiers, new shared patterns like Focus Ring, changes to token
   rules) — treat it as living documentation, not a one-time snapshot.

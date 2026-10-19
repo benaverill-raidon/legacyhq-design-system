@@ -9,7 +9,7 @@ import { KeyValuePair } from '../key-value-pair';
 import { KeyValueList } from './key-value-list';
 
 const meta = {
-  title: 'UI/Molecules/Key Value List',
+  title: 'Components/Data Display/Key Value List',
   component: KeyValueList,
   args: {
     children: null,
@@ -76,7 +76,7 @@ function EditableNotes() {
   const [value, setValue] = useState('Awaiting trust schedule.');
   return (
     <InlineEdit value={value} onConfirm={setValue} actionPlacement="end" actionAlignment="start">
-      <TextArea autoResize appearance="inline" aria-label="Notes" iconAfter={<EditIcon color="subtle" />} />
+      <TextArea autoResize context="inline" aria-label="Notes" iconAfter={<EditIcon color="subtle" />} />
     </InlineEdit>
   );
 }
@@ -88,7 +88,7 @@ export const MixedEditable: Story = {
         <KeyValueList>
           <KeyValuePair label="Client name" underline>
             <InlineEdit value="Jane Doe" onConfirm={() => {}} actionPlacement="end">
-              <TextField appearance="inline" aria-label="Client name" iconAfter={<EditIcon color="subtle" />} />
+              <TextField context="inline" aria-label="Client name" iconAfter={<EditIcon color="subtle" />} />
             </InlineEdit>
           </KeyValuePair>
           <KeyValuePair label="Account type" value="Trust" underline />

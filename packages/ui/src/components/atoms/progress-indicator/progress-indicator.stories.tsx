@@ -9,7 +9,7 @@ const sizes: ProgressIndicatorSize[] = ['sm', 'md'];
 const totals = [3, 5, 8];
 
 const meta = {
-  title: 'UI/Atoms/ProgressIndicator',
+  title: 'Components/Navigation/Progress Indicator',
   component: ProgressIndicator,
   args: {
     currentStep: 2,
@@ -21,10 +21,11 @@ const meta = {
   argTypes: {
     currentStep: { control: { type: 'number', min: 1, step: 1 } },
     totalSteps: { control: { type: 'number', min: 1, step: 1 } },
-    appearance: { control: 'inline-radio', options: ['default', 'primary', 'inverted'] },
+    appearance: { control: 'inline-radio', options: ['default', 'primary', 'inverse'] },
     size: { control: 'inline-radio', options: sizes },
     label: { control: 'text' },
     getValueText: { control: false },
+    getStepLabel: { control: false },
     onStepChange: { control: false },
     className: { control: false },
     style: { control: false },
@@ -60,11 +61,20 @@ const cardStyle: CSSProperties = {
   overflow: 'visible',
 };
 
-const darkCardStyle: CSSProperties = {
+// `appearance="inverse"` is for a bold surface, so this uses the bold neutral background directly
+// (as Link's stories do) rather than `data-theme="dark"`: in the dark theme the inverse dot is dark.
+const boldSurfaceStyle: CSSProperties = {
+  ...row,
+  padding: 'var(--spacing-lg)',
+  borderRadius: 'var(--border-radius-md)',
+  background: 'var(--color-background-neutral-bold-default)',
+};
+
+const boldCardStyle: CSSProperties = {
   ...cardStyle,
-  borderColor: 'var(--color-border-inverse-default)',
-  background: 'var(--color-elevation-surface-default)',
-  color: 'var(--color-content-default)',
+  borderColor: 'var(--color-background-neutral-bold-default)',
+  background: 'var(--color-background-neutral-bold-default)',
+  color: 'var(--color-content-inverse-default)',
 };
 
 const headingStyle: CSSProperties = {
@@ -96,8 +106,8 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * The intentionally designed forms. `inverted` is shown separately on a dark surface because its
- * selected dot is white and disappears on a light background - it isn't a fourth entry in the same
+ * The intentionally designed forms. `inverse` is shown separately on a bold surface because its
+ * selected dot is light and disappears on the page's own surface - it isn't a fourth entry in the same
  * row as the other three appearances.
  */
 export const Variants: Story = {
@@ -113,23 +123,15 @@ export const Variants: Story = {
       </Group>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Inverted (requires a dark or bold surface)</h3>
+        <h3 style={headingStyle}>Inverse (requires a bold surface)</h3>
         <p style={captionStyle}>
-          The inverted selected dot renders in <code>color-content-inverse-default</code> (white) - correct
-          on a dark surface, invisible on a light one. This is why it isn&rsquo;t grouped with the
-          other three appearances above.
+          The inverse selected dot renders in <code>color-background-neutral-subtle-default</code>, the
+          opposite of the bold surface - correct on a bold surface, invisible on the page&rsquo;s own.
+          This is why it isn&rsquo;t grouped with the other two appearances above.
         </p>
-        <div
-          data-theme="dark"
-          style={{
-            ...row,
-            padding: 'var(--spacing-lg)',
-            borderRadius: 'var(--border-radius-md)',
-            background: 'var(--color-elevation-surface-default)',
-          }}
-        >
-          <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Inverted journey" />
-          <ProgressIndicator appearance="inverted" size="md" currentStep={3} totalSteps={5} label="Inverted journey, md" />
+        <div style={boldSurfaceStyle}>
+          <ProgressIndicator appearance="inverse" currentStep={2} totalSteps={4} label="Inverse journey" />
+          <ProgressIndicator appearance="inverse" size="md" currentStep={3} totalSteps={5} label="Inverse journey, md" />
         </div>
       </section>
     </div>
@@ -216,7 +218,7 @@ export const States: Story = {
         <Cell label="Passive (decorative, non-focusable)">
           <ProgressIndicator currentStep={2} totalSteps={4} label="Passive journey" />
         </Cell>
-        <Cell label="Interactive (native buttons, aria-current on selected)">
+        <Cell label="Interactive (a group of native buttons, aria-current on selected)">
           <ProgressIndicator currentStep={2} totalSteps={4} label="Interactive journey" onStepChange={() => undefined} />
         </Cell>
       </Group>
@@ -298,10 +300,10 @@ export const Content: Story = {
           </div>
         </div>
 
-        <div style={darkCardStyle}>
+        <div style={boldCardStyle}>
           <div style={row}>
-            <ProgressIndicator appearance="inverted" size="md" currentStep={4} totalSteps={5} label="Document setup" />
-            <span style={captionStyle}>Review and confirm</span>
+            <ProgressIndicator appearance="inverse" size="md" currentStep={4} totalSteps={5} label="Document setup" />
+            <span style={{ ...captionStyle, color: 'var(--color-content-inverse-default)' }}>Review and confirm</span>
           </div>
         </div>
 
@@ -358,11 +360,11 @@ export const EdgeCases: Story = {
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Dark surface</h3>
+        <h3 style={headingStyle}>Dark theme</h3>
         <p style={captionStyle}>
-          <code>default</code> and <code>primary</code> stay legible on a
-          dark surface without switching appearance - <code>inverted</code> is only needed when the
-          default selected color itself lacks contrast.
+          In the dark theme, <code>default</code> and <code>primary</code> stay legible on the
+          page&rsquo;s own surface without switching appearance. <code>inverse</code> is for a bold
+          surface: on the dark page its selected dot is dark too.
         </p>
         <div
           data-theme="dark"
@@ -375,7 +377,7 @@ export const EdgeCases: Story = {
         >
           <ProgressIndicator currentStep={2} totalSteps={4} label="Dark default" />
           <ProgressIndicator appearance="primary" currentStep={2} totalSteps={4} label="Dark primary" />
-          <ProgressIndicator appearance="inverted" currentStep={2} totalSteps={4} label="Dark inverted" />
+          <ProgressIndicator appearance="inverse" currentStep={2} totalSteps={4} label="Dark inverse" />
         </div>
       </section>
     </div>

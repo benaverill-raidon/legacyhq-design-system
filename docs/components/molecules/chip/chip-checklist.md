@@ -5,7 +5,7 @@
 ### Name
 Chip
 
-### Category
+### Tier
 Molecule (see "Tier exception" below - `mode="filter"` composes Dropdown Menu, an organism)
 
 ### Related Components
@@ -72,7 +72,7 @@ No new tokens. Segments use `color-background-neutral-subtle-default/hover/press
 `color-border-input`; the label is `color-content-subtle`, operator/value `color-content-default`;
 selected uses the `selected` family (`color-background-selected-default-default/hover/press`,
 `color-border-selected`, `color-content-selected`); disabled uses `color-background-disabled` /
-`color-content-disabled`. Geometry uses `size-control-xs/sm`, `measurement-6`, `spacing-sm/xs`,
+`color-content-disabled`. Geometry uses `size-control-xs/sm`, `spacing-075`, `spacing-sm/xs`,
 `border-width-sm`, `border-radius-full-round`, and `size-200` for the 16px slots.
 
 ---
@@ -150,6 +150,9 @@ Final implementation decisions:
   segment is itself a control, and the only one Figma gives an unselected state.
 - **Panel accessible names are composed** (`${label} operator` / `${label} value`) rather than taken
   from the segment label, which is the current value ("on", "March 2") and names a panel poorly.
+- **Segment buttons are named by the property and their text** ("Due date March 2") through
+  `aria-labelledby`, so no new text needs translating. `labelText` gives the property as text when
+  `label` is JSX, for these names, the panel names, and the remove button.
 - **`tone` is unexposed.** chip-base supports five tones but all 14 chip variants use
   `tone=default`, so a chip-level mapping would be extrapolated rather than verified.
 - **The seam rule applies to every segment, not just the leading one.** Each segment drops its own
@@ -223,5 +226,5 @@ Final implementation decisions:
 - [ ] Both sizes across all three modes
 - [ ] A live, selectable scope row
 - [ ] A realistic, removable filter bar
-- [ ] Long label/value truncation
+- [x] Long label/value truncation (the label and value end in an ellipsis within the container)
 - [ ] Dark surface

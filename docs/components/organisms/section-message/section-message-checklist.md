@@ -6,7 +6,7 @@ Section Message
 
 ## Description
 
-A bordered, rounded, in-context status panel carrying an appearance-driven status with an optional
+A bordered, rounded, in-context status panel carrying an tone-driven status with an optional
 title, a description, optional Link Button actions (in a Button Group), and an optional dismiss
 button.
 
@@ -14,15 +14,15 @@ button.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
 ## Design decisions
 
-- [ ] `appearance` (`information` | `success` | `warning` | `error`) sets the tinted background,
+- [ ] `tone` (`information` | `success` | `warning` | `error`) sets the tinted background,
       border color, and status icon together - no separate tone axis.
-- [ ] The Figma `discovery` appearance was removed; code ships four appearances.
+- [ ] The Figma `discovery` tone was removed; code ships four tones.
 - [ ] Title and description use the default content color; only the icon and border take the status
       color.
 - [ ] The description wraps (no truncation), unlike Banner's single line.
@@ -35,7 +35,7 @@ Organism.
 ## Figma properties
 
 ```txt
-appearance: information | success | warning | error
+tone: information | success | warning | error
 title: true | false        (code: title prop, omit to hide)
 actions: true | false       (code: actions slot)
 isDismissible: true | false (code: isDismissible, default false)
@@ -45,10 +45,10 @@ titleText / descriptionText  (code: title / children)
 ## Code props
 
 ```ts
-type SectionMessageAppearance = 'information' | 'success' | 'warning' | 'error';
+type SectionMessageTone = 'information' | 'success' | 'warning' | 'error';
 
 interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
-  appearance?: SectionMessageAppearance;
+  tone?: SectionMessageTone;
   title?: React.ReactNode;
   children: React.ReactNode;
   actions?: React.ReactNode;
@@ -60,7 +60,7 @@ interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>,
 ## Defaults
 
 ```txt
-appearance: information
+tone: information
 isDismissible: false
 role: status
 ```
@@ -70,7 +70,7 @@ role: status
 - [ ] padding `--spacing-lg`, root gap `--spacing-lg`, content gap `--spacing-sm`, actions gap `--spacing-sm` (owned by the ButtonGroup).
 - [ ] border `--border-width-sm`, radius `--border-radius-xl`.
 - [ ] title `heading-sm`, description `body-md`.
-- [ ] per-appearance subtle background + border + status-icon color tokens (no primitives, no raw values).
+- [ ] per-tone subtle background + border + status-icon color tokens (no primitives, no raw values).
 
 ## Visual and structural requirements
 
@@ -83,6 +83,7 @@ role: status
 
 - [ ] `role="status"` by default; overridable (e.g. `alert`).
 - [ ] Status icon `aria-hidden`; dismiss button labelled "Dismiss".
+- [ ] The status is announced before the title as visually hidden text (`statusLabel`, defaulting to the tone's name).
 - [ ] Meaning conveyed by text, not color alone.
 
 ## Examples to document
@@ -97,7 +98,7 @@ role: status
 
 - [ ] Renders description; renders/omits title.
 - [ ] Defaults to role status + information.
-- [ ] Applies the appearance class; renders a status icon.
+- [ ] Applies the tone class; renders a status icon.
 - [ ] Actions rendered as passed (no injected separators); region omitted for none.
 - [ ] Not dismissible by default; dismisses + calls `onDismiss`.
 - [ ] Overridable role; forwards the ref.

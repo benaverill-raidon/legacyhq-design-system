@@ -10,12 +10,14 @@ greater visual emphasis than a bare icon.
 Use Icon Tile to give an icon a scannable, colored container - a feature call-out, an empty-state
 graphic, or a leading visual in a list or card.
 
-### Category
-Molecule
+### Tier
+Molecule. It composes two lower-level pieces, a sized, colored container and an icon from the
+Icon primitive's generated set, into one named unit with its own variant surface (tone, appearance,
+shape, size) that neither piece owns alone.
 
 ### Design Reference
 - Figma Component: `icon-tile` (component set, node `1555:3436`, file `Components v1.0.0`)
-- Variant axes: `size` (5) x `shape` (2) x `appearance` (20) = 200 variants
+- Variant axes: `size` (5) x `shape` (2) x `tone` (20) = 200 variants
 - Icon content is a single Figma `INSTANCE_SWAP` property (`icon`), not a Figma slot
 
 ---
@@ -53,11 +55,11 @@ IconTile
 
 ## Variants
 
-### Tone (Figma `appearance` hue segment)
+### Tone (Figma `tone` hue segment)
 
 | Tone | Description |
 |--------|-------------|
-| gray | Neutral emphasis |
+| taupe | Neutral emphasis (`gray`, the earlier name, is still accepted) |
 | brand | Brand emphasis |
 | red | Accent - red hue |
 | orange | Accent - orange hue |
@@ -68,17 +70,17 @@ IconTile
 | purple | Accent - purple hue |
 | magenta | Accent - magenta hue |
 
-### Appearance (Figma `appearance` bold segment)
+### Appearance (Figma `tone` bold segment)
 
 | Appearance | Description |
 |------------|-------------|
 | default | Subtle tint background, tinted icon |
 | bold | Solid, saturated background, inverse (white) icon |
 
-Figma models `tone` and `appearance` as a single flattened 20-value `appearance` property (e.g.
+Figma models `tone` and `appearance` as a single flattened 20-value `tone` property (e.g.
 `red`, `redBold`). The component splits this into two independent props - `tone` for hue/meaning
 and `appearance` for visual weight - following this design system's existing convention of
-separating emphasis from meaning (see Button's `appearance`/`tone` split). This avoids a
+separating emphasis from meaning (see Button's `prominence`/`tone` split). This avoids a
 20-value enum and lets `tone` and `appearance` be reasoned about independently.
 
 ### Shape
@@ -86,7 +88,7 @@ separating emphasis from meaning (see Button's `appearance`/`tone` split). This 
 | Shape | Description |
 |--------|-------------|
 | square | Rounded-square container (Figma `square`) |
-| round | Fully rounded/circular container (Figma `circle`, renamed to match Icon Button's `shape` prop naming) |
+| round | Fully rounded/circular container (Figma `round`; Figma's earlier `circle` was renamed to match Icon Button's `shape` prop) |
 
 ### Size
 
@@ -120,7 +122,7 @@ Exactly one icon. No text, no multiple icons.
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
-| tone | `'gray' \| 'brand' \| 'red' \| 'orange' \| 'yellow' \| 'green' \| 'teal' \| 'blue' \| 'purple' \| 'magenta'` | No | `'brand'` |
+| tone | `'taupe' \| 'brand' \| 'red' \| 'orange' \| 'yellow' \| 'green' \| 'teal' \| 'blue' \| 'purple' \| 'magenta'` | No | `'brand'` |
 | appearance | `'default' \| 'bold'` | No | `'default'` |
 | shape | `'square' \| 'round'` | No | `'square'` |
 | size | `'xxs' \| 'xs' \| 'sm' \| 'md' \| 'lg'` | No | `'md'` |
@@ -161,12 +163,12 @@ Background and icon color both come from the semantic accent-color layer, keyed 
 
 | Tone | Appearance | Background Token | Icon Color Token |
 |---------|------------|------------------------------------------------------|--------------------------------------------|
-| gray | default | `--color-background-accent-taupe-default-default` | `--color-content-default` |
-| gray | bold | `--color-background-accent-taupe-bold-default` | `--color-content-inverse` |
+| taupe | default | `--color-background-accent-taupe-default-default` | `--color-content-default` |
+| taupe | bold | `--color-background-accent-taupe-bold-default` | `--color-content-inverse-default` |
 | brand | default | `--color-background-brand-primary-default-default` | `--color-content-brand-primary-default` |
-| brand | bold | `--color-background-brand-primary-bold-default` | `--color-content-inverse` |
+| brand | bold | `--color-background-brand-primary-bold-default` | `--color-content-inverse-default` |
 | {hue} | default | `--color-background-accent-{hue}-default-default` | `--color-content-accent-{hue}-default` |
-| {hue} | bold | `--color-background-accent-{hue}-bold-default` | `--color-content-inverse` |
+| {hue} | bold | `--color-background-accent-{hue}-bold-default` | `--color-content-inverse-default` |
 
 `{hue}` is one of `red`, `orange`, `yellow`, `green`, `teal`, `blue`, `purple`, `magenta`. These
 mappings were read directly off representative Figma nodes' `boundVariables` (not guessed) via the

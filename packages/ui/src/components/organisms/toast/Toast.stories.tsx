@@ -3,22 +3,22 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
 import { ButtonGroup } from '../../molecules/button-group';
 import { Toast } from './toast';
-import type { ToastAppearance } from './toast.types';
+import type { ToastTone } from './toast.types';
 
-const appearances: ToastAppearance[] = ['default', 'success', 'info', 'warning', 'error', 'loading'];
+const tones: ToastTone[] = ['default', 'success', 'information', 'warning', 'error', 'loading'];
 
 const meta = {
-  title: 'UI/Organisms/Toast',
+  title: 'Components/Feedback/Toast',
   component: Toast,
   args: {
-    appearance: 'info',
+    tone: 'information',
     title: "This is the toast's title",
     description: 'Additional information that will help users understand the flag.',
     expanded: true,
     isDismissible: true,
   },
   argTypes: {
-    appearance: { control: 'inline-radio', options: appearances },
+    tone: { control: 'inline-radio', options: tones },
     title: { control: 'text' },
     description: { control: 'text' },
     expanded: { control: 'boolean' },
@@ -71,18 +71,18 @@ export const Playground: Story = {
   },
 };
 
-/** The six appearances - a colored status tile per appearance, and a spinner for loading. */
-export const Appearances: Story = {
+/** The six tones - a colored status tile per tone, and a spinner for loading. */
+export const Tones: Story = {
   render: () => (
     <div style={stack}>
-      {appearances.map((appearance) => (
-        <Labelled key={appearance} label={appearance}>
+      {tones.map((tone) => (
+        <Labelled key={tone} label={tone}>
           <Toast
-            appearance={appearance}
+            tone={tone}
             title="This is the toast's title"
             description="Additional information that will help users understand the flag."
-            actions={appearance === 'loading' ? undefined : demoActions()}
-            expanded={appearance !== 'loading'}
+            actions={tone === 'loading' ? undefined : demoActions()}
+            expanded={tone !== 'loading'}
           />
         </Labelled>
       ))}
@@ -95,11 +95,11 @@ export const ExpandedCollapsed: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Collapsed (title only)">
-        <Toast appearance="success" title="Your changes were saved" expanded={false} />
+        <Toast tone="success" title="Your changes were saved" expanded={false} />
       </Labelled>
       <Labelled label="Expanded (description + actions)">
         <Toast
-          appearance="success"
+          tone="success"
           title="Your changes were saved"
           description="They will sync across your devices shortly."
           actions={demoActions()}
@@ -115,13 +115,13 @@ export const Content: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Title only">
-        <Toast appearance="info" title="Syncing your workspace" />
+        <Toast tone="information" title="Syncing your workspace" />
       </Labelled>
       <Labelled label="Description, no actions">
-        <Toast appearance="error" title="Upload failed" description="The file was larger than the 25 MB limit." />
+        <Toast tone="error" title="Upload failed" description="The file was larger than the 25 MB limit." />
       </Labelled>
       <Labelled label="Not dismissible (e.g. loading)">
-        <Toast appearance="loading" title="Uploading your file..." isDismissible={false} />
+        <Toast tone="loading" title="Uploading your file..." isDismissible={false} />
       </Labelled>
     </div>
   ),

@@ -10,32 +10,43 @@ import {
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
 import styles from './section-message.module.css';
-import type { SectionMessageAppearance, SectionMessageProps } from './section-message.types';
+import type { SectionMessageProps, SectionMessageTone } from './section-message.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
 /*
- * Each appearance owns its status icon and the icon color it renders in - the icon keeps its own
+ * Each tone owns its status icon and the icon color it renders in - the icon keeps its own
  * status color (unlike Banner, whose icon inherits the bar's content color), matching the tinted
  * on-light treatment. The same StatusIcon set InlineMessage uses.
  */
-const APPEARANCE_ICON: Record<SectionMessageAppearance, { Icon: ComponentType<IconProps>; color: IconColor }> = {
+const TONE_ICON: Record<SectionMessageTone, { Icon: ComponentType<IconProps>; color: IconColor }> = {
   information: { Icon: StatusInformationIcon, color: 'information' },
   success: { Icon: StatusSuccessIcon, color: 'success' },
   warning: { Icon: StatusWarningIcon, color: 'warning' },
   error: { Icon: StatusErrorIcon, color: 'error' },
 };
 
+/** What each tone announces before the message. */
+const STATUS_LABELS: Record<SectionMessageTone, string> = {
+  information: 'Information',
+  success: 'Success',
+  warning: 'Warning',
+  error: 'Error',
+};
+
 export const SectionMessage = React.memo(
   React.forwardRef<HTMLDivElement, SectionMessageProps>(function SectionMessage(
     {
-      appearance = 'information',
+      tone: requestedTone,
+      appearance,
+      statusLabel,
       title,
       children,
       actions,
       isDismissible = false,
+      dismissLabel = 'Dismiss',
       onDismiss,
       className,
       role = 'status',
@@ -54,7 +65,10 @@ export const SectionMessage = React.memo(
       return null;
     }
 
-    const { Icon, color } = APPEARANCE_ICON[appearance];
+    // `appearance` is the deprecated name for `tone`.
+    const tone: SectionMessageTone = requestedTone ?? appearance ?? 'information';
+    const { Icon, color } = TONE_ICON[tone];
+    const status = statusLabel ?? STATUS_LABELS[tone];
     const hasTitle = title !== undefined && title !== null;
     const hasActions = React.Children.toArray(actions).filter(Boolean).length > 0;
 
@@ -63,13 +77,18 @@ export const SectionMessage = React.memo(
         {...rest}
         ref={forwardedRef}
         role={role}
-        className={mergeClassNames(styles.root, styles[`appearance_${appearance}`], className)}
+        className={mergeClassNames(styles.root, styles[`tone_${tone}`], className)}
       >
         <span className={styles.iconSlot} aria-hidden="true">
           <Icon size="md" spacing="spacious" color={color} />
         </span>
 
         <div className={styles.content}>
+          {status ? (
+            <>
+              <span className={styles.visuallyHidden}>{status}:</span>{' '}
+            </>
+          ) : null}
           {hasTitle ? <div className={styles.title}>{title}</div> : null}
           <div className={styles.description}>{children}</div>
           {hasActions ? <div className={styles.actions}>{actions}</div> : null}
@@ -80,7 +99,7 @@ export const SectionMessage = React.memo(
             className={styles.dismiss}
             appearance="subtle"
             size="xs"
-            aria-label="Dismiss"
+            aria-label={dismissLabel}
             onClick={handleDismiss}
           >
             <CloseIcon />

@@ -25,7 +25,7 @@
   {
     "name": "agreement",
     "component": "AgreementIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "agreement"
     ],
@@ -46,7 +46,7 @@
   {
     "name": "all",
     "component": "AllIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "all"
     ],
@@ -569,7 +569,7 @@
   {
     "name": "data-error",
     "component": "DataErrorIcon",
-    "category": "single-purpose",
+    "category": "multi-purpose",
     "keywords": [
       "data-error",
       "data",
@@ -660,7 +660,7 @@
   {
     "name": "documents",
     "component": "DocumentsIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "documents"
     ],
@@ -981,7 +981,7 @@
   {
     "name": "incapacitated",
     "component": "IncapacitatedIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "incapacitated"
     ],
@@ -990,7 +990,7 @@
   {
     "name": "income",
     "component": "IncomeIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "income"
     ],
@@ -999,7 +999,7 @@
   {
     "name": "institutions",
     "component": "InstitutionsIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "institutions"
     ],
@@ -1008,7 +1008,7 @@
   {
     "name": "integrations",
     "component": "IntegrationsIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "integrations"
     ],
@@ -1230,7 +1230,7 @@
   {
     "name": "message",
     "component": "MessageIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "message"
     ],
@@ -1257,7 +1257,7 @@
   {
     "name": "minor",
     "component": "MinorIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "minor"
     ],
@@ -1266,7 +1266,7 @@
   {
     "name": "miscellaneous-asset",
     "component": "MiscellaneousAssetIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "miscellaneous-asset",
       "miscellaneous",
@@ -1393,7 +1393,7 @@
   {
     "name": "people-all",
     "component": "PeopleAllIcon",
-    "category": "single-purpose",
+    "category": "multi-purpose",
     "keywords": [
       "people-all",
       "people",
@@ -1404,7 +1404,7 @@
   {
     "name": "person-account-management",
     "component": "PersonAccountManagementIcon",
-    "category": "single-purpose",
+    "category": "multi-purpose",
     "keywords": [
       "person-account-management",
       "person",
@@ -1416,7 +1416,7 @@
   {
     "name": "person-account",
     "component": "PersonAccountIcon",
-    "category": "single-purpose",
+    "category": "multi-purpose",
     "keywords": [
       "person-account",
       "person",
@@ -1842,7 +1842,7 @@
   {
     "name": "roadmap",
     "component": "RoadmapIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "roadmap"
     ],
@@ -1995,7 +1995,7 @@
   {
     "name": "signature",
     "component": "SignatureIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "signature"
     ],
@@ -2004,7 +2004,7 @@
   {
     "name": "signed",
     "component": "SignedIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "signed"
     ],
@@ -2130,7 +2130,7 @@
   {
     "name": "task-complete",
     "component": "TaskCompleteIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "task-complete",
       "task",
@@ -2141,7 +2141,7 @@
   {
     "name": "task-in-progress",
     "component": "TaskInProgressIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "task-in-progress",
       "task",
@@ -2153,7 +2153,7 @@
   {
     "name": "task-not-started",
     "component": "TaskNotStartedIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "task-not-started",
       "task",
@@ -2165,7 +2165,7 @@
   {
     "name": "task",
     "component": "TaskIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "task"
     ],
@@ -2292,7 +2292,7 @@
   {
     "name": "transfer",
     "component": "TransferIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "transfer"
     ],
@@ -2312,7 +2312,7 @@
   {
     "name": "trust",
     "component": "TrustIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "trust"
     ],
@@ -2357,7 +2357,7 @@
   {
     "name": "virtual",
     "component": "VirtualIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "virtual"
     ],
@@ -2401,7 +2401,7 @@
   {
     "name": "will",
     "component": "WillIcon",
-    "category": "multi-purpose",
+    "category": "single-purpose",
     "keywords": [
       "will"
     ],

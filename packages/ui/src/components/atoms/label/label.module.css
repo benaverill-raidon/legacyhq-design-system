@@ -2,7 +2,7 @@
   --label-background: var(--color-background-neutral-default-default);
   --label-color: var(--color-content-subtle);
   --label-min-block-size: 24px;
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
   --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);
@@ -12,6 +12,7 @@
   --label-letter-spacing: var(--typography-heading-xs-letter-spacing);
 
   display: inline-flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -44,8 +45,9 @@
 }
 
 .size_md {
+  /* The 24px heading-xs line height sets the height, so there's no block padding. */
   --label-min-block-size: 24px;
-  --label-padding-block: var(--spacing-xxs);
+  --label-padding-block: var(--spacing-none);
   --label-padding-inline: var(--spacing-sm);
   --label-border-radius: var(--border-radius-sm);
   --label-font-family: var(--typography-heading-xs-font-family);
@@ -62,7 +64,7 @@
 
 .tone_default.emphasis_bold {
   --label-background: var(--color-background-accent-taupe-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_information.emphasis_subtle {
@@ -72,7 +74,7 @@
 
 .tone_information.emphasis_bold {
   --label-background: var(--color-background-information-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_warning.emphasis_subtle {
@@ -92,7 +94,7 @@
 
 .tone_error.emphasis_bold {
   --label-background: var(--color-background-error-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_success.emphasis_subtle {
@@ -102,7 +104,7 @@
 
 .tone_success.emphasis_bold {
   --label-background: var(--color-background-success-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_law.emphasis_subtle {
@@ -112,7 +114,7 @@
 
 .tone_law.emphasis_bold {
   --label-background: var(--color-background-brand-primary-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }
 
 .tone_wealth.emphasis_subtle {
@@ -122,5 +124,5 @@
 
 .tone_wealth.emphasis_bold {
   --label-background: var(--color-background-accent-green-bold-default);
-  --label-color: var(--color-content-inverse);
+  --label-color: var(--color-content-inverse-default);
 }

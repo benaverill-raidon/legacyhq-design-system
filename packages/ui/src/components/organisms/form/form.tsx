@@ -61,7 +61,7 @@ export const FormSection = React.memo(function FormSection({
 
 FormSection.displayName = 'FormSection';
 
-/** Lays its children out as equal-width columns on one line (up to 4), collapsing to one on narrow viewports. */
+/** Lays its children out as equal-width columns on one line (up to 4). The row doesn't wrap or stack at narrow widths. */
 export const FormRow = React.memo(function FormRow({ children, className, ...rest }: FormRowProps) {
   return (
     <div {...rest} className={mergeClassNames(styles.row, className)}>

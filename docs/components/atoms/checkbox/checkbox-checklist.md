@@ -6,7 +6,7 @@ Checkbox is an input control that allows a user to select one or more options fr
 
 ## Component Type
 
-- Category: Atom
+- Tier: Atom
 - Public component: `Checkbox`
 - Internal visual anatomy: `CheckboxIndicator`
 - Figma-only part: `checkbox-item`
@@ -92,4 +92,8 @@ onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>)
 - Ensure focus ring appears around the visual indicator, not only the hidden input.
 - Ensure disabled styling applies to both indicator and label.
 - Ensure required asterisk is not the only indicator of required status in form-level context.
+- The `*` is `aria-hidden` on Checkbox and Checkbox Group; a required Checkbox Group adds hidden
+  `requiredLabel` text to its legend.
+- A disabled Checkbox Group shows every checkbox inside it as disabled, from `options` or `children`.
+- Horizontal Checkbox Groups put `spacing-lg` between options.
 - Ensure invalid state is not communicated by color alone when an error message exists nearby.

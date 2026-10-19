@@ -8,7 +8,7 @@ import type { IconButtonSize } from './icon-button.types';
 const sizes: IconButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Icon Button',
+  title: 'Components/Actions/Icon Button',
   component: IconButton,
   args: {
     appearance: 'default',
@@ -49,10 +49,17 @@ const row: CSSProperties = {
   gap: 'var(--spacing-md)',
 };
 
+// Labels read --story-label / --story-heading when a backdrop sets them, so they stay legible on the
+// Inverse story's dark surface.
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
-  color: 'var(--color-content-subtle)',
+  color: 'var(--story-label, var(--color-content-subtle))',
 };
+
+const onDark = {
+  '--story-heading': 'var(--color-content-inverse-default)',
+  '--story-label': 'var(--color-content-inverse-default)',
+} as CSSProperties;
 
 const cardStyle: CSSProperties = {
   display: 'grid',
@@ -80,7 +87,7 @@ function sectionHeading(text: string) {
       style={{
         margin: 0,
         font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
-        color: 'var(--color-content-default)',
+        color: 'var(--story-heading, var(--color-content-default))',
       }}
     >
       {text}
@@ -256,13 +263,14 @@ export const States: Story = {
  * `isInverse` is the on-dark treatment - for an IconButton placed on a dark or bold-colored surface
  * such as Banner. It mirrors Button's inverse: transparent fill, inverse content, and the white
  * *subtle* overlays on hover / press / expanded. It only reads on a dark backdrop, so every specimen
- * here sits on one. Disabled flattens the inverse look the same way it flattens tone.
+ * here sits on one. Disabled flattens the inverse look the same way it flattens the appearance.
  */
 export const Inverse: Story = {
   render: () => (
     <div
       style={{
         ...stack,
+        ...onDark,
         padding: 'var(--spacing-2xl)',
         borderRadius: 'var(--border-radius-md)',
         background: 'var(--color-background-neutral-bold-default)',

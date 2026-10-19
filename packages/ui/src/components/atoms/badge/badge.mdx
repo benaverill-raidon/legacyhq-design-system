@@ -1,148 +1,200 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Label } from '../label';
+import { Badge } from './badge';
+import badgeStyles from './badge.module.css';
 import * as BadgeStories from './Badge.stories';
 
 <Meta of={BadgeStories} name="Docs" />
 
-# Badge
+<Unstyled>
+<ComponentPage>
 
-Badge is a small, non-interactive indicator for a short numeric value - a count, a total, or a
-delta. It carries no action and no status semantics of its own.
+<ComponentHeader
+  id="badge"
+  example={
+    <>
+      <p>
+        Unread messages <Badge tone="brand">3</Badge>
+      </p>
+      <p>
+        Review score <Badge tone="success">+2</Badge>
+      </p>
+    </>
+  }
+>
+  Badge shows a short number beside the thing it counts: unread items, a small total, or a change in
+  a score. It's text in a small filled box, with no action of its own.
+</ComponentHeader>
 
-<Canvas of={BadgeStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Notification or unread counts.
-- Small totals in navigation, tables, lists, or cards.
-- Score deltas (`+1`, `-1`).
-- A lightweight numeric indicator next to a button or icon.
+- An unread or pending count beside a label or an icon.
+- A small total in navigation, a list, a table, or a card.
+- A change in a score, such as `+1` or `-1`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a text label or a status that needs explaining.** Use `Tag` or `Label` - Badge's content
-  rules cap it at 1-4 characters and forbid multi-line text.
-- **As a clickable control.** Badge has no interactive states by design - no hover, focus, press,
-  disabled, or loading. If the count needs to be actionable, put a `Button` or `IconButton` around
-  it, don't make Badge itself respond to input.
-- **To show progress or a loading state.** Use `Spinner` or `ProgressIndicator`.
-- **With an icon.** Badge has no icon slot; it is text-only by design.
+- **A status or a category in words:** <DocLink to="Components/Data Display/Label" />. Badge holds one to four characters.
+- **A reference to a record:** <DocLink to="Components/Data Display/Tag" />, which can link to it.
+- **An action:** <DocLink to="Components/Actions/Button" />. Badge isn't focusable and takes no click handler.
+- **Progress or loading:** <DocLink to="Components/Feedback/Progress Bar" /> or <DocLink to="Components/Feedback/Spinner" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Badge has a single part: a `span` root that renders its `children` directly. There is no separate
-icon, label, or container to compose - the root *is* the visible chip.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Content length
+<Anatomy specimen={<Badge tone="brand">12</Badge>}>
+  <Part name="root" target={badgeStyles.badge}>A `span`: the filled box, sized by its content. Always present.</Part>
+  <Part name="text">The `children`, rendered straight into the root. With `label`, they sit in a `span` hidden from assistive technology, beside the label as visually hidden text.</Part>
+</Anatomy>
 
-Keep content to 1-4 characters - a count, `+1`/`-1`, or `99+`. Badge does not wrap or truncate: its
-CSS sets `white-space: nowrap`, so longer content overflows its box visibly rather than shrinking
-to fit. Treat that overflow as a signal to reduce the value (`99+`) rather than as something to
-style around. See Edge Cases.
+</Section>
 
-### Choosing a tone
+<Section title="Variants">
 
-- `default` is neutral.
-- `brand` calls attention without implying good or bad.
-- `success` and `error` are for deltas and should track a real increase or decrease, not general
-  emphasis.
+`tone` sets the fill. `default` is a dark neutral fill, `brand` the brand color, and `success` and
+`error` show a change up or down. Every tone sets its text in the inverse content color.
 
-### Accessible labelling
+<Example of={BadgeStories.Variants} />
 
-Badge's visible content is exactly what gets announced unless `ariaLabel` is set. Reach for
-`ariaLabel` when the bare number is ambiguous out of context - "1" inside a notification icon reads
-better as "1 unread notification" - but skip it when adjacent visible text already disambiguates the
-count (a badge next to the word "Unread").
+<Subsection title="Size">
 
-## Do / Don't
+Badge has one size: 16px tall and at least 16px wide, with 4px of padding at each side and its text
+in `heading-xxs`. There's no `size` prop.
 
-**Do** keep Badge content short and numeric.
+</Subsection>
 
-```tsx
-<Badge tone="success">+1</Badge>
-```
+</Section>
 
-**Don't** put a status phrase inside Badge - it isn't built to wrap or explain itself.
+<Section title="Behavior">
 
-```tsx
-<Badge tone="success">Increased this week</Badge>
-```
+<Subsection title="Content length">
 
----
+Badge doesn't wrap or truncate its text, and it doesn't format numbers. A long value widens the badge,
+and in a container too narrow for it, the badge overflows. Cap large counts yourself, for example at
+`99+`.
 
-**Do** add `ariaLabel` when the number alone is ambiguous.
+<Example of={BadgeStories.EdgeCases} caption="Values longer than four characters, a narrow container, and a dark surface." />
 
-```tsx
-<Badge ariaLabel="3 unread messages">3</Badge>
-```
+</Subsection>
 
-**Don't** make Badge interactive to work around a missing affordance.
+<Subsection title="In context">
 
-```tsx
-<Badge onClick={openInbox}>3</Badge>
-```
+Badge has no hover, focus, pressed, or disabled look: it reads the same wherever it sits. Put it next
+to the words that say what it counts.
 
----
+<Example of={BadgeStories.Content} caption="Counts and deltas on their own and inside cards." />
 
-**Do** cap large counts rather than letting them overflow.
+</Subsection>
 
-```tsx
-<Badge>99+</Badge>
-```
+</Section>
 
-**Don't** pass an unbounded number and rely on the container to hide the overflow.
+<Section title="Do and don't">
 
-```tsx
-<Badge>{unreadCount}</Badge>
-```
+<Guidelines>
+<Do caption="Cap a large count so the badge stays one to four characters." code={`<Badge>{unreadCount > 99 ? '99+' : unreadCount}</Badge>`}>
+  <Badge>99+</Badge>
+</Do>
+<Dont caption="Pass a raw count. Badge doesn't cap it, so a large number stretches the badge." code={`<Badge>{unreadCount}</Badge>`}>
+  <Badge>184320</Badge>
+</Dont>
+<Do caption="Keep the sign in a change, so its direction doesn't depend on color." code={`<Badge tone="success">+2</Badge>
+<Badge tone="error">-1</Badge>`}>
+  <Badge tone="success">+2</Badge>
+  <Badge tone="error">-1</Badge>
+</Do>
+<Dont caption="Show a change by tone alone. The colors aren't read out, and not everyone can tell them apart." code={`<Badge tone="success">2</Badge>
+<Badge tone="error">1</Badge>`}>
+  <Badge tone="success">2</Badge>
+  <Badge tone="error">1</Badge>
+</Dont>
+<Do caption="Use Label for a status in words." code={`<Label tone="success">Active</Label>`}>
+  <Label tone="success">Active</Label>
+</Do>
+<Dont caption="Put a word in a Badge, which is sized for a number and doesn't wrap." code={`<Badge tone="success">Active</Badge>`}>
+  <Badge tone="success">Active</Badge>
+</Dont>
+</Guidelines>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. Short numeric value - 1 to 4 characters recommended.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'brand' | 'success' | 'error'</code></td>
-      <td><code>'default'</code></td>
-      <td>Visual tone. <code>success</code>/<code>error</code> are for deltas.</td>
-    </tr>
-    <tr>
-      <td><code>ariaLabel</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Overrides the announced value when the visible content is ambiguous.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root's class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Section title="Accessibility">
 
-Badge has no `size` prop - it has one size, driven by its typography and padding tokens - and no
-interactive states, so this Docs page has no Sizes or States section.
+- Badge renders a `span` with no role. It isn't focusable and has no keyboard interaction.
+- Its text is read in place, as part of the text around it. Put the words that say what the number
+  counts next to it, such as "Unread messages" before the badge.
+- When there are no such words, set `label`, such as "3 unread messages". Badge renders it as visually
+  hidden text and hides the visible number, so screen readers read the words instead of the number.
+- Keep the sign in a change (`+1`, `-1`). The `success` and `error` colors alone don't say which way
+  it went.
+- `label` isn't an `aria-label`: ARIA doesn't allow a name on an element with no role, so screen
+  readers may ignore one. Don't pass `aria-label` to Badge. The deprecated `ariaLabel` prop now
+  renders as `label` does.
 
-## Related components
+</Section>
 
-- **Tag** - for a labelled status or category, rather than a bare number.
-- **Label** - for identifying text that needs more than 1-4 characters.
-- **Tooltip** - to explain a badge's meaning on demand instead of via `ariaLabel` alone.
-- **Button** / **IconButton** - when the count needs to be clickable, wrap it rather than making
-  Badge interactive.
+<Section title="API">
+
+<PropsTable of={BadgeStories} />
+
+Any other attribute, such as `id`, `title`, or `aria-describedby`, goes to the span, and `className`
+is added to its classes.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Badge's stylesheet uses, by family, with the property it sets and when. "Base" is the
+badge with no modifiers, which looks the same as `tone="default"`.
+
+<TokensTable id="badge" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Label" /> for a status or a category in words.
+- <DocLink to="Components/Data Display/Tag" /> for a reference to a record, which can link to it or be removed.
+- <DocLink to="Components/Actions/Button" /> and <DocLink to="Components/Actions/Icon Button" /> for an action.
+- <DocLink to="Components/Feedback/Progress Bar" /> for progress you can measure.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads badge.types.ts, the design tokens read badge.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

@@ -1,6 +1,6 @@
 {
   "name": "InlineMessage",
-  "category": "molecule",
+  "category": "feedback",
   "status": "stable",
   "purpose": "Short, tone-colored inline status line with optional click-revealed detail.",
   "intent": "Give a short status message a place to reveal supplemental detail without a full banner or dialog, built on the Popup primitive.",
@@ -32,6 +32,10 @@
     "A page-level banner or toast"
   ],
   "anatomy": [
+    {
+      "name": "root",
+      "description": "The row: a native <button type=\"button\"> when content is provided, otherwise a plain div. No padding of its own; carries the hover/focus/open tint and the Focus Ring when it's a button."
+    },
     {
       "name": "icon",
       "description": "Tone-mapped status icon (24px container, matching Icon's spacing=\"spacious\"). tone=\"default\" falls back to a plain CSS dot - no matching status icon exists in the generated set."
@@ -70,7 +74,7 @@
       "default": "default",
       "enum": [
         "default",
-        "info",
+        "information",
         "success",
         "warning",
         "error"
@@ -131,7 +135,7 @@
         "iconColorToken": "--color-content-default",
         "tintToken": "--color-background-neutral-overlay-bold-hover"
       },
-      "info": {
+      "information": {
         "icon": "StatusInformationIcon",
         "iconColorToken": "--color-content-information",
         "tintToken": "--color-background-information-overlay-hover"
@@ -179,6 +183,7 @@
     ],
     "focusable": "only when content is provided (renders a real button)",
     "role": null,
+    "panelRole": "dialog (non-modal), named by the title; focused when the popup opens, one animation frame after Popup has positioned it",
     "ariaExpandedManagedBy": "Popup (default manageTriggerAria=true) - not duplicated locally",
     "focusIndicator": "Shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) on the trigger button; :focus-visible shows the same tint as :hover rather than a separate treatment"
   },
@@ -192,6 +197,7 @@
     "Leaves closeOnEscape/closeOnOutsideClick at Popup's own defaults (both true) - the detail dismisses on Escape or an outside click like any other Popup consumer. An earlier revision set both to false, matching a prediction in Popup's own docs that this component would want persistent-until-explicit-toggle behavior; reversed on direct product feedback.",
     "Leaves manageTriggerAria at Popup's default (true) - aria-expanded/aria-controls is the correct pattern for a click-to-reveal disclosure.",
     "Styles the hover/open tint off Popup's own aria-expanded attribute rather than a redundant custom data-open attribute.",
+    "Moves focus into the popup when it opens, in a requestAnimationFrame (as Dropdown Menu does): Popup keeps the panel at visibility: hidden until it's positioned, and a hidden element can't take focus, so focusing in the effect failed on the first open. Tab past the last item, Shift+Tab before the first, or Escape (preventDefault, so a dialog under it stays open) closes it and returns focus to the row.",
     "Applies the shared Focus Ring primitive (focusRingClassNames.focusRing + focusRingDefault) to the trigger button, and groups :focus-visible into the same tint rule as :hover - the same convention Button/IconButton/ToggleButton use - rather than a one-off local focus style.",
     "The row itself (.root) carries no padding - a native <button> otherwise inherits the UA stylesheet's own default button padding (1px block / 6px inline in Chrome), so .root resets padding to --spacing-none explicitly and the text group (.text) carries the real --spacing-xs padding on both sides instead."
   ],
@@ -201,7 +207,7 @@
   ],
   "contentRules": [
     "Keep title and secondaryText short enough for one line - neither has built-in truncation.",
-    "content wraps inside Popup's own default panel width."
+    "Keep content short: Popup's default panel is max-content wide with no maximum, so a long line of content does not wrap and can run past the viewport edge."
   ],
   "responsiveRules": [],
   "themeRules": [

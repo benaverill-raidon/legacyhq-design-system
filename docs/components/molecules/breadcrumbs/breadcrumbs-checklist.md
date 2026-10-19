@@ -5,7 +5,7 @@
 ### Name
 Breadcrumbs
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -79,8 +79,8 @@ Not Required:
 ## Accessibility
 
 ### Does the trail need a label?
-Yes - `nav` always has an accessible name, defaulting to `"Breadcrumb"` and overridable via
-`ariaLabel`.
+Yes - `nav` always has an accessible name, defaulting to `"Breadcrumb"` and overridable via the
+native `aria-label` (or `aria-labelledby`); `ariaLabel` is a deprecated alias.
 
 ### Is aria-current needed?
 Yes, always, on the current (last) item - not optional.

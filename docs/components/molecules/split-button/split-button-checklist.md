@@ -5,7 +5,7 @@
 ### Name
 Split Button
 
-### Category
+### Tier
 Molecule (see "Tier exception" below - its dropdown panel composes an organism, Dropdown Menu)
 
 ### Related Components
@@ -76,7 +76,7 @@ Yes - `children` is the primary action's own label, exactly like Button's own `c
 - default (default)
 - primary
 
-Narrower than Button's own `appearance` (no `subtle`) - matches every verified Figma variant
+Narrower than Button's own range (no `subtle`) - matches every verified Figma variant
 exactly; Figma never shows a subtle split button.
 
 ### Size
@@ -84,7 +84,7 @@ exactly; Figma never shows a subtle split button.
 
 ### Token Mapping
 No new tokens - the divider (`border-width-sm`, `size-control-xs/sm/md/lg`, `color-border-input` /
-`color-content-brand-primary-subtle` / `color-border-disabled`) and the squared corners (`0`, an
+`color-border-brand-primary-subtle` / `color-border-disabled`) and the squared corners (`0`, an
 explicitly-ignored value in the token-governance stylelint rule) are the only styling Split Button
 owns. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own.
 
@@ -112,7 +112,9 @@ a real `<button>` (IconButton) with Enter/Space activation native; arrow keys/Ho
 navigate the open panel (Menu).
 
 ### What ARIA is applied?
-`aria-expanded`/`aria-controls` on the secondary action (Popup, via Dropdown Menu); `role="menu"`
+`aria-haspopup="menu"`/`aria-expanded`/`aria-controls` on the secondary action (Dropdown Menu and
+Popup); focus moves into the menu on open and back to the caret on choose, Escape, or Tab out;
+`role="menu"`
 with an accessible name (`secondaryActionLabel`) and per-item `menuitem` rows on the panel (Menu);
 `aria-busy`/`aria-disabled` on the primary action while loading (Button's own existing behavior).
 
@@ -173,9 +175,11 @@ Final implementation decisions:
   via CSS logical properties (`border-start-end-radius`/`border-end-end-radius` and their mirror),
   not physical properties, so the layout stays correct in RTL contexts - matching Tag's own
   wrapper/remove-button precedent.
-- `IconButton`'s own `isExpanded` prop is not passed to the secondary action - verified directly
-  that it has no visual effect in code today, and `Popup` (via Dropdown Menu) already overwrites
-  `aria-expanded` via its own trigger-cloning regardless.
+- `IconButton`'s own `isExpanded` prop is not passed to the secondary action - left unset,
+  `IconButton` keeps the `aria-expanded` that `Popup` (via Dropdown Menu) injects, and its hover
+  fill follows it.
+- Choosing a menu item closes the menu and returns focus to the caret (Dropdown Menu), so the
+  internal `open` state needs no `onOpenChange` prop.
 - Verified directly that `IconButton`'s own tooltip-auto-wrapping (triggered by passing
   `aria-label`) does not interfere with `Popup`'s trigger-cloning (`ref`/`aria-expanded` still reach
   the real `<button>`) - the same combination already exists, unremarked, in Dropdown Menu's own

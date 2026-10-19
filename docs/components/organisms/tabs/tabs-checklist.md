@@ -13,13 +13,13 @@ uncontrolled) and wires optional TabPanel children.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
 ## Design decisions
 
-- [ ] Two `type`s: `line` (3px underline over a bottom border) and `contained` (radius-lg pills inside
+- [ ] Two `appearance`s (deprecated alias `type`): `line` (3px underline over a bottom border) and `contained` (radius-lg pills inside
       a raised, radius-xl, bordered, `spacing-xs`-padded segmented container).
 - [ ] Data-driven `tabs` array (matching the repo's Menu style); panels via optional `TabPanel`
       children with ARIA wired automatically.
@@ -40,11 +40,13 @@ tabs container: type (line | contained), showBorder (bool)
 ## Code props
 
 ```ts
-type TabsType = 'line' | 'contained';
+type TabsAppearance = 'line' | 'contained';
 interface TabItem { value: string; label: React.ReactNode; disabled?: boolean; }
 
 interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  type?: TabsType;
+  appearance?: TabsAppearance;
+  /** @deprecated Use `appearance`. */
+  type?: TabsAppearance;
   tabs: TabItem[];
   value?: string;
   defaultValue?: string;
@@ -64,14 +66,14 @@ interface TabPanelProps extends React.HTMLAttributes<HTMLDivElement> {
 ## Defaults
 
 ```txt
-type: line
+appearance: line
 defaultValue: first enabled tab
 showBorder: true
 ```
 
 ## Tokens
 
-- [ ] tab padding block `--size-075`, inline `--spacing-sm`; root gap `--spacing-lg`.
+- [ ] tab padding block `--spacing-075`, inline `--spacing-sm`; root gap `--spacing-lg`.
 - [ ] tab list border `--border-width-sm` / `--color-border-default`.
 - [ ] line indicator `--border-width-lg` / `--color-content-selected`.
 - [ ] contained tab radius `--border-radius-lg`; selected fill `--color-background-selected-default-default`
@@ -82,7 +84,8 @@ showBorder: true
 
 ## Accessibility
 
-- [ ] tablist labelled; tab/tabpanel ARIA; roving tabindex.
+- [ ] tablist labelled; tab/tabpanel ARIA (aria-controls only when the panel is rendered); roving
+      tabindex, falling back to the first enabled tab when the value matches none.
 - [ ] arrow keys (wrap), Home, End; skip disabled.
 - [ ] shared Focus Ring; native `disabled`.
 

@@ -35,7 +35,7 @@ describe('LinkButton', () => {
       </LinkButton>,
     );
 
-    expect(screen.getByRole('link', { name: 'External' })).toHaveAttribute('target', '_blank');
+    expect(screen.getByRole('link', { name: 'External (opens in a new tab)' })).toHaveAttribute('target', '_blank');
   });
 
   it('auto-adds noopener noreferrer for target blank when rel is absent', () => {
@@ -45,7 +45,7 @@ describe('LinkButton', () => {
       </LinkButton>,
     );
 
-    expect(screen.getByRole('link', { name: 'External' })).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(screen.getByRole('link', { name: 'External (opens in a new tab)' })).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
   it('preserves provided rel', () => {
@@ -55,7 +55,7 @@ describe('LinkButton', () => {
       </LinkButton>,
     );
 
-    expect(screen.getByRole('link', { name: 'External' })).toHaveAttribute('rel', 'nofollow');
+    expect(screen.getByRole('link', { name: 'External (opens in a new tab)' })).toHaveAttribute('rel', 'nofollow');
   });
 
   it('renders children', () => {
@@ -127,6 +127,33 @@ describe('LinkButton', () => {
 
     expect(link).toHaveAttribute('aria-disabled', 'true');
     expect(link).toHaveAttribute('tabindex', '-1');
+    // No href, so the context menu and a middle click can't open it either.
+    expect(link).not.toHaveAttribute('href');
+  });
+
+  it('loading removes the href and sets aria-disabled, but stays focusable', () => {
+    render(
+      <LinkButton href="/clients" isLoading>
+        Open client
+      </LinkButton>,
+    );
+
+    const link = screen.getByRole('link', { name: 'Open client' });
+
+    expect(link).not.toHaveAttribute('href');
+    expect(link).toHaveAttribute('aria-disabled', 'true');
+    expect(link).toHaveAttribute('tabindex', '0');
+    expect(link).not.toHaveAttribute('data-disabled');
+  });
+
+  it('says a new-tab link opens a new tab, in hidden text', () => {
+    render(
+      <LinkButton href="https://example.com" target="_blank">
+        Documentation
+      </LinkButton>,
+    );
+
+    expect(screen.getByRole('link', { name: 'Documentation (opens in a new tab)' })).toBeInTheDocument();
   });
 
   it('disabled prevents click and navigation', () => {
@@ -246,7 +273,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('gives the inverse treatment the inverse content token and the white subtle overlays on hover/press', () => {
-    expect(linkButtonCss).toMatch(/\.inverse:not\(\[aria-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
+    expect(linkButtonCss).toMatch(/\.inverse:not\(\[data-disabled='true'\]\) \{[\s\S]*?color: var\(--color-content-inverse-default\);/);
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-hover)');
     expect(linkButtonCss).toContain('var(--color-background-neutral-overlay-subtle-press)');
   });
@@ -256,7 +283,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('gives appearance=default a visible disabled border (--color-border-disabled), matching its own resting border', () => {
-    const rule = linkButtonCss.match(/\.appearance_default\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+    const rule = linkButtonCss.match(/\.appearance_default\[data-disabled='true'\][^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: var(--color-border-disabled);');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
@@ -264,7 +291,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('keeps appearance=primary disabled borderless, matching its own resting border', () => {
-    const rule = linkButtonCss.match(/\.appearance_primary\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+    const rule = linkButtonCss.match(/\.appearance_primary\[data-disabled='true'\][^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: transparent;');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');
@@ -272,7 +299,7 @@ describe('LinkButton token mappings', () => {
   });
 
   it('keeps appearance=subtle disabled borderless, matching its own resting border', () => {
-    const rule = linkButtonCss.match(/\.appearance_subtle\[aria-disabled='true'\][^{]*\{([^}]*)\}/);
+    const rule = linkButtonCss.match(/\.appearance_subtle\[data-disabled='true'\][^{]*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: transparent;');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');

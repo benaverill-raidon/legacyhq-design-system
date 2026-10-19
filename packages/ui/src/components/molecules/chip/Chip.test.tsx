@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Chip } from './chip';
@@ -111,6 +111,12 @@ describe('Chip', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Remove Trusts' }));
 
       expect(handleRemove).toHaveBeenCalledTimes(1);
+    });
+
+    it('names the remove button from labelText when label is JSX', () => {
+      render(<Chip mode="select" label={<em>Trusts</em>} labelText="Trusts" onRemove={vi.fn()} />);
+
+      expect(screen.getByRole('button', { name: 'Remove Trusts' })).toBeInTheDocument();
     });
 
     it('supports an explicit removeAriaLabel', () => {
@@ -229,7 +235,7 @@ describe('Chip', () => {
       );
 
       expect(screen.getByText('Status')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: '2 statuses' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Status 2 statuses' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Remove Status' })).toBeInTheDocument();
     });
 
@@ -238,7 +244,7 @@ describe('Chip', () => {
         <Chip mode="filter" label="Status" value={{ label: '2 statuses', sections: statusSections() }} onRemove={vi.fn()} />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: '2 statuses' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Status 2 statuses' }));
 
       const menu = screen.getByRole('menu');
       expect(within(menu).getByRole('menuitem', { name: 'Not started' })).toBeInTheDocument();
@@ -255,7 +261,7 @@ describe('Chip', () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: '2 statuses' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Status 2 statuses' }));
       fireEvent.click(screen.getByRole('menuitem', { name: 'Not started' }));
 
       expect(handleSelect).toHaveBeenCalledTimes(1);
@@ -280,7 +286,7 @@ describe('Chip', () => {
       );
 
       expect(screen.getAllByRole('button')).toHaveLength(3);
-      expect(screen.getByRole('button', { name: 'on' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Due date on' })).toBeInTheDocument();
     });
 
     it('names each menu panel after the property and the segment role, not the current value', () => {
@@ -294,7 +300,7 @@ describe('Chip', () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: 'on' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Due date on' }));
       expect(screen.getByRole('menu', { name: 'Due date operator' })).toBeInTheDocument();
     });
 
@@ -308,7 +314,7 @@ describe('Chip', () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: '2 statuses' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Status 2 statuses' }));
       expect(screen.getByRole('menu', { name: 'Choose statuses' })).toBeInTheDocument();
     });
 
@@ -323,7 +329,7 @@ describe('Chip', () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: 'on' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Due date on' }));
       expect(screen.getByRole('menuitem', { name: 'before' })).toBeInTheDocument();
       // Opening the operator menu must not also open the value menu.
       expect(screen.queryByRole('menuitem', { name: 'Not started' })).not.toBeInTheDocument();
@@ -344,6 +350,112 @@ describe('Chip', () => {
       for (const button of screen.getAllByRole('button')) {
         expect(button).toBeDisabled();
       }
+    });
+
+    it('names the operator and value buttons by the property and their own text', () => {
+      render(
+        <Chip
+          mode="filter"
+          label="Due date"
+          operator={{ label: 'on', sections: operatorSections() }}
+          value={{ label: 'March 2', sections: statusSections() }}
+          onRemove={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Due date on' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Due date March 2' })).toBeInTheDocument();
+    });
+
+    it("takes the property from a JSX label's text for the segment buttons", () => {
+      render(
+        <Chip
+          mode="filter"
+          label={<strong>Status</strong>}
+          value={{ label: '2 statuses', sections: statusSections() }}
+          onRemove={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Status 2 statuses' })).toBeInTheDocument();
+    });
+
+    it('names the segments, menus, and remove button from labelText when label is JSX', () => {
+      render(
+        <Chip
+          mode="filter"
+          label={<span aria-hidden="true">★</span>}
+          labelText="Priority"
+          operator={{ label: 'is', sections: operatorSections() }}
+          value={{ label: 'High', sections: statusSections() }}
+          onRemove={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Remove Priority' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Priority is' })).toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'Priority High' }));
+      expect(screen.getByRole('menu', { name: 'Priority value' })).toBeInTheDocument();
+    });
+
+    it('keeps the "Remove" fallback, and no default menu name, with a JSX label and no labelText', () => {
+      render(
+        <Chip
+          mode="filter"
+          label={<strong>Status</strong>}
+          value={{ label: '2 statuses', sections: statusSections() }}
+          onRemove={vi.fn()}
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
+    });
+
+    describe('with a segment tooltip', () => {
+      function renderWithTooltip() {
+        render(
+          <Chip
+            mode="filter"
+            label="Status"
+            value={{ label: '2 statuses', sections: statusSections(), tooltip: 'Not started, In progress' }}
+            onRemove={vi.fn()}
+          />,
+        );
+        return screen.getByRole('button', { name: 'Status 2 statuses' });
+      }
+
+      it('keeps the menu-button attributes on the segment', () => {
+        const segment = renderWithTooltip();
+        expect(segment).toHaveAttribute('aria-haspopup', 'menu');
+        expect(segment).toHaveAttribute('aria-expanded', 'false');
+
+        fireEvent.click(segment);
+
+        const panel = screen.getByRole('menu', { name: 'Status value' }).closest('[id]') as HTMLElement;
+        expect(segment).toHaveAttribute('aria-expanded', 'true');
+        expect(segment).toHaveAttribute('aria-controls', panel.id);
+      });
+
+      it('opens a visible menu positioned against the segment', () => {
+        const segment = renderWithTooltip();
+        fireEvent.click(segment);
+
+        const panel = screen.getByRole('menu').closest('[id]') as HTMLElement;
+        expect(panel.style.visibility).not.toBe('hidden');
+      });
+
+      it('returns focus to the segment on Escape', async () => {
+        const segment = renderWithTooltip();
+        segment.focus();
+        fireEvent.click(segment);
+        const item = screen.getByRole('menuitem', { name: 'Not started' });
+        await waitFor(() => expect(item).toHaveFocus());
+
+        fireEvent.keyDown(item, { key: 'Escape' });
+
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        expect(segment).toHaveFocus();
+      });
     });
 
     it('renders a value preview before the value text when given', () => {
@@ -384,6 +496,15 @@ describe('Chip', () => {
     // Figma suppresses only the leading segment's trailing stroke, which doubles to 2px between two
     // middle segments (its `due date` filter has an operator and a value side by side). Normalized.
     expect(chipCss).toMatch(/\.segment:not\(:last-child\)\s*\{[^}]*border-inline-end-width:\s*0/);
+  });
+
+  it('ellipsizes long labels and values within the available width instead of overflowing', () => {
+    // The root is capped at its container, every segment may shrink below its text, the text clips
+    // with an ellipsis, and the remove button keeps its size.
+    expect(chipCss).toMatch(/\.root \{[^}]*max-inline-size:\s*100%/);
+    expect(chipCss).toMatch(/\.segment \{[^}]*min-inline-size:\s*0/);
+    expect(chipCss).toMatch(/\.removeButton \{[^}]*flex:\s*none/);
+    expect(chipCss).toMatch(/\.label,\s*\.segmentLabel \{[^}]*min-inline-size:\s*0;[^}]*overflow:\s*hidden;[^}]*text-overflow:\s*ellipsis/);
   });
 
   it('rounds only the outer corners, squaring every interior one', () => {

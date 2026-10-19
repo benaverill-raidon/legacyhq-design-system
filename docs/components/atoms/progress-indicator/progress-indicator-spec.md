@@ -8,7 +8,7 @@ Use it for onboarding, setup, multi-step forms, guided workflows, carousels, and
 
 Do not use it for system process completion, percentage-based progress, free navigation, tab selection, or a stepper that requires labels and actions. Use Progress Bar for determinate system progress and a future Stepper pattern for labeled, navigable steps.
 
-## Category
+## Tier
 
 ```txt
 atom
@@ -20,7 +20,10 @@ atom
 export type ProgressIndicatorAppearance =
   | 'default'
   | 'primary'
-  | 'inverted';
+  | 'inverse';
+
+/** @deprecated Use `inverse`, the name every other component uses for light-on-dark. Still accepted. */
+export type DeprecatedProgressIndicatorAppearance = 'inverted';
 
 export type ProgressIndicatorSize = 'sm' | 'md';
 
@@ -71,9 +74,11 @@ The Figma-only `indicator-dot` remains private anatomy.
 
 - `default`: neutral selected dot.
 - `primary`: brand selected dot.
-- `inverted`: inverse selected dot for dark surfaces.
+- `inverse`: inverse selected dot for bold surfaces (`color-background-neutral-subtle-default`:
+  light in the light theme, dark in the dark theme).
 
-Do not expose Figma's internal `inverse` name publicly.
+`inverted`, the earlier public name for `inverse`, is still accepted as a deprecated alias and maps
+to `inverse` inside the component.
 
 ## Sizes
 
@@ -112,10 +117,10 @@ Suggested semantic intent:
 ```txt
 default selected: color-background-neutral-bold-default
 primary selected: color-background-brand-primary-bold-default
-inverted selected: color-background-neutral-subtle-default
+inverse selected: color-background-neutral-subtle-default
 unselected border: color-border-bold
-interactive hover: color-background-neutral-subtle-hover
-interactive pressed: color-background-neutral-subtle-press
+interactive hover: color-background-neutral-overlay-bold-hover
+interactive pressed: color-background-neutral-overlay-bold-press
 ```
 
 Verify the actual generated CSS variable names before implementation.
@@ -124,7 +129,7 @@ Verify the actual generated CSS variable names before implementation.
 
 Progress Indicator remains controlled by `currentStep` and `totalSteps`. External previous and next buttons belong to surrounding composition, not to the component itself.
 
-Apply to the root:
+Without `onStepChange`, apply to the root:
 
 ```txt
 role="progressbar"
@@ -133,20 +138,24 @@ aria-valuemax={normalizedTotalSteps}
 aria-valuenow={normalizedCurrentStep}
 ```
 
+With `onStepChange`, the root is `role="group"` with the same accessible name and no value
+attributes: a progressbar's children are presentational, so assistive technology may not expose
+buttons inside one.
+
 Accessible naming priority:
 
 1. `aria-label`
 2. `aria-labelledby`
 3. `label`
 
-Default `aria-valuetext` is `Step X of Y`.
+Default `aria-valuetext` is `Step X of Y` (progressbar only).
 
 Passive dots are decorative and hidden from assistive technology.
 
 When `onStepChange` is provided:
 
 - each dot is a native `button`
-- each button uses the accessible label `Go to step X`
+- each button is named by `getStepLabel(step, totalSteps)`, `Go to step X` by default
 - the selected dot uses `aria-current="step"`
 - focus uses the shared Focus Ring implementation
 
@@ -158,7 +167,8 @@ When `onStepChange` is provided:
 - Normalize `totalSteps` to at least `1`.
 - Dots are buttons only when `onStepChange` is provided.
 - Do not add completed-step styling.
-- Do not animate unless explicitly requested later.
+- The interactive dot's hover/press fill and the selected/unselected color swap both transition
+  with the `fade-quick` motion recipe, switched off under `prefers-reduced-motion: reduce`.
 
 ## Implementation constraints
 
@@ -194,9 +204,11 @@ Controls for `currentStep`, `totalSteps`, `appearance`, `size`, and `label`.
 
 ### Variants
 
-Show the appearance axis alone (`default`, `primary`), then `inverted` separately on a
-dark surface - it isn't grouped with the other two because its selected dot is white and
-disappears on a light background.
+Show the appearance axis alone (`default`, `primary`), then `inverse` separately on a bold
+surface (`color-background-neutral-bold-default`, not `data-theme="dark"`) - it isn't grouped with
+the other two because its selected dot (`color-background-neutral-subtle-default`) disappears on the
+page's own surface. In the dark theme that token is dark, so inverse inside `data-theme="dark"`
+shows no selected dot.
 
 ### Sizes
 
@@ -217,8 +229,8 @@ compositions - including an externally-controlled Previous/Next pagination examp
 ### Edge Cases
 
 Show a single-step journey, out-of-range `currentStep`/`totalSteps` values clamping safely, many
-steps in a narrow container (dots do not wrap), and default/primary/inverted together on
-a dark surface.
+steps in a narrow container (dots do not wrap), and default/primary/inverse together in the dark
+theme, where default and primary stay legible and inverse's selected dot is dark.
 
 Do not create one story per variant permutation unless necessary.
 

@@ -1,9 +1,10 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { DatePicker } from './date-picker';
 
 const css = readFileSync(
@@ -57,10 +58,51 @@ describe('DatePicker', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
-  it('moves focus into the calendar when opened', () => {
+  it('moves focus into the calendar when opened, once the panel is shown', async () => {
     renderPicker();
+    field().focus();
     fireEvent.click(field());
-    expect(document.activeElement?.closest('[role="grid"]')).not.toBeNull();
+    await waitFor(() => expect(dayButton(9)).toHaveFocus());
+  });
+
+  it('names the calendar dialog, with a translatable default', () => {
+    const { unmount } = renderPicker();
+    fireEvent.click(field());
+    expect(screen.getByRole('dialog', { name: 'Choose a date' })).toContainElement(screen.getByRole('grid'));
+    unmount();
+
+    renderPicker({ dialogLabel: 'Elegir una fecha' });
+    fireEvent.click(field());
+    expect(screen.getByRole('dialog', { name: 'Elegir una fecha' })).toBeInTheDocument();
+  });
+
+  it('closes and returns focus to the field when Tab leaves the calendar', async () => {
+    renderPicker();
+    field().focus();
+    fireEvent.click(field());
+    await waitFor(() => expect(dayButton(9)).toHaveFocus());
+
+    // The day is the last stop: Tab leaves the panel.
+    expect(fireEvent.keyDown(dayButton(9)!, { key: 'Tab' })).toBe(false);
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(field()).toHaveFocus();
+  });
+
+  it('closes and returns focus to the field when Shift+Tab leaves the calendar', async () => {
+    renderPicker();
+    field().focus();
+    fireEvent.click(field());
+    await waitFor(() => expect(dayButton(9)).toHaveFocus());
+
+    // Tab within the panel (from the first header button) doesn't close it.
+    const previousYear = screen.getByRole('button', { name: 'Previous year' });
+    previousYear.focus();
+    expect(fireEvent.keyDown(previousYear, { key: 'Tab' })).toBe(true);
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    fireEvent.keyDown(previousYear, { key: 'Tab', shiftKey: true });
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(field()).toHaveFocus();
   });
 
   it('selects a day, fills the field, closes, and returns focus (uncontrolled)', () => {
@@ -91,9 +133,11 @@ describe('DatePicker', () => {
     expect(field()).toHaveValue('03/20/2026');
   });
 
-  it('closes on Escape and returns focus to the field', () => {
+  it('closes on Escape and returns focus to the field', async () => {
     renderPicker();
+    field().focus();
     fireEvent.click(field());
+    await waitFor(() => expect(dayButton(9)).toHaveFocus());
     const grid = screen.getByRole('grid');
     fireEvent.keyDown(grid, { key: 'Escape' });
 
@@ -114,12 +158,55 @@ describe('DatePicker', () => {
     expect(dayButton(25)!).toHaveAttribute('data-disabled', 'true');
   });
 
-  it('exposes a dialog popup labelled to the field via aria-controls', () => {
+  it('points the field at the dialog with aria-controls while open', () => {
     renderPicker();
+    expect(field()).toHaveAttribute('aria-expanded', 'false');
+    expect(field()).not.toHaveAttribute('aria-controls');
     fireEvent.click(field());
     const controls = field().getAttribute('aria-controls');
     expect(controls).toBeTruthy();
-    expect(document.getElementById(controls!)).toHaveAttribute('role', 'dialog');
+    expect(document.getElementById(controls!)).toBe(screen.getByRole('dialog', { name: 'Choose a date' }));
+  });
+});
+
+describe('DatePicker required', () => {
+  function renderInForm(props: Partial<React.ComponentProps<typeof DatePicker>> = {}) {
+    render(
+      <form aria-label="Filing">
+        <DatePicker defaultValue={null} today={TODAY} aria-label="Date" required {...props} />
+      </form>,
+    );
+    return screen.getByRole('form') as HTMLFormElement;
+  }
+
+  it('stops the form from submitting while the date is empty', () => {
+    const form = renderInForm();
+    // The read-only field itself is never validated by the browser.
+    expect((field() as HTMLInputElement).willValidate).toBe(false);
+    expect(form.checkValidity()).toBe(false);
+
+    fireEvent.click(field());
+    fireEvent.click(dayButton(15)!);
+    expect(form.checkValidity()).toBe(true);
+  });
+
+  it('passes with a date, and when disabled', () => {
+    expect(renderInForm({ defaultValue: TODAY }).checkValidity()).toBe(true);
+    cleanup();
+    expect(renderInForm({ disabled: true }).checkValidity()).toBe(true);
+  });
+
+  it('sends focus on to the field when the browser points at the empty value', () => {
+    const form = renderInForm();
+    const holder = form.querySelector<HTMLInputElement>('input[aria-hidden="true"]')!;
+    expect(holder).toHaveAttribute('tabindex', '-1');
+    holder.focus();
+    expect(field()).toHaveFocus();
+  });
+
+  it('adds nothing when not required', () => {
+    const form = renderInForm({ required: false });
+    expect(form.querySelectorAll('input')).toHaveLength(1);
   });
 });
 
@@ -134,5 +221,18 @@ describe('DatePicker CSS contract', () => {
     const rule = css.match(/\.triggerInput \{([\s\S]*?)\}/)?.[1] ?? '';
     expect(rule).toContain('cursor: pointer;');
     expect(rule).toContain('caret-color: transparent;');
+  });
+
+  it('takes the wiring Field passes on its input, not its wrapper', () => {
+    render(
+      <Field label="Due date" message="The court's filing deadline" state="error" required>
+        <DatePicker />
+      </Field>,
+    );
+
+    const input = screen.getByRole('textbox', { name: 'Due date' });
+    expect(input).toHaveAccessibleDescription("The court's filing deadline");
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toBeRequired();
   });
 });

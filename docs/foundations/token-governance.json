@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "status": "stable",
     "owner": "LegacyHQ Design System",
-    "lastReviewed": "2026-07-07",
+    "lastReviewed": "2026-10-13",
     "appliesTo": [
         "tokens",
         "components",
@@ -84,6 +84,7 @@
                 "rules": [
                     "Component tokens are exceptions, not defaults.",
                     "Component tokens should generally alias semantic tokens.",
+                    "Exception: a component dimension token may alias the primitive scale when it represents geometry unique to that component (see dimensions.componentTokenException).",
                     "Component tokens should only exist when a component requires independent control, theming, or behavior."
                 ],
                 "representsIntent": true,
@@ -171,7 +172,7 @@
     "antiPatterns": [
         "Duplicate meanings.",
         "Component tokens that mirror existing semantic tokens.",
-        "Component tokens that reference primitive values directly.",
+        "Component tokens that reference primitive values directly - except dimension tokens for geometry unique to one component (see dimensions.componentTokenException).",
         "Creating tokens for a single isolated use case.",
         "Creating semantic tokens that differ only by component name."
     ],
@@ -203,7 +204,213 @@
         "preferIntentOverImplementation": true,
         "allowPrimitiveConsumptionByComponents": false,
         "allowComponentTokenForSemanticDuplicate": false,
-        "componentTokensRequireDocumentedNeed": true
+        "componentTokensRequireDocumentedNeed": true,
+        "allowComponentDimensionTokensToAliasPrimitives": true
+    },
+    "dimensions": {
+        "description": "Which family a dimension token belongs to, and how to choose one. Documented for people in Storybook at Foundations / Spacing.",
+        "primitiveScale": {
+            "tokens": "measurement-*",
+            "rule": "Raw lengths with no intent. Component CSS never references them.",
+            "figmaNaming": "Figma names these primitives number/*. The repo keeps measurement-*; whether to align the names is a separate token-source decision."
+        },
+        "families": [
+            {
+                "key": "spacing",
+                "tokens": [
+                    "spacing-*"
+                ],
+                "definition": "Spacing describes distance between, inside, or relative to elements when that distance expresses layout relationship.",
+                "appliesTo": [
+                    "padding",
+                    "gap",
+                    "margin",
+                    "layout inset"
+                ]
+            },
+            {
+                "key": "overlap",
+                "tokens": [
+                    "overlap-*"
+                ],
+                "definition": "Negative spacing for elements that deliberately stack, such as the avatars in an Avatar Group."
+            },
+            {
+                "key": "sizing",
+                "tokens": [
+                    "size-control-*",
+                    "size-choice-*",
+                    "size-icon-*",
+                    "size-marker-*",
+                    "size-avatar-*",
+                    "size-logo-*",
+                    "size-spinner-*",
+                    "size-<NNN>"
+                ],
+                "definition": "The dimensions of elements themselves. Use the most specific family that fits; the numeric scale (100 = 8px) covers any other element dimension."
+            },
+            {
+                "key": "shape",
+                "tokens": [
+                    "border-radius-*",
+                    "border-width-*"
+                ],
+                "definition": "Corner radius and stroke width - separate families even when a value matches a spacing step.",
+                "strokeRule": "Border-width tokens define stroke thickness regardless of rendering technique: border, outline, inset/outset shadow, divider, indicator, or SVG stroke.",
+                "blurredShadows": "A blurred shadow is elevation, not a stroke. An unblurred shadow (offset or spread only) is a stroke and takes its thickness from border-width tokens.",
+                "techniques": {
+                    "border": "The stroke is there at rest and part of the element's box.",
+                    "insetShadow": "The stroke appears or thickens with state and content must not move, sits inside padding without resizing the element, or is painted over content.",
+                    "outsetShadow": "A ring outside an element that must not change its size (spread only).",
+                    "outline": "Keyboard focus, through the Focus Ring primitive.",
+                    "element": "A line of its own (divider, indicator), sized with a border-width token."
+                },
+                "emphasisStroke": "A stroke that thickens with state without moving content is an inset shadow of calc(var(--border-width-md) - var(--border-width-sm)) inside the resting border, so the visual stroke is md.",
+                "radiusNotes": "border-radius-md (5px) is used only by Rich Text Area's slash input and by no Figma component; whether to retire it is a separate design decision.",
+                "documentation": "Foundations / Radius"
+            },
+            {
+                "key": "component",
+                "tokens": [
+                    "component-<name>-*"
+                ],
+                "definition": "Geometry only one component has, such as Switch's thumb travel or Menu's widths."
+            }
+        ],
+        "rule": "Choose a dimension token by what the value does, not by the number it resolves to: 16px of padding is spacing-lg, and a 16px-tall element is size-200. If the right family doesn't have the value, raise it as a gap rather than borrowing a primitive or another family's token.",
+        "notSpacing": [
+            "focus-ring offsets",
+            "motion travel",
+            "decorative strokes",
+            "shadow geometry",
+            "type metrics such as line height"
+        ],
+        "componentTokenException": "Component tokens may alias primitives when they represent geometry unique to one component. Do not create semantic tokens only so component tokens have something to alias. Component CSS itself must never consume primitives.",
+        "rawLengths": {
+            "rule": "Not every numeric length needs a token. Separate values that reveal a missing reusable token from acceptable local or layout arithmetic.",
+            "acceptable": [
+                "percentages and centering (100%, 50%, -50%)",
+                "calc() built from tokens",
+                "the 1px visually-hidden pattern",
+                "one-off geometry local to one component"
+            ]
+        },
+        "enforcement": "Not enforced yet. Foundations / Spacing lists, live from component CSS, the places where spacing is missing, misclassified, or borrowed for a non-spacing purpose.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "spacing": [
+                "There is no focus-ring offset token: several components set --focus-ring-offset or outline-offset with spacing tokens, and Focus Ring and Table set a raw 2px.",
+                "Rich Text Area's slash-command picker shadow falls back to spacing tokens for its offset and blur, because the --elevation-shadow-overlay token it refers to doesn't exist.",
+                "Link sets its icon line-height with --spacing-none."
+            ],
+            "sizingAndLayout": [
+                "Table row heights (32, 40, and 64px) are raw lengths repeated across Table, Text Field (editable table cells), and Time Picker (table-cell footer), with no shared token.",
+                "Panel and dialog widths are raw lengths in Date Picker and Time Picker (240px), Toast and Toast Group (368px), and Modal Dialog (400-968px), while Menu and Tooltip widths are component tokens."
+            ],
+            "note": "The spacing findings also appear on Foundations / Spacing, and shape exceptions would appear on Foundations / Radius, both generated from component CSS. The sizing and layout findings are recorded only here; they are not spacing issues.",
+            "shape": [
+                "None in component CSS (2026-10-08): no raw radius or stroke values, no shape primitives, and every stroke-like shadow takes its thickness from border-width tokens.",
+                "Figma: most component strokes bind deleted variables (border/width/default, 🌮 Stroke) and pills use raw radii (10000, 8333, 1198.8) instead of border/radius/full-round; tracked as a separate Figma clean-up."
+            ]
+        }
+    },
+    "elevation": {
+        "description": "How visual depth is expressed. Documented for people in Storybook at Foundations / Elevation.",
+        "surfaceColor": "Surface color expresses depth within the page: color-elevation-surface-deep, -sunken, -default (the page), and -raised, each with hover and press. Raised surfaces rest on the page and cast no shadow; their border separates them.",
+        "shadow": "An elevation shadow indicates that a surface floats above the interface. Use the role token; never rebuild a shadow from the color-elevation-shadow-* colors in component CSS. A floating surface keeps its border; the shadow sits outside it.",
+        "roles": [
+            {
+                "key": "overlay",
+                "token": "--elevation-shadow-overlay",
+                "source": "DTCG shadow composite in Semantic: Elevation (semantic-elevation-light.json and -dark.json), so light.css and dark.css each declare it and its colors resolve per theme.",
+                "layers": "inset 0 0 0 border-width-sm in color-elevation-shadow-overlay-inner (transparent in both themes); 0 8px 12px 0 in -spread; 0 0 1px 0 in -perimeter.",
+                "figma": "Light/elevation.shadow.overlay and Dark/elevation.shadow.overlay effect styles.",
+                "usedBy": [
+                    "Popup (and Dropdown Menu, Select, Date Picker, Time Picker, Inline Message through it)",
+                    "Toast",
+                    "Rich Text Area's slash-command picker",
+                    "Modal Dialog"
+                ]
+            }
+        ],
+        "strokeComposition": "Shape owns stroke thickness. Elevation may compose a Shape stroke into a shadow recipe, as the overlay inner ring does with border-width-sm. Blurred shadow layers are elevation; unblurred standalone rings and strokes remain Shape.",
+        "notYet": "Figma defines raised and overflow effect styles and their colors exist as tokens, but no component uses them, so they have no composite. Add one only when a component needs it.",
+        "unused": {
+            "primitives": "shadow-sm/md/lg-x/y/blur/spread (12): no token or component uses them; kept for now.",
+            "colors": [
+                "color-elevation-shadow-overlay-default",
+                "color-elevation-shadow-raised-default",
+                "color-elevation-shadow-raised-spread",
+                "color-elevation-shadow-raised-perimeter",
+                "color-elevation-shadow-raised-inner",
+                "color-elevation-shadow-overflow-default",
+                "color-elevation-shadow-overflow-spread",
+                "color-elevation-shadow-overflow-perimeter",
+                "color-elevation-shadow-overflow-color"
+            ]
+        },
+        "layering": "Stacking order (z-index) is a separate concern: it is not paired with elevation and isn't tokenized (Figma has no stacking order, and it doesn't change with the theme). The overlay order lives in one code file, packages/ui/src/components/primitives/layers.ts: LAYERS.dialog (1000, Modal Dialog) < LAYERS.toast (1100, Toast Group) < LAYERS.popup (1200, Popup and everything built on it), set inline by the components. The same file keeps the stack of open layers that Escape goes to (useLayer), so Escape closes the topmost popup or dialog first. In-page stacking (a control's own parts) stays local to each component.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "findings": [
+                "Resolved 2026-10-17: Popup-based overlays (z-index 1) rendered behind an open Modal Dialog (z-index 1000), including the dialog's own Close and Expand tooltips. Popup and Modal Dialog now take z-index from LAYERS in primitives/layers.ts (popup 1200 above dialog 1000), and Escape goes to the topmost open layer. Toast Group's stack takes LAYERS.toast (1100), between the two.",
+                "Four Light taupe alpha primitives (alpha-1100-12/16/24/32) are twice as opaque as their names and Figma (0.16/0.32/0.48/0.64), so the Light overlay shadow renders at 32%/64% instead of Figma's 16%/32%, and Light border-default and press fills are affected too. Tracked separately.",
+                "Storybook applies the theme to a wrapper div, so portaled overlays (Popup, Modal Dialog) render with Light tokens in Dark mode. Tracked separately.",
+                "Figma: color/elevation/shadow/overlay/spread and /perimeter don't exist as variables, and the effect styles aren't bound to variables (they hard-code the same values)."
+            ]
+        }
+    },
+    "motion": {
+        "description": "How motion is built and applied. Documented for people in Storybook at Foundations / Motion. Motion is code-only: Figma has no motion variables, and its prototypes set their own timings.",
+        "primitives": "Durations (duration-fast 150ms, duration-slow 300ms, duration-loop 860ms, duration-loop-slow 1500ms) and easings (ease-standard, which never overshoots; ease-spring, which overshoots to about 110% before settling; ease-loop). Component CSS never uses them directly.",
+        "recipes": {
+            "rule": "Components use recipes: a duration and an easing in one value, used whole in a transition or an animation, once for each property that changes. Never add a timing function after a recipe: the declaration becomes invalid and the browser drops it. Modal Dialog's entrance never ran because of this.",
+            "fade": "fade-* uses the standard non-overshooting motion curve for visual state changes: color, opacity, and indicators that turn or grow (Select's caret, Progress Bar's and Progress Tracker's fills).",
+            "move": "move-* uses the spring curve for physical movement of an element: Switch's thumb, Slider's handle, Avatar's selection ring, and Toast Group's stack.",
+            "duration": "quick is duration-fast (150ms), for direct feedback; long is duration-slow (300ms), for larger choreography such as the toast stack.",
+            "loops": "spin-loop (Spinner) and pulse-loop (Skeleton) repeat an animation. pulse-loop holds a literal linear curve rather than an easing primitive.",
+            "delay": "No recipe has a delay and no component adds one. Add a delay only when there's a real need."
+        },
+        "hover": "High-frequency, direct hover feedback may be instant: Menu and Table rows, Link, Avatar Group, and Inline Edit change on hover with no transition. More prominent state changes use fade-quick.",
+        "overlays": "Overlays enter using fade-quick; individual components may add local keyframed choreography, such as Modal Dialog's 8px rise. Popup and Modal Dialog leave at once. Toast Group uses move-long for the stack's movement and fade-long for toasts appearing and leaving.",
+        "progress": "Progress uses fade-quick, never a spring or movement recipe: it's a state change, not physical movement.",
+        "componentMotion": "Keyframes and choreography stay local to the component, timed with a recipe. There are no component motion tokens.",
+        "distance": "How far something travels is component geometry, not a motion or spacing token: a component dimension token when it's tied to the component's sizes (Switch's thumb travel), otherwise local (Modal Dialog's 8px rise, Toast Group's stack offsets).",
+        "timers": "A JavaScript timer that waits for motion should match the recipe's duration: Toast Group's EXIT_MS is 300, duration-slow, and a test keeps them in step.",
+        "reducedMotion": {
+            "rule": "Every component that moves responds to prefers-reduced-motion: reduce. The state still changes, without the movement: transitions finish at once (transition-duration: 0ms), loops stop (animation: none), and entrances don't play (animation-duration: 0ms, or the animation is added only inside a no-preference block, as Modal Dialog does).",
+            "selectors": "A reduce block must list every selector that adds motion. A media query adds no specificity, so a more specific moving rule elsewhere wins; Toast Group's .item[data-swiping='true'] did until it was listed.",
+            "spinner": "Spinner stops rather than turning slowly, and shows a still arc."
+        },
+        "naming": "Recipes say quick/long while the duration primitives say fast/slow, and the loop durations are duration-loop and duration-loop-slow. Left as is for now.",
+        "enforcement": "Not mechanically enforced yet: stylelint doesn't gate transition or animation values. The Motion page lists, from component CSS, raw timings, a recipe followed by a timing function, motion that reduced motion doesn't switch off, motion primitives used directly, and missing motion tokens. Modal Dialog, Toast Group, and Progress Bar tests pin their own motion. Candidates for later: those checks as lint or tests, and JavaScript exit timers derived from the CSS duration.",
+        "openFindings": {
+            "recorded": "2026-10-08",
+            "findings": [
+                "Figma prototypes use their own timings, which differ from code: Switch's thumb is 200ms ease-in-out in Figma and move-quick (150ms spring) in code; Menu's hover is 300ms ease-out in Figma and instant in code. With no motion variables in Figma, there's nothing to reconcile against yet."
+            ]
+        }
+    },
+    "icons": {
+        "description": "How icons are sized, colored, and named. Documented for people in Storybook at Foundations / Icons. Icons are generated components, not tokens; they are recorded here because their sizes and colors are tokens.",
+        "source": "packages/ui/src/assets/icons/source/*.svg, generated by npm run generate:icons into components and metadata (category, keywords). Every glyph is drawn on one 16px grid in one color: the generator strips clip paths and empty groups, and warns when it flattens a multi-color icon (microsoft.svg). The single-purpose category matches the section of that name on Figma's Icons page.",
+        "size": "md (--size-icon-md) is the default. sm is for dense contexts only: Menu's clear-search icon and Table's sort arrows, plus Link's external-link icon at Link's sm size. A component uses one icon size whatever its own size, and has no iconSize prop. spacing=\"spacious\" centers the glyph in a larger box; it is not a hit area, which belongs to the control around the icon.",
+        "color": "Icons inherit currentColor by default (color=\"inherit\"), so they follow the text or control they sit in, including its hover, disabled, and inverse states. Set a named color (subtle, information, success, warning, error, ...) only when the icon means something its text doesn't; every named color except disabled clears 3:1 on the surfaces it is used on. Don't fix an icon's color with an inline style: color the text or control it sits in, or use the color prop.",
+        "accessibility": "Icons are decorative (aria-hidden) unless given a label. An icon that carries meaning on its own needs text: status components (Banner, Section Message, Toast) read the status as visually hidden text before the message, and an icon-only control names the control (Icon Button's label), not the glyph. Link marks a new-tab link with hidden text, not only the icon.",
+        "ownGraphics": "Spinner, Progress Bar, Logo, and Avatar draw their own SVG at their own sizes; they are not icons. Anything else drawing a glyph by hand, fixing an icon's color, or rendering an unnamed icon-only control is listed on the Icons page as an exception.",
+        "naming": "Code names are kebab-case and say what the glyph is, not where it is used. Figma names 138 of its glyphs in snake_case or with spaces; the generator's names are the code's.",
+        "enforcement": "Not mechanically enforced in lint. The Icons page tests (packages/ui/src/storybook/pages/foundations/icons.test.ts) pin the grid, sizes, colors and their contrast, the sm uses, and the exception scan. Figma can't be checked in CI (see design-code-mapping-governance.json).",
+        "openFindings": {
+            "recorded": "2026-10-13",
+            "owner": "Aligned from the Figma side; code follows once Figma is settled.",
+            "findings": [
+                "Names: 16 glyphs are on Figma's Icons page but not in code (agent1, agent2, agent3, beneficiary, billing, detailed-theme, estate-plan, estate-planning, family, fiduciary, firm, liability, mobile-phone, relationships, sort, status_discovery), and 2 are in code but not Figma (administrative-account, firms-all).",
+                "Figma has two components named menu.",
+                "Four glyphs are drawn differently in Figma and code: assets, node, and the ring of radio_checked and radio_unchecked.",
+                "Figma's icon wrapper defaults to Size=sm, where code defaults to md, and names the property Size where every other is lowercase.",
+                "incapacitated and life-insurance-policy are the same glyph under two names."
+            ]
+        }
     },
     "enforcement": {
         "description": "This governance doc is a convention, not a guarantee. Raw-value regressions in component CSS are caught mechanically by stylelint, not by review alone.",
@@ -232,6 +439,16 @@
                 "reason": "These frequently require geometric arithmetic (calc(), negative offsets) that doesn't map onto the token scale; gating them produced false positives against legitimate layout math."
             },
             "escapeHatch": "A raw value can still pass via an inline `stylelint-disable-next-line scale-unlimited/declaration-strict-value` comment, but the comment must state why — reviewers should treat an unexplained disable as a rejection, not a pass."
+        },
+        "primitiveColorCheck": {
+            "description": "Stylelint accepts any var(), so it can't tell a primitive from a semantic token. This test closes that gap for color: component CSS that references a primitive color token - or a deprecated alias resolving to one - fails with the file, line, and token.",
+            "test": "packages/ui/src/components/component-color-tokens.test.ts",
+            "command": "npm test",
+            "runsIn": [
+                "npm run validate",
+                "CI (.github/workflows/validate.yml)"
+            ],
+            "notCovered": "Other primitive types are not checked. No component CSS references a primitive dimension token today, but nothing enforces that yet. Component tokens may alias dimension primitives (see the component token JSON files); that is the token layer, not component CSS."
         }
     },
     "sourceFormat": {

@@ -1,6 +1,6 @@
 {
   "name": "KeyValueList",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Stack Key Value Pair items vertically in a semantic <dl> element.",
   "intent": "A thin layout wrapper that provides the <dl> (description list) structure screen readers need to announce key/value pairs correctly. Resets browser default margins and uses a flex column layout. Individual pairs manage their own padding and dividers.",
@@ -48,6 +48,12 @@
       "element": "dl",
       "required": true,
       "description": "Flex column container. Resets browser default dl margin/padding."
+    },
+    {
+      "part": "children",
+      "element": "KeyValuePair (div with dt and dd)",
+      "required": true,
+      "description": "The Key Value Pairs, one per row. Each sets its own height, size, and underline divider."
     }
   ],
   "accessibility": {

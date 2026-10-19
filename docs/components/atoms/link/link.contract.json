@@ -1,6 +1,6 @@
 {
   "name": "Link",
-  "category": "atom",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Navigation.",
   "intent": "Hyperlink behavior.",
@@ -21,7 +21,7 @@
     },
     "notes": [
       "emphasis is a weight axis: strong = heading weight (600), default = body weight (400). Figma default emphasis is 'strong'.",
-      "hasVisited applies to every appearance including inverse; inverse visited is content/accent/purple/subtle in Figma (that token is not yet in the generated set, so code uses content/accent/purple/default as the closest available).",
+      "hasVisited applies to every appearance including inverse; inverse visited is content/accent/purple/subtle in Figma, and in code.",
       "Figma's Link has only default + hover states - there is no press/active treatment.",
       "Default appearance colour is content/brand/primary/default (matches Figma)."
     ]
@@ -37,7 +37,8 @@
   "anatomy": [
     "anchor",
     "content",
-    "automatic external-link icon"
+    "automatic external-link icon",
+    "new-tab label"
   ],
   "props": {
     "href": {
@@ -71,6 +72,12 @@
       "type": "string",
       "default": "_self",
       "required": false
+    },
+    "newTabLabel": {
+      "type": "string",
+      "default": "(opens in a new tab)",
+      "required": false,
+      "description": "Visually hidden text read after the link text when target is _blank, since the external-link icon is decorative."
     },
     "rel": {
       "type": "string",
@@ -112,7 +119,9 @@
   ],
   "behaviorRules": [
     "Use anchor semantics.",
-    "External links may show icon."
+    "External links may show icon.",
+    "When target is _blank, render the library's LinkExternalIcon (decorative, at the link's size) and visually hidden newTabLabel text after the link text.",
+    "Render inline, so long link text wraps with the sentence around it; only a link with the external icon is an inline flex box, which keeps the icon beside its text."
   ],
   "compositionRules": [
     "Use LinkButton when link should appear as button."

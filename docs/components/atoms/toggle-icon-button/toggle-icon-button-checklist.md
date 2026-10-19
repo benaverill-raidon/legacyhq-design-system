@@ -12,7 +12,7 @@ An icon-only toggle button lets users switch between selected and unselected sta
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 
@@ -66,6 +66,8 @@ interface ToggleIconButtonProps
   tone?: ToggleIconButtonTone;
   shape?: ToggleIconButtonShape;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   children: React.ReactNode;
 }
@@ -78,7 +80,7 @@ size: md
 tone: default
 shape: square
 isSelected: false
-isDisabled: false
+disabled: false
 type: button
 ```
 

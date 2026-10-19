@@ -194,11 +194,14 @@ export const SliderRange = React.memo(
       name,
       onValueChange,
       id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
       ...rest
     },
     forwardedRef,
   ) {
     const generatedId = React.useId();
+    const rootId = `${id ?? generatedId}-range`;
     const labelId = `${id ?? generatedId}-label`;
     const minInputId = `${id ?? generatedId}-min`;
     const maxInputId = `${id ?? generatedId}-max`;
@@ -222,8 +225,16 @@ export const SliderRange = React.memo(
     const lowerPosition = getVisualPosition(lowerPercent);
     const upperPosition = getVisualPosition(upperPercent);
     const stepModels = getStepModels(showSteps, steps, min, max, step, lowerPercent, upperPercent);
-    const ariaLabelledByMin = label !== undefined ? `${labelId} ${minHandleLabelId}` : minHandleLabelId;
-    const ariaLabelledByMax = label !== undefined ? `${labelId} ${maxHandleLabelId}` : maxHandleLabelId;
+    /*
+     * What names the range: the visible `label`, else `aria-labelledby`, else `aria-label`. The root
+     * becomes a named group, and each handle's name starts with the range's name. With `aria-label`
+     * the handles point at the root itself, whose `aria-label` is then used for that part.
+     */
+    const rangeNameIds =
+      label !== undefined ? labelId : ariaLabelledBy || (ariaLabel ? rootId : undefined);
+    const isNamed = rangeNameIds !== undefined;
+    const ariaLabelledByMin = isNamed ? `${rangeNameIds} ${minHandleLabelId}` : minHandleLabelId;
+    const ariaLabelledByMax = isNamed ? `${rangeNameIds} ${maxHandleLabelId}` : maxHandleLabelId;
     const { isDragging, startDragging, stopDragging } = useSliderDragState();
     const lowerFocusRing = usePointerFocusRing();
     const upperFocusRing = usePointerFocusRing();
@@ -362,6 +373,10 @@ export const SliderRange = React.memo(
     return (
       <div
         {...rest}
+        id={rootId}
+        role={isNamed ? 'group' : undefined}
+        aria-label={label === undefined && !ariaLabelledBy ? ariaLabel : undefined}
+        aria-labelledby={label !== undefined ? labelId : ariaLabelledBy}
         className={getRootClasses(orientation, size, className)}
         data-active-handle={getHandleName(activeThumb)}
         data-dragging={isDragging ? 'true' : undefined}
@@ -447,10 +462,26 @@ export const SliderRange = React.memo(
           </div>
 
           <div className={styles.handles} aria-hidden="true">
-            <span className={mergeClassNames(styles.handle, styles.handleLower)} data-slider-handle="lower">
+            <span
+              className={mergeClassNames(
+                styles.handle,
+                styles.handleLower,
+                focusRingClassNames.focusRing,
+                focusRingClassNames.focusRingDefault,
+              )}
+              data-slider-handle="lower"
+            >
               <span className={styles.handleVisual} />
             </span>
-            <span className={mergeClassNames(styles.handle, styles.handleUpper)} data-slider-handle="upper">
+            <span
+              className={mergeClassNames(
+                styles.handle,
+                styles.handleUpper,
+                focusRingClassNames.focusRing,
+                focusRingClassNames.focusRingDefault,
+              )}
+              data-slider-handle="upper"
+            >
               <span className={styles.handleVisual} />
             </span>
           </div>
@@ -459,13 +490,7 @@ export const SliderRange = React.memo(
             ref={lowerInputRef}
             id={minInputId}
             aria-labelledby={ariaLabelledByMin}
-            className={mergeClassNames(
-              styles.input,
-              styles.rangeInput,
-              styles.rangeInputLower,
-              focusRingClassNames.focusRing,
-              focusRingClassNames.focusRingDefault,
-            )}
+            className={mergeClassNames(styles.input, styles.rangeInput, styles.rangeInputLower)}
             type="range"
             min={min}
             max={max}
@@ -499,13 +524,7 @@ export const SliderRange = React.memo(
             ref={upperInputRef}
             id={maxInputId}
             aria-labelledby={ariaLabelledByMax}
-            className={mergeClassNames(
-              styles.input,
-              styles.rangeInput,
-              styles.rangeInputUpper,
-              focusRingClassNames.focusRing,
-              focusRingClassNames.focusRingDefault,
-            )}
+            className={mergeClassNames(styles.input, styles.rangeInput, styles.rangeInputUpper)}
             type="range"
             min={min}
             max={max}

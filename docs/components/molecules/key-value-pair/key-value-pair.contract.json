@@ -1,9 +1,9 @@
 {
   "name": "KeyValuePair",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Map a descriptive label to a static or inline-editable value for scannable metadata presentation.",
-  "intent": "Present metadata as label/value rows using semantic <dt>/<dd> elements. Supports both static text values and inline-editable controls (TextField/TextArea/Select with appearance='inline'). Grouped as a molecule because it composes text controls for its inline-editable mode.",
+  "intent": "Present metadata as label/value rows using semantic <dt>/<dd> elements. Supports both static text values and inline-editable controls (TextField/TextArea/Select with context='inline'). Grouped as a molecule because it composes text controls for its inline-editable mode.",
   "sourceFiles": {
     "component": "key-value-pair.tsx",
     "types": "key-value-pair.types.ts",
@@ -19,13 +19,14 @@
     "componentName": "key-value-pair",
     "variantCount": 22,
     "verifiedAt": "2026-09-17",
-    "note": "22 variants across size (sm/md/lg), context (default/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea with appearance='inline'.",
+    "note": "22 variants across size (sm/md/lg), context (static/inline), and underline axes. The context=inline variant maps to embedding a TextField/TextArea/Select with context='inline' - Figma uses the standard Text Field/Text Area/Select context=inline instances there.",
     "apiAdaptationNotes": [
-      "Figma's context=default renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
+      "Figma's context=static renders a static text value; context=inline renders an inline-editable control. In code, this is controlled by passing children (an inline-editable control) vs. a plain value prop - no explicit context prop needed.",
       "The key (label) uses <dt> and the value uses <dd> for semantic HTML, expecting the parent Key Value List to render a <dl>.",
       "Key width is a fixed 40% (inline-size: 40%) at all sizes, matching the Figma layout.",
       "Gap between key and value is --spacing-lg at all sizes.",
-      "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop."
+      "Underline is a simple bottom border (border-width-sm solid border/default) toggled by a boolean prop.",
+      "Inline fields in the value slot keep the standard context='inline' treatment, including the raised-hover background, matching Figma. Key Value Pair only squares their frames: .value [data-context='inline'] { border-radius: 0; }."
     ]
   },
   "props": {
@@ -46,7 +47,7 @@
       "required": false,
       "default": "md",
       "enum": ["sm", "md", "lg"],
-      "description": "Controls padding-block and typography."
+      "description": "Sets the row's minimum height (size-control-sm/md/lg) and typography (body-sm/md/lg). Does not size an inline control in children."
     },
     "underline": {
       "type": "boolean",
@@ -64,7 +65,7 @@
       "type": "React.ReactNode",
       "required": false,
       "default": null,
-      "description": "Inline-editable control (TextField/TextArea/Select with appearance='inline'). Takes precedence over value."
+      "description": "Inline-editable control (TextField/TextArea/Select with context='inline'). Takes precedence over value."
     }
   },
   "sizes": ["sm", "md", "lg"],
@@ -72,15 +73,16 @@
   "variants": {
     "size": {
       "sm": {
-        "paddingBlock": "--spacing-xs",
+        "minBlockSize": "--size-control-sm",
         "typography": "--typography-body-sm-*"
       },
       "md": {
-        "paddingBlock": "--spacing-sm",
+        "minBlockSize": "--size-control-md",
         "typography": "--typography-body-md-*"
       },
       "lg": {
-        "paddingBlock": "--spacing-md",
+        "minBlockSize": "--size-control-lg",
+        "keyAndStaticValueInset": "--spacing-md",
         "typography": "--typography-body-lg-*"
       }
     }
@@ -90,7 +92,7 @@
       "part": "root",
       "element": "div",
       "required": true,
-      "description": "Flex row (align-items: baseline) holding the key and value. Carries the size class and optional underline border."
+      "description": "Flex row (align-items: flex-start, gap spacing-lg, min-block-size size-control-*) holding the key and value. Carries the size class, data-size, and the optional underline border."
     },
     {
       "part": "key",
@@ -118,9 +120,14 @@
     },
     "spacing": {
       "gap": "--spacing-lg",
-      "paddingBlock_sm": "--spacing-xs",
-      "paddingBlock_md": "--spacing-sm",
-      "paddingBlock_lg": "--spacing-md"
+      "keyAndStaticValueInset": "--spacing-sm",
+      "keyAndStaticValueInset_lg": "--spacing-md"
+    },
+    "sizing": {
+      "minBlockSize_sm": "--size-control-sm",
+      "minBlockSize_md": "--size-control-md",
+      "minBlockSize_lg": "--size-control-lg",
+      "underline_width": "--border-width-sm"
     },
     "typography": {
       "sm": "--typography-body-sm-*",
@@ -136,7 +143,7 @@
   ],
   "do": [
     "Wrap in a Key Value List (<dl>) for proper semantic structure.",
-    "Use appearance='inline' on TextField/TextArea children for inline editing.",
+    "Use context='inline' on TextField/TextArea/Select children for inline editing.",
     "Provide aria-label on inline-editable children for accessibility.",
     "Use underline to visually separate pairs in a list."
   ],
@@ -148,7 +155,7 @@
   "behaviorNotes": [
     "children takes precedence over value when both are provided.",
     "The key occupies a fixed 40% width; the value fills the remaining space.",
-    "align-items: baseline keeps the key text and value text (or inline control text) vertically aligned."
+    "The root uses align-items: flex-start: the key stays at the top of the row, centered within the first control-height band, and a static value is centered in the row (align-self: center)."
   ],
   "knownLimitations": [
     "Fixed 40% key width - not configurable per instance.",

@@ -33,9 +33,9 @@ function fitChipLeadingAvatar(node: React.ReactNode, chipSize: ChipSize): React.
   return node;
 }
 
-function defaultRemoveAriaLabel(label: React.ReactNode, explicit?: string) {
+function defaultRemoveAriaLabel(propertyName: string | undefined, explicit?: string) {
   if (explicit) return explicit;
-  return typeof label === 'string' ? `Remove ${label}` : 'Remove';
+  return propertyName ? `Remove ${propertyName}` : 'Remove';
 }
 
 /**
@@ -49,11 +49,18 @@ function ChipDropdownSegment({
   disabled,
   preview,
   fallbackMenuName,
+  propertyNameId,
 }: {
   segment: ChipSegment;
   segmentClassName: string;
   disabled: boolean;
   preview?: React.ReactNode;
+  /**
+   * The id of the element holding the property's name (the visible label, or a hidden copy of
+   * `labelText`). The segment's text is only the current value ("March 2"), so the button is named
+   * by the property and its text together ("Due date March 2"), the way a reader sees the pill.
+   */
+  propertyNameId: string;
   /**
    * Used when the consumer gives no `menuAriaLabel`. The segment's own label is the *current value*
    * ("on", "March 2"), which makes a poor panel name on its own - naming the panel after the
@@ -62,10 +69,12 @@ function ChipDropdownSegment({
   fallbackMenuName?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const segmentTextId = React.useId();
 
   const button = (
     <button
       type="button"
+      aria-labelledby={`${propertyNameId} ${segmentTextId}`}
       className={mergeClassNames(
         styles.segment,
         segmentClassName,
@@ -80,7 +89,9 @@ function ChipDropdownSegment({
           {preview}
         </span>
       ) : null}
-      <span className={styles.segmentLabel}>{segment.label}</span>
+      <span id={segmentTextId} className={styles.segmentLabel}>
+        {segment.label}
+      </span>
     </button>
   );
 
@@ -101,6 +112,12 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
   const { label, elemBefore, disabled = false, id, className } = props;
   // An explicit `size` wins; otherwise inherit Chip Group's, falling back to md.
   const size = useChipSize(props.size);
+  const labelId = React.useId();
+  const labelTextId = React.useId();
+  // The label as plain text, for the names Chip builds from it: `labelText` when given (needed when
+  // `label` is JSX), else `label` itself when it's a string.
+  const labelText = props.mode === 'search' ? undefined : props.labelText;
+  const propertyName = labelText ?? (typeof label === 'string' ? label : undefined);
 
   const root = (children: React.ReactNode) => (
     <div
@@ -121,7 +138,16 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
           {fitChipLeadingAvatar(elemBefore, size)}
         </span>
       ) : null}
-      <span className={styles.label}>{label}</span>
+      <span id={labelId} className={styles.label}>
+        {label}
+      </span>
+      {labelText ? (
+        // Referenced by the segments' aria-labelledby in place of the visible label. A `hidden`
+        // element still contributes its text when referenced by id.
+        <span id={labelTextId} hidden>
+          {labelText}
+        </span>
+      ) : null}
     </>
   );
 
@@ -169,7 +195,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
         focusRingClassNames.focusRingDefault,
       )}
       disabled={disabled}
-      aria-label={defaultRemoveAriaLabel(label, props.removeAriaLabel)}
+      aria-label={defaultRemoveAriaLabel(propertyName, props.removeAriaLabel)}
       onClick={props.onRemove}
     >
       <CloseIcon size="md" decorative />
@@ -200,7 +226,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
     );
   }
 
-  const propertyName = typeof label === 'string' ? label : undefined;
+  const propertyNameId = labelText ? labelTextId : labelId;
 
   return root(
     <>
@@ -211,6 +237,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
           segmentClassName={styles.operatorSegment}
           disabled={disabled}
           fallbackMenuName={propertyName && `${propertyName} operator`}
+          propertyNameId={propertyNameId}
         />
       ) : null}
       <ChipDropdownSegment
@@ -219,6 +246,7 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
         disabled={disabled}
         preview={props.valuePreview}
         fallbackMenuName={propertyName && `${propertyName} value`}
+        propertyNameId={propertyNameId}
       />
       {removeButton}
     </>,

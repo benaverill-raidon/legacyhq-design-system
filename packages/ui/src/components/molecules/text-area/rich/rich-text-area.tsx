@@ -119,10 +119,12 @@ export function RichTextArea({
   recents,
   entityConfig,
   size = 'md',
-  appearance = 'default',
+  context: requestedContext,
+  appearance,
   resize = 'vertical',
-  invalid = false,
+  invalid: requestedInvalid = false,
   disabled = false,
+  required,
   placeholder,
   searchPlaceholder = 'Type to search',
   emptyMessage = 'No matches',
@@ -131,7 +133,12 @@ export function RichTextArea({
   id,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
 }: RichTextAreaProps) {
+  // `appearance` is the deprecated name for `context`: its subtle and inline values are inline.
+  const context = requestedContext ?? (appearance && appearance !== 'default' ? 'inline' : 'default');
+  const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<HTMLDivElement>(null);
   const slashSpanRef = React.useRef<HTMLElement | null>(null);
@@ -141,6 +148,7 @@ export function RichTextArea({
 
   const [hosts, setHosts] = React.useState<HTMLElement[]>([]);
   const [open, setOpen] = React.useState(false);
+  const pickerId = `${React.useId()}-picker`;
   const [sections, setSections] = React.useState<EntitySection[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [pickerPos, setPickerPos] = React.useState({ left: 0, top: 0 });
@@ -326,6 +334,9 @@ export function RichTextArea({
       } else if (event.key === 'Escape') {
         event.preventDefault();
         closePicker();
+      } else if (event.key === 'Tab') {
+        // Focus is leaving: close the list and let Tab move on.
+        closePicker();
       }
       return;
     }
@@ -358,7 +369,7 @@ export function RichTextArea({
         className={mergeClassNames(
           styles.editor,
           styles[`size_${size}`],
-          styles[`appearance_${appearance}`],
+          styles[`context_${context}`],
           styles[`resize_${resize}`],
         )}
         contentEditable={!disabled}
@@ -368,7 +379,15 @@ export function RichTextArea({
         aria-multiline="true"
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        aria-required={required ? true : undefined}
+        aria-disabled={disabled ? true : undefined}
         aria-invalid={invalid ? true : undefined}
+        // Focus stays in the editor while the list is open; aria-activedescendant points assistive
+        // technology at the highlighted row.
+        aria-haspopup="menu"
+        aria-controls={open ? pickerId : undefined}
+        aria-activedescendant={open && flatOptions[activeIndex] ? `${pickerId}-option-${activeIndex}` : undefined}
         data-invalid={invalid ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
         data-empty={isEmpty ? 'true' : undefined}
@@ -381,6 +400,7 @@ export function RichTextArea({
 
       {open ? (
         <EntityPicker
+          id={pickerId}
           position={pickerPos}
           sections={sections}
           loading={loading}

@@ -17,7 +17,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
       size = 'md',
       context = 'default',
       disabled = false,
-      invalid = false,
+      invalid: requestedInvalid = false,
       locale,
       min,
       max,
@@ -31,13 +31,20 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
       timeFormat,
       dateLabel = 'Date',
       timeLabel = 'Time',
+      id,
       className,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
+      'aria-invalid': ariaInvalid,
+      required,
       ...rest
     },
     forwardedRef,
   ) {
+    // Field's error and required apply to both inputs; its description stays on the group. Its `id`
+    // goes to the date input, so clicking Field's label focuses the date; the group is still named by
+    // the label through aria-labelledby.
+    const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
     const isValueControlled = value !== undefined;
     const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
     const selected = isValueControlled ? value ?? null : internalValue;
@@ -99,6 +106,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
         data-context={context}
       >
         <DatePicker
+          id={id}
           className={styles.date}
           value={selected}
           onChange={handleDateChange}
@@ -114,6 +122,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
           today={today}
           placeholder={datePlaceholder}
           format={dateFormat}
+          required={required}
           aria-label={dateLabel}
         />
         <TimePicker
@@ -128,6 +137,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
           minuteStep={minuteStep}
           placeholder={timePlaceholder}
           format={timeFormat}
+          required={required}
           aria-label={timeLabel}
         />
       </div>

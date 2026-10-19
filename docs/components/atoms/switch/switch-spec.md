@@ -196,7 +196,8 @@ live Figma component to actually be 6px (`--measurement-6`), 2px tighter than th
 - Use `aria-checked` only if needed; native checked state should usually be sufficient with `role="switch"`.
 - Do not add custom keyboard handlers unless native behavior is insufficient.
 - Do not use `div role="switch"`.
-- Required indicator appears after visible label.
+- Required indicator appears after visible label, spaced by `spacing-xxs` at both sizes (as on
+  Checkbox and Radio), and is `aria-hidden`: the native `required` is what's announced.
 - Disabled state uses native `disabled` attribute.
 
 ## Animation Requirements
@@ -205,7 +206,9 @@ live Figma component to actually be 6px (`--measurement-6`), 2px tighter than th
 - Support a subtle Material-inspired thumb expansion (`scaleX(1.16)`), triggered on both hover and
   pressed - not pressed alone - so the cue starts as soon as the pointer arrives rather than only
   on click.
-- Use CSS transitions.
+- Use CSS transitions: the track color fades with the `fade-quick` motion recipe, and the thumb
+  slides with `move-quick` (the spring recipe), since it's a physical reposition rather than a
+  color change.
 - Respect `prefers-reduced-motion` by reducing or removing movement.
 - Animation should feel smooth but not decorative enough to delay interaction feedback.
 
@@ -259,7 +262,8 @@ Show:
 - labeled switch
 - switch without visible label (`aria-label` only)
 - setting row usage
-- form usage
+- a switch that applies its setting immediately (no submit button), with `isLoading` while it saves -
+  not a form with a submit button, which is the "deferred form submission" anti-pattern
 - dark theme example
 
 ### EdgeCases

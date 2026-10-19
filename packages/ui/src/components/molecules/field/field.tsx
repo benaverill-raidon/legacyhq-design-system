@@ -40,6 +40,8 @@ export const Field = React.memo(function Field({
   const resolvedControlId = (childProps.id as string | undefined) ?? controlId ?? `${reactId}-control`;
   const hasMessage = message !== null && message !== undefined;
   const messageId = hasMessage ? `${reactId}-message` : undefined;
+  const hasLabel = label !== null && label !== undefined;
+  const labelId = hasLabel ? `${reactId}-label` : undefined;
   const isError = state === 'error';
 
   // Merge, rather than replace, any aria-describedby the control already carries, so Field's message
@@ -52,6 +54,9 @@ export const Field = React.memo(function Field({
   // whatever the control already declares.
   const injectedProps: Record<string, unknown> = {
     id: resolvedControlId,
+    // The label names the control by id as well as by htmlFor, so a control that isn't a native
+    // input (Rich Text Area's editor) is named too. A name the control already has wins.
+    'aria-labelledby': childProps['aria-labelledby'] ?? (childProps['aria-label'] ? undefined : labelId),
     'aria-describedby': describedBy,
     'aria-invalid': childProps['aria-invalid'] ?? (isError ? true : undefined),
     required: (childProps.required as boolean | undefined) ?? (required || undefined),
@@ -59,12 +64,12 @@ export const Field = React.memo(function Field({
   };
 
   // `context` is a single shared axis in Figma: an inline field also renders its control inline
-  // (borderless), so the whole field reads as one inline unit. Propagate it to the control's
-  // `appearance` (the code name for that axis - Text Field, Text Area, and Select all take
-  // `appearance="subtle"`). The control's own `appearance` always wins. This is deliberately unlike
-  // `state`, which maps to the control's *separate* invalid axis and so stays the consumer's call.
-  if (context === 'inline' && childProps.appearance === undefined) {
-    injectedProps.appearance = 'subtle';
+  // (borderless), so the whole field reads as one inline unit. Text Field, Text Area, and Select take
+  // the same `context` prop; the control's own context (or deprecated appearance/tone) always wins.
+  // This is deliberately unlike `state`, which maps to the control's *separate* invalid axis and so
+  // stays the consumer's call.
+  if (context === 'inline' && childProps.context === undefined && childProps.appearance === undefined && childProps.tone === undefined) {
+    injectedProps.context = 'inline';
   }
 
   const control = child ? React.cloneElement(child, injectedProps) : children;
@@ -85,8 +90,8 @@ export const Field = React.memo(function Field({
       data-context={context}
       data-size={size}
     >
-      {label !== null && label !== undefined ? (
-        <label htmlFor={resolvedControlId} className={mergeClassNames(styles.label, labelClassName)}>
+      {hasLabel ? (
+        <label id={labelId} htmlFor={resolvedControlId} className={mergeClassNames(styles.label, labelClassName)}>
           {label}
           {required ? (
             <span className={styles.required} aria-hidden="true">

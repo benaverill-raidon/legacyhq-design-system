@@ -1,6 +1,6 @@
 {
   "name": "SectionMessage",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "A bordered, in-context status panel.",
   "intent": "Carry a section-level status - information, success, warning, or error - with an optional title, description, actions, and dismiss.",
@@ -11,7 +11,7 @@
     "componentName": "section-message",
     "variantCount": 4,
     "verifiedAt": "2026-09-01",
-    "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` appearance was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
+    "notes": "Figma boolean properties (title, actions, isDismissible) map to optional props in code (title/actions omitted to hide; isDismissible defaults false). The Figma `discovery` tone was removed by the designer; code ships information/success/warning/error. Actions are Link Button instances laid out in a Button Group (the designer replaced the earlier middot-separated Links with a button-group instance; verified 2026-09-09)."
   },
   "useCases": [
     "communicate a permission or access restriction inside a section",
@@ -30,12 +30,12 @@
       "name": "root",
       "element": "div",
       "required": true,
-      "description": "bordered, rounded box with the appearance's tinted background and colored border"
+      "description": "bordered, rounded box with the tone's tinted background and colored border"
     },
     {
       "name": "icon",
       "required": true,
-      "description": "the status icon for the appearance, in its status color; decorative"
+      "description": "the status icon for the tone, in its status color; decorative"
     },
     {
       "name": "title",
@@ -59,11 +59,17 @@
     }
   ],
   "props": {
-    "appearance": {
+    "tone": {
       "type": "enum",
       "values": ["information", "success", "warning", "error"],
       "default": "information",
       "required": false
+    },
+    "statusLabel": {
+      "type": "string",
+      "default": "the tone's name (Information, Success, Warning, Error)",
+      "required": false,
+      "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
     },
     "title": {
       "type": "React.ReactNode",
@@ -87,6 +93,12 @@
       "default": false,
       "required": false
     },
+    "dismissLabel": {
+      "type": "string",
+      "default": "Dismiss",
+      "required": false,
+      "description": "Accessible name for the dismiss button."
+    },
     "onDismiss": {
       "type": "() => void",
       "default": null,
@@ -106,7 +118,7 @@
     }
   },
   "variants": {
-    "appearance": ["information", "success", "warning", "error"]
+    "tone": ["information", "success", "warning", "error"]
   },
   "slots": [
     { "name": "title", "required": false, "allowedContent": "React.ReactNode" },
@@ -152,11 +164,12 @@
     "defaultRole": "status",
     "roleOverridable": true,
     "iconDecorative": true,
+    "statusAnnounced": "Visually hidden statusLabel before the title.",
     "colorNotSoleSignal": true,
     "dismissLabel": "Dismiss"
   },
   "behaviorRules": [
-    "Set the tinted background, border color, and status icon from appearance.",
+    "Set the tinted background, border color, and status icon from tone.",
     "Render the icon in its own status color (not inherited).",
     "Render the title only when provided.",
     "Wrap the description across multiple lines (no truncation).",
@@ -172,7 +185,7 @@
   ],
   "contentRules": [
     "Lead with the essential status in the title or first sentence.",
-    "Do not rely on color alone to communicate the appearance.",
+    "Do not rely on color alone to communicate the tone.",
     "Reserve dismiss for messages the user can safely make go away."
   ],
   "themeRules": [
@@ -198,7 +211,7 @@
   ],
   "do": [
     "Use Section Message for a contained, in-context status.",
-    "Use appearance to signal the semantic status.",
+    "Use tone to signal the semantic status.",
     "Wrap multiple actions in a ButtonGroup of Link Buttons; pass a single action bare.",
     "Use a title for a scannable lead when the message is longer."
   ],
@@ -211,8 +224,8 @@
   "acceptanceCriteria": [
     "Renders the description.",
     "Renders the title when provided and omits it otherwise.",
-    "Defaults to role status and the information appearance.",
-    "Supports appearances information, success, warning, error.",
+    "Defaults to role status and the information tone.",
+    "Supports tones information, success, warning, error.",
     "Renders a status icon.",
     "Renders the passed actions (no injected separators) and omits the region when none.",
     "Is not dismissible by default; dismisses and calls onDismiss when the dismiss button is clicked.",

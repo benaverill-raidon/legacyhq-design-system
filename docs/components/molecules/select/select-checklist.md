@@ -5,7 +5,7 @@
 ### Name
 Select
 
-### Category
+### Tier
 Molecule (see "Tier exception" below — its panel composes Dropdown Menu, an organism)
 
 ### Related Components
@@ -63,8 +63,11 @@ these into the Menu; grouping is automatic from `group`.
 ### Size
 - `sm` (32), `md` (40, default), `lg` (48)
 
-### Tone
-- `default` (bordered), `subtle` (bottom-border only) — maps to TextField's `appearance`
+### Context
+- `default` (bordered), `inline` (chromeless until hovered or focused, for a field inside a row) —
+  passed straight to TextField's `context`
+- `tone` and `appearance` are deprecated aliases, still accepted: `subtle` and `inline` map to
+  `context="inline"`
 
 ### Token Mapping
 No new tokens. The trigger reuses TextField's frame tokens, chips reuse Chip's, the panel reuses
@@ -86,8 +89,9 @@ Not required:
 
 ### Does this support keyboard navigation?
 Yes. Type to filter; ArrowDown opens/moves into the menu; Enter/arrows/Home/End navigate rows
-(Menu's own); Backspace removes the last chip (multi, empty query); Escape closes and returns focus
-to the input.
+(Menu's own); Backspace removes the last chip (multi, empty query); Escape closes (from inside the menu, focus returns to the input); Tab or Shift+Tab inside the menu
+closes it and returns focus to the input; focus leaving the field and menu closes the menu; a
+single-select pick returns focus to the input; with only a native `<label>`, the menu is named from it.
 
 ### What ARIA is applied?
 `role="combobox"` + `aria-haspopup="menu"` + `aria-autocomplete="list"` on the input;
@@ -124,7 +128,7 @@ Final implementation decisions:
   selection, radio/checkbox semantics, and typeahead — the ergonomic shape a Select consumer expects.
   Grouping is automatic from each option's `group` field.
 - **Trigger reuses TextField**, whose tokens/geometry match Figma's `select-trigger` token-for-token.
-  `tone` maps to TextField's `appearance`.
+  `context` passes straight to TextField's `context` (same prop, values, and Figma axis).
 - **TextField gained one additive prop, `leadingContent`** — an in-frame slot (before the input, not
   aria-hidden) so multi-select chips render inside the field without a second frame or duplicated
   state CSS. Shrinks/clips to keep the field single-line (Figma's trigger is NO_WRAP). Same move as
@@ -150,7 +154,7 @@ no ~9px inset.
 
 ## Validated Figma Details
 
-- `select` component set: node `4662:42012`, page "✅⏲️ Select". 84 variants across size, tone, state
+- `select` component set: node `4662:42012`, page "✅⏲️ Select". 84 variants across size, context, state
   (default/hover/focus/typing/hasValue), inputType, isInvalid, isDisabled.
 - `select-trigger` part `4658:67775` is a `text-field` instance + trailing `caret_down`
   (`1496:1775` = CaretDownIcon). Trigger tokens/geometry match the TextField molecule exactly.
@@ -169,7 +173,7 @@ no ~9px inset.
 - [ ] Single vs multi side by side
 - [ ] Typeahead filtering + empty message
 - [ ] Grouped options
-- [ ] All sizes and both tones
+- [ ] All sizes in both contexts
 - [ ] Invalid and disabled (single + multi)
 - [ ] A realistic form row with option icons
 - [ ] Many chips on one line

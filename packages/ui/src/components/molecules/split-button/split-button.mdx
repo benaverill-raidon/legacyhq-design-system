@@ -1,102 +1,292 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { SplitButton } from './split-button';
+import splitButtonStyles from './split-button.module.css';
 import * as SplitButtonStories from './SplitButton.stories';
+
+export const saveSections = [
+  {
+    id: 'save',
+    items: [
+      { id: 'save-as', label: 'Save as…' },
+      { id: 'save-copy', label: 'Save a copy' },
+    ],
+  },
+];
+
+export const sendSections = [
+  {
+    id: 'send',
+    items: [
+      { id: 'send-draft', label: 'Send as draft' },
+      { id: 'preview', label: 'Preview before sending' },
+    ],
+  },
+];
+
+export const deleteSections = [{ id: 'delete', items: [{ id: 'delete-notify', label: 'Delete and notify the client' }] }];
 
 <Meta of={SplitButtonStories} name="Docs" />
 
-# Split Button
+<Unstyled>
+<ComponentPage>
 
-A split button lets people perform an action, or choose from a small group of similar actions. It
-joins a primary `Button` with a caret-only `IconButton` that opens a `Dropdown Menu` of related
-alternatives - one continuous shape, not two separate controls placed side by side.
-
-<Canvas of={SplitButtonStories.Playground} />
-
-## When to use
-
-- A primary action that has a small number of closely related alternatives - "Save" with "Save
-  as..." / "Save a copy", "Send" with "Send as draft" / "Preview before sending".
-
-## When not to use
-
-- **A single action with no alternatives.** Use Button directly.
-- **An icon-only trigger with no separate primary action.** Use Icon Button with Dropdown Menu
-  directly - Split Button always has a labeled primary segment.
-- **More than a small group of similar actions**, or actions that aren't close variations of the
-  primary one. Use Dropdown Menu on its own, or Button Group, instead.
-
-## Anatomy
-
-- **Primary action** - a real `Button` with every one of its own props (`onClick`, `isLoading`,
-  `iconBefore`/`iconAfter`, ...) forwarded through unchanged, except `appearance` (narrowed - see
-  below) and `isFullWidth` (not supported - no verified Figma variant for it).
-- **Divider** - a 1px rule between the two segments, colored by `appearance` (and overridden to
-  `color-border-disabled` when `disabled`). Internal to Split Button - not its own exported
-  component.
-- **Secondary action** - a real `IconButton` (`shape="square"`), showing a caret, wrapped in a
-  `DropdownMenu`. Its accessible name comes from `secondaryActionLabel`, which also becomes its
-  tooltip (IconButton's own existing behavior for an explicit `aria-label`).
-
-The primary action's trailing corners and the secondary action's leading corners are squared off so
-the two segments read as one continuous shape - measured directly from Figma, not an approximation.
-
-## Usage guidance
-
-### `secondaryActionLabel` is required
-
-There's no visible text on the caret segment to derive a name from, so it must be stated directly:
-
-```tsx
-<SplitButton
-  secondaryActionLabel="More Save options"
-  sections={[{ id: 'actions', items: [{ id: 'save-as', label: 'Save as...', onSelect: handleSaveAs }] }]}
-  onClick={handleSave}
+<ComponentHeader
+  id="split-button"
+  example={
+    <>
+      <SplitButton appearance="primary" secondaryActionLabel="More options for sending for signature" sections={sendSections}>
+        Send for signature
+      </SplitButton>
+      <SplitButton secondaryActionLabel="More save options" sections={saveSections}>
+        Save
+      </SplitButton>
+    </>
+  }
 >
-  Save
-</SplitButton>
-```
+  Split Button joins a main action to a menu of a few close alternatives, such as Save beside Save as
+  and Save a copy. The two halves read as one control: the label runs the main action, and the caret
+  opens the menu.
+</ComponentHeader>
 
-### `appearance` is narrower than Button's own
+<Section title="When to use">
 
-Only `'default' | 'primary'` - Figma's own `split-button` component never shows a `'subtle'`
-variant, so it isn't exposed here. Reach for a plain `Button` (which does support `subtle`) if a
-split button's own visual weight doesn't fit either option.
+<Usage>
+<UseFor>
 
-### The secondary action disables itself while the primary action is loading
+- A main action with a few variations, such as Save with Save as and Save a copy.
+- A main action with other ways to do the same task, such as Send for signature with Send as draft.
 
-Prevents picking a different action while the primary one is still in flight - `disabled` on the
-secondary segment becomes `disabled || isLoading`, not just `disabled` on its own.
+</UseFor>
+<UseInstead>
 
-<Canvas of={SplitButtonStories.EdgeCases} />
+- **One action with no alternatives:** <DocLink to="Components/Actions/Button" />.
+- **A menu with no main action:** <DocLink to="Components/Actions/Dropdown Menu" />, opened from a Button or an Icon Button.
+- **Many actions, or actions that aren't variations of the main one:** <DocLink to="Components/Actions/Dropdown Menu" />.
+- **Several separate actions side by side:** <DocLink to="Components/Actions/Button Group" />.
 
-### Realistic content, and every size/appearance
+</UseInstead>
+</Usage>
 
-<Canvas of={SplitButtonStories.Content} />
-<Canvas of={SplitButtonStories.Variants} />
+</Section>
 
-## API
+<Section title="Anatomy">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The primary action's own label (forwarded to Button as its own <code>children</code>).</td></tr>
-    <tr><td><code>sections</code></td><td><code>MenuSection[]</code></td><td>-</td><td>Required. The small group of related actions shown when the secondary segment opens.</td></tr>
-    <tr><td><code>secondaryActionLabel</code></td><td><code>string</code></td><td>-</td><td>Required. Accessible name (and tooltip) for the secondary segment and its panel.</td></tr>
-    <tr><td><code>appearance</code></td><td><code>'default' | 'primary'</code></td><td><code>'default'</code></td><td>Applied to both segments.</td></tr>
-    <tr><td><code>size</code></td><td><code>'xs' | 'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Applied to both segments.</td></tr>
-    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables both segments together.</td></tr>
-    <tr><td><code>isLoading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Applies to the primary action only (Button's own loading treatment); also disables the secondary action.</td></tr>
-    <tr><td><code>onClick</code></td><td><code>(event) =&gt; void</code></td><td>-</td><td>The primary action's own click handler.</td></tr>
-  </tbody>
-</table>
+<Anatomy
+  specimen={
+    <SplitButton size="lg" secondaryActionLabel="More save options" sections={saveSections}>
+      Save
+    </SplitButton>
+  }
+>
+  <Part name="primary action" target={splitButtonStyles.primaryAction}>A Button with the main action's label. Its inner corners are square, and it has no border on the inner edge.</Part>
+  <Part name="divider" target={splitButtonStyles.divider}>A 1px line between the halves, as tall as the control. Its color follows `appearance` and disabled.</Part>
+  <Part name="secondary action" target={splitButtonStyles.secondaryAction}>An Icon Button with a caret, named by `secondaryActionLabel`. It opens the menu.</Part>
+  <Part name="panel">The Dropdown Menu panel the caret opens, listing `sections`. Shown only while open.</Part>
+</Anatomy>
 
-Every other `Button` prop (`tone`, `iconBefore`, `iconAfter`, any native button attribute) forwards
-straight through to the primary action.
+</Section>
 
-## Related components
+<Section title="Variants">
 
-- **Button** - the primary action.
-- **Icon Button** - the secondary (caret) action.
-- **Dropdown Menu** - the secondary action's floating panel.
-- **Menu** - the panel's content.
+<Subsection title="Appearance and size">
+
+`appearance` styles both halves together. `default` is outlined: the main action is Button's
+`secondary` prominence beside an outlined Icon Button. `primary` gives both halves the brand fill.
+There's no subtle split button. `appearance` is the older name for this choice; Button itself now
+uses `prominence` and `tone`.
+
+`size` sets both halves to the same control height, from `xs` (24px) to `lg` (48px), the same scale
+as Button, and the divider matches it.
+
+<Example of={SplitButtonStories.Variants} caption="Default and primary, at every size." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="The menu">
+
+The caret opens a Menu below the Split Button, lined up with its right edge; if there's no room
+there, it opens where it fits best. The menu has no search field. Opening it moves focus to the
+first item. Choosing an item runs that item's `onSelect`, then closes the menu and returns focus to
+the caret; an `onSelect` that calls `event.preventDefault()` keeps it open. Escape or Tab out of the
+menu closes it and returns focus to the caret, and a click outside closes it.
+
+<Example of={SplitButtonStories.Content} caption="Realistic main actions, each with two close alternatives." />
+
+</Subsection>
+
+<Subsection title="Loading and disabled">
+
+`isLoading` shows Button's loading state on the main action: a Spinner centered over the label, with
+the button's size unchanged, so nothing around it moves. The caret is disabled until loading ends,
+so nobody picks another action while the first one runs.
+
+`disabled` disables both halves, and the divider takes the disabled border color.
+
+<Example of={SplitButtonStories.EdgeCases} caption="Loading, disabled in both appearances, and a menu item reporting the choice." />
+
+</Subsection>
+
+<Subsection title="What each half gets">
+
+`size`, `appearance`, and `disabled` apply to both halves. `onClick`, `iconBefore`, `iconAfter`,
+`tone`, a `ref`, and any other button attribute go to the main action only. `id` and `className` go
+to the wrapping `div`. There's no full-width Split Button.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Name the caret after the main action, so it makes sense heard on its own."
+  code={`<SplitButton secondaryActionLabel="More save options" sections={saveSections}>
+    Save
+</SplitButton>`}
+>
+  <SplitButton secondaryActionLabel="More save options" sections={saveSections}>
+    Save
+  </SplitButton>
+</Do>
+<Dont
+  caption={`Use a generic caret label like "More". Heard on its own, "More, button" doesn't say more of what.`}
+  code={`<SplitButton secondaryActionLabel="More" sections={saveSections}>
+    Save
+</SplitButton>`}
+/>
+<Do
+  caption="Keep the menu to variations of the main action."
+  code={`sections={[{ id: 'save', items: [
+    { id: 'save-as', label: 'Save as…', onSelect: saveAs },
+    { id: 'save-copy', label: 'Save a copy', onSelect: saveCopy },
+] }]}`}
+>
+  <SplitButton secondaryActionLabel="More save options" sections={saveSections}>
+    Save
+  </SplitButton>
+</Do>
+<Dont
+  caption="Fill it with unrelated actions. Use a Dropdown Menu for a set of different actions."
+  code={`sections={[{ id: 'misc', items: [
+    { id: 'share', label: 'Share', onSelect: share },
+    { id: 'export', label: 'Export to PDF', onSelect: exportPdf },
+    { id: 'delete', label: 'Delete', onSelect: remove },
+] }]}`}
+/>
+<Do
+  caption="Use a Button with the error tone for a destructive action."
+  code={`<Button prominence="primary" tone="error">Delete matter</Button>`}
+>
+  <Button prominence="primary" tone="error">Delete matter</Button>
+</Do>
+<Dont
+  caption="Set a tone on a Split Button. It reaches only the main action, so the two halves don't match."
+  code={`<SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
+    Delete matter
+</SplitButton>`}
+>
+  <SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
+    Delete matter
+  </SplitButton>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Split Button renders a `div` with no role around two native buttons: the main action, a Button,
+  and the caret, an Icon Button. The divider is hidden from assistive technology.
+- The main action's label is its accessible name. The caret's name is `secondaryActionLabel`, which
+  also shows as its tooltip and names the menu.
+- The caret has `aria-haspopup="menu"` and `aria-expanded`, which is `true` while the menu is open,
+  when its `aria-controls` points at the menu.
+- The menu is a Menu, announced as a menu, with each action a menu item.
+- The menu is added at the end of the page, so opening it moves focus to its first item, and
+  choosing an item, Escape, or Tab out of it returns focus to the caret. Arrow keys move between
+  items.
+- While loading, the main action stays focusable, with `aria-busy` and `aria-disabled`, and the
+  caret is natively disabled. `disabled` takes both halves out of the tab order.
+
+<Keyboard>
+  <Key keys="Tab">Moves to the main action, then to the caret. A disabled half is skipped, and so is the caret while loading. In the menu, Tab or Shift+Tab closes it and returns focus to the caret.</Key>
+  <Key keys="Enter">On the main action, runs it unless it's loading. On the caret, opens the menu and moves focus to its first item. On an item, chooses it, closes the menu, and returns focus to the caret.</Key>
+  <Key keys="Space">The same as Enter.</Key>
+  <Key keys="Escape">Closes the menu and returns focus to the caret.</Key>
+  <Key keys="Arrow Down">In the menu, moves to the next item, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Up">In the menu, moves to the previous item, wrapping from the first to the last.</Key>
+  <Key keys="Home">In the menu, moves to the first item.</Key>
+  <Key keys="End">In the menu, moves to the last item.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={SplitButtonStories} native="button" classNameOn="wrapping div" />
+
+Split Button also takes Button's other props, and they go to the main action too: `prominence` is
+set from `appearance`, so passing it changes nothing, and `isInverse` and `isExpanded` reach only
+the main action.
+
+</Section>
+
+<Section title="Design tokens">
+
+Split Button's stylesheet styles only the divider: its width, its height at each size, and its color
+for each appearance and when disabled. Everything else comes from Button, Icon Button, and Dropdown
+Menu.
+
+<TokensTable id="split-button" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Button" />, the main action, and on its own for an action with no alternatives.
+- <DocLink to="Components/Actions/Icon Button" />, the caret.
+- <DocLink to="Components/Actions/Dropdown Menu" />, the menu the caret opens, and on its own for a set of different actions.
+- <DocLink to="Components/Actions/Menu" />, the list inside the panel, which `sections` describes.
+- <DocLink to="Components/Actions/Button Group" /> for separate actions side by side.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads split-button.types.ts, the design tokens read split-button.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

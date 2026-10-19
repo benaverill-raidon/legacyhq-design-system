@@ -109,6 +109,12 @@ describe('ToggleButton', () => {
   });
 
   it('disabled sets native disabled', () => {
+    render(<ToggleButton disabled>Disabled</ToggleButton>);
+
+    expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
+  });
+
+  it('still accepts the deprecated isDisabled', () => {
     render(<ToggleButton isDisabled>Disabled</ToggleButton>);
 
     expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
@@ -118,7 +124,7 @@ describe('ToggleButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <ToggleButton isDisabled onClick={handleClick}>
+      <ToggleButton disabled onClick={handleClick}>
         Disabled
       </ToggleButton>,
     );
@@ -187,7 +193,7 @@ describe('ToggleButton', () => {
   it('uses a 6px icon-to-text gap, matching Figma at every size', () => {
     // Regression guard: this was previously --spacing-sm (8px) - measuring Figma's own auto-layout
     // itemSpacing on the icon/text container shows a constant 6px at xs/sm/md/lg alike.
-    expect(toggleButtonCss).toMatch(/\.toggleButton \{[\s\S]*?gap: var\(--measurement-6\);/);
+    expect(toggleButtonCss).toMatch(/\.toggleButton \{[\s\S]*?gap: var\(--spacing-075\);/);
     expect(toggleButtonCss).not.toContain('gap: var(--spacing-sm);');
   });
 

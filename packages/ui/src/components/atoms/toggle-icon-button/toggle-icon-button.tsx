@@ -26,7 +26,8 @@ export const ToggleIconButton = React.memo(
       tone = 'default',
       shape = 'square',
       isSelected = false,
-      isDisabled = false,
+      disabled: requestedDisabled,
+      isDisabled,
       className,
       children,
       type = 'button',
@@ -39,6 +40,9 @@ export const ToggleIconButton = React.memo(
     React.useEffect(() => {
       warnForMissingAccessibleName(ariaLabel, ariaLabelledBy);
     }, [ariaLabel, ariaLabelledBy]);
+
+    // `isDisabled` is the deprecated name for the native `disabled`.
+    const disabled = requestedDisabled ?? isDisabled ?? false;
 
     return (
       <button
@@ -55,7 +59,7 @@ export const ToggleIconButton = React.memo(
           focusRingClassNames.focusRingDefault,
           className,
         )}
-        disabled={isDisabled}
+        disabled={disabled}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-pressed={isSelected}

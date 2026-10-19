@@ -1,125 +1,235 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
+import { Toast } from './toast';
+import toastStyles from './toast.module.css';
 import * as ToastStories from './Toast.stories';
 
 <Meta of={ToastStories} name="Docs" />
 
-# Toast
+<Unstyled>
+<ComponentPage>
 
-Toast is a raised notification card: a leading status tile (or a spinner while loading), a title, an
-optional description and actions, and a dismiss button. On its own it is the presentational card;
-in practice toasts are shown and stacked by **Toast Group** through the imperative `toast()` API.
+<ComponentHeader
+  id="toast"
+  example={
+    <>
+      <Toast
+        tone="success"
+        title="Matter archived"
+        description="You can find it under Archived matters."
+        actions={<Button size="xs" prominence="tertiary">Undo</Button>}
+      />
+      <Toast tone="loading" title="Uploading contract.pdf…" isDismissible={false} />
+    </>
+  }
+>
+  Toast is the card for a brief notification that doesn't interrupt: a status tile, a title, and
+  optionally a description, actions, and a dismiss button. Show toasts with Toast Group's `toast()`,
+  which stacks them and takes them away; render Toast yourself only to build something Toast Group
+  doesn't cover.
+</ComponentHeader>
 
-<Canvas of={ToastStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A brief, transient confirmation or status that does not interrupt the task ("Changes saved").
-- A background result the user should know about ("Upload failed", "File ready").
-- A pending operation with a spinner (`loading`), later updated to success/error.
+- Confirming an action that just finished, such as a save or an archive.
+- A result from work in the background, such as an upload that finished or failed.
+- Work that's still running, with `loading`, replaced by the result when it's done.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a persistent, in-context status.** Use `SectionMessage`.
-- **For a full-width page-level announcement.** Use `Banner`.
-- **For a blocking confirmation.** Use `ModalDialog`.
+- **A status that has to stay until it's dealt with:** <DocLink to="Components/Feedback/Section Message" />.
+- **An announcement for the whole page:** <DocLink to="Components/Feedback/Banner" />.
+- **A short status beside what it's about:** <DocLink to="Components/Feedback/Inline Message" />.
+- **A decision the user has to make before going on:** <DocLink to="Components/Overlays/Modal Dialog" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={ToastStories.Appearances} />
+</Section>
 
-1. **Root** - a raised-surface card with a 1px border, radius, and the overlay elevation shadow.
-2. **Leading icon** - an `IconTile` colored per appearance, or a `Spinner` for `loading`.
-3. **Title** - the required lead line (`heading-xs`).
-4. **Dismiss** - a dismiss button (top-right), unless `isDismissible` is false.
-5. **Description** - optional supporting text (`body-md`), shown when expanded.
-6. **Actions** - optional Buttons, shown when expanded.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <Toast
+      tone="warning"
+      title="Your trial ends in three days"
+      description="Upgrade to keep access to your matters."
+      actions={
+        <ButtonGroup>
+          <Button size="xs" prominence="tertiary">Upgrade</Button>
+          <Button size="xs" prominence="tertiary">Remind me later</Button>
+        </ButtonGroup>
+      }
+    />
+  }
+>
+  <Part name="root" target={toastStyles.root}>A `div` card, 368px wide or its container's width if that's narrower, with a border, 12px corners, 16px padding, and the overlay shadow.</Part>
+  <Part name="leadingIcon" target={toastStyles.tile}>A 24px Icon Tile in the tone's color with its status icon, or a dot for `default`. `loading` shows a Spinner instead. Decorative.</Part>
+  <Part name="title" target={toastStyles.title}>Required and always shown. It wraps onto more lines if it needs them.</Part>
+  <Part name="dismiss" target={toastStyles.dismiss}>An extra-small subtle Icon Button beside the title, unless `isDismissible` is `false`.</Part>
+  <Part name="description" target={toastStyles.description}>Optional supporting text in the subtle text color. Shown only while `expanded`.</Part>
+  <Part name="actions" target={toastStyles.actions}>Optional, usually extra-small tertiary Buttons. Shown only while `expanded`.</Part>
+</Anatomy>
 
-### Appearance
+</Section>
 
-`appearance` sets the leading status tile: `default` (gray), `success` (green), `info` (blue),
-`warning` (orange), `error` (red), and `loading` (a spinner instead of a tile). Use `loading` for a
-pending operation and update the same toast id to `success`/`error` when it resolves.
+<Section title="Variants">
 
-### Expanded and collapsed
+`tone` sets the tile: `default` is a taupe tile with a dot, `success` green, `information` blue,
+`warning` orange, and `error` red, each with its status icon. `loading` shows a Spinner in place of
+the tile, and its title takes the muted loading text color. The card itself looks the same in every
+tone. `info`, the earlier name for `information`, and `appearance`, the earlier name for `tone`, are
+still accepted.
 
-<Canvas of={ToastStories.ExpandedCollapsed} />
+<Example of={ToastStories.Tones} />
 
-`expanded` controls whether the description and actions are shown. A collapsed toast is compact
-(title only); an expanded one reveals its detail. Toast Group drives this from its own
-collapsed/hovered state, so a stacked toast shows its title and expands on hover.
+</Section>
 
-### Dismiss
+<Section title="Behavior">
 
-A dismiss button is shown by default and calls `onDismiss`. Hide it (`isDismissible={false}`) for a
-toast the user shouldn't close manually - typically a `loading` toast that resolves on its own.
+<Subsection title="Expanded and collapsed">
 
-### Accessibility
+`expanded` decides whether the description and actions are shown; collapsed, the toast is its title
+alone. It's on by default. Toast Group turns it off while toasts are stacked and on while the stack is
+hovered or focused, so a description or action is only seen once someone reaches for the stack.
 
-Each toast is a `role="status"` (polite) region so screen readers announce it without interrupting.
-The leading icon is decorative; the dismiss button is a labelled `IconButton`.
+<Example of={ToastStories.ExpandedCollapsed} />
 
-## API
+</Subsection>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>title</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The lead line.</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'success' | 'info' | 'warning' | 'error' | 'loading'</code></td>
-      <td><code>'default'</code></td>
-      <td>Leading status tile, or a spinner for loading.</td>
-    </tr>
-    <tr>
-      <td><code>description</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Supporting text, shown when expanded.</td>
-    </tr>
-    <tr>
-      <td><code>actions</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Buttons, shown when expanded.</td>
-    </tr>
-    <tr>
-      <td><code>expanded</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Whether the description and actions are shown.</td>
-    </tr>
-    <tr>
-      <td><code>isDismissible</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Whether the dismiss button is shown.</td>
-    </tr>
-    <tr>
-      <td><code>onDismiss</code></td>
-      <td><code>() =&gt; void</code></td>
-      <td>-</td>
-      <td>Called when the dismiss button is clicked.</td>
-    </tr>
-  </tbody>
-</table>
+<Subsection title="Dismissing">
 
-## Related components
+The dismiss button shows unless `isDismissible` is `false`, and calls `onDismiss`. Toast doesn't hide
+itself: Toast Group removes it. Turn dismissing off for a `loading` toast, which is replaced when the
+work finishes rather than closed.
 
-- **Toast Group** - stacks toasts and provides the imperative `toast()` API.
-- **SectionMessage** - a persistent, in-context status.
-- **Banner** - a full-width page-level announcement.
-- **IconTile** / **Spinner** - the leading visuals Toast composes.
+<Example of={ToastStories.Content} caption="Title only, a description with no actions, and a loading toast with no dismiss button." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Say what happened in the title, and put anything more in the description." code={`toast.success('Matter archived', { description: 'You can find it under Archived matters.' });`}>
+  <Toast tone="success" title="Matter archived" description="You can find it under Archived matters." />
+</Do>
+<Dont caption="Put everything in the title. It's the only part shown while the toast is stacked." code={`toast.success('The matter was archived and can now be found under Archived matters');`}>
+  <Toast tone="success" title="The matter was archived and can now be found under Archived matters" />
+</Dont>
+<Do
+  caption="Use toast actions as shortcuts to something people can also do elsewhere, such as undo."
+  code={`toast.success('Matter archived', {
+    actions: <Button size="xs" prominence="tertiary">Undo</Button>,
+});`}
+>
+  <Toast tone="success" title="Matter archived" actions={<Button size="xs" prominence="tertiary">Undo</Button>} />
+</Do>
+<Dont
+  caption="Put the only way to do something important in a toast. It disappears on its own, and its actions only show while the stack is expanded."
+  code={`toast.warning('New billing terms', {
+    actions: <Button size="xs" prominence="tertiary">Accept terms</Button>,
+});`}
+>
+  <Toast tone="warning" title="New billing terms" actions={<Button size="xs" prominence="tertiary">Accept terms</Button>} />
+</Dont>
+<Do caption="Write a loading title that says what's happening. Loading reads no status of its own." code={`toast.loading('Uploading contract.pdf…');`}>
+  <Toast tone="loading" title="Uploading contract.pdf…" isDismissible={false} />
+</Do>
+<Dont caption="Leave a loading title vague. Screen readers hear only these words." code={`toast.loading('Please wait');`}>
+  <Toast tone="loading" title="Please wait" isDismissible={false} />
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Toast renders a `div` with `role="status"`, a polite live region. Pass another `role` only when the
+  toast plays a different part on the page.
+- The tile and the Spinner are hidden from assistive technology. For `success`, `information`,
+  `warning`, and `error`, visually hidden text with the tone's name, such as "Error:", is read before
+  the title, so the meaning doesn't depend on color. `default` and `loading` read none, so the title
+  has to say it. Translate it with `statusLabel`.
+- The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, which also
+  shows as its tooltip on hover and focus, as on Section Message. In a Toast Group the tooltip is
+  drawn behind the stack for now, until overlays share one stacking order.
+- The card isn't focusable. Tab reaches the dismiss button first, since it sits beside the title,
+  then the actions.
+- A collapsed toast doesn't render its description or actions at all, so they're neither read nor
+  reachable until it's expanded.
+
+<Keyboard>
+  <Key keys="Tab">Moves to the dismiss button, then to each action.</Key>
+  <Key keys="Enter">On the dismiss button, calls `onDismiss`.</Key>
+  <Key keys="Space">On the dismiss button, calls `onDismiss`.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ToastStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Toast's stylesheet uses, by family, with the property it sets and when. "Base" is the
+card in every tone; the tile's colors are Icon Tile's, and the Spinner's size is its own.
+
+<TokensTable id="toast" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Feedback/Toast Group" />, which stacks toasts and gives you `toast()`.
+- <DocLink to="Components/Feedback/Section Message" /> for a status that stays in the page.
+- <DocLink to="Components/Feedback/Banner" /> for an announcement across the whole page.
+- <DocLink to="Components/Data Display/Icon Tile" />, the status tile.
+- <DocLink to="Components/Feedback/Spinner" />, shown for `loading`.
+- <DocLink to="Components/Actions/Icon Button" />, which the dismiss button is.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads toast.types.ts, the design tokens read toast.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

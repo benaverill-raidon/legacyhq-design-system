@@ -1,94 +1,301 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../../molecules/field';
+import { DateTimePicker } from '../date-time-picker';
+import { FormRow } from '../form';
+import { TimePicker } from '../time-picker';
+import { DatePicker } from './date-picker';
+import datePickerStyles from './date-picker.module.css';
 import * as DatePickerStories from './DatePicker.stories';
+
+export const TODAY = new Date(2026, 2, 9);
 
 <Meta of={DatePickerStories} name="Docs" />
 
-# Date Picker
+<Unstyled>
+<ComponentPage>
 
-Date Picker is a date field that opens the Date Picker Calendar in a popup. The read-only field shows
-the selected date and a calendar icon; the calendar does the picking.
+<ComponentHeader
+  id="date-picker"
+  example={
+    <FormRow>
+      <Field label="Filing deadline" required>
+        <DatePicker defaultValue={new Date(2026, 2, 24)} today={TODAY} />
+      </Field>
+      <Field label="Date of death">
+        <DatePicker placeholder="MM/DD/YYYY" today={TODAY} />
+      </Field>
+    </FormRow>
+  }
+>
+  Date Picker lets someone choose one date from a calendar. It's a read-only field that shows the
+  chosen date, and opens Date Picker Calendar in a popup when it's clicked.
+</ComponentHeader>
 
-<Canvas of={DatePickerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A single-date field in a form or filter.
+- One date in a form: a deadline, a date of birth, a hearing date.
+- A date filter above a list or a table.
+- A date edited in place in a Table cell.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **An always-visible calendar** - use Date Picker Calendar directly.
-- **Picking a time** - use the Time Picker (Date/Time Picker combines both).
-- **A small set of preset dates** - a Select may be simpler.
+- **A date and a time together:** <DocLink to="Components/Forms/Date Time Picker" />.
+- **A time of day:** <DocLink to="Components/Forms/Time Picker" />.
+- **A calendar that's always on view, with no field:** <DocLink to="Components/Forms/Date Picker Calendar" />.
+- **A few fixed choices, such as "In 30 days" or "In 60 days":** <DocLink to="Components/Forms/Select" /> or <DocLink to="Components/Forms/Radio" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Field** - a read-only Text Field showing the formatted date with a trailing calendar icon; it is
-   the disclosure control (`aria-haspopup="dialog"`).
-2. **Popup** - a `role="dialog"` panel anchored to the field, providing the surface.
-3. **Calendar** - the Date Picker Calendar inside the popup.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Sizes and contexts
+<Anatomy specimen={<DatePicker defaultValue={TODAY} today={TODAY} aria-label="Filing deadline" />}>
+  <Part name="root" target={datePickerStyles.root}>A `div` that holds the field and takes any other attribute you pass. 240px wide by default, and never wider than its container.</Part>
+  <Part name="trigger" target={datePickerStyles.trigger}>A read-only Text Field showing the formatted date, with a calendar icon after it. Clicking it opens and closes the calendar.</Part>
+  <Part name="popup">A Popup panel below the field, added at the end of the page. Shown only while open.</Part>
+  <Part name="calendar">The Date Picker Calendar inside the panel, where the date is picked.</Part>
+</Anatomy>
 
-<Canvas of={DatePickerStories.Sizes} />
+</Section>
 
-`size` (`sm`/`md`/`lg`) sets the field height. `context` maps to the Text Field appearance:
+<Section title="Variants">
 
-<Canvas of={DatePickerStories.Contexts} />
+<Subsection title="Sizes">
 
-`default` is a bordered field; `inline` is borderless (subtle). The open state pins the field's focus
-treatment - a border for `default`, an underline for `inline`.
+Three heights: `sm` (32px), `md` (40px), and `lg` (48px), the same as Text Field, so a Date Picker
+lines up with the fields beside it. The calendar is the same size for every field size.
 
-### States
+<Example of={DatePickerStories.Sizes} />
 
-<Canvas of={DatePickerStories.States} />
+</Subsection>
 
-Empty shows the `placeholder`; `disabled` and `invalid` map to the Text Field states.
+<Subsection title="Context">
 
-### Restricting dates
+`context` is Text Field's. `default` is the bordered field for forms. `inline` is for a field inside a
+row of other content: no border or background until someone hovers it. Field passes
+`context="inline"` when it's inline.
 
-<Canvas of={DatePickerStories.WithConstraints} />
+<Example of={DatePickerStories.Contexts} />
 
-`min` / `max`, `isDateDisabled`, `weekStartsOn`, `today`, and `locale` pass through to the calendar.
+</Subsection>
 
-### Controlled
+</Section>
 
-<Canvas of={DatePickerStories.Controlled} />
+<Section title="Behavior">
 
-Pass `value` + `onChange` (and optionally `open` + `onOpenChange`) to control the picker.
+<Subsection title="Opening and picking">
 
-### Accessibility
+A click on the field opens the calendar below it, and a second click closes it. Enter, Space, Arrow
+Down, and Arrow Up open it from the keyboard. Opening moves focus to the chosen day in the calendar,
+or to today when nothing is chosen. While the calendar is open, the field keeps its focus style.
 
-The field carries `aria-haspopup="dialog"` and, while open, `aria-expanded` + `aria-controls`
-(managed by Popup) pointing at the dialog panel. Opening moves focus into the calendar grid; Escape or
-selecting a day closes the popup and returns focus to the field; outside clicks dismiss without moving
-focus. The calendar provides its own grid keyboard model. The field is read-only in this version -
-pick via the calendar (typing a date directly is a future addition).
+Picking a day fills the field, calls `onChange`, closes the calendar, and returns focus to the field.
+Escape closes it and returns focus too, and so does Tab past the calendar's last stop, or Shift+Tab
+before its first. A click outside closes it and leaves focus where the click put it.
 
-## API
+The field is read-only: people pick from the calendar and can't type a date.
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Selected date (controlled / uncontrolled).</td></tr>
-    <tr><td><code>onChange</code></td><td><code>(date: Date) =&gt; void</code></td><td>-</td><td>Called with the selected date.</td></tr>
-    <tr><td><code>open</code> / <code>defaultOpen</code> / <code>onOpenChange</code></td><td>-</td><td>-</td><td>Popup open state.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size.</td></tr>
-    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless field.</td></tr>
-    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Field states.</td></tr>
-    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Empty-state text.</td></tr>
-    <tr><td><code>format</code></td><td><code>(date, locale?) =&gt; string</code></td><td>locale short date</td><td>Field display format.</td></tr>
-    <tr><td><code>min</code> / <code>max</code> / <code>isDateDisabled</code> / <code>weekStartsOn</code> / <code>today</code> / <code>locale</code></td><td>-</td><td>-</td><td>Passed to the calendar.</td></tr>
-    <tr><td><code>alignment</code></td><td><code>PopupAlignment</code></td><td><code>'bottomLeft'</code></td><td>Popup placement.</td></tr>
-  </tbody>
-</table>
+<Example of={DatePickerStories.Playground} caption="Click the field, or focus it and press Enter, to open the calendar." />
 
-## Related components
+</Subsection>
 
-- **Date Picker Calendar** - the calendar this opens.
-- **Date/Time Picker** - date plus time.
-- **Text Field** - the trigger field.
-- **Popup** - positioning and dismissal.
+<Subsection title="Restricting dates">
+
+`min` and `max` set the earliest and latest dates that can be picked, and `isDateDisabled` rules out
+single dates, such as weekends. Ruled-out days are muted in the calendar and can't be picked.
+`weekStartsOn`, `today`, and `locale` go to the calendar too.
+
+<Example of={DatePickerStories.WithConstraints} caption="Only 4 to 24 March can be picked." />
+
+</Subsection>
+
+<Subsection title="Format">
+
+The field shows the date in the locale's short format, such as 03/09/2026 in US English. Pass
+`format` to show it another way. Set a `placeholder` that matches the format, so an empty field shows
+what the value will look like.
+
+</Subsection>
+
+<Subsection title="Required">
+
+`required` makes the form check for a date: submitting with an empty field stops the submit, and the
+browser's message points at the field. A read-only input is never checked by the browser, so Date
+Picker adds a hidden input that holds the date for the check. In a Field, `required` also adds the
+`*` to the label.
+
+</Subsection>
+
+<Subsection title="States">
+
+An empty field shows its `placeholder`. `invalid` gives the field Text Field's error border and sets
+`aria-invalid`; in a Field with `state="error"`, Field sets it for you. `disabled` disables the
+field, so the calendar can't open.
+
+<Example of={DatePickerStories.States} />
+
+</Subsection>
+
+<Subsection title="Controlled">
+
+Pass `value` and `onChange` to own the date, and `open` and `onOpenChange` to own whether the calendar
+is open. Without them, Date Picker keeps its own state, starting from `defaultValue` and
+`defaultOpen`.
+
+<Example of={DatePickerStories.Controlled} />
+
+</Subsection>
+
+<Subsection title="Width">
+
+The field is 240px wide by default and shrinks to fit a narrower container. Set a different width
+with `className`. In a Table's editable cell, it fills the cell and takes the cell's size and the
+inline context.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Rule out dates that can't be chosen with min, max, or isDateDisabled, so the calendar shows them as unavailable."
+  code={`<Field label="Hearing date">
+    <DatePicker min={today} isDateDisabled={isCourtHoliday} />
+</Field>`}
+>
+  <Field label="Hearing date">
+    <DatePicker min={TODAY} today={TODAY} placeholder="MM/DD/YYYY" />
+  </Field>
+</Do>
+<Dont
+  caption="Let someone pick any date, then reject it with an error. They learn the rule only after they've chosen."
+  code={`<Field label="Hearing date" state={isPast(date) ? 'error' : 'default'} message="Choose a future date.">
+    <DatePicker value={date} onChange={setDate} />
+</Field>`}
+/>
+<Do
+  caption="Use Date Time Picker for one moment that needs a date and a time."
+  code={`<Field label="Hearing">
+    <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`}
+>
+  <Field label="Hearing">
+    <DateTimePicker defaultValue={new Date(2026, 2, 24, 9, 30)} today={TODAY} />
+  </Field>
+</Do>
+<Dont
+  caption="Put a Date Picker and a Time Picker side by side for one moment. You get two labels and two values to join."
+  code={`<Field label="Hearing date"><DatePicker value={date} onChange={setDate} /></Field>
+<Field label="Hearing time"><TimePicker value={time} onChange={setTime} /></Field>`}
+>
+  <Field label="Hearing date">
+    <DatePicker defaultValue={new Date(2026, 2, 24)} today={TODAY} />
+  </Field>
+  <Field label="Hearing time">
+    <TimePicker defaultValue={new Date(2026, 2, 24, 9, 30)} />
+  </Field>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`,
+  `aria-expanded`, and `aria-controls` pointing at the calendar while it's open.
+- Name it with Field, which wires its label to the input, or with `aria-label` or
+  `aria-labelledby`. These go to the input, not the wrapper.
+- In a Field, the message is added to the input's description, an error sets `aria-invalid`, and
+  `required` sets the input's native `required`, which is announced. The hidden input that the form
+  checks is out of the tab order and hidden from assistive technology; when the browser points at
+  it, focus goes on to the field.
+- The calendar is a `dialog` named "Choose a date", added at the end of the page. Change the name
+  with `dialogLabel`, for example to translate it. Inside it, the days are a grid labelled by the
+  month: see <DocLink to="Components/Forms/Date Picker Calendar" /> for how it's announced.
+- Opening moves focus into the calendar. Picking a day, Escape, and Tab out of the calendar close it
+  and return focus to the field, so the tab order runs field, calendar, then the rest of the page.
+- The calendar icon is decorative and hidden from assistive technology.
+- `disabled` is the native attribute: the input leaves the tab order.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the calendar, moves through its month and year buttons, then its focused day; from the day, closes the calendar and returns focus to the field.</Key>
+  <Key keys="Shift + Tab">In the calendar, moves back; from its first button, closes the calendar and returns focus to the field.</Key>
+  <Key keys="Enter">On the field, opens the calendar. On a day, picks it and closes the calendar, unless the day is disabled.</Key>
+  <Key keys="Space">On the field, opens the calendar. On a day, picks it and closes the calendar, unless the day is disabled.</Key>
+  <Key keys="Arrow Down">On the field, opens the calendar. In the calendar, moves to the same day next week.</Key>
+  <Key keys="Arrow Up">On the field, opens the calendar. In the calendar, moves to the same day last week.</Key>
+  <Key keys="Escape">Closes the calendar. If focus was in it, focus returns to the field.</Key>
+</Keyboard>
+
+The calendar's other keys, for days, weeks, months, and years, are on the Date Picker Calendar page.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={DatePickerStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Date Picker's own stylesheet sets only the size of the box around the calendar icon. The field uses
+Text Field's tokens, the panel Popup's, and the calendar Date Picker Calendar's. The 240px default
+width is a fixed value from Figma, not a token.
+
+<TokensTable id="date-picker" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Field" /> to add a label, a message, and a required marker.
+- <DocLink to="Components/Forms/Date Picker Calendar" />, the calendar in the popup, also usable on its own.
+- <DocLink to="Components/Forms/Date Time Picker" /> for a date and a time as one value.
+- <DocLink to="Components/Forms/Time Picker" /> for a time of day.
+- <DocLink to="Components/Forms/Text Field" />, the field Date Picker is built on.
+- <DocLink to="Components/Overlays/Popup" />, which places the calendar and closes it.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads date-picker.types.ts, the design tokens read date-picker.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

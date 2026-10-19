@@ -299,6 +299,16 @@ describe('IconButton', () => {
     expect(screen.getByRole('button', { name: 'More actions' })).toHaveAttribute('aria-expanded', 'true');
   });
 
+  it('marks a closed menu trigger with aria-expanded="false", as Button does', () => {
+    render(
+      <IconButton aria-label="More actions" isExpanded={false} tooltip={false}>
+        <CloseIcon />
+      </IconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'More actions' })).toHaveAttribute('aria-expanded', 'false');
+  });
+
   it('supports custom className', () => {
     render(
       <IconButton aria-label="Custom" className="custom-icon-button" data-testid="icon-button" tooltip={false}>
@@ -418,5 +428,16 @@ describe('icon button CSS contract', () => {
     // The loading Spinner inherits color from Spinner's own base style now, not a same-named
     // override here racing it on CSS source order - see spinner.module.css.
     expect(iconButtonCss).not.toContain('.spinner {');
+  });
+
+  it('keeps an aria-expanded a wrapper passes (as Popup does) when isExpanded is unset', () => {
+    const { rerender } = render(<IconButton aria-label="Actions" aria-expanded tooltip={false}><CloseIcon /></IconButton>);
+    const trigger = screen.getByRole('button', { name: 'Actions' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('data-expanded', 'true');
+
+    rerender(<IconButton aria-label="Actions" aria-expanded={false} tooltip={false}><CloseIcon /></IconButton>);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).not.toHaveAttribute('data-expanded');
   });
 });

@@ -139,31 +139,87 @@ describe('Tabs', () => {
     expect(screen.getByRole('tab', { name: 'Beta' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('applies the type on the root', () => {
+  it('applies the appearance on the root, line by default', () => {
+    const { container, rerender } = renderTabs();
+    expect(container.querySelector(`.${styles.root}`)).toHaveAttribute('data-appearance', 'line');
+
+    rerender(<Tabs tabs={items} aria-label="Sections" appearance="contained" />);
+    expect(container.querySelector(`.${styles.root}`)).toHaveAttribute('data-appearance', 'contained');
+  });
+
+  it('still accepts the deprecated type for appearance', () => {
     const { container } = renderTabs({ type: 'contained' });
 
-    expect(container.querySelector(`.${styles.root}`)).toHaveAttribute('data-type', 'contained');
+    expect(container.querySelector(`.${styles.root}`)).toHaveAttribute('data-appearance', 'contained');
+  });
+
+  it('sets aria-controls only for tabs whose TabPanel is rendered', () => {
+    const { rerender } = render(<Tabs tabs={items} aria-label="Sections" />);
+
+    for (const tab of screen.getAllByRole('tab')) {
+      expect(tab).not.toHaveAttribute('aria-controls');
+    }
+
+    rerender(
+      <Tabs tabs={items} aria-label="Sections">
+        <TabPanel value="a">Panel A</TabPanel>
+      </Tabs>,
+    );
+
+    const panel = screen.getByRole('tabpanel');
+    expect(screen.getByRole('tab', { name: 'Alpha' })).toHaveAttribute('aria-controls', panel.id);
+    expect(screen.getByRole('tab', { name: 'Beta' })).not.toHaveAttribute('aria-controls');
+
+    // Unmounting the panel removes the reference again.
+    rerender(<Tabs tabs={items} aria-label="Sections" />);
+    expect(screen.getByRole('tab', { name: 'Alpha' })).not.toHaveAttribute('aria-controls');
+  });
+
+  it('every aria-controls points at an element that exists', () => {
+    renderTabs();
+
+    for (const tab of screen.getAllByRole('tab')) {
+      const id = tab.getAttribute('aria-controls');
+      expect(id && document.getElementById(id)).toBeTruthy();
+    }
+  });
+
+  it('keeps the first enabled tab in the tab order when the value matches no enabled tab', () => {
+    const { rerender } = renderTabs({ value: 'missing' });
+
+    expect(screen.getByRole('tab', { name: 'Alpha' })).toHaveAttribute('tabindex', '0');
+    expect(screen.getAllByRole('tab').filter((tab) => tab.getAttribute('tabindex') === '0')).toHaveLength(1);
+
+    // A disabled selection can't take focus either.
+    rerender(<Tabs tabs={items} aria-label="Sections" value="c" />);
+    expect(screen.getByRole('tab', { name: 'Gamma' })).toHaveAttribute('tabindex', '-1');
+    expect(screen.getByRole('tab', { name: 'Alpha' })).toHaveAttribute('tabindex', '0');
+
+    cleanup();
+    renderTabs({ defaultValue: 'missing' });
+    expect(screen.getByRole('tab', { name: 'Alpha' })).toHaveAttribute('tabindex', '0');
+    expect(screen.getByRole('tab', { name: 'Alpha' })).toHaveAttribute('aria-selected', 'false');
   });
 });
 
 describe('Tabs CSS contract', () => {
   it('draws the line indicator with the selected content token over the bottom border', () => {
     expect(tabsCss).toContain('var(--color-border-default)');
-    expect(tabsCss).toMatch(/\.root\[data-type='line'\] \.tab\[aria-selected='true'\]::after \{[\s\S]*?background: var\(--color-content-selected\);/);
+    expect(tabsCss).toMatch(/\.root\[data-appearance='line'\] \.tab\[aria-selected='true'\]::after \{[\s\S]*?background: var\(--color-content-selected\);/);
     expect(tabsCss).toContain('block-size: var(--border-width-lg);');
   });
 
   it('fills the selected contained tab with the selected surface and border', () => {
-    expect(tabsCss).toMatch(/\.root\[data-type='contained'\] \.tab\[aria-selected='true'\] \{[\s\S]*?background: var\(--color-background-selected-default-default\);/);
+    expect(tabsCss).toMatch(/\.root\[data-appearance='contained'\] \.tab\[aria-selected='true'\] \{[\s\S]*?background: var\(--color-background-selected-default-default\);/);
     expect(tabsCss).toContain('var(--color-border-selected)');
-    expect(tabsCss).toMatch(/\.root\[data-type='contained'\] \.tab \{[\s\S]*?border-radius: var\(--border-radius-lg\);/);
+    expect(tabsCss).toMatch(/\.root\[data-appearance='contained'\] \.tab \{[\s\S]*?border-radius: var\(--border-radius-lg\);/);
   });
 
   it('wraps the contained tab list in a raised, rounded, bordered, padded container', () => {
-    const containerRule = tabsCss.match(/\.root\[data-type='contained'\] \.tablist \{([\s\S]*?)\}/)?.[1] ?? '';
+    const containerRule = tabsCss.match(/\.root\[data-appearance='contained'\] \.tablist \{([\s\S]*?)\}/)?.[1] ?? '';
     expect(containerRule).toContain('padding: var(--spacing-xs);');
     expect(containerRule).toContain('border-radius: var(--border-radius-xl);');
     expect(containerRule).toContain('background: var(--color-elevation-surface-raised-default);');
-    expect(tabsCss).toMatch(/\.root\[data-type='contained'\] \.tablistBordered \{[\s\S]*?border-color: var\(--color-border-default\);/);
+    expect(tabsCss).toMatch(/\.root\[data-appearance='contained'\] \.tablistBordered \{[\s\S]*?border-color: var\(--color-border-default\);/);
   });
 });

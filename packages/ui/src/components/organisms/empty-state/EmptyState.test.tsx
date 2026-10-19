@@ -21,6 +21,24 @@ describe('EmptyState', () => {
     expect(screen.getByText('Nothing here yet.')).toBeInTheDocument();
   });
 
+  it('renders the heading as a real heading, at level 2 by default', () => {
+    render(<EmptyState heading="All caught up">Body</EmptyState>);
+
+    const heading = screen.getByRole('heading', { name: 'All caught up', level: 2 });
+    expect(heading.tagName).toBe('H2');
+    expect(heading).toHaveClass(styles.heading);
+  });
+
+  it('renders the heading at headingLevel', () => {
+    render(
+      <EmptyState heading="No documents yet" headingLevel={4}>
+        Body
+      </EmptyState>,
+    );
+
+    expect(screen.getByRole('heading', { name: 'No documents yet', level: 4 }).tagName).toBe('H4');
+  });
+
   it('renders the heading when provided and omits it otherwise', () => {
     const { container, rerender } = render(<EmptyState heading="All caught up">Body</EmptyState>);
     expect(screen.getByText('All caught up')).toBeInTheDocument();
@@ -52,19 +70,32 @@ describe('EmptyState', () => {
     expect(container.querySelector(`.${styles.actions}`)).not.toBeInTheDocument();
   });
 
-  it('defaults to the inherited (transparent) type', () => {
+  it('defaults to the inherited (transparent) appearance', () => {
     const { container } = render(<EmptyState>Body</EmptyState>);
 
     const root = container.querySelector(`.${styles.root}`);
 
-    expect(root).toHaveClass(styles.type_inherited);
-    expect(root).not.toHaveClass(styles.type_informative);
+    expect(root).toHaveClass(styles.appearance_inherited);
+    expect(root).not.toHaveClass(styles.appearance_informative);
   });
 
-  it('applies the informative type', () => {
-    const { container } = render(<EmptyState type="informative">Body</EmptyState>);
+  it('applies the informative appearance', () => {
+    const { container } = render(<EmptyState appearance="informative">Body</EmptyState>);
 
-    expect(container.querySelector(`.${styles.root}`)).toHaveClass(styles.type_informative);
+    expect(container.querySelector(`.${styles.root}`)).toHaveClass(styles.appearance_informative);
+  });
+
+  it('still accepts the deprecated type prop, with appearance taking precedence', () => {
+    const { container, rerender } = render(<EmptyState type="informative">Body</EmptyState>);
+    const root = () => container.querySelector(`.${styles.root}`);
+    expect(root()).toHaveClass(styles.appearance_informative);
+
+    rerender(
+      <EmptyState type="informative" appearance="inherited">
+        Body
+      </EmptyState>,
+    );
+    expect(root()).not.toHaveClass(styles.appearance_informative);
   });
 
   it('composes a custom className and forwards other props', () => {
@@ -87,8 +118,12 @@ describe('EmptyState', () => {
 });
 
 describe('EmptyState CSS contract', () => {
-  it('fills a sunken surface only for the informative type', () => {
-    expect(emptyStateCss).toMatch(/\.type_informative \{[\s\S]*?background: var\(--color-elevation-surface-sunken-default\);/);
+  it('resets the heading element margins so every level looks the same', () => {
+    expect(emptyStateCss).toMatch(/\.heading \{[^}]*?margin: 0;[^}]*?font-size: var\(--typography-heading-md-font-size\);[^}]*?font-weight: var\(--typography-heading-md-font-weight\);/);
+  });
+
+  it('fills a sunken surface only for the informative appearance', () => {
+    expect(emptyStateCss).toMatch(/\.appearance_informative \{[\s\S]*?background: var\(--color-elevation-surface-sunken-default\);/);
     // The base root does not paint a background (inherited stays transparent).
     const rootBlock = emptyStateCss.match(/\.root \{([^}]*)\}/)?.[1] ?? '';
     expect(rootBlock).not.toContain('background');

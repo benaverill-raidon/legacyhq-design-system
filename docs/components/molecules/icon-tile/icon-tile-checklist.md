@@ -5,7 +5,7 @@
 ### Name
 Icon Tile
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -64,7 +64,7 @@ Not applicable - no text content.
 ## Variants
 
 ### Tone
-- gray, brand, red, orange, yellow, green, teal, blue, purple, magenta
+- taupe, brand, red, orange, yellow, green, teal, blue, purple, magenta (gray, the earlier name for taupe, is still accepted)
 
 ### Appearance
 - default, bold
@@ -112,6 +112,6 @@ Optional, only meaningful when `decorative={false}`.
 ---
 
 ## Notes
-The Figma component models `tone` and `appearance` (bold) as one flattened 20-value `appearance`
+The Figma component models `tone` and `appearance` (bold) as one flattened 20-value `tone`
 variant. The React API splits these into two independent props to follow this design system's
 existing convention (see Button) of separating visual weight from semantic meaning.

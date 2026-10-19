@@ -24,8 +24,16 @@
     "properties": {
       "id": { "type": "string" },
       "name": { "type": "string" },
-      "tier": { "type": "string", "enum": ["primitive", "atom", "molecule", "organism"] },
-      "category": { "type": "string" },
+      "tier": {
+        "description": "Compositional complexity, derived from the component's folder. Independent of category - see classification in component-registry-governance.json.",
+        "type": "string",
+        "enum": ["primitive", "atom", "molecule", "organism"]
+      },
+      "category": {
+        "description": "Functional / documentation grouping, authored in contract.json. This enum is the single authoritative list of valid categories: other files may attach definitions, labels, or ordering to these values but must not redefine the set. Independent of tier - see classification in component-registry-governance.json.",
+        "type": "string",
+        "enum": ["actions", "forms", "feedback", "navigation", "data-display", "overlays", "foundations"]
+      },
       "status": { "type": "string" },
       "path": { "type": "string" },
       "anatomy": {

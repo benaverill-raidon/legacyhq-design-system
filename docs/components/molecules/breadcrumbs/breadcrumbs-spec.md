@@ -8,8 +8,10 @@ Breadcrumbs are a navigation system used to show a user's location in a site or 
 ### Description
 Use Breadcrumbs to render an ordered trail of ancestor links ending in the current page.
 
-### Category
-Molecule
+### Tier
+Molecule. It composes the `Link` atom (each ancestor in the trail) and a plain text label (the
+current page) into one ordered-list unit with its own layout (separators, spacing) that no single
+atom owns.
 
 ### Design Reference
 - Figma Component: `breadcrumbs` (single component, not a variant set - node `2026:746`, file
@@ -55,7 +57,9 @@ Breadcrumbs
 - Single root `nav` landmark
 - One `ol` > `li` per item, in the order given
 - A `/` separator precedes every item except the first
-- Every item except the last renders as a `Link`; the last always renders as non-interactive text
+- Every item with an `href` renders as a `Link`; every item without one renders as non-interactive
+  text with `aria-current="page"`. In practice only the last item omits `href`; if it has one, it
+  renders as a link and nothing is marked current
 - Each item may include an optional icon before and/or after its label
 
 ---
@@ -80,8 +84,8 @@ presence/absence and the last item's non-interactive `aria-current="page"` treat
 communicate "you are here" without a color difference on top.
 
 Link's own `:visited` treatment - a real, browser-history-driven color swap to purple - is
-intentionally overridden for every breadcrumb ancestor, back to whatever color Link's resting/
-pressed state would otherwise use. Per explicit design feedback, "have you visited this URL
+intentionally overridden for every breadcrumb ancestor, back to Link's resting color (Link's own
+`--link-color`; Link has no pressed color, so a pressed visited ancestor keeps it too). Per explicit design feedback, "have you visited this URL
 before" isn't a signal breadcrumbs should surface: it makes the trail read as an arbitrary list of
 hyperlinks rather than a location path. This is the one documented exception to "do not reimplement
 Link's hover/focus/press treatment locally" (see Engineering Notes below) - it targets `:visited`
@@ -134,8 +138,12 @@ Limitations).
 | Property | Type | Required | Default |
 |-----------|--------|----------|---------|
 | items | BreadcrumbItem[] | Yes | - |
-| ariaLabel | string | No | `'Breadcrumb'` |
+| aria-label | string | No | `'Breadcrumb'` (ignored when `aria-labelledby` is set) |
+| aria-labelledby | string | No | undefined |
+| ariaLabel | string | No | Deprecated alias for `aria-label`, still accepted |
 | className | string | No | undefined |
+
+Any other `nav` attribute (`id`, `data-*`, ...) and the `ref` are forwarded to the root `nav`.
 
 ---
 
@@ -147,7 +155,8 @@ The current-page item is plain text and is not part of the Tab order.
 
 ### ARIA
 
-- Root: `nav` landmark with `aria-label` (default `"Breadcrumb"`).
+- Root: `nav` landmark with `aria-label` (default `"Breadcrumb"`), or `aria-labelledby` in its
+  place.
 - Every non-current item: a real `<a>` via `Link` - no extra ARIA needed.
 - The last item: `aria-current="page"` on its wrapping element, per the WAI-ARIA Breadcrumb
   Pattern.
@@ -178,7 +187,7 @@ Example:
 
 ### Colors
 - Link items: `Link`'s own `appearance="subtle"` tokens (`--color-content-subtle`, etc.), with
-  `:visited` overridden back to the resting/press color - see Design Decisions above
+  `:visited` overridden back to the resting color - see Design Decisions above
 - Current-page item: `--color-content-subtle` (matches Link's resting color - no differentiation)
 - Separator: `--color-content-subtle`
 

@@ -4,13 +4,13 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
 import { ButtonGroup } from '../../molecules/button-group';
 import { ModalDialog } from './modal-dialog';
-import type { ModalAppearance, ModalWidth } from './modal-dialog.types';
+import type { ModalTone, ModalWidth } from './modal-dialog.types';
 
-const widths: ModalWidth[] = ['small', 'medium', 'large', 'extraLarge'];
-const appearances: ModalAppearance[] = ['default', 'warning', 'error'];
+const widths: ModalWidth[] = ['sm', 'md', 'lg', 'xl'];
+const tones: ModalTone[] = ['default', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Modal Dialog',
+  title: 'Components/Overlays/Modal Dialog',
   component: ModalDialog,
   args: {
     // Required props; every story's render provides its own open state and onClose, so these are
@@ -18,15 +18,15 @@ const meta = {
     open: false,
     onClose: () => {},
     title: 'Modal title',
-    appearance: 'default',
-    width: 'medium',
+    tone: 'default',
+    width: 'md',
     showCloseButton: true,
     closeOnEscape: true,
     closeOnBackdropClick: true,
   },
   argTypes: {
     title: { control: 'text' },
-    appearance: { control: 'inline-radio', options: appearances },
+    tone: { control: 'inline-radio', options: tones },
     width: { control: 'inline-radio', options: widths },
     showCloseButton: { control: 'boolean' },
     closeOnEscape: { control: 'boolean' },
@@ -44,20 +44,20 @@ type Story = StoryObj<typeof meta>;
 
 const row: CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-md)' };
 
-/** Confirm button tone follows the modal's appearance, the way the Figma variants pair them. */
-function confirmTone(appearance: ModalAppearance) {
-  return appearance === 'default' ? 'default' : appearance;
+/** Confirm button tone follows the modal's tone, the way the Figma variants pair them. */
+function confirmTone(tone: ModalTone) {
+  return tone === 'default' ? 'default' : tone;
 }
 
 /** A trigger button that opens a modal; the modal owns its own open state for the demo. */
 function ModalDemo({
   triggerLabel,
-  appearance = 'default',
+  tone = 'default',
   children,
   ...props
 }: {
   triggerLabel: string;
-  appearance?: ModalAppearance;
+  tone?: ModalTone;
   title?: ReactNode;
   width?: ModalWidth;
   showCloseButton?: boolean;
@@ -72,7 +72,7 @@ function ModalDemo({
       <Button onClick={() => setOpen(true)}>{triggerLabel}</Button>
       <ModalDialog
         {...props}
-        appearance={appearance}
+        tone={tone}
         open={open}
         onClose={() => setOpen(false)}
         footer={
@@ -80,7 +80,7 @@ function ModalDemo({
             <Button prominence="tertiary" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button prominence="primary" tone={confirmTone(appearance)} onClick={() => setOpen(false)}>
+            <Button prominence="primary" tone={confirmTone(tone)} onClick={() => setOpen(false)}>
               Confirm
             </Button>
           </ButtonGroup>
@@ -106,7 +106,7 @@ function PlaygroundModal(args: Parameters<NonNullable<Story['render']>>[0]) {
             <Button prominence="tertiary" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button prominence="primary" tone={confirmTone(args.appearance ?? 'default')} onClick={() => setOpen(false)}>
+            <Button prominence="primary" tone={confirmTone(args.tone ?? 'default')} onClick={() => setOpen(false)}>
               Confirm
             </Button>
           </ButtonGroup>
@@ -124,20 +124,20 @@ export const Playground: Story = {
 };
 
 /**
- * `appearance` prepends a status icon to the title (warning / error). It does not tone the footer
+ * `tone` prepends a status icon to the title (warning / error). It does not tone the footer
  * buttons - pair it with a matching Confirm button, as these do.
  */
-export const Appearances: Story = {
+export const Tones: Story = {
   render: () => (
     <div style={row}>
-      <ModalDemo triggerLabel="Default" appearance="default" title="Save changes?" />
-      <ModalDemo triggerLabel="Warning" appearance="warning" title="Unsaved changes" />
-      <ModalDemo triggerLabel="Delete" appearance="error" title="Delete repository?" />
+      <ModalDemo triggerLabel="Default" tone="default" title="Save changes?" />
+      <ModalDemo triggerLabel="Warning" tone="warning" title="Unsaved changes" />
+      <ModalDemo triggerLabel="Delete" tone="error" title="Delete repository?" />
     </div>
   ),
 };
 
-/** Four panel widths: small (400px), medium (600px), large (752px), extraLarge (968px). */
+/** Four panel widths: sm (400px), md (600px), lg (752px), xl (968px). */
 export const Widths: Story = {
   render: () => (
     <div style={row}>
@@ -151,7 +151,7 @@ export const Widths: Story = {
 /** A realistic destructive confirmation. */
 export const DestructiveConfirmation: Story = {
   render: () => (
-    <ModalDemo triggerLabel="Delete repository" appearance="error" width="small" title="Delete repository?">
+    <ModalDemo triggerLabel="Delete repository" tone="error" width="sm" title="Delete repository?">
       <p style={{ margin: 0 }}>
         This permanently deletes <strong>legacyhq/design-system</strong> and all of its history. This action cannot be
         undone.
@@ -163,7 +163,7 @@ export const DestructiveConfirmation: Story = {
 /** Long body content scrolls within the panel while the header and footer stay fixed. */
 export const ScrollingBody: Story = {
   render: () => (
-    <ModalDemo triggerLabel="Open terms" title="Terms of service" width="medium">
+    <ModalDemo triggerLabel="Open terms" title="Terms of service" width="md">
       <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         {Array.from({ length: 20 }).map((_, index) => (
           <p key={index} style={{ margin: 0 }}>

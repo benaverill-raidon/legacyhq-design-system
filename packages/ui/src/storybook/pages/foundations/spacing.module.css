@@ -1,0 +1,163 @@
+/*
+ * Foundations / Spacing layout. Page rhythm, type scale, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Every square, stack, and sample is sized with the token it
+ * illustrates (inline var() references or the rules below), so the picture is the value. Dimension
+ * tokens have no theme dependency, so the page stays light throughout.
+ */
+
+/* Column sizes for Spacing's tables (the tables themselves are doc.table). */
+
+.squareColumn {
+  inline-size: 4rem;
+}
+
+/* The usage matrix is four narrow number columns; full width would push them apart. */
+.compact {
+  max-inline-size: 40rem;
+}
+
+.count {
+  text-align: end;
+}
+
+/* A spacing step drawn at its own size. */
+.square {
+  display: block;
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+/* Overlap: three dots stacked by the step's (negative) overlap. */
+
+.overlaps {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.overlaps > li {
+  display: grid;
+  grid-template-columns: 6rem 10rem minmax(0, 1fr);
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.stack {
+  display: flex;
+}
+
+.stack > span {
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+  border: var(--border-width-md) solid var(--color-elevation-surface-default);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+.stack > span + span {
+  margin-inline-start: var(--stack-overlap);
+}
+
+/* Applying spacing */
+
+.levels {
+  display: grid;
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.level {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 16rem;
+  gap: var(--spacing-xl);
+  align-items: start;
+  padding-block: var(--spacing-lg);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.levelText {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 64ch;
+}
+
+/* The level's steps side by side, squares aligned on their bottom edge, labels underneath. */
+.levelSteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  align-items: flex-end;
+}
+
+.levelSteps > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: start;
+}
+
+/* Spacing vs. sizing: the same number doing two jobs. */
+
+.compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+  margin: 0;
+}
+
+.compare > div {
+  display: grid;
+  gap: var(--spacing-sm);
+  justify-items: start;
+  padding: var(--spacing-lg);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+}
+
+.compare figcaption {
+  grid-column: 1 / -1;
+}
+
+/* Two elements with the space between them drawn as a block, so the 16px is visible. */
+.pair {
+  display: flex;
+}
+
+.pair > span {
+  inline-size: var(--size-500);
+  block-size: var(--size-500);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-background-neutral-default-default);
+}
+
+.pair > .space {
+  inline-size: var(--spacing-lg);
+  border-radius: 0;
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+.sized {
+  inline-size: var(--size-500);
+  block-size: var(--size-200);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+/* Exceptions note */
+
+.exceptions {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.exceptions ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 900px) {
+  .level,
+  .compare,
+  .overlaps > li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

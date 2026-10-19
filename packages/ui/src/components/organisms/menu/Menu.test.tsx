@@ -236,18 +236,18 @@ describe('Menu', () => {
     expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
   });
 
-  it("renders the search field with TextField's subtle appearance and size=md, matching Figma's tone=subtle, size=md exactly", () => {
+  it("renders the search field with TextField's inline context and size=md, matching Figma's context=inline, size=md exactly", () => {
     render(<Menu aria-label="Actions" sections={actionSections()} />);
 
-    const field = screen.getByRole('textbox').closest('[data-appearance]');
-    expect(field).toHaveAttribute('data-appearance', 'subtle');
+    const field = screen.getByRole('textbox').closest('[data-context]');
+    expect(field).toHaveAttribute('data-context', 'inline');
     expect(field).toHaveAttribute('data-size', 'md');
   });
 
   it('does not render a leading search icon (removed - too small at this size)', () => {
     render(<Menu aria-label="Actions" sections={actionSections()} />);
 
-    const field = screen.getByRole('textbox').closest('[data-appearance]') as HTMLElement;
+    const field = screen.getByRole('textbox').closest('[data-context]') as HTMLElement;
     expect(field.querySelector('svg')).not.toBeInTheDocument();
   });
 
@@ -259,14 +259,14 @@ describe('Menu', () => {
 
   it("neutralizes the search field's hover/focus underline and hover background in CSS, matching Figma's menu-search exactly (no hover variant at all, empty fills/strokes in every state)", () => {
     // The selector needs [data-size='md'] plus two :not() clauses (not just a bare
-    // :global([data-appearance='subtle']):hover) to reach specificity (0,6,0) - TextField's own
+    // :global([data-context='inline']):hover) to reach specificity (0,6,0) - TextField's own
     // hover rule stacks three :not() clauses of its own, landing at (0,5,0), which a simpler
     // override would lose to regardless of CSS source order.
     expect(menuCss).toMatch(
-      /\.search\s+:global\(\[data-appearance='subtle'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):hover\s*\{[^}]*background:\s*transparent/,
+      /\.search\s+:global\(\[data-context='inline'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):hover\s*\{[^}]*background:\s*transparent/,
     );
     expect(menuCss).toMatch(
-      /\.search\s+:global\(\[data-appearance='subtle'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):focus-within\s*\{[^}]*border-bottom-color:\s*transparent/,
+      /\.search\s+:global\(\[data-context='inline'\]\[data-size='md'\]:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\)\):focus-within\s*\{[^}]*border-bottom-color:\s*transparent/,
     );
   });
 
@@ -357,5 +357,68 @@ describe('Menu', () => {
   it('has no background/border of its own - Figma verifies the menu root has empty fills/strokes', () => {
     expect(menuCss).not.toMatch(/^\.menu\s*\{[^}]*background/m);
     expect(menuCss).not.toMatch(/^\.menu\s*\{[^}]*border:/m);
+  });
+
+  it('names the search field with searchLabel, defaulting to "Search", not with the placeholder', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchPlaceholder="Find an action" sections={actionSections()} />);
+    expect(screen.getByRole('textbox', { name: 'Search' })).toHaveAttribute('placeholder', 'Find an action');
+
+    rerender(<Menu aria-label="Actions" searchLabel="Rechercher" sections={actionSections()} />);
+    expect(screen.getByRole('textbox', { name: 'Rechercher' })).toBeInTheDocument();
+  });
+
+  it('groups a headed section, named by its heading; an unheaded section is no group', () => {
+    render(
+      <Menu
+        aria-label="Matter"
+        showSearch={false}
+        sections={[
+          { id: 'plain', items: [{ id: 'open', label: 'Open' }] },
+          { id: 'danger', heading: 'Danger zone', items: [{ id: 'delete', label: 'Delete' }] },
+        ]}
+      />,
+    );
+
+    const groups = screen.getAllByRole('group');
+    expect(groups).toHaveLength(1);
+    expect(screen.getByRole('group', { name: 'Danger zone' })).toContainElement(screen.getByRole('menuitem', { name: 'Delete' }));
+    expect(screen.getByRole('group', { name: 'Danger zone' })).not.toContainElement(screen.getByRole('menuitem', { name: 'Open' }));
+  });
+
+  it('announces the empty message politely when the rows run out, but not when it first renders empty', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchValue="zzz" emptyMessage="No matches" sections={actionSections()} />);
+    const status = screen.getByRole('status');
+    expect(screen.getByText('No matches')).toBeInTheDocument();
+    expect(status).toBeEmptyDOMElement();
+
+    rerender(<Menu aria-label="Actions" searchValue="" emptyMessage="No matches" sections={actionSections()} />);
+    expect(screen.queryByText('No matches')).not.toBeInTheDocument();
+
+    rerender(<Menu aria-label="Actions" searchValue="qqq" emptyMessage="No matches" sections={actionSections()} />);
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toHaveTextContent('No matches');
+    expect(screen.getAllByText('No matches')).toHaveLength(1);
+  });
+
+  it('announces the loading row in the same live region, and the empty message when loading ends with nothing', () => {
+    const { rerender } = render(<Menu aria-label="Actions" showSearch={false} sections={actionSections()} />);
+    const status = screen.getByRole('status');
+    expect(status).toBeEmptyDOMElement();
+
+    rerender(<Menu aria-label="Actions" showSearch={false} loading loadingLabel="Loading people" sections={[]} />);
+    expect(status).toHaveTextContent('Loading people');
+
+    rerender(<Menu aria-label="Actions" showSearch={false} emptyMessage="Nobody found" sections={[]} />);
+    expect(status).toHaveTextContent('Nobody found');
+  });
+
+  it('names the clear-search button with an overridable label', () => {
+    const { rerender } = render(<Menu aria-label="Actions" searchValue="ren" onSearchChange={() => {}} sections={actionSections()} />);
+    expect(screen.getByRole('button', { name: 'Clear search' })).toBeInTheDocument();
+
+    rerender(
+      <Menu aria-label="Actions" searchValue="ren" onSearchChange={() => {}} clearSearchLabel="Effacer" sections={actionSections()} />,
+    );
+    expect(screen.getByRole('button', { name: 'Effacer' })).toBeInTheDocument();
   });
 });

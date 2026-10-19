@@ -1,6 +1,6 @@
 {
   "name": "ToggleIconButton",
-  "category": "atom",
+  "category": "actions",
   "status": "stable",
   "purpose": "Persistent icon-only toggle control.",
   "intent": "Combine compact icon-only presentation with toggle behavior.",

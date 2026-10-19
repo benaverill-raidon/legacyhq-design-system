@@ -1,6 +1,6 @@
 {
   "name": "DatePicker",
-  "category": "organism",
+  "category": "forms",
   "status": "stable",
   "purpose": "Enter a single date via a field that opens a calendar popup.",
   "intent": "A read-only date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.",
@@ -16,7 +16,7 @@
       "trigger": "figma-parts / select-trigger wrapping a text-field (value text + elemAfterInput calendar icon); the field frame is radius md with a border/input outline.",
       "popup": "the Figma trigger is built inside a dropdown-menu > popup (surface slot = the calendar). In code the trigger composes the Popup primitive + Text Field directly (dropdown-menu is menu-specific); the calendar goes in Popup's content."
     },
-    "notes": "context default -> Text Field appearance 'default' (bordered); context inline -> appearance 'subtle' (borderless). The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
+    "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
   },
   "useCases": [
     "a date field in a form",
@@ -31,7 +31,7 @@
   "anatomy": [
     { "name": "root", "element": "div", "required": true, "description": "wrapper; defaults to a 240px field width, shrinks to its container" },
     { "name": "trigger", "element": "TextField (input)", "required": true, "description": "read-only date display + trailing calendar icon; aria-haspopup=dialog" },
-    { "name": "popup", "element": "Popup (role=dialog)", "required": true, "description": "anchored to the field frame; holds the calendar" },
+    { "name": "popup", "element": "Popup", "required": true, "description": "anchored to the field frame; holds the calendar, which is the named role=dialog" },
     { "name": "calendar", "element": "DatePickerCalendar", "required": true, "description": "the month grid inside the popup" }
   ],
   "props": {
@@ -56,7 +56,9 @@
     "today": { "type": "Date", "default": "current date", "required": false },
     "id": { "type": "string", "required": false },
     "aria-label": { "type": "string", "required": false },
-    "aria-labelledby": { "type": "string", "required": false }
+    "aria-labelledby": { "type": "string", "required": false },
+    "required": { "type": "boolean", "required": false, "description": "Native required on the input, plus a hidden input the form's validation checks (a read-only input is never validated)." },
+    "dialogLabel": { "type": "string", "default": "Choose a date", "required": false, "description": "Accessible name for the calendar dialog." }
   },
   "variants": {
     "size": ["sm", "md", "lg"],
@@ -76,20 +78,22 @@
   },
   "accessibility": {
     "trigger": "read-only input, aria-haspopup=\"dialog\"",
-    "expanded": "aria-expanded + aria-controls set by Popup while open",
-    "panelRole": "dialog",
-    "openFocus": "focus moves into the calendar grid on open",
-    "dismiss": "Escape or selecting a day closes and returns focus to the field; outside click dismisses without moving focus",
+    "expanded": "aria-expanded, and aria-controls pointing at the dialog while open, set by Date Picker",
+    "panelRole": "dialog (the calendar root), named by dialogLabel",
+    "openFocus": "focus moves into the calendar grid on open, once the panel is shown",
+    "dismiss": "Escape, selecting a day, or Tab / Shift+Tab out of the calendar closes and returns focus to the field; outside click dismisses without moving focus",
+    "required": "native required on the read-only input, plus a hidden input (tabIndex -1, aria-hidden) that the form's constraint validation checks; focusing it sends focus on to the field",
     "calendar": "the DatePickerCalendar provides the grid semantics and keyboard model"
   },
   "keyboardInteraction": [
     "Enter / Space / ArrowDown / ArrowUp open the popup from the field.",
     "Escape closes the popup and returns focus to the field.",
+    "Tab past the calendar's last stop, or Shift+Tab before its first, closes it and returns focus to the field.",
     "Inside the popup, the calendar's grid keyboard model applies."
   ],
   "behaviorRules": [
     "Render a read-only Text Field showing the formatted selected date + a calendar icon.",
-    "context maps to Text Field appearance (default -> default, inline -> subtle); size passes through.",
+    "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Render the open state by pinning the field focus treatment while open.",
     "Open the calendar in a Popup anchored to the field frame; select fills the field and closes.",
     "Controlled/uncontrolled value and open state.",
@@ -138,7 +142,9 @@
     "Selects a day: fills the field, closes, returns focus (uncontrolled); supports controlled value.",
     "Closes on Escape and returns focus to the field.",
     "Does not open when disabled.",
-    "Passes min/max through to the calendar; exposes a role=dialog panel via aria-controls.",
+    "Passes min/max through to the calendar; points aria-controls at a dialog named by dialogLabel.",
+    "Tab / Shift+Tab out of the calendar closes it and returns focus to the field.",
+    "A required, empty Date Picker fails the form's validation; a date or disabled passes.",
     "Does not use MUI or Tailwind.",
     "Storybook and tests compile."
   ]

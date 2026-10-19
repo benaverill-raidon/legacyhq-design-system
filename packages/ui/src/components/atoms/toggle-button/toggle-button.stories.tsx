@@ -1,28 +1,28 @@
 import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CheckIcon, CloseIcon, EditIcon, SearchIcon } from '../../../assets/icons';
+import { CheckIcon, CloseIcon, SearchIcon, TextBoldIcon, TextItalicIcon, TextUnderlineIcon } from '../../../assets/icons';
 import { ToggleButton } from './toggle-button';
 import type { ToggleButtonSize } from './toggle-button.types';
 
 const sizes: ToggleButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Toggle Button',
+  title: 'Components/Actions/Toggle Button',
   component: ToggleButton,
   args: {
     children: 'Toggle Button',
     size: 'md',
     tone: 'default',
     isSelected: false,
-    isDisabled: false,
+    disabled: false,
   },
   argTypes: {
     children: { control: 'text' },
     size: { control: 'inline-radio', options: sizes },
     tone: { control: 'inline-radio', options: ['default', 'subtle'] },
     isSelected: { control: 'boolean' },
-    isDisabled: { control: 'boolean' },
+    disabled: { control: 'boolean' },
     iconBefore: { control: false },
     iconAfter: { control: false },
     className: { control: false },
@@ -138,7 +138,7 @@ function LiveToggleExample() {
 
   return (
     <ToggleButton isSelected={selected} onClick={() => setSelected((current) => !current)}>
-      {selected ? 'Selected' : 'Click to select'}
+      Show archived
     </ToggleButton>
   );
 }
@@ -169,7 +169,7 @@ export const States: Story = {
           <ToggleButton data-force-state="press">Label</ToggleButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleButton isDisabled>Label</ToggleButton>
+          <ToggleButton disabled>Label</ToggleButton>
         </Cell>
       </Group>
 
@@ -193,7 +193,7 @@ export const States: Story = {
           </ToggleButton>
         </Cell>
         <Cell label="Disabled">
-          <ToggleButton isSelected isDisabled>
+          <ToggleButton isSelected disabled>
             Label
           </ToggleButton>
         </Cell>
@@ -206,21 +206,24 @@ export const States: Story = {
   ),
 };
 
+/** Each formatting option is on or off by itself, so each button has its own boolean. */
 function ToolbarExample() {
-  const [selected, setSelected] = React.useState<'bold' | 'italic' | 'underline' | null>('bold');
+  const [bold, setBold] = React.useState(true);
+  const [italic, setItalic] = React.useState(false);
+  const [underline, setUnderline] = React.useState(false);
 
   return (
     <div style={row}>
-      <ToggleButton isSelected={selected === 'bold'} onClick={() => setSelected('bold')} iconBefore={<EditIcon />}>
+      <ToggleButton isSelected={bold} onClick={() => setBold((current) => !current)} iconBefore={<TextBoldIcon />}>
         Bold
       </ToggleButton>
-      <ToggleButton isSelected={selected === 'italic'} onClick={() => setSelected('italic')} iconBefore={<EditIcon />}>
+      <ToggleButton isSelected={italic} onClick={() => setItalic((current) => !current)} iconBefore={<TextItalicIcon />}>
         Italic
       </ToggleButton>
       <ToggleButton
-        isSelected={selected === 'underline'}
-        onClick={() => setSelected('underline')}
-        iconBefore={<EditIcon />}
+        isSelected={underline}
+        onClick={() => setUnderline((current) => !current)}
+        iconBefore={<TextUnderlineIcon />}
       >
         Underline
       </ToggleButton>
@@ -228,6 +231,7 @@ function ToolbarExample() {
   );
 }
 
+/** Two buttons stand for one choice, so the parent keeps the chosen value and selects the match. */
 function ViewModeExample() {
   const [selected, setSelected] = React.useState<'list' | 'search'>('list');
 
@@ -280,10 +284,9 @@ export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Long label wraps in a narrow container</h3>
+        <h3 style={headingStyle}>Long label in a narrow container</h3>
         <p style={captionStyle}>
-          Text-only content doesn&apos;t truncate - a very long label will wrap onto multiple lines
-          rather than overflow.
+          The label doesn&apos;t wrap or truncate: a label longer than its container overflows it.
         </p>
         <div style={{ inlineSize: '160px' }}>
           <ToggleButton>Notify every assigned reviewer</ToggleButton>
@@ -297,7 +300,7 @@ export const EdgeCases: Story = {
             <ToggleButton>Unselected</ToggleButton>
             <ToggleButton isSelected>Selected</ToggleButton>
             <ToggleButton tone="subtle">Subtle</ToggleButton>
-            <ToggleButton isDisabled>Disabled</ToggleButton>
+            <ToggleButton disabled>Disabled</ToggleButton>
           </div>
         </div>
       </section>

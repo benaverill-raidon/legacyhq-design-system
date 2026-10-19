@@ -14,7 +14,7 @@ visited steps optionally navigable.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 

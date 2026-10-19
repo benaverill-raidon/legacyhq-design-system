@@ -1,7 +1,7 @@
 /*
  * Key Value Pair lays out a label (key) and a value side by side in a horizontal row. The key takes
  * a fixed proportion of the row width; the value fills the rest. When children are provided (an
- * inline-editable control like TextField/TextArea/Select with appearance="inline"), they fill the
+ * inline-editable control like TextField/TextArea/Select with context="inline"), they fill the
  * value slot. Static pairs render plain text in the value slot.
  */
 .root {
@@ -51,13 +51,8 @@
 }
 
 /* TextField, TextArea, and Select share square inline frames inside a key/value row. */
-.value [data-appearance='inline'] {
+.value [data-context='inline'] {
   border-radius: 0;
-}
-
-/* Icons inside inline inputs are dialed back to subtler inside a key/value context. */
-.value {
-  --field-icon-color: var(--color-content-subtler);
 }
 
 /* sm: shorter row, smaller font */

@@ -32,14 +32,14 @@
       "props": { "mode": "search" }
     },
     {
-      "name": "Smaller size for a dense filter bar",
-      "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing.",
-      "jsx": "<Chip\n  mode=\"filter\"\n  size=\"sm\"\n  label=\"Status\"\n  value={{ label: 'Any', sections: statusSections }}\n  onRemove={() => clearFilter('status')}\n/>",
-      "props": { "mode": "filter", "size": "sm" }
+      "name": "Smaller size for a dense row",
+      "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing. sm exists for select and search chips; filter chips are md only.",
+      "jsx": "<Chip mode=\"select\" size=\"sm\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
+      "props": { "mode": "select", "size": "sm" }
     },
     {
       "name": "Naming a panel explicitly",
-      "description": "Panels default to `${label} value` / `${label} operator`. Override when the composed name would read poorly, or when label is not a plain string.",
+      "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
       "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
       "props": { "mode": "filter" }
     }
@@ -63,7 +63,7 @@
     {
       "name": "Expecting a tone prop",
       "jsx": "<Chip mode=\"select\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
-      "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
+      "reason": "Chip has no tone axis: Figma's chip-base tone axis was dropped in the 2026-08-27 simplification, and every chip variant used tone=default before it. TypeScript rejects it."
     }
   ]
 }

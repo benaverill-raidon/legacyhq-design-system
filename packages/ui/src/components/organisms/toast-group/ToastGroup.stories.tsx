@@ -6,7 +6,7 @@ import { ToastGroup } from './toast-group';
 import { toast } from './toast-store';
 
 const meta = {
-  title: 'UI/Organisms/Toast Group',
+  title: 'Components/Feedback/Toast Group',
   component: ToastGroup,
   parameters: { layout: 'fullscreen' },
   args: {
@@ -46,8 +46,8 @@ function undoAction() {
 /**
  * Trigger toasts from anywhere with the imperative `toast()` API. They stack in the bottom-right;
  * hover (or focus into) the stack to expand it into a vertical list. Toasts auto-dismiss after their
- * duration (paused while the stack is hovered), can be swiped away, and collapse behind a max of
- * `maxVisible`.
+ * duration (the timers pause while the stack is expanded and resume when it collapses), can be
+ * swiped away, and show at most `maxVisible` at once.
  */
 export const Playground: Story = {
   render: (args) => (

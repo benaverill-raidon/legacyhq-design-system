@@ -1,0 +1,229 @@
+/*
+ * Introduction / Overview layout. Page rhythm, type scale, and shared structure come from
+ * storybook/blocks/doc-page.module.css; this file only holds what's specific to this page.
+ */
+
+.prose {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.grid3 > li {
+  display: grid;
+}
+
+.card {
+  display: grid;
+  gap: var(--spacing-sm);
+  align-content: start;
+  padding: var(--spacing-lg);
+}
+
+/* Pipeline */
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+}
+
+/* Connector between stages in the same row (01 -> 02 -> 03, 04 -> 05 -> 06). */
+.stage:not(:nth-child(3n))::after {
+  content: '→';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 100%;
+  inline-size: var(--spacing-xl);
+  color: var(--color-content-subtle);
+  text-align: center;
+  transform: translateY(-50%);
+}
+
+.stageCard {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+}
+
+.stageNumber {
+  color: var(--color-content-default);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.stageFacts {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding-block-start: var(--spacing-sm);
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+/* Token trace */
+
+.traceSteps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.traceStep {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-xs);
+  align-content: start;
+  padding-block-start: var(--spacing-sm);
+  border-block-start: var(--border-width-md) solid var(--color-border-bold);
+}
+
+.traceStep:not(:last-child)::after {
+  content: '→';
+  position: absolute;
+  inset-block-start: var(--spacing-sm);
+  inset-inline-start: 100%;
+  inline-size: var(--spacing-xl);
+  color: var(--color-content-subtle);
+  text-align: center;
+}
+
+.traceValue {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.traceModes {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: var(--size-150);
+  block-size: var(--size-150);
+  vertical-align: middle;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-xs);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+.traceResult {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.themePanel {
+  display: grid;
+  gap: var(--spacing-md);
+  justify-items: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--color-elevation-surface-default);
+  color: var(--color-content-default);
+}
+
+.panelLabel {
+  justify-self: start;
+}
+
+/* Docs map */
+
+.sectionTable {
+  inline-size: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.sectionTable :where(th, td) {
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.sectionTable thead th {
+  padding-block-start: var(--spacing-none);
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.sectionTable td:last-child {
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+}
+
+.examples {
+  margin-block-start: auto;
+  padding-block-start: var(--spacing-xs);
+}
+
+.more {
+  color: var(--color-content-subtle);
+  white-space: nowrap;
+}
+
+/* Where to go next */
+
+.nextColumn {
+  display: grid;
+  gap: var(--spacing-md);
+  align-content: start;
+  padding-block-start: var(--spacing-md);
+  border-block-start: var(--border-width-md) solid var(--color-border-bold);
+}
+
+.nextList {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.nextList > li {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.nextDescription {
+  color: var(--color-content-subtle);
+}
+
+.nextEntry {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+@media (max-width: 900px) {
+  .grid3,
+  .stages,
+  .traceSteps,
+  .traceResult {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stage::after,
+  .traceStep::after {
+    content: none;
+  }
+}

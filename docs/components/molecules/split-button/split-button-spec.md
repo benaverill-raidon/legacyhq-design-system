@@ -11,6 +11,12 @@ inner corners that make the two segments read as one continuous shape.
 organisms - the same deliberate, documented exception Tag Group and Avatar Group already
 established (see their own contract.json `tierNote`s; not re-derived here).
 
+**Design reference.** Figma's `split-button` (24 variants: `tone` default/primary - code's
+`appearance` - x `size` xs-lg x `isDisabled` x `isOpen`, never open while disabled) uses a raw
+`popup` instance for the open panel, not a `dropdown-menu` instance. The panel's job ("choose from
+a small group of similar actions") is Dropdown Menu's, so code reuses Dropdown Menu rather than
+hand-assembling Popup and Menu again, as Tag Group and Avatar Group do.
+
 ## Anatomy
 
 ```txt
@@ -51,8 +57,8 @@ disabled: false
 isLoading: false
 ```
 
-Matches Button's and IconButton's own code defaults exactly (both already default to
-`size="md"`/`appearance="default"`) - unlike Tag Group and Avatar Group, there's no evidence in
+Matches Button's and IconButton's own code defaults exactly (`size="md"`; `appearance="default"`
+maps to Button's default `prominence="secondary"` and is IconButton's own default `appearance`) - unlike Tag Group and Avatar Group, there's no evidence in
 Figma of the *group* preferring a different default than the atoms it composes, so none was
 introduced.
 
@@ -64,10 +70,13 @@ introduced.
     {...rest}
     ref={forwardedRef}
     className={styles.primaryAction}
-    appearance={appearance}
+    prominence={appearance === 'primary' ? 'primary' : 'secondary'}
+    tone={tone}
     size={size}
     disabled={disabled}
     isLoading={isLoading}
+    iconBefore={iconBefore}
+    iconAfter={iconAfter}
     onClick={onClick}
   >
     {children}
@@ -98,6 +107,19 @@ introduced.
 
 Split Button holds exactly one piece of state - `open` - to drive the secondary action's
 `DropdownMenu`, identical in shape to Tag Group's and Avatar Group's own `overflowOpen`.
+
+That state is internal and not exposed (no `open`/`onOpenChange` prop). It doesn't need to be:
+Dropdown Menu calls `onOpenChange(false)` on Escape, an outside press, Tab out of the panel, and
+when an item is chosen (after its `onSelect`), and returns focus to the caret. An item's `onSelect`
+can keep the panel open by calling `event.preventDefault()`.
+
+Which props reach which segment: `size`, `appearance` (mapped), and `disabled` go to both;
+`isLoading` goes to the primary action and disables the secondary one; `onClick`, `tone`,
+`iconBefore`, `iconAfter`, the ref, and every other Button prop or native attribute in `rest`
+(including `isInverse` and `isExpanded`) go to the primary action only - `prominence` in `rest` is
+overridden by the `appearance` mapping. `id` and `className` go to the root `div`. Because
+IconButton has no `tone` (and gets no `isInverse`), a `tone` on Split Button colors only the
+primary segment.
 
 `showSearch={false}` and `alignment="right"` are both hardcoded, not exposed as props - matching
 Tag Group/Avatar Group's own precedent of not exposing every Menu/DropdownMenu prop, and matching
@@ -185,11 +207,10 @@ component (`shape="square"`) with a single icon child - `caret_down` (resolved d
 Figma instance's own bound component key; matches this codebase's existing `CaretDownIcon`
 one-for-one, not a new or different glyph).
 
-`IconButton`'s own `isExpanded` prop has no visual effect in code today (verified directly - it only
-sets `aria-expanded`/`data-expanded`, with no corresponding CSS), and `DropdownMenu`/`Popup` already
-overwrites `aria-expanded` via its own trigger-cloning regardless of whatever `IconButton` would set
-internally - so Split Button does not pass `isExpanded` to the secondary action at all; it would be
-redundant.
+Split Button does not pass `isExpanded` to the secondary action, and doesn't need to: `IconButton`
+leaves `isExpanded` unset by default and keeps the `aria-expanded` Popup injects (and its
+`data-expanded` hover fill follows it), so the caret reports `aria-expanded="true"` while the panel
+is open. Dropdown Menu also adds `aria-haspopup="menu"` to it.
 
 **IconButton's own tooltip-wrapping is safe as a Popup trigger.** `IconButton` auto-wraps itself in
 `Tooltip` whenever an explicit `aria-label` is given (its own existing behavior, unrelated to Split
@@ -206,12 +227,17 @@ already-exercised path.
 ## Accessibility
 
 - The primary action keeps Button's own documented accessibility unchanged.
-- The secondary action is a real `IconButton` - `aria-expanded`/`aria-controls` come from Popup (via
-  Dropdown Menu); its accessible name and tooltip both come from `secondaryActionLabel`.
+- The secondary action is a real `IconButton` with `aria-haspopup="menu"` (Dropdown Menu),
+  `aria-expanded`, and `aria-controls` while open (Popup, via Dropdown Menu). Its accessible name
+  and tooltip both come from `secondaryActionLabel`, which also names the Menu (`role="menu"`).
+- Dropdown Menu follows the menu-button pattern: opening the panel moves focus to its first enabled
+  item, and choosing an item, Escape, or Tab/Shift+Tab out of the panel closes it and returns focus
+  to the caret, so the panel's place at the end of `document.body` doesn't put it last in the tab
+  order. Escape closes the panel from anywhere.
 - `disabled` disables both segments together (native `disabled` on both, matching how Figma's own
   `isDisabled` axis covers the whole component, not one segment).
-- `isLoading` applies Button's own loading treatment (`aria-busy`/`aria-disabled`, spinner replacing
-  `iconBefore`) to the primary action only, and additionally disables the secondary action (native
+- `isLoading` applies Button's own loading treatment (`aria-busy`/`aria-disabled`, a spinner over the
+  content while the button keeps its size) to the primary action only, and additionally disables the secondary action (native
   `disabled`) - picking a different action while the primary one is mid-flight would be confusing,
   and Figma's own `isOpen`/`isDisabled` variants never model "open while loading" as a state to
   design around.
@@ -221,7 +247,7 @@ already-exercised path.
 `split-button.module.css` declares no raw values - the squared corners use `0` (an explicitly
 ignored value in the stylelint token-governance rule, not a token reference, since "no radius" has
 no meaningful token), the divider's size/color use `border-width-sm`, `size-control-xs/sm/md/lg`,
-`color-border-input`/`color-content-brand-primary-subtle`/`color-border-disabled`. Every other
+`color-border-input`/`color-border-brand-primary-subtle`/`color-border-disabled`. Every other
 value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens.
 
 ## Storybook
@@ -259,6 +285,9 @@ calls onClick when the primary action is activated
 renders the secondary action with its own accessible name, distinct from the primary label
 opens a menu holding the given sections when the secondary action is activated
 calls a menu item's own onSelect when chosen
+closes the menu and returns focus to the caret when an item is chosen
+marks the caret as opening a menu, and announces whether it is open
+moves focus into the menu when it opens, and back to the caret on Escape
 closes the dropdown on Escape, inherited from Popup
 disables both the primary and secondary actions when disabled is set
 disables the secondary action while the primary action is loading

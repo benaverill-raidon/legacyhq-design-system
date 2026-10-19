@@ -1,0 +1,98 @@
+/*
+ * Foundations / Elevation layout. Page rhythm, type scale, tables, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Every tile and sample is drawn with the token it illustrates
+ * (inline var() references), so the picture is the value. The two stages show the same surfaces in
+ * Light and Dark; the Dark one opts in with data-theme="dark".
+ */
+
+.sampleColumn {
+  inline-size: 5rem;
+}
+
+/* Surfaces on the page's default surface, in Light and Dark. */
+
+.stages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.stage {
+  display: grid;
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-default);
+  color: var(--color-content-default);
+}
+
+.stage figcaption {
+  color: var(--color-content-subtle);
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  align-items: flex-end;
+}
+
+.tiles > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  justify-items: center;
+}
+
+.tile {
+  display: block;
+  inline-size: var(--size-800);
+  block-size: var(--size-800);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+}
+
+/* A small sample for table rows, set on the default surface so raised and default read apart. */
+.swatch {
+  display: block;
+  inline-size: var(--size-500);
+  block-size: var(--size-400);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-sm);
+}
+
+/* Applying elevation */
+
+.levels {
+  display: grid;
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.levels > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 72ch;
+  padding-block: var(--spacing-lg);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+/* Exceptions note */
+
+.exceptions {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.exceptions ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 900px) {
+  .stages {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

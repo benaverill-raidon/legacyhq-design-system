@@ -1,114 +1,235 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { ProgressTracker } from './progress-tracker';
+import progressTrackerStyles from './progress-tracker.module.css';
 import * as ProgressTrackerStories from './ProgressTracker.stories';
+
+export const matterSetup = [
+  { label: 'Details', href: '#' },
+  { label: 'Parties', href: '#' },
+  { label: 'Documents' },
+  { label: 'Review' },
+  { label: 'Submit' },
+];
+
+{/* Progress Tracker fills its container's width; these frames center their content and give it none. */}
+export const filled = { inlineSize: '100%', maxInlineSize: '40rem' };
 
 <Meta of={ProgressTrackerStories} name="Docs" />
 
-# Progress Tracker
+<Unstyled>
+<ComponentPage>
 
-Progress Tracker shows where someone is in a linear, multi-step journey. It renders a segmented,
-labelled progress bar from a `steps` array: the bar fills to the current step and a label sits under
-each step, with the current step highlighted.
+<ComponentHeader id="progress-tracker" example={<ProgressTracker steps={matterSetup} currentStep={3} aria-label="Matter setup" style={filled} />}>
+  Progress Tracker shows where someone is in a flow whose steps have names: a bar filled up to the
+  current step, with each step's name under it and a link back to the steps already done.
+</ComponentHeader>
 
-<Canvas of={ProgressTrackerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A guided, multi-step flow with **named** steps (matter setup, onboarding, a checkout wizard).
-- Any linear sequence where both the relative position **and** each step's name matter.
+- A guided flow with named steps, such as matter setup or client onboarding.
+- Letting people go back to a step they've already done.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For relative position without labels.** Use the Progress Indicator (dots) atom.
-- **For determinate task/system percentage.** Use the Progress Bar atom.
-- **For switching between peer views.** Use Tabs.
-- **For page or route navigation.** Use links or a navigation component.
+- **Position without step names:** <DocLink to="Components/Navigation/Progress Indicator" />.
+- **How much of a task is done:** <DocLink to="Components/Feedback/Progress Bar" />, for an upload or an import. Progress Tracker is position in a sequence, not completion.
+- **Views people switch between in any order:** <DocLink to="Components/Navigation/Tabs" />.
+- **Where a page sits in a hierarchy:** <DocLink to="Components/Navigation/Breadcrumbs" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Track** - a full-round pill (`sunken` surface, `border/bold` outline) that carries the fill.
-2. **Fill** - the `background/brand/primary/bold` portion, `currentStep / totalSteps` wide.
-3. **Steps** - an ordered list of labels, one centred under each step. The current step is
-   `content/selected` and carries `aria-current="step"`; visited steps with an `href` are links.
-   Visited-step links reuse the `Link` atom but follow the tracker's `<items>` states: no `:visited`
-   (purple) colour, and hover changes colour only (`content/subtle` -> `content/default`) with no
-   underline.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Sizes
+<Anatomy specimen={<ProgressTracker steps={matterSetup} currentStep={3} aria-label="Matter setup" style={{ inlineSize: '28rem' }} />}>
+  <Part name="root" target={progressTrackerStyles.root}>A `nav` named "Progress" by default, which stacks the bar over the steps.</Part>
+  <Part name="track" target={progressTrackerStyles.track}>The full-width pill: a sunken surface with a bold outline. Hidden from assistive technology.</Part>
+  <Part name="fill" target={progressTrackerStyles.fill}>The brand-colored part of the bar, filled up to and including the current step.</Part>
+  <Part name="steps" target={progressTrackerStyles.steps}>An ordered list of the steps, which share the width equally.</Part>
+  <Part name="step" target={progressTrackerStyles.step}>One step, its name centered under its share of the bar. A Link for a visited step with an `href`, text otherwise.</Part>
+</Anatomy>
 
-<Canvas of={ProgressTrackerStories.Sizes} />
+</Section>
 
-`size` (`md` default, or `lg`) only changes the **bar thickness** - the labels stay `heading-xs` in
-both, matching the Figma component.
+<Section title="Variants">
 
-### Progress and navigation
+<Subsection title="Sizes">
 
-<Canvas of={ProgressTrackerStories.Progress} />
+`size` changes only the bar's thickness: `md`, the default, has a 12px fill and `lg` a 24px fill,
+each with a little more space between the fill and the outline. The step names stay `heading-xs`
+in both.
 
-`currentStep` is 1-based and clamped to `1..steps.length`; the fill grows to
-`currentStep / totalSteps`. Steps **before** the current one are treated as visited: give them an
-`href` (and optional `onClick`) to let people jump back. The current and upcoming steps are never
-links.
+<Example of={ProgressTrackerStories.Sizes} />
 
-### Disabled
+</Subsection>
 
-<Canvas of={ProgressTrackerStories.Disabled} />
+</Section>
 
-`disabled` greys the fill (`background/disabled`) and every label (`content/disabled`) and removes all
-links. Because that grey is low-contrast on the sunken track, the track outline also switches to
-`border/disabled` so the disabled state clearly stands out. A single step can also be disabled on its
-own with `step.disabled`.
+<Section title="Behavior">
 
-### Accessibility
+<Subsection title="Progress and going back">
 
-The tracker is a `<nav>`; give it an `aria-label` (or `aria-labelledby`) - it defaults to
-`"Progress"`. Steps are an ordered list; the current step is marked `aria-current="step"`. Visited
-steps render as the `Link` atom (subtle appearance) and use the shared Focus Ring. The bar itself is
-decorative (`aria-hidden`).
+`currentStep` counts from 1 and is clamped to the number of steps. The bar fills to
+`currentStep / steps.length`, so it ends where the current step's share of the width ends, and the
+fill animates when it changes. The current step's name is in the selected color and marked
+`aria-current="step"`. Steps before it are done: give them an `href` and their names become Links
+back to them. The current step and the ones after it are never links, even with an `href`.
 
-## API
+Visited-step links don't turn purple, and on hover they darken instead of underlining.
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>steps</code></td>
-      <td><code>{`{ label, href?, target?, onClick?, disabled? }[]`}</code></td>
-      <td>-</td>
-      <td>Required. The steps, in order.</td>
-    </tr>
-    <tr>
-      <td><code>currentStep</code></td>
-      <td><code>number</code></td>
-      <td>-</td>
-      <td>Required. 1-based current step; clamped to <code>1..steps.length</code>.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Bar thickness.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Mutes every label, greys the fill, removes links.</td>
-    </tr>
-    <tr>
-      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
-      <td><code>string</code></td>
-      <td><code>'Progress'</code></td>
-      <td>Names the tracker.</td>
-    </tr>
-  </tbody>
-</table>
+<Example of={ProgressTrackerStories.Progress} caption="The first step, a flow in progress, and the last step." />
 
-## Related components
+</Subsection>
 
-- **Progress Indicator** - dots for relative position without labels.
-- **Progress Bar** - determinate task/system percentage.
-- **Tabs** - switching between peer views rather than a step sequence.
+<Subsection title="Disabled">
+
+`disabled` greys the fill and the bar's outline and mutes every step name, and no step is a link. A
+single step can be disabled with the step's own `disabled`: its name is muted and never a link,
+even after it's done. Neither sets `aria-disabled`.
+
+<Example of={ProgressTrackerStories.Disabled} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Name the tracker for the flow, with aria-label or a visible heading." code={`<ProgressTracker steps={steps} currentStep={3} aria-label="Matter setup" />`}>
+  <ProgressTracker steps={matterSetup} currentStep={3} aria-label="Matter setup" style={filled} />
+</Do>
+<Dont caption="Leave the default name, so every tracker is announced as “Progress”." code={`<ProgressTracker steps={steps} currentStep={3} />`} />
+<Do caption="Keep step names short and parallel, one or two words each." code={`<ProgressTracker steps={[{ label: 'Details' }, { label: 'Parties' }, { label: 'Review' }]} currentStep={2} aria-label="Matter setup" />`}>
+  <ProgressTracker steps={[{ label: 'Details' }, { label: 'Parties' }, { label: 'Review' }]} currentStep={2} aria-label="Matter setup" style={filled} />
+</Do>
+<Dont caption="Write each step as a sentence, which wraps under its share of the bar." code={`<ProgressTracker steps={[{ label: 'Enter the matter details' }, { label: 'Add everyone involved in the matter' }, { label: 'Review and submit the matter' }]} currentStep={2} aria-label="Matter setup" />`}>
+  <ProgressTracker
+    steps={[{ label: 'Enter the matter details' }, { label: 'Add everyone involved in the matter' }, { label: 'Review and submit the matter' }]}
+    currentStep={2}
+    aria-label="Matter setup"
+    style={filled}
+  />
+</Dont>
+<Do caption="Give the steps before the current one an href, so people can go back to them." code={`<ProgressTracker
+    steps={[
+      { label: 'Details', href: '/matters/new/details' },
+      { label: 'Parties', href: '/matters/new/parties' },
+      { label: 'Review' },
+    ]}
+    currentStep={3}
+    aria-label="Matter setup"
+/>`}>
+  <ProgressTracker steps={[{ label: 'Details', href: '#' }, { label: 'Parties', href: '#' }, { label: 'Review' }]} currentStep={3} aria-label="Matter setup" style={filled} />
+</Do>
+<Dont caption="Expect an href to link an upcoming step: only steps before the current one become links." code={`<ProgressTracker
+    steps={[
+      { label: 'Details', href: '/matters/new/details' },
+      { label: 'Parties', href: '/matters/new/parties' },
+      { label: 'Review', href: '/matters/new/review' },
+    ]}
+    currentStep={1}
+    aria-label="Matter setup"
+/>`} />
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The root is a `nav` named by `aria-label`, "Progress" by default, or by `aria-labelledby`, which
+  replaces it. Name it for the flow.
+- The steps are an ordered list, so assistive technology announces how many there are. The current
+  step's name has `aria-current="step"`.
+- The bar is hidden from assistive technology: the list and `aria-current` carry the position.
+- Each visited step with an `href` is a Link: announced as a link, in the tab order, with the
+  shared Focus Ring. Every other step is plain text and isn't focusable.
+- A disabled tracker or step sets no `aria-disabled`; its names are text, so nothing in it is
+  focusable.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the next visited step that's a link. Other steps are skipped.</Key>
+  <Key keys="Enter">Follows the focused step's link.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ProgressTrackerStories} native="nav" />
+
+<Subsection title="Step">
+
+Each entry in `steps` takes:
+
+- `label`, required: the step's name.
+- `href`: a link back to the step, used only once the step is done.
+- `target`: passed to the Link. `_blank` adds Link's new-tab icon and hidden text.
+- `onClick`: called when the step's link is activated, so only a step that's a link calls it.
+- `disabled`: mutes the step's name and keeps it from ever being a link.
+
+</Subsection>
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Progress Tracker's own stylesheet uses, by family, with the property it sets and when.
+The visited-step links take the rest of their tokens from Link. The `--link-color-visited` row sets
+Link's own visited color to the plain step color, so visited steps don't turn purple. Under Other,
+`progress-tracker-fill` is the stylesheet's own variable for the fill's width, set from the current
+step.
+
+<TokensTable id="progress-tracker" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Navigation/Progress Indicator" /> for position in a sequence without step names.
+- <DocLink to="Components/Feedback/Progress Bar" /> for how much of a task is done.
+- <DocLink to="Components/Navigation/Tabs" /> for views people switch between in any order.
+- <DocLink to="Components/Navigation/Link" />, which renders each visited step with an `href`.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment on the links.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads progress-tracker.types.ts, the design tokens read progress-tracker.module.css,
+  and the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

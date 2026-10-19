@@ -143,6 +143,13 @@ describe('Checkbox', () => {
     expect(screen.getByText('*')).toHaveClass(styles.requiredIndicator);
   });
 
+  it('hides the required * from assistive technology, so the name is the label alone', () => {
+    render(<Checkbox label="Required" required />);
+
+    expect(screen.getByRole('checkbox', { name: 'Required' })).toBeRequired();
+    expect(screen.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+  });
+
   it('supports custom className', () => {
     const { container } = render(<Checkbox label="Custom" className="custom-checkbox" />);
 

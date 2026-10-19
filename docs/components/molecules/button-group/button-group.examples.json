@@ -4,7 +4,7 @@
     {
       "name": "Default horizontal group",
       "description": "Two related actions in a row.",
-      "jsx": "<ButtonGroup>\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+      "jsx": "<ButtonGroup>\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
       "props": {}
     },
     {
@@ -24,7 +24,7 @@
     {
       "name": "Labelled group",
       "description": "role=group is added automatically once aria-label is present.",
-      "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+      "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
       "props": {
         "aria-label": "Document actions"
       }
@@ -44,8 +44,8 @@
     },
     {
       "name": "Segmented/exclusive selection",
-      "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
-      "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+      "jsx": "<ButtonGroup>\n  <Button prominence={view === 'list' ? 'primary' : 'secondary'} onClick={() => setView('list')}>List</Button>\n  <Button prominence={view === 'grid' ? 'primary' : 'secondary'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
+      "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity. Lay out Toggle Buttons in the group instead, with isSelected from the parent's state."
     }
   ]
 }

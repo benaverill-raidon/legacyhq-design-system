@@ -11,7 +11,7 @@ const states: FieldState[] = ['default', 'error', 'valid'];
 const contexts: FieldContext[] = ['default', 'inline'];
 
 const meta = {
-  title: 'UI/Molecules/Field',
+  title: 'Components/Forms/Field',
   component: Field,
   args: {
     // A default control so `children` (required) is satisfied for every story; stories with their
@@ -131,7 +131,7 @@ export const States: Story = {
  *   `size=all`).
  * - `context="inline"` indents the label and message to line up with the text *inside* the control
  *   (`lg` a wider indent; `sm`/`md` share one) AND renders the control itself inline/borderless -
- *   Field injects `appearance="subtle"` into it - so the whole field reads as one inline unit.
+ *   Field passes `context="inline"` to it - so the whole field reads as one inline unit.
  *
  * Set Field's `size` to match the wrapped control's `size` so the alignment lands. Inline is for
  * text-bearing controls (Text Field, Select, Text Area, pickers) - that's where a borderless control
@@ -140,7 +140,7 @@ export const States: Story = {
 export const Contexts: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="context: default — flush with the control edge, same for every size">
+      <Group title="context: default, flush with the control edge at every size">
         <Cell label="sm control">
           <Field label="Field label" context="default" message="Message content">
             <TextField size="sm" placeholder="Placeholder" />
@@ -153,18 +153,18 @@ export const Contexts: Story = {
         </Cell>
       </Group>
 
-      <Group title="context: inline — borderless control, label/message aligned to its inner text (Field size = control size)">
-        <Cell label="sm/md — 8px indent">
+      <Group title="context: inline, borderless control with the label and message aligned to its text (Field size = control size)">
+        <Cell label="sm/md: 8px indent">
           <Field label="Field label" context="inline" size="sm" message="Message content">
             <TextField size="sm" placeholder="Placeholder" />
           </Field>
         </Cell>
-        <Cell label="sm/md — 8px indent">
+        <Cell label="sm/md: 8px indent">
           <Field label="Field label" context="inline" size="md" message="Message content">
             <TextField size="md" placeholder="Placeholder" />
           </Field>
         </Cell>
-        <Cell label="lg — 12px indent">
+        <Cell label="lg: 12px indent">
           <Field label="Field label" context="inline" size="lg" message="Message content">
             <TextField size="lg" placeholder="Placeholder" />
           </Field>

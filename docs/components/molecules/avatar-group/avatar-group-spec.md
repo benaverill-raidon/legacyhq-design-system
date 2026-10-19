@@ -122,7 +122,7 @@ Where `overflowTrigger` (only rendered when `hasOverflow`) is:
     })),
   }]}
 >
-  <Button size={size} appearance="subtle" className={styles.overflowTrigger} onClick={() => setOverflowOpen((c) => !c)}>
+  <Button size={size} prominence="tertiary" className={styles.overflowTrigger} onClick={() => setOverflowOpen((c) => !c)}>
     {overflowLabel(hiddenAvatars.length)}
   </Button>
 </DropdownMenu>
@@ -146,7 +146,7 @@ fallback in its own overflow row, not silently fall back to the person artwork.
 ## Overflow trigger: reusing Button, reshaped
 
 Figma's own `figma-parts / more-trigger` part is, one level deeper, the real `Button` component
-(`appearance="subtle"`, `buttonText` bound to whatever count string is needed), instance-overridden
+(`tone=subtle` in Figma's variant name, `prominence="tertiary"` in code; `buttonText` bound to whatever count string is needed), instance-overridden
 across every size/state variant - all 16 re-measured directly, not sampled from one variant:
 
 - **Fixed `inline-size`** equal to Button's own `min-block-size` at that size (making it square) -
@@ -156,7 +156,7 @@ across every size/state variant - all 16 re-measured directly, not sampled from 
 - **A fully-rounded corner radius** (`--border-radius-full-round` - the same token Avatar's own root
   already uses for its own circular shape) instead of Button's own per-size radius token. Measured
   `cornerRadius: 999` on every one of the 16 variants.
-- **Background overridden to the `sunken` surface family**, not Button's own subtle-appearance
+- **Background overridden to the `sunken` surface family**, not Button's own tertiary
   transparent/overlay backgrounds: `color-elevation-surface-sunken-default` at rest. All 16 Figma
   variants (every size x every state - default/hover/press/focus) measured the identical fill,
   which reads as an unfinished mockup rather than deliberate no-hover-feedback design intent, so
@@ -164,9 +164,9 @@ across every size/state variant - all 16 re-measured directly, not sampled from 
   (`color-elevation-surface-sunken-press`) using the same token family's sibling values, rather
   than leaving the trigger visually static on interaction like every other button in this system.
 - **Typography overridden to the `body` scale**, not Button's own per-size heading-based type
-  styles: Body/S, M, L, L for xs/sm/md/lg respectively (12px/14px/16px/16px, weight 400 throughout -
+  styles: Body/SM, MD, LG, LG for xs/sm/md/lg respectively (12px/14px/16px/16px, weight 400 throughout -
   `typography-body-sm/md/lg/lg`). Button's own `size=lg` normally steps up to a larger heading
-  style; the more-trigger's `lg` variant instead reuses the exact same Body/L style as `md` - text
+  style; the more-trigger's `lg` variant instead reuses the exact same Body/LG style as `md` - text
   size does not grow with the trigger's own diameter past `md`.
 - **Padding-inline matches Button's own per-size default almost exactly** - measured 8/12/16 for
   sm/md/lg align exactly with Button's own `spacing-sm/md/lg`, needing no override at all. `xs`
@@ -298,7 +298,7 @@ truncates beyond maxVisible and renders a "+N" overflow trigger
 renders the overflow trigger after the visible avatars
 opens a menu holding the remaining truncated avatars when the overflow trigger is activated
 calls onOverflowAvatarSelect with the selected truncated avatar
-does not close the overflow panel on its own when a truncated avatar is selected
+closes the overflow panel, returning focus to the trigger, when a truncated avatar is selected
 closes the overflow panel on outside click / Escape, inherited from Popup
 supports a custom overflowLabel
 defaults the overflow menu accessible name to "{count} more people"

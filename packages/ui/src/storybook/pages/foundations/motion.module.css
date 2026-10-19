@@ -1,0 +1,205 @@
+/*
+ * Foundations / Motion layout. Page rhythm, type scale, tables, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Each demo plays its recipe through --motion-demo, set inline
+ * to the recipe's own token, so the motion you see is the value. Demos move only after Play, and
+ * under reduced motion they jump to where they end, as components do.
+ */
+
+.demoColumn {
+  inline-size: 12rem;
+}
+
+.demos {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.reducedNote {
+  display: none;
+}
+
+/* A track shared by the fill and travel demos. --motion-demo-thumb is the space inside it. */
+.track {
+  --motion-demo-thumb: calc(var(--size-300) - 2 * var(--border-width-sm) - 2 * var(--spacing-xs));
+
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  block-size: var(--size-300);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+/* fade: a visual state change - a fill grows from a quarter to full, as Progress Bar's does. */
+.fill {
+  position: absolute;
+  inset-block: var(--spacing-xs);
+  inset-inline-start: var(--spacing-xs);
+  inline-size: calc((100% - 2 * var(--spacing-xs)) / 4);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+  transition: inline-size var(--motion-demo);
+}
+
+.demos[data-playing='true'] .fill {
+  inline-size: calc(100% - 2 * var(--spacing-xs));
+}
+
+/* move: physical movement - a thumb travels the track, as Switch's does. The wrapper is as wide as
+   the distance, so translating it by its own width carries the thumb to the far end. */
+.travel {
+  position: absolute;
+  inset-block: var(--spacing-xs);
+  inset-inline-start: var(--spacing-xs);
+  inline-size: calc(100% - 2 * var(--spacing-xs) - var(--motion-demo-thumb));
+  transition: transform var(--motion-demo);
+}
+
+.demos[data-playing='true'] .travel {
+  transform: translateX(100%);
+}
+
+.thumb {
+  display: block;
+  inline-size: var(--motion-demo-thumb);
+  block-size: var(--motion-demo-thumb);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+/* Loops: a ring turns, as Spinner's does; a block pulses, as Skeleton's does. */
+.spin {
+  display: block;
+  box-sizing: border-box;
+  inline-size: var(--size-300);
+  block-size: var(--size-300);
+  border: var(--border-width-lg) solid var(--color-border-default);
+  border-block-start-color: var(--color-border-brand-primary-default);
+  border-radius: var(--border-radius-full-round);
+}
+
+.pulse {
+  display: block;
+  block-size: var(--size-300);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-elevation-surface-deep-default);
+}
+
+.demos[data-playing='true'] .spin {
+  animation: motion-demo-spin var(--motion-demo) infinite;
+}
+
+.demos[data-playing='true'] .pulse {
+  animation: motion-demo-pulse var(--motion-demo) infinite;
+}
+
+@keyframes motion-demo-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes motion-demo-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Durations, drawn to scale. */
+.bar {
+  display: block;
+  block-size: var(--size-100);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-brand-primary-bold-default);
+}
+
+/* Easing curves: progress over time. */
+.curves {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2xl);
+}
+
+.curves > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  align-content: start;
+  inline-size: 14rem;
+}
+
+.curve {
+  display: block;
+  inline-size: var(--size-1250);
+  overflow: visible;
+}
+
+.curveGuide {
+  fill: none;
+  stroke: var(--color-border-default);
+  stroke-width: var(--border-width-sm);
+  stroke-dasharray: 2 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.curveLine {
+  fill: none;
+  stroke: var(--color-background-brand-primary-bold-default);
+  stroke-width: var(--border-width-md);
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Applying motion */
+
+.levels {
+  display: grid;
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.levels > li {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 72ch;
+  padding-block: var(--spacing-lg);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+/* Exceptions note */
+
+.exceptions {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-sunken-default);
+}
+
+.exceptions ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+/* The page's own demos follow the reduced-motion rule, with the same selectors that add motion. */
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .travel {
+    transition-duration: 0ms;
+  }
+
+  .demos[data-playing='true'] .spin,
+  .demos[data-playing='true'] .pulse {
+    animation: none;
+  }
+
+  .reducedNote {
+    display: block;
+  }
+}

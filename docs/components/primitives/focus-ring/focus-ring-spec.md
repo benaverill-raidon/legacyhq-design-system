@@ -8,7 +8,7 @@ Focus Ring is a primitive used to visually indicate the currently focused intera
 ### Description
 Use Focus Ring to provide consistent focus styling across interactive components such as buttons, form controls, links, and custom pressable elements. It should appear when an element receives keyboard focus or otherwise requires visible focus indication.
 
-### Category
+### Tier
 Primitive
 
 ### Design Reference
@@ -185,7 +185,8 @@ Mapping:
 | default | `--border-width-md` |
 
 ### Radius
-Focus Ring should inherit or align with the focused element radius where possible.
+The ring follows the focused element's own radius: an outline takes the shape of the element's
+`border-radius`, which the component sets. Focus Ring sets no radius of its own.
 
 ### Offset
 Use `2px` outline offset for v1.
@@ -310,4 +311,43 @@ None.
 - Tokenized focus offset
 - Inset focus ring
 - Focus ring utility package
-- Per-component radius inheritance strategy
+- Per-component ring radius different from the element's own (an outline can't do this; it would
+  need a pseudo-element ring)
+
+---
+
+## Composition and custom properties (as built)
+
+There are two entry points to the same CSS. The `FocusRing` component clones its single child and
+merges `focusRing` + `focusRingDefault` (or only `focusRingDisabled` when `disabled`) onto its
+`className`. `focusRingClassNames` exports the same three classes for a component to compose onto
+its own element alongside its own classes. Every system component that shows the ring (Button, Icon
+Button, Link, Link Button, Toggle Button, Toggle Icon Button, Tag, Avatar, Checkbox, Radio, Switch,
+Slider, Chip, Inline Message, Pagination, Menu, Tabs, Date Picker Calendar, Time Picker, Progress
+Indicator) composes `focusRingClassNames`; none wraps a child in `<FocusRing>`.
+
+The `:focus-visible` rule reads three custom properties. `.focusRing` declares two of them,
+`--focus-ring-color` (`--color-border-focus`) and `--focus-ring-width` (`--border-width-md`).
+`--focus-ring-offset` is a registered property (`@property`, `syntax: '<length>'`,
+`inherits: false`, `initial-value: 2px`, a raw length since there's no focus-offset token), and
+`.focusRing` declares no value for it. A component tunes its offset by setting
+`--focus-ring-offset` on the class of the element that carries the ring: Button, Icon Button, Tag,
+and the toggles set `var(--spacing-xxs)`; Checkbox and Radio set a negative offset so the ring
+circles the visible box, not the larger hit target; Menu rows set `calc(-1 * var(--border-width-md))`
+so the ring paints inside the row. With nothing from Focus Ring to tie with, that value wins
+whatever order the stylesheets load in, and because the property doesn't inherit, an element that
+sets none gets 2px, never a parent's offset. Components that draw the ring on a different element
+than the one carrying the class (Radio's preview state, Slider's thumb, Avatar) write their own
+`outline` rule reading the same variables.
+
+The ring's radius is the element's own `border-radius`, since an outline follows it. Focus Ring
+used to set `border-radius: inherit` on `.focusRing`, which overrode or lost to a component's own
+radius only by stylesheet order, and gave an element with no radius its parent's. It sets none now.
+A computed-style comparison of every Storybook story found no element whose radius or offset
+changed, so nothing relied on either.
+
+`[data-force-state='focus']` shows the ring without focus, so Storybook can present the focused
+state as a static reference. It's documentation-only, not part of the public API.
+
+`focusRingDisabled` sets `outline: none` on `:focus-visible`, which also removes the browser's
+default outline.

@@ -71,6 +71,8 @@ interface ToggleButtonProps
   size?: ToggleButtonSize;
   tone?: ToggleButtonTone;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   iconBefore?: React.ReactNode;
   iconAfter?: React.ReactNode;
@@ -84,7 +86,7 @@ interface ToggleButtonProps
 size: md
 tone: default
 isSelected: false
-isDisabled: false
+disabled: false
 type: button
 ```
 
@@ -167,10 +169,8 @@ lg
 Use shared dimension, spacing, typography, and radius tokens that match Button-family geometry:
 24/32/40/48px tall, 4/8/8/12px corner radius, 6/8/12/16px inline padding - verified against Figma.
 
-The icon-to-text gap is a constant 6px (`--measurement-6`) at every size - verified by measuring
-Figma's own auto-layout itemSpacing, which is identical across xs/sm/md/lg. This isn't one of the
-named spacing tokens (4/8/12/16px), so it's aliased directly to the raw 6px measurement rather than
-a semantic spacing token.
+The icon-to-text gap is a constant 6px (`--spacing-075`) at every size - verified by measuring
+Figma's own auto-layout itemSpacing, which is identical across xs/sm/md/lg.
 
 ## Icon support
 
@@ -189,6 +189,12 @@ Match Button icon behavior:
 - same disabled behavior
 
 Do not expose icon size as a public prop.
+
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Button. There's no press-state
+scale, and becoming selected is a plain color change with no pop or scale: transform-based
+feedback was removed from this component.
 
 ## Focus behavior
 
@@ -301,7 +307,7 @@ children
 size
 tone
 isSelected
-isDisabled
+disabled
 iconBefore
 iconAfter
 ```

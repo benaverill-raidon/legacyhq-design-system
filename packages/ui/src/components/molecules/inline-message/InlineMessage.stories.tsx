@@ -3,15 +3,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { InlineMessage } from './inline-message';
 import type { InlineMessageTone } from './inline-message.types';
 
-const tones: InlineMessageTone[] = ['default', 'info', 'success', 'warning', 'error'];
+const tones: InlineMessageTone[] = ['default', 'information', 'success', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Molecules/Inline Message',
+  title: 'Components/Feedback/Inline Message',
   component: InlineMessage,
   args: {
     title: 'Title',
     secondaryText: 'Secondary text',
-    tone: 'info',
+    tone: 'information',
     content: 'Additional detail about this message goes here.',
   },
   argTypes: {
@@ -131,20 +131,20 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Falls back automatically near a viewport edge</h3>
         <p style={captionStyle}>
-          Inline Message always prefers `bottomLeft` and delegates viewport-fit fallback to Popup -
-          click a row pinned to this row&apos;s edge to see it reposition on its own.
+          Inline Message always prefers <code>bottomLeft</code> and delegates viewport-fit fallback to
+          Popup: click a row pinned to this row&apos;s edge to see it reposition on its own.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <InlineMessage title="Left edge" tone="info" content="Repositioned automatically near the left edge." />
-          <InlineMessage title="Right edge" tone="info" content="Repositioned automatically near the right edge." />
+          <InlineMessage title="Left edge" tone="information" content="Repositioned automatically near the left edge." />
+          <InlineMessage title="Right edge" tone="information" content="Repositioned automatically near the right edge." />
         </div>
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
-        <h3 style={headingStyle}>Long detail content wraps inside Popup&apos;s default width</h3>
+        <h3 style={headingStyle}>Long detail content doesn&apos;t wrap: the popup is as wide as its content</h3>
         <InlineMessage
           title="Migration in progress"
-          tone="info"
+          tone="information"
           content="This matter is being migrated to the new document management system. Existing links and permissions are preserved, but search indexing may take up to 24 hours to catch up across every linked workspace."
         />
       </section>
@@ -153,7 +153,7 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Dark surface</h3>
         <div data-theme="dark" style={darkSurfaceStyle}>
           <div style={row}>
-            <InlineMessage title="Dark surface" tone="info" content="Reads correctly on a dark surface." />
+            <InlineMessage title="Dark surface" tone="information" content="Reads correctly on a dark surface." />
           </div>
         </div>
       </section>

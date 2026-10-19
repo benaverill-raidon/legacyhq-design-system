@@ -59,8 +59,8 @@
     },
     {
       "name": "Loading submit",
-      "description": "A loading form submit button that preserves its visible label.",
-      "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
+      "description": "A loading form submit button that keeps its size and accessible name.",
+      "jsx": "<Button prominence=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
       "props": {
         "appearance": "primary",
         "type": "submit",

@@ -12,7 +12,7 @@ description, required-field legend), and the spacing between section/row/footer 
 come from Field (wrapping Text Field, Select, Text Area, ...) passed as children; submission,
 validation, and each field's own state stay native and the consumer's.
 
-### Category
+### Tier
 Organism - it composes molecules (Field and its controls) into a complete UI section. Exported as
 four related parts (Form, FormSection, FormRow, FormFooter), the same separate-export pattern Tabs
 (Tabs + TabPanel) uses rather than dot-notation compounds.
@@ -65,7 +65,8 @@ Form (form.root, native <form>, flex column, gap 0)
 ### Structure Notes
 - The `<form>` itself has no gap; each block owns its own top spacing, so the layout is correct with
   or without a header.
-- `FormRow` makes each direct child an equal-width column (`flex: 1 1 0; min-inline-size: 0`).
+- `FormRow` makes each direct child an equal-width column (`flex: 1 1 0; min-inline-size: 0`). It
+  has no wrap or media query: a row stays on one line at every width.
 - `FormFooter` uses `data-align` (`end`/`start`) -> `justify-content: flex-end`/`flex-start`.
 
 ---

@@ -7,32 +7,44 @@ const sourceDir = path.join(iconsDir, 'source');
 const generatedDir = path.join(iconsDir, 'generated');
 const metadataDir = path.join(iconsDir, 'metadata');
 
+/*
+ * Single-purpose icons, matching the Figma Icons page's "Single-purpose icons" section: "reserved
+ * for a dedicated meaning and ... named after their associated function." Everything else is
+ * multi-purpose: "named descriptively after what they represent." administrative-account and
+ * firms-all are code-only; the rest mirror Figma.
+ */
 const singlePurposeNames = new Set([
   'administrative-account',
+  'agreement',
   'alive-and-well',
+  'all',
   'assets',
   'auto-edit',
   'bank-account',
   'closely-held-business',
   'contact-support',
   'counselpro-logo',
-  'data-error',
   'deceased',
   'disinherited',
   'document-add',
   'document-generation',
   'document-templates',
-  'family-tree',
+  'documents',
   'event-templates',
   'events',
+  'family-tree',
   'firms-all',
+  'incapacitated',
+  'income',
+  'institutions',
+  'integrations',
   'integrity-management',
   'investment-account',
   'life-insurance-policy',
+  'message',
+  'minor',
+  'miscellaneous-asset',
   'non-qualified-annuity',
-  'people-all',
-  'person-account',
-  'person-account-management',
   'qualified-plan',
   'real-estate',
   'referral',
@@ -40,12 +52,23 @@ const singlePurposeNames = new Set([
   'referral-existing-client',
   'referral-internet',
   'referral-newspaper',
+  'roadmap',
   'savings-bond',
   'schedule-meeting',
   'services-legal',
+  'signature',
+  'signed',
+  'task',
+  'task-complete',
+  'task-in-progress',
+  'task-not-started',
   'team-and-partners',
+  'transfer',
   'treasury-direct',
+  'trust',
+  'virtual',
   'wealth-management',
+  'will',
 ]);
 
 const keywordAliases = {
@@ -100,7 +123,7 @@ function getKeywords(name) {
 }
 
 function cleanSvg(svg) {
-  return svg
+  return removeEmptyGroups(svg
     .replace(/<\?xml[\s\S]*?\?>/g, '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/<!DOCTYPE[\s\S]*?>/gi, '')
@@ -113,7 +136,9 @@ function cleanSvg(svg) {
     .replace(/\s+data-[\w-]+="[^"]*"/g, '')
     .replace(/\s+width="[^"]*"/i, '')
     .replace(/\s+height="[^"]*"/i, '')
-    .replace(/\s+clipPath="url\([^)]+\)"/g, '')
+    // Figma exports wrap glyphs in a clip-path whose <clipPath> lives in <defs>, removed above; drop
+    // the reference too rather than leave it pointing at nothing.
+    .replace(/\s+clip-?[pP]ath="url\([^)]+\)"/g, '')
     .replace(/\s+fill-rule=/g, ' fillRule=')
     .replace(/\s+clip-rule=/g, ' clipRule=')
     .replace(/\s+stroke-linecap=/g, ' strokeLinecap=')
@@ -124,7 +149,23 @@ function cleanSvg(svg) {
     .replace(/\s+class=/g, ' className=')
     .replace(/\s+style="[^"]*"/g, '')
     .replace(/\s+id="[^"]*"/g, '')
-    .trim();
+    .trim());
+}
+
+/** Groups left empty once their clip-path, gradient, or foreignObject content is gone, nested or not. */
+function removeEmptyGroups(svg) {
+  let previous;
+  let next = svg;
+  do {
+    previous = next;
+    next = next.replace(/<g\b[^>]*>\s*<\/g>/g, '');
+  } while (next !== previous);
+  return next;
+}
+
+/** The distinct paints an icon uses, other than none: more than one means flattening loses color. */
+function paintsOf(svg) {
+  return new Set([...svg.matchAll(/\s(?:fill|stroke)="(?!none\b)([^"]+)"/gi)].map(([, paint]) => paint.toLowerCase()));
 }
 
 function normalizePaint(svg) {
@@ -179,7 +220,7 @@ async function main() {
     .sort((a, b) => a.localeCompare(b));
 
   const metadata = [];
-  const hardcodedPaint = [];
+  const flattenedPaint = [];
   const exports = [];
 
   for (const file of files) {
@@ -189,12 +230,12 @@ async function main() {
     const generatedFileName = `${name}-icon`;
     const sourcePath = path.join(sourceDir, file);
     const rawSvg = await readFile(sourcePath, 'utf8');
-    const normalizedSvg = normalizePaint(cleanSvg(rawSvg));
-    const { viewBox, content } = extractSvg(normalizedSvg, file);
-    const remainingPaint = [...content.matchAll(/\s(?:fill|stroke)="(?!none\b|currentColor\b|url\()[^"]+"/gi)];
+    const cleanedSvg = cleanSvg(rawSvg);
+    const { viewBox, content } = extractSvg(normalizePaint(cleanedSvg), file);
 
-    if (remainingPaint.length > 0) {
-      hardcodedPaint.push(file);
+    // Every paint becomes currentColor, so an icon drawn in more than one color loses it.
+    if (paintsOf(cleanedSvg).size > 1) {
+      flattenedPaint.push(file);
     }
 
     await writeFile(
@@ -216,8 +257,8 @@ async function main() {
   await writeFile(path.join(iconsDir, 'index.ts'), "export * from './generated';\nexport { default as iconMetadata } from './metadata/icons.json';\n");
   await writeFile(path.join(metadataDir, 'icons.json'), `${JSON.stringify(metadata, null, 2)}\n`);
 
-  if (hardcodedPaint.length > 0) {
-    console.warn(`Icons with unresolved hardcoded paint: ${hardcodedPaint.join(', ')}`);
+  if (flattenedPaint.length > 0) {
+    console.warn(`Multi-color icons flattened to one color: ${flattenedPaint.join(', ')}`);
   }
 
   console.log(`Generated ${metadata.length} icons.`);

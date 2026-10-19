@@ -17,15 +17,32 @@ Tooltip
 ## Public API
 
 ```ts
-interface TooltipProps {
+interface TooltipProps extends Omit<React.HTMLAttributes<HTMLElement>, 'content' | 'children' | 'className'> {
   content: React.ReactNode;
   children: React.ReactElement;
   truncate?: boolean;
   disabled?: boolean;
   delay?: number;
-  className?: string;
+  className?: string; // the bubble's, not the trigger's
+  ref?: React.Ref<HTMLElement>; // forwarded to the child
 }
 ```
+
+## Passing props through to the trigger
+
+Tooltip renders its child as the trigger, so anything a wrapper sets on the Tooltip element belongs
+on that child. Tooltip forwards its `ref` to the child (merged with the child's own ref) and passes
+every other prop it doesn't use itself to the child: `aria-*` and `data-*` attributes, `role`,
+`style` (merged with the child's), and event handlers (the child's runs first, then the one set on
+Tooltip, then Tooltip's own hover/focus behavior). A wrapper's value wins over the child's, except
+that `undefined` never erases the child's own value, and `aria-describedby` ids are kept from both.
+
+This is what lets a component that wires its trigger by cloning its child, such as Popup or Dropdown
+Menu, wrap a Tooltip: Popup's ref (which it measures to position the panel), `aria-expanded` and
+`aria-controls`, and Dropdown Menu's ref (for returning focus) and `aria-haspopup` all reach the real
+trigger. Chip's operator and value segments rely on it when a segment has a `tooltip`; before
+2026-10-17 Tooltip dropped them, so such a menu opened with `visibility: hidden` and the segment had
+no `aria-expanded`.
 
 ## Defaults
 
@@ -48,10 +65,17 @@ Tooltip opens on:
 
 Tooltip closes on:
 
-- pointer leave
+- pointer leave, unless the pointer moves onto the bubble (it then closes when the pointer leaves
+  the bubble, other than back onto the trigger)
 - blur
-- Escape
+- Escape, wherever focus is and whether hover or focus showed it (WCAG 1.4.13), through Popup's
+  `closeOnEscape`; as the topmost layer, it closes before a menu or dialog under it
 - `disabled={true}`
+
+The bubble is hoverable (WCAG 1.4.13): it takes pointer events, and a `::before` strip as tall as
+Popup's gap (`--spacing-sm`) on the trigger's side, chosen by the panel's `data-alignment`, bridges
+the gap so the pointer can cross from trigger to bubble. Leaving the trigger for the bubble (by
+`relatedTarget`) doesn't hide it; leaving the bubble for anywhere but the trigger does.
 
 Preserve consumer event handlers. If a consumer handler calls `event.preventDefault()`, Tooltip must skip its corresponding internal behavior.
 
@@ -71,6 +95,8 @@ Tooltip content must remain non-interactive.
 - Preserve existing `aria-describedby` values.
 - Add the tooltip id to `aria-describedby` only while the tooltip is rendered.
 - Do not create extra keyboard tab stops.
+- Pass through the `aria-*` attributes a wrapper sets on Tooltip (see above), so a menu button's
+  `aria-expanded`/`aria-controls`/`aria-haspopup` aren't lost.
 - Tooltip content must not replace the trigger's accessible name.
 
 ## Disabled native controls
@@ -88,18 +114,25 @@ Requirements:
 
 Tooltip renders through `Popup` (`packages/ui/src/components/primitives/popup`) with `unstyled` set,
 passing `alignment="topCenter"`, `role="tooltip"`, `manageTriggerAria={false}`, and both
-`closeOnEscape`/`closeOnOutsideClick` set to `false`. Popup owns:
+`closeOnOutsideClick` set to `false`. Popup owns:
 
 - the portal at `document.body`, avoiding clipping inside overflow containers
 - positioning relative to the trigger, and falling back across its six alignments (starting with
   `topCenter`, then `bottomCenter`, matching Popup's same-alignment-opposite-side fallback
   preference) when the preferred one would overflow
 - recalculating on trigger/panel resize, window resize, and scroll
-- the mount fade animation
+- the mount fade animation (`fade-quick`)
+- Escape: Tooltip leaves `closeOnEscape` on and hides when Popup calls `onOpenChange(false)`, so
+  Escape reaches a tooltip shown by hover too, and only the topmost layer acts on it
+- the stacking order: the bubble sits at `LAYERS.popup`, above Modal Dialog and Toast Group
 
-Tooltip does not use Popup's own dismissal (`closeOnEscape`/`closeOnOutsideClick` are both `false`)
-because Tooltip already owns dismissal itself via hover/focus/blur/Escape-on-the-trigger, which
-predates Popup and has different semantics (a hover-triggered hint has no "outside click" concept).
+There is no matching fade-out: React removes the bubble as soon as it hides, so the exit is
+instant. Animating the exit would mean deferring the unmount until the animation finishes.
+
+Tooltip does not use Popup's outside-click dismissal (`closeOnOutsideClick` is `false`): a
+hover-triggered hint has no "outside click" concept, and it owns hover/focus/blur itself. It used
+to handle Escape itself too, only on the trigger's `keydown`, so a tooltip shown by hover couldn't
+be dismissed; it now uses Popup's Escape.
 Tooltip also does not use Popup's `aria-expanded`/`aria-controls` wiring (`manageTriggerAria={false}`)
 since those are disclosure-widget attributes that don't apply to a supplemental hint - Tooltip's own
 `aria-describedby` wiring, unchanged, is the correct ARIA pattern here.
@@ -111,21 +144,19 @@ tradeoff for having positioning logic originate from one place across every Popu
 ## Styling and tokens
 
 Tooltip uses semantic color, typography, spacing, and radius tokens: background
-(`color-background-neutral-bold-default`), content color (`color-content-inverse`), corner radius
+(`color-background-neutral-bold-default`), content color (`color-content-inverse-default`), corner radius
 (`border-radius-sm`, 4px), vertical padding (`spacing-xxs`, 2px), and content gap (`spacing-xs`,
 4px) - all verified directly against Figma's tooltip-primitive frame.
 
-Horizontal padding is `--measurement-6` (6px) - a raw measurement rather than a named spacing token,
-since Figma's own value doesn't land on the 4/8/12/16px spacing scale. A prior implementation used
+Horizontal padding is `--spacing-075` (6px), matching Figma. A prior implementation used
 `--spacing-sm` (8px) here, which was 2px too wide.
 
 There is no arrow/caret pointing at the trigger - Figma's tooltip is a plain rounded rectangle.
 
-Tooltip-specific layout constraints remain private implementation values:
-
-- z-index: `1`
-- truncated max width: `420px`
-- wrapped max width: `240px`
+The max widths are component tokens: `--component-tooltip-max-width-truncated` (420px) and
+`--component-tooltip-max-width-wrapped` (240px). `--component-tooltip-z-index` (1) exists in the
+token data but no stylesheet reads it; the bubble's z-index is Popup's `LAYERS.popup`
+(`primitives/layers.ts`), since z-index isn't tokenized.
 
 ## Icon-only controls
 
@@ -141,11 +172,14 @@ External composition remains supported:
 
 ```tsx
 <Tooltip content="Custom explanation">
-  <IconButton aria-label="Edit" tooltip={false}>
+  <IconButton aria-label="Edit">
     <EditIcon />
   </IconButton>
 </Tooltip>
 ```
+
+Icon Button reads `TooltipScopeContext` (`tooltip-context.ts`, provided by every Tooltip) and skips
+its own `aria-label` tooltip inside a Tooltip, so `tooltip={false}` isn't needed here.
 
 ## Storybook
 

@@ -1,148 +1,253 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { AssetsIcon, TaskIcon, TrustIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import tagStyles from '../../atoms/tag/tag.module.css';
+import { Chip } from '../chip';
+import { ChipGroup } from '../chip-group';
+import { TagGroup } from './tag-group';
+import tagGroupStyles from './tag-group.module.css';
 import * as TagGroupStories from './TagGroup.stories';
 
 <Meta of={TagGroupStories} name="Docs" />
 
-# Tag Group
+export const records = [
+  { id: 'trust-1', label: 'Averill Family Living Trust', tone: 'green', href: '#', elemBefore: <TrustIcon size="sm" /> },
+  { id: 'asset-1', label: "Ben's Investments", tone: 'blue', href: '#', elemBefore: <AssetsIcon size="sm" /> },
+  { id: 'task-1', label: 'Sign the pour-over will', tone: 'teal', href: '#', elemBefore: <TaskIcon size="sm" /> },
+  { id: 'asset-2', label: 'Vacation Home', tone: 'blue', href: '#', elemBefore: <AssetsIcon size="sm" /> },
+  { id: 'task-2', label: 'Fund the trust', tone: 'teal', href: '#', elemBefore: <TaskIcon size="sm" /> },
+  { id: 'asset-3', label: 'Joint checking', tone: 'blue', href: '#', elemBefore: <AssetsIcon size="sm" /> },
+];
 
-Tag Group lays out a row of Tags that wraps as it fills, with an optional overflow tag - a "+N more"
-Tag that opens a Dropdown Menu holding whichever tags got truncated. It composes Tag and Dropdown
-Menu directly; it adds no visual styling of its own beyond the wrapping row layout.
+export const labels = (count) => Array.from({ length: count }, (_, index) => ({ id: `tag-${index + 1}`, label: `Tag ${index + 1}` }));
 
-<Canvas of={TagGroupStories.Playground} />
+<Unstyled>
+<ComponentPage>
 
-## When to use
+<ComponentHeader id="tag-group" example={<TagGroup tags={records} maxVisible={3} size="md" />}>
+  Tag Group lays out the Tags on a record in a row that wraps as it fills. Past `maxVisible`, the
+  rest move into a menu behind a “+N more” tag.
+</ComponentHeader>
 
-- A list of entity references, classifications, or filters that may not all fit on one line.
-- Anywhere a fixed number of tags should show inline, with the rest reachable through a "+N more"
-  affordance instead of silently overflowing or wrapping indefinitely.
+<Section title="When to use">
 
-## When not to use
+<Usage>
+<UseFor>
 
-- **A single tag.** Use Tag directly.
-- **A fixed, small set of tags that always fits.** `maxVisible` is optional for exactly this reason -
-  omit it and every tag renders, wrapping onto new lines as needed with no overflow tag at all.
-- **A group of Buttons.** Use Button Group.
+- The records linked to a record: a task's trust, assets, and notes, as Tags.
+- The categories on a record.
+- A list of tags that can grow, with `maxVisible` keeping it to a fixed number.
 
-## Anatomy
+</UseFor>
+<UseInstead>
 
-- **Visible tags** - the first `maxVisible` tags (or all of them, when `maxVisible` is omitted),
-  each rendered as a real `Tag` with every one of its own props (`tone`, `href`, `isRemovable`,
-  `elemBefore`, ...) forwarded through unchanged, except `size`, which Tag Group applies uniformly.
-- **Overflow tag** - present only when `tags.length` exceeds `maxVisible`. A `Tag` with
-  `isInteractive` (a plain focusable button, no navigation or remove affordance of its own) reading
-  `+${hiddenCount} more` by default, wrapped in a Dropdown Menu.
-- **Overflow panel** - a Dropdown Menu's Menu, listing every truncated tag as a row (`label` and a
-  decorative `leadingElement` from that tag's own `elemBefore`).
+- **One tag:** <DocLink to="Components/Data Display/Tag" />.
+- **Filters or search scopes people change:** <DocLink to="Components/Forms/Chip Group" />.
+- **People:** <DocLink to="Components/Data Display/Avatar Group" />, the same row with an overflow menu, for avatars.
+- **A row of actions:** <DocLink to="Components/Actions/Button Group" />.
 
-## Usage guidance
+</UseInstead>
+</Usage>
 
-### `maxVisible` is optional - so is the overflow tag
+</Section>
 
-```tsx
-<TagGroup tags={tags} />
-```
+<Section title="Anatomy">
 
-With no `maxVisible`, every tag renders and wraps onto new lines as the row fills - there is no
-overflow tag at all. This is the common case for a short, bounded list.
+<Anatomy specimen={<TagGroup tags={labels(6)} maxVisible={3} />}>
+  <Part name="root" target={tagGroupStyles.root}>A `div` that lays the tags out in a row, 8px apart in both directions, wrapping as it fills. It has no padding, border, or fill.</Part>
+  <Part name="visible tags" target={tagStyles.root}>The first `maxVisible` tags, each a real Tag. All of them show when `maxVisible` is unset.</Part>
+  <Part name="overflow tag" target={tagStyles.root} nth={4}>Only when tags are hidden: a Tag that's a button, reading `+3 more` by default. It opens the overflow panel.</Part>
+  <Part name="overflow panel">Shown only while open: a Dropdown Menu listing each hidden tag by its text, with its icon.</Part>
+</Anatomy>
 
-```tsx
-<TagGroup tags={tags} maxVisible={10} />
-```
+</Section>
 
-Once `tags.length` exceeds 10, the first 10 render as tags and the rest collapse behind a
-`+${hiddenCount} more` tag.
+<Section title="Variants">
 
-### `alignment` controls where the overflow tag sits, not which tags are visible
+<Subsection title="Sizes">
 
-Matches the real Figma component exactly (filed under the "Tag Group" page, though the component
-itself is named `tab-group` in Figma - a naming typo verified directly against the file, not a
-mismatch to reconcile).
+`sm` (24px), the default, and `md` (32px). One `size` sets every tag and the overflow tag; there's no
+size per tag. Tag Group defaults to `sm`, where a single Tag defaults to `md`.
 
-```tsx
-<TagGroup tags={tags} maxVisible={10} alignment="right" />
-```
+<Example of={TagGroupStories.Sizes} />
 
-`left` (default) renders the overflow tag trailing, after the visible tags. `right` renders it
-leading, before them. Either way the same tags are visible and the same tags are truncated -
-`alignment` only changes render order.
+</Subsection>
 
-<Canvas of={TagGroupStories.Overflow} />
+<Subsection title="Alignment">
 
-### One size per group, including the overflow tag
+`alignment` sets where the overflow tag sits: after the visible tags with `left`, the default, or
+before them with `right`. It doesn't change which tags show or the order they're in, and the menu
+always opens below the overflow tag, aligned to its left edge. In Figma, the component is named
+`tab-group`.
 
-`size` (`'sm'` | `'md'`, default `'sm'`) maps to Figma's own `size` axis - `sm (24)` and `md (32)` -
-and applies to every visible tag *and* the overflow tag together. That mirrors the source: inside any
-one Figma variant, all eleven `tag` instances carry that variant's size, so there is no per-tag
-mixing to model. Note `'sm'` is deliberately not Tag's own default (`'md'`) - it matches the first
-variant in Figma's grid.
+<Example of={TagGroupStories.Overflow} />
 
-```tsx
-<TagGroup tags={tags} maxVisible={10} size="md" />
-```
+</Subsection>
 
-<Canvas of={TagGroupStories.Sizes} />
+</Section>
 
-### Tag Group never assumes what selecting a truncated tag means
+<Section title="Behavior">
 
-Same "never assume" rule Menu and Dropdown Menu already follow. Selecting a row in the overflow
-panel calls `onOverflowTagSelect(tag, event)` with that tag's own data - Tag Group does not
-navigate, call `onRemove`, or close the panel on its own:
+<Subsection title="Wrapping and overflow">
 
-```tsx
-<TagGroup
-  tags={tags}
-  maxVisible={10}
-  onOverflowTagSelect={(tag) => {
-    if (tag.href) {
-      router.push(tag.href);
-    }
-  }}
+With no `maxVisible`, every tag shows and the row wraps onto new lines, with no overflow tag. Once
+there are more tags than `maxVisible`, the first `maxVisible` show and the rest move into the
+overflow menu, in order. `maxVisible={0}` leaves only the overflow tag.
+
+<Example of={TagGroupStories.Wrapping} caption="Eight tags in a 360px container, with no maxVisible." />
+
+</Subsection>
+
+<Subsection title="Choosing a hidden tag">
+
+The overflow tag opens and closes the menu. Each row shows the tag's text and its `elemBefore` icon;
+a tag with `isDisabled` is a disabled row. The tag's tone, link, and remove button don't carry into
+the menu.
+
+Choosing a row calls `onOverflowTagSelect` with that tag and the event. The menu then closes and
+focus returns to the overflow tag. Tag Group doesn't follow the tag's `href` or call its `onRemove`:
+do what the tag means from the callback. To keep the menu open, call `event.preventDefault()` in it.
+
+<Example of={TagGroupStories.EdgeCases} caption="Choosing a hidden tag, and one tag under maxVisible." />
+
+</Subsection>
+
+<Subsection title="Each tag is a Tag">
+
+Every prop on an item except `size`, `children`, and `isInteractive` goes to its Tag, and `label` is
+its text. So a visible tag can link with `href`, show an icon with `elemBefore`, or be removed with
+`isRemovable` and `onRemove`. Tag Group doesn't remove tags itself: take the tag out of `tags` in
+`onRemove`.
+
+<Example of={TagGroupStories.Content} caption="Linked records with tones and icons, and a removable tag." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Set maxVisible on a list that can grow, so it keeps to one line." code={`<TagGroup tags={tags} maxVisible={4} />`}>
+  <TagGroup tags={labels(12)} maxVisible={4} />
+</Do>
+<Dont caption="Show every tag on a long list. The row wraps onto line after line and pushes the page down." code={`<TagGroup tags={tags} />`}>
+  <TagGroup tags={labels(12)} />
+</Dont>
+<Do
+  caption="Follow a hidden tag's link from onOverflowTagSelect, which is the only thing a menu row calls."
+  code={`<TagGroup
+    tags={tags}
+    maxVisible={4}
+    onOverflowTagSelect={(tag) => tag.href && navigate(tag.href)}
+/>`}
 />
-```
+<Dont
+  caption="Expect a hidden tag's href to work from the menu. The row isn't a link, so nothing happens."
+  code={`<TagGroup tags={tags} maxVisible={4} />`}
+/>
+<Do
+  caption="Use Chip Group for filters and search scopes people change."
+  code={`<ChipGroup aria-label="Search scopes">
+    <Chip mode="search" label="Matters" isSelected />
+    <Chip mode="search" label="Documents" />
+</ChipGroup>`}
+>
+  <ChipGroup aria-label="Search scopes">
+    <Chip mode="search" label="Matters" isSelected />
+    <Chip mode="search" label="Documents" />
+  </ChipGroup>
+</Do>
+<Dont caption="Build filters from removable tags. Tags are references to records, and they can't show which filter is on or change it." code={`<TagGroup tags={activeFilters.map((filter) => ({ ...filter, isRemovable: true }))} />`} />
+</Guidelines>
 
-<Canvas of={TagGroupStories.EdgeCases} />
+</Section>
 
-### Realistic content
+<Section title="Accessibility">
 
-<Canvas of={TagGroupStories.Content} />
+- The root is a `div` with no role or name, and Tag Group adds nothing to the visible tags: each is a
+  Tag, with its own link and remove button.
+- The overflow tag is a native `button`. Its visible text, `+5 more` by default, is its accessible
+  name. It gets `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` from Dropdown Menu.
+- The menu has `role="menu"` and is named by `overflowMenuAriaLabel`, “5 more tags” by default.
+  Translate it and `overflowLabel` with the rest of your interface. Each row is a `menuitem` named
+  by the tag's text; its icon is hidden from assistive technology.
+- Opening the menu moves focus to the first enabled row. Choosing a row, Escape, or Tab out of the
+  menu closes it and returns focus to the overflow tag.
+- Focus shows the shared Focus Ring on each link, remove button, and the overflow tag.
 
-## Do / Don't
+<Keyboard>
+  <Key keys="Tab">Moves through the tags' links and remove buttons and the overflow tag, in the order they show. In the open menu, closes it and returns focus to the overflow tag.</Key>
+  <Key keys="Enter">On the overflow tag, opens or closes the menu. On a row, chooses that tag, closes the menu, and returns focus to the overflow tag.</Key>
+  <Key keys="Space">The same as Enter, except on a link.</Key>
+  <Key keys="Arrow Down">In the menu, moves to the next enabled row, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Up">In the menu, moves to the previous enabled row, wrapping from the first to the last.</Key>
+  <Key keys="Home">In the menu, moves to the first enabled row.</Key>
+  <Key keys="End">In the menu, moves to the last enabled row.</Key>
+  <Key keys="Escape">Closes the menu and returns focus to the overflow tag.</Key>
+</Keyboard>
 
-**Do** pass every tag's own props (`tone`, `href`, `isRemovable`, `onRemove`, `elemBefore`, ...)
-directly on each `TagGroupItem` - they forward straight to the rendered `Tag`.
+</Section>
 
-**Don't** set `size` per item - Tag Group applies one `size` uniformly, including to the overflow
-tag, matching Figma (which has no per-tag size mixing within one group).
+<Section title="API">
 
----
+<PropsTable of={TagGroupStories} />
 
-**Do** wire `onOverflowTagSelect` when truncated tags need to be reachable (navigate, remove, etc.).
+Each item in `tags` takes every Tag prop except `size`, `children`, and `isInteractive`, plus a
+required `id` that must be unique in the group and a `label`, the tag's text. Tag Group doesn't pass
+other attributes to its root.
 
-**Don't** expect selecting a truncated tag to do anything on its own - same rule as a Menu item's
-`onSelect`.
+</Section>
 
-## API
+<Section title="Design tokens">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>tags</code></td><td><code>TagGroupItem[]</code></td><td>-</td><td>Required. Each item is every one of Tag's own props (minus <code>size</code>/<code>children</code>/<code>isInteractive</code>) plus a required <code>id</code> and a <code>label</code> (forwarded to Tag as <code>children</code>).</td></tr>
-    <tr><td><code>maxVisible</code></td><td><code>number</code></td><td>-</td><td>Once exceeded, only the first <code>maxVisible</code> tags render - the rest are truncated behind the overflow tag. No truncation when omitted.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'sm'</code></td><td>Applied uniformly to every tag, including the overflow tag.</td></tr>
-    <tr><td><code>alignment</code></td><td><code>'left' | 'right'</code></td><td><code>'left'</code></td><td>Where the overflow tag renders - trailing (<code>left</code>) or leading (<code>right</code>). Does not change which tags are visible.</td></tr>
-    <tr><td><code>overflowLabel</code></td><td><code>(hiddenCount: number) =&gt; ReactNode</code></td><td><code>(n) =&gt; `+${n} more`</code></td><td>The overflow tag's text.</td></tr>
-    <tr><td><code>overflowMenuAriaLabel</code></td><td><code>string</code></td><td><code>`${hiddenCount} more tags`</code></td><td>Accessible name for the overflow Menu panel.</td></tr>
-    <tr><td><code>onOverflowTagSelect</code></td><td><code>(tag: TagGroupItem, event) =&gt; void</code></td><td>-</td><td>Called when a truncated tag is selected from the overflow panel.</td></tr>
-    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Applied to the root row element.</td></tr>
-  </tbody>
-</table>
+Tag Group's own stylesheet sets one token, the gap between tags. The tags and the menu keep their
+own tokens, listed on their pages.
 
-## Related components
+<TokensTable id="tag-group" />
 
-- **Tag** - every visible tag and the overflow tag itself; the overflow tag's `isInteractive`
-  button form was added to Tag specifically to support this composition.
-- **Dropdown Menu** - the overflow tag's floating panel.
-- **Menu** - the overflow panel's content, one row per truncated tag.
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Tag" />, each visible tag and the overflow tag, and the component for one tag.
+- <DocLink to="Components/Data Display/Avatar Group" />, the same row-with-overflow pattern for people.
+- <DocLink to="Components/Forms/Chip Group" /> for filters and search scopes people change.
+- <DocLink to="Components/Actions/Dropdown Menu" />, the overflow menu and its focus handling.
+- <DocLink to="Components/Actions/Menu" />, the rows inside the overflow menu.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads tag-group.types.ts, the design tokens read tag-group.module.css, and the Figma
+  source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

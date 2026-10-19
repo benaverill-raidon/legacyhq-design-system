@@ -5,13 +5,13 @@
 ### Name
 Table
 
-### Category
+### Tier
 Organism
 
 ### Related Components
-- Pagination (footer), Checkbox (selection), Text Field / Chip mode="filter" (toolbar)
+- Checkbox (selection), Text Field (search), Select + Icon Button (footer), Chip mode="filter" (consumer-rendered active filters)
 - Button / Icon Button (header + toolbar actions)
-- Skeleton (loading rows), Empty State (empty)
+- Skeleton (loading rows), Empty State (a good `empty` slot)
 
 ---
 
@@ -53,11 +53,12 @@ states right in one place keeps those pages consistent and correct.
 ## Content
 
 ### What content can be displayed?
-- Header: a title, a description, and actions (Buttons + an overflow Icon Button)
-- Toolbar: search field (flex, max 600px) + filter/configure Icon Buttons + active Chip mode="filter"
-  pills + "Clear all filters" action
+- Header: a title and a description
+- Toolbar: a search Icon Button that opens a 280px search field + filter/configure Icon Buttons +
+  `actions` (or the selection bar while rows are selected), then active Chip mode="filter" pills +
+  a "Clear filters" action
 - Grid: sortable column headers, a selection column, and cells rendering any content via `render`
-- Footer: Pagination
+- Footer: items-per-page Select, range text, page Select, page count, previous/next Icon Buttons
 
 ### Character Limits
 None - long cell content wraps or is rendered by the consumer; the grid scrolls horizontally.
@@ -74,7 +75,7 @@ None - long cell content wraps or is rendered by the consumer; the grid scrolls 
 ## States
 
 Required:
-- default, loading (skeleton rows + aria-busy), empty (Empty State)
+- default, loading (skeleton rows + aria-busy), empty (the `empty` slot, or a default "No results" message)
 - row hover, row selected, sorted (aria-sort on the header)
 
 Not Required:
@@ -90,11 +91,12 @@ Yes - a real `<table>` with `thead`/`tbody`/`th scope="col"`/`td` and a visually
 
 ### Is sorting accessible?
 Yes - sortable headers set `aria-sort` (ascending/descending/none) and wrap the label in a `<button>`
-labelled "Sort by {column}".
+named by the column's label. Each header cell is named by its label alone, so the resize handle inside
+it isn't read with every cell.
 
 ### Is selection accessible?
 Yes - real Checkboxes; the header select-all is labelled and goes indeterminate for a partial
-selection.
+selection. Changes to the selected count are announced in a polite live region.
 
 ### Can it be operated by keyboard?
 Yes - toolbar controls, sort buttons, checkboxes, in-cell controls, and pagination are all reachable;
@@ -117,11 +119,12 @@ Give the table an accessible name; pass a stable `getRowId` when selecting; keep
 Column-config driven (`columns` + `data`); cells render arbitrary content via `column.render` rather
 than a component-per-content-type. Batteries-included but controllable: sorting and selection are
 owned by default with controlled overrides; pagination is client-side (`pageSize`) or server-driven
-(`manualPagination`); search is controlled. Columns resize by default (drag / Arrow keys). Selection
+(`manualPagination`); search is uncontrolled by default or controlled with `searchValue`. Columns
+resize by default (drag / Arrow keys); each handle reports its width from the start. Selection
 is checkbox-only (rows are never clickable); selecting rows shows a selection bar (count +
-`bulkActions`). Follow the interaction rules: checkbox = selection, Link = navigation (strong Link for
+`bulkActions`) in place of the toolbar's buttons. Follow the interaction rules: checkbox = selection, Link = navigation (strong Link for
 the identifier, default for other entity links), Button = action; in-row controls act independently.
-The empty state uses the shared Empty State in its informative (sunken) treatment. Composes existing
+The default empty content is Table's own "No results" message on the deep surface. Composes existing
 components and uses only semantic tokens - no new tokens. The Figma page is still in-progress (✅⏲️);
 single-select, the column ⋮ menu, column reorder, sticky columns, and row expansion are deferred. See
 `table-spec.md` for the full reasoning.

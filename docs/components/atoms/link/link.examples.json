@@ -6,7 +6,7 @@
     },
     {
       "name": "External",
-      "jsx": "<Link href='https://example.com' external>Documentation</Link>"
+      "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>"
     }
   ]
 }

@@ -1,33 +1,9 @@
 # Key Value List
 
-Key Value List is a thin layout wrapper that stacks Key Value Pair items vertically inside a
-semantic `<dl>` element. It provides the description list structure that screen readers need to
-announce key/value pairs correctly.
+Key Value List's usage guidance is its Storybook Docs page (Components / Data Display / Key Value List),
+written in [`key-value-list.mdx`](../../../../packages/ui/src/components/molecules/key-value-list/key-value-list.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-## When to use
-
-- Wrapping multiple Key Value Pair items into a single description list.
-- Any metadata panel, detail sidebar, or settings overview with label/value rows.
-
-## When not to use
-
-- **A single isolated key/value pair.** You can use Key Value Pair alone, but wrap it in a `<dl>`
-  yourself for correct semantics.
-- **A data table.** If the data has sortable/filterable columns, use a table.
-
-## API
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `React.ReactNode` | (required) | Key Value Pair children. |
-| `className` | `string` | - | Composes with the `<dl>` element's class list. |
-
-## Accessibility
-
-- Renders a `<dl>` element — screen readers announce the description list structure.
-- Each child Key Value Pair provides the `<dt>`/`<dd>` semantics.
-
-## Related components
-
-- **Key Value Pair** — the individual row this list wraps.
-- **Text Field** / **Text Area** — `appearance="inline"` for inline editing inside pairs.
+For implementation detail, see [`key-value-list-spec.md`](key-value-list-spec.md); for the machine-readable contract,
+[`key-value-list.contract.json`](key-value-list.contract.json).

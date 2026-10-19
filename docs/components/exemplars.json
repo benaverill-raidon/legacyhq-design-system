@@ -76,8 +76,8 @@
         }
       },
       {
-        "name": "Spacious hit box",
-        "description": "A visually small icon centered in a larger click/touch target.",
+        "name": "Spacious box",
+        "description": "An icon centered in a 24px box, to line up with 24px slots. Not a hit area.",
         "jsx": "<CloseIcon spacing=\"spacious\" />",
         "props": {
           "spacing": "spacious"
@@ -271,7 +271,19 @@
       {
         "name": "Disabled interactive avatar",
         "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
-        "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />",
+        "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />",
+        "props": {}
+      },
+      {
+        "name": "Selectable interactive avatar",
+        "description": "An avatar people pick: given isSelected, the button is a toggle with aria-pressed, and its name is \"Ben Averill, busy\" without the word selected.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />",
+        "props": {}
+      },
+      {
+        "name": "Translated status words",
+        "description": "The words Avatar adds to the accessible name are props with English defaults.",
+        "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />",
         "props": {}
       },
       {
@@ -301,11 +313,11 @@
       },
       {
         "name": "Unread notification count",
-        "description": "Badge with accessible context for an otherwise ambiguous value.",
-        "jsx": "<Badge ariaLabel=\"1 unread notification\">1</Badge>",
+        "description": "Badge with a text alternative for an otherwise ambiguous value: screen readers read the label, as hidden text, in place of the number.",
+        "jsx": "<Badge label=\"1 unread notification\">1</Badge>",
         "props": {
           "children": "1",
-          "ariaLabel": "1 unread notification"
+          "label": "1 unread notification"
         }
       },
       {
@@ -345,12 +357,17 @@
       {
         "name": "Interactive badge",
         "jsx": "<Badge onClick={handleClick}>1</Badge>",
-        "reason": "Badge is non-interactive and does not support action behavior."
+        "reason": "Badge is non-interactive: it isn't focusable and has no button role, so a click handler on it can't be reached by keyboard. Use Button or Icon Button."
       },
       {
         "name": "Status text",
         "jsx": "<Badge>Active</Badge>",
         "reason": "Use Tag or Label for status/classification text."
+      },
+      {
+        "name": "aria-label on the badge",
+        "jsx": "<Badge aria-label=\"1 unread notification\">1</Badge>",
+        "reason": "The span has no role, so screen readers may ignore aria-label. Use label, which Badge renders as hidden text."
       }
     ],
     "exemplarCompleteness": "full"
@@ -419,8 +436,8 @@
       },
       {
         "name": "Loading submit",
-        "description": "A loading form submit button that preserves its visible label.",
-        "jsx": "<Button appearance=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
+        "description": "A loading form submit button that keeps its size and accessible name.",
+        "jsx": "<Button prominence=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
         "props": {
           "appearance": "primary",
           "type": "submit",
@@ -586,7 +603,7 @@
       {
         "name": "Bold",
         "description": null,
-        "jsx": "<Label appearance='bold'>Approved</Label>",
+        "jsx": "<Label emphasis='bold'>Approved</Label>",
         "props": {}
       }
     ],
@@ -608,7 +625,7 @@
       {
         "name": "External",
         "description": null,
-        "jsx": "<Link href='https://example.com' external>Documentation</Link>",
+        "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>",
         "props": {}
       }
     ],
@@ -702,9 +719,9 @@
         "props": {}
       },
       {
-        "name": "Inverted",
-        "description": "Appears on a dark or bold surface.",
-        "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverted\" label=\"Document setup\" />",
+        "name": "Inverse",
+        "description": "Appears on a bold surface (color-background-neutral-bold-default).",
+        "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />",
         "props": {}
       },
       {
@@ -904,13 +921,13 @@
       {
         "name": "Removable",
         "description": null,
-        "jsx": "<Tag onRemove={() => handleRemove('filter')}>Filter</Tag>",
+        "jsx": "<Tag isRemovable onRemove={() => handleRemove('filter')}>Filter</Tag>",
         "props": {}
       },
       {
         "name": "Linked & Removable",
         "description": null,
-        "jsx": "<Tag href='/asset/1' onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+        "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
         "props": {}
       }
     ],
@@ -1108,9 +1125,9 @@
       {
         "name": "Custom accessible name",
         "description": "Overriding the default 'Breadcrumb' nav label.",
-        "jsx": "<Breadcrumbs\n  ariaLabel=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
+        "jsx": "<Breadcrumbs\n  aria-label=\"You are here\"\n  items={[\n    { label: 'Docs', href: '/docs' },\n    { label: 'Components' },\n  ]}\n/>",
         "props": {
-          "ariaLabel": "You are here"
+          "aria-label": "You are here"
         }
       },
       {
@@ -1143,7 +1160,7 @@
       {
         "name": "Default horizontal group",
         "description": "Two related actions in a row.",
-        "jsx": "<ButtonGroup>\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "jsx": "<ButtonGroup>\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
         "props": {}
       },
       {
@@ -1163,7 +1180,7 @@
       {
         "name": "Labelled group",
         "description": "role=group is added automatically once aria-label is present.",
-        "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button appearance=\"primary\">Save</Button>\n  <Button appearance=\"subtle\">Cancel</Button>\n</ButtonGroup>",
+        "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",
         "props": {
           "aria-label": "Document actions"
         }
@@ -1183,8 +1200,8 @@
       },
       {
         "name": "Segmented/exclusive selection",
-        "jsx": "<ButtonGroup>\n  <Button appearance={view === 'list' ? 'primary' : 'default'} onClick={() => setView('list')}>List</Button>\n  <Button appearance={view === 'grid' ? 'primary' : 'default'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
-        "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity."
+        "jsx": "<ButtonGroup>\n  <Button prominence={view === 'list' ? 'primary' : 'secondary'} onClick={() => setView('list')}>List</Button>\n  <Button prominence={view === 'grid' ? 'primary' : 'secondary'} onClick={() => setView('grid')}>Grid</Button>\n</ButtonGroup>",
+        "reason": "Mutually exclusive selection is a different interaction pattern - Button Group does not manage selection state or exclusivity. Lay out Toggle Buttons in the group instead, with isSelected from the parent's state."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1236,17 +1253,17 @@
         }
       },
       {
-        "name": "Smaller size for a dense filter bar",
-        "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing.",
-        "jsx": "<Chip\n  mode=\"filter\"\n  size=\"sm\"\n  label=\"Status\"\n  value={{ label: 'Any', sections: statusSections }}\n  onRemove={() => clearFilter('status')}\n/>",
+        "name": "Smaller size for a dense row",
+        "description": "size applies to every segment together, matching Figma - there is no per-segment size mixing. sm exists for select and search chips; filter chips are md only.",
+        "jsx": "<Chip mode=\"select\" size=\"sm\" label=\"Trusts\" onRemove={() => detachProperty('trusts')} />",
         "props": {
-          "mode": "filter",
+          "mode": "select",
           "size": "sm"
         }
       },
       {
         "name": "Naming a panel explicitly",
-        "description": "Panels default to `${label} value` / `${label} operator`. Override when the composed name would read poorly, or when label is not a plain string.",
+        "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
         "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
         "props": {
           "mode": "filter"
@@ -1272,7 +1289,7 @@
       {
         "name": "Expecting a tone prop",
         "jsx": "<Chip mode=\"select\" label=\"Overdue\" tone=\"error\" onRemove={() => {}} />",
-        "reason": "chip-base supports five tones in Figma, but all 14 chip variants use tone=default, so no chip-level tone mapping is verified. Deliberately unexposed until a real Figma chip variant uses one; TypeScript rejects it."
+        "reason": "Chip has no tone axis: Figma's chip-base tone axis was dropped in the 2026-08-27 simplification, and every chip variant used tone=default before it. TypeScript rejects it."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1434,7 +1451,7 @@
       {
         "name": "Duplicating the label as an aria-label",
         "jsx": "<Field label=\"Email\">\n  <TextField type=\"email\" aria-label=\"Email\" />\n</Field>",
-        "reason": "Field's label already names the control via htmlFor. A duplicate aria-label is redundant and can override the visible label as the accessible name."
+        "reason": "Field's label already names the control, via htmlFor and the aria-labelledby Field adds. A control with its own aria-label keeps it and Field leaves aria-labelledby off, so a duplicate aria-label is redundant and can override the visible label as the accessible name."
       },
       {
         "name": "Error state without the control's own invalid",
@@ -1544,14 +1561,14 @@
     "examples": [
       {
         "name": "Basic click-to-edit text value",
-        "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. A subtle TextField is the recommended child for most cases.",
-        "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField appearance=\"subtle\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
+        "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. An inline TextField (context='inline') is the recommended child for most cases.",
+        "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField context=\"inline\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
         "props": {}
       },
       {
         "name": "Read-only display (before any interaction)",
         "description": "Inline Edit always starts read-only - the confirm/cancel buttons only appear once the field is clicked or focused.",
-        "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "value": "Q3 Planning"
         }
@@ -1559,7 +1576,7 @@
       {
         "name": "No visible action buttons (Enter/Escape only, once editing)",
         "description": "actionButtons={false} hides the icon buttons once editing starts; Enter still confirms and Escape still cancels.",
-        "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} actionButtons={false} onConfirm={setValue}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "actionButtons": false
         }
@@ -1567,7 +1584,7 @@
       {
         "name": "Custom accessible names for the action buttons",
         "description": null,
-        "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "props": {
           "confirmLabel": "Save title",
           "cancelLabel": "Discard changes"
@@ -1582,12 +1599,12 @@
       },
       {
         "name": "Expecting an isEditing prop to show the buttons upfront",
-        "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value=\"Q3 Planning\" isEditing>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "reason": "There is no isEditing prop - editing always starts on click/focus of the field itself, never before."
       },
       {
         "name": "Expecting onConfirm to fire on every keystroke",
-        "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField appearance=\"subtle\" aria-label=\"Title\" />\n</InlineEdit>",
+        "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
         "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
       }
     ],
@@ -1659,7 +1676,7 @@
       {
         "name": "Mixed editable and static pairs",
         "description": "Some pairs are inline-editable (with TextField/TextArea), others are static.",
-        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea appearance=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea context=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
         "props": {}
       }
     ],
@@ -1698,8 +1715,8 @@
       },
       {
         "name": "Inline editable with TextField",
-        "description": "Pass a TextField with appearance='inline' as children for inline editing. The edit icon provides the affordance.",
-        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "description": "Pass a TextField with context='inline' as children for inline editing. The edit icon provides the affordance.",
+        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
           "label": "Client name",
           "underline": true
@@ -1707,8 +1724,8 @@
       },
       {
         "name": "Inline editable with TextArea",
-        "description": "Pass a TextArea with appearance='inline' for multi-line inline editing.",
-        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "description": "Pass a TextArea with context='inline' for multi-line inline editing.",
+        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
           "label": "Notes",
           "underline": true
@@ -1793,9 +1810,9 @@
       {
         "name": "Custom accessible labels",
         "description": "Overriding the default nav/previous/next labels.",
-        "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  ariaLabel=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
+        "jsx": "<Pagination\n  currentPage={2}\n  totalPages={10}\n  onPageChange={setPage}\n  aria-label=\"Search results pages\"\n  previousLabel=\"Previous results\"\n  nextLabel=\"Next results\"\n/>",
         "props": {
-          "ariaLabel": "Search results pages",
+          "aria-label": "Search results pages",
           "previousLabel": "Previous results",
           "nextLabel": "Next results"
         }
@@ -1854,15 +1871,21 @@
         "props": {}
       },
       {
-        "name": "Sizes, appearance and states",
-        "description": "The frame axes are Text Area's, unchanged.",
-        "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea appearance=\"subtle\" aria-label=\"Subtle\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
+        "name": "Sizes, context and states",
+        "description": "The frame axes are Text Area's, unchanged: sm/md/lg sizes and the default/inline context. The deprecated `appearance` still works (subtle and inline map to context=\"inline\").",
+        "jsx": "<RichTextArea size=\"lg\" aria-label=\"Large\" value={a} onChange={setA} onSearch={search} />\n<RichTextArea context=\"inline\" aria-label=\"Inline\" value={b} onChange={setB} onSearch={search} />\n<RichTextArea invalid aria-label=\"Invalid\" value={c} onChange={setC} onSearch={search} />\n<RichTextArea disabled aria-label=\"Disabled\" value={d} onChange={setD} onSearch={search} />",
         "props": {
           "size": "lg",
-          "appearance": "subtle",
+          "context": "inline",
           "invalid": true,
           "disabled": true
         }
+      },
+      {
+        "name": "Labelled by Field",
+        "description": "Field names the editor by aria-labelledby (a label's htmlFor can't name a div) and passes its message, error, and required, which the editor sets as aria-describedby, aria-invalid, and aria-required.",
+        "jsx": "<Field label=\"Notes\" message=\"Type / to link a matter\" state=\"error\" required>\n  <RichTextArea value={value} onChange={setValue} onSearch={search} />\n</Field>",
+        "props": {}
       }
     ],
     "antiExamples": [
@@ -1880,11 +1903,6 @@
         "name": "Storing the value as HTML",
         "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
         "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
-      },
-      {
-        "name": "Relying on it as an accessible combobox",
-        "jsx": "<RichTextArea aria-label=\"Assign work\" value={value} onChange={setValue} onSearch={search} />",
-        "reason": "The picker does not set aria-activedescendant yet, so a screen reader user gets no announcement of the active entity while arrowing. Keyboard operation works, but don't make this the only path to a required task until that's wired."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1930,12 +1948,12 @@
         "props": {}
       },
       {
-        "name": "Sizes and tones",
-        "description": "size sets trigger height (32/40/48) and chip size; tone maps to TextField's appearance.",
-        "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" tone=\"subtle\" />",
+        "name": "Sizes and contexts",
+        "description": "size sets trigger height (32/40/48) and chip size; context is the same axis as TextField's (inline: chromeless until hovered or focused).",
+        "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" context=\"inline\" />",
         "props": {
           "size": "lg",
-          "tone": "subtle"
+          "context": "inline"
         }
       },
       {
@@ -1992,11 +2010,11 @@
         }
       },
       {
-        "name": "Circle for an avatar",
-        "description": "A circular placeholder sized to match an Avatar.",
-        "jsx": "<Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
+        "name": "Round shape for an avatar",
+        "description": "A round placeholder sized to match an Avatar.",
+        "jsx": "<Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
         "props": {
-          "shape": "circle",
+          "shape": "round",
           "style": {
             "inlineSize": "40px",
             "blockSize": "40px"
@@ -2012,7 +2030,7 @@
       {
         "name": "List row with avatar",
         "description": "A circular avatar placeholder next to two text-line placeholders.",
-        "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
+        "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
         "props": {}
       },
       {
@@ -2073,8 +2091,8 @@
       },
       {
         "name": "Loading primary action",
-        "description": "isLoading applies Button's own loading treatment to the primary action and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
-        "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Saving...\n</SplitButton>",
+        "description": "isLoading applies Button's own loading treatment to the primary action (a Spinner over the label, size held, label kept as the accessible name) and also disables the secondary action - picking an alternative while the primary action is mid-flight would be confusing.",
+        "jsx": "<SplitButton isLoading secondaryActionLabel=\"More save options\" sections={saveAlternatives} onClick={() => save()}>\n  Save\n</SplitButton>",
         "props": {
           "isLoading": true
         }
@@ -2089,11 +2107,9 @@
       },
       {
         "name": "Forwarding other Button props",
-        "description": "Every other ButtonProps prop (tone, iconBefore, iconAfter, any native button attribute) forwards straight to the primary action via {...rest}.",
-        "jsx": "<SplitButton\n  tone=\"warning\"\n  iconBefore={<AlertIcon decorative />}\n  secondaryActionLabel=\"More options\"\n  sections={alternatives}\n  onClick={() => flagForReview()}\n>\n  Flag for review\n</SplitButton>",
-        "props": {
-          "tone": "warning"
-        }
+        "description": "Other ButtonProps (iconBefore, iconAfter, any native button attribute) forward to the primary action only via {...rest}; prominence is overridden by appearance's mapping.",
+        "jsx": "<SplitButton\n  iconBefore={<SendIcon decorative />}\n  secondaryActionLabel=\"More send options\"\n  sections={sendAlternatives}\n  onClick={() => send()}\n>\n  Send\n</SplitButton>",
+        "props": {}
       }
     ],
     "antiExamples": [
@@ -2110,7 +2126,12 @@
       {
         "name": "Expecting a 'subtle' appearance",
         "jsx": "<SplitButton appearance=\"subtle\" secondaryActionLabel=\"More options\" sections={alternatives} onClick={() => create()}>\n  Create\n</SplitButton>",
-        "reason": "appearance is deliberately narrower than Button's own ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
+        "reason": "appearance is deliberately narrow ('default' | 'primary' only) - Figma never shows a subtle split button, so code doesn't invent one. TypeScript rejects this at compile time."
+      },
+      {
+        "name": "Setting a tone",
+        "jsx": "<SplitButton appearance=\"primary\" tone=\"error\" secondaryActionLabel=\"More delete options\" sections={deleteAlternatives} onClick={() => remove()}>\n  Delete matter\n</SplitButton>",
+        "reason": "tone forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2198,12 +2219,12 @@
         }
       },
       {
-        "name": "Sizes and appearances",
-        "description": "size controls padding/radius/font; appearance switches between the bordered box and the low-chrome subtle variant (transparent until interacted with).",
-        "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea appearance=\"subtle\" aria-label=\"Subtle\" rows={3} />",
+        "name": "Sizes and contexts",
+        "description": "size controls padding/radius/font; context switches between the bordered box and the chromeless inline field (transparent until interacted with).",
+        "jsx": "<TextArea size=\"md\" aria-label=\"Medium\" rows={3} />\n<TextArea size=\"lg\" aria-label=\"Large\" rows={3} />\n<TextArea context=\"inline\" aria-label=\"Inline\" rows={3} />",
         "props": {
           "size": "lg",
-          "appearance": "subtle",
+          "context": "inline",
           "rows": 3
         }
       },
@@ -2236,11 +2257,11 @@
         }
       },
       {
-        "name": "Inline appearance inside Key Value Pair",
-        "description": "appearance=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest with subtle-style bottom-only border on hover/focus/invalid.",
-        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea appearance=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "name": "Inline context inside Key Value Pair",
+        "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
+        "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
-          "appearance": "inline",
+          "context": "inline",
           "rows": 2,
           "resize": "none",
           "iconAfter": "EditIcon"
@@ -2289,11 +2310,11 @@
         }
       },
       {
-        "name": "Subtle appearance (search box)",
+        "name": "Inline context (search box)",
         "description": null,
-        "jsx": "<TextField appearance=\"subtle\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
+        "jsx": "<TextField context=\"inline\" type=\"search\" iconBefore={<SearchIcon />} placeholder=\"Search\" aria-label=\"Search\" />",
         "props": {
-          "appearance": "subtle",
+          "context": "inline",
           "type": "search"
         }
       },
@@ -2329,12 +2350,12 @@
         }
       },
       {
-        "name": "Small size, subtle appearance (square bottom corners)",
+        "name": "Small size, inline context (square bottom corners)",
         "description": null,
-        "jsx": "<TextField size=\"sm\" appearance=\"subtle\" placeholder=\"Placeholder\" aria-label=\"Small subtle field\" />",
+        "jsx": "<TextField size=\"sm\" context=\"inline\" placeholder=\"Placeholder\" aria-label=\"Small inline field\" />",
         "props": {
           "size": "sm",
-          "appearance": "subtle"
+          "context": "inline"
         }
       },
       {
@@ -2346,11 +2367,11 @@
         }
       },
       {
-        "name": "Inline appearance inside Key Value Pair",
-        "description": "appearance=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest with subtle-style bottom-only border on hover/focus/invalid.",
-        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField appearance=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+        "name": "Inline context inside Key Value Pair",
+        "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
+        "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
         "props": {
-          "appearance": "inline",
+          "context": "inline",
           "iconAfter": "EditIcon"
         }
       }
@@ -2396,19 +2417,19 @@
       {
         "name": "Warning",
         "description": "A cautionary status on the amber bold background. Its dark content means actions use tone=warning (not the inverse treatment).",
-        "jsx": "<Banner appearance=\"warning\" actions={<Button size=\"sm\" appearance=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
+        "jsx": "<Banner tone=\"warning\" actions={<Button size=\"sm\" prominence=\"primary\" tone=\"warning\">Renew</Button>}>Your subscription expires in three days.</Banner>",
         "props": {
-          "appearance": "warning",
-          "actions": "Button (size=sm, appearance=primary, tone=warning)",
+          "tone": "warning",
+          "actions": "Button (size=sm, prominence=primary, tone=warning)",
           "children": "Your subscription expires in three days."
         }
       },
       {
         "name": "Error with an action",
         "description": "An error status with a single inverse-tone action.",
-        "jsx": "<Banner appearance=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
+        "jsx": "<Banner tone=\"error\" actions={<Button size=\"sm\" isInverse>Retry</Button>}>We couldn't reach the server.</Banner>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "actions": "Button (size=sm, isInverse)",
           "children": "We couldn't reach the server."
         }
@@ -2434,9 +2455,9 @@
       {
         "name": "Urgent error (assertive)",
         "description": "An urgent error that must interrupt, using role=alert instead of the default polite status.",
-        "jsx": "<Banner appearance=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
+        "jsx": "<Banner tone=\"error\" role=\"alert\">Your session has expired. Sign in again to continue.</Banner>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "role": "alert",
           "children": "Your session has expired. Sign in again to continue."
         }
@@ -2450,7 +2471,7 @@
       },
       {
         "name": "Transient notification",
-        "jsx": "<Banner appearance=\"default\">Copied to clipboard</Banner>",
+        "jsx": "<Banner tone=\"default\">Copied to clipboard</Banner>",
         "reason": "Use Toast for a transient, auto-dismissing notification."
       },
       {
@@ -2706,7 +2727,7 @@
       {
         "name": "Basic action menu from a button",
         "description": "The common case - a button trigger opening a searchable action list.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Matter actions\"\n  open={open}\n  onOpenChange={setOpen}\n  searchPlaceholder=\"Search actions\"\n  sections={[{\n    id: 'actions',\n    heading: 'Actions',\n    items: [\n      { id: 'rename', label: 'Rename', onSelect: () => { handleRename(); setOpen(false); } },\n      { id: 'delete', label: 'Delete', onSelect: () => { handleDelete(); setOpen(false); } },\n    ],\n  }]}\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</DropdownMenu>",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Matter actions\"\n  open={open}\n  onOpenChange={setOpen}\n  searchPlaceholder=\"Search actions\"\n  sections={[{\n    id: 'actions',\n    heading: 'Actions',\n    items: [\n      { id: 'rename', label: 'Rename', onSelect: handleRename },\n      { id: 'delete', label: 'Delete', onSelect: handleDelete },\n    ],\n  }]}\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</DropdownMenu>",
         "props": {
           "searchPlaceholder": "Search actions"
         }
@@ -2714,7 +2735,7 @@
       {
         "name": "Icon-button row menu, no search",
         "description": "A dense row-level '...' menu - showSearch is false since a 3-4 item list doesn't need filtering.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  showSearch={false}\n  sections={[{ id: 'actions', items: [{ id: 'archive', label: 'Archive', onSelect: () => setOpen(false) }] }]}\n>\n  <IconButton aria-label=\"Row actions\" appearance=\"subtle\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<DropdownMenu\n  aria-label=\"Row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  showSearch={false}\n  sections={[{ id: 'actions', items: [{ id: 'archive', label: 'Archive', onSelect: handleArchive }] }]}\n>\n  <IconButton aria-label=\"Row actions\" appearance=\"subtle\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
         "props": {
           "showSearch": false
         }
@@ -2736,9 +2757,9 @@
         "reason": "DropdownMenu has no content prop - it always renders a Menu built from sections. For arbitrary non-Menu floating content, compose Popup directly instead of forcing it through DropdownMenu."
       },
       {
-        "name": "Expecting a selection to close the dropdown automatically",
-        "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]}>\n  <Button onClick={() => setOpen(true)}>Actions</Button>\n</DropdownMenu>",
-        "reason": "Neither Menu nor DropdownMenu calls onOpenChange on selection. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+        "name": "A checkbox menu that closes after every toggle",
+        "jsx": "<DropdownMenu open={open} onOpenChange={setOpen} showSearch={false} sections={[{ id: 'view', items: [{ id: 'drafts', label: 'Show drafts', selectionType: 'checkbox', selected: showDrafts, onSelect: toggleDrafts }] }]}>\n  <Button onClick={() => setOpen((current) => !current)}>View options</Button>\n</DropdownMenu>",
+        "reason": "Choosing an item closes the dropdown after its onSelect, so toggling several options means reopening it each time. Call event.preventDefault() in onSelect to keep it open: onSelect: (event) => { event.preventDefault(); toggleDrafts(); }."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2763,9 +2784,9 @@
       {
         "name": "No results (informative)",
         "description": "A self-contained empty state on a sunken surface panel, with two actions.",
-        "jsx": "<EmptyState type=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
+        "jsx": "<EmptyState appearance=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
         "props": {
-          "type": "informative",
+          "appearance": "informative",
           "illustration": "spot illustration",
           "heading": "No results found",
           "actions": "ButtonGroup",
@@ -2820,7 +2841,7 @@
       {
         "name": "Titled form with a required legend and end-aligned actions",
         "description": null,
-        "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button appearance=\"subtle\" type=\"button\">Cancel</Button>\n    <Button appearance=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
+        "jsx": "<Form title=\"Create a new repository\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Repository name\" required>\n      <TextField placeholder=\"my-project\" />\n    </Field>\n    <Field label=\"Description\">\n      <TextArea placeholder=\"A short description\" />\n    </Field>\n  </FormSection>\n  <FormFooter align=\"end\">\n    <Button prominence=\"tertiary\" type=\"button\">Cancel</Button>\n    <Button prominence=\"primary\" type=\"submit\">Create repository</Button>\n  </FormFooter>\n</Form>",
         "props": {
           "title": "Create a new repository",
           "requiredLegend": true
@@ -2829,13 +2850,13 @@
       {
         "name": "Two fields on one row",
         "description": null,
-        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button appearance=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <FormRow>\n      <Field label=\"First name\" required><TextField /></Field>\n      <Field label=\"Last name\" required><TextField /></Field>\n    </FormRow>\n  </FormSection>\n  <FormFooter><Button prominence=\"primary\" type=\"submit\">Continue</Button></FormFooter>\n</Form>",
         "props": {}
       },
       {
         "name": "Multiple titled sections",
         "description": null,
-        "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button appearance=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
+        "jsx": "<Form title=\"Project settings\" requiredLegend onSubmit={handleSubmit}>\n  <FormSection title=\"General\">\n    <Field label=\"Project name\" required><TextField /></Field>\n  </FormSection>\n  <FormSection title=\"Danger zone\">\n    <Field label=\"Rename repository\"><TextField /></Field>\n  </FormSection>\n  <FormFooter align=\"end\"><Button prominence=\"primary\" type=\"submit\">Save changes</Button></FormFooter>\n</Form>",
         "props": {
           "title": "Project settings",
           "requiredLegend": true
@@ -2844,7 +2865,7 @@
       {
         "name": "Start-aligned footer",
         "description": null,
-        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button appearance=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
+        "jsx": "<Form onSubmit={handleSubmit}>\n  <FormSection>\n    <Field label=\"Email\"><TextField type=\"email\" /></Field>\n  </FormSection>\n  <FormFooter align=\"start\">\n    <Button prominence=\"primary\" type=\"submit\">Subscribe</Button>\n  </FormFooter>\n</Form>",
         "props": {}
       },
       {
@@ -2867,7 +2888,7 @@
       },
       {
         "name": "A non-submit primary action",
-        "jsx": "<FormFooter><Button appearance=\"primary\" onClick={save}>Save</Button></FormFooter>",
+        "jsx": "<FormFooter><Button prominence=\"primary\" onClick={save}>Save</Button></FormFooter>",
         "reason": "Give the submit Button type=\"submit\" so Enter-to-submit and the form's onSubmit work; don't rely on onClick alone."
       },
       {
@@ -2903,7 +2924,7 @@
       {
         "name": "Checkbox-style multi-select section",
         "description": "Each row independently opts into selectionType='checkbox'; the leading glyph is Figma's own CheckboxFillIcon/CheckboxEmptyIcon, colored selected/subtle to match - not a real Checkbox control.",
-        "jsx": "const [checked, setChecked] = useState({ showDrafts: true, showArchived: false });\n\nconst items = [\n  { id: 'showDrafts', label: 'Show drafts' },\n  { id: 'showArchived', label: 'Show archived' },\n].map((item) => ({\n  ...item,\n  selectionType: 'checkbox',\n  selected: checked[item.id],\n  leadingElement: checked[item.id]\n    ? <CheckboxFillIcon spacing=\"spacious\" color=\"selected\" decorative />\n    : <CheckboxEmptyIcon spacing=\"spacious\" color=\"subtle\" decorative />,\n  onSelect: () => setChecked((current) => ({ ...current, [item.id]: !current[item.id] })),\n}));\n\n<Menu aria-label=\"View options\" showSearch={false} sections={[{ id: 'view', heading: 'View options', items }]} />",
+        "jsx": "const [checked, setChecked] = useState({ showDrafts: true, showArchived: false });\n\nconst items = [\n  { id: 'showDrafts', label: 'Show drafts' },\n  { id: 'showArchived', label: 'Show archived' },\n].map((item) => ({\n  ...item,\n  selectionType: 'checkbox',\n  selected: checked[item.id],\n  leadingElement: checked[item.id]\n    ? <CheckboxFillIcon spacing=\"spacious\" decorative />\n    : <CheckboxEmptyIcon spacing=\"spacious\" color=\"subtle\" decorative />,\n  onSelect: () => setChecked((current) => ({ ...current, [item.id]: !current[item.id] })),\n}));\n\n<Menu aria-label=\"View options\" showSearch={false} sections={[{ id: 'view', heading: 'View options', items }]} />",
         "props": {
           "showSearch": false
         }
@@ -2911,15 +2932,15 @@
       {
         "name": "Radio-style single-select section",
         "description": "Each row opts into selectionType='radio'; only the consumer's own state ensures a single selected row. The leading glyph is Figma's own RadioCheckedIcon/RadioUncheckedIcon.",
-        "jsx": "const [sort, setSort] = useState('recent');\nconst options = [\n  { value: 'recent', label: 'Most recent' },\n  { value: 'name', label: 'Name (A-Z)' },\n];\n\nconst items = options.map((option) => ({\n  id: option.value,\n  label: option.label,\n  selectionType: 'radio',\n  selected: sort === option.value,\n  leadingElement: sort === option.value\n    ? <RadioCheckedIcon spacing=\"spacious\" color=\"selected\" decorative />\n    : <RadioUncheckedIcon spacing=\"spacious\" color=\"subtle\" decorative />,\n  onSelect: () => setSort(option.value),\n}));\n\n<Menu aria-label=\"Sort by\" showSearch={false} sections={[{ id: 'sort', heading: 'Sort by', items }]} />",
+        "jsx": "const [sort, setSort] = useState('recent');\nconst options = [\n  { value: 'recent', label: 'Most recent' },\n  { value: 'name', label: 'Name (A-Z)' },\n];\n\nconst items = options.map((option) => ({\n  id: option.value,\n  label: option.label,\n  selectionType: 'radio',\n  selected: sort === option.value,\n  leadingElement: sort === option.value\n    ? <RadioCheckedIcon spacing=\"spacious\" decorative />\n    : <RadioUncheckedIcon spacing=\"spacious\" color=\"subtle\" decorative />,\n  onSelect: () => setSort(option.value),\n}));\n\n<Menu aria-label=\"Sort by\" showSearch={false} sections={[{ id: 'sort', heading: 'Sort by', items }]} />",
         "props": {
           "showSearch": false
         }
       },
       {
-        "name": "Selection closes a containing Dropdown Menu",
-        "description": "Menu never closes anything itself - wire onOpenChange(false) from each item's own onSelect.",
-        "jsx": "<Menu\n  aria-label=\"Matter actions\"\n  showSearch={false}\n  sections={[{\n    id: 'actions',\n    items: [{\n      id: 'delete',\n      label: 'Delete',\n      onSelect: () => {\n        handleDelete();\n        setOpen(false);\n      },\n    }],\n  }]}\n/>",
+        "name": "Keeping a containing Dropdown Menu open after a choice",
+        "description": "Menu never closes anything itself; a containing Dropdown Menu closes after an item's onSelect unless it calls event.preventDefault() - here, so a checkbox row can be toggled repeatedly.",
+        "jsx": "<Menu\n  aria-label=\"View options\"\n  showSearch={false}\n  sections={[{\n    id: 'view',\n    items: [{\n      id: 'drafts',\n      label: 'Show drafts',\n      selectionType: 'checkbox',\n      selected: showDrafts,\n      onSelect: (event) => {\n        event.preventDefault();\n        toggleDrafts();\n      },\n    }],\n  }]}\n/>",
         "props": {
           "showSearch": false
         }
@@ -2942,9 +2963,9 @@
         "reason": "Each row renders as a real <button>. Nesting Checkbox's real <input> inside it is invalid HTML (a focusable control inside another one) and creates two conflicting ways to activate the same row - one via the button's own onClick, one via the checkbox's onChange. Use a decorative icon/glyph instead and let selected/selectionType carry the real state, or toggle the row's own onSelect."
       },
       {
-        "name": "Expecting Menu to close a containing Dropdown Menu",
+        "name": "Nesting a Menu inside a Dropdown Menu",
         "jsx": "<DropdownMenu open={open} onOpenChange={setOpen}>\n  <Button>Actions</Button>\n  <Menu sections={[{ id: 'a', items: [{ id: 'delete', label: 'Delete', onSelect: handleDelete }] }]} />\n</DropdownMenu>",
-        "reason": "Menu has no idea it's inside a Dropdown Menu and never calls onOpenChange itself. Clicking 'Delete' here runs handleDelete but leaves the dropdown open - call setOpen(false) from inside onSelect instead."
+        "reason": "DropdownMenu has no children-as-content slot: its one child is the trigger, and it builds its own Menu from the sections you pass it (and closes after a choice). Pass sections to DropdownMenu directly instead of nesting a Menu."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2958,18 +2979,18 @@
       {
         "name": "Confirmation with Cancel + Confirm",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Save changes?\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" onClick={handleSave}>Save</Button>\n    </ButtonGroup>\n  }\n>\n  <p>Your changes will be applied immediately.</p>\n</ModalDialog>",
         "props": {
           "title": "Save changes?"
         }
       },
       {
-        "name": "Destructive confirmation (error appearance + red Confirm)",
+        "name": "Destructive confirmation (error tone + red Confirm)",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  appearance=\"error\"\n  width=\"small\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  title=\"Delete repository?\"\n  tone=\"error\"\n  width=\"sm\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" tone=\"error\" onClick={handleDelete}>Delete</Button>\n    </ButtonGroup>\n  }\n>\n  <p>This permanently deletes the repository and cannot be undone.</p>\n</ModalDialog>",
         "props": {
-          "appearance": "error",
-          "width": "small"
+          "tone": "error",
+          "width": "sm"
         }
       },
       {
@@ -2989,9 +3010,9 @@
       {
         "name": "Large width",
         "description": null,
-        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"large\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
+        "jsx": "<ModalDialog open={open} onClose={() => setOpen(false)} title=\"Edit profile\" width=\"lg\" footer={actions}>\n  <ProfileForm />\n</ModalDialog>",
         "props": {
-          "width": "large"
+          "width": "lg"
         }
       },
       {
@@ -3005,7 +3026,7 @@
       {
         "name": "Header expand (maximize) action",
         "description": null,
-        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button appearance=\"subtle\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button appearance=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
+        "jsx": "<ModalDialog\n  open={open}\n  onClose={() => setOpen(false)}\n  onExpand={handleExpand}\n  title=\"Preview attachment\"\n  footer={\n    <ButtonGroup>\n      <Button prominence=\"tertiary\" onClick={() => setOpen(false)}>Cancel</Button>\n      <Button prominence=\"primary\" onClick={() => setOpen(false)}>Confirm</Button>\n    </ButtonGroup>\n  }\n>\n  <p>The header shows an Expand button before Close, grouped together.</p>\n</ModalDialog>",
         "props": {
           "title": "Preview attachment"
         }
@@ -3018,9 +3039,9 @@
         "reason": "A dialog needs an accessible name - pass a title, or aria-label when there is no visible title."
       },
       {
-        "name": "Relying on appearance to colour the Confirm button",
-        "jsx": "<ModalDialog appearance=\"error\" footer={<Button appearance=\"primary\">Delete</Button>} />",
-        "reason": "appearance only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
+        "name": "Relying on tone to colour the Confirm button",
+        "jsx": "<ModalDialog tone=\"error\" footer={<Button prominence=\"primary\">Delete</Button>} />",
+        "reason": "tone only colours the header status icon. Set the Confirm button's tone yourself (tone=\"error\") so the action matches."
       },
       {
         "name": "Using a modal for transient feedback",
@@ -3115,18 +3136,18 @@
       {
         "name": "Success (no title)",
         "description": "A description-only success message.",
-        "jsx": "<SectionMessage appearance=\"success\">Your changes were published successfully.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"success\">Your changes were published successfully.</SectionMessage>",
         "props": {
-          "appearance": "success",
+          "tone": "success",
           "children": "Your changes were published successfully."
         }
       },
       {
         "name": "Warning with actions",
         "description": "Two Link Button actions grouped in a ButtonGroup that lays them out as a row.",
-        "jsx": "<SectionMessage appearance=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"warning\" title=\"Your trial ends soon\" actions={<ButtonGroup><LinkButton href=\"/upgrade\" appearance=\"subtle\" size=\"sm\">Upgrade</LinkButton><LinkButton href=\"/billing\" appearance=\"subtle\" size=\"sm\">Billing</LinkButton></ButtonGroup>}>Your trial ends in three days.</SectionMessage>",
         "props": {
-          "appearance": "warning",
+          "tone": "warning",
           "title": "Your trial ends soon",
           "actions": "a ButtonGroup of LinkButton elements",
           "children": "Your trial ends in three days."
@@ -3135,9 +3156,9 @@
       {
         "name": "Error, dismissible",
         "description": "A dismissible error message with a dismiss button in the top-right.",
-        "jsx": "<SectionMessage appearance=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" title=\"Something went wrong\" isDismissible onDismiss={handleDismiss}>We couldn't save your changes.</SectionMessage>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "title": "Something went wrong",
           "isDismissible": true,
           "children": "We couldn't save your changes."
@@ -3146,9 +3167,9 @@
       {
         "name": "Urgent error (assertive)",
         "description": "An urgent error using role=alert instead of the default polite status.",
-        "jsx": "<SectionMessage appearance=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" role=\"alert\" title=\"Payment failed\">Update your payment method to keep your subscription active.</SectionMessage>",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "role": "alert",
           "title": "Payment failed",
           "children": "Update your payment method to keep your subscription active."
@@ -3158,17 +3179,17 @@
     "antiExamples": [
       {
         "name": "Page-level banner",
-        "jsx": "<SectionMessage appearance=\"information\">Scheduled maintenance this weekend</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"information\">Scheduled maintenance this weekend</SectionMessage>",
         "reason": "Use Banner for a full-width, page-level announcement bar."
       },
       {
         "name": "Transient notification",
-        "jsx": "<SectionMessage appearance=\"success\" isDismissible>Copied to clipboard</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"success\" isDismissible>Copied to clipboard</SectionMessage>",
         "reason": "Use Toast for a transient, auto-dismissing notification."
       },
       {
         "name": "Dismissible hard constraint",
-        "jsx": "<SectionMessage appearance=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>",
+        "jsx": "<SectionMessage tone=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>",
         "reason": "Do not let the user dismiss a persistent restriction they need to keep seeing."
       }
     ],
@@ -3211,7 +3232,7 @@
       {
         "name": "Server-driven (manual sort + pagination)",
         "description": null,
-        "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
+        "jsx": "<Table\n  caption=\"Orders\"\n  getRowId={(o) => o.id}\n  columns={columns}\n  data={pageRows}\n  manualSort\n  sort={sort}\n  onSortChange={(next) => { setSort(next); refetch({ sort: next, page }); }}\n  manualPagination\n  page={page}\n  pageCount={totalPages}\n  pageSize={pageSize}\n  totalItems={totalCount}\n  onPageChange={(next) => { setPage(next); refetch({ sort, page: next }); }}\n  loading={isFetching}\n/>",
         "props": {
           "manualSort": true,
           "manualPagination": true
@@ -3271,7 +3292,7 @@
         "description": "The default underlined tab bar with panels.",
         "jsx": "<Tabs tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'><TabPanel value='a'>Overview</TabPanel><TabPanel value='b'>Activity</TabPanel></Tabs>",
         "props": {
-          "type": "line",
+          "appearance": "line",
           "defaultValue": "a",
           "aria-label": "Sections"
         }
@@ -3279,9 +3300,9 @@
       {
         "name": "Contained tabs",
         "description": "Pill tabs for a denser or card-like surface.",
-        "jsx": "<Tabs type='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
+        "jsx": "<Tabs appearance='contained' tabs={[{value:'a',label:'Overview'},{value:'b',label:'Activity'}]} defaultValue='a' aria-label='Sections'>...</Tabs>",
         "props": {
-          "type": "contained",
+          "appearance": "contained",
           "defaultValue": "a"
         }
       },
@@ -3302,7 +3323,7 @@
       {
         "name": "No bottom border",
         "description": "Hide the line's bottom border.",
-        "jsx": "<Tabs type='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
+        "jsx": "<Tabs appearance='line' showBorder={false} tabs={tabs} aria-label='Sections'>...</Tabs>",
         "props": {
           "showBorder": false
         }
@@ -3364,7 +3385,7 @@
       {
         "name": "Expecting a value on every column change",
         "jsx": "<TimePicker onChange={commitImmediately} /> {/* onChange runs on commit, not per column change */}",
-        "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm or an outside click, not per change."
+        "reason": "Column changes are staged (previewed live in the field); onChange fires on Confirm, or when a changed selection is dismissed, not per change."
       },
       {
         "name": "Unlabelled field",
@@ -3383,9 +3404,9 @@
       {
         "name": "Success",
         "description": "A success toast with a title and description.",
-        "jsx": "<Toast appearance=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
+        "jsx": "<Toast tone=\"success\" title=\"Changes saved\" description=\"Your matter is up to date.\" />",
         "props": {
-          "appearance": "success",
+          "tone": "success",
           "title": "Changes saved",
           "description": "Your matter is up to date."
         }
@@ -3393,9 +3414,9 @@
       {
         "name": "Error with an action",
         "description": "An error toast with a retry action.",
-        "jsx": "<Toast appearance=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" appearance=\"subtle\">Retry</Button>} />",
+        "jsx": "<Toast tone=\"error\" title=\"Upload failed\" description=\"The file exceeded the 25 MB limit.\" actions={<Button size=\"xs\" prominence=\"tertiary\">Retry</Button>} />",
         "props": {
-          "appearance": "error",
+          "tone": "error",
           "title": "Upload failed",
           "actions": "Button (xs, subtle)",
           "description": "The file exceeded the 25 MB limit."
@@ -3404,9 +3425,9 @@
       {
         "name": "Loading",
         "description": "A non-dismissible loading toast that resolves later.",
-        "jsx": "<Toast appearance=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
+        "jsx": "<Toast tone=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
         "props": {
-          "appearance": "loading",
+          "tone": "loading",
           "title": "Uploading your file...",
           "isDismissible": false
         }
@@ -3414,9 +3435,9 @@
       {
         "name": "Collapsed (title only)",
         "description": "A compact toast - the state a stacked toast shows before the group is expanded.",
-        "jsx": "<Toast appearance=\"info\" title=\"Syncing your workspace\" expanded={false} />",
+        "jsx": "<Toast tone=\"information\" title=\"Syncing your workspace\" expanded={false} />",
         "props": {
-          "appearance": "info",
+          "tone": "information",
           "title": "Syncing your workspace",
           "expanded": false
         }
@@ -3425,12 +3446,12 @@
     "antiExamples": [
       {
         "name": "Persistent status",
-        "jsx": "<Toast appearance=\"warning\" title=\"You do not have permission to edit this space\" />",
+        "jsx": "<Toast tone=\"warning\" title=\"You do not have permission to edit this space\" />",
         "reason": "Use SectionMessage for a status that should stay in context."
       },
       {
         "name": "Critical-only message",
-        "jsx": "<Toast appearance=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />",
+        "jsx": "<Toast tone=\"error\" title=\"Your payment failed - update your card to avoid losing access\" />",
         "reason": "Do not put the only copy of a critical message in a transient toast."
       }
     ],
@@ -3456,14 +3477,14 @@
       },
       {
         "name": "Loading updated to success",
-        "description": "Reuse the id to update a loading toast in place when it resolves.",
+        "description": "Reuse the id to update a loading toast in place when it resolves; the result gets the group's duration unless you pass one.",
         "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
         "props": {}
       },
       {
         "name": "Toast with an action",
         "description": "Actions appear when the stack is expanded.",
-        "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' appearance='subtle'>Undo</Button> })",
+        "jsx": "toast('Event created', { description: 'Monday 9:00 AM', actions: <Button size='xs' tone='subtle'>Undo</Button> })",
         "props": {}
       },
       {

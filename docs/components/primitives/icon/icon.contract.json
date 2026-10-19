@@ -1,6 +1,6 @@
 {
   "name": "Icon",
-  "category": "primitive",
+  "category": "foundations",
   "status": "stable",
   "purpose": "Render standardized icons throughout the design system.",
   "intent": "Provide one consistent icon system - sizing, spacing, and color inheritance - that every generated glyph shares, instead of each icon reinventing its own props.",
@@ -16,7 +16,14 @@
     "generationScript": "npm run generate:icons"
   },
   "figmaSource": {
-    "note": "Icon has no single Figma component node, unlike every other component in this design system - it's an asset library of many individual icon glyphs (a Figma page of loose symbols), not one component/variant-set. A direct Figma metadata lookup on the icons library page returned no resolvable node (confirmed 2026-08-06). The real source of truth is packages/ui/src/assets/icons/source/*.svg, generated into packages/ui/src/assets/icons/generated/*.tsx via `npm run generate:icons` - not a Figma node reference."
+    "file": "Components v1.0.0",
+    "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
+    "componentSetNodeId": "353:5385",
+    "componentName": "icon",
+    "variantCount": 4,
+    "glyphPage": { "pageNodeId": "13:19810", "pageName": "Icons", "glyphComponents": 245 },
+    "note": "The `icon` set is the wrapper Figma components place a glyph in: Size (sm | md), spacing (none | spacious (24px)), and an instance swap for the glyph. It maps to IconBase's size and spacing props; Figma's default is Size=sm, code's is md. The glyphs are separate components on the Icons page. Code's glyph source is packages/ui/src/assets/icons/source/*.svg (npm run generate:icons). Figma and code name some glyphs differently - see the icons block's openFindings in docs/foundations/token-governance.json. Replaces the 2026-08-06 note that Icon had no Figma node.",
+    "verifiedAt": "2026-10-13"
   },
   "useCases": [
     "Supporting a text label to speed up recognition",
@@ -48,14 +55,14 @@
       "required": false,
       "default": "none",
       "enum": ["none", "spacious"],
-      "description": "Hit-box/container padding around the glyph, independent of its visual size."
+      "description": "The box around the glyph: none matches the glyph; spacious centers it in a 24px box so it lines up with 24px slots. A layout box, not a hit area."
     },
     "color": {
       "type": "IconColor",
       "required": false,
-      "default": "default",
-      "enum": ["default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "disabled"],
-      "description": "Semantic content color."
+      "default": "inherit",
+      "enum": ["inherit", "default", "subtle", "inverse", "brand", "selected", "success", "warning", "error", "information", "disabled"],
+      "description": "The surrounding text color (inherit, the default) or a semantic content color."
     },
     "title": {
       "type": "string",
@@ -89,12 +96,13 @@
     },
     "spacing": {
       "none": { "purpose": "Container matches the glyph size exactly.", "className": "spacing_none" },
-      "spacious": { "purpose": "Centers the glyph in a larger, fixed touch/click-target box.", "className": "spacing_spacious", "token": "--size-300" }
+      "spacious": { "purpose": "Centers the glyph in a 24px box, to line up with 24px slots (a menu row's leading element, a message's status icon). Not a hit area: the control around the icon sets that.", "className": "spacing_spacious", "token": "--size-300" }
     },
     "color": {
+      "inherit": { "className": "color_inherit", "token": null, "purpose": "Default. Takes the surrounding text color, so the icon follows its control through hover, selection, disabled, and inverse." },
       "default": { "className": "color_default", "token": "--color-content-default" },
       "subtle": { "className": "color_subtle", "token": "--color-content-subtle" },
-      "inverse": { "className": "color_inverse", "token": "--color-content-inverse" },
+      "inverse": { "className": "color_inverse", "token": "--color-content-inverse-default" },
       "brand": { "className": "color_brand", "token": "--color-content-brand-primary-default" },
       "selected": { "className": "color_selected", "token": "--color-content-selected" },
       "success": { "className": "color_success", "token": "--color-content-success" },
@@ -114,9 +122,10 @@
       "spacious-container": "--size-300"
     },
     "color": {
+      "inherit": "none - the surrounding text color, through currentColor",
       "default": "--color-content-default",
       "subtle": "--color-content-subtle",
-      "inverse": "--color-content-inverse",
+      "inverse": "--color-content-inverse-default",
       "brand": "--color-content-brand-primary-default",
       "selected": "--color-content-selected",
       "success": "--color-content-success",
@@ -146,9 +155,9 @@
   },
   "keyboardInteraction": [],
   "behaviorRules": [
-    "Icons inherit color via currentColor by default; do not hardcode fills.",
+    "Icons take the surrounding text color by default (color=inherit, through currentColor); set a semantic color only when the icon carries its own meaning or stands alone. Do not hardcode fills.",
     "svg is always focusable=\"false\" - icons are never independently tabbable.",
-    "Default size=md, spacing=none, color=default, decorative=true.",
+    "Default size=md, spacing=none, color=inherit, decorative=true.",
     "Apply data-size/data-spacing/data-color on the root for downstream CSS overrides (the same mechanism Icon Tile and Icon Button use to force color/size inheritance)."
   ],
   "compositionRules": [
@@ -183,7 +192,7 @@
   ],
   "acceptanceCriteria": [
     "Renders the glyph via a generated component sharing the full IconProps set.",
-    "Defaults to size=md, spacing=none, color=default, decorative=true.",
+    "Defaults to size=md, spacing=none, color=inherit, decorative=true.",
     "Supports all IconSize, IconSpacing, and IconColor values.",
     "decorative=false renders role=img with an accessible name from title.",
     "Supports className and testId.",

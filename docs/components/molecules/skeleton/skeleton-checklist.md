@@ -5,7 +5,7 @@
 ### Name
 Skeleton
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -65,7 +65,7 @@ Not applicable - no text content.
 - default, subtle
 
 ### Shape
-- rectangle, circle
+- rectangle, round (circle, the earlier name, is still accepted)
 
 ---
 

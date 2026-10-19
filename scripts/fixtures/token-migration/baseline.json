@@ -7,18 +7,86 @@
     "commit": "03cd31dccc2d07fa6b394e8c45da78af2cdad4da",
     "reason": "Migration was authored on a pre-#34 base. Rebased onto master 86ed9e4, whose legacy build adds the progress-bar sm size and 16/24/32 track sizes. light.css and dark.css hashes are unchanged; only tokens.css moved (561 -> 564 declarations)."
   },
+  "identifierRenames": [
+    {
+      "on": "2026-10-07",
+      "reason": "Naming fixes made first in the Figma Tokens v1.0.0 file (variable IDs preserved) and mirrored in the token source: color/data-viz/catergory/* -> category/* (30 variables), categorical data-viz pink -> magenta at the subtle and bold levels (matching the magenta primitives and the default level), and color/green/alpha/500/4 -> 500/04 (matching its alpha siblings).",
+      "verification": "For each file, the new output with the deprecated alias lines removed equals the previous output with old names mapped to new ones, line for line - identifiers changed, values, order, and selectors did not.",
+      "deprecatedAliases": "Each old custom property is kept as an alias recipe (css-recipes.json) resolving to its new name: 30 in light.css, 30 in dark.css, 1 in tokens.css. See 'Deprecated aliases' in docs/foundations/token-format.md for when they can be removed.",
+      "previousFiles": {
+        "tokens.css": { "sha256LF": "673bd47995070bb3c43bf46e1e484f1c3541d207e8bb7ef49b2a558b81d47187", "declarations": 564 },
+        "light.css": { "sha256LF": "0b5eb1aed32e5645bc72134bfda25b7caf99db6f1d8114037711bbc61cdea942", "declarations": 323 },
+        "dark.css": { "sha256LF": "44024b1d9145ef3d62edf5f0ac10c3211629c999fac7fee9dc896e237e2f7479", "declarations": 323 }
+      }
+    }
+  ],
+  "tokenAdditions": [
+    {
+      "on": "2026-10-08",
+      "tokens": ["--spacing-075"],
+      "reason": "A 6px step on the semantic spacing scale (spacing/075, aliasing the 6px primitive), created first in the Figma Tokens v1.0.0 Semantic: Dimension collection and mirrored in the token source. Components used the primitive directly for this distance because the scale had no 6px step.",
+      "verification": "tokens.css with the one added line removed equals the previous tokens.css exactly; light.css and dark.css are unchanged.",
+      "previousFiles": {
+        "tokens.css": { "sha256LF": "21f06badfab95ec996d4b0e4f53b03432394ffa71ccd01bc15906a41ba3d1b16", "declarations": 565 }
+      }
+    },
+    {
+      "on": "2026-10-08",
+      "tokens": ["--elevation-shadow-overlay"],
+      "reason": "The overlay elevation shadow as a DTCG shadow composite (Semantic: Elevation, Light and Dark), matching Figma's elevation.shadow.overlay effect style: an inset ring of --border-width-sm in the overlay inner color, a 0 8px 12px drop in the overlay spread color, and a 0 0 1px perimeter. Components wrote this recipe out by hand, or approximated it.",
+      "verification": "light.css and dark.css each gain exactly this one declaration; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "36578a6e6a444e070cf8befe3c5c3e2c03623eb599318967931244a3d8516edb", "declarations": 353 },
+        "dark.css": { "sha256LF": "191500aae52ecbb73aad6dd5dd77ca7ae229526ffd70a9783e33f265a0dffab9", "declarations": 353 }
+      }
+    }
+  ],
+  "valueChanges": [
+    {
+      "on": "2026-10-08",
+      "tokens": ["--color-elevation-shadow-overlay-inner (Dark)"],
+      "from": "var(--color-brand-taupe-solid-500)",
+      "to": "rgba(0, 0, 0, 0)",
+      "reason": "Figma's Dark overlay effect style draws the inner ring transparent; the variable was solid taupe 500, so code showed a visible ring in Dark only. Changed first in Figma (Tokens v1.0.0, variable ID unchanged), then here. Light was already transparent.",
+      "verification": "dark.css differs from the previous file by this one value and the added --elevation-shadow-overlay line."
+    },
+    {
+      "on": "2026-10-14",
+      "tokens": ["--color-background-autofill-default (Light and Dark)"],
+      "from": "var(--color-brand-prussian-alpha-900-08) (Light), var(--color-brand-prussian-alpha-500-08) (Dark)",
+      "to": "var(--color-brand-prussian-alpha-900-16) (Light), var(--color-brand-prussian-alpha-500-16) (Dark)",
+      "reason": "The autofill tint on Text Field and Text Area read too faint at 8%; design raised it to 16%. Changed first in Figma (Tokens v1.0.0, Semantic: Color, both modes re-aliased to the existing 16% primitives, variable ID unchanged), then here. No new tokens.",
+      "verification": "light.css and dark.css each differ from the previous file by this one value; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "aa46611c20ed8c0261e9d15a9eb41e1c4b58f844125f579f3877eb9e570b717a", "declarations": 353 },
+        "dark.css": { "sha256LF": "0b33850234e56db8eb8fec7e9072ce7e1450de81b87c241f4f5ce46bf66decdd", "declarations": 353 }
+      }
+    }
+  ],
+  "tokenRemovals": [
+    {
+      "on": "2026-10-13",
+      "tokens": ["--color-content-subtler"],
+      "reason": "Figma Tokens v1.0.0 has no color/content/subtler variable, so code carried a leftover. Its only component use was Key Value Pair's field icons, where it measured 2.25:1 (Light) and 2.74:1 (Dark), below the 3:1 icons need; they now use the fields' own color-content-subtle.",
+      "verification": "light.css and dark.css each lose exactly this one declaration; tokens.css is unchanged.",
+      "previousFiles": {
+        "light.css": { "sha256LF": "bd6828d65541770e5f2bd2333fb8d773fc12deebcb3e909fe2d873e5375cb0cb", "declarations": 354 },
+        "dark.css": { "sha256LF": "248ce7daca82afc57c2d940cc8308e5002b753434e6986a3e116a36258b423f8", "declarations": 354 }
+      }
+    }
+  ],
   "files": {
     "tokens.css": {
-      "sha256LF": "673bd47995070bb3c43bf46e1e484f1c3541d207e8bb7ef49b2a558b81d47187",
-      "declarations": 564
+      "sha256LF": "4086e7f4c4a1e5c80d46ff86124c3766657209afca5dfdf87ed8a166eb02403e",
+      "declarations": 566
     },
     "light.css": {
-      "sha256LF": "0b5eb1aed32e5645bc72134bfda25b7caf99db6f1d8114037711bbc61cdea942",
-      "declarations": 323
+      "sha256LF": "1e91120d8aa0eda8ff25feb4b753b1dd9df100ed55e394d39946e22c84dcbba0",
+      "declarations": 353
     },
     "dark.css": {
-      "sha256LF": "44024b1d9145ef3d62edf5f0ac10c3211629c999fac7fee9dc896e237e2f7479",
-      "declarations": 323
+      "sha256LF": "f8bf509dc2c0df47b3125d214afa03558f7368321ad87490adcddb80d74d2b74",
+      "declarations": 353
     }
   }
 }

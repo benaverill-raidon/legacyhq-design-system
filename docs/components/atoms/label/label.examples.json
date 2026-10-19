@@ -10,7 +10,7 @@
     },
     {
       "name": "Bold",
-      "jsx": "<Label appearance='bold'>Approved</Label>"
+      "jsx": "<Label emphasis='bold'>Approved</Label>"
     }
   ]
 }

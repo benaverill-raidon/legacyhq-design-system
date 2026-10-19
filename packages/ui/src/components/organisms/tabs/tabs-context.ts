@@ -1,11 +1,13 @@
 import * as React from 'react';
-import type { TabsType } from './tabs.types';
+import type { TabsAppearance } from './tabs.types';
 
 export interface TabsContextValue {
   activeValue: string | undefined;
-  type: TabsType;
+  appearance: TabsAppearance;
   getTabId: (value: string) => string;
   getPanelId: (value: string) => string;
+  /** Called by a TabPanel while it's mounted, so its tab sets `aria-controls`. Returns the cleanup. */
+  registerPanel: (value: string) => () => void;
 }
 
 export const TabsContext = React.createContext<TabsContextValue | null>(null);

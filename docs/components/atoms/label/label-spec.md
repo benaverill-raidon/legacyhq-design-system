@@ -112,9 +112,9 @@ emphasis = 'subtle'
 |---|---|
 | `sm` padding-block | `--spacing-xxs` |
 | `sm` padding-inline | `--spacing-xs` |
-| `md` padding-block | `--spacing-xxs` |
+| `md` padding-block | `--spacing-none` (the 24px line height sets the height) |
 | `md` padding-inline | `--spacing-sm` |
-| Border radius | `--border-radius-xs` |
+| Border radius | `--border-radius-sm` (4px at both sizes) |
 
 ### Typography Tokens
 
@@ -131,7 +131,7 @@ Heading typography should apply:
 - `sm`: 12px font size, 16px line height, 0 letter spacing
 - `md`: 14px font size, 24px line height, 0 letter spacing
 
-The `md` line height (24px) sets the label's height, so `md` uses zero block padding (`spacing-none`); `sm` keeps `spacing-xxs` block padding around its 16px line height.
+The `md` line height (24px) sets the label's height, so `md` uses zero block padding (`spacing-none`); `sm` keeps `spacing-xxs` block padding around its 16px line height. The label is `box-sizing: border-box`, so the 20px and 24px minimum heights include the padding: `sm` is 20px (16 + 2 + 2) and `md` 24px.
 
 If generated typography tokens do not expose `heading-xxs` and `heading-xs` directly, implement local classes using the corresponding semantic or primitive typography variables. Do not hardcode raw values unless the token pipeline does not yet expose the needed variables.
 

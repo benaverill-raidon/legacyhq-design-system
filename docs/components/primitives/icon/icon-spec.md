@@ -8,7 +8,7 @@ Icon provides a consistent, reusable system for rendering SVG symbols across the
 ### Description
 Use Icon components to communicate actions, objects, statuses, and visual cues. Icons should be sized, spaced, colored, and labeled consistently through shared props and generated React components.
 
-### Category
+### Tier
 Primitive
 
 ### Design Reference
@@ -66,7 +66,9 @@ Examples:
 - ArrowRight
 
 ### Single-Purpose Icons
-Single-purpose icons are reserved for a dedicated meaning and should not be reused casually.
+Single-purpose icons are reserved for a dedicated meaning and should not be reused casually. They are named after their associated function, so a single-purpose icon can share a glyph with a multi-purpose one (`task-not-started` and `radio-unchecked`).
+
+Membership mirrors the Figma Icons page's "Single-purpose icons" section (the `singlePurposeNames` list in `scripts/generate-icons.mjs`); every other icon is multi-purpose.
 
 Examples:
 - AdministrativeAccount
@@ -174,11 +176,14 @@ Generated icon components should:
 
 ### Color
 
+Icons take the color of the surrounding text by default (`inherit`), so they follow their control through hover, selection, disabled, and inverse. Set a color only when the icon carries meaning of its own, such as a status, or stands alone.
+
 | Color | Token |
 |-------|-------|
+| inherit (default) | none: the surrounding text color, through `currentColor` |
 | default | `--color-content-default` |
 | subtle | `--color-content-subtle` |
-| inverse | `--color-content-inverse` |
+| inverse | `--color-content-inverse-default` |
 | brand | `--color-content-brand-primary-default` |
 | selected | `--color-content-selected` |
 | success | `--color-content-success` |
@@ -190,7 +195,7 @@ Generated icon components should:
 ### Default Values
 - `size = 'md'`
 - `spacing = 'none'`
-- `color = 'default'`
+- `color = 'inherit'`
 - `decorative = true`
 
 ---
@@ -203,7 +208,7 @@ Every generated icon component should support the same props.
 |----------|------|----------|---------|-------------|
 | size | `'sm' \| 'md'` | No | `'md'` | Icon glyph size |
 | spacing | `'none' \| 'spacious'` | No | `'none'` | Icon container size behavior |
-| color | IconColor | No | `'default'` | Semantic content color |
+| color | IconColor | No | `'inherit'` | The surrounding text color, or a semantic content color |
 | title | string | No | undefined | Accessible title when icon is meaningful |
 | decorative | boolean | No | true | Hides icon from assistive technology |
 | className | string | No | undefined | Optional class name |
@@ -216,6 +221,7 @@ export type IconSize = 'sm' | 'md';
 export type IconSpacing = 'none' | 'spacious';
 
 export type IconColor =
+  | 'inherit'
   | 'default'
   | 'subtle'
   | 'inverse'
@@ -289,9 +295,8 @@ Expected behavior:
 Use semantic content tokens only.
 
 ```css
-.icon {
-  color: var(--color-content-default);
-  fill: currentColor;
+.svg {
+  fill: currentColor; /* the root sets no color unless the color prop asks for one */
 }
 ```
 
@@ -338,7 +343,7 @@ Icon itself is not interactive.
 Interactive behavior belongs to parent components such as IconButton, Button, MenuItem, or Link.
 
 ### Disabled
-Use the `disabled` color token when the parent component is disabled.
+A disabled parent's text color reaches the icon on its own. Set `color="disabled"` only on an icon that stands outside a disabled control's text color.
 
 ---
 

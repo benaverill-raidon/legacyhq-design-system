@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DropdownMenu } from './dropdown-menu';
@@ -86,12 +86,199 @@ describe('DropdownMenu', () => {
     expect(handleOpenChange).toHaveBeenCalledWith(false);
   });
 
-  it('does not call onOpenChange when clicking a menu item itself (Menu decides, not DropdownMenu)', () => {
+  it('closes when an item is chosen, after its onSelect, and returns focus to the trigger', () => {
+    const order: string[] = [];
+    function Tracked() {
+      const [open, setOpen] = React.useState(false);
+      return (
+        <DropdownMenu
+          aria-label="Matter actions"
+          showSearch={false}
+          open={open}
+          onOpenChange={(next) => {
+            order.push(`openChange:${next}`);
+            setOpen(next);
+          }}
+          sections={[{ id: 'actions', items: [{ id: 'rename', label: 'Rename', onSelect: () => order.push('select') }] }]}
+        >
+          <button type="button" onClick={() => setOpen(true)}>
+            Trigger
+          </button>
+        </DropdownMenu>
+      );
+    }
+
+    render(<Tracked />);
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+    fireEvent.click(trigger);
+    const item = screen.getByRole('menuitem', { name: 'Rename' });
+    item.focus();
+    fireEvent.click(item);
+
+    expect(order).toEqual(['select', 'openChange:false']);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("stays open when the item's onSelect calls event.preventDefault()", () => {
     const handleOpenChange = vi.fn();
-    render(<ControlledDropdownMenu open onOpenChange={handleOpenChange} />);
+    render(
+      <ControlledDropdownMenu
+        open
+        onOpenChange={handleOpenChange}
+        sections={[
+          {
+            id: 'view',
+            items: [
+              { id: 'drafts', label: 'Show drafts', selectionType: 'checkbox', onSelect: (event) => event.preventDefault() },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('menuitemcheckbox', { name: 'Show drafts' }));
+
+    expect(handleOpenChange).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  it("leaves focus where an item's onSelect moved it, outside the panel", () => {
+    render(
+      <>
+        <input aria-label="Elsewhere" />
+        <ControlledDropdownMenu
+          open
+          sections={[
+            {
+              id: 'actions',
+              items: [
+                { id: 'rename', label: 'Rename', onSelect: () => screen.getByRole('textbox', { name: 'Elsewhere' }).focus() },
+              ],
+            },
+          ]}
+        />
+      </>,
+    );
 
     fireEvent.click(screen.getByRole('menuitem', { name: 'Rename' }));
 
+    expect(screen.getByRole('textbox', { name: 'Elsewhere' })).toHaveFocus();
+  });
+
+  it('gives the trigger aria-haspopup="menu", unless it sets its own', () => {
+    const { rerender } = render(<ControlledDropdownMenu />);
+    expect(screen.getByRole('button', { name: 'Trigger' })).toHaveAttribute('aria-haspopup', 'menu');
+
+    rerender(
+      <DropdownMenu aria-label="Matter actions" open={false} sections={actionSections()}>
+        <button type="button" aria-haspopup="true">
+          Trigger
+        </button>
+      </DropdownMenu>,
+    );
+    expect(screen.getByRole('button', { name: 'Trigger' })).toHaveAttribute('aria-haspopup', 'true');
+  });
+
+  it("keeps the trigger's own ref working", () => {
+    const ref = React.createRef<HTMLButtonElement>();
+    render(
+      <DropdownMenu aria-label="Matter actions" open={false} sections={actionSections()}>
+        <button ref={ref} type="button">
+          Trigger
+        </button>
+      </DropdownMenu>,
+    );
+
+    expect(ref.current).toBe(screen.getByRole('button', { name: 'Trigger' }));
+  });
+
+  it('moves focus to the first enabled item when it opens without a search field', async () => {
+    render(
+      <ControlledDropdownMenu
+        sections={[
+          {
+            id: 'actions',
+            items: [
+              { id: 'rename', label: 'Rename', disabled: true },
+              { id: 'delete', label: 'Delete' },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+    trigger.focus();
+    fireEvent.click(trigger);
+
+    await waitFor(() => expect(screen.getByRole('menuitem', { name: 'Delete' })).toHaveFocus());
+  });
+
+  it('moves focus to the search field when it opens with one', async () => {
+    render(<ControlledDropdownMenu showSearch />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Trigger' }));
+
+    await waitFor(() => expect(screen.getByRole('textbox', { name: 'Search' })).toHaveFocus());
+  });
+
+  it('returns focus to the trigger on Escape from inside the panel', async () => {
+    render(<ControlledDropdownMenu />);
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+    fireEvent.click(trigger);
+    const item = screen.getByRole('menuitem', { name: 'Rename' });
+    await waitFor(() => expect(item).toHaveFocus());
+
+    fireEvent.keyDown(item, { key: 'Escape' });
+
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('closes and returns focus to the trigger when Tab or Shift+Tab leaves the panel', async () => {
+    render(<ControlledDropdownMenu />);
+    const trigger = screen.getByRole('button', { name: 'Trigger' });
+
+    fireEvent.click(trigger);
+    let item = screen.getByRole('menuitem', { name: 'Rename' });
+    await waitFor(() => expect(item).toHaveFocus());
+    expect(fireEvent.keyDown(item, { key: 'Tab' })).toBe(false);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+
+    fireEvent.click(trigger);
+    item = screen.getByRole('menuitem', { name: 'Rename' });
+    await waitFor(() => expect(item).toHaveFocus());
+    fireEvent.keyDown(item, { key: 'Tab', shiftKey: true });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('lets Tab move from the search field into the rows without closing', async () => {
+    render(<ControlledDropdownMenu showSearch />);
+    fireEvent.click(screen.getByRole('button', { name: 'Trigger' }));
+    const search = screen.getByRole('textbox', { name: 'Search' });
+    await waitFor(() => expect(search).toHaveFocus());
+
+    expect(fireEvent.keyDown(search, { key: 'Tab' })).toBe(true);
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  it('leaves focus and closing to a combobox trigger, as Select is', async () => {
+    const handleOpenChange = vi.fn();
+    render(
+      <DropdownMenu aria-label="Options" open onOpenChange={handleOpenChange} showSearch={false} sections={actionSections()}>
+        <input role="combobox" aria-label="Field" aria-controls="options" aria-expanded={false} />
+      </DropdownMenu>,
+    );
+    const field = screen.getByRole('combobox', { name: 'Field' });
+    field.focus();
+
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    expect(field).toHaveFocus();
+
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Rename' }));
     expect(handleOpenChange).not.toHaveBeenCalled();
   });
 
@@ -167,6 +354,30 @@ describe('DropdownMenu', () => {
     const panel = screen.getByRole('menu').closest('[data-alignment]') as HTMLElement;
     expect(panel).toHaveAttribute('id', 'custom-dropdown');
     expect(panel).toHaveClass('custom-panel');
+  });
+
+  it('passes searchLabel and clearSearchLabel to the Menu', () => {
+    render(
+      <ControlledDropdownMenu
+        open
+        showSearch
+        searchValue="ren"
+        onSearchChange={() => {}}
+        searchLabel="Rechercher"
+        clearSearchLabel="Effacer"
+      />,
+    );
+
+    expect(screen.getByRole('textbox', { name: 'Rechercher' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Effacer' })).toBeInTheDocument();
+  });
+
+  it('passes fullWidth to the Menu', () => {
+    render(<ControlledDropdownMenu open size="sm" fullWidth />);
+
+    const menuRoot = screen.getByRole('menu').parentElement as HTMLElement;
+    expect(menuRoot).toHaveClass(menuStyles.fullWidth);
+    expect(menuRoot).not.toHaveClass(menuStyles.size_sm);
   });
 
   it('couples matchTriggerWidth to the inner Menu, filling the panel instead of a fixed size width', () => {

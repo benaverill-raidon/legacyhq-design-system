@@ -32,10 +32,10 @@
       "props": {}
     },
     {
-      "name": "Sizes and tones",
-      "description": "size sets trigger height (32/40/48) and chip size; tone maps to TextField's appearance.",
-      "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" tone=\"subtle\" />",
-      "props": { "size": "lg", "tone": "subtle" }
+      "name": "Sizes and contexts",
+      "description": "size sets trigger height (32/40/48) and chip size; context is the same axis as TextField's (inline: chromeless until hovered or focused).",
+      "jsx": "<Select options={options} value={value} onChange={setValue} size=\"lg\" context=\"inline\" />",
+      "props": { "size": "lg", "context": "inline" }
     },
     {
       "name": "Invalid, in a form",

@@ -1,189 +1,246 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { InlineMessage } from './inline-message';
+import inlineMessageStyles from './inline-message.module.css';
 import * as InlineMessageStories from './InlineMessage.stories';
 
 <Meta of={InlineMessageStories} name="Docs" />
 
-# Inline Message
+<Unstyled>
+<ComponentPage>
 
-Inline Message is a compact, tone-colored status row - an icon, a bold title, and optional
-secondary text - that can optionally reveal additional detail in a popup when clicked.
+<ComponentHeader
+  id="inline-message"
+  example={
+    <>
+      <InlineMessage tone="success" title="Synced" secondaryText="All changes saved" />
+      <InlineMessage
+        tone="warning"
+        title="3 documents pending review"
+        secondaryText="Last updated 2 hours ago"
+        content="Review each document before the filing deadline on Friday."
+      />
+    </>
+  }
+>
+  Inline Message is a one-line status in the flow of the page: an icon, a bold title, and optional
+  secondary text. Give it `content` and the row becomes a button that opens a short detail in a
+  popup.
+</ComponentHeader>
 
-<Canvas of={InlineMessageStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A short status line inline in the page (a save confirmation, a validation summary, a sync state)
-  that sometimes needs more explanation than fits in one line.
-- Anywhere a click-to-expand detail panel, anchored to the message itself, is more appropriate than
-  a full banner or a separate dialog.
+- A short status beside what it's about: a sync state, a save confirmation, a review count.
+- A status that sometimes needs one more sentence, opened on click with `content`.
+- A summary line for a form or a section, such as how many items need attention.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a hover-only supplemental hint.** That's Tooltip - non-interactive, shown on hover/focus,
-  and never contains its own trigger affordance. Inline Message is click-triggered by design (see
-  Usage guidance below).
-- **For content essential to completing a task with no fallback.** The detail panel is optional and
-  collapsed by default - don't put something the user can't afford to miss inside it.
-- **As a page-level banner or toast.** Inline Message is inline with surrounding content, not a
-  persistent top-of-page or corner notification.
+- **A hint on hover or focus:** <DocLink to="Components/Overlays/Tooltip" />. Inline Message opens only on click.
+- **A message about one form control:** <DocLink to="Components/Forms/Field" />'s `message`, which is tied to the control for assistive technology.
+- **Something people must read, or act on:** <DocLink to="Components/Feedback/Section Message" />, which shows its description and actions without a click.
+- **A page-level or passing announcement:** <DocLink to="Components/Feedback/Banner" /> or <DocLink to="Components/Feedback/Toast" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={InlineMessageStories.Content} />
+</Section>
 
-- **Icon** - a tone-mapped status icon (`StatusInformationIcon`, `StatusSuccessIcon`,
-  `StatusWarningIcon`, `StatusErrorIcon`). `tone="default"` falls back to a
-  plain dot - Figma has no dedicated status icon for it either, confirmed absent from the generated
-  icon set.
-- **Title** - required bold lead text (`heading-xs` typography).
-- **Secondary text** - optional muted trailing text (`body-md` typography), shown only when
-  provided.
-- **Detail panel** - rendered through [Popup](../../primitives/popup/popup.md) (its default styled
-  skin, not `unstyled`) when `content` is provided. Omit `content` and the whole row renders as a
-  plain, non-interactive `div` with no button and no popup.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <InlineMessage
+      tone="warning"
+      title="3 documents pending review"
+      secondaryText="Last updated 2 hours ago"
+      content="Review each document before the filing deadline on Friday."
+    />
+  }
+>
+  <Part name="root" target={inlineMessageStyles.root}>The row: a native `button` when `content` is set, a plain `div` when it isn't. It has no padding of its own.</Part>
+  <Part name="icon" target={inlineMessageStyles.iconSlot}>The tone's status icon, in the tone's color, in a 24px box. `default` shows a plain dot instead.</Part>
+  <Part name="title" target={inlineMessageStyles.title}>Required bold text. It doesn't wrap.</Part>
+  <Part name="secondaryText" target={inlineMessageStyles.secondaryText}>Optional muted text after the title. It doesn't wrap either.</Part>
+  <Part name="content">The detail, in a Popup below the row while it's open. It's rendered at the end of the page, not inside the row.</Part>
+</Anatomy>
 
-### Click-to-toggle, not hover
+</Section>
 
-Popup's own guidance is explicit: hover-only reveals belong to Tooltip, not to a Popup-based
-component. Inline Message's row renders as a real `<button>` when `content` is provided - clicking
-(or Enter/Space) toggles the detail panel, which is keyboard-accessible and works for touch users,
-unlike a hover-only reveal. The button applies the shared Focus Ring primitive for its
-`:focus-visible` outline, and keyboard focus shows the same tint as hover rather than a separate
-treatment - the same convention Button, IconButton, and Toggle Button already use.
+<Section title="Variants">
 
-```tsx
-<InlineMessage title="3 documents pending review" tone="warning" content="Review each document before Friday." />
-```
+`tone` sets the status: `default`, `information`, `success`, `warning`, or `error`. It picks the
+icon and its color, and the tint the row shows on hover, on focus, and while its popup is open; a
+row without `content` has no tint. There's no status icon for `default`, so it shows a plain dot.
+`info`, the earlier name for `information`, is still accepted.
 
-### Uncontrolled and controlled
+<Example of={InlineMessageStories.Variants} />
 
-Works out of the box with just a click (uncontrolled), and also accepts `open`/`onOpenChange` for
-programmatic control - e.g. showing the detail automatically right after an action completes.
+</Section>
 
-```tsx
-const [open, setOpen] = useState(false);
+<Section title="Behavior">
 
-<InlineMessage title="Saved" tone="success" open={open} onOpenChange={setOpen} content="All changes saved." />;
-```
+<Subsection title="Opening the detail">
 
-### Viewport-edge alignment and long content
+With `content`, clicking the row, or pressing Enter or Space on it, opens a popup below it. Clicking
+the row again, pressing Escape, or clicking outside closes it. It never opens on hover. Without
+`content`, the row is plain text: no button, no popup.
 
-Alignment fallback and content wrapping are both delegated to Popup rather than reimplemented
-locally.
+<Example of={InlineMessageStories.Content} caption="Title only, title and secondary text, no content, and inside a card." />
 
-<Canvas of={InlineMessageStories.EdgeCases} />
+</Subsection>
 
-### No `content`, no button
+<Subsection title="Controlled or uncontrolled">
 
-If there's nothing to expand, don't force an interactive affordance. Omitting `content` renders a
-plain status row - no button, no `aria-expanded`, no popup - for the common case of a message with
-nothing more to say.
+Inline Message keeps its own open state, starting from `defaultOpen`. To control it, pass `open`
+and update it from `onOpenChange`, which is called on every click of the row and with `false` when
+Escape or a click outside closes the popup. Use that to open the detail right after an action
+finishes, for example.
 
-```tsx
-<InlineMessage title="Synced" secondaryText="All changes saved" tone="success" />
-```
+</Subsection>
 
-## Do / Don't
+<Subsection title="Placement and length">
 
-**Do** omit `content` for a message that has nothing more to say.
+The popup opens below the row, lined up with its start edge, and moves to whichever side fits best
+near the edge of the window. It's as wide as its content and doesn't wrap, and neither do the title
+and secondary text, so keep all three short.
 
-```tsx
-<InlineMessage title="Synced" tone="success" />
-```
+<Example of={InlineMessageStories.EdgeCases} caption="Rows at the window's edges, a long detail that runs as one line, and a dark surface." />
 
-**Don't** wrap trivial content in a popup just to add an expand affordance nobody needs.
+</Subsection>
 
-```tsx
-<InlineMessage title="Synced" tone="success" content="Synced." />
-```
+</Section>
 
----
+<Section title="Do and don't">
 
-**Do** use `open`/`onOpenChange` to reveal detail programmatically after an action completes.
+<Guidelines>
+<Do caption="Leave content unset when there's nothing more to say." code={`<InlineMessage tone="success" title="Synced" secondaryText="All changes saved" />`}>
+  <InlineMessage tone="success" title="Synced" secondaryText="All changes saved" />
+</Do>
+<Dont caption="Add content that repeats the title, which turns the row into a button for nothing." code={`<InlineMessage tone="success" title="Synced" content="Synced." />`}>
+  <InlineMessage tone="success" title="Synced" content="Synced." />
+</Dont>
+<Do
+  caption="Write a title that says what happened. Assistive technology hears only the status word before it, not the icon."
+  code={`<InlineMessage
+  tone="error"
+  title="Filing rejected"
+  content="The court returned the filing: the signature page is missing."
+/>`}
+>
+  <InlineMessage tone="error" title="Filing rejected" content="The court returned the filing: the signature page is missing." />
+</Do>
+<Dont caption="Leave what happened to the icon and its color, with a title that doesn't say it." code={`<InlineMessage tone="error" title="Filing" secondaryText="Updated today" />`}>
+  <InlineMessage tone="error" title="Filing" secondaryText="Updated today" />
+</Dont>
+<Do caption="Keep the detail to a sentence of plain text." code={`<InlineMessage
+  tone="information"
+  title="Shared with 2 people"
+  content="Both can view and comment on this matter."
+/>`}>
+  <InlineMessage tone="information" title="Shared with 2 people" content="Both can view and comment on this matter." />
+</Do>
+<Dont
+  caption="Put links or buttons in content. The popup sits at the end of the page, so keyboard users reach them only after everything else."
+  code={`<InlineMessage
+  tone="information"
+  title="Shared with 2 people"
+  content={<Link href="/sharing">Manage access</Link>}
+/>`}
+/>
+</Guidelines>
 
-```tsx
-<InlineMessage title="Saved" tone="success" open={justSaved} onOpenChange={setJustSaved} content="Saved at 3:41 PM." />
-```
+</Section>
 
-**Don't** reach for Inline Message as a hover-only hint - that's Tooltip's job.
+<Section title="Accessibility">
 
-```tsx
-{
-  /* Use Tooltip instead - Inline Message is click-triggered by design. */
-}
-```
+- With `content`, the row is a native `button` with `type="button"`: focusable, and activated by
+  Enter and Space. Keyboard focus shows the shared Focus Ring with the same tint as hover.
+- The button's accessible name is its title and secondary text. Don't put links or other controls
+  in them, since they'd be nested inside a button.
+- Popup sets `aria-expanded` on the button, and `aria-controls` pointing at the popup while it's
+  open. The popup is a non-modal `dialog` named by the title.
+- The popup is rendered at the end of the page, so it takes focus when it opens, once it's in
+  place, even the first time; its links and buttons come next in Tab order. Tab past its last item,
+  Shift+Tab before its first, or Escape closes it and returns focus to the row.
+- The status icon and the `default` dot are hidden from assistive technology. As in Section
+  Message, the tone's name is read before the title as hidden text ("Error: Filing rejected"); it's
+  `statusLabel`, for translation, and `default` has none.
+- Without `content`, the row is a plain `div` that isn't focusable.
 
-## API
+<Keyboard>
+  <Key keys="Tab">Moves focus to the row when it has `content`. A row without it is skipped.</Key>
+  <Key keys="Enter">Opens or closes the popup.</Key>
+  <Key keys="Space">Opens or closes the popup.</Key>
+  <Key keys="Tab">In the popup, moves through its items; past the last, closes it and returns focus to the row.</Key>
+  <Key keys="Escape">Closes the popup and returns focus to the row.</Key>
+</Keyboard>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>title</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. Bold lead text.</td>
-    </tr>
-    <tr>
-      <td><code>secondaryText</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional muted trailing text.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'info' | 'success' | 'warning' | 'error'</code></td>
-      <td><code>'default'</code></td>
-      <td>Selects the status icon and the tint shown on hover/open.</td>
-    </tr>
-    <tr>
-      <td><code>content</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Detail revealed in a popup when clicked. Omitting it renders a plain, non-interactive row.</td>
-    </tr>
-    <tr>
-      <td><code>open</code></td>
-      <td><code>boolean</code></td>
-      <td>-</td>
-      <td>Controlled open state for the detail popup.</td>
-    </tr>
-    <tr>
-      <td><code>defaultOpen</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Initial open state for uncontrolled usage.</td>
-    </tr>
-    <tr>
-      <td><code>onOpenChange</code></td>
-      <td><code>(open: boolean) =&gt; void</code></td>
-      <td>-</td>
-      <td>Called with the next value whenever the row is clicked.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root row's class list.</td>
-    </tr>
-  </tbody>
-</table>
+</Section>
 
-`data-force-state` pins hover/focus as a static Storybook reference (documentation-only, not part
-of the public API) - the same convention Button, Checkbox, and Switch use.
+<Section title="API">
 
-## Related components
+<PropsTable of={InlineMessageStories} />
 
-- **Popup** - owns positioning, the portal, dismissal, and (unlike Tooltip) the visual skin the
-  detail panel uses directly.
-- **Focus Ring** - supplies the trigger button's `:focus-visible` outline.
-- **Tooltip** - the hover/focus-triggered, non-interactive counterpart.
+Inline Message doesn't pass other attributes through to the row. `className` is added to the row's
+classes.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Inline Message's stylesheet uses, by family, with the property it sets and when. "Base"
+is the row with no modifiers; the tone rows apply only to a row with `content`, on hover, on focus,
+and while the popup is open. The popup's own surface uses Popup's tokens.
+
+<TokensTable id="inline-message" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Overlays/Popup" />, which places the detail panel and closes it.
+- <DocLink to="Components/Overlays/Tooltip" /> for a hint shown on hover or focus.
+- <DocLink to="Components/Feedback/Section Message" /> for a status panel with a description or actions.
+- <DocLink to="Components/Forms/Field" /> for a message about one form control.
+- <DocLink to="Components/Feedback/Banner" /> for a page-level announcement, and <DocLink to="Components/Feedback/Toast" /> for a passing one.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads inline-message.types.ts, the design tokens read inline-message.module.css, and
+  the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

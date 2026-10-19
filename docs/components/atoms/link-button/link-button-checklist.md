@@ -12,7 +12,7 @@ Link buttons open new pages, websites, or new locations on a page. These are but
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 
@@ -144,7 +144,7 @@ When `isDisabled` is true:
 
 When `isLoading` is true:
 
-- Replace leading content area with Spinner if following Button loading behavior.
+- Show a Spinner over the content while loading, the same as Button.
 - Preserve the original label width.
 - Set `aria-busy="true"`.
 - Prevent navigation.
@@ -167,7 +167,7 @@ Match Button icon behavior.
 - Icons use spacing none internally.
 - Gap remains consistent with Button.
 - Support leading and trailing icons.
-- Loading should replace leading content area with Spinner while preserving label width.
+- Loading shows a Spinner over the content and holds the link button's size; the label stays the accessible name.
 
 ## Focus behavior
 

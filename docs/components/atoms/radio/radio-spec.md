@@ -137,7 +137,14 @@ invalid = false
 disabled = false
 ```
 
-RadioGroup default spacing should be vertical with no visible gap between radio options unless design tokens specify otherwise.
+RadioGroup default spacing is vertical with no gap between radio options (each row is a 32px
+target). `orientation="horizontal"` puts `spacing-lg` between options in a row (`column-gap`); rows
+that wrap stay flush. Figma's `radio-group` is vertical only, so the horizontal gap is a code
+decision to confirm in Figma.
+
+RadioGroup passes its `disabled` and `required` to every Radio inside it through context, from
+`options` or `children`: a disabled group's radios look disabled (not only natively disabled by the
+fieldset), and a required group's radios are natively required without their own `*`.
 
 ## Usage Examples
 
@@ -201,14 +208,24 @@ RadioGroup default spacing should be vertical with no visible gap between radio 
 - Typography: `body-md`.
 - Required mark appears after the label text.
 - Required mark uses error content color.
-- Disabled label uses disabled content color.
+- Required mark is `aria-hidden`; the native `required` is what assistive technology announces.
+- Disabled label uses disabled content color (the root's color, no extra opacity), matching Checkbox.
 
 ### Focus
 
 - Use Focus Ring primitive utility classes.
 - Do not recreate focus ring styles locally.
-- Focus should appear around the 32px interaction target / visual indicator area.
+- The ring wraps the 24px visual indicator: the input carries the Focus Ring classes and sets
+  `--focus-ring-offset` to `calc((size-choice-target - size-choice-indicator) / -2)`, as Checkbox does.
+- The `previewFocus` class pins the ring for Storybook, drawn from the Focus Ring's own variables.
 - Use `:focus-visible` behavior through the Focus Ring primitive.
+
+## Motion
+
+- The hover, press, and focus overlay behind the indicator fades in with the `fade-quick` motion
+  recipe, not a hardcoded duration, and is switched off under `prefers-reduced-motion: reduce`.
+- The selected dot appears instantly on toggle, with no scale-up or other transform-based
+  animation, matching Checkbox.
 
 ## Token Mapping
 
@@ -219,8 +236,8 @@ Use semantic CSS variables only. Do not hardcode visual design values unless a t
 - Indicator size: `size-choice-indicator` (24px).
 - Interaction target: `size-choice-target` (32px).
 - Row min-height: `size-choice-row` (32px).
-- Label gap: token equivalent of 8px or closest existing component spacing from the spec.
-- RadioGroup option gap: 0.
+- Label gap: `spacing-xxs` (2px); the 32px target adds 4px around the 24px circle.
+- RadioGroup option gap: 0 when vertical; `spacing-lg` between options when horizontal.
 
 ### Typography
 
@@ -373,13 +390,15 @@ Show unchecked, checked, and invalid (unchecked/checked) crossed with default/ho
 disabled, plus a live example demonstrating real click-driven, mutually-exclusive selection. Radio
 pins hover/focus/press with its own `previewHover`/`previewFocus`/`previewPress` classes rather
 than the shared `data-force-state` convention - document this rather than silently switching to
-`data-force-state`, which Radio's CSS does not read.
+`data-force-state`, which Radio's CSS does not read. `previewFocus` pins the shared Focus Ring as
+well as the overlay.
 
 ### Content
 
 Show label content variations (standard, required, label-less with `aria-label`, long/wrapping),
 a label-less table radio example, RadioGroup with the `options` API, a controlled RadioGroup,
-`orientation="horizontal"`, `children` composition, a required group, and a disabled group.
+`orientation="horizontal"`, `children` composition, a required group, and a disabled group from
+`options` and from `children`.
 
 ### Edge Cases
 

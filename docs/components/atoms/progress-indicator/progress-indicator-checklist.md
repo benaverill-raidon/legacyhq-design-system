@@ -28,7 +28,7 @@
 
 - [ ] `default` matches the neutral Figma treatment.
 - [ ] `primary` uses the brand semantic color.
-- [ ] `inverted` works on dark or bold surfaces.
+- [ ] `inverse` works on a bold surface (`color-background-neutral-bold-default`), in either theme.
 - [ ] Unselected dots use `color-border-bold` across all appearances.
 - [ ] No primitive colors are used directly.
 
@@ -56,20 +56,20 @@
 
 ## Accessibility
 
-- [ ] Root uses `role="progressbar"`.
+- [ ] Root uses `role="progressbar"` when passive, and `role="group"` (no value attributes) with `onStepChange`.
 - [ ] Root exposes one-based min/max/current values.
 - [ ] Component has an accessible journey name.
 - [ ] Default `aria-valuetext` is `Step X of Y`.
 - [ ] Custom `getValueText` is supported.
 - [ ] Passive dots are hidden from assistive technology.
-- [ ] Interactive dots use accessible button labels and `aria-current="step"`.
+- [ ] Interactive dots use accessible button labels from `getStepLabel` (default `Go to step X`) and `aria-current="step"`.
 - [ ] Root remains non-focusable.
 
 ## Storybook
 
 - [ ] Docs, Playground, Variants, Sizes, States, Content, and Edge Cases exist.
 - [ ] Docs embeds Playground and Content canvases and documents when to use / when not to use.
-- [ ] Variants shows `default` and `primary` together, with `inverted` shown
+- [ ] Variants shows `default` and `primary` together, with `inverse` shown
       separately on a dark surface.
 - [ ] Sizes shows `sm` and `md`, including that the interactive hit target scales too.
 - [ ] States shows first/middle/final dot position, passive versus interactive rendering, and a

@@ -2,14 +2,92 @@
   "id": "component-registry-governance",
   "designSystem": "LegacyHQ",
   "artifact": "component-registry-governance",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "status": "stable",
   "owner": "LegacyHQ Design System",
-  "lastReviewed": "2026-08-06",
-  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json"],
+  "lastReviewed": "2026-10-06",
+  "appliesTo": ["components", "docs/components/*/*/*.contract.json", "docs/components/registry.json", "packages/ui/src/components/**/*.stories.tsx (title only)", ".storybook/preview.js (storySort only)"],
   "overview": {
     "description": "Every component has a hand-authored <name>.contract.json meant to be a machine-readable contract (props, anatomy, tokens, a11y, behavior rules). An audit found severe shape inconsistency across the 28 files - not just missing fields, but genuinely incompatible JSON shapes for the same field name. docs/components/registry.json is generated from these files by scripts/generate-component-registry.mjs, which normalizes every field to one canonical shape and validates the result against docs/foundations/component-registry.schema.json. This is the reliable, single-fetch, machine-consumable view; the source contract.json files remain the deep-dive reference for one component's full, un-normalized detail.",
     "purpose": "Let an agent or tool query structural facts (props, anatomy, sizes, slots, variants) across many components at once without reading 28 differently-shaped files, while never fabricating content the source files don't actually contain."
+  },
+  "classification": {
+    "description": "Every component is classified on two independent dimensions. They answer different questions and must not be conflated - a component's tier says nothing about its category, and vice versa.",
+    "dimensions": {
+      "tier": {
+        "meaning": "Compositional complexity - what a component is built from.",
+        "allowedValues": "The `tier` enum in docs/foundations/component-registry.schema.json.",
+        "source": "Derived from the component's folder (packages/ui/src/components/<tier>/, docs/components/<tier>/). Not authored in contract.json.",
+        "drives": ["file layout", "composition rules (a tier composes only from lower tiers, plus the documented exceptions in CLAUDE.md)", "llms.txt index headings"]
+      },
+      "category": {
+        "meaning": "Functional / documentation grouping - the job the component does for the user.",
+        "allowedValues": "The `category` enum in docs/foundations/component-registry.schema.json is the single authoritative list. Other files may attach definitions, labels, or ordering to those values (e.g. `categories` below), but never define the set themselves.",
+        "source": "Authored as the top-level `category` key in each <name>.contract.json. Required: registry generation fails if it is missing or not in the schema enum.",
+        "drives": ["registry.json `category`", "Storybook sidebar group (story titles must match - see `storybook` below)"]
+      }
+    },
+    "categories": {
+      "description": "Definition of each category value. Keys must match the schema enum exactly - this is metadata for the values, not a second list of them.",
+      "definitions": {
+        "actions": "Triggers something — submits, confirms, opens, or offers a set of actions.",
+        "forms": "Captures or edits a value — inputs, pickers, selection controls, and the field/form structure around them.",
+        "feedback": "Communicates system status — messages, loading, progress toward completion, and empty states.",
+        "navigation": "Moves the user, or shows where they are — links, wayfinding, and position within a sequence.",
+        "data-display": "Presents information — metadata, people, records, and content surfaces.",
+        "overlays": "Layers content above the page — dialogs, tooltips, and anchored popups.",
+        "foundations": "Component-like system assets that are documented with the design foundations rather than as product UI - e.g. Icon, Focus Ring, Logo."
+      }
+    },
+    "foundationsScope": {
+      "rule": "`foundations` is a valid category for component-like system assets (Icon, Focus Ring, Logo): they have a contract.json and appear in registry.json like any other component.",
+      "distinction": "The Foundations documentation section is broader than the category. It also holds non-component documentation - Color, Typography, Spacing, Radius, Elevation, Motion - which has no contract.json and never appears in registry.json.",
+      "consequence": "Filtering registry.json by `category: foundations` returns only the component-backed subset, not the complete Foundations documentation section. Don't use it as an index of foundations docs."
+    },
+    "assignmentRules": [
+      "Classify by the job the component does for the user, not by how it looks or by its tier.",
+      "Progress components: progress toward completion or an outcome -> feedback (Progress Bar). Position within a sequence or workflow -> navigation (Progress Indicator, Progress Tracker).",
+      "Behavior beats appearance: Link Button renders an <a>, so it is navigation even though it looks like a Button.",
+      "Dropdown Menu and Menu are actions - their job is offering actions. Being reused inside Select or an overflow trigger is composition, not category.",
+      "Chip edits an applied filter or property, so it is forms; Tag is display-only metadata, so it is data-display.",
+      "Inline Edit is forms - it is an input mechanism, even when it sits inside a Key Value Pair or Table cell.",
+      "Each component gets exactly one category. When a component plausibly fits two, record the deciding reason here rather than splitting it."
+    ],
+    "deferredCategories": [
+      {
+        "category": "layout",
+        "decision": "Not created yet. Card stays in data-display until there are enough real layout components (e.g. a coded Page Header) to justify a separate group - no one-item categories."
+      }
+    ],
+    "storybook": {
+      "titleRule": "Every component (every contract.json) has exactly one story file whose meta `title` is `Components/<group label>/<display name>`, or `Foundations/<display name>` for the `foundations` category. Titles never use the retired `UI/<Tier>/` form.",
+      "componentGroups": [
+        { "category": "actions", "label": "Actions" },
+        { "category": "forms", "label": "Forms" },
+        { "category": "feedback", "label": "Feedback" },
+        { "category": "navigation", "label": "Navigation" },
+        { "category": "data-display", "label": "Data Display" },
+        { "category": "overlays", "label": "Overlays" }
+      ],
+      "componentGroupsRule": "Sidebar label and order for each component category. Must cover exactly the schema enum minus `foundations`, which is its own top-level Foundations section rather than a group under Components.",
+      "displayNameRule": "The contract `name` split into words at each capital (`ProgressBar` -> `Progress Bar`), unless the name is listed in displayNameOverrides.",
+      "displayNameOverrides": {
+        "Icon": "Icons"
+      },
+      "ordering": "parameters.options.storySort in .storybook/preview.js fixes the order of top-level sections and of the component groups (which must be componentGroups' labels, in order); components sort alphabetically within a group, keeping every `X Group` next to `X` without nesting. storySort has to stay an inline literal because Storybook reads it statically, so it is a literal copy of the labels - the test below catches drift.",
+      "enforcement": {
+        "test": "packages/ui/src/components/component-taxonomy.test.ts (runs in `npm test`, so CI fails on drift)",
+        "fails when": [
+          "a contract's category is missing or not in the schema enum",
+          "the governance category definitions or componentGroups don't cover exactly the schema enum",
+          "the storySort component-group order differs from componentGroups",
+          "a displayNameOverrides key isn't a real component name",
+          "a component has no story with its expected title, or more than one",
+          "a `Components/` story uses an unknown group or matches no contract's name and category",
+          "any story title starts with `UI/`"
+        ]
+      }
+    }
   },
   "normalizationRules": [
     {
@@ -79,7 +157,7 @@
     {
       "field": "subComponents",
       "canonicalShape": "Array<{name, anatomy, props}>, always present ([] when unused)",
-      "note": "Handles the Radio contract.json, which documents Radio and RadioGroup in one file (no top-level anatomy/props, nested under radio/radioGroup keys instead). Detected structurally so a future multi-component file is handled the same way."
+      "note": "Handles the Radio contract.json, which documents Radio and RadioGroup in one file, nested under radio/radioGroup keys. Detected by those keys, so its top-level anatomy (which the Docs page labels Radio's parts from) becomes the entry's anatomy without hiding the sub-components."
     }
   ],
   "contentCompleteness": {
@@ -87,22 +165,10 @@
     "purpose": "Surfaces real content gaps (not shape drift) as a queryable signal instead of only living in prose a reader might skip.",
     "knownContentGaps": [
       {
-        "component": "Avatar",
-        "file": "docs/components/atoms/avatar/avatar.contract.json",
-        "issue": "4 top-level keys only (name, anatomy, props, tokens) - missing purpose, useCases, states, accessibility, behaviorRules, do/dont, acceptanceCriteria entirely.",
-        "resolution": "Author the missing sections from the real avatar.tsx behavior next time Avatar is substantively touched. Not something the registry generator can or should paper over - filling this in requires real component analysis, not normalization."
-      },
-      {
-        "component": "Tooltip",
-        "file": "docs/components/atoms/tooltip/tooltip.contract.json",
-        "issue": "11 top-level keys - missing useCases, props (!), sizes, slots, do/dont, acceptanceCriteria.",
-        "resolution": "Same as Avatar - author when next substantively touched."
-      },
-      {
         "component": "IconButton",
         "file": "docs/components/atoms/icon-button/icon-button.contract.json",
         "issue": "12 top-level keys - missing tokens entirely, plus useCases, do/dont, acceptanceCriteria.",
-        "resolution": "Same as Avatar - author when next substantively touched."
+        "resolution": "Author the missing sections from the real icon-button.tsx behavior when Icon Button is next substantively touched (Avatar and Tooltip were filled in on 2026-10-17, during the Docs page rollout)."
       }
     ]
   },

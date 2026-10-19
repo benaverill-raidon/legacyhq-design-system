@@ -1,7 +1,7 @@
 import * as React from 'react';
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { SplitButton } from './split-button';
@@ -67,6 +67,46 @@ describe('SplitButton', () => {
     fireEvent.click(screen.getByRole('menuitem', { name: 'Save as...' }));
 
     expect(handleSaveAs).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes the menu and returns focus to the caret when an item is chosen', () => {
+    const handleSaveAs = vi.fn();
+    renderSplitButton({
+      sections: [{ id: 'actions', items: [{ id: 'save-as', label: 'Save as...', onSelect: handleSaveAs }] }],
+    });
+    const caret = screen.getByRole('button', { name: 'More Save options' });
+
+    fireEvent.click(caret);
+    const item = screen.getByRole('menuitem', { name: 'Save as...' });
+    item.focus();
+    fireEvent.click(item);
+
+    expect(handleSaveAs).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(caret).toHaveFocus();
+  });
+
+  it('marks the caret as opening a menu, and announces whether it is open', () => {
+    renderSplitButton();
+    const caret = screen.getByRole('button', { name: 'More Save options' });
+
+    expect(caret).toHaveAttribute('aria-haspopup', 'menu');
+    expect(caret).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(caret);
+    expect(caret).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('moves focus into the menu when it opens, and back to the caret on Escape', async () => {
+    renderSplitButton();
+    const caret = screen.getByRole('button', { name: 'More Save options' });
+
+    fireEvent.click(caret);
+    const item = screen.getByRole('menuitem', { name: 'Save as...' });
+    await waitFor(() => expect(item).toHaveFocus());
+
+    fireEvent.keyDown(item, { key: 'Escape' });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(caret).toHaveFocus();
   });
 
   it('closes the dropdown on Escape, inherited from Popup', () => {

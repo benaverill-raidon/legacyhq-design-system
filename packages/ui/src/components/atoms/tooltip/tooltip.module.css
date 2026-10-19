@@ -20,7 +20,7 @@
   gap: var(--spacing-xs);
   box-sizing: border-box;
   padding-block: var(--spacing-xxs);
-  padding-inline: var(--measurement-6);
+  padding-inline: var(--spacing-075);
   border-radius: var(--border-radius-sm);
   background: var(--color-background-neutral-bold-default);
   color: var(--color-content-inverse-default);
@@ -29,7 +29,26 @@
   font-weight: var(--typography-body-sm-font-weight);
   line-height: var(--typography-body-sm-line-height);
   letter-spacing: var(--typography-body-sm-letter-spacing);
-  pointer-events: none;
+}
+
+/*
+ * The bubble can be hovered (WCAG 1.4.13): this strip fills the gap Popup leaves between the bubble
+ * and its trigger (--spacing-sm), on the trigger's side, so the pointer can move from the trigger
+ * onto the bubble without leaving both. Popup's panel is position: fixed, so it holds the strip.
+ */
+.content::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  block-size: var(--spacing-sm);
+}
+
+.content[data-alignment^='top']::before {
+  inset-block-start: 100%;
+}
+
+.content[data-alignment^='bottom']::before {
+  inset-block-end: 100%;
 }
 
 .contentText {

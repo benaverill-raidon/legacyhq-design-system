@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Banner } from './banner';
 import styles from './banner.module.css';
-import type { BannerAppearance } from './banner.types';
+import type { BannerTone } from './banner.types';
 
 const bannerCss = readFileSync('packages/ui/src/components/organisms/banner/banner.module.css', 'utf8');
 
@@ -19,17 +19,17 @@ describe('Banner', () => {
     expect(screen.getByText('Scheduled maintenance tonight')).toBeInTheDocument();
   });
 
-  it('defaults to role status and the default appearance', () => {
+  it('defaults to role status and the default tone', () => {
     render(<Banner>Heads up</Banner>);
 
     const banner = screen.getByRole('status');
 
-    expect(banner).toHaveClass(styles.banner, styles.appearance_default);
+    expect(banner).toHaveClass(styles.banner, styles.tone_default);
   });
 
   it('allows the role to be overridden (e.g. alert for urgent errors)', () => {
     render(
-      <Banner appearance="error" role="alert">
+      <Banner tone="error" role="alert">
         Payment failed
       </Banner>,
     );
@@ -37,35 +37,35 @@ describe('Banner', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
-  it('applies the appearance class', () => {
-    const appearances: BannerAppearance[] = ['default', 'warning', 'error'];
+  it('applies the tone class', () => {
+    const tones: BannerTone[] = ['default', 'warning', 'error'];
 
-    appearances.forEach((appearance) => {
-      const { unmount } = render(<Banner appearance={appearance}>{appearance}</Banner>);
+    tones.forEach((tone) => {
+      const { unmount } = render(<Banner tone={tone}>{tone}</Banner>);
 
-      expect(screen.getByText(appearance)).toBeInTheDocument();
-      expect(screen.getByRole('status')).toHaveClass(styles[`appearance_${appearance}`]);
+      expect(screen.getByText(tone)).toBeInTheDocument();
+      expect(screen.getByRole('status')).toHaveClass(styles[`tone_${tone}`]);
 
       unmount();
     });
   });
 
   it('renders a status icon for warning and error, and a dot for default', () => {
-    const { container: defaultAppearance } = render(<Banner appearance="default">Default</Banner>);
-    expect(defaultAppearance.querySelector(`.${styles.dot}`)).toBeInTheDocument();
-    expect(defaultAppearance.querySelector('[data-color]')).not.toBeInTheDocument();
+    const { container: defaultTone } = render(<Banner tone="default">Default</Banner>);
+    expect(defaultTone.querySelector(`.${styles.dot}`)).toBeInTheDocument();
+    expect(defaultTone.querySelector('[data-color]')).not.toBeInTheDocument();
 
-    const { container: warning } = render(<Banner appearance="warning">Warning</Banner>);
+    const { container: warning } = render(<Banner tone="warning">Warning</Banner>);
     expect(warning.querySelector('[data-color]')).toBeInTheDocument();
     expect(warning.querySelector(`.${styles.dot}`)).not.toBeInTheDocument();
 
-    const { container: error } = render(<Banner appearance="error">Error</Banner>);
+    const { container: error } = render(<Banner tone="error">Error</Banner>);
     expect(error.querySelector('[data-color]')).toBeInTheDocument();
   });
 
   it('hides the icon when showIcon is false', () => {
     const { container } = render(
-      <Banner appearance="error" showIcon={false}>
+      <Banner tone="error" showIcon={false}>
         No icon
       </Banner>,
     );
@@ -75,7 +75,7 @@ describe('Banner', () => {
   });
 
   it('marks the icon slot as decorative', () => {
-    const { container } = render(<Banner appearance="warning">Warning</Banner>);
+    const { container } = render(<Banner tone="warning">Warning</Banner>);
 
     expect(container.querySelector(`.${styles.iconSlot}`)).toHaveAttribute('aria-hidden', 'true');
   });
@@ -116,10 +116,10 @@ describe('Banner', () => {
 });
 
 describe('Banner CSS contract', () => {
-  it('maps each appearance to its bold background and content token', () => {
-    expect(bannerCss).toMatch(/\.appearance_default \{[\s\S]*?background: var\(--color-background-neutral-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
-    expect(bannerCss).toMatch(/\.appearance_warning \{[\s\S]*?background: var\(--color-background-warning-bold-default\);[\s\S]*?color: var\(--color-content-warning-bold\);/);
-    expect(bannerCss).toMatch(/\.appearance_error \{[\s\S]*?background: var\(--color-background-error-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
+  it('maps each tone to its bold background and content token', () => {
+    expect(bannerCss).toMatch(/\.tone_default \{[\s\S]*?background: var\(--color-background-neutral-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
+    expect(bannerCss).toMatch(/\.tone_warning \{[\s\S]*?background: var\(--color-background-warning-bold-default\);[\s\S]*?color: var\(--color-content-warning-bold\);/);
+    expect(bannerCss).toMatch(/\.tone_error \{[\s\S]*?background: var\(--color-background-error-bold-default\);[\s\S]*?color: var\(--color-content-inverse-default\);/);
   });
 
   it('uses the Figma spacing tokens for padding and gaps', () => {
@@ -132,8 +132,39 @@ describe('Banner CSS contract', () => {
     expect(bannerCss).toMatch(/\.text \{[\s\S]*?text-overflow: ellipsis;[\s\S]*?white-space: nowrap;/);
   });
 
+  it('lets the bar shrink below its message as a flex or grid item, so the message truncates', () => {
+    // Without it, a flex or grid item's minimum width is its whole one-line message.
+    expect(bannerCss).toMatch(/\.banner \{[^}]*?min-inline-size: 0;/);
+    expect(bannerCss).toMatch(/\.message \{[^}]*?min-inline-size: 0;/);
+    expect(bannerCss).toMatch(/\.text \{[^}]*?min-inline-size: 0;[^}]*?overflow: hidden;/);
+  });
+
   it('lets the icon inherit the banner content color', () => {
     expect(bannerCss).toContain('.iconSlot :global([data-color]) {');
     expect(bannerCss).toMatch(/\.iconSlot :global\(\[data-color\]\) \{[\s\S]*?color: inherit;/);
+  });
+
+  it('announces the status before the message, since the icon is decorative', () => {
+    const { rerender } = render(<Banner tone="error">Payment failed</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Error: Payment failed');
+    expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
+
+    rerender(<Banner tone="warning">Trial ends soon</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Warning: Trial ends soon');
+
+    rerender(<Banner tone="warning" statusLabel="Advertencia">Trial ends soon</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent('Advertencia: Trial ends soon');
+
+    rerender(<Banner tone="default">New features available</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent(/^New features available$/);
+
+    rerender(<Banner tone="error" statusLabel="">Payment failed</Banner>);
+    expect(screen.getByRole('status')).toHaveTextContent(/^Payment failed$/);
+  });
+
+  it('still accepts the deprecated appearance prop as tone', () => {
+    render(<Banner appearance="error">Payment failed</Banner>);
+    expect(screen.getByRole('status')).toHaveClass(styles.tone_error);
+    expect(screen.getByRole('status')).toHaveTextContent('Error: Payment failed');
   });
 });

@@ -1,0 +1,313 @@
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocumentsIcon, FolderIcon, TeamAndPartnersIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { RichTextArea } from './rich';
+import richTextAreaStyles from './rich/rich-text-area.module.css';
+import { TextArea } from './text-area';
+import * as RichTextAreaStories from './RichTextArea.stories';
+
+<Meta of={RichTextAreaStories} name="Docs" />
+
+export const entityConfig = {
+  account: { tone: 'blue', icon: <TeamAndPartnersIcon decorative /> },
+  matter: { tone: 'teal', icon: <FolderIcon decorative /> },
+  document: { tone: 'default', icon: <DocumentsIcon decorative /> },
+};
+
+export const sameTone = {
+  account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },
+  matter: { tone: 'default', icon: <FolderIcon decorative /> },
+};
+
+export const records = [
+  {
+    id: 'accounts',
+    heading: 'Families and People',
+    entityType: 'account',
+    items: [
+      { id: 'a2', entityType: 'account', label: 'Ben Averill', href: '#' },
+      { id: 'a3', entityType: 'account', label: 'Jess Averill', href: '#' },
+    ],
+  },
+  { id: 'matters', heading: 'Matters', entityType: 'matter', items: [{ id: 'm1', entityType: 'matter', label: 'Averill Living Trust', href: '#' }] },
+  { id: 'documents', heading: 'Estate Documents', entityType: 'document', items: [{ id: 'd1', entityType: 'document', label: 'Last Will and Testament', href: '#' }] },
+];
+
+export const search = (query) =>
+  records
+    .map((section) => ({ ...section, items: section.items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())) }))
+    .filter((section) => section.items.length > 0);
+
+export const note = [
+  { type: 'text', text: 'Follow up with ' },
+  { type: 'entity', entity: { id: 'a2', entityType: 'account', label: 'Ben Averill', href: '#' } },
+  { type: 'text', text: ' about the ' },
+  { type: 'entity', entity: { id: 'm1', entityType: 'matter', label: 'Averill Living Trust', href: '#' } },
+  { type: 'text', text: ' before Friday.' },
+];
+
+<Unstyled>
+<ComponentPage>
+
+<ComponentHeader
+  id="rich-text-area"
+  example={<RichTextArea aria-label="Note" rows={3} value={note} onChange={() => {}} onSearch={search} entityConfig={entityConfig} />}
+>
+  Rich Text Area lets someone write a note that links to records inside the text. Typing `/` opens a
+  list of records to pick from, and each choice goes in as a tag that links to that record. It's Text
+  Area's frame around an editable surface instead of a native textarea.
+</ComponentHeader>
+
+<Section title="When to use">
+
+<Usage>
+<UseFor>
+
+- A note or comment that mentions people, matters, or documents by name.
+- Text where each mention should link to the record it names.
+
+</UseFor>
+<UseInstead>
+
+- **Plain text over several lines:** <DocLink to="Components/Forms/Text Area" />. It's a native textarea, with form submission and autofill.
+- **A value on one line:** <DocLink to="Components/Forms/Text Field" />.
+
+</UseInstead>
+</Usage>
+
+</Section>
+
+<Section title="Anatomy">
+
+<Anatomy
+  specimen={<RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={entityConfig} />}
+>
+  <Part name="editor" target={richTextAreaStyles.editor}>The frame and the editable surface in one. It uses Text Area's frame and holds the text and the tags.</Part>
+  <Part name="tag" target={richTextAreaStyles.tagHost}>One per linked record: a Tag in the record type's tone and icon, a link when the record has an `href`. The caret moves past it as one unit.</Part>
+  <Part name="slashInput">While a link is being typed, the `/` and the query in a small bordered box inside the text. Not shown here.</Part>
+  <Part name="picker">While a link is being typed, the list of matching records under the query, grouped by type. It's a Menu with its search field hidden. Not shown here.</Part>
+</Anatomy>
+
+</Section>
+
+<Section title="Variants">
+
+Three sizes and two contexts, on Text Area's frame.
+
+<Example of={RichTextAreaStories.Variants} />
+
+<Subsection title="Sizes">
+
+`sm`, `md`, and `lg`, with Text Area's padding, corners, and text size. `sm` keeps `md`'s corners
+and text with tighter padding above and below, as on Text Area.
+
+</Subsection>
+
+<Subsection title="Context">
+
+`context`, as on Text Area: `default` is the bordered field. `inline` has no border or background at
+rest; hover shows the hover background and a line along the bottom, and focus and invalid show a
+2px line along the bottom. The older `appearance` prop still works: `subtle` and `inline` map to
+`context="inline"`.
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Linking a record">
+
+Typing `/` at the start of the text or after a space starts a link. A `/` anywhere else, as in a
+date or a URL, is typed as a slash. The query goes into a small box in the text, and the list under
+it shows the matching records, grouped by type. Arrow keys move the highlight, Enter links the
+highlighted record as a tag followed by a space, and Escape, a space, or a click outside the field
+closes the list and keeps what was typed as plain text.
+
+<Example of={RichTextAreaStories.Playground} caption="Type / to link an account, matter, roadmap, or document. The node array below updates as you edit." />
+
+</Subsection>
+
+<Subsection title="Search and recents">
+
+`onSearch` gets the query and returns groups of records, now or as a promise. When the list first
+opens, before anything is typed, it shows `recents` if you pass them, or calls `onSearch('')`.
+Typed queries wait 150ms before searching, and an answer to an older query never replaces a newer
+one.
+
+</Subsection>
+
+<Subsection title="Tags">
+
+`entityConfig` gives each record type a tag tone and an icon, used for the tag and for its group's
+heading in the list. Tags aren't tab stops; a tag with an `href` is a link.
+Deleting a tag leaves the space after it.
+
+</Subsection>
+
+<Subsection title="The value">
+
+The value is an array of text runs and records, not HTML or Markdown, so you can store it as it is.
+The editor reads `value` once, when it mounts, and leads from then on: `onChange` reports every
+edit, and a new `value` passed later is ignored.
+
+<Example of={RichTextAreaStories.Prefilled} caption="Loaded with text and two tags; the node array below shows the round trip." />
+
+</Subsection>
+
+<Subsection title="Height and states">
+
+The editor starts `rows` lines tall, 3 unless you set it, and grows as the text gets longer, with
+no limit. Dragging the resize handle, vertical by default, sets a fixed height, and the text
+scrolls from there. `invalid` shows Text Area's error border, and it stays while the editor has
+focus. `disabled` turns off editing.
+
+<Example of={RichTextAreaStories.States} />
+
+</Subsection>
+
+<Subsection title="Known limits">
+
+Rich Text Area is in beta. The `/` query box is checked in Chrome; in Firefox and Safari the caret
+can slip out of it. Backspace doesn't remove a tag as one unit in every position, and pasted rich
+text isn't cleaned into the value. The list isn't announced to screen readers yet (see
+Accessibility).
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give each record type its own tone, so a tag's color says what it links to."
+  code={`entityConfig={{
+    account: { tone: 'blue', icon: <TeamAndPartnersIcon decorative /> },
+    matter: { tone: 'teal', icon: <FolderIcon decorative /> },
+}}`}
+>
+  <RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={entityConfig} />
+</Do>
+<Dont
+  caption="Give every type the same tone. People can't tell a person from a matter at a glance."
+  code={`entityConfig={{
+    account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },
+    matter: { tone: 'default', icon: <FolderIcon decorative /> },
+}}`}
+>
+  <RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={sameTone} />
+</Dont>
+<Do caption="Use Text Area for plain text with no links to records." code={`<TextArea rows={3} aria-label="Notes" />`}>
+  <TextArea rows={3} aria-label="Notes" />
+</Do>
+<Dont caption="Use Rich Text Area for plain text. It isn't a native textarea, so it has no name, isn't sent with a form, and can't be autofilled." code={`<RichTextArea value={[]} onChange={setNote} onSearch={() => []} aria-label="Notes" />`} />
+<Do
+  caption="Pass the saved note as the starting value, and keep what onChange reports."
+  code={`<RichTextArea value={savedNote} onChange={setDraft} onSearch={search} aria-label="Note" />`}
+>
+  <RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={entityConfig} />
+</Do>
+<Dont
+  caption="Clear or replace the note by passing a new value. The editor reads value only when it mounts."
+  code={`<RichTextArea value={note} onChange={setNote} onSearch={search} aria-label="Note" />
+
+// Later. The editor still shows the old text.
+setNote([]);`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The editor is a `div` with `role="textbox"`, `aria-multiline="true"`, and `contenteditable`, in the
+  tab order. It isn't a native control, so it has no form `name` and isn't sent with a form.
+- Name it with `aria-label`, or `aria-labelledby` pointing at a visible label. A `label` with
+  `htmlFor` doesn't name it, because a label can only point at a native control. Field names it by
+  `aria-labelledby`, and passes its message, error, and `required` (as `aria-required`).
+- `invalid` sets `aria-invalid` on the editor.
+- `disabled` turns off editing, takes the editor out of the tab order, and sets `aria-disabled`.
+- The editor has `aria-haspopup="menu"`. While the list is open, focus stays in the editor so typing
+  keeps reaching the query; `aria-controls` names the list, and `aria-activedescendant` points at
+  the highlighted record, so a screen reader follows the highlight.
+- Tags aren't tab stops. A tag with an `href` is a link.
+
+<Keyboard>
+  <Key keys="/">At the start of the text or after a space, starts a link and opens the list. Anywhere else, types a slash.</Key>
+  <Key keys="ArrowDown">With the list open, moves the highlight down, stopping at the last record.</Key>
+  <Key keys="ArrowUp">With the list open, moves the highlight up, stopping at the first record.</Key>
+  <Key keys="Enter">With the list open, links the highlighted record as a tag followed by a space. Otherwise starts a new line.</Key>
+  <Key keys="Escape">With the list open, closes it and keeps what was typed as plain text.</Key>
+  <Key keys="Tab">With the list open, closes it and moves focus on, keeping what was typed as text.</Key>
+  <Key keys="Space">While typing a query, ends the link and closes the list; what was typed stays as text.</Key>
+  <Key keys="Tab">Moves focus to the editor and out of it. A disabled editor is skipped.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+`value` is an array of `{ type: 'text', text }` and `{ type: 'entity', entity }` nodes, where an
+entity is `{ id, entityType, label, href? }`. `onSearch` and `recents` use groups of
+`{ id, heading, entityType, items }`, where each item is
+`{ id, entityType, label, description?, href?, leadingElement? }`. A `leadingElement` that's an
+Avatar or Avatar Group sits beside the label with no description line.
+
+<PropsTable of={RichTextAreaStories} />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Rich Text Area's stylesheet uses, by family, with the property it sets and when. "Editor"
+is the frame, "tag host" holds each tag, and "slash input" and "picker" appear while a link is being
+typed. The tags, the list rows, and the avatars use their own components' tokens.
+
+<TokensTable id="rich-text-area" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Text Area" /> for plain text over several lines. Rich Text Area uses its frame.
+- <DocLink to="Components/Data Display/Tag" />, which each linked record becomes.
+- <DocLink to="Components/Actions/Menu" />, which lists the matching records.
+- <DocLink to="Components/Data Display/Avatar" /> and <DocLink to="Components/Data Display/Avatar Group" /> to lead a person or family row in the list.
+- <DocLink to="Components/Data Display/Icon Tile" />, which marks each group's heading in the list.
+- <DocLink to="Components/Forms/Text Field" /> for a value on one line.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads rich-text-area.types.ts, the design tokens read rich-text-area.module.css, and
+  the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

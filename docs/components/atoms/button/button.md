@@ -1,43 +1,9 @@
 # Button
 
-Button is an atom used to trigger a user-initiated action. It renders a native `button` element and provides the system’s standard action control for forms, workflows, dialogs, and contextual actions.
+Button's usage guidance is its Storybook Docs page (Components / Actions / Button), written in
+[`button.mdx`](../../../../packages/ui/src/components/atoms/button/button.mdx): when to use it,
+anatomy, variants, behavior, do and don't, accessibility, API, and design tokens. The API table and
+the tokens there are generated from the code, so they can't drift.
 
-## When to use
-
-Use Button when the user is performing an action, such as saving, submitting, confirming, canceling, opening a dialog, or starting a workflow. Use semantic tones when the action carries meaning, such as warning or destructive/error actions.
-
-## When not to use
-
-Do not use Button for navigation-only behavior; use Link or Link Button instead. Do not use Button for icon-only actions; use Icon Button. Do not use Button for persistent selected/unselected state; use Toggle Button. Do not use Button as a loading indicator without an associated user action.
-
-## Design intent
-
-Button separates visual emphasis from semantic meaning. `appearance` controls emphasis (`default`, `primary`, `subtle`) and `tone` controls intent (`neutral`, `warning`, `error`). This avoids a large variant matrix while keeping action meaning explicit.
-
-In the current code the axes are `prominence` (`primary`, `secondary`, `tertiary`) and `tone` (`default`, `brand`, `warning`, `error`). Designed pairings: primary carries brand, warning, and error; secondary carries default, brand, and error; tertiary carries default and brand. `prominence="secondary" tone="error"` is the outlined destructive action - use it when a destructive action shouldn't be the loudest control in its group, and keep `prominence="primary" tone="error"` for the confirming step. Warning is primary only.
-
-Button is text-first. It may include leading or trailing icons, but icon-only usage belongs to Icon Button. Loading should preserve the action label and avoid layout shift.
-
-`isInverse` is an orthogonal on-dark treatment (not a `tone` value) for buttons placed on dark or bold-colored surfaces such as Banner. It renders a transparent fill with inverse content and the white subtle hover/press overlays; disabled flattens it the same way it flattens tone.
-
-## Accessibility expectations
-
-Button must render a native `<button>`, default to `type="button"`, support native `type="submit"` and `type="reset"`, and use the native `disabled` attribute when disabled. Loading buttons set `aria-busy="true"`, prevent duplicate activation, and expose a non-interactive busy state without removing the action label. Focus must use the shared Focus Ring pattern.
-
-The public prop is named `disabled`, matching the native `button` attribute directly, not a custom `isDisabled` prop.
-
-## Implementation constraints
-
-Use CSS Modules and design tokens. Use component tokens only for button min-height. Use semantic tokens for colors, spacing, radius, typography, border width, and focus treatment. Do not use MUI, Tailwind, hardcoded colors, hardcoded typography, or an icon-size prop. Icons use the medium icon size for all button sizes.
-
-State transitions (hover, press, focus) use the `fade-quick` semantic motion token rather than a hardcoded duration/easing pair, and are disabled under `prefers-reduced-motion: reduce`. Button has no press-state scale or other transform-based motion - press feedback is color-only.
-
-## Related components
-
-- Icon Button
-- Link Button
-- Toggle Button
-- Toggle Icon Button
-- Button Group (for laying out two or more related Buttons with consistent spacing)
-- Spinner
-- Focus Ring
+For implementation detail, see [`button-spec.md`](button-spec.md); for the machine-readable contract,
+[`button.contract.json`](button.contract.json).

@@ -73,6 +73,8 @@ interface ToggleIconButtonProps
   tone?: ToggleIconButtonTone;
   shape?: ToggleIconButtonShape;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   children: React.ReactNode;
 }
@@ -86,7 +88,7 @@ const defaultProps = {
   tone: 'default',
   shape: 'square',
   isSelected: false,
-  isDisabled: false,
+  disabled: false,
   type: 'button',
 };
 ```
@@ -252,6 +254,12 @@ Recommended priority:
 disabled > selected > press > hover > default
 ```
 
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Icon Button. There's no
+press-state scale, and becoming selected is a plain color change with no pop or scale:
+transform-based feedback was removed from this component, matching Toggle Button.
+
 ## Focus behavior
 
 Use the shared Focus Ring utility/classes.
@@ -335,7 +343,7 @@ size
 tone
 shape
 isSelected
-isDisabled
+disabled
 aria-label
 ```
 

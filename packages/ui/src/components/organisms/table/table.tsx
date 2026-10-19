@@ -38,13 +38,17 @@ export function Table<Row>({
   size = 'md',
   caption,
   title,
+  headingLevel = 2,
   description,
   actions,
   toolbar,
   searchable = false,
   searchValue,
+  defaultSearchValue = '',
   onSearchChange,
   searchPlaceholder = 'Search...',
+  searchLabel = 'Search',
+  clearSearchLabel = 'Clear search',
   toolbarActions,
   activeFilters,
   onClearFilters,
@@ -66,13 +70,25 @@ export function Table<Row>({
   onPageChange,
   pageSize,
   manualPagination = false,
+  previousPageLabel = 'Previous page',
+  nextPageLabel = 'Next page',
+  paginationLabel,
+  itemsPerPageLabel = 'Items per page:',
+  getRangeLabel = (start, end, total) =>
+    `${start.toLocaleString()}–${end.toLocaleString()} of ${total.toLocaleString()} items`,
+  pageLabel = 'Page',
+  getPageCountLabel = (pageCount) => `of ${pageCount} ${pageCount === 1 ? 'page' : 'pages'}`,
   totalItems,
   itemsPerPageOptions,
   onPageSizeChange,
   resizableColumns = true,
+  getResizeLabel = (columnLabel) => `Resize ${columnLabel}`,
   loading = false,
   skeletonRowCount = 5,
   empty,
+  emptyHeadingLabel = 'No results',
+  emptyDescriptionLabel = 'There is nothing to show here yet.',
+  scrollRegionLabel = 'Table',
   className,
   id,
 }: TableProps<Row>) {
@@ -80,14 +96,26 @@ export function Table<Row>({
   const [internalSelected, setInternalSelected] = React.useState<RowId[]>(defaultSelectedIds);
   const [internalPage, setInternalPage] = React.useState(1);
   const [columnWidths, setColumnWidths] = React.useState<Record<string, number>>({});
-  const [searchExpanded, setSearchExpanded] = React.useState(() => Boolean(searchValue));
+  const [internalSearch, setInternalSearch] = React.useState(defaultSearchValue);
   const resizeRef = React.useRef<{ key: string; startX: number; startWidth: number } | null>(null);
   const headerCellRefs = React.useRef<Map<string, HTMLTableCellElement>>(new Map());
+  const resizeHandleRefs = React.useRef<Map<string, HTMLSpanElement>>(new Map());
+  const syncResizeValuesRef = React.useRef<() => void>(() => {});
   const selectCellRef = React.useRef<HTMLTableCellElement | null>(null);
   const searchRef = React.useRef<HTMLInputElement>(null);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const idPrefix = React.useId();
+  const itemsPerPageLabelId = `${idPrefix}-items-per-page`;
 
   const currentSort = sort !== undefined ? sort : internalSort;
   const currentSelectedIds = selectedIds !== undefined ? selectedIds : internalSelected;
+  const currentSearch = searchValue !== undefined ? searchValue : internalSearch;
+  const [searchExpanded, setSearchExpanded] = React.useState(() => currentSearch !== '');
+
+  const changeSearch = (next: string) => {
+    if (searchValue === undefined) setInternalSearch(next);
+    onSearchChange?.(next);
+  };
 
   const rows = React.useMemo(
     () => data.map((row, index) => ({ row, index, id: getRowId(row, index) })),
@@ -117,13 +145,17 @@ export function Table<Row>({
     ? sortedRows.slice((currentPage - 1) * pageSize, currentPage * pageSize)
     : sortedRows;
 
-  const showFooter = manualPagination
-    ? (pageCount ?? 0) > 1
-    : clientPaginated && resolvedPageCount > 1;
+  // The footer shows while there's more than one page, or while there are page sizes to pick from, so
+  // choosing a size that fits every row doesn't take the page-size Select away.
+  const hasPageSizeOptions = itemsPerPageOptions != null && itemsPerPageOptions.length > 0;
+  const showFooter = (manualPagination || clientPaginated) && (resolvedPageCount > 1 || hasPageSizeOptions);
 
+  // The range is the rows shown: the page's first row, counted from the page size (with
+  // manualPagination and no pageSize, the rows passed count as one page), to its last.
   const resolvedTotalItems = totalItems ?? (clientPaginated ? sortedRows.length : visibleRows.length);
-  const rangeStart = clientPaginated ? (currentPage - 1) * pageSize + 1 : 1;
-  const rangeEnd = clientPaginated ? Math.min(currentPage * pageSize, resolvedTotalItems) : resolvedTotalItems;
+  const rowsPerPage = pageSize ?? visibleRows.length;
+  const rangeStart = visibleRows.length === 0 ? 0 : Math.min((currentPage - 1) * rowsPerPage + 1, resolvedTotalItems);
+  const rangeEnd = visibleRows.length === 0 ? 0 : Math.min(rangeStart + visibleRows.length - 1, resolvedTotalItems);
 
   const selectedSet = React.useMemo(() => new Set(currentSelectedIds), [currentSelectedIds]);
   const visibleIds = visibleRows.map((r) => r.id);
@@ -174,11 +206,40 @@ export function Table<Row>({
     onPageChange?.(nextPage);
   };
 
-  // Column resize via a pointer-captured drag handle on the header edge (plus arrow-key nudges).
+  // Column resize via a pointer-captured drag handle on the header edge (plus arrow-key nudges). A
+  // column is at least MIN_COLUMN_WIDTH and at most the scroll region's width.
   const MIN_COLUMN_WIDTH = 64;
   const RESIZE_STEP = 16;
   const currentWidth = (key: string) =>
-    columnWidths[key] ?? headerCellRefs.current.get(key)?.getBoundingClientRect().width ?? MIN_COLUMN_WIDTH;
+    clampWidth(columnWidths[key] ?? headerCellRefs.current.get(key)?.getBoundingClientRect().width ?? MIN_COLUMN_WIDTH);
+  function clampWidth(width: number) {
+    const max = scrollRef.current?.clientWidth || Infinity;
+    return Math.round(Math.min(Math.max(MIN_COLUMN_WIDTH, width), Math.max(MIN_COLUMN_WIDTH, max)));
+  }
+
+  // Each resize handle reports its column's width from the first render: after every render, and when
+  // the scroll region resizes, write the width (between the minimum and the region's width) and the
+  // maximum to the handles. They're measured from the DOM, so they're set on it directly.
+  React.useLayoutEffect(() => {
+    const sync = () => {
+      const region = scrollRef.current?.clientWidth ?? 0;
+      resizeHandleRefs.current.forEach((handle, key) => {
+        const width = columnWidths[key] ?? headerCellRefs.current.get(key)?.getBoundingClientRect().width ?? 0;
+        const now = clampWidth(width);
+        handle.setAttribute('aria-valuenow', String(now));
+        handle.setAttribute('aria-valuemax', String(Math.max(region, now)));
+      });
+    };
+    syncResizeValuesRef.current = sync;
+    sync();
+  });
+  React.useEffect(() => {
+    const region = scrollRef.current;
+    if (!region || typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(() => syncResizeValuesRef.current());
+    observer.observe(region);
+    return () => observer.disconnect();
+  }, []);
 
   const freezeColumnWidths = () => {
     setColumnWidths((prev) => {
@@ -203,8 +264,8 @@ export function Table<Row>({
   const moveResize = (event: React.PointerEvent<HTMLSpanElement>) => {
     const active = resizeRef.current;
     if (!active) return;
-    const next = Math.max(MIN_COLUMN_WIDTH, active.startWidth + (event.clientX - active.startX));
-    setColumnWidths((prev) => ({ ...prev, [active.key]: Math.round(next) }));
+    const next = clampWidth(active.startWidth + (event.clientX - active.startX));
+    setColumnWidths((prev) => ({ ...prev, [active.key]: next }));
   };
   const endResize = (event: React.PointerEvent<HTMLSpanElement>) => {
     resizeRef.current = null;
@@ -218,18 +279,27 @@ export function Table<Row>({
     const base = currentWidth(key);
     const delta = event.key === 'ArrowRight' ? RESIZE_STEP : -RESIZE_STEP;
     freezeColumnWidths();
-    setColumnWidths((prev) => ({ ...prev, [key]: Math.max(MIN_COLUMN_WIDTH, Math.round(base + delta)) }));
+    const next = clampWidth(base + delta);
+    setColumnWidths((prev) => ({ ...prev, [key]: next }));
   };
 
   const hasResized = Object.keys(columnWidths).length > 0;
 
   const selectedCount = currentSelectedIds.length;
 
+  // The selection bar's count is announced through a polite live region when it changes, not on the
+  // first render (adjusting state during render, so the announcement lands with the change).
+  const [selectionAnnouncement, setSelectionAnnouncement] = React.useState({ count: selectedCount, text: '' });
+  if (selectionAnnouncement.count !== selectedCount) {
+    setSelectionAnnouncement({ count: selectedCount, text: selectionCountLabel(selectedCount) });
+  }
+
   const columnCount = columns.length + (selectable ? 1 : 0);
   const name = accessibleString(caption, title);
   const captionContent = caption ?? title;
 
   const hasHeader = title != null || description != null;
+  const Heading = `h${headingLevel}` as const;
   const hasBuiltInToolbar = searchable || toolbarActions != null || actions != null || onClearFilters != null || (selectable && selectedCount > 0);
   const hasActiveFilters = activeFilters != null;
   const hasToolbar = toolbar != null || hasBuiltInToolbar || hasActiveFilters;
@@ -238,7 +308,7 @@ export function Table<Row>({
     <div className={cx(styles.table, className)} data-size={size} id={id}>
       {hasHeader ? (
         <div className={styles.header}>
-          {title != null ? <h2 className={styles.title}>{title}</h2> : null}
+          {title != null ? <Heading className={styles.title}>{title}</Heading> : null}
           {description != null ? <p className={styles.description}>{description}</p> : null}
         </div>
       ) : null}
@@ -268,11 +338,11 @@ export function Table<Row>({
                                 <IconButton
                                   appearance="subtle"
                                   size="xs"
-                                  aria-label="Clear search"
-                                  style={searchValue ? undefined : { visibility: 'hidden' }}
-                                  tabIndex={searchValue ? undefined : -1}
+                                  aria-label={clearSearchLabel}
+                                  style={currentSearch ? undefined : { visibility: 'hidden' }}
+                                  tabIndex={currentSearch ? undefined : -1}
                                   onClick={() => {
-                                    onSearchChange?.('');
+                                    changeSearch('');
                                     searchRef.current?.focus();
                                   }}
                                 >
@@ -280,10 +350,10 @@ export function Table<Row>({
                                 </IconButton>
                               }
                               placeholder={searchPlaceholder}
-                              aria-label={searchPlaceholder}
-                              value={searchValue}
-                              onChange={(event) => onSearchChange?.(event.currentTarget.value)}
-                              onBlur={() => { if (!searchValue) setSearchExpanded(false); }}
+                              aria-label={searchLabel}
+                              value={currentSearch}
+                              onChange={(event) => changeSearch(event.currentTarget.value)}
+                              onBlur={() => { if (!currentSearch) setSearchExpanded(false); }}
                             />
                           ) : (
                             <IconButton
@@ -293,7 +363,7 @@ export function Table<Row>({
                                 setSearchExpanded(true);
                                 requestAnimationFrame(() => searchRef.current?.focus());
                               }}
-                              aria-label={searchPlaceholder}
+                              aria-label={searchLabel}
                             >
                               <SearchIcon />
                             </IconButton>
@@ -322,8 +392,14 @@ export function Table<Row>({
           </div>
         ) : null}
 
+        {selectable && toolbar == null ? (
+          <span className={styles.announcer} role="status" aria-live="polite">
+            {selectionAnnouncement.text}
+          </span>
+        ) : null}
+
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-        <div className={styles.scroll} role="region" aria-label={name ?? 'Table'} tabIndex={0}>
+        <div ref={scrollRef} className={styles.scroll} role="region" aria-label={name ?? scrollRegionLabel} tabIndex={0}>
           <table className={styles.grid} aria-busy={loading || undefined} data-resized={hasResized || undefined}
             data-has-editable-cells={columns.some((column) => column.cellAppearance === 'editable') || undefined}>
             {captionContent != null ? <caption className={styles.caption}>{captionContent}</caption> : null}
@@ -348,7 +424,7 @@ export function Table<Row>({
                       />
                     </th>
                   ) : null}
-                  {columns.map((column) => {
+                  {columns.map((column, columnIndex) => {
                   const isActive = currentSort?.columnKey === column.key;
                   const ariaSort = isActive
                     ? currentSort!.direction === 'asc'
@@ -357,8 +433,12 @@ export function Table<Row>({
                     : column.sortable
                       ? 'none'
                       : undefined;
-                  const label = column.headerLabel ?? (typeof column.header === 'string' ? column.header : column.key);
+                  const label =
+                    column.headerLabel ?? (typeof column.header === 'string' && column.header !== '' ? column.header : column.key);
                   const isResizable = resizableColumns && column.resizable !== false;
+                  // The header cell is named by its label alone, so the resize handle's name inside it
+                  // isn't read as part of every cell's column header.
+                  const headerLabelId = `${idPrefix}-header-${columnIndex}`;
                   return (
                     <th
                       key={column.key}
@@ -369,6 +449,8 @@ export function Table<Row>({
                       }}
                       scope="col"
                       aria-sort={ariaSort}
+                      aria-label={column.headerLabel}
+                      aria-labelledby={column.headerLabel == null ? headerLabelId : undefined}
                       className={cx(styles.headerCell, column.headerClassName)}
                       data-align={column.align}
                       data-resizable={isResizable || undefined}
@@ -380,9 +462,9 @@ export function Table<Row>({
                           className={styles.sortButton}
                           onClick={() => handleSort(column.key)}
                           data-active={isActive || undefined}
-                          aria-label={`Sort by ${label}`}
+                          aria-label={column.headerLabel}
                         >
-                          <span className={styles.headerLabel}>{column.header}</span>
+                          <span id={headerLabelId} className={styles.headerLabel}>{column.header}</span>
                           <span className={styles.sortIcon} aria-hidden="true">
                             {isActive && currentSort!.direction === 'asc' ? (
                               <ArrowUpIcon size="sm" />
@@ -392,16 +474,20 @@ export function Table<Row>({
                           </span>
                         </button>
                       ) : (
-                        <span className={styles.headerLabel}>{column.header}</span>
+                        <span id={headerLabelId} className={styles.headerLabel}>{column.header}</span>
                       )}
                       {isResizable ? (
                         /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/no-noninteractive-tabindex */
                         <span
+                          ref={(el) => {
+                            const map = resizeHandleRefs.current;
+                            if (el) map.set(column.key, el);
+                            else map.delete(column.key);
+                          }}
                           className={styles.resizeHandle}
                           role="separator"
                           aria-orientation="vertical"
-                          aria-label={`Resize ${label}`}
-                          aria-valuenow={columnWidths[column.key]}
+                          aria-label={getResizeLabel(label)}
                           aria-valuemin={MIN_COLUMN_WIDTH}
                           tabIndex={0}
                           onPointerDown={startResize(column.key)}
@@ -437,8 +523,8 @@ export function Table<Row>({
                   <td colSpan={columnCount} className={styles.emptyCell}>
                     {empty ?? (
                       <div className={styles.emptyContainer}>
-                        <p className={styles.emptyHeading}>No results</p>
-                        <p className={styles.emptyDescription}>There is nothing to show here yet.</p>
+                        <p className={styles.emptyHeading}>{emptyHeadingLabel}</p>
+                        <p className={styles.emptyDescription}>{emptyDescriptionLabel}</p>
                       </div>
                     )}
                   </td>
@@ -481,44 +567,42 @@ export function Table<Row>({
         </div>
 
         {showFooter ? (
-          <div className={styles.footer} role="navigation" aria-label={name ? `${name} pagination` : 'Table pagination'}>
+          <div className={styles.footer} role="navigation" aria-label={paginationLabel ?? (name ? `${name} pagination` : 'Table pagination')}>
             <div className={styles.footerGroup}>
-              {itemsPerPageOptions != null && itemsPerPageOptions.length > 0 ? (
+              {hasPageSizeOptions ? (
                 <>
-                  <span className={styles.footerLabel}>Items per page:</span>
+                  <span id={itemsPerPageLabelId} className={styles.footerLabel}>{itemsPerPageLabel}</span>
                   <Select
                     size="sm"
-                    appearance="subtle"
+                    context="inline"
                     className={styles.footerSelect}
                     options={itemsPerPageOptions.map((opt) => ({ value: String(opt), label: String(opt) }))}
                     value={String(pageSize)}
                     onChange={(v) => { if (v != null) onPageSizeChange?.(Number(v)); }}
-                    aria-label="Items per page"
+                    aria-labelledby={itemsPerPageLabelId}
                   />
                 </>
               ) : null}
-              <span className={styles.footerLabel}>
-                {rangeStart}–{rangeEnd} of {resolvedTotalItems.toLocaleString()} items
-              </span>
+              <span className={styles.footerLabel}>{getRangeLabel(rangeStart, rangeEnd, resolvedTotalItems)}</span>
             </div>
             <div className={styles.footerGroup}>
               <Select
                 size="sm"
-                appearance="subtle"
+                context="inline"
                 className={styles.footerSelect}
                 options={Array.from({ length: resolvedPageCount }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))}
                 value={String(currentPage)}
                 onChange={(v) => { if (v != null) handlePageChange(Number(v)); }}
-                aria-label="Page"
+                aria-label={pageLabel}
               />
-              <span className={styles.footerLabel}>of {resolvedPageCount} pages</span>
+              <span className={styles.footerLabel}>{getPageCountLabel(resolvedPageCount)}</span>
               <div className={styles.footerNav}>
                 <IconButton
                   appearance="subtle"
                   size="sm"
                   disabled={currentPage <= 1}
                   onClick={() => handlePageChange(currentPage - 1)}
-                  aria-label="Previous page"
+                  aria-label={previousPageLabel}
                 >
                   <ChevronLeftIcon />
                 </IconButton>
@@ -527,7 +611,7 @@ export function Table<Row>({
                   size="sm"
                   disabled={currentPage >= resolvedPageCount}
                   onClick={() => handlePageChange(currentPage + 1)}
-                  aria-label="Next page"
+                  aria-label={nextPageLabel}
                 >
                   <ChevronRightIcon />
                 </IconButton>

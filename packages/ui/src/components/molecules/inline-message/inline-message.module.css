@@ -41,20 +41,40 @@
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-.tone_info.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
+.tone_default.trigger:is(:active, [data-force-state='press']) {
+  background: var(--color-background-neutral-overlay-bold-press);
+}
+
+.tone_information.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
   background: var(--color-background-information-overlay-hover);
+}
+
+.tone_information.trigger:is(:active, [data-force-state='press']) {
+  background: var(--color-background-information-overlay-press);
 }
 
 .tone_success.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
   background: var(--color-background-success-overlay-hover);
 }
 
+.tone_success.trigger:is(:active, [data-force-state='press']) {
+  background: var(--color-background-success-overlay-press);
+}
+
 .tone_warning.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
   background: var(--color-background-warning-overlay-hover);
 }
 
+.tone_warning.trigger:is(:active, [data-force-state='press']) {
+  background: var(--color-background-warning-overlay-press);
+}
+
 .tone_error.trigger:is(:hover, :focus-visible, [aria-expanded='true'], [data-force-state='hover'], [data-force-state='focus']) {
   background: var(--color-background-error-overlay-hover);
+}
+
+.tone_error.trigger:is(:active, [data-force-state='press']) {
+  background: var(--color-background-error-overlay-press);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -108,5 +128,20 @@
   font-weight: var(--typography-body-md-font-weight);
   line-height: var(--typography-body-md-line-height);
   letter-spacing: var(--typography-body-md-letter-spacing);
+  white-space: nowrap;
+}
+
+/* The popup's content: focusable so it can take focus when it opens, with no ring of its own. */
+.panelContent {
+  outline: none;
+}
+
+/* The status before the title: read by assistive technology, not shown. */
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }

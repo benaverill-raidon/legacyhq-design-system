@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Toast } from './toast';
@@ -24,10 +24,10 @@ describe('Toast', () => {
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
-  it('sets a data-appearance attribute', () => {
-    render(<Toast appearance="error" title="Failed" />);
+  it('sets a data-tone attribute', () => {
+    render(<Toast tone="error" title="Failed" />);
 
-    expect(screen.getByRole('status')).toHaveAttribute('data-appearance', 'error');
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'error');
   });
 
   it('shows the description and actions only when expanded', () => {
@@ -48,18 +48,19 @@ describe('Toast', () => {
     expect(screen.queryByRole('button', { name: 'Undo' })).not.toBeInTheDocument();
   });
 
-  it('renders a status tile for a non-loading appearance', () => {
-    const { container } = render(<Toast appearance="success" title="Saved" />);
+  it('renders a status tile for a non-loading tone', () => {
+    const { container } = render(<Toast tone="success" title="Saved" />);
 
     expect(container.querySelector('[data-tone="green"]')).toBeInTheDocument();
     expect(container.querySelector(`.${styles.spinnerSlot}`)).not.toBeInTheDocument();
   });
 
-  it('renders a spinner for the loading appearance', () => {
-    const { container } = render(<Toast appearance="loading" title="Uploading" />);
+  it('renders a spinner for the loading tone', () => {
+    const { container } = render(<Toast tone="loading" title="Uploading" />);
 
     expect(container.querySelector(`.${styles.spinnerSlot}`)).toBeInTheDocument();
-    expect(container.querySelector('[data-tone]')).not.toBeInTheDocument();
+    // No Icon Tile inside the toast (the toast root carries data-tone itself).
+    expect(container.querySelector('[role="status"] [data-tone]')).not.toBeInTheDocument();
   });
 
   it('shows a dismiss button by default and calls onDismiss', () => {
@@ -70,6 +71,22 @@ describe('Toast', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows the dismiss button's name as its tooltip, like every Icon Button", () => {
+    vi.useFakeTimers();
+    try {
+      render(<Toast title="Saved" />);
+
+      fireEvent.pointerEnter(screen.getByRole('button', { name: 'Dismiss' }));
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Dismiss');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('omits the dismiss button when isDismissible is false', () => {
@@ -94,13 +111,45 @@ describe('Toast CSS contract', () => {
     expect(toastCss).toContain('border: var(--border-width-sm) solid var(--color-border-default);');
   });
 
-  it('applies the overlay elevation shadow (0 8px 12px spread + 0 0 1px perimeter)', () => {
-    expect(toastCss).toContain('0 8px 12px var(--color-elevation-shadow-overlay-spread)');
-    expect(toastCss).toContain('0 0 1px var(--color-elevation-shadow-overlay-perimeter)');
+  it('applies the overlay elevation shadow', () => {
+    expect(toastCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 
-  it('colors the loading appearance with the loading content token', () => {
+  it('colors the loading tone with the loading content token', () => {
     expect(toastCss).toMatch(/\.spinnerSlot \{[\s\S]*?color: var\(--color-content-loading\);/);
-    expect(toastCss).toMatch(/\.root\[data-appearance='loading'\] \.title \{[\s\S]*?color: var\(--color-content-loading\);/);
+    expect(toastCss).toMatch(/\.root\[data-tone='loading'\] \.title \{[\s\S]*?color: var\(--color-content-loading\);/);
+  });
+
+  it('announces the status before the title, except for default and loading', () => {
+    const { rerender } = render(<Toast tone="error" title="Upload failed" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Error: Upload failed');
+    expect(screen.getByText('Error:')).toHaveClass(styles.visuallyHidden);
+
+    rerender(<Toast tone="information" title="New version" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
+
+    rerender(<Toast tone="success" statusLabel="Listo" title="Saved" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Listo: Saved');
+
+    for (const tone of ['default', 'loading'] as const) {
+      rerender(<Toast tone={tone} title="Saving" isDismissible={false} />);
+      expect(screen.getByRole('status')).not.toHaveTextContent(/:/);
+    }
+  });
+
+  it('names the dismiss button with an overridable label', () => {
+    render(<Toast title="Saved" dismissLabel="Cerrar" />);
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
+
+  it('still accepts the deprecated info tone as information', () => {
+    render(<Toast tone="info" title="New version" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'information');
+    expect(screen.getByRole('status')).toHaveTextContent('Information: New version');
+  });
+
+  it('still accepts the deprecated appearance prop as tone', () => {
+    render(<Toast appearance="error" title="Upload failed" isDismissible={false} />);
+    expect(screen.getByRole('status')).toHaveAttribute('data-tone', 'error');
   });
 });

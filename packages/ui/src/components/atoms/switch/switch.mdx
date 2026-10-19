@@ -1,206 +1,223 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Switch } from './switch';
+import switchStyles from './switch.module.css';
 import * as SwitchStories from './switch.stories';
 
 <Meta of={SwitchStories} name="Docs" />
 
-# Switch
+<Unstyled>
+<ComponentPage>
 
-Switch lets a user immediately toggle a single setting between enabled and disabled - the state
-takes effect right away, with no separate confirmation step.
+<ComponentHeader
+  id="switch"
+  example={
+    <>
+      <Switch label="Email notifications" defaultChecked />
+      <Switch label="Weekly summary" />
+    </>
+  }
+>
+  Switch turns a setting on or off, and the change takes effect as soon as it's flipped, with no
+  save step. It's announced as a switch that's on or off.
+</ComponentHeader>
 
-<Canvas of={SwitchStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A binary setting that takes effect immediately (notifications, a feature flag, a preference).
-- A persistent on/off state the user can flip directly, without a form submission.
+- A setting or preference that applies right away, such as notifications.
+- Turning a feature on or off from a settings list.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Selecting one option from a group of several.** Use `RadioGroup`.
-- **Selecting any number of options from a list.** Use `Checkbox`.
-- **An action that needs confirmation before applying**, or a one-time form choice rather than an
-  immediate state change. Use `Checkbox` instead.
+- **A choice that's saved when a form is submitted:** <DocLink to="Components/Forms/Checkbox" />.
+- **One option from several:** <DocLink to="Components/Forms/Radio" />.
+- **An on or off filter or format in a toolbar:** <DocLink to="Components/Actions/Toggle Button" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={SwitchStories.Content} />
+</Section>
 
-- **Root** - a `label` wrapping the whole control, so clicking the label text toggles the switch.
-- **Input** - the native `input[type="checkbox"]` with `role="switch"`, visually hidden but present
-  and focusable.
-- **Indicator** - the track, thumb, and a private check/X mark at each end of the track. These marks
-  are decorative CSS anatomy, not shared icon-library assets.
-- **Label text** - optional. When absent, `aria-label` or `aria-labelledby` is required.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy specimen={<Switch label="Email notifications" required defaultChecked />}>
+  <Part name="root" target={switchStyles.root}>A native `label` around the whole control, so clicking the text toggles it too.</Part>
+  <Part name="input" target={switchStyles.input}>The native checkbox with `role="switch"`, transparent over the track. It takes clicks and focus and holds the form value.</Part>
+  <Part name="track" target={switchStyles.indicator}>Neutral when off and green when on. Decorative, like the parts inside it.</Part>
+  <Part name="thumb" target={switchStyles.thumb}>The circle that slides to the end of the track that's on.</Part>
+  <Part name="icon" target={switchStyles.iconOn}>A check when on, or an X when off, opposite the thumb. A Spinner takes its place while loading; `showIcons={false}` hides the mark.</Part>
+  <Part name="label" target={switchStyles.labelText}>`label`, the visible text and the accessible name. Optional, but then `aria-label` is required.</Part>
+  <Part name="required indicator" target={switchStyles.requiredIndicator}>A `*` after the label, shown when `required` is set.</Part>
+</Anatomy>
 
-### Sizes are the only variant
+</Section>
 
-`md` (the default) and `sm` scale the track, thumb, and travel distance together - see Sizes. The
-on/off marks stay a constant 12px at both sizes.
+<Section title="Variants">
 
-### Loading
+Two sizes. `md`, the default, has a 40 by 20px track and a 16px thumb. `sm` has a 32 by 16px track,
+a 12px thumb, and a label one type size smaller. The marks are 12px at both sizes.
 
-`isLoading` blocks toggling and sets `aria-busy="true"`, but deliberately does **not** set native
-`disabled` - the control stays focusable and reachable by Tab, communicating "busy" rather than
-"unavailable." Figma's `isLoading` artwork has no visible difference from the resting state; this
-implementation additionally replaces the visible on/off mark with a small `Spinner` in the same
-slot - not on the thumb, so it doesn't compete with the thumb's own slide animation - inheriting
-that slot's color with no override of its own. This is a usability improvement beyond the literal
-mockup. Hover/press track treatment is also suppressed while loading, the same way `disabled`
-already does - see States.
+<Example of={SwitchStories.Sizes} />
 
-### Verifying interaction states
+</Section>
 
-`data-force-state` pins hover/press as a static Storybook reference (documentation-only, not part
-of the public API) - the same convention Button and Checkbox use. Focus preview instead uses the
-shared Focus Ring primitive's own `data-force-state="focus"` support on the input. See States for
-both the pinned reference states and a live, click-driven example.
+<Section title="Behavior">
 
-### Thumb expansion on hover
+<Subsection title="States">
 
-The thumb expands slightly (`scaleX(1.16)`) on hover as well as press, not press alone - the cue
-starts as soon as the pointer arrives rather than waiting for an actual click.
+On and off come from `checked` or `defaultChecked`. The thumb slides across and the track changes
+color. Hover and press darken the track and stretch the thumb a little; a disabled or loading
+switch shows neither. Disabled grays out the track and the label.
 
-### Reduced motion
+<Example of={SwitchStories.States} />
 
-The thumb's slide, hover, and press animation respects `prefers-reduced-motion: reduce` - see Edge
-Cases.
+</Subsection>
 
-### Hiding the icons
+<Subsection title="Loading">
 
-`showIcons={false}` renders a bare track/thumb with no check/X mark - use it where the track's own
-color (neutral vs. success) already reads clearly and the mark would just add visual noise. This is
-independent of `isLoading`: the loading Spinner is a functional status signal, not decoration, so it
-still renders in the same slot even when `showIcons` is `false`.
+Set `isLoading` while a change is being saved. A Spinner replaces the mark, and the switch ignores
+clicks and Space, so it can't be flipped again until the save finishes. It isn't disabled: it stays
+in the tab order and keeps focus, with `aria-busy` set. The label doesn't change. Clear `isLoading`
+and set `checked` to the saved value when the save finishes.
 
-```tsx
-<Switch label="Compact setting" showIcons={false} />
-```
+</Subsection>
 
-## Do / Don't
+<Subsection title="Marks">
 
-**Do** use a concise, state-neutral label that describes the setting.
+The check and X marks show by default. Set `showIcons={false}` for a plain track where the track
+color reads clearly on its own. The loading Spinner shows either way.
 
-```tsx
-<Switch label="Email notifications" />
-```
+</Subsection>
 
-**Don't** phrase the label as an instruction - the switch itself already communicates the action.
+<Subsection title="Controlled or uncontrolled">
 
-```tsx
-<Switch label="Turn on email notifications" />
-```
+Pass `checked` with `onCheckedChange` to keep the value in your state, or `defaultChecked` to let
+the input keep it. `onCheckedChange` gets the next value as a boolean, then the change event.
 
----
+</Subsection>
 
-**Do** give a label-less Switch an accessible name via `aria-label`.
+<Subsection title="Labels and motion">
 
-```tsx
-<Switch aria-label="Enable standalone setting" />
-```
+The switch sits before the label and is centered on it, so when a label wraps the switch lines up
+with the middle of the text, not the first line. The thumb's slide and the track's color change
+are switched off when someone asks for reduced motion.
 
-**Don't** omit both `label` and `aria-label` - the control becomes unnamed for assistive technology.
+<Example of={SwitchStories.EdgeCases} />
 
-```tsx
-<Switch />
-```
+</Subsection>
 
----
+</Section>
 
-**Do** use `isLoading` while an async toggle is in flight, so it stays focusable and announces busy.
+<Section title="Do and don't">
 
-```tsx
-<Switch label="Syncing calendar" isLoading defaultChecked />
-```
+<Guidelines>
+<Do caption="Name the setting in the label. The switch shows whether it's on." code={`<Switch label="Email notifications" />`}>
+  <Switch label="Email notifications" />
+</Do>
+<Dont caption="Write the label as an instruction. It reads wrong once the switch is on." code={`<Switch label="Turn on email notifications" />`}>
+  <Switch label="Turn on email notifications" defaultChecked />
+</Dont>
+<Do caption="Set isLoading while the change saves. The switch stays focused and can't be flipped twice." code={`<Switch label="Sync calendar" checked={on} isLoading={saving} onCheckedChange={save} />`}>
+  <Switch label="Sync calendar" defaultChecked isLoading />
+</Do>
+<Dont caption="Disable it while the change saves. It drops out of the tab order, so keyboard focus is lost, and it reads as unavailable." code={`<Switch label="Sync calendar" checked={on} disabled={saving} onCheckedChange={save} />`}>
+  <Switch label="Sync calendar" defaultChecked disabled />
+</Dont>
+<Do caption="Use Switch for a setting that applies as soon as it's flipped." code={`<Switch label="Auto-archive closed matters" checked={autoArchive} onCheckedChange={saveAutoArchive} />`}>
+  <Switch label="Auto-archive closed matters" defaultChecked />
+</Do>
+<Dont caption="Put a Switch in a form that waits for a submit button. People expect it to apply at once; use a Checkbox." code={`<form onSubmit={applyFilters}>
+    <Switch label="Include archived matters" name="includeArchived" />
+    <Button type="submit">Apply filters</Button>
+</form>`} />
+</Guidelines>
 
-**Don't** use `disabled` for the same purpose - it removes the control from the tab order and reads
-as permanently unavailable, not temporarily busy.
+</Section>
 
-```tsx
-<Switch label="Syncing calendar" disabled defaultChecked />
-```
+<Section title="Accessibility">
 
-## API
+- Switch renders a native `input type="checkbox"` with `role="switch"` inside a `label`, so it's
+  focusable, announced as a switch that's on or off, toggled by Space, and named by the label text.
+  Don't rebuild it with `role="switch"` on another element.
+- Without a visible label, name it with `aria-label` or `aria-labelledby`. Nothing warns you when
+  both are missing.
+- `isLoading` sets `aria-busy` and ignores clicks and Space, but doesn't disable the input, so it
+  stays in the tab order. The Spinner is hidden from assistive technology, so `aria-busy` carries the
+  state.
+- The track, thumb, and marks are hidden from assistive technology.
+- `disabled` and `required` are the native attributes: a disabled switch leaves the tab order, and a
+  required one is announced as required. The `*` is hidden from assistive technology, so it isn't
+  read as part of the name.
+- Keyboard focus shows the shared Focus Ring around the track.
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>label</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Visible label. Omit only when <code>aria-label</code>/<code>aria-labelledby</code> is set.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'md' | 'sm'</code></td>
-      <td><code>'md'</code></td>
-      <td>The only variant-like axis - scales track, thumb, and travel distance together.</td>
-    </tr>
-    <tr>
-      <td><code>checked</code></td>
-      <td><code>boolean</code></td>
-      <td>-</td>
-      <td>Controlled checked value.</td>
-    </tr>
-    <tr>
-      <td><code>defaultChecked</code></td>
-      <td><code>boolean</code></td>
-      <td>-</td>
-      <td>Initial value for uncontrolled usage.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>disabled</code> - removes the control from the tab order entirely.</td>
-    </tr>
-    <tr>
-      <td><code>required</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>required</code>. Appends a visible indicator after the label.</td>
-    </tr>
-    <tr>
-      <td><code>isLoading</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Blocks toggling and sets <code>aria-busy</code>, but stays focusable - unlike <code>disabled</code>. Replaces the on/off mark with a small Spinner in the same slot.</td>
-    </tr>
-    <tr>
-      <td><code>showIcons</code></td>
-      <td><code>boolean</code></td>
-      <td><code>true</code></td>
-      <td>Set to <code>false</code> to hide the decorative check/X marks. Does not affect the <code>isLoading</code> Spinner.</td>
-    </tr>
-    <tr>
-      <td><code>onCheckedChange</code></td>
-      <td><code>(checked: boolean, event: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; void</code></td>
-      <td>-</td>
-      <td>Fires on change with the next value already resolved.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>label</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Keyboard>
+  <Key keys="Tab">Moves focus to the switch, loading or not. A disabled switch is skipped.</Key>
+  <Key keys="Space">Turns the switch on or off, unless it's loading.</Key>
+</Keyboard>
 
-Any other native `input` prop (`name`, `value`, `aria-describedby`, and so on) is forwarded to the
-underlying input.
+</Section>
 
-## Related components
+<Section title="API">
 
-- **Checkbox** - for multi-select or a one-time form choice rather than an immediate state change.
-- **RadioGroup** - for selecting one option from several named choices.
+`ref` points to the native input.
+
+<PropsTable of={SwitchStories} native="input" classNameOn="root label" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Switch's stylesheet uses, by family, with the property it sets and when. "Base" is an
+off `md` switch. The track's class is `indicator` and the marks are `icon on` and `icon off`, so
+their rows read that way.
+
+<TokensTable id="switch" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Checkbox" /> for a choice that's saved with a form.
+- <DocLink to="Components/Forms/Radio" /> for one option from several.
+- <DocLink to="Components/Actions/Toggle Button" /> for an on or off control in a toolbar.
+- <DocLink to="Components/Feedback/Spinner" />, which Switch shows while loading.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads switch.types.ts, the design tokens read switch.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

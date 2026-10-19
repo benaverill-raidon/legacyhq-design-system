@@ -3,22 +3,22 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LinkButton } from '../../atoms/link-button';
 import { ButtonGroup } from '../../molecules/button-group';
 import { SectionMessage } from './section-message';
-import type { SectionMessageAppearance } from './section-message.types';
+import type { SectionMessageTone } from './section-message.types';
 
-const appearances: SectionMessageAppearance[] = ['information', 'success', 'warning', 'error'];
+const tones: SectionMessageTone[] = ['information', 'success', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Section Message',
+  title: 'Components/Feedback/Section Message',
   component: SectionMessage,
   args: {
-    appearance: 'information',
+    tone: 'information',
     title: 'Restricted access',
     children:
       "You're not allowed to change these restrictions. It's either due to the restrictions on the page, or permission settings for this space.",
     isDismissible: false,
   },
   argTypes: {
-    appearance: { control: 'inline-radio', options: appearances },
+    tone: { control: 'inline-radio', options: tones },
     title: { control: 'text' },
     children: { control: 'text' },
     isDismissible: { control: 'boolean' },
@@ -74,13 +74,13 @@ export const Playground: Story = {
   },
 };
 
-/** The four semantic appearances, each with its status icon, tinted background, and border. */
-export const Appearances: Story = {
+/** The four semantic tones, each with its status icon, tinted background, and border. */
+export const Tones: Story = {
   render: () => (
     <div style={stack}>
-      {appearances.map((appearance) => (
-        <Labelled key={appearance} label={appearance}>
-          <SectionMessage appearance={appearance} title="Restricted access" actions={demoActions()}>
+      {tones.map((tone) => (
+        <Labelled key={tone} label={tone}>
+          <SectionMessage tone={tone} title="Restricted access" actions={demoActions()}>
             {description}
           </SectionMessage>
         </Labelled>
@@ -94,18 +94,18 @@ export const Content: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Title + description + actions">
-        <SectionMessage appearance="information" title="Restricted access" actions={demoActions()}>
+        <SectionMessage tone="information" title="Restricted access" actions={demoActions()}>
           {description}
         </SectionMessage>
       </Labelled>
 
       <Labelled label="Description only (no title)">
-        <SectionMessage appearance="success">Your changes were published successfully.</SectionMessage>
+        <SectionMessage tone="success">Your changes were published successfully.</SectionMessage>
       </Labelled>
 
       <Labelled label="A single action">
         <SectionMessage
-          appearance="warning"
+          tone="warning"
           title="Your trial ends soon"
           actions={
             <LinkButton href="#upgrade" appearance="subtle" size="sm">
@@ -118,7 +118,7 @@ export const Content: Story = {
       </Labelled>
 
       <Labelled label="Dismissible">
-        <SectionMessage appearance="error" title="Something went wrong" isDismissible>
+        <SectionMessage tone="error" title="Something went wrong" isDismissible>
           We couldn&apos;t save your changes. Check your connection and try again.
         </SectionMessage>
       </Labelled>
@@ -131,14 +131,14 @@ export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Long, wrapping content with a title and actions">
-        <SectionMessage appearance="information" title="This title is descriptive enough to wrap onto a second line on narrower viewports" isDismissible actions={demoActions()}>
+        <SectionMessage tone="information" title="This title is descriptive enough to wrap onto a second line on narrower viewports" isDismissible actions={demoActions()}>
           {description} {description}
         </SectionMessage>
       </Labelled>
 
       <Labelled label="Dismissible, no title, one action">
         <SectionMessage
-          appearance="warning"
+          tone="warning"
           isDismissible
           actions={
             <LinkButton href="#review" appearance="subtle" size="sm">

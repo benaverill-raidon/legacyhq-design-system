@@ -24,7 +24,17 @@
     {
       "name": "Disabled interactive avatar",
       "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
-      "jsx": "<Avatar name=\"Ben Averill\" isInteractive isDisabled onClick={handleClick} />"
+      "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />"
+    },
+    {
+      "name": "Selectable interactive avatar",
+      "description": "An avatar people pick: given isSelected, the button is a toggle with aria-pressed, and its name is \"Ben Averill, busy\" without the word selected.",
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />"
+    },
+    {
+      "name": "Translated status words",
+      "description": "The words Avatar adds to the accessible name are props with English defaults.",
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />"
     },
     {
       "name": "Team/partner entity, no image",

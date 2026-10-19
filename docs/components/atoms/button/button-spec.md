@@ -27,12 +27,13 @@ index.ts
 
 ```txt
 Button
-├─ leading icon or loading spinner
+├─ leading icon
 ├─ content
-└─ trailing icon
+├─ trailing icon
+└─ spinner, over the content while loading
 ```
 
-The loading spinner replaces the leading content area while preserving the original label/content width.
+Loading holds the button's size: the spinner sits centered over the content, and the label and icons keep their space, hidden, so nothing shifts or reflows. The label stays the accessible name. The spinner is `md`, the size of Button's icons. This matches Figma's loading variant, which shows the spinner alone, while keeping the resting width.
 
 ## Public API
 
@@ -148,25 +149,17 @@ When `disabled` is true:
 
 When `isLoading` is true:
 
-- render a Spinner in the leading content area
-- preserve the original content width
+- render a Spinner centered over the content
+- hide the label and icons with opacity, so they keep their space and the label stays the accessible name
+- keep the button's width and height exactly
 - prevent repeated activation
-- apply loading visual behavior
-- keep the action label visible when possible
-
-The intended loading pattern is:
 
 ```txt
-[ spinner  Save changes ]
+[  Save changes  ]   resting
+[       ◌        ]   loading: same size, label still the accessible name
 ```
 
-not:
-
-```txt
-[ spinner ]
-```
-
-Button should not shrink when loading starts.
+Button never changes size when loading starts or ends.
 
 ### Full Width
 
@@ -240,7 +233,7 @@ Background, border, and content color changes across hover/press/focus transitio
 transition: background-color var(--fade-quick), border-color var(--fade-quick), color var(--fade-quick);
 ```
 
-Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do not hardcode a duration or easing curve directly on the component — consume the semantic motion token so retiming propagates system-wide.
+Respect `prefers-reduced-motion: reduce` by zeroing `transition-duration`. Do not hardcode a duration or easing curve directly on the component — consume the semantic motion token so retiming propagates system-wide. Button has no press-state scale or other transform motion: press feedback is color only.
 
 ### Size Token Mapping
 
@@ -470,7 +463,7 @@ Test:
 - supports the inverse treatment (isInverse)
 - disabled behavior
 - loading behavior
-- loading preserves label/content
+- loading holds the button's size
 - full width class
 - iconBefore rendering
 - iconAfter rendering

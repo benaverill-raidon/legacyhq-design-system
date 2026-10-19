@@ -132,4 +132,19 @@ describe('IconTile', () => {
     expect(iconTileCss).toContain('background: var(--color-background-brand-primary-default-default);');
     expect(iconTileCss).toContain('color: var(--color-content-inverse-default);');
   });
+
+  it('uses taupe for the neutral tone, and still accepts the deprecated gray', () => {
+    const { rerender } = render(
+      <IconTile tone="taupe" decorative={false} ariaLabel="Neutral">
+        <CheckIcon />
+      </IconTile>,
+    );
+    expect(screen.getByRole('img', { name: 'Neutral' })).toHaveAttribute('data-tone', 'taupe');
+    rerender(
+      <IconTile tone="gray" decorative={false} ariaLabel="Neutral">
+        <CheckIcon />
+      </IconTile>,
+    );
+    expect(screen.getByRole('img', { name: 'Neutral' })).toHaveAttribute('data-tone', 'taupe');
+  });
 });

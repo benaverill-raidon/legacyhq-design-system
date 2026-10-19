@@ -1,151 +1,250 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CodeSample,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { Checkbox } from '../../atoms/checkbox';
+import { Switch } from '../../atoms/switch';
+import { FocusRing } from './focus-ring';
+import focusRingStyles from './focus-ring.module.css';
 import * as FocusRingStories from './focus-ring.stories';
 
 <Meta of={FocusRingStories} name="Docs" />
 
-# Focus Ring
+<Unstyled>
+<ComponentPage>
 
-Focus Ring is the single, shared keyboard-focus treatment for this design system. Every interactive
-component - Button, Icon Button, Link, Checkbox, Radio, Switch, Slider, Tag - shows the same outline
-in the same color, width, and offset, because they all consume this one primitive instead of each
-defining their own `:focus-visible` styling.
+<ComponentHeader
+  id="focus-ring"
+  example={
+    <>
+      <Button data-force-state="focus">Save changes</Button>
+      <Checkbox label="Notify the client" data-force-state="focus" />
+      <Switch label="Share with the team" data-force-state="focus" />
+    </>
+  }
+>
+  Focus Ring is the keyboard focus outline every interactive component shares: 2px in the focus
+  color, outside the control, shown only when focus comes from the keyboard. Components compose it,
+  and you reach for it when you build a control of your own. These are shown focused.
+</ComponentHeader>
 
-<Canvas of={FocusRingStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Wrapping or styling any custom-built interactive element that needs a focus indicator.
-- Anywhere you'd otherwise be tempted to write a one-off `outline` or `box-shadow` for
-  `:focus-visible`.
+- Every element a new component renders that can take focus: a `button`, a link, an `input`, or an element with `tabIndex`.
+- A custom control in product code, by wrapping its one focusable element in `<FocusRing>`.
+- Instead of any one-off `:focus-visible` outline or shadow.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **As a standalone visual element.** Focus Ring has no appearance until the wrapped element is
-  keyboard-focus - it isn't decoration to reach for outside of a real focus state.
-- **As a substitute for native focusability.** Focus Ring only styles focus - the element still
-  needs to be a real, focusable control (a native `button`, `a[href]`, `input`, or a
-  `tabIndex`-bearing element). It does not add keyboard interaction on its own.
-- **For a mouse/pointer hover indicator.** It only ever appears on `:focus-visible`, never on plain
-  `:hover` or `:focus` from a mouse click - that's intentional, not a gap.
+- **A system component:** it already shows the ring, so don't wrap it. See <DocLink to="Components/Actions/Button" />.
+- **A text field's focus:** <DocLink to="Components/Forms/Text Field" /> and the other fields turn their border the focus color instead.
+- **Hover, selected, or error states:** each component's own styles. The ring means focus and nothing else.
+- **Making an element focusable:** use a native control, or `tabIndex`. Focus Ring only draws.
 
-## Two ways to apply it
+</UseInstead>
+</Usage>
 
-Most components wrap a single interactive child, so the `FocusRing` component is the simplest
-option - it clones its child and merges the focus classes onto it:
+</Section>
 
-```tsx
-<FocusRing>
-  <button type="button">Action</button>
-</FocusRing>
-```
+<Section title="Anatomy">
 
-Some components can't wrap a child this way - a raw `<input>` inside a custom checkbox/switch
-implementation, for example, where the component needs to add other classes of its own at the same
-time. For those cases, import the raw class names and compose them directly:
+<Anatomy specimen={<Button data-force-state="focus">Save changes</Button>}>
+  <Part name="wrapped element" target={focusRingStyles.focusRing}>The focusable element that carries the focus classes: the child `FocusRing` clones, or an element a component gives `focusRingClassNames`. Focus Ring adds no element; the ring is this element's outline, drawn 2px outside it here.</Part>
+</Anatomy>
 
-```tsx
-import { focusRingClassNames } from '../../primitives/focus-ring';
+</Section>
 
-<input className={`${myOwnClassName} ${focusRingClassNames.focusRing} ${focusRingClassNames.focusRingDefault}`} />;
-```
+<Section title="Behavior">
 
-This is exactly how Button, Icon Button, Avatar, and every other interactive atom in this system
-apply it internally - `FocusRing` the component and `focusRingClassNames` the object are two
-entry points to the same CSS, not two different implementations.
+<Subsection title="Keyboard focus only">
 
-## Border width
+The ring shows on `:focus-visible`: when someone moves focus with the keyboard, or when the browser
+otherwise decides focus should show, as it does in a text input. Clicking a button with a mouse
+doesn't show it. It's an outline, so it takes no space and doesn't move anything around it, and it
+follows the element's corner radius.
 
-`borderWidth="default"` is the only width Figma's focus-ring component currently defines - a
-1px/`compact` option existed previously but has since been removed there, and no component in this
-codebase ever consumed it. The prop stays in the API for forward compatibility in case a future
-dense-control variant is introduced, rather than being deleted outright.
+<Example of={FocusRingStories.Examples} caption="Button, Checkbox, and Switch, in light and dark themes. Press Tab to move through them." />
 
-Button, Checkbox, and Switch below are the real atoms, rendered unwrapped - they already apply
-Focus Ring internally, so this shows the actual result of that shared treatment across real
-components and both themes, not a hand-rolled approximation of what they look like.
+</Subsection>
 
-<Canvas of={FocusRingStories.Examples} />
+<Subsection title="Two ways to apply it">
 
-## Do / Don't
+Components compose the classes onto their own element with `focusRingClassNames`, next to their
+own classes. Every system component that shows the ring does it this way.
 
-**Do** wrap the one interactive child that needs a focus indicator.
+<CodeSample
+  code={`import { focusRingClassNames } from '../../primitives/focus-ring';
 
-```tsx
-<FocusRing>
-  <button type="button">Save</button>
-</FocusRing>
-```
+<button
+    className={mergeClassNames(
+        styles.root,
+        focusRingClassNames.focusRing,
+        focusRingClassNames.focusRingDefault,
+    )}
+/>`}
+/>
 
-**Don't** apply Focus Ring to a non-interactive element to fake a focus state.
+In product code, wrap one focusable element in `FocusRing`. It clones the element and adds the
+same classes to its `className`, after the element's own.
 
-```tsx
-<FocusRing>
-  <div>Not actually focusable</div>
-</FocusRing>
-```
+<CodeSample
+  code={`<FocusRing>
+    <a href="/matters/42/history">Matter history</a>
+</FocusRing>`}
+/>
 
----
+</Subsection>
 
-**Do** use `focusRingClassNames` when a component needs to compose its own classes onto the same
-element.
+<Subsection title="Tuning it for a component">
 
-```tsx
-className={mergeClassNames(styles.root, focusRingClassNames.focusRing, focusRingClassNames.focusRingDefault)}
-```
+The ring reads three custom properties: `--focus-ring-color`, `--focus-ring-width`, and
+`--focus-ring-offset`, 2px by default. A component changes its ring by setting them on the class of
+the element that carries the ring, never by writing a new outline. The offset doesn't inherit, and
+Focus Ring sets no value of its own for it, so a component's offset applies whatever order
+stylesheets load in, and an element that sets none gets 2px. The ring's corners are the element's
+own `border-radius`; Focus Ring sets no radius. Button, Icon Button, and Tag set the offset to
+`--spacing-xxs`; Checkbox and Radio set a negative one so the ring circles the box, not the larger
+area you can click; Menu rows set a negative one so it's drawn inside the row. A component that
+draws the ring on another element, such as Slider's thumb, reads the same properties in its own
+outline.
 
-**Don't** write a new `:focus-visible` rule instead of reusing this primitive.
+<CodeSample
+  code={`.root {
+    --focus-ring-offset: var(--spacing-xxs);
+}`}
+/>
 
-```css
-/* Don't do this in a new component's CSS */
-.myControl:focus-visible {
-  outline: 2px solid blue;
-}
-```
+</Subsection>
 
-## API
+<Subsection title="A pinned focus state">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactElement</code></td>
-      <td>-</td>
-      <td>Required. A single focusable element - <code>FocusRing</code> clones it and merges the focus classes onto its <code>className</code>.</td>
-    </tr>
-    <tr>
-      <td><code>borderWidth</code></td>
-      <td><code>'default'</code></td>
-      <td><code>'default'</code></td>
-      <td>Outline width. Only one value exists today; kept for forward compatibility.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Suppresses the outline entirely - use only when the wrapped control is itself disabled.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the merged class list.</td>
-    </tr>
-  </tbody>
-</table>
+`data-force-state="focus"` on the element shows the ring without focus, for documentation and
+visual tests, as on this page. It isn't for product code.
 
-`focusRingClassNames` exports the same underlying classes for direct composition:
-`focusRing` (the base rule), `focusRingDefault` (the border width), and `focusRingDisabled`
-(suppresses the outline).
+</Subsection>
 
-## Related components
+</Section>
 
-Every interactive atom consumes this primitive - Button, Icon Button, Link, Checkbox, Radio,
-Switch, Slider, and Tag all apply Focus Ring rather than defining their own focus treatment.
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Compose focusRingClassNames on the element that takes focus."
+  code={`className={mergeClassNames(styles.root, focusRingClassNames.focusRing, focusRingClassNames.focusRingDefault)}`}
+>
+  <Button data-force-state="focus">Save changes</Button>
+</Do>
+<Dont
+  caption="Write a new focus style in a component's stylesheet. It drifts from every other control."
+  code={`.myControl:focus-visible {
+    outline: 2px solid blue;
+}`}
+/>
+<Do
+  caption="Wrap the one focusable element."
+  code={`<FocusRing>
+    <a href="/matters/42/history">Matter history</a>
+</FocusRing>`}
+>
+  <FocusRing>
+    <a href="#" data-force-state="focus">Matter history</a>
+  </FocusRing>
+</Do>
+<Dont
+  caption="Wrap an element that can't take focus. Nothing shows, because Focus Ring doesn't make it focusable."
+  code={`<FocusRing>
+    <div onClick={open}>Matter history</div>
+</FocusRing>`}
+/>
+<Do
+  caption="Set --focus-ring-offset on the component's own class to move the ring, as Checkbox does to circle the box."
+  code={`.input {
+    --focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);
+}`}
+>
+  <Checkbox label="Notify the client" data-force-state="focus" />
+</Do>
+<Dont
+  caption="Override the outline itself to move it. The color and width stop following the shared ring."
+  code={`.root:focus-visible {
+    outline-offset: -2px;
+}`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Focus Ring adds no element, role, or name, and it doesn't make anything focusable: the element
+  keeps its own semantics.
+- Every interactive component shows the same ring, so keyboard users learn one signal for where
+  focus is.
+- It's an outline, not a shadow, so it stays visible in Windows high contrast mode.
+- `disabled` removes the ring and the browser's own outline. Use it only on a control that can't
+  take focus; a focusable control with no focus indicator fails keyboard users.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={FocusRingStories} />
+
+`focusRingClassNames` exports the same classes for a component to compose: `focusRing`, the ring,
+`focusRingDefault`, its width, and `focusRingDisabled`, which removes any outline.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Focus Ring's stylesheet uses, with the property it sets and when. The 2px offset is a
+fixed length in the stylesheet, not a token.
+
+<TokensTable id="focus-ring" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Button" />, the reference for a control that composes the ring, with the hover fill shown on focus too.
+- <DocLink to="Components/Forms/Checkbox" /> and <DocLink to="Components/Forms/Radio" />, which move the ring in to circle the box.
+- <DocLink to="Components/Actions/Menu" />, whose rows draw the ring inside the row.
+- <DocLink to="Components/Forms/Text Field" />, which shows focus on its border instead.
+- <DocLink to="Foundations/Color" />, which lists the focus border color with the other border colors.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads focus-ring.types.ts, the design tokens read focus-ring.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

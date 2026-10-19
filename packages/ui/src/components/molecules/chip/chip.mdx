@@ -1,180 +1,400 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { CalendarIcon, SearchIcon, TaskNotStartedIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CodeSample,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Tag } from '../../atoms/tag';
+import { ChipGroup } from '../chip-group';
+import { Chip } from './chip';
+import chipStyles from './chip.module.css';
 import * as ChipStories from './Chip.stories';
+
+export const statusSections = [
+  {
+    id: 'statuses',
+    items: [
+      { id: 'not-started', label: 'Not started' },
+      { id: 'in-progress', label: 'In progress' },
+      { id: 'complete', label: 'Complete' },
+    ],
+  },
+];
+
+export const operatorSections = [
+  {
+    id: 'operators',
+    items: [
+      { id: 'on', label: 'on' },
+      { id: 'before', label: 'before' },
+      { id: 'after', label: 'after' },
+    ],
+  },
+];
+
+export const dateSections = [
+  {
+    id: 'dates',
+    items: [
+      { id: 'today', label: 'Today' },
+      { id: 'april-15', label: 'April 15' },
+    ],
+  },
+];
 
 <Meta of={ChipStories} name="Docs" />
 
-# Chip
+<Unstyled>
+<ComponentPage>
 
-Chip is a compact segmented pill covering three closely-related jobs: showing and editing an active
-**filter**, showing an applied **property**, and selecting a search **scope**.
+<ComponentHeader
+  id="chip"
+  example={
+    <ChipGroup aria-label="Active filters">
+      <Chip
+        mode="filter"
+        label="Status"
+        elemBefore={<TaskNotStartedIcon decorative />}
+        value={{ label: '2 statuses', sections: statusSections }}
+        onRemove={() => {}}
+      />
+      <Chip
+        mode="filter"
+        label="Due date"
+        elemBefore={<CalendarIcon decorative />}
+        operator={{ label: 'before', sections: operatorSections }}
+        value={{ label: 'April 15', sections: dateSections }}
+        onRemove={() => {}}
+      />
+      <Chip mode="select" label="Trusts" onRemove={() => {}} />
+    </ChipGroup>
+  }
+>
+  Chip is a compact pill for an active filter, an applied value, or a search scope. Its segments read
+  as one shape, and `mode` decides which of them act: a filter's value opens a menu, a select chip
+  can be removed, and a search chip toggles on and off.
+</ComponentHeader>
 
-<Canvas of={ChipStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- **`mode="filter"`** — an active filter across one property, editable in place. Most often several
-  sit in a row above a task list: status, assignee, due date.
-- **`mode="select"`** — a single already-applied property. The value *is* the label, so there is
-  nothing to open; the only affordance is removing it.
-- **`mode="search"`** — narrowing a search to a broader category than a single property
-  (Everything / Matters / Documents / People). Selectable rather than removable.
+- An active filter above a list, edited in place: status, assignee, due date (`mode="filter"`).
+- An applied value someone can remove, such as each value in a multi-select (`mode="select"`).
+- Narrowing a search to a scope, such as Matters or Documents (`mode="search"`).
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A plain, non-removable label.** That's Tag. Chip always carries an affordance.
-- **A group needing overflow truncation.** That's Tag Group, or a wrapping row of Chips.
-- **A primary action.** That's Button, or Split Button when it has close alternatives.
-- **A persistent on/off setting** (Switch) or **a bordered text toggle** (Toggle Button).
+- **A label on a record, such as a matter's type:** <DocLink to="Components/Data Display/Tag" />.
+- **A set that truncates behind "+N more":** <DocLink to="Components/Data Display/Tag Group" />, with Tags.
+- **Choosing values from a list:** <DocLink to="Components/Forms/Select" />. In multi-select it shows each value as a select chip for you.
+- **An action:** <DocLink to="Components/Actions/Button" />, or <DocLink to="Components/Actions/Split Button" /> when it has close alternatives.
+- **A setting that's on or off:** <DocLink to="Components/Forms/Switch" />, or <DocLink to="Components/Actions/Toggle Button" /> for a toolbar control.
 
-## The three modes
+</UseInstead>
+</Usage>
 
-They genuinely differ in shape, which is why the props are a discriminated union on `mode`:
+</Section>
 
-| mode | segments | interactive parts |
-|---|---|---|
-| `filter` | label + optional operator + value + remove | operator, value, remove |
-| `select` | label + remove | remove |
-| `search` | label only | the label itself |
+<Section title="Anatomy">
 
-<Canvas of={ChipStories.Modes} />
+<Anatomy
+  specimen={
+    <Chip
+      mode="filter"
+      label="Due date"
+      elemBefore={<CalendarIcon decorative />}
+      operator={{ label: 'before', sections: operatorSections }}
+      value={{ label: 'April 15', sections: dateSections }}
+      onRemove={() => {}}
+    />
+  }
+>
+  <Part name="root" target={chipStyles.root}>A `div` that joins the segments into one pill, with no gap. Only the outer corners are round.</Part>
+  <Part name="label segment" target={chipStyles.labelSegment}>`elemBefore` and the `label`. A plain span in `filter` and `select`; a toggle button in `search`.</Part>
+  <Part name="operator segment" target={chipStyles.operatorSegment}>`filter` only, optional. A button that opens its own menu of comparisons, such as on or before.</Part>
+  <Part name="value segment" target={chipStyles.valueSegment}>`filter` only. A button that opens its own menu of values, with an optional `valuePreview` before the text.</Part>
+  <Part name="remove button" target={chipStyles.removeButton}>`filter` and `select`. A button with a close icon, named `Remove` plus the label.</Part>
+</Anatomy>
 
-## Usage guidance
+</Section>
 
-### Props are typed per mode
+<Section title="Variants">
 
-`ChipProps` is a discriminated union, so props that only make sense for one use are rejected for the
-others — `sections` cannot reach a search chip, `onSelectedChange` cannot reach a select chip, and
-`value` is required exactly where it means something.
+<Subsection title="Modes">
 
-```tsx
-<Chip mode="search" label="Matters" isSelected onSelectedChange={setSelected} />
-{/* Type error: `value` is not part of the search branch. */}
-```
+`mode` changes Chip's shape, so the props are typed per mode: `value` exists only on a filter chip,
+`onSelectedChange` only on a search chip, and `onRemove` is required on filter and select chips.
 
-### An operator is just a segment, not a filter category
+- `filter` is the label, an optional operator, the value, and a remove button. The operator and the
+  value open menus.
+- `select` is the label and a remove button. There's nothing to open.
+- `search` is the label alone, and the label is the control: it toggles the chip on and off. It's
+  the only mode with a selected look.
 
-Figma has a `filter type` axis (status / context / assignee / due date), but those four differ only
-in their data — with one structural exception: `due date` has a comparison segment. That fact is
-exposed directly as an optional `operator`, so any filter can carry a comparison and a fifth product
-category never needs a code change.
+<Example of={ChipStories.Modes} />
 
-```tsx
-<Chip
-  mode="filter"
-  label="Due date"
-  operator={{ label: 'before', sections: operatorSections }}
-  value={{ label: 'April 15', sections: dateSections }}
-  onRemove={clearDueDate}
+</Subsection>
+
+<Subsection title="Sizes">
+
+Two heights: `sm` (24px) and `md` (32px), the default. `size` applies to every segment together.
+Filter chips come only in `md`, and an explicit `size="sm"` on one is a type error; an `sm` from an
+enclosing Chip Group isn't blocked, so don't put filter chips in an `sm` group.
+
+<Example of={ChipStories.Sizes} />
+
+</Subsection>
+
+<Subsection title="Operator">
+
+`operator` adds a comparison segment between the label and the value. Any filter can have one, not
+only dates. Where the operator and the value meet, the line between them is 1px, like every other
+seam in the pill.
+
+<Example of={ChipStories.WithOperator} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Menus">
+
+The operator and the value each open their own Dropdown Menu below the segment, with no search
+field, and each keeps its own open state, so one never closes the other. Opening a menu moves focus
+to its first item. Choosing an item runs that item's `onSelect`, then closes the menu and returns
+focus to the segment; an `onSelect` that calls `event.preventDefault()` keeps it open, for choosing
+several values. Escape, Tab out of the menu, or a click outside also closes it.
+
+Each segment takes a `ChipSegment`, whose `sections` are Menu's own sections:
+
+<CodeSample code={`{
+    label: React.ReactNode;       // the current operator or value, shown in the segment
+    sections: MenuSection[];      // the rows the segment's menu lists
+    menuAriaLabel?: string;       // names the menu; defaults to "<label> operator" or "<label> value"
+    tooltip?: React.ReactNode;    // shown on hover and focus, such as the full value when it's cut off
+}`} />
+
+The menu is named after the property and the segment's role, such as "Due date value", because the
+segment's own text is the current value, which says nothing about what choosing does. That default
+needs the label as text: a string `label`, or `labelText` when `label` is JSX. Otherwise, pass
+`menuAriaLabel`.
+
+</Subsection>
+
+<Subsection title="Selection and removal">
+
+Chip never changes its own state. Activating a search chip calls `onSelectedChange` with the next
+value; the remove button calls `onRemove`. Search chips are independent toggles, not a radio group:
+several can be on at once, and if only one should be, the code holding the state decides that.
+
+<Example of={ChipStories.Content} caption="A filter bar whose chips can be removed." />
+
+</Subsection>
+
+<Subsection title="States">
+
+The label segment has no hover or press fill in any mode. In `filter` and `select` it names the
+property and doesn't act; in `search`, being selected or not is the feedback. The operator, value,
+and remove segments, which do act, take the hover and press fills. A selected search chip uses the
+selected background, border, and text. `disabled` disables every control in the chip and overrides
+selected, border included. The label's icon follows the label's text color through each state.
+
+<Example of={ChipStories.States} caption="Focus is pinned for this reference; hover the operator, value, or remove segment to see their fills." />
+
+</Subsection>
+
+<Subsection title="Long text">
+
+The chip stays on one line and sizes to its text, up to the width of its container. Past that, the
+label and the value each end in an ellipsis, giving up width in proportion to their length; the
+remove button, `elemBefore`, and `valuePreview` keep their size. Keep labels and values short anyway,
+such as "3 people" rather than a list of names, and give a segment that may be cut off a `tooltip`
+with its full text.
+
+<Example of={ChipStories.EdgeCases} caption="Edge cases: a long label and value in a 320px container, no elemBefore, and a dark surface." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Keep elemBefore and valuePreview to icons and avatars. Both are hidden from assistive technology."
+  code={`<Chip mode="search" label="Matters" elemBefore={<SearchIcon decorative />} />`}
+>
+  <Chip mode="search" label="Matters" elemBefore={<SearchIcon decorative />} />
+</Do>
+<Dont
+  caption="Put a control in elemBefore. In a search chip it would be a button inside a button, and it's hidden from assistive technology."
+  code={`<Chip mode="search" label="Matters" elemBefore={<Button size="xs">Go</Button>} />`}
 />
-```
+<Do
+  caption="Use a Tag for a label that nothing removes or opens."
+  code={`<Tag>Trust</Tag>`}
+>
+  <Tag>Trust</Tag>
+</Do>
+<Dont
+  caption="Use a select chip with an empty onRemove to make a plain label. Its remove button still shows and does nothing."
+  code={`<Chip mode="select" label="Trust" onRemove={() => {}} />`}
+>
+  <Chip mode="select" label="Trust" onRemove={() => {}} />
+</Dont>
+<Do
+  caption="Give the label as text in labelText when label is JSX, so the menus and the remove button are named after it."
+  code={`<Chip
+    mode="filter"
+    label={<strong>Status</strong>}
+    labelText="Status"
+    value={{ label: '2 statuses', sections }}
+    onRemove={clearStatus}
+/>`}
+>
+  <Chip
+    mode="filter"
+    label={<strong>Status</strong>}
+    labelText="Status"
+    value={{ label: '2 statuses', sections: statusSections }}
+    onRemove={() => {}}
+  />
+</Do>
+<Dont
+  caption={`Leave out labelText with a JSX label. The menu has no name, and the remove button is just "Remove".`}
+  code={`<Chip mode="filter" label={<strong>Status</strong>} value={{ label: '2 statuses', sections }} onRemove={clearStatus} />`}
+/>
+</Guidelines>
 
-<Canvas of={ChipStories.WithOperator} />
+</Section>
 
-### Chip never changes its own state
+<Section title="Accessibility">
 
-Selecting a row calls that row's own `onSelect`; selecting a scope calls `onSelectedChange`. Chip
-does not filter, remove, or re-label anything itself — the same "never assume" rule Menu and Dropdown
-Menu follow. Each dropdown segment owns its own open state, so an operator menu and a value menu are
-always independent.
+- The root is a `div` with no role. In `filter` and `select`, the label segment is plain text, not a
+  control.
+- A search chip's label segment is a native `button` with `aria-pressed`, the same semantics as
+  Toggle Button. Its visible label is its name.
+- The operator and value segments are native buttons, named by the label and their own text
+  together through `aria-labelledby`, such as "Due date April 15", since their text alone is only
+  the current operator or value. With `labelText`, its text stands in for the label. Dropdown Menu
+  gives each `aria-haspopup="menu"` and `aria-expanded`, and `aria-controls` while its menu is open,
+  with or without a segment `tooltip`.
+- Each menu is a Menu, announced as a menu and named "Due date value" or "Due date operator" by
+  default, or by `menuAriaLabel`.
+- The remove button is a native button named by `removeAriaLabel`, `Remove` plus the label by
+  default. The default names need the label as text: a string `label`, or `labelText`. A "Remove" tooltip shows on hover and focus; it isn't the button's name, and it's not
+  shown while disabled.
+- `elemBefore` and `valuePreview` are hidden from assistive technology, so the label and value text
+  must carry the meaning.
+- `disabled` sets the native attribute on every control in the chip, so they leave the tab order.
+- Every control shows the shared Focus Ring, and the focused segment is raised above its neighbors
+  so they don't hide the ring.
+- Opening a menu moves focus to its first item. Choosing an item, Escape, or Tab out of the menu
+  closes it and returns focus to the segment that opened it.
 
-### One size per chip
+<Keyboard>
+  <Key keys="Tab">Moves through the chip's controls in order: the operator, the value, then remove; or the search chip's toggle. Disabled controls are skipped. In a menu, Tab or Shift + Tab closes it and returns focus to its segment.</Key>
+  <Key keys="Enter">On a search chip, toggles it. On the operator or value, opens or closes its menu. On remove, calls `onRemove`.</Key>
+  <Key keys="Space">The same as Enter. In a menu, Enter or Space chooses the item.</Key>
+  <Key keys="Escape">Closes an open menu and returns focus to its segment.</Key>
+  <Key keys="Arrow Down">In a menu, moves to the next item, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Up">In a menu, moves to the previous item, wrapping from the first to the last.</Key>
+  <Key keys="Home">In a menu, moves to the first item.</Key>
+  <Key keys="End">In a menu, moves to the last item.</Key>
+</Keyboard>
 
-`size` (`'sm'` | `'md'`, default `'md'`) applies to every segment together — Figma has no per-segment
-size mixing.
+</Section>
 
-<Canvas of={ChipStories.Sizes} />
+<Section title="API">
 
-### Selected belongs to `search`
+Chip's props are a union typed by `mode`, and the generated table can't list them yet: Storybook's
+docgen skips a union of props types. Until it can, these are the props by mode, from chip.types.ts.
 
-`search` is the only mode Figma gives an unselected state, and the only one whose label segment is
-itself a control — so it renders as a real `<button>` with `aria-pressed`, the same semantics Toggle
-Button uses. Each chip is an **independent on/off toggle**: several can be on at once, and Chip never
-coordinates siblings. Any one-of-N behaviour belongs to whoever holds the state.
+<PropsTable of={ChipStories} />
 
-```tsx
-const [scopes, setScopes] = useState(new Set(['matters']));
+<CodeSample code={`// Every mode
+label: React.ReactNode;              // required
+elemBefore?: React.ReactNode;        // a decorative icon or Avatar; an Avatar is sized to the chip
+size?: 'sm' | 'md';                  // defaults to Chip Group's size, else 'md'
+disabled?: boolean;                  // disables every control in the chip
+id?: string;                         // on the root div
+className?: string;                  // added to the root div
 
-<Chip mode="search" label="Matters" isSelected={scopes.has('matters')} onSelectedChange={() => toggle('matters')} />
-```
+// mode="filter"
+value: ChipSegment;                  // required
+operator?: ChipSegment;
+valuePreview?: React.ReactNode;      // decorative, before the value text
+onRemove: (event) => void;           // required
+removeAriaLabel?: string;            // defaults to "Remove <label>"
+labelText?: string;                  // the label as text, for the built names; set it when label is JSX
+size?: 'md';                         // filter chips are md only
 
-### The label segment has no hover or press treatment
+// mode="select"
+onRemove: (event) => void;           // required
+removeAriaLabel?: string;            // defaults to "Remove <label>"
+labelText?: string;                  // the label as text, for the remove button's name
 
-Figma models a hover/press/focus axis on `chip-base`, but skipping it is deliberate: in
-`filter`/`select` the label is a passive span that shouldn't light up as though it acts, and in
-`search` the selected/unselected distinction is already the feedback. Interaction fills belong to the
-segments that *do* act — the operator, the value, and remove.
+// mode="search"
+isSelected?: boolean;                // default false; sets aria-pressed
+onSelectedChange?: (isSelected: boolean) => void;`} />
 
-Two consequences: `data-force-state` accepts only `'focus'` on a search chip (a `'hover'` value would
-render identically to the default and mislead), and the label's icon inherits the label's own colour
-so it tracks subtle → selected → disabled with the text.
+</Section>
 
-<Canvas of={ChipStories.States} />
+<Section title="Design tokens">
 
-## Do / Don't
+Every token Chip's stylesheet uses, by family, with the property it sets and when. Most of them are
+on the segments, which share one border, fill, and type style.
 
-**Do** keep `elemBefore` and `valuePreview` decorative — both are `aria-hidden`, and in search mode the
-segment is already a button.
+<TokensTable id="chip" />
 
-```tsx
-<Chip mode="filter" label="Assignee" valuePreview={<Avatar name="Jordan Ellis" size="xs" decorative />} value={value} onRemove={clear} />
-```
+</Section>
 
-**Don't** nest a focusable control in either slot — that's invalid HTML inside a search chip's button.
+<Section title="Related components">
 
-```tsx
-<Chip mode="search" label="Matters" elemBefore={<Button size="xs">Go</Button>} />
-```
+<Related>
 
----
+- <DocLink to="Components/Forms/Chip Group" /> to lay chips out in a wrapping row at one size.
+- <DocLink to="Components/Forms/Select" />, which shows each multi-select value as a select chip.
+- <DocLink to="Components/Data Display/Tag" /> for a label on a record.
+- <DocLink to="Components/Data Display/Tag Group" /> for tags that truncate behind "+N more".
+- <DocLink to="Components/Actions/Dropdown Menu" />, the menus the operator and value open, and <DocLink to="Components/Actions/Menu" />, the list inside them.
+- <DocLink to="Components/Actions/Toggle Button" />, the same `aria-pressed` semantics a search chip uses.
+- <DocLink to="Components/Actions/Split Button" />, the same joined-segment construction.
+- <DocLink to="Components/Data Display/Avatar Group" /> for a `valuePreview` of several people.
 
-**Do** name a panel explicitly when the composed default would read poorly.
+</Related>
 
-```tsx
-<Chip mode="filter" label="Status" value={{ label: '2 statuses', sections, menuAriaLabel: 'Choose statuses' }} onRemove={clear} />
-```
+</Section>
 
-**Don't** rely on the segment's own label naming the panel — it's the current *value*, so a panel
-called "on" or "March 2" says nothing about what choosing from it does. Chip composes
-`` `${label} operator` `` / `` `${label} value` `` for exactly this reason.
+<DocFooter>
+  The design tokens read chip.module.css, and the Figma source comes from registry.json, so they
+  follow the code. The props listed under API are copied from chip.types.ts by hand until the
+  generated table can read them.
+</DocFooter>
 
-## API
-
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>mode</code></td><td><code>'filter' | 'select' | 'search'</code></td><td>-</td><td>Required. Discriminates the union — determines which other props are valid.</td></tr>
-    <tr><td><code>label</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The leading segment's text: the property name (select), or the search-scope name (search).</td></tr>
-    <tr><td><code>elemBefore</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Decorative Icon or Avatar in a fixed 16px box.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td><code>'md'</code></td><td>Applied to every segment together.</td></tr>
-    <tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Disables every control in the chip at once.</td></tr>
-    <tr><td><code>isSelected</code></td><td><code>boolean</code></td><td><code>false</code></td><td><code>search</code> only. Drives <code>aria-pressed</code> and the selected tokens.</td></tr>
-    <tr><td><code>onSelectedChange</code></td><td><code>(isSelected: boolean) =&gt; void</code></td><td>-</td><td><code>search</code> only. Called with the next selected value.</td></tr>
-    <tr><td><code>value</code></td><td><code>ChipSegment</code></td><td>-</td><td><code>filter</code> only, required. The current value and the menu it opens.</td></tr>
-    <tr><td><code>operator</code></td><td><code>ChipSegment</code></td><td>-</td><td><code>filter</code> only. Adds a comparison segment before the value.</td></tr>
-    <tr><td><code>valuePreview</code></td><td><code>React.ReactNode</code></td><td>-</td><td><code>filter</code> only. Decorative preview before the value text.</td></tr>
-    <tr><td><code>onRemove</code></td><td><code>(event) =&gt; void</code></td><td>-</td><td><code>filter</code> and <code>select</code>, required.</td></tr>
-    <tr><td><code>removeAriaLabel</code></td><td><code>string</code></td><td><code>Remove ${'{'}label{'}'}</code></td><td>Accessible name for the remove button.</td></tr>
-    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the root's class list.</td></tr>
-  </tbody>
-</table>
-
-`ChipSegment` is `{ label, sections, menuAriaLabel? }` — `sections` is Menu's own
-`MenuSection[]`.
-
-`data-force-state` pins hover/focus/press as a static Storybook reference (documentation-only, not
-part of the public API) and is accepted on `search` only, since it is the only mode whose label
-segment is a control.
-
-## Edge cases
-
-<Canvas of={ChipStories.EdgeCases} />
-
-## Related components
-
-- **Tag** — the plain, non-removable label Chip should not replace.
-- **Tag Group** — a truncating group of tags.
-- **Dropdown Menu / Menu** — the operator and value panels.
-- **Toggle Button** — the same `aria-pressed` selection semantics `search` uses.
-- **Split Button** — the same segmented-pill construction.
+</ComponentPage>
+</Unstyled>

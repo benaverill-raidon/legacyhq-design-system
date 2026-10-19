@@ -1,132 +1,259 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { SearchIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Chip } from '../chip';
+import chipStyles from '../chip/chip.module.css';
+import { ChipGroup } from './chip-group';
+import chipGroupStyles from './chip-group.module.css';
 import * as ChipGroupStories from './ChipGroup.stories';
 
 <Meta of={ChipGroupStories} name="Docs" />
 
-# Chip Group
+<Unstyled>
+<ComponentPage>
 
-Chip Group lays out a wrapping row of Chips at one shared size and alignment. It is **pure layout** —
-it draws nothing of its own, and every visible pixel belongs to the Chips inside it.
+<ComponentHeader
+  id="chip-group"
+  example={
+    <ChipGroup size="sm" aria-label="Search scopes">
+      <Chip mode="search" label="Matters" elemBefore={<SearchIcon decorative />} isSelected />
+      <Chip mode="search" label="Documents" elemBefore={<SearchIcon decorative />} />
+      <Chip mode="search" label="People" elemBefore={<SearchIcon decorative />} />
+      <Chip mode="search" label="Tasks" elemBefore={<SearchIcon decorative />} />
+    </ChipGroup>
+  }
+>
+  Chip Group lays out several Chips in a wrapping row, at one shared size. It's layout only: it draws
+  nothing of its own and doesn't manage which chips are selected.
+</ComponentHeader>
 
-<Canvas of={ChipGroupStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-Whenever more than one Chip appears together — a scope selector, or a bar of active filters. Sharing
-`size` is the main reason to reach for it: in a *wrapping* row, one chip left at the wrong size
-visibly breaks the line it lands on.
+- A row of search scopes, such as Matters, Documents, and People.
+- A bar of active filters above a list.
+- Any set of chips that should share one size and wrap together.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **The collection needs to truncate** behind a "+N more" affordance → Tag Group, with Tags.
-- **It's a row of buttons** → Button Group.
-- **You want it to decide which chips are selected** → it won't. Chip Group is layout, not state.
+- **A set that truncates behind "+N more":** <DocLink to="Components/Data Display/Tag Group" />, with Tags. Chip Group never hides a chip.
+- **A row of buttons:** <DocLink to="Components/Actions/Button Group" />.
+- **One choice from a few options:** <DocLink to="Components/Forms/Radio" />, or <DocLink to="Components/Forms/Select" /> for a longer list.
 
-## Usage guidance
+</UseInstead>
+</Usage>
 
-### Size travels by context, not by cloning
+</Section>
 
-`size` reaches each Chip through React context, so it still arrives when a Chip sits behind a
-wrapper, comes out of a `.map`, or renders conditionally. `React.cloneElement` would only reach
-*direct* children and would silently miss all three.
+<Section title="Anatomy">
 
-```tsx
-<ChipGroup size="sm">
-  <Tooltip content="Only matters you own">
-    <Chip mode="search" label="My matters" />   {/* still sm */}
-  </Tooltip>
-  {showArchived ? <Chip mode="search" label="Archived" /> : null}
-</ChipGroup>
-```
+<Anatomy
+  specimen={
+    <ChipGroup size="md" aria-label="Search scopes">
+      <Chip mode="search" label="Matters" isSelected />
+      <Chip mode="search" label="Documents" />
+      <Chip mode="search" label="People" />
+    </ChipGroup>
+  }
+>
+  <Part name="root" target={chipGroupStyles.root}>A `div` that lays the chips out in a wrapping row, 8px apart in both directions. No padding, border, or fill.</Part>
+  <Part name="children" target={chipStyles.root}>The Chips. Any element is accepted, but the layout is built for Chip.</Part>
+</Anatomy>
 
-An explicit `size` on an individual Chip still wins — Chip resolves `size ?? groupSize ?? 'md'`.
-Leaving `size` off the group means "not opinionated", and every Chip keeps its own default.
+</Section>
 
-<Canvas of={ChipGroupStories.Sizes} />
+<Section title="Variants">
 
-### `alignment` is not Tag Group's `alignment`
+<Subsection title="Sizes">
 
-Same name, different meaning. Here it maps to Figma's `primaryAxisAlignItems` (MIN/MAX) — literally
-which edge the chips pack against, i.e. `justify-content`. Tag Group's decides where its *overflow
-tag* renders; Chip Group has no overflow, so there is nothing to place.
+`size` sets every Chip inside the group to `sm` (24px) or `md` (32px), even a Chip inside a wrapper,
+returned from a `.map`, or shown conditionally. A `size` on one Chip still wins over the group's.
+Leave `size` off and each Chip keeps its own, `md` by default. Filter chips come only in `md`, so
+keep them out of an `sm` group.
 
-<Canvas of={ChipGroupStories.Alignment} />
+<Example of={ChipGroupStories.Sizes} />
 
-### Wrapping
+</Subsection>
 
-Chips wrap onto new lines once the row runs out of inline space, keeping the same 8px gap on both
-axes — Figma measures `itemSpacing: 8` and `counterAxisSpacing: 8`, so one `gap` covers both.
+<Subsection title="Alignment">
 
-<Canvas of={ChipGroupStories.Wrapping} />
+`alignment` sets which edge the chips pack against: `left`, the default, or `right`. It's not Tag
+Group's `alignment`, which places that group's overflow tag; Chip Group has no overflow.
 
-### Selection stays yours
+<Example of={ChipGroupStories.Alignment} caption="The dashed box shows the group's own bounds." />
 
-Chip Group never coordinates its children. Search chips are independent on/off toggles, so hold that
-state yourself and pass it down — exactly as with Toggle Button.
+</Subsection>
 
-<Canvas of={ChipGroupStories.Content} />
+</Section>
 
-## Do / Don't
+<Section title="Behavior">
 
-**Do** set `size` once on the group.
+<Subsection title="Wrapping">
 
-```tsx
-<ChipGroup size="sm">{scopeChips}</ChipGroup>
-```
+When the row runs out of room, chips wrap onto the next line, with the same 8px gap between lines as
+between chips. Every chip stays visible.
 
-**Don't** repeat it on every chip — that's the exact mistake the group exists to prevent, since one
-missed chip breaks the line it wraps onto.
+<Example of={ChipGroupStories.Wrapping} />
 
-```tsx
-<ChipGroup size="sm">
-  <Chip mode="search" label="Matters" size="sm" />
-  <Chip mode="search" label="Documents" size="sm" />
-</ChipGroup>
-```
+</Subsection>
 
----
+<Subsection title="Selection stays yours">
 
-**Do** name the group when it forms a meaningful set — that's what makes it `role="group"`.
+Chip Group doesn't coordinate its chips. Search chips are independent toggles, so if only one scope
+should be on at a time, the code holding the state turns the others off. Removing a filter chip is
+also up to the code that renders it.
 
-```tsx
-<ChipGroup aria-label="Search scopes">{scopeChips}</ChipGroup>
-```
+<Example of={ChipGroupStories.Content} caption="A scope selector and an active filter bar, both wired to live state." />
 
-**Don't** put padding or a surface on it. Figma's own container has zero padding and no fill; put the
-surface on a wrapper you own so the group keeps hugging its chips.
+</Subsection>
 
-## API
+<Subsection title="Mixed content">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Required. The Chips in this group.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md'</code></td><td>-</td><td>Shared with every Chip inside, via context. Omit to leave each Chip on its own default.</td></tr>
-    <tr><td><code>alignment</code></td><td><code>'left' | 'right'</code></td><td><code>'left'</code></td><td>Which edge the chips pack against.</td></tr>
-    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Names the group, and makes it announced as <code>role="group"</code>.</td></tr>
-    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the root's class list.</td></tr>
-  </tbody>
-</table>
+A group can hold chips of different modes and disabled chips, which sit in the row like the others.
 
-Every other `div` attribute passes through, and the ref forwards to the root — the same shape Button
-Group uses.
+<Example of={ChipGroupStories.EdgeCases} caption="Edge cases: a single chip, mixed modes, disabled chips, and a dark surface." />
 
-## Accessibility
+</Subsection>
 
-Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour beyond
-its children's. It becomes `role="group"` **only** when given an accessible name — an unnamed group is
-a boundary a screen-reader user steps through for no benefit. There is deliberately no roving
-tabindex: the chips are independent controls, not one composite widget.
+</Section>
 
-## Edge cases
+<Section title="Do and don't">
 
-<Canvas of={ChipGroupStories.EdgeCases} />
+<Guidelines>
+<Do
+  caption="Set size once, on the group."
+  code={`<ChipGroup size="sm" aria-label="Search scopes">
+    <Chip mode="search" label="Matters" isSelected />
+    <Chip mode="search" label="Documents" />
+    <Chip mode="search" label="People" />
+</ChipGroup>`}
+>
+  <ChipGroup size="sm" aria-label="Search scopes">
+    <Chip mode="search" label="Matters" isSelected />
+    <Chip mode="search" label="Documents" />
+    <Chip mode="search" label="People" />
+  </ChipGroup>
+</Do>
+<Dont
+  caption="Set size on each chip. Miss one, and it breaks the row."
+  code={`<ChipGroup aria-label="Search scopes">
+    <Chip mode="search" label="Matters" size="sm" isSelected />
+    <Chip mode="search" label="Documents" size="sm" />
+    <Chip mode="search" label="People" />
+</ChipGroup>`}
+>
+  <ChipGroup aria-label="Search scopes">
+    <Chip mode="search" label="Matters" size="sm" isSelected />
+    <Chip mode="search" label="Documents" size="sm" />
+    <Chip mode="search" label="People" />
+  </ChipGroup>
+</Dont>
+<Do
+  caption="Name a group that forms a set, so it's announced as one."
+  code={`<ChipGroup aria-label="Active filters">{filterChips}</ChipGroup>`}
+/>
+<Dont
+  caption="Leave a set of related chips unnamed. Without a name, the group has no role and isn't announced."
+  code={`<ChipGroup>{filterChips}</ChipGroup>`}
+/>
+<Do
+  caption="Keep one-of-a-set selection in your own state, and pass each chip its isSelected."
+  code={`<ChipGroup aria-label="Search scope">
+    {scopes.map((scope) => (
+      <Chip
+        key={scope.id}
+        mode="search"
+        label={scope.label}
+        isSelected={scope.id === selected}
+        onSelectedChange={() => setSelected(scope.id)}
+      />
+    ))}
+</ChipGroup>`}
+/>
+<Dont
+  caption="Expect the group to turn the other chips off. Each search chip toggles on its own."
+  code={`<ChipGroup aria-label="Search scope">
+    <Chip mode="search" label="Matters" isSelected={matters} onSelectedChange={setMatters} />
+    <Chip mode="search" label="Documents" isSelected={documents} onSelectedChange={setDocuments} />
+</ChipGroup>`}
+/>
+</Guidelines>
 
-## Related components
+</Section>
 
-- **Chip** — what the group lays out.
-- **Tag Group** — the truncating equivalent, with Tags.
-- **Button Group** — the same children-based layout-wrapper shape.
-- **Avatar Group** — a group that *does* own its items, because it truncates.
+<Section title="Accessibility">
+
+- Chip Group renders a `div`. It has `role="group"` only when it's named with `aria-label` or
+  `aria-labelledby`; an unnamed group would be a boundary to step through for no benefit.
+- It adds no focus or keyboard behavior of its own. Each chip's controls are separate tab stops, in
+  the order they appear, and there's no arrow-key movement between chips.
+- It doesn't manage selection: each search chip announces its own state with `aria-pressed`.
+
+<Keyboard>
+  <Key keys="Tab">Moves to the next chip control in the group, in order. Disabled controls are skipped.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ChipGroupStories} native="div" />
+
+`aria-label` and `aria-labelledby` name the group and give it `role="group"`. The `ref` goes to the
+root `div`.
+
+</Section>
+
+<Section title="Design tokens">
+
+Chip Group's stylesheet uses one token, the gap between chips and between lines. Everything you see
+belongs to the Chips.
+
+<TokensTable id="chip-group" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Chip" />, what the group lays out.
+- <DocLink to="Components/Data Display/Tag Group" /> for tags that truncate behind "+N more".
+- <DocLink to="Components/Actions/Button Group" />, the same children-based layout for buttons.
+- <DocLink to="Components/Data Display/Avatar Group" />, a group that owns and truncates its items.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads chip-group.types.ts, the design tokens read chip-group.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

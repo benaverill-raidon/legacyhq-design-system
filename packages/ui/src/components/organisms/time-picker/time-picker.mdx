@@ -1,99 +1,338 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Field } from '../../molecules/field';
+import { DateTimePicker } from '../date-time-picker';
+import { FormRow } from '../form';
+import { TimePicker } from './time-picker';
+import timePickerStyles from './time-picker.module.css';
 import * as TimePickerStories from './TimePicker.stories';
+
+export const NINE_THIRTY = new Date(2026, 2, 24, 9, 30);
 
 <Meta of={TimePickerStories} name="Docs" />
 
-# Time Picker
+<Unstyled>
+<ComponentPage>
 
-Time Picker is a time field that opens a three-column time selector in a popup: hours, minutes, and
-AM/PM. The read-only field shows the selected time and a clock icon; the columns do the picking, and a
-Confirm commits the choice.
+<ComponentHeader
+  id="time-picker"
+  example={
+    <FormRow>
+      <Field label="Hearing time" required>
+        <TimePicker defaultValue={NINE_THIRTY} />
+      </Field>
+      <Field label="Reminder">
+        <TimePicker placeholder="hh:mm AM" minuteStep={15} />
+      </Field>
+    </FormRow>
+  }
+>
+  Time Picker lets someone choose a time of day. It's a read-only field that opens columns of hours,
+  minutes, and AM or PM in a popup, and the choice is saved when it's confirmed.
+</ComponentHeader>
 
-<Canvas of={TimePickerStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A single time-of-day field in a form or filter.
+- One time of day in a form: a hearing time, an appointment, a reminder.
+- A time filter above a list or a table.
+- A time edited in place in a Table cell.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Picking a date** - use the Date Picker (Date/Time Picker combines both).
-- **A duration or a countdown** - this selects a time of day.
+- **A date and a time together:** <DocLink to="Components/Forms/Date Time Picker" />.
+- **A date:** <DocLink to="Components/Forms/Date Picker" />.
+- **A length of time, such as 90 minutes:** <DocLink to="Components/Forms/Text Field" />, with the unit after the number.
+- **A few fixed times:** <DocLink to="Components/Forms/Select" /> or <DocLink to="Components/Forms/Radio" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-1. **Field** - a read-only Text Field showing the formatted time with a trailing clock icon; it is the
-   disclosure control (`aria-haspopup="dialog"`).
-2. **Popup** - a `role="dialog"` panel anchored to the field.
-3. **Columns** - three scrollable listboxes (hours, minutes, AM/PM); the selected option in each is
-   highlighted.
-4. **Footer** - Cancel and Confirm buttons. Column changes are staged and previewed live in the
-   field; **Confirm or an outside click** commits them, while **Cancel or Escape** discards them.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### Sizes and contexts
+<Anatomy specimen={<TimePicker defaultValue={NINE_THIRTY} aria-label="Hearing time" />}>
+  <Part name="root" target={timePickerStyles.root}>A `div` that holds the field and takes any other attribute you pass. 240px wide by default, and never wider than its container.</Part>
+  <Part name="trigger" target={timePickerStyles.trigger}>A read-only Text Field showing the formatted time, with a clock icon after it. Clicking it opens the panel, and clicking it again confirms.</Part>
+  <Part name="popup">A Popup panel below the field, 240px wide, added at the end of the page. Shown only while open.</Part>
+  <Part name="columns">Three scrolling columns: hours from 12 to 11, minutes from 00 in `minuteStep` steps, and AM or PM. Each shows its chosen option filled.</Part>
+  <Part name="footer">Cancel and Confirm, as small tertiary Buttons, below the columns.</Part>
+</Anatomy>
 
-<Canvas of={TimePickerStories.Sizes} />
+</Section>
 
-`size` (`sm`/`md`/`lg`) sets the field height. `context` maps to the Text Field appearance:
+<Section title="Variants">
 
-<Canvas of={TimePickerStories.Contexts} />
+<Subsection title="Sizes">
 
-`default` is a bordered field; `inline` is borderless (subtle). The open state pins the field's focus
-treatment - a border for `default`, an underline for `inline`.
+Three heights: `sm` (32px), `md` (40px), and `lg` (48px), the same as Text Field, so a Time Picker
+lines up with the fields beside it. The panel is the same size for every field size.
 
-### States
+<Example of={TimePickerStories.Sizes} />
 
-<Canvas of={TimePickerStories.States} />
+</Subsection>
 
-Empty shows the `placeholder`; `disabled` and `invalid` map to the Text Field states.
+<Subsection title="Context">
 
-### Minute step
+`context` is Text Field's. `default` is the bordered field for forms. `inline` is for a field inside a
+row of other content: no border or background until someone hovers it. Field passes
+`context="inline"` when it's inline.
 
-<Canvas of={TimePickerStories.MinuteStep} />
+<Example of={TimePickerStories.Contexts} />
 
-`minuteStep` (default `5`) sets the minute increment.
+</Subsection>
 
-### Controlled
+</Section>
 
-<Canvas of={TimePickerStories.Controlled} />
+<Section title="Behavior">
 
-Pass `value` + `onChange` (and optionally `open` + `onOpenChange`). The value is carried on a `Date`
-(only hours and minutes are used), so it composes cleanly with the Date Picker in a Date/Time Picker.
+<Subsection title="Opening">
 
-### Accessibility
+A click on the field opens the panel below it. Enter, Space, Arrow Down, and Arrow Up open it from the
+keyboard. Opening moves focus to the chosen hour, and while the panel is open the field keeps its
+focus style. With no value, the columns start at 12:00 AM.
 
-The field carries `aria-haspopup="dialog"` and, while open, `aria-expanded` + `aria-controls`
-(managed by Popup) pointing at the dialog panel. Each column is a `role="listbox"` of `role="option"`
-buttons with a roving tabindex; Arrow Up/Down (and Home/End) move within a column, Tab moves between
-columns, and Escape (or Cancel) discards and closes. While open, the field previews the staged
-selection live; **Confirm or an outside click commits** it, and **Cancel or Escape discards** it.
+The field is read-only: people pick from the columns and can't type a time.
 
-## API
+<Example of={TimePickerStories.Playground} caption="Click the field, choose an hour and minutes, then Confirm." />
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>value</code> / <code>defaultValue</code></td><td><code>Date | null</code></td><td>-</td><td>Selected time (controlled / uncontrolled); only h:m are used.</td></tr>
-    <tr><td><code>onChange</code></td><td><code>(value: Date) =&gt; void</code></td><td>-</td><td>Called with the committed time on Confirm.</td></tr>
-    <tr><td><code>open</code> / <code>defaultOpen</code> / <code>onOpenChange</code></td><td>-</td><td>-</td><td>Popup open state.</td></tr>
-    <tr><td><code>size</code></td><td><code>'sm' | 'md' | 'lg'</code></td><td><code>'md'</code></td><td>Field size.</td></tr>
-    <tr><td><code>context</code></td><td><code>'default' | 'inline'</code></td><td><code>'default'</code></td><td>Bordered or borderless field.</td></tr>
-    <tr><td><code>disabled</code> / <code>invalid</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Field states.</td></tr>
-    <tr><td><code>minuteStep</code></td><td><code>number</code></td><td><code>5</code></td><td>Minute increment.</td></tr>
-    <tr><td><code>placeholder</code></td><td><code>string</code></td><td>-</td><td>Empty-state text.</td></tr>
-    <tr><td><code>format</code></td><td><code>(value, locale?) =&gt; string</code></td><td>locale 12-hour time</td><td>Field display format.</td></tr>
-    <tr><td><code>alignment</code></td><td><code>PopupAlignment</code></td><td><code>'bottomLeft'</code></td><td>Popup placement.</td></tr>
-    <tr><td><code>confirmLabel</code> / <code>cancelLabel</code></td><td><code>string</code></td><td>Confirm / Cancel</td><td>Footer button labels.</td></tr>
-  </tbody>
-</table>
+</Subsection>
 
-## Related components
+<Subsection title="Confirming and cancelling">
 
-- **Date Picker** - a date field with a calendar popup.
-- **Date/Time Picker** - date plus time.
-- **Text Field** - the trigger field.
-- **Popup** - positioning and dismissal.
+Choices in the columns are held until they're confirmed, and the field shows them as they change.
+Confirm saves them: `onChange` is called and the panel closes. A click outside the panel, a second
+click on the field, or Tab out of the panel saves them too, but only if something was changed;
+otherwise the panel just closes. `onChange` isn't called for a time that's the same as the saved one.
+Cancel or Escape throws the choices away, and the field goes back to the saved time. Confirm,
+Cancel, Escape, a second click, and Tab out return focus to the field; a click outside leaves it
+where the click put it.
+
+</Subsection>
+
+<Subsection title="Minute step">
+
+`minuteStep` sets the minutes between the options in the minutes column, counting from 00, and
+defaults to 5. A step that doesn't divide the hour offers only the minutes that exist: 35 gives 00
+and 35. A saved time whose minutes fall between steps opens on the step before them, so 10:58 opens
+on 10:55. Saving then keeps that step; closing without a change keeps 10:58.
+
+<Example of={TimePickerStories.MinuteStep} caption="A 15-minute step: 00, 15, 30, and 45." />
+
+</Subsection>
+
+<Subsection title="The value is a date">
+
+Time Picker's value is a `Date`, and only its hours and minutes are read. The `Date` that `onChange`
+passes keeps the saved value's day, or today's when there's no value yet. Read only the hours and
+minutes from it, or use Date Time Picker when the day matters.
+
+</Subsection>
+
+<Subsection title="Format and labels">
+
+The field shows the time in the locale's 12-hour format, such as 04:30 PM in US English. Pass `format`
+to show it another way. The columns are always 12-hour. `confirmLabel`, `cancelLabel`, `hoursLabel`,
+`minutesLabel`, `meridiemLabel`, `amLabel`, `pmLabel`, and `dialogLabel` change the panel's words, for
+example to translate them.
+
+</Subsection>
+
+<Subsection title="Required">
+
+`required` makes the form check for a time: submitting with an empty field stops the submit, and the
+browser's message points at the field. A read-only input is never checked by the browser, so Time
+Picker adds a hidden input that holds the time for the check. In a Field, `required` also adds the
+`*` to the label.
+
+</Subsection>
+
+<Subsection title="States">
+
+An empty field shows its `placeholder`. `invalid` gives the field Text Field's error border and sets
+`aria-invalid`; in a Field with `state="error"`, Field sets it for you. `disabled` disables the
+field, so the panel can't open.
+
+<Example of={TimePickerStories.States} />
+
+</Subsection>
+
+<Subsection title="Controlled">
+
+Pass `value` and `onChange` to own the time, and `open` and `onOpenChange` to own whether the panel is
+open. Without them, Time Picker keeps its own state, starting from `defaultValue` and `defaultOpen`.
+
+<Example of={TimePickerStories.Controlled} />
+
+</Subsection>
+
+<Subsection title="Width">
+
+The field is 240px wide by default and shrinks to fit a narrower container. Set a different width with
+`className`. In a Table's editable cell, it fills the cell and takes the cell's size and the inline
+context, and the panel lines its options up at the start with a line beside the chosen one.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Set minuteStep to the precision the time needs, such as quarter hours for appointments."
+  code={`<Field label="Appointment time">
+    <TimePicker minuteStep={15} value={time} onChange={setTime} />
+</Field>`}
+>
+  <Field label="Appointment time">
+    <TimePicker minuteStep={15} defaultValue={NINE_THIRTY} />
+  </Field>
+</Do>
+<Dont
+  caption="Offer 5-minute steps, then reject times that aren't on the quarter hour."
+  code={`<Field label="Appointment time" state={time.getMinutes() % 15 ? 'error' : 'default'} message="Choose a quarter hour.">
+    <TimePicker value={time} onChange={setTime} />
+</Field>`}
+/>
+<Do
+  caption="Use Date Time Picker when the day matters as well as the time."
+  code={`<Field label="Hearing">
+    <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`}
+>
+  <Field label="Hearing">
+    <DateTimePicker defaultValue={NINE_THIRTY} today={NINE_THIRTY} />
+  </Field>
+</Do>
+<Dont
+  caption="Save Time Picker's value as a full date and time. Its day is the old value's, or today's."
+  code={`<TimePicker onChange={(time) => saveHearing({ startsAt: time })} />`}
+/>
+<Do
+  caption="Translate the panel's words along with the field's label."
+  code={`<Field label="Hora de la audiencia">
+    <TimePicker
+      confirmLabel="Confirmar"
+      cancelLabel="Cancelar"
+      hoursLabel="Horas"
+      minutesLabel="Minutos"
+      amLabel="a. m."
+      pmLabel="p. m."
+      dialogLabel="Elegir una hora"
+    />
+</Field>`}
+>
+  <Field label="Hora de la audiencia">
+    <TimePicker defaultValue={NINE_THIRTY} confirmLabel="Confirmar" cancelLabel="Cancelar" hoursLabel="Horas" minutesLabel="Minutos" amLabel="a. m." pmLabel="p. m." dialogLabel="Elegir una hora" />
+  </Field>
+</Do>
+<Dont
+  caption="Translate only the label. The panel's buttons and column names stay in English."
+  code={`<Field label="Hora de la audiencia">
+    <TimePicker />
+</Field>`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The field is a native `input` in Text Field's frame, read-only, with `aria-haspopup="dialog"`,
+  `aria-expanded`, and `aria-controls` pointing at the panel while it's open.
+- Name it with Field, which wires its label to the input, or with `aria-label` or
+  `aria-labelledby`. These go to the input, not the wrapper.
+- In a Field, the message is added to the input's description, an error sets `aria-invalid`, and
+  `required` sets the input's native `required`, which is announced. The hidden input that the form
+  checks is out of the tab order and hidden from assistive technology; when the browser points at
+  it, focus goes on to the field.
+- The panel is a `dialog` named "Choose a time", added at the end of the page. Change the name with
+  `dialogLabel`, for example to translate it.
+- Each column is a `listbox` named by `hoursLabel`, `minutesLabel`, or `meridiemLabel`. Its options
+  are native buttons with `role="option"`, and the chosen one has `aria-selected="true"`. Only the
+  chosen option in each column is in the tab order, and moving with the arrow keys chooses as it
+  goes. Focus shows the shared Focus Ring.
+- Opening moves focus to the chosen hour. Confirm, Cancel, Escape, and Tab out of the panel close
+  it and return focus to the field, so the tab order runs field, panel, then the rest of the page.
+- The clock icon is decorative and hidden from assistive technology.
+- `disabled` is the native attribute: the input leaves the tab order.
+
+<Keyboard>
+  <Key keys="Tab">Moves focus to the field. A disabled field is skipped. In the panel, moves from hours to minutes, AM or PM, Cancel, and Confirm; from Confirm, closes the panel, saving any change, and returns focus to the field.</Key>
+  <Key keys="Shift + Tab">In the panel, moves back; from the hours, closes the panel, saving any change, and returns focus to the field.</Key>
+  <Key keys="Enter">On the field, opens the panel. On an option, chooses it; on a button, presses it.</Key>
+  <Key keys="Space">On the field, opens the panel. On an option, chooses it; on a button, presses it.</Key>
+  <Key keys="Arrow Down">On the field, opens the panel. In a column, chooses the next option.</Key>
+  <Key keys="Arrow Up">On the field, opens the panel. In a column, chooses the previous option.</Key>
+  <Key keys="Home">In a column, chooses the first option.</Key>
+  <Key keys="End">In a column, chooses the last option.</Key>
+  <Key keys="Escape">Throws away the choices, closes the panel, and returns focus to the field.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={TimePickerStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Time Picker's stylesheet uses, by family, with the property it sets and when: the icon
+box, then the panel's columns, options, and footer. The field uses Text Field's tokens and the panel
+surface Popup's. The 240px widths, the columns' 256px height, and the 40px footer in a Table cell are
+fixed values, not tokens.
+
+<TokensTable id="time-picker" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Forms/Field" /> to add a label, a message, and a required marker.
+- <DocLink to="Components/Forms/Date Time Picker" /> for a date and a time as one value.
+- <DocLink to="Components/Forms/Date Picker" /> for a date.
+- <DocLink to="Components/Forms/Text Field" />, the field Time Picker is built on.
+- <DocLink to="Components/Overlays/Popup" />, which places the panel and closes it on a click outside.
+- <DocLink to="Components/Actions/Button" />, the Cancel and Confirm buttons.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads time-picker.types.ts, the design tokens read time-picker.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

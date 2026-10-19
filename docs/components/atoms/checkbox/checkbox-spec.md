@@ -7,7 +7,7 @@ Checkbox is a form input atom used to let users select one or more independent o
 ## Component Type
 
 - Name: `Checkbox`
-- Category: Atom
+- Tier: Atom
 - Folder: `packages/ui/src/components/atoms/checkbox/`
 - Public export: Yes
 - Interactive: Yes
@@ -70,7 +70,20 @@ When `checked` and `indeterminate` are both true, indeterminate wins visually.
 - `required: false`
 - `required: true`
 
-Required state displays an asterisk after the label when a visible label is present.
+Required state displays an asterisk after the label when a visible label is present. The
+asterisk is `aria-hidden`; the native `required` attribute is what assistive technology announces.
+
+### Checkbox Group
+
+- A `fieldset` named by its `legend` (`label`), with `description`, the options, and `errorMessage`.
+- `disabled` sets the fieldset's native `disabled` and, through context, shows every Checkbox
+  inside it as disabled, from `options` or `children`.
+- `required` shows an `aria-hidden` `*` after the legend and adds visually hidden `requiredLabel`
+  text (default `required`) to the legend, so the group's name announces it. Checkboxes have no
+  native group-level requirement, and `aria-required` isn't allowed on a `group`, so no checkbox is
+  made natively required; validating "at least one" stays the consumer's job.
+- `orientation="vertical"` stacks options with no gap; `horizontal` puts `spacing-lg` between them
+  (`column-gap`) and wraps. Figma has no Checkbox Group, so the horizontal gap is a code decision.
 
 ## Props / API
 
@@ -186,6 +199,13 @@ Recommended mappings, subject to available token names:
 - `onCheckedChange` fires with the next checked value and native change event.
 - `indeterminate` sets the native input `indeterminate` property via ref/effect.
 - `indeterminate` visually overrides checked.
+
+## Motion
+
+- The hover, press, and focus overlay behind the indicator fades in with the `fade-quick` motion
+  recipe, not a hardcoded duration, and is switched off under `prefers-reduced-motion: reduce`.
+- The check mark and the indeterminate mark appear instantly on toggle, with no scale-up or other
+  transform-based animation.
 
 ## Accessibility
 

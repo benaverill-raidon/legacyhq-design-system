@@ -1,9 +1,9 @@
 {
   "name": "Field",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Wrap a single form control with a label, an optional message, and a validation state, wiring the three together for accessibility.",
-  "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",
+  "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-labelledby / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",
   "nativeElement": "div (with a nested native label)",
   "sourceFiles": {
     "component": "field.tsx",
@@ -50,13 +50,15 @@
     },
     "apiAdaptationNotes": [
       "Field renders its own label and message rather than reusing the Label atom / Inline Message molecule - the Figma <label>/<message> code-parts use different typography (heading/xxs, body/sm) and a smaller state set (default/error/valid) than those components expose.",
-      "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop.",
+      "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop. Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming aria-invalid as invalid, so their border follows; Text Field and Text Area need invalid.",
       "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
       "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
-      "context is a single shared axis in Figma (the same 'context' property sits on <field>, text-field, select, etc.), so Field propagates context='inline' to the control by injecting appearance='subtle' - the code name for that axis. Text Field and Text Area take appearance directly; Select was given an additive appearance alias (mapping to its existing tone, tone still winning) so the same injected prop reaches it. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
+      "context is a single shared axis in Figma (the same 'context' property, default/inline, sits on <field>, text-field, text-area, select, etc.), so Field propagates context='inline' to the control by injecting context='inline' - Text Field, Text Area, and Select take the same context prop with the same values. The control's own context (or a deprecated appearance/tone) wins. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
       "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
-      "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
-      "The message icon->text gap is Figma spacing/075 (6px), which has no semantic spacing token yet - uses --measurement-6, the same documented precedent as Text Field and Toggle Button."
+      "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-labelledby naming the label unless the control has its own aria-label or aria-labelledby, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
+      "The label has an id as well as htmlFor, and Field passes that id to the control as aria-labelledby, because htmlFor only names a labelable native element. That is what names Rich Text Area's contenteditable div and Date Time Picker's group.",
+      "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs.",
+      "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
     ]
   },
   "useCases": [
@@ -80,9 +82,9 @@
     },
     {
       "part": "label",
-      "element": "label.label (native, htmlFor)",
+      "element": "label.label (native, id + htmlFor)",
       "required": false,
-      "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id. Omitted when label is not provided."
+      "description": "Quiet form label at --typography-heading-xxs, --color-content-subtle. Points at the control's id, and its own id is the control's aria-labelledby. Omitted when label is not provided."
     },
     {
       "part": "required",
@@ -94,7 +96,7 @@
       "part": "control",
       "element": "{children}",
       "required": true,
-      "description": "The wrapped control (the slot), cloned to receive id / aria-describedby / aria-invalid / required, plus appearance='subtle' when context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
+      "description": "The wrapped control (the slot), cloned to receive id / aria-labelledby / aria-describedby / aria-invalid / required, plus context='inline' when Field's context='inline' (so the control renders borderless/inline). Rendered at the container's edge; only label/message indent in the inline context."
     },
     {
       "part": "message",
@@ -119,7 +121,7 @@
       "type": "React.ReactNode",
       "required": false,
       "default": null,
-      "description": "Label text, rendered in a real native label[htmlFor]. Omit only when the control is labelled another way; then no label is rendered."
+      "description": "Label text, rendered in a real native label[htmlFor]; the control also gets aria-labelledby naming it, unless it has its own aria-label or aria-labelledby. Omit only when the control is labelled another way; then no label is rendered."
     },
     "message": {
       "type": "React.ReactNode",
@@ -139,7 +141,7 @@
       "required": false,
       "default": "default",
       "enum": ["default", "inline"],
-      "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio."
+      "description": "default aligns label/message with the control's outer edge (size-independent). inline indents them to the control's inner text and gives the control context='inline' unless it sets its own - meant for text-bearing controls (Text Field, Select, Text Area, pickers), not Checkbox/Switch/Radio."
     },
     "size": {
       "type": "FieldSize",
@@ -191,7 +193,7 @@
       "name": "children",
       "required": true,
       "supports": [
-        "a single form control (Text Field, Text Area, Select, or a native input)"
+        "a single form control (Text Field, Text Area, Rich Text Area, Select, Date Picker, Time Picker, Date Time Picker, or a native input)"
       ],
       "interactive": true
     }
@@ -200,7 +202,7 @@
     "layout": {
       "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
       "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
-      "messageIconToTextGap": "--measurement-6 (Figma spacing/075; no semantic spacing token yet)",
+      "messageIconToTextGap": "--spacing-075 (Figma spacing/075)",
       "inlineIndent_lg": "--spacing-md",
       "inlineIndent_sm_md": "--spacing-sm"
     },
@@ -222,10 +224,11 @@
     "role": null,
     "requirements": [
       "The label is a real label[htmlFor] pointing at the control's id (generated when the control has none), so the control gets its accessible name from the label - no aria-label on the control.",
+      "The label also has an id, which Field passes to the control as aria-labelledby unless the control has its own aria-label or aria-labelledby, so a control htmlFor can't reach (Rich Text Area's div editor, Date Time Picker's group) is named too.",
       "The message is linked to the control via aria-describedby, merged with any aria-describedby the control already carries.",
       "state='error' sets aria-invalid on the control; an explicit control aria-invalid always wins.",
       "required forwards native required to the control; the visible '*' is aria-hidden.",
-      "Field only fills in wiring the control left unset - the control's own id/aria-invalid/aria-describedby/required/appearance are never overwritten.",
+      "Field only fills in wiring the control left unset - the control's own id/aria-labelledby/aria-invalid/aria-describedby/required/context (or deprecated appearance/tone) are never overwritten, and a control's own aria-label keeps Field from adding aria-labelledby.",
       "Use Field for one control only; a group of controls needs fieldset/legend instead of a single label[htmlFor]."
     ]
   },
@@ -236,9 +239,9 @@
   "behaviorRules": [
     "Render label, control, then message in a single flex column.",
     "Default state=default, context=default, size=md, required=false.",
-    "Clone the single child control to inject id, aria-describedby (merged), aria-invalid (on error), required (when required), data-force-state, and appearance='subtle' (when context=inline) - filling in only unset props.",
+    "Clone the single child control to inject id, aria-labelledby (the label's id, when there is a label and the control has no aria-label or aria-labelledby), aria-describedby (merged), aria-invalid (on error), required (when required), data-force-state, and context='inline' (when context=inline, unless the control sets context or a deprecated appearance/tone) - filling in only unset props.",
     "state colours the message + status icon and sets aria-invalid; it never sets the control's own error border.",
-    "context=inline indents the label and message by the control's inner start padding for the size (lg wider than the shared sm/md), aligning them to the control's inner text, AND renders the control inline by injecting appearance='subtle' (control's own appearance wins); context=default does neither and is size-independent.",
+    "context=inline indents the label and message by the control's inner start padding for the size (lg wider than the shared sm/md), aligning them to the control's inner text, AND renders the control inline by injecting context='inline' (control's own context wins); context=default does neither and is size-independent.",
     "The required '*' is decorative (aria-hidden); the requirement is conveyed by the forwarded native required.",
     "Render no label when label is omitted, and no message (nor aria-describedby) when message is omitted.",
     "Support className (root), labelClassName, and messageClassName composition."
@@ -266,7 +269,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded colours, spacing, radius, or typography, except the documented --measurement-6 gap (Figma spacing/075, matching Text Field / Toggle Button precedent).",
+    "No hardcoded colours, spacing, radius, or typography.",
     "Render the label as a native label[htmlFor]; do not reuse the Label atom or Inline Message molecule."
   ],
   "relatedComponents": ["Text Field", "Text Area", "Select", "Label", "Inline Message", "Section Message"],
@@ -284,6 +287,7 @@
   ],
   "acceptanceCriteria": [
     "Renders the label as a native label[htmlFor] wired to the control's id; the control gets its accessible name from the label.",
+    "Gives the label an id and sets the control's aria-labelledby to it, so a non-native control (Rich Text Area) is named too; a control's own aria-label or aria-labelledby wins.",
     "Generates a control id when the control has none; keeps the control's own id when set.",
     "Links the message to the control via aria-describedby, merged with any existing value.",
     "state='error' sets aria-invalid on the control; an explicit control aria-invalid wins.",
@@ -291,18 +295,17 @@
     "Shows a status icon on error/valid, none on default.",
     "Sets data-state/data-context/data-size on the root; defaults default/default/md.",
     "context='inline' indents the label/message per size (lg -> --spacing-md, sm/md -> --spacing-sm); default does not.",
-    "context='inline' injects appearance='subtle' into the control (control's own appearance wins); context='default' leaves the control's appearance untouched.",
+    "context='inline' injects context='inline' into the control (control's own context wins); context='default' leaves the control's context untouched.",
     "Renders no label when label is omitted, and no message nor aria-describedby when message is omitted.",
     "Composes className, labelClassName, and messageClassName.",
-    "Uses only semantic tokens (plus the documented --measurement-6 gap); works in light and dark.",
+    "Uses only semantic tokens; works in light and dark.",
     "Storybook includes Playground, States, Contexts, Content, AnyControl, and EdgeCases.",
-    "Tests cover label/id wiring, describedby merge, aria-invalid, required, status icons, data attributes, omitted label/message, className composition, and force-state forwarding."
+    "Tests cover label/id wiring, aria-labelledby (naming a Rich Text Area, and a control's own aria-label winning), describedby merge, aria-invalid, required, status icons, data attributes, omitted label/message, className composition, and force-state forwarding."
   ],
   "knownLimitations": [
     "children must be a single React element (it is cloned) - text, fragments, or multiple elements are unsupported.",
-    "state does not set the control's own error border - the consumer pairs it with the control's invalid prop.",
-    "No built-in support for labelling a group of controls (fieldset/legend is the right tool there).",
-    "--measurement-6 (Figma spacing/075) has no semantic spacing token yet."
+    "state does not set the control's own error border - the consumer pairs it with the control's invalid prop. (Select, the date/time pickers, and Rich Text Area show their border for the aria-invalid Field passes; Text Field and Text Area don't.)",
+    "No built-in support for labelling a group of controls (fieldset/legend is the right tool there)."
   ],
   "futureEnhancements": [
     "An optional trailing label slot (e.g. an 'Optional' tag or a character counter).",

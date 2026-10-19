@@ -25,6 +25,12 @@ and [Color module](https://www.designtokens.org/TR/2025.10/color/).
 | `number` | Unitless JSON number |
 | `cubicBezier` | Four numbers; x coordinates in [0, 1] |
 | `transition` | `duration`, `delay`, and `timingFunction`, each a correctly typed value or token reference |
+| `shadow` | One layer or an ordered array of layers, each with `color`, `offsetX`, `offsetY`, `blur` (not negative), `spread`, and optional boolean `inset`; every member a correctly typed value or token reference |
+
+A shadow that references themed colors lives in a themed collection (`Semantic: Elevation`, with
+Light and Dark groups), so each theme's CSS file declares it and its colors resolve per theme; one
+`:root` declaration would keep the Light colors inside `[data-theme="dark"]`. CSS serializes the
+layers in order as a `box-shadow` list, keeping references live.
 
 Every token declares `$type`. References use complete token paths, including
 collection and mode groups, for example `{Primitive.Value.duration-fast}`.
@@ -48,7 +54,7 @@ may reference tokens in other fragments.
 The data uses a valid subset of DTCG. Our validator/formatter is **not a complete
 implementation of every DTCG tool requirement**. It intentionally rejects
 unimplemented features such as group type inheritance, `$extends`, JSON Pointer
-`$ref`, other composite types, non-sRGB colors, and font-weight keywords.
+`$ref`, composite types other than `transition` and `shadow`, non-sRGB colors, and font-weight keywords.
 Light/Dark output routing remains repository configuration, not an implementation
 of DTCG Resolver documents. CSS recipes are platform-specific and do not become
 portable DTCG behavior merely because the token data is valid.
@@ -91,6 +97,26 @@ The current source has no such self-reference, but its regression test remains.
 Colors serialize to six-digit hex or rgba with 8-bit RGB channels; font families
 receive CSS quotes. Existing component-to-primitive references remain unchanged;
 this migration does not revise the three-tier governance policy.
+
+### Deprecated aliases
+
+Renamed tokens keep their old CSS custom property for a while, as an alias recipe
+that resolves to the new name. Themed tokens get the alias in both `light.css` and
+`dark.css`, because an alias declared only on `:root` would keep the Light value
+inside `[data-theme="dark"]`. Nothing in this repository uses the old names; they
+exist for consumers outside it.
+
+| Old custom property | New custom property | Since |
+| --- | --- | --- |
+| `--color-data-viz-catergory-{subtle,default,bold}-{hue}` (28) | `--color-data-viz-category-…` | 2026-10-07 |
+| `--color-data-viz-catergory-{subtle,bold}-pink` | `--color-data-viz-category-{subtle,bold}-magenta` | 2026-10-07 |
+| `--color-green-alpha-500-4` | `--color-green-alpha-500-04` | 2026-10-07 |
+
+The Figma variables were renamed at the same time (Tokens v1.0.0; variable IDs
+unchanged). The aliases stay until the LegacyHQ application has been checked for the
+old names - for example `git grep -nE "data-viz-catergory|green-alpha-500-4\b"` in
+its repository - and any uses are migrated. Then delete the alias recipes from
+`css-recipes.json`, rebuild, and update the migration fixtures.
 
 ## Build, validation, and exports
 

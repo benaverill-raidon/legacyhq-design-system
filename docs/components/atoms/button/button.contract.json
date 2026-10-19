@@ -1,6 +1,6 @@
 {
   "name": "Button",
-  "category": "atom",
+  "category": "actions",
   "status": "stable",
   "purpose": "Trigger a user-initiated action.",
   "intent": "Provide a consistent native action control with separate visual emphasis and semantic tone.",
@@ -39,7 +39,7 @@
     },
     {
       "name": "leading",
-      "description": "leading icon slot or loading spinner",
+      "description": "leading icon slot",
       "required": false
     },
     {
@@ -50,6 +50,11 @@
     {
       "name": "trailing",
       "description": "trailing icon slot",
+      "required": false
+    },
+    {
+      "name": "spinner",
+      "description": "loading spinner, centered over the content while loading",
       "required": false
     }
   ],
@@ -307,8 +312,8 @@
     "Suppress onClick when isLoading is true.",
     "Set aria-busy when isLoading is true.",
     "Set data-loading when isLoading is true.",
-    "Render Spinner in the leading area when isLoading is true.",
-    "Keep children visible when loading.",
+    "Render Spinner centered over the content when isLoading is true.",
+    "Hide the content with opacity while loading, so the button keeps its size and the label stays the accessible name.",
     "Use iconBefore only when not loading.",
     "Render iconAfter when provided.",
     "Set inline-size to 100% when isFullWidth is true.",
@@ -328,7 +333,7 @@
     "Button text must describe the action.",
     "Do not rely on color alone to communicate warning or destructive meaning.",
     "Keep labels short and action-oriented.",
-    "Keep visible label when loading."
+    "Keep the label as the accessible name when loading."
   ],
   "responsiveRules": [
     "Use isFullWidth when a button must fill its container.",
@@ -345,7 +350,7 @@
     "Use React.memo.",
     "Use CSS Modules.",
     "Use focusRingClassNames.focusRing and focusRingClassNames.focusRingDefault.",
-    "Use Spinner size sm for loading indicator.",
+    "Use Spinner size md for loading indicator, the size of Button's icons.",
     "Use medium icon size by inherited icon implementation; do not expose icon size prop.",
     "Do not import MUI.",
     "Do not use Tailwind utilities."
@@ -365,7 +370,7 @@
     "Use children for label content.",
     "Use native button props when needed.",
     "Use semantic design tokens.",
-    "Preserve label width during loading."
+    "Hold the button's size during loading."
   ],
   "dont": [
     "Do not use Button for navigation-only behavior.",
@@ -390,7 +395,7 @@
     "Suppresses click while loading.",
     "Sets aria-busy while loading.",
     "Renders Spinner while loading.",
-    "Keeps visible label while loading.",
+    "Keeps its size, and its label as the accessible name, while loading.",
     "Supports iconBefore.",
     "Supports iconAfter.",
     "Supports isFullWidth.",

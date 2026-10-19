@@ -34,6 +34,7 @@ interface ChipSegment {
   label: React.ReactNode;
   sections: MenuSection[];
   menuAriaLabel?: string;
+  tooltip?: React.ReactNode;
 }
 
 // shared by all modes
@@ -57,6 +58,7 @@ interface ChipSelectProps extends ChipCommonProps {
   mode: 'select';
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
   removeAriaLabel?: string;
+  labelText?: string; // the label as plain text, for the built names
 }
 
 interface ChipFilterProps extends ChipCommonProps {
@@ -66,6 +68,7 @@ interface ChipFilterProps extends ChipCommonProps {
   valuePreview?: React.ReactNode;
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
   removeAriaLabel?: string;
+  labelText?: string; // the label as plain text, for the built names
 }
 
 type ChipProps = ChipSearchProps | ChipSelectProps | ChipFilterProps;
@@ -84,7 +87,8 @@ justified because the alternative (all-optional props, silently ignored when irr
 size: md
 disabled: false
 isSelected: false      (search)
-removeAriaLabel: `Remove ${label}` when label is a string, otherwise `Remove`
+labelText: `label` when it is a string
+removeAriaLabel: `Remove ${labelText}` when there is label text, otherwise `Remove`
 ```
 
 `size` resolves as `size ?? groupSize ?? 'md'`. An explicit prop wins; otherwise Chip inherits the
@@ -146,8 +150,8 @@ Measured directly, per size:
 | | sm | md |
 |---|---|---|
 | segment block-size | `--size-control-xs` (24) | `--size-control-sm` (32) |
-| segment padding-inline | `--measurement-6` (6) | `--spacing-sm` (8) |
-| remove button padding-inline | `--spacing-xs` / `--measurement-6` (4 / 6) | `--measurement-6` / `--spacing-sm` (6 / 8) |
+| segment padding-inline | `--spacing-075` (6) | `--spacing-sm` (8) |
+| remove button padding-inline | `--spacing-xs` / `--spacing-075` (4 / 6) | `--spacing-075` / `--spacing-sm` (6 / 8) |
 | segment gap | `--spacing-xs` (4) | `--spacing-xs` (4) |
 
 The remove button's asymmetric padding is real, not a simplification - Figma pulls the close icon 2px
@@ -241,9 +245,8 @@ Figma models **no** selected+disabled chip-base variant, so disabled fully overr
 (including resetting the border to `color-border-input`) rather than blending them - the precedent
 Toggle Button and Toggle Icon Button already set for that same gap.
 
-`chip-base`'s `tone` axis (default/error/warning/success/information) is deliberately unexposed: all
-14 chip variants use `tone=default`, so any chip-level tone mapping would be extrapolated from the
-part rather than verified.
+`chip-base`'s `tone` axis was dropped in Figma's 2026-08-27 simplification, and every chip variant
+used `tone=default` before that, so Chip has no `tone` prop.
 
 ## Dropdown segments
 
@@ -255,6 +258,28 @@ shared flag on Chip would make them fight.
 names default to `${label} operator` / `${label} value` (composed from the property name and the
 segment's role) because the segment's own label is the current *value* - naming a panel "on" or
 "March 2" says nothing about what choosing from it does. `ChipSegment.menuAriaLabel` overrides it.
+The property name is `labelText`, or `label` when that is a string; with a JSX `label` and no
+`labelText` there is no default name, so pass `labelText` (or `menuAriaLabel`).
+
+**Segment buttons are named by the property and their text.** Each operator/value button has
+`aria-labelledby` pointing at the label's text and then its own text span, so it reads "Due date
+March 2" rather than just "March 2". No text is added, so there's nothing to translate, and JSX on
+either side contributes its text. With `labelText`, a `hidden` span holding it is referenced instead
+of the visible label (a referenced hidden element still contributes its text).
+
+**`ChipSegment.tooltip`.** The segment then passes a `Tooltip` element to Dropdown Menu as its
+trigger. Tooltip forwards the ref and the props Popup and Dropdown Menu set on it (`aria-expanded`,
+`aria-controls`, `aria-haspopup`) to the segment button, so the menu is positioned and shown, and the
+focus handling below reaches the segment (fixed 2026-10-17; it had opened with `visibility: hidden`).
+
+Choosing a menu item runs the item's `onSelect`, then closes the menu and returns focus to the
+segment (an `onSelect` calling `preventDefault()` keeps it open); opening moves focus to the first
+row, and Escape or Tab out returns focus to the segment.
+
+**Long text ends in an ellipsis.** The root has `max-inline-size: 100%`, every segment
+`min-inline-size: 0`, and `.label`/`.segmentLabel` clip with `text-overflow: ellipsis`, so a chip
+wider than its container shrinks to it: the label and value segments give up width in proportion to
+their text, and the remove button (`flex: none`), `elemBefore` and `valuePreview` keep their size.
 
 ## Accessibility
 
@@ -262,8 +287,12 @@ segment's role) because the segment's own label is the current *value* - naming 
   `aria-selected`, or a checkbox.
 - `filter`/`select` label segments are plain `<span>`s. Only the dropdown segments and remove button
   are controls.
-- Dropdown segments receive `aria-expanded`/`aria-controls` from Popup via Dropdown Menu.
-- The remove button always has an accessible name (`Remove ${label}` by default).
+- Dropdown segments receive `aria-expanded`/`aria-controls` from Popup via Dropdown Menu, and
+  `aria-haspopup="menu"` from Dropdown Menu, with or without a segment `tooltip`.
+- Dropdown segments are named by the property and their own text (`aria-labelledby`), e.g. "Due date
+  March 2".
+- The remove button always has an accessible name (`Remove ${labelText}` by default, `Remove` when
+  `label` is JSX and there's no `labelText`).
 - `elemBefore` and `valuePreview` are `aria-hidden` and must stay decorative - in search mode the
   segment is already a button, so a nested focusable element would be invalid HTML.
 - Every control uses the shared Focus Ring primitive.
@@ -302,6 +331,7 @@ search: disables the toggle when disabled
 select: renders a non-interactive label plus a remove button
 select: calls onRemove when the remove button is activated
 select: supports an explicit removeAriaLabel
+select: names the remove button from labelText when label is JSX
 filter: renders the label, the value segment, and a remove button
 filter: opens the value menu when the value segment is activated
 filter: calls a value menu item's own onSelect
@@ -311,6 +341,14 @@ filter: lets menuAriaLabel override the composed panel name
 filter: gives the operator and value segments independent menus
 filter: disables every segment when disabled
 filter: renders a value preview before the value text
+filter: names the operator and value buttons by the property and their own text
+filter: takes the property from a JSX label's text for the segment buttons
+filter: names the segments, menus, and remove button from labelText when label is JSX
+filter: keeps the "Remove" fallback with a JSX label and no labelText
+filter, segment tooltip: keeps aria-haspopup/aria-expanded/aria-controls on the segment
+filter, segment tooltip: opens a visible menu positioned against the segment
+filter, segment tooltip: returns focus to the segment on Escape
+ellipsizes long labels and values within the available width
 applies size and mode to the root for every mode
 defaults to size md
 supports a custom id/className on the root
@@ -335,6 +373,6 @@ tooltip: keeps aria-label as the accessible name
 
 - Expose `tone` once a real Figma chip variant uses a non-default tone.
 - An `isRemovable={false}` escape hatch, if a real non-removable filter/select appears.
-- A `ChipGroup`, if filter bars need Tag Group's truncation behavior.
+- Truncation in Chip Group, if filter bars need Tag Group's "+N more" behavior.
 
 Do not implement these unless requested.

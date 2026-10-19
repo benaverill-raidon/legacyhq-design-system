@@ -5,21 +5,24 @@ import { Button } from '../../atoms/button';
 import { ButtonGroup } from '../../molecules/button-group';
 import { Link } from '../../atoms/link';
 import { EmptyState } from './empty-state';
-import type { EmptyStateType } from './empty-state.types';
+import type { EmptyStateAppearance } from './empty-state.types';
 
-const types: EmptyStateType[] = ['inherited', 'informative'];
+const appearances: EmptyStateAppearance[] = ['inherited', 'informative'];
 
 const meta = {
-  title: 'UI/Organisms/Empty State',
+  title: 'Components/Feedback/Empty State',
   component: EmptyState,
   args: {
-    type: 'inherited',
+    appearance: 'inherited',
     heading: "You're all caught up!",
+    headingLevel: 2,
     children: 'No more recent activity in the past 24 hours.',
   },
   argTypes: {
-    type: { control: 'inline-radio', options: types },
+    appearance: { control: 'inline-radio', options: appearances },
+    type: { control: false, table: { disable: true } },
     heading: { control: 'text' },
+    headingLevel: { control: 'inline-radio', options: [1, 2, 3, 4, 5, 6] },
     children: { control: 'text' },
     illustration: { control: false },
     actions: { control: false },
@@ -32,7 +35,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* Empty states live on a surface; rendering the demos on the default elevation surface lets the
-   transparent `inherited` type read correctly and shows the `informative` sunken panel against it. */
+   transparent `inherited` appearance read correctly and shows the `informative` sunken panel against it. */
 const stack: CSSProperties = {
   display: 'grid',
   gap: 'var(--spacing-2xl)',
@@ -88,13 +91,13 @@ export const Playground: Story = {
 };
 
 /** `inherited` blends into the surface beneath; `informative` fills a sunken surface panel. */
-export const Types: Story = {
+export const Appearances: Story = {
   render: () => (
     <div style={stack}>
-      {types.map((type) => (
-        <Labelled key={type} label={type}>
+      {appearances.map((appearance) => (
+        <Labelled key={appearance} label={appearance}>
           <EmptyState
-            type={type}
+            appearance={appearance}
             illustration={
               <Illustration>
                 <CheckIcon />
@@ -117,7 +120,7 @@ export const Content: Story = {
     <div style={stack}>
       <Labelled label="Full: illustration + heading + description + actions">
         <EmptyState
-          type="informative"
+          appearance="informative"
           illustration={
             <Illustration>
               <SearchIcon />
@@ -167,7 +170,7 @@ export const EdgeCases: Story = {
     <div style={stack}>
       <Labelled label="Long heading and description wrap and stay centered">
         <EmptyState
-          type="informative"
+          appearance="informative"
           illustration={
             <Illustration>
               <SearchIcon />

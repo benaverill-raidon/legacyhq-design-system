@@ -7,12 +7,20 @@ exactly one thing neither already provides - a fixed, always-opens-below alignme
 matching Figma's `dropdown-menu` component exactly - and pairs Popup's `padding="none"` with Menu as
 its content, since Menu already carries all of its own edge padding.
 
+**Design reference.** Figma's `dropdown-menu` crosses a `trigger` axis (nine example trigger types:
+button, icon-button, avatar, link-button, several chips, tag, a page selector) with `alignment` and
+`isOpen`. None of the trigger types became a variant prop: `children` stays a generic
+`React.ReactElement`, matching Popup's own `children` model. Every Figma instance nests a `menu`,
+never arbitrary content, so `DropdownMenuProps` extends `MenuProps` instead of taking an opaque
+`content` prop as Popup does.
+
 ## Anatomy
 
 ```txt
 DropdownMenu
 +- Popup
-   +- trigger child (children - any focusable element, cloned by Popup for measurement/ARIA)
+   +- trigger child (children - any focusable element, cloned by DropdownMenu for a ref and
+   |  aria-haspopup, then by Popup for measurement/ARIA)
    +- floating panel (Popup's default skin, padding="none")
       +- Menu (every DropdownMenu prop besides children/open/onOpenChange/alignment/id/className)
 ```
@@ -45,11 +53,17 @@ Every `MenuProps` default (`size: sm`, `showSearch: true`, `showScrollbar: true`
 `loadingLabel: 'Loading…'`, `emptyMessage: 'No results'`) applies unchanged, since those props pass
 straight through to the rendered Menu.
 
-`anchorRef` and `matchTriggerWidth` forward to Popup (see popup-spec). `matchTriggerWidth` also drives
+DropdownMenu forwards an explicit list of Menu props (`sections`, `size`, `showSearch`,
+`searchValue`, `onSearchChange`, `searchPlaceholder`, `searchLabel`, `clearSearchLabel`,
+`showScrollbar`, `maxHeight`, `loading`, `loadingLabel`, `emptyMessage`, `fullWidth`, `aria-label`,
+`aria-labelledby`), not a rest spread, so every inherited `MenuProps` member reaches the Menu.
+`sections` is passed with each item's `onSelect` wrapped (see "Selection closes the panel").
+
+`anchorRef` and `matchTriggerWidth` forward to Popup (see popup-spec). `matchTriggerWidth` also sets
 the inner Menu's `fullWidth` — a trigger-matched panel needs its Menu to stretch to the panel width
-rather than stay at one of the fixed `size` widths. Because `fullWidth` is technically inherited from
-`MenuProps`, DropdownMenu sets it internally from `matchTriggerWidth`; consumers use
-`matchTriggerWidth`, not `fullWidth`, to opt in (Select is the first consumer, matching its field).
+rather than stay at one of the fixed `size` widths (Select is the first consumer, matching its
+field). `fullWidth` on its own, without `matchTriggerWidth`, makes the panel (which is
+`inline-size: max-content`) as wide as the Menu's widest row instead of a `size` width.
 
 ## Composition
 
@@ -61,14 +75,15 @@ rather than stay at one of the fixed `size` widths. Because `fullWidth` is techn
   padding="none"
   id={id}
   className={className}
-  content={<Menu sections={sections} size={size} /* ...every other MenuProps... */ />}
+  content={<Menu sections={sectionsWithClosingOnSelect} size={size} /* ...every other MenuProps... */ />}
 >
-  {children}
+  {cloneElement(children, { ref, 'aria-haspopup': children.props['aria-haspopup'] ?? 'menu' })}
 </Popup>
 ```
 
-DropdownMenu holds no state of its own beyond what it destructures from props to redistribute
-between Popup and Menu - no `useState`, no `useEffect`.
+DropdownMenu holds no `useState`. It keeps a ref to the trigger (merged with the child's own ref) and
+uses two effects while open: one moves focus into the panel, one listens for Escape and Tab on the
+panel (see "Focus management").
 
 ## Alignment mapping
 
@@ -79,19 +94,46 @@ preference), then the remaining four, exactly as it would for any other consumer
 capability Figma's `dropdown-menu` component doesn't model (it has no top/bottom axis at all) -
 inherited for free from Popup rather than re-implemented.
 
-## Selection does not close the panel
+## Selection closes the panel
 
-Neither Menu nor Dropdown Menu ever calls `onOpenChange`. A consumer wanting a selection to close
-the dropdown wires it explicitly:
+DropdownMenu wraps each item's `onSelect`: the item's own `onSelect` runs first, then, unless it
+called `event.preventDefault()`, focus returns to the trigger and `onOpenChange(false)` is called.
+`preventDefault()` keeps the panel open, such as for a checkbox row the user may toggle several times:
 
 ```tsx
-sections={[{ id: 's', items: [{ id: 'delete', label: 'Delete', onSelect: () => { handleDelete(); setOpen(false); } }] }]}
+sections={[{ id: 'view', items: [{ id: 'drafts', label: 'Show drafts', selectionType: 'checkbox',
+  selected: showDrafts, onSelect: (event) => { event.preventDefault(); toggleDrafts(); } }] }]}
 ```
+
+A trigger with `role="combobox"` (Select's field) is left out of this and of the focus management
+below: its items' `onSelect` aren't wrapped, since Select closes single-select itself and keeps
+multi-select open.
+
+## Focus management
+
+The menu-button pattern, skipped for a `role="combobox"` trigger:
+
+- **Open:** focus moves to the search field when there is one, otherwise to the rows' tab stop (the
+  first enabled row), otherwise to the `role="menu"` container. It waits one animation frame,
+  because Popup keeps the panel `visibility: hidden` until it has measured a position, and a hidden
+  element can't take focus (this is also why Menu's own search `autoFocus` never took effect inside
+  a Dropdown Menu in a real browser). It moves focus only if focus is on the trigger or the page,
+  and runs again when `loading` changes, so an async menu gets focus once its rows arrive.
+- **Choose:** focus returns to the trigger, unless the item's `onSelect` moved focus out of the
+  panel (into a dialog it opened, say).
+- **Escape:** a `keydown` listener on the panel returns focus to the trigger; Popup's document-level
+  Escape listener then calls `onOpenChange(false)`, so it's called once.
+- **Tab:** Tab past the panel's last tab stop, or Shift+Tab before its first, is prevented, focus
+  returns to the trigger, and `onOpenChange(false)` is called - the same model as Inline Message's
+  popup. Tab between the search field, its clear button, and the rows stays inside.
 
 ## Accessibility
 
-Entirely inherited:
-- Popup sets `aria-expanded`/`aria-controls` on the trigger, reflecting `open`.
+- Popup sets `aria-expanded`/`aria-controls` on the trigger, reflecting `open`, by cloning it.
+  Button and IconButton keep that `aria-expanded` when their own `isExpanded` is unset.
+- DropdownMenu sets `aria-haspopup="menu"` on the trigger, unless the trigger sets its own.
+- Focus follows the menu-button pattern (see "Focus management"), so the panel's place at the end
+  of `document.body` doesn't put its rows last in the tab order.
 - Menu's own sections container carries `role="menu"`, `aria-label`/`aria-labelledby` (forwarded
   from DropdownMenu's own props of the same name), and owns all per-item roles and roving-tabindex
   keyboard navigation.
@@ -119,10 +161,15 @@ DropdownMenu
 └─ EdgeCases
 ```
 
+The stories' Button/IconButton triggers still set `isExpanded={open}`; it's no longer needed, since
+Button and IconButton keep the `aria-expanded` Popup adds.
+
 ### Alignment story
 
 All three `alignment` values, each independently open, to show the below-trigger positioning and
-horizontal edge alignment.
+horizontal edge alignment. The triggers are spread across the width so the open panels don't
+overlap. On the Docs page it renders in an iframe (`parameters.docs.story.inline: false`), since
+open panels are portaled and would otherwise float over the page.
 
 ### Content story
 
@@ -131,4 +178,5 @@ matching Figma's own range without a `trigger` variant prop in code.
 
 ### EdgeCases story
 
-Multiple sections in one panel, with selection closing the dropdown from each item's own `onSelect`.
+Multiple sections in one panel, with selection closing the dropdown.
+Open on load, so it also renders in an iframe on the Docs page.

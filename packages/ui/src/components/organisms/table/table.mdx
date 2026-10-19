@@ -1,145 +1,510 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  CodeSample,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { Link } from '../../atoms/link';
+import { Table } from './table';
+import tableStyles from './table.module.css';
 import * as TableStories from './table.stories';
 
 <Meta of={TableStories} name="Docs" />
 
-# Table
+export const members = [
+  { id: 1, name: 'Ada Lovelace', role: 'Owner', status: 'Active', joined: '2023-01-04' },
+  { id: 2, name: 'Alan Turing', role: 'Admin', status: 'Active', joined: '2023-02-11' },
+  { id: 3, name: 'Grace Hopper', role: 'Admin', status: 'Active', joined: '2023-03-19' },
+  { id: 4, name: 'Katherine Johnson', role: 'Editor', status: 'Invited', joined: '2023-05-02' },
+  { id: 5, name: 'Edsger Dijkstra', role: 'Editor', status: 'Active', joined: '2023-06-21' },
+];
 
-Table is an organism for presenting a large, sortable, filterable set of records - the workhorse of
-list/index ("All X") pages. It renders a section header, a filter toolbar, a column-config-driven grid
-(sortable headers, a selection column, loading/empty states), and a pagination footer, composing Text
-Field, Select, Chip, Checkbox, Button, Skeleton, Empty State, and Pagination.
+export const memberColumns = [
+  {
+    key: 'name',
+    header: 'Name',
+    sortable: true,
+    emphasis: 'strong',
+    render: (member) => <Link href="#" emphasis="strong">{member.name}</Link>,
+  },
+  { key: 'role', header: 'Role', sortable: true },
+  { key: 'status', header: 'Status', sortable: true },
+  { key: 'joined', header: 'Joined', sortable: true, align: 'end' },
+];
 
-<Canvas of={TableStories.FullShell} />
+export const trusts = [
+  { id: 1, name: 'Doe Family Trust', balance: '$1,204,500.00' },
+  { id: 2, name: 'Rivera Living Trust', balance: '$86,250.00' },
+  { id: 3, name: 'Chen Education Trust', balance: '$9,800.00' },
+];
 
-## When to use
+export const memberId = (member) => member.id;
 
-- A page of records the user scans, sorts, filters, selects, and pages through ("All members").
-- A selectable list with bulk actions, or a dense data view (`size="sm"`).
-- A server-paged dataset (with `manualSort` + `manualPagination`).
+<Unstyled>
+<ComponentPage>
 
-## When not to use
+<ComponentHeader
+  id="table"
+  example={
+    <Table
+      caption="Team members"
+      columns={memberColumns}
+      data={members.slice(0, 4)}
+      getRowId={memberId}
+      selectable
+      defaultSelectedIds={[2]}
+      getSelectionLabel={(member) => `Select ${member.name}`}
+      bulkActions={<Button size="sm">Change role</Button>}
+      defaultSort={{ columnKey: 'name', direction: 'asc' }}
+      size="sm"
+    />
+  }
+>
+  Table lists records people scan, sort, select, and page through, one row per record and one column
+  per field. You describe the columns and pass the rows; Table handles sorting, selection, pagination,
+  and column resizing, and leaves the data, filters, and actions to you.
+</ComponentHeader>
 
-- **A simple key/value layout or short static list.** Use plain markup / a description list.
-- **A dashboard of cards.** That's a layout grid, not tabular data.
-- **A spreadsheet with formulas or range selection.** Use a dedicated grid for those interactions.
+<Section title="When to use">
 
-## Columns and data
+<Usage>
+<UseFor>
 
-<Canvas of={TableStories.Basic} />
+- A page of records people scan, sort, filter, and page through, such as everyone in a workspace.
+- Records compared side by side across the same fields.
+- Acting on several records at once, with `selectable` and bulk actions.
+- Editing a few fields of many records in place, with editable cells.
+- A list the server sorts and pages, with `manualSort` and `manualPagination`.
 
-Pass `columns` + `data`. A column is `{ key, header, render?, sortable?, align?, width? }`; a cell
-shows `String(row[key])` unless you pass `render` to compose any content. Always pass a stable
-`getRowId` - it defaults to the row index, which is unstable once rows sort or paginate.
+</UseFor>
+<UseInstead>
 
-## Inline editable cells
+- **One record's details:** <DocLink to="Components/Data Display/Key Value List" />.
+- **A set of summaries, each with its own layout:** <DocLink to="Components/Data Display/Card" />, in a layout grid.
+- **Paging through content that isn't a table:** <DocLink to="Components/Navigation/Pagination" />.
+- **Choosing one or more options in a form:** <DocLink to="Components/Forms/Checkbox" /> or <DocLink to="Components/Forms/Select" />. Table's selection is for acting on records.
 
-<Canvas of={TableStories.EditableCells} />
+</UseInstead>
+</Usage>
 
-<Canvas of={TableStories.EditableCellsCompact} />
+</Section>
 
-Set `cellAppearance: 'editable'` on an editor column. In its `render`, use `InlineEdit` wrapping
-`TextField` for text, or render `Select`, `DatePicker`, or `TimePicker` directly. Give each control
-an accessible label identifying its row. The consumer owns the value and save callback.
+<Section title="Anatomy">
 
-Editable triggers fill the 40px/64px row and receive table-specific padding, hover fill, and bottom
-focus indicator. Text actions stay inside the cell; Enter confirms, Escape cancels, and leaving the
-editor commits. Select and date choices commit immediately; TimePicker retains its staged selection
-and Cancel/Confirm behavior. Row selection and hover remain owned by the row.
+<Anatomy
+  specimen={
+    <Table
+      title="Members"
+      description="Everyone with access to this workspace."
+      columns={memberColumns.slice(0, 2)}
+      data={members}
+      getRowId={memberId}
+      selectable
+      defaultSelectedIds={[1]}
+      getSelectionLabel={(member) => `Select ${member.name}`}
+      bulkActions={<Button size="sm">Change role</Button>}
+      pageSize={3}
+      size="sm"
+    />
+  }
+>
+  <Part name="root" target={tableStyles.table}>A `div` holding the header and the table body. It fills its container's width.</Part>
+  <Part name="header" target={tableStyles.header}>`title`, a heading at `headingLevel` (`h2` by default), over `description`. Shown when either is set.</Part>
+  <Part name="tableBody" target={tableStyles.tableBody}>Holds the toolbar, the grid, and the footer, with no border or radius.</Part>
+  <Part name="toolbar" target={tableStyles.toolbar}>A button group at the end, with the search, `toolbarActions`, and `actions`, and a second row for `activeFilters`. `toolbar` replaces it.</Part>
+  <Part name="selectionBar" target={tableStyles.selectionPill}>Takes the place of the toolbar's buttons while rows are selected: the count, then `bulkActions`.</Part>
+  <Part name="scroll" target={tableStyles.scroll}>A focusable region around the table that scrolls sideways when the columns don't fit.</Part>
+  <Part name="grid" target={tableStyles.grid}>A native `table`, named by a visually hidden `caption`.</Part>
+  <Part name="headerCell" target={tableStyles.headerCell}>A column header. A sortable one holds a button with the label and a sort arrow.</Part>
+  <Part name="resizeHandle" target={tableStyles.resizeHandle}>The divider at a header's trailing edge. Drag it, or focus it and use the Arrow keys, to resize the column.</Part>
+  <Part name="selectionColumn" target={tableStyles.selectHeaderCell}>With `selectable`: a select-all Checkbox in the header and one Checkbox per row.</Part>
+  <Part name="row" target={tableStyles.row}>One record. It has a hover fill, and a brand tint while selected.</Part>
+  <Part name="cell" target={tableStyles.cell}>A column's `render` output, or `row[key]` as text.</Part>
+  <Part name="footer" target={tableStyles.footer}>Shown when there's more than one page, or page sizes to pick from: the range of rows shown, a page Select, and previous and next buttons.</Part>
+</Anatomy>
 
-Cell sizing applies only to the trigger; popup contents keep their own sizing. Popups use a 4px
-gap, and the inline time panel uses leading-aligned options with a selected leading rule.
-Standalone controls retain their normal styling. The last row follows the table's divider rules.
+</Section>
 
-## Sorting
+<Section title="Variants">
 
-<Canvas of={TableStories.Sortable} />
+<Subsection title="Sizes">
 
-Sorting is owned by default: set `defaultSort`, click a sortable header to cycle ascending ->
-descending -> unsorted, and the data reorders client-side. Control it with `sort` + `onSortChange`, or
-set `manualSort` to sort server-side.
+`md`, the default, has 64px rows under 40px headers. `sm` has 40px rows under 32px headers, for
+dense views, and narrows the outer gutter from 24px to 16px. The search and its button follow the
+table's size; size the controls you put in cells to match, as the cell examples below do.
 
-## Selection
+<Example of={TableStories.Sizes} />
 
-<Canvas of={TableStories.Selectable} />
+</Subsection>
 
-`selectable` adds a leading Checkbox column with a header select-all (indeterminate for a partial
-selection). Selection is **checkbox-only** - rows are never clickable - and is owned by default,
-controllable via `selectedIds` + `onSelectionChange`. When one or more rows are selected, a selection
-bar appears at the top of the card with the count on the left and your `bulkActions` on the right; a
-selectable row also gets a subtle neutral hover, distinct from the brand-tinted selected state.
+</Section>
 
-## Columns, resizing, and interaction rules
+<Section title="Behavior">
 
-Columns resize by default: drag a header's trailing edge (or focus the handle and use the Arrow
-keys); opt out with `resizableColumns={false}` or per column with `column.resizable === false`. Mark
-the identifier column with `emphasis: 'strong'` (heading weight) and leave other columns at body
-weight. Follow the interaction rules consistently: **checkbox** = selection, **Link** = navigation (a
-routable value in a cell, or a strong Link for the identifier), **Button** = an action that changes
-state. Controls inside a row act independently.
+<Subsection title="Columns and cells">
 
-## Toolbar
+Each column is a `TableColumn` (listed under API). A cell shows `row[key]` as text unless the column
+has a `render`, which can return any content: a Link, Tag, Badge, Avatar, Switch, or Buttons. Table
+has no cell types of its own.
 
-<Canvas of={TableStories.WithToolbar} />
+Mark the column that identifies the row with `emphasis: 'strong'`, which sets it at the heading
+weight, and use a strong Link if it opens the record. Align numbers and dates to the end with
+`align: 'end'`. `width` and `minWidth` size a column; otherwise columns size to their content and the
+table fills its container, scrolling sideways when the columns don't fit.
 
-`searchable` renders the built-in search; `filters` is a slot for your domain Selects; `onClearFilters`
-adds a Clear filters action; `activeFilters` renders removable pills. Pass `toolbar` to replace the
-whole built-in toolbar.
+<Example of={TableStories.Basic} />
 
-## Pagination, sizes, and states
+<Example of={TableStories.CellVariants} caption="Cell content composed with render, at both sizes." />
 
-<Canvas of={TableStories.Pagination} />
+</Subsection>
 
-Pass `pageSize` for client-side pagination, or `manualPagination` with `page` / `pageCount` /
-`onPageChange` for a server-paged API.
+<Subsection title="Header and toolbar">
 
-<Canvas of={TableStories.Sizes} />
+`title` and `description` sit above the table. `title` is an `h2`; set `headingLevel` to fit it into
+the page's outline. The toolbar's first row is a button group at the end: the search, then
+`toolbarActions`, such as filter and settings Icon Buttons, then `actions`, such as a primary Button.
 
-<Canvas of={TableStories.Loading} />
+`searchable` shows a search Icon Button. Pressing it opens a 280px search field and focuses it; the
+field stays open while it has text, shows a clear button then, and closes again if it loses focus
+while empty. Table doesn't filter anything: filter `data` in `onSearchChange`. Table keeps the text
+itself (start it with `defaultSearchValue`), or control it with `searchValue`.
 
-<Canvas of={TableStories.EmptyStateStory} />
+The second row holds `activeFilters`, the filter Chips you render and control, and a Clear filters
+button when you pass `onClearFilters`. Pass `toolbar` to replace both rows with your own.
 
-## Accessibility
+<Example of={TableStories.WithToolbar} caption="A title, search, filter and settings buttons, and active filter Chips." />
 
-- It's a real `<table>` - always give it an accessible name via `caption` or `title`.
-- Sortable headers set `aria-sort` and wrap the label in a `<button>`; the scrollable grid is a
-  keyboard-focusable `role="region"`.
-- Selection uses real Checkboxes; keep content you put in cells accessible (label in-cell buttons).
+</Subsection>
 
-## API
+<Subsection title="Sorting">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>columns</code></td><td><code>TableColumn&lt;Row&gt;[]</code></td><td>-</td><td>Column definitions.</td></tr>
-    <tr><td><code>data</code></td><td><code>Row[]</code></td><td>-</td><td>The row data.</td></tr>
-    <tr><td><code>getRowId</code></td><td><code>(row, i) =&gt; string | number</code></td><td><code>index</code></td><td>Stable row id (pass a real one for selection).</td></tr>
-    <tr><td><code>size</code></td><td><code>'md' | 'sm'</code></td><td><code>'md'</code></td><td>Row density.</td></tr>
-    <tr><td><code>caption</code> / <code>title</code></td><td><code>ReactNode</code></td><td>-</td><td>Accessible name / header title.</td></tr>
-    <tr><td><code>description</code> / <code>actions</code></td><td><code>ReactNode</code></td><td>-</td><td>Header description / right-aligned actions.</td></tr>
-    <tr><td><code>searchable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Show the built-in search field.</td></tr>
-    <tr><td><code>searchValue</code> / <code>onSearchChange</code></td><td><code>string</code> / <code>fn</code></td><td>-</td><td>Controlled search.</td></tr>
-    <tr><td><code>filters</code></td><td><code>ReactNode</code></td><td>-</td><td>Filter controls slot.</td></tr>
-    <tr><td><code>onClearFilters</code> / <code>activeFilters</code></td><td><code>fn</code> / <code>TableActiveFilter[]</code></td><td>-</td><td>Clear action / removable pills.</td></tr>
-    <tr><td><code>sort</code> / <code>defaultSort</code> / <code>onSortChange</code></td><td><code>TableSort | null</code></td><td>-</td><td>Controlled / uncontrolled sort.</td></tr>
-    <tr><td><code>manualSort</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Sort server-side (no client reorder).</td></tr>
-    <tr><td><code>selectable</code></td><td><code>boolean</code></td><td><code>false</code></td><td>Selection Checkbox column + select-all.</td></tr>
-    <tr><td><code>selectedIds</code> / <code>onSelectionChange</code></td><td><code>(string|number)[]</code> / <code>fn</code></td><td>-</td><td>Controlled selection.</td></tr>
-    <tr><td><code>bulkActions</code></td><td><code>ReactNode</code></td><td>-</td><td>Actions in the selection bar when rows are selected.</td></tr>
-    <tr><td><code>resizableColumns</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Drag/Arrow-key column resizing.</td></tr>
-    <tr><td><code>page</code> / <code>pageCount</code> / <code>onPageChange</code></td><td><code>number</code> / <code>fn</code></td><td>-</td><td>Controlled pagination.</td></tr>
-    <tr><td><code>pageSize</code> / <code>manualPagination</code></td><td><code>number</code> / <code>boolean</code></td><td>-</td><td>Client-side / server-side paging.</td></tr>
-    <tr><td><code>loading</code> / <code>skeletonRowCount</code></td><td><code>boolean</code> / <code>number</code></td><td><code>false</code> / <code>5</code></td><td>Skeleton rows + aria-busy.</td></tr>
-    <tr><td><code>empty</code></td><td><code>ReactNode</code></td><td>Empty State</td><td>Shown when there are no rows.</td></tr>
-    <tr><td><code>className</code> / <code>id</code></td><td><code>string</code></td><td>-</td><td>Root class / id.</td></tr>
-  </tbody>
-</table>
+Set `sortable` on a column to make its header a button with a sort arrow. Pressing it sorts
+ascending, then descending, then back to the order of `data`; pressing another column's header
+starts that column at ascending. Every sortable column shows its arrow, which darkens on the sorted
+column and points up while it's ascending.
 
-## Related components
+Table sorts `data` itself, by the column's `sortValue` or else `row[key]`: numbers as numbers, text
+without regard to case and with numbers inside it in order, and empty values last when ascending.
+Start with `defaultSort`, or control it with `sort` and `onSortChange`. With `manualSort`, Table shows
+the sort and calls `onSortChange`, and leaves `data` in the order you pass, for sorting on the server.
 
-- **Pagination** - the footer.
-- **Select / Text Field / Chip** - the toolbar (filters, search, active filters).
-- **Checkbox** - selection. **Button / Icon Button** - actions.
-- **Skeleton** - loading rows. **Empty State** - the empty slot.
+<Example of={TableStories.Sortable} />
+
+</Subsection>
+
+<Subsection title="Selection">
+
+`selectable` adds a column of Checkboxes. The select-all Checkbox in the header selects or clears
+every row on the current page, and shows its indeterminate state when only some of them are
+selected. Rows are selected only through their Checkboxes: clicking a row does nothing, so links and
+buttons in it work on their own.
+
+While any row is selected, the selection bar takes the place of the toolbar's buttons, with the
+count on the left and your `bulkActions` on the right. A selected row takes a brand tint. Selection
+is kept by row id, across pages and sorts. The default id is the row's position in `data`, so pass a
+`getRowId` that returns a real id. Start with
+`defaultSelectedIds`, or control it with `selectedIds` and `onSelectionChange`.
+
+<Example of={TableStories.Selectable} />
+
+<Example of={TableStories.FullShell} caption="Header, toolbar, selection with bulk actions, sorting, and pagination together." />
+
+</Subsection>
+
+<Subsection title="Pagination">
+
+Pass `pageSize` and Table shows that many rows per page and keeps the current page; control the page
+with `page` and `onPageChange`. To page on the server, set `manualPagination` with `pageCount`,
+`page`, and `onPageChange`, and pass only the current page's rows.
+
+The footer appears when there's more than one page, or when you pass `itemsPerPageOptions`, so a
+page size that fits every row doesn't take the page-size Select away. It has the page-size Select
+(Table calls `onPageSizeChange` and leaves `pageSize` to you), the range of rows shown, a page Select,
+the page count, and previous and next buttons, which are disabled on the first and last pages.
+
+The range runs from the page's first row to its last, such as "11–20 of 42 items". With
+`manualPagination`, pass `pageSize` and `totalItems` so Table can place the page; without `pageSize`,
+the rows you pass count as one page.
+
+Every piece of footer text is a prop with an English default, for translation: `itemsPerPageLabel`
+(shown as given, so include its colon), `getRangeLabel`, `pageLabel`, `getPageCountLabel`,
+`previousPageLabel`, `nextPageLabel`, and `paginationLabel`, the footer's accessible name.
+
+<Example of={TableStories.Pagination} />
+
+</Subsection>
+
+<Subsection title="Resizing columns">
+
+Columns can be resized by default. Drag the divider at a header's trailing edge, or focus it and press
+Arrow Left or Arrow Right to narrow or widen the column by 16px, from 64px up to the width of the
+table's scroll region. The first
+resize, or the first selection, fixes every column at its current width, so changing one doesn't
+reflow the others and the widths hold as you page. Widths aren't saved, and reset when the table
+remounts. Turn resizing off with `resizableColumns={false}`, or for one column with
+`resizable: false`.
+
+</Subsection>
+
+<Subsection title="Editable cells">
+
+Set `cellAppearance: 'editable'` on a column and return its editor from `render`: an
+<DocLink to="Components/Forms/Inline Edit" /> around a <DocLink to="Components/Forms/Text Field" />
+for text, or a <DocLink to="Components/Forms/Select" />, <DocLink to="Components/Forms/Date Picker" />,
+or <DocLink to="Components/Forms/Time Picker" />. In an editable cell, these controls take the
+inline look at the table's size and fill the cell, so don't set their `size` or `context`. Hover shows
+a fill and an underline; editing shows the focus underline. Their menus and calendars keep their
+usual look, and the same controls elsewhere in the table don't change.
+
+You keep the value: save it in the control's own callback, such as Inline Edit's `onConfirm` or
+Select's `onChange`. Give each editor an accessible name that includes its row.
+
+<Example of={TableStories.EditableCells} />
+
+<Example of={TableStories.EditableCellsCompact} caption="Editable cells at the sm size." />
+
+</Subsection>
+
+<Subsection title="Loading and empty">
+
+`loading` keeps the headers, shows `skeletonRowCount` rows of Skeletons in place of the data (5 by
+default), and sets `aria-busy` on the table.
+
+<Example of={TableStories.Loading} />
+
+With no rows, the table shows `empty` across every column. The default is a "No results" heading and
+"There is nothing to show here yet." on the deep surface, set by `emptyHeadingLabel` and
+`emptyDescriptionLabel`. Pass an Empty State that says why the list is empty and what to do next.
+
+<Example of={TableStories.EmptyStateStory} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Pass a getRowId that returns the record's id, so selection stays with the record when the data changes."
+  code={`<Table
+    columns={columns}
+    data={members}
+    getRowId={(member) => member.id}
+    selectable
+/>`}
+/>
+<Dont
+  caption="Leave out getRowId on a table people select. The row's position in data becomes its id, so after a filter, a server sort, or a reload, the selection lands on other records."
+  code={`<Table columns={columns} data={members} selectable />`}
+/>
+<Do
+  caption="Open a record from a Link in the identifier column. People can tab to it and open it in a new tab."
+  code={`{
+    key: 'name',
+    header: 'Name',
+    emphasis: 'strong',
+    render: (member) => (
+      <Link href={'/members/' + member.id} emphasis="strong">
+        {member.name}
+      </Link>
+    ),
+}`}
+>
+  <Table caption="Team members" columns={memberColumns.slice(0, 2)} data={members.slice(0, 2)} getRowId={memberId} resizableColumns={false} size="sm" />
+</Do>
+<Dont
+  caption="Make a cell or row clickable to open the record. Keyboard and screen reader users can't reach it, and it competes with the row's selection Checkbox."
+  code={`{
+    key: 'name',
+    header: 'Name',
+    render: (member) => (
+      <span onClick={() => navigate('/members/' + member.id)}>
+        {member.name}
+      </span>
+    ),
+}`}
+/>
+<Do
+  caption="Align numbers to the end, so their digits line up."
+  code={`{ key: 'balance', header: 'Balance', align: 'end' }`}
+>
+  <Table
+    caption="Trust balances"
+    columns={[{ key: 'name', header: 'Trust', emphasis: 'strong' }, { key: 'balance', header: 'Balance', align: 'end' }]}
+    data={trusts}
+    getRowId={memberId}
+    resizableColumns={false}
+    size="sm"
+  />
+</Do>
+<Dont
+  caption="Leave numbers at the start. Amounts of different lengths are hard to compare."
+  code={`{ key: 'balance', header: 'Balance' }`}
+>
+  <Table
+    caption="Trust balances"
+    columns={[{ key: 'name', header: 'Trust', emphasis: 'strong' }, { key: 'balance', header: 'Balance' }]}
+    data={trusts}
+    getRowId={memberId}
+    resizableColumns={false}
+    size="sm"
+  />
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Table renders a native `table` with `thead`, `tbody`, and column headers (`th scope="col"`), so
+  screen readers can move by row and column and read each cell with its header.
+- The table is named by a visually hidden `caption`: `caption`, or `title` when there's no
+  `caption`. Always set one. `title` also renders as a heading above the table, at `headingLevel`.
+- The table sits in a scroll region (`role="region"`) that can take focus, so people can scroll it
+  sideways with the keyboard. It's named by a string `caption` or `title`, or `scrollRegionLabel`
+  ("Table") otherwise.
+- Each column header is named by its label alone (its `header`, or `headerLabel` when the header
+  isn't text), so screen readers read a cell's column as "Name", not the controls inside the header.
+- A sortable header holds a button named by the same label, and the header cell sets `aria-sort` to
+  `ascending`, `descending`, or `none`, which screen readers announce with the column. The arrow is
+  hidden from assistive technology.
+- Selection uses Checkboxes: "Select all rows" (`selectionColumnLabel`) in the header, which is
+  announced as mixed when only some rows are selected, and one per row named by `getSelectionLabel`.
+  Without it, every row's Checkbox is named "Select row", so always pass it.
+- When the number of selected rows changes, a polite live region announces the count, such as
+  "3 selected" (`selectionCountLabel`). It isn't announced when the table first renders.
+- Each resize handle is a focusable `separator`, vertical, named by `getResizeLabel` ("Resize Name").
+  It reports the column's width in pixels as `aria-valuenow` from the start, with 64 as
+  `aria-valuemin` and the scroll region's width as `aria-valuemax`.
+- While loading, the table sets `aria-busy`. The footer is a `navigation` region named by
+  `paginationLabel`, and its Selects and Icon Buttons are named by the footer props.
+- Content you render in cells keeps its own semantics: name icon-only buttons, and give each
+  editable cell's control a name that includes its row.
+
+<Keyboard>
+  <Key keys="Tab">Moves through the toolbar's controls, the scroll region, the header row (the select-all Checkbox, then each sort button and resize handle), each row's Checkbox and controls, and the footer's controls.</Key>
+  <Key keys="Enter">On a sort button, sorts by that column, moving to the next step: ascending, descending, unsorted. In an Inline Edit cell, confirms the change.</Key>
+  <Key keys="Space">On a sort button, sorts like Enter. On a selection Checkbox, selects or clears the row; on the select-all, every row on the page.</Key>
+  <Key keys="Arrow Left">On a resize handle, narrows the column by 16px, down to 64px. In the scroll region, scrolls left.</Key>
+  <Key keys="Arrow Right">On a resize handle, widens the column by 16px, up to the scroll region's width. In the scroll region, scrolls right.</Key>
+  <Key keys="Escape">In an Inline Edit cell, cancels the change.</Key>
+</Keyboard>
+
+Tabbing into an Inline Edit cell starts editing, and tabbing away saves a changed value. Select, Date
+Picker, and Time Picker cells, and the footer's Selects, keep their own keyboard; see their pages.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={TableStories} />
+
+`className` is added to the root `div`'s classes. Table passes no other attributes to it.
+
+<Subsection title="Columns">
+
+Each item in `columns` is a `TableColumn<Row>`:
+
+<CodeSample code={`{
+    key: string;                        // required; also the default value, row[key]
+    header: React.ReactNode;            // required
+    render?: (row, rowIndex) => React.ReactNode;   // defaults to String(row[key])
+    sortable?: boolean;                 // makes the header a sort button
+    sortValue?: (row) => string | number | boolean | null | undefined;   // what the built-in sort compares
+    align?: 'start' | 'center' | 'end'; // default 'start'; 'end' for numbers and dates
+    emphasis?: 'strong' | 'default';    // 'strong' for the column that identifies the row
+    width?: number | string;            // a number is px
+    minWidth?: number | string;         // a number is px
+    resizable?: boolean;                // default true; false keeps this column's width
+    cellAppearance?: 'default' | 'editable';       // 'editable' for an editor returned by render
+    headerLabel?: string;               // names the column when header isn't text
+    className?: string;                 // added to the column's td cells
+    headerClassName?: string;           // added to its th
+}`} />
+
+`sort`, `defaultSort`, and `onSortChange` use a `TableSort`, and selection uses row ids
+(`string | number`):
+
+<CodeSample code={`{ columnKey: string; direction: 'asc' | 'desc' }`} />
+
+</Subsection>
+
+<Subsection title="Editable cells">
+
+An editable column returns its control from `render` and saves through the control's own callback:
+
+<CodeSample code={`{
+    key: 'status',
+    header: 'Status',
+    cellAppearance: 'editable',
+    render: (row) => (
+      <Select
+        aria-label={'Status, ' + row.name}
+        value={row.status}
+        options={statusOptions}
+        onChange={(status) => save(row.id, { status })}
+      />
+    ),
+}`} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Table's stylesheet uses, by family, with the property it sets and when. "Base" is the
+table's root. The two brand-tinted row backgrounds are the selected row and its hover, which the
+table lists as "row". Row and header heights, the 40px selection column, and the 280px search field
+are fixed lengths in the stylesheet, not tokens. An editable cell's look comes from Text Field's
+stylesheet.
+
+<TokensTable id="table" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Key Value List" /> for one record's details.
+- <DocLink to="Components/Data Display/Card" /> for summaries that each need their own layout.
+- <DocLink to="Components/Navigation/Pagination" /> for paging through content outside a table.
+- <DocLink to="Components/Forms/Chip" /> for the filters in `activeFilters`.
+- <DocLink to="Components/Actions/Dropdown Menu" /> for a filter or settings menu opened from `toolbarActions`.
+- <DocLink to="Components/Forms/Inline Edit" />, <DocLink to="Components/Forms/Select" />, <DocLink to="Components/Forms/Date Picker" />, and <DocLink to="Components/Forms/Time Picker" /> for editable cells.
+- <DocLink to="Components/Navigation/Link" /> to open a record from its row.
+- <DocLink to="Components/Feedback/Empty State" /> for the `empty` content.
+- <DocLink to="Components/Forms/Checkbox" /> and <DocLink to="Components/Feedback/Skeleton" />, which Table uses for selection and loading.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads table.types.ts, the design tokens read table.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

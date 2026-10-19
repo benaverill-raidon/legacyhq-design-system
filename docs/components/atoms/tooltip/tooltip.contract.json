@@ -1,6 +1,6 @@
 {
   "name": "Tooltip",
-  "category": "atom",
+  "category": "overlays",
   "status": "stable",
   "purpose": "Supplemental contextual information.",
   "intent": "Give a trigger element a short, non-interactive, hover/focus-revealed explanation without requiring it to carry its own accessible name.",
@@ -39,7 +39,7 @@
       "type": "React.ReactElement",
       "required": true,
       "default": null,
-      "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby."
+      "description": "A single trigger element - cloned to add pointer/focus handlers and aria-describedby. Tooltip also passes it its ref and every prop set on Tooltip that Tooltip doesn't use itself (aria-*, data-*, role, style merged, handlers run after the child's own; undefined never erases the child's value, aria-describedby ids are kept from both), so a wrapper that clones Tooltip (Popup's aria-expanded/aria-controls, Dropdown Menu's aria-haspopup) reaches the real trigger."
     },
     "truncate": {
       "type": "boolean",
@@ -63,7 +63,13 @@
       "type": "string",
       "required": false,
       "default": null,
-      "description": "Composes with the tooltip content element's class list."
+      "description": "Composes with the tooltip content element's class list (the bubble, not the trigger)."
+    },
+    "ref": {
+      "type": "React.Ref<HTMLElement>",
+      "required": false,
+      "default": null,
+      "description": "Forwarded to the child, merged with the child's own ref, so a wrapper that clones Tooltip (Popup, Dropdown Menu) can measure and focus the real trigger."
     }
   },
   "sizes": [],
@@ -73,13 +79,13 @@
   "tokens": {
     "semantic": [
       "--color-background-neutral-bold-default",
-      "--color-content-inverse",
+      "--color-content-inverse-default",
       "--typography-body-sm-font-family",
       "--spacing-xxs",
       "--spacing-xs",
       "--border-radius-sm"
     ],
-    "note": "Horizontal padding is --measurement-6 (6px), a raw measurement rather than a semantic spacing token - Figma's own value doesn't land on the 4/8/12/16px spacing scale. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
+    "note": "Horizontal padding is --spacing-075 (6px), matching Figma. Positioning/z-index/animation tokens (--spacing-sm gap, --fade-quick) now live in Popup, not here - see popup.contract.json."
   },
   "accessibility": {
     "triggeredBy": ["pointer", "focus"],
@@ -88,14 +94,14 @@
     "describedByWhileVisible": true
   },
   "behaviorRules": [
-    "Owns trigger behavior via composition (hover, focus, blur, pointer leave, Escape).",
+    "Owns trigger behavior via composition (hover, focus, blur, pointer leave); Escape comes through Popup.",
     "Supports disabled native controls with a non-focusable pointer wrapper.",
     "Does not render or attach behavior when content is absent.",
     "Skips internal behavior when consumer handlers prevent default.",
     "Renders through Popup with unstyled set - Popup owns positioning, the portal, and the mount animation; Tooltip owns its own visual skin.",
     "Always requests Popup's topCenter alignment - no placement prop; Popup's own viewport-fit fallback (topCenter -> bottomCenter -> the remaining four) handles the rest.",
     "Sets manageTriggerAria={false} on Popup - Tooltip's own aria-describedby is the correct ARIA pattern here, not Popup's disclosure-widget aria-expanded/aria-controls.",
-    "Sets closeOnEscape={false} and closeOnOutsideClick={false} on Popup - Tooltip's own hover/focus/blur/Escape-on-trigger dismissal predates Popup and has different semantics than a generic dismissible popup."
+    "Sets closeOnOutsideClick={false} on Popup (a hover hint has no outside click) and leaves closeOnEscape on, hiding when Popup calls onOpenChange(false), so Escape dismisses a tooltip shown by hover or focus, and as the topmost layer it closes before a menu or dialog under it."
   ],
   "compositionRules": [
     "Give the trigger its own accessible name, independent of the tooltip content.",
@@ -121,7 +127,7 @@
   ],
   "acceptanceCriteria": [
     "Renders the trigger child; attaches no behavior when content is empty.",
-    "Shows on hover (after delay) and keyboard focus; hides on pointer leave, blur, and Escape.",
+    "Shows on hover (after delay) and keyboard focus; hides on pointer leave, blur, and Escape (wherever focus is). The bubble is hoverable: moving the pointer from the trigger onto it keeps it open, and a ::before strip bridges the gap (WCAG 1.4.13).",
     "Sets role=tooltip and wires aria-describedby only while visible, preserving any existing value.",
     "Supports disabled native controls via a non-focusable pointer wrapper with no extra tab stop.",
     "Preserves consumer event handlers and honors preventDefault().",

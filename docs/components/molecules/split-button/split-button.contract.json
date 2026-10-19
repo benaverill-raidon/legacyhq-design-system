@@ -1,6 +1,6 @@
 {
   "name": "SplitButton",
-  "category": "molecule",
+  "category": "actions",
   "status": "stable",
   "purpose": "Lets people perform a primary action, or choose from a small group of similar actions via an attached Dropdown Menu.",
   "intent": "A thin composition of Button (the primary action), IconButton (the secondary, caret-only action), and Dropdown Menu (the secondary action's floating panel), preconfigured for the primary-action-with-close-alternatives use case, rather than a third independent implementation of any of them.",
@@ -56,12 +56,12 @@
     "children": { "type": "React.ReactNode", "required": true, "default": null, "description": "The primary action's own label, forwarded to Button as its own children." },
     "sections": { "type": "MenuSection[]", "required": true, "default": null, "description": "The small group of related actions shown when the secondary segment opens." },
     "secondaryActionLabel": { "type": "string", "required": true, "default": null, "description": "Accessible name (and tooltip) for the secondary segment and its panel." },
-    "appearance": { "type": "SplitButtonAppearance", "required": false, "default": "default", "enum": ["default", "primary"], "description": "Applied to both segments. Narrower than Button's own appearance - no 'subtle', matching every verified Figma variant." },
+    "appearance": { "type": "SplitButtonAppearance", "required": false, "default": "default", "enum": ["default", "primary"], "description": "Applied to both segments: default maps to Button prominence=\"secondary\" plus IconButton appearance=\"default\"; primary maps to both primary. No 'subtle', matching every verified Figma variant." },
     "size": { "type": "ButtonSize", "required": false, "default": "md", "enum": ["xs", "sm", "md", "lg"], "description": "Applied to both segments." },
     "disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables both segments together." },
     "isLoading": { "type": "boolean", "required": false, "default": false, "description": "Applies Button's own loading treatment to the primary action only; also disables the secondary action." },
     "onClick": { "type": "(event) => void", "required": false, "default": null, "description": "The primary action's own click handler." },
-    "tone": { "type": "ButtonTone", "required": false, "default": "neutral", "description": "Forwarded to the primary action, unchanged from Button's own prop." },
+    "tone": { "type": "ButtonTone", "required": false, "default": "default", "description": "Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)." },
     "iconBefore": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
     "iconAfter": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
     "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root element." },
@@ -87,7 +87,8 @@
   "keyboardInteraction": [
     "Tab moves between the primary action and the secondary action, in DOM order",
     "Enter/Space activates either segment (native button behavior)",
-    "Escape closes the open panel (inherited from Popup, via Dropdown Menu)",
+    "Opening the panel moves focus to its first enabled item; choosing an item, or Tab/Shift+Tab out of the panel, closes it and returns focus to the caret (Dropdown Menu)",
+    "Escape closes the open panel and returns focus to the caret (Dropdown Menu)",
     "Arrow keys/Home/End/Enter navigate and activate rows inside the open panel (inherited from Menu)"
   ],
   "behaviorRules": [
@@ -96,7 +97,8 @@
     "isLoading applies only to the primary action (Button's own loading treatment) but additionally sets the secondary action's own disabled to disabled || isLoading.",
     "appearance and size are applied uniformly to both segments - there is no per-segment mixing in Figma's own variant set.",
     "showSearch is hardcoded to false and alignment to 'right' on the internal DropdownMenu - neither is exposed as a SplitButtonProps prop.",
-    "Does not pass isExpanded to the secondary action's IconButton - redundant, since Popup already manages aria-expanded via trigger-cloning."
+    "Choosing a menu item runs its onSelect, then closes the panel and returns focus to the caret (Dropdown Menu calls onOpenChange(false)); an onSelect that calls event.preventDefault() keeps it open.",
+    "Does not pass isExpanded to the secondary action's IconButton - redundant, since IconButton keeps the aria-expanded Popup injects via trigger-cloning."
   ],
   "compositionRules": [
     "Pass every other Button prop (tone, iconBefore, iconAfter, any native button attribute) directly on SplitButtonProps - they forward straight to the primary action via {...rest}.",
@@ -112,7 +114,7 @@
     "Inherits Button's, IconButton's, and Dropdown Menu/Menu's token-driven theming - no component-level light/dark branching of its own."
   ],
   "tokens": {
-    "note": "split-button.module.css declares no raw values other than 0 (squared corners). The divider uses border-width-sm, size-control-xs/sm/md/lg, color-border-input/color-content-brand-primary-subtle/color-border-disabled. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
+    "note": "split-button.module.css declares no raw values other than 0 (squared corners). The divider uses border-width-sm, size-control-xs/sm/md/lg, color-border-input/color-border-brand-primary-subtle/color-border-disabled. Every other value is Button's, IconButton's, or Dropdown Menu/Menu's own tokens - see their respective contract.json files."
   },
   "relatedComponents": ["Button", "IconButton", "DropdownMenu", "Menu", "TagGroup", "AvatarGroup"],
   "do": [
@@ -134,7 +136,7 @@
   ],
   "knownLimitations": [
     "No built-in support for more than a small, static list of actions - very large sections arrays inherit Menu's own eager-rendering behavior (no virtualization).",
-    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead, no built-in focus-first-item-on-open)."
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead)."
   ],
   "futureEnhancements": [
     "A renderSecondaryAction/custom-icon escape hatch, if a real use case needs something other than the caret.",

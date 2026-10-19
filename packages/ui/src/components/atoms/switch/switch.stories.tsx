@@ -7,7 +7,7 @@ import type { SwitchSize } from './switch.types';
 const sizes: SwitchSize[] = ['md', 'sm'];
 
 const meta = {
-  title: 'UI/Atoms/Switch',
+  title: 'Components/Forms/Switch',
   component: Switch,
   args: {
     label: 'Label',
@@ -69,7 +69,11 @@ const settingRowStyle: CSSProperties = {
   gap: 'var(--spacing-lg)',
 };
 
-const settingTextStyle: CSSProperties = { display: 'grid', gap: 'var(--spacing-xxs)' };
+const settingTextStyle: CSSProperties = {
+  display: 'grid',
+  gap: 'var(--spacing-xxs)',
+  font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
+};
 
 const headingStyle: CSSProperties = {
   margin: 0,
@@ -205,6 +209,41 @@ export const States: Story = {
   ),
 };
 
+/**
+ * A Switch applies its setting the moment it's toggled - there's no Save button - so the result
+ * shows right away, and the switch shows a Spinner while the change is saved.
+ */
+function AppliesImmediatelyExample() {
+  const [showArchived, setShowArchived] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!isSaving) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setIsSaving(false), 600);
+    return () => window.clearTimeout(timer);
+  }, [isSaving]);
+
+  return (
+    <>
+      <Switch
+        label="Show archived matters"
+        checked={showArchived}
+        isLoading={isSaving}
+        onCheckedChange={(next) => {
+          setShowArchived(next);
+          setIsSaving(true);
+        }}
+      />
+      <span style={captionStyle} aria-live="polite">
+        {showArchived ? 'Archived matters are shown in the list.' : 'Archived matters are hidden from the list.'}
+      </span>
+    </>
+  );
+}
+
 /** How Switch behaves with realistic content and inside the compositions it's designed for. */
 export const Content: Story = {
   render: () => (
@@ -243,11 +282,9 @@ export const Content: Story = {
           </div>
         </div>
 
-        <form style={cardStyle}>
-          <Switch label="Include archived matters" name="includeArchived" value="yes" />
-          <Switch label="Required preference" name="requiredPreference" required />
-          <button type="submit">Save preferences</button>
-        </form>
+        <div style={cardStyle}>
+          <AppliesImmediatelyExample />
+        </div>
 
         <div style={cardStyle}>
           <Switch label="Syncing calendar" isLoading defaultChecked />
@@ -280,7 +317,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Long label wraps in a narrow container</h3>
         <p style={captionStyle}>
-          The control stays anchored to the first line of a wrapped label rather than shrinking.
+          The control keeps its size and stays centered on the wrapped label, not on the first line.
         </p>
         <div
           style={{

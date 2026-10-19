@@ -62,7 +62,8 @@
  * on the block axis and the inline-start edge, so it floats inside the bordered track rather than
  * meeting its edges. Its inline size is the fill fraction of the track's inner (padded) width, so
  * at 100% it leaves an equal pad on the inline-end edge. Matches the inset progress-segment shape
- * in Figma.
+ * in Figma. A value change eases the fill to its new size with --fade-quick, as Progress Tracker's
+ * fill does.
  */
 .progressSegment {
   position: absolute;
@@ -71,6 +72,7 @@
   inline-size: calc(var(--progress-bar-fill, 0) * (100% - 2 * var(--progress-bar-linear-pad)));
   border-radius: var(--border-radius-full-round);
   background: var(--color-background-brand-primary-bold-default);
+  transition: inline-size var(--fade-quick);
 }
 
 .circularViewport {
@@ -120,9 +122,22 @@
 
 /*
  * The progress arc is capped with rounded ends so the ring reads as a rounded stroke rather than a
- * hard-edged wedge. Matches the rounded arc ends in Figma.
+ * hard-edged wedge. Matches the rounded arc ends in Figma. A value change eases the arc with
+ * --fade-quick, like the linear fill; the dash array transitions too, so reaching or leaving 100
+ * (an explicit dash/gap split) still eases. At 0 the whole ring is hidden (above), so arriving at
+ * or leaving 0 shows or hides the ring at once.
  */
 .circularProgress {
   stroke: var(--color-background-brand-primary-bold-default);
   stroke-linecap: round;
+  transition:
+    stroke-dashoffset var(--fade-quick),
+    stroke-dasharray var(--fade-quick);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressSegment,
+  .circularProgress {
+    transition-duration: 0ms;
+  }
 }

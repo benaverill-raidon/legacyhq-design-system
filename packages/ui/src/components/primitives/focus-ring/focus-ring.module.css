@@ -1,9 +1,24 @@
+/*
+ * The ring's offset is a registered property that doesn't inherit, with 2px as its initial value
+ * (a raw length: focus-ring offsets aren't spacing, and there's no offset token yet). Focus Ring
+ * declares no value of its own, so a component's `--focus-ring-offset` on its focusable element
+ * wins whatever order the stylesheets load in, and an element that sets none gets 2px, never a
+ * parent's offset.
+ */
+@property --focus-ring-offset {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 2px;
+}
+
+/*
+ * No border-radius here: an outline follows the element's own corner radius, which the component
+ * sets. (Focus Ring used to set `border-radius: inherit`, which fought the component's own radius by
+ * stylesheet order and gave an element with none its parent's.)
+ */
 .focusRing {
   --focus-ring-color: var(--color-border-focus);
   --focus-ring-width: var(--border-width-md);
-  --focus-ring-offset: 2px;
-
-  border-radius: inherit;
 }
 
 .focusRing:focus-visible,

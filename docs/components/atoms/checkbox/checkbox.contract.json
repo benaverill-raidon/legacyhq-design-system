@@ -1,6 +1,6 @@
 {
   "name": "Checkbox",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Select one or more independent options.",
   "intent": "Native checkbox control.",
@@ -20,10 +20,11 @@
     "Mutually exclusive choices"
   ],
   "anatomy": [
+    "root",
     "input",
     "indicator",
     "label",
-    "helperText"
+    "required indicator"
   ],
   "props": {},
   "variants": {},
@@ -38,8 +39,7 @@
     "invalid"
   ],
   "slots": [
-    "label",
-    "helperText"
+    "label"
   ],
   "tokens": {},
   "accessibility": {
@@ -48,10 +48,17 @@
   "keyboardInteraction": [
     "Space toggles"
   ],
-  "behaviorRules": [],
+  "behaviorRules": [
+    "A disabled CheckboxGroup disables every checkbox inside it, from options or children, and they look disabled.",
+    "required on CheckboxGroup shows an aria-hidden * after the legend and adds hidden requiredLabel text to the group's name; it doesn't make any checkbox natively required."
+  ],
   "compositionRules": [],
-  "contentRules": [],
-  "responsiveRules": [],
+  "contentRules": [
+    "The required * appears after the label or legend and is aria-hidden; the native required attribute (Checkbox) or the hidden requiredLabel text (Checkbox Group) is what's announced."
+  ],
+  "responsiveRules": [
+    "CheckboxGroup is vertical by default with no gap between options; horizontal puts spacing-lg between options and wraps (no Figma Checkbox Group exists, so this is a code decision)."
+  ],
   "themeRules": [],
   "implementationNotes": [],
   "relatedComponents": [

@@ -19,13 +19,11 @@
 }
 
 /*
- * ToggleButton normally sizes itself to its label (padding + content), so a two-digit page like
- * "20" renders wider than a one-digit page like "2". Figma's page slots are a fixed 32x32 square
- * regardless of digit count, so force it here via the same `:global([data-attr])` compound-selector
- * technique Icon Button and Icon Tile use to reliably out-specificity a single-class atom rule
- * without touching ToggleButton's own default (variable-width) behavior for its other consumers.
+ * A page button takes Toggle Button's look, which sizes itself to its label (padding + content), so
+ * a two-digit page like "20" would render wider than a one-digit page like "2". Figma's page slots
+ * are a fixed 32x32 square regardless of digit count, so the page button sets its width here.
  */
-.item :global([data-selected]) {
+.page {
   inline-size: var(--size-control-sm);
 }
 

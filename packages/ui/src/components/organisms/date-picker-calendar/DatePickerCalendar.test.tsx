@@ -140,6 +140,30 @@ describe('DatePickerCalendar', () => {
     expect(dayButton(container, 1)!).toHaveAttribute('tabindex', '0');
   });
 
+  it('stops keyboard moves at min and max', () => {
+    const { container } = renderCalendar({ min: new Date(2026, 2, 4), max: new Date(2026, 2, 24) });
+
+    // Page Up would go to 9 February; it stops on the min day instead, and the month stays.
+    fireEvent.keyDown(dayButton(container, 9)!, { key: 'PageUp' });
+    expect(screen.getByText('March 2026')).toBeInTheDocument();
+    expect(document.activeElement).toBe(dayButton(container, 4));
+
+    // Arrow Up and Home from the min day stay on it.
+    fireEvent.keyDown(dayButton(container, 4)!, { key: 'ArrowUp' });
+    fireEvent.keyDown(dayButton(container, 4)!, { key: 'Home' });
+    expect(document.activeElement).toBe(dayButton(container, 4));
+
+    // Shift + Page Down would go to next year; it stops on the max day.
+    fireEvent.keyDown(dayButton(container, 4)!, { key: 'PageDown', shiftKey: true });
+    expect(screen.getByText('March 2026')).toBeInTheDocument();
+    expect(document.activeElement).toBe(dayButton(container, 24));
+
+    // End from 24 March (a Tuesday) would go to Saturday the 28th; it stops on the 24th.
+    fireEvent.keyDown(dayButton(container, 24)!, { key: 'End' });
+    expect(document.activeElement).toBe(dayButton(container, 24));
+    expect(dayButton(container, 24)!).toHaveAttribute('tabindex', '0');
+  });
+
   it('supports starting the week on Monday', () => {
     const grid = renderCalendar({ weekStartsOn: 1 }).container.querySelector('[role="grid"]')!;
     const firstHeader = within(grid as HTMLElement).getAllByRole('columnheader')[0];

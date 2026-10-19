@@ -18,7 +18,7 @@ function EditableNotes() {
     <dl>
       <KeyValuePair label="Notes" underline>
         <InlineEdit value={value} onConfirm={setValue} actionPlacement="end" actionAlignment="start">
-          <TextArea autoResize appearance="inline" aria-label="Notes" style={{ lineHeight: '24px' }} />
+          <TextArea autoResize context="inline" aria-label="Notes" style={{ lineHeight: '24px' }} />
         </InlineEdit>
       </KeyValuePair>
       <KeyValuePair label="Status" value="Active" />

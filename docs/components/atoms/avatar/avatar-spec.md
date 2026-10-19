@@ -31,16 +31,62 @@ has no effect once an image loads successfully, and does not change accessible-n
 
 | Avatar size | Container | Icon |
 |---|---:|---:|
+| `xxs` | 8px | 8px |
 | `xs` | 12px | 12px |
 | `sm` | 12px | 12px |
 | `md` | 14px | 14px |
 | `lg` | 16px | 16px |
 | `xl` | 20px | 18px |
 
-Use the same structure at all sizes. Keep XS positioned at the block-end and inline-end with a `-2px` offset. Preserve the existing size anatomy, and keep the visible badge circle bordered with the inverse border token.
+Use the same structure at all sizes. Keep XXS and XS positioned at the block-end and inline-end with a `-2px` offset. Preserve the existing size anatomy, and keep the visible badge circle bordered with the inverse border token.
 
 The online presence badge is a solid semantic success-green circle with no interior glyph.
 
 ## Token guidance
 
 Keep component tokens only for avatar-specific anatomy such as avatar size, badge container size, and badge icon size. Prefer semantic tokens directly for badge color, selected border, badge border, hover and press overlays, border width, radius, and offline subtle content color.
+
+## Fallback artwork
+
+The fallback is a full-size background image on the content span, swapped for dark artwork under
+`[data-theme='dark']`. The team silhouette (`entityType="team"`) isn't drawn from scratch: it's the
+shipped `team-and-partners` icon glyph (`packages/ui/src/assets/icons/source/team-and-partners.svg`),
+rescaled and recolored to the person fallback's template (a 200x200 flat-color square with a centered
+glyph, the same light and dark color pairs). `entityType` has no Figma variant and doesn't change the
+accessible name.
+
+## Motion
+
+The interactive hover and press overlay (`.surface::after`) fades with `fade-quick`. The selected ring
+(`.surface::before`, an inset box-shadow) grows in with `move-quick`, the spring recipe, since it's a
+ring growing rather than a color change. Both transitions are set to 0ms under
+`prefers-reduced-motion: reduce`.
+
+## Accessible name
+
+`aria-labelledby` wins and nothing is appended. Otherwise the base is `aria-label`, then `name`, then
+`alt`, and Avatar appends the selected word (static avatars only, see below) and the visible badge's
+word. The words are props with English defaults, for translation (component-api-governance
+`built-in-labels`):
+
+| Prop | Default | Used for |
+|---|---|---|
+| `selectedLabel` | `"selected"` | a static avatar with `isSelected` |
+| `getPresenceLabel(presence)` | `"online"`, `"offline"`, `"busy"` | the presence badge |
+| `getStatusLabel(status)` | `"accepted"`, `"declined"` | the status badge (wins over presence) |
+
+In development a console warning fires when a non-decorative avatar has no name.
+
+## Selection
+
+An interactive avatar given `isSelected` (`true` or `false`) is a toggle button: it sets
+`aria-pressed`, and the selected word isn't added to its name, so the state isn't read twice. An
+interactive avatar without `isSelected` has no `aria-pressed`, so an avatar that only opens something
+isn't announced as a toggle. A static avatar (`role="img"`) can't carry a pressed state, so a selected
+static avatar keeps `selectedLabel` in its name.
+
+## Disabled
+
+`disabled` dims the avatar and, on an interactive avatar, sets the native `disabled` attribute.
+`isDisabled` is a deprecated alias, still accepted and mapped to `disabled` (component-api-governance
+`disabled-prop`); `disabled` wins when both are set.

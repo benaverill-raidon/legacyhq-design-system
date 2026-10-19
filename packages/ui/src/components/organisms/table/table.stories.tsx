@@ -116,7 +116,7 @@ const getRowId = (member: Member) => member.id;
 /* ---------- Meta ---------- */
 
 const meta: Meta<typeof Table<Member>> = {
-  title: 'UI/Organisms/Table',
+  title: 'Components/Data Display/Table',
   component: Table<Member>,
   parameters: { layout: 'fullscreen' },
   decorators: [

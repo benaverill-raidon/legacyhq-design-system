@@ -3,8 +3,8 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-inline-size: var(--spacing-lg);
-  block-size: var(--spacing-lg);
+  min-inline-size: var(--size-200);
+  block-size: var(--size-200);
   padding-block: var(--spacing-none);
   padding-inline: var(--spacing-xs);
   border: 0;
@@ -40,4 +40,14 @@
 .tone_error {
   background: var(--color-background-error-bold-default);
   color: var(--color-content-inverse-default);
+}
+
+/* The `label` text: read by assistive technology in place of the value, not shown. */
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LAYERS } from '../../primitives/layers';
+import { DropdownMenu } from '../dropdown-menu';
 import { ModalDialog } from './modal-dialog';
 import styles from './modal-dialog.module.css';
 
@@ -187,7 +189,7 @@ describe('ModalDialog', () => {
 
   it('shows a status icon for warning and error, but not default', () => {
     const { container: warn } = render(
-      <ModalDialog open onClose={() => {}} title="Title" appearance="warning">
+      <ModalDialog open onClose={() => {}} title="Title" tone="warning">
         Body
       </ModalDialog>,
     );
@@ -202,16 +204,16 @@ describe('ModalDialog', () => {
     expect(def.ownerDocument.querySelector(`.${styles.statusIcon}`)).toBeNull();
   });
 
-  it('applies the width class and appearance data attribute', () => {
+  it('applies the width class and tone data attribute', () => {
     render(
-      <ModalDialog open onClose={() => {}} title="Title" width="large" appearance="error">
+      <ModalDialog open onClose={() => {}} title="Title" width="lg" tone="error">
         Body
       </ModalDialog>,
     );
 
     const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveClass(styles.width_large);
-    expect(dialog).toHaveAttribute('data-appearance', 'error');
+    expect(dialog).toHaveClass(styles.width_lg);
+    expect(dialog).toHaveAttribute('data-tone', 'error');
   });
 
   it('composes className onto the panel', () => {
@@ -269,8 +271,121 @@ describe('ModalDialog', () => {
     expect(document.body.style.overflow).not.toBe('hidden');
   });
 
-  it('uses semantic tokens for the surface and radius', () => {
+  it('uses semantic tokens for the surface, radius, and elevation', () => {
     expect(modalCss).toContain('background: var(--color-background-brand-secondary-overlay-blanket);');
     expect(modalCss).toContain('border-radius: var(--border-radius-xxl);');
+    expect(modalCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
+  });
+
+  it('enters with the fade-quick recipe, only when motion is allowed', () => {
+    const allowed = modalCss.match(/@media \(prefers-reduced-motion: no-preference\) \{([\s\S]*?)\n\}/)?.[1] ?? '';
+    expect(allowed).toContain('animation: modal-backdrop-in var(--fade-quick);');
+    expect(allowed).toContain('animation: modal-panel-in var(--fade-quick);');
+    // A recipe is already duration + easing; another timing function after it invalidates the shorthand.
+    expect(modalCss).not.toMatch(/var\(--fade-quick[^)]*\)\s+(ease|linear|cubic-bezier)/);
+    expect(modalCss).toMatch(/@keyframes modal-panel-in \{\s*from \{\s*opacity: 0;\s*transform: translateY\(8px\);/);
+  });
+
+  it('still accepts the deprecated appearance prop and long width names', () => {
+    render(
+      <ModalDialog open onClose={() => {}} title="Title" width="extraLarge" appearance="warning">
+        Body
+      </ModalDialog>,
+    );
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveClass(styles.width_xl);
+    expect(dialog).toHaveAttribute('data-tone', 'warning');
+  });
+
+  it('closes an open menu inside it on Escape, not itself', () => {
+    const onClose = vi.fn();
+    function DialogWithMenu() {
+      const [menuOpen, setMenuOpen] = useState(false);
+      return (
+        <ModalDialog open onClose={onClose} title="Title">
+          <DropdownMenu
+            aria-label="Actions"
+            showSearch={false}
+            sections={[{ id: 'actions', items: [{ id: 'rename', label: 'Rename' }] }]}
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+          >
+            <button type="button" onClick={() => setMenuOpen(true)}>
+              Actions
+            </button>
+          </DropdownMenu>
+        </ModalDialog>
+      );
+    }
+    render(<DialogWithMenu />);
+    fireEvent.click(screen.getByRole('button', { name: 'Actions' }));
+    const item = screen.getByRole('menuitem', { name: 'Rename' });
+
+    fireEvent.keyDown(item, { key: 'Escape' });
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+
+    // With the menu closed, the next Escape is the dialog's.
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes only the top dialog of two stacked ones on Escape', () => {
+    const closeFirst = vi.fn();
+    const closeSecond = vi.fn();
+    const { rerender } = render(
+      <>
+        <ModalDialog open onClose={closeFirst} title="First" />
+        <ModalDialog open={false} onClose={closeSecond} title="Second" />
+      </>,
+    );
+    rerender(
+      <>
+        <ModalDialog open onClose={closeFirst} title="First" />
+        <ModalDialog open onClose={closeSecond} title="Second" />
+      </>,
+    );
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(closeSecond).toHaveBeenCalledTimes(1);
+    expect(closeFirst).not.toHaveBeenCalled();
+  });
+
+  it('leaves an Escape that a control inside already handled (preventDefault)', () => {
+    const onClose = vi.fn();
+    render(
+      <ModalDialog open onClose={onClose} title="Title">
+        <input aria-label="Field" onKeyDown={(event) => event.key === 'Escape' && event.preventDefault()} />
+      </ModalDialog>,
+    );
+
+    fireEvent.keyDown(screen.getByRole('textbox', { name: 'Field' }), { key: 'Escape' });
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('stacks below popups and toasts, from the one layer scale', () => {
+    render(
+      <ModalDialog open onClose={() => {}} title="Title">
+        Body
+      </ModalDialog>,
+    );
+
+    const backdrop = screen.getByRole('dialog').parentElement as HTMLElement;
+    expect(backdrop.style.zIndex).toBe(String(LAYERS.dialog));
+    expect(LAYERS.dialog).toBeLessThan(LAYERS.toast);
+    expect(LAYERS.dialog).toBeLessThan(LAYERS.popup);
+    expect(modalCss).not.toMatch(/z-index\s*:/);
+  });
+
+  it('warns in development when the dialog has neither a title nor an aria-label', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(<ModalDialog open onClose={() => {}} title="Title" />);
+    render(<ModalDialog open onClose={() => {}} aria-label="Settings" />);
+    expect(warn).not.toHaveBeenCalled();
+
+    render(<ModalDialog open onClose={() => {}} />);
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('ModalDialog requires a `title` or an `aria-label`'));
+    warn.mockRestore();
   });
 });

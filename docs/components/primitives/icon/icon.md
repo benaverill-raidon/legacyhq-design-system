@@ -19,15 +19,15 @@ is generated as its own named component (`AddIcon`, `CheckIcon`, `ChevronLeftIco
 nothing extra to learn per icon. New glyphs are added via `npm run generate:icons`, not written by
 hand.
 
-`size` is `sm` or `md` only - there is no per-icon size override; components that need a specific
-icon size (Button, Avatar's badge glyph) fix it internally rather than exposing an `iconSize` prop.
-`spacing` controls the icon's own hit-box padding independent of its visual size - `spacious`
-reserves a larger square around a visually small icon, useful when the icon sits alone as a
-touch/click target.
+`size` is `sm` or `md` only - there is no per-icon size override, and components don't expose an
+`iconSize` prop. `md` is the size in every component at every control size; `sm` is for dense marks
+beside small text. `spacing="spacious"` centers the icon in a 24px box so it lines up with 24px
+slots; it's a layout box, not a hit area - the control around the icon sets that.
 
-Icons inherit `currentColor` by default (`color="default"`). Reach for the semantic color values
-only when the icon itself is carrying that meaning independently of its surrounding text, not just
-to make it colorful. Icons default to `decorative={true}` because most sit next to a text label
+Icons take the surrounding text color by default (`color="inherit"`), so they follow their control
+through hover, selection, disabled, and inverse. Reach for the semantic color values only when the
+icon itself is carrying that meaning independently of its surrounding text, not just to make it
+colorful. Icons default to `decorative={true}` because most sit next to a text label
 that already carries the meaning; set `decorative={false}` and provide `title` only when the icon
 is the sole carrier of meaning.
 

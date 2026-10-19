@@ -13,16 +13,17 @@ const tabs: TabItem[] = [
 ];
 
 const meta = {
-  title: 'UI/Organisms/Tabs',
+  title: 'Components/Navigation/Tabs',
   component: Tabs,
   args: {
-    type: 'line',
+    appearance: 'line',
     tabs,
     defaultValue: 'overview',
     'aria-label': 'Matter sections',
   },
   argTypes: {
-    type: { control: 'inline-radio', options: ['line', 'contained'] },
+    appearance: { control: 'inline-radio', options: ['line', 'contained'] },
+    type: { control: false },
     showBorder: { control: 'boolean' },
     tabs: { control: false },
     value: { control: false },
@@ -87,18 +88,18 @@ export const Playground: Story = {
   ),
 };
 
-/** The two types: `line` (underline indicator) and `contained` (pill). */
-export const Types: Story = {
+/** The two appearances: `line` (underline indicator) and `contained` (pill). */
+export const Appearances: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="line">
-        <Tabs type="line" tabs={tabs} defaultValue="overview" aria-label="Line tabs">
+        <Tabs appearance="line" tabs={tabs} defaultValue="overview" aria-label="Line tabs">
           <Panels />
         </Tabs>
       </Labelled>
 
       <Labelled label="contained">
-        <Tabs type="contained" tabs={tabs} defaultValue="overview" aria-label="Contained tabs">
+        <Tabs appearance="contained" tabs={tabs} defaultValue="overview" aria-label="Contained tabs">
           <Panels />
         </Tabs>
       </Labelled>
@@ -111,13 +112,13 @@ export const States: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="With a disabled tab (Billing)">
-        <Tabs type="line" tabs={tabs} defaultValue="overview" aria-label="With disabled">
+        <Tabs appearance="line" tabs={tabs} defaultValue="overview" aria-label="With disabled">
           <Panels />
         </Tabs>
       </Labelled>
 
       <Labelled label="Line without the bottom border">
-        <Tabs type="line" tabs={tabs} defaultValue="activity" showBorder={false} aria-label="No border">
+        <Tabs appearance="line" tabs={tabs} defaultValue="activity" showBorder={false} aria-label="No border">
           <Panels />
         </Tabs>
       </Labelled>
@@ -135,7 +136,7 @@ export const Controlled: Story = {
           <span style={{ font: 'var(--typography-body-sm-font-size) / 1 var(--typography-body-sm-font-family)', color: 'var(--color-content-subtle)' }}>
             Selected: {value}
           </span>
-          <Tabs type="contained" tabs={tabs} value={value} onValueChange={setValue} aria-label="Controlled">
+          <Tabs appearance="contained" tabs={tabs} value={value} onValueChange={setValue} aria-label="Controlled">
             <Panels />
           </Tabs>
         </div>

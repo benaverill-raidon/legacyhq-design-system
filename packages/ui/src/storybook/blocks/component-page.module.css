@@ -1,0 +1,361 @@
+/*
+ * The component Docs page standard (component-page.tsx), on top of doc-page's rhythm and type
+ * scale. Light only, like every docs page.
+ */
+
+.page {
+  display: grid;
+  gap: var(--spacing-4xl);
+  counter-reset: component-section;
+}
+
+/*
+ * Every grid on the page gets a column that can shrink below its content, so a wide table scrolls
+ * in its own box (.tableScroll) instead of widening the page on a phone.
+ */
+.page,
+.header,
+.section,
+.prose,
+.example,
+.usageColumn,
+.guideline {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+/* Sections number themselves in the order the page lists them. */
+.section {
+  counter-increment: component-section;
+}
+
+.sectionNumber::before {
+  content: counter(component-section);
+}
+
+/*
+ * Markdown written in the MDX, between the blocks. Markdown's lists carry no class (or an empty
+ * one), and
+ * every rule skips what sits inside a live example, so none of this reaches a component's own lists
+ * (Breadcrumbs, Pagination) whatever order the stylesheets load in.
+ */
+.prose {
+  display: grid;
+  gap: var(--spacing-lg);
+  max-inline-size: 100%;
+}
+
+.prose > :where(p, ul, ol) {
+  max-inline-size: 72ch;
+}
+
+.prose :where(ul, ol):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
+  display: grid;
+  gap: var(--spacing-xs);
+  padding-inline-start: var(--spacing-lg);
+  list-style: disc;
+}
+
+.prose :where(ol):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
+  list-style: decimal;
+}
+
+.prose :where(strong):where(:not([class]), [class='']):not(:where(.stage, .guidelineExample) *) {
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+/* Storybook renders markdown code with a class of its own, so code is matched by where it sits. */
+.prose :where(p, li):not(:where(.stage, .guidelineExample) *) > code {
+  padding: var(--spacing-none) var(--spacing-xxs);
+  border: none;
+  border-radius: var(--border-radius-xs);
+  background: var(--color-elevation-surface-sunken-default);
+  color: inherit;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- no monospace font token exists; code identifiers need a fixed-width face */
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.header {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+/* The frame every live example sits in. */
+.stage {
+  display: grid;
+  place-items: center;
+  min-block-size: var(--size-1250);
+  padding: var(--spacing-2xl);
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+/* The header's example: several items sit in a row, wrapping, rather than stacking. */
+.headerStage {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: center;
+}
+
+.example {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.example .stage {
+  place-items: stretch;
+  padding: var(--spacing-md);
+}
+
+/* When to use */
+
+.usage {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-2xl);
+}
+
+.usageColumn {
+  display: grid;
+  gap: var(--spacing-md);
+  align-content: start;
+}
+
+/* Anatomy */
+
+.anatomy {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: var(--spacing-2xl);
+  align-items: center;
+}
+
+.anatomyStage {
+  position: relative;
+  padding-block: var(--spacing-4xl);
+}
+
+.specimen {
+  display: flex;
+  justify-content: center;
+}
+
+.outline {
+  position: absolute;
+  box-sizing: border-box;
+  border: var(--border-width-sm) dashed var(--color-border-bold);
+  border-radius: var(--border-radius-xs);
+  pointer-events: none;
+}
+
+.anatomyStageSide {
+  padding-inline-start: calc(var(--spacing-2xl) + var(--spacing-4xl));
+}
+
+/* A part's number and its leader line; placePins says where, and on which side. */
+.pin {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.pin_above {
+  flex-direction: column;
+  transform: translateX(-50%);
+}
+
+.pin_below {
+  flex-direction: column-reverse;
+  transform: translateX(-50%);
+}
+
+.pin_left {
+  flex-direction: row;
+  transform: translateY(-50%);
+}
+
+.pinLine {
+  flex: 1;
+  background: var(--color-border-bolder);
+}
+
+.pin_above .pinLine,
+.pin_below .pinLine {
+  inline-size: var(--border-width-sm);
+}
+
+.pin_left .pinLine {
+  block-size: var(--border-width-sm);
+}
+
+.pinNumber,
+.partNumber {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--size-250);
+  block-size: var(--size-250);
+  border-radius: var(--border-radius-full-round);
+  background: var(--color-background-neutral-bold-default);
+  color: var(--color-content-inverse-default);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-heading-xxs-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  font-variant-numeric: tabular-nums;
+}
+
+.parts {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.parts > li {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: baseline;
+}
+
+.parts > li > div {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.missing {
+  color: var(--color-content-error);
+}
+
+/* Variants */
+
+.tableScroll:has(> .combinations) {
+  justify-self: start;
+  max-inline-size: 100%;
+}
+
+table.combinations {
+  inline-size: auto;
+}
+
+.combinations :where(th, td) {
+  padding-inline-end: var(--spacing-xl);
+}
+
+.yes {
+  display: inline-flex;
+  color: var(--color-content-success);
+}
+
+/* Do and don't */
+
+.guidelines {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-2xl) var(--spacing-xl);
+}
+
+.guideline {
+  display: grid;
+  gap: var(--spacing-md);
+  align-content: start;
+  margin: 0;
+  padding-block-start: var(--spacing-md);
+  border-block-start: var(--border-width-lg) solid var(--guideline-color);
+}
+
+.do {
+  --guideline-color: var(--color-border-success);
+  --guideline-content: var(--color-content-success);
+}
+
+.dont {
+  --guideline-color: var(--color-border-error);
+  --guideline-content: var(--color-content-error);
+}
+
+.verdict {
+  display: grid;
+  gap: var(--spacing-xxs);
+}
+
+.verdictLabel {
+  display: inline-flex;
+  gap: var(--spacing-xxs);
+  align-items: center;
+  color: var(--guideline-content);
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.guidelineExample {
+  display: flex;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--size-1250);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-lg);
+  background: var(--color-elevation-surface-raised-default);
+}
+
+/* Accessibility */
+
+.keys {
+  white-space: nowrap;
+}
+
+.kbd {
+  display: inline-block;
+  padding: var(--spacing-none) var(--spacing-xs);
+  border: var(--border-width-sm) solid var(--color-border-bold);
+  border-radius: var(--border-radius-sm);
+  background: var(--color-elevation-surface-raised-default);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+/* API and tokens */
+
+.props :where(th, td),
+.tokens :where(th, td) {
+  vertical-align: top;
+}
+
+.props th[scope='row'],
+.tokens th[scope='row'] {
+  white-space: nowrap;
+}
+
+.required {
+  color: var(--color-content-default);
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.family {
+  padding-block-start: var(--spacing-xl);
+  font-weight: var(--typography-heading-xxs-font-weight);
+}
+
+.related ul {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+@media (max-width: 900px) {
+  .usage,
+  .anatomy,
+  .guidelines {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

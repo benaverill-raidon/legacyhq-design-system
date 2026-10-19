@@ -1,15 +1,29 @@
 import type * as React from 'react';
-import type { ToastAppearance } from '../toast/toast.types';
+import type { DeprecatedToastTone, ToastTone } from '../toast/toast.types';
 
 /** Options accepted by `toast()` and its variants. */
 export interface ToastOptions {
-  /** Stable id. Reuse it to update an existing toast in place (e.g. loading -> success). */
+  /**
+   * The toast's id. Reuse it to update that toast in place, keeping its place in the stack; options
+   * you leave out keep their earlier values.
+   */
   id?: string;
-  appearance?: ToastAppearance;
+  /** The Toast's `tone`. The `toast.success`, `.error`, `.warning`, `.info`, and `.loading` helpers set it. */
+  tone?: ToastTone | DeprecatedToastTone;
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: ToastTone | DeprecatedToastTone;
+  /** Supporting text, shown while the stack is expanded. */
   description?: React.ReactNode;
+  /** Actions, usually extra-small tertiary Buttons, shown while the stack is expanded. */
   actions?: React.ReactNode;
-  /** Auto-dismiss delay in ms. `Infinity` (or 0) keeps the toast until dismissed. Defaults to 5000. */
+  /**
+   * How long the toast stays once it's in view, in milliseconds. `Infinity` or `0` keeps it until
+   * it's dismissed. Defaults to the group's `duration`; a `loading` toast stays until it's updated or
+   * dismissed. When a loading toast is updated to another tone, it gets the group's `duration` again
+   * unless you pass one.
+   */
   duration?: number;
+  /** Shows the dismiss button. Defaults to `true`. */
   isDismissible?: boolean;
 }
 
@@ -17,11 +31,18 @@ export interface ToastOptions {
 export interface ToastItem extends ToastOptions {
   id: string;
   title: React.ReactNode;
+  /** Counts every add and update, so an updated toast is a new entry for the group's announcer. */
+  revision: number;
 }
 
 type Listener = (toasts: ToastItem[]) => void;
 
 let counter = 0;
+let revisions = 0;
+
+function isLoading(toast: ToastOptions): boolean {
+  return (toast.tone ?? toast.appearance) === 'loading';
+}
 
 /**
  * A tiny observer store, so `toast()` can be called from anywhere without a React context. The
@@ -47,12 +68,23 @@ class ToastStore {
 
   add = (title: React.ReactNode, options: ToastOptions = {}): string => {
     const id = options.id ?? `toast-${(counter += 1)}`;
-    const item: ToastItem = { ...options, id, title };
+    const item: ToastItem = { ...options, id, title, revision: (revisions += 1) };
     const existingIndex = this.toasts.findIndex((toast) => toast.id === id);
 
     if (existingIndex >= 0) {
-      // Update in place - keeps its stack position (loading -> success/error).
-      this.toasts = this.toasts.map((toast, index) => (index === existingIndex ? { ...toast, ...item } : toast));
+      // Update in place - keeps its stack position (loading -> success/error). Options left out keep
+      // their earlier values, except a loading toast's duration: once it resolves, it gets the
+      // group's duration unless the update passes one.
+      this.toasts = this.toasts.map((toast, index) => {
+        if (index !== existingIndex) {
+          return toast;
+        }
+        const updated: ToastItem = { ...toast, ...item };
+        if (isLoading(toast) && !isLoading(updated) && options.duration === undefined) {
+          delete updated.duration;
+        }
+        return updated;
+      });
     } else {
       this.toasts = [item, ...this.toasts];
     }
@@ -85,14 +117,14 @@ function createToast(title: React.ReactNode, options: ToastOptions = {}): string
 
 /**
  * Imperative API. Call `toast('Saved')` from anywhere; `toast.success/error/warning/info/loading`
- * set the appearance, and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
+ * set the tone (`info` sets `information`; a `loading` toast stays until it's updated or dismissed),
+ * and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
  */
 export const toast: ToastFunction = Object.assign(createToast, {
-  success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'success' }),
-  error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'error' }),
-  warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'warning' }),
-  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, appearance: 'info' }),
-  loading: (title: React.ReactNode, options: ToastOptions = {}) =>
-    toastStore.add(title, { duration: Infinity, ...options, appearance: 'loading' }),
+  success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'success' }),
+  error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'error' }),
+  warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'warning' }),
+  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'information' }),
+  loading: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'loading' }),
   dismiss: (id?: string) => toastStore.dismiss(id),
 });

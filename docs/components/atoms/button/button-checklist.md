@@ -34,7 +34,7 @@ Atom
 - Icon gap remains consistent across sizes using `spacing-075`.
 - Use shared Focus Ring utility classes instead of component-specific focus styles.
 - Use the `fade-quick` semantic motion token for hover/press/focus color transitions instead of a hardcoded duration/easing.
-- Support `isLoading` while preserving the original label width to prevent layout shift.
+- Support `isLoading` without changing the button's size.
 - Support `isFullWidth` for layout flexibility.
 - Support `isInverse` as an orthogonal boolean on-dark treatment (not a `tone` value) for placement on dark/bold surfaces such as Banner, using the `color-background-neutral-overlay-subtle-*` overlays; flattened by `disabled` like tone.
 - Do not support selected/toggled behavior in the base Button.
@@ -91,9 +91,9 @@ Atom
 
 ## Loading Requirements
 
-- When `isLoading` is true, render a Spinner in the leading content area.
-- Preserve the original label/content width so the button does not shrink or jump.
-- Keep the visible label when possible so the action remains understandable.
+- When `isLoading` is true, render a Spinner centered over the content.
+- Keep the label and icons in place, hidden with opacity, so the button keeps its exact size.
+- Keep the label as the accessible name while loading.
 - Disable user interaction while loading.
 - Loading state should not remove the button from tab order unless disabled behavior is intentionally applied.
 
@@ -167,7 +167,7 @@ Stories should document behavior, not create one story per variant permutation.
 - Button supports all appearances.
 - Button supports all tones.
 - Button supports hover, press, focus, disabled, and loading states.
-- Loading state preserves width.
+- Loading state holds the button's size.
 - Loading state prevents duplicate activation.
 - Full-width button fills its container.
 - Icons render before and after content.

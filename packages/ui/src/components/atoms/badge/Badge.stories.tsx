@@ -6,7 +6,7 @@ import type { BadgeTone } from './badge.types';
 const tones: BadgeTone[] = ['default', 'brand', 'success', 'error'];
 
 const meta = {
-  title: 'UI/Atoms/Badge',
+  title: 'Components/Data Display/Badge',
   component: Badge,
   args: {
     children: '1',
@@ -15,7 +15,8 @@ const meta = {
   argTypes: {
     children: { control: 'text' },
     tone: { control: 'select', options: tones },
-    ariaLabel: { control: 'text' },
+    label: { control: 'text' },
+    ariaLabel: { control: false },
     className: { control: false },
   },
 } satisfies Meta<typeof Badge>;
@@ -112,9 +113,9 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="With ariaLabel (count needs context)">
-        <Cell label="Visible '1', announced fully">
-          <Badge ariaLabel="1 unread notification">1</Badge>
+      <Group title="With label">
+        <Cell label="Visible '1', read as its label">
+          <Badge label="1 unread notification">1</Badge>
         </Cell>
       </Group>
 
@@ -132,7 +133,7 @@ export const Content: Story = {
           <div style={cardStyle}>
             <span>Unread notifications</span>
             <div style={row}>
-              <Badge ariaLabel="1 unread notification">1</Badge>
+              <Badge label="1 unread notification">1</Badge>
               <Badge tone="brand">1</Badge>
             </div>
           </div>
@@ -177,8 +178,8 @@ export const EdgeCases: Story = {
           Narrow container
         </h3>
         <p style={captionStyle}>
-          Badge does not wrap or shrink its text - a long value inside a narrow container overflows
-          visibly rather than truncating silently.
+          Badge does not wrap or shrink its text, so a long value is wider than a narrow container.
+          This container clips its overflow.
         </p>
         <div
           style={{

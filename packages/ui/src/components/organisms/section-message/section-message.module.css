@@ -1,6 +1,6 @@
 /*
  * Section Message is a bordered, rounded status panel. Its background, border, and status icon come
- * from the appearance; the title and description use the default content color. Layout, spacing,
+ * from the tone; the title and description use the default content color. Layout, spacing,
  * border, and radius map to the tokens the Figma component is bound to: spacing-lg padding and root
  * gap, spacing-sm between the title/description/actions, a 1px border, and a radius-xl corner.
  */
@@ -63,22 +63,32 @@
   flex: 0 0 auto;
 }
 
-.appearance_information {
+.tone_information {
   border-color: var(--color-border-information);
   background: var(--color-background-information-subtle-default);
 }
 
-.appearance_success {
+.tone_success {
   border-color: var(--color-border-success);
   background: var(--color-background-success-subtle-default);
 }
 
-.appearance_warning {
+.tone_warning {
   border-color: var(--color-border-warning);
   background: var(--color-background-warning-subtle-default);
 }
 
-.appearance_error {
+.tone_error {
   border-color: var(--color-border-error);
   background: var(--color-background-error-subtle-default);
+}
+
+/* The status prefix: read by assistive technology before the message, not shown. */
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

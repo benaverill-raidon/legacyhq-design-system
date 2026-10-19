@@ -1,6 +1,6 @@
 {
   "name": "Breadcrumbs",
-  "category": "molecule",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Show a user's location in a nested/hierarchical section via an ordered trail of ancestor links ending in the current page.",
   "intent": "Provide a consistent, accessible 'you are here' trail composed from the existing Link atom, rather than every page reinventing separators and spacing.",
@@ -71,11 +71,24 @@
       "default": null,
       "description": "Ordered list of trail entries, root first, current page last."
     },
-    "ariaLabel": {
+    "aria-label": {
       "type": "string",
       "required": false,
       "default": "Breadcrumb",
-      "description": "Accessible name for the nav landmark."
+      "description": "Accessible name for the nav landmark. Ignored when aria-labelledby is set."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Names the nav by the id of a visible heading, in place of aria-label."
+    },
+    "ariaLabel": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "deprecated": true,
+      "description": "Deprecated alias for aria-label, still accepted."
     },
     "className": {
       "type": "string",
@@ -119,7 +132,7 @@
       "separator": "--typography-body-md-*"
     },
     "color": {
-      "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting/press color (see compositionRules)",
+      "link": "inherited from Link appearance=subtle, with :visited overridden back to the resting color (see compositionRules)",
       "current": "--color-content-subtle",
       "separator": "--color-content-subtle"
     }
@@ -143,11 +156,11 @@
     "Render an item with href as the Link atom (appearance=subtle, size=md).",
     "Render an item without href as non-interactive text with aria-current=\"page\".",
     "Render iconBefore/iconAfter around the label when provided.",
-    "Default ariaLabel to 'Breadcrumb'."
+    "Default aria-label to 'Breadcrumb'; accept the deprecated ariaLabel; forward other attributes and the ref to the root nav."
   ],
   "compositionRules": [
     "Breadcrumbs always renders Link for ancestor items - do not restyle or reimplement Link's own hover/focus/press treatment locally.",
-    "The one documented exception: Breadcrumbs overrides Link's :visited color back to its normal resting/press color, via a higher-specificity selector scoped to .item .link (no !important) - a visited-URL signal doesn't belong in a location trail. Hover/focus/press remain entirely Link's own.",
+    "The one documented exception: Breadcrumbs overrides Link's :visited color back to its resting color (Link has no pressed color), via a higher-specificity selector scoped to .item .link (no !important) - a visited-URL signal doesn't belong in a location trail. Hover/focus/press remain entirely Link's own.",
     "Use Progress Indicator instead of Breadcrumbs for step-based flow progress."
   ],
   "contentRules": [
@@ -187,7 +200,7 @@
     "Supports className on the root.",
     "Uses --spacing-sm between items and --spacing-xs between an icon and its label.",
     "Storybook includes Playground and Composition.",
-    "Tests cover ordering, separator placement, link vs current rendering, icons, ariaLabel, and className."
+    "Tests cover ordering, separator placement, link vs current rendering, icons, aria-label (and the deprecated ariaLabel), attribute forwarding, and className."
   ],
   "knownLimitations": [
     "No truncation, wrapping, or collapsed/overflow behavior for long trails or narrow containers."

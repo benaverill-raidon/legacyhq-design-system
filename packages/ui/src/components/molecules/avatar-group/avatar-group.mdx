@@ -1,130 +1,230 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { AvatarGroup } from './avatar-group';
+import avatarGroupStyles from './avatar-group.module.css';
 import * as AvatarGroupStories from './AvatarGroup.stories';
 
 <Meta of={AvatarGroupStories} name="Docs" />
 
-# Avatar Group
+export const people = (count) =>
+  ['Ben Averill', 'Jordan Ellis', 'Priya Natarajan', 'Marcus Webb', 'Sofia Reyes', 'Owen Fitzgerald', 'Amara Okafor', 'Liam Brennan', 'Grace Holloway']
+    .slice(0, count)
+    .map((name, index) => ({ id: `person-${index + 1}`, name }));
 
-Avatar Group lays out an overlapping stack of Avatars, with an optional overflow trigger - a "+N"
-button that opens a Dropdown Menu holding whichever people got truncated. It composes Avatar,
-Button, and Dropdown Menu directly; it adds no rendering of its own beyond the overlap layout and
-the two separating rings (around each avatar, and around the overflow trigger).
+<Unstyled>
+<ComponentPage>
 
-<Canvas of={AvatarGroupStories.Playground} />
+<ComponentHeader id="avatar-group" example={<AvatarGroup avatars={people(7)} maxVisible={4} size="md" />}>
+  Avatar Group shows the people on something, such as a matter's team or a task's assignees, as a
+  row of overlapping avatars. Past `maxVisible`, the rest move into a menu behind a “+N” button.
+</ComponentHeader>
 
-## When to use
+<Section title="When to use">
 
-- A bounded or unbounded list of people - a task's assignees, a matter's team, a document's
-  collaborators - shown as a compact overlapping stack instead of a full name list.
-- Anywhere a fixed number of avatars should show inline, with the rest reachable through a "+N"
-  affordance instead of the stack growing unbounded.
+<Usage>
+<UseFor>
 
-## When not to use
+- The people on a record, where a row of photos is enough and names can wait: a matter's team, a
+  task's assignees, a document's collaborators.
+- A list of people that can grow, with `maxVisible` keeping the row to a fixed length.
+- A mix of people and firms, with `entityType="team"` on each firm.
 
-- **A single person.** Use Avatar directly.
-- **A fixed, small set of people that always fits.** `maxVisible` is optional for exactly this
-  reason - omit it and every avatar renders as one overlapping stack, no overflow trigger at all.
-- **Non-person entities** (firms, trusts, accounts). Avatar itself is scoped to people; Avatar
-  Group inherits that scope.
+</UseFor>
+<UseInstead>
 
-## Anatomy
+- **One person:** <DocLink to="Components/Data Display/Avatar" />.
+- **People whose names need to be read at a glance:** a list of names, or <DocLink to="Components/Data Display/Tag Group" /> with a Tag for each person.
+- **Choosing people:** a picker, such as <DocLink to="Components/Forms/Select" />. Avatar Group only shows them.
 
-- **Visible avatars** - the first `maxVisible` avatars (or all of them, when `maxVisible` is
-  omitted), each a real `Avatar` with every one of its own props (`src`, `name`, `presence`,
-  `isInteractive`, ...) forwarded through unchanged, except `size`, which Avatar Group applies
-  uniformly. Each one is wrapped in a thin ring (`color-elevation-surface-raised-default`) so
-  overlapping avatars read as separate circles rather than merging together.
-- **Overflow trigger** - present only when `avatars.length` exceeds `maxVisible`. A `Button`
-  (`appearance="subtle"`) reshaped into a circle exactly matching Avatar's own diameter at the
-  current size, reading `+${hiddenCount}` by default, wrapped in a Dropdown Menu. Rings in
-  `color-border-inverse-default` - the same token Avatar's own badge already uses for its cutout ring,
-  matching Figma exactly.
-- **Overflow panel** - a Dropdown Menu's Menu, listing every truncated person as a row (their own
-  name as the label, their own picture as a decorative leading avatar).
+</UseInstead>
+</Usage>
 
-## Usage guidance
+</Section>
 
-### `maxVisible` is optional - so is the overflow trigger
+<Section title="Anatomy">
 
-```tsx
-<AvatarGroup avatars={people} />
-```
+<Anatomy specimen={<AvatarGroup avatars={people(6)} maxVisible={3} />}>
+  <Part name="root" target={avatarGroupStyles.root}>A `div` that lays the avatars out in a row, each one overlapping the one before it.</Part>
+  <Part name="visible avatars" target={avatarGroupStyles.avatarRing}>The first `maxVisible` people, each a real Avatar in a 1px ring that keeps the circles apart. All of them show when `maxVisible` is unset.</Part>
+  <Part name="overflow trigger" target={avatarGroupStyles.overflowTrigger}>Only when people are hidden: a Button reshaped into a circle the size of an avatar, reading `+3` by default. It opens the overflow panel.</Part>
+  <Part name="overflow panel">Shown only while open: a Dropdown Menu listing each hidden person by name, with a small avatar beside the name.</Part>
+</Anatomy>
 
-With no `maxVisible`, every avatar renders as one overlapping stack - there is no overflow trigger
-at all. This is the common case for a short, bounded list.
+</Section>
 
-```tsx
-<AvatarGroup avatars={people} maxVisible={4} />
-```
+<Section title="Variants">
 
-Once `people.length` exceeds 4, the first 4 render as avatars and the rest collapse behind a
-`+${hiddenCount}` trigger.
+<Subsection title="Sizes">
 
-<Canvas of={AvatarGroupStories.Overflow} />
+Four sizes, from `xs` (24px) to `lg` (48px), with `lg` the default. One `size` sets every avatar and
+the overflow button, so the circles always match; there's no size per person. Avatars overlap by 4px
+at `xs` and `sm`, 8px at `md`, and 12px at `lg`. Avatar's `xxs` and `xl` sizes aren't part of Avatar
+Group.
 
-### Avatar Group never assumes what selecting a truncated avatar means
+<Example of={AvatarGroupStories.Stack} caption="Every size, for people and for firms with entityType team." />
 
-Same "never assume" rule Menu and Dropdown Menu already follow. Selecting a row in the overflow
-panel calls `onOverflowAvatarSelect(avatar, event)` with that avatar's own data - Avatar Group does
-not navigate or close the panel on its own:
+</Subsection>
 
-```tsx
-<AvatarGroup
-  avatars={people}
-  maxVisible={4}
-  onOverflowAvatarSelect={(avatar) => {
-    router.push(`/people/${avatar.id}`);
-  }}
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Overflow">
+
+With no `maxVisible`, every avatar shows and there's no overflow button. Once there are more people
+than `maxVisible`, the first `maxVisible` show and the rest move into the overflow menu, in order. At
+least one avatar always shows beside the button: a `maxVisible` below 1 is treated as 1, with a
+warning in development.
+
+<Example of={AvatarGroupStories.Overflow} />
+
+</Subsection>
+
+<Subsection title="Choosing someone hidden">
+
+The overflow button opens and closes the menu. Each row shows the person's name, or `alt` when there's
+no name, and their photo or fallback as a small decorative avatar; a person with `isDisabled` is a
+disabled row. Their other Avatar props, such as `onClick`, `presence`, and `status`, don't carry into
+the menu.
+
+Choosing a row calls `onOverflowAvatarSelect` with that person and the event. The menu then closes
+and focus returns to the overflow button. Avatar Group doesn't navigate: open the person's profile
+from the callback. To keep the menu open, call `event.preventDefault()` in it.
+
+<Example of={AvatarGroupStories.EdgeCases} caption="Choosing a hidden person, one person under maxVisible, interactive avatars, and maxVisible below 1." />
+
+</Subsection>
+
+<Subsection title="Each avatar is an Avatar">
+
+Every prop on an item except `size` goes to its Avatar, so a visible avatar can have a photo, a
+presence badge, or its own `onClick`. Set `entityType="team"` on a firm or another organization: its
+fallback shows two people instead of one, in the row and in the menu. Each avatar paints over the one
+before it, and the overflow button paints over the last.
+
+<Example of={AvatarGroupStories.Content} caption="A task's assignees, a matter team past maxVisible, and clients with an outside firm." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Set maxVisible on a list that can grow, so the row stays the same length." code={`<AvatarGroup avatars={team} maxVisible={4} size="md" />`}>
+  <AvatarGroup avatars={people(9)} maxVisible={4} size="md" />
+</Do>
+<Dont caption="Show every person on a long list. The row keeps growing and crowds what's beside it." code={`<AvatarGroup avatars={team} size="md" />`}>
+  <AvatarGroup avatars={people(9)} size="md" />
+</Dont>
+<Do
+  caption="Open the person from onOverflowAvatarSelect, which is the only thing a menu row calls."
+  code={`<AvatarGroup
+    avatars={team}
+    maxVisible={4}
+    onOverflowAvatarSelect={(person) => openProfile(person.id)}
+/>`}
 />
-```
+<Dont
+  caption="Rely on a person's own onClick once they're hidden. The menu row doesn't call it."
+  code={`<AvatarGroup
+    avatars={team.map((person) => ({ ...person, onClick: () => openProfile(person.id) }))}
+    maxVisible={4}
+/>`}
+/>
+<Do caption="Give every person a name. It names their avatar and their row in the menu." code={`{ id: 'person-1', name: 'Ben Averill', src: photo }`} />
+<Dont caption="Leave out the name and the alt. The avatar has no accessible name, and its menu row reads “Unnamed”." code={`{ id: 'person-1', src: photo }`} />
+</Guidelines>
 
-<Canvas of={AvatarGroupStories.EdgeCases} />
+</Section>
 
-### Realistic content, and every size
+<Section title="Accessibility">
 
-<Canvas of={AvatarGroupStories.Content} />
-<Canvas of={AvatarGroupStories.Stack} />
+- The root is a `div` with no role or name, and Avatar Group adds nothing to the visible avatars:
+  each is an Avatar, an image named by its `name`, or a button when it's interactive. Say what the
+  people are in the text around the group, such as a “Team” heading.
+- The overflow button is a native `button`. Its visible text, `+3` by default, is its accessible
+  name. It gets `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` from Dropdown Menu.
+- The menu has `role="menu"` and is named by `overflowMenuAriaLabel`, “3 more people” by default.
+  Each row is a `menuitem` named by the person's name; its avatar is decorative. Translate
+  `overflowMenuAriaLabel` with the rest of your interface. A person with no name or `alt` gets the
+  row name “Unnamed”, which has no prop to translate it yet.
+- Opening the menu moves focus to the first enabled row. Choosing a row, Escape, or Tab out of the
+  menu closes it and returns focus to the overflow button.
+- Focus shows the shared Focus Ring on the overflow button and on interactive avatars.
 
-## Do / Don't
+<Keyboard>
+  <Key keys="Tab">Moves through the interactive avatars, then to the overflow button. Static avatars aren't tab stops. In the open menu, closes it and returns focus to the overflow button.</Key>
+  <Key keys="Enter">On the overflow button, opens or closes the menu. On a row, chooses that person, closes the menu, and returns focus to the button.</Key>
+  <Key keys="Space">The same as Enter.</Key>
+  <Key keys="Arrow Down">In the menu, moves to the next enabled row, wrapping from the last to the first.</Key>
+  <Key keys="Arrow Up">In the menu, moves to the previous enabled row, wrapping from the first to the last.</Key>
+  <Key keys="Home">In the menu, moves to the first enabled row.</Key>
+  <Key keys="End">In the menu, moves to the last enabled row.</Key>
+  <Key keys="Escape">Closes the menu and returns focus to the overflow button.</Key>
+</Keyboard>
 
-**Do** pass every avatar's own props (`src`, `name`, `presence`, `isInteractive`, `onClick`, ...)
-directly on each `AvatarGroupItem` - they forward straight to the rendered `Avatar`. Set
-`entityType="team"` on any entry that represents a firm, outside counsel, or other team/partner
-entity rather than an individual - it swaps that avatar's empty-state fallback to a two-person
-silhouette instead of the default individual one, in both the visible stack and the overflow panel.
+</Section>
 
-**Don't** set `size` per item - Avatar Group applies one `size` uniformly, including to the
-overflow trigger, matching Figma (which has no per-avatar size mixing within one group).
+<Section title="API">
 
----
+<PropsTable of={AvatarGroupStories} />
 
-**Do** wire `onOverflowAvatarSelect` when truncated people need to be reachable (navigate to their
-profile, etc.).
+Each item in `avatars` takes every Avatar prop except `size`, plus a required `id` that must be unique
+in the group. Avatar Group doesn't pass other attributes to its root.
 
-**Don't** expect selecting a truncated avatar to do anything on its own - same rule as a Menu item's
-`onSelect`.
+</Section>
 
-## API
+<Section title="Design tokens">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>avatars</code></td><td><code>AvatarGroupItem[]</code></td><td>-</td><td>Required. Each item is every one of Avatar's own props (minus <code>size</code>) plus a required <code>id</code>.</td></tr>
-    <tr><td><code>maxVisible</code></td><td><code>number</code></td><td>-</td><td>Once exceeded, only the first <code>maxVisible</code> avatars render - the rest are truncated behind the overflow trigger. No truncation when omitted.</td></tr>
-    <tr><td><code>size</code></td><td><code>'xs' | 'sm' | 'md' | 'lg'</code></td><td><code>'lg'</code></td><td>Applied uniformly to every avatar, including the overflow trigger.</td></tr>
-    <tr><td><code>overflowLabel</code></td><td><code>(hiddenCount: number) =&gt; ReactNode</code></td><td><code>(n) =&gt; `+${n}`</code></td><td>The overflow trigger's text.</td></tr>
-    <tr><td><code>overflowMenuAriaLabel</code></td><td><code>string</code></td><td><code>`${hiddenCount} more people`</code></td><td>Accessible name for the overflow Menu panel.</td></tr>
-    <tr><td><code>onOverflowAvatarSelect</code></td><td><code>(avatar: AvatarGroupItem, event) =&gt; void</code></td><td>-</td><td>Called when a truncated avatar is selected from the overflow panel.</td></tr>
-    <tr><td><code>id</code> / <code>className</code></td><td><code>string</code></td><td>-</td><td>Applied to the root element.</td></tr>
-  </tbody>
-</table>
+Every token Avatar Group's own stylesheet uses, by family, with the property it sets and when: the
+overlap, the two rings, and the overflow button's fill, shape, width, and text at each size. The
+avatars, the button, and the menu keep their own tokens, listed on their pages.
 
-## Related components
+<TokensTable id="avatar-group" />
 
-- **Avatar** - every visible avatar.
-- **Button** - the overflow trigger, reshaped into a circle.
-- **Dropdown Menu** - the overflow trigger's floating panel.
-- **Menu** - the overflow panel's content, one row per truncated person.
-- **Tag Group** - the equivalent composition for Tags, with the same overflow shape.
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Avatar" />, each visible person, and the component for one person.
+- <DocLink to="Components/Data Display/Tag Group" />, the same row-with-overflow pattern for Tags.
+- <DocLink to="Components/Actions/Dropdown Menu" />, the overflow menu and its focus handling.
+- <DocLink to="Components/Actions/Menu" />, the rows inside the overflow menu.
+- <DocLink to="Components/Actions/Button" />, the overflow button.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads avatar-group.types.ts, the design tokens read avatar-group.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

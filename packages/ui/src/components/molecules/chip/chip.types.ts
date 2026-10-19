@@ -25,17 +25,25 @@ interface ChipCommonProps {
   size?: ChipSize;
   /** Disables every segment at once (native `disabled` on each real control). */
   disabled?: boolean;
+  /** Set on the root `div`. */
   id?: string;
+  /** Added to the root `div`'s classes. */
   className?: string;
 }
 
 /** One dropdown-backed segment: visible text plus the menu it opens. */
 export interface ChipSegment {
-  /** The segment's visible text - the current operator ("on") or value ("2 statuses", "March 2"). */
+  /**
+   * The segment's visible text - the current operator ("on") or value ("2 statuses", "March 2").
+   * The button is named by the chip's label and this text together ("Due date March 2").
+   */
   label: React.ReactNode;
   /** Rows shown when this segment opens, same shape Menu/Dropdown Menu already use. */
   sections: MenuSection[];
-  /** Accessible name for this segment's own menu panel. */
+  /**
+   * Accessible name for this segment's own menu panel. Defaults to "<label> operator" or
+   * "<label> value", built from `labelText` or a string `label`; pass it when neither is set.
+   */
   menuAriaLabel?: string;
   /** Tooltip shown on hover/focus, useful when the segment text may truncate or needs extra context. */
   tooltip?: React.ReactNode;
@@ -50,6 +58,7 @@ export interface ChipSegment {
  * consumer holding the state, the same way Toggle Button works.
  */
 export interface ChipSearchProps extends ChipCommonProps {
+  /** `search`: a selectable search scope. The label segment is a toggle button. */
   mode: 'search';
   /** Selected search chips carry the `selected` token family; unselected ones read as a plain chip. */
   isSelected?: boolean;
@@ -68,11 +77,21 @@ export interface ChipSearchProps extends ChipCommonProps {
 /** `select` - one already-applied selection/property, with a remove affordance. No dropdowns. (This
  * is the chip a Select renders for each multi-select value.) */
 export interface ChipSelectProps extends ChipCommonProps {
+  /** `select`: one applied value, with a remove button. */
   mode: 'select';
   /** Every verified Figma `select` chip carries a remove button, so this is required. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  /** Accessible name for the remove button. Defaults to `Remove ${label}` when label is a string. */
+  /**
+   * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
+   * `label`), otherwise just "Remove".
+   */
   removeAriaLabel?: string;
+  /**
+   * The label as plain text, for the names Chip builds from it: the remove button ("Remove <label>").
+   * Defaults to `label` when that's a string; set it when `label` is JSX, or those names lose the
+   * property.
+   */
+  labelText?: string;
 }
 
 /**
@@ -80,6 +99,7 @@ export interface ChipSelectProps extends ChipCommonProps {
  * current value (each dropdown-backed), and a remove affordance.
  */
 export interface ChipFilterProps extends ChipCommonProps {
+  /** `filter`: an active filter, with a value menu, an optional operator menu, and a remove button. */
   mode: 'filter';
   /**
    * Filter chips exist only at `md` in Figma - the `sm` filter variants were removed (`select` and
@@ -98,8 +118,20 @@ export interface ChipFilterProps extends ChipCommonProps {
   operator?: ChipSegment;
   /** Preview of the current selection, rendered before the value text (an Avatar Group, status icons, ...). */
   valuePreview?: React.ReactNode;
+  /** Called when the remove button is activated. Chip doesn't remove itself: drop the filter here. */
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  /**
+   * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
+   * `label`), otherwise just "Remove".
+   */
   removeAriaLabel?: string;
+  /**
+   * The label as plain text, for the names Chip builds from it: the remove button ("Remove
+   * <label>"), the operator and value menus ("<label> value"), and the operator and value buttons,
+   * which are named by the label and their own text together ("Due date March 2"). Defaults to
+   * `label` when that's a string; set it when `label` is JSX, or those names lose the property.
+   */
+  labelText?: string;
 }
 
 /**

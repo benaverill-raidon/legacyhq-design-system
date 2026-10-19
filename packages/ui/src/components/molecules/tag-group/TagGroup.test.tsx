@@ -78,13 +78,13 @@ describe('TagGroup', () => {
     expect(handleSelect.mock.calls[0][0]).toMatchObject({ id: 'tag-11', label: 'Tag 11' });
   });
 
-  it('does not close the overflow panel on its own when a truncated tag is selected', () => {
+  it('closes the overflow panel, returning focus to the trigger, when a truncated tag is selected', () => {
     render(<TagGroup tags={makeTags(11)} maxVisible={10} />);
 
     fireEvent.click(screen.getByRole('button', { name: '+1 more' }));
     fireEvent.click(screen.getByRole('menuitem', { name: 'Tag 11' }));
 
-    expect(screen.getByRole('menu')).toBeInTheDocument();
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
   it('closes the overflow panel on an outside click and on Escape, inherited from Popup', () => {
@@ -162,5 +162,19 @@ describe('TagGroup', () => {
 
     const root = document.getElementById('custom-group') as HTMLElement;
     expect(root).toHaveClass('custom-class');
+  });
+
+  it('treats a negative maxVisible as 0, showing only the overflow tag', () => {
+    render(<TagGroup tags={makeTags(3)} maxVisible={-2} />);
+    expect(screen.queryByText('Tag 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Tag 3')).not.toBeInTheDocument();
+  });
+
+  it('marks a hidden tag passed disabled as disabled in the overflow menu', () => {
+    const tags = makeTags(3);
+    tags[2] = { ...tags[2], disabled: true };
+    render(<TagGroup tags={tags} maxVisible={2} />);
+    fireEvent.click(screen.getByRole('button', { name: /more/i }));
+    expect(screen.getByRole('menuitem', { name: 'Tag 3' })).toBeDisabled();
   });
 });

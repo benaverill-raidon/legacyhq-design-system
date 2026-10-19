@@ -5,7 +5,7 @@
 ### Name
 Inline Edit
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -53,7 +53,7 @@ instead of every call site rebuilding draft/value tracking from scratch.
 
 ### What content can be displayed?
 - A single controlled input-like element as `children` - typically a `TextField` with
-  `appearance="subtle"`, cloned by Inline Edit for both the read-only and editable states
+  `context="inline"`, cloned by Inline Edit for both the read-only and editable states
 
 ### Character Limits
 Not applicable - Inline Edit has no text content of its own.
@@ -92,7 +92,12 @@ Yes, always - via `confirmLabel`/`cancelLabel` props (default `'Confirm'`/`'Canc
 
 ### What happens if the user clicks/tabs away without pressing confirm or cancel?
 The draft is committed - the same as clicking confirm. Clicking/Tab-ing off the field always saves;
-it never silently discards. Only clicking cancel (or pressing Escape) discards the draft.
+it never silently discards. Only clicking cancel (or pressing Escape) discards the draft. An
+unchanged draft isn't committed: editing just ends, without `onConfirm`.
+
+### Where does focus go when an edit ends?
+To the read-only field. Enter and Escape leave it there; the cancel and confirm buttons move it back
+there, since they unmount. A click or Enter on the focused read-only field starts editing again.
 
 ---
 

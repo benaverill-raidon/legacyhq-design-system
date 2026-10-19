@@ -1,214 +1,287 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { ArchiveIcon, EditIcon, MoreHorizIcon, PinIcon, SearchIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { ButtonGroup } from '../../molecules/button-group';
+import { Button } from '../button';
+import { ToggleIconButton } from '../toggle-icon-button';
+import { IconButton } from './icon-button';
+import iconButtonStyles from './icon-button.module.css';
 import * as IconButtonStories from './icon-button.stories';
 
 <Meta of={IconButtonStories} name="Docs" />
 
-# Icon Button
+<Unstyled>
+<ComponentPage>
 
-IconButton is an icon-only action control for when the action is recognizable from its icon and
-space is limited. It carries its own accessible name and, by default, its own tooltip - there is no
-visible label slot.
+<ComponentHeader
+  id="icon-button"
+  example={
+    <ButtonGroup>
+      <IconButton aria-label="Search matters">
+        <SearchIcon />
+      </IconButton>
+      <IconButton aria-label="Edit matter">
+        <EditIcon />
+      </IconButton>
+      <IconButton aria-label="More actions">
+        <MoreHorizIcon />
+      </IconButton>
+    </ButtonGroup>
+  }
+>
+  Icon Button is an action shown only as an icon, for a familiar action where space is tight: a
+  toolbar, a table row, a card header. Its `aria-label` names it and shows as its tooltip.
+</ComponentHeader>
 
-<Canvas of={IconButtonStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A recognizable, single-purpose action where a label would be redundant - search, close, edit.
-- A disclosure trigger for a menu or panel, using `isExpanded`.
-- A compact action in a toolbar, table row, or card where horizontal space is limited.
+- A familiar action whose icon is clear on its own: search, edit, close, more actions.
+- A compact row of actions, such as a toolbar or a table row.
+- Opening a menu from a "more actions" icon, with `isExpanded`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **When the action isn't obvious from the icon alone.** Use `Button` with a visible label instead
-  of hoping a tooltip will carry the meaning.
-- **For a toggleable selected state.** Use `ToggleIconButton`.
-- **As a bare loading indicator with no user action attached.** Use `Spinner` directly.
+- **An action the icon can't explain alone:** <DocLink to="Components/Actions/Button" />, with a visible label and an icon beside it if it helps.
+- **A selected or unselected state:** <DocLink to="Components/Actions/Toggle Icon Button" />.
+- **Navigation:** <DocLink to="Components/Navigation/Link Button" />. Icon Button is a native button, so it can't be opened in a new tab.
+- **Loading with no action attached:** <DocLink to="Components/Feedback/Spinner" /> on its own.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={IconButtonStories.Content} />
+</Section>
 
-1. **Root** - a native `button`, sized to a fixed square per `size`.
-2. **Content** - the icon, or the loading `Spinner` when `isLoading` is true. IconButton has no
-   separate leading/trailing slots - one icon fills the whole button.
-3. **Tooltip** - rendered automatically around the button unless suppressed. See Usage guidance.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <IconButton size="lg" aria-label="More actions">
+      <MoreHorizIcon />
+    </IconButton>
+  }
+>
+  <Part name="button" target={iconButtonStyles.root}>A native `button` element, a fixed square at every size. Always present.</Part>
+  <Part name="icon" target={iconButtonStyles.content}>`children`, the one icon. Hidden from assistive technology: the name comes from `aria-label`.</Part>
+  <Part name="spinner">Shown only while loading, in place of the icon. The square keeps its size.</Part>
+  <Part name="tooltip">The `aria-label` text, or `tooltip`, shown on hover and keyboard focus. Not shown with `tooltip={false}`.</Part>
+</Anatomy>
 
-### The accessible name is required, and doubles as the tooltip
+</Section>
 
-IconButton warns in development when both `aria-label` and `aria-labelledby` are missing - there is
-no visible text to fall back on. When `aria-label` is a non-empty string and `tooltip` is not set,
-that same string becomes the visible tooltip content automatically. `aria-labelledby` does **not**
-feed the tooltip this way - pass `tooltip` explicitly (or `tooltip={false}`) whenever you use
-`aria-labelledby`, or you'll get a second dev warning. See Edge Cases for both anti-patterns.
+<Section title="Variants">
 
-### Suppressing or replacing the tooltip
+`appearance` sets how much attention the button draws: `default` is outlined, `primary` has the
+brand fill, and `subtle` has no border and no fill until hover. There's no `tone`, so there's no
+warning or error look; give a destructive action a labelled <DocLink to="Components/Actions/Button" />
+instead.
 
-Set `tooltip={false}` to render no internal tooltip at all - typically because you're wrapping the
-button in your own `Tooltip` externally. IconButton detects when it's already inside a `Tooltip`
-(via `useTooltipScope`) and skips its own internal one automatically, so nesting doesn't double up
-even if you forget `tooltip={false}`.
+Icon Button still takes this older `appearance` prop, where Button now takes `prominence` and
+`tone`; the change is part of the pending Button-family revision.
 
-### Appearance versus tone
+<Example of={IconButtonStories.Variants} />
 
-IconButton has no `tone` prop - unlike `Button`, its three appearances (`default`, `primary`,
-`subtle`) don't cross with a semantic tone axis. Reach for `Button` if a warning/error
-distinction is required.
+<Subsection title="Sizes">
 
-### Focus and hover
+Four squares, from `xs` (24px) to `lg` (48px), on the same control heights as Button so they line up
+in a row. The corner radius grows with the size. The icon stays its default size at every button
+size, and there's no prop to change it.
 
-Keyboard focus shows the same background fill as hover, on top of the outline ring from the shared
-`FocusRing` primitive - the same convention as `Button`, `Avatar`, and `Checkbox`. `isExpanded` also
-shares that same fill, so an open disclosure trigger reads consistently with its own hover state.
+<Example of={IconButtonStories.Sizes} />
 
-### Shape
+</Subsection>
 
-`shape="round"` is a full circle regardless of `size`; `shape="square"` uses the same radius scale as
-`Button`. Pick one shape per context and stay consistent - don't mix square and round icon buttons
-in the same toolbar.
+<Subsection title="Shape">
 
-### On dark surfaces
+`square` follows the size's corner radius; `round` is a full circle at every size. Use one shape
+across a toolbar, not a mix.
 
-`isInverse` is the on-dark treatment, shared with `Button` - for an IconButton placed on a dark or
-bold-colored surface such as `Banner`. It renders a transparent fill with inverse content and the
-white *subtle* overlays on hover/press/expanded. `disabled` flattens it the same way it flattens the
-appearance. See the Inverse story.
+</Subsection>
 
-<Canvas of={IconButtonStories.Inverse} />
+<Subsection title="On dark surfaces">
 
-## Do / Don't
+Set `isInverse` on an Icon Button that sits on a dark or bold surface, such as a Banner. It drops the
+fill and border, uses the inverse icon color, and swaps the dark hover and press overlays for light
+ones. It looks the same for every appearance. Disabled flattens it the same way it flattens the
+appearance.
 
-**Do** let a non-empty `aria-label` double as the tooltip.
+<Example of={IconButtonStories.Inverse} />
 
-```tsx
-<IconButton aria-label="Search">
+</Subsection>
+
+</Section>
+
+<Section title="Behavior">
+
+<Subsection title="Tooltip">
+
+Icon Button shows a tooltip on hover and keyboard focus, after a short delay. With no `tooltip`
+prop, a string `aria-label` is the tooltip text. Pass `tooltip` for different text, or
+`tooltip={false}` for none. Icon Button can't read the text `aria-labelledby` points to, so with
+it, set `tooltip` yourself; it warns in development otherwise. Inside your own
+<DocLink to="Components/Overlays/Tooltip" />, it skips its own, so two never stack. A disabled Icon
+Button still shows its tooltip on hover.
+
+<Example of={IconButtonStories.Content} caption="Where the tooltip comes from, an external Tooltip, and a toolbar in a card." />
+
+</Subsection>
+
+<Subsection title="Loading">
+
+`isLoading` swaps the icon for a Spinner and ignores clicks. The square keeps its size, so nothing
+around it moves. The button stays focusable and keeps its name, and `aria-busy` tells assistive
+technology the action is running.
+
+</Subsection>
+
+<Subsection title="Opening a menu or panel">
+
+On an Icon Button that opens a menu or panel, set `isExpanded` to whether it's open, as on Button.
+It sets `aria-expanded` to match and keeps the hover fill while open. Leave it unset on a button that
+doesn't open anything. <DocLink to="Components/Actions/Dropdown Menu" /> wires its trigger for you.
+
+</Subsection>
+
+<Subsection title="Focus and hover">
+
+Keyboard focus shows the hover fill together with the shared Focus Ring, so a keyboard user sees both
+signals at once.
+
+<Example of={IconButtonStories.States} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Name the action in aria-label, which is both the accessible name and the tooltip." code={`<IconButton aria-label="Search matters">
   <SearchIcon />
-</IconButton>
-```
-
-**Don't** add a redundant explicit `tooltip` that just repeats the label.
-
-```tsx
-<IconButton aria-label="Search" tooltip="Search">
+</IconButton>`}>
+  <IconButton aria-label="Search matters">
+    <SearchIcon />
+  </IconButton>
+</Do>
+<Dont
+  caption="Put the name only in tooltip, which describes the button only while it shows, so the button has no name."
+  code={`<IconButton tooltip="Search matters">
   <SearchIcon />
-</IconButton>
-```
-
----
-
-**Do** pass `tooltip` explicitly when using `aria-labelledby`.
-
-```tsx
-<IconButton aria-labelledby="menu-label" tooltip="More actions menu" aria-haspopup="menu">
-  <MoreHorizIcon />
-</IconButton>
-```
-
-**Don't** rely on `aria-labelledby` alone and expect a tooltip to appear.
-
-```tsx
-<IconButton aria-labelledby="menu-label" aria-haspopup="menu">
-  <MoreHorizIcon />
-</IconButton>
-```
-
----
-
-**Do** use `Button` when the action isn't self-evident from an icon.
-
-```tsx
-<Button iconBefore={<ArchiveIcon />}>Archive matter</Button>
-```
-
-**Don't** reach for an unlabelled icon when the meaning needs a word.
-
-```tsx
-<IconButton aria-label="Archive matter">
+</IconButton>`}
+/>
+<Do caption="Use Button with a label when the icon alone doesn't say what happens." code={`<Button iconBefore={<ArchiveIcon />}>Archive matter</Button>`}>
+  <Button iconBefore={<ArchiveIcon />}>Archive matter</Button>
+</Do>
+<Dont caption="Rely on the tooltip to explain an unfamiliar icon, so people have to hover to find out what it does." code={`<IconButton aria-label="Archive matter">
   <ArchiveIcon />
-</IconButton>
-```
+</IconButton>`}>
+  <IconButton aria-label="Archive matter">
+    <ArchiveIcon />
+  </IconButton>
+</Dont>
+<Do caption="Use Toggle Icon Button for something that stays on, so it's announced as pressed." code={`<ToggleIconButton aria-label="Pin matter" isSelected={isPinned}>
+  <PinIcon />
+</ToggleIconButton>`}>
+  <ToggleIconButton aria-label="Pin matter" isSelected>
+    <PinIcon />
+  </ToggleIconButton>
+</Do>
+<Dont caption="Show a state by switching the appearance, which assistive technology can't hear." code={`<IconButton aria-label="Pin matter" appearance={isPinned ? 'primary' : 'default'}>
+  <PinIcon />
+</IconButton>`}>
+  <IconButton aria-label="Pin matter" appearance="primary">
+    <PinIcon />
+  </IconButton>
+</Dont>
+</Guidelines>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The icon. Replaced by a <code>Spinner</code> while loading.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Square footprint and radius, shared scale with <code>Button</code>.</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'default' | 'primary' | 'subtle'</code></td>
-      <td><code>'default'</code></td>
-      <td>Visual emphasis. No <code>tone</code> axis.</td>
-    </tr>
-    <tr>
-      <td><code>shape</code></td>
-      <td><code>'square' | 'round'</code></td>
-      <td><code>'square'</code></td>
-      <td>Corner treatment.</td>
-    </tr>
-    <tr>
-      <td><code>isInverse</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>On-dark treatment for placement on dark/bold surfaces (e.g. Banner). Flattened by <code>disabled</code>.</td>
-    </tr>
-    <tr>
-      <td><code>disabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Maps to the native <code>disabled</code> attribute.</td>
-    </tr>
-    <tr>
-      <td><code>isLoading</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Shows a <code>Spinner</code> in place of the icon, sets <code>aria-busy</code>, suppresses clicks.</td>
-    </tr>
-    <tr>
-      <td><code>isExpanded</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Sets <code>aria-expanded</code> and applies the hover-equivalent fill.</td>
-    </tr>
-    <tr>
-      <td><code>tooltip</code></td>
-      <td><code>React.ReactNode | false</code></td>
-      <td>-</td>
-      <td>Overrides the default (<code>aria-label</code>-derived) tooltip content, or suppresses it.</td>
-    </tr>
-    <tr>
-      <td><code>aria-label</code> / <code>aria-labelledby</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Required for an accessible name. <code>aria-label</code> also seeds the default tooltip.</td>
-    </tr>
-  </tbody>
-</table>
+<Section title="Accessibility">
 
-Any other native `button` prop is forwarded to the root element.
+- Icon Button renders a native `button`, so it's focusable, announced as a button, and activated by
+  Enter and Space with no extra code. `type` defaults to `button`, so it submits a form only when
+  you ask for `submit`.
+- There's no visible text, so the accessible name comes from `aria-label` or `aria-labelledby`.
+  Icon Button warns in development when both are missing. Name the action ("Delete matter"), not the
+  icon ("Trash").
+- The icon and the loading Spinner are hidden from assistive technology.
+- While the tooltip shows, it's linked to the button with `aria-describedby`, so it adds a
+  description and never replaces the name.
+- `disabled` is the native attribute: the button leaves the tab order. A loading button stays
+  focusable, with `aria-busy` and `aria-disabled`, so focus doesn't jump while the action runs.
+- `isExpanded` sets `aria-expanded` on a button that opens a menu or panel: `true` while it's open, `false` while it's closed.
 
-## Related components
+<Keyboard>
+  <Key keys="Tab">Moves focus to the button and shows its tooltip. A disabled button is skipped.</Key>
+  <Key keys="Enter">Activates the button, unless it's loading.</Key>
+  <Key keys="Space">Activates the button, unless it's loading.</Key>
+  <Key keys="Escape">Hides the tooltip.</Key>
+</Keyboard>
 
-- **Button** - when the action needs a visible label.
-- **ToggleIconButton** - for a selected/unselected icon-only control.
-- **Tooltip** - the primitive IconButton composes internally.
-- **Spinner** - rendered in place of the icon while loading.
+</Section>
+
+<Section title="API">
+
+<PropsTable of={IconButtonStories} native="button" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Icon Button's stylesheet uses, by family, with the property it sets and when. "Base" is
+the button with no modifiers; a token listed for an appearance applies at every size and shape.
+Under Other, `icon-button-size` and `icon-button-radius` are the stylesheet's own variables, set per
+size from the size and radius tokens.
+
+<TokensTable id="icon-button" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Button" /> for an action with a visible label.
+- <DocLink to="Components/Actions/Toggle Icon Button" /> for an icon-only control that stays on or off.
+- <DocLink to="Components/Overlays/Tooltip" />, which Icon Button shows its name in.
+- <DocLink to="Components/Actions/Button Group" /> to lay out related buttons together.
+- <DocLink to="Components/Actions/Split Button" />, whose menu trigger is an Icon Button.
+- <DocLink to="Components/Feedback/Spinner" />, which Icon Button shows while loading.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads icon-button.types.ts, the design tokens read icon-button.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

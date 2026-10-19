@@ -1,21 +1,9 @@
 # Spinner
 
-## Purpose
-Spinner communicates that an operation is in progress.
+Spinner's usage guidance is its Storybook Docs page (Components / Feedback / Spinner), written in
+[`spinner.mdx`](../../../../packages/ui/src/components/atoms/spinner/spinner.mdx): when to use it,
+anatomy, variants, behavior, do and don't, accessibility, API, and design tokens. The API table and
+the tokens there are generated from the code, so they can't drift.
 
-## When to use
-Use for indeterminate loading.
-
-## When not to use
-Use Progress Indicator for measurable progress.
-
-## Design intent
-Provide a lightweight, consistent loading indicator. Spinner has no color of its own - it always
-inherits the current text color of whatever it's placed inside (a Button's per-appearance/tone
-color, a colored heading, plain body text), rather than a fixed token.
-
-## Accessibility
-Announce loading when appropriate.
-
-## Related
-Button, Progress Indicator.
+For implementation detail, see [`spinner-spec.md`](spinner-spec.md); for the machine-readable
+contract, [`spinner.contract.json`](spinner.contract.json).

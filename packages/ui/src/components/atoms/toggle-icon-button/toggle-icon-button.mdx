@@ -1,162 +1,273 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { ArchiveIcon, PinIcon, StarStarredIcon, TextBoldIcon, TextItalicIcon, TextUnderlineIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { ButtonGroup } from '../../molecules/button-group';
+import { ToggleButton } from '../toggle-button';
+import { Tooltip } from '../tooltip';
+import { ToggleIconButton } from './toggle-icon-button';
+import toggleIconButtonStyles from './toggle-icon-button.module.css';
 import * as ToggleIconButtonStories from './toggle-icon-button.stories';
 
 <Meta of={ToggleIconButtonStories} name="Docs" />
 
-# Toggle Icon Button
+<Unstyled>
+<ComponentPage>
 
-Toggle Icon Button is an icon-only Button-family atom that represents a persistent
-selected/unselected state where space is limited - it combines Icon Button's layout with Toggle
-Button's selection semantics.
+<ComponentHeader
+  id="toggle-icon-button"
+  example={
+    <ButtonGroup>
+      <ToggleIconButton aria-label="Bold" isSelected>
+        <TextBoldIcon />
+      </ToggleIconButton>
+      <ToggleIconButton aria-label="Italic">
+        <TextItalicIcon />
+      </ToggleIconButton>
+      <ToggleIconButton aria-label="Underline">
+        <TextUnderlineIcon />
+      </ToggleIconButton>
+    </ButtonGroup>
+  }
+>
+  Toggle Icon Button turns an option on or off with only an icon: a formatting style, a favorite, a
+  view in a dense toolbar. Its `aria-label` names it, and it's announced as pressed or not pressed.
+</ComponentHeader>
 
-<Canvas of={ToggleIconButtonStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- View mode selection.
-- Favorite/saved or pinned/unpinned state.
-- Formatting toolbar controls with no room for a text label.
-- Compact filter state.
+- A familiar on or off option in a dense toolbar, such as bold or italic.
+- Favoriting or pinning an item.
+- Switching between views, such as a grid or a list.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A one-time action.** Use `IconButton`.
-- **The action benefits from a visible text label.** Use `ToggleButton`.
-- **A setting that turns something on/off**, outside a toolbar context. Use `Switch`.
-- **Opening a menu or popover.** Use `IconButton` with `isExpanded`.
-- **Navigation.** Use `LinkButton` or `Link`.
+- **A one-off action:** <DocLink to="Components/Actions/Icon Button" />.
+- **When a visible label would be clearer:** <DocLink to="Components/Actions/Toggle Button" />.
+- **A setting that takes effect right away, outside a toolbar:** <DocLink to="Components/Forms/Switch" />.
+- **Opening a menu or panel:** <DocLink to="Components/Actions/Icon Button" /> with `isExpanded`.
+- **Navigation:** <DocLink to="Components/Navigation/Link Button" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={ToggleIconButtonStories.Content} />
+</Section>
 
-- **Root** - a native `<button type="button">`, exposing `aria-pressed` rather than
-  `aria-selected`, `aria-expanded`, or `role="switch"`.
-- **Icon slot** - `children`, decorative (`aria-hidden`) since the accessible name comes from
-  `aria-label`/`aria-labelledby`, not the icon itself.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <ToggleIconButton size="lg" aria-label="Favorite" isSelected>
+      <StarStarredIcon />
+    </ToggleIconButton>
+  }
+>
+  <Part name="button" target={toggleIconButtonStyles.root}>A native `button` element with `aria-pressed`, a fixed square at every size. Always present.</Part>
+  <Part name="icon" target={toggleIconButtonStyles.content}>`children`, the one icon. Hidden from assistive technology: the name comes from `aria-label`.</Part>
+</Anatomy>
 
-### Always needs an accessible name
+</Section>
 
-Since there's no visible label, every instance must have `aria-label` or `aria-labelledby` - the
-component logs a dev-time console warning when both are missing. Tooltip content is not a
-substitute: wrap in `Tooltip` externally for a visible hint, but keep the accessible name on the
-button itself - see EdgeCases for the warning in practice.
+<Section title="Variants">
 
-### The parent owns selection
+Here `tone` is the visual style, not a meaning: `default` has a border and `subtle` has none, in
+every state. Selected uses the same fill and icon color for both, and only `default` shows the
+selected border. Using `tone` for style is a recorded exception to the system's naming, kept on
+purpose.
 
-`isSelected` is fully controlled, the same as `ToggleButton` - see Content for single-choice
-(view mode) and multi-choice (formatting toolbar) patterns.
+`shape` is separate from both: `square` follows the size's corner radius, and `round` is a full
+circle at every size.
 
-### Tone, size, and shape
+<Example of={ToggleIconButtonStories.Variants} />
 
-`tone` (`default`/`subtle`) and `size` (`xs`/`sm`/`md`/`lg`) work exactly like `ToggleButton` - see
-Variants and Sizes. `shape` is independent of both: `square` (the default) uses the size's own
-corner radius, `round` is always a full circle regardless of size.
+<Subsection title="Sizes">
 
-### Disabled always wins over selected
+Four squares, from `xs` (24px) to `lg` (48px), the same as Icon Button so the two line up in a
+toolbar. The corner radius grows with the size. The icon stays its default size at every button
+size, and there's no prop to change it.
 
-Figma has no unique visual treatment for "selected and disabled" - disabled styling fully overrides
-the selected appearance rather than blending with it. See States.
+<Example of={ToggleIconButtonStories.Sizes} />
 
-## Do / Don't
+</Subsection>
 
-**Do** give every instance an accessible name.
+</Section>
 
-```tsx
-<ToggleIconButton aria-label="Grid view" isSelected={isGridView} onClick={toggleGridView}>
-  <GridIcon />
-</ToggleIconButton>
-```
+<Section title="Behavior">
 
-**Don't** rely on adjacent visible text or a tooltip as the only accessible name.
+<Subsection title="The parent owns the state">
 
-```tsx
-<Tooltip content="Grid view">
-  <ToggleIconButton onClick={toggleGridView}>
-    <GridIcon />
+Toggle Icon Button never changes on its own: `isSelected` comes from your state, and your `onClick`
+flips it. When several buttons stand for one choice, such as grid or list view, keep the chosen
+value in the parent and select the button that matches it. When each option is on or off by itself,
+such as bold and italic, give each its own state.
+
+<Example of={ToggleIconButtonStories.Content} caption="A view mode that's one choice, independent formatting options, and a favorite." />
+
+</Subsection>
+
+<Subsection title="Tooltip">
+
+Toggle Icon Button has no tooltip of its own, unlike Icon Button. Wrap it in
+<DocLink to="Components/Overlays/Tooltip" /> to show its name on hover and keyboard focus; the
+tooltip shows on a disabled one too. The `aria-label` stays the name either way.
+
+</Subsection>
+
+<Subsection title="Disabled">
+
+`disabled` is the native attribute, so the button leaves the tab order and ignores
+clicks. Disabled looks the same selected or not, but `aria-pressed` still reports the state.
+
+</Subsection>
+
+<Subsection title="Focus and hover">
+
+Keyboard focus shows the hover fill together with the shared Focus Ring, selected or not, so a
+keyboard user sees both signals at once. A selected button keeps its border and icon color and steps
+only its fill, to the selected hover and press fills.
+
+<Example of={ToggleIconButtonStories.States} />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Name it with aria-label, and wrap it in Tooltip to show that name on hover and focus." code={`<Tooltip content="Pin matter">
+  <ToggleIconButton aria-label="Pin matter" isSelected={isPinned} onClick={togglePinned}>
+    <PinIcon />
   </ToggleIconButton>
-</Tooltip>
-```
+</Tooltip>`}>
+  <Tooltip content="Pin matter">
+    <ToggleIconButton aria-label="Pin matter" isSelected>
+      <PinIcon />
+    </ToggleIconButton>
+  </Tooltip>
+</Do>
+<Dont
+  caption="Name it only with a Tooltip, which describes the button only while it shows, so the button has no name."
+  code={`<Tooltip content="Pin matter">
+  <ToggleIconButton isSelected={isPinned} onClick={togglePinned}>
+    <PinIcon />
+  </ToggleIconButton>
+</Tooltip>`}
+/>
+<Do caption="Keep the name the same, and let aria-pressed say whether it's on." code={`<ToggleIconButton aria-label="Favorite" isSelected={isFavorite} onClick={toggleFavorite}>
+  {isFavorite ? <StarStarredIcon /> : <StarUnstarredIcon />}
+</ToggleIconButton>`}>
+  <ToggleIconButton aria-label="Favorite" isSelected>
+    <StarStarredIcon />
+  </ToggleIconButton>
+</Do>
+<Dont
+  caption="Change the name with the state, so people hear Remove from favorites, pressed, and can't tell what pressing does."
+  code={`<ToggleIconButton
+  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+  isSelected={isFavorite}
+>
+  <StarStarredIcon />
+</ToggleIconButton>`}
+/>
+<Do caption="Use Toggle Button when there's room for a label." code={`<ToggleButton isSelected={showArchived}>Show archived</ToggleButton>`}>
+  <ToggleButton isSelected>Show archived</ToggleButton>
+</Do>
+<Dont caption="Use an icon that isn't familiar on its own, which people have to guess at." code={`<ToggleIconButton aria-label="Show archived" isSelected={showArchived}>
+  <ArchiveIcon />
+</ToggleIconButton>`}>
+  <ToggleIconButton aria-label="Show archived" isSelected>
+    <ArchiveIcon />
+  </ToggleIconButton>
+</Dont>
+</Guidelines>
 
----
+</Section>
 
-**Do** use `ToggleButton` once there's room for a label - it reads more clearly than an unlabeled
-icon for anything beyond a very familiar, dense toolbar.
+<Section title="Accessibility">
 
-```tsx
-<ToggleButton isSelected={isBold} onClick={toggleBold}>
-  Bold
-</ToggleButton>
-```
+- Toggle Icon Button renders a native `button`, so it's focusable and activated by Enter and Space
+  with no extra code. `type` defaults to `button`, so it submits a form only when you ask for
+  `submit`.
+- There's no visible text, so the accessible name comes from `aria-label` or `aria-labelledby`. It
+  warns in development when both are missing. Name the option ("Bold"), and keep the name the same
+  in both states. The icon is hidden from assistive technology.
+- `isSelected` sets `aria-pressed` to `true` or `false`, so assistive technology announces a toggle
+  button, pressed or not pressed. It doesn't use `aria-selected`, `aria-expanded`, or
+  `role="switch"`.
+- When it's wrapped in Tooltip, the tooltip is linked with `aria-describedby` while it shows, so it
+  adds a description and never replaces the name.
+- `disabled` is the native attribute: the button leaves the tab order, and `aria-pressed` stays.
 
-**Don't** default to the icon-only form just to save space if the control isn't already a
-well-established icon (bold/italic/underline, grid/list) - an unfamiliar icon with no label is hard
-to identify.
+<Keyboard>
+  <Key keys="Tab">Moves focus to the button. A disabled button is skipped.</Key>
+  <Key keys="Enter">Activates the button, which calls `onClick`, where you flip `isSelected`.</Key>
+  <Key keys="Space">Activates the button, which calls `onClick`, where you flip `isSelected`.</Key>
+</Keyboard>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The icon content.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Fixed square footprint: 24/32/40/48px. Icon size stays constant.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'subtle'</code></td>
-      <td><code>'default'</code></td>
-      <td>Whether the resting state shows a visible border.</td>
-    </tr>
-    <tr>
-      <td><code>shape</code></td>
-      <td><code>'square' | 'round'</code></td>
-      <td><code>'square'</code></td>
-      <td>Independent of size - <code>round</code> is always a full circle.</td>
-    </tr>
-    <tr>
-      <td><code>isSelected</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Fully controlled by the parent. Sets <code>aria-pressed</code> and the selected visual treatment.</td>
-    </tr>
-    <tr>
-      <td><code>isDisabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Native <code>disabled</code>. Overrides selected styling entirely.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>button</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Section title="API">
 
-Any other native `button` attribute (including `aria-label`, `aria-labelledby`,
-`aria-describedby`) is forwarded to the root element. `type` defaults to `"button"`.
+<PropsTable of={ToggleIconButtonStories} native="button" />
 
-## Related components
+</Section>
 
-- **IconButton** - for a one-time icon-only action with no persistent selected state.
-- **ToggleButton** - for the same selection semantics with a visible text label.
-- **Switch** - for an immediate on/off setting outside a toolbar context.
+<Section title="Design tokens">
+
+Every token Toggle Icon Button's stylesheet uses, by family, with the property it sets and when.
+"Base" is the button with no modifiers; a token listed for a tone applies at every size and shape.
+Under Other, `toggle-icon-button-size` and `toggle-icon-button-radius` are the stylesheet's own
+variables, set per size from the size and radius tokens.
+
+<TokensTable id="toggle-icon-button" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Toggle Button" /> for the same control with a visible label.
+- <DocLink to="Components/Actions/Icon Button" /> for a one-off icon-only action.
+- <DocLink to="Components/Overlays/Tooltip" /> to show the button's name on hover and focus.
+- <DocLink to="Components/Forms/Switch" /> for a setting that takes effect right away.
+- <DocLink to="Components/Actions/Button Group" /> to lay out related toggles together.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads toggle-icon-button.types.ts, the design tokens read
+  toggle-icon-button.module.css, and the Figma source comes from registry.json, so they follow the
+  code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

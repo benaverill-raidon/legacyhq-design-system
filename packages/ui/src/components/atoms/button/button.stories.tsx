@@ -1,13 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ArrowRightIcon, CheckIcon, CloseIcon, DeleteIcon } from '../../../assets/icons';
+import { ArrowRightIcon, CaretDownIcon, CheckIcon, CloseIcon, DeleteIcon } from '../../../assets/icons';
 import { Button } from './button';
 import type { ButtonSize } from './button.types';
 
 const sizes: ButtonSize[] = ['xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Atoms/Button',
+  title: 'Components/Actions/Button',
   component: Button,
   args: {
     children: 'Save changes',
@@ -49,10 +49,17 @@ const row: CSSProperties = {
   gap: 'var(--spacing-md)',
 };
 
+// Labels read --story-label / --story-heading when a backdrop sets them, so they stay legible on the
+// Inverse story's dark surface.
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
-  color: 'var(--color-content-subtle)',
+  color: 'var(--story-label, var(--color-content-subtle))',
 };
+
+const onDark = {
+  '--story-heading': 'var(--color-content-inverse-default)',
+  '--story-label': 'var(--color-content-inverse-default)',
+} as CSSProperties;
 
 const cardStyle: CSSProperties = {
   display: 'grid',
@@ -81,7 +88,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
         style={{
           margin: 0,
           font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
-          color: 'var(--color-content-default)',
+          color: 'var(--story-heading, var(--color-content-default))',
         }}
       >
         {title}
@@ -359,6 +366,7 @@ export const Inverse: Story = {
     <div
       style={{
         ...stack,
+        ...onDark,
         padding: 'var(--spacing-2xl)',
         borderRadius: 'var(--border-radius-md)',
         background: 'var(--color-background-neutral-bold-default)',
@@ -460,16 +468,16 @@ export const Content: Story = {
         </Cell>
       </Group>
 
-      <Group title="Loading preserves the label and its width">
+      <Group title="Loading holds the size">
         <Cell label="Default">
           <Button prominence="primary">Save changes</Button>
         </Cell>
-        <Cell label="Loading (same width)">
+        <Cell label="Loading">
           <Button prominence="primary" isLoading>
             Save changes
           </Button>
         </Cell>
-        <Cell label="Loading replaces a leading icon">
+        <Cell label="Loading, with a leading icon">
           <Button prominence="primary" iconBefore={<CheckIcon />} isLoading>
             Save changes
           </Button>
@@ -484,12 +492,17 @@ export const Content: Story = {
         </div>
       </Group>
 
-      <Group title="Expanded">
-        <div style={{ inlineSize: '320px' }}>
-          <Button isExpanded prominence="primary">
-            Expand
+      <Group title="Expanded (an open menu trigger keeps its hover fill)">
+        <Cell label="Closed">
+          <Button isExpanded={false} iconAfter={<CaretDownIcon />}>
+            Actions
           </Button>
-        </div>
+        </Cell>
+        <Cell label="Open">
+          <Button isExpanded iconAfter={<CaretDownIcon />}>
+            Actions
+          </Button>
+        </Cell>
       </Group>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>

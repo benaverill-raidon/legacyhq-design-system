@@ -1,6 +1,6 @@
 {
   "name": "Banner",
-  "category": "organism",
+  "category": "feedback",
   "status": "stable",
   "purpose": "A full-width, page-level announcement bar.",
   "intent": "Carry a single high-visibility, page-level message on a bold background, with optional inline actions.",
@@ -11,7 +11,7 @@
     "componentName": "banner",
     "variantCount": 3,
     "verifiedAt": "2026-09-01",
-    "notes": "The Figma `appearance` variant `appearance4` maps to the code appearance `default`. The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
+    "notes": "The Figma `tone` variants match code (default, warning, error). The bar hugs its content vertically (single message row + block padding) rather than a fixed height. Banner actions are inverse-tone Button instances (Figma tone=inverse -> code isInverse)."
   },
   "useCases": [
     "announce scheduled maintenance",
@@ -30,7 +30,7 @@
       "name": "root",
       "element": "div",
       "required": true,
-      "description": "full-width bar with the appearance's bold background; height hugs content"
+      "description": "full-width bar with the tone's bold background; height hugs content"
     },
     {
       "name": "icon",
@@ -49,7 +49,7 @@
     }
   ],
   "props": {
-    "appearance": {
+    "tone": {
       "type": "enum",
       "values": ["default", "warning", "error"],
       "default": "default",
@@ -64,6 +64,12 @@
       "type": "boolean",
       "default": true,
       "required": false
+    },
+    "statusLabel": {
+      "type": "string",
+      "default": "the tone's name (Warning, Error); none for default",
+      "required": false,
+      "description": "Visually hidden text read before the message, since the status icon is decorative. An empty string omits it."
     },
     "actions": {
       "type": "React.ReactNode",
@@ -84,7 +90,7 @@
     }
   },
   "variants": {
-    "appearance": ["default", "warning", "error"]
+    "tone": ["default", "warning", "error"]
   },
   "slots": [
     {
@@ -116,11 +122,11 @@
       },
       "color": {
         "defaultBackground": "--color-background-neutral-bold-default",
-        "defaultContent": "--color-content-inverse",
+        "defaultContent": "--color-content-inverse-default",
         "warningBackground": "--color-background-warning-bold-default",
         "warningContent": "--color-content-warning-bold",
         "errorBackground": "--color-background-error-bold-default",
-        "errorContent": "--color-content-inverse"
+        "errorContent": "--color-content-inverse-default"
       }
     }
   },
@@ -129,20 +135,21 @@
     "defaultRole": "status",
     "roleOverridable": true,
     "iconDecorative": true,
+    "statusAnnounced": "Visually hidden statusLabel before the message for warning and error.",
     "colorNotSoleSignal": true
   },
   "behaviorRules": [
     "Render a full-width bar whose height hugs the single message row plus block padding.",
-    "Set the bold background and content color from appearance.",
+    "Set the bold background and content color from tone.",
     "Render the warning/error status icon, or a plain dot when there is no status glyph; the icon inherits the banner content color.",
     "Omit the leading icon when showIcon is false.",
-    "Truncate the message to a single line with an ellipsis rather than wrapping.",
+    "Truncate the message to a single line with an ellipsis rather than wrapping, in any container: the root has min-inline-size 0, so as a flex or grid item it shrinks instead of widening to fit the message.",
     "Render the actions region only when actions are provided.",
     "Default role to status (a polite live region); allow it to be overridden.",
     "Mark the leading icon slot aria-hidden."
   ],
   "compositionRules": [
-    "Actions match the bar: default and error (dark bars) take inverse-tone Buttons; warning (amber, dark content) takes tone=warning Buttons (appearance=primary) instead.",
+    "Actions match the bar: default and error (dark bars) take inverse-tone Buttons; warning (amber, dark content) takes tone=warning Buttons (prominence=primary) instead.",
     "Keep the action count low (one or two).",
     "Use InlineMessage, Toast, or SectionMessage for the non-page-level cases."
   ],
@@ -173,7 +180,7 @@
   ],
   "do": [
     "Use Banner for a page-level announcement.",
-    "Use appearance to signal the semantic status.",
+    "Use tone to signal the semantic status.",
     "Pass inverse-tone actions.",
     "Keep the message to a single, short line."
   ],
@@ -185,8 +192,8 @@
   ],
   "acceptanceCriteria": [
     "Renders the message.",
-    "Defaults to role status and the default appearance.",
-    "Supports appearances default, warning, error.",
+    "Defaults to role status and the default tone.",
+    "Supports tones default, warning, error.",
     "Renders a status icon for warning/error and a dot for default.",
     "Hides the icon when showIcon is false.",
     "Renders actions when provided and omits the region otherwise.",

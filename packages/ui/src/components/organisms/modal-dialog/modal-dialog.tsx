@@ -4,14 +4,18 @@ import { CloseIcon, GrowDiagonalIcon, StatusErrorIcon, StatusWarningIcon } from 
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../../molecules/button-group';
+import { LAYERS, useLayer } from '../../primitives/layers';
 import styles from './modal-dialog.module.css';
-import type { ModalAppearance, ModalDialogProps } from './modal-dialog.types';
+import type { DeprecatedModalWidth, ModalDialogProps, ModalTone, ModalWidth } from './modal-dialog.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-const STATUS_ICONS: Partial<Record<ModalAppearance, { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
+/** The size names the deprecated width names map to. */
+const WIDTHS: Record<DeprecatedModalWidth, ModalWidth> = { small: 'sm', medium: 'md', large: 'lg', extraLarge: 'xl' };
+
+const STATUS_ICONS: Partial<Record<ModalTone, { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
   warning: { Icon: StatusWarningIcon, color: 'warning' },
   error: { Icon: StatusErrorIcon, color: 'error' },
 };
@@ -25,6 +29,19 @@ const FOCUSABLE_SELECTOR = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(',');
 
+/** A dialog needs a name: `title` (through aria-labelledby) or `aria-label`. */
+function warnForMissingAccessibleName(title: React.ReactNode, ariaLabel?: string) {
+  if (import.meta.env?.PROD) {
+    return;
+  }
+
+  if (title != null || ariaLabel) {
+    return;
+  }
+
+  console.warn('ModalDialog requires a `title` or an `aria-label` for an accessible name.');
+}
+
 function getFocusable(container: HTMLElement): HTMLElement[] {
   return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
     (el) => el.offsetParent !== null || el === document.activeElement,
@@ -35,8 +52,9 @@ export const ModalDialog = React.memo(function ModalDialog({
   open,
   onClose,
   title,
-  appearance = 'default',
-  width = 'medium',
+  tone: requestedTone,
+  appearance,
+  width: requestedWidth = 'md',
   children,
   footer,
   showCloseButton = true,
@@ -57,6 +75,15 @@ export const ModalDialog = React.memo(function ModalDialog({
   // Read the latest onClose inside the always-attached listener without re-subscribing each render.
   const onCloseRef = React.useRef(onClose);
   onCloseRef.current = onClose;
+  // The dialog is a layer: Escape closes it only when nothing opened above it (a menu, a tooltip,
+  // another dialog) is still open. See primitives/layers.ts.
+  const claimEscape = useLayer(open);
+
+  React.useEffect(() => {
+    if (open) {
+      warnForMissingAccessibleName(title, ariaLabel);
+    }
+  }, [open, title, ariaLabel]);
 
   // Focus management: remember what was focused, move focus into the dialog, restore it on close.
   React.useEffect(() => {
@@ -85,19 +112,30 @@ export const ModalDialog = React.memo(function ModalDialog({
     };
   }, [open]);
 
-  // Escape to close, and trap Tab focus inside the panel.
+  // Escape closes the dialog when it's the topmost layer. It listens in the bubble phase, so a
+  // control inside that handles Escape itself and calls preventDefault() keeps it.
   React.useEffect(() => {
     if (!open || typeof document === 'undefined') {
       return;
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (closeOnEscape && event.key === 'Escape') {
-        event.stopPropagation();
+      if (closeOnEscape && claimEscape(event)) {
         onCloseRef.current();
-        return;
       }
+    }
 
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [open, closeOnEscape, claimEscape]);
+
+  // Trap Tab focus inside the panel.
+  React.useEffect(() => {
+    if (!open || typeof document === 'undefined') {
+      return;
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key !== 'Tab' || !panelRef.current) {
         return;
       }
@@ -125,13 +163,16 @@ export const ModalDialog = React.memo(function ModalDialog({
 
     document.addEventListener('keydown', handleKeyDown, true);
     return () => document.removeEventListener('keydown', handleKeyDown, true);
-  }, [open, closeOnEscape]);
+  }, [open]);
 
   if (!open || typeof document === 'undefined') {
     return null;
   }
 
-  const status = STATUS_ICONS[appearance];
+  // `appearance` is the deprecated name for `tone`; the long width names are deprecated too.
+  const tone: ModalTone = requestedTone ?? appearance ?? 'default';
+  const width: ModalWidth = WIDTHS[requestedWidth as DeprecatedModalWidth] ?? (requestedWidth as ModalWidth);
+  const status = STATUS_ICONS[tone];
 
   // Header actions: an optional Expand (maximize) button, then the Close button. When both are
   // present they share a Button Group (matching Figma's modal-header); a lone button renders on its
@@ -166,45 +207,57 @@ export const ModalDialog = React.memo(function ModalDialog({
     backdropMouseDownRef.current = false;
   };
 
-  return createPortal(
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className={styles.backdrop} onMouseDown={handleBackdropMouseDown} onMouseUp={handleBackdropMouseUp}>
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title != null ? titleId : undefined}
-        aria-label={title == null ? ariaLabel : undefined}
-        tabIndex={-1}
-        className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
-        data-appearance={appearance}
-        data-has-header={hasHeader ? 'true' : undefined}
-        data-has-footer={footer != null ? 'true' : undefined}
-      >
-        {hasHeader ? (
-          <div className={styles.header}>
-            <div className={styles.titleArea}>
-              {status ? (
-                <span className={styles.statusIcon} aria-hidden="true">
-                  <status.Icon size="md" color={status.color} />
-                </span>
-              ) : null}
-              {title != null ? (
-                <h2 id={titleId} className={styles.title}>
-                  {title}
-                </h2>
-              ) : null}
-            </div>
-            {headerActions}
+  // The fragment adds nothing to the DOM; it lets Storybook's docgen (react-docgen) recognize this
+  // as a component, which it doesn't for a bare createPortal return, so the Docs API table renders.
+  return (
+    <>
+      {createPortal(
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+        <div
+          className={styles.backdrop}
+          // z-index comes from the one layer scale (primitives/layers.ts): below popups and toasts.
+          style={{ zIndex: LAYERS.dialog }}
+          onMouseDown={handleBackdropMouseDown}
+          onMouseUp={handleBackdropMouseUp}
+        >
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title != null ? titleId : undefined}
+            aria-label={title == null ? ariaLabel : undefined}
+            tabIndex={-1}
+            className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
+            data-tone={tone}
+            data-has-header={hasHeader ? 'true' : undefined}
+            data-has-footer={footer != null ? 'true' : undefined}
+          >
+            {hasHeader ? (
+              <div className={styles.header}>
+                <div className={styles.titleArea}>
+                  {status ? (
+                    <span className={styles.statusIcon} aria-hidden="true">
+                      <status.Icon size="md" color={status.color} />
+                    </span>
+                  ) : null}
+                  {title != null ? (
+                    <h2 id={titleId} className={styles.title}>
+                      {title}
+                    </h2>
+                  ) : null}
+                </div>
+                {headerActions}
+              </div>
+            ) : null}
+
+            <div className={styles.body}>{children}</div>
+
+            {footer != null ? <div className={styles.footer}>{footer}</div> : null}
           </div>
-        ) : null}
-
-        <div className={styles.body}>{children}</div>
-
-        {footer != null ? <div className={styles.footer}>{footer}</div> : null}
-      </div>
-    </div>,
-    document.body,
+        </div>,
+        document.body,
+      )}
+    </>
   );
 });
 

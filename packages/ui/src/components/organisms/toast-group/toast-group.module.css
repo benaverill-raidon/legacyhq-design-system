@@ -4,19 +4,19 @@
  * (`--toast-y`, `--toast-scale`, `--toast-x`) set by the component: collapsed, older toasts peek up
  * and scale down behind the front one; expanded (on hover/focus) they animate into a spaced vertical
  * list. Swiping a toast drives `--toast-x` and disables the transform transition so it follows the
- * pointer.
+ * pointer. The stack's physical movement (each toast's transform and the region's height) uses
+ * --move-long; appearing and disappearing (opacity) uses --fade-long. Both are 300ms.
  */
 .region {
   position: fixed;
   inset-block-end: var(--spacing-xl);
   inset-inline-end: var(--spacing-xl);
-  z-index: 1000;
   margin: 0;
   padding: 0;
   inline-size: 368px;
   max-inline-size: calc(100vw - 2 * var(--spacing-xl));
   list-style: none;
-  transition: block-size 300ms cubic-bezier(0.21, 1.02, 0.73, 1);
+  transition: block-size var(--move-long);
 }
 
 .item {
@@ -28,8 +28,8 @@
   transform: translate3d(var(--toast-x, 0px), var(--toast-y, 0px), 0) scale(var(--toast-scale, 1));
   transform-origin: bottom center;
   transition:
-    transform 300ms cubic-bezier(0.21, 1.02, 0.73, 1),
-    opacity 300ms ease;
+    transform var(--move-long),
+    opacity var(--fade-long);
   will-change: transform, opacity;
 }
 
@@ -43,12 +43,24 @@
 
 /* While dragging, follow the pointer instantly - keep only the opacity transition. */
 .item[data-swiping='true'] {
-  transition: opacity 300ms ease;
+  transition: opacity var(--fade-long);
 }
 
+/* The swiping selector is listed too: it's more specific than .item and resets the shorthand. */
 @media (prefers-reduced-motion: reduce) {
   .region,
-  .item {
+  .item,
+  .item[data-swiping='true'] {
     transition-duration: 0ms;
   }
+}
+
+/* The live region that announces toasts: always on the page, read by assistive technology, not shown. */
+.announcer {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

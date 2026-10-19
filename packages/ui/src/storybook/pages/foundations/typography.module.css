@@ -1,0 +1,102 @@
+/*
+ * Foundations / Typography layout. Page rhythm, type scale, and shared structure come from
+ * storybook/blocks/doc-page.module.css. Specimens set their own type from each role's tokens
+ * (inline var() references), so this file only handles layout. Typography has no theme dependency,
+ * so the page stays light throughout.
+ */
+
+.numbers {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Type roles */
+
+.roleList {
+  display: grid;
+  border-block-start: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.roleRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 19rem;
+  gap: var(--spacing-xl);
+  align-items: start;
+  padding-block: var(--spacing-lg);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+}
+
+.specimen {
+  max-inline-size: 36ch;
+  color: var(--color-content-default);
+}
+
+.spec {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: 0;
+}
+
+.spec > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: var(--spacing-sm);
+  align-items: baseline;
+}
+
+.spec dd {
+  margin: 0;
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+/* Type scale */
+
+.scale {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.scale :where(th, td) {
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-none);
+  border-block-end: var(--border-width-sm) solid var(--color-border-default);
+  text-align: start;
+  vertical-align: middle;
+}
+
+.scale thead th {
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+.scale tbody th {
+  inline-size: 5rem;
+  color: var(--color-content-subtle);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+}
+
+.scaleCell {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+}
+
+.scaleCell + .scaleCell {
+  margin-block-start: var(--spacing-xs);
+}
+
+/* Fixed width (not em) so role names line up in each column whatever the sample's size. */
+.scaleSample {
+  flex: none;
+  inline-size: 4.5rem;
+  color: var(--color-content-default);
+}
+
+@media (max-width: 900px) {
+  .roleRow,
+  .spec > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

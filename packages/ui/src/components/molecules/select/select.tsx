@@ -17,6 +17,16 @@ let panelIdCounter = 0;
 /** Chips sit at sm inside the sm/md triggers and md inside the lg trigger, matching Figma. */
 const CHIP_SIZE_FOR: Record<SelectSize, 'sm' | 'md'> = { sm: 'sm', md: 'sm', lg: 'md' };
 
+/** A label's text, leaving out the field itself when the label wraps it (its chips' text). */
+function getLabelText(label: HTMLLabelElement, field: Element | null) {
+  let text = '';
+  const walker = document.createTreeWalker(label, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    if (!field?.contains(walker.currentNode)) text += walker.currentNode.textContent ?? '';
+  }
+  return text.replace(/\s+/g, ' ').trim();
+}
+
 /** Group consecutive options by their `group` field into Menu sections, preserving order. */
 function buildSections(
   options: SelectOption[],
@@ -52,11 +62,12 @@ export const Select = React.memo(function Select(props: SelectProps) {
   const {
     options,
     size = 'md',
+    context,
     tone,
     appearance,
     placeholder,
     disabled = false,
-    invalid = false,
+    invalid: requestedInvalid = false,
     searchValue,
     onSearchChange,
     emptyMessage = 'No matches',
@@ -64,16 +75,22 @@ export const Select = React.memo(function Select(props: SelectProps) {
     className,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    required,
   } = props;
+  const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
 
-  // `appearance` is an alias for `tone` (the canonical name Text Field/Text Area use); an explicit
-  // `tone` wins so existing usage is unchanged, and a wrapper like Field's inline context can drive
-  // the trigger with `appearance="subtle"`.
-  const resolvedAppearance = tone ?? appearance ?? 'default';
+  // `tone` and `appearance` are deprecated names for `context`: their subtle and inline values are inline.
+  const legacy = tone ?? appearance;
+  const resolvedContext = context ?? (legacy && legacy !== 'default' ? 'inline' : 'default');
 
   const multi = props.inputType === 'multi';
 
   const [open, setOpen] = React.useState(false);
+  // The menu's name when the field is named only by a native <label> (no aria-label or
+  // aria-labelledby): read from the label when the menu opens, so the menu isn't left unnamed.
+  const [nativeLabelName, setNativeLabelName] = React.useState<{ 'aria-label'?: string; 'aria-labelledby'?: string }>({});
   const [internalQuery, setInternalQuery] = React.useState('');
   const query = searchValue ?? internalQuery;
 
@@ -107,6 +124,25 @@ export const Select = React.memo(function Select(props: SelectProps) {
 
   const focusInput = React.useCallback(() => inputRef.current?.focus(), []);
 
+  const readNativeLabel = React.useCallback(() => {
+    if (ariaLabel || ariaLabelledBy) return;
+    const labels = Array.from(inputRef.current?.labels ?? []);
+    const frame = frameRef.current;
+    // A label that points at the field by id names the menu by reference; one that wraps the field
+    // would name it with the field's value too, so its own text is copied instead.
+    if (labels.length > 0 && labels.every((label) => label.id && !label.contains(frame))) {
+      setNativeLabelName({ 'aria-labelledby': labels.map((label) => label.id).join(' ') });
+      return;
+    }
+    const text = labels.map((label) => getLabelText(label, frame)).filter(Boolean).join(' ');
+    setNativeLabelName(text ? { 'aria-label': text } : {});
+  }, [ariaLabel, ariaLabelledBy]);
+
+  const openMenu = React.useCallback(() => {
+    readNativeLabel();
+    setOpen(true);
+  }, [readNativeLabel]);
+
   // Clicks on the TextField frame's own padding (between its border and child elements) don't reach
   // the <input> or caret handlers. This listener catches those so the entire trigger surface opens
   // the dropdown — event.target === frame confirms the click hit the frame itself, not a child.
@@ -117,12 +153,12 @@ export const Select = React.memo(function Select(props: SelectProps) {
       if (disabled) return;
       if (event.target !== frame) return;
       event.preventDefault();
-      setOpen(true);
+      openMenu();
       inputRef.current?.focus();
     };
     frame.addEventListener('mousedown', handleFrameMouseDown);
     return () => frame.removeEventListener('mousedown', handleFrameMouseDown);
-  }, [disabled]);
+  }, [disabled, openMenu]);
 
   const handlePick = React.useCallback(
     (value: string) => {
@@ -135,6 +171,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
       } else {
         props.onChange(value);
         setQuery('');
+        // The chosen row unmounts with the menu, so focus goes back to the field rather than the page.
+        focusInput();
         setOpen(false);
       }
     },
@@ -149,24 +187,67 @@ export const Select = React.memo(function Select(props: SelectProps) {
     [multi, props],
   );
 
+  // Popup calls this for Escape and for a click outside. Escape from inside the menu has already
+  // returned focus to the field (the panel's keydown handler below); a click outside leaves focus
+  // where the click put it.
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
-      setOpen(next);
-      if (!next) {
-        setQuery('');
-        // Escape / outside-click close: return focus to the field, matching combobox convention.
-        if (document.activeElement && inputRef.current?.contains(document.activeElement)) return;
+      if (next) {
+        openMenu();
+        return;
       }
+      setOpen(false);
+      setQuery('');
     },
-    [setQuery],
+    [openMenu, setQuery],
   );
+
+  const closeMenu = React.useCallback(() => handleOpenChange(false), [handleOpenChange]);
+
+  // Dropdown Menu leaves a combobox trigger to manage focus itself, so Select does it here, while
+  // the menu is open:
+  // - Escape inside the menu returns focus to the field (Popup then closes the menu).
+  // - Tab or Shift+Tab inside the menu closes it and returns focus to the field, as Dropdown Menu
+  //   does for its own triggers; the portalled menu would otherwise tab to the end of the page.
+  // - Focus moving anywhere outside the field and the menu (Tab out of the field, a click on another
+  //   control) closes the menu. A blur with no new target (a click on nothing focusable, or the
+  //   window losing focus) leaves it to Popup's outside click.
+  React.useEffect(() => {
+    if (!open || disabled) return undefined;
+    const panel = document.getElementById(panelId);
+    const frame = frameRef.current;
+    if (!panel) return undefined;
+
+    const handlePanelKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        focusInput();
+      } else if (event.key === 'Tab') {
+        event.preventDefault();
+        focusInput();
+        closeMenu();
+      }
+    };
+    const handleFocusOut = (event: FocusEvent) => {
+      const next = event.relatedTarget as Node | null;
+      if (next && !panel.contains(next) && !frame?.contains(next)) closeMenu();
+    };
+
+    panel.addEventListener('keydown', handlePanelKeyDown);
+    panel.addEventListener('focusout', handleFocusOut);
+    frame?.addEventListener('focusout', handleFocusOut);
+    return () => {
+      panel.removeEventListener('keydown', handlePanelKeyDown);
+      panel.removeEventListener('focusout', handleFocusOut);
+      frame?.removeEventListener('focusout', handleFocusOut);
+    };
+  }, [open, disabled, panelId, focusInput, closeMenu]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (disabled) return;
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       if (!open) {
-        setOpen(true);
+        openMenu();
         return;
       }
       // Move into the Menu; its own roving tabindex takes over from there.
@@ -184,7 +265,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
       // Space/Enter opens a closed field, unless the user is mid-word typing (space in a query).
       if (event.key === 'Enter' || query === '') {
         event.preventDefault();
-        setOpen(true);
+        openMenu();
       }
     }
   };
@@ -230,8 +311,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
   return (
     <DropdownMenu
       id={panelId}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledBy}
+      aria-label={ariaLabel ?? nativeLabelName['aria-label']}
+      aria-labelledby={ariaLabelledBy ?? nativeLabelName['aria-labelledby']}
       open={open && !disabled}
       onOpenChange={handleOpenChange}
       showSearch={false}
@@ -246,7 +327,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
         id={id}
         className={mergeClassNames(styles.trigger, className)}
         size={size}
-        appearance={resolvedAppearance}
+        context={resolvedContext}
         data-force-state={cellSize && open && !disabled ? 'focus' : undefined}
         invalid={invalid}
         disabled={disabled}
@@ -264,7 +345,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
             onMouseDown={(event) => {
               event.preventDefault();
               if (!disabled) {
-                setOpen((prev) => !prev);
+                if (open) closeMenu();
+                else openMenu();
                 focusInput();
               }
             }}
@@ -274,17 +356,19 @@ export const Select = React.memo(function Select(props: SelectProps) {
         }
         onChange={(event) => {
           setQuery(event.target.value);
-          if (!open) setOpen(true);
+          if (!open) openMenu();
         }}
         onMouseDown={() => {
-          if (!disabled && !open) setOpen(true);
+          if (!disabled && !open) openMenu();
         }}
         onClick={() => {
-          if (cellSize && !disabled && !open) setOpen(true);
+          if (cellSize && !disabled && !open) openMenu();
         }}
         onKeyDown={handleKeyDown}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        required={required}
       />
     </DropdownMenu>
   );

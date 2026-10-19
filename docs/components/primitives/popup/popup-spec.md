@@ -71,6 +71,13 @@ What Popup does own, once `open` becomes true:
 - Positioning the panel relative to the trigger.
 - Calling `onOpenChange(false)` on Escape (`closeOnEscape`, default `true`) and on a pointer press
   outside both the trigger and the panel (`closeOnOutsideClick`, default `true`).
+- Escape goes to the topmost open layer only. Every open Popup registers as a layer
+  (`useLayer` in `primitives/layers.ts`, shared with Modal Dialog), even with `closeOnEscape`
+  off, and acts on Escape only when it's the most recently opened layer still open; claiming the
+  key calls `preventDefault()`, and an Escape that content inside already handled that way isn't
+  claimed. So a menu or tooltip opened inside a dialog, or inside another Popup, closes first.
+- Reading the trigger child's own ref from `child.props.ref` (React 19 passes `ref` as a prop;
+  `element.ref` is deprecated and warns in development), merged with Popup's measurement ref.
 
 Popup does not change its own visibility in response to Escape/outside click - it only calls
 `onOpenChange`. If the consumer doesn't provide `onOpenChange`, dismissal has no visible effect,
@@ -134,8 +141,9 @@ own copy, which it did before Popup existed:
   the opposite side (e.g. `topCenter` -> `bottomCenter`) wins over an unrelated alignment, so a
   consumer's horizontal-alignment intent survives the fallback.
 - Recalculates on trigger/panel resize (via `ResizeObserver`), window resize, and scroll.
-- The gap between trigger and panel is a fixed `--spacing-sm` (8px), matching the Figma component's
-  own `itemSpacing` - not exposed as a prop.
+- The gap between trigger and panel is `--spacing-sm` (8px), matching the Figma component's own
+  `itemSpacing` - not exposed as a prop. Inside an editable Table cell (`EditableCellContext`) it's
+  `--spacing-xs` (4px). The panel also stays at least `--spacing-sm` inside the viewport.
 - When the trigger's bounding rect ends up fully outside the viewport on any one of its four edges
   (checked every time position recalculates), the panel is hidden (`visibility: hidden`,
   `data-trigger-out-of-view="true"`) instead of being clamped to the nearest viewport edge.
@@ -151,9 +159,9 @@ own copy, which it did before Popup existed:
 The panel uses semantic color, spacing, radius, and shadow tokens, all verified directly against
 Figma's `popup` component set: background (`--color-elevation-surface-raised-default`), border
 (`--border-width-sm` `--color-border-default`), padding (`--spacing-lg`, 16px, by default - see
-`padding` below), corner radius (`--border-radius-lg`, 8px), and a three-layer shadow matching
-Figma's `elevation.shadow.overlay` effect style (`--color-elevation-shadow-overlay-inner`,
-`-spread`, `-perimeter`).
+`padding` below), corner radius (`--border-radius-lg`, 8px), and the overlay elevation shadow
+(`--elevation-shadow-overlay`, Figma's `elevation.shadow.overlay` effect style: an inner ring, an 8px
+drop, and a 1px perimeter).
 
 ### Padding
 
@@ -182,6 +190,16 @@ overlay effect wasn't independently re-verified in Figma.
 The panel hugs its content on both axes (`display: inline-flex`, no explicit width/height) rather
 than filling an ambient container - this matches the Figma component's inner `Slot`, which is set
 to `HUG` on both `layoutSizingHorizontal` and `layoutSizingVertical`.
+
+The panel fades in on mount with the `fade-quick` motion recipe, as a CSS `@keyframes` animation
+rather than a `transition`, since the panel mounts and unmounts instead of toggling a class. There's
+no exit animation: the panel is removed as soon as `open` is false. Under
+`prefers-reduced-motion: reduce` the animation's duration is 0ms.
+
+The panel's `z-index` is set inline from `LAYERS.popup` (1200) in `primitives/layers.ts`, the one
+place the overlay stacking order lives: Modal Dialog (`LAYERS.dialog`, 1000), then Toast Group
+(`LAYERS.toast`, 1100), then Popup. So a Popup opened inside a Modal Dialog or over the toast stack
+renders above it. z-index isn't a design token (it has no Figma counterpart or theme).
 
 Content items inside the panel get `--spacing-xs` (4px) of gap when there's more than one, matching
 the Figma component's own inner `itemSpacing`.
@@ -214,8 +232,7 @@ Show all six `alignment` values, each with its own independently-clicked trigger
 ### Content story
 
 Show Popup as the foundation for a menu-shaped consumer (`role="menu"`) and a short-message-shaped
-consumer (`role="status"`), previewing the two documented future consumers (Dropdown Menu, Inline
-Message) without building either.
+consumer (`role="status"`), the shapes Dropdown Menu and Inline Message build on.
 
 ### EdgeCases story
 

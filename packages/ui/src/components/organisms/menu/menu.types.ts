@@ -5,70 +5,99 @@ export type MenuSize = 'sm' | 'md' | 'lg';
 export type MenuItemSelectionType = 'checkbox' | 'radio';
 
 export interface MenuItem {
-  /** Stable identity for the item - used for the React key and as part of the roving-tabindex order. */
+  /** Unique within the Menu. Used as the React key and to track which row is the tab stop. */
   id: string;
-  /** Primary row text. Used for search filtering when it's a plain string. */
+  /** The row's text and its accessible name. Search can match it only when it's a string. */
   label: React.ReactNode;
-  /** Secondary row text, rendered below the label. */
+  /** A second, smaller line under the label. Search can match it only when it's a string. */
   description?: React.ReactNode;
   /**
-   * Leading slot for the whole row - a fixed 24px box regardless of content. Decorative only
-   * (rendered with aria-hidden); never a real interactive control - the row is a native <button>,
-   * so nesting a focusable one inside it is invalid HTML. Pass an Icon with `spacing="spacious"`
-   * (size stays at Icon's own `md` default) to fill the slot the way Figma does.
+   * A fixed 24px slot before the text, for an icon or an Avatar. It's hidden from assistive
+   * technology, so it can't carry meaning, and it must never hold a control: the row is already a
+   * native `button`. The slot centers what you pass, so a `md` icon sits in the middle of it.
    *
-   * Any icon here should track `selected`: color="selected" when the item is selected,
-   * color="default" otherwise - verified on a plain, non-checkbox icon (same color/content/selected
-   * variable the row's own text uses), not just checkbox/radio ones. For a checkbox/radio-style
-   * row specifically, use the exact icons Figma's own menu-item uses -
-   * CheckboxFillIcon/CheckboxEmptyIcon or RadioCheckedIcon/RadioUncheckedIcon, colored
-   * color="selected" when selected and color="subtle" (not "default") when not - never a real
+   * An icon here needs no color: it takes the row's text color, so it turns `selected` with the
+   * row (color/content/selected, the variable Figma binds) and `disabled` with it. For a
+   * checkbox/radio-style row, use the exact icons Figma's own menu-item uses -
+   * CheckboxFillIcon/CheckboxEmptyIcon or RadioCheckedIcon/RadioUncheckedIcon - and set
+   * color="subtle" on the unchecked one, which Figma dims below the row's text. Never a real
    * Checkbox/Radio.
    */
   leadingElement?: React.ReactNode;
-  /** A smaller leading icon immediately before the label text itself, distinct from leadingElement. Rare - most rows only need leadingElement. */
+  /** A small icon right before the label, on the label's line. Rare: most rows need only `leadingElement`. Hidden from assistive technology. */
   titleLeadingElement?: React.ReactNode;
-  /** Trailing slot for the whole row (24px) - a shortcut hint, chevron, or count. Same decorative-only rule as leadingElement. */
+  /** A fixed 24px slot after the text, for a chevron, a count, or a shortcut hint. Hidden from assistive technology, like `leadingElement`. */
   trailingElement?: React.ReactNode;
-  /** Persistent highlighted/checked state, independent of hover/focus. Omit entirely for a plain action item with no selection concept. */
+  /** Shows the row as selected: a tinted fill, the selected text color, and a 2px bar on its left edge. Announced only when `selectionType` is set. */
   selected?: boolean;
-  /** When set alongside `selected`, the row's ARIA role becomes menuitemcheckbox/menuitemradio with aria-checked instead of plain menuitem. */
+  /** Makes the row a `menuitemcheckbox` or `menuitemradio`, with `aria-checked` from `selected`. Menu doesn't keep radio rows exclusive: select one yourself. */
   selectionType?: MenuItemSelectionType;
+  /** Disables the row with the native attribute: it can't be focused, the arrow keys skip it, and `onSelect` isn't called. */
   disabled?: boolean;
+  /**
+   * Called when the row is clicked, or activated with Enter or Space. Menu on its own doesn't close
+   * anything. In a Dropdown Menu, choosing a row then closes the menu and returns focus to the
+   * trigger; call `event.preventDefault()` here to keep it open, such as for a checkbox row.
+   */
   onSelect?: (event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>) => void;
 }
 
 export interface MenuSection {
+  /** Unique within the Menu; used as the React key. */
   id: string;
+  /** Text above the section's rows. A headed section is a `role="group"` named by its heading, so the rows are announced with it. */
   heading?: React.ReactNode;
+  /** An icon before the heading. Hidden from assistive technology. */
   headingLeadingElement?: React.ReactNode;
+  /** The section's rows, in order. */
   items: MenuItem[];
 }
 
 export interface MenuProps {
-  /** Sections rendered top to bottom, each separated by a divider after the first. */
+  /** The sections, top to bottom. A divider separates each one from the section or search field above it. */
   sections: MenuSection[];
-  /** Controls the panel's fixed width (--component-menu-width-sm/md/lg: 192/240/288px). Row height is unaffected - it's driven by content. */
+  /** The Menu's fixed width: `sm` 192px, `md` 240px, `lg` 288px. Row height follows the content. Ignored with `fullWidth`. */
   size?: MenuSize;
-  /** Shows the search field above the sections. Defaults to true, matching the Figma component's own default. */
+  /**
+   * Shows the search field above the sections and focuses it when the Menu mounts, which in a
+   * Dropdown Menu is every time it opens. On by default, as in Figma.
+   */
   showSearch?: boolean;
-  /** Filters items by a case-insensitive substring match against each item's label (only when label is a plain string) and description. Controlled - Menu does not filter internally when this is provided without onSearchChange. */
+  /**
+   * The search text, and the filter: rows stay when their string label or description contains it,
+   * ignoring case, and sections left empty are hidden. Menu keeps no search state, so pass it with
+   * `onSearchChange`; without it, typing doesn't filter.
+   */
   searchValue?: string;
+  /** Called with the field's text on every change, and with `''` when the clear button is pressed. */
   onSearchChange?: (value: string) => void;
+  /** The search field's placeholder, a hint shown while it's empty. None by default. It doesn't name the field: `searchLabel` does. */
   searchPlaceholder?: string;
-  /** Enables scrolling (with a visible scrollbar) once content exceeds maxHeight. Defaults to true, matching the Figma component's own default. */
+  /** The search field's accessible name. Defaults to "Search". */
+  searchLabel?: string;
+  /** The accessible name and tooltip of the clear button, which shows once `searchValue` isn't empty. */
+  clearSearchLabel?: string;
+  /** Lets the sections scroll once they're taller than `maxHeight`; without it, the extra rows are cut off. On by default, as in Figma. */
   showScrollbar?: boolean;
-  /** Caps the sections area's height before it scrolls. No cap by default. */
+  /** The tallest the sections can be, in pixels or any CSS length. No limit by default. */
   maxHeight?: number | string;
-  /** Replaces the sections area with a loading row. Search (if shown) stays interactive. */
+  /** Replaces the sections with a loading row, a Spinner and `loadingLabel`, in a polite live region. The search field stays usable. */
   loading?: boolean;
+  /** The loading row's text. */
   loadingLabel?: React.ReactNode;
-  /** Shown when search filters every item out. */
+  /**
+   * Shown in place of the rows when none are left, such as when a search matches nothing. It's
+   * announced politely when the rows run out after the Menu has rendered, not when it first renders empty.
+   */
   emptyMessage?: React.ReactNode;
-  /** Fills the container's width instead of one of the fixed `size` widths - for a panel sized to its trigger (e.g. Select via Dropdown Menu's `matchTriggerWidth`). Defaults to false. */
+  /** Fills the container's width instead of a fixed `size` width, for a panel sized to its trigger, as Dropdown Menu's `matchTriggerWidth` does. */
   fullWidth?: boolean;
+  /** Set on the Menu's outer `div`, which holds the search field and the menu. */
   id?: string;
+  /** Added to the outer `div`'s classes. */
   className?: string;
+  /** Names the menu for assistive technology. Set it or `aria-labelledby`: Menu has no default name. */
   'aria-label'?: string;
+  /** The id of visible text that names the menu, such as a heading above it. */
   'aria-labelledby'?: string;
 }

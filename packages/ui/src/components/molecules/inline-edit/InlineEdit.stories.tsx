@@ -5,14 +5,14 @@ import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
 
 const meta = {
-  title: 'UI/Molecules/Inline Edit',
+  title: 'Components/Forms/Inline Edit',
   component: InlineEdit,
   args: {
     value: 'Q3 Planning',
     actionButtons: true,
     confirmLabel: 'Confirm',
     cancelLabel: 'Cancel',
-    children: <TextField appearance="subtle" aria-label="Title" />,
+    children: <TextField context="inline" aria-label="Title" />,
   },
   argTypes: {
     value: { control: 'text' },
@@ -92,7 +92,7 @@ function LiveInlineEditExample({ actionButtons = true }: { actionButtons?: boole
 
   return (
     <InlineEdit value={value} actionButtons={actionButtons} onConfirm={setValue}>
-      <TextField appearance="subtle" aria-label="Title" />
+      <TextField context="inline" aria-label="Title" />
     </InlineEdit>
   );
 }
@@ -129,12 +129,12 @@ export const Content: Story = {
       <Group title="Sizes">
         <Cell label="sm">
           <InlineEdit value="Q3 Planning">
-            <TextField appearance="subtle" size="sm" aria-label="Title" />
+            <TextField context="inline" size="sm" aria-label="Title" />
           </InlineEdit>
         </Cell>
         <Cell label="md (default)">
           <InlineEdit value="Q3 Planning">
-            <TextField appearance="subtle" aria-label="Title" />
+            <TextField context="inline" aria-label="Title" />
           </InlineEdit>
         </Cell>
       </Group>
@@ -142,7 +142,7 @@ export const Content: Story = {
       <Group title="Custom action labels">
         <Cell label="confirmLabel / cancelLabel">
           <InlineEdit value="Q3 Planning" confirmLabel="Save title" cancelLabel="Discard changes">
-            <TextField appearance="subtle" aria-label="Title" />
+            <TextField context="inline" aria-label="Title" />
           </InlineEdit>
         </Cell>
       </Group>
@@ -157,7 +157,7 @@ export const EdgeCases: Story = {
       <Group title="Long value in a narrow container">
         <div style={{ inlineSize: '160px' }}>
           <InlineEdit value="A value longer than the field can comfortably show">
-            <TextField appearance="subtle" aria-label="Title" />
+            <TextField context="inline" aria-label="Title" />
           </InlineEdit>
         </div>
       </Group>
@@ -165,7 +165,7 @@ export const EdgeCases: Story = {
       <Group title="Fills its container">
         <div style={{ inlineSize: '100%' }}>
           <InlineEdit value="Full width">
-            <TextField appearance="subtle" aria-label="Title" />
+            <TextField context="inline" aria-label="Title" />
           </InlineEdit>
         </div>
       </Group>
@@ -176,7 +176,7 @@ export const EdgeCases: Story = {
           <div style={row}>
             <div style={fieldStyle}>
               <InlineEdit value="Q3 Planning">
-                <TextField appearance="subtle" aria-label="Title" />
+                <TextField context="inline" aria-label="Title" />
               </InlineEdit>
             </div>
           </div>

@@ -71,8 +71,8 @@
 }
 
 /*
- * Overflow trigger text uses Body/S, M, L, L (xs/sm/md/lg) - measured directly against Figma - not
- * Button's own heading-based per-size type scale (Button's size=lg even reuses Body/L rather than
+ * Overflow trigger text uses Body/SM, MD, LG, LG (xs/sm/md/lg) - measured directly against Figma - not
+ * Button's own heading-based per-size type scale (Button's size=lg even reuses Body/LG rather than
  * stepping up to a larger body size, matching size=md exactly).
  */
 .size_xs .overflowTrigger {

@@ -27,7 +27,9 @@ Select
 
 ```ts
 type SelectSize = 'sm' | 'md' | 'lg';
-type SelectTone = 'default' | 'subtle';
+type SelectContext = 'default' | 'inline';
+/** @deprecated Use SelectContext: subtle and inline are both inline. */
+type SelectTone = 'default' | 'subtle' | 'inline';
 
 interface SelectOption {
   value: string;
@@ -41,7 +43,11 @@ interface SelectOption {
 interface SelectCommonProps {
   options: SelectOption[];
   size?: SelectSize;
+  context?: SelectContext;
+  /** @deprecated Use context. */
   tone?: SelectTone;
+  /** @deprecated Use context. */
+  appearance?: SelectTone;
   placeholder?: string;
   disabled?: boolean;
   invalid?: boolean;
@@ -49,7 +55,10 @@ interface SelectCommonProps {
   onSearchChange?: (value: string) => void;
   emptyMessage?: React.ReactNode;
   'aria-label'?: string;
-  'aria-labelledby'?: string;
+  'aria-labelledby'?: string;   // passed to the input and the Menu
+  'aria-describedby'?: string;  // Field's message
+  'aria-invalid'?: boolean | 'true' | 'false';
+  required?: boolean;
   id?: string;
   className?: string;
 }
@@ -73,12 +82,15 @@ A **discriminated union on `inputType`** (default `'single'`), so single's scala
 array can't be crossed — the same pattern Chip uses for `mode`. The common case (`single`) needs no
 discriminant.
 
+`tone` and `appearance` are deprecated aliases for `context`, still accepted: `subtle` and `inline`
+both map to `context="inline"`, `default` to `default`. An explicit `context` wins.
+
 ## Defaults
 
 ```txt
 inputType: single
 size: md
-tone: default
+context: default
 emptyMessage: "No matches"
 ```
 
@@ -86,7 +98,8 @@ emptyMessage: "No matches"
 
 - **Trigger** — the existing `TextField`. Its frame, fill, border, and per-size geometry match
   Figma's `select-trigger` token-for-token (verified), so Select reuses it rather than restating the
-  state CSS. `tone` maps to TextField's `appearance`.
+  state CSS. `context` passes straight through to TextField's `context` — the same prop, values,
+  and Figma axis.
 - **Panel** — `DropdownMenu` with `showSearch={false}` (the trigger *is* the search field), the
   option rows built by Select, and `emptyMessage` for no-results.
 - **Chips** — multi-select values render as `Chip mode="select"` in the trigger's `leadingContent`
@@ -129,8 +142,25 @@ design.
   `aria-expanded`/`aria-controls` on it.
 - **Open** on click, typing, or ArrowDown. Focus stays in the input.
 - **ArrowDown** (when open) moves focus into the Menu; its roving tabindex takes over.
-- **Type** filters; **Escape** / outside-click closes and returns focus to the input.
-- **single**: choosing a row calls `onChange(value)` and closes; the trigger shows the label.
+- **Type** filters; **Escape** / outside-click closes. Escape from inside the Menu first returns
+  focus to the input (a keydown listener on the panel, since Dropdown Menu leaves combobox triggers
+  to manage their own focus); a click outside leaves focus where the click put it.
+- **Tab / Shift+Tab** inside the Menu closes it and returns focus to the input, as Dropdown Menu does
+  for its own triggers (the portalled panel would otherwise tab to the end of the page).
+- **Focus leaving** the field frame and the panel for another element closes the menu (a `focusout`
+  listener on both; moving between the input and a chip's remove button keeps it open). A blur with
+  no new target (a click on nothing focusable, the window losing focus) is left to Popup's outside
+  click.
+- **Menu name**: `aria-label` / `aria-labelledby` are passed to the menu. Without either, the menu is
+  named from the input's native `<label>`s when it opens: `aria-labelledby` their ids when every one
+  has an id and none wraps the field, otherwise `aria-label` with their text (leaving out the field's
+  own text when a label wraps it).
+- **Enter** opens a closed field; **Space** does too when the query is empty.
+- **single**: choosing a row calls `onChange(value)`, returns focus to the input, and closes; the
+  trigger shows the label. Select
+  never calls `onChange(null)`; clearing a single value is up to the consumer.
+- **While open**, the single trigger's input is the query field: it's emptied, and the current label
+  is shown as its placeholder.
 - **multi**: choosing toggles the value, keeps the panel open, clears the query; values are removable
   chips. **Backspace** on an empty query removes the last chip.
 
@@ -202,11 +232,22 @@ grouping: a section heading per group
 states: does not open when disabled
 states: aria-invalid when invalid
 states: opens on ArrowDown
-states: size and tone map to the TextField trigger
+states: size and context map to the TextField trigger
 a11y: combobox with menu popup + list autocomplete
 a11y: aria-expanded reflects open state
 a11y: custom id/className on the trigger
+focus: Escape from inside the menu returns focus to the field
+focus: a single-select pick returns focus to the field
+focus: Tab / Shift+Tab inside the menu closes it and returns focus to the field
+focus: focus moving out of the field closes the menu
+focus: focus moving within the field (to a chip) keeps the menu open
+focus: a blur with no new target keeps the menu open
+naming: menu named from a native label pointing at the field
+naming: menu named by reference when the native label has an id
+naming: menu named from a wrapping label
+naming: aria-label / aria-labelledby win over a native label
 caret rotates only while open, via a class
+deprecated tone and appearance values map to a context
 ```
 
 Plus TextField's own suite gains three cases for the new `leadingContent` slot.

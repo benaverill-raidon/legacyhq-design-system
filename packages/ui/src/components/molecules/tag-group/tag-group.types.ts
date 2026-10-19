@@ -11,32 +11,29 @@ export interface TagGroupItem extends Omit<TagProps, 'size' | 'children' | 'id' 
 }
 
 export interface TagGroupProps {
-  /** The full set of tags, visible and truncated. */
+  /** Every tag in the group, in order, visible or not. Each item takes Tag's props except `size`, `children`, and `isInteractive`, plus a unique `id` and its text as `label`. */
   tags: TagGroupItem[];
-  /** Once `tags.length` exceeds this, only the first `maxVisible` render as tags - the rest are truncated behind an overflow tag. No truncation when omitted. */
+  /** How many tags show before the rest move behind the overflow tag. With no `maxVisible`, every tag shows, wrapping onto new lines, and there's no overflow tag. */
   maxVisible?: number;
-  /** Applied uniformly to every rendered tag, including the overflow tag - matching Figma, which has no per-tag size mixing within one group. */
+  /** The size of every tag and of the overflow tag: `sm` (24px) or `md` (32px). Unlike Tag, the default is `sm`. */
   size?: TagSize;
-  /**
-   * Where the overflow tag renders relative to the visible tags, matching Figma's own `tab-group`
-   * (mislabeled - it is Tag Group) component exactly: `left` (default) renders it trailing, after
-   * the visible tags; `right` renders it leading, before them. Both values are illustrative-order
-   * only - which tags are "visible" vs. truncated does not change with alignment.
-   */
+  /** Where the overflow tag sits: after the visible tags with `left`, before them with `right`. It doesn't change which tags are hidden. */
   alignment?: TagGroupAlignment;
-  /** Overflow tag text, given the truncated count. Defaults to `+${hiddenCount} more`, matching Figma exactly. */
+  /** The overflow tag's text, from the number of hidden tags. Defaults to `+5 more` for five. */
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
-  /** Accessible name for the overflow panel (a Menu). Defaults to `${hiddenCount} more tags`. */
+  /** The overflow menu's accessible name. Defaults to “5 more tags” for five. */
   overflowMenuAriaLabel?: string;
   /**
-   * Called when a truncated tag is selected from the overflow panel. Tag Group does not navigate,
-   * remove, or close the panel on its own - same "never assume" rule as Menu and Dropdown Menu. Wire
-   * whatever the selected tag's own `href`/`onRemove` implies from here.
+   * Called with the tag and the event when someone chooses a hidden tag from the overflow menu. The
+   * menu then closes and focus returns to the overflow tag. Tag Group doesn't follow the tag's `href`
+   * or call its `onRemove`, so do what the tag means from here.
    */
   onOverflowTagSelect?: (
     tag: TagGroupItem,
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
   ) => void;
+  /** The root element's `id`. */
   id?: string;
+  /** Added to the root element's classes. */
   className?: string;
 }

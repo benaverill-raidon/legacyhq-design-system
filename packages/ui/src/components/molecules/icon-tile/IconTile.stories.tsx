@@ -5,7 +5,7 @@ import { IconTile } from './icon-tile';
 import type { IconTileAppearance, IconTileShape, IconTileSize, IconTileTone } from './icon-tile.types';
 
 const tones: IconTileTone[] = [
-  'gray',
+  'taupe',
   'brand',
   'red',
   'orange',
@@ -21,7 +21,7 @@ const shapes: IconTileShape[] = ['square', 'round'];
 const sizes: IconTileSize[] = ['xxs', 'xs', 'sm', 'md', 'lg'];
 
 const meta = {
-  title: 'UI/Molecules/Icon Tile',
+  title: 'Components/Data Display/Icon Tile',
   component: IconTile,
   args: {
     tone: 'brand',
@@ -180,7 +180,7 @@ export const Composition: Story = {
 
       <Group title="Empty state">
         <div style={{ ...cardStyle, justifyItems: 'center', textAlign: 'center' }}>
-          <IconTile size="lg" tone="gray" shape="round">
+          <IconTile size="lg" tone="taupe" shape="round">
             <StarStarredIcon />
           </IconTile>
           <h3 style={headingStyle}>No favorites yet</h3>

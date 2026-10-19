@@ -13,9 +13,11 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
  */
 export const TextArea = React.memo(
   React.forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(
-    { size = 'md', appearance = 'default', invalid = false, resize = 'vertical', autoResize = false, maxRows = 6, iconAfter, className, disabled, 'aria-invalid': ariaInvalid, ...rest },
+    { size = 'md', context: requestedContext, appearance, invalid = false, resize = 'vertical', autoResize = false, maxRows = 6, iconAfter, className, disabled, 'aria-invalid': ariaInvalid, ...rest },
     forwardedRef,
   ) {
+    // `appearance` is the deprecated name for `context`: its subtle and inline values are both inline.
+    const context = requestedContext ?? (appearance && appearance !== 'default' ? 'inline' : 'default');
     const dataForceState = (rest as { 'data-force-state'?: string })['data-force-state'];
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     React.useImperativeHandle(forwardedRef, () => textareaRef.current!, []);
@@ -70,13 +72,13 @@ export const TextArea = React.memo(
         className={mergeClassNames(
           styles.root,
           styles[`size_${size}`],
-          styles[`appearance_${appearance}`],
+          styles[`context_${context}`],
           styles[`resize_${resize}`],
           autoResize && styles.auto_resize,
           className,
         )}
         data-size={size}
-        data-appearance={appearance}
+        data-context={context}
         data-invalid={invalid ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
         data-force-state={dataForceState}

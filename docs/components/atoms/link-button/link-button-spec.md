@@ -55,7 +55,7 @@ not:
 LinkButton
 ├─ anchor root
 │  ├─ leading icon, optional
-│  ├─ spinner, loading only
+│  ├─ spinner, over the content while loading
 │  ├─ label
 │  └─ trailing icon, optional
 └─ focus ring
@@ -152,9 +152,15 @@ Because anchors do not support `disabled`, use semantic disabled behavior.
 When `isDisabled` is true:
 
 ```txt
+href removed (nothing can open it: click, middle click, or context menu)
+role="link"
 aria-disabled="true"
 tabIndex={-1}
+data-disabled="true"   (the styling hook)
 ```
+
+`isLoading` also removes the `href` and sets `role="link"` and `aria-disabled="true"`, but keeps the
+link focusable (`tabIndex` 0) and doesn't set `data-disabled`, so it doesn't look disabled.
 
 Also:
 
@@ -177,7 +183,7 @@ When `isLoading` is true:
 Recommended loading model:
 
 ```txt
-Spinner replaces leading content area while preserving label width.
+Loading holds the link button's size: the spinner sits centered over the content, and the label and icons keep their space, hidden, so nothing shifts or reflows. The label stays the accessible name.
 ```
 
 ## Icon behavior
@@ -188,7 +194,7 @@ Match Button.
 - `iconAfter` renders after label.
 - Icons use md size.
 - Gap follows Button.
-- Loading replaces leading content area with Spinner.
+- Loading shows a Spinner over the content and holds the link button's size.
 - Do not expose icon size prop.
 
 ## Size mapping
@@ -237,8 +243,13 @@ Tone styles should match Button for:
 - pressed: `color-background-neutral-overlay-subtle-press`
 - focus: white subtle hover fill plus the shared focus ring
 
-It uses LinkButton's `[aria-disabled='true']` guard rather than the native `:disabled` pseudo, and
+It uses LinkButton's `[data-disabled='true']` guard rather than the native `:disabled` pseudo, and
 is flattened by `isDisabled` like tone.
+
+## Motion
+
+Hover, press, and focus color changes use `fade-quick`, the same as Button. There's no press-state
+scale or other transform: press feedback is color only.
 
 ## Focus behavior
 
@@ -306,7 +317,8 @@ Show matrix:
 
 ```txt
 sizes: xs | sm | md | lg
-tones: default | primary | subtle | warning | error
+appearances: default | primary | subtle
+tones: default | warning | error (warning and error restyle only with appearance="primary")
 states: default | hover | press | focus
 icons: none | before | after
 loading

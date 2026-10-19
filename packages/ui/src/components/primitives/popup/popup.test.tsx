@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { LAYERS } from '../layers';
 import { Popup } from './popup';
 import styles from './popup.module.css';
 
@@ -284,9 +285,7 @@ describe('Popup', () => {
     expect(popupCss).toContain('background: var(--color-elevation-surface-raised-default);');
     expect(popupCss).toContain('border: var(--border-width-sm) solid var(--color-border-default);');
     expect(popupCss).toContain('border-radius: var(--border-radius-lg);');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-inner)');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-spread)');
-    expect(popupCss).toContain('var(--color-elevation-shadow-overlay-perimeter)');
+    expect(popupCss).toContain('box-shadow: var(--elevation-shadow-overlay);');
   });
 
   it('hugs its content instead of stretching to fill a container', () => {
@@ -412,5 +411,94 @@ describe('Popup', () => {
     fireEvent.pointerDown(screen.getByTestId('frame'));
 
     expect(screen.getByText('Popup content')).toBeInTheDocument();
+  });
+
+  it('stacks the panel above Modal Dialog and Toast Group, from the one layer scale', () => {
+    render(<ControlledPopup open />);
+
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel.style.zIndex).toBe(String(LAYERS.popup));
+    expect(LAYERS.popup).toBeGreaterThan(LAYERS.toast);
+    expect(LAYERS.toast).toBeGreaterThan(LAYERS.dialog);
+    // The stylesheet doesn't set its own z-index, so there's one source for it.
+    expect(popupCss).not.toMatch(/z-indexs*:/);
+  });
+
+  it('closes only the topmost open popup on Escape', () => {
+    const outerChange = vi.fn();
+    const innerChange = vi.fn();
+    function Nested({ innerOpen }: { innerOpen: boolean }) {
+      return (
+        <Popup
+          open
+          onOpenChange={outerChange}
+          content={
+            <Popup open={innerOpen} onOpenChange={innerChange} content={<span>Inner</span>}>
+              <button type="button">Inner trigger</button>
+            </Popup>
+          }
+        >
+          <button type="button">Outer trigger</button>
+        </Popup>
+      );
+    }
+    const { rerender } = render(<Nested innerOpen={false} />);
+    rerender(<Nested innerOpen />);
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(innerChange).toHaveBeenCalledWith(false);
+    expect(outerChange).not.toHaveBeenCalled();
+
+    rerender(<Nested innerOpen={false} />);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(outerChange).toHaveBeenCalledWith(false);
+  });
+
+  it('keeps an open popup with closeOnEscape off on top, so the layer below it stays open', () => {
+    const outerChange = vi.fn();
+    function Nested({ innerOpen }: { innerOpen: boolean }) {
+      return (
+        <Popup open onOpenChange={outerChange} content={<span>Outer</span>}>
+          <Popup open={innerOpen} closeOnEscape={false} content={<span>Inner</span>}>
+            <button type="button">Trigger</button>
+          </Popup>
+        </Popup>
+      );
+    }
+    const { rerender } = render(<Nested innerOpen={false} />);
+    rerender(<Nested innerOpen />);
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(outerChange).not.toHaveBeenCalled();
+  });
+
+  it('leaves an Escape that something inside already handled (preventDefault)', () => {
+    const handleOpenChange = vi.fn();
+    render(
+      <ControlledPopup
+        open
+        onOpenChange={handleOpenChange}
+        content={<input aria-label="Field" onKeyDown={(event) => event.key === 'Escape' && event.preventDefault()} />}
+      />,
+    );
+
+    fireEvent.keyDown(screen.getByRole('textbox', { name: 'Field' }), { key: 'Escape' });
+    expect(handleOpenChange).not.toHaveBeenCalled();
+  });
+
+  it("reads the trigger's own ref from its props, without React 19's element.ref warning", () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const triggerRef = React.createRef<HTMLButtonElement>();
+    render(
+      <Popup open content={<span>Popup content</span>}>
+        <button ref={triggerRef} type="button">
+          Trigger
+        </button>
+      </Popup>,
+    );
+
+    expect(triggerRef.current).toBe(screen.getByRole('button', { name: 'Trigger' }));
+    expect(consoleError).not.toHaveBeenCalledWith(expect.stringContaining('element.ref'));
+    consoleError.mockRestore();
   });
 });

@@ -46,7 +46,8 @@ export const Tag = React.memo(
       target,
       rel,
       isRemovable = false,
-      isDisabled = false,
+      disabled,
+      isDisabled: deprecatedIsDisabled,
       isInteractive = false,
       elemBefore,
       onRemove,
@@ -60,6 +61,8 @@ export const Tag = React.memo(
     },
     forwardedRef,
   ) {
+    // `isDisabled` is the deprecated name for `disabled`.
+    const isDisabled = disabled ?? deprecatedIsDisabled ?? false;
     const rootClassName = mergeClassNames(
       styles.root,
       styles['size_' + size],
@@ -136,6 +139,8 @@ export const Tag = React.memo(
           {...rest}
           ref={forwardedRef as React.ForwardedRef<HTMLSpanElement>}
           className={mergeClassNames(rootClassName, styles.standalone)}
+          aria-describedby={ariaDescribedBy}
+          tabIndex={tabIndex}
           data-disabled={isDisabled ? 'true' : undefined}
           data-size={size}
           data-tone={tone}
@@ -178,6 +183,9 @@ export const Tag = React.memo(
         {...rest}
         ref={forwardedRef as React.ForwardedRef<HTMLSpanElement>}
         className={mergeClassNames(rootClassName, styles.wrapper)}
+        // With a link inside, the link takes these; without one, the wrapper is the tag's only element.
+        aria-describedby={href ? undefined : ariaDescribedBy}
+        tabIndex={href ? undefined : tabIndex}
         data-disabled={isDisabled ? 'true' : undefined}
         data-size={size}
         data-tone={tone}

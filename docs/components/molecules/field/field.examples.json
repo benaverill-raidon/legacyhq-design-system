@@ -46,7 +46,7 @@
     {
       "name": "Duplicating the label as an aria-label",
       "jsx": "<Field label=\"Email\">\n  <TextField type=\"email\" aria-label=\"Email\" />\n</Field>",
-      "reason": "Field's label already names the control via htmlFor. A duplicate aria-label is redundant and can override the visible label as the accessible name."
+      "reason": "Field's label already names the control, via htmlFor and the aria-labelledby Field adds. A control with its own aria-label keeps it and Field leaves aria-labelledby off, so a duplicate aria-label is redundant and can override the visible label as the accessible name."
     },
     {
       "name": "Error state without the control's own invalid",

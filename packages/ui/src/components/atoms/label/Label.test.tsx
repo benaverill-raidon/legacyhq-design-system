@@ -85,6 +85,24 @@ describe('Label', () => {
     expect(labelCss).toContain('--label-border-radius: var(--border-radius-sm);');
     expect(labelCss).not.toContain('--label-border-radius: var(--border-radius-lg);');
   });
+
+  // md's 24px line height sets its 24px height; block padding would make it 28px.
+  it('gives md no block padding, so it is 24px tall', () => {
+    const sizeRule = (name: string) => labelCss.match(new RegExp(`\\.${name} \\{([^}]*)\\}`))?.[1] ?? '';
+
+    expect(sizeRule('size_md')).toContain('--label-padding-block: var(--spacing-none);');
+    expect(sizeRule('size_md')).toContain('--label-line-height: var(--typography-heading-xs-line-height);');
+    expect(sizeRule('label')).toContain('--label-padding-block: var(--spacing-none);');
+    expect(sizeRule('size_sm')).toContain('--label-padding-block: var(--spacing-xxs);');
+  });
+
+  // The 20px / 24px minimums are border-box heights; in a content box, padding would add to them.
+  it('measures its minimum height as the border box', () => {
+    const baseRule = labelCss.match(/\.label \{([^}]*)\}/)?.[1] ?? '';
+
+    expect(baseRule).toContain('box-sizing: border-box;');
+    expect(baseRule).toContain('min-block-size: var(--label-min-block-size);');
+  });
 });
 
 describe('label CSS contract', () => {

@@ -66,6 +66,7 @@ interface MenuProps {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
+  searchLabel?: string; // default 'Search'
   showScrollbar?: boolean;
   maxHeight?: number | string;
   loading?: boolean;
@@ -121,17 +122,16 @@ optionally, `selectionType`:
 
 Figma's own `checkboxes`/`radios` demo compositions render the check/radio state via
 `leadingElement` icons, not a real form control: `CheckboxFillIcon`/`CheckboxEmptyIcon` for a
-checkbox-style row, `RadioCheckedIcon`/`RadioUncheckedIcon` for a radio-style row - colored
-`color="selected"` when selected and `color="subtle"` when not (verified on the actual vector fill
-of both icon families). This is the canonical pattern to follow, not a generic checkmark or a real
+checkbox-style row, `RadioCheckedIcon`/`RadioUncheckedIcon` for a radio-style row. The checked
+icon takes the row's selected text color; the unchecked one sets `color="subtle"` (verified on the
+actual vector fill of both icon families). This is the canonical pattern to follow, not a generic checkmark or a real
 `Checkbox`/`Radio`.
 
-This isn't specific to checkbox/radio rows: a **plain**, non-checkbox `elemBefore` icon on a
-selected row binds to the exact same `color/content/selected` variable as the row's own text
-(verified directly - same variable id, not just the same resolved value), while an unselected
-plain icon uses `color/content/default`. Any `leadingElement` icon that should visually track
-`selected` - not just a checkbox/radio glyph - should set `color="selected"`/`color="default"`
-accordingly.
+A **plain**, non-checkbox `elemBefore` icon on a selected row binds to the exact same
+`color/content/selected` variable as the row's own text (verified directly - same variable id),
+and an unselected one to `color/content/default`. Icons take the surrounding text color by
+default, so a plain `leadingElement` icon needs no `color` prop: it follows the row through
+selected and disabled.
 
 ## Keyboard navigation
 
@@ -139,6 +139,9 @@ accordingly.
   visible items, wrapping at either end.
 - `Home`/`End` jump to the first/last enabled, visible item.
 - `Enter`/`Space` activate the focused item for free, since it's a real `<button>`.
+- None of this has a Figma variant: it's a code-level accessibility decision for the ARIA menu
+  pattern, delivering Popup's documented future enhancement ("a documented recipe for wiring
+  keyboard arrow navigation once Dropdown Menu exists").
 - A disabled item is excluded entirely from the roving-tabindex cycle - never focusable via arrow
   navigation, Tab, or click-then-arrow.
 - The active id is derived on every render (`enabledIds.includes(activeId) ? activeId :
@@ -152,13 +155,14 @@ accordingly.
   decorative only (icons, or a plain glyph) - never a real interactive control. Each row is a native
   `<button>`; nesting a focusable `<input>` (a real `Checkbox`/`Radio`) or another `<button>` inside
   it is invalid HTML and creates two conflicting activation paths for the same row.
-- Pass `spacing="spacious"` on every `leadingElement`/`trailingElement` icon (size stays at Icon's
-  own `md` default). Menu's `elemBefore`/`elemAfter` wrapper is a fixed 24px (`--size-300`) box
-  regardless of content, matching Figma's own elemBefore/elemAfter component exactly - an icon
-  without `spacing="spacious"` renders undersized and off-center inside it rather than filling it
-  the way Figma's own `Size: md` + `spacing: spacious (24px)` icon does.
-- Menu never closes anything on `onSelect` - a consumer wanting a selection to close a containing
-  Dropdown Menu wires `onOpenChange(false)` from the item's own `onSelect`.
+- Menu's `elemBefore`/`elemAfter` wrapper is a fixed 24px (`--size-300`) box regardless of
+  content, matching Figma's own elemBefore/elemAfter component exactly, and it centers its content
+  (`inline-flex`, `align-items`/`justify-content: center`). An `md` icon therefore renders as a
+  16px glyph at the same 4px inset with or without `spacing="spacious"` (measured in Storybook);
+  the stories pass `spacing="spacious"` to mirror Figma's `Size: md` + `spacing: spacious (24px)`
+  icon, but alignment doesn't depend on it.
+- Menu never closes anything on `onSelect`. A containing Dropdown Menu wraps each item's
+  `onSelect` and closes itself afterwards, unless the `onSelect` calls `event.preventDefault()`.
 
 ## Accessibility
 
@@ -170,6 +174,27 @@ accordingly.
 - `disabled` is the native `<button disabled>` attribute - `:disabled` styling and
   `toBeDisabled()`-style assertions work without any extra ARIA.
 - No default accessible name for the `menu` role - pass `aria-label` or `aria-labelledby`.
+- A section with a `heading` renders its body as `role="group"` with `aria-labelledby` pointing at
+  the heading's generated id, so the rows are announced with it; a section without a heading has no
+  group. Dividers carry `role="separator"`.
+- The search field is outside the `role="menu"` element (keydown is handled on the sections
+  container only), so the arrow keys don't move from the field into the rows; Tab does (through the
+  clear button when it's shown). The field's accessible name is `searchLabel` (default "Search",
+  translatable, as Table's); `searchPlaceholder` is only the placeholder hint.
+- The search field is `autoFocus`ed whenever it mounts. Inside a Dropdown Menu, that `autoFocus`
+  can't take effect in a browser (Popup keeps the panel `visibility: hidden` until positioned), so
+  Dropdown Menu focuses the field itself a frame later, on open. On a
+  page that renders a searchable Menu inline (including a Storybook Docs page), it takes focus and
+  scrolls the page to it on load. The Docs page renders only one searchable Menu, in the header,
+  for that reason.
+- Menu doesn't handle Escape; a containing Dropdown Menu (Popup) does.
+- One `role="status"` element (a polite live region) sits after the `role="menu"` element from the
+  first render. While `loading`, it holds the loading row (the Spinner itself has no label) and the
+  `role="menu"` element isn't rendered. The empty message is announced through it when the rows run
+  out after the first render (a search stops matching, or loading ends with nothing); when the Menu
+  first renders already empty, the message is shown outside the live region, so it isn't announced
+  on top of whatever took focus. "Rows ran out" is previous-render state adjusted during render,
+  not an effect.
 
 ## Styling and tokens
 
@@ -180,10 +205,10 @@ introducing new ones:
 - Default row text: `--color-content-default` (label), `--color-content-subtle` (description).
 - Hover/press row background: `--color-background-neutral-overlay-bold-hover` /
   `-overlay-press`.
-- Selected row background: `--color-background-brand-primary-subtle-default` (and the
-  `-hover`/`-press` variants on interaction) - Figma's `isSelected` fills
-  (`#e5f6ff`/`#ccecff`/`#b3e3ff`) resolved exactly to these already-existing tokens
-  (`brand.prussian.solid.100/200/300`), so no new color token was needed for the background.
+- Selected row background: `--color-background-selected-default-default` (and the
+  `-hover`/`-press` variants on interaction; focus shares the hover fill) - Figma's
+  `color/background/selected/default/*` variables. It previously borrowed
+  `--color-background-brand-primary-subtle-*`, the closest match before a `selected` family existed.
 - Selected row text and icon: `--color-content-selected` - a genuinely distinct Figma variable
   (`color/content/selected`, verified via `figma.variables.getVariableByIdAsync`, own light/dark
   mode values) that happens to equal `--color-content-brand-primary-default`'s value in both themes
@@ -198,32 +223,31 @@ introducing new ones:
   transcription error caught in review.
 - `elemBefore`/`elemAfter`: a fixed `--size-300` (24px) box on both axes, independent of whatever
   icon or glyph is inside, matching Figma's fixed-size slot exactly.
-- Section body padding: `--spacing-xs` (4px) top, `--spacing-sm` (8px) bottom - asymmetric, not a
-  uniform `padding-block`, matching the exact values on Figma's `<section>/list` → `Container`.
+- Section body padding: a symmetric `--spacing-xs` (4px) `padding-block`, matching Figma's
+  `<section>/list` → `Container` (paddingTop 4, paddingBottom 4).
 - Selected-row indicator: a 2px inset left `box-shadow` (`--border-width-md`
-  `--color-border-brand-primary-default`), not `border-left` - Figma's own stroke on this state is
+  `--color-border-selected`, Figma's `color/border/selected`), not `border-left` - Figma's own stroke on this state is
   `strokeAlign: INSIDE` with `paddingLeft` completely unchanged (still `spacing/md`, identical to
   every other row), meaning the indicator paints inside the row's existing bounds. A real
   `border-left` would add to the box size in CSS and visibly shift selected rows 2px right relative
   to unselected ones - a regression caught by comparing rendered output against Figma directly.
-  `--color-border-brand-primary-default` resolves to the exact same primitive
-  (`brand.prussian.solid.900`/`#003655`) Figma's own stroke variable does.
+  It previously used `--color-border-brand-primary-default`.
 - Label typography: `--typography-body-md-*` (14px, matching Figma's measured `menu-item` title).
   Description/heading typography: `--typography-body-sm-*` (12px).
-- Search field: rendered as `size="md"` with TextField's `appearance="subtle"`
-  (`data-appearance="subtle"`, `data-size="md"`), matching Figma's own `menu-search` → nested
-  `text-field`'s `size: md`, `tone: subtle` component properties exactly - confirmed directly from
-  the actual Figma instance, not assumed. No leading icon (the instance has no `elemBeforeInput`
-  at all - only a trailing `elemAfterInput` clear button). `appearance="subtle"` alone still
+- Search field: rendered as `size="md"` with TextField's `context="inline"`
+  (`data-context="inline"`, `data-size="md"`), matching Figma's own `menu-search` → nested
+  `text-field`'s `size: md`, `context: inline` - confirmed directly from the actual Figma
+  instance (re-checked 2026-10-13), not assumed. No leading icon (the instance has no `elemBeforeInput`
+  at all - only a trailing `elemAfterInput` clear button). `context="inline"` alone still
   leaves a colored focus underline and a hover background tint (correct for TextField generally)
   - but the wrapper's own `code-parts / <menu-search>` component has no hover variant at all, and
   its `text-field` instance's `fills`/`strokes` are empty in every one of its default/focus/typing
   states, so Menu additionally neutralizes both via
-  `.search :global([data-appearance='subtle'][data-size='md']:not([data-disabled='true']):not([data-invalid='true']))`
+  `.search :global([data-context='inline'][data-size='md']:not([data-disabled='true']):not([data-invalid='true']))`
   `:hover`/`:focus-within`. The extra `[data-size='md']` and two `:not()` clauses aren't padding -
-  TextField's own hover rule stacks three `:not()` clauses of its own
+  TextField's own hover rule (on `.context_inline`) stacks three `:not()` clauses of its own
   (`:not([data-disabled]):not(:focus-within):not([data-force-state='focus']):is(:hover, ...)`),
-  landing at specificity `(0,5,0)`; a plain `.search [data-appearance='subtle']:hover` only reaches
+  landing at specificity `(0,5,0)`; a plain `.search [data-context='inline']:hover` only reaches
   `(0,3,0)` and silently loses regardless of CSS source order - `(0,6,0)` is what actually wins,
   without `!important` (see "New tokens" below). The field is also `autoFocus`ed whenever it's
   rendered.
@@ -241,7 +265,7 @@ introducing new ones:
   (`packages/ui/src/components/primitives/icon/`) - added for Menu's selected-row icon: a real,
   verified need, not a speculative addition.
 - `.search`'s hover/focus neutralization stays local to Menu's own CSS rather than changing
-  TextField's `appearance="subtle"` implementation - `subtle`'s existing hover/focus styling is
+  TextField's `context="inline"` implementation - `inline`'s existing hover/focus styling is
   correct for TextField's other consumers; menu-search is simply a stripped-down instance of it,
   verified directly against Figma rather than assumed.
 

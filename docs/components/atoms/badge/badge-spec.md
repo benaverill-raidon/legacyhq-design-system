@@ -8,7 +8,7 @@ Badge is a compact visual indicator for numeric values such as tallies, counts, 
 ### Description
 Use Badge to display short numeric information inline with other interface elements.
 
-### Category
+### Tier
 Atom
 
 ### Design Reference
@@ -84,8 +84,11 @@ Badge content should never wrap.
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
 | tone | 'default' \| 'brand' \| 'success' \| 'error' | No | 'default' |
-| ariaLabel | string | No | undefined |
+| label | string | No | undefined |
+| ariaLabel | string (deprecated: use `label`) | No | undefined |
 | className | string | No | undefined |
+
+Any other span attribute (`id`, `title`, `data-*`, native `aria-*`) is forwarded to the root `span`.
 
 ---
 
@@ -99,12 +102,17 @@ Badge is not interactive.
 ### ARIA
 
 Support:
-- aria-label
+- `label`, the count in words, such as "3 unread messages". Badge renders it as visually hidden text
+  inside the span and hides the visible value from assistive technology (`aria-hidden`), so screen
+  readers read the words in place of the number. It isn't an `aria-label`: the span has no role, and
+  ARIA prohibits naming an element with the generic role, so screen readers may ignore one.
+- `ariaLabel` is a deprecated alias for `label`, rendered the same way. `label` wins when both are set.
+- Native attributes, including `aria-describedby`, are forwarded to the root `span`.
 
 Example:
 
 ```tsx
-<Badge ariaLabel="1 unread notification">
+<Badge label="1 unread notification">
   1
 </Badge>
 ```
@@ -121,10 +129,10 @@ Suggested mappings:
 
 | Tone | Background Token | Text Token |
 |---------|------------------|-------------|
-| default | surface/default | content/default |
-| brand | background/brand | content/inverse |
-| success | background/success | content/inverse |
-| error | background/error | content/inverse |
+| default | `--color-background-neutral-bold-default` | `--color-content-inverse-default` |
+| brand | `--color-background-brand-primary-bold-default` | `--color-content-inverse-default` |
+| success | `--color-background-success-bold-default` | `--color-content-inverse-default` |
+| error | `--color-background-error-bold-default` | `--color-content-inverse-default` |
 
 ### Typography
 Use typography tokens.
@@ -154,11 +162,8 @@ No animation.
 None
 
 ### Used By
-- Navigation
-- Button
-- Table
-- Card
-- List Item
+No component composes Badge today. It's placed beside navigation items, table cells, cards, and
+list items by the code that renders them.
 
 ---
 
@@ -192,7 +197,7 @@ None
 - [ ] className applies correctly
 
 ### Accessibility
-- [ ] aria-label works
+- [ ] `label` is read in place of the visible value (hidden text, not `aria-label`)
 - [ ] Contrast meets requirements
 
 ---

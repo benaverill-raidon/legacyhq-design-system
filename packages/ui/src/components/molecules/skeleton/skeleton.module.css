@@ -18,7 +18,7 @@
   border-radius: var(--skeleton-radius);
 }
 
-.shape_circle {
+.shape_round {
   border-radius: var(--border-radius-full-round);
 }
 

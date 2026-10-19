@@ -2,9 +2,9 @@
  * Empty State is a centered, vertical stack: an optional illustration above a message block
  * (heading, description, actions). Spacing, padding, and typography map to the tokens the Figma
  * component is bound to: spacing-2xl between the illustration and the message, spacing-lg within the
- * message, spacing-xl padding, heading-md heading, and body-md description. The `informative` type
- * fills a sunken surface panel; `inherited` (default) stays transparent to blend into the surface
- * beneath it.
+ * message, spacing-xl padding, heading-md heading, and body-md description. The `informative`
+ * appearance fills a sunken surface panel; `inherited` (default) stays transparent to blend into the
+ * surface beneath it.
  */
 .root {
   display: flex;
@@ -16,7 +16,7 @@
   text-align: center;
 }
 
-.type_informative {
+.appearance_informative {
   background: var(--color-elevation-surface-sunken-default);
 }
 
@@ -35,7 +35,10 @@
   min-inline-size: 0;
 }
 
+/* A real h1-h6 at `headingLevel`: the browser's heading margins are reset, and the type styles below
+   replace its heading size and weight, so every level looks the same. */
 .heading {
+  margin: 0;
   color: var(--color-content-default);
   font-family: var(--typography-heading-md-font-family);
   font-size: var(--typography-heading-md-font-size);

@@ -1,160 +1,192 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import iconButtonStyles from '../../atoms/icon-button/icon-button.module.css';
+import toggleButtonStyles from '../../atoms/toggle-button/toggle-button.module.css';
+import { Pagination } from './pagination';
+import paginationStyles from './pagination.module.css';
 import * as PaginationStories from './Pagination.stories';
 
 <Meta of={PaginationStories} name="Docs" />
 
-# Pagination
+<Unstyled>
+<ComponentPage>
 
-Pagination divides a large amount of content into smaller chunks across multiple pages, and lets
-people jump directly to a specific page rather than only stepping forward or backward one at a
-time.
+<ComponentHeader id="pagination" example={<Pagination currentPage={4} totalPages={12} onPageChange={() => {}} />}>
+  Pagination splits a long set of results into pages and lets people jump straight to one, or step
+  to the page before or after.
+</ComponentHeader>
 
-<Canvas of={PaginationStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A paged table, list, or search-results view where jumping to a specific page is useful.
-- The total number of pages is known up front.
+- A paged table, list, or set of search results with a known number of pages.
+- Jumping to a specific page, not only to the next one.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Infinite scroll / "load more" content.** There's no fixed page count to navigate between.
-- **Step-based flows.** Use `ProgressIndicator` for a wizard or onboarding sequence, not Pagination.
-- **Only one or two pages.** The control adds overhead a simple "next" affordance wouldn't.
+- **Steps in a flow:** <DocLink to="Components/Navigation/Progress Indicator" /> or <DocLink to="Components/Navigation/Progress Tracker" />. Pagination pages through results; it doesn't track progress.
+- **Views of the same page:** <DocLink to="Components/Navigation/Tabs" />.
+- **Results with no fixed page count**, loaded as you scroll or a batch at a time: a <DocLink to="Components/Actions/Button" /> that loads more.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-Pagination renders a `nav` landmark containing an `ol`: a previous control, the computed page
-range (numbers and, where the range collapses, a non-interactive ellipsis), and a next control.
-Every page number is the real `ToggleButton` atom; previous/next are the real `IconButton` atom -
-Pagination owns no button styling of its own.
+</Section>
 
-## Usage guidance
+<Section title="Anatomy">
 
-### It's fully controlled
+<Anatomy specimen={<Pagination currentPage={5} totalPages={20} onPageChange={() => {}} />}>
+  <Part name="root" target={paginationStyles.root}>A `nav` landmark named "Pagination" by default.</Part>
+  <Part name="list" target={paginationStyles.list}>An ordered list of the controls, in a single row.</Part>
+  <Part name="previous" target={iconButtonStyles.root}>A subtle, small Icon Button with a left chevron. Disabled on the first page.</Part>
+  <Part name="page" target={toggleButtonStyles.toggleButton}>A `button` for each page shown, with a small, subtle Toggle Button's look: a 32px square whatever the number. The current page is selected.</Part>
+  <Part name="ellipsis" target={paginationStyles.ellipsis}>`…` where pages are left out. Text, not a control, and hidden from assistive technology.</Part>
+  <Part name="next" target={iconButtonStyles.root} nth={2}>A subtle, small Icon Button with a right chevron, at the end of the row. Disabled on the last page.</Part>
+</Anatomy>
 
-Pagination takes `currentPage` and `totalPages` and calls `onPageChange` with the page the user
-picked - it never manages page state internally. Store `currentPage` wherever you're already
-tracking it (component state, a query param, etc.) and pass it back in.
+</Section>
 
-```tsx
-const [page, setPage] = useState(1);
+<Section title="Behavior">
 
-<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />;
-```
+<Subsection title="Controlled">
 
-### How the page range is chosen
+Pagination keeps no state: it shows `currentPage` of `totalPages` and calls `onPageChange` with the
+page someone chose, the page number or the one before or after. Update `currentPage` in response,
+from component state or the URL. Choosing the current page calls `onPageChange` with the same page.
+`currentPage` is rounded down and clamped between 1 and `totalPages`. Previous is disabled on the
+first page and Next on the last. When Previous or Next has focus and reaching the end disables it,
+focus moves to the current page, so it isn't lost.
 
-Figma's source component is a single fixed sample (`currentPage=1` of `totalPages=20`) that shows
-12 consecutive pages before collapsing into an ellipsis and a page-20 shortcut - a width-fitting
-demo, not a literal algorithm. This component instead uses the standard **sibling + boundary
-count** windowing algorithm: `boundaryCount` pages are always shown at each end, `siblingCount`
-pages are always shown around the current page, and any larger gap collapses into a single
-ellipsis. With the defaults (`siblingCount=1`, `boundaryCount=1`), the same inputs render
-`1 2 … 20` instead of Figma's wider sample - raise `siblingCount` for a wider range.
+</Subsection>
 
-<Canvas of={PaginationStories.Composition} />
+<Subsection title="Which pages show">
 
-## Do / Don't
+The first and last `boundaryCount` pages always show, and so do `siblingCount` pages on each side of
+the current one. A gap of more pages becomes an ellipsis; a gap of exactly one page shows that page,
+since it takes the same room. With the defaults of 1, page 1 of 20 shows `1 2 … 20`, and page 10
+shows `1 … 9 10 11 … 20`. Raise `siblingCount` for a wider range where there's room.
 
-**Do** keep Pagination controlled and update `currentPage` from `onPageChange`.
+<Example of={PaginationStories.Composition} caption="Few pages, the middle of a long range, near the start, near the end, and a wider sibling range." />
 
-```tsx
-<Pagination currentPage={page} totalPages={total} onPageChange={setPage} />
-```
+</Subsection>
 
-**Don't** render Pagination when there's nothing to paginate.
+<Subsection title="Width">
 
-```tsx
-<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />
-```
+Page buttons are 32px squares, so a two-digit page is as wide as a one-digit one. The number of
+buttons changes as the current page moves, so the row grows and shrinks, and Next moves with it,
+near either end of a long range.
 
----
+</Subsection>
 
-**Do** use Pagination for a known, finite set of pages.
+</Section>
 
-```tsx
-<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />
-```
+<Section title="Do and don't">
 
-**Don't** use Pagination to show progress through an unvisited, linear flow.
+<Guidelines>
+<Do caption="Keep currentPage in state and update it from onPageChange." code={`const [page, setPage] = useState(1);
 
-```tsx
-{
-  /* Use ProgressIndicator instead. */
-}
-```
+<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />`}>
+  <Pagination currentPage={1} totalPages={20} onPageChange={() => {}} />
+</Do>
+<Dont caption="Load the new page's results without updating currentPage, so the selected page never moves." code={`<Pagination currentPage={1} totalPages={20} onPageChange={(page) => loadResults(page)} />`} />
+<Do caption="Show Pagination only when there's more than one page." code={`{totalPages > 1 && (
+    <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+)}`}>
+  <Pagination currentPage={2} totalPages={5} onPageChange={() => {}} />
+</Do>
+<Dont caption="Render it for a single page: two disabled arrows around one button." code={`<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />`}>
+  <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />
+</Dont>
+</Guidelines>
 
-## API
+</Section>
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>currentPage</code></td>
-      <td><code>number</code></td>
-      <td>-</td>
-      <td>Required. 1-based current page.</td>
-    </tr>
-    <tr>
-      <td><code>totalPages</code></td>
-      <td><code>number</code></td>
-      <td>-</td>
-      <td>Required. Total number of pages.</td>
-    </tr>
-    <tr>
-      <td><code>onPageChange</code></td>
-      <td><code>(page: number) =&gt; void</code></td>
-      <td>-</td>
-      <td>Required. Called when a page, previous, or next control is activated.</td>
-    </tr>
-    <tr>
-      <td><code>siblingCount</code></td>
-      <td><code>number</code></td>
-      <td><code>1</code></td>
-      <td>Pages always shown on either side of the current page.</td>
-    </tr>
-    <tr>
-      <td><code>boundaryCount</code></td>
-      <td><code>number</code></td>
-      <td><code>1</code></td>
-      <td>Pages always shown at the start and end of the range.</td>
-    </tr>
-    <tr>
-      <td><code>previousLabel</code> / <code>nextLabel</code></td>
-      <td><code>string</code></td>
-      <td><code>'Previous page'</code> / <code>'Next page'</code></td>
-      <td>Accessible names for the previous/next controls.</td>
-    </tr>
-    <tr>
-      <td><code>getPageLabel</code></td>
-      <td><code>(page: number) =&gt; string</code></td>
-      <td><code>(page) =&gt; `Page ${'{'}page{'}'}`</code></td>
-      <td>Accessible name generator for each page button.</td>
-    </tr>
-    <tr>
-      <td><code>ariaLabel</code></td>
-      <td><code>string</code></td>
-      <td><code>'Pagination'</code></td>
-      <td>Accessible name for the <code>nav</code> landmark.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root <code>nav</code>'s class list.</td>
-    </tr>
-  </tbody>
-</table>
+<Section title="Accessibility">
 
-## Related components
+- The root is a `nav` landmark named by `aria-label`, "Pagination" by default. Translate it, and
+  give each Pagination on a page its own name, or name it by a visible heading with
+  `aria-labelledby`, which replaces it. `ariaLabel`, the old name, still works.
+- Previous and Next are Icon Buttons named by `previousLabel` and `nextLabel`, which also show as
+  their tooltip on hover and focus. At either end, the button is natively `disabled` and leaves the
+  tab order; if it had focus, focus moves to the current page.
+- Each page is a native `button` named by `getPageLabel`, "Page 3" by default, around the visible
+  number. The current page has `aria-current="page"`, so it's announced once, as the current page.
+  Pages take Toggle Button's look but not its `aria-pressed`: a page is a position, not an on or
+  off option.
+- The ellipsis is hidden from assistive technology, so the left-out pages aren't announced; the
+  names of the pages on either side, such as "Page 20", say where the range jumps.
+- Every control shows the shared Focus Ring.
 
-- **Toggle Button** / **Icon Button** - the atoms Pagination always wraps.
-- **Progress Indicator** - for step-based flow progress instead of content paging.
+<Keyboard>
+  <Key keys="Tab">Moves focus through Previous, each page, and Next, in order. A disabled Previous or Next is skipped.</Key>
+  <Key keys="Enter">Goes to the focused page, or the page before or after.</Key>
+  <Key keys="Space">Goes to the focused page, or the page before or after.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={PaginationStories} native="nav" />
+
+`getPaginationRange(currentPage, totalPages, siblingCount, boundaryCount)`, exported beside
+Pagination, returns the range it shows, page numbers and `'ellipsis'`, for a custom layout.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Pagination's own stylesheet uses, by family, with the property it sets and when. The
+buttons take their tokens from Icon Button and Toggle Button's stylesheet. Under Size, the
+`inline-size` row for page is the fixed width of each page button, and the other two size the
+ellipsis to match.
+
+<TokensTable id="pagination" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Toggle Button" />, whose look each page button takes.
+- <DocLink to="Components/Actions/Icon Button" />, the Previous and Next buttons.
+- <DocLink to="Components/Navigation/Progress Indicator" /> for position in a sequence of steps.
+- <DocLink to="Components/Navigation/Tabs" /> for switching between views of one page.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads pagination.types.ts, the design tokens read pagination.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

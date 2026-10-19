@@ -1,105 +1,371 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as React from 'react';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { ButtonGroup } from '../../molecules/button-group';
+import { ModalDialog } from './modal-dialog';
 import * as ModalDialogStories from './ModalDialog.stories';
+
+export const DialogExample = ({ trigger, tone = 'default', title, label, body, confirm, width = 'sm', onExpand }) => {
+  const [open, setOpen] = React.useState(false);
+  const close = () => setOpen(false);
+  return (
+    <>
+      <Button prominence={tone === 'error' ? 'secondary' : 'primary'} tone={tone === 'error' ? 'error' : 'default'} onClick={() => setOpen(true)}>
+        {trigger}
+      </Button>
+      <ModalDialog
+        open={open}
+        onClose={close}
+        title={title}
+        aria-label={label}
+        tone={tone}
+        width={width}
+        onExpand={onExpand}
+        footer={
+          <ButtonGroup>
+            <Button prominence="tertiary" onClick={close}>
+              Cancel
+            </Button>
+            <Button prominence="primary" tone={tone} onClick={close}>
+              {confirm}
+            </Button>
+          </ButtonGroup>
+        }
+      >
+        {body}
+      </ModalDialog>
+    </>
+  );
+};
 
 <Meta of={ModalDialogStories} name="Docs" />
 
-# Modal Dialog
+<Unstyled>
+<ComponentPage>
 
-Modal Dialog is an organism that interrupts the flow to focus the user on a single task or decision -
-a confirmation, a short form, a piece of content that needs acknowledgement. It renders a backdrop
-over the page and a centered panel with a header (title + close), a scrollable body, and a footer for
-the actions, and it handles the modal behaviour: it portals above the page, traps focus, closes on
-Escape or a backdrop click, locks page scroll, and restores focus to whatever opened it.
+<ComponentHeader
+  id="modal-dialog"
+  example={
+    <>
+      <DialogExample
+        trigger="Close matter"
+        title="Close this matter?"
+        body="Closed matters stay searchable, and you can reopen them at any time."
+        confirm="Close matter"
+      />
+      <DialogExample
+        trigger="Delete matter"
+        tone="error"
+        title="Delete this matter?"
+        body="This deletes the matter, its documents, and its history. You can't undo it."
+        confirm="Delete matter"
+      />
+    </>
+  }
+>
+  Modal Dialog asks for one decision or one short task before people go on. It covers the page with
+  a backdrop, keeps focus inside until it closes, and returns focus to where it was. Try the buttons.
+</ComponentHeader>
 
-<Canvas of={ModalDialogStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A decision or confirmation the user must resolve before continuing (especially a destructive one).
-- A short, focused task or a piece of content that needs to be acknowledged.
+- Confirming a destructive or hard-to-undo action, with `tone="error"`.
+- A decision people have to make before they go on, such as discarding unsaved changes.
+- A short, focused task, such as renaming a matter or sharing it.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Non-blocking, transient feedback.** Use Toast.
-- **Contextual overflow anchored to a control** (a menu, a popover). Use Dropdown Menu / Menu.
-- **A large or multi-step flow.** Prefer a full page - a modal is for one focused task.
+- **Feedback that doesn't need an answer:** <DocLink to="Components/Feedback/Toast" />, through <DocLink to="Components/Feedback/Toast Group" />.
+- **A message about part of the page:** <DocLink to="Components/Feedback/Section Message" />.
+- **Actions opened from a control:** <DocLink to="Components/Actions/Dropdown Menu" />.
+- **Floating content beside a control:** <DocLink to="Components/Overlays/Popup" />. It doesn't block the page.
+- **A long form or a flow of several steps:** a page of its own.
 
-## Anatomy and behaviour
+</UseInstead>
+</Usage>
 
-Modal Dialog is controlled: pass `open` and an `onClose`. It never closes itself - `onClose` fires
-(from the close button, Escape, or a backdrop click) and the consumer sets `open` to false. While
-open it:
+</Section>
 
-- portals into `document.body`, above the page, over a blanket backdrop;
-- sets `role="dialog"` + `aria-modal="true"`, named by the `title` (`aria-labelledby`) or, without
-  one, by `aria-label`;
-- moves focus into the panel, traps Tab within it, and restores focus to the trigger on close;
-- locks page scroll; the body scrolls internally when it is taller than the viewport allows.
+<Section title="Anatomy">
 
-## Appearance
+<Anatomy
+  specimen={
+    <DialogExample
+      trigger="Open the dialog"
+      tone="warning"
+      width="md"
+      title="Discard your changes?"
+      body="You've changed the matter's details. If you leave now, the changes are lost."
+      confirm="Discard changes"
+      onExpand={() => {}}
+    />
+  }
+>
+  <Part name="backdrop">A blanket fixed over the whole window, which centers the panel and keeps it 40px from the edges. A press that starts and ends on it calls `onClose`.</Part>
+  <Part name="panel">The dialog itself, with `role="dialog"`: the raised surface, a border, a 16px radius, and the overlay shadow, at the `width` you choose.</Part>
+  <Part name="header">Shown when there's a title or a header button. It holds the title area and the header actions.</Part>
+  <Part name="statusIcon">A warning or error icon before the title, for `tone="warning"` or `"error"`. It's decorative.</Part>
+  <Part name="title">An `h2` that names the dialog.</Part>
+  <Part name="headerActions">A Button Group around Expand and Close when both are shown; a single button stands on its own.</Part>
+  <Part name="expand">An Expand Icon Button, shown when you pass `onExpand`.</Part>
+  <Part name="close">The Close Icon Button, shown unless `showCloseButton` is `false`. It calls `onClose`.</Part>
+  <Part name="body">Your content. It scrolls when it's taller than the panel allows, and the header and footer stay put.</Part>
+  <Part name="footer">Your `footer`, usually Cancel and a Confirm Button, aligned to the end.</Part>
+</Anatomy>
 
-<Canvas of={ModalDialogStories.Appearances} />
+The dialog covers the window, so its parts aren't outlined here. Open it to see them all.
 
-`appearance` (`default` / `warning` / `error`) prepends a status icon to the title in the matching
-colour. It deliberately does **not** tone the footer buttons - Modal Dialog can't know your action
-layout - so pair `appearance="error"` with a matching Confirm button, e.g.
-`<Button appearance="primary" tone="error">Delete</Button>`.
+</Section>
 
-<Canvas of={ModalDialogStories.DestructiveConfirmation} />
+<Section title="Variants">
 
-## Widths
+<Subsection title="Tone">
 
-<Canvas of={ModalDialogStories.Widths} />
+`tone` says what the decision means. `warning` and `error` put a status icon before the title;
+`default` shows none. Tone doesn't touch the footer, so give the Confirm button the same `tone`: an
+error dialog confirms with `<Button prominence="primary" tone="error">`.
 
-Four widths - `small` (400px), `medium` (600px, default), `large` (752px), `extraLarge` (968px). The
-panel shrinks to fit narrow viewports (it never exceeds the available width).
+<Example of={ModalDialogStories.Tones} caption="Default, warning, and error dialogs, each with a matching Confirm button." />
 
-## Content
+</Subsection>
 
-<Canvas of={ModalDialogStories.ScrollingBody} />
+<Subsection title="Widths">
 
-The header and footer stay fixed while a long body scrolls. The footer is a slot - pass the actions
-(typically a Cancel and a Confirm Button); they render right-aligned. Omit `footer` for an
-informational dialog.
+Four panel widths: `sm` (400px), `md` (600px, the default), `lg` (752px), and `xl` (968px). On a
+narrow window the panel narrows to fit inside the backdrop's 40px inset. Use `sm` for a short
+confirmation and the wider sizes for a form or a preview.
 
-<Canvas of={ModalDialogStories.EdgeCases} />
+<Example of={ModalDialogStories.Widths} />
 
-## Accessibility
+</Subsection>
 
-- Always give the dialog an accessible name: a `title`, or `aria-label` when there's no visible
-  title.
-- Focus moves into the dialog on open and returns to the trigger on close; Tab is trapped inside.
-- Escape closes the dialog (`closeOnEscape`, default on); the close button is labelled "Close" by
-  default (`closeLabel`).
-- The status icon is decorative - the appearance's meaning is carried by the title text and the
-  actions, not the icon alone.
+</Section>
 
-## API
+<Section title="Behavior">
 
-<table>
-  <thead>
-    <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
-  </thead>
-  <tbody>
-    <tr><td><code>open</code></td><td><code>boolean</code></td><td>-</td><td>Whether the dialog is shown (controlled).</td></tr>
-    <tr><td><code>onClose</code></td><td><code>() =&gt; void</code></td><td>-</td><td>Called on close request (close button, Escape, backdrop).</td></tr>
-    <tr><td><code>title</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Header heading and the dialog's accessible name.</td></tr>
-    <tr><td><code>appearance</code></td><td><code>'default' | 'warning' | 'error'</code></td><td><code>'default'</code></td><td>Prepends a status icon to the title.</td></tr>
-    <tr><td><code>width</code></td><td><code>'small' | 'medium' | 'large' | 'extraLarge'</code></td><td><code>'medium'</code></td><td>Panel width.</td></tr>
-    <tr><td><code>children</code></td><td><code>React.ReactNode</code></td><td>-</td><td>The body content (scrolls when tall).</td></tr>
-    <tr><td><code>footer</code></td><td><code>React.ReactNode</code></td><td>-</td><td>Right-aligned footer actions.</td></tr>
-    <tr><td><code>showCloseButton</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Show the header close (X) button.</td></tr>
-    <tr><td><code>closeLabel</code></td><td><code>string</code></td><td><code>'Close'</code></td><td>Accessible label for the close button.</td></tr>
-    <tr><td><code>closeOnEscape</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when Escape is pressed.</td></tr>
-    <tr><td><code>closeOnBackdropClick</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Close when the backdrop is clicked.</td></tr>
-    <tr><td><code>initialFocusRef</code></td><td><code>RefObject</code></td><td>-</td><td>Element to focus on open (defaults to the panel).</td></tr>
-    <tr><td><code>aria-label</code></td><td><code>string</code></td><td>-</td><td>Accessible name when there's no <code>title</code>.</td></tr>
-    <tr><td><code>className</code></td><td><code>string</code></td><td>-</td><td>Composes with the panel's class list.</td></tr>
-  </tbody>
-</table>
+<Subsection title="Your state opens and closes it">
 
-## Related components
+Modal Dialog never closes itself. Keep `open` in your state and set it to `false` in `onClose`,
+which is called by the Close button, by Escape, and by a press that starts and ends on the backdrop.
+A text selection dragged out of the panel doesn't close it. Turn off Escape or the backdrop with
+`closeOnEscape` or `closeOnBackdropClick`; since `onClose` comes before any change, you can also ask
+before discarding work. While closed, it renders nothing.
 
-- **Button** - the footer actions.
-- **Toast** - for non-blocking, transient feedback instead of a blocking dialog.
-- **Dropdown Menu / Menu** - for contextual overflow anchored to a control.
+<Example of={ModalDialogStories.DestructiveConfirmation} caption="A destructive confirmation: the error tone, a narrow panel, and an error Confirm button." />
+
+</Subsection>
+
+<Subsection title="Focus">
+
+When the dialog opens, focus moves to the panel, or to the element in `initialFocusRef`, such as the
+first field of a form. Tab and Shift+Tab cycle through the dialog's controls and don't leave it.
+When it closes, focus goes back to the element that had it before, usually the button that opened
+it.
+
+</Subsection>
+
+<Subsection title="Scrolling">
+
+While the dialog is open, the page behind it doesn't scroll. A long body scrolls inside the panel,
+with the header and footer in place.
+
+<Example of={ModalDialogStories.ScrollingBody} caption="Twenty paragraphs of terms scroll inside the panel." />
+
+</Subsection>
+
+<Subsection title="Header actions">
+
+The header ends with a Close button unless you set `showCloseButton={false}`. Pass `onExpand` to
+add an Expand button before it, for a preview that can open at full size; Modal Dialog shows the
+button and calls `onExpand`, and what expanding does is up to you.
+
+<Example of={ModalDialogStories.HeaderExpand} />
+
+</Subsection>
+
+<Subsection title="Without a title or a footer">
+
+Leave out `footer` for a dialog that only informs; people close it with the Close button or
+Escape. Without a visible `title`, name the dialog with `aria-label`; in development, a dialog with
+neither logs a warning. The header still shows while it holds the Close button.
+
+<Example of={ModalDialogStories.EdgeCases} />
+
+</Subsection>
+
+<Subsection title="Layering and motion">
+
+Tooltip, Dropdown Menu, the pickers, and Inline Message open in a Popup, which sits above the
+dialog, so they show over it, including the tooltips of its own Close and Expand buttons. A dialog
+opened from inside another shows over the first. The order (dialog, then toast, then popup) is kept
+in one place, `primitives/layers.ts`.
+
+Escape closes only the topmost layer: an open menu, picker, or tooltip in the dialog closes first,
+and the next Escape closes the dialog; with two dialogs open, only the top one closes. A control
+inside that handles Escape itself, such as Inline Message's popup, keeps it.
+
+The backdrop fades in and the panel fades in while rising 8px, both with `fade-quick`; with
+reduced motion, the dialog appears at once. It leaves at once when it closes.
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Give a destructive dialog the error tone, and the Confirm button the error tone too."
+  code={`<ModalDialog
+    tone="error"
+    title="Delete this matter?"
+    footer={
+        <ButtonGroup>
+            <Button prominence="tertiary" onClick={close}>Cancel</Button>
+            <Button prominence="primary" tone="error" onClick={remove}>Delete matter</Button>
+        </ButtonGroup>
+    }
+    …
+/>`}
+>
+  <DialogExample
+    trigger="Delete matter"
+    tone="error"
+    title="Delete this matter?"
+    body="This deletes the matter, its documents, and its history. You can't undo it."
+    confirm="Delete matter"
+  />
+</Do>
+<Dont
+  caption="Expect the dialog's tone to style its buttons. Here the Confirm button stays the brand color."
+  code={`<ModalDialog
+    tone="error"
+    title="Delete this matter?"
+    footer={<Button prominence="primary" onClick={remove}>Delete matter</Button>}
+    …
+/>`}
+/>
+<Do
+  caption="Name the action in the title and on the Confirm button."
+  code={`<ModalDialog title="Discard your changes?" footer={…Discard changes…} …>`}
+>
+  <DialogExample
+    trigger="Leave without saving"
+    tone="warning"
+    title="Discard your changes?"
+    body="You've changed the matter's details. If you leave now, the changes are lost."
+    confirm="Discard changes"
+  />
+</Do>
+<Dont
+  caption="Ask a vague question with a generic answer. People have to read the body to know what OK does."
+  code={`<ModalDialog title="Are you sure?" footer={…OK…} …>`}
+/>
+<Do
+  caption="Pass a title, or aria-label when there's no visible title."
+  code={`<ModalDialog open={open} onClose={close} aria-label="Notification settings" …>
+    …
+</ModalDialog>`}
+>
+  <DialogExample
+    trigger="Notification settings"
+    label="Notification settings"
+    body="Email me when a matter I follow changes."
+    confirm="Save"
+  />
+</Do>
+<Dont
+  caption="Leave the dialog unnamed. A screen reader announces only that a dialog opened."
+  code={`<ModalDialog open={open} onClose={close}>
+    …
+</ModalDialog>`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- The panel has `role="dialog"` and `aria-modal="true"`. It's named by its `title`, through
+  `aria-labelledby`, or by `aria-label` when there's no title; with neither, it has no name, and
+  it warns in development.
+- Opening moves focus into the dialog, Tab and Shift+Tab stay inside it, and closing returns focus
+  to the element that had it before. The panel itself can take focus, so focus stays in the dialog
+  even when it holds no controls.
+- The page behind isn't made inert: `aria-modal` tells assistive technology to stay in the dialog,
+  and the backdrop stops pointer presses from reaching the page.
+- The status icon is hidden from assistive technology, so the title and the buttons have to carry
+  the meaning on their own.
+- The Close and Expand buttons are named by `closeLabel` and `expandLabel`, "Close" and "Expand" by
+  default; translate them with the rest of your text.
+
+<Keyboard>
+  <Key keys="Tab">Moves to the next control in the dialog, and from the last back to the first.</Key>
+  <Key keys="Shift + Tab">Moves to the previous control, and from the first, or the panel, to the last.</Key>
+  <Key keys="Escape">Calls `onClose`, unless `closeOnEscape` is `false`, when nothing opened above the dialog (a menu, a tooltip, another dialog) is still open: that closes first.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={ModalDialogStories} />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Modal Dialog's stylesheet uses, by family, with the property it sets and where. The
+panel widths are fixed lengths in the stylesheet, not tokens.
+
+<TokensTable id="modal-dialog" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Actions/Button" />, for the footer's Cancel and Confirm, with a `tone` that matches the dialog's.
+- <DocLink to="Components/Actions/Button Group" />, which lays out the footer's buttons and groups the header's.
+- <DocLink to="Components/Feedback/Toast Group" />, for feedback that doesn't need an answer.
+- <DocLink to="Components/Overlays/Popup" />, for content that floats beside a control without blocking the page.
+- <DocLink to="Components/Actions/Dropdown Menu" />, for actions opened from a control.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads modal-dialog.types.ts, the design tokens read modal-dialog.module.css, and the
+  Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

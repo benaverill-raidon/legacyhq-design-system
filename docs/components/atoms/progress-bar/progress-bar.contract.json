@@ -1,6 +1,6 @@
 {
   "name": "ProgressBar",
-  "category": "atom",
+  "category": "feedback",
   "status": "specified",
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
@@ -73,6 +73,7 @@
     "size": {
       "type": "enum",
       "values": [
+        "sm",
         "md",
         "lg"
       ],
@@ -100,15 +101,21 @@
     }
   },
   "sizes": {
+    "sm": {
+      "linearRoot": "24px",
+      "trackThickness": "16px",
+      "progressInset": "4px",
+      "circularDiameter": "72px"
+    },
     "md": {
-      "linearRoot": "20px",
-      "trackThickness": "12px",
+      "linearRoot": "32px",
+      "trackThickness": "24px",
       "progressInset": "4px",
       "circularDiameter": "72px"
     },
     "lg": {
-      "linearRoot": "32px",
-      "trackThickness": "24px",
+      "linearRoot": "40px",
+      "trackThickness": "32px",
       "progressInset": "4px",
       "circularDiameter": "72px"
     }
@@ -157,7 +164,7 @@
     "Clamp rendered and announced value to 0\u2013100.",
     "Support arbitrary numeric values.",
     "Do not add indeterminate behavior.",
-    "Do not add animation unless explicitly specified.",
+    "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular ring is hidden, so reaching or leaving 0 shows or hides it at once.",
     "Linear width is controlled by the parent.",
     "Circular progress starts at 12 o'clock and advances clockwise.",
     "The linear progress fill and remaining track are both fully-rounded pills (border-radius-full-round) at every value.",
@@ -215,7 +222,7 @@
   "acceptanceCriteria": [
     "Linear and circular variants render from one numeric value API.",
     "Values clamp to 0\u2013100.",
-    "Both sizes match the documented anatomy.",
+    "Every size matches the documented anatomy.",
     "Linear progress is fluid width.",
     "Circular progress uses vector geometry.",
     "Progress semantics and accessible naming are correct.",

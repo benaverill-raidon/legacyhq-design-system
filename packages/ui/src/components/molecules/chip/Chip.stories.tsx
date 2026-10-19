@@ -49,7 +49,7 @@ function peopleSections(): MenuSection[] {
 }
 
 const meta = {
-  title: 'UI/Molecules/Chip',
+  title: 'Components/Forms/Chip',
   component: Chip,
   args: {
     mode: 'filter',
@@ -106,7 +106,7 @@ export const Playground: Story = {};
 
 /**
  * The three modes, which is the axis that actually changes Chip's shape. `filter` is the only mode
- * with dropdown segments; `property` is a label plus a remove affordance; `scope` is the only mode
+ * with dropdown segments; `select` is a label plus a remove affordance; `search` is the only mode
  * that is itself selectable, and the only one Figma gives an unselected state.
  */
 export const Modes: Story = {
@@ -145,8 +145,8 @@ export const Modes: Story = {
       </Group>
 
       <Group
-        title="property"
-        description="A single already-applied property. No dropdown - the value is the label itself, and the only control is remove."
+        title="select"
+        description="A single already-applied value. No dropdown - the value is the label itself, and the only control is remove."
       >
         <div style={row}>
           <Chip mode="select" label="Trusts" onRemove={() => {}} />
@@ -155,7 +155,7 @@ export const Modes: Story = {
       </Group>
 
       <Group
-        title="scope"
+        title="search"
         description="Scopes a search to a broader category than a single property. Each chip is an independent on/off toggle carrying aria-pressed - not a radio group, so several can be on at once."
       >
         <ScopeExample />
@@ -235,7 +235,7 @@ export const WithOperator: Story = {
 };
 
 /**
- * The sizes Figma defines, applied to every segment together. `property` and `scope` exist at both
+ * The sizes Figma defines, applied to every segment together. `select` and `search` exist at both
  * `sm (24)` and `md (32)`; `filter` is `md`-only (the `sm` filtering variants were removed), so it
  * appears in the md row alone.
  */
@@ -275,7 +275,7 @@ export const Sizes: Story = {
 
 /**
  * Interaction and system states. The label segment (Figma's chip-base) deliberately has **no** hover
- * or press treatment in any mode - in filter/property it is a passive span, and in scope the
+ * or press treatment in any mode - in filter/select it is a passive span, and in search the
  * selected/unselected distinction is the feedback, with the focus ring covering keyboard affordance.
  * So `data-force-state` accepts only `'focus'` here; the segments that do have interaction fills are
  * the operator, the value, and remove.
@@ -283,7 +283,7 @@ export const Sizes: Story = {
 export const States: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="scope - unselected" description="No hover or press fill - only focus and disabled change the label segment.">
+      <Group title="search - unselected" description="No hover or press fill - only focus and disabled change the label segment.">
         <div style={row}>
           <Chip mode="search" label="Default" elemBefore={<SearchIcon decorative />} />
           <Chip mode="search" label="Focus" elemBefore={<SearchIcon decorative />} data-force-state="focus" />
@@ -291,7 +291,7 @@ export const States: Story = {
         </div>
       </Group>
       <Group
-        title="scope - selected"
+        title="search - selected"
         description="Selected is a selection state, not an interaction state - it uses the dedicated selected token family, and the label icon tracks the text colour with it."
       >
         <div style={row}>
@@ -315,7 +315,7 @@ export const States: Story = {
           />
         </div>
       </Group>
-      <Group title="filter / property - disabled" description="Disabled applies to every segment at once.">
+      <Group title="filter / select - disabled" description="Disabled applies to every segment at once.">
         <div style={row}>
           <Chip
             mode="filter"
@@ -385,7 +385,7 @@ export const Content: Story = {
 export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Long label and value truncate rather than breaking the pill" description="The chip stays a single line; segments ellipsize.">
+      <Group title="Long label and value in a 320px container" description="The chip stays on one line within the container: the label and value end in an ellipsis.">
         <div style={{ inlineSize: '320px' }}>
           <Chip
             mode="filter"

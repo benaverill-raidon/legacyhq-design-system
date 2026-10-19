@@ -1,6 +1,6 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { focusRingClassNames } from '../../primitives/focus-ring';
@@ -169,5 +169,73 @@ describe('InlineMessage', () => {
 
   it('applies matching padding on both sides of the text group', () => {
     expect(inlineMessageCss).toMatch(/\.text \{[\s\S]*?padding-inline: var\(--spacing-xs\);/);
+  });
+
+  it('uses information for the info tone, and still accepts the deprecated info', () => {
+    const { container, rerender } = render(<InlineMessage title="Synced" tone="information" content="Details" />);
+    expect(container.querySelector('button')).toHaveClass(styles.tone_information);
+    expect(container.querySelector('[data-color="information"]')).toBeInTheDocument();
+
+    rerender(<InlineMessage title="Synced" tone="info" content="Details" />);
+    expect(container.querySelector('button')).toHaveClass(styles.tone_information);
+    expect(container.querySelector('[data-color="information"]')).toBeInTheDocument();
+  });
+
+  it('says the status in hidden text before the title, since the icon is decorative', () => {
+    render(<InlineMessage tone="warning" title="Unsaved changes" />);
+    expect(screen.getByText('Warning:')).toHaveClass(styles.visuallyHidden);
+
+    cleanup();
+    render(<InlineMessage tone="error" title="Sync failed" content="Details" />);
+    expect(screen.getByRole('button', { name: 'Error: Sync failed' })).toBeInTheDocument();
+
+    cleanup();
+    render(<InlineMessage title="Draft" statusLabel="" />);
+    expect(screen.queryByText(/:$/)).not.toBeInTheDocument();
+  });
+
+  it('moves focus into the popup when it opens, so its links come next in tab order', async () => {
+    render(<InlineMessage tone="information" title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Information: Migration' }));
+
+    const dialog = screen.getByRole('dialog', { name: 'Information: Migration' });
+    await waitFor(() => expect(dialog).toHaveFocus());
+  });
+
+  it('moves focus only once Popup has shown the panel, so the first open works too', async () => {
+    // A browser won't focus an element under visibility: hidden, which Popup sets until it has
+    // positioned the panel. jsdom would, so this makes focus() behave as a browser's does.
+    const focus = HTMLElement.prototype.focus;
+    const focusSpy = vi.spyOn(HTMLElement.prototype, 'focus').mockImplementation(function (this: HTMLElement) {
+      if (this.closest('[style*="visibility: hidden"]')) return;
+      focus.call(this);
+    });
+
+    render(<InlineMessage title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Migration' }));
+
+    await waitFor(() => expect(screen.getByRole('dialog', { name: 'Migration' })).toHaveFocus());
+    focusSpy.mockRestore();
+  });
+
+  it('closes and returns focus to the row when Tab leaves the popup, or on Escape', () => {
+    render(<InlineMessage title="Migration" content={<a href="#notes">Read the notes</a>} />);
+    const trigger = screen.getByRole('button', { name: 'Migration' });
+
+    fireEvent.click(trigger);
+    const link = screen.getByRole('link', { name: 'Read the notes' });
+    link.focus();
+    fireEvent.keyDown(link, { key: 'Tab' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+
+    fireEvent.click(trigger);
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it("styles the pressed state with each tone's press overlay", () => {
+    expect(inlineMessageCss).toMatch(/\.tone_error\.trigger:is\(:active, \[data-force-state='press'\]\) \{\s*background: var\(--color-background-error-overlay-press\);/);
   });
 });

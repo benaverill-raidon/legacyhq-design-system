@@ -5,7 +5,7 @@
 ### Name
 Text Field
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -70,8 +70,10 @@ No fixed limit - native `maxLength` applies if the consumer sets it.
 ### Size
 - sm, md, lg
 
-### Appearance
-- default (bordered), subtle (borderless until interacted), inline (chromeless at rest, subtle-style bottom-only on interaction)
+### Context
+- default (bordered), inline (chromeless at rest; hover background and bottom border on hover,
+  bottom focus/error line on focus/invalid) - the same name and values as Figma's `context` axis
+- The deprecated `appearance` prop still works: `subtle` and `inline` map to `inline`
 
 ---
 
@@ -79,6 +81,12 @@ No fixed limit - native `maxLength` applies if the consumer sets it.
 
 Required:
 - Default, hover, focus, disabled, invalid
+- Autofill - Figma's `state=autofill`: `--color-background-autofill-default` over the raised surface,
+  with each context's resting stroke, when the input matches `:autofill` (or the
+  documentation-only `data-force-state="autofill"` pin). Hover replaces the tint; focus and invalid
+  keep it. `context="inline"` stays chromeless at rest, as Figma's inline autofill variant does, and
+  shows the tint only while focused (per design feedback). The browser's own autofill fill on the
+  input is hidden by clipping its background to the text.
 
 Not Required:
 - A separate "typing" or "filled" state - both fall out of native `:placeholder-shown` plus
@@ -110,16 +118,17 @@ accessible name (e.g. `aria-label="Clear"`) and remain reachable by keyboard.
 ---
 
 ## Notes
-Figma's `state` variant axis (default/hover/focus/typing/filled) is not a real prop - it resolves
-entirely to native `:hover`, `:focus-within`, and `:placeholder-shown`, plus the input's own value.
-Figma's `tone` axis is renamed to `appearance` (`standard`→`default`) to match this system's
-existing visual-weight vocabulary. `appearance="subtle"` always renders square bottom corners
-(top corners only), confirmed from Figma's per-corner radius data. `elemBeforeInput` (icon-or-text,
+Figma's `state` variant axis (default/hover/focus/typing/filled/autofill) is not a real prop - it
+resolves entirely to native `:hover`, `:focus-within`, `:placeholder-shown`, and `:autofill`, plus the
+input's own value.
+Figma's `context` axis (`default`/`inline`) is the `context` prop, with the same name and values.
+`context="inline"` always renders square bottom corners (top corners only), confirmed from Figma's
+per-corner radius data. `elemBeforeInput` (icon-or-text,
 always decorative) and `elemAfterInput` (icon-or-button, may be interactive) are asymmetric Figma
 sub-components, not a symmetric before/after pair. Focus/typing replaces the resting border color
 directly (the same pattern `invalid` uses), not an outline ring around it; hover is suppressed while
-the field is focused/typing. Neither appearance changes real `border-width` on focus/invalid -
-`appearance="default"` and `appearance="subtle"` both rest at 1px at every state (rest, hover,
+the field is focused/typing. Neither context changes real `border-width` on focus/invalid -
+`context="default"` and `context="inline"` both rest at 1px at every state (rest, hover,
 focus, invalid), painting the "thicker" look via `box-shadow` only, so the input text and typing
-caret never shift position. Hovering an invalid `appearance="subtle"` field keeps the error border
+caret never shift position. Hovering an invalid `context="inline"` field keeps the error border
 color instead of resetting it. See `text-field-spec.md` for the full reasoning.

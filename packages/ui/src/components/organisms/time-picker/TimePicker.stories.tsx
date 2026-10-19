@@ -6,7 +6,7 @@ import { TimePicker } from './time-picker';
 const FOUR_THIRTY_PM = new Date(2026, 2, 9, 16, 30); // 04:30 PM
 
 const meta = {
-  title: 'UI/Organisms/TimePicker',
+  title: 'Components/Forms/Time Picker',
   component: TimePicker,
   args: {
     defaultValue: FOUR_THIRTY_PM,
@@ -29,7 +29,6 @@ const meta = {
     defaultValue: { control: false },
     onChange: { control: false },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '360px' }}>{Story()}</div>],
 } satisfies Meta<typeof TimePicker>;
 
 export default meta;

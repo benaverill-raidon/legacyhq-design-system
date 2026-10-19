@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { DateTimePicker } from './date-time-picker';
 import styles from './date-time-picker.module.css';
 
@@ -114,5 +115,55 @@ describe('DateTimePicker CSS contract', () => {
     expect(css).toContain('margin-inline-start: calc(-1 * var(--border-width-sm));');
     expect(css).toMatch(/\.date > div \{[\s\S]*?border-start-end-radius: 0;[\s\S]*?border-end-end-radius: 0;/);
     expect(css).toMatch(/\.time > div \{[\s\S]*?border-start-start-radius: 0;[\s\S]*?border-end-start-radius: 0;/);
+  });
+
+  it('takes the wiring Field passes: the label names the group, and both inputs get the error and required', () => {
+    render(
+      <Field label="Hearing" message="Both a date and a time" state="error" required>
+        <DateTimePicker />
+      </Field>,
+    );
+
+    const group = screen.getByRole('group', { name: 'Hearing' });
+    expect(group).toHaveAccessibleDescription('Both a date and a time');
+    for (const input of within(group).getAllByRole('textbox')) {
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input).toBeRequired();
+    }
+  });
+
+  it("points Field's label at the date input, and the label still names the group", () => {
+    render(
+      <Field label="Hearing">
+        <DateTimePicker />
+      </Field>,
+    );
+
+    const label = screen.getByText('Hearing');
+    const date = screen.getByRole('textbox', { name: 'Date' });
+    expect(label).toHaveAttribute('for', date.id);
+    expect(Array.from((date as HTMLInputElement).labels ?? [])).toContain(label);
+    expect(screen.getByRole('group', { name: 'Hearing' })).not.toHaveAttribute('id');
+  });
+
+  it('makes the form check both halves when required', () => {
+    render(
+      <form aria-label="Hearing form">
+        <DateTimePicker aria-label="When" today={MARCH_9_430PM} required />
+      </form>,
+    );
+    const form = screen.getByRole('form') as HTMLFormElement;
+    expect(form.checkValidity()).toBe(false);
+
+    // A confirmed time fills both halves (the date comes from `today`).
+    fireEvent.click(timeField());
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+    expect(form.checkValidity()).toBe(true);
+  });
+
+  it('puts its id on the date input, not the group', () => {
+    renderPicker({ id: 'hearing' });
+    expect(dateField()).toHaveAttribute('id', 'hearing');
+    expect(screen.getByRole('group', { name: 'When' })).not.toHaveAttribute('id');
   });
 });

@@ -37,6 +37,9 @@ const photoB = portrait({ top: '#d8c3a5', bottom: '#8c6f4e', figure: '#3c2f26' }
 const photoC = portrait({ top: '#b9c9a8', bottom: '#5f7a52', figure: '#e8d3bb' });
 const brokenImage = 'https://invalid.localhost/this-image-does-not-exist.png';
 
+/** The photograph stand-ins, for the Docs page's examples. Not a story. */
+export const avatarPhotos = { photoA, photoB, photoC };
+
 const SIZES: AvatarSize[] = ['xxs', 'xs', 'sm', 'md', 'lg', 'xl'];
 
 const row: React.CSSProperties = {
@@ -90,15 +93,15 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 }
 
 const meta = {
-  title: 'UI/Atoms/Avatar',
+  title: 'Components/Data Display/Avatar',
   component: Avatar,
+  excludeStories: ['avatarPhotos'],
   args: {
     size: 'md',
     name: 'Ben Averill',
     presence: 'none',
     status: 'none',
-    isSelected: false,
-    isDisabled: false,
+    disabled: false,
     isInteractive: false,
     decorative: false,
     entityType: 'person',
@@ -111,6 +114,11 @@ const meta = {
     presence: { control: 'select', options: ['none', 'online', 'offline', 'busy'] },
     status: { control: 'select', options: ['none', 'accepted', 'declined'] },
     entityType: { control: 'inline-radio', options: ['person', 'team'] },
+    isSelected: { control: 'boolean' },
+    isDisabled: { control: false },
+    selectedLabel: { control: 'text' },
+    getPresenceLabel: { control: false },
+    getStatusLabel: { control: false },
     onClick: { control: false },
     className: { control: false },
   },
@@ -250,7 +258,7 @@ export const States: Story = {
           />
         </Cell>
         <Cell label="Disabled">
-          <Avatar src={photoA} name="Disabled" isInteractive isDisabled onClick={() => undefined} />
+          <Avatar src={photoA} name="Disabled" isInteractive disabled onClick={() => undefined} />
         </Cell>
       </Group>
 
@@ -294,7 +302,7 @@ export const States: Story = {
             name="Selected disabled"
             isInteractive
             isSelected
-            isDisabled
+            disabled
             onClick={() => undefined}
           />
         </Cell>
@@ -342,7 +350,7 @@ function LiveToggle() {
   return (
     <Avatar
       src={photoB}
-      name={selected ? 'Ben Averill, selected' : 'Ben Averill'}
+      name="Ben Averill"
       isInteractive
       isSelected={selected}
       presence="online"

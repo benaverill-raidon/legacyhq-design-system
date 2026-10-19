@@ -1,6 +1,7 @@
 .button {
   --button-border-radius: var(--border-radius-sm);
   --focus-ring-offset: var(--spacing-xxs);
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -93,7 +94,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   border-color: var(--color-border-input);
   background: var(--color-background-neutral-overlay-bold-hover);
@@ -113,7 +115,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   border-color: var(--color-border-brand-primary-default);
   background: var(--color-background-brand-primary-overlay-hover);
@@ -137,7 +140,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   border-color: var(--color-border-error);
   background: var(--color-background-error-overlay-hover);
@@ -157,7 +161,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   background: var(--color-background-brand-primary-bold-hover);
 }
@@ -175,7 +180,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   background: var(--color-background-warning-bold-hover);
 }
@@ -193,7 +199,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   background: var(--color-background-error-bold-hover);
 }
@@ -212,7 +219,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   background: var(--color-background-neutral-overlay-bold-hover);
 }
@@ -229,7 +237,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   background: var(--color-background-brand-primary-overlay-hover);
 }
@@ -289,7 +298,8 @@
     :hover,
     :focus-visible,
     [data-force-state='hover'],
-    [data-force-state='focus']
+    [data-force-state='focus'],
+    [data-expanded='true']
   ) {
   border-color: transparent;
   background: var(--color-background-neutral-overlay-subtle-hover);
@@ -301,10 +311,6 @@
 }
 
 .fullWidth {
-  inline-size: 100%;
-}
-
-.expanded {
   inline-size: 100%;
 }
 
@@ -329,5 +335,21 @@
 
 .leading :global([data-color]),
 .trailing :global([data-color]) {
+  color: inherit;
+}
+
+/*
+ * Loading holds the button's size: the content keeps its space (and stays the accessible name, since
+ * opacity leaves it in the accessibility tree) while the spinner sits centered over it.
+ */
+.button[data-loading='true'] > :is(.leading, .content, .trailing) {
+  opacity: 0;
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   color: inherit;
 }

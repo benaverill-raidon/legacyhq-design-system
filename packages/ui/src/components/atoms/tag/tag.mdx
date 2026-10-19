@@ -1,214 +1,272 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { AssetsIcon, TrustIcon } from '../../../assets/icons';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Label } from '../label';
+import { Tag } from './tag';
+import tagStyles from './tag.module.css';
 import * as TagStories from './tag.stories';
 
 <Meta of={TagStories} name="Docs" />
 
-# Tag
+<Unstyled>
+<ComponentPage>
 
-Tag labels UI objects for classification and navigation. In LegacyHQ it most often represents a
-referenced entity - a trust, asset, task, note, or person - and can be display-only, navigational,
-removable, or both navigational and removable at once.
+<ComponentHeader
+  id="tag"
+  example={
+    <>
+      <Tag href="#" tone="green" elemBefore={<TrustIcon />}>
+        Averill Family Living Trust
+      </Tag>
+      <Tag href="#" tone="blue" elemBefore={<AssetsIcon />}>
+        Ben&apos;s Investments
+      </Tag>
+      <Tag tone="purple" isRemovable onRemove={() => undefined}>
+        Estate planning
+      </Tag>
+    </>
+  }
+>
+  Tag is a compact reference to a record or a category: a trust, an asset, a task, a person. It can
+  link to the record, be removed, or both, and each of those is its own control.
+</ComponentHeader>
 
-<Canvas of={TagStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A compact labeled reference to an entity (a trust, asset, task, note, or person mention).
-- A classification or category attached to a record.
-- A removable relationship or association between records.
+- A reference to a record that opens it, with `href`: a trust, an asset, a task, a note, or a person.
+- A category or a classification attached to a record.
+- A relationship people can remove, with `isRemovable`.
+- A small trigger in a row of tags, such as Tag Group's "+5 more", with `isInteractive`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **A purely informational, non-interactive status label.** Use `Label` or `Badge`.
-- **A primary action.** Use `Button`.
-- **An icon-only action.** Use `IconButton` or `ToggleIconButton`.
-- **A freeform text link.** Use `Link`.
+- **A status:** <DocLink to="Components/Data Display/Label" />. Its tones mean something; Tag's colors don't.
+- **A count:** <DocLink to="Components/Data Display/Badge" />.
+- **A filter people apply or change:** <DocLink to="Components/Forms/Chip" />.
+- **A link inside a sentence that isn't a record reference:** <DocLink to="Components/Navigation/Link" />.
+- **An action:** <DocLink to="Components/Actions/Button" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={TagStories.Content} />
+</Section>
 
-Tag renders one of four different root shapes depending on which props are set - see Variants:
+<Section title="Anatomy">
 
-- **Display-only** - a plain `span`, non-interactive.
-- **Navigational** (`href` set) - a native anchor as the root itself.
-- **Removable** (`isRemovable` set) - a wrapper `span` containing a non-interactive content area and
-  a separate native remove `button`. The button is never nested inside an anchor.
-- **Navigational + removable** - the same wrapper, but the content area is an anchor.
+<Anatomy
+  specimen={
+    <Tag href="#" tone="green" elemBefore={<TrustIcon />} isRemovable onRemove={() => undefined}>
+      Averill Family Living Trust
+    </Tag>
+  }
+>
+  <Part name="container" target={tagStyles.root}>The root. A `span` to display, an `a` with `href`, a `button` when interactive, or a wrapper `span` around the content and the remove button when removable. It draws the border.</Part>
+  <Part name="content area" target={tagStyles.content}>Only in a removable tag: an `a` with `href`, otherwise a `span`. In every other form, the container is the content.</Part>
+  <Part name="optional leading icon" target={tagStyles.elemBefore}>`elemBefore`, set to 16px at both sizes, in the tag's text color.</Part>
+  <Part name="label" target={tagStyles.text}>The `children`, on one line. It ends with an ellipsis when the tag is narrower than its text.</Part>
+  <Part name="optional remove button" target={tagStyles.removeButton}>With `isRemovable`: a native `button` with a close icon, named by `removeLabel`. It's never inside the link.</Part>
+</Anatomy>
 
-Every form shares: an optional `elemBefore` leading icon, the label text (truncates with an ellipsis
-rather than wrapping), and - when removable - the remove button's own icon.
+</Section>
 
-## Usage guidance
+<Section title="Variants">
 
-### Tone
+`tone` picks a color set for the fill, border, and text. `default` is neutral and `brand` is the
+product color. The other eight are accent colors with no fixed meaning, for telling kinds of records
+apart: Rich Text Area, for one, shows accounts and people in blue, matters in teal, and roadmaps in
+purple by default. Don't use them to say whether something is good or bad.
 
-`tone` is a broad enumeration, not a paired emphasis/meaning split like Button's `appearance`/`tone`.
-`default` is the neutral default; `brand` ties to the product's own color; the rest are
-general-purpose accent tones with no fixed semantic meaning of their own - pick one for visual
-variety or light categorization, not to encode status. See Variants.
+<Example of={TagStories.Variants} caption="Every tone, then each form: display, link, removable, link and removable, and interactive." />
 
-### Sizes
+<Subsection title="Sizes">
 
-`sm` and `md` scale the tag's height, padding, and the remove button's own container - the
-`elemBefore` and remove-button icon glyphs stay a constant 16px at both sizes. See Sizes.
+`md`, the default, is 32px tall with 8px corners. `sm` is 24px tall with 4px corners and tighter
+padding, for dense rows and tags inside text. The text is `body-md` and the icons are 16px at both
+sizes; the remove button stays square at the tag's height.
 
-### Independent focus for content and remove
+<Example of={TagStories.Sizes} />
 
-When a Tag is both navigational and removable, the content anchor and the remove button are two
-separately-focusable native elements, each with its own tight focus ring at its own bounds - not one
-ring around the whole tag. Tab moves between them independently, and hovering or pressing one never
-affects the other's visual state - see States for a live example.
+</Subsection>
 
-### Removing vs. navigating
+</Section>
 
-Clicking the remove button always calls `onRemove` and never triggers navigation, even when the
-content area is also a link - the two are fully independent interactive targets, and neither is
-nested inside the other in the DOM.
+<Section title="Behavior">
 
-### Disabled
+<Subsection title="Display, link, remove, or click">
 
-`isDisabled` suppresses hover/press styling on both the content area and the remove button,
-prevents navigation, and disables the remove button natively - see States.
+Tag renders a different root for each job:
 
-## Do / Don't
+- **No `href`, not removable:** a `span` that only displays.
+- **`href`:** the whole tag is an `a`. With `target="_blank"` and no `rel`, Tag adds
+  `rel="noopener noreferrer"`. A `rel` you pass is used as given.
+- **`isRemovable`:** a wrapper `span` holding the content, which is a link when `href` is set, and a
+  separate remove button.
+- **`isInteractive` or `onClick`, with no `href` and not removable:** a `button`, for a tag that
+  opens something, such as Tag Group's overflow tag.
 
-**Do** give a removable Tag either a plain-text `children` (so a label is derived automatically) or
-an explicit `removeLabel`.
+A removable tag without `href` ignores `onClick` and `isInteractive`: its content stays a `span`.
 
-```tsx
-<Tag isRemovable onRemove={handleRemove}>
-  Averill Family Living Trust
-</Tag>
-```
+</Subsection>
 
-**Don't** rely on the derived label when `children` isn't plain text - it silently falls back to the
-generic "Remove tag", which loses the specific entity name for screen reader users.
+<Subsection title="Removing">
 
-```tsx
-<Tag isRemovable onRemove={handleRemove}>
-  <CustomEntityLabel />
-</Tag>
-```
+The remove button calls `onRemove`. Its click doesn't reach the link, so removing never navigates.
+Tag doesn't remove itself: take it out of your list in `onRemove`. It doesn't move focus either, so
+decide where focus goes when the tag disappears.
 
-Use `removeLabel` explicitly instead:
+The button's accessible name is `removeLabel`. Without it, Tag uses "Remove" and the text when
+`children` is a string, and "Remove tag" when it isn't.
 
-```tsx
-<Tag isRemovable onRemove={handleRemove} removeLabel="Remove Averill Family Living Trust">
-  <CustomEntityLabel />
-</Tag>
-```
+</Subsection>
 
----
+<Subsection title="Focus, hover, and disabled">
 
-**Do** let Tag derive `rel="noopener noreferrer"` for external links.
+A link and its remove button are separate controls: each takes focus on its own, with its own Focus
+Ring at its own edges, and its own hover and pressed fill, which fades in with `fade-quick`. A
+display-only tag has no hover or focus look.
 
-```tsx
-<Tag href="https://example.com" target="_blank">
-  External reference
-</Tag>
-```
+`disabled` swaps the fill, border, and text for the disabled colors and turns off hover and press.
+A link gets `aria-disabled`, leaves the tab order, and doesn't navigate when clicked. The remove
+button and an interactive tag get the native `disabled`.
 
-**Don't** use Tag for a primary call to action - it has no emphasis states designed for that.
+<Example of={TagStories.States} />
 
-```tsx
-<Tag href="/save" tone="brand">
-  Save changes
-</Tag>
-```
+</Subsection>
 
-## API
+<Subsection title="Long text">
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The label content.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'sm' | 'md'</code></td>
-      <td><code>'md'</code></td>
-      <td>Scales height, padding, and the remove button's container. Icon glyphs stay 16px.</td>
-    </tr>
-    <tr>
-      <td><code>tone</code></td>
-      <td><code>'default' | 'blue' | 'green' | 'purple' | 'red' | 'teal' | 'yellow' | 'orange' | 'magenta' | 'brand'</code></td>
-      <td><code>'default'</code></td>
-      <td>Background/border/content color set. No fixed semantic meaning beyond <code>default</code> and <code>brand</code>.</td>
-    </tr>
-    <tr>
-      <td><code>href</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>When set, the content area renders as a native anchor.</td>
-    </tr>
-    <tr>
-      <td><code>target</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Native anchor <code>target</code>.</td>
-    </tr>
-    <tr>
-      <td><code>rel</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Preserved if provided; otherwise <code>noopener noreferrer</code> is added automatically for <code>target="_blank"</code>.</td>
-    </tr>
-    <tr>
-      <td><code>isRemovable</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Renders a separate native remove button alongside the content area.</td>
-    </tr>
-    <tr>
-      <td><code>onRemove</code></td>
-      <td><code>() =&gt; void</code></td>
-      <td>-</td>
-      <td>Called when the remove button is clicked. Never triggers navigation.</td>
-    </tr>
-    <tr>
-      <td><code>removeLabel</code></td>
-      <td><code>string</code></td>
-      <td>derived from <code>children</code></td>
-      <td>Accessible name for the remove button. Falls back to "Remove tag" when <code>children</code> isn't plain text.</td>
-    </tr>
-    <tr>
-      <td><code>isDisabled</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Suppresses hover/press styling, blocks navigation, and disables the remove button.</td>
-    </tr>
-    <tr>
-      <td><code>elemBefore</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Leading icon or other compact visual content.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root element's class list.</td>
-    </tr>
-  </tbody>
-</table>
+A tag stays on one line. When its container is narrower than the tag, the text ends with an ellipsis;
+there's no tooltip with the full text. Tags in a wrapping row move to the next line as the row fills.
 
-Any other native attribute for the rendered root element (`span`, `a`, or the wrapper `span`) is
-forwarded via `...rest`.
+<Example of={TagStories.EdgeCases} caption="A long linked, removable tag in a narrow container, and tags on a dark surface." />
 
-## Related components
+<Example of={TagStories.Content} caption="Entity references, mentions, removable relationships, and a row that wraps." />
 
-- **Label** - for a purely informational, non-interactive status.
-- **Badge** - for a compact count or status indicator.
-- **Link** - for a freeform text link outside a tag's bounded shape.
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do caption="Use href for a tag that opens a record, so people can open it in a new tab." code={`<Tag href="/trusts/123" tone="green">Averill Family Living Trust</Tag>`}>
+  <Tag href="#" tone="green">
+    Averill Family Living Trust
+  </Tag>
+</Do>
+<Dont caption="Navigate from onClick. The tag becomes a button, which can't be opened in a new tab or show where it goes." code={`<Tag tone="green" onClick={() => navigate('/trusts/123')}>
+    Averill Family Living Trust
+</Tag>`} />
+<Do caption="Give a removable tag plain text, or a removeLabel that names the record." code={`<Tag isRemovable onRemove={remove}>Averill Family Living Trust</Tag>
+<Tag isRemovable onRemove={remove} removeLabel="Remove Averill Family Living Trust">
+    <TrustName id={123} />
+</Tag>`}>
+  <Tag isRemovable onRemove={() => undefined}>
+    Averill Family Living Trust
+  </Tag>
+</Do>
+<Dont caption="Pass other content without a removeLabel. Every remove button is then named “Remove tag”." code={`<Tag isRemovable onRemove={remove}>
+    <TrustName id={123} />
+</Tag>`} />
+<Do caption="Use Label for a status." code={`<Label tone="success">Active</Label>`}>
+  <Label tone="success">Active</Label>
+</Do>
+<Dont caption="Use a Tag's color as a status. Tag's tones have no fixed meaning, and it reads as a reference." code={`<Tag tone="green">Active</Tag>`}>
+  <Tag tone="green">Active</Tag>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Tag renders a native element for each job: a `span` to display, an `a` to link, a `button` to
+  remove or to click. The remove button is never inside the link, so they're separate controls.
+- The text is the accessible name of the link or the interactive tag. The remove button is named by
+  `removeLabel`, or "Remove" and the text; translate `removeLabel` with the rest of your interface.
+- Icons in `elemBefore` are decorative by default, so the text alone names the tag.
+- A disabled link keeps its `href`, sets `aria-disabled`, and leaves the tab order, so screen reader
+  users can still find it and hear that it's unavailable. Disabled buttons use the native `disabled`.
+  On a display-only tag, `disabled` only changes the look.
+- Focus shows the shared Focus Ring on the link, the remove button, or the interactive tag.
+- Tag doesn't move focus when it's removed. There's no Delete or Backspace shortcut: tags are removed
+  with their button.
+
+<Keyboard>
+  <Key keys="Tab">Moves to the link, then to its remove button, as separate stops. Display-only and disabled tags are skipped.</Key>
+  <Key keys="Enter">Follows the link, or activates the remove button or an interactive tag.</Key>
+  <Key keys="Space">Activates the remove button or an interactive tag. On a link it scrolls the page, as on any link.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={TagStories} />
+
+Any other attribute goes to the root element (in a removable tag, the wrapper `span`), and `className`
+is added to its classes. `tabIndex` and `aria-describedby` go to the link or the button when there is
+one, and to the root otherwise. `isDisabled` is the deprecated name for `disabled` and still works.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Tag's stylesheet uses, by family, with the property it sets and when. Each size and tone
+sets the stylesheet's own variables, which the base, link, and remove-button rules read, so a token
+shows the size or tone that sets it. The `-hover` and `-press` fills apply only while the link, the
+remove button, or an interactive tag is hovered or pressed. Each fill is a `background-color`: the
+table also lists it under `background-image`, which Tag always sets to `none`.
+
+<TokensTable id="tag" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Tag Group" /> to lay out a row of tags, with an overflow tag for the rest.
+- <DocLink to="Components/Data Display/Label" /> for a status or a category that doesn't link.
+- <DocLink to="Components/Data Display/Badge" /> for a count.
+- <DocLink to="Components/Forms/Chip" /> for a filter people apply or change.
+- <DocLink to="Components/Forms/Rich Text Area" />, which shows a linked record in its text as a small Tag.
+- <DocLink to="Components/Navigation/Link" /> for a link inside a sentence.
+- <DocLink to="Foundations/Focus Ring" />, the shared focus treatment.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads tag.types.ts, the design tokens read tag.module.css, and the Figma source comes
+  from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

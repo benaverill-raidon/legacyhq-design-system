@@ -26,9 +26,11 @@ export const TagGroup = React.memo(function TagGroup({
 }: TagGroupProps) {
   const [overflowOpen, setOverflowOpen] = React.useState(false);
 
-  const hasOverflow = typeof maxVisible === 'number' && tags.length > maxVisible;
-  const visibleTags = hasOverflow ? tags.slice(0, maxVisible) : tags;
-  const hiddenTags = hasOverflow ? tags.slice(maxVisible) : [];
+  // A negative maxVisible would slice from the end; treat it as 0 (only the overflow tag).
+  const limit = typeof maxVisible === 'number' ? Math.max(0, maxVisible) : undefined;
+  const hasOverflow = limit !== undefined && tags.length > limit;
+  const visibleTags = hasOverflow ? tags.slice(0, limit) : tags;
+  const hiddenTags = hasOverflow ? tags.slice(limit) : [];
 
   const visibleTagElements = visibleTags.map(({ id: tagId, label, ...tagProps }) => (
     <Tag key={tagId} {...tagProps} size={size}>
@@ -45,7 +47,7 @@ export const TagGroup = React.memo(function TagGroup({
           id: tag.id,
           label: tag.label,
           leadingElement: tag.elemBefore,
-          disabled: tag.isDisabled,
+          disabled: tag.disabled ?? tag.isDisabled,
           onSelect: (event) => onOverflowTagSelect?.(tag, event),
         })),
       },

@@ -15,9 +15,9 @@
     {
       "name": "No results (informative)",
       "description": "A self-contained empty state on a sunken surface panel, with two actions.",
-      "jsx": "<EmptyState type=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
+      "jsx": "<EmptyState appearance=\"informative\" illustration={<Illustration />} heading=\"No results found\" actions={<ButtonGroup><Button appearance=\"subtle\">Clear filters</Button><Button appearance=\"primary\">New search</Button></ButtonGroup>}>Try adjusting your search or filters.</EmptyState>",
       "props": {
-        "type": "informative",
+        "appearance": "informative",
         "illustration": "spot illustration",
         "heading": "No results found",
         "actions": "ButtonGroup",

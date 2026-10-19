@@ -1,6 +1,6 @@
 {
   "name": "Slider",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",
@@ -37,9 +37,13 @@
     "Precise text input"
   ],
   "anatomy": [
+    "label",
     "track",
-    "thumb",
-    "steps"
+    "active track",
+    "steps",
+    "handle",
+    "value indicator",
+    "input"
   ],
   "props": {},
   "variants": {
@@ -50,6 +54,8 @@
     ]
   },
   "sizes": [
+    "xs",
+    "sm",
     "md"
   ],
   "states": [
@@ -60,8 +66,7 @@
     "disabled"
   ],
   "slots": [
-    "label",
-    "helperText"
+    "label"
   ],
   "tokens": {},
   "accessibility": {
@@ -77,7 +82,9 @@
   "behaviorRules": [
     "Supports overlap.",
     "Supports disableSwap.",
-    "Supports minDistance."
+    "Supports minDistance.",
+    "showValue keeps the value bubble showing and makes room for it above the track, so it never overlaps the label.",
+    "SliderRange is a group named by label, aria-labelledby, or aria-label; each handle's name is that name plus minLabel or maxLabel."
   ],
   "compositionRules": [],
   "contentRules": [],
@@ -85,7 +92,7 @@
   "themeRules": [],
   "implementationNotes": [
     "CSS Modules",
-    "Shared FocusRing"
+    "Shared FocusRing, drawn on the visible handle from the primitive's variables (the native input fills the control and has no outline)"
   ],
   "relatedComponents": [
     "Text Field"

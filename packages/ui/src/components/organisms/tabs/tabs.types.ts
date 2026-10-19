@@ -1,6 +1,8 @@
 import type * as React from 'react';
 
-export type TabsType = 'line' | 'contained';
+export type TabsAppearance = 'line' | 'contained';
+/** @deprecated Use `TabsAppearance`, the name for the `appearance` prop. */
+export type TabsType = TabsAppearance;
 
 export interface TabItem {
   /** Stable identifier for the tab and its panel. */
@@ -12,27 +14,43 @@ export interface TabItem {
 }
 
 export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /** Visual style: `line` (underline indicator) or `contained` (pill). Defaults to `line`. */
-  type?: TabsType;
-  /** The tabs to render, in order. */
+  /**
+   * The visual style: `line` underlines the selected tab, and `contained` fills it as a pill inside
+   * a raised container.
+   */
+  appearance?: TabsAppearance;
+  /** @deprecated Use `appearance`, the name every component uses for a visual style. Still accepted. */
+  type?: TabsAppearance;
+  /** The tabs, in order: each one's `value`, `label`, and whether it's `disabled`. */
   tabs: TabItem[];
-  /** Controlled selected value. */
+  /**
+   * The selected tab's `value`, to control the selection. Update it from `onValueChange`. If it
+   * matches no enabled tab, the first enabled tab is still the one Tab reaches.
+   */
   value?: string;
-  /** Initial selected value for uncontrolled usage. Defaults to the first enabled tab. */
+  /** The tab selected first, when Tabs manages the selection. Defaults to the first enabled tab. */
   defaultValue?: string;
-  /** Called with the next value when the selection changes. */
+  /** Called with a tab's `value` when it's clicked or reached with the arrow keys, Home, or End. */
   onValueChange?: (value: string) => void;
-  /** Whether to show the bottom border under the tab list. Defaults to true for `line`, false for `contained`. */
+  /**
+   * Shows the border: the line under the tab list for `line`, the container's border for
+   * `contained`. On by default for both.
+   */
   showBorder?: boolean;
-  /** Accessible label for the tab list (or use `aria-labelledby`). */
+  /** The tab list's accessible name. Set it or `aria-labelledby`. */
   'aria-label'?: string;
+  /** Names the tab list by the id of a visible heading, instead of `aria-label`. */
   'aria-labelledby'?: string;
-  /** Panels - typically `TabPanel` elements, one per tab value. */
+  /**
+   * The panels: a `TabPanel` for each tab `value`. Optional, so the tab bar can be used alone. A tab
+   * points at its panel with `aria-controls` only while that `TabPanel` is rendered.
+   */
   children?: React.ReactNode;
 }
 
 export interface TabPanelProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** The tab value this panel belongs to. */
+  /** The `value` of the tab this panel belongs to. */
   value: string;
+  /** The panel's content, rendered only while its tab is selected. */
   children: React.ReactNode;
 }

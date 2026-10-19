@@ -5,7 +5,7 @@
 ### Name
 Inline Message
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
@@ -52,8 +52,8 @@ supplemental enough that it shouldn't always be visible or take up permanent lay
 - `content`: optional detail revealed in a popup on click
 
 ### Character Limits
-No fixed limit on `title`/`secondaryText` - keep them short enough for one line. `content` wraps
-inside Popup's default panel width.
+No fixed limit on `title`/`secondaryText` - keep them short enough for one line. Keep `content`
+short too: Popup's default panel is `max-content` wide with no maximum, so a long line doesn't wrap.
 
 ---
 
@@ -61,7 +61,7 @@ inside Popup's default panel width.
 
 ### Tone
 - `default`
-- `info`
+- `information` (`info`, the earlier name, is still accepted)
 - `success`
 - `warning`
 - `error`
@@ -86,6 +86,9 @@ inside Popup's default panel width.
 - [ ] Supports controlled (`open`/`onOpenChange`) and uncontrolled (`defaultOpen`) usage.
 - [ ] The detail panel dismisses on Escape and on an outside click, inherited from Popup's own
       defaults - the same as clicking the row again.
+- [ ] Opening moves focus into the popup (a non-modal dialog named by the title) on the first open
+      too: the focus waits a frame for Popup to position and show the panel. Tab past its last item,
+      Shift+Tab before its first, or Escape returns focus to the row.
 
 ## Design Decisions
 
@@ -119,7 +122,7 @@ inside Popup's default panel width.
 ## Validated Figma Details
 
 - `inline-message` component set: node `4589:2519`, file `Components v1.0.0`, variants `tone`
-  (default/info/success/warning/error) x `isOpen`.
+  (default/information/success/warning/error) x `isOpen`, the same names as code.
 - `figma-parts / inline-message-trigger` sub-component: node `2448:72904`, properties `titleText`,
   `showTitle`, `secondaryText`, `showSecondaryText`, `tone`, `state`
   (default/hover-open/focus/press).
@@ -156,6 +159,6 @@ Inline Message / Content
 Inline Message / EdgeCases
 ```
 
-- **Variants** - all six tones, each with `content` provided.
+- **Variants** - all five tones, each with `content` provided.
 - **Content** - title only, title + secondary text, no `content`, a form composition.
-- **EdgeCases** - viewport-edge alignment fallback, long wrapping detail content, dark surface.
+- **EdgeCases** - viewport-edge alignment fallback, long detail content, dark surface.

@@ -11,8 +11,11 @@ export const TabPanel = React.forwardRef<HTMLDivElement, TabPanelProps>(function
   { value, children, className, ...rest },
   forwardedRef,
 ) {
-  const { activeValue, getTabId, getPanelId } = useTabsContext('TabPanel');
+  const { activeValue, getTabId, getPanelId, registerPanel } = useTabsContext('TabPanel');
   const active = value === activeValue;
+
+  // Tell Tabs this panel exists, so its tab points at it with aria-controls.
+  React.useLayoutEffect(() => registerPanel(value), [registerPanel, value]);
 
   return (
     <div

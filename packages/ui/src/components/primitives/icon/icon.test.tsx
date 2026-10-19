@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
@@ -5,7 +7,10 @@ import { AddIcon } from '../../../assets/icons';
 import { IconBase } from './icon-base';
 import type { IconColor } from './icon.types';
 
+const iconCss = readFileSync('packages/ui/src/components/primitives/icon/icon.module.css', 'utf8');
+
 const colors: IconColor[] = [
+  'inherit',
   'default',
   'subtle',
   'inverse',
@@ -33,7 +38,7 @@ describe('IconBase', () => {
 
     expect(root).toHaveAttribute('data-size', 'md');
     expect(root).toHaveAttribute('data-spacing', 'none');
-    expect(root).toHaveAttribute('data-color', 'default');
+    expect(root).toHaveAttribute('data-color', 'inherit');
     expect(svg).toHaveAttribute('aria-hidden', 'true');
     expect(svg).toHaveAttribute('fill', 'currentColor');
   });
@@ -86,6 +91,14 @@ describe('IconBase', () => {
     );
 
     expect(screen.getByTestId('icon')).toHaveAttribute('data-color', color);
+  });
+
+  it('takes the surrounding text color unless a color is set', () => {
+    const root = iconCss.match(/\.root \{([^}]*)\}/)?.[1] ?? '';
+    expect(root).not.toMatch(/(^|\s)color:/);
+    expect(iconCss).toMatch(/\.color_inherit \{\s*color: inherit;/);
+    expect(iconCss).toMatch(/\.color_default \{\s*color: var\(--color-content-default\);/);
+    expect(iconCss).toMatch(/\.svg \{[^}]*fill: currentColor;/);
   });
 
   it('renders decorative mode by default', () => {

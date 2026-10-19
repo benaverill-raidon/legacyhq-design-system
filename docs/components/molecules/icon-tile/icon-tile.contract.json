@@ -1,6 +1,6 @@
 {
   "name": "IconTile",
-  "category": "molecule",
+  "category": "data-display",
   "status": "stable",
   "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
   "intent": "Provide a non-interactive, scannable colored icon container distinct from Icon Button (interactive) and Badge/Tag (text content).",
@@ -21,11 +21,11 @@
     "variantCount": 200,
     "figmaVariantAxes": {
       "size": ["xxs (16px)", "xs (24px)", "sm (32px)", "md (40px)", "lg (48px)"],
-      "shape": ["square", "circle"],
-      "appearance": [
+      "shape": ["square", "round"],
+      "tone": [
         "red", "redBold", "orange", "orangeBold", "yellow", "yellowBold",
         "green", "greenBold", "teal", "tealBold", "blue", "blueBold",
-        "purple", "purpleBold", "magenta", "magentaBold", "gray", "grayBold",
+        "purple", "purpleBold", "magenta", "magentaBold", "taupe", "taupeBold",
         "brand", "brandBold"
       ]
     },
@@ -35,8 +35,8 @@
       "note": "Exposed as a component property, not a Figma slot (slots array was empty)."
     },
     "apiAdaptationNotes": [
-      "Figma's flattened 20-value `appearance` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
-      "Figma's `circle` shape value was renamed to `round` to match Icon Button's existing `shape` prop naming (`square` | `round`).",
+      "Figma's flattened 20-value `tone` property was split into two independent props - `tone` (hue/meaning) and `appearance` (default/bold weight) - to follow this system's existing convention of separating emphasis from meaning (see Button).",
+      "Figma's shape values are `square` | `round`, the same as Icon Button's `shape` prop (Figma's `circle` was renamed to `round` on 2026-10-13).",
       "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
     ]
   },
@@ -78,8 +78,8 @@
       "type": "IconTileTone",
       "required": false,
       "default": "brand",
-      "enum": ["gray", "brand", "red", "orange", "yellow", "green", "teal", "blue", "purple", "magenta"],
-      "description": "Hue/semantic meaning of the tile."
+      "enum": ["taupe", "brand", "red", "orange", "yellow", "green", "teal", "blue", "purple", "magenta"],
+      "description": "Hue/semantic meaning of the tile. gray, the earlier name for taupe, is still accepted."
     },
     "appearance": {
       "type": "IconTileAppearance",
@@ -123,7 +123,7 @@
   },
   "variants": {
     "tone": {
-      "gray": { "purpose": "Neutral emphasis.", "className": "tone_gray" },
+      "taupe": { "purpose": "Neutral emphasis.", "className": "tone_taupe" },
       "brand": { "purpose": "Brand emphasis.", "className": "tone_brand" },
       "red": { "purpose": "Red accent hue.", "className": "tone_red" },
       "orange": { "purpose": "Orange accent hue.", "className": "tone_orange" },
@@ -173,26 +173,26 @@
       "round": "--border-radius-full-round"
     },
     "color": {
-      "gray_default": { "background": "--color-background-accent-taupe-default-default", "content": "--color-content-default" },
-      "gray_bold": { "background": "--color-background-accent-taupe-bold-default", "content": "--color-content-inverse" },
+      "taupe_default": { "background": "--color-background-accent-taupe-default-default", "content": "--color-content-default" },
+      "taupe_bold": { "background": "--color-background-accent-taupe-bold-default", "content": "--color-content-inverse-default" },
       "brand_default": { "background": "--color-background-brand-primary-default-default", "content": "--color-content-brand-primary-default" },
-      "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse" },
+      "brand_bold": { "background": "--color-background-brand-primary-bold-default", "content": "--color-content-inverse-default" },
       "red_default": { "background": "--color-background-accent-red-default-default", "content": "--color-content-accent-red-default" },
-      "red_bold": { "background": "--color-background-accent-red-bold-default", "content": "--color-content-inverse" },
+      "red_bold": { "background": "--color-background-accent-red-bold-default", "content": "--color-content-inverse-default" },
       "orange_default": { "background": "--color-background-accent-orange-default-default", "content": "--color-content-accent-orange-default" },
-      "orange_bold": { "background": "--color-background-accent-orange-bold-default", "content": "--color-content-inverse" },
+      "orange_bold": { "background": "--color-background-accent-orange-bold-default", "content": "--color-content-inverse-default" },
       "yellow_default": { "background": "--color-background-accent-yellow-default-default", "content": "--color-content-accent-yellow-default" },
-      "yellow_bold": { "background": "--color-background-accent-yellow-bold-default", "content": "--color-content-inverse" },
+      "yellow_bold": { "background": "--color-background-accent-yellow-bold-default", "content": "--color-content-inverse-default" },
       "green_default": { "background": "--color-background-accent-green-default-default", "content": "--color-content-accent-green-default" },
-      "green_bold": { "background": "--color-background-accent-green-bold-default", "content": "--color-content-inverse" },
+      "green_bold": { "background": "--color-background-accent-green-bold-default", "content": "--color-content-inverse-default" },
       "teal_default": { "background": "--color-background-accent-teal-default-default", "content": "--color-content-accent-teal-default" },
-      "teal_bold": { "background": "--color-background-accent-teal-bold-default", "content": "--color-content-inverse" },
+      "teal_bold": { "background": "--color-background-accent-teal-bold-default", "content": "--color-content-inverse-default" },
       "blue_default": { "background": "--color-background-accent-blue-default-default", "content": "--color-content-accent-blue-default" },
-      "blue_bold": { "background": "--color-background-accent-blue-bold-default", "content": "--color-content-inverse" },
+      "blue_bold": { "background": "--color-background-accent-blue-bold-default", "content": "--color-content-inverse-default" },
       "purple_default": { "background": "--color-background-accent-purple-default-default", "content": "--color-content-accent-purple-default" },
-      "purple_bold": { "background": "--color-background-accent-purple-bold-default", "content": "--color-content-inverse" },
+      "purple_bold": { "background": "--color-background-accent-purple-bold-default", "content": "--color-content-inverse-default" },
       "magenta_default": { "background": "--color-background-accent-magenta-default-default", "content": "--color-content-accent-magenta-default" },
-      "magenta_bold": { "background": "--color-background-accent-magenta-bold-default", "content": "--color-content-inverse" }
+      "magenta_bold": { "background": "--color-background-accent-magenta-bold-default", "content": "--color-content-inverse-default" }
     }
   },
   "accessibility": {

@@ -1,6 +1,6 @@
 {
   "name": "Popup",
-  "category": "primitive",
+  "category": "overlays",
   "status": "stable",
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
   "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
@@ -179,11 +179,9 @@
   "tokens": {
     "color": {
       "background": "--color-elevation-surface-raised-default",
-      "border": "--color-border-default",
-      "shadowInner": "--color-elevation-shadow-overlay-inner",
-      "shadowSpread": "--color-elevation-shadow-overlay-spread",
-      "shadowPerimeter": "--color-elevation-shadow-overlay-perimeter"
+      "border": "--color-border-default"
     },
+    "shadow": "--elevation-shadow-overlay",
     "borderWidth": "--border-width-sm",
     "spacing": {
       "padding": "--spacing-sm | --spacing-md | --spacing-lg (via the padding prop, default lg)",
@@ -192,7 +190,7 @@
     },
     "radius": "--border-radius-lg",
     "motion": "--fade-quick",
-    "note": "--color-elevation-shadow-overlay-spread and -perimeter were added alongside this component - they mirror the existing --color-elevation-shadow-raised-* family's shape, using the exact alpha values (16%, 32%) read from Figma's Light/elevation.shadow.overlay effect style. The dark-theme values mirror elevation.shadow.raised's light-to-dark base-hue swap at the same percentages rather than an independently re-verified dark effect."
+    "note": "The shadow is the overlay elevation role, --elevation-shadow-overlay (Figma's elevation.shadow.overlay effect style): an inset ring of --border-width-sm in --color-elevation-shadow-overlay-inner (transparent in both themes), a 0 8px 12px drop in -spread, and a 0 0 1px perimeter in -perimeter. -spread and -perimeter were added alongside this component and don't exist as Figma variables; Figma's effect style uses the same values unbound."
   },
   "accessibility": {
     "triggeredBy": ["consumer-controlled - Popup attaches no open/close handler itself"],
@@ -210,7 +208,7 @@
     ]
   },
   "keyboardInteraction": [
-    "Escape calls onOpenChange(false) when closeOnEscape is true (default).",
+    "Escape calls onOpenChange(false) when closeOnEscape is true (default) and this Popup is the topmost open layer (popup or Modal Dialog); a menu or tooltip inside a dialog closes before the dialog.",
     "No other keyboard behavior is owned by Popup - content-specific navigation (e.g. arrow keys in a menu) belongs to the consumer."
   ],
   "behaviorRules": [
@@ -220,6 +218,9 @@
     "Positions via a portal at document.body with position: fixed, recalculating on trigger/panel resize, window resize, and scroll.",
     "Tries the preferred alignment first, then the same alignment on the opposite side, then the remaining four, and resolves to whichever overflows the viewport least, exposed via data-alignment.",
     "Escape (document keydown) and outside pointer press (document pointerdown, capture phase) both gate on their respective closeOn* prop before calling onOpenChange.",
+    "Every open Popup is a layer (useLayer in primitives/layers.ts, shared with Modal Dialog), even with closeOnEscape off. Escape is acted on only by the topmost open layer, once per key press: claiming it calls preventDefault(), and an Escape already handled with preventDefault() inside is left alone.",
+    "The panel's z-index is LAYERS.popup from primitives/layers.ts, set inline, above Modal Dialog (LAYERS.dialog) and Toast Group (LAYERS.toast), so a Popup opened from inside a dialog or a toast shows over it. z-index is not a design token.",
+    "The trigger child's own ref is read from child.props.ref (React 19), not the deprecated element.ref, and merged with Popup's measurement ref.",
     "A pointer press inside the panel or on the trigger itself never triggers outside-click dismissal.",
     "Renders nothing but the cloned trigger when open is false - no empty portal node stays mounted.",
     "unstyled=true omits Popup's own visual skin class (and the padding class) from the panel entirely, leaving only structural positioning and the mount animation - the base .panel class never carries visual styling, so there's no cross-module CSS override needed.",
@@ -282,7 +283,7 @@
   ],
   "knownLimitations": [
     "No built-in focus management - focus trapping/restoration is left entirely to the consumer.",
-    "Dark-theme shadow alpha values mirror the elevation.shadow.raised family's percentages rather than an independently re-verified dark Figma effect."
+    "The overlay shadow's colors are themed through --elevation-shadow-overlay; the Dark inner ring is transparent, matching Figma's Dark overlay effect style."
   ],
   "futureEnhancements": [
     "Optional built-in focus-trap behavior for consumers that want it without implementing their own."

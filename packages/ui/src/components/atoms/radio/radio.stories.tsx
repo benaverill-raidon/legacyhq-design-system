@@ -11,7 +11,7 @@ const options = [
 ];
 
 const meta = {
-  title: 'UI/Atoms/Radio',
+  title: 'Components/Forms/Radio',
   component: Radio,
   args: {
     label: 'Label',
@@ -59,6 +59,8 @@ const cardStyle: CSSProperties = {
 const tableStyle: CSSProperties = { width: '100%', borderCollapse: 'collapse' };
 
 const cellStyle: CSSProperties = {
+  font: 'var(--typography-body-md-font-weight) var(--typography-body-md-font-size) / var(--typography-body-md-line-height) var(--typography-body-md-font-family)',
+  color: 'var(--color-content-default)',
   padding: 'var(--spacing-sm)',
   borderBlockEnd: 'var(--border-width-sm) solid var(--color-border-default)',
   textAlign: 'start',
@@ -109,8 +111,9 @@ function LiveSelectionExample() {
 /**
  * The checked-value states crossed with interaction and system states. Radio predates the shared
  * `data-force-state` convention (Checkbox, Button, and Avatar use it) - its own CSS pins hover,
- * pressed, and focus with `previewHover` / `previewPress` / `previewFocus` classes instead. The
- * Live group is where real click-driven, mutually-exclusive selection is verified by hand.
+ * pressed, and focus with `previewHover` / `previewPress` / `previewFocus` classes instead;
+ * `previewFocus` pins the shared Focus Ring too. The Live group is where real click-driven,
+ * mutually-exclusive selection is verified by hand.
  */
 export const States: Story = {
   render: () => (
@@ -135,19 +138,19 @@ export const States: Story = {
 
       <Group title="Checked">
         <Cell label="Default">
-          <Radio label="Label" name="state-checked" value="default" defaultChecked />
+          <Radio label="Label" name="state-checked-default" value="default" defaultChecked />
         </Cell>
         <Cell label="Hover">
-          <Radio label="Label" name="state-checked" value="hover" className="previewHover" defaultChecked />
+          <Radio label="Label" name="state-checked-hover" value="hover" className="previewHover" defaultChecked />
         </Cell>
         <Cell label="Focus visible">
-          <Radio label="Label" name="state-checked" value="focus" className="previewFocus" defaultChecked />
+          <Radio label="Label" name="state-checked-focus" value="focus" className="previewFocus" defaultChecked />
         </Cell>
         <Cell label="Press">
-          <Radio label="Label" name="state-checked" value="press" className="previewPress" defaultChecked />
+          <Radio label="Label" name="state-checked-press" value="press" className="previewPress" defaultChecked />
         </Cell>
         <Cell label="Disabled">
-          <Radio label="Label" name="state-checked" value="disabled" disabled defaultChecked />
+          <Radio label="Label" name="state-checked-disabled" value="disabled" disabled defaultChecked />
         </Cell>
       </Group>
 
@@ -276,6 +279,13 @@ export const Content: Story = {
         <div style={cardStyle}>
           <RadioGroup label="Disabled group" name="disabled-group" disabled defaultValue="email" options={options} />
         </div>
+
+        <div style={cardStyle}>
+          <RadioGroup label="Disabled group (children composition)" disabled>
+            <Radio label="Draft" name="disabled-children" value="draft" defaultChecked />
+            <Radio label="Final" name="disabled-children" value="final" />
+          </RadioGroup>
+        </div>
       </section>
     </div>
   ),
@@ -307,7 +317,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Narrow container</h3>
         <p style={captionStyle}>
-          The label wraps and the control stays anchored to the first line rather than shrinking.
+          The label wraps; the control keeps its size and stays centered on the text, not on the first line.
         </p>
         <div
           style={{

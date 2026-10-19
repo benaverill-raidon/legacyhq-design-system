@@ -25,6 +25,7 @@ export const Button = React.memo(
       className,
       type = 'button',
       onClick,
+      'aria-expanded': ariaExpanded,
       ...rest
     },
     forwardedRef,
@@ -42,8 +43,6 @@ export const Button = React.memo(
       [disabled, isLoading, onClick],
     );
 
-    const hasLeading = isLoading || Boolean(iconBefore);
-
     return (
       <button
         {...rest}
@@ -56,7 +55,6 @@ export const Button = React.memo(
           styles[`tone_${tone}`],
           isInverse && styles.inverse,
           isFullWidth && styles.fullWidth,
-          isExpanded && styles.expanded,
           focusRingClassNames.focusRing,
           focusRingClassNames.focusRingDefault,
           className,
@@ -64,15 +62,16 @@ export const Button = React.memo(
         disabled={disabled}
         aria-busy={isLoading ? true : undefined}
         aria-disabled={isLoading ? true : undefined}
-        aria-expanded={isExpanded != null ? isExpanded : undefined}
+        // isExpanded wins; without it, an aria-expanded a wrapper passes (Popup does) stays.
+        aria-expanded={isExpanded != null ? isExpanded : ariaExpanded}
         data-loading={isLoading ? 'true' : undefined}
         data-full-width={isFullWidth ? 'true' : undefined}
-        data-expanded={isExpanded ? 'true' : undefined}
+        data-expanded={(isExpanded ?? (ariaExpanded === true || ariaExpanded === 'true')) ? 'true' : undefined}
         onClick={handleClick}
       >
-        {hasLeading ? (
-          <span className={styles.leading} aria-hidden={isLoading ? undefined : true}>
-            {isLoading ? <Spinner size="sm" /> : iconBefore}
+        {iconBefore ? (
+          <span className={styles.leading} aria-hidden="true">
+            {iconBefore}
           </span>
         ) : null}
 
@@ -81,6 +80,13 @@ export const Button = React.memo(
         {iconAfter ? (
           <span className={styles.trailing} aria-hidden="true">
             {iconAfter}
+          </span>
+        ) : null}
+
+        {/* While loading, the spinner sits over the content, which keeps its space and stays the accessible name. */}
+        {isLoading ? (
+          <span className={styles.spinner} aria-hidden="true">
+            <Spinner size="md" />
           </span>
         ) : null}
       </button>

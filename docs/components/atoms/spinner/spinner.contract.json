@@ -1,6 +1,6 @@
 {
   "name": "Spinner",
-  "category": "atom",
+  "category": "feedback",
   "status": "stable",
   "purpose": "Indeterminate loading indicator.",
   "intent": "Communicate ongoing work.",
@@ -21,7 +21,8 @@
   ],
   "anatomy": [
     "container",
-    "indicator"
+    "indicator",
+    "label"
   ],
   "props": {},
   "variants": {
@@ -48,7 +49,7 @@
     "Continuous animation"
   ],
   "compositionRules": [
-    "May replace Button leading icon"
+    "Button and Link Button show a md Spinner centered over their content while loading; Icon Button shows a sm Spinner in place of its icon"
   ],
   "contentRules": [],
   "responsiveRules": [],

@@ -8,9 +8,9 @@ Button atom (dismiss).
 
 ## Anatomy
 
-1. **Root** - a `div` rendered as a bordered, rounded box with the appearance's tinted background and
+1. **Root** - a `div` rendered as a bordered, rounded box with the tone's tinted background and
    colored border. Horizontal layout: icon, content column, optional dismiss button.
-2. **Icon slot** - the status icon for the appearance, in its own status color. Decorative
+2. **Icon slot** - the status icon for the tone, in its own status color. Decorative
    (`aria-hidden`).
 3. **Content** - a vertical column:
    - **Title** - optional bold lead line (`heading-sm`, default content color).
@@ -22,30 +22,35 @@ Button atom (dismiss).
 ## Public API
 
 ```ts
-export type SectionMessageAppearance = 'information' | 'success' | 'warning' | 'error';
+export type SectionMessageTone = 'information' | 'success' | 'warning' | 'error';
 
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
-  appearance?: SectionMessageAppearance;
+  tone?: SectionMessageTone;
+  /** @deprecated Renamed to `tone`. Still accepted. */
+  appearance?: SectionMessageTone;
+  statusLabel?: string;
   title?: React.ReactNode;
   children: React.ReactNode;
   actions?: React.ReactNode;
   isDismissible?: boolean;
+  dismissLabel?: string;
   onDismiss?: () => void;
+  role?: React.AriaRole;
 }
 ```
 
 ## Default Props
 
 ```txt
-appearance = 'information'
+tone = 'information'
 isDismissible = false
 role = 'status'
 ```
 
 ## Variants
 
-`appearance` sets the tinted background, the border color, and the status icon. The Figma
-`discovery` appearance was removed by the designer; code ships four appearances.
+`tone` sets the tinted background, the border color, and the status icon. The Figma
+`discovery` tone was removed by the designer; code ships four tones.
 
 ### Information
 
@@ -90,7 +95,7 @@ The panel hugs its content vertically; the description wraps rather than truncat
 
 ## Behavior
 
-- Set the tinted background, border color, and status icon from `appearance`.
+- Set the tinted background, border color, and status icon from `tone`.
 - The icon keeps its own status color (unlike Banner, whose icon inherits the bar color).
 - Render the title only when provided; render the actions region only when actions are provided.
 - Render the actions as passed (typically a `ButtonGroup` of `LinkButton`s); do not inject
@@ -102,15 +107,22 @@ The panel hugs its content vertically; the description wraps rather than truncat
 
 - Default `role="status"` (a polite live region). Overridable - `role="alert"` for urgent errors.
 - The status icon slot is `aria-hidden`.
-- The dismiss button is a labelled `IconButton` ("Dismiss").
-- Appearance is conveyed by the title/description text, not by color alone.
+- Because the icon is decorative, the status is announced before the title as visually hidden text ("Information:", "Success:", "Warning:", "Error:"), from `statusLabel` (defaults to the tone's name; pass a translation, or an empty string to omit).
+- The dismiss button is an `IconButton` labelled by `dismissLabel` ("Dismiss" by default). It keeps
+  Icon Button's default tooltip, so the label also shows on hover and focus (Toast's dismiss button
+  does the same).
+- Dismissed state is internal (`useState`); the component returns `null` once dismissed and has no
+  prop to show it again, so a caller remounts it (a new `key`) to bring it back. Focus is not moved
+  when the focused dismiss button is removed.
+- The title is a `div`, not a heading element.
+- Tone is conveyed by the title/description text, not by color alone.
 
 ## Storybook
 
 Documentation structure:
 
 - Playground
-- Appearances
+- Tones
 - Content (title/description/actions, description only, single action, dismissible)
 - Edge Cases (long wrapping content, dismissible with actions, no title)
 
@@ -123,8 +135,8 @@ Required tests:
 ```txt
 renders the description
 renders the title when provided and omits it otherwise
-defaults to role status and the information appearance
-applies the appearance class
+defaults to role status and the information tone
+applies the tone class
 renders a status icon
 allows the role to be overridden
 renders the actions passed to it as-is, with no injected separators
@@ -133,5 +145,5 @@ is not dismissible by default
 dismisses and calls onDismiss when the dismiss button is clicked
 composes a custom className and forwards props
 forwards the ref to the root element
-CSS contract: appearance background/border tokens, radius-xl, 1px border, spacing-lg padding
+CSS contract: tone background/border tokens, radius-xl, 1px border, spacing-lg padding
 ```

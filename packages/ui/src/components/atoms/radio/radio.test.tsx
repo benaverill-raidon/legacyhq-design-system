@@ -3,8 +3,10 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { focusRingClassNames } from '../../primitives/focus-ring';
 import { Radio } from './radio';
 import styles from './radio.module.css';
+import type { RadioProps } from './radio.types';
 
 const radioCss = readFileSync('packages/ui/src/components/atoms/radio/radio.module.css', 'utf8');
 const tokenCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
@@ -78,6 +80,49 @@ describe('Radio', () => {
     expect(screen.getByText('*')).toHaveClass(styles.requiredIndicator);
   });
 
+  it('hides the required * from assistive technology, so the name is the label alone', () => {
+    render(<Radio label="Required" name="required" value="required" required />);
+
+    expect(screen.getByRole('radio', { name: 'Required' })).toBeRequired();
+    expect(screen.getByText('*')).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('keeps showRequiredIndicator off the public props', () => {
+    const props: RadioProps = {
+      label: 'Internal',
+      // @ts-expect-error Radio Group's required-indicator handling is internal, not a Radio prop.
+      showRequiredIndicator: false,
+    };
+
+    expect(props.label).toBe('Internal');
+  });
+
+  it('uses the shared focus ring primitive on the input, offset inward to the visible circle', () => {
+    render(<Radio label="Focusable" name="focusable" value="focusable" />);
+
+    expect(screen.getByRole('radio', { name: 'Focusable' })).toHaveClass(
+      focusRingClassNames.focusRing,
+      focusRingClassNames.focusRingDefault,
+    );
+    expect(radioCss).toContain(
+      '--focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);',
+    );
+    expect(radioCss).not.toContain('::after');
+    expect(radioCss).not.toMatch(/\.input:focus-visible \{[^}]*outline: none/s);
+  });
+
+  it('pins the shared focus ring for previewFocus, from the primitive variables', () => {
+    expect(radioCss).toMatch(
+      /\.radio:global\(\.previewFocus\):not\(\[data-disabled='true'\]\) \.input \{[^}]*outline: var\(--focus-ring-width\) solid var\(--focus-ring-color\);[^}]*outline-offset: var\(--focus-ring-offset\);/s,
+    );
+  });
+
+  it('dims a disabled radio with the disabled color only, like Checkbox', () => {
+    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \{[^}]*color: var\(--color-content-disabled\);/s);
+    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);/s);
+    expect(radioCss).not.toContain('opacity');
+  });
+
   it('supports aria-label when label is omitted', () => {
     render(<Radio aria-label="Select current row" name="row" value="current" />);
 
@@ -140,16 +185,11 @@ describe('Radio', () => {
     expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
     expect(radioCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(radioCss).toMatch(/\.radio\[data-invalid='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-error\);/s);
-    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \.labelText,\s*\.radio\[data-disabled='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);[^}]*opacity: 0\.32;/s);
-    expect(radioCss).toContain('.input:focus-visible + .indicatorTarget .indicatorFocus::after');
-    expect(radioCss).toContain('inline-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
-    expect(radioCss).toContain('block-size: calc(var(--size-choice-indicator) + var(--border-width-md));');
-    expect(radioCss).toContain('border: var(--border-width-md) solid var(--color-border-focus);');
+    expect(radioCss).not.toContain('border: var(--border-width-md) solid var(--color-border-focus);');
   });
 
   it('uses compact density tokens for item, target, and focus anatomy', () => {
     expect(radioCss).toMatch(/\.radio \{[^}]*gap: var\(--spacing-xxs\);/s);
-    expect(radioCss).toMatch(/\.input:focus,\s*\.input:focus-visible \{[^}]*outline: none;/s);
     expect(radioCss).toContain('min-block-size: var(--size-choice-row);');
     expect(radioCss).toContain('block-size: var(--size-choice-row);');
     expect(radioCss).toContain('inline-size: var(--size-choice-target);');

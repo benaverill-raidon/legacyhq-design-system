@@ -13,17 +13,18 @@ background, with an optional leading status icon and optional inverse-tone actio
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
 ## Design decisions
 
-- [ ] `appearance` (`default` | `warning` | `error`) sets both the bold background and the leading
+- [ ] `tone` (`default` | `warning` | `error`) sets both the bold background and the leading
       status icon - no separate tone axis.
-- [ ] The Figma `appearance` variant `appearance4` maps to the code appearance `default`.
+- [ ] The Figma `tone` variants match code: `default`, `warning`, `error`.
 - [ ] Height hugs content (single message row + block padding) rather than a fixed height.
-- [ ] The message truncates to a single line with an ellipsis instead of wrapping.
+- [ ] The message truncates to a single line with an ellipsis instead of wrapping, in any container
+      (the root has `min-inline-size: 0`, so a flex or grid parent can't be widened by the message).
 - [ ] `default` uses a plain dot (no dedicated status glyph), matching Figma and Inline Message.
 - [ ] The leading icon inherits the banner content color rather than its own status color.
 - [ ] Actions are passed in via a slot and expected to be inverse-tone Buttons / a Button Group.
@@ -32,17 +33,17 @@ Organism.
 ## Figma properties
 
 ```txt
-appearance: default (appearance4) | warning | error
+tone: default | warning | error
 showIcon: true | false
 ```
 
 ## Code props
 
 ```ts
-type BannerAppearance = 'default' | 'warning' | 'error';
+type BannerTone = 'default' | 'warning' | 'error';
 
 interface BannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
-  appearance?: BannerAppearance;
+  tone?: BannerTone;
   children: React.ReactNode;
   showIcon?: boolean;
   actions?: React.ReactNode;
@@ -52,7 +53,7 @@ interface BannerProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'childr
 ## Defaults
 
 ```txt
-appearance: default
+tone: default
 showIcon: true
 role: status
 ```
@@ -63,7 +64,7 @@ role: status
 - [ ] root gap `--spacing-sm`, message gap `--spacing-xs`, actions gap `--spacing-xs`.
 - [ ] icon slot `--size-300`, dot `--size-marker-sm`.
 - [ ] message typography `body-md`.
-- [ ] per-appearance bold background + content tokens (no primitives, no raw values).
+- [ ] per-tone bold background + content tokens (no primitives, no raw values).
 
 ## Visual and structural requirements
 
@@ -76,6 +77,7 @@ role: status
 
 - [ ] `role="status"` by default; overridable (e.g. `alert`).
 - [ ] Icon slot `aria-hidden`.
+- [ ] `warning` and `error` announce "Warning:" / "Error:" before the message (visually hidden, `statusLabel`); `default` announces none.
 - [ ] Meaning conveyed by text, not color alone.
 
 ## Examples to document
@@ -90,8 +92,8 @@ role: status
 ## Tests
 
 - [ ] Renders the message.
-- [ ] Defaults to role status and the default appearance.
-- [ ] Applies the appearance class.
+- [ ] Defaults to role status and the default tone.
+- [ ] Applies the tone class.
 - [ ] Status icon for warning/error, dot for default.
 - [ ] Hides the icon when `showIcon` is false.
 - [ ] Renders / omits the actions region.

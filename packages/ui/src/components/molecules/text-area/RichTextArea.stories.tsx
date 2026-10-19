@@ -8,7 +8,7 @@ import { RichTextArea } from './rich';
 import type { EntityOption, EntitySection, RichTextValue } from './rich';
 
 const meta = {
-  title: 'UI/Molecules/Text Area/Rich Inline',
+  title: 'Components/Forms/Rich Text Area',
   component: RichTextArea,
   // Stories drive their own state via `render`; these satisfy the required props on the type.
   args: { value: [], onChange: () => {}, onSearch: () => [] },
@@ -124,11 +124,42 @@ function PrefilledDemo() {
 
 function StatesDemo() {
   const [a, setA] = useState<RichTextValue>([{ type: 'text', text: 'This note needs attention' }]);
-  const [b, setB] = useState<RichTextValue>([{ type: 'text', text: 'Read-only note' }]);
+  const [b, setB] = useState<RichTextValue>([{ type: 'text', text: 'Disabled note' }]);
   return (
     <div style={stack}>
       <RichTextArea value={a} onChange={setA} onSearch={search} recents={RECENTS} entityConfig={entityConfig} invalid aria-label="Invalid" rows={2} />
       <RichTextArea value={b} onChange={setB} onSearch={search} recents={RECENTS} entityConfig={entityConfig} disabled aria-label="Disabled" rows={2} />
+    </div>
+  );
+}
+
+const VARIANT_VALUE: RichTextValue = [
+  { type: 'text', text: 'Call ' },
+  { type: 'entity', entity: { id: 'a2', entityType: 'account', label: 'Ben Averill', href: '#a2' } },
+  { type: 'text', text: ' about the trust schedule.' },
+];
+
+function VariantsDemo() {
+  return (
+    <div style={stack}>
+      {(['md', 'lg'] as const).flatMap((size) =>
+        (['default', 'inline'] as const).map((context) => (
+          <div key={`${size}-${context}`} style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
+            <RichTextArea
+              value={VARIANT_VALUE}
+              onChange={() => {}}
+              onSearch={search}
+              recents={RECENTS}
+              entityConfig={entityConfig}
+              size={size}
+              context={context}
+              rows={2}
+              aria-label={`Note, ${size}, ${context}`}
+            />
+            <span style={caption}>{`size="${size}" context="${context}"`}</span>
+          </div>
+        )),
+      )}
     </div>
   );
 }
@@ -141,3 +172,6 @@ export const Prefilled: Story = { render: () => <PrefilledDemo /> };
 
 /** Invalid and disabled reuse Text Area's frame treatment. */
 export const States: Story = { render: () => <StatesDemo /> };
+
+/** The sizes in the default and inline contexts. The editor reads `value` once, so it leads from there. */
+export const Variants: Story = { render: () => <VariantsDemo /> };

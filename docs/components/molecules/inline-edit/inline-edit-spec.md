@@ -10,7 +10,7 @@ explicit confirm/cancel step.
 Use Inline Edit to make a single displayed value directly editable on the same spot on the page,
 rather than always showing an open input or requiring a separate form/dialog.
 
-### Category
+### Tier
 Molecule
 
 ### Design Reference
@@ -48,10 +48,10 @@ Molecule
 InlineEdit
 └─ div (root, column layout, no visual chrome of its own)
    ├─ div.content (full width, holds the cloned child - read-only or editable depending on state)
-   └─ span.actions (optional, only once editing has started && actionButtons; below content,
-      right-aligned)
-      ├─ IconButton (cancel/close)
-      └─ IconButton (confirm/check)
+   └─ ButtonGroup.actions (optional, only once editing has started && actionButtons; absolutely
+      positioned below the field at its trailing edge, or past that edge with actionPlacement="end")
+      ├─ IconButton (cancel/close), size xs
+      └─ IconButton (confirm/check), size xs
 ```
 
 ### Structure Notes
@@ -75,10 +75,12 @@ consumer would want to render the confirm/cancel buttons before the field is int
 
 Figma's literal `state=edit` layout puts the action buttons trailing in the *same row* as the field,
 which means the field has to shrink to make room for them once editing starts. Per explicit design
-feedback, this implementation instead stacks the action row *below* the field (`flex-direction:
-column`, action row `align-self: flex-end` to stay anchored to the trailing/right edge) - the field
-keeps its full width whether or not it's being edited, and the layout never shifts the field's own
-size when the action buttons appear.
+feedback, this implementation instead floats the action row: it's absolutely positioned 8px
+(`--spacing-sm`) below the field at its trailing edge, or with `actionPlacement="end"` 8px past the
+field's trailing edge (centered on it, or with `actionAlignment="start"` held at the first line's
+control height so it stays put as a multi-line field grows). The field keeps its full width whether
+or not it's being edited, the layout never shifts, and the buttons float over whatever sits below or
+beside the field, so the container has to leave room for them.
 
 Figma's `state=default` variant contains no read-mode UI at all - not even a text value or an edit
 trigger. Rather than invent a separate one, Inline Edit clones the *same* single child for both
@@ -100,12 +102,13 @@ shows the two icon buttons) as a deliberate, explicit addition - standard inline
 even when `actionButtons={false}` hides the visible buttons (the only remaining way to confirm/cancel
 without wiring a separate control). `Enter` calls `event.preventDefault()` in addition to invoking
 `onConfirm`, so an editable control nested inside a native `<form>` doesn't also trigger an
-accidental form submission. Both keys also blur the field afterward, deselecting it the same way
-clicking the confirm/cancel buttons already does (moving focus off the field, rather than leaving it
-focused with the now-committed-or-reverted text still selected) - this reuses the same
-`mousedown`-set ref flag the action buttons use, since blurring synchronously inside the key handler
-would otherwise re-enter the blur-to-confirm handler with a stale (still-editing) closure and
-double-fire confirm.
+accidental form submission. Both keys leave focus on the field, which turns read-only, so a
+keyboard user stays where they were (until 2026-10-17 both blurred the field, dropping focus to the
+page). Escape pressed on a cancel/confirm button first moves focus to the field, since the buttons
+unmount; clicking either button does the same. Because the field may then already have focus, a
+click or `Enter` on the read-only field starts editing again (focus alone can't, as no focus event
+fires); the child's own `onClick`/`onKeyDown` still run first, and `Enter` calls `preventDefault`
+there too, so a read-only field in a `<form>` doesn't submit it.
 
 Clicking (or Tab-ing) away from the field while editing - anywhere other than the cancel/confirm
 buttons themselves - commits the draft, the same as clicking confirm, per explicit design feedback:
@@ -113,7 +116,9 @@ buttons themselves - commits the draft, the same as clicking confirm, per explic
 clicking confirm." This is implemented as an `onBlur` handler on the root: if the element about to
 receive focus (`event.relatedTarget`) is outside the root, or unavailable, the draft is committed;
 if it's one of Inline Edit's own cancel/confirm buttons, the blur is a no-op and that button's own
-`onClick` handles it instead. A `mousedown`-set ref flag on both buttons backs up this check for
+`onClick` handles it instead. A draft equal to `value` isn't committed on blur: editing just ends,
+without `onConfirm`, so tabbing through the field and both buttons without typing doesn't report an
+edit that didn't happen (Enter and the confirm button still call `onConfirm`, as explicit choices). A `mousedown`-set ref flag on both buttons backs up this check for
 browsers that don't reliably move focus to a clicked `<button>` (where `relatedTarget` would
 otherwise be unavailable even though the click landed on Inline Edit's own button) - without it,
 clicking cancel in such a browser could fire an incorrect auto-confirm from the blur immediately
@@ -122,7 +127,7 @@ before cancel's own click handler runs.
 Because most values displayed this way are short pieces of text, `children` is expected to be a
 single controlled input-like element - `TextField` today, and `Select`/`DatePicker`/`TimePicker`/
 `DateTimePicker` once those exist, matching Figma's own five documented slot types. Consumers are
-expected to use `appearance="subtle"` on the slotted `TextField` most of the time, since a subtle
+expected to use `context="inline"` on the slotted `TextField` most of the time, since an inline
 field already has no visible border/background at rest, so it reads as plain text until clicked -
 the same visual result Figma's blank `state=default` variant implies, achieved by styling the real
 input rather than rendering a second, separate read-only display.
@@ -140,7 +145,7 @@ Inline Edit has no size, appearance, or tone variants of its own - Figma's only 
 
 ### Supported Content
 A single controlled input-like element appropriate for editing one value - `TextField` today
-(typically with `appearance="subtle"`); `Select`, `DatePicker`, `TimePicker`, `DateTimePicker` once
+(typically with `context="inline"`); `Select`, `DatePicker`, `TimePicker`, `DateTimePicker` once
 built, matching Figma's own slot. The child must accept `value`, `onChange`, and `readOnly` -
 Inline Edit clones it with these props to drive both the read-only and editable states.
 
@@ -158,6 +163,8 @@ Not applicable - Inline Edit has no text content of its own.
 | onConfirm | `(value: string) => void` | No | undefined |
 | onCancel | `() => void` | No | undefined |
 | actionButtons | boolean | No | `true` |
+| actionPlacement | `'below' \| 'end'` | No | `'below'` |
+| actionAlignment | `'center' \| 'start'` | No | `'center'` |
 | confirmLabel | string | No | `'Confirm'` |
 | cancelLabel | string | No | `'Cancel'` |
 | className | string | No | undefined |
@@ -174,14 +181,19 @@ Inline Edit, not the consumer, renders those buttons.
 
 - The cloned child stays focusable (via native Tab order) in both states - `readOnly` does not
   remove an element from the tab order, only `disabled` does.
-- Focusing the read-only clone (by click or by `Tab`) starts editing.
+- Focusing the read-only clone (by click or by `Tab`) starts editing. When it already has focus
+  (after an edit ends), a click or `Enter` starts editing.
 - `Tab` then reaches the cancel button, then the confirm button, in that order (matching the
   trailing button-group's own internal order confirmed from Figma: close/cancel first, check/confirm
   second).
-- `Enter` calls `onConfirm` with the current draft while editing, from anywhere inside the root, then
-  blurs the field (deselecting it).
-- `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root, then
-  blurs the field (deselecting it).
+- `Enter` calls `onConfirm` with the current draft while editing a single-line field; focus stays on
+  the field, now read-only. In a textarea, `Enter` adds a line and `Ctrl`/`Cmd`+`Enter` confirms. On
+  a focused cancel/confirm button, `Enter` activates that button instead, and focus moves to the
+  field.
+- Tabbing through the field and both buttons without typing doesn't call `onConfirm`: with the draft
+  unchanged, focus leaving the root just ends editing.
+- `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root; focus
+  ends on the read-only field.
 - `Tab`-ing (or clicking) away from the field to anywhere *outside* Inline Edit while editing also
   calls `onConfirm` with the current draft - the same as clicking confirm. Moving focus to the
   cancel/confirm buttons themselves does not trigger this; their own click handler applies instead.
@@ -198,17 +210,20 @@ Inline Edit, not the consumer, renders those buttons.
 ## Design Tokens
 
 ### Spacing
-Gap between the content row and the action row is `--spacing-sm` (8px). Gap between the two action
-buttons themselves is also `--spacing-sm` (8px), matching the Button Group standard. (This was
-updated from the original `--spacing-xs`/4px Figma `itemSpacing`; keep the code and Figma in sync.)
+The action row floats `--spacing-sm` (8px) from the field: below it, or past its trailing edge with
+`actionPlacement="end"`. The gap between the two action buttons is `--spacing-xs` (4px), matching
+Figma's `itemSpacing: 4`; `.root .actions` overrides Button Group's default 8px.
 
 ### Layout
 The root diverges from Figma's own single-row layout, per explicit design feedback: `display: flex`,
 `flex-direction: column`, `align-items: stretch`, so the field always keeps its full width instead
 of sharing a row with (and shrinking to make room for) the action buttons. The content area is
-`inline-size: 100%`; the action row sits below it and is `align-self: flex-end`, anchoring the
-confirm/cancel pair to the trailing/right edge of the field rather than Figma's literal
-same-row-trailing placement. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
+`inline-size: 100%`; the action row is absolutely positioned (`z-index: 1`) below the field at its
+trailing edge, or past that edge with `actionPlacement="end"`, rather than Figma's literal
+same-row-trailing placement. Inside a Table's editable cell (`data-editable-cell`), the read-only
+child gets an edit icon in `iconAfter` and starts editing on click too; while editing, the actions
+sit inside the cell at its trailing edge, vertically centered, the child reserves padding for them,
+and it shows a focus-colored bottom line. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
 `TextField`'s own convention of filling its container by default.
 
 No color, radius, or typography tokens are owned by Inline Edit itself - all visual styling comes
@@ -220,15 +235,15 @@ from the cloned child, and the confirm/cancel `IconButton`s carry their own toke
 
 ### Read-only (not editing)
 Renders the child cloned with `value` and `readOnly`, no action row. Starting to edit happens on
-`onFocus` of this clone (click or Tab).
+`onFocus` of this clone (click or Tab), or on a click or `Enter` when it already has focus.
 
 ### Editing
 Renders the child cloned with the in-progress draft and an `onChange` handler that updates it, plus
 a confirm/cancel `IconButton` pair below it (unless `actionButtons={false}`). `Enter`/`Escape` call
-`onConfirm`/`onCancel` respectively, in addition to the buttons themselves, then blur the field
-(deselecting it, the same as clicking either button already does); losing focus to anything outside
-Inline Edit (a click or a Tab) also calls `onConfirm` - clicking/Tab-ing off the field always saves,
-never silently discards. Confirming calls `onConfirm(draft)` and returns to read-only; cancelling
+`onConfirm`/`onCancel` respectively, in addition to the buttons themselves; after any of the four,
+focus is on the read-only field. Losing focus to anything outside Inline Edit (a click or a Tab) also
+calls `onConfirm` when the draft changed - clicking/Tab-ing off the field always saves, never
+silently discards - and just ends editing when it didn't. Confirming calls `onConfirm(draft)` and returns to read-only; cancelling
 discards the draft, calls `onCancel()`, and returns to read-only showing the original `value`.
 
 ---
@@ -236,8 +251,10 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 ## Dependencies
 
 ### Uses
-- Icon Button (atom) - the confirm/cancel actions, `size="sm"`, default `shape`/`appearance`
-- Text Field (molecule) - the most common cloned control today, typically `appearance="subtle"`
+- Icon Button (atom) - the confirm/cancel actions, `size="xs"`, `appearance="default"`, repainted
+  with the neutral-subtle fill
+- Button Group (molecule) - holds the action pair (a documented tier exception)
+- Text Field (molecule) - the most common cloned control today, typically `context="inline"`
 
 ### Used By
 - Editable name/title fields
@@ -274,21 +291,24 @@ discards the draft, calls `onCancel()`, and returns to read-only showing the ori
 - [ ] The field keeps its full width whether or not the action row is showing (never shrinks to make
       room for the buttons)
 - [ ] `actionButtons={false}` hides the icon-button pair while still editing
-- [ ] Gap between the field and the action row matches `--spacing-sm` (8px); gap between the two
-      action buttons themselves also matches `--spacing-sm` (8px)
+- [ ] The action row floats `--spacing-sm` (8px) from the field; the gap between the two action
+      buttons is `--spacing-xs` (4px)
 - [ ] Light mode works
 - [ ] Dark mode works
 
 ### Functional
 - [ ] `onConfirm` fires with the typed draft when the confirm button is clicked
 - [ ] `onCancel` fires when the cancel button is clicked, and the field reverts to `value`
-- [ ] `Enter` calls `onConfirm` with the draft while editing, calls `preventDefault`, and blurs the
-      field afterward (deselecting it)
-- [ ] `Escape` calls `onCancel` while editing, reverting to `value`, and blurs the field afterward
-      (deselecting it)
-- [ ] `Enter`/`Escape` do nothing before editing has started
+- [ ] `Enter` calls `onConfirm` with the draft while editing, calls `preventDefault`, and leaves
+      focus on the field, now read-only
+- [ ] `Escape` calls `onCancel` while editing, reverting to `value`, with focus on the read-only
+      field (moved there from a cancel/confirm button)
+- [ ] Clicking cancel or confirm returns focus to the read-only field
+- [ ] `Enter`/`Escape` never confirm or cancel before editing has started; `Enter` or a click on the
+      focused read-only field starts editing
 - [ ] Clicking/Tab-ing away from the field to anywhere outside Inline Edit while editing calls
-      `onConfirm` with the draft (auto-save on blur), and returns to read-only
+      `onConfirm` with a changed draft (auto-save on blur), and returns to read-only
+- [ ] Tabbing through without changing the draft ends editing without calling `onConfirm`
 - [ ] Clicking cancel does not also trigger an auto-confirm from the blur clicking it causes
 - [ ] `className` applies to the root
 - [ ] Focus is preserved across the read→edit transition (same DOM node, cloned)

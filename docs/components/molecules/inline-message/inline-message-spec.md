@@ -24,7 +24,8 @@ When `content` is omitted, the whole row renders as a plain `div` - no button, n
 ## Public API
 
 ```ts
-export type InlineMessageTone = 'default' | 'info' | 'success' | 'warning' | 'error';
+export type InlineMessageTone = 'default' | 'information' | 'success' | 'warning' | 'error';
+// 'info', the earlier name, is still accepted as a deprecated alias of 'information'.
 
 export interface InlineMessageProps {
   title: React.ReactNode;
@@ -84,7 +85,7 @@ pattern from one sample:
 | Tone | Icon | Icon color | Hover/open tint |
 |------|------|------------|------------------|
 | `default` | plain dot (no matching status icon in the generated set - see below) | `--color-content-default` | `--color-background-neutral-overlay-bold-hover` |
-| `info` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hover` |
+| `information` | `StatusInformationIcon` | `--color-content-information` | `--color-background-information-overlay-hover` |
 | `success` | `StatusSuccessIcon` | `--color-content-success` | `--color-background-success-overlay-hover` |
 | `warning` | `StatusWarningIcon` | `--color-content-warning` | `--color-background-warning-overlay-hover` |
 | `error` | `StatusErrorIcon` | `--color-content-error` | `--color-background-error-overlay-hover` |
@@ -196,7 +197,7 @@ All six tones side by side, each with `content` provided.
 ### EdgeCases story
 
 - Alignment falling back automatically near a viewport edge
-- Long detail content wrapping inside Popup's default width
+- Long detail content (Popup's default panel is `max-content` wide, so it doesn't wrap)
 - Dark surface
 
 ## Testing Requirements
@@ -217,8 +218,21 @@ All six tones side by side, each with `content` provided.
 ## Known Limitations
 
 - No `disabled` prop - not evidenced in Figma's own component set.
-- No built-in max-width/truncation behavior for the title/secondary text row itself (Popup's panel
-  already wraps long `content`).
+- No built-in max-width/truncation behavior for the title/secondary text row itself: both are
+  `white-space: nowrap`.
+- Long `content` doesn't wrap either: Popup's default panel is `inline-size: max-content` with no
+  maximum, so a long sentence renders as one line and can run past the viewport (the EdgeCases
+  "Migration in progress" sample measures 1358px wide in a 1024px viewport).
+- The status icon (and the `default` dot) is `aria-hidden`, and unlike Banner, Section Message, and
+  Toast there's no visually hidden status text, so the tone isn't announced; the title has to carry
+  it in words.
+- Popup portals the panel to the end of `document.body`, so Inline Message moves focus into it: the
+  panel content is a non-modal `role="dialog"` named by the title, focused when it opens. The focus
+  waits one animation frame (as Dropdown Menu's does), because Popup keeps the panel at
+  `visibility: hidden` until it has positioned it and a hidden element can't take focus; focusing
+  straight away failed on the first open. Tab past its last item, Shift+Tab before its first, or
+  Escape (handled on the panel, with `preventDefault()`, so a Modal Dialog under it stays open)
+  closes it and returns focus to the row.
 
 ## Future Enhancements
 

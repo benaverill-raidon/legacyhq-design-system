@@ -118,7 +118,7 @@
   position: absolute;
   inset-inline: var(--spacing-xs);
   inset-block-end: var(--spacing-xs);
-  block-size: 2px;
+  block-size: var(--border-width-md);
   border-radius: var(--border-radius-full-round);
   background: var(--color-content-selected);
 }

@@ -6,7 +6,7 @@ import type { LinkSize } from './link.types';
 const sizes: LinkSize[] = ['sm', 'md'];
 
 const meta = {
-  title: 'UI/Atoms/Link',
+  title: 'Components/Navigation/Link',
   component: Link,
   args: {
     href: '/clients',
@@ -39,9 +39,11 @@ const row: CSSProperties = {
   gap: 'var(--spacing-lg)',
 };
 
+// Labels read --story-label / --story-heading when a backdrop sets them, so they stay legible on the
+// dark surface the inverse examples sit on.
 const captionStyle: CSSProperties = {
   font: 'var(--typography-body-sm-font-size) / var(--typography-body-sm-line-height) var(--typography-body-sm-font-family)',
-  color: 'var(--color-content-subtle)',
+  color: 'var(--story-label, var(--color-content-subtle))',
 };
 
 const paragraphStyle: CSSProperties = {
@@ -64,14 +66,16 @@ const cardStyle: CSSProperties = {
 // theme happens to be (like Badge's default chip or a Tooltip bubble), not a full dark-theme
 // preview - so this uses the "boldest contrast for the current theme" tokens directly rather
 // than `data-theme="dark"` + theme-relative tokens.
-const darkSurfaceStyle: CSSProperties = {
+const darkSurfaceStyle = {
   display: 'grid',
   gap: 'var(--spacing-md)',
   padding: 'var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   background: 'var(--color-background-neutral-bold-default)',
   color: 'var(--color-content-inverse-default)',
-};
+  '--story-heading': 'var(--color-content-inverse-default)',
+  '--story-label': 'var(--color-content-inverse-default)',
+} as CSSProperties;
 
 function sectionHeading(text: string) {
   return (
@@ -79,7 +83,7 @@ function sectionHeading(text: string) {
       style={{
         margin: 0,
         font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
-        color: 'var(--color-content-default)',
+        color: 'var(--story-heading, var(--color-content-default))',
       }}
     >
       {text}
@@ -281,8 +285,8 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         {sectionHeading('Long text wraps normally, unlike Button or Label')}
         <p style={captionStyle}>
-          Link has no <code>white-space: nowrap</code> - it&apos;s built for inline, sentence-level use,
-          so long link text wraps like any other inline content instead of overflowing.
+          Link has no <code>white-space: nowrap</code>, so long link text wraps inside the link
+          instead of overflowing.
         </p>
         <div
           style={{
@@ -293,6 +297,25 @@ export const EdgeCases: Story = {
         >
           <Link href="/clients">Open the full client record and review every filing</Link>
         </div>
+      </section>
+
+      <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+        {sectionHeading('Long text flows with the sentence')}
+        <p style={captionStyle}>
+          A link is inline, so in a paragraph its text breaks across lines with the words around it,
+          instead of moving to the next line whole.
+        </p>
+        <p
+          style={{
+            ...paragraphStyle,
+            inlineSize: '280px',
+            border: 'var(--border-width-sm) dashed var(--color-border-default)',
+            padding: 'var(--spacing-xs)',
+          }}
+        >
+          Before you sign, <Link href="/clients">open the full client record and review every filing</Link>{' '}
+          for missing signatures.
+        </p>
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>

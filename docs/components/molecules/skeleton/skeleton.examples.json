@@ -16,11 +16,11 @@
       }
     },
     {
-      "name": "Circle for an avatar",
-      "description": "A circular placeholder sized to match an Avatar.",
-      "jsx": "<Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
+      "name": "Round shape for an avatar",
+      "description": "A round placeholder sized to match an Avatar.",
+      "jsx": "<Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />",
       "props": {
-        "shape": "circle",
+        "shape": "round",
         "style": { "inlineSize": "40px", "blockSize": "40px" }
       }
     },
@@ -33,7 +33,7 @@
     {
       "name": "List row with avatar",
       "description": "A circular avatar placeholder next to two text-line placeholders.",
-      "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"circle\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
+      "jsx": "<div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)' }}>\n  <Skeleton shape=\"round\" style={{ inlineSize: '40px', blockSize: '40px' }} />\n  <div style={{ display: 'grid', gap: 'var(--spacing-sm)', inlineSize: '240px' }}>\n    <Skeleton style={{ inlineSize: '70%' }} />\n    <Skeleton style={{ inlineSize: '40%' }} />\n  </div>\n</div>",
       "props": {}
     },
     {

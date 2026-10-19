@@ -1,12 +1,13 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '../button';
 import { Spinner } from './spinner';
 import type { SpinnerSize } from './spinner.types';
 
 const sizes: SpinnerSize[] = ['sm', 'md', 'lg', 'xl'];
 
 const meta = {
-  title: 'UI/Atoms/Spinner',
+  title: 'Components/Feedback/Spinner',
   component: Spinner,
   args: {
     size: 'lg',
@@ -66,21 +67,6 @@ const inlineTextStyle: CSSProperties = {
   gap: 'var(--spacing-sm)',
 };
 
-const buttonStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: 'var(--spacing-sm)',
-  width: 'fit-content',
-  paddingBlock: 'var(--spacing-sm)',
-  paddingInline: 'var(--spacing-md)',
-  border: 'var(--border-width-sm) solid var(--color-border-default)',
-  borderRadius: 'var(--border-radius-md)',
-  background: 'var(--color-elevation-surface-raised-default)',
-  color: 'var(--color-content-default)',
-  font: 'inherit',
-};
-
 const headingStyle: CSSProperties = {
   margin: 0,
   font: 'var(--typography-heading-xxs-font-weight) var(--typography-heading-xxs-font-size) / var(--typography-heading-xxs-line-height) var(--typography-heading-xxs-font-family)',
@@ -110,10 +96,8 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
 export const Playground: Story = {};
 
 /**
- * Size is the only visual axis - Spinner has one appearance, not a set of variants, so this page
- * replaces Variants. There's no States page either: Spinner is non-interactive and decorative by
- * default (no hover/press/focus/disabled to preview) - see the Docs API section for the full
- * rationale.
+ * Size is the only visual axis: Spinner has one appearance, and no states to preview, since it's
+ * non-interactive.
  */
 export const Sizes: Story = {
   render: () => (
@@ -152,15 +136,14 @@ export const Content: Story = {
       </Group>
 
       <Group title="In composition">
-        <button type="button" style={buttonStyle} disabled>
-          <Spinner size="sm" />
-          Saving
-        </button>
+        <Button prominence="primary" isLoading>
+          Save matter
+        </Button>
 
         <div style={cardStyle}>
           <strong>Client matter list</strong>
           <p style={inlineTextStyle}>
-            <Spinner size="md" label="Loading matters" />
+            <Spinner size="md" />
             Fetching matters&hellip;
           </p>
         </div>
@@ -188,8 +171,8 @@ export const EdgeCases: Story = {
         <h3 style={headingStyle}>Color always inherits from context</h3>
         <p style={captionStyle}>
           Spinner has no color of its own - it takes whatever <code>color</code> is in effect where
-          it&apos;s rendered, the same way a Button&apos;s loading Spinner picks up that instance&apos;s own
-          appearance/tone color.
+          it&apos;s rendered, the same way a Button&apos;s loading Spinner picks up that button&apos;s
+          prominence and tone color.
         </p>
         <div style={row}>
           <span style={{ ...inlineTextStyle, color: 'var(--color-content-error)' }}>

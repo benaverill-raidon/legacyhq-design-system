@@ -12,7 +12,7 @@ Allows users to switch between selected and unselected states while visible as a
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 
@@ -71,6 +71,8 @@ interface ToggleButtonProps
   size?: ToggleButtonSize;
   tone?: ToggleButtonTone;
   isSelected?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. Still accepted. */
   isDisabled?: boolean;
   iconBefore?: React.ReactNode;
   iconAfter?: React.ReactNode;
@@ -84,7 +86,7 @@ interface ToggleButtonProps
 size: md
 tone: default
 isSelected: false
-isDisabled: false
+disabled: false
 type: button
 ```
 
@@ -243,7 +245,7 @@ Do not build ToggleButtonGroup in this pass.
 - `xs`/`sm`/`md`/`lg` = 24/32/40/48px tall, 4/8/8/12px corner radius, 6/8/12/16px inline padding -
   all already correct.
 - Fixed a real bug: the icon-to-text gap was `--spacing-sm` (8px); Figma's own auto-layout
-  itemSpacing measures a constant 6px at every size. Fixed to `--measurement-6`.
+  itemSpacing measures a constant 6px at every size. Fixed to `--spacing-075`.
 - The icon glyph itself is never resized by this component (no CSS icon-size override, matching
   Button, which also doesn't resize its icons - both just render whatever default size the icon
   itself uses).

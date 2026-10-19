@@ -1,6 +1,6 @@
 {
   "name": "ProgressTracker",
-  "category": "organism",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Show where someone is in a linear, multi-step journey with named steps.",
   "intent": "A segmented, labelled progress bar that fills to the current step and marks it as the active position.",

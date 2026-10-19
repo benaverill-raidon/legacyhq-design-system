@@ -5,7 +5,7 @@
 ### Name
 Dropdown Menu
 
-### Category
+### Tier
 Organism
 
 ### Related Components
@@ -137,7 +137,9 @@ Final implementation decisions:
   (`left`/`center`/`right`), always mapped to a `bottom*` Popup alignment - not the full six-value
   `PopupAlignment` space.
 - No `dropdown-menu.module.css` - there is no visual styling that belongs to DropdownMenu itself.
-- DropdownMenu holds no state of its own (no `useState`/`useEffect`) - it only destructures and
-  redistributes props between Popup and Menu.
-- Selection never closes the panel automatically - same rule as Menu, documented again here since
-  it's the single most likely point of confusion for a first-time consumer.
+- DropdownMenu holds no `useState`; it keeps a trigger ref and runs the menu-button focus
+  management while open (focus into the panel on open; back to the trigger on choose, Escape, and
+  Tab out).
+- Choosing an item closes the panel (after the item's `onSelect`) unless that `onSelect` calls
+  `event.preventDefault()`; a `role="combobox"` trigger (Select) is left to close it itself.
+- The trigger gets `aria-haspopup="menu"` unless it sets its own.

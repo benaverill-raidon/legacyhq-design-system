@@ -1,49 +1,10 @@
 # Section Message
 
-## Purpose
+Section Message's usage guidance is its Storybook Docs page (Components / Feedback / Section
+Message), written in
+[`section-message.mdx`](../../../../packages/ui/src/components/organisms/section-message/section-message.mdx):
+when to use it, anatomy, variants, behavior, do and don't, accessibility, API, and design tokens.
+The API table and the tokens there are generated from the code, so they can't drift.
 
-Section Message is an organism: a bordered, rounded status panel placed inside the flow of a page or
-a section of one. It carries a status - information, success, warning, or error - with an optional
-title, a description, optional inline actions, and an optional dismiss button.
-
-## When to use
-
-Use Section Message for a contained, in-context status message inside a section, form, or panel -
-communicating the result or constraint of the surrounding content (a permission restriction, a
-validation summary, a success confirmation, a warning about the section).
-
-## When not to use
-
-Do not use Section Message for a full-width, page-level announcement bar; use Banner. Do not use it
-for a transient, auto-dismissing notification; use Toast. Do not use it for an inline status next to
-a single field or row; use Inline Message. Do not use it for a blocking confirmation; use Modal
-Dialog.
-
-## Design intent
-
-Section Message is a presentation/layout organism that composes the Icon primitive, the Link Button
-atom (in actions), and the Icon Button atom (the dismiss button). `appearance` (`information`,
-`success`, `warning`, `error`) sets the tinted background, the border color, and the status icon
-together - the appearance is the semantic signal.
-
-The title and description use the default content color; only the icon and border take the status
-color. Unlike Banner (a single truncated line), the description wraps freely, so Section Message
-suits longer, multi-line explanations. Actions are `LinkButton`s laid out in a `ButtonGroup` - wrap
-multiple actions in a Button Group, or pass a single action bare; no separators are injected
-(previously the actions were `Link`s joined by a `·` middot, matching the old Figma). Dismiss is
-opt-in (`isDismissible`) and hides the message while calling `onDismiss`.
-
-## Accessibility expectations
-
-Section Message renders with `role="status"` (a polite live region) by default, so one that appears
-dynamically is announced without interrupting. The role is overridable - use `role="alert"` for an
-urgent error. The status icon is decorative (`aria-hidden`) and the meaning is carried by the title
-and description text, not by color alone. The dismiss control is a labelled Icon Button ("Dismiss").
-
-## Related components
-
-- Banner
-- Toast
-- Inline Message
-- Modal Dialog
-- Link Button / Button Group / Icon Button (composed inside)
+For implementation detail, see [`section-message-spec.md`](section-message-spec.md); for the
+machine-readable contract, [`section-message.contract.json`](section-message.contract.json).

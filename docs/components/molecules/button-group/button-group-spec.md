@@ -10,8 +10,9 @@ spacing and orientation.
 Use Button Group to lay out two or more related `Button`/`IconButton` elements in a row or column
 with a single, consistent gap between them.
 
-### Category
-Molecule
+### Tier
+Molecule: it composes Button/IconButton atoms into a named layout unit with its own variant
+surface (`orientation`), without adding any visual treatment of its own.
 
 ### Design Reference
 - Figma Component: `button-group` (component set, node `1690:7026`, file `Components v1.0.0`)
@@ -50,7 +51,7 @@ ButtonGroup
 ### Structure Notes
 - Single root container (`div`)
 - Any number of `children` (typically `Button`/`IconButton` elements)
-- No owned button styling - size, appearance, and tone are set on each child directly
+- No owned button styling - size, prominence, and tone are set on each child directly
 - No wrapping - matches Figma's `layoutWrap: NO_WRAP`
 
 ---
@@ -112,13 +113,16 @@ independent actions, not a single composite control.
 - No label provided: plain `div`, no `role`.
 - `aria-label` or `aria-labelledby` provided: `role="group"` is added automatically, so the set of
   actions is announced as a named group.
+- A consumer-passed `role` (e.g. `toolbar`) wins, labelled or not: `role={role ?? (named ? 'group'
+  : undefined)}`. A `toolbar` is one tab stop with arrow keys between its controls, which the
+  consumer then adds.
 
 Example:
 
 ```tsx
 <ButtonGroup aria-label="Document actions">
-  <Button appearance="primary">Save</Button>
-  <Button appearance="subtle">Cancel</Button>
+  <Button prominence="primary">Save</Button>
+  <Button prominence="tertiary">Cancel</Button>
 </ButtonGroup>
 ```
 
@@ -195,6 +199,7 @@ no state of its own.
 ### Accessibility
 - [ ] No label: no role, plain div
 - [ ] aria-label present: role="group" and the label are both exposed
+- [ ] A consumer's own role (e.g. toolbar) is kept, labelled or not
 - [ ] Each child button remains independently focusable via Tab
 
 ---

@@ -1,85 +1,287 @@
-import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Button } from '../../atoms/button';
+import { KeyValueList } from '../../molecules/key-value-list';
+import { KeyValuePair } from '../../molecules/key-value-pair';
+import { Card } from './card';
+import cardStyles from './card.module.css';
+import storyStyles from './card-stories.module.css';
 import * as CardStories from './Card.stories';
 
 <Meta of={CardStories} name="Docs" />
 
-# Card
+<Unstyled>
+<ComponentPage>
 
-An optional surface, an optional thin border, and rounded corners around any content. Pass content through `children`;
-the card supplies no header, footer, padding, typography, or interaction of its own.
+<ComponentHeader
+  id="card"
+  example={
+    <Card borderRadius="xl" className={storyStyles.example}>
+      <section className={storyStyles.content} aria-labelledby="card-header-title">
+        <h3 id="card-header-title" className={storyStyles.heading}>Account summary</h3>
+        <KeyValueList>
+          <KeyValuePair label="Type" value="Trust" underline />
+          <KeyValuePair label="Status" value="Active" />
+        </KeyValueList>
+      </section>
+    </Card>
+  }
+>
+  Card sets content on its own surface: a background color, a thin border, and rounded corners that
+  clip what's inside. It has one slot and no padding, header, or behavior of its own.
+</ComponentHeader>
 
-<Canvas of={CardStories.Playground} />
+<Section title="When to use">
 
-## Surfaces and corners
+<Usage>
+<UseFor>
 
-Choose `raised` (default), `default`, `sunken`, `deep`, or `none`. The first four use theme-aware
-surface colors; `none` is transparent. `raised` does not add a shadow.
+- A summary, list, form, or dashboard section that should read as one group.
+- An inset or nested panel, with a different `surface`.
+- Content that runs to the edges, such as an image above text, with rounded corners.
 
-`border` defaults to `true` (a 1px default border). Set `border={false}` to remove the stroke
-and its width. Surface, border, and radius are independent.
+</UseFor>
+<UseInstead>
 
-`borderRadius` accepts `lg` (8px, default), `xl` (12px), and `xxl` (16px).
+- **Layout with no surface, border, or clipping:** plain layout markup. Card adds nothing there.
+- **A message about the page or a task:** <DocLink to="Components/Feedback/Section Message" /> or <DocLink to="Components/Feedback/Banner" />.
+- **Content above the page that needs a response:** <DocLink to="Components/Overlays/Modal Dialog" />.
+- **Many records compared side by side:** <DocLink to="Components/Data Display/Table" />.
 
-<Canvas of={CardStories.AllVariants} />
+</UseInstead>
+</Usage>
 
-## Transparent and borderless
+</Section>
 
-Use `surface="none"` to show the parent background through the card. It keeps its border unless
-you also set `border={false}`. Rounded clipping remains active; children keep full opacity.
+<Section title="Anatomy">
 
-<Canvas of={CardStories.NoSurface} />
+<Anatomy
+  specimen={
+    <Card borderRadius="xl" className={storyStyles.example}>
+      <section className={storyStyles.content} aria-labelledby="card-anatomy-title">
+        <h3 id="card-anatomy-title" className={storyStyles.heading}>Project overview</h3>
+        <p className={storyStyles.description}>The content brings its own padding.</p>
+      </section>
+    </Card>
+  }
+>
+  <Part name="root" target={cardStyles.root}>A `div` with the surface color, the optional border, and the radius. It clips its content and has no padding.</Part>
+  <Part name="content" target={storyStyles.content}>`children`, rendered directly inside the root. Here it's a `section` with its own padding and gap, which belong to the content, not the card.</Part>
+</Anatomy>
 
-```tsx
-<Card surface="none" border={false} borderRadius="xl">
-  {children}
-</Card>
-```
+</Section>
 
-## One unrestricted slot
+<Section title="Variants">
 
-```tsx
-import { Card } from './card';
+`surface`, `border`, and `borderRadius` are independent, so any surface takes any radius, with or
+without a border. Figma has all 30 combinations.
 
-<Card surface="raised" borderRadius="xl">
-  <section aria-labelledby="project-title" style={{ padding: 'var(--spacing-2xl)' }}>
-    <h2 id="project-title">Project overview</h2>
-    <p>Content and layout belong to you.</p>
-  </section>
-</Card>
-```
+<Subsection title="Surface">
 
-Multiple children, composed components, and nested cards are all supported. The examples provide
-their own padding and layout; there is no mandatory content wrapper or set of card subcomponents.
+`surface` picks one of the elevation surface colors, which follow the theme. `raised` (the default)
+is the card resting on the page, `default` is the page's own color, and `sunken` and `deep` sit
+below it, for inset panels. `none` is transparent, so the background behind the card shows through.
+No surface adds a shadow: a raised card is set apart by its color and its border.
 
-<Canvas of={CardStories.ContentSlot} />
+<Example of={CardStories.AllVariants} caption="Every surface at every radius, with and without a border." />
 
-## Edge-to-edge content
+</Subsection>
 
-The card clips content to its rounded boundary, matching Figma. It has no fixed dimensions:
-width follows its layout context and height follows its content unless the consumer sets a size.
-An empty card has only its border height (zero when borderless); the swatches above provide a demonstration height.
+<Subsection title="Border">
 
-<Canvas of={CardStories.EdgeToEdge} />
+`border` is on by default: a 1px line in the default border color. `border={false}` removes it
+completely, so the card doesn't keep an invisible 1px. With `surface="none"`, the border alone
+outlines the content; without either, the card only rounds and clips it. Children keep full opacity
+whatever the surface.
 
-## Forms and other interactions
+<Example of={CardStories.NoSurface} caption="A transparent card with and without its border." />
 
-Controls inside the slot keep their own behavior. A card is a plain `div`, not a button, link,
-focus target, or landmark. Compose native headings, sections, forms, links, and buttons as needed.
-There are no card-level hover, pressed, selected, or disabled states.
+</Subsection>
 
-<Canvas of={CardStories.WithForm} />
+<Subsection title="Corners">
 
-Keep focusable controls inset enough that their focus indicators are visible. Use the existing
-portaled Popup or picker components for content that needs to escape the clipped boundary.
+`borderRadius` is `lg` (8px, the default), `xl` (12px), or `xxl` (16px). Content is clipped to it.
 
-## API
+</Subsection>
 
-<ArgTypes of={CardStories.Playground} />
+</Section>
 
-Native `div` attributes, `className`, `style`, and a forwarded `HTMLDivElement` ref are supported.
+<Section title="Behavior">
 
-## Design source
+<Subsection title="Content">
 
-[Card in Figma](https://www.figma.com/design/M0eINB6n1BfrXu7ntYqb1i/Components-v1.0.0?node-id=4968-153931).
-All 30 variants, their variable bindings, optional border/fill, clipping, and zero padding were inspected through
-Figma Console on September 22, 2026.
+Card renders `children` directly, with no wrapper, so the content decides its own padding, gap,
+typography, and layout. It can be several elements, composed components, or another card.
+
+<Example of={CardStories.ContentSlot} caption="A summary with a badge and metrics, and a sunken checklist with a nested card." />
+
+</Subsection>
+
+<Subsection title="Clipping">
+
+The card hides overflow at its rounded edge, so content can run to the edges and still get the
+corners. Keep focusable controls far enough in from the edge for their focus ring to show, and use a
+portaled overlay, such as <DocLink to="Components/Overlays/Popup" /> or a picker, for anything that
+has to extend past the card.
+
+<Example of={CardStories.EdgeToEdge} caption="A banner that runs to the edges, above padded text." />
+
+</Subsection>
+
+<Subsection title="Size">
+
+Card has no size of its own. It fills the width its layout gives it and grows with its content, and
+it can shrink inside a flex or grid layout. Set a width or height on it with `className` or `style`
+when you need one. An empty card is only as tall as its border.
+
+</Subsection>
+
+<Subsection title="Interactive content">
+
+Card has no hover, pressed, selected, or disabled state, and handles no events. Controls inside it,
+like the form here, keep their own behavior.
+
+<Example of={CardStories.WithForm} caption="A form inside a card, with its own submit button." />
+
+</Subsection>
+
+</Section>
+
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Put the padding in the content, where it belongs to the layout you're building."
+  code={`<Card>
+    <section className={styles.content}>
+      <h3>Project overview</h3>
+      <p>The content brings its own padding.</p>
+    </section>
+</Card>`}
+>
+  <Card className={storyStyles.example}>
+    <section className={storyStyles.content}>
+      <h3 className={storyStyles.heading}>Project overview</h3>
+      <p className={storyStyles.description}>The content brings its own padding.</p>
+    </section>
+  </Card>
+</Do>
+<Dont
+  caption="Expect the card to pad its content. The text runs into the border."
+  code={`<Card>
+    <h3>Project overview</h3>
+    <p>The content brings its own padding.</p>
+</Card>`}
+>
+  <Card className={storyStyles.example}>
+    <h3 className={storyStyles.heading}>Project overview</h3>
+    <p className={storyStyles.description}>The content brings its own padding.</p>
+  </Card>
+</Dont>
+<Do
+  caption="Put a real link or button inside the card for its action."
+  code={`<Card>
+    <section className={styles.content}>
+      <h3>Community projects</h3>
+      <Button>View projects</Button>
+    </section>
+</Card>`}
+>
+  <Card className={storyStyles.example}>
+    <section className={storyStyles.content}>
+      <h3 className={storyStyles.heading}>Community projects</h3>
+      <div>
+        <Button>View projects</Button>
+      </div>
+    </section>
+  </Card>
+</Do>
+<Dont
+  caption="Make the whole card a click target. It's a div: keyboard users can't reach it, and it isn't announced as a link or button."
+  code={`<Card onClick={() => navigate('/projects')}>
+    <h3>Community projects</h3>
+</Card>`}
+/>
+<Do
+  caption="Keep the border on a raised card that sits on the page. Its border is what sets it apart."
+  code={`<Card surface="raised">…</Card>`}
+/>
+<Dont
+  caption="Remove the border from a raised card on the page and expect a shadow to separate it. Raised adds no shadow."
+  code={`<Card surface="raised" border={false}>…</Card>`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Card renders a plain `div`: no role, no landmark, no tab stop, and no keyboard behavior. Screen
+  readers don't announce it, and it doesn't change how its content is read.
+- The content brings the semantics. Use headings, and a `section` or `article` named by its heading,
+  as the examples do, when the card holds a group people should find.
+- Controls inside keep their own focus and keyboard behavior. The card clips at its edge, so keep
+  them inset enough for the focus ring to show.
+- Surface and border are visual only. Don't rely on a card's color to say something the content
+  doesn't.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={CardStories} native="div" />
+
+The ref is forwarded to the root `div`.
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Card's stylesheet uses, by family, with the property it sets and when. "Base" is the
+raised card with a border at the `lg` radius; `surface="none"` sets a transparent background, which
+isn't a token.
+
+<TokensTable id="card" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Data Display/Key Value List" /> for a record's details inside a card.
+- <DocLink to="Components/Forms/Form" /> for a form set on a card.
+- <DocLink to="Components/Feedback/Empty State" /> for a card's content when there's nothing to show yet.
+- <DocLink to="Components/Data Display/Table" /> for many records side by side.
+- <DocLink to="Components/Overlays/Popup" /> for content that has to extend past the card's clipped edge.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads card.types.ts, the design tokens read card.module.css, and the Figma source
+  comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

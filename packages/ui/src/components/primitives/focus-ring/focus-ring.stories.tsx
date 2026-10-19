@@ -6,7 +6,7 @@ import { Switch } from '../../atoms/switch';
 import { FocusRing } from './focus-ring';
 
 const meta: Meta<typeof FocusRing> = {
-  title: 'UI/Primitives/Focus Ring',
+  title: 'Foundations/Focus Ring',
   component: FocusRing,
   args: {
     borderWidth: 'default',

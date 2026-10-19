@@ -8,14 +8,14 @@ const TODAY = new Date(2026, 2, 9); // 9 March 2026
 
 const surface: CSSProperties = {
   display: 'inline-block',
-  background: 'var(--color-elevation-surface-overlay-default, var(--color-elevation-surface-raised-default))',
+  background: 'var(--color-elevation-surface-raised-default)',
   border: 'var(--border-width-sm) solid var(--color-border-default)',
   borderRadius: 'var(--border-radius-lg)',
-  boxShadow: 'var(--shadow-overlay, 0 8px 24px rgba(0,0,0,0.12))',
+  boxShadow: 'var(--elevation-shadow-overlay)',
 };
 
 const meta = {
-  title: 'UI/Organisms/DatePickerCalendar',
+  title: 'Components/Forms/Date Picker Calendar',
   component: DatePickerCalendar,
   args: {
     defaultMonth: TODAY,
@@ -36,7 +36,7 @@ const meta = {
     max: { control: false },
     isDateDisabled: { control: false },
   },
-  // The calendar is transparent by design; wrap it in a popup-like surface for the stories.
+  // The calendar is transparent by design; wrap it in Popup's surface for the stories.
   decorators: [
     (Story) => (
       <div style={surface}>

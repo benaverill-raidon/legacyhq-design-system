@@ -1,6 +1,6 @@
 {
   "name": "ChipGroup",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Lay out a wrapping row of Chips at one shared size and alignment.",
   "intent": "Give a row of Chips its measured wrap, gap, and alignment in one place, and remove the repetition (and the silent misalignment) of setting the same size on every chip by hand.",

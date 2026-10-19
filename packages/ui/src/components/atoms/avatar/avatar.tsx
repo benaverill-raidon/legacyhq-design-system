@@ -12,16 +12,30 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-const PRESENCE_LABELS: Record<Exclude<AvatarPresence, 'none'>, string> = {
+type AvatarBadgePresence = Exclude<AvatarPresence, 'none'>;
+type AvatarBadgeStatus = Exclude<AvatarStatus, 'none'>;
+
+// The English defaults for the words Avatar adds to its accessible name; each is a prop for translation.
+const DEFAULT_SELECTED_LABEL = 'selected';
+
+const PRESENCE_LABELS: Record<AvatarBadgePresence, string> = {
   online: 'online',
   offline: 'offline',
   busy: 'busy',
 };
 
-const STATUS_LABELS: Record<Exclude<AvatarStatus, 'none'>, string> = {
+const STATUS_LABELS: Record<AvatarBadgeStatus, string> = {
   accepted: 'accepted',
   declined: 'declined',
 };
+
+function getDefaultAvatarPresenceLabel(presence: AvatarBadgePresence) {
+  return PRESENCE_LABELS[presence];
+}
+
+function getDefaultAvatarStatusLabel(status: AvatarBadgeStatus) {
+  return STATUS_LABELS[status];
+}
 
 function getVisibleBadge(status: AvatarStatus, presence: AvatarPresence) {
   return status !== 'none' ? status : presence;
@@ -33,20 +47,26 @@ function getAccessibleLabel({
   alt,
   decorative,
   isButton,
-  isSelected,
+  announceSelected,
   name,
   presence,
   status,
+  selectedLabel,
+  getPresenceLabel,
+  getStatusLabel,
 }: {
   ariaLabel?: string;
   ariaLabelledBy?: string;
   alt?: string;
   decorative: boolean;
   isButton: boolean;
-  isSelected: boolean;
+  announceSelected: boolean;
   name?: string;
   presence: AvatarPresence;
   status: AvatarStatus;
+  selectedLabel: string;
+  getPresenceLabel: (presence: AvatarBadgePresence) => string;
+  getStatusLabel: (status: AvatarBadgeStatus) => string;
 }) {
   if (decorative && !isButton) {
     return undefined;
@@ -63,18 +83,15 @@ function getAccessibleLabel({
   }
 
   const details: string[] = [];
-  const visibleBadge = getVisibleBadge(status, presence);
 
-  if (isSelected) {
-    details.push('selected');
+  if (announceSelected) {
+    details.push(selectedLabel);
   }
 
-  if (visibleBadge !== 'none') {
-    details.push(
-      visibleBadge in STATUS_LABELS
-        ? STATUS_LABELS[visibleBadge as Exclude<AvatarStatus, 'none'>]
-        : PRESENCE_LABELS[visibleBadge as Exclude<AvatarPresence, 'none'>],
-    );
+  if (status !== 'none') {
+    details.push(getStatusLabel(status));
+  } else if (presence !== 'none') {
+    details.push(getPresenceLabel(presence));
   }
 
   return details.length > 0 ? baseLabel + ', ' + details.join(', ') : baseLabel;
@@ -138,16 +155,21 @@ export const Avatar = React.memo(
       name,
       presence = 'none',
       status = 'none',
-      isSelected = false,
-      isDisabled = false,
+      isSelected,
+      disabled,
+      isDisabled: deprecatedIsDisabled,
       isInteractive = false,
       decorative = false,
       entityType = 'person',
       className,
       onClick,
       type = 'button',
+      selectedLabel = DEFAULT_SELECTED_LABEL,
+      getPresenceLabel = getDefaultAvatarPresenceLabel,
+      getStatusLabel = getDefaultAvatarStatusLabel,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
+      'aria-pressed': ariaPressed,
       ...rest
     },
     forwardedRef,
@@ -159,6 +181,13 @@ export const Avatar = React.memo(
       setImageFailed(false);
     }
     const isButton = isInteractive || typeof onClick === 'function';
+    // `isDisabled` is the deprecated name for `disabled`.
+    const isDisabled = disabled ?? deprecatedIsDisabled ?? false;
+    const selected = isSelected ?? false;
+    // An interactive avatar given `isSelected` is a toggle: the button carries the state in
+    // aria-pressed, so "selected" isn't repeated in its name. A static avatar (role="img") can't carry
+    // a pressed state, so it keeps the word.
+    const pressed = isButton && isSelected !== undefined ? isSelected : undefined;
     const decorativeAvatar = decorative && !isButton;
     const visibleBadge = getVisibleBadge(status, presence);
     const computedLabel = getAccessibleLabel({
@@ -167,10 +196,13 @@ export const Avatar = React.memo(
       alt,
       decorative: decorativeAvatar,
       isButton,
-      isSelected,
+      announceSelected: selected && pressed === undefined,
       name,
       presence,
       status,
+      selectedLabel,
+      getPresenceLabel,
+      getStatusLabel,
     });
     const rootClassName = mergeClassNames(
       styles.root,
@@ -219,9 +251,10 @@ export const Avatar = React.memo(
           disabled={isDisabled}
           aria-label={computedLabel}
           aria-labelledby={ariaLabelledBy}
+          aria-pressed={pressed ?? ariaPressed}
           data-size={size}
           data-interactive="true"
-          data-selected={isSelected ? 'true' : undefined}
+          data-selected={selected ? 'true' : undefined}
           data-disabled={isDisabled ? 'true' : undefined}
           data-presence={presence}
           data-status={status}
@@ -245,7 +278,7 @@ export const Avatar = React.memo(
         aria-labelledby={ariaLabelledBy}
         data-size={size}
         data-interactive="false"
-        data-selected={isSelected ? 'true' : undefined}
+        data-selected={selected ? 'true' : undefined}
         data-disabled={isDisabled ? 'true' : undefined}
         data-presence={presence}
         data-status={status}

@@ -3,8 +3,7 @@
  * colour are all confirmed directly from Figma's <field>/<label>/<message> parts:
  *   - label -> control gap: 4px (label padding-bottom, Figma space/050)
  *   - control -> message gap: 4px (message padding-top, Figma spacing/xs)
- *   - message icon -> text gap: 6px (Figma spacing/075 - no semantic spacing token yet, so
- *     --measurement-6, the same precedent Text Field and Toggle Button use for this exact gap)
+ *   - message icon -> text gap: 6px (Figma spacing/075, --spacing-075)
  */
 .root {
   display: flex;
@@ -36,7 +35,7 @@
 .message {
   display: flex;
   align-items: center;
-  gap: var(--measurement-6);
+  gap: var(--spacing-075);
   padding-top: var(--spacing-xs);
   color: var(--color-content-subtle);
   font-family: var(--typography-body-sm-font-family);

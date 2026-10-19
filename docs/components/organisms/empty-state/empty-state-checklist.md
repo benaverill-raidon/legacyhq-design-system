@@ -13,15 +13,16 @@ shown when a view has no content yet. `inherited` (transparent) or `informative`
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
 ## Design decisions
 
-- [ ] `type` (`inherited` | `informative`) sets the background: transparent vs a sunken surface panel.
+- [ ] `appearance` (`inherited` | `informative`) sets the background: transparent vs a sunken
+      surface panel. `type` (Figma's name) stays accepted as a deprecated alias.
 - [ ] The Figma `inherited` variant had no content built (WIP); code renders the same centered
-      content for both types.
+      content for both appearances.
 - [ ] Only the description (`children`) is required; illustration, heading, and actions are optional
       slots (mapping the Figma showIllustration/showHeading/showActions booleans).
 - [ ] All content is centered; long headings/descriptions wrap symmetrically.
@@ -31,7 +32,7 @@ Organism.
 ## Figma properties
 
 ```txt
-type: inherited | informative
+type: inherited | informative   (code: appearance; `type` is a deprecated alias)
 showIllustration: true | false   (code: illustration slot)
 showHeading: true | false        (code: heading slot)
 showActions: true | false        (code: actions slot)
@@ -41,12 +42,16 @@ headingText / descriptionText    (code: heading / children)
 ## Code props
 
 ```ts
-type EmptyStateType = 'inherited' | 'informative';
+type EmptyStateAppearance = 'inherited' | 'informative';
+type EmptyStateHeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
-  type?: EmptyStateType;
+  appearance?: EmptyStateAppearance;
+  /** @deprecated Renamed to `appearance`. */
+  type?: EmptyStateAppearance;
   illustration?: React.ReactNode;
   heading?: React.ReactNode;
+  headingLevel?: EmptyStateHeadingLevel;
   children: React.ReactNode;
   actions?: React.ReactNode;
 }
@@ -55,7 +60,8 @@ interface EmptyStateProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ch
 ## Defaults
 
 ```txt
-type: inherited
+appearance: inherited
+headingLevel: 2
 ```
 
 ## Tokens
@@ -73,7 +79,8 @@ type: inherited
 ## Accessibility
 
 - [ ] No default role; document that a dynamic swap-in region should announce the change.
-- [ ] Heading can be a real heading element when needed.
+- [ ] The heading is a real `h1`-`h6` at `headingLevel` (default `h2`), margins reset, same look at
+      every level.
 
 ## Examples to document
 
@@ -85,7 +92,8 @@ type: inherited
 ## Tests
 
 - [ ] Renders description; renders/omits heading, illustration, actions.
-- [ ] Defaults to inherited; applies informative.
+- [ ] Defaults to inherited; applies informative; the deprecated `type` still works.
+- [ ] Heading is a real heading at level 2 by default and at `headingLevel`.
 - [ ] Sunken background only for informative.
 - [ ] Centered stack + spacing tokens; heading-md / body-md.
 - [ ] Forwards the ref.

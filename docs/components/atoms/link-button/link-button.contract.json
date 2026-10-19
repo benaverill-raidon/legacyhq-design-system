@@ -1,6 +1,6 @@
 {
   "name": "LinkButton",
-  "category": "atom",
+  "category": "navigation",
   "status": "stable",
   "purpose": "Navigation styled as a button.",
   "intent": "Combine anchor semantics with Button visuals.",
@@ -26,14 +26,21 @@
     "anchor",
     "optional leading icon",
     "label",
-    "optional trailing icon"
+    "optional trailing icon",
+    "spinner"
   ],
   "props": {},
   "variants": {
     "appearance": [
       "default",
-      "subtle",
-      "bold"
+      "primary",
+      "subtle"
+    ],
+    "tone": [
+      "default",
+      "brand",
+      "warning",
+      "error"
     ]
   },
   "sizes": [
@@ -47,7 +54,8 @@
     "hover",
     "press",
     "focus",
-    "disabled"
+    "disabled",
+    "loading"
   ],
   "slots": [
     "iconBefore",

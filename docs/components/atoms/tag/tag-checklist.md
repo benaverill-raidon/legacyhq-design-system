@@ -12,7 +12,7 @@ A tag labels UI objects for classification and navigation.
 
 Ready for implementation.
 
-## Component category
+## Component tier
 
 Atom
 
@@ -75,6 +75,8 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
   target?: React.AnchorHTMLAttributes<HTMLAnchorElement>['target'];
   rel?: string;
   isRemovable?: boolean;
+  disabled?: boolean;
+  /** @deprecated Use `disabled`. */
   isDisabled?: boolean;
   isInteractive?: boolean;
   elemBefore?: React.ReactNode;
@@ -90,7 +92,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
 size: md
 tone: default
 isRemovable: false
-isDisabled: false
+disabled: false
 isInteractive: false
 removeLabel: Remove tag
 ```
@@ -167,6 +169,7 @@ When disabled:
 - Set `aria-disabled="true"` on navigational content
 - Remove navigational content from tab order with `tabIndex={-1}`
 - Disable remove button with native `disabled`
+- Take the native-named `disabled` prop; `isDisabled` stays accepted as a deprecated alias
 
 ## External link behavior
 
@@ -305,6 +308,8 @@ Test:
 - supports data-force-state hover/press preview on both the content and remove areas
 - renders a button (not a span) when isInteractive or onClick is provided with no href/isRemovable
 - interactive tag button is natively disabled and uses the shared focus ring classes
+- the deprecated isDisabled alias still works, and disabled wins when both are set
+- tabIndex and aria-describedby reach the root of a display-only tag and of a removable tag without href, and the link or button otherwise
 
 ## Do not include
 

@@ -1,6 +1,6 @@
 {
   "name": "Chip",
-  "category": "molecule",
+  "category": "forms",
   "status": "stable",
   "purpose": "Show and edit an applied filter, an applied property, or a selectable search scope, as one compact segmented pill.",
   "intent": "Give the three closely-related chip uses one component and one mental model, with each use's own props typed so they cannot be mixed up - rather than three near-identical components or one component with a pile of conditionally-meaningful props.",
@@ -36,7 +36,7 @@
       "segmentHover": "background: color/background/neutral/subtle/hover",
       "segmentPress": "background: color/background/neutral/subtle/press",
       "labelText": "color/content/subtle - the label names the property rather than acting on it",
-      "operatorAndValueText": "color/content/default, typography Body/M",
+      "operatorAndValueText": "color/content/default, typography Body/MD",
       "selected": "background: color/background/selected/default/default; border: color/border/selected; text: color/content/selected. No hover/press ramp - see the chip-base interaction-states note.",
       "disabled": "background: color/background/disabled; text: color/content/disabled; border reverts to color/border/input",
       "labelIcon": "inherits the label segment's own colour, so it moves through content/subtle -> content/selected -> content/disabled with the text",
@@ -173,8 +173,14 @@
     "removeAriaLabel": {
       "type": "string",
       "required": false,
-      "default": "Remove ${label}",
-      "description": "filter and select. Falls back to `Remove ${label}` when label is a string, otherwise `Remove`."
+      "default": "Remove ${labelText}",
+      "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`."
+    },
+    "labelText": {
+      "type": "string",
+      "required": false,
+      "default": "label, when it is a string",
+      "description": "filter and select. The label as plain text, for the names Chip builds from it: the remove button (`Remove ${labelText}`), and in filter mode the operator/value panels (`${labelText} operator` / `${labelText} value`) and the operator/value buttons, which are named by the property and their own text (`aria-labelledby`, e.g. \"Due date March 2\"). Set it when label is JSX, or those names lose the property."
     },
     "id": {
       "type": "string",
@@ -227,9 +233,9 @@
   "accessibility": {
     "searchRole": "native button with aria-pressed, matching Toggle Button",
     "labelSegment": "a plain non-interactive span in filter/select mode - it names the property rather than acting on it",
-    "dropdownSegments": "native buttons; aria-expanded/aria-controls supplied by Popup via Dropdown Menu",
+    "dropdownSegments": "native buttons named by the property and their own text through aria-labelledby (\"Due date March 2\"; labelText stands in for a JSX label); aria-expanded/aria-controls supplied by Popup and aria-haspopup by Dropdown Menu, also when the segment has a tooltip (Tooltip forwards them to the button)",
     "menuRole": "menu (from Menu), named from the property and segment role by default",
-    "removeButton": "native button with an accessible name (`Remove ${label}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
+    "removeButton": "native button with an accessible name (`Remove ${labelText}` by default) plus a \"Remove\" Tooltip on hover/focus - the tooltip is supplementary, never the sole accessible name, and is suppressed while disabled",
     "decorativeSlots": "elemBefore and valuePreview are aria-hidden - the label and value text already carry the meaning",
     "focus": "shared Focus Ring primitive on every real control",
     "labelIcon": "inherits the label colour, so it stays legible across subtle/selected/disabled without the consumer restating it"
@@ -256,14 +262,14 @@
     "No segment may be wrapped - every segment must remain a direct child of the root. The seam and corner rules are all structural (:first-child / :last-child / :not(:last-child)), so any wrapper (a Tooltip around a disabled child, a positioning div, anything that renders DOM) detaches that segment from the pill."
   ],
   "responsiveRules": [
-    "Segments never wrap; long labels and values ellipsize so the chip stays a single line.",
+    "Segments never wrap, so the chip stays a single line. The root is capped at its container (max-inline-size: 100%) and every segment can shrink (min-inline-size: 0), so long labels and values end in an ellipsis; the remove button, elemBefore, and valuePreview keep their size.",
     "Each segment menu inherits Popup's viewport-aware alignment fallback and outside-dismissal."
   ],
   "themeRules": [
     "Fully token-driven - no component-level light/dark branching. Verified in both themes."
   ],
   "tokens": {
-    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, measurement-6 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, size-200 for the 16px slots, plus the color families listed under figmaSource.tokenMapping. The only literal is the 0 used for squared interior corners and suppressed interior borders."
+    "note": "chip.module.css references only tokens: size-control-xs/sm for heights, spacing-075 and spacing-sm/xs for padding and gap, border-width-sm, border-radius-full-round, typography-body-md-*, fade-quick for the color transition, plus the color families listed under figmaSource.tokenMapping. The slots have no fixed size (they hug their content), and the only literal is the 0 that suppresses interior borders."
   },
   "relatedComponents": [
     "Tag",

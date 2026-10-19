@@ -14,20 +14,22 @@ to the calendar.
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
 ## Design decisions
 
 - [ ] Trigger = read-only Text Field showing the formatted date + a trailing calendar icon.
-- [ ] context maps to Text Field appearance: default (bordered) / inline (subtle, borderless); size
-      passes through (sm/md/lg).
+- [ ] context passes straight to the Text Field's context: default (bordered) / inline (borderless);
+      size passes through (sm/md/lg).
 - [ ] Open state rendered by pinning the field focus treatment (`data-force-state="focus"`) - border
       box for default, underline for inline (matches Figma `open`).
-- [ ] Popup primitive anchored to the field frame (bottomLeft default), role=dialog, padding none; the
-      Date Picker Calendar fills it.
-- [ ] Opening moves focus into the grid; select/Escape close and return focus; outside click dismisses.
+- [ ] Popup primitive anchored to the field frame (bottomLeft default), padding none; the Date Picker
+      Calendar fills it and is the role=dialog, named by `dialogLabel` ("Choose a date").
+- [ ] Opening moves focus into the grid; select/Escape/Tab out close and return focus; outside click
+      dismisses.
+- [ ] `required` adds a hidden native input that the form validates (a read-only input never is).
 - [ ] Controlled + uncontrolled value and open.
 - [ ] min/max/isDateDisabled/weekStartsOn/today/locale pass through to the calendar.
 - [ ] Field is read-only (v1); manual date entry is future.
@@ -63,6 +65,7 @@ interface DatePickerProps
   weekStartsOn?: Weekday; today?: Date;
   id?: string;
   'aria-label'?: string; 'aria-labelledby'?: string;
+  required?: boolean; dialogLabel?: string;
 }
 ```
 
@@ -85,8 +88,8 @@ format: locale short date (03/09/2026)
 
 ## Accessibility
 
-- [ ] trigger read-only input, aria-haspopup=dialog; aria-expanded/aria-controls via Popup.
-- [ ] role=dialog panel; focus into grid on open, back to field on close.
+- [ ] trigger read-only input, aria-haspopup=dialog; aria-expanded + aria-controls (pointing at the dialog).
+- [ ] named role=dialog calendar; focus into grid on open, back to field on close; Tab out closes.
 - [ ] Enter/Space/ArrowDown/ArrowUp open; Escape closes; calendar keyboard model inside.
 
 ## Examples to document
@@ -103,6 +106,8 @@ format: locale short date (03/09/2026)
 - [ ] Opens on click / Enter / ArrowDown; field expanded; focus into grid.
 - [ ] Select fills field + closes + returns focus (uncontrolled); controlled value.
 - [ ] Escape closes + returns focus; disabled does not open.
-- [ ] min/max passed to calendar; role=dialog via aria-controls.
+- [ ] min/max passed to calendar; named role=dialog via aria-controls.
+- [ ] Tab / Shift+Tab out of the calendar closes it and returns focus to the field.
+- [ ] required: empty value fails form validation; date or disabled passes.
 - [ ] CSS contract (240px width, read-only cursor/caret).
 - [ ] Uses MUI: no. Uses Tailwind: no.

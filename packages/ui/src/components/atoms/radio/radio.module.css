@@ -27,6 +27,12 @@
   overflow: visible;
 }
 
+/*
+ * The shared Focus Ring draws the keyboard ring on this input. It should wrap the visible 24px
+ * circle (size-choice-indicator), not the 32px hit target, so `--focus-ring-offset` insets the
+ * outline by exactly the gap between the two - the same treatment as Checkbox. The full-round
+ * radius stays round once the negative offset deflates it.
+ */
 .input {
   position: absolute;
   inset-block-start: 50%;
@@ -42,11 +48,16 @@
   background: transparent;
   cursor: inherit;
   transform: translate(-50%, -50%);
+  --focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);
 }
 
-.input:focus,
-.input:focus-visible {
-  outline: none;
+/*
+ * `previewFocus` pins focus for Storybook. The shared Focus Ring only reacts to :focus-visible (or
+ * its own data-force-state), so mirror its outline here from its own variables.
+ */
+.radio:global(.previewFocus):not([data-disabled='true']) .input {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
 }
 
 .indicatorTarget {
@@ -66,26 +77,12 @@
 }
 
 .indicatorFocus {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   inline-size: var(--size-choice-indicator);
   block-size: var(--size-choice-indicator);
   border-radius: var(--border-radius-full-round);
-}
-
-.input:focus-visible + .indicatorTarget .indicatorFocus::after {
-  content: '';
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 50%;
-  inline-size: calc(var(--size-choice-indicator) + var(--border-width-md));
-  block-size: calc(var(--size-choice-indicator) + var(--border-width-md));
-  border: var(--border-width-md) solid var(--color-border-focus);
-  border-radius: var(--border-radius-full-round);
-  box-sizing: border-box;
-  transform: translate(-50%, -50%);
 }
 
 .indicatorIcon {
@@ -151,14 +148,12 @@
 }
 
 .radio[data-disabled='true'] {
-  color: var(--color-content-default);
+  color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
-.radio[data-disabled='true'] .labelText,
 .radio[data-disabled='true'] .indicatorIcon {
   color: var(--color-content-disabled);
-  opacity: 0.32;
 }
 
 .radio[data-disabled='true'] .indicatorTarget,
@@ -218,9 +213,14 @@
   flex-direction: column;
 }
 
+/*
+ * In a row, options need space between them so each label reads with its own circle. Wrapped rows
+ * stay flush, like the vertical stack (each row is already a 32px target).
+ */
 .orientation_horizontal .options {
   flex-direction: row;
   flex-wrap: wrap;
+  column-gap: var(--spacing-lg);
 }
 
 .errorMessage {

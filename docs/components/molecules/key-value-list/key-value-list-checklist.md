@@ -5,7 +5,7 @@
 ### Name
 KeyValueList
 
-### Category
+### Tier
 Molecule
 
 ### Related Components

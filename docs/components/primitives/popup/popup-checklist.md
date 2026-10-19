@@ -5,7 +5,7 @@
 ### Name
 Popup
 
-### Category
+### Tier
 Primitive
 
 ### Related Components
@@ -86,7 +86,7 @@ Yes - `children` is the single trigger element, cloned to receive a measurement 
 - Border: `--border-width-sm` / `--color-border-default`
 - Padding: `--spacing-sm` / `--spacing-md` / `--spacing-lg` (via the `padding` prop)
 - Radius: `--border-radius-lg`
-- Shadow: `--color-elevation-shadow-overlay-inner` / `-spread` / `-perimeter`
+- Shadow: `--elevation-shadow-overlay`
 - Trigger-to-panel gap: `--spacing-sm`
 - Inter-content gap: `--spacing-xs`
 
@@ -113,8 +113,10 @@ Not required:
 ## Accessibility
 
 ### Does this support keyboard navigation?
-Escape dismisses by default (`closeOnEscape`). Popup does not manage focus movement into or out of
-the panel - that's left to the consumer, since the right focus target depends on what's inside.
+Escape dismisses by default (`closeOnEscape`), but only the topmost open layer: a Popup opened
+inside a Modal Dialog or another Popup closes before the layer under it (`useLayer` in
+`primitives/layers.ts`). Popup does not manage focus movement into or out of the panel - that's
+left to the consumer, since the right focus target depends on what's inside.
 
 ### What ARIA is applied?
 By default (`manageTriggerAria=true`): `aria-expanded` on the trigger, and `aria-controls` on the
@@ -159,6 +161,10 @@ Final implementation decisions:
 - `open` is a required, fully controlled prop - no internal open state, no `defaultOpen`.
 - Popup owns Escape/outside-click dismissal by default (`closeOnEscape`/`closeOnOutsideClick`,
   both `true`), calling `onOpenChange(false)` rather than changing its own visibility.
+- Escape goes to the topmost open layer only (popups and Modal Dialogs share one stack in
+  `primitives/layers.ts`), and the panel's z-index is `LAYERS.popup` from the same file, above
+  dialogs and toasts.
+- The trigger's own ref is read from `child.props.ref`, not the deprecated `element.ref`.
 - `alignment` defaults to `topLeft`, matching Figma's own declared default variant.
 - The panel hugs its content on both axes - no stretch-to-fill.
 - No default ARIA role on the panel.

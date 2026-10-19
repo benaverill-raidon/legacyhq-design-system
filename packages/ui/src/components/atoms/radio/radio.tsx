@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { RadioCheckedIcon, RadioUncheckedIcon } from '../../../assets/icons';
+import { focusRingClassNames } from '../../primitives/focus-ring';
+import { RadioGroupContext } from './radio-group-context';
 import styles from './radio.module.css';
 import type { RadioProps } from './radio.types';
-
-type InternalRadioProps = RadioProps & {
-  showRequiredIndicator?: boolean;
-};
 
 function mergeClassNames(...classNames: Array<string | undefined>) {
   return classNames.filter(Boolean).join(' ');
@@ -22,7 +20,7 @@ function setRefs<T>(node: T, ...refs: Array<React.ForwardedRef<T>>) {
 }
 
 export const Radio = React.memo(
-  React.forwardRef<HTMLInputElement, InternalRadioProps>(function Radio(
+  React.forwardRef<HTMLInputElement, RadioProps>(function Radio(
     {
       label,
       checked,
@@ -32,7 +30,6 @@ export const Radio = React.memo(
       disabled = false,
       className,
       inputClassName,
-      showRequiredIndicator = true,
       onCheckedChange,
       id,
       'aria-invalid': ariaInvalid,
@@ -42,6 +39,11 @@ export const Radio = React.memo(
   ) {
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
+    // A Radio Group's `disabled` and `required` reach every radio inside it, from `options` or
+    // `children`. Group-level `required` is native only: the group shows the one `*`, on its legend.
+    const group = React.useContext(RadioGroupContext);
+    const isDisabled = disabled || group.disabled;
+    const isRequired = required || group.required;
 
     const handleChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +55,7 @@ export const Radio = React.memo(
     return (
       <label
         className={mergeClassNames(styles.radio, className)}
-        data-disabled={disabled ? 'true' : undefined}
+        data-disabled={isDisabled ? 'true' : undefined}
         data-invalid={invalid ? 'true' : undefined}
       >
         <span className={styles.control}>
@@ -64,12 +66,17 @@ export const Radio = React.memo(
             {...rest}
             ref={(node) => setRefs(node, forwardedRef)}
             id={inputId}
-            className={mergeClassNames(styles.input, inputClassName)}
+            className={mergeClassNames(
+              styles.input,
+              focusRingClassNames.focusRing,
+              focusRingClassNames.focusRingDefault,
+              inputClassName,
+            )}
             type="radio"
             checked={checked}
             defaultChecked={defaultChecked}
-            disabled={disabled}
-            required={required}
+            disabled={isDisabled}
+            required={isRequired}
             aria-invalid={invalid ? true : ariaInvalid}
             onChange={handleChange}
           />
@@ -92,7 +99,12 @@ export const Radio = React.memo(
         {label !== undefined ? (
           <span className={styles.labelText}>
             {label}
-            {required && showRequiredIndicator ? <span className={styles.requiredIndicator}>*</span> : null}
+            {/* Decorative: the native `required` is what assistive technology announces. */}
+            {required ? (
+              <span className={styles.requiredIndicator} aria-hidden="true">
+                *
+              </span>
+            ) : null}
           </span>
         ) : null}
       </label>

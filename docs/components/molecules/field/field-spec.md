@@ -9,10 +9,10 @@ wires them together so the control is correctly labelled and described.
 ### Description
 Field is the "form field" layer the control components deliberately leave out. Text Field, Text
 Area, and Select render only their control frame; Field is where the label and helper/error text
-live, and where the `htmlFor`/`aria-describedby`/`aria-invalid`/`required` wiring is done once
-instead of at every call site.
+live, and where the `htmlFor`/`aria-labelledby`/`aria-describedby`/`aria-invalid`/`required` wiring
+is done once instead of at every call site.
 
-### Category
+### Tier
 Molecule - it composes the Icon primitive (the message's status glyph) and a native `<label>`
 around a control slot. The control it wraps is passed in as `children`, not owned, so a single Field
 serves every control type.
@@ -52,9 +52,9 @@ serves every control type.
 
 ```text
 Field (div.root, flex column, data-state/context/size)
-├─ label.label (optional; native <label htmlFor>, --typography-heading-xxs)
+├─ label.label (optional; native <label id htmlFor>, --typography-heading-xxs)
 │  └─ span.required (optional, "*", aria-hidden, --color-content-error)
-├─ {children}  (the wrapped control - the slot - cloned to receive id/aria-*/required, plus appearance="subtle" when context=inline)
+├─ {children}  (the wrapped control - the slot - cloned to receive id/aria-*/required, plus context="inline" when context=inline)
 └─ div.message (optional; id, --typography-body-sm)
    ├─ span.messageIcon (error/valid only; aria-hidden; sm status Icon)
    └─ span.messageText
@@ -62,8 +62,10 @@ Field (div.root, flex column, data-state/context/size)
 
 ### Structure Notes
 - The root is a single flex column: label, control, message stacked in that order.
-- The label is a real `<label htmlFor>` pointing at the control's `id`. The `*` is decorative
-  (`aria-hidden`) - the forwarded `required` conveys the requirement to assistive technology.
+- The label is a real `<label htmlFor>` pointing at the control's `id`. It also has its own id, which
+  the control gets as `aria-labelledby`, so a control `htmlFor` can't name (Rich Text Area's `div`
+  editor, Date Time Picker's group) is named too. The `*` is decorative (`aria-hidden`) - the
+  forwarded `required` conveys the requirement to assistive technology.
 - The control is rendered as-is at the container's edge; only the label and message are indented in
   the inline context.
 - The message's status icon is decorative (`aria-hidden`); its colour is carried by the Icon
@@ -76,37 +78,44 @@ Field (div.root, flex column, data-state/context/size)
 ### Accessibility wiring (via `React.cloneElement` of the single child control)
 - `id`: the control's own `id` if set, else `controlId`, else a generated `useId` id. The label's
   `htmlFor` and the message's `id` derive from it.
+- `aria-labelledby`: the label's id, unless the control already sets `aria-labelledby` or
+  `aria-label` (then the control's name wins). Not set when there's no `label`. This is what names a
+  control that isn't a labelable native element, such as Rich Text Area's editor.
 - `aria-describedby`: the message's id, merged with any `aria-describedby` the control already
   carries.
 - `aria-invalid`: `true` when `state="error"`, unless the control already sets `aria-invalid`.
 - `required`: forwarded when `required` is set, unless the control already sets `required`.
 - `data-force-state`: forwarded to the control (documentation-only, for static Storybook state
   references), unless the control already sets it.
-- `appearance`: `"subtle"` when `context="inline"` (see Context / Size), unless the control already
-  sets its own `appearance`. This is the only injected prop tied to a Field axis rather than pure
-  wiring - it exists because Figma models `context` as one shared axis across the field and control.
+- `context`: `"inline"` when `context="inline"` (see Context / Size), unless the control already
+  sets its own `context` (or a deprecated `appearance`/`tone`). This is the only injected prop tied
+  to a Field axis rather than pure wiring - it exists because Figma models `context` as one shared
+  axis across the field and control.
 - The control's own props always win - Field only fills in what the consumer left unset.
 
 ### State
 - `default`: plain helper text, `--color-content-subtle`, no icon.
 - `error`: message `--color-content-error` + `status_error` icon; sets `aria-invalid` on the
   control. Does **not** set the control's own error border (pair with the control's `invalid` prop).
+  Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming
+  `aria-invalid` as `invalid`, so their border follows; Text Field and Text Area need `invalid`.
 - `valid`: message `--color-content-success` + `status_success` icon.
 
 ### Context / Size (coupled, matching Figma's `size=all | lg | sm/md`)
 - `context="default"`: label and message flush with the control's outer edge, and the control keeps
-  its own appearance. **Size-independent** - every control size renders identically (Figma's single
+  its own context. **Size-independent** - every control size renders identically (Figma's single
   `size=all` default variant).
 - `context="inline"` does two things, because Figma models `context` as one shared axis across the
   whole field: (a) it indents the label and message to the control's inner start padding for the
   size (`lg` -> `--spacing-md`, `sm` and `md` share `--spacing-sm`), aligning them to the control's
-  inner text; and (b) it renders the control inline by injecting `appearance="subtle"` (the control's
-  own `appearance` wins), so the field reads as one borderless inline unit.
+  inner text; and (b) it renders the control inline by injecting `context="inline"` (the control's
+  own `context`, or a deprecated `appearance`/`tone`, wins), so the field reads as one borderless
+  inline unit.
 - `size` therefore only does anything in the inline context, purely to align the label/message with
   the control's inner text. It never resizes the control (set the control's own `size` too).
 - Because inline means a borderless control whose inner text the label lines up with, it is meant for
   text-bearing controls (Text Field, Select, Text Area, date/time pickers - all of which take
-  `appearance="subtle"`); it has no meaningful effect on controls without inner text (Checkbox,
+  `context="inline"`); it has no meaningful effect on controls without inner text (Checkbox,
   Switch, Radio) - use `context="default"` there.
 
 ---
@@ -120,7 +129,7 @@ Field (div.root, flex column, data-state/context/size)
 | Required `*` colour | `--color-content-error` | |
 | Label -> control gap | `--spacing-xs` (label `padding-bottom`) | Figma space/050 (4px) |
 | Control -> message gap | `--spacing-xs` (message `padding-top`) | Figma spacing/xs (4px) |
-| Message icon -> text gap | `--measurement-6` | Figma spacing/075 (6px) - no semantic spacing token yet; same precedent as Text Field / Toggle Button |
+| Message icon -> text gap | `--spacing-075` | Figma spacing/075 (6px) |
 | Message typography | `--typography-body-sm-*` | Figma body/sm |
 | Message colour (default) | `--color-content-subtle` | |
 | Message colour (error) | `--color-content-error` | |
@@ -144,18 +153,27 @@ Field (div.root, flex column, data-state/context/size)
   invalid />`. This matches the system's wrapper-vs-control split.
 - **Auto-wiring via `cloneElement`, consumer props win.** A form-field wrapper whose value is
   accessibility wiring should do that wiring, not document it as homework - so Field injects
-  `id`/`aria-describedby`/`aria-invalid`/`required`. It only fills in unset props, so a control that
-  declares its own id or aria state is never surprised. `cloneElement` is the same pattern Inline
-  Edit already uses in this system.
+  `id`/`aria-labelledby`/`aria-describedby`/`aria-invalid`/`required`. It only fills in unset
+  props, so a control that declares its own id, name, or aria state is never surprised.
+  `cloneElement` is the same pattern Inline Edit already uses in this system.
+- **The wiring only lands if the control forwards it.** The injected props are ordinary props, so
+  they reach the native element only when the control passes them on. Every form control in the
+  system does. Text Field and Text Area spread their remaining props onto the native
+  `<input>`/`<textarea>`. Select, Date Picker, and Time Picker pass `aria-labelledby`,
+  `aria-describedby`, `aria-invalid`, and `required` to their input rather than the wrapper. Rich
+  Text Area sets them on its editor (`required` as `aria-required`); its editor is a `div`, which a
+  `<label htmlFor>` can't name, so the injected `aria-labelledby` is what names it. Date Time Picker
+  names its group with the label, keeps the description on the group, and passes the error and
+  `required` to both its date and time inputs.
 - **`context` is one shared axis across the field AND its control - so it propagates.** In Figma,
-  the same `context` property (standard/inline) sits on the `<field>`, the Text Field, the Select,
-  etc. An inline field is a borderless (inline) control with its label/message aligned to the
-  control's inner text. So Field propagates `context="inline"` to the control by injecting
-  `appearance="subtle"` (the code name for that same axis - Text Field and Text Area use
-  `appearance`, and Select now takes it as an alias for its `tone`). This is deliberately different
-  from `state`: `state` maps to the control's *separate* `isInvalid` axis (a different Figma
-  property), so it stays the consumer's call, whereas `context` is literally the same axis on both
-  and so is wired through. The control's own `appearance` always wins, as with every injected prop.
+  the same `context` property (default/inline) sits on the `<field>`, the Text Field, the Text Area,
+  the Select, etc. An inline field is a borderless (inline) control with its label/message aligned
+  to the control's inner text. So Field propagates `context="inline"` to the control - Text Field,
+  Text Area, and Select take the same `context` prop, with the same values, as Figma. This is
+  deliberately different from `state`: `state` maps to the control's *separate* `isInvalid` axis (a
+  different Figma property), so it stays the consumer's call, whereas `context` is literally the
+  same axis on both and so is wired through. The control's own `context` (or a deprecated
+  `appearance`/`tone`) always wins, as with every injected prop.
 - **`context`/`size` are coupled, and `size` only distinguishes anything inline.** Both `context`
   values keep the same vertical stack; the only label/message difference in the node data is a start
   padding (0 in `default`; the control's inner padding in `inline`). Figma models this as one
@@ -174,6 +192,8 @@ Field (div.root, flex column, data-state/context/size)
 
 - Renders the label as a native `<label htmlFor>` wired to the control's id; the control gets its
   accessible name from the label with no `aria-label`.
+- Gives the label an id and sets the control's `aria-labelledby` to it, so a non-native control
+  (Rich Text Area) is named too; a control's own `aria-label` or `aria-labelledby` wins.
 - Generates a control id when the control has none; keeps the control's own id when it has one.
 - Links the message to the control via `aria-describedby`, merged with any existing value.
 - `state="error"` sets `aria-invalid` on the control; an explicit control `aria-invalid` wins.
@@ -181,12 +201,13 @@ Field (div.root, flex column, data-state/context/size)
 - Shows a status icon on `error`/`valid`, none on `default`.
 - Sets `data-state`, `data-context`, `data-size` on the root; defaults `default`/`default`/`md`.
 - `context="inline"` indents the label/message per size (`lg` -> `--spacing-md`, `sm`/`md` ->
-  `--spacing-sm`) AND injects `appearance="subtle"` into the control (control's own `appearance`
-  wins); `context="default"` does neither.
+  `--spacing-sm`) AND injects `context="inline"` into the control (control's own `context`, or a
+  deprecated `appearance`/`tone`, wins); `context="default"` does neither.
 - Renders no `<label>` when `label` is omitted, and no message (nor `aria-describedby`) when
   `message` is omitted.
 - Composes `className` (root), `labelClassName`, and `messageClassName`.
-- Uses only semantic tokens (plus the documented `--measurement-6` gap); works in light and dark.
+- Uses only semantic tokens; works in light and dark.
 - Storybook includes Playground, States, Contexts, Content, AnyControl, and EdgeCases.
-- Tests cover label/id wiring, describedby merge, aria-invalid, required, status icons, data
-  attributes, omitted label/message, className composition, and force-state forwarding.
+- Tests cover label/id wiring, aria-labelledby (naming a Rich Text Area, and a control's own
+  aria-label winning), describedby merge, aria-invalid, required, status icons, data attributes,
+  omitted label/message, className composition, and force-state forwarding.

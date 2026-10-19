@@ -3,21 +3,21 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
 import { ButtonGroup } from '../../molecules/button-group';
 import { Banner } from './banner';
-import type { BannerAppearance } from './banner.types';
+import type { BannerTone } from './banner.types';
 
-const appearances: BannerAppearance[] = ['default', 'warning', 'error'];
+const tones: BannerTone[] = ['default', 'warning', 'error'];
 
 const meta = {
-  title: 'UI/Organisms/Banner',
+  title: 'Components/Feedback/Banner',
   component: Banner,
   parameters: { layout: 'fullscreen' },
   args: {
-    appearance: 'default',
+    tone: 'default',
     showIcon: true,
     children: 'Scheduled maintenance is planned for this weekend. Some features may be unavailable.',
   },
   argTypes: {
-    appearance: { control: 'inline-radio', options: appearances },
+    tone: { control: 'inline-radio', options: tones },
     showIcon: { control: 'boolean' },
     children: { control: 'text' },
     actions: { control: false },
@@ -29,6 +29,8 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+// One shrinkable column: a grid item's minimum width is its content's, and Banner's one-line
+// message would otherwise widen the column instead of truncating.
 const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-lg)' };
 
 const captionStyle: CSSProperties = {
@@ -40,10 +42,10 @@ const captionStyle: CSSProperties = {
 /**
  * The two-action composition the Banner is designed around. `default` and `error` sit on a dark
  * background so their actions use the inverse treatment; the `warning` bar carries dark content, so
- * its actions use `tone="warning"` (which needs `appearance="primary"` to render) instead.
+ * its actions use `tone="warning"` (which needs `prominence="primary"` to render) instead.
  */
-function BannerActions({ appearance = 'default' }: { appearance?: BannerAppearance }) {
-  if (appearance === 'warning') {
+function BannerActions({ tone = 'default' }: { tone?: BannerTone }) {
+  if (tone === 'warning') {
     return (
       <ButtonGroup>
         <Button size="sm" prominence="primary" tone="warning">
@@ -84,13 +86,13 @@ export const Playground: Story = {
   },
 };
 
-/** The three semantic appearances, each with its status icon and inverse-tone actions. */
-export const Appearances: Story = {
+/** The three tones, each with its status icon and actions that match the bar. */
+export const Tones: Story = {
   render: () => (
     <div style={stack}>
-      {appearances.map((appearance) => (
-        <Labelled key={appearance} label={appearance}>
-          <Banner appearance={appearance} actions={<BannerActions appearance={appearance} />}>
+      {tones.map((tone) => (
+        <Labelled key={tone} label={tone}>
+          <Banner tone={tone} actions={<BannerActions tone={tone} />}>
             Scheduled maintenance is planned for this weekend. Some features may be unavailable.
           </Banner>
         </Labelled>
@@ -121,7 +123,7 @@ export const Content: Story = {
 
       <Labelled label="A single action">
         <Banner
-          appearance="error"
+          tone="error"
           actions={
             <Button size="sm" isInverse>
               Retry
@@ -140,7 +142,7 @@ export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
       <Labelled label="Long message truncates with an ellipsis">
-        <Banner appearance="warning" actions={<BannerActions appearance="warning" />}>
+        <Banner tone="warning" actions={<BannerActions tone="warning" />}>
           This is an intentionally long announcement that keeps going well past the available width
           of the banner so that the single-line truncation behaviour is visible - the message ends
           with an ellipsis rather than wrapping onto a second line and growing the bar.
@@ -149,8 +151,17 @@ export const EdgeCases: Story = {
 
       <Labelled label="Narrow viewport">
         <div style={{ inlineSize: '360px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
-          <Banner appearance="error" actions={<BannerActions />}>
+          <Banner tone="error" actions={<BannerActions />}>
             The connection was interrupted while saving your work.
+          </Banner>
+        </div>
+      </Labelled>
+
+      <Labelled label="In a flex row: still cut off at the container's edge">
+        <div style={{ display: 'flex', inlineSize: '480px', border: 'var(--border-width-sm) dashed var(--color-border-default)' }}>
+          <Banner>
+            A new version is available, with faster search, a redesigned matter list, and changes to how
+            deadlines are calculated.
           </Banner>
         </div>
       </Labelled>

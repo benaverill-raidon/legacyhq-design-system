@@ -13,7 +13,7 @@ A combined date + time control: a Date Picker and a Time Picker joined into one 
 
 In progress (mirrors the current WIP Figma: context x size).
 
-## Component category
+## Component tier
 
 Organism.
 
@@ -54,6 +54,7 @@ interface DateTimePickerProps
   dateFormat?: (date: Date, locale?: string) => string;
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string; timeLabel?: string;
+  id?: string; // the date input's
   'aria-label'?: string; 'aria-labelledby'?: string;
 }
 ```
@@ -73,6 +74,8 @@ dateLabel: Date; timeLabel: Time
 ## Accessibility
 
 - [ ] role=group labelled; each half has its own accessible name / dialog popup / keyboard model.
+- [ ] Field's id goes to the date input, so clicking the label focuses the date half.
+- [ ] required makes the form check both halves (each half's hidden validation input).
 
 ## Examples to document
 
@@ -86,5 +89,6 @@ dateLabel: Date; timeLabel: Time
 - [ ] Renders date + time fields in a labelled group.
 - [ ] Selecting a date keeps the time; confirming a time keeps the date; onChange gets combined Date.
 - [ ] Controlled value; disables both; size/context on the group.
+- [ ] Field's label points at the date input; id on the date input; required fails form validation when empty.
 - [ ] CSS contract (collapsed border + squared inner corners).
 - [ ] Uses MUI: no. Uses Tailwind: no.

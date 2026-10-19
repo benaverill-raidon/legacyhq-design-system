@@ -13,6 +13,13 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
 
 let panelIdCounter = 0;
 
+/** What can take focus inside the panel, for the Tab handling below. Filtered to tabIndex >= 0. */
+const FOCUSABLE = 'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]';
+
+function toDateValue(date: Date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
 function defaultFormat(date: Date, locale?: string) {
   return date.toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' });
 }
@@ -28,7 +35,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     size = 'md',
     context = 'default',
     disabled = false,
-    invalid = false,
+    invalid: requestedInvalid = false,
     placeholder,
     format = defaultFormat,
     locale,
@@ -42,10 +49,16 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     className,
     'aria-label': ariaLabel,
     'aria-labelledby': ariaLabelledBy,
+    'aria-describedby': ariaDescribedBy,
+    'aria-invalid': ariaInvalid,
+    required,
+    dialogLabel = 'Choose a date',
     ...rest
   },
   forwardedRef,
 ) {
+  // Field's wiring goes to the input, not the wrapper div that takes the other attributes.
+  const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
   const cellSize = useEditableCellSize();
   const isValueControlled = value !== undefined;
   const [internalValue, setInternalValue] = React.useState<Date | null>(defaultValue ?? null);
@@ -64,6 +77,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     frameRef.current = node?.parentElement ?? null;
   }, []);
   const panelId = React.useMemo(() => `date-picker-panel-${(panelIdCounter += 1)}`, []);
+  const dialogId = `${panelId}-dialog`;
 
   const setOpen = React.useCallback(
     (next: boolean) => {
@@ -78,7 +92,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
       setOpen(next);
-      // On dismiss from inside the panel (Escape / selection), return focus to the field.
+      // On dismiss from inside the panel (Escape), return focus to the field.
       if (!next) {
         const panel = document.getElementById(panelId);
         if (panel && document.activeElement && panel.contains(document.activeElement)) {
@@ -88,6 +102,11 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     },
     [setOpen, panelId],
   );
+
+  const closeToField = React.useCallback(() => {
+    setOpen(false);
+    inputRef.current?.focus();
+  }, [setOpen]);
 
   const handleSelect = React.useCallback(
     (date: Date) => {
@@ -101,14 +120,48 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     [isValueControlled, onChange, setOpen],
   );
 
-  // When the popup opens, move focus to the calendar's focusable day.
+  // When the popup opens, move focus to the calendar's focusable day. The panel is portalled to the
+  // end of the page, so without this it would come last in the tab order. It waits a frame because
+  // Popup keeps the panel hidden until it's positioned, and a hidden element can't take focus. Focus
+  // that moved somewhere else on purpose in the meantime stays there.
   React.useEffect(() => {
     if (!isOpen) {
-      return;
+      return undefined;
     }
-    const panel = document.getElementById(panelId);
-    panel?.querySelector<HTMLButtonElement>('[role="grid"] button[tabindex="0"]')?.focus();
+    const frame = window.requestAnimationFrame(() => {
+      const panel = document.getElementById(panelId);
+      const active = document.activeElement;
+      if (!panel || (active && panel.contains(active))) return;
+      if (active && active !== document.body && active !== inputRef.current) return;
+      panel.querySelector<HTMLButtonElement>('[role="grid"] button[tabindex="0"]')?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [isOpen, panelId]);
+
+  // Tab past the panel's last stop, or Shift+Tab before its first, closes it and returns focus to
+  // the field, as Dropdown Menu does: the tab order runs field, calendar, then the rest of the page.
+  React.useEffect(() => {
+    const panel = isOpen ? document.getElementById(panelId) : null;
+    if (!panel) return undefined;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') return;
+      // Walks every element so the stops come in document order.
+      const tabbables = [...panel.querySelectorAll<HTMLElement>('*')].filter(
+        (element) => element.matches(FOCUSABLE) && element.tabIndex >= 0,
+      );
+      const active = document.activeElement as HTMLElement | null;
+      const leaving =
+        !tabbables.length ||
+        !tabbables.includes(active as HTMLElement) ||
+        active === (event.shiftKey ? tabbables[0] : tabbables[tabbables.length - 1]);
+      if (leaving) {
+        event.preventDefault();
+        closeToField();
+      }
+    };
+    panel.addEventListener('keydown', handleKeyDown);
+    return () => panel.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, panelId, closeToField]);
 
   const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (disabled) {
@@ -130,10 +183,15 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
         alignment={alignment}
         anchorRef={frameRef}
         id={panelId}
-        role="dialog"
         padding="none"
+        // The field's aria-expanded and aria-controls are set below, so they point at the dialog.
+        manageTriggerAria={false}
         content={
+          // The calendar is the dialog, so it can carry its name: Popup's panel takes no label.
           <DatePickerCalendar
+            id={dialogId}
+            role="dialog"
+            aria-label={dialogLabel}
             value={selected}
             defaultMonth={selected ?? today}
             onChange={handleSelect}
@@ -152,15 +210,19 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
           className={styles.trigger}
           inputClassName={styles.triggerInput}
           size={size}
-          appearance={context === 'inline' ? 'subtle' : 'default'}
+          context={context}
           invalid={invalid}
           disabled={disabled}
           readOnly
           value={displayValue}
           placeholder={placeholder}
           aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-controls={isOpen ? dialogId : undefined}
           aria-label={ariaLabel}
           aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
+          required={required}
           data-force-state={isOpen ? 'focus' : undefined}
           iconAfter={
             <span className={styles.iconBox} aria-hidden="true">
@@ -175,6 +237,22 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
           onKeyDown={handleTriggerKeyDown}
         />
       </Popup>
+      {required ? (
+        // A read-only input is never validated, so the browser would skip the field's `required`.
+        // This hidden input holds the value only so the form's own validation checks it; if it's
+        // empty on submit, the browser focuses it and the focus goes on to the field.
+        <input
+          className={styles.validation}
+          tabIndex={-1}
+          aria-hidden="true"
+          autoComplete="off"
+          required
+          disabled={disabled}
+          value={selected ? toDateValue(selected) : ''}
+          onChange={() => {}}
+          onFocus={() => inputRef.current?.focus()}
+        />
+      ) : null}
     </div>
   );
 });

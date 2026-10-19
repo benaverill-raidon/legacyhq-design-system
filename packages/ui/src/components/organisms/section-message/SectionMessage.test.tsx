@@ -1,13 +1,13 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Link } from '../../atoms/link';
 import { SectionMessage } from './section-message';
 import styles from './section-message.module.css';
-import type { SectionMessageAppearance } from './section-message.types';
+import type { SectionMessageTone } from './section-message.types';
 
 const sectionMessageCss = readFileSync(
   'packages/ui/src/components/organisms/section-message/section-message.module.css',
@@ -31,35 +31,35 @@ describe('SectionMessage', () => {
     expect(screen.queryByText('Heads up')).not.toBeInTheDocument();
   });
 
-  it('defaults to role status and the information appearance', () => {
+  it('defaults to role status and the information tone', () => {
     render(<SectionMessage>Body</SectionMessage>);
 
     const root = screen.getByRole('status');
 
-    expect(root).toHaveClass(styles.root, styles.appearance_information);
+    expect(root).toHaveClass(styles.root, styles.tone_information);
   });
 
-  it('applies the appearance class', () => {
-    const appearances: SectionMessageAppearance[] = ['information', 'success', 'warning', 'error'];
+  it('applies the tone class', () => {
+    const tones: SectionMessageTone[] = ['information', 'success', 'warning', 'error'];
 
-    appearances.forEach((appearance) => {
-      const { unmount } = render(<SectionMessage appearance={appearance}>{appearance}</SectionMessage>);
+    tones.forEach((tone) => {
+      const { unmount } = render(<SectionMessage tone={tone}>{tone}</SectionMessage>);
 
-      expect(screen.getByText(appearance).closest(`.${styles.root}`)).toHaveClass(styles[`appearance_${appearance}`]);
+      expect(screen.getByText(tone).closest(`.${styles.root}`)).toHaveClass(styles[`tone_${tone}`]);
 
       unmount();
     });
   });
 
   it('renders a status icon', () => {
-    const { container } = render(<SectionMessage appearance="error">Body</SectionMessage>);
+    const { container } = render(<SectionMessage tone="error">Body</SectionMessage>);
 
     expect(container.querySelector('[data-color]')).toBeInTheDocument();
   });
 
   it('allows the role to be overridden', () => {
     render(
-      <SectionMessage appearance="error" role="alert">
+      <SectionMessage tone="error" role="alert">
         Payment failed
       </SectionMessage>,
     );
@@ -118,6 +118,22 @@ describe('SectionMessage', () => {
     expect(screen.queryByText('Dismiss me')).not.toBeInTheDocument();
   });
 
+  it("shows the dismiss button's name as its tooltip, like every Icon Button", () => {
+    vi.useFakeTimers();
+    try {
+      render(<SectionMessage isDismissible>Saved</SectionMessage>);
+
+      fireEvent.pointerEnter(screen.getByRole('button', { name: 'Dismiss' }));
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Dismiss');
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('composes a custom className and forwards other props', () => {
     render(
       <SectionMessage className="custom-sm" data-testid="sm">
@@ -138,16 +154,56 @@ describe('SectionMessage', () => {
 });
 
 describe('SectionMessage CSS contract', () => {
-  it('maps each appearance to its subtle background and border token', () => {
-    expect(sectionMessageCss).toMatch(/\.appearance_information \{[\s\S]*?border-color: var\(--color-border-information\);[\s\S]*?background: var\(--color-background-information-subtle-default\);/);
-    expect(sectionMessageCss).toMatch(/\.appearance_success \{[\s\S]*?border-color: var\(--color-border-success\);[\s\S]*?background: var\(--color-background-success-subtle-default\);/);
-    expect(sectionMessageCss).toMatch(/\.appearance_warning \{[\s\S]*?border-color: var\(--color-border-warning\);[\s\S]*?background: var\(--color-background-warning-subtle-default\);/);
-    expect(sectionMessageCss).toMatch(/\.appearance_error \{[\s\S]*?border-color: var\(--color-border-error\);[\s\S]*?background: var\(--color-background-error-subtle-default\);/);
+  it('maps each tone to its subtle background and border token', () => {
+    expect(sectionMessageCss).toMatch(/\.tone_information \{[\s\S]*?border-color: var\(--color-border-information\);[\s\S]*?background: var\(--color-background-information-subtle-default\);/);
+    expect(sectionMessageCss).toMatch(/\.tone_success \{[\s\S]*?border-color: var\(--color-border-success\);[\s\S]*?background: var\(--color-background-success-subtle-default\);/);
+    expect(sectionMessageCss).toMatch(/\.tone_warning \{[\s\S]*?border-color: var\(--color-border-warning\);[\s\S]*?background: var\(--color-background-warning-subtle-default\);/);
+    expect(sectionMessageCss).toMatch(/\.tone_error \{[\s\S]*?border-color: var\(--color-border-error\);[\s\S]*?background: var\(--color-background-error-subtle-default\);/);
   });
 
   it('uses the Figma layout tokens (radius-xl, 1px border, spacing-lg padding)', () => {
     expect(sectionMessageCss).toContain('border-radius: var(--border-radius-xl);');
     expect(sectionMessageCss).toContain('border: var(--border-width-sm) solid transparent;');
     expect(sectionMessageCss).toContain('padding: var(--spacing-lg);');
+  });
+
+  it('announces the status before the title, since the icon is decorative', () => {
+    const expected: Record<SectionMessageTone, string> = {
+      information: 'Information',
+      success: 'Success',
+      warning: 'Warning',
+      error: 'Error',
+    };
+    for (const [tone, label] of Object.entries(expected) as Array<[SectionMessageTone, string]>) {
+      const { unmount } = render(
+        <SectionMessage tone={tone} title="Sync paused">
+          Reconnect to continue.
+        </SectionMessage>,
+      );
+      expect(screen.getByRole('status')).toHaveTextContent(`${label}: Sync paused`);
+      expect(screen.getByText(`${label}:`)).toHaveClass(styles.visuallyHidden);
+      unmount();
+    }
+
+    render(
+      <SectionMessage tone="error" statusLabel="Erreur">
+        Upload failed.
+      </SectionMessage>,
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Erreur: Upload failed.');
+  });
+
+  it('names the dismiss button with an overridable label', () => {
+    render(
+      <SectionMessage isDismissible dismissLabel="Cerrar">
+        Saved.
+      </SectionMessage>,
+    );
+    expect(screen.getByRole('button', { name: 'Cerrar' })).toBeInTheDocument();
+  });
+
+  it('still accepts the deprecated appearance prop as tone', () => {
+    render(<SectionMessage appearance="warning">Sync paused.</SectionMessage>);
+    expect(screen.getByRole('status')).toHaveClass(styles.tone_warning);
   });
 });

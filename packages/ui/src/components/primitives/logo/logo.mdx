@@ -1,140 +1,206 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { Link } from '../../atoms/link';
+import { Logo } from './logo';
+import logoStyles from './logo.module.css';
 import * as LogoStories from './Logo.stories';
 
 <Meta of={LogoStories} name="Docs" />
 
-# Logo
+<Unstyled>
+<ComponentPage>
 
-Logo is the approved LegacyHQ brand primitive - the single source for rendering the brand mark,
-wordmark, or full lockup anywhere in the product, so every surface uses the same approved artwork
-instead of a screenshot, a recreated SVG, or a stretched image.
+<ComponentHeader
+  id="logo"
+  example={
+    <>
+      <Logo size="lg" />
+      <Logo type="mark" size="lg" />
+    </>
+  }
+>
+  Logo renders the approved LegacyHQ artwork: the mark, the wordmark, or both together. Use it
+  anywhere the brand appears, so every screen shows the same drawing at a size from the scale.
+</ComponentHeader>
 
-<Canvas of={LogoStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- Application headers, authentication screens, marketing surfaces, and other branded experiences
-  that need the LegacyHQ identity.
-- A compact nav rail or collapsed sidebar, where `type="mark"` fits without the wordmark.
+- The application header, usually as the link back to home.
+- Sign-in and other branded screens.
+- A collapsed navigation rail, with `type="mark"`.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **Don't alter proportions, colors, spacing, or crop the artwork.** Logo renders the approved SVG
-  as-is - there is no prop for recoloring, stretching, rotating, or adding shadows/effects.
-- **Don't recreate the wordmark in text.** Use the `wordmark` or `full` type instead of typing
-  "LegacyHQ" in a heading font - the approved artwork is the only correct rendering of the brand
-  name.
-- **Don't combine it with other graphics** outside the approved `mark`/`wordmark`/`full` variants.
+- **An icon in the interface:** <DocLink to="Foundations/Icons" />. The mark isn't an icon.
+- **The product name in running text:** plain text. Logo is artwork, not a word in a sentence.
+- **Another organization's logo:** an image of it. Logo draws only LegacyHQ's artwork.
 
-## Choosing a type and size
+</UseInstead>
+</Usage>
 
-<Canvas of={LogoStories.Variants} />
+</Section>
 
-- **`mark`** - the icon-only symbol. Use where space is tight (a collapsed nav rail, a favicon-like
-  context) and the wordmark isn't needed for recognition.
-- **`wordmark`** - the brand name only, no symbol.
-- **`full`** (default) - mark + wordmark together. Use this whenever there's room for it; it's the
-  primary, most recognizable lockup.
+<Section title="Anatomy">
 
-Five sizes (`xxs` through `lg`) cover everything from a compact nav-rail mark to a prominent
-auth-screen lockup - pick the size token, don't scale the rendered SVG with CSS `transform`.
+<Anatomy specimen={<Logo size="lg" />}>
+  <Part name="root" target={logoStyles.logo}>A `span` that sets the height from `size` and holds the artwork. It carries the `title` attribute, and `aria-hidden` when the logo is decorative.</Part>
+  <Part name="artwork" target={logoStyles.svg}>The approved SVG for the `type`, drawn inline at the root's height. It carries the role and the accessible name.</Part>
+</Anatomy>
 
-## Decorative vs. informative
+</Section>
 
-Unlike Icon, Logo defaults to **`decorative={false}`** - a logo is usually the accessible name for
-a link back to the product's home, so it renders `role="img"` with an accessible label (`title` or
-`ariaLabel`, falling back to `"LegacyHQ"`) unless you explicitly mark it decorative. Set
-`decorative={true}` only when the logo sits next to other text that already provides the same
-accessible name (for example, inside a link that already has its own `aria-label`), so the logo
-isn't announced twice.
+<Section title="Variants">
 
-<Canvas of={LogoStories.Examples} />
+<Subsection title="Type">
 
-## Do / Don't
+`full`, the default, is the mark and the wordmark together: use it wherever there's room, since
+it's the most recognizable. `mark` is the symbol alone, for a tight space such as a collapsed
+navigation rail. `wordmark` is the name alone.
 
-**Do** use the `mark` type in a compact nav rail.
+<Example of={LogoStories.Variants} caption="Each type at each size, from xxs to lg." />
 
-```tsx
-<a href="/" aria-label="LegacyHQ home">
-  <Logo type="mark" size="sm" decorative />
-</a>
-```
+</Subsection>
 
-**Don't** recolor or restyle the rendered SVG.
+<Subsection title="Size">
 
-```tsx
-<Logo style={{ filter: 'grayscale(1)' }} />
-```
+`size` sets the height: `xxs` 16px, `xs` 24px, `sm` 32px, `md` 40px (the default), and `lg` 48px.
+The width follows the artwork's proportions, so a size never stretches it. Pick a size from the
+scale rather than scaling the logo with CSS.
 
----
+</Subsection>
 
-**Do** let Logo provide the accessible name when it's the only content in a link.
+</Section>
 
-```tsx
-<a href="/">
-  <Logo type="full" size="md" title="LegacyHQ" />
-</a>
-```
+<Section title="Behavior">
 
-**Don't** double up the accessible name.
+<Subsection title="Color and themes">
 
-```tsx
-<a href="/" aria-label="LegacyHQ home">
-  <Logo type="full" size="md" title="LegacyHQ" /> {/* decorative is missing - announced twice */}
-</a>
-```
+The mark is drawn in the brand primary color and the wordmark in the default text color, both read
+from tokens inside the artwork, so the logo follows the light and dark themes on its own. There's
+no prop to recolor it, and it shouldn't be recolored.
 
-## API
+<Example of={LogoStories.Examples} caption="In a header link, a compact navigation rail, and on light and dark surfaces." />
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>type</code></td>
-      <td><code>'mark' | 'wordmark' | 'full'</code></td>
-      <td><code>'full'</code></td>
-      <td>Which lockup to render.</td>
-    </tr>
-    <tr>
-      <td><code>size</code></td>
-      <td><code>'xxs' | 'xs' | 'sm' | 'md' | 'lg'</code></td>
-      <td><code>'md'</code></td>
-      <td>Rendered size.</td>
-    </tr>
-    <tr>
-      <td><code>title</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Accessible name and native tooltip text; falls back to <code>"LegacyHQ"</code> when informative.</td>
-    </tr>
-    <tr>
-      <td><code>ariaLabel</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Overrides the accessible name; takes precedence over <code>title</code>.</td>
-    </tr>
-    <tr>
-      <td><code>decorative</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>When <code>true</code>, <code>aria-hidden</code> with no role. When <code>false</code> (default), <code>role="img"</code> with the accessible name.</td>
-    </tr>
-    <tr>
-      <td><code>className</code></td>
-      <td><code>string</code></td>
-      <td>-</td>
-      <td>Composes with the root's class list.</td>
-    </tr>
-  </tbody>
-</table>
+</Subsection>
 
-## Related components
+</Section>
 
-- **Icon** - the same decorative/informative accessibility pattern, for non-brand glyphs.
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Let the logo name a link to home when it's the link's only content."
+  code={`<Link href="/">
+    <Logo ariaLabel="LegacyHQ home" size="sm" />
+</Link>`}
+>
+  <Link href="#">
+    <Logo ariaLabel="LegacyHQ home" size="sm" />
+  </Link>
+</Do>
+<Dont
+  caption="Give a link an empty name by marking its only content decorative."
+  code={`<Link href="/">
+    <Logo decorative size="sm" />
+</Link>`}
+/>
+<Do
+  caption="Mark the logo decorative when text beside it already says LegacyHQ."
+  code={`<Link href="/">
+    <Logo type="mark" size="xs" decorative /> LegacyHQ
+</Link>`}
+>
+  <Link href="#">
+    <Logo type="mark" size="xs" decorative /> LegacyHQ
+  </Link>
+</Do>
+<Dont
+  caption="Leave it informative beside the same text. The link is read as LegacyHQ LegacyHQ."
+  code={`<Link href="/">
+    <Logo type="mark" size="xs" /> LegacyHQ
+</Link>`}
+/>
+<Do caption="Use the wordmark for the product name as artwork." code={`<Logo type="wordmark" size="md" />`}>
+  <Logo type="wordmark" size="md" />
+</Do>
+<Dont
+  caption="Recreate the wordmark in a heading font, or recolor, stretch, or crop the artwork."
+  code={`<h1 className={styles.brandName}>LegacyHQ</h1>
+<Logo className={styles.grayscale} />`}
+/>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- By default the logo is an image with a name: the artwork has `role="img"` and an `aria-label`
+  from `ariaLabel`, then `title`, then "LegacyHQ". It's informative by default, unlike Icon, because
+  a logo is often all there is in a link back to home.
+- `decorative` puts `aria-hidden` on the root and the artwork and drops the role. Use it when the
+  text beside the logo already names the same thing, so it isn't read twice, but never on a link's
+  only content.
+- `title` also shows as the browser's tooltip on hover; it's set on the root even when the logo is
+  decorative.
+- The artwork can't take focus, and Logo isn't interactive. To link it, put it in a
+  <DocLink to="Components/Navigation/Link" />, which takes the focus and the Focus Ring.
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={LogoStories} />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Logo's stylesheet uses, with the property it sets and when. The artwork's fills read
+`--logo-mark-color` and `--color-content-default` from inside the SVG files, which this table
+doesn't cover.
+
+<TokensTable id="logo" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Foundations/Icons" />, for glyphs in the interface, which are decorative by default.
+- <DocLink to="Components/Navigation/Link" />, to make the logo the link back to home.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads logo.types.ts and the design tokens read logo.module.css, so they follow the
+  code. Logo has no Figma component: the SVG files in assets/logos are its source.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

@@ -1,6 +1,6 @@
 {
   "name": "Form",
-  "category": "organism",
+  "category": "forms",
   "status": "stable",
   "purpose": "Lay out a set of fields the user fills in and submits together - a native <form> with a header, grouped/rowed fields, and a footer of actions.",
   "intent": "Be a thin layout organism, not a form-state manager. Figma's Form is pure layout + slots, and this system already puts labelling/description/validation on Field and native behaviour on the control - so Form renders a real <form> (native submission + validation for free), an optional header, and the section/row/footer spacing, and owns no form state. Composes molecules (Field and its controls) into a complete UI section, so it lives at the organism tier.",

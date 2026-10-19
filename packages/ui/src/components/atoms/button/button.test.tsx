@@ -98,6 +98,20 @@ describe('Button', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
+  it('holds its size while loading: the spinner sits over the content, which keeps its space', () => {
+    render(
+      <Button isLoading iconBefore={<CheckIcon />}>
+        Save changes
+      </Button>,
+    );
+    const button = screen.getByRole('button', { name: 'Save changes' });
+
+    expect(button.querySelector(`.${styles.leading} svg`)).toBeInTheDocument();
+    expect(button.querySelector(`.${styles.spinner}`)).toHaveAttribute('aria-hidden', 'true');
+    expect(buttonCss).toMatch(/\.button\[data-loading='true'\] > :is\(\.leading, \.content, \.trailing\) \{\s*opacity: 0;/);
+    expect(buttonCss).toMatch(/\.spinner \{\s*position: absolute;\s*inset: 0;/);
+  });
+
   it('applies disabled behavior to primary semantic tone buttons', () => {
     render(
       <Button prominence="primary" tone="error" disabled>
@@ -164,13 +178,13 @@ describe('Button', () => {
     expect(screen.getByRole('button', { name: 'Continue' })).toHaveClass(styles.fullWidth);
   });
 
-  it('supports isExpanded', () => {
+  it('marks an open menu trigger with isExpanded, keeping its own width', () => {
     const { rerender } = render(<Button isExpanded>Expand</Button>);
     const button = screen.getByRole('button', { name: 'Expand' });
 
     expect(button).toHaveAttribute('aria-expanded', 'true');
     expect(button).toHaveAttribute('data-expanded', 'true');
-    expect(button).toHaveClass(styles.expanded);
+    expect(button).not.toHaveClass(styles.fullWidth);
 
     rerender(<Button isExpanded={false}>Expand</Button>);
 
@@ -294,7 +308,7 @@ describe('Button', () => {
   it('provides an outlined error treatment for prominence=secondary using the semantic error tokens', () => {
     const rest = buttonCss.match(/\.prominence_secondary\.tone_error \{([^}]*)\}/);
     const hover = buttonCss.match(
-      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\]\s*\) \{([^}]*)\}/,
+      /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(\s*:hover,\s*:focus-visible,\s*\[data-force-state='hover'\],\s*\[data-force-state='focus'\],\s*\[data-expanded='true'\]\s*\) \{([^}]*)\}/,
     );
     const press = buttonCss.match(
       /\.prominence_secondary\.tone_error:not\(:disabled\):not\(\[data-loading='true'\]\):is\(:active, \[data-force-state='press'\]\) \{([^}]*)\}/,
@@ -321,5 +335,16 @@ describe('Button', () => {
     expect(buttonCss).toContain(
       ".button.inverse:not(:disabled):not([data-loading='true']):is(:active, [data-force-state='press']) {",
     );
+  });
+
+  it('keeps an aria-expanded a wrapper passes (as Popup does) when isExpanded is unset', () => {
+    const { rerender } = render(<Button aria-label="Actions" aria-expanded>Actions</Button>);
+    const trigger = screen.getByRole('button', { name: 'Actions' });
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger).toHaveAttribute('data-expanded', 'true');
+
+    rerender(<Button aria-label="Actions" aria-expanded={false}>Actions</Button>);
+    expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger).not.toHaveAttribute('data-expanded');
   });
 });

@@ -37,11 +37,11 @@ describe('Skeleton', () => {
   });
 
   it('applies a selected shape', () => {
-    render(<Skeleton shape="circle" data-testid="skeleton" />);
+    render(<Skeleton shape="round" data-testid="skeleton" />);
 
     const skeleton = screen.getByTestId('skeleton');
-    expect(skeleton).toHaveAttribute('data-shape', 'circle');
-    expect(skeleton).toHaveClass(styles.shape_circle);
+    expect(skeleton).toHaveAttribute('data-shape', 'round');
+    expect(skeleton).toHaveClass(styles.shape_round);
   });
 
   it('supports custom className', () => {
@@ -92,12 +92,17 @@ describe('Skeleton', () => {
     expect(skeletonCss).toContain('--skeleton-color: var(--component-skeleton-color-subtle);');
   });
 
-  it('uses the full-round radius token for the circle shape', () => {
+  it('uses the full-round radius token for the round shape', () => {
     expect(skeletonCss).toContain('border-radius: var(--border-radius-full-round);');
   });
 
   it('pulses on a loop using the shared motion token and respects reduced motion', () => {
     expect(skeletonCss).toContain('animation: skeleton-pulse var(--pulse-loop) infinite;');
     expect(skeletonCss).toContain('animation: none;');
+  });
+
+  it('still accepts the deprecated circle shape as round', () => {
+    render(<Skeleton shape="circle" data-testid="skeleton" />);
+    expect(screen.getByTestId('skeleton')).toHaveClass(styles.shape_round);
   });
 });

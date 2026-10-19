@@ -1,6 +1,6 @@
 {
   "name": "FocusRing",
-  "category": "primitive",
+  "category": "foundations",
   "status": "stable",
   "purpose": "Provide one consistent keyboard-focus indicator shared by every interactive component.",
   "intent": "Centralize :focus-visible styling so no component defines its own one-off focus treatment.",
@@ -34,7 +34,7 @@
       "part": "wrapped element",
       "element": "React.ReactElement (via FocusRing) or any element (via focusRingClassNames)",
       "required": true,
-      "description": "The single focusable element the focus classes are applied to. FocusRing has no DOM node of its own - it clones its child."
+      "description": "The focusable element that carries the focus classes: the child FocusRing clones, or an element a component gives focusRingClassNames. Focus Ring has no DOM node of its own; the ring is that element's outline."
     }
   ],
   "props": {
@@ -106,7 +106,8 @@
     "Clone the single child element and merge the focus classes onto its className.",
     "Default borderWidth is default (--border-width-md).",
     "disabled=true suppresses the outline via focusRingClassNames.focusRingDisabled instead of the width-specific class.",
-    "border-radius: inherit, so the ring shape always matches whatever element it wraps.",
+    "No border-radius of its own: the outline follows the element's own border-radius, which the component sets, never a parent's.",
+    "--focus-ring-offset is a registered, non-inheriting property with a 2px initial value (@property) that .focusRing doesn't declare, so a component's own --focus-ring-offset on the ring element wins whatever order stylesheets load in.",
     "Support className composition."
   ],
   "compositionRules": [

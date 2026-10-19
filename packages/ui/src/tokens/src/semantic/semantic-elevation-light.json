@@ -1,0 +1,72 @@
+{
+  "Semantic: Elevation": {
+    "Light": {
+      "elevation-shadow-overlay": {
+        "$type": "shadow",
+        "$value": [
+          {
+            "color": "{Semantic: Color.Light.color-elevation-shadow-overlay-inner}",
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 0,
+              "unit": "px"
+            },
+            "spread": "{Semantic: Border.border-width-sm}",
+            "inset": true
+          },
+          {
+            "color": "{Semantic: Color.Light.color-elevation-shadow-overlay-spread}",
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 8,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 12,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          },
+          {
+            "color": "{Semantic: Color.Light.color-elevation-shadow-overlay-perimeter}",
+            "offsetX": {
+              "value": 0,
+              "unit": "px"
+            },
+            "offsetY": {
+              "value": 0,
+              "unit": "px"
+            },
+            "blur": {
+              "value": 1,
+              "unit": "px"
+            },
+            "spread": {
+              "value": 0,
+              "unit": "px"
+            }
+          }
+        ],
+        "$description": "Surfaces that float above the interface: popups, menus, pickers, toasts, and dialogs. An inner ring (border-width-sm), an 8px drop with 12px blur, and a 1px perimeter.",
+        "$extensions": {
+          "com.legacyhq": {
+            "originalName": "Light/elevation.shadow.overlay"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,19 +1,9 @@
 # Link
 
-## Purpose
-Links navigate users to another page, route, resource, or location.
+Link's usage guidance is its Storybook Docs page (Components / Navigation / Link), written in
+[`link.mdx`](../../../../packages/ui/src/components/atoms/link/link.mdx): when to use it, anatomy,
+variants, behavior, do and don't, accessibility, API, and design tokens. The API table and the
+tokens there are generated from the code, so they can't drift.
 
-## When to use
-Use for navigation between pages or locations.
-
-## When not to use
-Do not use for actions that mutate state; use Button instead.
-
-## Design intent
-Maintain familiar hyperlink behavior while supporting LegacyHQ appearances, icons, and accessibility.
-
-## Accessibility
-Must have discernible text or accessible name, visible focus, and distinguishable visited state if enabled.
-
-## Related
-Button, Link Button, Tooltip.
+For implementation detail, see [`link-spec.md`](link-spec.md); for the machine-readable contract,
+[`link.contract.json`](link.contract.json).

@@ -1,139 +1,274 @@
-import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
+import { DocFooter } from '../../../storybook/blocks/doc-page';
+import { DocLink } from '../../../storybook/blocks/doc-link';
+import {
+  Anatomy,
+  ComponentHeader,
+  ComponentPage,
+  Do,
+  Dont,
+  Example,
+  Guidelines,
+  Key,
+  Keyboard,
+  Part,
+  PropsTable,
+  Related,
+  Section,
+  Subsection,
+  TokensTable,
+  Usage,
+  UseFor,
+  UseInstead,
+} from '../../../storybook/blocks/component-page';
+import { LinkButton } from '../../atoms/link-button';
+import { ButtonGroup } from '../../molecules/button-group';
+import { Toast } from '../toast';
+import { SectionMessage } from './section-message';
+import sectionMessageStyles from './section-message.module.css';
 import * as SectionMessageStories from './SectionMessage.stories';
 
 <Meta of={SectionMessageStories} name="Docs" />
 
-# Section Message
+<Unstyled>
+<ComponentPage>
 
-Section Message is a bordered, rounded status panel placed inside the flow of a page or a section of
-one. It carries a status - information, success, warning, or error - with an optional title, a
-description, optional inline actions, and an optional dismiss button.
+<ComponentHeader
+  id="section-message"
+  example={
+    <SectionMessage
+      tone="warning"
+      title="Two documents are missing signatures"
+      actions={
+        <ButtonGroup>
+          <LinkButton href="#review" appearance="subtle" size="sm">Review documents</LinkButton>
+          <LinkButton href="#remind" appearance="subtle" size="sm">Send a reminder</LinkButton>
+        </ButtonGroup>
+      }
+    >
+      The filing can't be submitted until every document in the package is signed.
+    </SectionMessage>
+  }
+>
+  Section Message is a bordered status panel in the flow of a page, about the section it sits in:
+  a restriction, a warning, a result. It can hold a title, a description of several lines, a few
+  actions, and a dismiss button.
+</ComponentHeader>
 
-<Canvas of={SectionMessageStories.Playground} />
+<Section title="When to use">
 
-## When to use
+<Usage>
+<UseFor>
 
-- A contained, in-context status message inside a section, form, or panel.
-- Communicating the result or constraint of the surrounding content - a permission restriction, a
-  validation summary, a success confirmation, a warning about the section.
-- A message that should sit in the page flow rather than float or span the full width.
+- A restriction on what someone can do in this section, such as missing permissions.
+- A warning about the content beside it, such as an incomplete filing.
+- A summary of errors at the top of a form.
+- The result of an action that changed this section, when it needs explaining.
 
-## When not to use
+</UseFor>
+<UseInstead>
 
-- **For a full-width, page-level announcement bar.** Use `Banner`.
-- **For a transient, auto-dismissing notification.** Use `Toast`.
-- **For an inline status next to a single field or row.** Use `InlineMessage`.
-- **For a blocking confirmation or decision.** Use `ModalDialog`.
+- **An announcement for the whole page:** <DocLink to="Components/Feedback/Banner" />.
+- **A short status on one line, beside what it's about:** <DocLink to="Components/Feedback/Inline Message" />.
+- **A passing confirmation, such as a save:** <DocLink to="Components/Feedback/Toast Group" />'s `toast()`.
+- **A message about one form control:** <DocLink to="Components/Forms/Field" />'s `message`.
+- **Nothing to show yet, such as an empty list:** <DocLink to="Components/Feedback/Empty State" />.
 
-## Anatomy
+</UseInstead>
+</Usage>
 
-<Canvas of={SectionMessageStories.Content} />
+</Section>
 
-1. **Root** - a bordered, rounded box with the appearance's tinted background and colored border.
-2. **Icon** - the status icon for the appearance, in its status color. Decorative (`aria-hidden`).
-3. **Title** - an optional bold lead line (`heading-sm`).
-4. **Description** - the `children`. Wraps to as many lines as needed.
-5. **Actions** - optional `Link`s; Section Message inserts a middot separator between them.
-6. **Dismiss** - an optional dismiss button (`isDismissible`) in the top-right.
+<Section title="Anatomy">
 
-## Usage guidance
+<Anatomy
+  specimen={
+    <SectionMessage
+      tone="information"
+      title="Restricted access"
+      isDismissible
+      actions={
+        <ButtonGroup>
+          <LinkButton href="#learn-more" appearance="subtle" size="sm">Learn more</LinkButton>
+          <LinkButton href="#request-access" appearance="subtle" size="sm">Request access</LinkButton>
+        </ButtonGroup>
+      }
+    >
+      Only the matter's owners can change who has access to it.
+    </SectionMessage>
+  }
+>
+  <Part name="root" target={sectionMessageStyles.root}>A `div` with a 1px border in the tone's color, a tinted background, 12px corners, and 16px padding.</Part>
+  <Part name="icon" target={sectionMessageStyles.iconSlot}>The tone's status icon, in the tone's color. Decorative.</Part>
+  <Part name="title" target={sectionMessageStyles.title}>Optional bold line, in the default text color. Not a heading element.</Part>
+  <Part name="description" target={sectionMessageStyles.description}>`children`, the only required content. It wraps onto as many lines as it needs.</Part>
+  <Part name="actions" target={sectionMessageStyles.actions}>Optional, below the description: usually Link Buttons in a Button Group.</Part>
+  <Part name="dismiss" target={sectionMessageStyles.dismiss}>Optional, with `isDismissible`: an extra-small subtle Icon Button in the top corner.</Part>
+</Anatomy>
 
-### Appearance
+</Section>
 
-`appearance` (`information`, `success`, `warning`, `error`) sets the tinted background, the border
-color, and the status icon together - the appearance is the semantic signal. The title and
-description always use the default content color; only the icon and border take the status color.
+<Section title="Variants">
 
-<Canvas of={SectionMessageStories.Appearances} />
+`tone` sets the border, the background tint, and the icon together: `information`, `success`,
+`warning`, or `error`. Only the border and the icon take the tone's color; the title and description
+stay in the default text color. `appearance`, the earlier name for `tone`, is still accepted.
 
-### Title and description
+<Example of={SectionMessageStories.Tones} />
 
-The `title` is optional - omit it for a description-only message. The description (`children`) is
-required and wraps freely, so Section Message suits longer, multi-line explanations (unlike `Banner`,
-whose single line truncates).
+</Section>
 
-### Actions
+<Section title="Behavior">
 
-Pass `Link`s to `actions`; Section Message inserts the `·` separators between them, so callers write
-bare Links (a fragment or an array) rather than repeating separator markup. Keep actions to a small
-number of related links.
+<Subsection title="Content">
 
-### Dismiss
+The description is the only required part. Leave out `title` for a short message, and `actions` when
+there's nothing to do. Two or more actions go in a Button Group, which lays them out in a row; a single
+Link Button can be passed on its own. Section Message adds no separators between them.
 
-Set `isDismissible` to show a dismiss button in the top-right. Clicking it hides the message and
-calls `onDismiss`. Reserve dismiss for messages the user can safely make go away - not for a
-persistent constraint they need to keep seeing.
+<Example of={SectionMessageStories.Content} caption="Title, description, and actions; description only; a single action; and dismissible." />
 
-### Accessibility
+</Subsection>
 
-Section Message renders with `role="status"` (a polite live region) by default, so one that appears
-dynamically is announced without interrupting. Override `role` when the semantics differ - use
-`role="alert"` for an urgent error. The status icon is decorative (`aria-hidden`); the meaning is
-carried by the title and description text, not by color alone. The dismiss button is a labelled
-`IconButton` ("Dismiss").
+<Subsection title="Dismissing">
 
-## API
+`isDismissible` adds a dismiss button. Clicking it hides the message and calls `onDismiss`. Section
+Message keeps that state itself: it stays hidden until it's unmounted, and there's no prop to show it
+again. To bring it back later, render it again with a new `key`. Don't make a restriction or a
+warning that still applies dismissible.
 
-<table>
-  <thead>
-    <tr>
-      <th>Prop</th>
-      <th>Type</th>
-      <th>Default</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><code>children</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Required. The description. Wraps to multiple lines.</td>
-    </tr>
-    <tr>
-      <td><code>appearance</code></td>
-      <td><code>'information' | 'success' | 'warning' | 'error'</code></td>
-      <td><code>'information'</code></td>
-      <td>Tinted background, border, and status icon.</td>
-    </tr>
-    <tr>
-      <td><code>title</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional bold title above the description.</td>
-    </tr>
-    <tr>
-      <td><code>actions</code></td>
-      <td><code>React.ReactNode</code></td>
-      <td>-</td>
-      <td>Optional Links; middot separators are inserted between them.</td>
-    </tr>
-    <tr>
-      <td><code>isDismissible</code></td>
-      <td><code>boolean</code></td>
-      <td><code>false</code></td>
-      <td>Show a dismiss button in the top-right.</td>
-    </tr>
-    <tr>
-      <td><code>onDismiss</code></td>
-      <td><code>() =&gt; void</code></td>
-      <td>-</td>
-      <td>Called when dismissed. The message also hides itself.</td>
-    </tr>
-    <tr>
-      <td><code>role</code></td>
-      <td><code>string</code></td>
-      <td><code>'status'</code></td>
-      <td>Overridable - e.g. <code>'alert'</code> for urgent errors.</td>
-    </tr>
-  </tbody>
-</table>
+<Example of={SectionMessageStories.EdgeCases} caption="A title and description that wrap, with actions and a dismiss button; and a message with no title." />
 
-Any other native `div` prop is forwarded to the root element.
+</Subsection>
 
-## Related components
+</Section>
 
-- **Banner** - a full-width, page-level announcement bar.
-- **Toast** - a transient, auto-dismissing notification.
-- **InlineMessage** - an inline status next to a field or row.
-- **Link** - the actions Section Message composes.
+<Section title="Do and don't">
+
+<Guidelines>
+<Do
+  caption="Let people dismiss a message once it has done its job, such as a confirmation."
+  code={`<SectionMessage tone="success" isDismissible>
+    Your changes were published.
+</SectionMessage>`}
+>
+  <SectionMessage tone="success" isDismissible>
+    Your changes were published.
+  </SectionMessage>
+</Do>
+<Dont
+  caption="Make a restriction dismissible. It still applies after the message is gone."
+  code={`<SectionMessage tone="warning" title="Restricted access" isDismissible>
+    Only the matter's owners can change who has access to it.
+</SectionMessage>`}
+>
+  <SectionMessage tone="warning" title="Restricted access" isDismissible>
+    Only the matter's owners can change who has access to it.
+  </SectionMessage>
+</Dont>
+<Do
+  caption="Offer one or two related links as actions."
+  code={`<SectionMessage
+    tone="error"
+    title="The filing was rejected"
+    actions={<LinkButton href="/filings/1042" appearance="subtle" size="sm">View the court's notice</LinkButton>}
+>
+    The court returned the filing because the signature page is missing.
+</SectionMessage>`}
+>
+  <SectionMessage
+    tone="error"
+    title="The filing was rejected"
+    actions={<LinkButton href="#notice" appearance="subtle" size="sm">View the court's notice</LinkButton>}
+  >
+    The court returned the filing because the signature page is missing.
+  </SectionMessage>
+</Do>
+<Dont
+  caption="Fill the actions with every next step. The message turns into a toolbar, and the main step gets lost."
+  code={`<SectionMessage
+    tone="error"
+    title="The filing was rejected"
+    actions={
+      <ButtonGroup>
+        <LinkButton href="/notice" appearance="subtle" size="sm">View notice</LinkButton>
+        <LinkButton href="/edit" appearance="subtle" size="sm">Edit filing</LinkButton>
+        <LinkButton href="/court" appearance="subtle" size="sm">Contact court</LinkButton>
+        <LinkButton href="/help" appearance="subtle" size="sm">Get help</LinkButton>
+      </ButtonGroup>
+    }
+>
+    The court returned the filing because the signature page is missing.
+</SectionMessage>`}
+/>
+<Do caption="Confirm a quick action with a toast, which goes away on its own." code={`toast.success('Matter archived');`}>
+  <Toast tone="success" title="Matter archived" />
+</Do>
+<Dont caption="Add a Section Message to the page for every routine confirmation." code={`<SectionMessage tone="success">Matter archived.</SectionMessage>`}>
+  <SectionMessage tone="success">Matter archived.</SectionMessage>
+</Dont>
+</Guidelines>
+
+</Section>
+
+<Section title="Accessibility">
+
+- Section Message renders a `div` with `role="status"`, a polite live region: a change to its
+  content while it's on the page is read without interrupting. A message that's added with its
+  content already in it may not be read out as it appears, depending on the screen reader. Pass
+  `role="alert"` for an urgent error that must interrupt.
+- The icon is hidden from assistive technology. Visually hidden text with the tone's name, such as
+  "Warning:", is read before the title, so the meaning doesn't depend on color. Translate it with
+  `statusLabel`.
+- The title is styled text in a `div`, not a heading, so it isn't listed among the page's headings.
+- The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, which also
+  shows as its tooltip on hover and focus.
+- Dismissing removes the message, including the button that had focus, and Section Message doesn't
+  move focus anywhere. If you need focus to land somewhere specific, move it in `onDismiss`.
+
+<Keyboard>
+  <Key keys="Tab">Moves to each action, then to the dismiss button.</Key>
+  <Key keys="Enter">On the dismiss button, hides the message. On an action, follows the link.</Key>
+  <Key keys="Space">On the dismiss button, hides the message.</Key>
+</Keyboard>
+
+</Section>
+
+<Section title="API">
+
+<PropsTable of={SectionMessageStories} native="div" />
+
+</Section>
+
+<Section title="Design tokens">
+
+Every token Section Message's stylesheet uses, by family, with the property it sets and when. "Base"
+is the message with no modifiers; each tone sets the border color and the background tint. The
+icon's color comes from the Icon's own `color`, so it isn't listed here.
+
+<TokensTable id="section-message" />
+
+</Section>
+
+<Section title="Related components">
+
+<Related>
+
+- <DocLink to="Components/Feedback/Banner" /> for an announcement across the whole page.
+- <DocLink to="Components/Feedback/Inline Message" /> for a one-line status beside what it's about.
+- <DocLink to="Components/Feedback/Toast Group" /> and <DocLink to="Components/Feedback/Toast" /> for a passing notification.
+- <DocLink to="Components/Navigation/Link Button" />, the usual action.
+- <DocLink to="Components/Actions/Button Group" /> to lay out two or more actions.
+- <DocLink to="Components/Actions/Icon Button" />, which the dismiss button is.
+
+</Related>
+
+</Section>
+
+<DocFooter>
+  The API table reads section-message.types.ts, the design tokens read section-message.module.css,
+  and the Figma source comes from registry.json, so they follow the code.
+</DocFooter>
+
+</ComponentPage>
+</Unstyled>

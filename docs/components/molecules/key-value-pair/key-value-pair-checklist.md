@@ -5,13 +5,13 @@
 ### Name
 KeyValuePair
 
-### Category
+### Tier
 Molecule
 
 ### Related Components
 - Key Value List (wraps pairs in a `<dl>`)
-- Text Field (`appearance="inline"` for single-line inline editing)
-- Text Area (`appearance="inline"` for multi-line inline editing)
+- Text Field (`context="inline"` for single-line inline editing)
+- Text Area (`context="inline"` for multi-line inline editing)
 - Field (for full form layouts — not the same use case)
 
 ---
@@ -38,7 +38,7 @@ needs consistent layout, typography, and semantic structure across the product.
 ## Variants
 
 ### size
-- `sm`, `md` (default), `lg` — controls padding-block and typography
+- `sm`, `md` (default), `lg` — sets the row's minimum height (`--size-control-sm/md/lg`) and typography; does not size an inline control in `children`
 
 ### underline
 - `true` / `false` (default) — adds a 1px bottom border divider
@@ -48,7 +48,8 @@ needs consistent layout, typography, and semantic structure across the product.
 ## States
 
 No interactive states — the component is a layout container. Inline-editable children manage their
-own hover/focus/invalid states.
+own hover/focus/invalid states (the standard `context="inline"` treatment, including the hover
+background); Key Value Pair only squares their frame corners.
 
 ---
 
@@ -66,7 +67,8 @@ All tokens are semantic — no primitives consumed directly.
 - Key text: `--color-content-subtle`
 - Value text: `--color-content-default`
 - Underline: `--border-width-sm` solid `--color-border-default`
-- Padding: `--spacing-xs` / `--spacing-sm` / `--spacing-md` per size
+- Minimum row height: `--size-control-sm` / `--size-control-md` / `--size-control-lg` per size
+- Key and static value inline-start inset: `--spacing-sm`, `--spacing-md` at `lg`
 - Gap: `--spacing-lg`
 - Typography: `body-sm` / `body-md` / `body-lg` per size
 
@@ -77,18 +79,18 @@ All tokens are semantic — no primitives consumed directly.
 - **Semantic HTML** — `<dt>`/`<dd>` for key/value, expecting a `<dl>` parent.
 - **Fixed 40% key width** — matches the Figma layout proportions.
 - **`children` over `value`** — children takes precedence, no explicit context prop needed.
-- **`align-items: baseline`** — keeps key text and value text (or inline control text) aligned.
+- **`align-items: flex-start`** — the key stays at the top of the row, centered in the first control-height band; a static value is centered in the row (`align-self: center`).
 - **No own interactive states** — pure layout; children handle their own states.
 
 ---
 
 ## Verified live (Storybook)
 
-- Static pairs render at all three sizes with correct typography and padding ✓
+- Static pairs render at all three sizes with correct typography and row height ✓
 - Underline border appears and disappears correctly ✓
 - Inline editable with TextField + EditIcon renders correctly ✓
 - Inline editable with TextArea + EditIcon renders correctly ✓
-- Key/value baseline alignment is correct ✓
+- Key/value vertical alignment is correct ✓
 - Works inside Key Value List ✓
 
 ---
@@ -97,6 +99,8 @@ All tokens are semantic — no primitives consumed directly.
 
 - `key-value-pair` component set: node `4869:244271`, page in Components v1.0.0.
 - 22 variants across size (sm/md/lg), context (default/inline), and underline axes.
+- The inline variants use the standard Text Field/Text Area/Select `context=inline` instances, so
+  code passes `context="inline"` children with no Key Value Pair-specific field look.
 
 ---
 

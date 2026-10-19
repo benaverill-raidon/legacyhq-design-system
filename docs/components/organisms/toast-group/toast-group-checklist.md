@@ -14,7 +14,7 @@ and a max-visible cap. Code-only behavior component (no Figma node).
 
 Stable.
 
-## Component category
+## Component tier
 
 Organism.
 
@@ -24,9 +24,12 @@ Organism.
       and `toast.dismiss(id?)` from anywhere (module-level store, no context).
 - [ ] Newest toast at the front; up to `maxVisible` (default 3) stacked, the rest collapsed behind.
 - [ ] Collapsed = 3D pile (peek + scale down); expanded (hover/focus) = spaced vertical list.
-- [ ] Auto-dismiss after `duration` (default 5000; loading = Infinity); timers pause while expanded.
+- [ ] Auto-dismiss after `duration` in view (default 5000; loading = Infinity until it resolves, then
+      the group's duration unless one is passed); timers pause while expanded and resume with the
+      time left; a queued toast's timer starts only once it's in view.
 - [ ] Swipe/drag past a threshold dismisses; exit animates out before removal.
 - [ ] Reuse an id to update a toast in place (loading -> success/error).
+- [ ] Stack movement uses `--move-long`, opacity `--fade-long`; the exit timer matches the 300ms fade.
 - [ ] Reduced motion collapses transitions to instant.
 - [ ] Behavior follows shadcn/sonner; there is no Figma component for the group.
 
@@ -56,8 +59,11 @@ label: Notifications
 
 ## Accessibility
 
-- [ ] `aria-label`led list region; each toast `role="status"`.
-- [ ] Focus into the stack expands it and pauses auto-dismiss.
+- [ ] `aria-label`led list region; an always-mounted, visually hidden `role="status"` live region
+      announces each toast in view (cards are `role="none"`, so no double announcement).
+- [ ] Focus into the stack expands it and pauses auto-dismiss; it stays expanded while focus is
+      inside, even when the pointer leaves.
+- [ ] Queued toasts (past `maxVisible`) are `inert` and `aria-hidden`.
 
 ## Examples to document
 
@@ -69,9 +75,13 @@ label: Notifications
 
 ## Tests
 
-- [ ] Renders nothing when empty; renders a triggered toast in an aria-labelled list.
-- [ ] Appearance from the variant helpers; update in place by id.
+- [ ] Renders only an empty live region when empty; renders a triggered toast in an aria-labelled list.
+- [ ] Tone from the variant helpers; update in place by id.
 - [ ] Dismiss button + auto-dismiss remove the toast.
 - [ ] All toasts in the DOM while stacked, newest first.
 - [ ] Hover expands to reveal descriptions.
+- [ ] A resolved loading toast gets the group's duration (or the one passed).
+- [ ] Queued toasts are inert/aria-hidden and their timers wait until they're in view.
+- [ ] The live region stays mounted and announces new, updated, and newly visible toasts once.
+- [ ] Hover and focus pause the timers, which resume with the time left; focus keeps the stack expanded.
 - [ ] Uses MUI: no. Uses Tailwind: no.

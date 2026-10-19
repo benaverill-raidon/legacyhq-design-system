@@ -169,6 +169,16 @@ describe('ToggleIconButton', () => {
 
   it('disabled sets native disabled', () => {
     render(
+      <ToggleIconButton aria-label="Disabled" disabled>
+        <CloseIcon />
+      </ToggleIconButton>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Disabled' })).toBeDisabled();
+  });
+
+  it('still accepts the deprecated isDisabled', () => {
+    render(
       <ToggleIconButton aria-label="Disabled" isDisabled>
         <CloseIcon />
       </ToggleIconButton>,
@@ -181,7 +191,7 @@ describe('ToggleIconButton', () => {
     const handleClick = vi.fn();
 
     render(
-      <ToggleIconButton aria-label="Disabled" isDisabled onClick={handleClick}>
+      <ToggleIconButton aria-label="Disabled" disabled onClick={handleClick}>
         <CloseIcon />
       </ToggleIconButton>,
     );

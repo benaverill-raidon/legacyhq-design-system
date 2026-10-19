@@ -21,7 +21,7 @@ function saveSections(onSelect?: (id: string) => void): MenuSection[] {
 }
 
 const meta = {
-  title: 'UI/Molecules/Split Button',
+  title: 'Components/Actions/Split Button',
   component: SplitButton,
   args: {
     children: 'Save',

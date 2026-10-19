@@ -1,6 +1,6 @@
 {
   "name": "ButtonGroup",
-  "category": "molecule",
+  "category": "actions",
   "status": "stable",
   "purpose": "Lay out a set of related, independent action buttons with consistent spacing and direction.",
   "intent": "Centralize the recurring 'N buttons, one gap, one direction' layout without introducing any new visual treatment - all color/radius/typography comes from the Button/IconButton children.",
@@ -102,9 +102,10 @@
     "role": null,
     "group": {
       "supported": true,
-      "appliedWhen": "aria-label or aria-labelledby is present",
+      "appliedWhen": "aria-label or aria-labelledby is present, and no role is passed",
       "value": "group"
     },
+    "consumerRole": "A role passed by the consumer (e.g. toolbar) wins over group, labelled or not.",
     "requirements": [
       "Do not add roving tabindex or arrow-key navigation - children keep native Tab order.",
       "Do not add a role without an accompanying accessible name.",
@@ -144,7 +145,7 @@
   "relatedComponents": ["Button", "IconButton", "ToggleButton"],
   "do": [
     "Use for a toolbar or action row of related, independent buttons.",
-    "Set size/appearance/tone directly on each child Button.",
+    "Set size/prominence/tone directly on each child Button.",
     "Add aria-label when the group's purpose isn't obvious from context."
   ],
   "dont": [

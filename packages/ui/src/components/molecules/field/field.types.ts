@@ -6,64 +6,56 @@ export type FieldSize = 'sm' | 'md' | 'lg';
 
 export interface FieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
   /**
-   * The single form control this field wraps (Text Field, Text Area, Select, ...). Field wires the
-   * label, message, and validation state to it, so it must be a single React element - not text,
-   * a fragment, or multiple elements.
+   * The one form control the field wraps, such as a Text Field or a Text Area. Field clones it to
+   * pass the wiring, so it must be a single element: not text, a fragment, or several elements.
    */
   children: React.ReactElement;
   /**
-   * The label text. Rendered in a real native `<label htmlFor>` pointing at the control, so the
-   * control gets its accessible name from the label - no separate `aria-label` needed. Omit only
-   * when the control is labelled some other way (then Field renders no `<label>`).
+   * The label, rendered in a native `<label htmlFor>` that points at the control and becomes its
+   * accessible name. Omit it only when the control is named some other way; Field then renders no label.
    */
   label?: React.ReactNode;
   /**
-   * Helper, error, or success text shown below the control. Field links it to the control via
-   * `aria-describedby` automatically. Its color, and whether a status icon appears, follow `state`.
+   * Helper, error, or success text below the control, added to the control's `aria-describedby`. Its
+   * color, and whether a status icon shows, follow `state`.
    */
   message?: React.ReactNode;
   /**
-   * Validation state. `error` and `valid` colour the message and prepend a status icon; `error`
-   * also sets `aria-invalid` on the control. Purely visual/semantic - it does not set the control's
-   * own error border, so pair `state="error"` with the control's own `invalid` prop for that.
+   * `error` and `valid` color the message and put a status icon before it; `error` also sets
+   * `aria-invalid` on the control. It doesn't change the control's border, so pair `state="error"`
+   * with the control's own `invalid`.
    */
   state?: FieldState;
   /**
-   * Field-wide layout context, a single shared axis (matching Figma). `default` aligns the label and
-   * message to the control's outer edge (size-independent). `inline` both (a) indents the label and
-   * message to line up with the text *inside* the control, by the control's own inner start padding
-   * for `size`, and (b) renders the control itself inline (borderless) by giving it
-   * `appearance="subtle"` - the control's own `appearance` wins if it sets one. So it's meant for
-   * text-bearing controls (Text Field, Select, Text Area, date/time pickers) where that alignment
-   * and borderless treatment read; it has no meaningful effect on controls without inner text
-   * (checkbox, switch, radio).
+   * Where the field sits, one axis shared with its control (as in Figma). `default` keeps the label
+   * and message flush with the control's edge, at every size. `inline` steps them in to line up with
+   * the text inside the control, by the control's start padding for `size`, and passes
+   * `context="inline"` to the control unless it sets its own `context` (or a deprecated `appearance`
+   * or `tone`). Meant for controls with text inside, such as Text Field, Text Area, and Select.
    */
   context?: FieldContext;
   /**
-   * Matches the wrapped control's size, and is used **only** to pick the `inline` context indent so
-   * the label/message align to the control's inner text (lg -> a wider indent than sm/md, which
-   * share one). In the `default` context it has no visual effect - every size renders the same. It
-   * never resizes the control itself, so set the control's own `size` too.
+   * The wrapped control's size, used only for the `inline` indent: 8px for `sm` and `md`, 12px for
+   * `lg`. It doesn't resize the control, so set the control's own `size` to match.
    */
   size?: FieldSize;
   /**
-   * Marks the field required: shows a `*` after the label and forwards `required` to the control.
-   * The `*` is decorative (`aria-hidden`) - the forwarded `required` conveys the state to assistive
-   * technology.
+   * Shows a `*` after the label and passes `required` to the control. The `*` is hidden from
+   * assistive technology, since the control's `required` already says it.
    */
   required?: boolean;
   /**
-   * Explicit id for the control, used for the label's `htmlFor` and the message's `aria-describedby`
-   * wiring. Auto-generated when omitted. A control that already carries its own `id` keeps it.
+   * The id for the label's `htmlFor` and the message wiring, when the control has no `id` of its own.
+   * Generated when omitted.
    */
   controlId?: string;
-  /** Composes with the `<label>`'s class list. */
+  /** Added to the label's classes. */
   labelClassName?: string;
-  /** Composes with the message's class list. */
+  /** Added to the message's classes. */
   messageClassName?: string;
   /**
-   * Documentation-only: mirrors a forced pseudo-state on the wrapped control for static Storybook
-   * references. Forwarded to the control, matching the convention Text Field and Button use.
+   * Documentation only: pins a hover or focus look on the wrapped control for static Storybook
+   * references. Passed to the control, as Text Field and Button use it.
    */
   'data-force-state'?: string;
 }

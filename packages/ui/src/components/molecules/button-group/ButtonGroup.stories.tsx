@@ -9,7 +9,7 @@ import type { ButtonGroupOrientation } from './button-group.types';
 const orientations: ButtonGroupOrientation[] = ['horizontal', 'vertical'];
 
 const meta = {
-  title: 'UI/Molecules/Button Group',
+  title: 'Components/Actions/Button Group',
   component: ButtonGroup,
   args: {
     orientation: 'horizontal',
@@ -112,7 +112,7 @@ export const Composition: Story = {
         <div style={cardStyle}>
           <h3 style={headingStyle}>Discard unsaved changes?</h3>
           <p style={captionStyle}>This can&apos;t be undone.</p>
-          <ButtonGroup aria-label="Dialog actions">
+          <ButtonGroup>
             <Button prominence="tertiary">Cancel</Button>
             <Button prominence="primary" tone="error">
               Discard

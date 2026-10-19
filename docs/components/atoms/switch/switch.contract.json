@@ -1,6 +1,6 @@
 {
   "name": "Switch",
-  "category": "atom",
+  "category": "forms",
   "status": "stable",
   "purpose": "Binary toggle control.",
   "intent": "Immediately enable or disable a setting.",
@@ -22,11 +22,13 @@
     "Deferred form submission"
   ],
   "anatomy": [
+    "root",
+    "input",
     "track",
     "thumb",
     "icon",
     "label",
-    "helperText"
+    "required indicator"
   ],
   "props": {
     "showIcons": {
@@ -51,8 +53,7 @@
     "loading"
   ],
   "slots": [
-    "label",
-    "helperText"
+    "label"
   ],
   "tokens": {},
   "accessibility": {
@@ -69,10 +70,11 @@
     "showIcons defaults to true, preserving the existing check/X marks; set to false to render a bare track/thumb with no internal icon."
   ],
   "compositionRules": [
-    "Can be used with helper text."
+    "Has no helper text of its own; put a description beside it (a setting row) or wrap it in Field."
   ],
   "contentRules": [
-    "Use concise labels describing the enabled state."
+    "Use concise labels describing the enabled state.",
+    "The required * after the label is aria-hidden; the native required attribute is what's announced."
   ],
   "responsiveRules": [],
   "themeRules": [

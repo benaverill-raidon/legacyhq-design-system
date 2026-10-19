@@ -17,7 +17,8 @@ rules, and the task→file routing table that says which of a component's up to
   prop-naming rules. Load when adding/renaming a prop.
 - [registry.json](docs/components/registry.json): generated, normalized
   cross-component index (props/anatomy/sizes/slots/variants for all 58
-  components in one consistent shape). Load for structural queries across
+  components in one consistent shape, plus each one's status, known issues,
+  and the evidence behind its status). Load for structural queries across
   many components instead of reading individual `.contract.json` files. See
   [component-registry-governance.json](docs/foundations/component-registry-governance.json)
   for normalization rules and known content gaps.

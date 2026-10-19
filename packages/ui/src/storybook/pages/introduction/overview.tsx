@@ -6,6 +6,7 @@ import { Card } from '../../../components/organisms/card';
 import buttonCss from '../../../components/atoms/button/button.module.css?raw';
 import { DocLink } from '../../blocks/doc-link';
 import { breakable, Code, doc, DocFooter, DocHeader, DocPage, DocSection, DocSubsection } from '../../blocks/doc-page';
+import { statusCounts, statusEntries } from '../../blocks/status-data';
 import { componentCount, componentGroups, findComponentRule, tokenTrace } from './overview-data';
 import styles from './overview.module.css';
 
@@ -269,7 +270,11 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
     name: 'Introduction',
     status: 'In progress',
     purpose: 'Orientation: what the system is, how it’s built, and how to use these docs.',
-    availableNow: 'Overview',
+    availableNow: (
+      <>
+        <DocLink size="sm" to="Introduction/Overview" /> · <DocLink size="sm" to="Introduction/Status" />
+      </>
+    ),
   },
   {
     name: 'Foundations',
@@ -289,11 +294,21 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
     name: 'Components',
     status: 'Available',
     purpose: `${componentCount} React components for building LegacyHQ interfaces, with live examples and usage guidance.`,
-    availableNow: 'Six groups, below',
+    availableNow: (
+      <>
+        Six groups, below ·{' '}
+        <DocLink size="sm" to="Introduction/Status">
+          {/* The same components as the count above, which leaves out the foundations. */}
+          {statusCounts(statusEntries.filter(({ category }) => category !== 'foundations'))
+            .map(({ label, count }) => `${count} ${label}`)
+            .join(', ')}
+        </DocLink>
+      </>
+    ),
   },
   {
     name: 'Patterns',
-    status: 'In progress',
+    status: 'Available',
     purpose: 'Guidance for combining components to solve recurring product problems.',
     availableNow: (
       <>

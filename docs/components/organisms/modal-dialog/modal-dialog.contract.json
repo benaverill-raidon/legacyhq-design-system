@@ -1,7 +1,13 @@
 {
   "name": "ModalDialog",
   "category": "overlays",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "It has no exit animation, which is the documented current state. Should it have one?"
+    }
+  ],
   "purpose": "Interrupt the flow to focus the user on a single task or decision, over a backdrop, with the modal behaviour handled.",
   "intent": "A controlled overlay: a blanket backdrop centering a panel of header (title + header actions), a scrollable body, and a footer of actions. The consumer owns `open` and reacts to `onClose`. Composes atoms (Icon Button, Buttons, status Icon) into a complete self-contained overlay that portals above the page, traps focus, closes on Escape/backdrop, locks page scroll, and restores focus - which is why it lives at the organism tier.",
   "nativeElement": "div (role=dialog, portaled)",

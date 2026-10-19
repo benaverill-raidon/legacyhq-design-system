@@ -42,7 +42,7 @@ const preview = {
         method: 'alphabetical',
         order: [
           'Introduction',
-          ['Overview', 'Getting Started', 'Principles', 'Accessibility', 'Changelog'],
+          ['Overview', 'Status', 'Getting Started', 'Principles', 'Accessibility', 'Changelog'],
           'Foundations',
           ['Color', 'Typography', 'Spacing', 'Radius', 'Elevation', 'Motion', 'Icons', 'Focus Ring', 'Logo'],
           'Components',

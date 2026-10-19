@@ -1,7 +1,21 @@
 {
   "name": "Tag",
   "category": "data-display",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "A removable Tag without `href` ignores `onClick`."
+    },
+    {
+      "kind": "decision",
+      "summary": "`tone` holds color names (blue, green, purple), which by tone-is-meaning is `appearance`. Rename it, or keep it as Toggle Button's is kept."
+    },
+    {
+      "kind": "decision",
+      "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
+    }
+  ],
   "purpose": "Display compact metadata with optional navigation and removal.",
   "intent": "Represent entities and contextual metadata throughout LegacyHQ.",
   "figmaSource": {

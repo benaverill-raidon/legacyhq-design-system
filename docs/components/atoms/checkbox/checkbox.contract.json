@@ -1,7 +1,17 @@
 {
   "name": "Checkbox",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "A single Checkbox has `invalid` but no way to show an error message, and wrapping it in Field replaces its own label as its name."
+    },
+    {
+      "kind": "decision",
+      "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs; they sit side by side in one form."
+    }
+  ],
   "purpose": "Select one or more independent options.",
   "intent": "Native checkbox control.",
   "figmaSource": {

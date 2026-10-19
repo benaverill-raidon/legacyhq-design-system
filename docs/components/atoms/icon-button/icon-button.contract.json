@@ -1,7 +1,17 @@
 {
   "name": "IconButton",
   "category": "actions",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Takes the legacy `appearance` (default | primary | subtle) while Figma has moved it to `tone` and `prominence` (tone-is-meaning)."
+    },
+    {
+      "kind": "decision",
+      "summary": "Which \"more\" glyph is standard: `MoreHorizIcon` (this page) or `MoreVertIcon` (Dropdown Menu and Table row actions)."
+    }
+  ],
   "purpose": "Icon-only action button.",
   "figmaSource": {
     "file": "Components v1.0.0",

@@ -1,7 +1,21 @@
 {
   "name": "Select",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Names its chips' remove buttons in English (`Remove <label>`), with no prop (built-in-labels)."
+    },
+    {
+      "kind": "gap",
+      "summary": "A single Select doesn't show the chosen option's icon; only menu rows and multi-select chips do."
+    },
+    {
+      "kind": "gap",
+      "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
+    }
+  ],
   "purpose": "Pick one option (or several) from a searchable list, shown in a field-styled trigger.",
   "intent": "A combobox composed from the pieces the system already has - a TextField trigger, a Dropdown Menu panel, and Chips for multi-select values - preconfigured for the choose-from-a-list use case, rather than a fourth independent implementation of a field, a floating panel, or a token input.",
   "tierNote": "Classified as a molecule, but its panel composes Dropdown Menu (an organism, itself Menu + Popup) - the same deliberate, documented exception Tag Group, Avatar Group, Split Button, and Chip already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here. Select also composes two molecules (TextField, Chip), which is ordinary molecule-on-molecule composition.",

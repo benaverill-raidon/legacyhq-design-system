@@ -1,0 +1,20 @@
+/* Introduction / Status: layout only, on top of doc-page's tables and type. Light only. */
+
+.tableScroll {
+  overflow-x: auto;
+}
+
+.components th[scope='row'] {
+  white-space: nowrap;
+}
+
+.issueList {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+.issueGroup {
+  display: grid;
+  gap: var(--spacing-xs);
+  max-inline-size: 72ch;
+}

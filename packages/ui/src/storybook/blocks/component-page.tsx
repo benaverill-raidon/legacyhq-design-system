@@ -4,7 +4,10 @@ import { CheckIcon, CloseIcon } from '../../assets/icons';
 import { componentCss } from './component-css';
 import { headerFacts, placePins, propRows, registryEntry, rootClassOf, tokenRows, TOKEN_FAMILIES } from './component-page-data';
 import type { ComponentPageSection, DocgenInfo, PinBox, PropRow } from './component-page-data';
+import { DocLink } from './doc-link';
 import { breakable, Code, doc, DocHeader, DocPage, DocSubsection } from './doc-page';
+import { codeParts, ISSUE_KINDS, statusEntries, statusLabel } from './status-data';
+import type { KnownIssue } from './status-data';
 import styles from './component-page.module.css';
 
 // The component Docs page standard: blocks a component's MDX page is written with, inside
@@ -24,12 +27,56 @@ export function ComponentPage({ children }: { children: React.ReactNode }) {
 /** `IconButton` -> `Icon Button`. */
 const displayName = (name: string) => name.replace(/([a-z])([A-Z])/g, '$1 $2');
 
-/** Name, the summary (children), the facts line, and a live example. */
+/** A known issue's summary, with its `code` set as code. */
+export function IssueText({ summary }: { summary: string }) {
+  return (
+    <>
+      {codeParts(summary).map(({ part, code }, index) => (code ? <Code key={index}>{part}</Code> : <React.Fragment key={index}>{part}</React.Fragment>))}
+    </>
+  );
+}
+
+/** A component's known issues, each with its kind. */
+export function KnownIssues({ issues }: { issues: KnownIssue[] }) {
+  return (
+    <ul className={styles.issues}>
+      {issues.map(({ kind, summary }) => (
+        <li key={summary}>
+          <span className={styles.issueKind}>{ISSUE_KINDS[kind]}</span> <IssueText summary={summary} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/**
+ * Name, the summary (children), the facts line with the status (a link to what it means), the
+ * known issues that hold the component below Stable, and a live example.
+ */
 export function ComponentHeader({ id, example, children }: { id: string; example?: React.ReactNode; children: React.ReactNode }) {
   const entry = registryEntry(id);
+  const { status, knownIssues } = statusEntries.find((candidate) => candidate.id === id) ?? { status: '', knownIssues: [] };
+  const [group, tier, ...rest] = headerFacts(entry);
+  const context = (
+    <>
+      {group} · {tier} ·{' '}
+      <DocLink size="sm" to="Introduction/Status">
+        {statusLabel(status)}
+      </DocLink>
+      {rest.map((fact) => ` · ${fact}`)}
+    </>
+  );
   return (
     <div className={styles.header}>
-      <DocHeader title={displayName(entry.name)} lede={children} context={headerFacts(entry).join(' · ')} />
+      <DocHeader title={displayName(entry.name)} lede={children} context={context} />
+      {knownIssues.length > 0 && (
+        <details className={styles.knownIssues}>
+          <summary>
+            {knownIssues.length} known {knownIssues.length === 1 ? 'issue' : 'issues'}
+          </summary>
+          <KnownIssues issues={knownIssues} />
+        </details>
+      )}
       {example && <div className={`${styles.stage} ${styles.headerStage}`}>{example}</div>}
     </div>
   );

@@ -72,7 +72,7 @@ export function figmaFact(source: FigmaSource | null | undefined) {
 const groupLabel = (category: string) =>
   governance.classification.storybook.componentGroups.find((group) => group.category === category)?.label ?? titleCase(category);
 
-/** The header's facts line: category, tier, and Figma source. Status stays off until it means something. */
+/** The header's facts line: category, tier, and Figma source. The status is added by the header, as a link. */
 export function headerFacts(entry: RegistryEntry) {
   const figma = figmaFact(entry.figmaSource);
   return [groupLabel(entry.category), titleCase(entry.tier), ...(figma ? [`Figma: ${figma}`] : [])];

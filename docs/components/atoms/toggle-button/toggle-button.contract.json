@@ -1,7 +1,7 @@
 {
   "name": "ToggleButton",
   "category": "actions",
-  "status": "stable",
+  "status": "beta",
   "purpose": "Persistent toggle control styled as a button.",
   "intent": "Represent binary selection while remaining button-like.",
   "figmaSource": {

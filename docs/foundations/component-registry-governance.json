@@ -89,6 +89,73 @@
       }
     }
   },
+  "componentStatus": {
+    "description": "How ready each component is, in one of four statuses. The status is authored in each component's contract.json (`status`), and component-status.test.ts fails if it claims more than the evidence below supports. People can always set a lower status than the evidence allows (judgment: an API about to change, a design still moving); never a higher one. Decided with the owner 2026-10-19.",
+    "values": [
+      {
+        "value": "draft",
+        "label": "Draft",
+        "meaning": "Not ready to build product screens with. It may be incomplete, change without notice, or go away."
+      },
+      {
+        "value": "beta",
+        "label": "Beta",
+        "meaning": "Usable, documented, and tested, but it has known issues or gaps, or its API may still change. Check its known issues before relying on it."
+      },
+      {
+        "value": "stable",
+        "label": "Stable",
+        "meaning": "Safe to build with. Complete, matched to Figma, with no known issues. A breaking change goes through a deprecated alias first (see deprecated-aliases in component-api-governance.json)."
+      },
+      {
+        "value": "deprecated",
+        "label": "Deprecated",
+        "meaning": "Replaced: don't use it in new work. `replacedBy` names its successor, and it's removed once nothing uses it."
+      }
+    ],
+    "criteria": [
+      {
+        "id": "docsPage",
+        "needs": "beta",
+        "label": "Docs page",
+        "checkedBy": "An MDX Docs page beside the component's code: on the component page standard (<ComponentHeader id>), or the component's own page (Icon's is Foundations / Icons)."
+      },
+      {
+        "id": "tests",
+        "needs": "beta",
+        "label": "Tests",
+        "checkedBy": "A *.test.ts(x) file beside the component's code."
+      },
+      {
+        "id": "figma",
+        "needs": "beta",
+        "label": "Figma source",
+        "checkedBy": "contract.json has a figmaSource (any shape in design-code-mapping-governance.json, including a documented no-node exception)."
+      },
+      {
+        "id": "contract",
+        "needs": "stable",
+        "label": "Full contract",
+        "checkedBy": "contentCompleteness is full (see contentCompleteness in this file)."
+      },
+      {
+        "id": "examples",
+        "needs": "stable",
+        "label": "Full examples",
+        "checkedBy": "exemplarCompleteness is full in exemplars.json (see component-exemplars-governance.json)."
+      },
+      {
+        "id": "noKnownIssues",
+        "needs": "stable",
+        "label": "No known issues",
+        "checkedBy": "contract.json's knownIssues is empty."
+      }
+    ],
+    "knownIssues": "Unresolved bugs, gaps, and open decisions about one component, as `knownIssues: [{ kind: bug | gap | decision, summary }]` in its contract.json. They hold it below Stable and show on its Docs page and the Status page. Different from knownLimitations, which are designed boundaries (a deferred feature, a documented constraint) and don't affect status. Issues that span many components or aren't about a component (tokens, Figma publishing, docs tooling) stay in docs/open-items.md.",
+    "deprecation": "A deprecated component sets `replacedBy` to the id of the component to use instead, which must exist. Renamed props and values are not component deprecations: they stay @deprecated aliases (component-api-governance.json).",
+    "shownOn": "The component's Docs page header (with its known issues), Introduction / Status (every component, its evidence, and what holds it back), the Overview's component counts, and a marker in Storybook's sidebar for anything not Stable.",
+    "implementation": "scripts/lib/component-status.mjs reads these criteria; generate-component-registry.mjs records each component's evidence (statusCheck) in registry.json; component-status.test.ts recomputes it from the source tree and checks the authored status and the registry against it."
+  },
   "normalizationRules": [
     {
       "field": "anatomy",

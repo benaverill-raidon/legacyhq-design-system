@@ -1,7 +1,13 @@
 {
   "name": "Toast",
   "category": "feedback",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "The loading title's contrast is 3.19:1 in light and 4.31:1 in dark. Needs a token, created in Figma first."
+    }
+  ],
   "purpose": "A raised, transient notification card.",
   "intent": "Show a brief, non-blocking status - success, error, warning, information, default, or a loading spinner - with an optional description and actions.",
   "figmaSource": {

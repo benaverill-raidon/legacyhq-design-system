@@ -293,6 +293,29 @@ token-governance.json). Current rules:
 
 Check that file before introducing a new prop name pattern.
 
+## Component status
+
+Every component has a status, authored as `status` in its `.contract.json`:
+`draft`, `beta`, `stable`, or `deprecated` (with `replacedBy`). What each
+means and the evidence it needs are `componentStatus` in
+`docs/foundations/component-registry-governance.json`. Beta needs a Docs
+page, tests, and a Figma source; Stable also needs a full contract, full
+examples, and **no known issues**.
+
+- **Known issues** are unresolved bugs, gaps, and open decisions about one
+  component: `knownIssues: [{ kind: bug | gap | decision, summary }]` in its
+  contract. Add one when you find a problem you aren't fixing; remove it when
+  it's fixed, and raise the status if the evidence now allows. Designed
+  boundaries are `knownLimitations` and don't affect status. Issues that
+  aren't about one component go in `docs/open-items.md`.
+- `component-status.test.ts` (part of `npm test`) fails if a status claims
+  more than the evidence supports, or if registry.json is stale: run
+  `npm run generate:exemplars` then `npm run generate:registry` after
+  changing a contract or examples file.
+- Status shows in each Docs page header (with the known issues), on
+  Introduction / Status, in the Overview's counts, and beside non-Stable
+  components in the sidebar (`.storybook/manager.js`).
+
 ## Component Docs pages
 
 Each component's Storybook Docs page is `<component>.mdx` beside it, written
@@ -305,8 +328,8 @@ Accessibility, API, Design tokens, Related components.
   the TypeScript props and their JSDoc through Storybook's docgen, so every
   member of `<Name>Props` needs a description comment (`@deprecated` ones are
   listed separately). The tokens table reads the component's CSS module. The
-  header's facts (category, tier, Figma source) come from registry.json.
-  Status isn't shown yet.
+  header's facts (category, tier, status, Figma source) and the component's
+  known issues come from registry.json.
 - **Live examples are stories** (`<Example of={...}>`); Do/Don't pairs render
   real components with the code beneath. Anatomy numbers parts found by their
   CSS-module classes, named as in the contract.

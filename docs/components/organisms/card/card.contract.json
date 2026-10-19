@@ -1,7 +1,13 @@
 {
   "name": "Card",
   "category": "data-display",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "It spreads `onClick` and other props onto its `div`, while its page says it handles no events."
+    }
+  ],
   "purpose": "Wrap arbitrary content in an optional theme-aware surface and border with rounded corners.",
   "intent": "A surface shell with a single unrestricted children slot. Content owns padding, layout, semantics, and interactions. Tier exception: it lives with organisms as a container for complete content sections, while importing no other UI components.",
   "nativeElement": "div",

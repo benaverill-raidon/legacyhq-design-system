@@ -1,7 +1,13 @@
 {
   "name": "Button",
   "category": "actions",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "The `isLoading` JSDoc leaves out the `aria-disabled` it sets (the Docs page mentions it)."
+    }
+  ],
   "purpose": "Trigger a user-initiated action.",
   "intent": "Provide a consistent native action control with separate visual emphasis and semantic tone.",
   "figmaSource": {

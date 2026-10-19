@@ -1,7 +1,17 @@
 {
   "name": "ProgressBar",
   "category": "feedback",
-  "status": "specified",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
+    },
+    {
+      "kind": "gap",
+      "summary": "The circular variant draws nothing at 0, track included, so a completion summary at 0 shows an empty space."
+    }
+  ],
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
   "figmaSource": {

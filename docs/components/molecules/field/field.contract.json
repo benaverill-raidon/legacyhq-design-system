@@ -1,7 +1,29 @@
 {
   "name": "Field",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "The status icon is centered against a message that wraps onto two lines. Check the intent in Figma."
+    },
+    {
+      "kind": "gap",
+      "summary": "`state` uses `valid` where every message component says `success` (shared-value-names)."
+    },
+    {
+      "kind": "decision",
+      "summary": "No rule says when errors show. Its \"Live validation\" story shows one from the first keystroke; Forms and Validation recommends checking on submit."
+    },
+    {
+      "kind": "decision",
+      "summary": "Its label is `heading-xxs` while Radio's and Checkbox's group legends are `body-md`, and the required `*` spacing differs."
+    },
+    {
+      "kind": "gap",
+      "summary": "Its AnyControl story says \"Bio is required.\", against its own Do (write the error as what to do)."
+    }
+  ],
   "purpose": "Wrap a single form control with a label, an optional message, and a validation state, wiring the three together for accessibility.",
   "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-labelledby / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",
   "nativeElement": "div (with a nested native label)",

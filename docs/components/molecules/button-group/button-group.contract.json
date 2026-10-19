@@ -1,7 +1,13 @@
 {
   "name": "ButtonGroup",
   "category": "actions",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "The space between buttons: Figma's stacked variants are 8px and the contract's 4px is stale; the horizontal gap uses `spacing-lg`, which Figma has no value for."
+    }
+  ],
   "purpose": "Lay out a set of related, independent action buttons with consistent spacing and direction.",
   "intent": "Centralize the recurring 'N buttons, one gap, one direction' layout without introducing any new visual treatment - all color/radius/typography comes from the Button/IconButton children.",
   "nativeElement": "div",

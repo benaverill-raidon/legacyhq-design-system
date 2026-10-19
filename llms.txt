@@ -139,6 +139,16 @@ accessibility, and examples built from system components.
 - [collections](packages/ui/src/storybook/pages/patterns/collections.mdx): Table, Card, or Key
   Value List; search, sort, filter chips, paging; selection, bulk and row actions, editing in place.
 
+## Templates (2, drafts)
+
+Complete workflows composed from system components, as Storybook pages. Both were built ahead of
+their designs: the product details are placeholders, listed under each page's Open questions.
+
+- [document-generation](packages/ui/src/storybook/pages/templates/document-generation.mdx): a
+  guided flow for one matter: choose documents, confirm details, generate, review and send.
+- [roadmap](packages/ui/src/storybook/pages/templates/roadmap.mdx): a roadmap's tasks by stage,
+  their status, completion, filters, and editing in place.
+
 ## Optional
 
 - `<name>-prompt.md` files (one per component): historical generation

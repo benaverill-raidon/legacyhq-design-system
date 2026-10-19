@@ -39,16 +39,17 @@ export function Section({ title, children }: { title: PatternPageSection; childr
 
 /**
  * A decision table: one row per situation, the component to use (DocLinks as children), and a
- * column per extra fact. `situation` heads the first column, `columns` the facts after "Use".
+ * column per extra fact. `situation` heads the first column, `use` the second ("Use" by default),
+ * `columns` the facts after it.
  */
-export function Choices({ situation, columns, children }: { situation: string; columns: string[]; children: React.ReactNode }) {
+export function Choices({ situation, use = 'Use', columns, children }: { situation: string; use?: string; columns: string[]; children: React.ReactNode }) {
   return (
     <div className={styles.tableScroll}>
       <table className={`${doc.table} ${styles.choices}`}>
         <thead>
           <tr>
             <th scope="col">{situation}</th>
-            <th scope="col">Use</th>
+            <th scope="col">{use}</th>
             {columns.map((column) => (
               <th key={column} scope="col">
                 {column}

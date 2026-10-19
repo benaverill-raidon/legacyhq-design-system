@@ -21,9 +21,10 @@ Some open items are already tracked next to their rules, and aren't repeated her
 4. Component Docs page standard: done, for all 56 components.
 5. Patterns: done. Messages and Feedback (the reference page), Forms and Validation, Loading and
    Empty States, Collections.
-6. **Templates: next.**
-7. Status / maturity vocabulary: deferred until after Overview, and still waiting. Pages show no
-   status yet.
+6. Templates: drafts of Document Generation and Roadmap, built ahead of their designs. Revise
+   them against the designs when those are done; each page lists its assumptions under Open
+   questions.
+7. **Status / maturity: next.** Then every held item below, at once.
 
 ## Figma (publish and check)
 
@@ -121,6 +122,22 @@ Found while writing the patterns:
 - Button's `isLoading` JSDoc leaves out the `aria-disabled` it sets (its page mentions it).
 - Progress Bar's page says it renders `role="progressbar"`, but a `role` you pass replaces it.
 
+Found while drafting the templates:
+
+- Table's title is always `heading-lg`, with no smaller option, so stacked tables (a roadmap's
+  stages) can't rank under the page heading.
+- Table has no row groups, so a roadmap's stages are separate tables, and each one's scroll region
+  adds its own tab stop. Its `activeFilters` belongs to one table, so filters across several tables
+  need their own Chip Group and Clear filters.
+- A single Select doesn't show the chosen option's icon (only menu rows and multi-select chips do).
+- Label has no icon slot, so a task status is an icon composed beside a Label by hand.
+- The circular Progress Bar draws nothing at 0 (track included), so a roadmap with none complete
+  shows an empty space.
+- Nothing gives focus a place to go when the control someone used unmounts (a removed chip, a
+  row that leaves the filtered view); Collections and Roadmap handle it locally.
+- The same axis has two names in the Button family: Button's `prominence`, Link Button's and Split
+  Button's `appearance` (already a known violation), and Link Button's `isDisabled`.
+
 ## Docs tooling
 
 - Chip's and Select's union props leave the generated API table empty, so they're listed by hand.
@@ -138,6 +155,12 @@ Found while writing the patterns:
   of which controls take the boolean `invalid`) and only the first declaration of a prop, so it
   can't read Chip's `mode` from its union of prop types.
 - Storybook's Dark toolbar themes only a wrapper, so portalled overlays render light in dark mode.
+  With the OS in dark mode, the canvas body is transparent and takes the browser's dark color while
+  the tokens stay light, so a story's own text reads dark on dark.
+- Only one Toast Group can mount per docs page, so a story's toasts show only when the story that
+  mounts it is on the page (Document Generation's failure story, viewed alone).
+- Template screens start their headings at `h3` so they sit inside the docs outline; the product's
+  own levels are stated in prose only. The blocks have no way to set a base level.
 
 ## Housekeeping
 

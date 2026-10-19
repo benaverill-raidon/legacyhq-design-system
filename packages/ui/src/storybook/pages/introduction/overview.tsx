@@ -304,8 +304,13 @@ const sections: Array<{ name: string; status: Status; purpose: React.ReactNode; 
   },
   {
     name: 'Templates',
-    status: 'Planned',
+    status: 'In progress',
     purpose: 'Complete LegacyHQ workflows composed entirely from system components.',
+    availableNow: (
+      <>
+        Drafts: <DocLink size="sm" to="Templates/Document Generation" /> · <DocLink size="sm" to="Templates/Roadmap" />
+      </>
+    ),
   },
 ];
 

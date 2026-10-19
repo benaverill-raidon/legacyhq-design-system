@@ -3,11 +3,12 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { describe, expect, it } from 'vitest';
 import { registryEntry } from './component-page-data';
-import { componentImports, componentsUsed, docsTitleOf, PATTERN_PAGE_SECTIONS, propValues, toneMatrix } from './pattern-page-data';
+import { componentImports, componentsUsed, docsTitleOf, PATTERN_PAGE_SECTIONS, propValues, TEMPLATE_PAGE_SECTIONS, toneMatrix } from './pattern-page-data';
 
-// Keeps every pattern page (an MDX page using <PatternPage>) to the standard, and its facts true:
-// the sections in order, examples that are stories built from system components, a "Components
-// used" list that covers everything the page renders, and links to real Docs pages.
+// Keeps every pattern page (an MDX page using <PatternPage>) and template page (<TemplatePage>) to
+// its standard, and its facts true: the sections in order, examples that are stories built from
+// system components, a "Components used" list that covers everything the page renders, and links
+// to real Docs pages.
 
 const PAGES = 'packages/ui/src/storybook/pages';
 const COMPONENTS = 'packages/ui/src/components';
@@ -24,13 +25,18 @@ const titleOf = (path: string) => loadCsf(read(path), { fileName: path, makeTitl
 const componentTitles = new Set(filesIn(COMPONENTS, /\.stories\.tsx$/).map(titleOf));
 const typesOf = (id: string) => filesIn(COMPONENTS, new RegExp(`/${id}/${id}\\.types\\.ts$`)).map(read)[0] ?? '';
 
-const pages = filesIn(PAGES, /\.mdx$/)
-  .filter((path) => read(path).includes('<PatternPage>'))
-  .map((path) => {
-    const mdx = read(path);
-    const storiesPath = path.replace(/\.mdx$/, '.stories.tsx');
-    return { path, mdx, storiesPath, stories: read(storiesPath) };
-  });
+const KINDS = [
+  { wrapper: '<PatternPage>', header: 'PatternHeader', sections: [...PATTERN_PAGE_SECTIONS] as string[], group: 'Patterns' },
+  { wrapper: '<TemplatePage>', header: 'TemplateHeader', sections: [...TEMPLATE_PAGE_SECTIONS] as string[], group: 'Templates' },
+];
+
+const pages = filesIn(PAGES, /\.mdx$/).flatMap((path) => {
+  const mdx = read(path);
+  const kind = KINDS.find(({ wrapper }) => mdx.includes(wrapper));
+  if (!kind) return [];
+  const storiesPath = path.replace(/\.mdx$/, '.stories.tsx');
+  return [{ path, mdx, kind, storiesPath, stories: read(storiesPath) }];
+});
 
 describe('pattern page helpers', () => {
   it('reads the components a file imports, by folder, once each', () => {
@@ -72,24 +78,24 @@ export interface InlineMessageProps {
   });
 });
 
-describe('pattern pages', () => {
+describe('pattern and template pages', () => {
   it('finds the pattern pages', () => {
     expect(pages.map(({ path }) => path)).toContain(`${PAGES}/patterns/messages-and-feedback.mdx`);
   });
 
-  it.each(pages.map((page) => [page.path, page]))('%s: has every section, in order', (_, { mdx }) => {
+  it.each(pages.map((page) => [page.path, page]))('%s: has every section, in order', (_, { mdx, kind }) => {
     const titles = [...mdx.matchAll(/<Section title=(["'])(.*?)\1/g)].map(([, , title]) => title);
-    expect(titles).toEqual([...PATTERN_PAGE_SECTIONS]);
+    expect(titles).toEqual(kind.sections);
   });
 
-  it.each(pages.map((page) => [page.path, page]))('%s: documents its own stories, under Patterns', (_, { mdx, storiesPath, stories }) => {
+  it.each(pages.map((page) => [page.path, page]))('%s: documents its own stories, in its group', (_, { mdx, kind, storiesPath, stories }) => {
     const name = storiesPath.split('/').pop()?.replace(/\.tsx$/, '');
     expect(mdx).toMatch(new RegExp(`import \\* as Stories from '\\./${name}';`));
     expect(mdx).toContain('<Meta of={Stories} name="Docs" />');
     expect(mdx).toContain(`import storiesSource from './${name}.tsx?raw';`);
-    expect(mdx).toMatch(/<PatternHeader [^>]*source=\{storiesSource\}/);
+    expect(mdx).toMatch(new RegExp(`<${kind.header} [^>]*source=\\{storiesSource\\}`));
     expect(mdx).toContain('<ComponentsUsed source={storiesSource} />');
-    expect(titleOf(storiesPath)).toMatch(/^Patterns\//);
+    expect(titleOf(storiesPath).startsWith(`${kind.group}/`)).toBe(true);
     expect(stories).toMatch(/export const \w+: Story/);
   });
 

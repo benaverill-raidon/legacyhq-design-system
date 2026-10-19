@@ -1,0 +1,91 @@
+/*
+ * Layout for the Document Generation template: where each region of the screen sits, never how a
+ * component looks. The page heading, the step headings, and the plain text beside the Progress Bar
+ * are the screen's own content, so their type is set here. The example's own frame stands in for
+ * the window, so the screen adds none.
+ */
+
+.screen {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+.header {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xl-font-family);
+  font-size: var(--typography-heading-xl-font-size);
+  font-weight: var(--typography-heading-xl-font-weight);
+  line-height: var(--typography-heading-xl-line-height);
+  letter-spacing: var(--typography-heading-xl-letter-spacing);
+}
+
+.context {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+/* One step at a time: its heading, then its form, progress, or table. */
+.step {
+  display: grid;
+  align-content: start;
+  gap: var(--spacing-lg);
+}
+
+/* The forms and the progress keep to a readable width; the tables take the whole width. */
+.narrow {
+  max-inline-size: 56rem;
+}
+
+/* The heading takes focus when the step changes; it isn't a control, so it shows no focus ring. */
+.stepTitle {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-lg-font-family);
+  font-size: var(--typography-heading-lg-font-size);
+  font-weight: var(--typography-heading-lg-font-weight);
+  line-height: var(--typography-heading-lg-line-height);
+  letter-spacing: var(--typography-heading-lg-letter-spacing);
+}
+
+.stepTitle:focus {
+  outline: none;
+}
+
+.progress {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.status {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.errorList {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding-inline-start: var(--spacing-lg);
+  list-style: disc;
+}

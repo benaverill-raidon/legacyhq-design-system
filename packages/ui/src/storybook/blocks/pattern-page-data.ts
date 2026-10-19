@@ -14,6 +14,15 @@ export const PATTERN_PAGE_SECTIONS = ['The problem', 'Choosing', 'Examples', 'Ru
 
 export type PatternPageSection = (typeof PATTERN_PAGE_SECTIONS)[number];
 
+/**
+ * A template page's sections, in order: a whole workflow built from the system, with the regions
+ * it's made of and the questions its designs still have to settle. Every template page has all of
+ * them.
+ */
+export const TEMPLATE_PAGE_SECTIONS = ['Purpose', 'The template', "How it's built", 'Accessibility', 'Open questions', 'Components used'] as const;
+
+export type TemplatePageSection = (typeof TEMPLATE_PAGE_SECTIONS)[number];
+
 const { componentGroups, displayNameOverrides } = governance.classification.storybook as {
   componentGroups: Array<{ category: string; label: string }>;
   displayNameOverrides: Record<string, string>;

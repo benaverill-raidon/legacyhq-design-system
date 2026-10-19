@@ -1,0 +1,157 @@
+/*
+ * Layout for Templates / Roadmap: where each region of the screen sits, never how a component
+ * looks. The roadmap's heading, the completion count, and the results line are the screen's own
+ * text, so their type is set here. The heading is a size above Table's title (heading-lg), so the
+ * stages read as parts of the roadmap. Skeletons are sized to the content they stand in for, as
+ * Skeleton's page says to.
+ */
+
+.screen {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+/* The roadmap's name and facts beside its completion, wrapping under it on a narrow screen. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--spacing-2xl);
+}
+
+.summary {
+  display: grid;
+  flex: 1 1 22rem;
+  gap: var(--spacing-lg);
+  max-inline-size: 36rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.title {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-xl-font-family);
+  font-size: var(--typography-heading-xl-font-size);
+  font-weight: var(--typography-heading-xl-font-weight);
+  line-height: var(--typography-heading-xl-line-height);
+  letter-spacing: var(--typography-heading-xl-letter-spacing);
+}
+
+.person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.completion {
+  flex: 0 1 20rem;
+}
+
+.completionContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+}
+
+.completionText {
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.count {
+  margin: 0;
+  color: var(--color-content-default);
+  font-family: var(--typography-heading-sm-font-family);
+  font-size: var(--typography-heading-sm-font-size);
+  font-weight: var(--typography-heading-sm-font-weight);
+  line-height: var(--typography-heading-sm-line-height);
+}
+
+.meta,
+.results {
+  margin: 0;
+  color: var(--color-content-subtle);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  line-height: var(--typography-body-sm-line-height);
+}
+
+/* The filters, then the results line at the far end. */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.results {
+  margin-inline-start: auto;
+}
+
+/* Each Table's header already pads above its title, so the stages need no gap of their own. */
+.stages {
+  display: grid;
+}
+
+/* The task icon beside the status Label. */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* --- Loading: skeletons sized like what they stand in for --------------------------------- */
+
+.skeletonTrail {
+  inline-size: 18rem;
+}
+
+/* Icon Tile's md size. */
+.skeletonTile {
+  inline-size: var(--size-500);
+  block-size: var(--size-500);
+}
+
+.skeletonTitle {
+  inline-size: 16rem;
+  block-size: var(--size-400);
+}
+
+.skeletonFacts {
+  display: grid;
+}
+
+/* One row per Key Value Pair: the same height, with the key in the same 40% column. */
+.skeletonFact {
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  align-items: center;
+  gap: var(--spacing-lg);
+  min-block-size: var(--size-control-md);
+  padding-inline-start: var(--spacing-sm);
+}
+
+.skeletonKey {
+  inline-size: 5rem;
+}
+
+/* Progress Bar's circular ring is 72px across at every size. */
+.skeletonRing {
+  inline-size: 72px;
+  block-size: 72px;
+}
+
+.skeletonCount {
+  inline-size: 11rem;
+}
+
+.skeletonMeta {
+  inline-size: 8rem;
+}

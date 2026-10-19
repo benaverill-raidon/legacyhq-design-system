@@ -48,7 +48,9 @@
   max-inline-size: 100%;
 }
 
-.prose > :where(p, ul, ol) {
+/* The same reading width for markdown inside a block one level down, such as a Subsection. */
+.prose > :where(p, ul, ol),
+.prose > div > :where(p, ul, ol):where(:not([class]), [class='']) {
   max-inline-size: 72ch;
 }
 

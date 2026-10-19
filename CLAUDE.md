@@ -25,8 +25,9 @@ packages/ui/src/components/
 
 packages/ui/src/storybook/   # Storybook-only docs; never exported as components
   pages/        # docs pages that aren't one component's docs (Introduction/
-                # Overview, Foundations, Patterns): MDX with <Meta title="..." />
-                # (or <Meta of={...} /> for a pattern's stories), page-local
+                # Overview, Foundations, Patterns, Templates): MDX with
+                # <Meta title="..." /> (or <Meta of={...} /> for a pattern's
+                # or template's stories), page-local
                 # components and CSS Modules beside it
   blocks/       # docs building blocks shared across pages: DocLink (internal
                 # links by sidebar title, checked by doc-link.test.ts),
@@ -339,6 +340,25 @@ Do and don't, Components used.
   in "Components used", that each listed component links to a real Docs page,
   and the cited facts. Each page also has its own `<pattern>.test.ts` for
   the facts its prose states.
+
+## Template pages
+
+A template is a complete LegacyHQ workflow composed from system components:
+`storybook/pages/templates/<template>.mdx` beside its `.stories.tsx`, written
+with `storybook/blocks/template-page.tsx` on top of the pattern blocks.
+Sections, all required, in order: Purpose, The template, How it's built,
+Accessibility, Open questions, Components used. The same rules as pattern
+pages apply, and `pattern-pages.test.ts` checks both.
+
+- **How it's built** maps each region of the screen to the components it's
+  built with and the pattern it follows (`<Choices situation="Region"
+  use="Built with" columns={['Follows']}>`).
+- **Drafts say so.** Document Generation and Roadmap were built before their
+  designs were final (`<TemplateHeader draft>`): their product details are
+  placeholders, and every assumption is listed under Open questions. Only the
+  few facts the repo establishes (record types, task states, icons) are stated
+  as fact.
+- Templates show the content area of a screen; the system has no app shell.
 
 ## When building/editing a component
 

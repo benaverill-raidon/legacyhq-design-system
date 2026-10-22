@@ -28,7 +28,9 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    questions.
 7. Status: done. Draft, Beta, Stable, Deprecated, authored in each contract and checked against the
    evidence (componentStatus in component-registry-governance.json). 15 Stable, 43 Beta.
-8. **Now: the held items.** Done so far: the naming and behavior decisions (start/end alignment,
+8. **Now: the held items.** Gaps done 2026-10-22 (Section Message `errors`, Checkbox
+   `errorMessage`, Slider `invalid` and Field wiring, Inline Edit `validate`, Table title size by
+   `size`, Progress Bar's empty ring, and the Table, Label, and Tag Group decisions). Done so far: the naming and behavior decisions (start/end alignment,
    `removeLabel`, `toast.information()`, Field `success`, when errors show, loading toasts,
    focus after removal, disabled fieldsets, Slider field names, and the Table, Link, Modal
    Dialog, and Tooltip decisions). Next: the gaps, the bugs, and docs tooling.
@@ -50,6 +52,16 @@ component's known issues, so they show on Introduction / Status too.
 - [ ] Alignment variants `left` / `right` → `start` / `end` in popup, dropdown-menu, chip-group,
   and tag-group (popup's `topLeft`… → `topStart`…).
 - [ ] Field's `state=valid` → `success`, and the message's `valid` boolean → `success`.
+
+**Add to match the code** (built in code 2026-10-22)
+
+- [ ] Table: the `sm` size's title is `heading/md` (`md` stays `heading/lg`).
+- [ ] Progress Bar: the circular `value=0` variant shows the bordered empty track, as the linear one
+  does.
+- [ ] Slider: an invalid variant (error-colored handle and track).
+- [ ] Inline Edit: an error state (the message under the field, in Field's error look).
+- [ ] Section Message: an errors list (linked field names under the description).
+- [ ] Checkbox: an error message under a single checkbox.
 
 **Check a value**
 
@@ -121,6 +133,12 @@ While carrying out the naming and behavior decisions. Each is also its component
 Not a known issue: Field's label doesn't dim when its control is disabled. It's already planned as
 a future enhancement in Field's contract.
 
+Found while closing the gaps:
+
+- Templates / Document Generation still builds its own error list inside Section Message; it can
+  use Section Message's new `errors`.
+- Inline Edit inside Field wires nothing (now Inline Edit's known issue).
+
 ## Docs tooling
 
 - Union prop types leave the generated API table empty (Chip and Select list theirs by hand; both
@@ -142,6 +160,8 @@ a future enhancement in Field's contract.
   the tokens stay light, so a story's own text reads dark on dark.
 - Only one Toast Group can mount per docs page, so a story's toasts show only when the story that
   mounts it is on the page (Document Generation's failure story, viewed alone).
+- Foundations / Icons under-counts the components that use `sm` icons: its detector misses an icon
+  picked from a lookup (Field's status icon).
 - Template screens start their headings at `h3` so they sit inside the docs outline; the product's
   own levels are stated in prose only. The blocks have no way to set a base level.
 

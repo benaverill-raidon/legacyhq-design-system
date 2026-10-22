@@ -7,9 +7,12 @@
   --slider-value-scale-inset: var(--component-slider-handle-half-width);
   --slider-internal-gap: var(--spacing-sm);
   --slider-handle-visual-color: var(--color-background-brand-primary-bold-default);
+  --slider-handle-hover-color: var(--color-background-brand-primary-bold-hover);
+  --slider-handle-press-color: var(--color-background-brand-primary-bold-press);
   --slider-track-active-color: var(--color-data-viz-sequence-prussian-900);
   --slider-track-inactive-color: var(--color-data-viz-sequence-prussian-300);
   --slider-step-color: var(--color-content-brand-primary-default);
+  --slider-step-active-color: var(--color-content-brand-primary-subtle);
   --slider-value-indicator-block-size: calc(var(--typography-body-sm-line-height) + var(--spacing-xs) * 2);
 
   display: grid;
@@ -22,6 +25,21 @@
   line-height: var(--typography-body-md-line-height);
   letter-spacing: var(--typography-body-md-letter-spacing);
   text-transform: var(--typography-body-md-text-transform);
+}
+
+/*
+ * Invalid (`invalid`, or the aria-invalid Field passes): the same parts in the error colors, at the
+ * same weights - a bold handle and fill, a lighter unfilled track, dots that contrast with each.
+ * Disabled sets its own colors on the parts directly, so it wins.
+ */
+.root[data-invalid='true'] {
+  --slider-handle-visual-color: var(--color-background-error-bold-default);
+  --slider-handle-hover-color: var(--color-background-error-bold-hover);
+  --slider-handle-press-color: var(--color-background-error-bold-press);
+  --slider-track-active-color: var(--color-background-error-bold-default);
+  --slider-track-inactive-color: var(--color-background-error-default-default);
+  --slider-step-color: var(--color-content-error);
+  --slider-step-active-color: var(--color-background-error-default-default);
 }
 
 .size_xs {
@@ -228,7 +246,7 @@
 .rangeRoot[data-active-handle='upper']:not([data-disabled='true'], :where(:has(.input:disabled))):hover .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='hover']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='hover']) .handleUpper {
-  --slider-handle-visual-color: var(--color-background-brand-primary-bold-hover);
+  --slider-handle-visual-color: var(--slider-handle-hover-color);
 }
 
 .root:not(.rangeRoot):not([data-disabled='true'], :where(:has(.input:disabled))):active .handleSingle,
@@ -237,7 +255,7 @@
 .rangeRoot[data-active-handle='upper']:not([data-disabled='true'], :where(:has(.input:disabled))):active .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper {
-  --slider-handle-visual-color: var(--color-background-brand-primary-bold-press);
+  --slider-handle-visual-color: var(--slider-handle-press-color);
 }
 
 .root:not(.rangeRoot):not([data-disabled='true'], :where(:has(.input:disabled))):active .handleSingle .handleVisual,
@@ -342,7 +360,7 @@
  * keeps this from tying in specificity with the disabled-state stepDot color below.
  */
 .root:not([data-disabled='true'], :where(:has(.input:disabled))) .step[data-active='true'] .stepDot {
-  background: var(--color-content-brand-primary-subtle);
+  background: var(--slider-step-active-color);
 }
 
 .valueIndicator {

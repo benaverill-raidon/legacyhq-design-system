@@ -114,7 +114,7 @@ Form (form.root, native <form>, flex column, gap 0)
 - **When errors show is a system rule, followed by the consumer.** Form doesn't validate, but every
   form shows its errors the same way: check when the form is submitted, not while someone types;
   on a failed submit, show every error at once, with a Section Message (`tone="error"`) at the top
-  of the form naming and linking each field, each field's own error through Field, and focus moved
+  of the form whose `errors` name and link each field, each field's own error through Field, and focus moved
   to the summary; then update each field's error as its value changes, so it clears as soon as it's
   fixed. The summary is a live region, so it changes only on the next submit. Set `noValidate` so
   the browser's own messages don't come first. Patterns / Forms and Validation builds the flow.

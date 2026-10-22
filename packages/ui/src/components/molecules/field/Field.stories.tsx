@@ -2,7 +2,7 @@ import type { CSSProperties, FormEvent, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
-import { Link } from '../../atoms/link';
+import { Slider } from '../../atoms/slider';
 import { SectionMessage } from '../../organisms/section-message';
 import { TextField } from '../text-field';
 import { TextArea } from '../text-area';
@@ -214,6 +214,11 @@ export const AnyControl: Story = {
           <TextArea invalid placeholder="Tell us about yourself" />
         </Field>
       </Cell>
+      <Cell label="Slider (error)">
+        <Field label="Confidence" state="error" message="Set how sure the client is.">
+          <Slider defaultValue={0} />
+        </Field>
+      </Cell>
     </div>
   ),
 };
@@ -263,22 +268,13 @@ function ValidatingForm() {
   return (
     <form noValidate onSubmit={submit} style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
       {summary.length > 0 ? (
-        <SectionMessage ref={summaryRef} tabIndex={-1} tone="error" title={`Fix ${summary.length === 1 ? '1 field' : `${summary.length} fields`} to save`}>
-          {summary.map((key) => (
-            <div key={key}>
-              <Link
-                href={`#${ids[key]}`}
-                emphasis="default"
-                onClick={(event) => {
-                  event.preventDefault();
-                  document.getElementById(ids[key])?.focus();
-                }}
-              >
-                {CHECKED_LABELS[key]}
-              </Link>
-            </div>
-          ))}
-        </SectionMessage>
+        <SectionMessage
+          ref={summaryRef}
+          tabIndex={-1}
+          tone="error"
+          title={`Fix ${summary.length === 1 ? '1 field' : `${summary.length} fields`} to save`}
+          errors={summary.map((key) => ({ label: CHECKED_LABELS[key], targetId: ids[key] }))}
+        />
       ) : null}
       {(Object.keys(CHECKED_LABELS) as CheckedField[]).map((key) => (
         <Field

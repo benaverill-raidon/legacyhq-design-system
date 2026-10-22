@@ -76,7 +76,7 @@ export interface TableProps<Row> {
   data: Row[];
   /** Returns a stable id per row, for selection and React keys. Defaults to the row's index in `data`, which changes when `data` is filtered or reordered, so pass a real id. */
   getRowId?: (row: Row, index: number) => RowId;
-  /** Row density: `md` (64px rows) or `sm` (40px rows). */
+  /** Row density and title size: `md` (64px rows, a `heading/lg` title) or `sm` (40px rows, a `heading/md` title). */
   size?: TableSize;
   /**
    * The table's accessible name, rendered as a visually hidden `<caption>`. Falls back to `title`. A
@@ -85,9 +85,13 @@ export interface TableProps<Row> {
   caption?: React.ReactNode;
 
   // --- Header region ---
-  /** The title above the table, rendered as a heading at `headingLevel`. Also names the table when there's no `caption`. */
+  /**
+   * The title above the table: a section heading that labels this table among other content. Its size
+   * follows `size`, not `headingLevel`. On a page that's only a table, leave it out and let the page's
+   * header name the page. Also names the table when there's no `caption`.
+   */
   title?: React.ReactNode;
-  /** The heading level of `title`, 1 to 6, to fit the page's outline. Defaults to 2. */
+  /** The heading level of `title`, 1 to 6, to fit the page's outline. Only the outline: the size follows `size`. Defaults to 2. */
   headingLevel?: TableHeadingLevel;
   /** Supporting text below the title. */
   description?: React.ReactNode;

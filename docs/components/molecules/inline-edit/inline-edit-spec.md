@@ -162,6 +162,7 @@ Not applicable - Inline Edit has no text content of its own.
 | children | `React.ReactElement` | Yes | - |
 | onConfirm | `(value: string) => void` | No | undefined |
 | onCancel | `() => void` | No | undefined |
+| validate | `(value: string) => string \| undefined` | No | undefined |
 | actionButtons | boolean | No | `true` |
 | actionPlacement | `'below' \| 'end'` | No | `'below'` |
 | actionAlignment | `'center' \| 'start'` | No | `'center'` |
@@ -193,7 +194,9 @@ Inline Edit, not the consumer, renders those buttons.
 - Tabbing through the field and both buttons without typing doesn't call `onConfirm`: with the draft
   unchanged, focus leaving the root just ends editing.
 - `Escape` calls `onCancel` and reverts to `value` while editing, from anywhere inside the root; focus
-  ends on the read-only field.
+  ends on the read-only field. It also clears `validate`'s error.
+- With `validate`, a rejected `Enter` or confirm-button press keeps editing and leaves focus in the
+  field; a rejected blur keeps editing without moving focus back.
 - `Tab`-ing (or clicking) away from the field to anywhere *outside* Inline Edit while editing also
   calls `onConfirm` with the current draft - the same as clicking confirm. Moving focus to the
   cancel/confirm buttons themselves does not trigger this; their own click handler applies instead.
@@ -204,6 +207,10 @@ Inline Edit, not the consumer, renders those buttons.
   belongs to the cloned child (e.g. `TextField`'s own `aria-label`).
 - The confirm/cancel `IconButton`s each require an accessible name, supplied via `confirmLabel`/
   `cancelLabel` (default English labels `'Confirm'`/`'Cancel'`).
+- While `validate` rejects the draft, the child gets `invalid`, `aria-invalid`, and the message's id
+  added after its own `aria-describedby`. The message sits in a polite live region rendered from the
+  start of editing (when `validate` is set), so it's announced after `Enter`, when focus doesn't
+  move. Its status icon is `aria-hidden`.
 
 ---
 
@@ -215,9 +222,11 @@ The action row floats `--spacing-sm` (8px) from the field: below it, or past its
 Figma's `itemSpacing: 4`; `.root .actions` overrides Button Group's default 8px.
 
 ### Layout
-The root diverges from Figma's own single-row layout, per explicit design feedback: `display: flex`,
-`flex-direction: column`, `align-items: stretch`, so the field always keeps its full width instead
-of sharing a row with (and shrinking to make room for) the action buttons. The content area is
+The root diverges from Figma's own single-row layout, per explicit design feedback: a one-column
+grid (`grid-template-columns: minmax(0, 1fr)`, rows for the field and `validate`'s message), so the
+field always keeps its full width instead of sharing a row with (and shrinking to make room for)
+the action buttons. With `actionPlacement="end"` and in a Table cell, the action row is placed in
+the first grid row, so that row is its containing block and a message below doesn't move it. The content area is
 `inline-size: 100%`; the action row is absolutely positioned (`z-index: 1`) below the field at its
 trailing edge, or past that edge with `actionPlacement="end"`, rather than Figma's literal
 same-row-trailing placement. Inside a Table's editable cell (`data-editable-cell`), the read-only
@@ -226,8 +235,15 @@ sit inside the cell at its trailing edge, vertically centered, the child reserve
 and it shows a focus-colored bottom line. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
 `TextField`'s own convention of filling its container by default.
 
-No color, radius, or typography tokens are owned by Inline Edit itself - all visual styling comes
-from the cloned child, and the confirm/cancel `IconButton`s carry their own tokens.
+### Error message
+`validate`'s message copies Field's error look: the small error status icon (`sm`, no spacing,
+`color="error"`), `--spacing-075` before the text, `body-sm` in `--color-content-error`, and
+`--spacing-xs` above it. It's indented like Field's inline context, by the inline control's text
+inset: `--spacing-sm` for `sm`/`md`, `--spacing-md` for `lg`.
+
+Apart from that message, no color, radius, or typography tokens are owned by Inline Edit itself -
+all visual styling comes from the cloned child, and the confirm/cancel `IconButton`s carry their own
+tokens.
 
 ---
 
@@ -245,6 +261,13 @@ focus is on the read-only field. Losing focus to anything outside Inline Edit (a
 calls `onConfirm` when the draft changed - clicking/Tab-ing off the field always saves, never
 silently discards - and just ends editing when it didn't. Confirming calls `onConfirm(draft)` and returns to read-only; cancelling
 discards the draft, calls `onCancel()`, and returns to read-only showing the original `value`.
+
+### Validating
+With `validate`, every confirm (Enter, the confirm button, a blur with a changed draft) first calls
+`validate(draft)`. A returned message rejects the draft: `onConfirm` isn't called, editing goes on
+with the draft, the message shows under the field, and the child is marked invalid. After a
+rejection the message is recomputed as the draft changes, so it clears once the draft is fixed.
+Cancel, Escape, a new edit, a successful confirm, and a blur with an unchanged draft clear it.
 
 ---
 

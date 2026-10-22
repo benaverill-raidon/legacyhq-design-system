@@ -1,7 +1,10 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { LinkButton } from '../../atoms/link-button';
+import { RadioGroup } from '../../atoms/radio';
 import { ButtonGroup } from '../../molecules/button-group';
+import { Field } from '../../molecules/field';
+import { TextField } from '../../molecules/text-field';
 import { SectionMessage } from './section-message';
 import type { SectionMessageTone } from './section-message.types';
 
@@ -23,6 +26,7 @@ const meta = {
     children: { control: 'text' },
     isDismissible: { control: 'boolean' },
     actions: { control: false },
+    errors: { control: false },
     onDismiss: { control: false },
     className: { control: false },
   },
@@ -149,6 +153,40 @@ export const EdgeCases: Story = {
           Some of your notification preferences are out of date.
         </SectionMessage>
       </Labelled>
+    </div>
+  ),
+};
+
+/**
+ * The summary at the top of a form after a failed submit: a title that counts the fields, and
+ * `errors` listing each one as a link. Following a link moves focus to the field; the Billing link
+ * targets a Radio Group's fieldset, so focus goes to its first radio.
+ */
+export const ErrorSummary: Story = {
+  render: () => (
+    <div style={stack}>
+      <SectionMessage
+        tone="error"
+        title="Fix 2 fields to create the matter"
+        errors={[
+          { label: 'Client name', message: "Enter the client's first and last name.", targetId: 'summary-client-name' },
+          { label: 'Billing', message: 'Choose how the matter is billed.', targetId: 'summary-billing' },
+        ]}
+      />
+      <Field label="Client name" required state="error" message="Enter the client's first and last name.">
+        <TextField id="summary-client-name" invalid defaultValue="Rivera" />
+      </Field>
+      <RadioGroup
+        id="summary-billing"
+        label="Billing"
+        required
+        invalid
+        errorMessage="Choose how the matter is billed."
+        options={[
+          { value: 'hourly', label: 'Hourly' },
+          { value: 'flat', label: 'Flat fee' },
+        ]}
+      />
     </div>
   ),
 };

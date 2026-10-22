@@ -6,10 +6,6 @@
     {
       "kind": "decision",
       "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
-    },
-    {
-      "kind": "gap",
-      "summary": "No icon slot, so a status with an icon (a task status) is composed beside the Label by hand."
     }
   ],
   "purpose": "Display short metadata.",
@@ -123,5 +119,8 @@
   "acceptanceCriteria": [
     "Correct semantic tones",
     "Consistent sizing"
+  ],
+  "knownLimitations": [
+    "No icon slot: a status with an icon, such as a task status, is the icon beside the Label, composed by the page (see Templates / Roadmap)."
   ]
 }

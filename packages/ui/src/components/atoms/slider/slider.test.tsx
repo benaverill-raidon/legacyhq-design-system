@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../../molecules/field';
 import { focusRingClassNames } from '../../primitives/focus-ring';
 import { getVisualPosition } from './slider';
 import * as sliderModuleExports from './slider';
@@ -1132,7 +1133,8 @@ describe('slider CSS contract', () => {
   it('swaps a track-stop dot to the subtle brand color when it sits on the active fill, like Progress Bar', () => {
     expect(sliderCss).toContain('--slider-step-color: var(--color-content-brand-primary-default);');
     expect(sliderCss).toContain("[data-active='true'] .stepDot");
-    expect(sliderCss).toContain('background: var(--color-content-brand-primary-subtle);');
+    expect(sliderCss).toContain('--slider-step-active-color: var(--color-content-brand-primary-subtle);');
+    expect(sliderCss).toContain('background: var(--slider-step-active-color);');
     // The active-color override must out-specificity the disabled-state stepDot rule so a
     // disabled, active-region dot never renders the brand color instead of the disabled one.
     expect(sliderCss).toContain(".root:not([data-disabled='true'], :where(:has(.input:disabled))) .step[data-active='true'] .stepDot");
@@ -1160,8 +1162,10 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('.handleVisual {');
     expect(sliderCss).toContain('background: var(--slider-handle-visual-color);');
     expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-default);');
-    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-hover);');
-    expect(sliderCss).toContain('--slider-handle-visual-color: var(--color-background-brand-primary-bold-press);');
+    expect(sliderCss).toContain('--slider-handle-hover-color: var(--color-background-brand-primary-bold-hover);');
+    expect(sliderCss).toContain('--slider-handle-press-color: var(--color-background-brand-primary-bold-press);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--slider-handle-hover-color);');
+    expect(sliderCss).toContain('--slider-handle-visual-color: var(--slider-handle-press-color);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-lower-position);');
     expect(sliderCss).toContain('inset-inline-start: var(--slider-upper-position);');
   });
@@ -1212,5 +1216,91 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('inset: 0;');
     expect(sliderCss).not.toContain('padding-inline: var(--slider-stop-layer-padding)');
     expect(sliderCss).not.toContain('padding-block: var(--slider-stop-layer-padding)');
+  });
+});
+
+describe('invalid', () => {
+  it('marks a single Slider invalid: aria-invalid on the handle and the error look on the root', () => {
+    const { container } = render(<Slider label="Confidence" invalid />);
+
+    expect(screen.getByRole('slider', { name: 'Confidence' })).toHaveAttribute('aria-invalid', 'true');
+    expect(container.firstElementChild).toHaveAttribute('data-invalid', 'true');
+  });
+
+  it('marks both handles of a Slider Range invalid, and not the group', () => {
+    const { container } = render(<SliderRange label="Price" invalid />);
+
+    for (const handle of screen.getAllByRole('slider')) {
+      expect(handle).toHaveAttribute('aria-invalid', 'true');
+    }
+    expect(screen.getByRole('group', { name: 'Price' })).not.toHaveAttribute('aria-invalid');
+    expect(container.firstElementChild).toHaveAttribute('data-invalid', 'true');
+  });
+
+  it('is not invalid by default', () => {
+    const { container } = render(<Slider label="Confidence" />);
+
+    expect(screen.getByRole('slider')).not.toHaveAttribute('aria-invalid');
+    expect(container.firstElementChild).not.toHaveAttribute('data-invalid');
+  });
+
+  it('draws the error look from the error tokens', () => {
+    expect(sliderCss).toMatch(/\.root\[data-invalid='true'\] \{[^}]*--slider-handle-visual-color: var\(--color-background-error-bold-default\);/);
+    expect(sliderCss).toMatch(/\.root\[data-invalid='true'\] \{[^}]*--slider-track-active-color: var\(--color-background-error-bold-default\);/);
+    expect(sliderCss).toMatch(/\.root\[data-invalid='true'\] \{[^}]*--slider-track-inactive-color: var\(--color-background-error-default-default\);/);
+    expect(sliderCss).toMatch(/\.root\[data-invalid='true'\] \{[^}]*--slider-handle-hover-color: var\(--color-background-error-bold-hover\);/);
+    expect(sliderCss).toMatch(/\.root\[data-invalid='true'\] \{[^}]*--slider-handle-press-color: var\(--color-background-error-bold-press\);/);
+  });
+});
+
+describe('in a Field', () => {
+  it('wires the label, message, error, and required onto a single Slider', () => {
+    render(
+      <Field label="Confidence" required state="error" message="Set how sure you are.">
+        <Slider />
+      </Field>,
+    );
+
+    const slider = screen.getByRole('slider', { name: 'Confidence' });
+    expect(slider).toHaveAccessibleDescription('Set how sure you are.');
+    expect(slider).toHaveAttribute('aria-invalid', 'true');
+    // jest-dom's toBeRequired skips range inputs, which the browser never checks; the attribute is set.
+    expect(slider).toHaveAttribute('required');
+    // Field's aria-invalid shows the error look too, as it does on Select and the pickers.
+    expect(slider.closest(`.${styles.root}`)).toHaveAttribute('data-invalid', 'true');
+  });
+
+  it("wires a Slider Range: the label names the group and both handles, and points at the lower one", () => {
+    const { container } = render(
+      <Field label="Fee range" required state="error" message="Set a range of at least $500.">
+        <SliderRange />
+      </Field>,
+    );
+
+    expect(screen.getByRole('group', { name: 'Fee range' })).toBeInTheDocument();
+    const [lower, upper] = screen.getAllByRole('slider');
+    expect(lower).toHaveAccessibleName('Fee range Minimum value');
+    expect(upper).toHaveAccessibleName('Fee range Maximum value');
+    const label = container.querySelector('label') as HTMLLabelElement;
+    expect(label.htmlFor).toBe(lower.id);
+    for (const handle of [lower, upper]) {
+      expect(handle).toHaveAccessibleDescription('Set a range of at least $500.');
+      expect(handle).toHaveAttribute('aria-invalid', 'true');
+      expect(handle).toHaveAttribute('required');
+    }
+    const root = container.querySelector(`.${styles.rangeRoot}`) as HTMLElement;
+    expect(root).not.toHaveAttribute('required');
+    expect(root).not.toHaveAttribute('aria-invalid');
+    expect(root).not.toHaveAttribute('aria-describedby');
+    expect(root).toHaveAttribute('data-invalid', 'true');
+  });
+
+  it("keeps a Slider Range's own id prefix for the rest of its ids", () => {
+    render(<SliderRange id="fees" aria-label="Fees" />);
+
+    const [lower, upper] = screen.getAllByRole('slider');
+    expect(lower.id).toBe('fees');
+    expect(upper.id).toBe('fees-max');
+    expect(screen.getByRole('group', { name: 'Fees' }).id).toBe('fees-range');
   });
 });

@@ -206,4 +206,73 @@ describe('SectionMessage CSS contract', () => {
     render(<SectionMessage appearance="warning">Sync paused.</SectionMessage>);
     expect(screen.getByRole('status')).toHaveClass(styles.tone_warning);
   });
+
+  describe('errors', () => {
+    const ERRORS = [
+      { label: 'Client name', message: "Enter the client's first and last name.", targetId: 'client-name' },
+      { label: 'Matter type', targetId: 'matter-type' },
+    ];
+
+    it('lists each error as a link to its control, under the description', () => {
+      render(
+        <SectionMessage tone="error" title="Fix 2 fields to create the matter" errors={ERRORS}>
+          Nothing was saved.
+        </SectionMessage>,
+      );
+
+      const list = screen.getByRole('list');
+      expect(list).toHaveClass(styles.errors);
+      const items = screen.getAllByRole('listitem');
+      expect(items).toHaveLength(2);
+      expect(items[0]).toHaveTextContent("Client name: Enter the client's first and last name.");
+      expect(items[1]).toHaveTextContent(/^Matter type$/);
+      expect(screen.getByRole('link', { name: 'Client name' })).toHaveAttribute('href', '#client-name');
+      expect(screen.getByRole('link', { name: 'Matter type' })).toHaveAttribute('href', '#matter-type');
+      // After the description, before the actions.
+      expect(screen.getByText('Nothing was saved.').compareDocumentPosition(list) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('moves focus to the control when a link is followed, without changing the URL', () => {
+      render(
+        <>
+          <SectionMessage tone="error" errors={ERRORS} />
+          <label htmlFor="client-name">Client name</label>
+          <input id="client-name" />
+        </>,
+      );
+
+      const link = screen.getByRole('link', { name: 'Client name' });
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+      act(() => {
+        link.dispatchEvent(click);
+      });
+      expect(click.defaultPrevented).toBe(true);
+      expect(screen.getByRole('textbox', { name: 'Client name' })).toHaveFocus();
+    });
+
+    it("focuses the first control inside a target that can't take focus, such as a group's fieldset", () => {
+      render(
+        <>
+          <SectionMessage tone="error" errors={[{ label: 'Billing', targetId: 'billing' }]} />
+          <fieldset id="billing">
+            <legend>Billing</legend>
+            <input type="radio" name="billing" aria-label="Hourly" />
+            <input type="radio" name="billing" aria-label="Flat fee" />
+          </fieldset>
+        </>,
+      );
+
+      fireEvent.click(screen.getByRole('link', { name: 'Billing' }));
+      expect(screen.getByRole('radio', { name: 'Hourly' })).toHaveFocus();
+    });
+
+    it('renders no list for an empty array, and no description when there are no children', () => {
+      const { container, rerender } = render(<SectionMessage tone="error" title="Fix 1 field" errors={[]}>Body</SectionMessage>);
+      expect(screen.queryByRole('list')).not.toBeInTheDocument();
+
+      rerender(<SectionMessage tone="error" title="Fix 1 field" errors={ERRORS.slice(0, 1)} />);
+      expect(container.querySelector(`.${styles.description}`)).toBeNull();
+      expect(screen.getByRole('list')).toBeInTheDocument();
+    });
+  });
 });

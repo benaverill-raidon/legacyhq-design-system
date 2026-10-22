@@ -275,4 +275,52 @@ describe('checkbox CSS contract', () => {
     expect(focusRingCss).toContain('--focus-ring-width: var(--border-width-md);');
     expect(checkboxCss).toContain('border-radius: var(--border-radius-xs);');
   });
+
+  describe('errorMessage', () => {
+    it('shows the message under the box, describes the checkbox with it, and marks it invalid', () => {
+      const { container } = render(
+        <Checkbox label="I've run a conflict check" errorMessage="Run a conflict check before you open the matter." />,
+      );
+
+      const checkbox = screen.getByRole('checkbox', { name: "I've run a conflict check" });
+      expect(checkbox).toHaveAccessibleDescription('Run a conflict check before you open the matter.');
+      expect(checkbox).toHaveAttribute('aria-invalid', 'true');
+      const message = screen.getByText('Run a conflict check before you open the matter.');
+      expect(message).toHaveClass(styles.errorMessage);
+      // Outside the label, so it isn't part of the checkbox's name, and after it.
+      expect(message.closest('label')).toBeNull();
+      const label = container.querySelector(`label.${styles.root}`) as HTMLElement;
+      expect(label).toHaveAttribute('data-invalid', 'true');
+      expect(label.compareDocumentPosition(message) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    });
+
+    it('keeps an existing aria-describedby and adds the message after it', () => {
+      render(
+        <>
+          <span id="hint">Required before intake.</span>
+          <Checkbox label="Conflict check" aria-describedby="hint" errorMessage="Run a conflict check." />
+        </>,
+      );
+
+      expect(screen.getByRole('checkbox')).toHaveAccessibleDescription('Required before intake. Run a conflict check.');
+    });
+
+    it('puts className on the wrapper around the label and the message', () => {
+      const { container } = render(<Checkbox label="Conflict check" className="custom" errorMessage="Run a conflict check." />);
+
+      const wrapper = container.firstElementChild as HTMLElement;
+      expect(wrapper.tagName).toBe('DIV');
+      expect(wrapper).toHaveClass(styles.field, 'custom');
+      expect(container.querySelector('label')).not.toHaveClass('custom');
+    });
+
+    it('renders no wrapper or message without errorMessage', () => {
+      const { container } = render(<Checkbox label="Conflict check" className="custom" />);
+
+      expect(container.firstElementChild?.tagName).toBe('LABEL');
+      expect(container.firstElementChild).toHaveClass('custom');
+      expect(screen.getByRole('checkbox')).not.toHaveAttribute('aria-invalid');
+      expect(screen.getByRole('checkbox')).not.toHaveAttribute('aria-describedby');
+    });
+  });
 });

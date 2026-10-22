@@ -180,18 +180,29 @@ describe('ProgressBar', () => {
     expect(progressWidth).toBeLessThan(trackWidth);
   });
 
-  it('shows no circular track at value 0', () => {
-    const { container } = render(<ProgressBar value={0} variant="circular" label="Empty circular" />);
+  it('shows the empty track and its border at value 0, in both variants, and hides only the circular arc', () => {
+    const { container, rerender } = render(<ProgressBar value={0} variant="circular" label="Empty circular" />);
     const progressBar = screen.getByRole('progressbar', { name: 'Empty circular' });
 
     expect(progressBar).toHaveClass(styles.variant_circular);
     expect(progressBar).toHaveAttribute('data-empty', 'true');
-    // The empty-circular rule hides the track ring, its border, and the progress arc.
-    expect(progressBarCss).toMatch(
-      /\.variant_circular\[data-empty='true'\][^{]*\.circularProgress\s*{[^}]*display:\s*none/,
-    );
-    // The track layers are still in the DOM (hidden by CSS, which jsdom does not compute).
     expect(container.querySelector(`.${styles.circularTrackBorder}`)).toBeInTheDocument();
+    expect(container.querySelector(`.${styles.circularTrack}`)).toBeInTheDocument();
+    // jsdom doesn't compute the CSS, so read the rules: the only thing the empty state hides is the
+    // circular progress arc (a zero-length arc with a round cap would draw a dot at 12 o'clock).
+    const emptySelectors = [...progressBarCss.matchAll(/([^{}]*\[data-empty='true'\][^{}]*){([^}]*)}/g)].map(
+      ([, selector]) => selector.replace(/\/\*[\s\S]*?\*\//g, '').trim(),
+    );
+    expect(emptySelectors).toEqual([".variant_circular[data-empty='true'] .circularProgress"]);
+    expect(progressBarCss).toMatch(
+      /\.variant_circular\[data-empty='true'\] \.circularProgress\s*{[^}]*display:\s*none/,
+    );
+
+    // The linear variant shows its bordered track at 0 the same way; its fill is zero-width.
+    rerender(<ProgressBar data-testid="pb" value={0} label="Empty linear" />);
+    expect(screen.getByTestId('pb')).toHaveAttribute('data-empty', 'true');
+    expect(screen.getByTestId('pb')).toHaveStyle({ '--progress-bar-fill': '0' });
+    expect(container.querySelector(`.${styles.remainingTrack}`)).toBeInTheDocument();
   });
 
   it('gives the linear track and progress fill fully rounded corners at every value', () => {

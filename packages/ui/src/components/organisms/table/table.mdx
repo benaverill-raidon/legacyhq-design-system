@@ -148,8 +148,9 @@ export const memberId = (member) => member.id;
 
 <Subsection title="Sizes">
 
-`md`, the default, has 64px rows under 40px headers. `sm` has 40px rows under 32px headers, for
-dense views, and narrows the outer gutter from 24px to 16px. The search and its button follow the
+`md`, the default, has 64px rows under 40px headers and a `heading/lg` title. `sm` has 40px rows
+under 32px headers and a `heading/md` title, for dense views and tables that sit lower in a page,
+and narrows the outer gutter from 24px to 16px. The search and its button follow the
 table's size; size the controls you put in cells to match, as the cell examples below do.
 
 <Example of={TableStories.Sizes} />
@@ -179,8 +180,11 @@ table fills its container, scrolling sideways when the columns don't fit.
 
 <Subsection title="Header and toolbar">
 
-`title` and `description` sit above the table. `title` is an `h2`; set `headingLevel` to fit it into
-the page's outline. The toolbar's first row is a button group at the end: the search, then
+`title` and `description` sit above the table. The title is a section heading: it labels this table
+among other content, such as one table on a dashboard or in a section of a page. A page that's only a
+table uses the page's own header instead, and leaves the Table's `title` out. The title's size follows
+the table's `size` (`heading/lg` at `md`, `heading/md` at `sm`); `headingLevel` sets only its place in
+the page's outline (`h2` by default). The toolbar's first row is a button group at the end: the search, then
 `toolbarActions`, such as filter and settings Icon Buttons, then `actions`, such as a primary Button.
 
 `searchable` shows a search Icon Button. Pressing it opens a 280px search field and focuses it; the

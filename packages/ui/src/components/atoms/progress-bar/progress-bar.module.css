@@ -110,12 +110,11 @@
 }
 
 /*
- * At value 0 the circular variant shows nothing at all - the track ring, its border, and the
- * progress arc are all hidden. The progress arc must be hidden too: a zero-length arc with a round
- * cap would otherwise render as a small dot at 12 o'clock.
+ * At value 0 the circular variant shows its empty track ring and border, as the linear variant
+ * shows its empty bordered track, so a completion summary at 0 still reads as a progress ring.
+ * Only the progress arc is hidden: a zero-length arc with a round cap would otherwise render as a
+ * small dot at 12 o'clock.
  */
-.variant_circular[data-empty='true'] .circularTrackBorder,
-.variant_circular[data-empty='true'] .circularTrack,
 .variant_circular[data-empty='true'] .circularProgress {
   display: none;
 }
@@ -124,8 +123,8 @@
  * The progress arc is capped with rounded ends so the ring reads as a rounded stroke rather than a
  * hard-edged wedge. Matches the rounded arc ends in Figma. A value change eases the arc with
  * --fade-quick, like the linear fill; the dash array transitions too, so reaching or leaving 100
- * (an explicit dash/gap split) still eases. At 0 the whole ring is hidden (above), so arriving at
- * or leaving 0 shows or hides the ring at once.
+ * (an explicit dash/gap split) still eases. At 0 the arc is hidden (above), so arriving at or
+ * leaving 0 shows or hides the arc at once; the track ring stays.
  */
 .circularProgress {
   stroke: var(--color-background-brand-primary-bold-default);

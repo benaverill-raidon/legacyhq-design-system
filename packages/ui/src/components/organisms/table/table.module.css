@@ -443,6 +443,15 @@
   padding-inline: var(--spacing-lg);
 }
 
+/* SM's title is a size smaller (heading/md): the title follows the table's size, not its heading level. */
+.table[data-size='sm'] .title {
+  font-family: var(--typography-heading-md-font-family);
+  font-size: var(--typography-heading-md-font-size);
+  font-weight: var(--typography-heading-md-font-weight);
+  line-height: var(--typography-heading-md-line-height);
+  letter-spacing: var(--typography-heading-md-letter-spacing);
+}
+
 .table[data-size='sm'] .toolbarControls {
   padding-block: var(--spacing-lg) var(--spacing-sm);
   padding-inline: var(--spacing-lg);

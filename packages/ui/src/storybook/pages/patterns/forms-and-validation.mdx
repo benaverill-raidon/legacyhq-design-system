@@ -37,11 +37,13 @@ export const BILLING = [
 export const sample1 = `<Field label="Billing">
   <Select options={billing} value="flat" onChange={setBilling} />
 </Field>`;
-export const sample2 = `<SectionMessage tone="error" title="Fix 1 field to create the matter">
-  Docket number: enter it as it appears on the court notice.
-</SectionMessage>
+export const sample2 = `<SectionMessage
+  tone="error"
+  title="Fix 1 field to create the matter"
+  errors={[{ label: 'Docket number', message: 'Enter it as it appears on the court notice.', targetId: 'docket' }]}
+/>
 <Field label="Docket number" state="error" message="Enter the docket number as it appears on the court notice, such as MER-L-001482-26.">
-  <TextField invalid defaultValue="1482" />
+  <TextField id="docket" invalid defaultValue="1482" />
 </Field>`;
 export const sample3 = `<SectionMessage tone="error" title="The form has errors">
   Check your entries and try again.
@@ -115,7 +117,7 @@ Two questions settle most of it:
     situation="Any number of options from a short set, or a single yes or no saved with the form."
     cells={[
       <>Checkbox Group’s legend and <Code>description</Code> for a set; a single Checkbox’s own <Code>label</Code>.</>,
-      <>Checkbox Group’s <Code>errorMessage</Code>, with its <Code>invalid</Code>. A single Checkbox has <Code>invalid</Code> but no message: connect one with <Code>aria-describedby</Code>.</>,
+      <>Checkbox Group’s <Code>errorMessage</Code>, with its <Code>invalid</Code>. A single Checkbox’s own <Code>errorMessage</Code>, which marks it invalid too.</>,
     ]}
   >
     <DocLink to="Components/Forms/Checkbox" />
@@ -128,7 +130,7 @@ Two questions settle most of it:
   </Choice>
   <Choice
     situation="A value set by feel, or a low and a high bound, where the exact number doesn’t matter."
-    cells={[<>Its own <Code>label</Code>.</>, 'None: it has no invalid state or message.']}
+    cells={['Field, or its own label.', <>The same as Text Field: Field’s <Code>state="error"</Code> also shows the slider’s error colors.</>]}
   >
     <DocLink to="Components/Forms/Slider" />
   </Choice>
@@ -147,7 +149,7 @@ Two questions settle most of it:
   </Choice>
   <Choice
     situation="One value changed where it’s shown, outside a form: a matter’s name, one detail."
-    cells={[<>The Key Value Pair or Field around it, or <Code>aria-label</Code>.</>, 'None of its own. Leaving the field confirms the draft.']}
+    cells={[<>The Key Value Pair or Field around it, or <Code>aria-label</Code>.</>, <>Its own <Code>validate</Code>: a rejected draft stays in the field, with the message under it.</>]}
   >
     <DocLink to="Components/Forms/Inline Edit" />
   </Choice>
@@ -175,7 +177,7 @@ Two questions settle most of it:
 Field marks one control with `state`. `error` colors the message, adds a status icon, and sets
 `aria-invalid` on the control; `success` confirms a check passed. Field doesn't change the control's
 border, so pair `state="error"` with the control's own `invalid`. Radio Group and Checkbox Group take
-`invalid` and `errorMessage` instead. The table is read from Field's TypeScript.
+`invalid` and `errorMessage` instead, and a single Checkbox takes its own `errorMessage`. The table is read from Field's TypeScript.
 
 <ToneMatrix components={['field']} prop="state" />
 
@@ -197,7 +199,7 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
 
 <Example
   of={Stories.OutsideAForm}
-  caption="No form needed. Inline Edit changes one value where it's shown, and a Switch applies a setting as soon as it's flipped, showing it's saving while it does."
+  caption="No form needed. Inline Edit changes one value where it's shown, and rejects a docket number in the wrong format with validate. A Switch applies a setting as soon as it's flipped, showing it's saving while it does."
 />
 
 </Section>
@@ -217,7 +219,8 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
   it's fixed. Field doesn't validate and Form leaves the checks to you, so your code follows the
   rule: set `state`, `message`, and `invalid` from it.
 - **Show a failed submit at the top and at each field.** Put a Section Message with
-  `tone="error"` at the top of the form, naming each field that needs fixing and linking to it.
+  `tone="error"` at the top of the form, with `errors` naming each field that needs fixing, in the
+  order of the form; each is a link that moves focus to the field.
   Each field shows its own error. Don't show only one or the other. The summary is a live region, so
   change it on the next submit, not on every keystroke.
 - **Write each error as what to do.** "Enter the client's first and last name", not "Invalid input."
@@ -229,9 +232,9 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
   keeps its size and label, and ignores clicks. Don't disable it or swap the label for "Saving…".
 - **Confirm a save the way any message confirms.** A toast for a save that worked; a failure that
   needs fixing stays on the page. See <DocLink to="Patterns/Messages and Feedback" />.
-- **Edit one value in place when it doesn't need a form.** Inline Edit has no error state, and
-  leaving the field confirms the draft, so a value that needs a check that can fail belongs in a
-  form, where Field can show the error.
+- **Edit one value in place when it doesn't need a form.** Give Inline Edit a `validate` when a draft
+  can be wrong: it rejects the draft on Enter, the confirm button, or leaving the field, and keeps it
+  in the field with the message under it. Several values that are checked together belong in a form.
 
 </Section>
 
@@ -246,8 +249,8 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
 - No component moves focus when a submit fails. Move it to the summary yourself: Section Message
   takes a `ref` and `tabIndex={-1}`. It's a polite live region, but a message added with its content
   already in it may not be read out as it appears, so move focus to it rather than rely on that.
-- Link each error in the summary to its field, and move focus to the field. The field then reads
-  its label and its error.
+- Section Message's `errors` link each error in the summary to its field and move focus to it. The
+  field then reads its label and its error.
 - A loading Button sets `aria-busy`, and its label stays its accessible name.
 - Form is a landmark only when it's named, and its title and section titles aren't headings. Pass
   `aria-label` or `aria-labelledby` if people should find it by landmark, and put the page's own
@@ -285,14 +288,16 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
   </Field>
 </Dont>
 <Do
-  caption="Name what needs fixing in the summary, and say what to do at the field."
+  caption="Name what needs fixing in the summary, linked to the field, and say what to do at the field."
   code={sample2}
 >
-  <SectionMessage tone="error" title="Fix 1 field to create the matter">
-    Docket number: enter it as it appears on the court notice.
-  </SectionMessage>
+  <SectionMessage
+    tone="error"
+    title="Fix 1 field to create the matter"
+    errors={[{ label: 'Docket number', message: 'Enter it as it appears on the court notice.', targetId: 'forms-do-docket' }]}
+  />
   <Field label="Docket number" state="error" message="Enter the docket number as it appears on the court notice, such as MER-L-001482-26.">
-    <TextField invalid defaultValue="1482" />
+    <TextField id="forms-do-docket" invalid defaultValue="1482" />
   </Field>
 </Do>
 <Dont

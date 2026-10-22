@@ -44,6 +44,8 @@ Do not use Checkbox when:
 - Support native form behavior.
 - Support keyboard interaction through the native input.
 - Use `aria-invalid` when invalid.
+- A single Checkbox's `errorMessage` is shown under the box, outside the label, added to
+  `aria-describedby`, and sets `aria-invalid`.
 - Use `aria-required` when required if needed, while preserving native `required` behavior where appropriate.
 - Support `aria-label` or `aria-labelledby` when no visible label is provided.
 - Use `aria-checked="mixed"` for indeterminate state if needed.
@@ -96,4 +98,5 @@ onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>)
   `requiredLabel` text to its legend.
 - A disabled Checkbox Group shows every checkbox inside it as disabled, from `options` or `children`.
 - Horizontal Checkbox Groups put `spacing-lg` between options.
-- Ensure invalid state is not communicated by color alone when an error message exists nearby.
+- Ensure invalid state is not communicated by color alone: give a single Checkbox `errorMessage`, and a
+  group its own `errorMessage`.

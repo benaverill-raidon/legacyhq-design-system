@@ -95,7 +95,7 @@ Use when horizontal space is constrained or the indicator is paired with a compa
 - Use `stroke-dasharray` and `stroke-dashoffset`, or an equivalent SVG implementation.
 - The progress arc is inset within the track ring by the pad (4px, every size) on both radial edges, matching the linear inset, so a light gap of track shows around the fill.
 - The progress arc is capped with rounded ends (`stroke-linecap: round`) and carries no border.
-- At value 0, render nothing: hide the track ring and its border.
+- At value 0, draw the empty track ring and its border, and hide only the progress arc (a zero-length arc with a round cap would show as a dot at 12 o'clock). This matches the linear variant, which shows its empty bordered track at 0.
 - Do not use images generated from Figma.
 
 ## Sizes
@@ -138,7 +138,7 @@ Support any numeric value, not only the Figma demonstration values `0`, `10`, `2
 At `0`:
 
 - linear renders only the remaining track
-- circular renders nothing (the track ring and its border are hidden)
+- circular renders only the track ring and its border (the progress arc is hidden)
 
 At `100`:
 
@@ -220,7 +220,7 @@ Do not make the component focusable. Do not add keyboard interaction. Decorative
 - No Figma-exported bitmap or SVG assets.
 - No hardcoded colors.
 - No interactive thumb or drag behavior.
-- Value changes ease with `--fade-quick` (the linear fill's inline size; the circular arc's dash offset and dash array), matching Progress Tracker. Never a spring or movement recipe: progress is a state change, not physical movement. No transition under `prefers-reduced-motion: reduce`. At value 0 the circular ring is hidden, so reaching or leaving 0 shows or hides it at once.
+- Value changes ease with `--fade-quick` (the linear fill's inline size; the circular arc's dash offset and dash array), matching Progress Tracker. Never a spring or movement recipe: progress is a state change, not physical movement. No transition under `prefers-reduced-motion: reduce`. At value 0 the circular progress arc is hidden, so reaching or leaving 0 shows or hides the arc at once; the track ring stays.
 - Forward the root ref.
 - Preserve native `data-*` and `aria-*` attributes.
 - Circular progress must scale cleanly without raster artifacts.

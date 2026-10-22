@@ -36,9 +36,11 @@ describe('Roadmap cites the components', () => {
     expect(code).not.toMatch(/aria-live/);
   });
 
-  it('Progress Bar draws no ring at 0', () => {
-    expect(source('atoms/progress-bar/progress-bar.module.css')).toMatch(/\.variant_circular\[data-empty='true'\] \.circularTrackBorder,/);
-    expect(source('atoms/progress-bar/progress-bar.mdx')).toMatch(/the\s+circular ring isn't drawn at all/);
+  it('Progress Bar shows the empty ring at 0: the track, with no arc', () => {
+    const css = source('atoms/progress-bar/progress-bar.module.css');
+    expect(css).toMatch(/\.variant_circular\[data-empty='true'\] \.circularProgress \{\s*display: none;/);
+    expect(css).not.toMatch(/\[data-empty='true'\] \.circularTrack/);
+    expect(source('atoms/progress-bar/progress-bar.mdx')).toMatch(/At 0 both variants show only their empty track/);
   });
 
   it('Progress Tracker is position in a sequence, for a guided flow, not completion', () => {
@@ -69,7 +71,7 @@ describe('Roadmap cites the components', () => {
 
   it("Label has no icon slot", () => {
     expect(source('atoms/label/label.types.ts')).not.toMatch(/icon/i);
-    expect(source('atoms/label/label.mdx')).toMatch(/It has no border, icon, or remove control\./);
+    expect(source('atoms/label/label.mdx')).toMatch(/It has no border, icon, or remove control, by design/);
   });
 
   it('a single Select shows only the chosen label; option icons are in the rows and on multi-select chips', () => {

@@ -10,7 +10,7 @@ Molecule
 
 ### Related Components
 - Text Field, Text Area, Select (the controls Field wraps most often), plus Rich Text Area, Date
-  Picker, Time Picker, and Date Time Picker, which also take its wiring
+  Picker, Time Picker, Date Time Picker, Slider, and Slider Range, which also take its wiring
 - Label (the standalone pill/overline label atom - distinct from Field's built-in form label)
 - Inline Message, Section Message (standalone messages - distinct from Field's per-control message)
 
@@ -112,10 +112,11 @@ No - it's `aria-hidden`. The forwarded native `required` is what conveys the req
 ### What must the consumer still do?
 Set the control's own visual error prop (e.g. `<TextField invalid />`) alongside `state="error"` -
 Field sets `aria-invalid` but not the control's border. (Select, the date/time pickers, and Rich
-Text Area treat an incoming `aria-invalid` as `invalid`, so their border follows; Text Field and
-Text Area need `invalid`.) Match `size` on Field and the control.
+Text Area treat an incoming `aria-invalid` as `invalid`, so their border follows, and Slider shows
+its error colors for it; Text Field and Text Area need `invalid`.) Match `size` on Field and the control.
 Show errors by the system's rule: check on submit, show every error at once with a summary at the
-top of the form, then update each field's error as its value changes.
+top of the form (a Section Message whose `errors` link to each field), then update each field's
+error as its value changes.
 
 ---
 

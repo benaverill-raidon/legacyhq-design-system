@@ -93,12 +93,13 @@ describe('icon usage', () => {
   it('finds which components import library icons', () => {
     const usage = iconUsage(componentTsx);
     expect(usage.LinkExternalIcon).toEqual(['Link']);
-    expect(usage.StatusErrorIcon).toEqual(['Banner', 'Field', 'Inline Message', 'Modal Dialog', 'Section Message', 'Toast']);
+    expect(usage.StatusErrorIcon).toEqual(['Banner', 'Field', 'Inline Edit', 'Inline Message', 'Modal Dialog', 'Section Message', 'Toast']);
     expect(iconUsers(componentTsx)).toHaveLength(20);
   });
 
   it('cites the components that use sm', () => {
     expect(fixedSizes(componentTsx, 'sm')).toEqual([
+      { component: 'Inline Edit', icon: 'StatusErrorIcon' },
       { component: 'Menu', icon: 'CloseIcon' },
       { component: 'Table', icon: 'ArrowUpIcon' },
       { component: 'Table', icon: 'ArrowDownIcon' },

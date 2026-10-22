@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import { useState } from 'react';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
@@ -32,7 +34,17 @@ function bodyRowNames() {
 
 afterEach(cleanup);
 
+const tableCss: string = readFileSync('packages/ui/src/components/organisms/table/table.module.css', 'utf8').replace(/\r\n/g, '\n');
+
 describe('Table', () => {
+  it("sizes the title with the table's size, not its heading level", () => {
+    // md: heading/lg on the title itself; sm: heading/md, whatever headingLevel says.
+    expect(tableCss).toMatch(/\.title \{[^}]*--typography-heading-lg-font-size/);
+    expect(tableCss).toMatch(/\.table\[data-size='sm'\] \.title \{[^}]*--typography-heading-md-font-size/);
+    render(<Table columns={columns} data={rows} getRowId={getRowId} size="sm" title="Matters" headingLevel={4} />);
+    expect(screen.getByRole('heading', { name: 'Matters', level: 4 })).toBeInTheDocument();
+  });
+
   it('renders columns and data, named by its caption', () => {
     render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" />);
 

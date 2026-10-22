@@ -137,8 +137,8 @@ export const Sizes: Story = {
 
 /**
  * The three system states every progress value falls into. Empty and complete are the two exact
- * boundaries where the rendering previously showed a stray sliver - Empty must show no progress
- * fill at all, and Complete must show a fully closed ring with no gap.
+ * boundaries where the rendering previously showed a stray sliver - Empty shows only the bordered
+ * track (bar or ring) with no progress fill at all, and Complete shows a fully closed ring with no gap.
  */
 export const States: Story = {
   render: () => (

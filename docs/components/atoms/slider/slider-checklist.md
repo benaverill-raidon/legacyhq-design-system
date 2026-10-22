@@ -80,7 +80,7 @@ SliderRange:
 
 - orientation: `horizontal`, `vertical`
 - size: `xs`, `sm`, `md`
-- state: default, hover, press, focus, disabled
+- state: default, hover, press, focus, disabled, invalid
 - showSteps: boolean
 - showValue: boolean
 
@@ -92,6 +92,9 @@ Slider components must:
 - support keyboard interaction
 - support screen readers
 - support disabled state
+- support `invalid`: the error colors and `aria-invalid` on the handle(s); an `aria-invalid` from
+  Field does the same
+- work inside Field: its label, message, error, and required reach the handle(s)
 - expose min, max, step, and current value through native inputs
 - support visible label association when label is provided
 - support `aria-label` or `aria-labelledby` when no visible label is rendered

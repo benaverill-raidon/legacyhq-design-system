@@ -134,6 +134,7 @@ export interface SliderBaseProps {
   orientation?: SliderOrientation;
   size?: SliderSize;
   disabled?: boolean;
+  invalid?: boolean;
   showSteps?: boolean;
   steps?: number[];
   showValue?: boolean;
@@ -170,6 +171,12 @@ export interface SliderRangeProps
     value: [number, number],
     event: React.ChangeEvent<HTMLInputElement>
   ) => void;
+  /** The lower handle's id; the other ids start with it. */
+  id?: string;
+  /** Go to both handles, not the group (what Field passes). */
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | 'true' | 'false' | 'grammar' | 'spelling';
+  required?: boolean;
 }
 ```
 
@@ -392,7 +399,18 @@ focus ring -> shared Focus Ring primitive/pattern
 
 disabled active track/handle -> color/content/disabled or disabled token
 disabled inactive track -> color/background/disabled
+
+invalid handle -> color/background/error/bold/default (hover, press: bold/hover, bold/press)
+invalid active track -> color/background/error/bold/default
+invalid inactive track -> color/background/error/default/default
+invalid stops -> color/content/error off the fill, color/background/error/default/default on it
 ```
+
+The root sets these part colors as its own custom properties (`--slider-handle-visual-color`,
+`--slider-handle-hover-color`, `--slider-handle-press-color`, `--slider-track-active-color`,
+`--slider-track-inactive-color`, `--slider-step-color`, `--slider-step-active-color`);
+`[data-invalid='true']` swaps them to the error tokens. Disabled sets its colors on the parts
+directly, so it wins over invalid.
 
 Use current generated token names. If the project uses `text` instead of `content`, use the generated names.
 
@@ -429,6 +447,11 @@ For `SliderRange`:
 - allow override through `minLabel` and `maxLabel` (translatable)
 - the root is a `group` named by `label`, `aria-labelledby`, or `aria-label`, and each handle's
   name starts with that name, then `minLabel` or `maxLabel`
+- `aria-describedby`, `aria-invalid`, and `required` go to both handles, not the group; `id` is the
+  lower handle's, so a label pointing at it (Field's) focuses that handle
+
+`invalid` (or `aria-invalid="true"`, as Field passes) sets `aria-invalid` on the handle(s) and the
+error look. Field wraps every slider: leave out the slider's own `label`.
 
 ## Storybook Structure
 
@@ -458,7 +481,8 @@ endpoint dot at 0 and 100 regardless of size.
 
 ### States
 
-Show enabled/hover/press/focus/disabled matching Figma's variants, pinned with
+Show enabled/hover/press/focus/disabled matching Figma's variants, plus invalid (code-only; no
+Figma variant yet), pinned with
 `data-preview-state`, plus a live example to verify by hand that clicking or dragging the handle
 never shows a focus ring on its own - only real keyboard focus does.
 
@@ -496,6 +520,10 @@ Test:
 - showSteps rendering
 - showValue behavior
 - custom className
+- `invalid`: `aria-invalid` on the handle(s), `data-invalid` on the root, not on the range's group
+- error-token CSS contract for invalid
+- in a Field: label, description, `aria-invalid`, and `required` reach the input (both handles on
+  SliderRange); the label points at the lower handle; `id` keeps prefixing the range's other ids
 
 ## Engineering Requirements
 

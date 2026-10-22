@@ -14,10 +14,6 @@
     {
       "kind": "bug",
       "summary": "The hover-only value bubble floats over the label."
-    },
-    {
-      "kind": "gap",
-      "summary": "No `invalid` state or message, and Field's page doesn't list it among the controls it wires."
     }
   ],
   "purpose": "Numeric range selection.",
@@ -81,7 +77,8 @@
     "hover",
     "press",
     "focus",
-    "disabled"
+    "disabled",
+    "invalid"
   ],
   "slots": [
     "label"
@@ -104,7 +101,9 @@
     "Supports minDistance.",
     "SliderRange submits the lower value under minName and the upper under maxName; they default to name and `${name}Max`.",
     "showValue keeps the value bubble showing and makes room for it above the track, so it never overlaps the label.",
-    "SliderRange is a group named by label, aria-labelledby, or aria-label; each handle's name is that name plus minLabel or maxLabel."
+    "SliderRange is a group named by label, aria-labelledby, or aria-label; each handle's name is that name plus minLabel or maxLabel.",
+    "invalid (or an aria-invalid of true, which Field passes for an error) sets data-invalid on the root, which swaps the handle, track, and step-dot custom properties to the error colors, and sets aria-invalid on the handle (both handles on SliderRange). Disabled colors win.",
+    "Field wires Slider like its other controls: its id, aria-labelledby, aria-describedby, aria-invalid, and required reach the input. On SliderRange, id is the lower handle's id (the other ids start with it: <id>-max, <id>-range), aria-labelledby names the group, and aria-describedby, aria-invalid, and required go to both handles, not the group. required never blocks a submit: a range always has a value."
   ],
   "compositionRules": [],
   "contentRules": [],

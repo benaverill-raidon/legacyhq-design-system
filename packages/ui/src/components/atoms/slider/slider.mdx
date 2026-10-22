@@ -130,6 +130,23 @@ In a form, the lower value submits under `name` and the upper under `name` with 
 
 </Subsection>
 
+<Subsection title="Errors and Field">
+
+`invalid` draws the track and the handle in the error colors and sets `aria-invalid` on the handle,
+or on both handles of Slider Range. Pair it with a message that says what to change.
+
+Field wraps a Slider like any other form control: leave out the Slider's own `label` and let Field's
+label name it, its `message` describe it, `required` show the `*`, and `state="error"` mark it. Field
+passes `aria-invalid` for an error, and Slider shows the error look for that too, as Select and the
+pickers do. On Slider Range, Field's label names the group and starts each handle's name; its `id`
+goes to the lower handle, so clicking the label focuses it; and the message, the error, and
+`required` go to both handles. A slider always has a value, so `required` only adds the `*`: the
+browser never stops a submit for it.
+
+<Example of={SliderStories.InField} caption="A Slider with Field's helper text, and a required Slider Range with Field's error." />
+
+</Subsection>
+
 <Subsection title="Pointer and focus">
 
 Press anywhere on the track and the handle jumps there; on Slider Range, the nearer handle does.
@@ -182,7 +199,11 @@ than the input, which fills the whole control. Hover and press change the handle
 - Slider Range renders two range inputs inside a `group`. The range's name comes from `label`, or
   from `aria-labelledby` or `aria-label` when there's no visible label; it names the group, and each
   handle is named by it and then its own `minLabel` or `maxLabel` ("Minimum value" and "Maximum
-  value" by default, so pass translations). Other attributes go to the root `div`.
+  value" by default, so pass translations). `aria-describedby`, `aria-invalid`, and `required` go to
+  both handles, since each is focused on its own; other attributes go to the root `div`.
+- `invalid` sets `aria-invalid` on the handle (both, on Slider Range), and an `aria-invalid` passed
+  in shows the error look too. The color isn't the message: pair it with text, such as Field's error
+  message, which Field connects with `aria-describedby`.
 - The track, steps, and drawn handle are hidden from assistive technology. The value bubble is a
   native `output` linked to its input.
 - `disabled` is the native attribute: the slider leaves the tab order and ignores the pointer.
@@ -227,8 +248,9 @@ fill starts at zero, or at the nearer end when zero is outside the range.
 Every token Slider's stylesheet uses, by family, with the property it sets and when. All three
 sliders share the stylesheet, and "base" is a horizontal `md` slider with no state. The stylesheet
 sets several part values as its own custom properties on the root, so they read as base too: the
-first four color rows are the handle, active track, inactive track, and step dot colors, and
-`size-025` is the handle's width while pressed.
+handle's colors at rest, on hover, and pressed, the active and inactive track, and the step dots on
+and off the fill; `size-025` is the handle's width while pressed. Invalid sets the same custom
+properties to the error colors.
 
 <TokensTable id="slider" />
 
@@ -241,7 +263,7 @@ first four color rows are the handle, active track, inactive track, and step dot
 - <DocLink to="Components/Forms/Text Field" /> for an exact number.
 - <DocLink to="Components/Forms/Radio" /> for a few named options.
 - <DocLink to="Components/Feedback/Progress Bar" /> to show progress rather than set a value.
-- <DocLink to="Components/Forms/Field" /> to label a Text Field used instead of a slider.
+- <DocLink to="Components/Forms/Field" /> to label a slider and show its helper text or error.
 
 </Related>
 

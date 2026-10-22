@@ -48,6 +48,24 @@
 }
 
 /*
+ * The error summary's list: one bulleted line per field, its link then what to do, in the
+ * description's type. The link brings its own color and weight.
+ */
+.errors {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding-inline-start: var(--spacing-lg);
+  color: var(--color-content-default);
+  font-family: var(--typography-body-md-font-family);
+  font-size: var(--typography-body-md-font-size);
+  font-weight: var(--typography-body-md-font-weight);
+  line-height: var(--typography-body-md-line-height);
+  letter-spacing: var(--typography-body-md-letter-spacing);
+  list-style: disc;
+}
+
+/*
  * Positioning wrapper for the actions row. Multiple actions are laid out by the ButtonGroup the
  * caller passes in (which owns the row direction + gap); this keeps a matching gap so a couple of
  * bare actions still space correctly, and wraps on narrow widths.

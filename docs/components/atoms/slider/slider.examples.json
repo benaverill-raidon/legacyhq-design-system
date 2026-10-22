@@ -15,6 +15,14 @@
     {
       "name": "Range in a form, with its own field names",
       "jsx": "<SliderRange label=\"Budget\" name=\"budget\" minName=\"budgetFrom\" maxName=\"budgetTo\" defaultValue={[20, 80]} />"
+    },
+    {
+      "name": "In a Field, with an error",
+      "jsx": "<Field label=\"Fee range\" required state=\"error\" message=\"Set a range at least $500 wide.\"><SliderRange min={0} max={5000} step={100} defaultValue={[1000, 1200]} /></Field>"
+    },
+    {
+      "name": "Invalid, with its own label",
+      "jsx": "<Slider label=\"Confidence\" invalid aria-describedby=\"confidence-error\" />"
     }
   ]
 }

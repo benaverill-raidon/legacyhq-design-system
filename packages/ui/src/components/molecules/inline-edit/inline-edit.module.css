@@ -1,13 +1,17 @@
 /*
  * Column layout: the confirm/cancel row sits below the field, not beside it, so the field never
- * has to shrink to make room for the actions while editing - per explicit design feedback.
+ * has to shrink to make room for the actions while editing - per explicit design feedback. A
+ * one-column grid: the field in the first row, `validate`'s error message in the second. Actions
+ * placed beside the field (end placement, editable cells) take the first row as their containing
+ * block, so a message below doesn't move them.
  */
 .root {
   --inline-edit-control-height: var(--size-control-md);
+  --inline-edit-text-inset: var(--spacing-sm);
 
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
   position: relative;
   inline-size: 100%;
 }
@@ -18,10 +22,47 @@
 
 .root[data-control-size='lg'] {
   --inline-edit-control-height: var(--size-control-lg);
+  --inline-edit-text-inset: var(--spacing-md);
 }
 
 .content {
+  grid-row: 1;
+  grid-column: 1;
   inline-size: 100%;
+}
+
+/*
+ * `validate`'s error message, in Field's error look: body-sm in the error color with the small
+ * status icon, 4px below the field. Indented like Field's inline context, to line up with the text
+ * inside the inline control (8px for sm and md, 12px for lg).
+ */
+.messageRegion {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-075);
+  padding-top: var(--spacing-xs);
+  padding-inline-start: var(--inline-edit-text-inset);
+  color: var(--color-content-error);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
+}
+
+.messageIcon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.messageText {
+  min-inline-size: 0;
 }
 
 /*
@@ -61,7 +102,10 @@
  * width. Logical insets support both text directions; auto block margins center the actions.
  * Containers using this placement need room for the actions outside the field.
  */
+/* Both lines are explicit: an absolutely positioned item's `auto` line is the container's edge. */
 .placement_end .actions {
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
   inset-block: 0;
   inset-inline-start: calc(100% + var(--spacing-sm));
   inset-inline-end: auto;
@@ -85,6 +129,8 @@
 }
 
 .root[data-editable-cell] .actions {
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
   position: absolute;
   inset-inline-end: var(--spacing-sm);
   inset-block-start: 50%;

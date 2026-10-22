@@ -22,6 +22,7 @@ const meta = {
     children: { control: false },
     onConfirm: { control: false },
     onCancel: { control: false },
+    validate: { control: false },
     className: { control: false },
   },
 } satisfies Meta<typeof InlineEdit>;
@@ -144,6 +145,51 @@ export const Content: Story = {
           <InlineEdit value="Q3 Planning" confirmLabel="Save title" cancelLabel="Discard changes">
             <TextField context="inline" aria-label="Title" />
           </InlineEdit>
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+/** Docket numbers look like MER-L-001482-26: county, court, number, year. */
+const DOCKET = /^[A-Z]{3}-[A-Z]-\d{6}-\d{2}$/;
+
+function checkDocket(value: string) {
+  if (!value.trim()) return 'Enter the docket number.';
+  if (!DOCKET.test(value.trim())) return 'Enter it as it appears on the court notice, such as MER-L-001482-26.';
+  return undefined;
+}
+
+function ValidatedDocketExample({ actionPlacement }: { actionPlacement?: 'below' | 'end' }) {
+  const [value, setValue] = useState('MER-L-001482-26');
+
+  return (
+    <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} actionPlacement={actionPlacement} confirmLabel="Save docket number">
+      <TextField context="inline" aria-label="Docket number" />
+    </InlineEdit>
+  );
+}
+
+/**
+ * `validate` checks the draft on every confirm. Change the docket number to "1482" and press Enter,
+ * click confirm, or click away: the field stays in edit mode with the error under it. Fix it and the
+ * error clears as you type; Escape still cancels.
+ */
+export const Validation: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Actions below (the default)">
+        <Cell label="Rejects a docket number in the wrong format">
+          <div style={fieldStyle}>
+            <ValidatedDocketExample />
+          </div>
+        </Cell>
+      </Group>
+      <Group title="Actions at the end">
+        <Cell label="The buttons stay level with the field while the error shows">
+          <div style={fieldStyle}>
+            <ValidatedDocketExample actionPlacement="end" />
+          </div>
         </Cell>
       </Group>
     </div>

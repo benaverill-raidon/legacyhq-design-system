@@ -2,7 +2,6 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../../components/atoms/button';
 import { Checkbox, CheckboxGroup } from '../../../components/atoms/checkbox';
-import { Link } from '../../../components/atoms/link';
 import { RadioGroup } from '../../../components/atoms/radio';
 import { Switch } from '../../../components/atoms/switch';
 import { Field } from '../../../components/molecules/field';
@@ -143,9 +142,9 @@ export const MatterIntake: Story = {
   },
 };
 
-type Values = { clientName: string; matterName: string; matterType: string | null; opened: Date | null; conflicts: string[] };
+type Values = { clientName: string; matterName: string; matterType: string | null; opened: Date | null; conflictCheck: boolean };
 
-const EMPTY: Values = { clientName: 'Rivera', matterName: '', matterType: null, opened: null, conflicts: [] };
+const EMPTY: Values = { clientName: 'Rivera', matterName: '', matterType: null, opened: null, conflictCheck: false };
 
 type FieldKey = keyof Values;
 type FieldError = { key: FieldKey; label: string; message: string };
@@ -157,7 +156,7 @@ function check(values: Values): FieldError[] {
     [!values.matterName.trim(), { key: 'matterName', label: 'Matter name', message: 'Enter a name for the matter, such as Rivera v. Atlantic Insurance.' }],
     [!values.matterType, { key: 'matterType', label: 'Matter type', message: 'Choose the type of matter.' }],
     [!values.opened, { key: 'opened', label: 'Opened', message: 'Choose the date the matter was opened.' }],
-    [values.conflicts.length === 0, { key: 'conflicts', label: 'Conflict check', message: 'Run a conflict check before you open the matter.' }],
+    [!values.conflictCheck, { key: 'conflictCheck', label: 'Conflict check', message: 'Run a conflict check before you open the matter.' }],
   ];
   return failing.filter(([fails]) => fails).map(([, error]) => error);
 }
@@ -174,7 +173,7 @@ export const SubmitAndValidate: Story = {
       matterName: `${prefix}-matter`,
       matterType: `${prefix}-type`,
       opened: `${prefix}-opened`,
-      conflicts: `${prefix}-conflicts`,
+      conflictCheck: `${prefix}-conflict-check`,
     };
     const [values, setValues] = React.useState<Values>(EMPTY);
     const [submitted, setSubmitted] = React.useState(false);
@@ -194,12 +193,6 @@ export const SubmitAndValidate: Story = {
     React.useEffect(() => {
       if (attempt > 0) summary.current?.focus();
     }, [attempt]);
-
-    const focusField = (event: React.MouseEvent, key: FieldKey) => {
-      event.preventDefault();
-      const target = key === 'conflicts' ? document.querySelector<HTMLInputElement>(`input[name="${ids.conflicts}"]`) : document.getElementById(ids[key]);
-      target?.focus();
-    };
 
     const reset = () => {
       setValues(EMPTY);
@@ -236,18 +229,8 @@ export const SubmitAndValidate: Story = {
                 tabIndex={-1}
                 tone="error"
                 title={`Fix ${summaryErrors.length === 1 ? '1 field' : `${summaryErrors.length} fields`} to create the matter`}
-              >
-                <ul className={styles.errorList}>
-                  {summaryErrors.map(({ key, label, message }) => (
-                    <li key={key}>
-                      <Link href={`#${ids[key]}`} emphasis="default" onClick={(event) => focusField(event, key)}>
-                        {label}
-                      </Link>
-                      : {message}
-                    </li>
-                  ))}
-                </ul>
-              </SectionMessage>
+                errors={summaryErrors.map(({ key, label, message }) => ({ label, message, targetId: ids[key] }))}
+              />
             </FormSection>
           ) : null}
           <FormSection title="Client">
@@ -284,15 +267,13 @@ export const SubmitAndValidate: Story = {
             <Field label="Opened" required state={errorFor('opened') ? 'error' : 'default'} message={errorFor('opened')}>
               <DatePicker id={ids.opened} invalid={Boolean(errorFor('opened'))} value={values.opened} onChange={(date) => set('opened', date)} today={TODAY} />
             </Field>
-            <CheckboxGroup
-              label="Conflict check"
+            <Checkbox
+              id={ids.conflictCheck}
+              label="I've run a conflict check and found no conflicts"
               required
-              name={ids.conflicts}
-              invalid={Boolean(errorFor('conflicts'))}
-              errorMessage={errorFor('conflicts')}
-              value={values.conflicts}
-              onValueChange={(next) => set('conflicts', next)}
-              options={[{ value: 'cleared', label: "I've run a conflict check and found no conflicts" }]}
+              errorMessage={errorFor('conflictCheck')}
+              checked={values.conflictCheck}
+              onCheckedChange={(checked) => set('conflictCheck', checked)}
             />
           </FormSection>
           <FormFooter>
@@ -310,7 +291,15 @@ export const SubmitAndValidate: Story = {
   },
 };
 
-/** One value changed where it's shown, and a setting that applies as soon as it's flipped: no form. */
+/** Docket numbers look like MER-P-2026-0417 here: county, court, year, number. */
+const checkDocket = (value: string) =>
+  /^[A-Z]{3}-[A-Z]-\d{4}-\d{4}$/.test(value.trim()) ? undefined : 'Enter it as it appears on the court notice, such as MER-P-2026-0417.';
+
+/**
+ * One value changed where it's shown, and a setting that applies as soon as it's flipped: no form.
+ * The docket number is checked with Inline Edit's `validate`: a draft in the wrong format stays in
+ * the field with its error.
+ */
 export const OutsideAForm: Story = {
   render: function Render() {
     const [matterName, setMatterName] = React.useState('Lee Living Trust');
@@ -333,7 +322,7 @@ export const OutsideAForm: Story = {
             </InlineEdit>
           </KeyValuePair>
           <KeyValuePair label="Docket number" underline>
-            <InlineEdit value={caseNumber} onConfirm={setCaseNumber} actionPlacement="end" confirmLabel="Save docket number">
+            <InlineEdit value={caseNumber} onConfirm={setCaseNumber} validate={checkDocket} actionPlacement="end" confirmLabel="Save docket number">
               <TextField context="inline" aria-label="Docket number" />
             </InlineEdit>
           </KeyValuePair>

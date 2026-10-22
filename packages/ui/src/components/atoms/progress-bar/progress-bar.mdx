@@ -113,8 +113,9 @@ gets thicker. Neither variant sets its own width or shows any text.
 <Subsection title="Value">
 
 `value` runs from 0 to 100. Any other number is clamped, for both the fill and what's announced:
-below 0 and `NaN` show 0, above 100 shows 100. At 0 a linear bar shows only its track, and the
-circular ring isn't drawn at all. At 100 the fill reaches the end of the track and the ring closes.
+below 0 and `NaN` show 0, above 100 shows 100. At 0 both variants show only their empty track, with
+its border: the bar and the ring keep their shape, so a completion summary at 0 still reads as one.
+At 100 the fill reaches the end of the track and the ring closes.
 
 <Example of={ProgressBarStories.States} />
 
@@ -134,8 +135,8 @@ Screen readers announce the value as a percentage. `getValueText` replaces that 
 <Subsection title="Motion">
 
 When `value` changes, the fill eases to its new size with the `fade-quick` motion recipe (150ms).
-With reduced motion it changes at once. Reaching or leaving 0 shows or hides the circular ring at
-once either way.
+With reduced motion it changes at once. Reaching or leaving 0 shows or hides the circular arc at
+once either way; the ring's track stays.
 
 </Subsection>
 

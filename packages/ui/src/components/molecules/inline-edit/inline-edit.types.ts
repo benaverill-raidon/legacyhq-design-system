@@ -20,6 +20,12 @@ export interface InlineEditableProps {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   /** Inside a Table's editable cell, replaced by an edit icon while read-only and removed while editing. */
   iconAfter?: React.ReactNode;
+  /** Set to `true` while `validate` rejects the draft, for the control's error border. Its own `true` wins. */
+  invalid?: boolean;
+  /** Set to `true` while `validate` rejects the draft. Its own value wins. */
+  'aria-invalid'?: boolean | 'true' | 'false' | 'grammar' | 'spelling';
+  /** The error message's id is added after the child's own, while `validate` rejects the draft. */
+  'aria-describedby'?: string;
 }
 
 export interface InlineEditProps {
@@ -30,9 +36,17 @@ export interface InlineEditProps {
   /**
    * Called with the draft when confirmed: by the confirm button, Enter (Ctrl/Cmd+Enter in a
    * textarea), or focus leaving Inline Edit. Leaving focus with an unchanged draft just ends editing
-   * without calling it.
+   * without calling it. With `validate`, it's called only for a draft that passes.
    */
   onConfirm?: (value: string) => void;
+  /**
+   * Checks the draft on every confirm: Enter, the confirm button, or focus leaving Inline Edit. Return
+   * a message to reject it, or `undefined` to accept it. A rejected draft stays in the field, still
+   * editing: the message shows under it in Field's error look, the field gets `aria-invalid`, and
+   * focus stays in the field (or, when focus left, the draft waits there). From then on the message
+   * follows the draft as it changes. Escape and the cancel button still discard it.
+   */
+  validate?: (value: string) => string | undefined;
   /** Called when the cancel button (or Escape) discards the draft and reverts to `value`. */
   onCancel?: () => void;
   /** Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false. */

@@ -23,6 +23,12 @@
       "name": "Custom accessible names for the action buttons",
       "jsx": "<InlineEdit value={value} confirmLabel=\"Save title\" cancelLabel=\"Discard changes\" onConfirm={setValue}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
       "props": { "confirmLabel": "Save title", "cancelLabel": "Discard changes" }
+    },
+    {
+      "name": "Rejecting a draft with validate",
+      "description": "validate runs on every confirm. A returned message keeps the field editing, with the message under it and the field marked invalid; the message then follows the draft until it's fixed.",
+      "jsx": "<InlineEdit value={docket} onConfirm={setDocket} validate={(value) => (/^[A-Z]{3}-[A-Z]-\\d{6}-\\d{2}$/.test(value) ? undefined : 'Enter it as it appears on the court notice, such as MER-L-001482-26.')}>\n  <TextField context=\"inline\" aria-label=\"Docket number\" />\n</InlineEdit>",
+      "props": { "validate": "(value) => string | undefined" }
     }
   ],
   "antiExamples": [
@@ -40,6 +46,11 @@
       "name": "Expecting onConfirm to fire on every keystroke",
       "jsx": "<InlineEdit value={value} onConfirm={(v) => console.log('typed', v)}>\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",
       "reason": "onConfirm only fires when the user commits the edit (clicking confirm or pressing Enter), not per keystroke - the in-progress draft stays internal to Inline Edit."
+    },
+    {
+      "name": "Dropping a bad draft in onConfirm",
+      "jsx": "<InlineEdit value={docket} onConfirm={(value) => { if (DOCKET.test(value)) setDocket(value); }}>\n  <TextField context=\"inline\" aria-label=\"Docket number\" />\n</InlineEdit>",
+      "reason": "Editing has already ended by the time onConfirm runs, so the draft is lost and nobody learns why. Reject it with validate instead."
     }
   ]
 }

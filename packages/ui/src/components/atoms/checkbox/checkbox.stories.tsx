@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Checkbox } from './checkbox';
@@ -60,13 +61,6 @@ const fieldsetStyle: CSSProperties = {
 const legendStyle: CSSProperties = {
   marginBlockEnd: 'var(--spacing-xs)',
   color: 'var(--color-content-subtle)',
-};
-
-// Matches Checkbox Group's errorMessage: body-md in the error color.
-const errorTextStyle: CSSProperties = {
-  margin: 0,
-  font: 'var(--typography-body-md-font-weight) var(--typography-body-md-font-size) / var(--typography-body-md-line-height) var(--typography-body-md-font-family)',
-  color: 'var(--color-content-error)',
 };
 
 const tableStyle: CSSProperties = { width: '100%', borderCollapse: 'collapse' };
@@ -360,6 +354,26 @@ export const GroupVariants: Story = {
   ),
 };
 
+/**
+ * A single Checkbox's `errorMessage`: shown under the box in the error color, read as the checkbox's
+ * description, and marking it invalid. Check the box to see the error clear, as it would once the
+ * value is fixed after a failed submit.
+ */
+export const ErrorMessage: Story = {
+  render: function Render() {
+    const [checked, setChecked] = React.useState(false);
+    return (
+      <Checkbox
+        label="I've run a conflict check for this client"
+        required
+        checked={checked}
+        onCheckedChange={setChecked}
+        errorMessage={checked ? undefined : 'Run a conflict check before you open the matter.'}
+      />
+    );
+  },
+};
+
 /** Difficult states made reproducible outside the application, including a documented anti-pattern. */
 export const EdgeCases: Story = {
   render: () => (
@@ -381,17 +395,13 @@ export const EdgeCases: Story = {
         <Checkbox />
       </section>
 
-      <Group title="Invalid with an adjacent error message">
-        <Cell label="Described by visible text">
-          <div style={{ display: 'grid', gap: 'var(--spacing-xs)' }}>
+      <Group title="Error message in a narrow container">
+        <Cell label="The label and the message both wrap">
+          <div style={{ inlineSize: '200px' }}>
             <Checkbox
-              label="Invalid selection with described error"
-              invalid
-              aria-describedby="checkbox-error"
+              label="I've run a conflict check for this client"
+              errorMessage="Run a conflict check before you open the matter, so nobody on the team is conflicted out."
             />
-            <p id="checkbox-error" style={errorTextStyle}>
-              Select this option before continuing.
-            </p>
           </div>
         </Cell>
       </Group>

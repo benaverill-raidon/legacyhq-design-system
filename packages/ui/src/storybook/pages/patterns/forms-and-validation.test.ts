@@ -49,6 +49,15 @@ describe('Forms and Validation cites', () => {
     expect(message).toMatch(/role = 'status'/);
   });
 
+  it("Section Message's errors: a list of links, each moving focus to its field", () => {
+    expect(membersOf(types('organisms/section-message/section-message.types.ts'), 'SectionMessageProps')).toContain('errors');
+    expect(membersOf(types('organisms/section-message/section-message.types.ts'), 'SectionMessageError')).toEqual(['label', 'message', 'targetId']);
+    const message = source('organisms/section-message/section-message.tsx');
+    expect(message).toMatch(/<ul className=\{styles\.errors\}>/);
+    expect(message).toMatch(/href=\{`#\$\{targetId\}`\}/);
+    expect(message).toMatch(/\(control \?\? target\)\.focus\(\)/);
+  });
+
   it('Radio Group and Checkbox Group: legend, description, errorMessage, and invalid', () => {
     for (const path of ['atoms/radio/radio.types.ts', 'atoms/checkbox/checkbox.types.ts']) {
       const group = membersOf(types(path), path.includes('radio') ? 'RadioGroupProps' : 'CheckboxGroupProps');
@@ -65,11 +74,10 @@ describe('Forms and Validation cites', () => {
     expect(group).not.toMatch(/required=\{required\}/);
   });
 
-  it('a single Checkbox has invalid but no message of its own', () => {
+  it('a single Checkbox has its own errorMessage, which marks it invalid', () => {
     const checkbox = membersOf(types('atoms/checkbox/checkbox.types.ts'), 'CheckboxProps');
-    expect(checkbox).toContain('invalid');
-    expect(checkbox).not.toEqual(expect.arrayContaining(['message']));
-    expect(checkbox).not.toContain('errorMessage');
+    expect(checkbox).toEqual(expect.arrayContaining(['invalid', 'errorMessage']));
+    expect(source('atoms/checkbox/checkbox.tsx')).toMatch(/const invalid = invalidProp \|\| hasError;/);
   });
 
   it("Rich Text Area isn't a native control: no name, and required only as aria-required", () => {
@@ -89,11 +97,19 @@ describe('Forms and Validation cites', () => {
     expect(types('organisms/date-time-picker/date-time-picker.types.ts')).toMatch(/Shows the error border on both fields and sets `aria-invalid` on both inputs\./);
   });
 
-  it('Switch, Slider, and Inline Edit have no invalid state', () => {
+  it('Switch has no invalid state; it shows saving with isLoading', () => {
     expect(membersOf(types('atoms/switch/switch.types.ts'), 'SwitchProps')).not.toContain('invalid');
     expect(membersOf(types('atoms/switch/switch.types.ts'), 'SwitchProps')).toContain('isLoading');
-    expect(types('atoms/slider/slider.types.ts')).not.toMatch(/invalid\??:/);
-    expect(types('molecules/inline-edit/inline-edit.types.ts')).not.toMatch(/invalid\??:/);
+  });
+
+  it("Slider has invalid, and Field's aria-invalid shows its error colors too", () => {
+    expect(membersOf(types('atoms/slider/slider.types.ts'), 'SliderBaseProps')).toContain('invalid');
+    expect(source('atoms/slider/slider.tsx')).toMatch(/const invalid = invalidProp \|\| ariaInvalid === true \|\| ariaInvalid === 'true';/);
+  });
+
+  it("Inline Edit's validate keeps a rejected draft in the field", () => {
+    expect(membersOf(types('molecules/inline-edit/inline-edit.types.ts'), 'InlineEditProps')).toContain('validate');
+    expect(source('molecules/inline-edit/inline-edit.tsx')).toMatch(/const message = validate\?\.\(draft\);\s*if \(message\) \{\s*setError\(message\);/);
   });
 
   it('Inline Edit confirms the draft when focus leaves it', () => {

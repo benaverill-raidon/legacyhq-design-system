@@ -124,7 +124,7 @@ function TaskActions({ task, onStatusChange }: { task: Task; onStatusChange: (ta
       onOpenChange={setOpen}
       showSearch={false}
       size="sm"
-      alignment="right"
+      alignment="end"
       sections={[
         {
           id: 'status',

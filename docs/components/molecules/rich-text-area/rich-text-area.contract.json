@@ -105,6 +105,7 @@
     "Don't re-render it from `value` on every keystroke expecting the editor to follow; it hydrates once and then leads."
   ],
   "behaviorNotes": [
+    "Inside a disabled <fieldset> (outside its first legend), the editor is disabled as with disabled: not editable, out of the tab order, aria-disabled. A div isn't disabled by a fieldset natively, so the component checks the fieldsets around it and watches their disabled attribute.",
     "`/` only starts a command at the beginning of the editor or after whitespace - mid-word slashes stay literal characters.",
     "The query types inline into a small bordered span; Escape (or a caret leaving the span) unwraps it back to plain text, keeping what was typed.",
     "Enter inserts the active row as a tag, replacing the `/query` span and adding a trailing space.",

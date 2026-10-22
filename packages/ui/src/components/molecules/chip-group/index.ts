@@ -1,2 +1,2 @@
 export { ChipGroup } from './chip-group';
-export type { ChipGroupAlignment, ChipGroupProps } from './chip-group.types';
+export type { ChipGroupAlignment, ChipGroupProps, DeprecatedChipGroupAlignment } from './chip-group.types';

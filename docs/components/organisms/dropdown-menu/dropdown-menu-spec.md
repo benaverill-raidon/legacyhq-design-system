@@ -28,13 +28,15 @@ DropdownMenu
 ## Public API
 
 ```ts
-type DropdownMenuAlignment = 'left' | 'center' | 'right';
+type DropdownMenuAlignment = 'start' | 'center' | 'end';
+/** @deprecated Physical names, still accepted and placed as start/end. */
+type DeprecatedDropdownMenuAlignment = 'left' | 'right';
 
 interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
   children: React.ReactElement;
   open: boolean;
   onOpenChange?: (open: boolean) => void;
-  alignment?: DropdownMenuAlignment;
+  alignment?: DropdownMenuAlignment | DeprecatedDropdownMenuAlignment;
   anchorRef?: React.RefObject<HTMLElement | null>;
   matchTriggerWidth?: boolean;
   id?: string;
@@ -45,7 +47,7 @@ interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
 ## Defaults
 
 ```txt
-alignment: left
+alignment: start
 matchTriggerWidth: false
 ```
 
@@ -71,7 +73,7 @@ field). `fullWidth` on its own, without `matchTriggerWidth`, makes the panel (wh
 <Popup
   open={open}
   onOpenChange={onOpenChange}
-  alignment={ALIGNMENT_MAP[alignment]} // left -> bottomLeft, center -> bottomCenter, right -> bottomRight
+  alignment={ALIGNMENT_MAP[alignment]} // start -> bottomStart, center -> bottomCenter, end -> bottomEnd (left/right: deprecated, same)
   padding="none"
   id={id}
   className={className}

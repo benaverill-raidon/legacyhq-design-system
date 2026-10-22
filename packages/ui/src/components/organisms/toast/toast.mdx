@@ -127,9 +127,11 @@ hovered or focused, so a description or action is only seen once someone reaches
 
 <Subsection title="Dismissing">
 
-The dismiss button shows unless `isDismissible` is `false`, and calls `onDismiss`. Toast doesn't hide
-itself: Toast Group removes it. Turn dismissing off for a `loading` toast, which is replaced when the
-work finishes rather than closed.
+The dismiss button shows unless `isDismissible` is `false`, and calls `onDismiss` with the click
+event. Toast doesn't hide itself: Toast Group removes it. A `loading` toast has no dismiss button,
+since it's replaced when the work finishes rather than closed: Toast Group's `toast.loading()` turns
+it off, and gives it back when the toast is updated to its result. Turn it off yourself when you
+render a loading Toast on its own.
 
 <Example of={ToastStories.Content} caption="Title only, a description with no actions, and a loading toast with no dismiss button." />
 
@@ -181,10 +183,12 @@ work finishes rather than closed.
   the title, so the meaning doesn't depend on color. `default` and `loading` read none, so the title
   has to say it. Translate it with `statusLabel`.
 - The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, which also
-  shows as its tooltip on hover and focus, as on Section Message. In a Toast Group the tooltip is
-  drawn behind the stack for now, until overlays share one stacking order.
+  shows as its tooltip on hover and focus, as on Section Message. In a Toast Group the tooltip shows
+  above the stack, since popups are layered above toasts.
 - The card isn't focusable. Tab reaches the dismiss button first, since it sits beside the title,
   then the actions.
+- Toast doesn't move focus when it's dismissed, since it doesn't remove itself. Toast Group does:
+  dismissed from the keyboard, focus goes to the next toast, or back where it came from.
 - A collapsed toast doesn't render its description or actions at all, so they're neither read nor
   reachable until it's expanded.
 

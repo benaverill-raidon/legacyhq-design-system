@@ -198,15 +198,15 @@
  * handled by the shared Focus Ring primitive's own `[data-force-state='focus']` support on `.input`
  * directly, so it needs no Switch-specific rule here.
  */
-.root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator {
   background: var(--color-background-neutral-bold-hover);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator {
   background: var(--color-background-neutral-bold-press);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(
     :hover,
     :active,
     [data-force-state='hover'],
@@ -219,11 +219,11 @@
   background: var(--color-background-success-bold-default);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .input:checked + .indicator {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:hover, [data-force-state='hover']) .input:checked + .indicator {
   background: var(--color-background-success-bold-hover);
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .input:checked + .indicator {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:active, [data-force-state='press']) .input:checked + .indicator {
   background: var(--color-background-success-bold-press);
 }
 
@@ -232,7 +232,7 @@
   transform-origin: right center;
 }
 
-.root:not([data-disabled='true']):not([data-loading='true']):is(
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(
     :hover,
     :active,
     [data-force-state='hover'],
@@ -249,19 +249,19 @@
   opacity: 0;
 }
 
-.root[data-disabled='true'] {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) {
   color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
-.root[data-loading='true']:not([data-disabled='true']) {
+.root[data-loading='true']:not([data-disabled='true'], :where(:has(.input:disabled))) {
   cursor: progress;
 }
 
-.root[data-disabled='true'] .indicator,
-.root[data-disabled='true']:hover .indicator,
-.root[data-disabled='true']:active .indicator,
-.root[data-disabled='true'] .input:checked + .indicator {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .indicator,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))):hover .indicator,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))):active .indicator,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .input:checked + .indicator {
   background: var(--color-background-disabled);
 }
 

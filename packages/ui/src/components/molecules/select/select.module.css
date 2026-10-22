@@ -12,7 +12,8 @@
  * content/disabled when the field is disabled. Set explicitly here (rather than leaning on TextField's
  * `.action` slot color) so the disabled case is covered - TextField's disabled state repaints the
  * frame but not its action slot. The CaretDownIcon inherits this via TextField's own
- * `.action :global([data-color]) { color: inherit }` rule.
+ * `.action :global([data-color]) { color: inherit }` rule. A disabled fieldset disables the input
+ * without the `disabled` prop, so the caret follows the input too.
  */
 .caret {
   display: inline-flex;
@@ -22,7 +23,8 @@
   transition: transform var(--fade-quick);
 }
 
-.caretDisabled {
+.caretDisabled,
+.trigger:where(:has(input:disabled)) .caret {
   color: var(--color-content-disabled);
 }
 

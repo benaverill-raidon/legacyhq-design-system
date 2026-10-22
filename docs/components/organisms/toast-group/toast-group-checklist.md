@@ -20,8 +20,11 @@ Organism.
 
 ## Design decisions
 
-- [ ] Imperative API: mount one `ToastGroup`; call `toast()`/`toast.success/error/warning/info/loading`
-      and `toast.dismiss(id?)` from anywhere (module-level store, no context).
+- [ ] Imperative API: mount one `ToastGroup`; call `toast()`/`toast.success/error/warning/information/loading`
+      and `toast.dismiss(id?)` from anywhere (module-level store, no context). `toast.info` stays as
+      a deprecated alias of `toast.information`.
+- [ ] A loading toast has no dismiss button unless it passes `isDismissible`; resolved to another
+      tone, it gets one back unless the update passes `isDismissible`.
 - [ ] Newest toast at the front; up to `maxVisible` (default 3) stacked, the rest collapsed behind.
 - [ ] Collapsed = 3D pile (peek + scale down); expanded (hover/focus) = spaced vertical list.
 - [ ] Auto-dismiss after `duration` in view (default 5000; loading = Infinity until it resolves, then
@@ -63,6 +66,8 @@ label: Notifications
       announces each toast in view (cards are `role="none"`, so no double announcement).
 - [ ] Focus into the stack expands it and pauses auto-dismiss; it stays expanded while focus is
       inside, even when the pointer leaves.
+- [ ] Dismissed from the keyboard, focus moves to the next toast, else the previous, else back to
+      where it came from, else the page; a pointer click leaves focus alone.
 - [ ] Queued toasts (past `maxVisible`) are `inert` and `aria-hidden`.
 
 ## Examples to document
@@ -84,4 +89,9 @@ label: Notifications
 - [ ] Queued toasts are inert/aria-hidden and their timers wait until they're in view.
 - [ ] The live region stays mounted and announces new, updated, and newly visible toasts once.
 - [ ] Hover and focus pause the timers, which resume with the time left; focus keeps the stack expanded.
+- [ ] `toast.information` sets information; `toast.info` still does the same.
+- [ ] A loading toast has no dismiss button and gets it back when it resolves; an `isDismissible`
+      it set doesn't pass on to its result.
+- [ ] Focus after a keyboard dismiss: next toast, previous toast, skips unfocusable and queued
+      toasts, back to where it came from, the page as a last resort; a pointer click leaves it.
 - [ ] Uses MUI: no. Uses Tailwind: no.

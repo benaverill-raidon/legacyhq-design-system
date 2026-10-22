@@ -2,6 +2,7 @@ import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AssetsIcon, TrustIcon } from '../../../assets/icons';
+import { Button } from '../../atoms/button';
 import { TagGroup } from './tag-group';
 import type { TagGroupAlignment, TagGroupItem } from './tag-group.types';
 
@@ -12,11 +13,11 @@ const meta = {
     tags: Array.from({ length: 6 }, (_, index) => ({ id: `tag-${index + 1}`, label: `Tag ${index + 1}` })),
     maxVisible: undefined,
     size: 'sm',
-    alignment: 'left',
+    alignment: 'start',
   },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    alignment: { control: 'inline-radio', options: ['left', 'right'] },
+    alignment: { control: 'inline-radio', options: ['start', 'end'] },
     maxVisible: { control: 'number' },
     tags: { control: false },
     overflowLabel: { control: false },
@@ -89,8 +90,8 @@ export const Wrapping: Story = {
 /**
  * `maxVisible` truncates the rest behind a "+N more" tag that opens a Dropdown Menu holding the
  * remaining truncated tags. `alignment` (matching Figma's `tab-group` component exactly - a naming
- * typo for Tag Group, verified live) controls only where that tag renders: `left` (default) trailing,
- * `right` leading.
+ * typo for Tag Group, verified live; there `left`/`right`) controls only where that tag renders:
+ * `start` (default) trailing, `end` leading.
  */
 export const Overflow: Story = {
   render: () => {
@@ -100,14 +101,49 @@ export const Overflow: Story = {
 
     return (
       <div style={stack}>
-        <Group title="alignment: left (default)" description="The overflow tag trails the visible tags.">
-          <OverflowExample alignment="left" />
+        <Group title="alignment: start (default)" description="The overflow tag trails the visible tags.">
+          <OverflowExample alignment="start" />
         </Group>
-        <Group title="alignment: right" description="The overflow tag leads the visible tags.">
-          <OverflowExample alignment="right" />
+        <Group title="alignment: end" description="The overflow tag leads the visible tags.">
+          <OverflowExample alignment="end" />
         </Group>
       </div>
     );
+  },
+};
+
+/**
+ * Removing a tag keeps focus in the group: it moves to the next tag, or the previous one if the
+ * removed tag was last, or to the group itself once none are left. Tab to a remove button and press
+ * Enter a few times.
+ */
+export const Removal: Story = {
+  render: () => {
+    function RemovableTags() {
+      const all = ['Averill Family Living Trust', "Ben's Investments", 'Vacation Home', 'Follow-up task'];
+      const [labels, setLabels] = React.useState(all);
+      return (
+        <div style={stack}>
+          <TagGroup
+            tags={labels.map((label) => ({
+              id: label,
+              label,
+              tone: 'blue',
+              isRemovable: true,
+              onRemove: () => setLabels((current) => current.filter((item) => item !== label)),
+            }))}
+          />
+          <p style={captionStyle}>
+            {labels.length} of {all.length} linked
+          </p>
+          <div>
+            <Button onClick={() => setLabels(all)}>Reset</Button>
+          </div>
+        </div>
+      );
+    }
+
+    return <RemovableTags />;
   },
 };
 

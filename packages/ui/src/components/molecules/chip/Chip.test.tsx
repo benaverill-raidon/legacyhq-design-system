@@ -119,10 +119,38 @@ describe('Chip', () => {
       expect(screen.getByRole('button', { name: 'Remove Trusts' })).toBeInTheDocument();
     });
 
-    it('supports an explicit removeAriaLabel', () => {
-      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} removeAriaLabel="Clear the trusts filter" />);
+    it('supports an explicit removeLabel', () => {
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} removeLabel="Clear the trusts filter" />);
 
       expect(screen.getByRole('button', { name: 'Clear the trusts filter' })).toBeInTheDocument();
+    });
+
+    it('still accepts the deprecated removeAriaLabel, named the same as removeLabel', () => {
+      const { unmount } = render(
+        <Chip mode="select" label="Trusts" onRemove={vi.fn()} removeLabel="Clear the trusts filter" />,
+      );
+      const expected = screen.getByRole('button', { name: 'Clear the trusts filter' }).outerHTML;
+      unmount();
+
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} removeAriaLabel="Clear the trusts filter" />);
+
+      expect(screen.getByRole('button', { name: 'Clear the trusts filter' }).outerHTML).toBe(expected);
+    });
+
+    it('prefers removeLabel over the deprecated removeAriaLabel when both are set', () => {
+      render(
+        <Chip
+          mode="filter"
+          label="Status"
+          value={{ label: 'Open', sections: [] }}
+          onRemove={vi.fn()}
+          removeLabel="Clear status"
+          removeAriaLabel="Old name"
+        />,
+      );
+
+      expect(screen.getByRole('button', { name: 'Clear status' })).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Old name' })).not.toBeInTheDocument();
     });
 
     it('disables the remove button when the chip is disabled, and suppresses its click', () => {
@@ -605,7 +633,7 @@ describe('Chip', () => {
   it('lets disabled fully override selected, including the border', () => {
     // Figma models no selected+disabled chip-base variant, so disabled wins outright - the same
     // precedent Toggle Button and Toggle Icon Button already set for that gap.
-    const rule = chipCss.match(/\.root\[data-disabled='true'\] \.segment,\s*\n\.segment:disabled\s*\{([^}]*)\}/);
+    const rule = chipCss.match(/\.root:is\(\[data-disabled='true'\], :where\(:has\(:disabled\)\)\) \.segment,\s*\n\.segment:disabled\s*\{([^}]*)\}/);
 
     expect(rule?.[1]).toContain('border-color: var(--color-border-input);');
     expect(rule?.[1]).toContain('background: var(--color-background-disabled);');

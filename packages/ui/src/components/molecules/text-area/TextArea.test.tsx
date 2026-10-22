@@ -217,7 +217,7 @@ describe('TextArea', () => {
   });
 
   it('suppresses the hover background once the field is focused', () => {
-    expect(textAreaCss).toContain(":not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover'])");
+    expect(textAreaCss).toContain(":not([data-disabled='true'], :where(:has(.textarea:disabled))):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover'])");
   });
 
   it('reuses Text Field semantic tokens for surface, border, and radius', () => {
@@ -239,12 +239,12 @@ describe('TextArea', () => {
     expect(textAreaCss).not.toMatch(/appearance_/);
     expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*border-color:\s*transparent;/);
     expect(textAreaCss).toMatch(/\.context_inline\s*\{[^}]*background:\s*transparent;/);
-    expect(textAreaCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textAreaCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\], :where\(:has\(\.textarea:disabled\)\)\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
     expect(textAreaCss).toMatch(/\.context_inline\[data-invalid[^{]*\{[^}]*border-bottom-color:\s*var\(--color-border-error\)/);
   });
 
   it('disables resize on a disabled wrapper', () => {
-    expect(textAreaCss).toMatch(/\.root\[data-disabled='true'\]\s*\{[^}]*resize:\s*none;/);
+    expect(textAreaCss).toMatch(/\.root:is\(\[data-disabled='true'\], :where\(:has\(\.textarea:disabled\)\)\)\s*\{[^}]*resize:\s*none;/);
   });
 
   describe('autofill', () => {
@@ -261,13 +261,13 @@ describe('TextArea', () => {
     });
 
     it('shows the tint on context=default whenever the textarea is autofilled or pinned, except when disabled', () => {
-      expect(selectors[0]).toBe(".context_default:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill'])");
+      expect(selectors[0]).toBe(".context_default:not([data-disabled='true'], :where(:has(.textarea:disabled))):is(:has(.textarea:autofill), [data-force-state='autofill'])");
     });
 
     it('keeps context=inline chromeless at rest: the tint shows only while focused', () => {
       expect(selectors).toHaveLength(2);
       expect(selectors[1]).toBe(
-        ".context_inline:not([data-disabled='true']):is(:has(.textarea:autofill), [data-force-state='autofill']):focus-within",
+        ".context_inline:not([data-disabled='true'], :where(:has(.textarea:disabled))):is(:has(.textarea:autofill), [data-force-state='autofill']):focus-within",
       );
     });
 
@@ -277,7 +277,7 @@ describe('TextArea', () => {
 
     it('lets hover replace the tint: the hover rules outrank it and set the background shorthand, which clears it', () => {
       const hoverRule = (context: string) =>
-        css.match(new RegExp(`\\.${context}:not\\(\\[data-disabled='true'\\]\\):not\\(:focus-within\\)[^{]*:is\\(:hover, \\[data-force-state='hover'\\]\\)\\s*\\{([^}]*)\\}`))?.[1];
+        css.match(new RegExp(`\\.${context}:not\\(\\[data-disabled='true'\\], :where\\(:has\\(\\.textarea:disabled\\)\\)\\):not\\(:focus-within\\)[^{]*:is\\(:hover, \\[data-force-state='hover'\\]\\)\\s*\\{([^}]*)\\}`))?.[1];
 
       expect(hoverRule('root')).toContain('background: var(--color-elevation-surface-raised-hover);');
       expect(hoverRule('context_inline')).toContain('background: var(--color-elevation-surface-raised-hover);');

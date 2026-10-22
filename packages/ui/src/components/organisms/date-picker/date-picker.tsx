@@ -39,7 +39,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     placeholder,
     format = defaultFormat,
     locale,
-    alignment = 'bottomLeft',
+    alignment = 'bottomStart',
     min,
     max,
     isDateDisabled,
@@ -163,8 +163,11 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     return () => panel.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, panelId, closeToField]);
 
+  // `:disabled` also catches a disabled fieldset around the picker, which its own prop doesn't.
+  const isDisabled = () => disabled || Boolean(inputRef.current?.matches(':disabled'));
+
   const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) {
+    if (isDisabled()) {
       return;
     }
     if (!isOpen && ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
@@ -230,7 +233,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
             </span>
           }
           onClick={() => {
-            if (!disabled) {
+            if (!isDisabled()) {
               setOpen(!isOpen);
             }
           }}

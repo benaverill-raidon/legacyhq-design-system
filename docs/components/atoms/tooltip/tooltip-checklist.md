@@ -28,7 +28,9 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
 
 ## Disabled control support
 
-- [ ] Support pointer-triggered tooltip explanations for disabled native controls.
+- [ ] Support pointer-triggered tooltips on disabled native controls.
+- [ ] Don't use the tooltip to explain why the control is disabled: keyboard users can't reach it,
+      so the reason goes in visible helper text (e.g. Field's message).
 - [ ] Keep the control natively disabled.
 - [ ] Keep the wrapper non-focusable.
 - [ ] Preserve inline layout, dimensions, and alignment.
@@ -63,7 +65,7 @@ Use Tooltip for short, supplemental clarification near an existing control or pi
 
 - [ ] Icon-only controls
 - [ ] Toggle icon controls
-- [ ] Disabled-control explanations
+- [ ] A disabled trigger, whose tooltip says what it does (not why it's disabled)
 - [ ] Truncated content
 - [ ] Supplemental clarification that is not essential
 
@@ -81,8 +83,7 @@ Tooltip / EdgeCases
 ```
 
 - **Variants** - `truncate` plus `disabled`. No placement axis - Tooltip has no `placement` prop.
-- **Content** - icon-only actions, toggle icon buttons, disabled-control explanations, a text button
-  trigger.
+- **Content** - icon-only actions, toggle icon buttons, a disabled trigger, a text button trigger.
 - **EdgeCases** - automatic alignment fallback near a viewport edge (verify the resolved
   `data-alignment` on the Popup panel differs from `topCenter`), keyboard-focus trigger, dark
   surface.

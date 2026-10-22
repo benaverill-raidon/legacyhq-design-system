@@ -139,6 +139,9 @@ export const Select = React.memo(function Select(props: SelectProps) {
   }, [ariaLabel, ariaLabelledBy]);
 
   const openMenu = React.useCallback(() => {
+    // A disabled fieldset around the Select disables its input without the `disabled` prop; the
+    // menu stays shut then too, from the frame, the caret, or the input.
+    if (inputRef.current?.matches(':disabled')) return;
     readNativeLabel();
     setOpen(true);
   }, [readNativeLabel]);
@@ -301,7 +304,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
             label={option.label}
             elemBefore={option.icon}
             disabled={disabled}
-            removeAriaLabel={`Remove ${option.label}`}
+            removeLabel={`Remove ${option.label}`}
             onRemove={() => removeValue(value)}
           />
         );

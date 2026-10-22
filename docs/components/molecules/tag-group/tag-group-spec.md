@@ -28,7 +28,9 @@ TagGroup
 ## Public API
 
 ```ts
-type TagGroupAlignment = 'left' | 'right';
+type TagGroupAlignment = 'start' | 'end';
+/** @deprecated Physical names, still accepted and placed as start/end. */
+type DeprecatedTagGroupAlignment = 'left' | 'right';
 
 interface TagGroupItem extends Omit<TagProps, 'size' | 'children' | 'id' | 'isInteractive'> {
   id: string;
@@ -39,7 +41,7 @@ interface TagGroupProps {
   tags: TagGroupItem[];
   maxVisible?: number;
   size?: TagSize;
-  alignment?: TagGroupAlignment;
+  alignment?: TagGroupAlignment | DeprecatedTagGroupAlignment;
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
   overflowMenuAriaLabel?: string;
   onOverflowTagSelect?: (
@@ -55,7 +57,7 @@ interface TagGroupProps {
 
 ```txt
 size: sm
-alignment: left
+alignment: start
 overflowLabel: (hiddenCount) => `+${hiddenCount} more`
 overflowMenuAriaLabel: `${hiddenCount} more tags`
 ```
@@ -92,13 +94,13 @@ const hiddenTags = hasOverflow ? tags.slice(maxVisible) : [];
 
 ```tsx
 <div className={styles.root} data-alignment={alignment}>
-  {alignment === 'right' ? overflowTag : null}
+  {alignment === 'end' ? overflowTag : null}
   {visibleTags.map((tag) => (
     <Tag key={tag.id} {...tagPropsWithoutIdAndLabel} size={size}>
       {tag.label}
     </Tag>
   ))}
-  {alignment === 'left' ? overflowTag : null}
+  {alignment === 'start' ? overflowTag : null}
 </div>
 ```
 
@@ -132,17 +134,31 @@ since Dropdown Menu is itself fully controlled and holds no state of its own.
 
 ## Alignment
 
-`alignment` (`'left' | 'right'`, default `'left'`) maps directly to Figma's own two `tab-group`
-variants:
+`alignment` (`'start' | 'end'`, default `'start'`) maps to Figma's own two `tab-group` variants:
 
-- `left` (default): visible tags first, overflow tag trailing. Matches Figma's `alignment=left`.
-- `right`: overflow tag first (leading), then the visible tags. Matches Figma's `alignment=right`.
+- `start` (default): visible tags first, overflow tag trailing. Matches Figma's `alignment=left`.
+- `end`: overflow tag first (leading), then the visible tags. Matches Figma's `alignment=right`.
+
+Alignment is named by logical start and end, as Table and Form name it (shared-value-names); the
+physical `left` and `right` were renamed on 2026-10-20 and stay accepted as deprecated aliases,
+placed the same. It sets DOM order, so it follows the writing direction.
 
 Both variants show the identical set of ten placeholder tags in Figma - `alignment` is an ordering
 concern only, not a truncation concern. The nested Dropdown Menu's own panel alignment was measured
-directly in both Figma variants and stays `left` (`bottomLeft`) either way; Tag Group does not
-recompute or flip it based on its own `alignment` - it hardcodes `DropdownMenu`'s default (`left`)
+directly in both Figma variants and stays `left` (`bottomStart` in code) either way; Tag Group does
+not recompute or flip it based on its own `alignment` - it hardcodes `DropdownMenu`'s default (`start`)
 and relies on Popup's own viewport-fit fallback if that overflows in a given layout.
+
+## Focus after removing a tag
+
+Tag Group doesn't remove tags (the consumer takes the tag out of `tags` in `onRemove`), but it keeps
+focus when one goes. When the tag holding focus (or the one just pressed, since Safari doesn't focus
+a clicked button) leaves the DOM and focus falls to the page, focus moves to the tag now in its
+place (a hidden tag moving up, or the overflow tag), else the previous tag, landing on the control
+in the same position counted from the end (one remove button to the next); tags with no enabled
+control are skipped. With no tag left, the root takes `tabindex="-1"` and focus, with the shared
+Focus Ring. Focus the page has already moved is left alone. The root watches its children with a
+MutationObserver (`primitives/focus-after-removal.ts`, shared with Chip Group).
 
 ## Overflow tag: Tag's `isInteractive` form
 
@@ -208,6 +224,10 @@ No `maxVisible` - every tag renders, wrapping onto new lines as a narrow contain
 Both `alignment` values side by side, each truncating 15 tags to 10 visible plus a "+5 more"
 overflow tag, to show the ordering difference directly.
 
+### Removal story
+
+Removable tags, to try focus moving to the next tag as each is removed.
+
 ### Content story
 
 Realistic entity-reference tags (tone, `href`, `elemBefore`, a removable tag) inside a Tag Group with
@@ -226,8 +246,9 @@ Required tests:
 renders every tag when there is no maxVisible
 renders every tag when tags.length does not exceed maxVisible (no overflow tag)
 truncates beyond maxVisible and renders a "+N more" overflow tag
-renders the overflow tag trailing when alignment is left (default)
-renders the overflow tag leading when alignment is right
+renders the overflow tag trailing when alignment is start (default)
+renders the overflow tag leading when alignment is end
+still accepts the deprecated left / right alignment, placed as start / end
 opens a menu holding the remaining truncated tags when the overflow tag is activated
 calls onOverflowTagSelect with the selected truncated tag
 closes the overflow panel, returning focus to the trigger, when a truncated tag is selected
@@ -238,6 +259,11 @@ supports a custom overflowMenuAriaLabel
 applies size uniformly to every visible tag and the overflow tag
 forwards each tag item's own props (tone, href, isRemovable, onRemove, elemBefore) to the rendered Tag
 supports a custom id/className on the root
+moves focus to the next tag when a tag is removed from the keyboard
+moves focus to the next tag when a tag is removed by a click that did not focus it
+moves focus to the previous tag when the last tag is removed
+moves focus to the tag that takes the place of the last visible one, before the overflow tag
+moves focus to the group itself when its only tag is removed
 ```
 
 ## Future considerations

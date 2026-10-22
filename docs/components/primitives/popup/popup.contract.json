@@ -10,12 +10,7 @@
     {
       "kind": "bug",
       "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
-    },
-    {
-      "kind": "gap",
-      "summary": "Alignment uses compound physical values (`topLeft`) where Table and Form use logical `start` | `end` (shared-value-names)."
-    }
-  ],
+    }  ],
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
   "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
   "sourceFiles": {
@@ -36,7 +31,8 @@
     "structure": "Two component properties beyond the variant axes: an exposed SLOT (the anchor/trigger region) and an internal, unpromoted Slot inside the nested `figma-parts / popup` panel instance (the content region). Code models this as `children` (trigger) + `content` (panel content) rather than two Figma-shaped slot props, since the inner slot was never promoted to the outer component set's own property list.",
     "apiAdaptationNotes": [
       "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
-      "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+      "`alignment`'s default (`topStart`, Figma's `top left`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+      "Figma's alignment variants are physical (`top left`, `bottom right`, ...); code names them by logical start and end (`topStart`, `bottomEnd`, ...) since 2026-10-20, as Table and Form name alignment (shared-value-names). The physical names (`topLeft`, `topRight`, `bottomLeft`, `bottomRight`) are deprecated aliases, still accepted and placed the same.",
       "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free.",
       "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
     ]
@@ -100,9 +96,9 @@
     "alignment": {
       "type": "PopupAlignment",
       "required": false,
-      "default": "topLeft",
-      "enum": ["topLeft", "topRight", "topCenter", "bottomLeft", "bottomRight", "bottomCenter"],
-      "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least."
+      "default": "topStart",
+      "enum": ["topStart", "topEnd", "topCenter", "bottomStart", "bottomEnd", "bottomCenter"],
+      "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least. Placement is left-to-right only: start is the trigger's left edge, even in a right-to-left page. topLeft, topRight, bottomLeft, and bottomRight, the earlier names, are still accepted."
     },
     "closeOnEscape": {
       "type": "boolean",
@@ -167,11 +163,11 @@
   },
   "variants": {
     "alignment": {
-      "topLeft": { "purpose": "Opens above the trigger, left edges aligned." },
-      "topRight": { "purpose": "Opens above the trigger, right edges aligned." },
+      "topStart": { "purpose": "Opens above the trigger, start (left) edges aligned." },
+      "topEnd": { "purpose": "Opens above the trigger, end (right) edges aligned." },
       "topCenter": { "purpose": "Opens above the trigger, horizontally centered on it." },
-      "bottomLeft": { "purpose": "Opens below the trigger, left edges aligned." },
-      "bottomRight": { "purpose": "Opens below the trigger, right edges aligned." },
+      "bottomStart": { "purpose": "Opens below the trigger, start (left) edges aligned." },
+      "bottomEnd": { "purpose": "Opens below the trigger, end (right) edges aligned." },
       "bottomCenter": { "purpose": "Opens below the trigger, horizontally centered on it." }
     },
     "padding": {
@@ -289,6 +285,7 @@
     "Calls onOpenChange(false) on an outside pointer press when closeOnOutsideClick is true (default).",
     "Does not call onOpenChange for a pointer press inside the panel or on the trigger.",
     "Resolves to a fitting alignment (preferring the same alignment on the opposite side before an unrelated one) and exposes it via data-alignment.",
+    "Accepts the deprecated topLeft, topRight, bottomLeft, and bottomRight alignments, placed as topStart, topEnd, bottomStart, and bottomEnd.",
     "Supports a custom id and className.",
     "Applies its own visual skin by default; omits it entirely when unstyled is true.",
     "Defaults padding to lg; applies none/sm/md/lg padding classes per the padding prop; applies none when unstyled is true.",
@@ -297,6 +294,7 @@
   ],
   "knownLimitations": [
     "No built-in focus management - focus trapping/restoration is left entirely to the consumer.",
+    "Placement is left-to-right only: start and end are the trigger's left and right edges even in a right-to-left page (positions are computed in physical pixels from getBoundingClientRect).",
     "The overlay shadow's colors are themed through --elevation-shadow-overlay; the Dark inner ring is transparent, matching Figma's Dark overlay effect style."
   ],
   "futureEnhancements": [

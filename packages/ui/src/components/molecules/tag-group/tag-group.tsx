@@ -2,12 +2,22 @@ import * as React from 'react';
 import { Tag } from '../../atoms/tag';
 import { DropdownMenu } from '../../organisms/dropdown-menu';
 import type { MenuSection } from '../../organisms/menu';
+import { focusRingClassNames } from '../../primitives/focus-ring';
+import { useFocusAfterRemoval } from '../../primitives/focus-after-removal';
 import styles from './tag-group.module.css';
-import type { TagGroupItem, TagGroupProps } from './tag-group.types';
+import type { DeprecatedTagGroupAlignment, TagGroupAlignment, TagGroupItem, TagGroupProps } from './tag-group.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
+
+// `left` and `right` are the deprecated names for `start` and `end`, placed the same.
+const ALIGNMENTS: Record<TagGroupAlignment | DeprecatedTagGroupAlignment, TagGroupAlignment> = {
+  start: 'start',
+  end: 'end',
+  left: 'start',
+  right: 'end',
+};
 
 function defaultOverflowLabel(hiddenCount: number) {
   return `+${hiddenCount} more`;
@@ -17,14 +27,18 @@ export const TagGroup = React.memo(function TagGroup({
   tags,
   maxVisible,
   size = 'sm',
-  alignment = 'left',
+  alignment: requestedAlignment = 'start',
   overflowLabel = defaultOverflowLabel,
   overflowMenuAriaLabel,
   onOverflowTagSelect,
   id,
   className,
 }: TagGroupProps) {
+  const alignment = ALIGNMENTS[requestedAlignment] ?? 'start';
   const [overflowOpen, setOverflowOpen] = React.useState(false);
+  // When a removed tag took focus with it, focus moves to the next tag, the previous one, or this
+  // group (see primitives/focus-after-removal.ts).
+  const removalFocus = useFocusAfterRemoval<HTMLDivElement>();
 
   // A negative maxVisible would slice from the end; treat it as 0 (only the overflow tag).
   const limit = typeof maxVisible === 'number' ? Math.max(0, maxVisible) : undefined;
@@ -70,10 +84,24 @@ export const TagGroup = React.memo(function TagGroup({
   }
 
   return (
-    <div id={id} className={mergeClassNames(styles.root, className)} data-alignment={alignment}>
-      {alignment === 'right' ? overflowTag : null}
+    <div
+      ref={removalFocus.rootRef}
+      id={id}
+      className={mergeClassNames(
+        styles.root,
+        // Shown only if focus falls back to the group itself, once its last tag is removed.
+        focusRingClassNames.focusRing,
+        focusRingClassNames.focusRingDefault,
+        className,
+      )}
+      data-alignment={alignment}
+      onFocus={removalFocus.handleFocus}
+      onBlur={removalFocus.handleBlur}
+      onPointerDown={removalFocus.handlePointerDown}
+    >
+      {alignment === 'end' ? overflowTag : null}
       {visibleTagElements}
-      {alignment === 'left' ? overflowTag : null}
+      {alignment === 'start' ? overflowTag : null}
     </div>
   );
 });

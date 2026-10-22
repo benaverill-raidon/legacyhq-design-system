@@ -3,12 +3,15 @@ import { Menu } from '../menu';
 import type { MenuItem, MenuSection } from '../menu';
 import { Popup } from '../../primitives/popup';
 import type { PopupAlignment } from '../../primitives/popup';
-import type { DropdownMenuAlignment, DropdownMenuProps } from './dropdown-menu.types';
+import type { DeprecatedDropdownMenuAlignment, DropdownMenuAlignment, DropdownMenuProps } from './dropdown-menu.types';
 
-const ALIGNMENT_MAP: Record<DropdownMenuAlignment, PopupAlignment> = {
-  left: 'bottomLeft',
+// `left` and `right` are the deprecated names for `start` and `end`, placed the same.
+const ALIGNMENT_MAP: Record<DropdownMenuAlignment | DeprecatedDropdownMenuAlignment, PopupAlignment> = {
+  start: 'bottomStart',
   center: 'bottomCenter',
-  right: 'bottomRight',
+  end: 'bottomEnd',
+  left: 'bottomStart',
+  right: 'bottomEnd',
 };
 
 /** What can take focus inside the panel, for the Tab handling below. Filtered to tabIndex >= 0. */
@@ -39,7 +42,7 @@ export const DropdownMenu = React.memo(function DropdownMenu({
   children,
   open,
   onOpenChange,
-  alignment = 'left',
+  alignment = 'start',
   id,
   className,
   sections,

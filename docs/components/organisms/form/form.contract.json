@@ -144,7 +144,8 @@
       "Give the submit Button type='submit' so it triggers onSubmit.",
       "Field owns each control's labelling and description - Form does not re-wire them.",
       "The section title is presentational; add a semantic heading in the page structure if a group needs one.",
-      "The required legend (including its '*') is real content, not aria-hidden."
+      "The required legend (including its '*') is real content, not aria-hidden.",
+      "After a failed submit, move focus to the error summary at the top of the form; Form doesn't move focus itself."
     ]
   },
   "keyboardInteraction": [
@@ -159,7 +160,9 @@
     "FormSection adds --spacing-3xl top spacing and spaces its children by --spacing-lg; title optional.",
     "FormRow lays its children out as equal-width columns (flex:1 1 0), gap --spacing-lg.",
     "FormFooter defaults to align='end'; align='start' left-aligns; gap --spacing-sm between actions.",
-    "Support className on every part (plus headerClassName / titleClassName)."
+    "Support className on every part (plus headerClassName / titleClassName).",
+    "To disable a group of fields at once, wrap them in a native <fieldset disabled> inside a FormSection (with its border, padding, and margin cleared): every form control follows it as it follows its own disabled.",
+    "Errors show by the system's rule: check when the form is submitted, show every error at once (a Section Message summary at the top of the form, naming and linking each field, plus each field's own error through Field), then update each field's error as its value changes. The summary changes only on the next submit. Form doesn't validate; the consumer follows the rule, with noValidate set."
   ],
   "compositionRules": [
     "Use Field for each control; Form arranges Fields, it does not replace them.",
@@ -206,7 +209,7 @@
     "FormFooter defaults to align='end' and supports align='start' via data-align.",
     "Composes className on every part (plus headerClassName / titleClassName).",
     "Uses only semantic tokens; works in light and dark themes.",
-    "Storybook includes Playground, Repository, Sections, Rows, FooterAlignment, and EdgeCases.",
+    "Storybook includes Playground, Repository, Sections, Rows, FooterAlignment, DisabledFieldset, and EdgeCases.",
     "Tests cover the native form + submit + ref/attrs, header/legend, sections, rows, and footer alignment."
   ],
   "knownLimitations": [

@@ -24,7 +24,7 @@ SplitButton
 ├─ root (inline-flex row, align-items: stretch, no gap)
 │  ├─ Button (primary action - trailing corners squared)
 │  ├─ divider (1px rule, color keyed to appearance/disabled)
-│  └─ DropdownMenu (alignment="right", hardcoded)
+│  └─ DropdownMenu (alignment="end", hardcoded)
 │     └─ IconButton (secondary action - leading corners squared, shape="square")
 │        └─ Menu (the panel content)
 ```
@@ -87,7 +87,7 @@ introduced.
     open={open}
     onOpenChange={setOpen}
     showSearch={false}
-    alignment="right"
+    alignment="end"
     sections={sections}
   >
     <IconButton
@@ -121,10 +121,10 @@ overridden by the `appearance` mapping. `id` and `className` go to the root `div
 IconButton has no `tone` (and gets no `isInverse`), a `tone` on Split Button colors only the
 primary segment.
 
-`showSearch={false}` and `alignment="right"` are both hardcoded, not exposed as props - matching
+`showSearch={false}` and `alignment="end"` are both hardcoded, not exposed as props - matching
 Tag Group/Avatar Group's own precedent of not exposing every Menu/DropdownMenu prop, and matching
 the fact that Figma's own `split-button` variant set has no `alignment` axis at all (every
-instance opens "bottom right"). `alignment="right"` maps to Popup's own `'bottomRight'` (via
+instance opens "bottom right"). `alignment="end"` maps to Popup's own `'bottomEnd'` (via
 Dropdown Menu's `ALIGNMENT_MAP`) - the intended default for every Split Button. This is a preferred
 alignment, not a forced one: Popup's own collision detection (`getAlignmentOrder`/
 `getCandidatePosition` in popup.tsx) already measures available space on open and flips to an
@@ -304,6 +304,6 @@ Potential future support:
 
 - A `renderSecondaryAction`/custom-icon escape hatch, if a real use case needs something other than
   the caret.
-- Exposing `alignment`, if a real layout ever needs the panel to open left instead of right.
+- Exposing `alignment`, if a real layout ever needs the panel to open at the start instead of the end.
 
 Do not implement these unless requested.

@@ -111,6 +111,17 @@ Form (form.root, native <form>, flex column, gap 0)
   already used, so it is no longer a judgment call. One call remains: the Figma title is a text node,
   so `title` renders as presentational text, not a semantic heading - documented so consumers add
   their own heading structure if needed.
+- **When errors show is a system rule, followed by the consumer.** Form doesn't validate, but every
+  form shows its errors the same way: check when the form is submitted, not while someone types;
+  on a failed submit, show every error at once, with a Section Message (`tone="error"`) at the top
+  of the form naming and linking each field, each field's own error through Field, and focus moved
+  to the summary; then update each field's error as its value changes, so it clears as soon as it's
+  fixed. The summary is a live region, so it changes only on the next submit. Set `noValidate` so
+  the browser's own messages don't come first. Patterns / Forms and Validation builds the flow.
+- **A disabled fieldset disables a group of fields.** A FormSection is a `div`, so to disable
+  several fields at once, wrap them in a native `<fieldset disabled>` inside the section, with the
+  browser's border, padding, and margin cleared. Every form control in the system looks and behaves
+  disabled inside it, as with its own `disabled` (the DisabledFieldset story).
 
 ---
 
@@ -125,6 +136,6 @@ Form (form.root, native <form>, flex column, gap 0)
 - FormFooter defaults to `align="end"` and supports `align="start"` via `data-align`.
 - Composes `className` on every part (plus `headerClassName` / `titleClassName`).
 - Uses only semantic tokens; works in light and dark themes.
-- Storybook includes Playground, Repository, Sections, Rows, FooterAlignment, and EdgeCases.
+- Storybook includes Playground, Repository, Sections, Rows, FooterAlignment, DisabledFieldset, and EdgeCases.
 - Tests cover the native form + submit + ref/attrs, header/legend, sections, rows, and footer
   alignment.

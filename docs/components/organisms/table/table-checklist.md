@@ -104,7 +104,9 @@ the scrollable grid is a keyboard-focusable `role="region"` (WCAG 2.1.1).
 
 ### What must the consumer still do?
 Give the table an accessible name; pass a stable `getRowId` when selecting; keep in-cell content
-(action buttons, links) accessible.
+(action buttons, links) accessible. Selection is kept across filters (rows a filter hides stay
+selected, are counted, and are acted on by `bulkActions`), so a bulk action's confirmation names the
+count it will act on.
 
 ---
 

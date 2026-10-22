@@ -95,12 +95,11 @@
                     "Sizes: xxs | xs | sm | md | lg | xl (never small/medium/large/extraLarge)",
                     "Light-on-dark: inverse (never inverted); the Button family uses the `isInverse` boolean",
                     "Round shapes: round (never circle); square otherwise",
-                    "The neutral palette: taupe (never gray), the palette's and Figma's name"
+                    "The neutral palette: taupe (never gray), the palette's and Figma's name",
+        "Alignment: start | center | end, and topStart / bottomEnd on Popup (never left / right): logical, as Table and Form already were"
                 ]
             },
-            "knownViolations": [
-                "Alignment mixes physical left | right (Dropdown Menu, Chip Group, Tag Group) with logical start | end (Table, Form) and compound topLeft (Popup). Not yet aligned."
-            ]
+            "knownViolations": []
         },
         {
             "id": "built-in-labels",
@@ -116,7 +115,6 @@
                 ]
             },
             "knownViolations": [
-                "Chip names its remove control `removeAriaLabel` where the convention is `removeLabel` (Tag).",
                 "Select names its chips’ remove buttons in English (Remove <label>). Form’s required legend (“indicates a required field”) is hard-coded. Date Time Picker can’t pass its halves’ labels through (dialogLabel, amLabel, pmLabel, Confirm/Cancel, column and month names)."
             ]
         },
@@ -131,7 +129,9 @@
                     "Banner, Section Message, Toast, and Modal Dialog accept `appearance` for `tone`",
                     "Text Field, Text Area, and Select accept `appearance` / `tone` (subtle, inline) for `context`",
                     "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`",
-                    "Toggle Button, Toggle Icon Button, Tag, and Avatar accept isDisabled for disabled; Rich Text Area accepts appearance for context; Tabs accepts type for appearance; Empty State accepts type for appearance; Breadcrumbs, Pagination, and Badge accept ariaLabel (Badge: for label)"
+                    "Toggle Button, Toggle Icon Button, Tag, and Avatar accept isDisabled for disabled; Rich Text Area accepts appearance for context; Tabs accepts type for appearance; Empty State accepts type for appearance; Breadcrumbs, Pagination, and Badge accept ariaLabel (Badge: for label)",
+        "Popup, Dropdown Menu, Chip Group, Tag Group, Date Picker, and Time Picker accept left / right (and topLeft, bottomRight...) for start / end",
+        "Chip accepts removeAriaLabel for removeLabel; Toast Group accepts toast.info for toast.information; Field accepts state `valid` for `success`"
                 ]
             },
             "knownViolations": []

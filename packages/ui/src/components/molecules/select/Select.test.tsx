@@ -182,6 +182,20 @@ describe('Select', () => {
       expect(combobox()).toBeDisabled();
     });
 
+    it('does not open inside a disabled fieldset, from the input, the frame, or the caret', () => {
+      const { container } = render(
+        <fieldset disabled>
+          <Select options={OPTIONS} value={null} onChange={vi.fn()} aria-label="Status" />
+        </fieldset>,
+      );
+      expect(combobox()).toBeDisabled();
+
+      open();
+      fireEvent.mouseDown(container.querySelector(`.${textFieldStyles.root}`) as Element);
+      fireEvent.mouseDown(container.querySelector(`.${selectStyles.caret}`) as Element);
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
     it('sets aria-invalid when invalid', () => {
       render(<Select options={OPTIONS} value={null} onChange={vi.fn()} invalid />);
 
@@ -376,7 +390,7 @@ describe('Select', () => {
     // content/disabled when isDisabled. The CaretDownIcon inherits this via TextField's own
     // `.action :global([data-color]) { color: inherit }`.
     expect(selectCss).toMatch(/\.caret\s*\{[^}]*color:\s*var\(--field-icon-color,\s*var\(--color-content-subtle\)\)/);
-    expect(selectCss).toMatch(/\.caretDisabled\s*\{[^}]*color:\s*var\(--color-content-disabled\)/);
+    expect(selectCss).toMatch(/\.caretDisabled,\s*\.trigger:where\(:has\(input:disabled\)\) \.caret\s*\{[^}]*color:\s*var\(--color-content-disabled\)/);
   });
 
   it('applies the disabled caret class only when the field is disabled', () => {

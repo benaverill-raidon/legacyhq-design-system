@@ -48,7 +48,7 @@
     "placeholder": { "type": "string", "required": false },
     "format": { "type": "(date: Date, locale?: string) => string", "default": "locale short date (MM/DD/YYYY)", "required": false },
     "locale": { "type": "string", "required": false },
-    "alignment": { "type": "PopupAlignment", "default": "bottomLeft", "required": false },
+    "alignment": { "type": "PopupAlignment", "default": "bottomStart", "required": false, "description": "Popup's alignment. The deprecated physical names (bottomLeft, ...) are still accepted." },
     "min": { "type": "Date", "required": false },
     "max": { "type": "Date", "required": false },
     "isDateDisabled": { "type": "(date: Date) => boolean", "required": false },
@@ -92,6 +92,7 @@
     "Inside the popup, the calendar's grid keyboard model applies."
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the input is disabled without the disabled prop; the field looks disabled (Text Field's :has(.input:disabled)) and the panel doesn't open by click or key.",
     "Render a read-only Text Field showing the formatted selected date + a calendar icon.",
     "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Render the open state by pinning the field focus treatment while open.",

@@ -130,6 +130,7 @@
     "Escape closes the panel (inherited from Popup); from inside the menu, focus returns to the input", "Tab / Shift+Tab inside the menu closes it and returns focus to the input; Tab out of the input closes the menu"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the input is disabled without the disabled prop; the frame, caret, and multi-select chips look disabled (CSS :has(input:disabled)) and the menu doesn't open.",
     "Holds its own open and (uncontrolled) query state; value is always controlled by the consumer.",
     "single: choosing a row calls onChange(value), returns focus to the input, and closes; the trigger shows the chosen label.",
     "multi: choosing a row toggles the value in the array, keeps the panel open, and clears the query; values render as removable chips.",

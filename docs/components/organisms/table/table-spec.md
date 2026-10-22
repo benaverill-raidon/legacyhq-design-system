@@ -109,6 +109,10 @@ Table (div.table, data-size)
   visible. When one or more rows are selected, the selection bar (`div.selectionPill`: the count,
   then `bulkActions`) **replaces** the toolbar's button group (search, `toolbarActions`, `actions`).
   The column headers stay. The first selection freezes the column widths, as a resize does.
+  Selection is kept by id across pages, sorts, and filters (decided 2026-10-20): Table never prunes
+  `selectedIds` to the rows in `data`, so a row a filter now hides stays selected, the count includes
+  it, and `bulkActions` act on every selected id. A bulk action's confirmation names the count it
+  will act on (for example "Archive 12 matters?").
 - **Hover.** Every row shows a `neutral-overlay-bold` hover (aids horizontal scanning), distinct from
   the brand-tinted selected state. A single row - or the last row when there's no pagination footer -
   drops its bottom divider.

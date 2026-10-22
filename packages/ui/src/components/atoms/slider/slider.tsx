@@ -410,7 +410,8 @@ export function SliderBaseComponent(
 
   const handleControlPointerDown = React.useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
-      if (disabled || (event.pointerType === 'mouse' && event.button !== 0)) {
+      // `:disabled` also catches a disabled fieldset around the slider, which its own prop doesn't.
+      if (disabled || inputRef.current?.matches(':disabled') || (event.pointerType === 'mouse' && event.button !== 0)) {
         return;
       }
 

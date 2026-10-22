@@ -79,6 +79,7 @@
     "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
   },
   "behaviorRules": [
+    "Inside a disabled <fieldset>, both halves are disabled without the disabled prop, look disabled, and don't open.",
     "Compose a DatePicker (left) and a TimePicker (right) over one shared Date value.",
     "Picking a date keeps the current time (else midnight); confirming a time keeps the current date (else today).",
     "Fire onChange with the combined Date whenever either half changes.",

@@ -113,13 +113,13 @@ describe('Radio', () => {
 
   it('pins the shared focus ring for previewFocus, from the primitive variables', () => {
     expect(radioCss).toMatch(
-      /\.radio:global\(\.previewFocus\):not\(\[data-disabled='true'\]\) \.input \{[^}]*outline: var\(--focus-ring-width\) solid var\(--focus-ring-color\);[^}]*outline-offset: var\(--focus-ring-offset\);/s,
+      /\.radio:global\(\.previewFocus\):not\(\[data-disabled='true'\], :where\(:has\(\.input:disabled\)\)\) \.input \{[^}]*outline: var\(--focus-ring-width\) solid var\(--focus-ring-color\);[^}]*outline-offset: var\(--focus-ring-offset\);/s,
     );
   });
 
   it('dims a disabled radio with the disabled color only, like Checkbox', () => {
-    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \{[^}]*color: var\(--color-content-disabled\);/s);
-    expect(radioCss).toMatch(/\.radio\[data-disabled='true'\] \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);/s);
+    expect(radioCss).toMatch(/\.radio:is\(\[data-disabled='true'\], :where\(:has\(\.input:disabled\)\)\) \{[^}]*color: var\(--color-content-disabled\);/s);
+    expect(radioCss).toMatch(/\.radio:is\(\[data-disabled='true'\], :where\(:has\(\.input:disabled\)\)\) \.indicatorIcon \{[^}]*color: var\(--color-content-disabled\);/s);
     expect(radioCss).not.toContain('opacity');
   });
 

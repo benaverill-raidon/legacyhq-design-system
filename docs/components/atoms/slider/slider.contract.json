@@ -4,8 +4,12 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "decision",
-      "summary": "A range submits `name` and `${name}Max`. Is that the intended form shape?"
+      "kind": "bug",
+      "summary": "A pointer press on a disabled single Slider still sets `data-dragging=\"true\"`; the disabled styles hide it."
+    },
+    {
+      "kind": "bug",
+      "summary": "Its examples file uses a `type` prop that doesn't exist (`<Slider type=\"slider-range\">`)."
     },
     {
       "kind": "bug",
@@ -94,9 +98,11 @@
     "Page Down"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "Supports overlap.",
     "Supports disableSwap.",
     "Supports minDistance.",
+    "SliderRange submits the lower value under minName and the upper under maxName; they default to name and `${name}Max`.",
     "showValue keeps the value bubble showing and makes room for it above the track, so it never overlaps the label.",
     "SliderRange is a group named by label, aria-labelledby, or aria-label; each handle's name is that name plus minLabel or maxLabel."
   ],

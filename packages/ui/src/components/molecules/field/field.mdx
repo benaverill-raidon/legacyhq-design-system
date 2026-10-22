@@ -95,10 +95,11 @@ import * as FieldStories from './Field.stories';
 
 <Subsection title="States">
 
-`state` is `default`, `error`, or `valid`. `default` shows the message as quiet helper text.
-`error` and `valid` color the message and put a status icon before it, and `error` also sets
+`state` is `default`, `error`, or `success`. `default` shows the message as quiet helper text.
+`error` and `success` color the message and put a status icon before it, and `error` also sets
 `aria-invalid` on the control. `state` doesn't change the control's border: pass the control's own
-`invalid` too, so the border and the message agree.
+`invalid` too, so the border and the message agree. `valid`, the earlier name for `success`, is
+still accepted and looks the same.
 
 <Example of={FieldStories.States} />
 
@@ -151,12 +152,18 @@ hidden from assistive technology, because the control's `required` already says 
 
 </Subsection>
 
-<Subsection title="Validation">
+<Subsection title="When errors show">
 
-Field doesn't validate. Set `state`, `message`, and the control's `invalid` from your own check, and
-change them as the value changes.
+Field doesn't validate: set `state`, `message`, and the control's `invalid` from your own check.
+When you show the errors follows one rule across the system:
 
-<Example of={FieldStories.EdgeCases} caption="Edge cases: live validation as you type, a long label and message in a narrow field, and a dark surface." />
+1. **Check when the form is submitted**, not while someone is still typing their first answer.
+2. **Show every error at once**: each field's own error, and a summary at the top of the form
+   naming each field that needs fixing.
+3. **Then update each field's error as its value changes**, so it clears as soon as it's fixed. The
+   summary changes only on the next submit.
+
+<Example of={FieldStories.EdgeCases} caption="Edge cases: validation by the rule (submit as it is, then fix each field), a long label and message in a narrow field, and a dark surface." />
 
 </Subsection>
 
@@ -221,6 +228,22 @@ change them as the value changes.
     <TextField type="tel" invalid defaultValue="555-01" />
   </Field>
 </Dont>
+<Do
+  caption="Wait for the submit before showing an error, then update it as the value changes."
+  code={`const errors = submitted ? check(values) : {};
+
+<Field label="Work email" state={errors.email ? 'error' : 'default'} message={errors.email}>
+    <TextField type="email" invalid={Boolean(errors.email)} value={values.email} onChange={onEmailChange} />
+</Field>`}
+/>
+<Dont
+  caption="Show an error from the first keystroke. People are told they're wrong before they've finished typing."
+  code={`const error = values.email && !isEmail(values.email);
+
+<Field label="Work email" state={error ? 'error' : 'default'} message={error ? 'Enter an email address.' : undefined}>
+    <TextField type="email" invalid={error} value={values.email} onChange={onEmailChange} />
+</Field>`}
+/>
 </Guidelines>
 
 </Section>
@@ -236,6 +259,9 @@ change them as the value changes.
   already has, so it's read when the control gets focus.
 - `state="error"` sets `aria-invalid` on the control unless the control sets its own. The status icon
   is hidden from assistive technology, so the message text has to carry the meaning.
+- Errors show on submit, all at once, so a screen reader user isn't interrupted while typing. Move
+  focus to the form's summary after a failed submit; each field then reads its label and its error
+  when it gets focus.
 - `required` passes the native `required` to the control, and the `*` is hidden, so the requirement
   is announced once.
 - Every form control in the system passes this wiring to its native element, including Rich Text
@@ -256,7 +282,7 @@ Field adds no keys of its own; focus goes straight to the control.
 <Section title="Design tokens">
 
 Every token Field's stylesheet uses, by family, with the property it sets and when. "Base" is the
-field with no modifiers; `error` and `valid` are the states, and `inline` with a size is the
+field with no modifiers; `error` and `success` are the states, and `inline` with a size is the
 inline context's indent.
 
 <TokensTable id="field" />

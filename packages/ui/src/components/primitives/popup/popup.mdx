@@ -33,7 +33,7 @@ import { KeyValuePair } from '../../molecules/key-value-pair';
 import { Popup } from './popup';
 import * as PopupStories from './popup.stories';
 
-export const MatterDetails = ({ alignment = 'bottomLeft' }) => {
+export const MatterDetails = ({ alignment = 'bottomStart' }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef(null);
   const linkRef = React.useRef(null);
@@ -124,9 +124,11 @@ export const MatterDetails = ({ alignment = 'bottomLeft' }) => {
 <Subsection title="Alignment">
 
 `alignment` sets which side of the trigger the panel opens on, `top` or `bottom`, and which edge it
-lines up with: `Left`, `Center`, or `Right`. The default is `topLeft`, as in Figma. It's a
+lines up with: `Start`, `Center`, or `End`. The default is `topStart`, Figma's `topLeft`. It's a
 preference: where the panel would overflow the viewport, Popup tries the same alignment on the other
-side, then the rest, and uses the one that overflows least.
+side, then the rest, and uses the one that overflows least. Placement is left-to-right only: start
+is the trigger's left edge even in a right-to-left page. The earlier names `topLeft`, `topRight`,
+`bottomLeft`, and `bottomRight` are deprecated and still accepted.
 
 <Example of={PopupStories.Variants} caption="The six alignments, and the sm, md, and lg padding." />
 

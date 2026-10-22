@@ -1,13 +1,7 @@
 {
   "name": "DropdownMenu",
   "category": "actions",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
-    }
-  ],
+  "status": "stable",
   "purpose": "Pairs any trigger element with a floating Menu panel.",
   "intent": "A thin composition of Popup (positioning/dismissal) and Menu (search/sectioning/selection/keyboard nav) preconfigured for the click-to-open action-menu use case, rather than a third independent implementation of either concern.",
   "sourceFiles": {
@@ -28,7 +22,7 @@
     "structure": "Variants cross `trigger` (avatar/icon-button/button/link-button/chip-base/chip-operator/chip-value/tag/page-selector - 9 distinct trigger types, default avatar) x `alignment` (left/center/right, default left) x `isOpen` (true/false, not fully crossed with alignment). Every variant instantiates the same `popup` component (the exact component set Popup wraps) with a `trigger` SLOT holding the trigger instance, and a `surface` SLOT holding `figma-parts / panelSurface` (Popup's own skin) whose own `content` SLOT holds a `menu` instance. The measured padding around that nested menu instance is 0 on every axis.",
     "apiAdaptationNotes": [
       "Figma's 9-value `trigger` variant became a generic `children: React.ReactElement` prop, not a variant enum - matching Popup's own `children` model (\"the single trigger element\") rather than hardcoding a closed set of trigger shapes. Any focusable element works; the 9 Figma values are demonstrated in Storybook's Content story as examples, not enforced as an allowed list.",
-      "Figma's `alignment` (left/center/right) maps to Popup's `bottomLeft`/`bottomCenter`/`bottomRight` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
+      "Figma's `alignment` (left/center/right) is named by logical start and end in code since 2026-10-20 (`start`/`center`/`end`, as Table and Form name alignment; `left`/`right` stay accepted as deprecated aliases) and maps to Popup's `bottomStart`/`bottomCenter`/`bottomEnd` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
       "`isOpen` became the existing `open`/`onOpenChange` controlled pair (Popup's own prop names), not a new prop - same native-attribute-first reasoning as Popup's own isOpen->open adaptation.",
       "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
       "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
@@ -50,7 +44,7 @@
     "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "The single trigger element." },
     "open": { "type": "boolean", "required": true, "default": null, "description": "Controlled visibility." },
     "onOpenChange": { "type": "(open: boolean) => void", "required": false, "default": null, "description": "Called with false on Escape or an outside click." },
-    "alignment": { "type": "DropdownMenuAlignment", "required": false, "default": "left", "enum": ["left", "center", "right"], "description": "Maps to Popup's bottomLeft/bottomCenter/bottomRight - always opens below the trigger." },
+    "alignment": { "type": "DropdownMenuAlignment", "required": false, "default": "start", "enum": ["start", "center", "end"], "description": "Maps to Popup's bottomStart/bottomCenter/bottomEnd - always opens below the trigger. left and right, the earlier names, are still accepted." },
     "anchorRef": { "type": "React.RefObject<HTMLElement | null>", "required": false, "default": null, "description": "Element to measure for positioning and width instead of the trigger child - forwarded to Popup. Use when the ARIA-bearing trigger is smaller than the visual control (e.g. Select's inset input within its field frame)." },
     "matchTriggerWidth": { "type": "boolean", "required": false, "default": false, "description": "Sizes the panel to the trigger (or anchorRef) and passes fullWidth to the inner Menu so it fills that width - so a field's dropdown matches the field's width. Forwarded to Popup." },
     "id": { "type": "string", "required": false, "default": null, "description": "Applied to Popup's floating panel, not to Menu's root." },
@@ -72,7 +66,7 @@
   "sizes": ["sm", "md", "lg"],
   "slots": [],
   "variants": {
-    "alignment": { "left": { "purpose": "Opens below the trigger, left edges aligned - matches Figma's default." }, "center": { "purpose": "Opens below the trigger, horizontally centered." }, "right": { "purpose": "Opens below the trigger, right edges aligned." } }
+    "alignment": { "start": { "purpose": "Opens below the trigger, start (left) edges aligned - matches Figma's default (left)." }, "center": { "purpose": "Opens below the trigger, horizontally centered." }, "end": { "purpose": "Opens below the trigger, end (right) edges aligned - Figma's right." } }
   },
   "states": ["closed", "open"],
   "accessibility": {
@@ -118,7 +112,8 @@
   "acceptanceCriteria": [
     "Renders only the trigger when open is false; renders the trigger plus a role=\"menu\" panel when open is true.",
     "Sets aria-expanded/aria-controls on the trigger, reflecting open (inherited from Popup).",
-    "Maps alignment left/center/right to Popup's bottomLeft/bottomCenter/bottomRight exactly, defaulting to left.",
+    "Maps alignment start/center/end to Popup's bottomStart/bottomCenter/bottomEnd exactly, defaulting to start.",
+    "Accepts the deprecated left and right alignments, placed as start and end.",
     "Calls onOpenChange(false) on Escape and on an outside click by default (inherited from Popup), on Tab out of the panel, and after a chosen item's onSelect unless it called event.preventDefault().",
     "Sets aria-haspopup=\"menu\" on the trigger unless it sets its own.",
     "Moves focus into the panel on open (search field, else first enabled row) and returns it to the trigger on choose, Escape, and Tab out.",
@@ -128,6 +123,7 @@
   ],
   "knownLimitations": [
     "No support for non-Menu panel content - a consumer needing that composes Popup directly instead.",
+    "Placement is left-to-right only, as Popup's is: start is the trigger's left edge even in a right-to-left page.",
     "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead)."
   ],
   "futureEnhancements": [

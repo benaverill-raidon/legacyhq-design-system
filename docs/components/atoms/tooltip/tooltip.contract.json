@@ -4,10 +4,6 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "decision",
-      "summary": "Keyboard users can't reach a tooltip on a disabled control, as the spec intends, but the contract lists \"explaining why a control is disabled\" as a use. Pick one."
-    },
-    {
       "kind": "gap",
       "summary": "`--component-tooltip-z-index` is defined but unused: z-index lives in primitives/layers.ts. A candidate to remove in Figma."
     }
@@ -25,11 +21,11 @@
   },
   "useCases": [
     "Clarifying an icon-only control whose meaning isn't obvious from its accessible name alone",
-    "Explaining why a control is disabled",
     "Short supplemental context that isn't essential to completing the task"
   ],
   "antiPatterns": [
     "Essential information the user needs to complete a task",
+    "Explaining why a control is disabled - keyboard users can't reach a tooltip on a disabled control; the reason belongs in visible helper text (e.g. Field's message)",
     "The only accessible name for a control",
     "Interactive content (buttons, links, form controls) inside the tooltip"
   ],
@@ -128,7 +124,7 @@
   "relatedComponents": ["Popup", "IconButton", "ToggleIconButton", "Button"],
   "do": [
     "Give the trigger its own accessible name, independent of the tooltip content.",
-    "Let a disabled control still explain itself via Tooltip."
+    "Keep a tooltip on a disabled control to what the control does, and give the reason it's disabled in visible helper text (e.g. Field's message)."
   ],
   "dont": [
     "Do not rely on tooltip content as the only description of what a control does.",

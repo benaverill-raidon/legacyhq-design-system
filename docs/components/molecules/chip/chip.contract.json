@@ -5,7 +5,7 @@
   "knownIssues": [
     {
       "kind": "gap",
-      "summary": "Names its remove control `removeAriaLabel`, where the convention is `removeLabel` (built-in-labels)."
+      "summary": "Its remove button's tooltip says \"Remove\" in English, with no prop to translate it (built-in-labels)."
     },
     {
       "kind": "gap",
@@ -180,11 +180,11 @@
       "default": null,
       "description": "filter and select. Every verified Figma variant of both has a remove button."
     },
-    "removeAriaLabel": {
+    "removeLabel": {
       "type": "string",
       "required": false,
       "default": "Remove ${labelText}",
-      "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`."
+      "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`. removeAriaLabel, the earlier name (renamed 2026-10-20 to match Tag's removeLabel, built-in-labels), is still accepted; removeLabel wins when both are set."
     },
     "labelText": {
       "type": "string",
@@ -295,7 +295,7 @@
   "do": [
     "Give each segment menu real MenuSection data and let its rows' own onSelect update your state.",
     "Use search for search scoping, filter for an editable filter, select for an applied value.",
-    "Provide an explicit removeAriaLabel when the label is not a plain string."
+    "Provide an explicit removeLabel when the label is not a plain string."
   ],
   "dont": [
     "Do not expect a tone prop - it is unexposed until a real Figma chip variant uses one.",

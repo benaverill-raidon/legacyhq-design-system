@@ -16,8 +16,8 @@
     {
       "name": "Packing chips against the trailing edge",
       "description": "alignment maps to justify-content - which edge the chips pack against. Note this is not Tag Group's alignment, which places an overflow tag.",
-      "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"search\" label=\"Documents\" />\n</ChipGroup>",
-      "props": { "alignment": "right", "size": "md" }
+      "jsx": "<ChipGroup alignment=\"end\" size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"search\" label=\"Documents\" />\n</ChipGroup>",
+      "props": { "alignment": "end", "size": "md" }
     },
     {
       "name": "One chip opting out of the group's size",

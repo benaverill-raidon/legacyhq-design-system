@@ -33,12 +33,18 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
    * it: collapsed in the stack, expanded while the stack is hovered or focused.
    */
   expanded?: boolean;
-  /** Shows the dismiss button. Turn it off for a `loading` toast that's replaced when the work finishes. */
+  /**
+   * Shows the dismiss button. Defaults to `true`. Turn it off for a `loading` toast, which is replaced
+   * when the work finishes; Toast Group's `toast.loading()` does that for you.
+   */
   isDismissible?: boolean;
   /** The dismiss button's accessible name. Defaults to "Dismiss"; pass a translation. */
   dismissLabel?: string;
-  /** Called when the dismiss button is clicked. Toast doesn't hide itself; Toast Group removes it. */
-  onDismiss?: () => void;
+  /**
+   * Called with the click event when the dismiss button is clicked. Toast doesn't hide itself; Toast
+   * Group removes it, and uses the event to tell a keyboard press (`detail` is 0) from a pointer click.
+   */
+  onDismiss?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   /** Defaults to `status`, a polite live region. */
   role?: React.AriaRole;
 }

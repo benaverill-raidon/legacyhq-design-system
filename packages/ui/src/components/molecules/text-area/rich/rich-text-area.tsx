@@ -107,6 +107,35 @@ function serializeDom(root: HTMLElement): RichTextValue {
   return out.filter((n) => n.type !== 'text' || n.text.length > 0);
 }
 
+/** Whether a `<fieldset disabled>` around the element disables it, as it would a native control. */
+function isInDisabledFieldset(element: Element) {
+  for (let fieldset = element.closest('fieldset'); fieldset; fieldset = fieldset.parentElement?.closest('fieldset') ?? null) {
+    // A disabled fieldset doesn't disable what's in its first legend.
+    if (fieldset.disabled && !fieldset.querySelector(':scope > legend')?.contains(element)) return true;
+  }
+  return false;
+}
+
+/**
+ * A native control follows a disabled `<fieldset>` around it by itself. The editor is a div, so it
+ * checks the fieldsets around it, and watches their `disabled`, to follow them the same way.
+ */
+function useFieldsetDisabled(ref: React.RefObject<HTMLElement | null>) {
+  const [fieldsetDisabled, setFieldsetDisabled] = React.useState(false);
+  React.useLayoutEffect(() => {
+    const element = ref.current;
+    if (!element) return undefined;
+    const check = () => setFieldsetDisabled(isInDisabledFieldset(element));
+    check();
+    const observer = new MutationObserver(check);
+    for (let fieldset = element.closest('fieldset'); fieldset; fieldset = fieldset.parentElement?.closest('fieldset') ?? null) {
+      observer.observe(fieldset, { attributes: true, attributeFilter: ['disabled'] });
+    }
+    return () => observer.disconnect();
+  }, [ref]);
+  return fieldsetDisabled;
+}
+
 /**
  * Rich Text Area - the `type=rich-inline` mode: a contenteditable field where typing `/` inline opens
  * a grouped entity picker (options only, like Figma), the `/query` living in a small Text-Field-like
@@ -123,7 +152,7 @@ export function RichTextArea({
   appearance,
   resize = 'vertical',
   invalid: requestedInvalid = false,
-  disabled = false,
+  disabled: requestedDisabled = false,
   required,
   placeholder,
   searchPlaceholder = 'Type to search',
@@ -141,6 +170,8 @@ export function RichTextArea({
   const invalid = requestedInvalid || ariaInvalid === true || ariaInvalid === 'true';
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<HTMLDivElement>(null);
+  // Disabled by its own prop, or by a disabled fieldset around it.
+  const disabled = useFieldsetDisabled(editorRef) || requestedDisabled;
   const slashSpanRef = React.useRef<HTMLElement | null>(null);
   const hydratedRef = React.useRef(false);
   const seqRef = React.useRef(0);

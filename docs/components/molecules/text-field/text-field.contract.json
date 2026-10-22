@@ -363,6 +363,7 @@
     "When iconAfter holds an interactive control, Tab reaches it as its own stop after the input, in native DOM order."
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "Render a real <input> inside a bordered frame div.",
     "Default size=md, context=default, invalid=false.",
     "The deprecated appearance prop maps to context: subtle and inline map to inline, default to default. An explicit context wins.",

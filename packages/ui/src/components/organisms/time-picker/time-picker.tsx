@@ -177,7 +177,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
     minuteStep = 5,
     format = defaultFormat,
     locale,
-    alignment = 'bottomLeft',
+    alignment = 'bottomStart',
     confirmLabel = 'Confirm',
     cancelLabel = 'Cancel',
     hoursLabel = 'Hours',
@@ -371,8 +371,11 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, close]);
 
+  // `:disabled` also catches a disabled fieldset around the picker, which its own prop doesn't.
+  const isDisabled = () => disabled || Boolean(inputRef.current?.matches(':disabled'));
+
   const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (disabled) {
+    if (isDisabled()) {
       return;
     }
     if (!isOpen && ['Enter', ' ', 'ArrowDown', 'ArrowUp'].includes(event.key)) {
@@ -456,7 +459,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(func
             </span>
           }
           onClick={() => {
-            if (disabled) {
+            if (isDisabled()) {
               return;
             }
             // Re-clicking the field while open dismisses it, which saves a changed selection.

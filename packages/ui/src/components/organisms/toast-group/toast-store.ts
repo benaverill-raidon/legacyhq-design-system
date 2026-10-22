@@ -8,7 +8,7 @@ export interface ToastOptions {
    * you leave out keep their earlier values.
    */
   id?: string;
-  /** The Toast's `tone`. The `toast.success`, `.error`, `.warning`, `.info`, and `.loading` helpers set it. */
+  /** The Toast's `tone`. The `toast.success`, `.error`, `.warning`, `.information`, and `.loading` helpers set it. */
   tone?: ToastTone | DeprecatedToastTone;
   /** @deprecated Renamed to `tone`. Still accepted. */
   appearance?: ToastTone | DeprecatedToastTone;
@@ -23,7 +23,11 @@ export interface ToastOptions {
    * unless you pass one.
    */
   duration?: number;
-  /** Shows the dismiss button. Defaults to `true`. */
+  /**
+   * Shows the dismiss button. Defaults to `true`, except for a `loading` toast, which is replaced with
+   * its result rather than closed. When a loading toast is updated to another tone, it gets its dismiss
+   * button back unless the update passes `isDismissible`.
+   */
   isDismissible?: boolean;
 }
 
@@ -73,15 +77,20 @@ class ToastStore {
 
     if (existingIndex >= 0) {
       // Update in place - keeps its stack position (loading -> success/error). Options left out keep
-      // their earlier values, except a loading toast's duration: once it resolves, it gets the
-      // group's duration unless the update passes one.
+      // their earlier values, except a loading toast's duration and dismiss button: once it resolves,
+      // it gets the group's duration and a dismiss button again unless the update passes them.
       this.toasts = this.toasts.map((toast, index) => {
         if (index !== existingIndex) {
           return toast;
         }
         const updated: ToastItem = { ...toast, ...item };
-        if (isLoading(toast) && !isLoading(updated) && options.duration === undefined) {
-          delete updated.duration;
+        if (isLoading(toast) && !isLoading(updated)) {
+          if (options.duration === undefined) {
+            delete updated.duration;
+          }
+          if (options.isDismissible === undefined) {
+            delete updated.isDismissible;
+          }
         }
         return updated;
       });
@@ -102,12 +111,21 @@ class ToastStore {
 export const toastStore = new ToastStore();
 
 interface ToastFunction {
+  /** Adds a `default` toast, or updates the toast with the same `id`, and returns its id. */
   (title: React.ReactNode, options?: ToastOptions): string;
+  /** A `success` toast. */
   success: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** An `error` toast. */
   error: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** A `warning` toast. */
   warning: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** An `information` toast. */
+  information: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** @deprecated Renamed to `toast.information`, the status name every component uses. Still accepted. */
   info: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** A `loading` toast: no dismiss button, and it stays until it's updated or dismissed. */
   loading: (title: React.ReactNode, options?: ToastOptions) => string;
+  /** Removes one toast at once, without the fade, or every toast when `id` is left out. */
   dismiss: (id?: string) => void;
 }
 
@@ -115,16 +133,21 @@ function createToast(title: React.ReactNode, options: ToastOptions = {}): string
   return toastStore.add(title, options);
 }
 
+const information = (title: React.ReactNode, options: ToastOptions = {}) =>
+  toastStore.add(title, { ...options, tone: 'information' });
+
 /**
- * Imperative API. Call `toast('Saved')` from anywhere; `toast.success/error/warning/info/loading`
- * set the tone (`info` sets `information`; a `loading` toast stays until it's updated or dismissed),
- * and `toast.dismiss(id)` removes one (or all). Requires a mounted `ToastGroup`.
+ * Imperative API. Call `toast('Saved')` from anywhere; `toast.success/error/warning/information/loading`
+ * set the tone (a `loading` toast has no dismiss button and stays until it's updated or dismissed),
+ * and `toast.dismiss(id)` removes one (or all). `toast.info` is the deprecated name for
+ * `toast.information`. Requires a mounted `ToastGroup`.
  */
 export const toast: ToastFunction = Object.assign(createToast, {
   success: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'success' }),
   error: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'error' }),
   warning: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'warning' }),
-  info: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'information' }),
+  information,
+  info: information,
   loading: (title: React.ReactNode, options: ToastOptions = {}) => toastStore.add(title, { ...options, tone: 'loading' }),
   dismiss: (id?: string) => toastStore.dismiss(id),
 });

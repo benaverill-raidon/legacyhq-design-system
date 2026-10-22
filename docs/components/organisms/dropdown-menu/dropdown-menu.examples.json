@@ -14,10 +14,10 @@
       "props": { "showSearch": false }
     },
     {
-      "name": "Right-aligned menu from a trailing trigger",
-      "description": "alignment='right' keeps the panel from overflowing past the trigger's right edge when the trigger sits near the end of a row.",
-      "jsx": "<DropdownMenu\n  aria-label=\"Table row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  alignment=\"right\"\n  showSearch={false}\n  sections={[{ id: 'actions', items: rowActionItems }]}\n>\n  <IconButton aria-label=\"Row actions\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
-      "props": { "alignment": "right", "showSearch": false }
+      "name": "End-aligned menu from a trailing trigger",
+      "description": "alignment='end' keeps the panel from overflowing past the trigger's end edge when the trigger sits near the end of a row.",
+      "jsx": "<DropdownMenu\n  aria-label=\"Table row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  alignment=\"end\"\n  showSearch={false}\n  sections={[{ id: 'actions', items: rowActionItems }]}\n>\n  <IconButton aria-label=\"Row actions\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+      "props": { "alignment": "end", "showSearch": false }
     }
   ],
   "antiExamples": [

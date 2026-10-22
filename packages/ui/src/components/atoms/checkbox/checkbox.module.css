@@ -151,37 +151,37 @@
   color: var(--color-content-error);
 }
 
-.root:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
-.root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):hover .indicatorTarget,
+.root[data-force-state='hover']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .indicatorTarget {
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-.root:not([data-disabled='true']):not([data-invalid='true']):hover .input:checked + .indicatorTarget,
-.root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):hover .indicatorTarget,
-.root[data-force-state='hover']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
-.root[data-force-state='hover'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):hover .input:checked + .indicatorTarget,
+.root[data-indeterminate='true']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):hover .indicatorTarget,
+.root[data-force-state='hover']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .input:checked + .indicatorTarget,
+.root[data-force-state='hover'][data-indeterminate='true']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .indicatorTarget {
   background: var(--color-background-brand-primary-overlay-hover);
 }
 
-.root:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
-.root[data-force-state='press']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):active .indicatorTarget,
+.root[data-force-state='press']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .indicatorTarget {
   background: var(--color-background-neutral-overlay-bold-press);
 }
 
-.root:not([data-disabled='true']):not([data-invalid='true']):active .input:checked + .indicatorTarget,
-.root[data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']):active .indicatorTarget,
-.root[data-force-state='press']:not([data-disabled='true']):not([data-invalid='true']) .input:checked + .indicatorTarget,
-.root[data-force-state='press'][data-indeterminate='true']:not([data-disabled='true']):not([data-invalid='true']) .indicatorTarget {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):active .input:checked + .indicatorTarget,
+.root[data-indeterminate='true']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):active .indicatorTarget,
+.root[data-force-state='press']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .input:checked + .indicatorTarget,
+.root[data-force-state='press'][data-indeterminate='true']:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']) .indicatorTarget {
   background: var(--color-background-brand-primary-overlay-press);
 }
 
-.root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,
-.root[data-force-state='hover'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
+.root[data-invalid='true']:not([data-disabled='true'], :where(:has(.input:disabled))):hover .indicatorTarget,
+.root[data-force-state='hover'][data-invalid='true']:not([data-disabled='true'], :where(:has(.input:disabled))) .indicatorTarget {
   background: var(--color-background-neutral-overlay-bold-hover);
 }
 
-.root[data-invalid='true']:not([data-disabled='true']):active .indicatorTarget,
-.root[data-force-state='press'][data-invalid='true']:not([data-disabled='true']) .indicatorTarget {
+.root[data-invalid='true']:not([data-disabled='true'], :where(:has(.input:disabled))):active .indicatorTarget,
+.root[data-force-state='press'][data-invalid='true']:not([data-disabled='true'], :where(:has(.input:disabled))) .indicatorTarget {
   background: var(--color-background-neutral-overlay-bold-press);
 }
 
@@ -189,20 +189,20 @@
   color: var(--color-content-error);
 }
 
-.root[data-disabled='true'] {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) {
   color: var(--color-content-disabled);
   cursor: not-allowed;
 }
 
-.root[data-disabled='true'] .indicatorTarget,
-.root[data-disabled='true']:hover .indicatorTarget,
-.root[data-disabled='true']:active .indicatorTarget,
-.root[data-force-state='hover'][data-disabled='true'] .indicatorTarget,
-.root[data-force-state='press'][data-disabled='true'] .indicatorTarget {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .indicatorTarget,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))):hover .indicatorTarget,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))):active .indicatorTarget,
+.root[data-force-state='hover']:is([data-disabled='true'], :where(:has(.input:disabled))) .indicatorTarget,
+.root[data-force-state='press']:is([data-disabled='true'], :where(:has(.input:disabled))) .indicatorTarget {
   background: transparent;
 }
 
-.root[data-disabled='true'] .indicatorIcon {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .indicatorIcon {
   color: var(--color-content-disabled);
 }
 

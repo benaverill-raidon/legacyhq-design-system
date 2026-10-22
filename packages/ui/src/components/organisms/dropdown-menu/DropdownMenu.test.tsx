@@ -304,21 +304,29 @@ describe('DropdownMenu', () => {
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
   });
 
-  it('maps alignment left/center/right to Popup bottomLeft/bottomCenter/bottomRight', () => {
-    const { rerender } = render(<ControlledDropdownMenu open alignment="left" />);
-    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomLeft');
+  it('maps alignment start/center/end to Popup bottomStart/bottomCenter/bottomEnd', () => {
+    const { rerender } = render(<ControlledDropdownMenu open alignment="start" />);
+    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomStart');
 
     rerender(<ControlledDropdownMenu open alignment="center" />);
     expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomCenter');
 
-    rerender(<ControlledDropdownMenu open alignment="right" />);
-    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomRight');
+    rerender(<ControlledDropdownMenu open alignment="end" />);
+    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomEnd');
   });
 
-  it('defaults to left (bottomLeft) alignment', () => {
+  it('still accepts the deprecated left and right alignments, placed as start and end', () => {
+    const { rerender } = render(<ControlledDropdownMenu open alignment="left" />);
+    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomStart');
+
+    rerender(<ControlledDropdownMenu open alignment="right" />);
+    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomEnd');
+  });
+
+  it('defaults to start (bottomStart) alignment', () => {
     render(<ControlledDropdownMenu open />);
 
-    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomLeft');
+    expect(screen.getByRole('menu').closest('[data-alignment]')).toHaveAttribute('data-alignment', 'bottomStart');
   });
 
   it("renders the panel with Popup's own visual skin but no padding, so Menu sits flush", () => {

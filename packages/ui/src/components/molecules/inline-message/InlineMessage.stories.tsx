@@ -131,7 +131,7 @@ export const EdgeCases: Story = {
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Falls back automatically near a viewport edge</h3>
         <p style={captionStyle}>
-          Inline Message always prefers <code>bottomLeft</code> and delegates viewport-fit fallback to
+          Inline Message always prefers <code>bottomStart</code> and delegates viewport-fit fallback to
           Popup: click a row pinned to this row&apos;s edge to see it reposition on its own.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

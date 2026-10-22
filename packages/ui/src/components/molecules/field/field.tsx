@@ -2,25 +2,25 @@ import * as React from 'react';
 import { StatusErrorIcon, StatusSuccessIcon } from '../../../assets/icons';
 import type { IconColor, IconProps } from '../../primitives/icon';
 import styles from './field.module.css';
-import type { FieldProps } from './field.types';
+import type { FieldProps, FieldState } from './field.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
-// `default` has no status icon (helper text only); `error` and `valid` each map to a decorative
-// status glyph, matching Figma's <message> part. Kept as sm/none (the field message's compact icon)
-// rather than the larger, spacious icon Inline Message uses.
-const STATUS_ICONS: Partial<Record<'error' | 'valid', { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
+// `default` has no status icon (helper text only); `error` and `success` each map to a decorative
+// status glyph, matching Figma's <message> part (whose `valid` is `success` here). Kept as sm/none
+// (the field message's compact icon) rather than the larger, spacious icon Inline Message uses.
+const STATUS_ICONS: Partial<Record<FieldState, { Icon: React.ComponentType<IconProps>; color: IconColor }>> = {
   error: { Icon: StatusErrorIcon, color: 'error' },
-  valid: { Icon: StatusSuccessIcon, color: 'success' },
+  success: { Icon: StatusSuccessIcon, color: 'success' },
 };
 
 export const Field = React.memo(function Field({
   children,
   label,
   message,
-  state = 'default',
+  state: stateProp = 'default',
   context = 'default',
   size = 'md',
   required = false,
@@ -31,6 +31,8 @@ export const Field = React.memo(function Field({
   'data-force-state': dataForceState,
   ...rest
 }: FieldProps) {
+  // `valid` is the deprecated name for `success`, and renders the same.
+  const state: FieldState = stateProp === 'valid' ? 'success' : stateProp;
   const reactId = React.useId();
   const child = React.isValidElement(children)
     ? (children as React.ReactElement<Record<string, unknown>>)
@@ -74,7 +76,7 @@ export const Field = React.memo(function Field({
 
   const control = child ? React.cloneElement(child, injectedProps) : children;
 
-  const status = STATUS_ICONS[state as 'error' | 'valid'];
+  const status = STATUS_ICONS[state];
 
   return (
     <div

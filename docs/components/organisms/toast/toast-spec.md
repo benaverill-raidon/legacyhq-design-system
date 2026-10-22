@@ -33,7 +33,7 @@ export interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
   expanded?: boolean;
   isDismissible?: boolean;
   dismissLabel?: string;
-  onDismiss?: () => void;
+  onDismiss?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   role?: React.AriaRole;
 }
 ```
@@ -75,12 +75,14 @@ loading  -> Spinner (no tile)
 
 - Render the Icon Tile (per-tone tone) or the Spinner for `loading`.
 - Always render the title; render the description and actions only when `expanded` and provided.
-- Show the dismiss button unless `isDismissible` is false; call `onDismiss` on click. Toast never
-  hides itself; the caller (Toast Group) removes it.
+- Show the dismiss button unless `isDismissible` is false; call `onDismiss` with the click event on
+  click. Toast never hides itself or moves focus; the caller (Toast Group) removes it, and uses the
+  event's `detail` to tell a keyboard press from a pointer click when it moves focus. Toast Group's
+  `toast.loading()` turns `isDismissible` off for a loading toast and gives it back on resolve.
 - The dismiss Icon Button keeps Icon Button's default tooltip, which shows its accessible name
   (`dismissLabel`) on hover and focus, the same as Section Message's. Inside Toast Group the tooltip
-  is drawn behind the stack for now: Popup's portal sits at `z-index: 1` and the group at `1000`
-  (the layering task recorded in token-governance.json's `elevation.layering`).
+  shows above the stack: Popup takes `LAYERS.popup` (1200) and the group `LAYERS.toast` (1100), from
+  `primitives/layers.ts` (see token-governance.json's `elevation.layering`).
 
 ## Accessibility
 

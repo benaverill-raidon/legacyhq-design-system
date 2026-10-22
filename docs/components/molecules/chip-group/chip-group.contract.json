@@ -1,13 +1,7 @@
 {
   "name": "ChipGroup",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
-    }
-  ],
+  "status": "stable",
   "purpose": "Lay out a wrapping row of Chips at one shared size and alignment.",
   "intent": "Give a row of Chips its measured wrap, gap, and alignment in one place, and remove the repetition (and the silent misalignment) of setting the same size on every chip by hand.",
   "sourceFiles": {
@@ -27,7 +21,7 @@
     "variantCount": 4,
     "verifiedAt": "2026-08-24",
     "note": "Filed on the file's own \"✅⏲️ Chip Group\" page, verified directly against the file via the Desktop Bridge plugin.",
-    "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
+    "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right; `start`/`end` in code). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
     "apiAdaptationNotes": [
       "Chip Group takes `children`, not a data array. Tag Group and Avatar Group own their items because they have to decide which are visible and which are truncated; Chip Group has no overflow behaviour at all, and Chip's own props are a discriminated union on `mode`, which a flat item type could not express without duplicating that union. Button Group - the closest analogue in this system - is likewise a children-based layout wrapper.",
       "`size` reaches each Chip through React context (ChipSizeContext), not by cloning children. cloneElement only reaches direct children, so a Chip inside a Tooltip, returned from a `.map`, or rendered conditionally would silently miss the group's size - the same structural fragility that detached Chip's own remove button from its pill. Context reaches any descendant regardless of what sits between, and an explicit `size` on an individual Chip still wins because Chip resolves `size ?? groupSize ?? 'md'`.",
@@ -49,13 +43,13 @@
     "Managing which chip is selected - Chip Group is layout only; hold that state yourself"
   ],
   "anatomy": [
-    { "name": "root", "description": "A wrapping flex row with an 8px gap on both axes and no padding or surface of its own. Carries data-alignment and data-size." },
+    { "name": "root", "description": "A wrapping flex row with an 8px gap on both axes and no padding or surface of its own. Carries data-alignment and data-size. Takes focus (tabindex=-1, Focus Ring) only when its last chip is removed while in use." },
     { "name": "children", "description": "The Chips. Any element is accepted, but the layout is built for Chip." }
   ],
   "props": {
     "children": { "type": "React.ReactNode", "required": true, "default": null, "description": "The Chips in this group." },
     "size": { "type": "ChipSize", "required": false, "default": null, "enum": ["sm", "md"], "description": "Shared by every Chip inside, via context. Omit to leave each Chip on its own default. An explicit size on an individual Chip wins." },
-    "alignment": { "type": "ChipGroupAlignment", "required": false, "default": "left", "enum": ["left", "right"], "description": "Which edge the chips pack against - maps to justify-content." },
+    "alignment": { "type": "ChipGroupAlignment", "required": false, "default": "start", "enum": ["start", "end"], "description": "Which edge the chips pack against - maps to justify-content, so it follows the writing direction. left and right, the earlier names, are still accepted." },
     "aria-label": { "type": "string", "required": false, "default": null, "description": "Names the group and makes it announced as role=\"group\"." },
     "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Same, by reference." },
     "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root's class list." }
@@ -64,8 +58,8 @@
   "slots": [{ "name": "children", "required": true, "allowedContent": "Chip elements" }],
   "variants": {
     "alignment": {
-      "left": { "purpose": "Chips pack against the inline start. The default, and Figma's own first variant." },
-      "right": { "purpose": "Chips pack against the inline end." }
+      "start": { "purpose": "Chips pack against the inline start. The default, and Figma's own first variant (left)." },
+      "end": { "purpose": "Chips pack against the inline end (Figma's right)." }
     }
   },
   "states": ["default"],
@@ -73,7 +67,8 @@
     "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
     "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
     "selection": "not managed - each search Chip carries its own aria-pressed",
-    "note": "Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour to document beyond its children's."
+    "focusAfterRemoval": "When the chip holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the chip that takes its place, else the previous chip, landing on the control in the same position counted from the end (remove button to remove button); chips with no enabled control are skipped. With no chip left, the group root takes tabindex=-1 and focus, with the shared Focus Ring. Focus the page has already moved is left alone.",
+    "note": "Chip Group renders no interactive element of its own; apart from keeping focus when a chip is removed, its focus and keyboard behaviour is its children's."
   },
   "keyboardInteraction": [
     "Tab moves between the Chips' own controls in DOM order",
@@ -109,7 +104,8 @@
   ],
   "acceptanceCriteria": [
     "Renders its children in a wrapping row with an 8px gap on both axes.",
-    "alignment=left packs chips against the inline start; alignment=right against the inline end.",
+    "alignment=start packs chips against the inline start; alignment=end against the inline end. The deprecated left and right lay out the same as start and end.",
+    "Removing the chip in use moves focus to the next chip, the previous one if it was last, or the group root if none remain, by keyboard or click; focus the page moved itself is left alone.",
     "size applies to every Chip inside, including ones behind a wrapper or produced by a map.",
     "An explicit size on an individual Chip wins over the group's.",
     "With no size set, each Chip keeps its own default.",

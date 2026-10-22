@@ -224,6 +224,12 @@ is kept by row id, across pages and sorts. The default id is the row's position 
 `getRowId` that returns a real id. Start with
 `defaultSelectedIds`, or control it with `selectedIds` and `onSelectionChange`.
 
+Selection is also kept across filters and searches, by design. A selected row that a filter now
+hides stays selected: the count in the selection bar includes it, and your `bulkActions` act on
+every selected id, shown or not. So a bulk action that asks for confirmation names the count it will
+act on, such as "Archive 12 matters?", rather than "Archive the selected matters?", and people can see
+when it reaches beyond the rows in view.
+
 <Example of={TableStories.Selectable} />
 
 <Example of={TableStories.FullShell} caption="Header, toolbar, selection with bulk actions, sorting, and pagination together." />

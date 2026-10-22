@@ -123,6 +123,9 @@ On Slider Range, the values stay at least `minDistance` apart, 1 by default; set
 the handles meet. A handle moved past the other trades places with it, so the lower value always
 comes first. Set `disableSwap` to stop a handle at the other one instead.
 
+In a form, the lower value submits under `name` and the upper under `name` with `Max` added, such as
+`budget` and `budgetMax`. Set `minName` and `maxName` to submit them under other names.
+
 <Example of={SliderStories.EdgeCases} caption="Edge cases: handles that meet, a minimum distance with and without swapping, a narrow container, short vertical sliders, and a dark surface." />
 
 </Subsection>

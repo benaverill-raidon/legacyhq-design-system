@@ -62,7 +62,7 @@ export const ActionsDropdown = ({ showSearch = false }) => {
 export const RowActionsDropdown = () => {
   const [open, setOpen] = React.useState(false);
   return (
-    <DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} alignment="right" showSearch={false} sections={matterActions(() => setOpen(false))}>
+    <DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} alignment="end" showSearch={false} sections={matterActions(() => setOpen(false))}>
       <IconButton aria-label="Row actions" appearance="subtle" isExpanded={open} onClick={() => setOpen((current) => !current)}>
         <MoreVertIcon />
       </IconButton>
@@ -132,12 +132,14 @@ export const RowActionsDropdown = () => {
 
 <Subsection title="Alignment">
 
-`alignment` sets which edge of the trigger the panel lines up with: `left`, the default, `center`,
-or `right`. It always opens below the trigger, as in Figma, where it fits. Where it doesn't, it
-moves to the position that overflows the viewport least, trying the same alignment above first,
-and it's kept inside the viewport.
+`alignment` sets which edge of the trigger the panel lines up with: `start`, the default, `center`,
+or `end` (Figma's `left`, `center`, and `right`). It always opens below the trigger, as in Figma,
+where it fits. Where it doesn't, it moves to the position that overflows the viewport least, trying
+the same alignment above first, and it's kept inside the viewport. Placement is left-to-right only:
+start is the trigger's left edge even in a right-to-left page. The earlier `left` and `right` are
+deprecated and still accepted.
 
-<Example of={DropdownMenuStories.Alignment} caption="Left, center, and right, each open below its trigger." />
+<Example of={DropdownMenuStories.Alignment} caption="Start, center, and end, each open below its trigger." />
 
 </Subsection>
 

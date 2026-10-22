@@ -177,23 +177,76 @@ describe('Popup', () => {
   });
 
   it('sets data-alignment on the panel matching the requested alignment', () => {
-    render(<ControlledPopup open alignment="bottomRight" />);
+    render(<ControlledPopup open alignment="bottomEnd" />);
 
     const panel = screen.getByText('Popup content').parentElement;
-    expect(panel).toHaveAttribute('data-alignment', 'bottomRight');
+    expect(panel).toHaveAttribute('data-alignment', 'bottomEnd');
   });
 
-  it('defaults to topLeft alignment, matching the Figma component default', () => {
+  it('defaults to topStart alignment, matching the Figma component default', () => {
     render(<ControlledPopup open />);
 
     const panel = screen.getByText('Popup content').parentElement;
-    expect(panel).toHaveAttribute('data-alignment', 'topLeft');
+    expect(panel).toHaveAttribute('data-alignment', 'topStart');
+  });
+
+  it("places start at the trigger's left edge and end at its right edge", () => {
+    document.documentElement.style.setProperty('--spacing-sm', '8px');
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.tagName === 'BUTTON') {
+          return { top: 100, bottom: 120, left: 200, right: 400, width: 200, height: 20 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    const { unmount } = render(<ControlledPopup open alignment="bottomStart" />);
+    expect(screen.getByText('Popup content').parentElement).toHaveStyle({ left: '200px' });
+    unmount();
+
+    render(<ControlledPopup open alignment="bottomEnd" />);
+    expect(screen.getByText('Popup content').parentElement).toHaveStyle({ left: '300px' });
+
+    getBoundingClientRectSpy.mockRestore();
+    document.documentElement.style.removeProperty('--spacing-sm');
+  });
+
+  it.each([
+    ['topLeft', 'topStart'],
+    ['topRight', 'topEnd'],
+    ['bottomLeft', 'bottomStart'],
+    ['bottomRight', 'bottomEnd'],
+  ] as const)('still accepts the deprecated %s alignment, placed as %s', (deprecated, replacement) => {
+    document.documentElement.style.setProperty('--spacing-sm', '8px');
+    const getBoundingClientRectSpy = vi
+      .spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.tagName === 'BUTTON') {
+          return { top: 200, bottom: 220, left: 200, right: 400, width: 200, height: 20 } as DOMRect;
+        }
+        return { top: 0, bottom: 50, left: 0, right: 100, width: 100, height: 50 } as DOMRect;
+      });
+
+    const { unmount } = render(<ControlledPopup open alignment={replacement} />);
+    const expected = screen.getByText('Popup content').parentElement as HTMLElement;
+    const expectedStyle = { top: expected.style.top, left: expected.style.left };
+    unmount();
+
+    render(<ControlledPopup open alignment={deprecated} />);
+    const panel = screen.getByText('Popup content').parentElement as HTMLElement;
+    expect(panel).toHaveAttribute('data-alignment', replacement);
+    expect(expectedStyle.left).not.toBe('');
+    expect({ top: panel.style.top, left: panel.style.left }).toEqual(expectedStyle);
+
+    getBoundingClientRectSpy.mockRestore();
+    document.documentElement.style.removeProperty('--spacing-sm');
   });
 
   it('falls back to the same alignment on the opposite side, not an unrelated alignment, on a tied overflow', () => {
     // Regression guard: when the preferred alignment overflows and multiple other alignments tie
     // at zero overflow, the fallback must prefer flipping the side (topCenter -> bottomCenter)
-    // over jumping to an alignment with a different horizontal align (e.g. bottomLeft) just
+    // over jumping to an alignment with a different horizontal align (e.g. bottomStart) just
     // because it happens to come first in the internal fallback list.
     document.documentElement.style.setProperty('--spacing-sm', '8px');
 

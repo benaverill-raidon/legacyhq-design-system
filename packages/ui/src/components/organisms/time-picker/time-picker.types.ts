@@ -1,5 +1,5 @@
 import type * as React from 'react';
-import type { PopupAlignment } from '../../primitives/popup';
+import type { DeprecatedPopupAlignment, PopupAlignment } from '../../primitives/popup';
 
 export type TimePickerSize = 'sm' | 'md' | 'lg';
 /** `default` is the bordered field for forms; `inline` is borderless at rest, for a field inside a row. */
@@ -42,8 +42,8 @@ export interface TimePickerProps
   format?: (value: Date, locale?: string) => string;
   /** BCP 47 locale for the field text. The columns are always 12-hour; `amLabel` and `pmLabel` name the halves. */
   locale?: string;
-  /** Where the popup opens relative to the field. Defaults to `bottomLeft`. */
-  alignment?: PopupAlignment;
+  /** Where the popup opens relative to the field, as Popup's `alignment`. Defaults to `bottomStart`; the deprecated physical names (`bottomLeft`, ...) are still accepted. */
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   /** Label for the Confirm button. Defaults to `Confirm`. */
   confirmLabel?: string;
   /** Label for the Cancel button. Defaults to `Cancel`. */

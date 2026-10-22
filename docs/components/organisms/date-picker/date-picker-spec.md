@@ -36,7 +36,7 @@ export interface DatePickerProps
   placeholder?: string;
   format?: (date: Date, locale?: string) => string;
   locale?: string;
-  alignment?: PopupAlignment;
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   min?: Date;
   max?: Date;
   isDateDisabled?: (date: Date) => boolean;
@@ -59,7 +59,7 @@ size = 'md'
 context = 'default'
 disabled = false
 invalid = false
-alignment = 'bottomLeft'
+alignment = 'bottomStart'
 weekStartsOn = 0
 format = locale short date (year numeric, month/day 2-digit, e.g. 03/09/2026)
 ```

@@ -111,7 +111,6 @@ button tone (Modal Dialog does not tone footer buttons).
 ---
 
 ## Open Questions
-- Should Modal Dialog offer enter/exit transitions beyond the light fade-in it ships with?
 - Should it grow a scroll-into-view or "sticky header shadow" affordance for very long bodies?
 
 ---

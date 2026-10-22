@@ -153,6 +153,9 @@ Final implementation decisions:
 - **Segment buttons are named by the property and their text** ("Due date March 2") through
   `aria-labelledby`, so no new text needs translating. `labelText` gives the property as text when
   `label` is JSX, for these names, the panel names, and the remove button.
+- **The remove button is named by `removeLabel`**, the name Tag uses (built-in-labels). It was
+  `removeAriaLabel` until 2026-10-20; that name is still accepted as a deprecated alias, and
+  `removeLabel` wins when both are set.
 - **`tone` is unexposed.** chip-base supports five tones but all 14 chip variants use
   `tone=default`, so a chip-level mapping would be extrapolated rather than verified.
 - **The seam rule applies to every segment, not just the leading one.** Each segment drops its own

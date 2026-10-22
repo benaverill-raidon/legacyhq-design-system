@@ -263,6 +263,12 @@ that just duplicate a semantic token under a different name (e.g. don't make
   Toast), and an icon-only control names the control. Rules and the open
   Figma/code differences are in the `icons` block of token-governance.json;
   Storybook's Foundations / Icons page documents them for people.
+- **When the control someone used disappears, focus moves to the nearest
+  element that stays** — never to the page. A component that removes its own
+  control does this itself (Chip Group and Tag Group move to the next or
+  previous item; Toast Group to the next toast or back to where focus came
+  from); a page that removes a row or item moves focus to a stable element
+  such as a results line (Patterns / Collections, Templates / Roadmap).
 - **Loading/busy states hold the control's size.** The spinner sits centered
   over the content; the label and icons keep their space (hidden with
   opacity, so the label stays the accessible name), and `aria-busy` marks it.

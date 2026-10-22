@@ -208,6 +208,7 @@
     "Don't use Text Area when the text needs to link to records - use RichTextArea, its inline entity-tagging sibling."
   ],
   "behaviorNotes": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "The frame styling lives on a wrapper <div>, matching Text Field's pattern. The <textarea> is a transparent, borderless child inside it.",
     "Focus detection uses :focus-within on the wrapper (not :focus on the textarea directly).",
     "Focus/invalid paint the thicker border via inset box-shadow on the wrapper, so the text never shifts.",

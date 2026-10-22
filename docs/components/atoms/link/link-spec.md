@@ -112,7 +112,9 @@ Do not add a `hasVisited` prop. Use native CSS `:visited`.
 
 ### Emphasis
 `emphasis` sets the text weight only: `strong` (the default, a heading weight) for a name /
-first-column identifier; `default` (a body weight) for any other entity link.
+first-column identifier; `default` (a body weight) for any other entity link. The `strong` default
+is intended (decided 2026-10-20), matching the contract; pass `emphasis="default"` for links in
+running text and secondary entity links.
 
 ## Token mapping
 

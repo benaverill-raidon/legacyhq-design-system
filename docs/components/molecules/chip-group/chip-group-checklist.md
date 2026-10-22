@@ -57,8 +57,9 @@ visibly breaks the line it lands on, and repeating `size="sm"` six times is exac
 ## Variants
 
 ### Alignment
-- `left` (default) - chips pack against the inline start
-- `right` - chips pack against the inline end
+- `start` (default, Figma's `left`) - chips pack against the inline start
+- `end` (Figma's `right`) - chips pack against the inline end
+- The deprecated `left` and `right` still work and lay out the same as `start` and `end`
 
 ### Size
 - `sm`, `md` - shared with every Chip inside; unset by default
@@ -80,7 +81,9 @@ Required:
 
 - [ ] `role="group"` only when `aria-label`/`aria-labelledby` is provided - never an unnamed group.
 - [ ] No roving tabindex: the chips are independent controls, not one composite widget.
-- [ ] No focus or keyboard behaviour of its own.
+- [ ] Removing the chip in use (keyboard or click) moves focus to the next chip, the previous one
+      if it was last, or the group itself (tabindex -1, Focus Ring) if none remain; never to the
+      page. Focus the page moved itself is left alone.
 - [ ] Forwards a ref and passes native div attributes through.
 
 ---
@@ -123,7 +126,7 @@ Final implementation decisions:
 ## Validated Figma Details
 
 - `chip-group` component set: node `4636:84492`, page "✅⏲️ Chip Group". Four variants crossing
-  `size` (`sm (24)` / `md (32)`) with `alignment` (left/right).
+  `size` (`sm (24)` / `md (32)`) with `alignment` (left/right; `start`/`end` in code).
 - Every variant: layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8,
   counterAxisAlignItems CENTER, padding 0, no fill or stroke.
 - `alignment=left` measures `primaryAxisAlignItems: MIN`; `alignment=right` measures `MAX`.
@@ -138,6 +141,7 @@ Final implementation decisions:
 - [ ] Both alignments, inside a bounded container so the packing edge is visible
 - [ ] Both sizes, plus one Chip opting out of the group's size
 - [ ] Wrapping onto a second line
+- [ ] Removing chips one after another, with focus moving to the next chip
 - [ ] A live scope selector (independent on/off toggles)
 - [ ] A live, removable filter bar
 - [ ] A single chip

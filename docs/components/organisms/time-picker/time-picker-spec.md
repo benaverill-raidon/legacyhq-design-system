@@ -41,7 +41,7 @@ export interface TimePickerProps
   minuteStep?: number;
   format?: (value: Date, locale?: string) => string;
   locale?: string;
-  alignment?: PopupAlignment;
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   confirmLabel?: string;
   cancelLabel?: string;
   hoursLabel?: string;
@@ -65,7 +65,7 @@ export interface TimePickerProps
 size = 'md'
 context = 'default'
 minuteStep = 5
-alignment = 'bottomLeft'
+alignment = 'bottomStart'
 format = locale 12-hour time (hour/minute 2-digit, e.g. 04:30 PM)
 confirmLabel = 'Confirm'; cancelLabel = 'Cancel'
 hoursLabel = 'Hours'; minutesLabel = 'Minutes'; meridiemLabel = 'AM/PM'

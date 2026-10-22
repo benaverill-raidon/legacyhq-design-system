@@ -182,7 +182,7 @@ function DocumentActions({ document, onRegenerate }: { document: GeneratedDocume
       onOpenChange={setOpen}
       showSearch={false}
       size="sm"
-      alignment="right"
+      alignment="end"
       sections={[
         {
           id: 'actions',

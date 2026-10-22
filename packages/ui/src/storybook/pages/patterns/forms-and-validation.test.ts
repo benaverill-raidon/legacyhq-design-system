@@ -19,7 +19,7 @@ const membersOf = (typesSource: string, name: string) => {
 describe('Forms and Validation cites', () => {
   it("Field's states, and what error and required wire onto the control", () => {
     const field = source('molecules/field/field.tsx');
-    expect(propValues(types('molecules/field/field.types.ts'), 'state')).toEqual(['default', 'error', 'valid']);
+    expect(propValues(types('molecules/field/field.types.ts'), 'state')).toEqual(['default', 'error', 'success']);
     expect(field).toMatch(/'aria-invalid': childProps\['aria-invalid'\] \?\? \(isError \? true : undefined\)/);
     expect(field).toMatch(/\[childProps\['aria-describedby'\] as string \| undefined, messageId\]/);
     expect(field).toMatch(/required: \(childProps\.required as boolean \| undefined\) \?\? \(required \|\| undefined\)/);

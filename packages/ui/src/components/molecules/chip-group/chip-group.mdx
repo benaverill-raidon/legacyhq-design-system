@@ -101,8 +101,10 @@ keep them out of an `sm` group.
 
 <Subsection title="Alignment">
 
-`alignment` sets which edge the chips pack against: `left`, the default, or `right`. It's not Tag
-Group's `alignment`, which places that group's overflow tag; Chip Group has no overflow.
+`alignment` sets which edge the chips pack against: `start`, the default, or `end` (Figma's `left`
+and `right`). Both follow the writing direction, so `start` is the right edge in a right-to-left
+page. The earlier `left` and `right` are deprecated and still accepted. It's not Tag Group's
+`alignment`, which places that group's overflow tag; Chip Group has no overflow.
 
 <Example of={ChipGroupStories.Alignment} caption="The dashed box shows the group's own bounds." />
 
@@ -128,6 +130,20 @@ should be on at a time, the code holding the state turns the others off. Removin
 also up to the code that renders it.
 
 <Example of={ChipGroupStories.Content} caption="A scope selector and an active filter bar, both wired to live state." />
+
+</Subsection>
+
+<Subsection title="Focus after removing a chip">
+
+When a chip is removed while someone is using it, from the keyboard or with a click, focus stays in
+the group instead of falling to the page. It moves to the chip that takes the removed one's place,
+or to the one before it if the removed chip was last, landing on the control in the same place (from
+one remove button to the next). Once no chips are left, focus moves to the group itself, so name the
+group with `aria-label` and it's announced. If your `onRemove` moves focus somewhere itself, or the
+page removes the whole group, Chip Group leaves focus alone; then move it to a stable element, as
+in Patterns / Collections.
+
+<Example of={ChipGroupStories.Removal} caption="Tab to a remove button and press Enter: focus moves to the next chip." />
 
 </Subsection>
 
@@ -209,8 +225,11 @@ A group can hold chips of different modes and disabled chips, which sit in the r
 
 - Chip Group renders a `div`. It has `role="group"` only when it's named with `aria-label` or
   `aria-labelledby`; an unnamed group would be a boundary to step through for no benefit.
-- It adds no focus or keyboard behavior of its own. Each chip's controls are separate tab stops, in
-  the order they appear, and there's no arrow-key movement between chips.
+- Each chip's controls are separate tab stops, in the order they appear, and there's no arrow-key
+  movement between chips.
+- When a chip is removed while it holds focus (or was just pressed), focus moves to the next chip,
+  the previous one if it was last, or the group itself, which takes `tabindex="-1"` and shows the
+  focus ring, once none are left. Focus is never dropped to the page.
 - It doesn't manage selection: each search chip announces its own state with `aria-pressed`.
 
 <Keyboard>

@@ -46,7 +46,7 @@ interface ToastProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'>
   actions?: React.ReactNode;
   expanded?: boolean;
   isDismissible?: boolean;
-  onDismiss?: () => void;
+  onDismiss?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 ```
 

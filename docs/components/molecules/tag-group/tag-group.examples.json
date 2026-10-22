@@ -15,9 +15,9 @@
     },
     {
       "name": "Overflow tag leading instead of trailing",
-      "description": "alignment='right' matches Figma's alignment=right variant - the overflow tag renders before the visible tags, same tags visible either way.",
-      "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} alignment=\"right\" />",
-      "props": { "maxVisible": 10, "alignment": "right" }
+      "description": "alignment='end' matches Figma's alignment=right variant - the overflow tag renders before the visible tags, same tags visible either way.",
+      "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} alignment=\"end\" />",
+      "props": { "maxVisible": 10, "alignment": "end" }
     },
     {
       "name": "Acting on a selected truncated tag",

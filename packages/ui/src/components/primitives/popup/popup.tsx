@@ -3,19 +3,33 @@ import { createPortal } from 'react-dom';
 import { EditableCellContext, useEditableCellSize } from '../editable-cell-context';
 import { LAYERS, useLayer } from '../layers';
 import styles from './popup.module.css';
-import type { PopupAlignment, PopupPadding, PopupProps } from './popup.types';
+import type { DeprecatedPopupAlignment, PopupAlignment, PopupPadding, PopupProps } from './popup.types';
 
 type Side = 'top' | 'bottom';
-type Align = 'left' | 'right' | 'center';
+type Align = 'start' | 'end' | 'center';
 
 const ALIGNMENT_FALLBACKS: PopupAlignment[] = [
-  'topLeft',
-  'topRight',
+  'topStart',
+  'topEnd',
   'topCenter',
-  'bottomLeft',
-  'bottomRight',
+  'bottomStart',
+  'bottomEnd',
   'bottomCenter',
 ];
+
+// The physical names alignment had before it took logical start/end, still accepted.
+const DEPRECATED_ALIGNMENTS: Record<DeprecatedPopupAlignment, PopupAlignment> = {
+  topLeft: 'topStart',
+  topRight: 'topEnd',
+  bottomLeft: 'bottomStart',
+  bottomRight: 'bottomEnd',
+};
+
+function normalizeAlignment(alignment: PopupAlignment | DeprecatedPopupAlignment): PopupAlignment {
+  return alignment in DEPRECATED_ALIGNMENTS
+    ? DEPRECATED_ALIGNMENTS[alignment as DeprecatedPopupAlignment]
+    : (alignment as PopupAlignment);
+}
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -58,12 +72,12 @@ function getTokenPixels(tokenName: string) {
 
 function splitAlignment(alignment: PopupAlignment): { side: Side; align: Align } {
   const side: Side = alignment.startsWith('top') ? 'top' : 'bottom';
-  const align: Align = alignment.endsWith('Left') ? 'left' : alignment.endsWith('Right') ? 'right' : 'center';
+  const align: Align = alignment.endsWith('Start') ? 'start' : alignment.endsWith('End') ? 'end' : 'center';
   return { side, align };
 }
 
 function combineAlignment(side: Side, align: Align): PopupAlignment {
-  const alignPart = align === 'left' ? 'Left' : align === 'right' ? 'Right' : 'Center';
+  const alignPart = align === 'start' ? 'Start' : align === 'end' ? 'End' : 'Center';
   return `${side}${alignPart}` as PopupAlignment;
 }
 
@@ -93,10 +107,12 @@ function getCandidatePosition(
   const viewportHeight = window.innerHeight;
 
   const top = side === 'top' ? triggerRect.top - panelRect.height - gap : triggerRect.bottom + gap;
+  // Placement is left-to-right only: start is the trigger's left edge and end its right edge, even
+  // in a right-to-left page.
   const left =
-    align === 'left'
+    align === 'start'
       ? triggerRect.left
-      : align === 'right'
+      : align === 'end'
         ? triggerRect.right - panelRect.width
         : triggerRect.left + triggerRect.width / 2 - panelRect.width / 2;
 
@@ -127,7 +143,7 @@ export const Popup = React.memo(function Popup({
   content,
   open,
   onOpenChange,
-  alignment = 'topLeft',
+  alignment: requestedAlignment = 'topStart',
   closeOnEscape = true,
   closeOnOutsideClick = true,
   id,
@@ -139,6 +155,7 @@ export const Popup = React.memo(function Popup({
   anchorRef,
   matchTriggerWidth = false,
 }: PopupProps) {
+  const alignment = normalizeAlignment(requestedAlignment);
   const cellSize = useEditableCellSize();
   const generatedId = React.useId();
   const contentId = id ?? generatedId;

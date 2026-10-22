@@ -19,7 +19,9 @@ Popup
 ## Public API
 
 ```ts
-type PopupAlignment = 'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft' | 'bottomRight' | 'bottomCenter';
+type PopupAlignment = 'topStart' | 'topEnd' | 'topCenter' | 'bottomStart' | 'bottomEnd' | 'bottomCenter';
+/** @deprecated Physical names, still accepted and placed as topStart/topEnd/bottomStart/bottomEnd. */
+type DeprecatedPopupAlignment = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 type PopupPadding = 'none' | 'sm' | 'md' | 'lg';
 
 interface PopupProps {
@@ -27,7 +29,7 @@ interface PopupProps {
   content: React.ReactNode;
   open: boolean;
   onOpenChange?: (open: boolean) => void;
-  alignment?: PopupAlignment;
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   closeOnEscape?: boolean;
   closeOnOutsideClick?: boolean;
   id?: string;
@@ -44,7 +46,7 @@ interface PopupProps {
 ## Defaults
 
 ```txt
-alignment: topLeft
+alignment: topStart
 closeOnEscape: true
 closeOnOutsideClick: true
 unstyled: false
@@ -53,10 +55,17 @@ manageTriggerAria: true
 matchTriggerWidth: false
 ```
 
-`alignment`'s default of `topLeft` matches the Figma component set's own declared default variant
+`alignment`'s default of `topStart` matches the Figma component set's own declared default variant
 (`alignment: "top left"`) - it is not necessarily the most common runtime placement (a click-opened
 menu more typically opens below its trigger), but there is no product signal in the source file to
 override it, so the spec follows Figma exactly rather than guessing.
+
+Alignment is named by logical start and end (`topStart`, `bottomEnd`), as Table and Form name it
+(component-api-governance.json, shared-value-names); Figma's variants are still physical (`top
+left`, `bottom right`). The physical names `topLeft`, `topRight`, `bottomLeft`, and `bottomRight`
+were renamed on 2026-10-20 and stay accepted as deprecated aliases, placed the same. Placement is
+left-to-right only: start is the trigger's left edge and end its right edge, even in a right-to-left
+page.
 
 ## Trigger behavior
 
@@ -135,7 +144,7 @@ primitive going forward - Tooltip renders through it (with `unstyled`) rather th
 own copy, which it did before Popup existed:
 
 - Renders in a portal at `document.body` to avoid clipping inside overflow containers.
-- Supports the six `alignment` values as a preference.
+- Supports the six `alignment` values as a preference (plus the four deprecated physical names).
 - Falls back to whichever of the six alignments overflows the viewport least when the preferred one
   doesn't fit, exposed via `data-alignment` on the panel. On a tied overflow, the same alignment on
   the opposite side (e.g. `topCenter` -> `bottomCenter`) wins over an unrelated alignment, so a

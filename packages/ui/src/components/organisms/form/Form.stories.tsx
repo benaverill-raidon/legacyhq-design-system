@@ -7,6 +7,8 @@ import { TextArea } from '../../molecules/text-area';
 import { Select } from '../../molecules/select';
 import { Button } from '../../atoms/button';
 import { Checkbox } from '../../atoms/checkbox';
+import { RadioGroup } from '../../atoms/radio';
+import { DatePicker } from '../date-picker';
 import { Form, FormSection, FormRow, FormFooter } from './form';
 
 const meta = {
@@ -246,3 +248,66 @@ export const EdgeCases: Story = {
     </div>
   ),
 };
+
+const BILLING = [
+  { value: 'hourly', label: 'Hourly' },
+  { value: 'flat', label: 'Flat fee' },
+];
+
+// A native fieldset's own border, padding, and margin, cleared so the fields sit where a FormSection
+// would put them. Its legend is the section's title, hidden here because the Form title names it.
+const plainFieldset: CSSProperties = {
+  display: 'grid',
+  gap: 'var(--spacing-lg)',
+  minInlineSize: 0,
+  margin: 'var(--spacing-none)',
+  padding: 'var(--spacing-none)',
+  border: 'none',
+};
+
+/**
+ * Disabling a group of fields at once: wrap them in a native `<fieldset disabled>`. Every control in
+ * it is disabled and looks it, without its own `disabled` prop, just as the browser disables native
+ * inputs. Here a closed matter's details are locked until it's reopened.
+ */
+function LockedMatterForm() {
+  const [locked, setLocked] = useState(true);
+  const [owner, setOwner] = useState<string | null>('javerill');
+
+  return (
+    <div style={frame}>
+      <Form title="Matter details" description={locked ? 'This matter is closed. Reopen it to make changes.' : 'Make your changes, then save.'} onSubmit={(event) => event.preventDefault()}>
+        <FormSection>
+          <fieldset disabled={locked} style={plainFieldset}>
+            <FormRow>
+              <Field label="Matter name">
+                <TextField defaultValue="Lee Living Trust" />
+              </Field>
+              <Field label="Responsible attorney">
+                <Select options={OWNERS} value={owner} onChange={setOwner} />
+              </Field>
+            </FormRow>
+            <Field label="Opened">
+              <DatePicker defaultValue={new Date(2026, 2, 9)} today={new Date(2026, 2, 9)} />
+            </Field>
+            <RadioGroup label="Billing" orientation="horizontal" defaultValue="flat" options={BILLING} />
+            <Checkbox label="Email the client a copy of each document" defaultChecked />
+          </fieldset>
+        </FormSection>
+        <FormFooter align="end">
+          <Button prominence={locked ? 'primary' : 'tertiary'} onClick={() => setLocked((current) => !current)}>
+            {locked ? 'Reopen matter' : 'Close matter'}
+          </Button>
+          {locked ? null : (
+            <Button prominence="primary" type="submit">
+              Save
+            </Button>
+          )}
+        </FormFooter>
+      </Form>
+    </div>
+  );
+}
+
+/** A group of fields disabled at once by a native `<fieldset disabled>`. */
+export const DisabledFieldset: Story = { render: () => <LockedMatterForm /> };

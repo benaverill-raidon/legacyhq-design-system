@@ -209,6 +209,19 @@ describe('TimePicker', () => {
     fireEvent.click(field());
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('does not open inside a disabled fieldset, by click or key', () => {
+    render(
+      <fieldset disabled>
+        <TimePicker defaultValue={FOUR_THIRTY_PM} aria-label="Time" />
+      </fieldset>,
+    );
+    expect(field()).toBeDisabled();
+    fireEvent.click(field());
+    fireEvent.keyDown(field(), { key: 'Enter' });
+    fireEvent.keyDown(field(), { key: 'ArrowDown' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 });
 
 describe('TimePicker minute snapping and unchanged dismissals', () => {

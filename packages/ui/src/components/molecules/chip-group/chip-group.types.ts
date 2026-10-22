@@ -2,14 +2,20 @@ import type * as React from 'react';
 import type { ChipSize } from '../chip';
 
 /**
- * Where the row sits along its own inline axis - Figma's `alignment` axis, which measures
- * `primaryAxisAlignItems: MIN` / `MAX`.
+ * Where the row sits along its own inline axis - Figma's `alignment` axis (`left` / `right`), which
+ * measures `primaryAxisAlignItems: MIN` / `MAX`. Named by logical start and end, as Table and Form
+ * name alignment, so it follows the writing direction.
  *
  * Note this is genuinely different from Tag Group's identically-named prop: there, `alignment`
  * decides where the *overflow tag* renders. Chip Group has no overflow, so here it means what it
  * looks like - which edge the chips pack against.
  */
-export type ChipGroupAlignment = 'left' | 'right';
+export type ChipGroupAlignment = 'start' | 'end';
+/**
+ * @deprecated Use `start` or `end`: alignment is named by logical start and end, as Table and Form
+ * name it. Still accepted, and laid out the same.
+ */
+export type DeprecatedChipGroupAlignment = 'left' | 'right';
 
 export interface ChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /** The Chips in this group. Any element is accepted, but Chip is what the layout is built for. */
@@ -20,6 +26,10 @@ export interface ChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
    * Chip wins. Omit to leave each Chip on its own default.
    */
   size?: ChipSize;
-  /** Which edge the chips pack against. Defaults to `left`. */
-  alignment?: ChipGroupAlignment;
+  /**
+   * Which edge the chips pack against: `start`, the default, or `end`. It follows the writing
+   * direction, so `start` is the right edge in a right-to-left page. `left` and `right`, the earlier
+   * names, are still accepted.
+   */
+  alignment?: ChipGroupAlignment | DeprecatedChipGroupAlignment;
 }

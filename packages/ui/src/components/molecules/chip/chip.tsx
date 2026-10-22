@@ -33,7 +33,7 @@ function fitChipLeadingAvatar(node: React.ReactNode, chipSize: ChipSize): React.
   return node;
 }
 
-function defaultRemoveAriaLabel(propertyName: string | undefined, explicit?: string) {
+function defaultRemoveLabel(propertyName: string | undefined, explicit?: string) {
   if (explicit) return explicit;
   return propertyName ? `Remove ${propertyName}` : 'Remove';
 }
@@ -195,7 +195,8 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
         focusRingClassNames.focusRingDefault,
       )}
       disabled={disabled}
-      aria-label={defaultRemoveAriaLabel(propertyName, props.removeAriaLabel)}
+      // `removeAriaLabel` is the deprecated name for `removeLabel`.
+      aria-label={defaultRemoveLabel(propertyName, props.removeLabel ?? props.removeAriaLabel)}
       onClick={props.onRemove}
     >
       <CloseIcon size="md" decorative />

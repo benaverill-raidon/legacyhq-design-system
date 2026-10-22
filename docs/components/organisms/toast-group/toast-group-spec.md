@@ -31,15 +31,17 @@ toast(title, options?)          // default tone
 toast.success(title, options?)
 toast.error(title, options?)
 toast.warning(title, options?)
-toast.info(title, options?)
-toast.loading(title, options?)  // stays until updated or dismissed
+toast.information(title, options?)
+toast.info(title, options?)     // deprecated alias of toast.information
+toast.loading(title, options?)  // no dismiss button; stays until updated or dismissed
 toast.dismiss(id?)              // one, or all when id is omitted
 
 // options: { id?, description?, actions?, duration?, isDismissible?, tone? }
 ```
 
 Reuse an `id` to update a toast in place (loading -> success/error). A loading toast that resolves
-to another tone gets the group's `duration` unless the update passes one.
+to another tone gets the group's `duration` and its dismiss button back unless the update passes
+`duration` or `isDismissible`.
 
 ## Behavior
 
@@ -57,10 +59,13 @@ to another tone gets the group's `duration` unless the update passes one.
   while the stack is expanded, while the toast is queued (past `maxVisible`), and while it exits; it
   keeps the time left and resumes from it. A queued toast's timer doesn't start until it's in view.
   An update (same id) or a new duration starts the timer over.
+- **Dismiss button.** Shown unless the toast's `isDismissible` is `false`. A `loading` toast with no
+  `isDismissible` has none (the group passes `isDismissible ?? !isLoading` to Toast), since it's
+  replaced with its result rather than closed.
 - **Update in place.** `add` merges the new options over the old item (`{ ...old, ...new }`), so an
-  option left out keeps its earlier value. The exception: when a `loading` toast is updated to another
-  tone without a `duration`, its duration is dropped, so the result gets the group's `duration`. Each
-  add or update bumps the item's `revision`.
+  option left out keeps its earlier value. The exceptions: when a `loading` toast is updated to another
+  tone, its `duration` and `isDismissible` are dropped unless the update passes them, so the result
+  gets the group's `duration` and a dismiss button. Each add or update bumps the item's `revision`.
 - **`toast.dismiss`** removes from the store immediately (no exit fade); only the dismiss button
   and swipe run the fade first.
 - **Swipe.** Pointer drag past 80px dismisses; otherwise it snaps back. The transform transition is
@@ -84,6 +89,14 @@ to another tone gets the group's `duration` unless the update passes one.
   revision, so a new toast, an updated toast, and a queued toast coming into view are each added to it
   and announced. The Toast cards render with `role="none"`, so nothing is announced twice.
 - Focusing into the stack expands it and pauses auto-dismiss; it stays expanded while focus is inside.
+- **Focus after a keyboard dismiss.** When a toast's dismiss button is activated from the keyboard (a
+  click with `detail === 0`) while focus is in that toast, focus moves before the toast fades: to the
+  first focusable element of the next toast in the list (older), else the previous one (newer),
+  skipping toasts that are queued (`inert`), already exiting, or have nothing to focus; else back to
+  the element focus came from when it entered the stack (recorded from `relatedTarget` on focus-in);
+  else, if that's gone or can't take focus, the focused button is blurred, leaving focus on the page.
+  A pointer click (`detail > 0`) leaves focus alone, so the stack collapses when the pointer leaves.
+  Swipes and timers don't move focus (timers are paused while focus is inside).
 - Hidden (queued) items are `inert` and `aria-hidden="true"` (plus `opacity: 0`, `pointer-events:
   none`): out of the accessibility tree and the tab order.
 - Not portaled: the list renders where `ToastGroup` is mounted (fixed-positioned), which sets its
@@ -115,4 +128,13 @@ expands to reveal descriptions when the stack is hovered
 pauses the timers while hovered and resumes them with the time that was left
 stays expanded and paused while focus is inside, even after the pointer leaves
 collapses again when the focused toast is removed
+sets information from toast.information, and still accepts the deprecated toast.info
+gives a loading toast no dismiss button, and gives it back when the toast resolves
+doesn't pass a loading toast's isDismissible on to its result unless the update sets it
+focus after a keyboard dismiss: moves to the next toast in the list
+focus after a keyboard dismiss: moves to the previous toast when it was the last one in the list
+focus after a keyboard dismiss: skips a toast with nothing to focus, and one that's waiting past maxVisible
+focus after a keyboard dismiss: goes back to where focus was before it entered the stack when no toast is left
+focus after a keyboard dismiss: falls back to the page when focus came from nowhere it can go back to
+focus after a keyboard dismiss: leaves focus alone after a pointer click
 ```

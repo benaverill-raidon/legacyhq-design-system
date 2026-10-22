@@ -151,6 +151,19 @@ describe('DatePicker', () => {
     expect(screen.queryByRole('grid')).not.toBeInTheDocument();
   });
 
+  it('does not open inside a disabled fieldset, by click or key', () => {
+    render(
+      <fieldset disabled>
+        <DatePicker defaultValue={TODAY} today={TODAY} aria-label="Date" />
+      </fieldset>,
+    );
+    expect(field()).toBeDisabled();
+    fireEvent.click(field());
+    fireEvent.keyDown(field(), { key: 'Enter' });
+    fireEvent.keyDown(field(), { key: 'ArrowDown' });
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+  });
+
   it('passes min/max through to the calendar', () => {
     renderPicker({ min: new Date(2026, 2, 4), max: new Date(2026, 2, 24) });
     fireEvent.click(field());

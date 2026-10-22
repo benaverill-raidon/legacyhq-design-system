@@ -141,7 +141,7 @@ describe('Messages and Feedback cites', () => {
   it('the tones each component takes', () => {
     expect(propValues(typesOf('banner'), 'tone')).toEqual(['default', 'warning', 'error']);
     expect(propValues(typesOf('toast'), 'tone')).toContain('loading');
-    expect(propValues(typesOf('field'), 'state')).toEqual(['default', 'error', 'valid']);
+    expect(propValues(typesOf('field'), 'state')).toEqual(['default', 'error', 'success']);
   });
 
   it("Toast Group's 5-second default and its live region", () => {

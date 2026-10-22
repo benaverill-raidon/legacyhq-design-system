@@ -1,21 +1,7 @@
 {
   "name": "ToastGroup",
   "category": "feedback",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Dismissing a toast from the keyboard leaves focus on the page."
-    },
-    {
-      "kind": "gap",
-      "summary": "The helper is `toast.info()`, which sets the `information` tone; by the one-name rule it would be `toast.information()`, with `info` kept as an alias."
-    },
-    {
-      "kind": "decision",
-      "summary": "Toast's page says to turn dismissing off for a loading toast, but `toast.loading()` doesn't, and an `isDismissible: false` loading toast passes it on to its result."
-    }
-  ],
+  "status": "stable",
   "purpose": "Stack transient Toasts and provide the imperative toast() API.",
   "intent": "Pin a bottom-right stack of Toasts that collapses in a 3D pile and expands into a vertical list on hover, with auto-dismiss, pause-on-hover, and swipe-to-dismiss.",
   "figmaSource": {
@@ -52,8 +38,9 @@
     "toast.success": "(title, options?) => id",
     "toast.error": "(title, options?) => id",
     "toast.warning": "(title, options?) => id",
-    "toast.info": "(title, options?) => id",
-    "toast.loading": "(title, options?) => id  (no auto-dismiss until it's updated to another tone, which then gets the group's duration unless one is passed)",
+    "toast.information": "(title, options?) => id",
+    "toast.info": "(title, options?) => id  (deprecated alias of toast.information)",
+    "toast.loading": "(title, options?) => id  (no dismiss button and no auto-dismiss until it's updated to another tone, which then gets the group's duration and a dismiss button unless duration or isDismissible is passed)",
     "toast.dismiss": "(id?) => void  (dismiss one, or all when id is omitted)",
     "options": "{ id?, description?, actions?, duration?, isDismissible?, tone? }"
   },
@@ -75,8 +62,9 @@
     "toastRole": "none",
     "liveRegion": "an always-mounted, visually hidden role=\"status\" element (aria-atomic=\"false\") beside the list",
     "focusExpandsAndPauses": true,
+    "focusAfterKeyboardDismiss": "the next toast's first focusable element, else the previous toast's, else the element focus came from when it entered the stack, else the page (the button is blurred)",
     "queuedToastsInert": true,
-    "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden."
+    "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden. When a toast is dismissed from the keyboard (a click with detail 0 while focus is in it), focus moves to the next toast, else the previous one, skipping queued, exiting, and unfocusable toasts, else back to where it came from, else the page; a pointer click leaves focus alone."
   },
   "behaviorRules": [
     "Mount exactly one ToastGroup; call toast() from anywhere.",
@@ -85,7 +73,9 @@
     "Auto-dismiss each toast after it has been in view for its duration; pause the timers while the stack is hovered or focused, and resume them with the time left. Don't run a queued toast's timer.",
     "Support swipe/drag to dismiss past a threshold.",
     "Reduce transitions to instant under prefers-reduced-motion.",
-    "Update a toast in place when the same id is reused (loading -> success/error); a resolved loading toast gets the group's duration unless the update passes one.",
+    "Update a toast in place when the same id is reused (loading -> success/error); a resolved loading toast gets the group's duration and a dismiss button unless the update passes duration or isDismissible.",
+    "Give a loading toast no dismiss button unless it passes isDismissible.",
+    "When a toast is dismissed from the keyboard, move focus to the next toast, else the previous one, else back to where focus came from, else the page.",
     "Keep the stack expanded while focus is inside it, whatever the pointer does.",
     "Keep a live region mounted and announce each toast through it when it comes into view or is updated; keep queued toasts inert and aria-hidden."
   ],
@@ -129,6 +119,9 @@
     "Keeps every toast in the DOM while stacked, newest first.",
     "Expands to reveal descriptions when the stack is hovered.",
     "Gives a resolved loading toast the group's duration unless the update passes one.",
+    "Sets information from toast.information, and still accepts the deprecated toast.info.",
+    "Gives a loading toast no dismiss button, and gives it back on resolve unless the update passes isDismissible.",
+    "Moves focus after a keyboard dismiss to the next toast, the previous one, or back to where it came from; leaves it alone after a pointer click.",
     "Keeps queued toasts inert and aria-hidden, and starts their timers only once they're in view.",
     "Announces new, updated, and newly visible toasts once through a persistent live region.",
     "Pauses the timers on hover and focus and resumes them with the time left; stays expanded while focus is inside.",

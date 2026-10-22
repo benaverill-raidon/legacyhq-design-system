@@ -28,7 +28,10 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    questions.
 7. Status: done. Draft, Beta, Stable, Deprecated, authored in each contract and checked against the
    evidence (componentStatus in component-registry-governance.json). 15 Stable, 43 Beta.
-8. **Next: every held item at once**: the known issues on Introduction / Status, and this file.
+8. **Now: the held items.** Done so far: the naming and behavior decisions (start/end alignment,
+   `removeLabel`, `toast.information()`, Field `success`, when errors show, loading toasts,
+   focus after removal, disabled fieldsets, Slider field names, and the Table, Link, Modal
+   Dialog, and Tooltip decisions). Next: the gaps, the bugs, and docs tooling.
 
 ## Figma (publish and check)
 
@@ -40,12 +43,6 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
   status icon, the focus-ring offset and inverse ring, Toast's loading title, Progress Indicator's
   inverse dot, Skeleton's fill, the icon reconciliation, the "more" icon) are those components'
   known issues.
-
-## Across components
-
-- Controls inside a plain `<fieldset disabled>` don't look disabled.
-- Nothing gives focus a place to go when the control someone used unmounts (a removed chip, a
-  row that leaves the filtered view); Collections and Roadmap handle it locally.
 
 ## Docs tooling
 

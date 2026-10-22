@@ -222,27 +222,27 @@
   inset-inline-start: var(--slider-upper-position);
 }
 
-.root:not(.rangeRoot):not([data-disabled='true']):hover .handleSingle,
+.root:not(.rangeRoot):not([data-disabled='true'], :where(:has(.input:disabled))):hover .handleSingle,
 .control:has(.singleInput[data-preview-state='hover']) .handleSingle,
-.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):hover .handleLower,
-.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):hover .handleUpper,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true'], :where(:has(.input:disabled))):hover .handleLower,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true'], :where(:has(.input:disabled))):hover .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='hover']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='hover']) .handleUpper {
   --slider-handle-visual-color: var(--color-background-brand-primary-bold-hover);
 }
 
-.root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle,
+.root:not(.rangeRoot):not([data-disabled='true'], :where(:has(.input:disabled))):active .handleSingle,
 .control:has(.singleInput[data-preview-state='press']) .handleSingle,
-.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):active .handleLower,
-.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):active .handleUpper,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true'], :where(:has(.input:disabled))):active .handleLower,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true'], :where(:has(.input:disabled))):active .handleUpper,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper {
   --slider-handle-visual-color: var(--color-background-brand-primary-bold-press);
 }
 
-.root:not(.rangeRoot):not([data-disabled='true']):active .handleSingle .handleVisual,
-.rangeRoot[data-active-handle='lower']:not([data-disabled='true']):active .handleLower .handleVisual,
-.rangeRoot[data-active-handle='upper']:not([data-disabled='true']):active .handleUpper .handleVisual,
+.root:not(.rangeRoot):not([data-disabled='true'], :where(:has(.input:disabled))):active .handleSingle .handleVisual,
+.rangeRoot[data-active-handle='lower']:not([data-disabled='true'], :where(:has(.input:disabled))):active .handleLower .handleVisual,
+.rangeRoot[data-active-handle='upper']:not([data-disabled='true'], :where(:has(.input:disabled))):active .handleUpper .handleVisual,
 .control:has(.singleInput[data-preview-state='press']) .handleSingle .handleVisual,
 .control:has(.rangeInputLower[data-preview-state='press']) .handleLower .handleVisual,
 .control:has(.rangeInputUpper[data-preview-state='press']) .handleUpper .handleVisual {
@@ -269,24 +269,24 @@
   outline-offset: var(--focus-ring-offset);
 }
 
-.root[data-disabled='true'] {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) {
   color: var(--color-content-disabled);
 }
 
-.root[data-disabled='true'] .inactiveTrackStart,
-.root[data-disabled='true'] .inactiveTrackEnd {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .inactiveTrackStart,
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .inactiveTrackEnd {
   background: var(--color-background-disabled);
 }
 
-.root[data-disabled='true'] .activeTrack {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .activeTrack {
   background: var(--color-content-disabled);
 }
 
-.root[data-disabled='true'] .handle {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .handle {
   --slider-handle-visual-color: var(--color-content-disabled);
 }
 
-.root[data-disabled='true'] .stepDot {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) .stepDot {
   background: var(--color-content-disabled);
 }
 
@@ -341,7 +341,7 @@
  * `data-active` already reflects whether this dot falls within the active fill. `:not(disabled)`
  * keeps this from tying in specificity with the disabled-state stepDot color below.
  */
-.root:not([data-disabled='true']) .step[data-active='true'] .stepDot {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))) .step[data-active='true'] .stepDot {
   background: var(--color-content-brand-primary-subtle);
 }
 

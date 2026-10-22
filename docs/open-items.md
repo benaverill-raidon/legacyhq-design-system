@@ -33,16 +33,93 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    focus after removal, disabled fieldsets, Slider field names, and the Table, Link, Modal
    Dialog, and Tooltip decisions). Next: the gaps, the bugs, and docs tooling.
 
-## Figma (publish and check)
+## Figma (the owner's checklist)
 
-- Publish **Tokens v1.0.0**: the variable and style renames, the Heading/XXL rebind, the style
+Work in Figma first; the code follows. Items that belong to one component are also that
+component's known issues, so they show on Introduction / Status too.
+
+**Publish**
+
+- [ ] **Tokens v1.0.0**: the 31 variable and 6 style renames, the Heading/XXL rebind, the 15 style
   descriptions, and `spacing/075`.
-- Publish **Components v1.0.0**: the vocabulary renames (tone, context, information, inverse,
-  taupe, round, Modal Dialog sm–xl).
-- The Figma checks and token requests that belong to one component (Table's header fill, Field's
-  status icon, the focus-ring offset and inverse ring, Toast's loading title, Progress Indicator's
-  inverse dot, Skeleton's fill, the icon reconciliation, the "more" icon) are those components'
-  known issues.
+- [ ] **Components v1.0.0**: the vocabulary renames (status → tone, the in-a-row look → context,
+  info → information, inverted → inverse, gray → taupe, circle → round, Modal Dialog sm–xl).
+
+**Rename to match the code** (done in code 2026-10-22, old names still accepted there)
+
+- [ ] Alignment variants `left` / `right` → `start` / `end` in popup, dropdown-menu, chip-group,
+  and tag-group (popup's `topLeft`… → `topStart`…).
+- [ ] Field's `state=valid` → `success`, and the message's `valid` boolean → `success`.
+
+**Check a value**
+
+- [ ] Table header fill (node `2956:29798`): surface sunken (the CSS) or surface default (the
+  contract)?
+- [ ] Button Group gap: confirm the stacked variants' 8px; there's no value for the horizontal gap.
+- [ ] Field: is the status icon meant to center against a message that wraps?
+- [ ] Field's label (`heading-xxs`) vs Radio's and Checkbox's group legends (`body-md`), and the
+  required `*` spacing: which is right?
+
+**Create tokens**
+
+- [ ] A focus-ring offset (the code uses a raw 2px).
+- [ ] An inverse focus ring for dark surfaces.
+- [ ] A Toast loading title color that passes contrast (3.19:1 light, 4.31:1 dark).
+- [ ] A Progress Indicator inverse dot that shows on surfaces that stay dark.
+- [ ] A stronger Skeleton subtle fill.
+- [ ] Remove `component/tooltip/z-index` (unused; z-index isn't a token).
+
+**Icons**
+
+- [ ] 16 Figma-only names (agent1–3, beneficiary, billing, detailed-theme, estate-plan,
+  estate-planning, family, fiduciary, firm, liability, mobile-phone, relationships, sort,
+  status_discovery) and 2 code-only names (administrative-account and one more: the full list is
+  `icons.openFindings` in token-governance.json).
+- [ ] Two components named `menu`.
+- [ ] Four glyphs drawn differently from code: assets, node, and the rings of radio_checked and
+  radio_unchecked.
+- [ ] `incapacitated` and `life-insurance-policy` are the same glyph.
+- [ ] The icon wrapper defaults to `Size=sm` (code: md), and the property is capitalized.
+- [ ] Decide the "more" icon: horizontal (Icon Button's page) or vertical (row actions).
+
+**Decide**
+
+- [ ] Tag `tone` holds color names: rename to `appearance`, or keep.
+- [ ] Tag or Label for categories on a record.
+- [ ] Split Button `tone`: drop, or deprecate until Icon Button has one.
+
+**Earlier clean-up, if not done**
+
+- [ ] Rebind components still bound to deleted variables (old spacing, stroke, border-width) and
+  replace raw pill radii.
+- [ ] Drop the duplicate `size/avatar/2xl` (Avatar xl is bound to it).
+- [ ] Text Field and Text Area have an autofill color in Figma the code doesn't use yet.
+
+**When the designs are ready**
+
+- [ ] Check Templates / Document Generation and Roadmap against them; each lists its guesses under
+  Open questions.
+
+## Across components
+
+- **Popups are placed by physical left and right.** Popup and everything built on it (Dropdown
+  Menu, Tooltip, Select, the pickers, Inline Message, Split Button) take `start` / `end`, but on a
+  right-to-left page `start` stays on the left. Recorded as a known limitation on Popup and
+  Dropdown Menu; supporting right-to-left is a separate piece of work.
+
+## Found recently (2026-10-22)
+
+While carrying out the naming and behavior decisions. Each is also its component's known issue.
+
+- Chip: the remove button's tooltip says "Remove" in English, with no prop to translate it.
+- Tag Group: no `aria-label`, so focus lands on an unnamed group when its last tag is removed.
+- Slider: a press on a disabled single Slider still sets `data-dragging="true"`.
+- Slider: its examples file uses a `type` prop that doesn't exist.
+- Chip Group and Tag Group: an empty group's root is 0×0, so its focus ring barely shows when
+  focus lands there.
+
+Not a known issue: Field's label doesn't dim when its control is disabled. It's already planned as
+a future enhancement in Field's contract.
 
 ## Docs tooling
 

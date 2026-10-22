@@ -4,6 +4,10 @@
   "status": "beta",
   "knownIssues": [
     {
+      "kind": "bug",
+      "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
+    },
+    {
       "kind": "gap",
       "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."
     },

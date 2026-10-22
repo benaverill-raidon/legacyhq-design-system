@@ -3994,19 +3994,26 @@
         "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
       ]
     },
-    "status": "stable",
-    "knownIssues": [],
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "stable",
-      "unmet": [],
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },
@@ -6381,6 +6388,10 @@
     },
     "status": "beta",
     "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
+      },
       {
         "kind": "gap",
         "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."

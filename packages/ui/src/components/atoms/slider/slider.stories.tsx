@@ -1,6 +1,7 @@
 import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Field } from '../../molecules/field';
 import { Slider, SliderCentered, SliderRange } from './index';
 import type { SliderSize } from './slider.types';
 
@@ -167,6 +168,15 @@ export const States: Story = {
         <Slider label="Disabled" defaultValue={65} disabled />
       </Group>
 
+      <Group title="Invalid">
+        <Slider label="Invalid" defaultValue={65} invalid />
+        <Slider label="Invalid, hover" defaultValue={65} invalid data-preview-state="hover" />
+        <Slider label="Invalid, press" defaultValue={65} invalid data-preview-state="press" />
+        <Slider label="Invalid, with steps" defaultValue={60} invalid showSteps step={20} />
+        <SliderRange label="Invalid range" defaultValue={[25, 75]} invalid />
+        <Slider label="Invalid and disabled: disabled wins" defaultValue={65} invalid disabled />
+      </Group>
+
       <Group title="Live - click, drag, and tab to this">
         <LiveDragExample />
       </Group>
@@ -185,6 +195,23 @@ function ControlledRangeExample() {
 
   return <SliderRange label={`Controlled range ${value[0]} to ${value[1]}`} value={value} onValueChange={setValue} />;
 }
+
+/**
+ * Field labels a Slider or a Slider Range and wires its message, error, and required, as it does for
+ * every form control. `state="error"` alone shows the error look: Field's `aria-invalid` sets it.
+ */
+export const InField: Story = {
+  render: () => (
+    <div style={stack}>
+      <Field label="How sure is the client about the move?" message="0 is not at all, 100 is certain.">
+        <Slider defaultValue={70} showValue />
+      </Field>
+      <Field label="Fee range" required state="error" message="Set a range at least $500 wide.">
+        <SliderRange min={0} max={5000} step={100} defaultValue={[1000, 1200]} minDistance={0} showValue />
+      </Field>
+    </div>
+  ),
+};
 
 /** Realistic content and the compositions Slider is designed to sit inside. */
 export const Content: Story = {

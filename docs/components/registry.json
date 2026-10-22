@@ -1342,10 +1342,6 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "gap",
-        "summary": "A single Checkbox has `invalid` but no way to show an error message, and wrapping it in Field replaces its own label as its name."
-      },
-      {
         "kind": "decision",
         "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs; they sit side by side in one form."
       }
@@ -1582,10 +1578,6 @@
       {
         "kind": "decision",
         "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
-      },
-      {
-        "kind": "gap",
-        "summary": "No icon slot, so a status with an icon (a task status) is composed beside the Label by hand."
       }
     ],
     "replacedBy": null,
@@ -2032,10 +2024,6 @@
       {
         "kind": "bug",
         "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
-      },
-      {
-        "kind": "gap",
-        "summary": "The circular variant draws nothing at 0, track included, so a completion summary at 0 shows an empty space."
       }
     ],
     "replacedBy": null,
@@ -2628,10 +2616,6 @@
       {
         "kind": "bug",
         "summary": "The hover-only value bubble floats over the label."
-      },
-      {
-        "kind": "gap",
-        "summary": "No `invalid` state or message, and Field's page doesn't list it among the controls it wires."
       }
     ],
     "replacedBy": null,
@@ -4256,14 +4240,14 @@
       },
       "apiAdaptationNotes": [
         "Field renders its own label and message rather than reusing the Label atom / Inline Message molecule - the Figma <label>/<message> code-parts use different typography (heading/xxs, body/sm) and a smaller state set (default/error/valid) than those components expose.",
-        "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop. Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming aria-invalid as invalid, so their border follows; Text Field and Text Area need invalid.",
+        "Figma's 'state' axis (default/error/valid) drives the label/message layer and aria-invalid only. It deliberately does not paint the control's own error border, because Field can't know the control's styling prop name - consumers pair state='error' with the control's own invalid prop. Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming aria-invalid as invalid, so their border follows, and Slider and Slider Range show their error colors for it; Text Field and Text Area need invalid.",
         "Figma's 'context' (default/inline) and 'size' axes are coupled and reduce to a start-padding indent on the label and message: 0 in default; the control's own inner start padding in inline (lg -> --spacing-md, sm/md -> --spacing-sm), confirmed directly from the <label>/<message> bound variables. Figma models this as one size=all variant for the default context and separate size=lg / size=sm/md variants for inline - i.e. size only distinguishes anything in the inline context. Both contexts keep the same vertical stack. The code keeps a plain sm|md|lg size prop but consumes it only via .context_inline.size_* rules, so the default context stays size-independent.",
         "The inline indent aligns the label/message to a control's inner text, so context='inline' is intended for text-bearing controls (Text Field, Select, Text Area, pickers); it has no meaningful effect on controls without inner text (Checkbox, Switch, Radio). size matches the wrapped control's size and selects the inline indent; it does not resize the control (set the control's own size too).",
         "context is a single shared axis in Figma (the same 'context' property, default/inline, sits on <field>, text-field, text-area, select, etc.), so Field propagates context='inline' to the control by injecting context='inline' - Text Field, Text Area, and Select take the same context prop with the same values. The control's own context (or a deprecated appearance/tone) wins. This is deliberately unlike state (which maps to the control's separate isInvalid axis and stays consumer-set).",
         "The required '*' is decorative (aria-hidden) - the forwarded native 'required' conveys the requirement to assistive technology, avoiding a doubled announcement.",
         "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-labelledby naming the label unless the control has its own aria-label or aria-labelledby, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
         "The label has an id as well as htmlFor, and Field passes that id to the control as aria-labelledby, because htmlFor only names a labelable native element. That is what names Rich Text Area's contenteditable div and Date Time Picker's group.",
-        "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs.",
+        "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs; Slider spreads it onto its range input; Slider Range names its group with the label, takes the id as its lower handle's, and passes the description, the error, and required to both handles.",
         "The message icon->text gap is Figma spacing/075 (6px), --spacing-075.",
         "Figma's `valid` (the <field> state axis and the <message> boolean) is `success` in code since 2026-10-22, the name every message component uses (shared-value-names). `valid` is still accepted as a deprecated alias and renders the same (data-state='success')."
       ]
@@ -4628,7 +4612,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Layout wrapper with no color or border tokens of its own: a full-width column holding the content, with the action row positioned absolutely against it."
+        "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1) and validate's message (row 2), with the action row positioned absolutely against it (against row 1 with actionPlacement=\"end\" and in a Table cell)."
       },
       {
         "name": "content",
@@ -4637,6 +4621,10 @@
       {
         "name": "actions",
         "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill."
+      },
+      {
+        "name": "message",
+        "description": "validate's error, shown only while editing and while validate rejects the draft: Field's error look (status error icon sm, body-sm, --color-content-error, --spacing-075 between icon and text, --spacing-xs above), indented by the inline control's text inset (--spacing-sm, --spacing-md for lg). Inside a polite live region that exists while editing with validate set."
       }
     ],
     "props": {
@@ -4656,13 +4644,19 @@
         "type": "(value: string) => void",
         "required": false,
         "default": null,
-        "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged."
+        "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged, or for a draft validate rejects."
       },
       "onCancel": {
         "type": "() => void",
         "required": false,
         "default": null,
         "description": "Called when the cancel button (or Escape) discards the draft and reverts to value."
+      },
+      "validate": {
+        "type": "(value: string) => string | undefined",
+        "required": false,
+        "default": null,
+        "description": "Checks the draft on every confirm (Enter, the confirm button, focus leaving). A returned message rejects it: editing goes on, the message shows under the field, the field gets invalid/aria-invalid and the message in aria-describedby, and focus stays in the field (or, after a blur, the draft waits there). After a rejection the message follows the draft. Escape/cancel still discard."
       },
       "actionButtons": {
         "type": "boolean",
@@ -4710,7 +4704,16 @@
     "tokens": {
       "layout": {
         "actionsOffset": "--spacing-sm (8px between the field and the floating action row, below it or past its trailing edge)",
-        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
+        "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)",
+        "messageOffset": "--spacing-xs (4px above validate's message, as Field's)",
+        "messageIconGap": "--spacing-075",
+        "messageInset": "--spacing-sm (sm, md) / --spacing-md (lg): the inline control's text inset"
+      },
+      "typography": {
+        "message": "body-sm"
+      },
+      "color": {
+        "message": "--color-content-error (the icon uses Icon's error color)"
       }
     },
     "accessibility": {
@@ -4723,6 +4726,7 @@
         "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
         "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
         "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
+        "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby; the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
         "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
       ]
     },
@@ -4781,7 +4785,7 @@
     "knownIssues": [
       {
         "kind": "gap",
-        "summary": "No error state, and it can't reject a draft: focus leaving the field always confirms."
+        "summary": "Wrapping it in Field wires nothing: Inline Edit doesn't pass on the id and ARIA props Field gives it, so Field's label and message don't reach the control."
       },
       {
         "kind": "bug",
@@ -6395,10 +6399,6 @@
       {
         "kind": "gap",
         "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."
-      },
-      {
-        "kind": "decision",
-        "summary": "Its contract lists an active-filters use case, while its page, Chip's, and Label's say filters are Chips in a Chip Group."
       }
     ],
     "replacedBy": null,
@@ -8581,10 +8581,6 @@
       {
         "kind": "gap",
         "summary": "The required legend (\"indicates a required field\") is hard-coded English (built-in-labels)."
-      },
-      {
-        "kind": "gap",
-        "summary": "No way to list a summary's errors: Forms and Validation lays out a plain list itself."
       }
     ],
     "replacedBy": null,
@@ -9363,7 +9359,11 @@
       },
       {
         "name": "description",
-        "description": "the children; wraps to multiple lines (body-md)"
+        "description": "the children; wraps to multiple lines (body-md). Required unless errors is set"
+      },
+      {
+        "name": "errors",
+        "description": "optional list from errors: one bulleted line per field, a Link to #targetId then what to do"
       },
       {
         "name": "actions",
@@ -9401,9 +9401,15 @@
       },
       "children": {
         "type": "React.ReactNode",
-        "required": true,
+        "required": false,
         "default": null,
-        "description": "The description. Wraps to multiple lines."
+        "description": "The description. Wraps to multiple lines. Required unless errors lists what's wrong."
+      },
+      "errors": {
+        "type": "Array<{ label: React.ReactNode; message?: React.ReactNode; targetId: string }>",
+        "required": false,
+        "default": null,
+        "description": "The fields that need fixing, for a form's summary after a failed submit. Listed under the description; each label is a Link to #targetId that moves focus to the control (or the first control inside a target that can't take focus)."
       },
       "actions": {
         "type": "React.ReactNode",
@@ -9463,7 +9469,9 @@
           "padding": "--spacing-lg",
           "rootGap": "--spacing-lg",
           "contentGap": "--spacing-sm",
-          "actionsGap": "--spacing-sm (the ButtonGroup between the actions owns this; the .actions wrapper matches it for bare actions)"
+          "actionsGap": "--spacing-sm (the ButtonGroup between the actions owns this; the .actions wrapper matches it for bare actions)",
+          "errorsIndent": "--spacing-lg",
+          "errorsGap": "--spacing-xs"
         },
         "border": {
           "width": "--border-width-sm",
@@ -9471,7 +9479,8 @@
         },
         "typography": {
           "title": "heading-sm",
-          "description": "body-md"
+          "description": "body-md",
+          "errors": "body-md"
         },
         "color": {
           "informationBackground": "--color-background-information-subtle-default",
@@ -9487,7 +9496,8 @@
           "errorBorder": "--color-border-error",
           "errorIcon": "--color-content-error",
           "title": "--color-content-default",
-          "description": "--color-content-default"
+          "description": "--color-content-default",
+          "errors": "--color-content-default (the links take Link's own color)"
         }
       }
     },
@@ -9498,7 +9508,8 @@
       "iconDecorative": true,
       "statusAnnounced": "Visually hidden statusLabel before the title.",
       "colorNotSoleSignal": true,
-      "dismissLabel": "Dismiss"
+      "dismissLabel": "Dismiss",
+      "errorsList": "errors renders a ul; each link moves focus to its control (or the first control inside it) and prevents the in-page jump."
     },
     "relatedComponents": [
       "Banner",
@@ -9506,7 +9517,9 @@
       "InlineMessage",
       "LinkButton",
       "ButtonGroup",
-      "IconButton"
+      "IconButton",
+      "Link",
+      "Field"
     ],
     "contentCompleteness": "full",
     "figmaSource": {
@@ -9547,7 +9560,7 @@
       },
       {
         "name": "header",
-        "description": "Rendered when there's a title or description: the title (heading/lg), a heading at headingLevel (h2 by default), over a description (body/md, content/subtle)."
+        "description": "Rendered when there's a title or description: the title (heading/lg at md, heading/md at sm), a heading at headingLevel (h2 by default), over a description (body/md, content/subtle)."
       },
       {
         "name": "tableBody",
@@ -9617,7 +9630,7 @@
         "type": "TableSize",
         "required": false,
         "default": "md",
-        "description": "Row density: md (64px rows) or sm (40px rows).",
+        "description": "Row density and title size: md (64px rows, a heading/lg title) or sm (40px rows, a heading/md title).",
         "enum": [
           "md",
           "sm"
@@ -9633,13 +9646,13 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Header title (heading/lg), rendered as a heading at headingLevel. Names the table when there's no caption."
+        "description": "A section heading labelling the table among other content (heading/lg at md, heading/md at sm), rendered at headingLevel. A page that's only a table uses the page header and leaves it out. Names the table when there's no caption."
       },
       "headingLevel": {
         "type": "1 | 2 | 3 | 4 | 5 | 6",
         "required": false,
         "default": 2,
-        "description": "The heading level of title, to fit the page's outline."
+        "description": "The heading level of title, to fit the page's outline. Only the outline: the size follows size."
       },
       "description": {
         "type": "React.ReactNode",
@@ -9978,7 +9991,7 @@
         "selectionColumnWidth": "40px"
       },
       "typography": {
-        "title": "--typography-heading-lg-*",
+        "title": "--typography-heading-lg-* (md), --typography-heading-md-* (sm)",
         "headerCell": "--typography-heading-xs-*",
         "cell": "--typography-body-md-*",
         "description": "--typography-body-md-*"
@@ -10122,14 +10135,6 @@
       {
         "kind": "gap",
         "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
-      },
-      {
-        "kind": "gap",
-        "summary": "The title is always `heading-lg`, so stacked tables can't rank under a page heading."
-      },
-      {
-        "kind": "gap",
-        "summary": "No row groups, so grouped rows are separate tables, each adding its own tab stop, and `activeFilters` belongs to one table."
       }
     ],
     "replacedBy": null,

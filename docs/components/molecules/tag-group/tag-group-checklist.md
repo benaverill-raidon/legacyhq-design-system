@@ -40,16 +40,16 @@ structure as its own named component.
 
 ### Where will this component be used?
 Anywhere a list of tag-shaped references needs an inline cap - a task's linked entities, a record's
-classifications, an active-filters row.
+classifications.
 
 ### What are the most common use cases?
 - A bounded list of entity-reference tags on a record detail view
-- An active-filters row that can grow past what comfortably fits on one line
 - A short, unbounded tag list with no truncation at all (`maxVisible` omitted)
 
 ### When should this component NOT be used?
 - A single tag - use Tag directly
 - A group of Buttons - use Button Group
+- Active filters or search scopes people change - use Chip Group (filters are Chips in a named Chip Group)
 
 ---
 

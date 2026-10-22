@@ -135,11 +135,12 @@ overwritten, and an `aria-describedby` it already has keeps its place, with the 
 it. Because Field clones its child, `children` must be one element, not text, a fragment, or
 several elements.
 
-Every form control in the system passes them on: Text Field, Text Area, Select, Date Picker, and
-Time Picker to their input; Rich Text Area to its editor; Date Time Picker names its group and marks
-both inputs.
+Every form control in the system passes them on: Text Field, Text Area, Select, Date Picker, Time
+Picker, and Slider to their input; Rich Text Area to its editor; Date Time Picker names its group and
+marks both inputs; Slider Range names its group, points the label at its lower handle, and gives
+both handles the message, the error, and `required`.
 
-<Example of={FieldStories.AnyControl} caption="The same label, message, and state on a Text Field and a Text Area." />
+<Example of={FieldStories.AnyControl} caption="The same label, message, and state on a Text Field, a Text Area, and a Slider." />
 
 </Subsection>
 
@@ -158,8 +159,8 @@ Field doesn't validate: set `state`, `message`, and the control's `invalid` from
 When you show the errors follows one rule across the system:
 
 1. **Check when the form is submitted**, not while someone is still typing their first answer.
-2. **Show every error at once**: each field's own error, and a summary at the top of the form
-   naming each field that needs fixing.
+2. **Show every error at once**: each field's own error, and a summary at the top of the form: a
+   Section Message whose `errors` link to each field that needs fixing.
 3. **Then update each field's error as its value changes**, so it clears as soon as it's fixed. The
    summary changes only on the next submit.
 
@@ -260,8 +261,8 @@ When you show the errors follows one rule across the system:
 - `state="error"` sets `aria-invalid` on the control unless the control sets its own. The status icon
   is hidden from assistive technology, so the message text has to carry the meaning.
 - Errors show on submit, all at once, so a screen reader user isn't interrupted while typing. Move
-  focus to the form's summary after a failed submit; each field then reads its label and its error
-  when it gets focus.
+  focus to the form's summary after a failed submit. Each link in the summary's `errors` moves focus
+  to its field, which then reads its label and its error.
 - `required` passes the native `required` to the control, and the `*` is hidden, so the requirement
   is announced once.
 - Every form control in the system passes this wiring to its native element, including Rich Text

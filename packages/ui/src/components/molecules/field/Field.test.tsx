@@ -329,7 +329,9 @@ describe('Field', () => {
     expect(email).toHaveAttribute('aria-invalid', 'true');
     const summary = screen.getByText('Fix 2 fields to save').closest('[tabindex="-1"]') as HTMLElement;
     expect(summary).toHaveFocus();
-    expect(within(summary).getByRole('link', { name: 'Client name' })).toBeInTheDocument();
+    // Section Message's errors: each link moves focus to its field.
+    fireEvent.click(within(summary).getByRole('link', { name: 'Client name' }));
+    expect(name).toHaveFocus();
 
     // After the submit, each field's error follows its value; the summary waits for the next submit.
     fireEvent.change(name, { target: { value: 'Jordan Lee' } });

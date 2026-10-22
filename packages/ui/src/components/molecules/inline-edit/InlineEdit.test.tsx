@@ -1,10 +1,12 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
-import { useState } from 'react';
+import { type ComponentProps, useState } from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
+import styles from './inline-edit.module.css';
 
 const inlineEditCss = readFileSync(
   'packages/ui/src/components/molecules/inline-edit/inline-edit.module.css',
@@ -462,7 +464,8 @@ describe('InlineEdit', () => {
     const rootRule = inlineEditCss.match(/\.root\s*\{([^}]*)\}/);
     const actionsRule = inlineEditCss.match(/\.actions\s*\{([^}]*)\}/);
 
-    expect(rootRule?.[1]).toContain('flex-direction: column;');
+    expect(rootRule?.[1]).toContain('display: grid;');
+    expect(rootRule?.[1]).toContain('grid-template-columns: minmax(0, 1fr);');
     expect(rootRule?.[1]).toContain('position: relative;');
     expect(actionsRule?.[1]).toContain('position: absolute;');
     expect(actionsRule?.[1]).toContain('inset-block-start: calc(100% + var(--spacing-sm));');
@@ -476,6 +479,8 @@ describe('InlineEdit', () => {
     expect(placementEndActionsRule?.[1]).toContain('inset-inline-end: auto;');
     expect(placementEndActionsRule?.[1]).toContain('inset-block: 0;');
     expect(placementEndActionsRule?.[1]).toContain('margin-block: auto;');
+    // Placed in the field's grid row (both lines explicit), so validate's message below doesn't move them.
+    expect(placementEndActionsRule?.[1]).toContain('grid-row: 1 / 2;');
   });
 
   it('pins the action buttons to the neutral-subtle background ramp (rest, hover, press)', () => {
@@ -496,5 +501,121 @@ describe('InlineEdit', () => {
     const group = screen.getByRole('button', { name: 'Confirm' }).closest('[data-orientation]');
     expect(group).toHaveAttribute('data-orientation', 'horizontal');
     expect(group).toContainElement(screen.getByRole('button', { name: 'Cancel' }));
+  });
+});
+
+describe('InlineEdit validate', () => {
+  const requireName = (value: string) => (value.trim() ? undefined : 'Enter a matter name.');
+
+  function renderValidated(props: Partial<ComponentProps<typeof InlineEdit>> = {}) {
+    const onConfirm = vi.fn();
+    const utils = render(
+      <div>
+        <InlineEdit value="Lee Living Trust" onConfirm={onConfirm} validate={requireName} {...props}>
+          <TextField context="inline" aria-label="Matter name" />
+        </InlineEdit>
+        <button type="button">Somewhere else</button>
+      </div>,
+    );
+    const field = screen.getByRole('textbox', { name: 'Matter name' });
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: '   ' } });
+    return { ...utils, field, onConfirm };
+  }
+
+  function expectError(field: HTMLElement) {
+    expect(field).not.toHaveAttribute('readOnly');
+    expect(field).toHaveAttribute('aria-invalid', 'true');
+    expect(field).toHaveAccessibleDescription('Enter a matter name.');
+    expect(screen.getByText('Enter a matter name.').closest(`.${styles.message}`)).toBeInTheDocument();
+  }
+
+  it('Enter with an error keeps editing, shows the message, marks the field invalid, and keeps focus', () => {
+    const { field, onConfirm } = renderValidated();
+    field.focus();
+
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    expect(onConfirm).not.toHaveBeenCalled();
+    expectError(field);
+    expect(field).toHaveFocus();
+    expect(field).toHaveValue('   ');
+  });
+
+  it('the confirm button with an error keeps editing and moves focus back to the field', () => {
+    const { field, onConfirm } = renderValidated();
+
+    fireEvent.mouseDown(screen.getByRole('button', { name: 'Confirm' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Confirm' }));
+
+    expect(onConfirm).not.toHaveBeenCalled();
+    expectError(field);
+    expect(field).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Confirm' })).toBeInTheDocument();
+  });
+
+  it('blur with an error keeps editing, so the draft is not lost', () => {
+    const { field, onConfirm } = renderValidated();
+
+    fireEvent.blur(field, { relatedTarget: screen.getByRole('button', { name: 'Somewhere else' }) });
+
+    expect(onConfirm).not.toHaveBeenCalled();
+    expectError(field);
+    expect(field).toHaveValue('   ');
+  });
+
+  it('Escape still cancels, clearing the error and reverting the draft', () => {
+    const onCancel = vi.fn();
+    const { field } = renderValidated({ onCancel });
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    fireEvent.keyDown(field, { key: 'Escape' });
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(field).toHaveAttribute('readOnly');
+    expect(field).toHaveValue('Lee Living Trust');
+    expect(field).not.toHaveAttribute('aria-invalid');
+    expect(screen.queryByText('Enter a matter name.')).not.toBeInTheDocument();
+  });
+
+  it('after a failed confirm, the error follows the draft and clears once it is fixed', () => {
+    const { field, onConfirm } = renderValidated();
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    fireEvent.change(field, { target: { value: 'Lee Family Trust' } });
+    expect(screen.queryByText('Enter a matter name.')).not.toBeInTheDocument();
+    expect(field).not.toHaveAttribute('aria-invalid');
+
+    fireEvent.keyDown(field, { key: 'Enter' });
+    expect(onConfirm).toHaveBeenCalledWith('Lee Family Trust');
+    expect(field).toHaveAttribute('readOnly');
+  });
+
+  it('confirms a valid draft as before, calling validate with it', () => {
+    const validate = vi.fn(requireName);
+    const { field, onConfirm } = renderValidated({ validate });
+    fireEvent.change(field, { target: { value: 'Lee Family Trust' } });
+
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    expect(validate).toHaveBeenCalledWith('Lee Family Trust');
+    expect(onConfirm).toHaveBeenCalledWith('Lee Family Trust');
+    expect(field).toHaveAttribute('readOnly');
+  });
+
+  it('announces the message in a polite live region that is there before the error', () => {
+    const { field, container } = renderValidated();
+    const region = container.querySelector('[aria-live="polite"]');
+    expect(region).toBeInTheDocument();
+    expect(region).toBeEmptyDOMElement();
+
+    fireEvent.keyDown(field, { key: 'Enter' });
+    expect(region).toHaveTextContent('Enter a matter name.');
+  });
+
+  it('shows the message in the error look: a status icon and the error color, under the field', () => {
+    expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*color: var\(--color-content-error\);/);
+    expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*font-size: var\(--typography-body-sm-font-size\);/);
+    expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*padding-top: var\(--spacing-xs\);/);
   });
 });

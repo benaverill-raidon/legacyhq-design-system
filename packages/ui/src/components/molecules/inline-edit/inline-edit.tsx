@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CheckIcon, CloseIcon, EditIcon } from '../../../assets/icons';
+import { CheckIcon, CloseIcon, EditIcon, StatusErrorIcon } from '../../../assets/icons';
 import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../button-group';
@@ -15,6 +15,7 @@ export const InlineEdit = React.memo(function InlineEdit({
   children,
   onConfirm,
   onCancel,
+  validate,
   actionButtons = true,
   actionPlacement = 'below',
   actionAlignment = 'center',
@@ -25,6 +26,11 @@ export const InlineEdit = React.memo(function InlineEdit({
   const cellSize = useEditableCellSize();
   const [isEditing, setIsEditing] = React.useState(false);
   const [draft, setDraft] = React.useState(value);
+  // What `validate` said about the draft. Checked on each confirm; after one fails, it follows the
+  // draft as it changes (the system's rule: check on submit, then follow the value).
+  const [error, setError] = React.useState<string | undefined>(undefined);
+  const [isChecking, setIsChecking] = React.useState(false);
+  const errorId = `${React.useId()}-error`;
   const rootRef = React.useRef<HTMLDivElement>(null);
   const controlSize = children.props.size === 'sm' || children.props.size === 'lg' ? children.props.size : 'md';
   // Set on mousedown for the cancel/confirm buttons themselves, so the blur that mousedown causes
@@ -33,9 +39,15 @@ export const InlineEdit = React.memo(function InlineEdit({
   // otherwise make handleBlur's relatedTarget check alone unreliable for that specific case.
   const suppressBlurRef = React.useRef(false);
 
+  const clearError = () => {
+    setError(undefined);
+    setIsChecking(false);
+  };
+
   const startEditing = () => {
     suppressBlurRef.current = false;
     setDraft(value);
+    clearError();
     setIsEditing(true);
   };
 
@@ -46,14 +58,28 @@ export const InlineEdit = React.memo(function InlineEdit({
     rootRef.current?.querySelector<HTMLElement>(`.${styles.content} :is(input, textarea)`)?.focus();
   };
 
+  // A draft `validate` rejects isn't confirmed: editing goes on, with the message under the field.
   const confirm = () => {
+    const message = validate?.(draft);
+    if (message) {
+      setError(message);
+      setIsChecking(true);
+      return;
+    }
+    clearError();
     onConfirm?.(draft);
     setIsEditing(false);
   };
 
   const cancel = () => {
+    clearError();
     onCancel?.();
     setIsEditing(false);
+  };
+
+  const changeDraft = (next: string) => {
+    setDraft(next);
+    if (isChecking) setError(validate?.(next));
   };
 
   // The cancel and confirm buttons unmount when editing ends, so focus goes back to the field
@@ -93,6 +119,7 @@ export const InlineEdit = React.memo(function InlineEdit({
     }
 
     if (draft === value) {
+      clearError();
       setIsEditing(false);
       return;
     }
@@ -142,11 +169,21 @@ export const InlineEdit = React.memo(function InlineEdit({
   // starts editing on focus/click) or an editable clone (draft, tracks typing) - rather than
   // swapping between two different elements, so the underlying DOM node (and its focus) persists
   // across the transition.
+  // While `validate` rejects the draft, the field is marked invalid and described by the message;
+  // the child's own values win, and its own description keeps its place.
+  const hasError = isEditing && error !== undefined;
   const control = isEditing
     ? React.cloneElement(children, {
         value: draft,
-        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft(event.target.value),
+        onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => changeDraft(event.target.value),
         ...(cellSize ? { iconAfter: undefined } : {}),
+        ...(hasError
+          ? {
+              invalid: true,
+              'aria-invalid': childProps['aria-invalid'] ?? true,
+              'aria-describedby': [childProps['aria-describedby'], errorId].filter(Boolean).join(' '),
+            }
+          : {}),
       })
     : React.cloneElement(children, {
         value,
@@ -171,10 +208,28 @@ export const InlineEdit = React.memo(function InlineEdit({
       data-control-size={controlSize}
       data-editable-cell={cellSize ?? undefined}
       data-has-actions={isEditing && actionButtons ? 'true' : undefined}
+      data-invalid={hasError ? 'true' : undefined}
       onKeyDown={isEditing ? handleKeyDown : undefined}
       onBlur={isEditing ? handleBlur : undefined}
     >
       <div className={styles.content}>{control}</div>
+
+      {/*
+        A polite live region, there from the start of editing, so a message that appears after Enter
+        is read out even though focus doesn't move. The message also describes the field.
+      */}
+      {isEditing && validate ? (
+        <div className={styles.messageRegion} aria-live="polite">
+          {hasError ? (
+            <div id={errorId} className={styles.message}>
+              <span className={styles.messageIcon} aria-hidden="true">
+                <StatusErrorIcon size="sm" spacing="none" color="error" />
+              </span>
+              <span className={styles.messageText}>{error}</span>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
 
       {isEditing && actionButtons ? (
         <ButtonGroup className={styles.actions}>

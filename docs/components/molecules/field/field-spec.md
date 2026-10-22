@@ -98,7 +98,8 @@ Field (div.root, flex column, data-state/context/size)
 - `error`: message `--color-content-error` + `status_error` icon; sets `aria-invalid` on the
   control. Does **not** set the control's own error border (pair with the control's `invalid` prop).
   Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming
-  `aria-invalid` as `invalid`, so their border follows; Text Field and Text Area need `invalid`.
+  `aria-invalid` as `invalid`, so their border follows, and Slider and Slider Range show their error
+  colors for it; Text Field and Text Area need `invalid`.
 - `success`: message `--color-content-success` + `status_success` icon. Figma calls it `valid`;
   `valid` is still accepted in code as a deprecated alias and renders the same (`data-state` reads
   `success`).
@@ -108,7 +109,8 @@ Field doesn't validate; the consumer sets `state`, `message`, and the control's 
 system's rule for when:
 - Check when the form is submitted, not while someone types their first answer.
 - On a failed submit, show every error at once: each field's error, and a summary at the top of the
-  form (a Section Message, `tone="error"`) naming and linking each field. Move focus to the summary.
+  form (a Section Message, `tone="error"`, whose `errors` link to each field and move focus to it).
+  Move focus to the summary.
 - From then on, update each field's error as its value changes, so it clears as soon as it's fixed.
   The summary changes only on the next submit.
 - Write each error as what to do ("Enter an email address, like name@example.com.").
@@ -176,7 +178,9 @@ system's rule for when:
   Text Area sets them on its editor (`required` as `aria-required`); its editor is a `div`, which a
   `<label htmlFor>` can't name, so the injected `aria-labelledby` is what names it. Date Time Picker
   names its group with the label, keeps the description on the group, and passes the error and
-  `required` to both its date and time inputs.
+  `required` to both its date and time inputs. Slider spreads them onto its range input. Slider
+  Range names its group with the label, takes Field's `id` as its lower handle's (so the label
+  focuses it), and passes the description, the error, and `required` to both handles.
 - **`context` is one shared axis across the field AND its control - so it propagates.** In Figma,
   the same `context` property (default/inline) sits on the `<field>`, the Text Field, the Text Area,
   the Select, etc. An inline field is a borderless (inline) control with its label/message aligned

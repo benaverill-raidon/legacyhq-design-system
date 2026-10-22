@@ -29,6 +29,13 @@ export interface SliderBaseProps {
   /** The native `disabled` attribute: the slider can't be moved and leaves the tab order. */
   disabled?: boolean;
   /**
+   * Marks the value as failing validation: draws the track and the handle in the error colors and
+   * sets `aria-invalid` on the handle (both handles on Slider Range). Pair it with a visible message,
+   * such as Field's `message` with `state="error"`. An `aria-invalid` of `true`, which Field passes for
+   * an error, does the same. Disabled looks win over it.
+   */
+  invalid?: boolean;
+  /**
    * Adds a dot at each step between the dots at `min` and `max`, which always show. The dots come
    * from `steps`, or from `step` when that gives 25 values or fewer.
    */
@@ -102,4 +109,21 @@ export interface SliderRangeProps
   maxName?: string;
   /** Called as either value changes, with both values, sorted, and the change event. */
   onValueChange?: (value: [number, number], event: React.ChangeEvent<HTMLInputElement>) => void;
+  /**
+   * The lower handle's id, and the start of the range's other ids (`<id>-max` for the upper handle,
+   * `<id>-range` for the group). Field sets it, so clicking Field's label focuses the lower handle.
+   */
+  id?: string;
+  /**
+   * Ids of elements that describe the range, added to both handles rather than the group, so each
+   * handle reads them when it gets focus. Field passes its message's id.
+   */
+  'aria-describedby'?: string;
+  /** Marks both handles invalid, as `invalid` does. Field passes it for an error. */
+  'aria-invalid'?: boolean | 'true' | 'false' | 'grammar' | 'spelling';
+  /**
+   * Sets the native `required` on both handles. A range always has a value, so the browser never
+   * stops a submit for it; Field passes it with its `*`.
+   */
+  required?: boolean;
 }

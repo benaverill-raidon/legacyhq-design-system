@@ -96,6 +96,21 @@ disabled dims the box and the label.
 
 </Subsection>
 
+<Subsection title="Error message">
+
+`errorMessage` shows an error under the box, in the error color, and adds it to the checkbox's
+description. It also marks the checkbox invalid, so you don't need `invalid` with it. Use it for a
+single checkbox, such as a confirmation a form needs before it's submitted; a set of checkboxes
+takes Checkbox Group's own `errorMessage`. Don't wrap a single Checkbox in Field for its error:
+Field's label would replace the checkbox's own as its name.
+
+With `errorMessage`, the label and the message sit in a `div`, which takes `className` in place of
+the label.
+
+<Example of={CheckboxStories.ErrorMessage} caption="A required confirmation with its error. Check it and the error clears." />
+
+</Subsection>
+
 <Subsection title="Partial selection">
 
 Set `indeterminate` on a checkbox that stands for a group whose items are only partly selected,
@@ -191,6 +206,17 @@ around the box. An invalid checkbox keeps the neutral overlay in every state.
     ]}
   />
 </Dont>
+<Do caption="Give a single checkbox its own errorMessage." code={`<Checkbox label="I've run a conflict check" errorMessage="Run a conflict check before you open the matter." />`}>
+  <Checkbox label="I've run a conflict check" errorMessage="Run a conflict check before you open the matter." />
+</Do>
+<Dont caption="Make a one-option Checkbox Group just to show an error. The question and the answer say the same thing twice." code={`<CheckboxGroup label="Conflict check" invalid errorMessage="Run a conflict check." options={[{ value: 'done', label: "I've run a conflict check" }]} />`}>
+  <CheckboxGroup
+    label="Conflict check"
+    invalid
+    errorMessage="Run a conflict check."
+    options={[{ value: 'done', label: "I've run a conflict check" }]}
+  />
+</Dont>
 </Guidelines>
 
 </Section>
@@ -204,9 +230,10 @@ around the box. An invalid checkbox keeps the neutral overlay in every state.
   both are missing.
 - `indeterminate` sets the input's native `indeterminate` and `aria-checked="mixed"`, so it's
   announced as mixed, not as checked or unchecked.
-- `invalid` sets `aria-invalid`. Connect a message to a single checkbox with `aria-describedby`.
-  Checkbox Group connects its `description` and `errorMessage` for you, to the fieldset and to each
-  checkbox from `options`.
+- `invalid` sets `aria-invalid`. A single checkbox's `errorMessage` is added to its
+  `aria-describedby`, after any description it already has, and sets `aria-invalid` too; the message
+  sits outside the `label`, so it isn't read as part of the name. Checkbox Group connects its
+  `description` and `errorMessage` for you, to the fieldset and to each checkbox from `options`.
 - `disabled` and `required` are the native attributes: a disabled checkbox leaves the tab order, and
   a required one is announced as required. The `*` is hidden from assistive technology, so it isn't
   read as part of the name.

@@ -28,6 +28,12 @@ import { SectionMessage } from './section-message';
 import sectionMessageStyles from './section-message.module.css';
 import * as SectionMessageStories from './SectionMessage.stories';
 
+export const errorsSample = `<SectionMessage
+  tone="error"
+  title="Fix 1 field to file the document"
+  errors={[{ label: 'Docket number', message: 'Enter it as it appears on the court notice.', targetId: 'docket-number' }]}
+/>`;
+
 <Meta of={SectionMessageStories} name="Docs" />
 
 <Unstyled>
@@ -51,8 +57,8 @@ import * as SectionMessageStories from './SectionMessage.stories';
   }
 >
   Section Message is a bordered status panel in the flow of a page, about the section it sits in:
-  a restriction, a warning, a result. It can hold a title, a description of several lines, a few
-  actions, and a dismiss button.
+  a restriction, a warning, a result. It can hold a title, a description of several lines, a list of
+  errors that link to their fields, a few actions, and a dismiss button.
 </ComponentHeader>
 
 <Section title="When to use">
@@ -62,7 +68,7 @@ import * as SectionMessageStories from './SectionMessage.stories';
 
 - A restriction on what someone can do in this section, such as missing permissions.
 - A warning about the content beside it, such as an incomplete filing.
-- A summary of errors at the top of a form.
+- A summary of errors at the top of a form, with `errors` linking to each field that needs fixing.
 - The result of an action that changed this section, when it needs explaining.
 
 </UseFor>
@@ -83,25 +89,36 @@ import * as SectionMessageStories from './SectionMessage.stories';
 
 <Anatomy
   specimen={
-    <SectionMessage
-      tone="information"
-      title="Restricted access"
-      isDismissible
-      actions={
-        <ButtonGroup>
-          <LinkButton href="#learn-more" appearance="subtle" size="sm">Learn more</LinkButton>
-          <LinkButton href="#request-access" appearance="subtle" size="sm">Request access</LinkButton>
-        </ButtonGroup>
-      }
-    >
-      Only the matter's owners can change who has access to it.
-    </SectionMessage>
+    <div style={{ display: 'grid', gap: 'var(--spacing-lg)' }}>
+      <SectionMessage
+        tone="information"
+        title="Restricted access"
+        isDismissible
+        actions={
+          <ButtonGroup>
+            <LinkButton href="#learn-more" appearance="subtle" size="sm">Learn more</LinkButton>
+            <LinkButton href="#request-access" appearance="subtle" size="sm">Request access</LinkButton>
+          </ButtonGroup>
+        }
+      >
+        Only the matter's owners can change who has access to it.
+      </SectionMessage>
+      <SectionMessage
+        tone="error"
+        title="Fix 2 fields to create the matter"
+        errors={[
+          { label: 'Client name', message: "Enter the client's first and last name.", targetId: 'anatomy-client-name' },
+          { label: 'Matter type', message: 'Choose the type of matter.', targetId: 'anatomy-matter-type' },
+        ]}
+      />
+    </div>
   }
 >
   <Part name="root" target={sectionMessageStyles.root}>A `div` with a 1px border in the tone's color, a tinted background, 12px corners, and 16px padding.</Part>
   <Part name="icon" target={sectionMessageStyles.iconSlot}>The tone's status icon, in the tone's color. Decorative.</Part>
   <Part name="title" target={sectionMessageStyles.title}>Optional bold line, in the default text color. Not a heading element.</Part>
-  <Part name="description" target={sectionMessageStyles.description}>`children`, the only required content. It wraps onto as many lines as it needs.</Part>
+  <Part name="description" target={sectionMessageStyles.description}>`children`. It wraps onto as many lines as it needs. Required unless `errors` is set.</Part>
+  <Part name="errors" target={sectionMessageStyles.errors}>Optional, with `errors`, below the description: a bulleted list, each line a link to a field and what to do there.</Part>
   <Part name="actions" target={sectionMessageStyles.actions}>Optional, below the description: usually Link Buttons in a Button Group.</Part>
   <Part name="dismiss" target={sectionMessageStyles.dismiss}>Optional, with `isDismissible`: an extra-small subtle Icon Button in the top corner.</Part>
 </Anatomy>
@@ -127,6 +144,25 @@ there's nothing to do. Two or more actions go in a Button Group, which lays them
 Link Button can be passed on its own. Section Message adds no separators between them.
 
 <Example of={SectionMessageStories.Content} caption="Title, description, and actions; description only; a single action; and dismissible." />
+
+</Subsection>
+
+<Subsection title="Listing errors">
+
+`errors` turns the message into the summary at the top of a form after a failed submit. Each entry
+names a field (`label`), says what to do there (`message`, optional), and points at its control by
+`targetId`. They're listed under the description, in the order you pass them, which should be the
+order of the form. The description is optional here: a title that counts the fields and the list
+often say enough.
+
+Each label is a Link to `#` and the control's id. Following it moves focus to the control, which
+then reads its own label and error; when the target can't take focus, such as a Radio Group's
+fieldset, its first control gets focus. Section Message doesn't check anything or move focus to
+itself: after a failed submit, move focus to the message (it takes a `ref` and `tabIndex={-1}`), and
+change `errors` only on the next submit. <DocLink to="Patterns/Forms and Validation" /> builds the
+whole flow.
+
+<Example of={SectionMessageStories.ErrorSummary} caption="A form's summary: two fields, each a link that moves focus to it. Billing points at a Radio Group, so focus goes to its first radio." />
 
 </Subsection>
 
@@ -201,6 +237,26 @@ warning that still applies dismissible.
     The court returned the filing because the signature page is missing.
 </SectionMessage>`}
 />
+<Do
+  caption="List the fields that need fixing in errors, so each one is a link that takes people to it."
+  code={errorsSample}
+>
+  <SectionMessage
+    tone="error"
+    title="Fix 1 field to file the document"
+    errors={[{ label: 'Docket number', message: 'Enter it as it appears on the court notice.', targetId: 'do-docket-number' }]}
+  />
+</Do>
+<Dont
+  caption="Write the fields into the description. People have to find each one themselves."
+  code={`<SectionMessage tone="error" title="The form has errors">
+    Check the docket number and try again.
+</SectionMessage>`}
+>
+  <SectionMessage tone="error" title="The form has errors">
+    Check the docket number and try again.
+  </SectionMessage>
+</Dont>
 <Do caption="Confirm a quick action with a toast, which goes away on its own." code={`toast.success('Matter archived');`}>
   <Toast tone="success" title="Matter archived" />
 </Do>
@@ -221,14 +277,20 @@ warning that still applies dismissible.
   "Warning:", is read before the title, so the meaning doesn't depend on color. Translate it with
   `statusLabel`.
 - The title is styled text in a `div`, not a heading, so it isn't listed among the page's headings.
+- `errors` is a `ul`, so it's announced as a list with its count. Each label is a link to `#` and the
+  control's id; following it moves focus to the control (or the first control inside it), so the
+  field reads its label and its error. The link's own jump is stopped, so the URL doesn't change.
+- Section Message doesn't move focus to itself. After a failed submit, move focus to the summary:
+  pass a `ref` and `tabIndex={-1}`. A message added with its content already in it may not be read
+  out as it appears, so don't rely on the live region for that.
 - The dismiss button is an Icon Button named by `dismissLabel`, "Dismiss" by default, which also
   shows as its tooltip on hover and focus.
 - Dismissing removes the message, including the button that had focus, and Section Message doesn't
   move focus anywhere. If you need focus to land somewhere specific, move it in `onDismiss`.
 
 <Keyboard>
-  <Key keys="Tab">Moves to each action, then to the dismiss button.</Key>
-  <Key keys="Enter">On the dismiss button, hides the message. On an action, follows the link.</Key>
+  <Key keys="Tab">Moves to each error's link, then each action, then the dismiss button.</Key>
+  <Key keys="Enter">On an error's link, moves focus to its field. On the dismiss button, hides the message. On an action, follows the link.</Key>
   <Key keys="Space">On the dismiss button, hides the message.</Key>
 </Keyboard>
 
@@ -258,6 +320,8 @@ icon's color comes from the Icon's own `color`, so it isn't listed here.
 - <DocLink to="Components/Feedback/Inline Message" /> for a one-line status beside what it's about.
 - <DocLink to="Components/Feedback/Toast Group" /> and <DocLink to="Components/Feedback/Toast" /> for a passing notification.
 - <DocLink to="Components/Navigation/Link Button" />, the usual action.
+- <DocLink to="Components/Navigation/Link" />, each entry in `errors`.
+- <DocLink to="Components/Forms/Field" />, which shows each field's own error beside the summary.
 - <DocLink to="Components/Actions/Button Group" /> to lay out two or more actions.
 - <DocLink to="Components/Actions/Icon Button" />, which the dismiss button is.
 

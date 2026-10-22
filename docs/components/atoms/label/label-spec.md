@@ -30,6 +30,10 @@ The component does not include:
 - Remove controls
 - Dropdown affordances
 
+Having no icon slot is a decision, not a gap: a status with an icon, such as a task status, is the
+icon beside the Label, composed by the page (see Templates / Roadmap). It's recorded in
+`knownLimitations` in `label.contract.json`.
+
 ## Variants
 
 ### Size

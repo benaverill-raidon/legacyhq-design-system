@@ -5,7 +5,7 @@
   "knownIssues": [
     {
       "kind": "gap",
-      "summary": "No error state, and it can't reject a draft: focus leaving the field always confirms."
+      "summary": "Wrapping it in Field wires nothing: Inline Edit doesn't pass on the id and ARIA props Field gives it, so Field's label and message don't reach the control."
     },
     {
       "kind": "bug",
@@ -62,15 +62,17 @@
     "an edit that needs its own dedicated space (dialog or separate screen)"
   ],
   "anatomy": [
-    { "part": "root", "element": "div", "required": true, "description": "Layout wrapper with no color or border tokens of its own: a full-width column holding the content, with the action row positioned absolutely against it." },
+    { "part": "root", "element": "div", "required": true, "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1) and validate's message (row 2), with the action row positioned absolutely against it (against row 1 with actionPlacement=\"end\" and in a Table cell)." },
     { "part": "content", "element": "div", "required": true, "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing. Full width in both states." },
-    { "part": "actions", "element": "ButtonGroup (div)", "required": false, "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill." }
+    { "part": "actions", "element": "ButtonGroup (div)", "required": false, "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill." },
+    { "part": "message", "element": "div", "required": false, "description": "validate's error, shown only while editing and while validate rejects the draft: Field's error look (status error icon sm, body-sm, --color-content-error, --spacing-075 between icon and text, --spacing-xs above), indented by the inline control's text inset (--spacing-sm, --spacing-md for lg). Inside a polite live region that exists while editing with validate set." }
   ],
   "props": {
     "value": { "type": "string", "required": true, "default": null, "description": "The last confirmed value. Owned by the parent - InlineEdit only tracks the in-progress draft." },
     "children": { "type": "React.ReactElement", "required": true, "default": null, "description": "A single controlled input-like element (e.g. a TextField with context='inline') InlineEdit clones for both the read-only display and the editable control." },
-    "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged." },
+    "onConfirm": { "type": "(value: string) => void", "required": false, "default": null, "description": "Called with the draft value when the confirm button (or Enter) commits the edit, or when focus leaves Inline Edit with a changed draft. Not called when focus leaves with the draft unchanged, or for a draft validate rejects." },
     "onCancel": { "type": "() => void", "required": false, "default": null, "description": "Called when the cancel button (or Escape) discards the draft and reverts to value." },
+    "validate": { "type": "(value: string) => string | undefined", "required": false, "default": null, "description": "Checks the draft on every confirm (Enter, the confirm button, focus leaving). A returned message rejects it: editing goes on, the message shows under the field, the field gets invalid/aria-invalid and the message in aria-describedby, and focus stays in the field (or, after a blur, the draft waits there). After a rejection the message follows the draft. Escape/cancel still discard." },
     "actionButtons": { "type": "boolean", "required": false, "default": true, "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false." },
     "actionPlacement": { "type": "'below' | 'end'", "required": false, "default": "below", "description": "Where the action row floats: below the field at its trailing edge, or past its trailing edge. Neither takes space from the field; leave room for the buttons." },
     "actionAlignment": { "type": "'center' | 'start'", "required": false, "default": "center", "description": "With actionPlacement=\"end\": center the actions on the field, or keep them level with its first line (one control height) as a multi-line field grows." },
@@ -80,15 +82,20 @@
   },
   "variants": {},
   "sizes": [],
-  "states": ["read-only (not editing)", "editing"],
+  "states": ["read-only (not editing)", "editing", "editing, with validate's error"],
   "slots": [
     { "name": "children", "required": true, "supports": ["TextField (today, typically context=inline)", "Select/DatePicker/TimePicker/DateTimePicker (once built, if they accept value/onChange/readOnly)"] }
   ],
   "tokens": {
     "layout": {
       "actionsOffset": "--spacing-sm (8px between the field and the floating action row, below it or past its trailing edge)",
-      "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)"
-    }
+      "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)",
+      "messageOffset": "--spacing-xs (4px above validate's message, as Field's)",
+      "messageIconGap": "--spacing-075",
+      "messageInset": "--spacing-sm (sm, md) / --spacing-md (lg): the inline control's text inset"
+    },
+    "typography": { "message": "body-sm" },
+    "color": { "message": "--color-content-error (the icon uses Icon's error color)" }
   },
   "accessibility": {
     "interactive": true,
@@ -100,12 +107,13 @@
       "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
       "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
       "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
+      "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby; the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
       "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
     ]
   },
   "keyboardInteraction": [
     { "key": "Tab", "behavior": "Reaches the cloned child (readOnly, focusable), then, once editing, cancel, then confirm, in native DOM order. Tab-ing past confirm to outside the root calls onConfirm (auto-save on blur) if the draft changed, otherwise just ends editing." },
-    { "key": "Enter", "behavior": "While editing, calls onConfirm with the draft and preventDefault; focus stays on the field, now read-only. On the focused read-only field, starts editing." },
+    { "key": "Enter", "behavior": "While editing, calls onConfirm with the draft and preventDefault; focus stays on the field, now read-only. When validate rejects the draft, shows the error and keeps editing instead. On the focused read-only field, starts editing." },
     { "key": "Escape", "behavior": "Calls onCancel and reverts to value, only while editing; focus ends on the read-only field." }
   ],
   "behaviorRules": [
@@ -116,6 +124,7 @@
     "Render the confirm/cancel IconButton pair only once editing has started && actionButtons is not false.",
     "Default actionButtons=true, confirmLabel='Confirm', cancelLabel='Cancel'.",
     "Confirm calls onConfirm(draft) and returns to not-editing. Cancel calls onCancel() and returns to not-editing, showing value again.",
+    "With validate, every confirm (Enter, the confirm button, a blur with a changed draft) calls validate(draft) first. A message rejects it: no onConfirm, editing continues with the draft, the message shows, and the child gets invalid, aria-invalid, and aria-describedby. After a rejection the message is recomputed on each change until editing ends. Cancel, Escape, starting an edit, a successful confirm, and a blur with an unchanged draft clear it.",
     "Enter/Escape confirm/cancel handling is scoped to the internal editing state and never fires before editing starts.",
     "Enter and Escape leave focus on the field after calling onConfirm/onCancel (Escape from an action button moves it to the field first); the action buttons' clicks move focus to the field before ending the edit, since they unmount.",
     "onBlur on the root: if the newly-focus element (event.relatedTarget) is outside the root, or unavailable, call confirm() when the draft differs from value, otherwise just end editing; if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
@@ -152,7 +161,8 @@
   "dont": [
     "Do not use for multiple related fields - use a real form.",
     "Do not expect an isEditing/state prop - editing always starts on click/focus.",
-    "Do not expect onConfirm to fire on every keystroke - only on commit."
+    "Do not expect onConfirm to fire on every keystroke - only on commit.",
+    "Do not drop or quietly fix a bad draft in onConfirm - reject it with validate so the person sees what to change."
   ],
   "acceptanceCriteria": [
     "Renders the child read-only (no action row) before any interaction.",
@@ -165,6 +175,7 @@
     "Focus leaving with an unchanged draft ends editing without calling onConfirm.",
     "Clicking/Tab-ing focus outside the root while editing calls onConfirm with the draft and returns to read-only.",
     "Clicking cancel or confirm never also triggers an auto-confirm from the blur clicking them causes.",
+    "With validate, a rejected draft (Enter, confirm button, or blur) keeps editing with the message under the field, aria-invalid on it, and focus in it after Enter/confirm; the message follows the draft; Escape still cancels.",
     "confirmLabel/cancelLabel set the accessible names of the action buttons.",
     "className applies to the root.",
     "Works in light and dark themes.",
@@ -172,7 +183,7 @@
     "Tests cover read-only rendering, starting to edit, actionButtons, confirm/cancel behavior including revert-on-cancel, blur-to-confirm, keyboard shortcuts, and accessible names."
   ],
   "knownLimitations": [
-    "No value/validation handling beyond confirm/cancel - only a transient draft while editing; the confirmed value is entirely owned by the parent.",
+    "validate is synchronous and checks the draft only; saving can still fail, which onConfirm handles. The confirmed value is entirely owned by the parent.",
     "Only TextField exists as a real clonable-control implementation today."
   ],
   "futureEnhancements": [

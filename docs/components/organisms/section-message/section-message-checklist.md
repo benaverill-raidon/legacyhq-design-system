@@ -31,6 +31,8 @@ Organism.
 - [ ] Dismiss is opt-in (`isDismissible`), hides the message, and calls `onDismiss`.
 - [ ] The icon keeps its own status color rather than inheriting.
 - [ ] `role` defaults to `status` and is overridable.
+- [ ] `errors` lists the fields a failed submit needs fixed, each a Link that focuses its control (or
+      the first control inside a target that can't take focus). No separate error-summary component.
 
 ## Figma properties
 
@@ -50,7 +52,8 @@ type SectionMessageTone = 'information' | 'success' | 'warning' | 'error';
 interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
   tone?: SectionMessageTone;
   title?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  errors?: Array<{ label: React.ReactNode; message?: React.ReactNode; targetId: string }>;
   actions?: React.ReactNode;
   isDismissible?: boolean;
   onDismiss?: () => void;
@@ -70,6 +73,7 @@ role: status
 - [ ] padding `--spacing-lg`, root gap `--spacing-lg`, content gap `--spacing-sm`, actions gap `--spacing-sm` (owned by the ButtonGroup).
 - [ ] border `--border-width-sm`, radius `--border-radius-xl`.
 - [ ] title `heading-sm`, description `body-md`.
+- [ ] errors list `body-md`, `--spacing-lg` start padding, `--spacing-xs` between lines.
 - [ ] per-tone subtle background + border + status-icon color tokens (no primitives, no raw values).
 
 ## Visual and structural requirements
@@ -78,6 +82,7 @@ role: status
 - [ ] Status icon in its own status color, `aria-hidden`.
 - [ ] Actions rendered as passed (no injected separators); region rendered only when actions provided.
 - [ ] Dismiss button only when `isDismissible`.
+- [ ] Errors list only when `errors` has entries; description only when `children` is set.
 
 ## Accessibility
 
@@ -85,6 +90,7 @@ role: status
 - [ ] Status icon `aria-hidden`; dismiss button labelled "Dismiss".
 - [ ] The status is announced before the title as visually hidden text (`statusLabel`, defaulting to the tone's name).
 - [ ] Meaning conveyed by text, not color alone.
+- [ ] `errors` is a `ul`; each link focuses its control without changing the URL.
 
 ## Examples to document
 
@@ -93,6 +99,7 @@ role: status
 - [ ] Warning with actions
 - [ ] Error, dismissible
 - [ ] Urgent error (`role="alert"`)
+- [ ] Error summary (`errors`)
 
 ## Tests
 
@@ -102,4 +109,5 @@ role: status
 - [ ] Actions rendered as passed (no injected separators); region omitted for none.
 - [ ] Not dismissible by default; dismisses + calls `onDismiss`.
 - [ ] Overridable role; forwards the ref.
+- [ ] `errors`: links after the description; focuses the control; falls back to a group's first control; empty array renders nothing.
 - [ ] Uses MUI: no. Uses Tailwind: no.

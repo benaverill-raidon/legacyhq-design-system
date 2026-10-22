@@ -92,6 +92,7 @@ export function LivePair({ label, initial }) {
   <Part name="root" target={inlineEditStyles.root}>A `div` that fills its container's width. It has no border or fill of its own.</Part>
   <Part name="content" target={inlineEditStyles.content}>Holds the child, usually a Text Field: read-only and showing `value`, or editable and showing the draft.</Part>
   <Part name="actions">A Button Group of a cancel and a confirm Icon Button. Shown only while editing, unless `actionButtons` is `false`; it floats below the field, so it isn't on the specimen.</Part>
+  <Part name="message">The error from `validate`, under the field in Field's error look. Shown only while editing, when `validate` rejects the draft, so it isn't on the specimen.</Part>
 </Anatomy>
 
 </Section>
@@ -144,11 +145,29 @@ old value again after confirming.
 <Subsection title="Leaving the field saves">
 
 While editing, moving focus anywhere outside Inline Edit, by a click or by Tab, confirms the draft,
-the same as the confirm button. Moving to the cancel or confirm button doesn't. Only cancel or
+the same as the confirm button, unless `validate` rejects it. Moving to the cancel or confirm button doesn't. Only cancel or
 Escape throws a draft away, so clicking elsewhere never loses an edit. If the draft is unchanged,
 leaving just ends editing without calling `onConfirm`, so tabbing through the field and its buttons
 doesn't report an edit that didn't happen. Enter or the confirm button still call `onConfirm` with
 an unchanged value, since someone chose to confirm.
+
+</Subsection>
+
+<Subsection title="Checking the draft">
+
+`validate` checks the draft whenever it would be confirmed: Enter, the confirm button, or focus
+leaving. Return a message to reject the draft, or `undefined` to accept it. A rejected draft isn't
+confirmed and isn't lost: the field stays in edit mode, the message shows under it in Field's error
+look, and the field is marked invalid. After Enter or the confirm button, focus is in the field, so
+people can fix it straight away. When focus left, Inline Edit doesn't pull it back: the draft and
+its error wait in the field, with the buttons still showing.
+
+After a rejected confirm, the message follows the draft as it changes, so it clears as soon as the
+draft is fixed, the system's rule for when errors show. Escape and the cancel button still discard
+the draft and the error. Inline Edit only checks: saving can still fail, so handle that in
+`onConfirm`.
+
+<Example of={InlineEditStories.Validation} caption="Change the docket number to 1482, then press Enter or click away: the error keeps the draft in the field." />
 
 </Subsection>
 
@@ -213,6 +232,18 @@ field.
     <TextField context="inline" aria-label="Last name" />
 </InlineEdit>`}
 />
+<Do
+  caption="Reject a draft that can't be saved with validate, saying what to do. The draft stays in the field to fix."
+  code={`<InlineEdit value={docket} onConfirm={setDocket} validate={(value) => (DOCKET.test(value) ? undefined : 'Enter it as it appears on the court notice.')}>
+    <TextField context="inline" aria-label="Docket number" />
+</InlineEdit>`}
+/>
+<Dont
+  caption="Ignore or quietly fix a bad draft in onConfirm. Editing has already ended, so people don't learn what was wrong."
+  code={`<InlineEdit value={docket} onConfirm={(value) => { if (DOCKET.test(value)) setDocket(value); }}>
+    <TextField context="inline" aria-label="Docket number" />
+</InlineEdit>`}
+/>
 <Dont
   caption="Wrap several fields in one. Inline Edit sets value and readOnly on the wrapper, not on the fields."
   code={`<InlineEdit value={name} onConfirm={setName}>
@@ -237,10 +268,14 @@ field.
   isn't clear. Their Button Group has no name, so it adds no group role.
 - After Enter, Escape, cancel, or confirm, focus is on the read-only field, so it isn't lost to the
   page. Enter or a click there starts editing again.
+- When `validate` rejects the draft, the field gets `aria-invalid` and the message is added to its
+  `aria-describedby`, after any description it already has. The message is in a polite live region,
+  so it's read out after Enter, when focus doesn't move. Its status icon is hidden, so the text
+  carries the meaning. Focus stays in the field after Enter or the confirm button.
 
 <Keyboard>
   <Key keys="Tab">Moves into the field, which starts editing; then to cancel, then to confirm. Moving focus out of Inline Edit confirms a changed draft, and just ends editing when nothing changed.</Key>
-  <Key keys="Enter">In a Text Field, confirms the draft. On a focused cancel or confirm button, activates that button. On the read-only field, starts editing.</Key>
+  <Key keys="Enter">In a Text Field, confirms the draft, or shows the error and keeps editing when `validate` rejects it. On a focused cancel or confirm button, activates that button. On the read-only field, starts editing.</Key>
   <Key keys="Ctrl + Enter">In a Text Area, confirms the draft. Cmd + Enter does the same on a Mac.</Key>
   <Key keys="Escape">Cancels the edit and shows `value` again, with focus on the field.</Key>
 </Keyboard>
@@ -254,14 +289,16 @@ field.
 The child must accept `value`, `onChange`, `onFocus`, and `readOnly`, which Inline Edit sets on it;
 Text Field and Text Area do. Inline Edit replaces the child's own `onChange` while editing and its
 `onFocus` while read-only. While read-only it also wraps the child's `onClick` and `onKeyDown`: they
-still run, then a click or Enter starts editing.
+still run, then a click or Enter starts editing. While `validate` rejects the draft, Inline Edit also
+sets `invalid` and `aria-invalid` on the child and adds the message to its `aria-describedby`.
 
 </Section>
 
 <Section title="Design tokens">
 
-Every token Inline Edit's stylesheet uses: where the action buttons sit, their fill, and the Table
-cell treatment. The field itself is styled by its own component. The control heights, listed by the
+Every token Inline Edit's stylesheet uses: where the action buttons sit, their fill, `validate`'s
+error message (Field's error look, indented to the text inside the field), and the Table cell
+treatment. The field itself is styled by its own component. The control heights, listed by the
 child's size, set the height of the action row only with `actionPlacement="end"` and
 `actionAlignment="start"`.
 
@@ -279,6 +316,7 @@ child's size, set the height of the action row only with `actionPlacement="end"`
 - <DocLink to="Components/Data Display/Table" />, whose editable cells can hold an Inline Edit.
 - <DocLink to="Components/Actions/Icon Button" />, the cancel and confirm buttons.
 - <DocLink to="Components/Actions/Button Group" />, which holds them.
+- <DocLink to="Components/Forms/Field" />, whose error look the `validate` message shares.
 
 </Related>
 

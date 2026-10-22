@@ -10,10 +10,6 @@
     {
       "kind": "gap",
       "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."
-    },
-    {
-      "kind": "decision",
-      "summary": "Its contract lists an active-filters use case, while its page, Chip's, and Label's say filters are Chips in a Chip Group."
     }
   ],
   "purpose": "Lays out a wrapping row of Tags with an optional overflow tag that opens a Dropdown Menu holding whichever tags got truncated.",
@@ -48,12 +44,12 @@
   },
   "useCases": [
     "A bounded list of entity-reference tags on a record detail view, with the rest reachable via \"+N more\"",
-    "An active-filters row that can grow past what comfortably fits on one line",
     "A short, unbounded tag list with no truncation at all (maxVisible omitted)"
   ],
   "antiPatterns": [
     "A single tag - use Tag directly",
-    "A group of Buttons - use Button Group"
+    "A group of Buttons - use Button Group",
+    "Active filters or search scopes people change - use Chip Group (filters are Chips in a named Chip Group)"
   ],
   "anatomy": [
     {

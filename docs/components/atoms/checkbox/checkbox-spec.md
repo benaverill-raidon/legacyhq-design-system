@@ -95,6 +95,7 @@ export interface CheckboxProps
   defaultChecked?: boolean;
   indeterminate?: boolean;
   invalid?: boolean;
+  errorMessage?: React.ReactNode;
   disabled?: boolean;
   required?: boolean;
   onCheckedChange?: (
@@ -215,6 +216,10 @@ Recommended mappings, subject to available token names:
 - Must support `aria-label` and `aria-labelledby` for label-less usage.
 - If no `label`, `aria-label`, or `aria-labelledby` is provided, this should be considered invalid usage and may warn in development.
 - Use `aria-invalid` when `invalid` is true.
+- `errorMessage` renders under the box, outside the `label` (so it isn't part of the name), is added
+  to the input's `aria-describedby` after any existing description, and sets `aria-invalid` and the
+  invalid look. The label and the message are then wrapped in a `div` (`.field`) that takes
+  `className`.
 - Use `aria-checked="mixed"` when indeterminate, if applicable.
 - Do not add extra roles unless required.
 
@@ -262,6 +267,8 @@ Test:
 - Applies indeterminate state.
 - Indeterminate visually overrides checked.
 - Applies invalid state and `aria-invalid`.
+- `errorMessage`: shown under the box outside the label, describes the input, sets `aria-invalid`;
+  keeps an existing `aria-describedby`; `className` moves to the wrapper; no wrapper without it.
 - Applies disabled state and prevents interaction.
 - Applies required state.
 - Supports custom `className`.

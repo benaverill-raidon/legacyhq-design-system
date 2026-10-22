@@ -89,6 +89,7 @@ Future interactivity, such as dropdown-trigger behavior, should be handled by a 
 - The component is named `Label`, not `Lozenge`.
 - The component is non-interactive for the first implementation.
 - The component is text-only for the first implementation.
+- The component has no icon slot, by design: a status with an icon, such as a task status, is the icon beside the Label, composed by the page (see Templates / Roadmap).
 - The component has no border.
 - Subtle emphasis uses a softer background with readable foreground text.
 - Bold emphasis uses a stronger filled background with inverse foreground text.
@@ -100,7 +101,6 @@ Future interactivity, such as dropdown-trigger behavior, should be handled by a 
 
 These are intentionally out of scope for the first implementation:
 
-- Icon support
 - Removable labels
 - Clickable labels
 - Dropdown trigger behavior

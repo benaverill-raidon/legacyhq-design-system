@@ -73,6 +73,8 @@ Required:
 - Read-only (not editing) - renders the cloned child with `value`, no action row
 - Editing (started by click/focus) - renders the cloned child with the in-progress draft, plus the
   confirm/cancel action pair
+- Editing with an error - `validate` rejected the draft: the message under the field in Field's
+  error look, the child marked invalid (`invalid`, `aria-invalid`, `aria-describedby`)
 
 Not Required:
 - A prop-driven "start already editing" state - there is no example where confirm/cancel should
@@ -93,11 +95,18 @@ Yes, always - via `confirmLabel`/`cancelLabel` props (default `'Confirm'`/`'Canc
 ### What happens if the user clicks/tabs away without pressing confirm or cancel?
 The draft is committed - the same as clicking confirm. Clicking/Tab-ing off the field always saves;
 it never silently discards. Only clicking cancel (or pressing Escape) discards the draft. An
-unchanged draft isn't committed: editing just ends, without `onConfirm`.
+unchanged draft isn't committed: editing just ends, without `onConfirm`. When `validate` rejects the
+draft, it isn't committed either: editing goes on with the draft and its error, and focus isn't
+pulled back.
 
 ### Where does focus go when an edit ends?
 To the read-only field. Enter and Escape leave it there; the cancel and confirm buttons move it back
 there, since they unmount. A click or Enter on the focused read-only field starts editing again.
+When `validate` rejects Enter or the confirm button, focus is in the still-editable field.
+
+### How is a rejected draft announced?
+The field gets `aria-invalid` and the message in its `aria-describedby`; the message is in a polite
+live region, so it's read out after Enter even though focus doesn't move.
 
 ---
 

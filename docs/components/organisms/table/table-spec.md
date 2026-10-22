@@ -57,7 +57,7 @@ and the default empty content is Table's own markup, not Empty State.
 ```text
 Table (div.table, data-size)
 ├─ div.header                                        [when title / description]
-│  ├─ h{headingLevel}.title (heading/lg; h2 by default)
+│  ├─ h{headingLevel}.title (heading/lg at md, heading/md at sm; h2 by default)
 │  └─ p.description (body/md, content/subtle)
 └─ div.tableBody (data-has-footer; no border/radius)
    ├─ div.toolbar                                     [when toolbar / search / toolbarActions / actions /
@@ -213,7 +213,7 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 | Row divider / header border | `--color-border-default` (dropped for a lone row, or the last row with no footer) |
 | Empty cell padding | none (the default empty content's deep background meets the table's edges) |
 | Focus ring | `--color-border-focus`, `--border-width-md` |
-| Title / header cell / body cell type | `--typography-heading-lg-*` / `--typography-heading-xs-*` / `--typography-body-md-*` |
+| Title (md / sm) / header cell / body cell type | `--typography-heading-lg-*` / `--typography-heading-md-*` / `--typography-heading-xs-*` / `--typography-body-md-*` |
 | Header padding | block `--spacing-3xl` / `--spacing-lg`, inline `--spacing-2xl` |
 | Heading gap | `--spacing-md` (12px) |
 | Cell inline padding | `--spacing-sm` |
@@ -230,6 +230,11 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 
 ## Design Decisions
 
+- **The title is a section heading, and its size follows the table's size.** It labels a table among
+  other content (a dashboard, a section of a page): `heading/lg` at `md`, `heading/md` at `sm`. A page
+  that's only a table uses the page's own header and leaves the Table's title out, so the title never
+  has to be the page's top heading. `headingLevel` sets only the outline. Decided with the owner
+  2026-10-22.
 - **Column-config driven, not slot-composed.** Figma lays the grid out column-by-column; the code
   takes `columns` + `data` and renders a semantic row-oriented `<table>`. This scales to a data-heavy
   program with many similar "All X" pages far better than hand-composed rows.
@@ -247,6 +252,11 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 - **Reuses existing components; no new tokens.** Search (Text Field + Icon Button), selection
   (Checkbox), Clear filters (Button), loading (Skeleton), and the footer's Selects and Icon Buttons
   are existing components; colour/spacing/typography use existing semantic tokens.
+- **No row groups (for now).** Grouped rows - a roadmap's stages, for example - are separate tables,
+  each with its own scroll region (and tab stop) and its own `activeFilters`; Templates / Roadmap
+  builds its stages this way. This is a designed boundary (a `knownLimitations` entry in the
+  contract), not a gap, until the Roadmap designs land and show whether grouped rows need to be one
+  table.
 
 ---
 

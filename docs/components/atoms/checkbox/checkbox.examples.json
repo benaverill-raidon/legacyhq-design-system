@@ -11,6 +11,10 @@
     {
       "name": "Disabled",
       "jsx": "<Checkbox disabled>Receive updates</Checkbox>"
+    },
+    {
+      "name": "Error message",
+      "jsx": "<Checkbox label=\"I've run a conflict check\" required errorMessage=\"Run a conflict check before you open the matter.\" />"
     }
   ]
 }

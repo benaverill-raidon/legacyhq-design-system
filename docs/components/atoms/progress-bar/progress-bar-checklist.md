@@ -49,7 +49,7 @@
 - [ ] Progress advances clockwise.
 - [ ] Progress arc is inset within the track ring by the pad (4px), matching the linear inset.
 - [ ] Progress arc is capped with rounded ends and has no border of its own.
-- [ ] At value 0, nothing renders (track ring and border hidden).
+- [ ] At value 0, the track ring and its border render and the progress arc is hidden (no dot at 12 o'clock).
 - [ ] Circular geometry scales without raster artifacts.
 
 ## Tokens

@@ -18,9 +18,15 @@ export interface CheckboxProps
   indeterminate?: boolean;
   /**
    * Marks the checkbox as failing validation: sets `aria-invalid` and draws the box in the error
-   * color. Pair it with a visible message.
+   * color. Pair it with a visible message: `errorMessage` sets it for you.
    */
   invalid?: boolean;
+  /**
+   * An error message under the box, in the error color, added to the checkbox's `aria-describedby`.
+   * Setting it also marks the checkbox invalid. Use it for a single checkbox; in a Checkbox Group,
+   * pass the group's own `errorMessage`.
+   */
+  errorMessage?: React.ReactNode;
   /**
    * The native `disabled` attribute: the checkbox can't be changed and leaves the tab order. A
    * disabled Checkbox Group disables it too.
@@ -33,7 +39,10 @@ export interface CheckboxProps
   required?: boolean;
   /** Called when the user toggles the checkbox, with the next checked value and the change event. */
   onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
-  /** Added to the root `label` element's classes. */
+  /**
+   * Added to the root element's classes: the `label`, or, with `errorMessage`, the `div` around the
+   * label and the message.
+   */
   className?: string;
 }
 

@@ -26,7 +26,8 @@ export const Checkbox = React.memo(
       checked,
       defaultChecked,
       indeterminate = false,
-      invalid = false,
+      invalid: invalidProp = false,
+      errorMessage,
       disabled = false,
       required = false,
       className,
@@ -34,12 +35,18 @@ export const Checkbox = React.memo(
       id,
       'aria-checked': ariaChecked,
       'aria-invalid': ariaInvalid,
+      'aria-describedby': ariaDescribedBy,
       ...rest
     },
     forwardedRef,
   ) {
     const generatedId = React.useId();
     const inputId = id ?? generatedId;
+    const errorId = `${inputId}-error`;
+    // An error message marks the checkbox invalid too, and describes it after any description it has.
+    const hasError = errorMessage !== undefined && errorMessage !== null && errorMessage !== false;
+    const invalid = invalidProp || hasError;
+    const describedBy = [ariaDescribedBy, hasError ? errorId : undefined].filter(Boolean).join(' ') || undefined;
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     // A disabled Checkbox Group disables every checkbox inside it, from `options` or `children`.
     const group = React.useContext(CheckboxGroupContext);
@@ -61,9 +68,9 @@ export const Checkbox = React.memo(
       [onCheckedChange],
     );
 
-    return (
+    const checkbox = (
       <label
-        className={mergeClassNames(styles.root, className)}
+        className={mergeClassNames(styles.root, hasError ? undefined : className)}
         data-disabled={isDisabled ? 'true' : undefined}
         data-indeterminate={indeterminate ? 'true' : undefined}
         data-invalid={invalid ? 'true' : undefined}
@@ -85,6 +92,7 @@ export const Checkbox = React.memo(
             disabled={isDisabled}
             required={required}
             aria-invalid={invalid ? true : ariaInvalid}
+            aria-describedby={describedBy}
             aria-checked={indeterminate ? 'mixed' : ariaChecked}
             onChange={handleChange}
           />
@@ -121,6 +129,20 @@ export const Checkbox = React.memo(
           </span>
         ) : null}
       </label>
+    );
+
+    if (!hasError) {
+      return checkbox;
+    }
+
+    // The message sits outside the label, so it describes the checkbox without becoming part of its name.
+    return (
+      <div className={mergeClassNames(styles.field, className)}>
+        {checkbox}
+        <div id={errorId} className={styles.errorMessage}>
+          {errorMessage}
+        </div>
+      </div>
     );
   }),
 );

@@ -6,10 +6,6 @@
     {
       "kind": "bug",
       "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
-    },
-    {
-      "kind": "gap",
-      "summary": "The circular variant draws nothing at 0, track included, so a completion summary at 0 shows an empty space."
     }
   ],
   "purpose": "Communicate determinate process completion from 0 to 100.",
@@ -174,7 +170,7 @@
     "Clamp rendered and announced value to 0\u2013100.",
     "Support arbitrary numeric values.",
     "Do not add indeterminate behavior.",
-    "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular ring is hidden, so reaching or leaving 0 shows or hides it at once.",
+    "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular progress arc is hidden, so reaching or leaving 0 shows or hides the arc at once; the track ring stays.",
     "Linear width is controlled by the parent.",
     "Circular progress starts at 12 o'clock and advances clockwise.",
     "The linear progress fill and remaining track are both fully-rounded pills (border-radius-full-round) at every value.",
@@ -182,7 +178,7 @@
     "The circular progress arc is inset within the track ring by the same pad on both radial edges, so a light gap of track shows around the fill - matching the linear inset.",
     "Only the remaining track carries the bold border; the progress fill has none.",
     "The circular progress arc is capped with rounded ends and carries no border.",
-    "At value 0 the circular variant renders nothing: the track ring and its border are hidden.",
+    "At value 0 the circular variant draws its empty track ring and border, and hides only the progress arc, as the linear variant shows its empty bordered track.",
     "Colors map to the brand palette (progress = brand primary bold, track = deep surface, border = border/bold), and are theme-aware in light and dark."
   ],
   "compositionRules": [

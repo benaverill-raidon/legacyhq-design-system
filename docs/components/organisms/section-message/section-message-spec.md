@@ -3,8 +3,8 @@
 ## Overview
 
 Section Message is a bordered, rounded, in-context status panel. It belongs to the organism tier and
-composes the Icon primitive, the Link Button atom laid out in a Button Group (actions), and the Icon
-Button atom (dismiss).
+composes the Icon primitive, the Link Button atom laid out in a Button Group (actions), the Link
+atom (each entry in `errors`), and the Icon Button atom (dismiss).
 
 ## Anatomy
 
@@ -15,6 +15,10 @@ Button atom (dismiss).
 3. **Content** - a vertical column:
    - **Title** - optional bold lead line (`heading-sm`, default content color).
    - **Description** - the `children`, wrapping across lines (`body-md`, default content color).
+     Rendered only when `children` is set; required unless `errors` is.
+   - **Errors** - optional, with `errors`: a `ul` (disc bullets, `--spacing-lg` start padding,
+     `--spacing-xs` between lines, `body-md`), each line a `Link` (`emphasis="default"`) to
+     `#targetId` followed by `: message` when there is one.
    - **Actions** - optional actions (typically `LinkButton`s), laid out by a `ButtonGroup` the
      caller passes; no separators are injected.
 4. **Dismiss** - optional dismiss `IconButton` (xs, subtle) in the top-right.
@@ -24,13 +28,20 @@ Button atom (dismiss).
 ```ts
 export type SectionMessageTone = 'information' | 'success' | 'warning' | 'error';
 
+export interface SectionMessageError {
+  label: React.ReactNode;
+  message?: React.ReactNode;
+  targetId: string;
+}
+
 export interface SectionMessageProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'title'> {
   tone?: SectionMessageTone;
   /** @deprecated Renamed to `tone`. Still accepted. */
   appearance?: SectionMessageTone;
   statusLabel?: string;
   title?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  errors?: SectionMessageError[];
   actions?: React.ReactNode;
   isDismissible?: boolean;
   dismissLabel?: string;
@@ -100,6 +111,10 @@ The panel hugs its content vertically; the description wraps rather than truncat
 - Render the title only when provided; render the actions region only when actions are provided.
 - Render the actions as passed (typically a `ButtonGroup` of `LinkButton`s); do not inject
   separators.
+- Render `errors` (when it has entries) as a list under the description, in the order given. Each
+  label is a `Link` to `#targetId`; clicking it prevents the jump and focuses the element with that
+  id, or, when that element can't take focus (a fieldset), the first focusable control inside it.
+  A missing target leaves the link's default behavior alone.
 - Show the dismiss button only when `isDismissible`. On dismiss, hide the message (internal state)
   and call `onDismiss`.
 
@@ -115,6 +130,9 @@ The panel hugs its content vertically; the description wraps rather than truncat
   prop to show it again, so a caller remounts it (a new `key`) to bring it back. Focus is not moved
   when the focused dismiss button is removed.
 - The title is a `div`, not a heading element.
+- `errors` is a `ul` of links, so it's announced as a list with its count. Following a link moves
+  focus to the field, which reads its own label and error. Section Message doesn't move focus to
+  itself; after a failed submit the caller focuses it (`ref` and `tabIndex={-1}`).
 - Tone is conveyed by the title/description text, not by color alone.
 
 ## Storybook
@@ -125,6 +143,7 @@ Documentation structure:
 - Tones
 - Content (title/description/actions, description only, single action, dismissible)
 - Edge Cases (long wrapping content, dismissible with actions, no title)
+- Error Summary (`errors` linking to a Text Field and to a Radio Group's fieldset)
 
 ## Tests
 
@@ -145,5 +164,9 @@ is not dismissible by default
 dismisses and calls onDismiss when the dismiss button is clicked
 composes a custom className and forwards props
 forwards the ref to the root element
+errors: lists each as a link to #targetId after the description
+errors: following a link focuses the control, without changing the URL
+errors: a target that can't take focus hands it to its first control
+errors: an empty array renders no list; no children renders no description
 CSS contract: tone background/border tokens, radius-xl, 1px border, spacing-lg padding
 ```

@@ -51,6 +51,17 @@
         "title": "Payment failed",
         "children": "Update your payment method to keep your subscription active."
       }
+    },
+    {
+      "name": "Error summary",
+      "description": "The summary at the top of a form after a failed submit: each field that needs fixing, linked to its control.",
+      "jsx": "<SectionMessage ref={summaryRef} tabIndex={-1} tone=\"error\" title=\"Fix 2 fields to create the matter\" errors={[{ label: 'Client name', message: \"Enter the client's first and last name.\", targetId: 'client-name' }, { label: 'Matter type', message: 'Choose the type of matter.', targetId: 'matter-type' }]} />",
+      "props": {
+        "tone": "error",
+        "title": "Fix 2 fields to create the matter",
+        "errors": "two entries, each { label, message, targetId }",
+        "tabIndex": -1
+      }
     }
   ],
   "antiExamples": [
@@ -68,6 +79,11 @@
       "name": "Dismissible hard constraint",
       "reason": "Do not let the user dismiss a persistent restriction they need to keep seeing.",
       "jsx": "<SectionMessage tone=\"error\" isDismissible>You do not have permission to edit this space.</SectionMessage>"
+    },
+    {
+      "name": "Hand-laid error links",
+      "reason": "Use errors: it lists the fields as links that move focus to each control, instead of links that only jump the page.",
+      "jsx": "<SectionMessage tone=\"error\" title=\"Fix 1 field\"><a href=\"#client-name\">Client name</a></SectionMessage>"
     }
   ]
 }

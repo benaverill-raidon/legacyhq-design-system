@@ -34,14 +34,6 @@
     {
       "kind": "gap",
       "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
-    },
-    {
-      "kind": "gap",
-      "summary": "The title is always `heading-lg`, so stacked tables can't rank under a page heading."
-    },
-    {
-      "kind": "gap",
-      "summary": "No row groups, so grouped rows are separate tables, each adding its own tab stop, and `activeFilters` belongs to one table."
     }
   ],
   "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
@@ -98,7 +90,7 @@
   ],
   "anatomy": [
     { "part": "root", "element": "div.table (data-size)", "required": true, "description": "Flex column holding the header and the table body. Fills its container's width." },
-    { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title or description: the title (heading/lg), a heading at headingLevel (h2 by default), over a description (body/md, content/subtle)." },
+    { "part": "header", "element": "div.header", "required": false, "description": "Rendered when there's a title or description: the title (heading/lg at md, heading/md at sm), a heading at headingLevel (h2 by default), over a description (body/md, content/subtle)." },
     { "part": "tableBody", "element": "div.tableBody (data-has-footer)", "required": true, "description": "Holds the toolbar, the grid's scroll region, and the footer, with no border or radius. data-has-footer marks whether the pagination footer is shown." },
     { "part": "toolbar", "element": "div.toolbar", "required": false, "description": "Rendered for `toolbar`, `searchable`, `toolbarActions`, `actions`, `onClearFilters`, `activeFilters`, or a selection. Row 1: a right-aligned button group (search, then `toolbarActions`, then `actions`), or the selection bar while rows are selected. Row 2: `activeFilters` and the Clear filters button. `toolbar` replaces both rows." },
     { "part": "selectionBar", "element": "div.selectionPill (in the toolbar's first row)", "required": false, "description": "Shown while one or more rows are selected, in place of the toolbar's button group: the selected count, then `bulkActions`, on the selected background with a selected border." },
@@ -115,10 +107,10 @@
     "columns": { "type": "Array<TableColumn<Row>>", "required": true, "description": "Column definitions (key, header, render, sortable, align, width, resizable, emphasis, ...). column.resizable=false opts a column out of resizing; column.emphasis='strong' marks an identifier column (heading weight)." },
     "data": { "type": "Row[]", "required": true, "description": "The row data. Sorted/paginated unless the matching manual flag is set." },
     "getRowId": { "type": "(row: Row, index: number) => string | number", "required": false, "default": "index", "description": "Stable row id for selection and React keys. Pass a real id when using selection." },
-    "size": { "type": "TableSize", "required": false, "default": "md", "enum": ["md", "sm"], "description": "Row density: md (64px rows) or sm (40px rows)." },
+    "size": { "type": "TableSize", "required": false, "default": "md", "enum": ["md", "sm"], "description": "Row density and title size: md (64px rows, a heading/lg title) or sm (40px rows, a heading/md title)." },
     "caption": { "type": "React.ReactNode", "required": false, "default": null, "description": "Accessible name for the <table> (visually-hidden caption). Falls back to `title`." },
-    "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Header title (heading/lg), rendered as a heading at headingLevel. Names the table when there's no caption." },
-    "headingLevel": { "type": "1 | 2 | 3 | 4 | 5 | 6", "required": false, "default": 2, "description": "The heading level of title, to fit the page's outline." },
+    "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "A section heading labelling the table among other content (heading/lg at md, heading/md at sm), rendered at headingLevel. A page that's only a table uses the page header and leaves it out. Names the table when there's no caption." },
+    "headingLevel": { "type": "1 | 2 | 3 | 4 | 5 | 6", "required": false, "default": 2, "description": "The heading level of title, to fit the page's outline. Only the outline: the size follows size." },
     "description": { "type": "React.ReactNode", "required": false, "default": null, "description": "Supporting description under the title." },
     "actions": { "type": "React.ReactNode", "required": false, "default": null, "description": "Actions such as a primary Button, at the end of the toolbar's button group after toolbarActions. Hidden while rows are selected." },
     "toolbar": { "type": "React.ReactNode", "required": false, "default": null, "description": "Replaces the entire built-in toolbar, including search, actions, active filters, and the selection bar." },
@@ -209,7 +201,7 @@
       "rowHeight": "64px (md) / 40px (sm)",
       "selectionColumnWidth": "40px"
     },
-    "typography": { "title": "--typography-heading-lg-*", "headerCell": "--typography-heading-xs-*", "cell": "--typography-body-md-*", "description": "--typography-body-md-*" }
+    "typography": { "title": "--typography-heading-lg-* (md), --typography-heading-md-* (sm)", "headerCell": "--typography-heading-xs-*", "cell": "--typography-body-md-*", "description": "--typography-body-md-*" }
   },
   "accessibility": {
     "interactive": true,
@@ -311,7 +303,8 @@
   "knownLimitations": [
     "Single-select (radio) column, the per-column ⋮ menu, column reorder, sticky first column, and row expansion are deferred (the Figma page is still in-progress).",
     "The built-in client-side sort compares row[key] (or column.sortValue) with a general comparator; complex/locale-specific sorts need manualSort.",
-    "Resized column widths are session-only state (not persisted) and reset on remount."
+    "Resized column widths are session-only state (not persisted) and reset on remount.",
+    "No row groups: grouped rows (a roadmap's stages) are separate tables, each with its own scroll region (and tab stop) and its own `activeFilters`. A designed boundary until the Roadmap designs land."
   ],
   "futureEnhancements": [
     "Single-select (radio) rows and the per-column options menu.",

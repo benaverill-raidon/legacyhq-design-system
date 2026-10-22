@@ -9,8 +9,9 @@ import {
 } from '../../../assets/icons';
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
+import { Link } from '../../atoms/link';
 import styles from './section-message.module.css';
-import type { SectionMessageProps, SectionMessageTone } from './section-message.types';
+import type { SectionMessageError, SectionMessageProps, SectionMessageTone } from './section-message.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -36,6 +37,38 @@ const STATUS_LABELS: Record<SectionMessageTone, string> = {
   error: 'Error',
 };
 
+/** What can take focus: the control an error link moves to, or the first one inside its target. */
+const FOCUSABLE =
+  'input:not([type="hidden"]):not(:disabled), select:not(:disabled), textarea:not(:disabled), button:not(:disabled), a[href], [contenteditable="true"], [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Moves focus to an error's control. The link's own navigation is stopped: following an in-page
+ * link scrolls to its target but doesn't focus it, and it would change the URL. A target that can't
+ * take focus itself, such as a fieldset, hands focus to the first control inside it.
+ */
+function focusTarget(event: React.MouseEvent<HTMLAnchorElement>, targetId: string) {
+  const target = document.getElementById(targetId);
+  if (!target) return;
+  event.preventDefault();
+  const control = target.matches(FOCUSABLE) ? target : target.querySelector<HTMLElement>(FOCUSABLE);
+  (control ?? target).focus();
+}
+
+function ErrorList({ errors }: { errors: SectionMessageError[] }) {
+  return (
+    <ul className={styles.errors}>
+      {errors.map(({ label, message, targetId }) => (
+        <li key={targetId}>
+          <Link href={`#${targetId}`} emphasis="default" onClick={(event) => focusTarget(event, targetId)}>
+            {label}
+          </Link>
+          {message !== undefined && message !== null ? <>: {message}</> : null}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export const SectionMessage = React.memo(
   React.forwardRef<HTMLDivElement, SectionMessageProps>(function SectionMessage(
     {
@@ -44,6 +77,7 @@ export const SectionMessage = React.memo(
       statusLabel,
       title,
       children,
+      errors,
       actions,
       isDismissible = false,
       dismissLabel = 'Dismiss',
@@ -70,6 +104,8 @@ export const SectionMessage = React.memo(
     const { Icon, color } = TONE_ICON[tone];
     const status = statusLabel ?? STATUS_LABELS[tone];
     const hasTitle = title !== undefined && title !== null;
+    const hasDescription = children !== undefined && children !== null && children !== false;
+    const hasErrors = errors !== undefined && errors.length > 0;
     const hasActions = React.Children.toArray(actions).filter(Boolean).length > 0;
 
     return (
@@ -90,7 +126,8 @@ export const SectionMessage = React.memo(
             </>
           ) : null}
           {hasTitle ? <div className={styles.title}>{title}</div> : null}
-          <div className={styles.description}>{children}</div>
+          {hasDescription ? <div className={styles.description}>{children}</div> : null}
+          {hasErrors ? <ErrorList errors={errors} /> : null}
           {hasActions ? <div className={styles.actions}>{actions}</div> : null}
         </div>
 

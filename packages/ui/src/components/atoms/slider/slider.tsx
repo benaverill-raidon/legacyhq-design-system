@@ -317,11 +317,13 @@ export function SliderBaseComponent(
     orientation = 'horizontal',
     size = 'md',
     disabled = false,
+    invalid: invalidProp = false,
     showSteps = false,
     steps,
     showValue = false,
     className,
     id,
+    'aria-invalid': ariaInvalid,
     onValueChange,
     onBlur,
     onFocus,
@@ -336,6 +338,8 @@ export function SliderBaseComponent(
 ) {
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
+  // Field passes aria-invalid for an error; it shows the error look too, as `invalid` does.
+  const invalid = invalidProp || ariaInvalid === true || ariaInvalid === 'true';
   const isControlled = value !== undefined;
   const [uncontrolledValue, setUncontrolledValue] = React.useState(defaultValue);
   const currentValue = clampValue(isControlled ? value : uncontrolledValue, min, max);
@@ -449,6 +453,7 @@ export function SliderBaseComponent(
       className={getRootClasses(orientation, size, className)}
       data-dragging={isDragging ? 'true' : undefined}
       data-disabled={disabled ? 'true' : undefined}
+      data-invalid={invalid ? 'true' : undefined}
       data-orientation={orientation}
       data-show-value={showValue ? 'true' : undefined}
     >
@@ -546,6 +551,7 @@ export function SliderBaseComponent(
           value={isControlled ? currentValue : undefined}
           defaultValue={isControlled ? undefined : defaultValue}
           disabled={disabled}
+          aria-invalid={invalid ? true : ariaInvalid}
           data-pointer-focus={pointerFocusRing.isPointerFocused ? 'true' : undefined}
           onBlur={(event) => {
             if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {

@@ -185,6 +185,7 @@ export const SliderRange = React.memo(
       orientation = 'horizontal',
       size = 'md',
       disabled = false,
+      invalid: invalidProp = false,
       showSteps = false,
       steps,
       showValue = false,
@@ -198,6 +199,9 @@ export const SliderRange = React.memo(
       id,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
+      'aria-describedby': ariaDescribedBy,
+      'aria-invalid': ariaInvalid,
+      required,
       ...rest
     },
     forwardedRef,
@@ -205,10 +209,14 @@ export const SliderRange = React.memo(
     const generatedId = React.useId();
     const rootId = `${id ?? generatedId}-range`;
     const labelId = `${id ?? generatedId}-label`;
-    const minInputId = `${id ?? generatedId}-min`;
+    // `id` is the lower handle's own, so a label pointing at it (Field's) focuses that handle.
+    const minInputId = id ?? `${generatedId}-min`;
     const maxInputId = `${id ?? generatedId}-max`;
     const minHandleLabelId = `${id ?? generatedId}-min-label`;
     const maxHandleLabelId = `${id ?? generatedId}-max-label`;
+    // Field's error, description, and required go to both handles: each is focused on its own.
+    const invalid = invalidProp || ariaInvalid === true || ariaInvalid === 'true';
+    const handleInvalid = invalid ? true : ariaInvalid;
     const isControlled = value !== undefined;
     const effectiveMinDistance = getEffectiveMinDistance(minDistance, min, max);
     const [uncontrolledValue, setUncontrolledValue] = React.useState<[number, number]>(
@@ -384,6 +392,7 @@ export const SliderRange = React.memo(
         data-active-handle={getHandleName(activeThumb)}
         data-dragging={isDragging ? 'true' : undefined}
         data-disabled={disabled ? 'true' : undefined}
+        data-invalid={invalid ? 'true' : undefined}
         data-orientation={orientation}
         data-overlapping={isOverlapping ? 'true' : undefined}
         data-show-value={showValue ? 'true' : undefined}
@@ -493,6 +502,9 @@ export const SliderRange = React.memo(
             ref={lowerInputRef}
             id={minInputId}
             aria-labelledby={ariaLabelledByMin}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={handleInvalid}
+            required={required}
             className={mergeClassNames(styles.input, styles.rangeInput, styles.rangeInputLower)}
             type="range"
             min={min}
@@ -527,6 +539,9 @@ export const SliderRange = React.memo(
             ref={upperInputRef}
             id={maxInputId}
             aria-labelledby={ariaLabelledByMax}
+            aria-describedby={ariaDescribedBy}
+            aria-invalid={handleInvalid}
+            required={required}
             className={mergeClassNames(styles.input, styles.rangeInput, styles.rangeInputUpper)}
             type="range"
             min={min}

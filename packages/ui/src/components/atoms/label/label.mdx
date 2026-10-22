@@ -77,7 +77,7 @@ import * as LabelStories from './Label.stories';
 <Section title="Anatomy">
 
 <Anatomy specimen={<Label tone="information">Research</Label>}>
-  <Part name="container" target={labelStyles.label}>A `span`: the colored fill, sized by its text. It has no border, icon, or remove control.</Part>
+  <Part name="container" target={labelStyles.label}>A `span`: the colored fill, sized by its text. It has no border, icon, or remove control, by design: a status with an icon, such as a task status, is the icon beside the Label, composed by the page, as <DocLink to="Templates/Roadmap" /> does.</Part>
   <Part name="text">The `children`, rendered straight into the container on one line, in the case you pass.</Part>
 </Anatomy>
 

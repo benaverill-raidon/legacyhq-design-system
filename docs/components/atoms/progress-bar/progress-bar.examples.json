@@ -17,6 +17,11 @@
       "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />"
     },
     {
+      "name": "Circular summary at 0",
+      "description": "Nothing complete yet: the ring shows its empty track and border, with no progress arc, so the summary keeps its shape.",
+      "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />"
+    },
+    {
       "name": "Domain-specific value text",
       "description": "Announces completed items instead of only a percentage.",
       "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />"

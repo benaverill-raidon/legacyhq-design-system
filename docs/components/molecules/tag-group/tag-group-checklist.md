@@ -68,8 +68,9 @@ pattern rather than expecting hand-placed `<Tag>` elements.
 ## Variants
 
 ### Alignment
-- left (default, matches Figma) - overflow tag trails the visible tags
-- right - overflow tag leads the visible tags
+- start (default, Figma's `left`) - overflow tag trails the visible tags
+- end (Figma's `right`) - overflow tag leads the visible tags
+- The deprecated `left` and `right` still work and render the same as `start` and `end`
 
 Both values only ever affect render order, not which tags are visible or truncated.
 
@@ -94,7 +95,13 @@ Required:
 
 Not required:
 - Hover/active/focus/disabled at the Tag Group level - each Tag and the overflow panel own their
-  own states independently.
+  own states independently. (The root shows the Focus Ring only when it takes focus after its last
+  tag is removed.)
+
+Focus after removal:
+- [ ] Removing the tag in use (keyboard or click) moves focus to the next tag, the previous one if it
+      was last, or the root (tabindex -1, Focus Ring) if none remain; never to the page. Focus the
+      page moved itself is left alone.
 
 ---
 
@@ -169,7 +176,7 @@ Final implementation decisions:
   `sections` replaced Figma's per-variant row instances.
 - `alignment` only changes where the overflow tag renders (leading vs. trailing) - it does not
   change which tags are visible or truncated, and it does not flip the nested Dropdown Menu's own
-  panel alignment (measured as `left` in both Figma variants, hardcoded to Dropdown Menu's own
+  panel alignment (measured as `left` in both Figma variants, `start` in code, hardcoded to Dropdown Menu's own
   default rather than recomputed).
 - Tag Group calls `onOverflowTagSelect` on selection and does nothing else automatically - no
   navigation, no removal, no closing the panel - same "never assume" rule as Menu/Dropdown Menu.

@@ -1,6 +1,8 @@
 import type * as React from 'react';
 
-export type FieldState = 'default' | 'error' | 'valid';
+export type FieldState = 'default' | 'error' | 'success';
+/** @deprecated Use `success`, the status name every message component uses. Still accepted, and looks the same. */
+export type DeprecatedFieldState = 'valid';
 export type FieldContext = 'default' | 'inline';
 export type FieldSize = 'sm' | 'md' | 'lg';
 
@@ -21,11 +23,11 @@ export interface FieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
    */
   message?: React.ReactNode;
   /**
-   * `error` and `valid` color the message and put a status icon before it; `error` also sets
+   * `error` and `success` color the message and put a status icon before it; `error` also sets
    * `aria-invalid` on the control. It doesn't change the control's border, so pair `state="error"`
-   * with the control's own `invalid`.
+   * with the control's own `invalid`. `valid`, the earlier name for `success`, is still accepted.
    */
-  state?: FieldState;
+  state?: FieldState | DeprecatedFieldState;
   /**
    * Where the field sits, one axis shared with its control (as in Figma). `default` keeps the label
    * and message flush with the control's edge, at every size. `inline` steps them in to line up with

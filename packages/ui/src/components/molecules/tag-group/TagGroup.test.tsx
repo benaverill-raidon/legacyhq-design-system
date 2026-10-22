@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TagGroup } from './tag-group';
@@ -39,20 +39,34 @@ describe('TagGroup', () => {
     expect(screen.getByRole('button', { name: '+5 more' })).toBeInTheDocument();
   });
 
-  it('renders the overflow tag trailing (after visible tags) when alignment is left (default)', () => {
+  it('renders the overflow tag trailing (after visible tags) when alignment is start (default)', () => {
     render(<TagGroup tags={makeTags(12)} maxVisible={10} id="group" />);
 
     const root = document.getElementById('group') as HTMLElement;
     const children = Array.from(root.children);
+    expect(root).toHaveAttribute('data-alignment', 'start');
     expect(children[children.length - 1]).toHaveTextContent('+2 more');
   });
 
-  it('renders the overflow tag leading (before visible tags) when alignment is right', () => {
-    render(<TagGroup tags={makeTags(12)} maxVisible={10} alignment="right" id="group" />);
+  it('renders the overflow tag leading (before visible tags) when alignment is end', () => {
+    render(<TagGroup tags={makeTags(12)} maxVisible={10} alignment="end" id="group" />);
 
     const root = document.getElementById('group') as HTMLElement;
     const children = Array.from(root.children);
     expect(children[0]).toHaveTextContent('+2 more');
+  });
+
+  it.each([
+    ['left', 'start'],
+    ['right', 'end'],
+  ] as const)('still accepts the deprecated %s alignment, placed as %s', (deprecated, replacement) => {
+    const { unmount } = render(<TagGroup tags={makeTags(12)} maxVisible={10} alignment={replacement} id="group" />);
+    const expected = (document.getElementById('group') as HTMLElement).outerHTML;
+    unmount();
+
+    render(<TagGroup tags={makeTags(12)} maxVisible={10} alignment={deprecated} id="group" />);
+
+    expect((document.getElementById('group') as HTMLElement).outerHTML).toBe(expected);
   });
 
   it('opens a menu holding the remaining truncated tags when the overflow tag is activated', () => {
@@ -176,5 +190,90 @@ describe('TagGroup', () => {
     render(<TagGroup tags={tags} maxVisible={2} />);
     fireEvent.click(screen.getByRole('button', { name: /more/i }));
     expect(screen.getByRole('menuitem', { name: 'Tag 3' })).toBeDisabled();
+  });
+});
+
+describe('TagGroup focus when a tag is removed', () => {
+  // The MutationObserver that moves focus reports after the DOM change, as a microtask.
+  async function flushRemoval() {
+    await act(async () => {
+      await Promise.resolve();
+    });
+  }
+
+  function RemovableTags({ count = 3, maxVisible }: { count?: number; maxVisible?: number }) {
+    const [tags, setTags] = React.useState(() => makeTags(count));
+    return (
+      <TagGroup
+        id="group"
+        maxVisible={maxVisible}
+        tags={tags.map((tag) => ({
+          ...tag,
+          isRemovable: true,
+          onRemove: () => setTags((current) => current.filter((item) => item.id !== tag.id)),
+        }))}
+      />
+    );
+  }
+
+  it('moves focus to the next tag when a tag is removed from the keyboard', async () => {
+    render(<RemovableTags />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 2' });
+    remove.focus();
+
+    // Enter or Space on a native button fires click.
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    expect(screen.queryByText('Tag 2')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Remove Tag 3' })).toHaveFocus();
+  });
+
+  it('moves focus to the next tag when a tag is removed by a click that did not focus it', async () => {
+    render(<RemovableTags />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 1' });
+
+    // Safari doesn't focus a button on click, so only the press is seen.
+    fireEvent.pointerDown(remove);
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    expect(screen.getByRole('button', { name: 'Remove Tag 2' })).toHaveFocus();
+  });
+
+  it('moves focus to the previous tag when the last tag is removed', async () => {
+    render(<RemovableTags />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 3' });
+    remove.focus();
+
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    expect(screen.getByRole('button', { name: 'Remove Tag 2' })).toHaveFocus();
+  });
+
+  it('moves focus to the tag that takes the place of the last visible one, before the overflow tag', async () => {
+    render(<RemovableTags count={4} maxVisible={2} />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 2' });
+    remove.focus();
+
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    // Tag 3 moves out of the overflow and into Tag 2's place.
+    expect(screen.getByRole('button', { name: 'Remove Tag 3' })).toHaveFocus();
+  });
+
+  it('moves focus to the group itself when its only tag is removed', async () => {
+    render(<RemovableTags count={1} />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 1' });
+    remove.focus();
+
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    const group = document.getElementById('group') as HTMLElement;
+    expect(group).toHaveFocus();
+    expect(group).toHaveAttribute('tabindex', '-1');
   });
 });

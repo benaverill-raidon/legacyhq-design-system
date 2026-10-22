@@ -59,6 +59,7 @@
     "Space toggles"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "A disabled CheckboxGroup disables every checkbox inside it, from options or children, and they look disabled.",
     "required on CheckboxGroup shows an aria-hidden * after the legend and adds hidden requiredLabel text to the group's name; it doesn't make any checkbox natively required."
   ],

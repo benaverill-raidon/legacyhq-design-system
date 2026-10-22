@@ -403,6 +403,21 @@ describe('Slider', () => {
     expect(container.querySelector(`.${styles.valueIndicator}`)).toHaveTextContent('50');
   });
 
+  it('ignores a press on the track inside a disabled fieldset, as it does with disabled', () => {
+    const onValueChange = vi.fn();
+    const { container } = render(
+      <fieldset disabled>
+        <Slider aria-label="Volume" defaultValue={50} onValueChange={onValueChange} />
+      </fieldset>,
+    );
+    const slider = screen.getByRole('slider', { name: 'Volume' });
+
+    expect(slider).toBeDisabled();
+    fireEvent.pointerDown(container.querySelector(`.${styles.control}`) as Element, { clientX: 0, pointerId: 1 });
+    expect(slider).toHaveValue('50');
+    expect(onValueChange).not.toHaveBeenCalled();
+  });
+
   it('tracks drag state and clears it on pointer up', () => {
     const { container } = render(<Slider aria-label="Drag" defaultValue={50} />);
     const slider = screen.getByRole('slider', { name: 'Drag' });
@@ -783,6 +798,48 @@ describe('SliderRange', () => {
     expect(screen.getByRole('slider', { name: 'High threshold' })).toBeInTheDocument();
   });
 
+  it('submits the lower value under name and the upper under name plus Max by default', () => {
+    const { container } = render(
+      <form>
+        <SliderRange label="Budget" name="budget" defaultValue={[20, 80]} />
+      </form>,
+    );
+
+    const data = new FormData(container.querySelector('form') as HTMLFormElement);
+    expect([...data.entries()]).toEqual([
+      ['budget', '20'],
+      ['budgetMax', '80'],
+    ]);
+  });
+
+  it('submits under minName and maxName when they are set', () => {
+    const { container } = render(
+      <form>
+        <SliderRange label="Budget" name="budget" minName="budgetFrom" maxName="budgetTo" defaultValue={[20, 80]} />
+      </form>,
+    );
+
+    const data = new FormData(container.querySelector('form') as HTMLFormElement);
+    expect([...data.entries()]).toEqual([
+      ['budgetFrom', '20'],
+      ['budgetTo', '80'],
+    ]);
+  });
+
+  it('can name one handle and keep the default for the other', () => {
+    render(<SliderRange label="Budget" name="budget" maxName="ceiling" />);
+
+    expect(screen.getByRole('slider', { name: /Minimum value/ })).toHaveAttribute('name', 'budget');
+    expect(screen.getByRole('slider', { name: /Maximum value/ })).toHaveAttribute('name', 'ceiling');
+  });
+
+  it('submits nothing without a name', () => {
+    render(<SliderRange label="Budget" />);
+
+    expect(screen.getByRole('slider', { name: /Minimum value/ })).not.toHaveAttribute('name');
+    expect(screen.getByRole('slider', { name: /Maximum value/ })).not.toHaveAttribute('name');
+  });
+
   it('supports disabled state and custom className', () => {
     const { container } = render(<SliderRange label="Budget" disabled className="custom-range-slider" />);
 
@@ -911,6 +968,20 @@ describe('SliderRange', () => {
     expect(getCustomProperty(steps[2], '--slider-step-position')).toBe(
       getCustomProperty(control, '--slider-upper-position'),
     );
+  });
+
+  it('ignores a press on the track inside a disabled fieldset, as it does with disabled', () => {
+    const onValueChange = vi.fn();
+    const { container } = render(
+      <fieldset disabled>
+        <SliderRange label="Budget" defaultValue={[20, 80]} onValueChange={onValueChange} />
+      </fieldset>,
+    );
+
+    fireEvent.pointerDown(container.querySelector(`.${styles.control}`) as Element, { clientX: 0, pointerId: 1 });
+    expect(screen.getByRole('slider', { name: /Minimum value/ })).toHaveValue('20');
+    expect(screen.getByRole('slider', { name: /Maximum value/ })).toHaveValue('80');
+    expect(onValueChange).not.toHaveBeenCalled();
   });
 
   it('tracks drag state for range handles and clears it on pointer up', () => {
@@ -1064,7 +1135,7 @@ describe('slider CSS contract', () => {
     expect(sliderCss).toContain('background: var(--color-content-brand-primary-subtle);');
     // The active-color override must out-specificity the disabled-state stepDot rule so a
     // disabled, active-region dot never renders the brand color instead of the disabled one.
-    expect(sliderCss).toContain(".root:not([data-disabled='true']) .step[data-active='true'] .stepDot");
+    expect(sliderCss).toContain(".root:not([data-disabled='true'], :where(:has(.input:disabled))) .step[data-active='true'] .stepDot");
   });
 
   it('marks track-stop dots within the active fill so the CSS can contrast them, at both endpoints and in between', () => {
@@ -1097,13 +1168,13 @@ describe('slider CSS contract', () => {
 
   it('shrinks only the inner visual handle to the pressed width without changing positioning rules', () => {
     expect(sliderCss).toContain('--slider-handle-width-press: var(--size-025);');
-    expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\']):active .handleSingle .handleVisual');
+    expect(sliderCss).toContain('.root:not(.rangeRoot):not([data-disabled=\'true\'], :where(:has(.input:disabled))):active .handleSingle .handleVisual');
     expect(sliderCss).toContain(
-      '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):active .handleLower .handleVisual',
+      '.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\'], :where(:has(.input:disabled))):active .handleLower .handleVisual',
     );
     expect(sliderCss).toContain('.control:has(.singleInput[data-preview-state=\'press\']) .handleSingle .handleVisual');
-    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\']):hover .handleLower');
-    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'upper\']:not([data-disabled=\'true\']):hover .handleUpper');
+    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'lower\']:not([data-disabled=\'true\'], :where(:has(.input:disabled))):hover .handleLower');
+    expect(sliderCss).toContain('.rangeRoot[data-active-handle=\'upper\']:not([data-disabled=\'true\'], :where(:has(.input:disabled))):hover .handleUpper');
     expect(sliderCss).toContain('.control:has(.rangeInputLower[data-preview-state=\'hover\']) .handleLower');
     expect(sliderCss).toContain('.control:has(.rangeInputUpper[data-preview-state=\'hover\']) .handleUpper');
     expect(sliderCss).not.toContain('.root:not([data-disabled=\'true\']):hover .handle,');

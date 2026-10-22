@@ -1,7 +1,12 @@
 import type * as React from 'react';
 import type { MenuProps } from '../menu';
 
-export type DropdownMenuAlignment = 'left' | 'center' | 'right';
+export type DropdownMenuAlignment = 'start' | 'center' | 'end';
+/**
+ * @deprecated Use `start` or `end`: alignment is named by logical start and end, as Table and Form
+ * name it. Still accepted, and placed the same.
+ */
+export type DeprecatedDropdownMenuAlignment = 'left' | 'right';
 
 export interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
   /**
@@ -21,10 +26,12 @@ export interface DropdownMenuProps extends Omit<MenuProps, 'id' | 'className'> {
    */
   onOpenChange?: (open: boolean) => void;
   /**
-   * Which edge of the trigger the panel lines up with. It opens below the trigger; where it doesn't
-   * fit, it moves to the position that overflows the viewport least, trying above first.
+   * Which edge of the trigger the panel lines up with: `start`, `center`, or `end`. It opens below
+   * the trigger; where it doesn't fit, it moves to the position that overflows the viewport least,
+   * trying above first. Placement is left-to-right only: start is the trigger's left edge, even in
+   * a right-to-left page. `left` and `right`, the earlier names, are still accepted.
    */
-  alignment?: DropdownMenuAlignment;
+  alignment?: DropdownMenuAlignment | DeprecatedDropdownMenuAlignment;
   /**
    * Another element to position against and match width to, instead of the trigger, such as the
    * field frame around Select's input. A press inside it doesn't close the panel.

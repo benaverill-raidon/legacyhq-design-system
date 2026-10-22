@@ -3,9 +3,9 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Button } from '../../atoms/button';
 import { Popup } from './popup';
-import type { PopupAlignment, PopupPadding } from './popup.types';
+import type { PopupAlignment, PopupPadding, PopupProps } from './popup.types';
 
-const alignments: PopupAlignment[] = ['topLeft', 'topRight', 'topCenter', 'bottomLeft', 'bottomRight', 'bottomCenter'];
+const alignments: PopupAlignment[] = ['topStart', 'topEnd', 'topCenter', 'bottomStart', 'bottomEnd', 'bottomCenter'];
 const paddings: PopupPadding[] = ['none', 'sm', 'md', 'lg'];
 
 const stack: CSSProperties = { display: 'grid', gap: 'var(--spacing-2xl)', color: 'var(--color-content-default)' };
@@ -76,7 +76,7 @@ function PopupDemo({
   content,
 }: {
   label: string;
-  alignment?: PopupAlignment;
+  alignment?: PopupProps['alignment'];
   padding?: PopupPadding;
   closeOnEscape?: boolean;
   closeOnOutsideClick?: boolean;
@@ -109,7 +109,7 @@ const meta = {
   args: {
     open: false,
     content: <MenuContent />,
-    alignment: 'topLeft',
+    alignment: 'topStart',
     padding: 'lg',
     closeOnEscape: true,
     closeOnOutsideClick: true,
@@ -151,21 +151,21 @@ export const Playground: Story = {
 
 /**
  * `alignment` picks which side of the trigger the panel opens on (`top`/`bottom`) and how it
- * lines up against it (`Left`/`Right`/`Center`) - it's a preference, not a guarantee, see EdgeCases.
+ * lines up against it (`Start`/`End`/`Center`) - it's a preference, not a guarantee, see EdgeCases.
  * `padding` sizes just the default skin's padding, independent of alignment.
  */
 export const Variants: Story = {
   render: () => (
     <div style={stack}>
       <Group title="Top">
-        <PopupDemo label="topLeft" alignment="topLeft" />
+        <PopupDemo label="topStart" alignment="topStart" />
         <PopupDemo label="topCenter" alignment="topCenter" />
-        <PopupDemo label="topRight" alignment="topRight" />
+        <PopupDemo label="topEnd" alignment="topEnd" />
       </Group>
       <Group title="Bottom">
-        <PopupDemo label="bottomLeft" alignment="bottomLeft" />
+        <PopupDemo label="bottomStart" alignment="bottomStart" />
         <PopupDemo label="bottomCenter" alignment="bottomCenter" />
-        <PopupDemo label="bottomRight" alignment="bottomRight" />
+        <PopupDemo label="bottomEnd" alignment="bottomEnd" />
       </Group>
       <Group title="Padding">
         <PopupDemo label="sm" padding="sm" />
@@ -210,8 +210,8 @@ export const EdgeCases: Story = {
           near. Open one to see it move to the alignment that fits.
         </p>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <PopupDemo label="Top-left corner" alignment="topLeft" />
-          <PopupDemo label="Top-right corner" alignment="topRight" />
+          <PopupDemo label="Top-left corner" alignment="topStart" />
+          <PopupDemo label="Top-right corner" alignment="topEnd" />
         </div>
       </section>
 

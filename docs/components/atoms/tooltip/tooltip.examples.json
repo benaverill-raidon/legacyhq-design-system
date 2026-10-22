@@ -5,12 +5,15 @@
       "jsx": "<Tooltip content='Search'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
     },
     {
-      "name": "Disabled explanation",
-      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
-    },
-    {
       "name": "Supplemental clarification",
       "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>"
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Explaining why a control is disabled",
+      "reason": "Keyboard users can't reach a tooltip on a disabled control. Put the reason in visible helper text, such as Field's message.",
+      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
     }
   ]
 }

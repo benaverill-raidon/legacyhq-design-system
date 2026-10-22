@@ -48,7 +48,7 @@ field/
 
 A single flex column: an optional native `<label htmlFor>` (with an optional decorative required
 `*`), then the wrapped control (the slot), then an optional message (a decorative status icon on
-error/valid, plus the message text).
+error/success, plus the message text).
 
 ---
 
@@ -57,7 +57,7 @@ error/valid, plus the message text).
 - `children: React.ReactElement` - the single control to wrap (cloned to receive the wiring)
 - `label?: React.ReactNode`
 - `message?: React.ReactNode`
-- `state?: 'default' | 'error' | 'valid'` (default `'default'`)
+- `state?: 'default' | 'error' | 'success'` (default `'default'`; `'valid'` is a deprecated alias for `'success'`)
 - `context?: 'default' | 'inline'` (default `'default'`)
 - `size?: 'sm' | 'md' | 'lg'` (default `'md'`)
 - `required?: boolean` (default `false`)

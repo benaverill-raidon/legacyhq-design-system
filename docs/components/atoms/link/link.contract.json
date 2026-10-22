@@ -2,12 +2,6 @@
   "name": "Link",
   "category": "navigation",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "Is the `strong` emphasis default intended? It matches the contract."
-    }
-  ],
   "purpose": "Navigation.",
   "intent": "Hyperlink behavior.",
   "figmaSource": {

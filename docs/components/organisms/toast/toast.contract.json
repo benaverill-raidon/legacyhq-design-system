@@ -53,7 +53,7 @@
     "expanded": { "type": "boolean", "default": true, "required": false, "description": "Whether the description and actions are shown." },
     "isDismissible": { "type": "boolean", "default": true, "required": false },
     "dismissLabel": { "type": "string", "default": "Dismiss", "required": false, "description": "Accessible name for the dismiss button." },
-    "onDismiss": { "type": "() => void", "default": null, "required": false },
+    "onDismiss": { "type": "(event: React.MouseEvent<HTMLButtonElement>) => void", "default": null, "required": false, "description": "Called with the click event; Toast Group uses its detail to tell a keyboard press from a pointer click." },
     "role": { "type": "string", "default": "status", "required": false },
     "className": { "type": "string", "default": null, "required": false }
   },
@@ -92,7 +92,7 @@
   "behaviorRules": [
     "Render the leading IconTile colored per tone, or a Spinner for the loading tone.",
     "Always render the title; render the description and actions only when expanded and provided.",
-    "Show the dismiss button unless isDismissible is false; call onDismiss when it is clicked.",
+    "Show the dismiss button unless isDismissible is false; call onDismiss with the click event when it is clicked.",
     "Render on a raised surface with the overlay elevation shadow.",
     "Default role to status (a polite live region)."
   ],

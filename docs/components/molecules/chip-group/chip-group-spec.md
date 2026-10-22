@@ -20,12 +20,14 @@ ChipGroup
 ## Public API
 
 ```ts
-type ChipGroupAlignment = 'left' | 'right';
+type ChipGroupAlignment = 'start' | 'end';
+/** @deprecated Physical names, still accepted and laid out as start/end. */
+type DeprecatedChipGroupAlignment = 'left' | 'right';
 
 interface ChipGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   size?: ChipSize;
-  alignment?: ChipGroupAlignment;
+  alignment?: ChipGroupAlignment | DeprecatedChipGroupAlignment;
 }
 ```
 
@@ -40,7 +42,7 @@ Extending `React.HTMLAttributes<HTMLDivElement>` and forwarding a ref matches Bu
 ## Defaults
 
 ```txt
-alignment: left     (Figma's own first variant)
+alignment: start    (Figma's own first variant, `left`)
 size:      unset    (each Chip keeps its own default)
 ```
 
@@ -78,8 +80,13 @@ own group (which would be a cycle).
 
 | alignment | Figma | CSS |
 |---|---|---|
-| `left` (default) | MIN | `justify-content: flex-start` |
-| `right` | MAX | `justify-content: flex-end` |
+| `start` (default) | MIN (`left`) | `justify-content: flex-start` |
+| `end` | MAX (`right`) | `justify-content: flex-end` |
+
+Alignment is named by logical start and end, as Table and Form name it (shared-value-names); the
+physical `left` and `right` were renamed on 2026-10-20 and stay accepted as deprecated aliases,
+laid out the same. `flex-start`/`flex-end` follow the writing direction, so `start` is the right
+edge in a right-to-left page.
 
 **This is not Tag Group's `alignment`,** despite the identical name. There, `alignment` decides where
 the *overflow tag* renders (leading vs trailing). Chip Group has no overflow, so here it means what it
@@ -114,7 +121,14 @@ No fill, no stroke, no radius. The group contributes exactly one token reference
 
 - `role="group"` only when `aria-label` or `aria-labelledby` is provided. An unnamed group is a
   boundary a screen-reader user steps through for no benefit - the same rule Button Group follows.
-- No focus or keyboard behaviour of its own; everything belongs to the Chips inside.
+- Keeps focus when a chip is removed. When the chip holding focus (or the one just pressed, since
+  Safari doesn't focus a clicked button) leaves the DOM and focus falls to the page, focus moves to
+  the chip now in its place, else the previous chip, on the control in the same position counted
+  from the end (one remove button to the next); chips with no enabled control are skipped. With no
+  chip left, the root takes `tabindex="-1"` and focus, with the shared Focus Ring, and is announced
+  by its name. Focus the page has already moved (in `onRemove`) is left alone. Removal is watched
+  with a MutationObserver on the root (`primitives/focus-after-removal.ts`), so it works however
+  the chip was removed. Other keyboard behaviour belongs to the Chips inside.
 
 ## Storybook
 
@@ -125,6 +139,7 @@ Chip Group
 ├─ Alignment
 ├─ Sizes
 ├─ Wrapping
+├─ Removal
 ├─ Content
 └─ EdgeCases
 ```
@@ -133,6 +148,7 @@ Chip Group
   legible.
 - **Sizes** - both sizes, plus one Chip opting out of the group's size.
 - **Wrapping** - a narrow container forcing a second line.
+- **Removal** - removable chips, to try focus moving to the next chip as each is removed.
 - **Content** - a live scope selector and a live, removable filter bar.
 - **EdgeCases** - a single chip, mixed modes in one group, disabled chips, dark surface.
 
@@ -140,8 +156,9 @@ Chip Group
 
 ```txt
 renders its children
-defaults to left alignment
-supports right alignment
+defaults to start alignment
+supports end alignment
+still accepts the deprecated left / right alignment, laid out as start / end
 applies its size to every Chip inside
 lets an individual Chip's own size win over the group's
 leaves Chips on their own default when the group sets no size
@@ -153,6 +170,12 @@ supports a custom className alongside its own
 wraps with a single 8px gap on both axes, matching Figma
 maps alignment to justify-content, matching Figma primaryAxisAlignItems MIN/MAX
 adds no padding of its own - the group is pure layout
+moves focus to the next chip when a chip is removed from the keyboard
+moves focus to the next chip when a chip is removed by a click that did not focus it
+moves focus to the previous chip when the last chip is removed
+moves focus to the group itself when its only chip is removed
+leaves focus alone when it is not in the group as a chip is removed
+leaves focus where the page put it in onRemove
 ```
 
 ## Future considerations

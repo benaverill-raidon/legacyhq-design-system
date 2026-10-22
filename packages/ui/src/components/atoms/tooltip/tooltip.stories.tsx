@@ -109,7 +109,7 @@ export const Variants: Story = {
       </Group>
 
       <Group title="Disabled">
-        <Tooltip content="Disabled because nothing is selected">
+        <Tooltip content="Edit the selected record">
           <IconButton aria-label="Edit" disabled tooltip={false}>
             <EditIcon />
           </IconButton>
@@ -165,9 +165,9 @@ export const Content: Story = {
       </div>
 
       <div style={cardStyle}>
-        <h3 style={headingStyle}>Explaining a disabled control</h3>
+        <h3 style={headingStyle}>A disabled trigger, and a longer hint</h3>
         <div style={row}>
-          <Tooltip content="Disabled until a record is selected">
+          <Tooltip content="Edit the selected record">
             <IconButton aria-label="Edit" disabled tooltip={false}>
               <EditIcon />
             </IconButton>

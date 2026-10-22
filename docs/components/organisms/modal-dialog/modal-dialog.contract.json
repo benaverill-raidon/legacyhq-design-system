@@ -1,13 +1,7 @@
 {
   "name": "ModalDialog",
   "category": "overlays",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "It has no exit animation, which is the documented current state. Should it have one?"
-    }
-  ],
+  "status": "stable",
   "purpose": "Interrupt the flow to focus the user on a single task or decision, over a backdrop, with the modal behaviour handled.",
   "intent": "A controlled overlay: a blanket backdrop centering a panel of header (title + header actions), a scrollable body, and a footer of actions. The consumer owns `open` and reacts to `onClose`. Composes atoms (Icon Button, Buttons, status Icon) into a complete self-contained overlay that portals above the page, traps focus, closes on Escape/backdrop, locks page scroll, and restores focus - which is why it lives at the organism tier.",
   "nativeElement": "div (role=dialog, portaled)",
@@ -208,12 +202,11 @@
     "Tests cover open/closed, portal + ARIA, all three close paths, the expand button and its grouping, focus move/trap/restore, scroll lock, tone icon, width, and className."
   ],
   "knownLimitations": [
-    "No enter/exit transition beyond a light fade-in.",
+    "No exit transition, by decision: it enters with a light fade-in (fade-quick and an 8px rise) and leaves at once, as the motion rules have overlays do.",
     "The breadcrumb header appearance is not a dedicated prop (pass breadcrumbs as title + aria-label).",
     "Stacked modals: Escape closes only the top one and a later dialog paints over an earlier one, but each open dialog keeps its own Tab trap and scroll lock; the traps aren't coordinated."
   ],
   "futureEnhancements": [
-    "Enter/exit transitions (scale/fade) with reduced-motion support.",
     "A dedicated breadcrumb header mode once a real use case appears."
   ]
 }

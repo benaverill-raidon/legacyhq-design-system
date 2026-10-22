@@ -121,7 +121,9 @@ the dialog closes that first, and with two stacked dialogs only the top one clos
 handles Escape itself without `preventDefault()` (Inline Edit's cancel) still lets the dialog close
 too. The Tab focus trap stays a capture-phase listener. Layers order by when they open, so a popup
 and a dialog that both mount open in the same render order child-first (the popup under the dialog).
-There's no exit animation; the dialog unmounts when `open` is false.
+There's no exit animation, by decision (2026-10-20): the dialog unmounts when `open` is false and
+leaves at once, as the motion rules have every overlay but Toast Group do (token-governance.json
+`motion.overlays`). It's not an open question.
 
 The component returns its portal wrapped in a fragment. That adds nothing to the DOM; react-docgen
 (Storybook's docgen) doesn't recognize a function that returns a bare `createPortal(...)` call as a

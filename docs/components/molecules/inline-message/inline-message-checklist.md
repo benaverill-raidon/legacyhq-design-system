@@ -135,7 +135,7 @@ short too: Popup's default panel is `max-content` wide with no maximum, so a lon
   `<button>` otherwise inherits the UA stylesheet's own default button padding (1px block / 6px
   inline in Chrome), so `.root` resets `padding` to `--spacing-none` explicitly.
 - The popup's `alignment` property reads `"bottom left"` on every variant, mapping directly to
-  Popup's `alignment="bottomLeft"`.
+  Popup's `alignment="bottomStart"` (Popup names it by logical start).
 - Open state is read from the nested `popup` instance's own `isOpen` component property, not from the
   outer variant name.
 

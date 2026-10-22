@@ -42,7 +42,7 @@
     "placeholder": { "type": "string", "required": false },
     "format": { "type": "(value: Date, locale?: string) => string", "default": "locale 12-hour time (hh:mm AM)", "required": false },
     "locale": { "type": "string", "required": false },
-    "alignment": { "type": "PopupAlignment", "default": "bottomLeft", "required": false },
+    "alignment": { "type": "PopupAlignment", "default": "bottomStart", "required": false, "description": "Popup's alignment. The deprecated physical names (bottomLeft, ...) are still accepted." },
     "confirmLabel": { "type": "string", "default": "Confirm", "required": false },
     "cancelLabel": { "type": "string", "default": "Cancel", "required": false },
     "hoursLabel": { "type": "string", "default": "Hours", "required": false },
@@ -97,6 +97,7 @@
     "Confirm commits the staged time; Cancel discards it."
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the input is disabled without the disabled prop; the field looks disabled (Text Field's :has(.input:disabled)) and the panel doesn't open by click or key.",
     "Render a read-only Text Field showing the formatted time + a clock icon.",
     "context passes straight to the Text Field's context (default | inline); size passes through.",
     "Open a Popup with three listbox columns (hours 12-hour, minutes by minuteStep, AM/PM).",

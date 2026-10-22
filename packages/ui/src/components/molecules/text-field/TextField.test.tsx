@@ -169,7 +169,7 @@ describe('TextField', () => {
 
   it('never lets hover mask the invalid border color on context=inline', () => {
     expect(textFieldCss).toMatch(
-      /\.context_inline:not\(\[data-disabled='true'\]\):not\(\[data-invalid='true'\]\):not\(:focus-within\):not\(\[data-force-state='focus'\]\):is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*border-bottom-color: var\(--color-border-input\);/,
+      /\.context_inline:not\(\[data-disabled='true'\], :where\(:has\(\.input:disabled\)\)\):not\(\[data-invalid='true'\]\):not\(:focus-within\):not\(\[data-force-state='focus'\]\):is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*border-bottom-color: var\(--color-border-input\);/,
     );
   });
 
@@ -233,7 +233,7 @@ describe('TextField', () => {
 
   it('has one inline look, Figma\'s: no separate chromeless-without-hover duplicate', () => {
     expect(textFieldCss).not.toMatch(/appearance_/);
-    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\]\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
+    expect(textFieldCss).toMatch(/\.context_inline:not\(\[data-disabled='true'\], :where\(:has\(\.input:disabled\)\)\)[^{]*:is\(:hover, \[data-force-state='hover'\]\)\s*\{\s*background: var\(--color-elevation-surface-raised-hover\);/);
   });
 
   describe('autofill', () => {
@@ -250,13 +250,13 @@ describe('TextField', () => {
     });
 
     it('shows the tint on context=default whenever the input is autofilled or pinned, except when disabled', () => {
-      expect(selectors[0]).toBe(".context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill'])");
+      expect(selectors[0]).toBe(".context_default:not([data-disabled='true'], :where(:has(.input:disabled))):is(:has(.input:autofill), [data-force-state='autofill'])");
     });
 
     it('keeps context=inline chromeless at rest: the tint shows only while focused', () => {
       expect(selectors).toHaveLength(2);
       expect(selectors[1]).toBe(
-        ".context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):focus-within",
+        ".context_inline:not([data-disabled='true'], :where(:has(.input:disabled))):is(:has(.input:autofill), [data-force-state='autofill']):focus-within",
       );
     });
 
@@ -266,7 +266,7 @@ describe('TextField', () => {
 
     it('lets hover replace the tint: the hover rules outrank it and set the background shorthand, which clears it', () => {
       const hoverRule = (context: string) =>
-        css.match(new RegExp(`\\.${context}:not\\(\\[data-disabled='true'\\]\\):not\\(:focus-within\\)[^{]*:is\\(:hover, \\[data-force-state='hover'\\]\\)\\s*\\{([^}]*)\\}`))?.[1];
+        css.match(new RegExp(`\\.${context}:not\\(\\[data-disabled='true'\\], :where\\(:has\\(\\.input:disabled\\)\\)\\):not\\(:focus-within\\)[^{]*:is\\(:hover, \\[data-force-state='hover'\\]\\)\\s*\\{([^}]*)\\}`))?.[1];
 
       expect(hoverRule('root')).toContain('background: var(--color-elevation-surface-raised-hover);');
       expect(hoverRule('context_inline')).toContain('background: var(--color-elevation-surface-raised-hover);');

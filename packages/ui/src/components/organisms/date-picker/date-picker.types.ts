@@ -1,5 +1,5 @@
 import type * as React from 'react';
-import type { PopupAlignment } from '../../primitives/popup';
+import type { DeprecatedPopupAlignment, PopupAlignment } from '../../primitives/popup';
 import type { Weekday } from '../date-picker-calendar';
 
 export type DatePickerSize = 'sm' | 'md' | 'lg';
@@ -34,8 +34,8 @@ export interface DatePickerProps
   format?: (date: Date, locale?: string) => string;
   /** BCP 47 locale for the field text and the calendar's names. Defaults to the browser's. */
   locale?: string;
-  /** Where the popup opens relative to the field. Defaults to `bottomLeft`. */
-  alignment?: PopupAlignment;
+  /** Where the popup opens relative to the field, as Popup's `alignment`. Defaults to `bottomStart`; the deprecated physical names (`bottomLeft`, ...) are still accepted. */
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   /** Earliest date that can be picked, inclusive. Passed to the calendar. */
   min?: Date;
   /** Latest date that can be picked, inclusive. Passed to the calendar. */

@@ -25,7 +25,7 @@ Organism.
       size passes through (sm/md/lg).
 - [ ] Open state rendered by pinning the field focus treatment (`data-force-state="focus"`) - border
       box for default, underline for inline (matches Figma `open`).
-- [ ] Popup primitive anchored to the field frame (bottomLeft default), padding none; the Date Picker
+- [ ] Popup primitive anchored to the field frame (bottomStart default), padding none; the Date Picker
       Calendar fills it and is the role=dialog, named by `dialogLabel` ("Choose a date").
 - [ ] Opening moves focus into the grid; select/Escape/Tab out close and return focus; outside click
       dismisses.
@@ -60,7 +60,7 @@ interface DatePickerProps
   placeholder?: string;
   format?: (date: Date, locale?: string) => string;
   locale?: string;
-  alignment?: PopupAlignment;
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   min?: Date; max?: Date; isDateDisabled?: (date: Date) => boolean;
   weekStartsOn?: Weekday; today?: Date;
   id?: string;
@@ -74,7 +74,7 @@ interface DatePickerProps
 ```txt
 size: md
 context: default
-alignment: bottomLeft
+alignment: bottomStart
 weekStartsOn: 0
 format: locale short date (03/09/2026)
 ```

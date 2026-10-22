@@ -173,7 +173,7 @@ Two questions settle most of it:
 <Subsection title="Marking an error">
 
 Field marks one control with `state`. `error` colors the message, adds a status icon, and sets
-`aria-invalid` on the control; `valid` confirms a check passed. Field doesn't change the control's
+`aria-invalid` on the control; `success` confirms a check passed. Field doesn't change the control's
 border, so pair `state="error"` with the control's own `invalid`. Radio Group and Checkbox Group take
 `invalid` and `errorMessage` instead. The table is read from Field's TypeScript.
 
@@ -211,10 +211,11 @@ border, so pair `state="error"` with the control's own `invalid`. Radio Group an
   a set. Mark required fields with `required` and set the form's `requiredLegend`.
 - **Say what a field wants before anyone gets it wrong.** Helper text in Field's `message` gives the
   format, the limit, or who sees the value. Leave it out when the label says enough.
-- **Check when people submit, then follow the value.** The system doesn't set the timing: Field
-  doesn't validate, and Form leaves checks to you or to the browser. Our guidance is to check on
-  submit and show every error at once, then update each field as its value changes, so an error
-  clears as soon as it's fixed.
+- **Check when people submit, then follow the value.** This is the system's rule for when errors
+  show. Check on submit, not while people are still typing. Show every error at once, with the
+  summary at the top. Then update each field's error as its value changes, so it clears as soon as
+  it's fixed. Field doesn't validate and Form leaves the checks to you, so your code follows the
+  rule: set `state`, `message`, and `invalid` from it.
 - **Show a failed submit at the top and at each field.** Put a Section Message with
   `tone="error"` at the top of the form, naming each field that needs fixing and linking to it.
   Each field shows its own error. Don't show only one or the other. The summary is a live region, so

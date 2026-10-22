@@ -259,13 +259,13 @@ describe('checkbox CSS contract', () => {
     expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-hover);');
     expect(checkboxCss).toContain('background: var(--color-background-brand-primary-overlay-press);');
     expect(checkboxCss).toContain(".root[data-invalid='true'] .input:focus-visible + .indicatorTarget {");
-    expect(checkboxCss).toContain(".root[data-invalid='true']:not([data-disabled='true']):hover .indicatorTarget,");
+    expect(checkboxCss).toContain(".root[data-invalid='true']:not([data-disabled='true'], :where(:has(.input:disabled))):hover .indicatorTarget,");
   });
 
   it('uses error and disabled content tokens for glyphs and labels', () => {
     expect(checkboxCss).toContain(".root[data-invalid='true'] .indicatorIcon {");
     expect(checkboxCss).toContain('color: var(--color-content-error);');
-    expect(checkboxCss).toContain(".root[data-disabled='true'] .indicatorIcon {");
+    expect(checkboxCss).toContain(".root:is([data-disabled='true'], :where(:has(.input:disabled))) .indicatorIcon {");
     expect(checkboxCss).toContain('color: var(--color-content-disabled);');
   });
 

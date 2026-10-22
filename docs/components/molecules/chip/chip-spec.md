@@ -57,6 +57,8 @@ interface ChipSearchProps extends ChipCommonProps {
 interface ChipSelectProps extends ChipCommonProps {
   mode: 'select';
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  removeLabel?: string;
+  /** @deprecated Use removeLabel (Tag's name). Still accepted; removeLabel wins. */
   removeAriaLabel?: string;
   labelText?: string; // the label as plain text, for the built names
 }
@@ -67,6 +69,8 @@ interface ChipFilterProps extends ChipCommonProps {
   operator?: ChipSegment;
   valuePreview?: React.ReactNode;
   onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  removeLabel?: string;
+  /** @deprecated Use removeLabel (Tag's name). Still accepted; removeLabel wins. */
   removeAriaLabel?: string;
   labelText?: string; // the label as plain text, for the built names
 }
@@ -88,7 +92,7 @@ size: md
 disabled: false
 isSelected: false      (search)
 labelText: `label` when it is a string
-removeAriaLabel: `Remove ${labelText}` when there is label text, otherwise `Remove`
+removeLabel: `Remove ${labelText}` when there is label text, otherwise `Remove`
 ```
 
 `size` resolves as `size ?? groupSize ?? 'md'`. An explicit prop wins; otherwise Chip inherits the
@@ -330,7 +334,9 @@ search: renders no remove button and no dropdown
 search: disables the toggle when disabled
 select: renders a non-interactive label plus a remove button
 select: calls onRemove when the remove button is activated
-select: supports an explicit removeAriaLabel
+select: supports an explicit removeLabel
+select: still accepts the deprecated removeAriaLabel, named the same as removeLabel
+select: prefers removeLabel over the deprecated removeAriaLabel when both are set
 select: names the remove button from labelText when label is JSX
 filter: renders the label, the value segment, and a remove button
 filter: opens the value menu when the value segment is activated

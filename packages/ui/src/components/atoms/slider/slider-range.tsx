@@ -192,6 +192,8 @@ export const SliderRange = React.memo(
       minLabel = 'Minimum value',
       maxLabel = 'Maximum value',
       name,
+      minName = name,
+      maxName = name ? `${name}Max` : undefined,
       onValueChange,
       id,
       'aria-label': ariaLabel,
@@ -334,7 +336,8 @@ export const SliderRange = React.memo(
 
     const handleControlPointerDown = React.useCallback(
       (event: React.PointerEvent<HTMLDivElement>) => {
-        if (disabled || (event.pointerType === 'mouse' && event.button !== 0)) {
+        // `:disabled` also catches a disabled fieldset around the range, which its own prop doesn't.
+        if (disabled || lowerInputRef.current?.matches(':disabled') || (event.pointerType === 'mouse' && event.button !== 0)) {
           return;
         }
 
@@ -497,7 +500,7 @@ export const SliderRange = React.memo(
             step={step}
             value={lowerValue}
             disabled={disabled}
-            name={name}
+            name={minName}
             data-pointer-focus={lowerFocusRing.isPointerFocused ? 'true' : undefined}
             onBlur={(event) => {
               if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {
@@ -531,7 +534,7 @@ export const SliderRange = React.memo(
             step={step}
             value={upperValue}
             disabled={disabled}
-            name={name ? `${name}Max` : undefined}
+            name={maxName}
             data-pointer-focus={upperFocusRing.isPointerFocused ? 'true' : undefined}
             onBlur={(event) => {
               if (!(event.relatedTarget instanceof Node) || !controlRef.current?.contains(event.relatedTarget)) {

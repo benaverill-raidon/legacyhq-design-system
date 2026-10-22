@@ -184,7 +184,7 @@ Final implementation decisions:
   `aria-label`) does not interfere with `Popup`'s trigger-cloning (`ref`/`aria-expanded` still reach
   the real `<button>`) - the same combination already exists, unremarked, in Dropdown Menu's own
   `Content` story.
-- `alignment` is hardcoded to `'right'`, not exposed - Figma's own `split-button` variant set has
+- `alignment` is hardcoded to `'end'`, not exposed - Figma's own `split-button` variant set has
   no `alignment` axis at all; every instance opens "bottom right". This is a preferred alignment
   only - Popup's own collision detection already flips to an alternate alignment (and ultimately
   clamps to the viewport) when there isn't room, with no extra logic needed in Split Button.

@@ -14,7 +14,7 @@ InlineMessage
 +- text
 |  +- title (required)
 |  +- secondaryText (optional)
-+- Popup (default styled skin, alignment="bottomLeft") - only when `content` is provided
++- Popup (default styled skin, alignment="bottomStart") - only when `content` is provided
    +- detail content
 ```
 
@@ -134,7 +134,7 @@ trigger and panel for every Popup-based component, the same way it does for Tool
 - Uses Popup's **default** styled skin - not `unstyled` - matching Figma's `figma-parts /
   panelSurface` instance inside the popup exactly (a raised card with border/shadow). This is the
   first component in the system to exercise that code path; Tooltip only exercises `unstyled`.
-- `alignment="bottomLeft"`, matching Figma's own `popup` instance property on every variant.
+- `alignment="bottomStart"` (Figma's `bottom left`), matching Figma's own `popup` instance property on every variant.
 - Leaves `closeOnEscape`/`closeOnOutsideClick` at Popup's own defaults (both `true`) - the detail
   dismisses on Escape or an outside click, the same as any other Popup consumer. Popup's own docs
   originally predicted Inline Message would want persistent-until-explicit-toggle behavior, and an

@@ -51,7 +51,7 @@
     },
     {
       "name": "content",
-      "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal.",
+      "description": "Rendered through Popup (default styled skin, alignment=bottomStart) when provided - Popup owns positioning/portal/dismissal.",
       "group": "optional"
     }
   ],
@@ -193,7 +193,7 @@
     "Does not open on hover or focus - click/keyboard-activation only, per Popup's own guidance that hover-only reveals are Tooltip's job.",
     "Supports controlled (open/onOpenChange) and uncontrolled (defaultOpen) usage - the standard React pattern, since there is no native form element to delegate this to.",
     "Renders through Popup with its default styled skin (not unstyled) - the first component in the system to exercise that code path.",
-    "Requests alignment=\"bottomLeft\", matching Figma's own popup instance property on every variant.",
+    "Requests alignment=\"bottomStart\" (Figma's bottom left), matching Figma's own popup instance property on every variant.",
     "Leaves closeOnEscape/closeOnOutsideClick at Popup's own defaults (both true) - the detail dismisses on Escape or an outside click like any other Popup consumer. An earlier revision set both to false, matching a prediction in Popup's own docs that this component would want persistent-until-explicit-toggle behavior; reversed on direct product feedback.",
     "Leaves manageTriggerAria at Popup's default (true) - aria-expanded/aria-controls is the correct pattern for a click-to-reveal disclosure.",
     "Styles the hover/open tint off Popup's own aria-expanded attribute rather than a redundant custom data-open attribute.",

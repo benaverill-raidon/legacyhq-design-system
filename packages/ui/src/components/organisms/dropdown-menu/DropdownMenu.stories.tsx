@@ -97,7 +97,7 @@ export const Playground: Story = {
   },
 };
 
-/** `alignment` (left/center/right) always opens below the trigger, matching Figma exactly - Popup's own viewport-fit fallback still applies underneath if there's no room below. */
+/** `alignment` (start/center/end) always opens below the trigger, matching Figma exactly - Popup's own viewport-fit fallback still applies underneath if there's no room below. */
 export const Alignment: Story = {
   render: () => {
     function AlignmentDropdown({ alignment }: { alignment: DropdownMenuAlignment }) {
@@ -122,9 +122,9 @@ export const Alignment: Story = {
     // Spread across the width so the three open panels don't overlap one another.
     return (
       <div style={spread}>
-        <AlignmentDropdown alignment="left" />
+        <AlignmentDropdown alignment="start" />
         <AlignmentDropdown alignment="center" />
-        <AlignmentDropdown alignment="right" />
+        <AlignmentDropdown alignment="end" />
       </div>
     );
   },

@@ -71,6 +71,7 @@
     "Enter toggles"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native button is disabled without the disabled prop; its disabled styling keys off :disabled, so it looks the same.",
     "Selected state persists until toggled.",
     "Shares sizing and visual language with Button.",
     "Selected and disabled both show a border only for tone=default; tone=subtle stays borderless in both states, matching its own resting look (same pattern Button uses for disabled)."

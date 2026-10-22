@@ -85,6 +85,8 @@ export interface ChipSelectProps extends ChipCommonProps {
    * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
    * `label`), otherwise just "Remove".
    */
+  removeLabel?: string;
+  /** @deprecated Use `removeLabel`, the name Tag uses. Still accepted; `removeLabel` wins when both are set. */
   removeAriaLabel?: string;
   /**
    * The label as plain text, for the names Chip builds from it: the remove button ("Remove <label>").
@@ -124,6 +126,8 @@ export interface ChipFilterProps extends ChipCommonProps {
    * Accessible name for the remove button. Defaults to "Remove" plus `labelText` (or a string
    * `label`), otherwise just "Remove".
    */
+  removeLabel?: string;
+  /** @deprecated Use `removeLabel`, the name Tag uses. Still accepted; `removeLabel` wins when both are set. */
   removeAriaLabel?: string;
   /**
    * The label as plain text, for the names Chip builds from it: the remove button ("Remove

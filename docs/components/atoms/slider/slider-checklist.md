@@ -103,6 +103,7 @@ SliderRange must:
 - keep the lower value below the upper: a handle moved past the other swaps with it, or stops at it with `disableSwap`
 - name the range (a `group`) from `label`, `aria-labelledby`, or `aria-label`, and prefix each handle's name with it
 - expose each handle as a native range input
+- submit the lower value under `minName` and the upper under `maxName`, defaulting to `name` and `${name}Max`
 
 ## Content Rules
 

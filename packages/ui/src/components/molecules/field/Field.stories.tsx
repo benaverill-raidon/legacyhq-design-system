@@ -1,13 +1,16 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { useState } from 'react';
+import type { CSSProperties, FormEvent, ReactNode } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '../../atoms/button';
+import { Link } from '../../atoms/link';
+import { SectionMessage } from '../../organisms/section-message';
 import { TextField } from '../text-field';
 import { TextArea } from '../text-area';
 import { Field } from './field';
 import type { FieldContext, FieldSize, FieldState } from './field.types';
 
 const sizes: FieldSize[] = ['sm', 'md', 'lg'];
-const states: FieldState[] = ['default', 'error', 'valid'];
+const states: FieldState[] = ['default', 'error', 'success'];
 const contexts: FieldContext[] = ['default', 'inline'];
 
 const meta = {
@@ -106,7 +109,7 @@ export const Playground: Story = {
 };
 
 /**
- * The three validation states. `error` and `valid` colour the message and prepend a status icon;
+ * The three validation states. `error` and `success` colour the message and prepend a status icon;
  * `error` also sets `aria-invalid` on the control (pair it with the control's own `invalid` prop for
  * the error border).
  */
@@ -207,7 +210,7 @@ export const AnyControl: Story = {
         </Field>
       </Cell>
       <Cell label="Text Area (error)">
-        <Field label="Bio" state="error" message="Bio is required.">
+        <Field label="Bio" state="error" message="Add a sentence or two about yourself.">
           <TextArea invalid placeholder="Tell us about yourself" />
         </Field>
       </Cell>
@@ -215,28 +218,91 @@ export const AnyControl: Story = {
   ),
 };
 
-/** A live required-field validation flow: the message and state react to the input's value. */
-function ValidatingField() {
-  const [value, setValue] = useState('');
-  const touched = value.length > 0;
-  const valid = /.+@.+\..+/.test(value);
-  const state: FieldState = !touched ? 'default' : valid ? 'valid' : 'error';
+type CheckedField = 'name' | 'email';
+
+const CHECKED_LABELS: Record<CheckedField, string> = { name: 'Client name', email: 'Work email' };
+
+/** The errors in the form's values, in the order the fields appear. */
+function checkValues(values: Record<CheckedField, string>) {
+  const errors: Partial<Record<CheckedField, string>> = {};
+  if (!values.name.trim()) errors.name = "Enter the client's first and last name.";
+  if (!/.+@.+\..+/.test(values.email)) errors.email = 'Enter an email address, like name@example.com.';
+  return errors;
+}
+
+/**
+ * When errors show, as the system's rule says: nothing is checked until the form is submitted; then
+ * every error shows at once, with a summary at the top, and from then on each field's error follows
+ * its value, so it clears as soon as it's fixed. The summary changes only on the next submit.
+ */
+function ValidatingForm() {
+  const prefix = useId();
+  const ids: Record<CheckedField, string> = { name: `${prefix}-name`, email: `${prefix}-email` };
+  const [values, setValues] = useState<Record<CheckedField, string>>({ name: '', email: 'jordan.lee@' });
+  const [submitted, setSubmitted] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const [summary, setSummary] = useState<CheckedField[]>([]);
+  const summaryRef = useRef<HTMLDivElement>(null);
+
+  // Before the first submit nothing is checked; after it, each field's error follows its value.
+  const errors = submitted ? checkValues(values) : {};
+
+  // Move focus to the summary after each failed submit, so it's read out and people start there.
+  useEffect(() => {
+    if (attempt > 0) summaryRef.current?.focus();
+  }, [attempt]);
+
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    setSubmitted(true);
+    const failed = (Object.keys(CHECKED_LABELS) as CheckedField[]).filter((key) => checkValues(values)[key]);
+    setSummary(failed);
+    if (failed.length > 0) setAttempt((count) => count + 1);
+  };
 
   return (
-    <Field
-      label="Email"
-      required
-      state={state}
-      message={!touched ? 'Enter your work email.' : valid ? 'Looks good.' : 'Enter a valid email address.'}
-    >
-      <TextField
-        type="email"
-        value={value}
-        invalid={state === 'error'}
-        placeholder="you@example.com"
-        onChange={(event) => setValue(event.target.value)}
-      />
-    </Field>
+    <form noValidate onSubmit={submit} style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
+      {summary.length > 0 ? (
+        <SectionMessage ref={summaryRef} tabIndex={-1} tone="error" title={`Fix ${summary.length === 1 ? '1 field' : `${summary.length} fields`} to save`}>
+          {summary.map((key) => (
+            <div key={key}>
+              <Link
+                href={`#${ids[key]}`}
+                emphasis="default"
+                onClick={(event) => {
+                  event.preventDefault();
+                  document.getElementById(ids[key])?.focus();
+                }}
+              >
+                {CHECKED_LABELS[key]}
+              </Link>
+            </div>
+          ))}
+        </SectionMessage>
+      ) : null}
+      {(Object.keys(CHECKED_LABELS) as CheckedField[]).map((key) => (
+        <Field
+          key={key}
+          label={CHECKED_LABELS[key]}
+          required
+          state={errors[key] ? 'error' : 'default'}
+          message={errors[key] ?? (key === 'email' ? "We'll send the engagement letter here." : undefined)}
+        >
+          <TextField
+            id={ids[key]}
+            type={key === 'email' ? 'email' : 'text'}
+            value={values[key]}
+            invalid={Boolean(errors[key])}
+            onChange={(event) => setValues((current) => ({ ...current, [key]: event.target.value }))}
+          />
+        </Field>
+      ))}
+      <div>
+        <Button type="submit" prominence="primary">
+          Save
+        </Button>
+      </div>
+    </form>
   );
 }
 
@@ -244,10 +310,10 @@ function ValidatingField() {
 export const EdgeCases: Story = {
   render: () => (
     <div style={stack}>
-      <Group title="Live validation">
-        <Cell label="Type an email">
-          <ValidatingField />
-        </Cell>
+      <Group title="Live validation: checked on submit, then as each value changes">
+        <div style={{ inlineSize: '360px' }}>
+          <ValidatingForm />
+        </div>
       </Group>
 
       <Group title="Long label and message in a narrow field">

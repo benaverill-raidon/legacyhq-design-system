@@ -301,7 +301,9 @@ For `SliderRange`, both values show.
 - A handle moved past the other trades places with it, so the lower value always comes first; with
   `disableSwap`, a handle stops at the other one instead.
 - Active fill appears between both handles.
-- The lower value submits under `name`, the upper under `name` with `Max` appended.
+- The lower value submits under `minName`, the upper under `maxName`. They default to `name` and
+  `name` with `Max` appended (`budget` and `budgetMax`), so a form that sets only `name` submits as
+  before. With no name at all, neither input is submitted.
 
 ## Percentage Calculations
 

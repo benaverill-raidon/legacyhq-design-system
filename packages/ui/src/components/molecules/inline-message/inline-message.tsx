@@ -146,7 +146,7 @@ export const InlineMessage = React.memo(function InlineMessage({
     <Popup
       open={isOpen}
       onOpenChange={handleOpenChange}
-      alignment="bottomLeft"
+      alignment="bottomStart"
       content={
         // A non-modal dialog named by the title, focusable so it can take focus when it opens.
         <div ref={panelRef} className={styles.panelContent} role="dialog" aria-labelledby={titleId} tabIndex={-1}>

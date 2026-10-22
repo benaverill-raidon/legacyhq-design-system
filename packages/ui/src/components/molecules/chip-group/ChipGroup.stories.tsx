@@ -3,12 +3,13 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarIcon, SearchIcon, TaskNotStartedIcon } from '../../../assets/icons';
 import { Avatar } from '../../atoms/avatar';
+import { Button } from '../../atoms/button';
 import type { MenuSection } from '../../organisms/menu';
 import { Chip } from '../chip';
 import { ChipGroup } from './chip-group';
 import type { ChipGroupAlignment } from './chip-group.types';
 
-const ALIGNMENTS: ChipGroupAlignment[] = ['left', 'right'];
+const ALIGNMENTS: ChipGroupAlignment[] = ['start', 'end'];
 
 function statusSections(): MenuSection[] {
   return [
@@ -41,7 +42,7 @@ const meta = {
   component: ChipGroup,
   args: {
     size: 'md',
-    alignment: 'left',
+    alignment: 'start',
     children: (
       <>
         <Chip mode="search" label="Matters" elemBefore={<SearchIcon decorative />} isSelected />
@@ -104,7 +105,7 @@ export const Alignment: Story = {
   render: () => (
     <div style={stack}>
       {ALIGNMENTS.map((alignment) => (
-        <Group key={alignment} title={`alignment: ${alignment}${alignment === 'left' ? ' (default)' : ''}`}>
+        <Group key={alignment} title={`alignment: ${alignment}${alignment === 'start' ? ' (default)' : ''}`}>
           <div style={boundedStyle}>
             <ChipGroup alignment={alignment} size="md">
               <Chip mode="search" label="Matters" isSelected />
@@ -171,6 +172,38 @@ export const Wrapping: Story = {
       </ChipGroup>
     </div>
   ),
+};
+
+/**
+ * Removing a chip keeps focus in the group: it moves to the next chip, or the previous one if the
+ * removed chip was last, or to the group itself once none are left. Tab to a remove button and press
+ * Enter a few times.
+ */
+export const Removal: Story = {
+  render: () => {
+    function RemovableFilters() {
+      const all = ['Trusts', 'Wills', 'Estates', 'Probate'];
+      const [labels, setLabels] = React.useState(all);
+      return (
+        <div style={{ display: 'grid', gap: 'var(--spacing-md)', justifyItems: 'start' }}>
+          <ChipGroup aria-label="Applied practice areas" size="md">
+            {labels.map((label) => (
+              <Chip
+                key={label}
+                mode="select"
+                label={label}
+                onRemove={() => setLabels((current) => current.filter((item) => item !== label))}
+              />
+            ))}
+          </ChipGroup>
+          <p style={captionStyle}>{labels.length} of {all.length} applied</p>
+          <Button onClick={() => setLabels(all)}>Reset</Button>
+        </div>
+      );
+    }
+
+    return <RemovableFilters />;
+  },
 };
 
 /** Realistic uses - a scope selector and an active filter bar, the two places chips gather. */
@@ -274,7 +307,7 @@ export const EdgeCases: Story = {
     <div style={stack}>
       <Group title="A single chip" description="No gap to collapse, and alignment still applies.">
         <div style={boundedStyle}>
-          <ChipGroup alignment="right" size="md">
+          <ChipGroup alignment="end" size="md">
             <Chip mode="search" label="Matters" isSelected />
           </ChipGroup>
         </div>

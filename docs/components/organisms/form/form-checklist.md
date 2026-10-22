@@ -85,6 +85,12 @@ Not Required:
 Yes - Form renders a native `<form>`, so Enter-to-submit, `type="submit"` buttons, and browser
 validation all work. Give the submit Button `type="submit"`.
 
+### When do errors show?
+By the system's rule: check on submit, show every error at once (a summary at the top of the form
+and each field's own error), then update each field's error as its value changes. Form doesn't
+validate or move focus; the consumer sets `noValidate`, follows the rule, and moves focus to the
+summary.
+
 ### Who labels the fields?
 Field does. Form does not re-wire labelling or descriptions.
 

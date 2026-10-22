@@ -1,7 +1,12 @@
 import type * as React from 'react';
 import type { TagProps, TagSize } from '../../atoms/tag';
 
-export type TagGroupAlignment = 'left' | 'right';
+export type TagGroupAlignment = 'start' | 'end';
+/**
+ * @deprecated Use `start` or `end`: alignment is named by logical start and end, as Table and Form
+ * name it. Still accepted, and placed the same.
+ */
+export type DeprecatedTagGroupAlignment = 'left' | 'right';
 
 export interface TagGroupItem extends Omit<TagProps, 'size' | 'children' | 'id' | 'isInteractive'> {
   /** Stable identity - used for the React key and as the Menu item id if this tag is truncated into the overflow panel. */
@@ -17,8 +22,12 @@ export interface TagGroupProps {
   maxVisible?: number;
   /** The size of every tag and of the overflow tag: `sm` (24px) or `md` (32px). Unlike Tag, the default is `sm`. */
   size?: TagSize;
-  /** Where the overflow tag sits: after the visible tags with `left`, before them with `right`. It doesn't change which tags are hidden. */
-  alignment?: TagGroupAlignment;
+  /**
+   * Where the overflow tag sits: after the visible tags with `start`, the default, before them with
+   * `end`. It doesn't change which tags are hidden. It follows the writing direction. `left` and
+   * `right`, the earlier names, are still accepted.
+   */
+  alignment?: TagGroupAlignment | DeprecatedTagGroupAlignment;
   /** The overflow tag's text, from the number of hidden tags. Defaults to `+5 more` for five. */
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
   /** The overflow menu's accessible name. Defaults to “5 more tags” for five. */

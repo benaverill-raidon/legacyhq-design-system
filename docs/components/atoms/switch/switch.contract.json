@@ -65,6 +65,7 @@
     "Tab focuses"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "State changes immediately.",
     "Supports controlled and uncontrolled usage.",
     "showIcons defaults to true, preserving the existing check/X marks; set to false to render a bare track/thumb with no internal icon."

@@ -12,10 +12,10 @@
     {
       "name": "Programmatically shown status message",
       "description": "The shape Inline Message will build on - shown after an action completes, not on a direct trigger click.",
-      "jsx": "const [open, setOpen] = useState(false);\n\nasync function handleSave() {\n  await save();\n  setOpen(true);\n}\n\n<Popup open={open} onOpenChange={setOpen} role=\"status\" alignment=\"bottomLeft\" content={<span>Saved</span>}>\n  <Button onClick={handleSave}>Save</Button>\n</Popup>",
+      "jsx": "const [open, setOpen] = useState(false);\n\nasync function handleSave() {\n  await save();\n  setOpen(true);\n}\n\n<Popup open={open} onOpenChange={setOpen} role=\"status\" alignment=\"bottomStart\" content={<span>Saved</span>}>\n  <Button onClick={handleSave}>Save</Button>\n</Popup>",
       "props": {
         "role": "status",
-        "alignment": "bottomLeft"
+        "alignment": "bottomStart"
       }
     },
     {

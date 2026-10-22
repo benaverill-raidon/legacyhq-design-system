@@ -55,13 +55,13 @@
   min-inline-size: 0;
 }
 
-/* error/valid recolour the whole message (icon inherits via its own IconColor); default stays the
+/* error/success recolour the whole message (icon inherits via its own IconColor); default stays the
  * resting subtle colour set on `.message`. */
 .state_error .message {
   color: var(--color-content-error);
 }
 
-.state_valid .message {
+.state_success .message {
   color: var(--color-content-success);
 }
 

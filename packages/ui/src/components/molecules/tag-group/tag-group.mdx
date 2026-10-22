@@ -96,10 +96,12 @@ size per tag. Tag Group defaults to `sm`, where a single Tag defaults to `md`.
 
 <Subsection title="Alignment">
 
-`alignment` sets where the overflow tag sits: after the visible tags with `left`, the default, or
-before them with `right`. It doesn't change which tags show or the order they're in, and the menu
-always opens below the overflow tag, aligned to its left edge. In Figma, the component is named
-`tab-group`.
+`alignment` sets where the overflow tag sits: after the visible tags with `start`, the default, or
+before them with `end` (Figma's `left` and `right`). It follows the writing direction, so in a
+right-to-left page `start` still puts the overflow tag after the tags, on their left. The earlier
+`left` and `right` are deprecated and still accepted. It doesn't change which tags show or the order
+they're in, and the menu always opens below the overflow tag, aligned to its left edge. In Figma,
+the component is named `tab-group`.
 
 <Example of={TagGroupStories.Overflow} />
 
@@ -141,6 +143,20 @@ its text. So a visible tag can link with `href`, show an icon with `elemBefore`,
 `onRemove`.
 
 <Example of={TagGroupStories.Content} caption="Linked records with tones and icons, and a removable tag." />
+
+</Subsection>
+
+<Subsection title="Focus after removing a tag">
+
+When a tag is removed while someone is using it, from the keyboard or with a click, focus stays in
+the group instead of falling to the page. It moves to the tag that takes the removed one's place
+(a hidden tag moving up, or the overflow tag), or to the one before it if the removed tag was last,
+landing on the control in the same place (from one remove button to the next). Once no tags are
+left, focus moves to the group itself. If your `onRemove` moves focus somewhere itself, or the page
+removes the whole group, Tag Group leaves focus alone; then move it to a stable element, as in
+Patterns / Collections.
+
+<Example of={TagGroupStories.Removal} caption="Tab to a remove button and press Enter: focus moves to the next tag." />
 
 </Subsection>
 
@@ -195,6 +211,10 @@ its text. So a visible tag can link with `href`, show an icon with `elemBefore`,
   by the tag's text; its icon is hidden from assistive technology.
 - Opening the menu moves focus to the first enabled row. Choosing a row, Escape, or Tab out of the
   menu closes it and returns focus to the overflow tag.
+- When a tag is removed while it holds focus (or was just pressed), focus moves to the next tag, the
+  previous one if it was last, or the group root, which takes `tabindex="-1"` and shows the focus
+  ring, once none are left. The root has no name, so it's announced only by what's around it. Focus
+  is never dropped to the page.
 - Focus shows the shared Focus Ring on each link, remove button, and the overflow tag.
 
 <Keyboard>

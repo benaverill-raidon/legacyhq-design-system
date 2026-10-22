@@ -21,7 +21,7 @@ serves every control type.
 - Figma Component: `code-parts / <field>` (component set, node `4798:124451`, file `Components
   v1.0.0`, page "Field"), assembled from two sub-part sets: `code-parts / <label>` (node
   `4798:124439`) and `code-parts / <message>` (node `4798:124412`).
-- Variant axes on `<field>`: `state` (default, error, valid) x `context` (default, inline) x `size`
+- Variant axes on `<field>`: `state` (default, error, valid; `valid` is `success` in code) x `context` (default, inline) x `size`
   (all, lg, sm/md) = 9 variants. `context=default` uses one `size=all` variant (no indent);
   `context=inline` splits into `size=lg` and `size=sm/md`.
 - `<message>` axes: `error` (true/false) x `valid` (true/false) x `context` x `size` - the status
@@ -56,7 +56,7 @@ Field (div.root, flex column, data-state/context/size)
 │  └─ span.required (optional, "*", aria-hidden, --color-content-error)
 ├─ {children}  (the wrapped control - the slot - cloned to receive id/aria-*/required, plus context="inline" when context=inline)
 └─ div.message (optional; id, --typography-body-sm)
-   ├─ span.messageIcon (error/valid only; aria-hidden; sm status Icon)
+   ├─ span.messageIcon (error/success only; aria-hidden; sm status Icon)
    └─ span.messageText
 ```
 
@@ -99,7 +99,19 @@ Field (div.root, flex column, data-state/context/size)
   control. Does **not** set the control's own error border (pair with the control's `invalid` prop).
   Select, Date Picker, Time Picker, Date Time Picker, and Rich Text Area treat an incoming
   `aria-invalid` as `invalid`, so their border follows; Text Field and Text Area need `invalid`.
-- `valid`: message `--color-content-success` + `status_success` icon.
+- `success`: message `--color-content-success` + `status_success` icon. Figma calls it `valid`;
+  `valid` is still accepted in code as a deprecated alias and renders the same (`data-state` reads
+  `success`).
+
+### When errors show
+Field doesn't validate; the consumer sets `state`, `message`, and the control's `invalid`. The
+system's rule for when:
+- Check when the form is submitted, not while someone types their first answer.
+- On a failed submit, show every error at once: each field's error, and a summary at the top of the
+  form (a Section Message, `tone="error"`) naming and linking each field. Move focus to the summary.
+- From then on, update each field's error as its value changes, so it clears as soon as it's fixed.
+  The summary changes only on the next submit.
+- Write each error as what to do ("Enter an email address, like name@example.com.").
 
 ### Context / Size (coupled, matching Figma's `size=all | lg | sm/md`)
 - `context="default"`: label and message flush with the control's outer edge, and the control keeps
@@ -133,7 +145,7 @@ Field (div.root, flex column, data-state/context/size)
 | Message typography | `--typography-body-sm-*` | Figma body/sm |
 | Message colour (default) | `--color-content-subtle` | |
 | Message colour (error) | `--color-content-error` | |
-| Message colour (valid) | `--color-content-success` | |
+| Message colour (success) | `--color-content-success` | |
 | Inline indent (lg) | `--spacing-md` | matches Text Field lg inner start padding |
 | Inline indent (sm/md) | `--spacing-sm` | matches Text Field sm/md inner start padding |
 
@@ -198,7 +210,10 @@ Field (div.root, flex column, data-state/context/size)
 - Links the message to the control via `aria-describedby`, merged with any existing value.
 - `state="error"` sets `aria-invalid` on the control; an explicit control `aria-invalid` wins.
 - `required` forwards `required` to the control and shows a decorative (`aria-hidden`) `*`.
-- Shows a status icon on `error`/`valid`, none on `default`.
+- Shows a status icon on `error`/`success`, none on `default`; the deprecated `valid` renders as
+  `success`.
+- The EdgeCases story's live validation follows the error-timing rule (nothing before submit; every
+  error and the summary on submit; each error then follows its value).
 - Sets `data-state`, `data-context`, `data-size` on the root; defaults `default`/`default`/`md`.
 - `context="inline"` indents the label/message per size (`lg` -> `--spacing-md`, `sm`/`md` ->
   `--spacing-sm`) AND injects `context="inline"` into the control (control's own `context`, or a

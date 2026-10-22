@@ -68,12 +68,14 @@ Yes - `children` is the single trigger element, cloned to receive a measurement 
 ## Variants
 
 ### Alignment
-- topLeft (default, matches Figma)
-- topRight
+- topStart (default, Figma's `top left`)
+- topEnd
 - topCenter
-- bottomLeft
-- bottomRight
+- bottomStart
+- bottomEnd
 - bottomCenter
+- The deprecated `topLeft`, `topRight`, `bottomLeft`, `bottomRight` still work and place the same
+  as their start/end replacements
 
 ### Padding
 - none (0 - the consumer's own content manages all edge padding, e.g. Dropdown Menu's Menu panel)
@@ -165,7 +167,7 @@ Final implementation decisions:
   `primitives/layers.ts`), and the panel's z-index is `LAYERS.popup` from the same file, above
   dialogs and toasts.
 - The trigger's own ref is read from `child.props.ref`, not the deprecated `element.ref`.
-- `alignment` defaults to `topLeft`, matching Figma's own declared default variant.
+- `alignment` defaults to `topStart`, matching Figma's own declared default variant (`top left`).
 - The panel hugs its content on both axes - no stretch-to-fill.
 - No default ARIA role on the panel.
 - `unstyled` (default `false`) skips Popup's own visual skin entirely, for a consumer with a

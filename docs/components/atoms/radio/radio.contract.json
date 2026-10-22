@@ -292,6 +292,7 @@
     "Space selects the focused option"
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "Only one option is selected within a group of radios sharing the same name.",
     "Radio's onCheckedChange fires when the input changes; checked enables controlled usage, defaultChecked enables uncontrolled usage.",
     "RadioGroup passes a shared name to every Radio generated from options.",

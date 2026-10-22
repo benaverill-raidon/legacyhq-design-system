@@ -11,6 +11,10 @@
     {
       "name": "Centered",
       "jsx": "<Slider type='slider-centered' value={0} />"
+    },
+    {
+      "name": "Range in a form, with its own field names",
+      "jsx": "<SliderRange label=\"Budget\" name=\"budget\" minName=\"budgetFrom\" maxName=\"budgetTo\" defaultValue={[20, 80]} />"
     }
   ]
 }

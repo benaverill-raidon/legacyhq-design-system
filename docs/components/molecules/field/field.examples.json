@@ -12,9 +12,9 @@
       "props": { "state": "error", "message": "Enter a valid email address." }
     },
     {
-      "name": "Valid state",
-      "jsx": "<Field label=\"Email\" state=\"valid\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
-      "props": { "state": "valid", "message": "Looks good." }
+      "name": "Success state",
+      "jsx": "<Field label=\"Email\" state=\"success\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
+      "props": { "state": "success", "message": "Looks good." }
     },
     {
       "name": "Required field",
@@ -28,7 +28,7 @@
     },
     {
       "name": "Wrapping a Text Area",
-      "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Bio is required.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
+      "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Add a sentence or two about yourself.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
       "props": { "state": "error" }
     },
     {

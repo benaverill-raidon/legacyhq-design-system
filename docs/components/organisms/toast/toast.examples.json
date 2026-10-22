@@ -15,7 +15,7 @@
     },
     {
       "name": "Loading",
-      "description": "A non-dismissible loading toast that resolves later.",
+      "description": "A non-dismissible loading toast that resolves later. Rendered on its own, turn dismissing off yourself; Toast Group's toast.loading() does it for you.",
       "jsx": "<Toast tone=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
       "props": { "tone": "loading", "title": "Uploading your file...", "isDismissible": false }
     },

@@ -13,10 +13,6 @@
     },
     {
       "kind": "bug",
-      "summary": "Selection counts rows a filter now hides, and bulk actions act on them; its page only says selection is kept across pages and sorts."
-    },
-    {
-      "kind": "bug",
       "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
     },
     {
@@ -242,6 +238,7 @@
     "Sort cycles ascending → descending → unsorted per column.",
     "Selection is checkbox-only (rows are never clickable), uncontrolled by default (defaultSelectedIds) and controlled via selectedIds+onSelectionChange; select-all operates over the visible (current-page) rows.",
     "When one or more rows are selected, the selection bar (selected count + bulkActions) replaces the toolbar's button group (search, toolbarActions, actions). The column headers stay.",
+    "Selection is kept by id across pages, sorts, and filters (decided): a selected row that a filter now hides stays selected, the selection count includes it, and bulk actions act on every selected id. A bulk action's confirmation names the count it will act on.",
     "All rows show a neutral-overlay-bold hover (aids horizontal scanning); the selected state is brand-tinted. A single row - or the last row when there is no pagination footer - drops its bottom divider.",
     "Columns are resizable by default (resizableColumns): drag the header-edge separator or use Arrow keys; per-column opt-out via column.resizable=false. The first resize freezes every column's width (fixed table-layout) so a resize doesn't reflow the others and the widths persist across page/data changes.",
     "column.emphasis='strong' renders a cell at the heading weight (an identifier); otherwise body weight.",

@@ -64,9 +64,10 @@ Yes - `children` is the single trigger element, exactly like Popup.
 ## Variants
 
 ### Alignment
-- left (default, matches Figma) - opens below, left edges aligned
+- start (default, Figma's `left`) - opens below, start (left) edges aligned
 - center - opens below, horizontally centered
-- right - opens below, right edges aligned
+- end (Figma's `right`) - opens below, end (right) edges aligned
+- The deprecated `left` and `right` still work and place the same as `start` and `end`
 
 All three only ever set Popup's *preferred* alignment - Popup's own viewport-fit fallback still
 applies if it overflows.
@@ -134,7 +135,8 @@ Final implementation decisions:
 - No `content` prop like Popup's - DropdownMenu always renders a Menu, matching every real Figma
   instance of `dropdown-menu`, which never nests anything else.
 - `alignment` is restricted to the three values Figma's `dropdown-menu` actually has
-  (`left`/`center`/`right`), always mapped to a `bottom*` Popup alignment - not the full six-value
+  (`left`/`center`/`right`, named `start`/`center`/`end` in code), always mapped to a `bottom*`
+  Popup alignment - not the full six-value
   `PopupAlignment` space.
 - No `dropdown-menu.module.css` - there is no visual styling that belongs to DropdownMenu itself.
 - DropdownMenu holds no `useState`; it keeps a trigger ref and runs the menu-button focus

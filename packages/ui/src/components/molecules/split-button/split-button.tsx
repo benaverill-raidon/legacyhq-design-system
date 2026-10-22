@@ -57,7 +57,7 @@ export const SplitButton = React.forwardRef<HTMLButtonElement, SplitButtonProps>
         open={open}
         onOpenChange={setOpen}
         showSearch={false}
-        alignment="right"
+        alignment="end"
         sections={sections}
       >
         <IconButton

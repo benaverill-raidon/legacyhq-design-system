@@ -95,6 +95,58 @@ describe('ToastGroup', () => {
     expect(cards(container)[0]).toHaveAttribute('data-tone', 'error');
   });
 
+  it('sets information from toast.information, and still accepts the deprecated toast.info', () => {
+    const { container } = render(<ToastGroup />);
+
+    act(() => {
+      toast.information('A new version is available', { id: 'new', duration: Infinity });
+    });
+    const tone = cards(container)[0].getAttribute('data-tone');
+    const announced = liveRegion().textContent;
+    expect(tone).toBe('information');
+    expect(announced).toBe('Information: A new version is available');
+
+    act(() => {
+      toast.dismiss();
+      toast.info('A new version is available', { id: 'old', duration: Infinity });
+    });
+    expect(cards(container)[0]).toHaveAttribute('data-tone', tone as string);
+    expect(liveRegion().textContent).toBe(announced);
+  });
+
+  it('gives a loading toast no dismiss button, and gives it back when the toast resolves', () => {
+    render(<ToastGroup />);
+
+    act(() => {
+      toast.loading('Uploading', { id: 'upload' });
+    });
+    expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
+
+    act(() => {
+      toast.success('Uploaded', { id: 'upload' });
+    });
+    expect(screen.getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
+  });
+
+  it("doesn't pass a loading toast's isDismissible on to its result unless the update sets it", () => {
+    render(<ToastGroup />);
+
+    act(() => {
+      toast.loading('Uploading', { id: 'upload', isDismissible: false });
+      toast.loading('Exporting', { id: 'export', isDismissible: true });
+    });
+    expect(screen.getAllByRole('button', { name: 'Dismiss' })).toHaveLength(1);
+
+    act(() => {
+      toast.success('Uploaded', { id: 'upload' });
+      toast.error('Export failed', { id: 'export', isDismissible: false });
+    });
+    expect(screen.getAllByRole('button', { name: 'Dismiss' })).toHaveLength(1);
+    expect(screen.getByText('Uploaded', { selector: 'li *' }).closest('li')).toContainElement(
+      screen.getByRole('button', { name: 'Dismiss' }),
+    );
+  });
+
   it('updates a toast in place when the same id is reused (loading -> success)', () => {
     const { container } = render(<ToastGroup />);
 
@@ -378,6 +430,102 @@ describe('ToastGroup', () => {
 
     advance(5000 + 300);
     expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+  });
+
+  describe('focus after a toast is dismissed from the keyboard', () => {
+    /** Presses a dismiss button from the keyboard: a click with no pointer behind it. */
+    function pressDismiss(button: HTMLElement) {
+      act(() => {
+        button.focus();
+        fireEvent.click(button, { detail: 0 });
+      });
+    }
+
+    function dismissButtonOf(title: string) {
+      const item = screen.getByText(title, { selector: 'li *' }).closest('li') as HTMLElement;
+      return item.querySelector('button') as HTMLElement;
+    }
+
+    it('moves to the next toast in the list', () => {
+      render(<ToastGroup />);
+      act(() => {
+        toast('Oldest', { duration: Infinity });
+        toast('Middle', { duration: Infinity });
+        toast('Newest', { duration: Infinity });
+      });
+
+      pressDismiss(dismissButtonOf('Middle'));
+      expect(dismissButtonOf('Oldest')).toHaveFocus();
+    });
+
+    it('moves to the previous toast when it was the last one in the list', () => {
+      render(<ToastGroup />);
+      act(() => {
+        toast('Oldest', { duration: Infinity });
+        toast('Newest', { duration: Infinity });
+      });
+
+      pressDismiss(dismissButtonOf('Oldest'));
+      expect(dismissButtonOf('Newest')).toHaveFocus();
+    });
+
+    it("skips a toast with nothing to focus, and one that's waiting past maxVisible", () => {
+      render(<ToastGroup maxVisible={3} />);
+      act(() => {
+        toast('Waiting', { duration: Infinity });
+        toast('Oldest', { duration: Infinity });
+        toast.loading('Uploading');
+        toast('Newest', { duration: Infinity });
+      });
+
+      pressDismiss(dismissButtonOf('Newest'));
+      expect(dismissButtonOf('Oldest')).toHaveFocus();
+    });
+
+    it('goes back to where focus was before it entered the stack when no toast is left', () => {
+      render(
+        <>
+          <button type="button">Save</button>
+          <ToastGroup />
+        </>,
+      );
+      act(() => {
+        toast('Saved', { duration: Infinity });
+      });
+      const save = screen.getByRole('button', { name: 'Save' });
+      act(() => {
+        save.focus();
+      });
+
+      pressDismiss(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(save).toHaveFocus();
+      expect(screen.getByRole('list')).not.toHaveAttribute('data-expanded');
+    });
+
+    it('falls back to the page when focus came from nowhere it can go back to', () => {
+      render(<ToastGroup />);
+      act(() => {
+        toast('Saved', { duration: Infinity });
+      });
+
+      pressDismiss(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(document.body).toHaveFocus();
+    });
+
+    it("leaves focus alone after a pointer click, so the stack can collapse when the pointer leaves", () => {
+      render(<ToastGroup />);
+      act(() => {
+        toast('Oldest', { duration: Infinity });
+        toast('Newest', { duration: Infinity });
+      });
+      const button = dismissButtonOf('Newest');
+
+      act(() => {
+        button.focus();
+        fireEvent.click(button, { detail: 1 });
+      });
+      expect(button).toHaveFocus();
+    });
   });
 
   it('collapses again when the focused toast is removed', () => {

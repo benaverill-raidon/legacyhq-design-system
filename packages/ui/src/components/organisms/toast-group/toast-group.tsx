@@ -14,6 +14,9 @@ const EXPANDED_GAP = 8; // px between toasts when the stack is expanded
 const SWIPE_DISMISS_THRESHOLD = 80; // px of horizontal travel before a swipe dismisses
 // The exit fade is --fade-long (--duration-slow, 300ms); the toast is removed once it has finished.
 const EXIT_MS = 300;
+// What can take focus inside a toast: its dismiss button and its actions.
+const FOCUSABLE =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -37,9 +40,11 @@ interface StackedToastProps {
   onHeight: (id: string, height: number) => void;
   /** Removes the toast from the store, after its exit fade. */
   onDismiss: (id: string) => void;
+  /** Moves focus out of this toast, which is going, to the nearest place that stays. */
+  onFocusAway: (item: HTMLElement) => void;
 }
 
-function StackedToast({ item, index, expanded, hidden, offset, duration, onHeight, onDismiss }: StackedToastProps) {
+function StackedToast({ item, index, expanded, hidden, offset, duration, onHeight, onDismiss, onFocusAway }: StackedToastProps) {
   const ref = React.useRef<HTMLLIElement>(null);
   const [exiting, setExiting] = React.useState(false);
   const [entered, setEntered] = React.useState(false);
@@ -73,6 +78,17 @@ function StackedToast({ item, index, expanded, hidden, offset, duration, onHeigh
     setExiting(true);
     window.setTimeout(() => onDismiss(item.id), EXIT_MS);
   }, [item.id, onDismiss]);
+
+  // Dismissed from the keyboard (a click with no pointer behind it, so `detail` is 0) while focus is in
+  // this toast: the button is going, so focus moves to the nearest place that stays instead of being
+  // lost with it. A pointer click leaves focus alone, so the stack can collapse when the pointer leaves.
+  const handleDismissClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const el = ref.current;
+    if (event.detail === 0 && el && el.contains(document.activeElement)) {
+      onFocusAway(el);
+    }
+    handleDismiss();
+  };
 
   // A loading toast stays until it's updated; otherwise the toast's own duration, else the group's.
   const isLoading = resolveToastTone(item.tone, item.appearance) === 'loading';
@@ -164,8 +180,10 @@ function StackedToast({ item, index, expanded, hidden, offset, duration, onHeigh
         description={item.description}
         actions={item.actions}
         expanded={expanded}
-        isDismissible={item.isDismissible}
-        onDismiss={handleDismiss}
+        // A loading toast is replaced with its result, not closed, so it has no dismiss button unless
+        // it asks for one.
+        isDismissible={item.isDismissible ?? !isLoading}
+        onDismiss={handleDismissClick}
       />
     </li>
   );
@@ -195,6 +213,8 @@ export function ToastGroup({ maxVisible = 3, duration = DEFAULT_DURATION, label 
   const [focusWithin, setFocusWithin] = React.useState(false);
   const [heights, setHeights] = React.useState<Record<string, number>>({});
   const listRef = React.useRef<HTMLOListElement>(null);
+  // Where focus was before it entered the stack, to go back to when no toast is left to take it.
+  const returnFocus = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => toastStore.subscribe(setToasts), []);
 
@@ -216,6 +236,41 @@ export function ToastGroup({ maxVisible = 3, duration = DEFAULT_DURATION, label 
   }, []);
 
   const dismiss = React.useCallback((id: string) => toastStore.dismiss(id), []);
+
+  // When a toast is dismissed from the keyboard, focus goes to the nearest thing that stays: the next
+  // toast in the list, else the previous one, else back where it was before it entered the stack, and
+  // only when none of those can take it, the page itself.
+  const focusAway = React.useCallback((leaving: HTMLElement) => {
+    const list = listRef.current;
+    const items = list ? (Array.from(list.children) as HTMLElement[]) : [];
+    const at = items.indexOf(leaving);
+    const neighbors = [...items.slice(at + 1), ...items.slice(0, Math.max(at, 0)).reverse()];
+
+    for (const neighbor of neighbors) {
+      // Toasts waiting past maxVisible are inert, and toasts already fading out are going too.
+      if (neighbor.hasAttribute('inert') || neighbor.dataset.exiting === 'true') {
+        continue;
+      }
+      const target = neighbor.querySelector<HTMLElement>(FOCUSABLE);
+      if (target) {
+        target.focus();
+        return;
+      }
+    }
+
+    const previous = returnFocus.current;
+    if (previous && previous.isConnected && !list?.contains(previous)) {
+      previous.focus();
+      if (document.activeElement === previous) {
+        return;
+      }
+    }
+
+    const active = document.activeElement;
+    if (active instanceof HTMLElement && leaving.contains(active)) {
+      active.blur();
+    }
+  }, []);
 
   const expanded = hovered || focusWithin;
 
@@ -264,7 +319,13 @@ export function ToastGroup({ maxVisible = 3, duration = DEFAULT_DURATION, label 
         style={{ zIndex: LAYERS.toast, ...(regionHeight ? { blockSize: `${regionHeight}px` } : {}) }}
         onPointerEnter={() => setHovered(true)}
         onPointerLeave={() => setHovered(false)}
-        onFocusCapture={() => setFocusWithin(true)}
+        onFocusCapture={(event) => {
+          // Focus arriving from outside the stack: remember where it came from.
+          if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+            returnFocus.current = event.relatedTarget instanceof HTMLElement ? event.relatedTarget : null;
+          }
+          setFocusWithin(true);
+        }}
         onBlurCapture={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget as Node)) {
             setFocusWithin(false);
@@ -282,6 +343,7 @@ export function ToastGroup({ maxVisible = 3, duration = DEFAULT_DURATION, label 
             duration={duration}
             onHeight={setHeight}
             onDismiss={dismiss}
+            onFocusAway={focusAway}
           />
         ))}
       </ol>

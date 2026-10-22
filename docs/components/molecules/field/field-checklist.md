@@ -30,7 +30,7 @@ accessible scaffold.
 
 ### What user goal does it support?
 - Understand what a control is for (its label) and how to fill it in (its helper text)
-- See at a glance whether the value is valid or in error, with a matching icon and colour
+- See at a glance whether the value is accepted or in error, with a matching icon and colour
 
 ---
 
@@ -56,7 +56,7 @@ accessible scaffold.
 ### What content can be displayed?
 - A label (with an optional required `*`)
 - A single wrapped control (the slot)
-- A helper/error/success message, with a status icon on error/valid
+- A helper/error/success message, with a status icon on error/success
 
 ### Character Limits
 None - the label and message wrap.
@@ -66,7 +66,7 @@ None - the label and message wrap.
 ## Variants
 
 ### State
-- default, error, valid
+- default, error, success (`valid`, Figma's name, is a deprecated alias that renders the same)
 
 ### Context
 - default (flush with the control edge; size-independent; control keeps its own context), inline
@@ -83,7 +83,7 @@ None - the label and message wrap.
 ## States
 
 Required:
-- default, error, valid
+- default, error, success (`valid`, Figma's name, is a deprecated alias that renders the same)
 
 Not Required:
 - hover/focus/disabled are the *control's* states, not Field's - Field forwards `data-force-state`
@@ -114,6 +114,8 @@ Set the control's own visual error prop (e.g. `<TextField invalid />`) alongside
 Field sets `aria-invalid` but not the control's border. (Select, the date/time pickers, and Rich
 Text Area treat an incoming `aria-invalid` as `invalid`, so their border follows; Text Field and
 Text Area need `invalid`.) Match `size` on Field and the control.
+Show errors by the system's rule: check on submit, show every error at once with a summary at the
+top of the form, then update each field's error as its value changes.
 
 ---
 

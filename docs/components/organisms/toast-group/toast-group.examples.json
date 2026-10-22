@@ -15,8 +15,14 @@
     },
     {
       "name": "Loading updated to success",
-      "description": "Reuse the id to update a loading toast in place when it resolves; the result gets the group's duration unless you pass one.",
+      "description": "Reuse the id to update a loading toast in place when it resolves. The loading toast has no dismiss button; the result gets the group's duration and a dismiss button unless you pass duration or isDismissible.",
       "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
+      "props": {}
+    },
+    {
+      "name": "Information toast",
+      "description": "toast.information sets the information tone (toast.info is the deprecated alias).",
+      "jsx": "toast.information('A new version is available', { description: 'Refresh to update.' })",
       "props": {}
     },
     {

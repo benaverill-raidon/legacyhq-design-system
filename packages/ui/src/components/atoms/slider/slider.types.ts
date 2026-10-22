@@ -91,8 +91,15 @@ export interface SliderRangeProps
    * or `aria-label`). Defaults to `Maximum value`; pass a translation.
    */
   maxLabel?: string;
-  /** The form name: the lower value submits under `name`, the upper under `name` with `Max` added. */
+  /**
+   * The form name. Without `minName` and `maxName`, the lower value submits under `name` and the
+   * upper under `name` with `Max` added (`price` and `priceMax`).
+   */
   name?: string;
+  /** The form name the lower value submits under. Defaults to `name`. */
+  minName?: string;
+  /** The form name the upper value submits under. Defaults to `name` with `Max` added. */
+  maxName?: string;
   /** Called as either value changes, with both values, sorted, and the change event. */
   onValueChange?: (value: [number, number], event: React.ChangeEvent<HTMLInputElement>) => void;
 }

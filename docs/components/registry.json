@@ -504,14 +504,14 @@
       "alignment": {
         "type": "PopupAlignment",
         "required": false,
-        "default": "topLeft",
-        "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least.",
+        "default": "topStart",
+        "description": "Preferred side/edge alignment. Falls back to whichever of the six overflows the viewport least. Placement is left-to-right only: start is the trigger's left edge, even in a right-to-left page. topLeft, topRight, bottomLeft, and bottomRight, the earlier names, are still accepted.",
         "enum": [
-          "topLeft",
-          "topRight",
+          "topStart",
+          "topEnd",
           "topCenter",
-          "bottomLeft",
-          "bottomRight",
+          "bottomStart",
+          "bottomEnd",
           "bottomCenter"
         ]
       },
@@ -588,11 +588,11 @@
     ],
     "variants": {
       "alignment": [
-        "topLeft",
-        "topRight",
+        "topStart",
+        "topEnd",
         "topCenter",
-        "bottomLeft",
-        "bottomRight",
+        "bottomStart",
+        "bottomEnd",
         "bottomCenter"
       ],
       "padding": [
@@ -653,7 +653,8 @@
       "structure": "Two component properties beyond the variant axes: an exposed SLOT (the anchor/trigger region) and an internal, unpromoted Slot inside the nested `figma-parts / popup` panel instance (the content region). Code models this as `children` (trigger) + `content` (panel content) rather than two Figma-shaped slot props, since the inner slot was never promoted to the outer component set's own property list.",
       "apiAdaptationNotes": [
         "Figma's `isOpen` variant became the `open` prop, not `isOpen` - `open` is a native HTML attribute (dialog/details), and component-api-governance.json prefers native names whenever one exists.",
-        "`alignment`'s default (`topLeft`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+        "`alignment`'s default (`topStart`, Figma's `top left`) matches Figma's own declared default variant exactly, even though a click-opened floating panel more typically opens below its trigger - there was no product signal in the source file to justify overriding it.",
+        "Figma's alignment variants are physical (`top left`, `bottom right`, ...); code names them by logical start and end (`topStart`, `bottomEnd`, ...) since 2026-10-20, as Table and Form name alignment (shared-value-names). The physical names (`topLeft`, `topRight`, `bottomLeft`, `bottomRight`) are deprecated aliases, still accepted and placed the same.",
         "Dismissal (Escape/outside click) has no Figma variant at all - it's a code-level behavior decision, not a design-source fact. Added as opt-out (default on) rather than opt-in, so most consumers get it for free.",
         "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
       ]
@@ -667,10 +668,6 @@
       {
         "kind": "bug",
         "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
-      },
-      {
-        "kind": "gap",
-        "summary": "Alignment uses compound physical values (`topLeft`) where Table and Form use logical `start` | `end` (shared-value-names)."
       }
     ],
     "replacedBy": null,
@@ -1763,18 +1760,12 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "Is the `strong` emphasis default intended? It matches the contract."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
-        "noKnownIssues"
+        "examples"
       ],
       "evidence": {
         "docsPage": true,
@@ -1782,7 +1773,7 @@
         "figma": true,
         "contract": true,
         "examples": false,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -2627,8 +2618,12 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "decision",
-        "summary": "A range submits `name` and `${name}Max`. Is that the intended form shape?"
+        "kind": "bug",
+        "summary": "A pointer press on a disabled single Slider still sets `data-dragging=\"true\"`; the disabled styles hide it."
+      },
+      {
+        "kind": "bug",
+        "summary": "Its examples file uses a `type` prop that doesn't exist (`<Slider type=\"slider-range\">`)."
       },
       {
         "kind": "bug",
@@ -3178,10 +3173,6 @@
     },
     "status": "beta",
     "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "Keyboard users can't reach a tooltip on a disabled control, as the spec intends, but the contract lists \"explaining why a control is disabled\" as a use. Pick one."
-      },
       {
         "kind": "gap",
         "summary": "`--component-tooltip-z-index` is defined but unused: z-index lives in primitives/layers.ts. A candidate to remove in Figma."
@@ -3751,11 +3742,11 @@
         "default": null,
         "description": "filter and select. Every verified Figma variant of both has a remove button."
       },
-      "removeAriaLabel": {
+      "removeLabel": {
         "type": "string",
         "required": false,
         "default": "Remove ${labelText}",
-        "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`."
+        "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`. removeAriaLabel, the earlier name (renamed 2026-10-20 to match Tag's removeLabel, built-in-labels), is still accepted; removeLabel wins when both are set."
       },
       "labelText": {
         "type": "string",
@@ -3868,7 +3859,7 @@
     "knownIssues": [
       {
         "kind": "gap",
-        "summary": "Names its remove control `removeAriaLabel`, where the convention is `removeLabel` (built-in-labels)."
+        "summary": "Its remove button's tooltip says \"Remove\" in English, with no prop to translate it (built-in-labels)."
       },
       {
         "kind": "gap",
@@ -3900,7 +3891,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "A wrapping flex row with an 8px gap on both axes and no padding or surface of its own. Carries data-alignment and data-size."
+        "description": "A wrapping flex row with an 8px gap on both axes and no padding or surface of its own. Carries data-alignment and data-size. Takes focus (tabindex=-1, Focus Ring) only when its last chip is removed while in use."
       },
       {
         "name": "children",
@@ -3927,11 +3918,11 @@
       "alignment": {
         "type": "ChipGroupAlignment",
         "required": false,
-        "default": "left",
-        "description": "Which edge the chips pack against - maps to justify-content.",
+        "default": "start",
+        "description": "Which edge the chips pack against - maps to justify-content, so it follows the writing direction. left and right, the earlier names, are still accepted.",
         "enum": [
-          "left",
-          "right"
+          "start",
+          "end"
         ]
       },
       "aria-label": {
@@ -3962,8 +3953,8 @@
     ],
     "variants": {
       "alignment": [
-        "left",
-        "right"
+        "start",
+        "end"
       ]
     },
     "subComponents": [],
@@ -3974,7 +3965,8 @@
       "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
       "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
       "selection": "not managed - each search Chip carries its own aria-pressed",
-      "note": "Chip Group renders no interactive element of its own, so it has no focus or keyboard behaviour to document beyond its children's."
+      "focusAfterRemoval": "When the chip holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the chip that takes its place, else the previous chip, landing on the control in the same position counted from the end (remove button to remove button); chips with no enabled control are skipped. With no chip left, the group root takes tabindex=-1 and focus, with the shared Focus Ring. Focus the page has already moved is left alone.",
+      "note": "Chip Group renders no interactive element of its own; apart from keeping focus when a chip is removed, its focus and keyboard behaviour is its children's."
     },
     "relatedComponents": [
       "Chip",
@@ -3991,7 +3983,7 @@
       "variantCount": 4,
       "verifiedAt": "2026-08-24",
       "note": "Filed on the file's own \"✅⏲️ Chip Group\" page, verified directly against the file via the Desktop Bridge plugin.",
-      "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
+      "structure": "Four variants cross `size` (`sm (24)` / `md (32)`) with `alignment` (left/right; `start`/`end` in code). Every variant is a single auto-layout frame - layoutMode HORIZONTAL, layoutWrap WRAP, itemSpacing 8, counterAxisSpacing 8, counterAxisAlignItems CENTER, and zero padding - containing ten `chip` instances, all `mode=search`, `isSelected=false`, each carrying the variant's own size. `alignment=left` measures primaryAxisAlignItems MIN; `alignment=right` measures MAX. There is no overflow instance, no divider, and no container fill or stroke: the group is pure layout.",
       "apiAdaptationNotes": [
         "Chip Group takes `children`, not a data array. Tag Group and Avatar Group own their items because they have to decide which are visible and which are truncated; Chip Group has no overflow behaviour at all, and Chip's own props are a discriminated union on `mode`, which a flat item type could not express without duplicating that union. Button Group - the closest analogue in this system - is likewise a children-based layout wrapper.",
         "`size` reaches each Chip through React context (ChipSizeContext), not by cloning children. cloneElement only reaches direct children, so a Chip inside a Tooltip, returned from a `.map`, or rendered conditionally would silently miss the group's size - the same structural fragility that detached Chip's own remove button from its pill. Context reaches any descendant regardless of what sits between, and an explicit `size` on an individual Chip still wins because Chip resolves `size ?? groupSize ?? 'md'`.",
@@ -4005,8 +3997,8 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "gap",
-        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+        "kind": "bug",
+        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
       }
     ],
     "replacedBy": null,
@@ -4054,7 +4046,7 @@
       },
       {
         "name": "messageIcon",
-        "description": "Decorative sm status Icon shown on error (status_error) / valid (status_success) only."
+        "description": "Decorative sm status Icon shown on error (status_error) / success (status_success) only."
       }
     ],
     "props": {
@@ -4077,14 +4069,14 @@
         "description": "Helper/error/success text below the control, linked via aria-describedby. Colour and status icon follow state."
       },
       "state": {
-        "type": "FieldState",
+        "type": "FieldState | DeprecatedFieldState",
         "required": false,
         "default": "default",
-        "description": "Colours the message and prepends a status icon; error also sets aria-invalid on the control. Does not set the control's own error border.",
+        "description": "Colours the message and prepends a status icon; error also sets aria-invalid on the control. Does not set the control's own error border. `valid` is the deprecated name for `success` and renders the same.",
         "enum": [
           "default",
           "error",
-          "valid"
+          "success"
         ]
       },
       "context": {
@@ -4151,7 +4143,7 @@
       "state": [
         "default",
         "error",
-        "valid"
+        "success"
       ],
       "context": [
         "default",
@@ -4177,7 +4169,7 @@
         "requiredAsterisk": "--color-content-error",
         "messageDefault": "--color-content-subtle",
         "messageError": "--color-content-error",
-        "messageValid": "--color-content-success"
+        "messageSuccess": "--color-content-success"
       },
       "typography": {
         "label": "--typography-heading-xxs-*",
@@ -4272,7 +4264,8 @@
         "Accessibility wiring is injected by cloning the single child control and only filling in props it left unset (id, aria-labelledby naming the label unless the control has its own aria-label or aria-labelledby, aria-describedby merged with any existing value, aria-invalid, required, data-force-state) - the same React.cloneElement pattern Inline Edit uses. The control's own props always win.",
         "The label has an id as well as htmlFor, and Field passes that id to the control as aria-labelledby, because htmlFor only names a labelable native element. That is what names Rich Text Area's contenteditable div and Date Time Picker's group.",
         "Every form control in the system forwards the wiring: Text Field and Text Area spread it onto the native input/textarea; Select, Date Picker, and Time Picker pass aria-labelledby, aria-describedby, aria-invalid, and required to their input, not the wrapper; Rich Text Area sets them on its editor (required as aria-required); Date Time Picker names its group with the label, keeps the description on the group, and passes the error and required to both inputs.",
-        "The message icon->text gap is Figma spacing/075 (6px), --spacing-075."
+        "The message icon->text gap is Figma spacing/075 (6px), --spacing-075.",
+        "Figma's `valid` (the <field> state axis and the <message> boolean) is `success` in code since 2026-10-22, the name every message component uses (shared-value-names). `valid` is still accepted as a deprecated alias and renders the same (data-state='success')."
       ]
     },
     "status": "beta",
@@ -4282,20 +4275,8 @@
         "summary": "The status icon is centered against a message that wraps onto two lines. Check the intent in Figma."
       },
       {
-        "kind": "gap",
-        "summary": "`state` uses `valid` where every message component says `success` (shared-value-names)."
-      },
-      {
-        "kind": "decision",
-        "summary": "No rule says when errors show. Its \"Live validation\" story shows one from the first keystroke; Forms and Validation recommends checking on submit."
-      },
-      {
         "kind": "decision",
         "summary": "Its label is `heading-xxs` while Radio's and Checkbox's group legends are `body-md`, and the required `*` spacing differs."
-      },
-      {
-        "kind": "gap",
-        "summary": "Its AnyControl story says \"Bio is required.\", against its own Do (write the error as what to do)."
       }
     ],
     "replacedBy": null,
@@ -4848,7 +4829,7 @@
       },
       {
         "name": "content",
-        "description": "Rendered through Popup (default styled skin, alignment=bottomLeft) when provided - Popup owns positioning/portal/dismissal."
+        "description": "Rendered through Popup (default styled skin, alignment=bottomStart) when provided - Popup owns positioning/portal/dismissal."
       }
     ],
     "props": {
@@ -6235,7 +6216,7 @@
         "The figma-parts / split-button / divider part is not implemented as a new exported primitive - it's namespaced as component-specific in Figma (unlike figma-parts / secondary-action, which is reused across other components), and no existing shared Divider component exists in this codebase to reuse instead. Implemented as a single internal <span>.",
         "IconButton's own isExpanded prop is not passed to the secondary action - verified directly in code that it only sets aria-expanded/data-expanded with no corresponding CSS (no visual effect today), and Popup (via Dropdown Menu) already overwrites aria-expanded via its own trigger-cloning regardless of whatever IconButton would set internally.",
         "Verified directly that IconButton's own tooltip-auto-wrapping (triggered by passing an explicit aria-label, IconButton's own pre-existing behavior unrelated to Split Button) does not interfere with the outer Popup's (Dropdown Menu's) own trigger-cloning - ref and aria-expanded/aria-controls are injected as props on the authored <IconButton> element itself and correctly routed to its real internal <button> via IconButton's own forwardRef and prop-destructuring, regardless of what IconButton renders around it internally. This exact combination already exists, unremarked, in Dropdown Menu's own Content story.",
-        "alignment is hardcoded to 'right' on the internal DropdownMenu call, not exposed as a SplitButtonProps prop - Figma's own split-button variant set has no alignment axis at all; every one of the 24 variants opens \"bottom right\". This is a preferred alignment only, not a forced one - it maps to Popup's own 'bottomRight' (via Dropdown Menu's ALIGNMENT_MAP), and Popup's own collision detection already flips to an alternate alignment (then clamps to the viewport) when there isn't room, with no extra logic needed in Split Button.",
+        "alignment is hardcoded to 'end' on the internal DropdownMenu call, not exposed as a SplitButtonProps prop - Figma's own split-button variant set has no alignment axis at all; every one of the 24 variants opens \"bottom right\". This is a preferred alignment only, not a forced one - it maps to Popup's own 'bottomEnd' (via Dropdown Menu's ALIGNMENT_MAP), and Popup's own collision detection already flips to an alternate alignment (then clamps to the viewport) when there isn't room, with no extra logic needed in Split Button.",
         "isFullWidth is omitted from the Button props Split Button inherits (Omit<ButtonProps, 'appearance' | 'isFullWidth'>) - no verified Figma variant for a full-width split button exists.",
         "Each segment suppresses its own border on the interior edge (border-inline-end-width: 0 on .primaryAction, border-inline-start-width: 0 on .secondaryAction) - Figma's own button/icon-button instances measure strokeRightWeight/strokeLeftWeight: 0 on that exact edge, so the divider is the only thing drawing that seam. Caught live in Storybook: without this, Button's/IconButton's own 1px border on that edge stacked with the 1px divider into a visibly wide line instead of one clean 1px seam.",
         "IconButton's own appearance_primary:disabled (and appearance_subtle:disabled) was fixed to stay borderless (border-color: transparent), matching Button's own disabled rule split and Figma's own disabled variants (identical fill regardless of tone, but primary/subtle drop the stroke entirely - verified directly against Figma's disabled component variants). It previously shared the same visible-border rule as appearance_default:disabled, so a disabled primary secondary action looked identical to a disabled default one. This is an IconButton-atom fix (icon-button.module.css), not Split-Button-specific, but Split Button's primary+disabled secondary action is what surfaced it.",
@@ -6319,11 +6300,11 @@
       "alignment": {
         "type": "TagGroupAlignment",
         "required": false,
-        "default": "left",
-        "description": "Where the overflow tag renders relative to the visible tags - trailing (left) or leading (right). Does not change which tags are visible or truncated.",
+        "default": "start",
+        "description": "Where the overflow tag renders relative to the visible tags - trailing (start) or leading (end), in DOM order, so it follows the writing direction. Does not change which tags are visible or truncated. left and right, the earlier names, are still accepted.",
         "enum": [
-          "left",
-          "right"
+          "start",
+          "end"
         ]
       },
       "overflowLabel": {
@@ -6364,8 +6345,8 @@
     "slots": [],
     "variants": {
       "alignment": [
-        "left",
-        "right"
+        "start",
+        "end"
       ]
     },
     "subComponents": [],
@@ -6377,7 +6358,8 @@
       "ariaExpanded": "set on the overflow tag by Popup (via Dropdown Menu), reflecting the panel's open state",
       "ariaControls": "set on the overflow tag by Popup, pointing at the panel id while open",
       "overflowPanelRole": "menu (set by Menu, via Dropdown Menu), named by overflowMenuAriaLabel",
-      "visibleTagAccessibility": "unchanged from Tag's own documented accessibility - Tag Group applies no ARIA of its own to visible tags"
+      "visibleTagAccessibility": "unchanged from Tag's own documented accessibility - Tag Group applies no ARIA of its own to visible tags",
+      "focusAfterRemoval": "When the tag holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the tag now in its place (a hidden tag moving up, or the overflow tag), else the previous tag, landing on the control in the same position counted from the end (remove button to remove button); tags with no enabled control are skipped. With no tag left, the root takes tabindex=-1 and focus, with the shared Focus Ring; it has no name. Focus the page has already moved is left alone."
     },
     "relatedComponents": [
       "Tag",
@@ -6397,9 +6379,9 @@
       "structure": "Four variants cross two axes: `size` (`sm (24)` / `md (32)`) x `alignment`. Each variant is an auto-layout frame (layoutWrap: WRAP, itemSpacing: 8, counterAxisSpacing: 8, counterAxisAlignItems: CENTER) containing ten `tag` instances (tone=standard/default, isRemovable=false, elemBefore=false, text \"Tag\") plus one `dropdown-menu` instance (trigger=tag, alignment=left, isOpen=false) whose trigger slot holds an eleventh `tag` instance reading \"+5 more\" (same variant shape as the others: tone=standard, isRemovable=false). Every `tag` instance inside a variant - the ten visible ones and the overflow trigger's - carries that variant's own size, so size is uniform per group with no per-tag mixing. Measured frame heights match the size axis exactly (sm: 24, md: 32). In `alignment=left`, the dropdown-menu instance is the last child (trailing); in `alignment=right`, it is the first child (leading). The nested dropdown-menu's own `alignment` property measures `left` in every case - it does not flip with the outer variant.",
       "apiAdaptationNotes": [
         "Figma's example is a fixed illustrative count (10 visible tags + a \"+5 more\" overflow tag = 15 total, with no exposed count/list-editing property). Code generalizes this into an open, data-driven `tags: TagGroupItem[]` array plus a `maxVisible` number, the same 'closed demo becomes an open prop' adaptation Menu made for its own `sections` versus Figma's per-variant row instances.",
-        "Figma's `alignment` variant (left/right) became TagGroupProps.alignment directly, unchanged in name or values - it controls only where the overflow tag renders (trailing vs. leading), not which tags are visible or truncated, matching the fact that every Figma variant shows the identical placeholder tag set.",
+        "Figma's `alignment` variant (left/right) became TagGroupProps.alignment, named by logical start and end since 2026-10-20 (`start`/`end`, as Table and Form name alignment; `left`/`right` stay accepted as deprecated aliases, placed the same) - it controls only where the overflow tag renders (trailing vs. leading), not which tags are visible or truncated, matching the fact that every Figma variant shows the identical placeholder tag set.",
         "Figma's `size` axis (`sm (24)` / `md (32)`) became TagGroupProps.size, carrying Tag's own TagSize values (sm/md) rather than Figma's parenthesised pixel labels. It applies uniformly to every visible tag and to the overflow tag, because that is what Figma does inside each variant - so TagGroupItem omits `size` from Tag's own props entirely. TagGroup defaults to `sm`, a deliberate divergence from Tag's own `md` code default: `size=sm (24)` is the first variant in Figma's grid and the one its illustrative examples use.",
-        "The nested dropdown-menu's own `alignment` property was measured as `left` in both outer `alignment` variants (not flipped for `alignment=right`) - code matches this directly: TagGroup always renders the overflow tag's DropdownMenu with Dropdown Menu's own default alignment (left), rather than deriving or flipping it from TagGroup's own `alignment` prop.",
+        "The nested dropdown-menu's own `alignment` property was measured as `left` in both outer `alignment` variants (not flipped for `alignment=right`) - code matches this directly: TagGroup always renders the overflow tag's DropdownMenu with Dropdown Menu's own default alignment (start, Figma's left), rather than deriving or flipping it from TagGroup's own `alignment` prop.",
         "The overflow tag's trigger needed a plain, focusable, non-navigational, non-removable interactive form - a gap in Tag's own code API (Tag was previously focusable only via `href` or its remove button). Added `isInteractive` to Tag itself (see tag.contract.json's own apiAdaptationNotes) rather than reimplementing a one-off interactive wrapper inside Tag Group.",
         "Figma's nested `dropdown-menu` instance has an empty `content` slot in the static file (isOpen=false, never toggled open in the source), so the overflow panel's actual content (a Menu row per truncated tag) is a code-level design decision, not something measured from an open Figma variant - informed directly by Dropdown Menu's own established 'always renders a Menu built from sections' rule."
       ]
@@ -6407,12 +6389,16 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "decision",
-        "summary": "Its contract lists an active-filters use case, while its page, Chip's, and Label's say filters are Chips in a Chip Group."
+        "kind": "bug",
+        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
       },
       {
         "kind": "gap",
-        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
+        "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."
+      },
+      {
+        "kind": "decision",
+        "summary": "Its contract lists an active-filters use case, while its page, Chip's, and Label's say filters are Chips in a Chip Group."
       }
     ],
     "replacedBy": null,
@@ -7424,8 +7410,8 @@
       "alignment": {
         "type": "PopupAlignment",
         "required": false,
-        "default": "bottomLeft",
-        "description": null
+        "default": "bottomStart",
+        "description": "Popup's alignment. The deprecated physical names (bottomLeft, ...) are still accepted."
       },
       "min": {
         "type": "Date",
@@ -8057,12 +8043,12 @@
       "alignment": {
         "type": "DropdownMenuAlignment",
         "required": false,
-        "default": "left",
-        "description": "Maps to Popup's bottomLeft/bottomCenter/bottomRight - always opens below the trigger.",
+        "default": "start",
+        "description": "Maps to Popup's bottomStart/bottomCenter/bottomEnd - always opens below the trigger. left and right, the earlier names, are still accepted.",
         "enum": [
-          "left",
+          "start",
           "center",
-          "right"
+          "end"
         ]
       },
       "anchorRef": {
@@ -8181,9 +8167,9 @@
     "slots": [],
     "variants": {
       "alignment": [
-        "left",
+        "start",
         "center",
-        "right"
+        "end"
       ]
     },
     "subComponents": [],
@@ -8215,32 +8201,25 @@
       "structure": "Variants cross `trigger` (avatar/icon-button/button/link-button/chip-base/chip-operator/chip-value/tag/page-selector - 9 distinct trigger types, default avatar) x `alignment` (left/center/right, default left) x `isOpen` (true/false, not fully crossed with alignment). Every variant instantiates the same `popup` component (the exact component set Popup wraps) with a `trigger` SLOT holding the trigger instance, and a `surface` SLOT holding `figma-parts / panelSurface` (Popup's own skin) whose own `content` SLOT holds a `menu` instance. The measured padding around that nested menu instance is 0 on every axis.",
       "apiAdaptationNotes": [
         "Figma's 9-value `trigger` variant became a generic `children: React.ReactElement` prop, not a variant enum - matching Popup's own `children` model (\"the single trigger element\") rather than hardcoding a closed set of trigger shapes. Any focusable element works; the 9 Figma values are demonstrated in Storybook's Content story as examples, not enforced as an allowed list.",
-        "Figma's `alignment` (left/center/right) maps to Popup's `bottomLeft`/`bottomCenter`/`bottomRight` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
+        "Figma's `alignment` (left/center/right) is named by logical start and end in code since 2026-10-20 (`start`/`center`/`end`, as Table and Form name alignment; `left`/`right` stay accepted as deprecated aliases) and maps to Popup's `bottomStart`/`bottomCenter`/`bottomEnd` specifically - Dropdown Menu always opens below its trigger, matching the fact that Figma's dropdown-menu has no top/bottom axis at all. Popup's own viewport-fit fallback (trying the top* counterpart, then the remaining alignments) still applies underneath when there's no room below - a capability Figma doesn't model, inherited for free rather than re-derived.",
         "`isOpen` became the existing `open`/`onOpenChange` controlled pair (Popup's own prop names), not a new prop - same native-attribute-first reasoning as Popup's own isOpen->open adaptation.",
         "The measured zero padding around the nested `menu` instance is what motivated adding a fourth value, `'none'`, to Popup's own `padding` prop (see popup.contract.json apiAdaptationNotes, dated 2026-08-19) rather than having Dropdown Menu set `unstyled` and re-declare background/border/radius/shadow itself.",
         "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Alignment is physical (`left` | `right`) where Table and Form use logical `start` | `end` (shared-value-names)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -8536,7 +8515,8 @@
         "Give the submit Button type='submit' so it triggers onSubmit.",
         "Field owns each control's labelling and description - Form does not re-wire them.",
         "The section title is presentational; add a semantic heading in the page structure if a group needs one.",
-        "The required legend (including its '*') is real content, not aria-hidden."
+        "The required legend (including its '*') is real content, not aria-hidden.",
+        "After a failed submit, move focus to the error summary at the top of the form; Form doesn't move focus itself."
       ]
     },
     "relatedComponents": [
@@ -9186,26 +9166,19 @@
         "The breadcrumb header appearance is not a dedicated code prop - it is niche; a breadcrumbs header can be achieved by passing a Breadcrumbs element as `title` plus an aria-label."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "It has no exit animation, which is the documented current state. Should it have one?"
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -10128,10 +10101,6 @@
       },
       {
         "kind": "bug",
-        "summary": "Selection counts rows a filter now hides, and bulk actions act on them; its page only says selection is kept across pages and sorts."
-      },
-      {
-        "kind": "bug",
         "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
       },
       {
@@ -10483,8 +10452,8 @@
       "alignment": {
         "type": "PopupAlignment",
         "required": false,
-        "default": "bottomLeft",
-        "description": null
+        "default": "bottomStart",
+        "description": "Popup's alignment. The deprecated physical names (bottomLeft, ...) are still accepted."
       },
       "confirmLabel": {
         "type": "string",
@@ -10727,10 +10696,10 @@
         "description": "Accessible name for the dismiss button."
       },
       "onDismiss": {
-        "type": "() => void",
+        "type": "(event: React.MouseEvent<HTMLButtonElement>) => void",
         "required": false,
         "default": null,
-        "description": null
+        "description": "Called with the click event; Toast Group uses its detail to tell a keyboard press from a pointer click."
       },
       "role": {
         "type": "string",
@@ -10915,8 +10884,9 @@
       "toastRole": "none",
       "liveRegion": "an always-mounted, visually hidden role=\"status\" element (aria-atomic=\"false\") beside the list",
       "focusExpandsAndPauses": true,
+      "focusAfterKeyboardDismiss": "the next toast's first focusable element, else the previous toast's, else the element focus came from when it entered the stack, else the page (the button is blurred)",
       "queuedToastsInert": true,
-      "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden."
+      "notes": "The live region holds one entry per toast in view (status, title, description), keyed by id and revision, so new toasts, updated toasts, and queued toasts coming into view are each announced once; the cards are role=\"none\" so they aren't announced again. Focusing into the stack expands it and pauses auto-dismiss so keyboard users can reach dismiss buttons and actions; it stays expanded while focus is inside, even after the pointer leaves. Queued toasts (past maxVisible) are inert and aria-hidden. When a toast is dismissed from the keyboard (a click with detail 0 while focus is in it), focus moves to the next toast, else the previous one, skipping queued, exiting, and unfocusable toasts, else back to where it came from, else the page; a pointer click leaves focus alone."
     },
     "relatedComponents": [
       "Toast",
@@ -10933,34 +10903,19 @@
       "shape": "no-node-exception",
       "notes": "Code-only behavior component - there is no Figma component for the group. It stacks the `toast` component (node 1565:12728) and its stacking/hover-expand behavior follows shadcn/sonner. The behavior was specified by the design owner, not a Figma node."
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "Dismissing a toast from the keyboard leaves focus on the page."
-      },
-      {
-        "kind": "gap",
-        "summary": "The helper is `toast.info()`, which sets the `information` tone; by the one-name rule it would be `toast.information()`, with `info` kept as an alias."
-      },
-      {
-        "kind": "decision",
-        "summary": "Toast's page says to turn dismissing off for a loading toast, but `toast.loading()` doesn't, and an `isDismissible: false` loading toast passes it on to its result."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   }

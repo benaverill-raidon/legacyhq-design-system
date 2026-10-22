@@ -40,7 +40,7 @@
     {
       "name": "Naming a panel explicitly",
       "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
-      "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
+      "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
       "props": { "mode": "filter" }
     }
   ],

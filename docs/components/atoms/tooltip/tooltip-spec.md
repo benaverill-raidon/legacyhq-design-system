@@ -107,8 +107,12 @@ Requirements:
 
 - the child control remains natively disabled
 - the wrapper is not keyboard-focusable
-- pointer hover may reveal a tooltip explanation
+- pointer hover may reveal the tooltip
 - keyboard users are not told the disabled control is interactive
+
+Because keyboard users can't reach it, a tooltip on a disabled control says only what the control
+does, as on an enabled one. It never explains why the control is disabled: that reason belongs in
+visible helper text, such as Field's message (decided 2026-10-20).
 
 ## Positioning
 
@@ -164,7 +168,6 @@ Tooltip is especially appropriate for:
 
 - icon-only buttons
 - toggle icon controls
-- disabled control explanations
 - truncated content
 - short supplemental clarification
 
@@ -207,7 +210,7 @@ Show:
 
 - icon-only actions
 - toggle icon buttons
-- disabled-control explanations
+- a disabled trigger (its tooltip says what it does, not why it's disabled)
 - a text button trigger
 
 ### EdgeCases story

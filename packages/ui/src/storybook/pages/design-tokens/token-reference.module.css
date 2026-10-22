@@ -1,0 +1,85 @@
+.surface {
+  position: relative;
+  min-inline-size: 0;
+  background: var(--color-elevation-surface-raised-default);
+  color: var(--color-content-default);
+  color-scheme: light;
+}
+
+.surface[data-theme="dark"] { color-scheme: dark; }
+
+/* Keep the existing Docs layout while extending the selected surface into its gutters. */
+:global(.sbdocs-wrapper):has(.surface) {
+  background: var(--color-elevation-surface-raised-default);
+}
+
+.themeControl {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Reserve the control's horizontal space without shifting any page's title vertically. */
+.surface:has(.themeControl) > :last-child > header > h1 {
+  max-inline-size: calc(100% - 2 * var(--size-1250));
+}
+
+.preview {
+  min-inline-size: 0;
+  background: var(--color-elevation-surface-raised-default);
+  color: var(--color-content-default);
+  color-scheme: light;
+}
+
+.preview[data-theme="dark"] { color-scheme: dark; }
+
+.jumpLink:focus-visible {
+  outline: var(--border-width-md) solid var(--color-border-focus);
+  outline-offset: var(--spacing-xxs);
+}
+
+.stack { display: grid; gap: var(--spacing-xs); min-inline-size: 0; }
+.group { display: grid; gap: var(--spacing-md); min-inline-size: 0; }
+.group h3 { scroll-margin-block-start: var(--spacing-xl); }
+.tableWrap { min-inline-size: 0; }
+.table { table-layout: fixed; }
+.nameColumn { inline-size: 36%; }
+.valueColumn { inline-size: 27%; }
+.table :where(th, td) { vertical-align: top; overflow-wrap: anywhere; }
+.table code { overflow-wrap: anywhere; }
+
+.checker {
+  border: var(--border-width-sm) solid var(--color-border-default);
+  border-radius: var(--border-radius-sm);
+  overflow: hidden;
+  /* Semantic surfaces reveal transparent swatches without introducing palette literals. */
+  background: repeating-conic-gradient(var(--color-elevation-surface-sunken-default) 0% 25%, var(--color-elevation-surface-raised-default) 0% 50%) 0 0 / 16px 16px;
+}
+.swatch { block-size: 48px; inline-size: 100%; }
+.shape {
+  inline-size: 64px;
+  block-size: 48px;
+  border: var(--border-width-sm) solid var(--color-border-default);
+  background: var(--color-elevation-surface-raised-default);
+}
+.stroke { inline-size: 100%; border-block-start: solid var(--color-content-default); margin-block: var(--spacing-md); }
+.shadowWell { padding: var(--spacing-lg); }
+.measureWell { inline-size: 100%; padding-block: var(--spacing-sm); }
+.measure { display: block; box-sizing: border-box; block-size: 12px; background: var(--color-content-brand-primary-default); }
+.measure[data-negative="true"] { border: var(--border-width-md) dashed var(--color-content-default); background: transparent; }
+.typeSample { max-block-size: 96px; overflow: hidden; }
+.roleSample { display: grid; gap: var(--spacing-sm); padding-block: var(--spacing-lg); border-block-end: var(--border-width-sm) solid var(--color-border-default); overflow-wrap: anywhere; }
+.jumpLinks { display: flex; flex-wrap: wrap; gap: var(--spacing-sm) var(--spacing-lg); }
+.jumpLink { color: var(--color-content-brand-primary-default); text-underline-offset: 0.2em; }
+.tiers { display: grid; gap: var(--spacing-lg); }
+.tiers > li, .directory > div { display: grid; gap: var(--spacing-sm); padding: var(--spacing-lg); border: var(--border-width-sm) solid var(--color-border-default); border-radius: var(--border-radius-md); }
+.directory { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: var(--spacing-lg); }
+
+@media (max-width: 700px) {
+  .surface:has(.themeControl) > :last-child > header > h1 { max-inline-size: calc(100% - 2 * var(--size-1000) - var(--spacing-md)); }
+  .table { font-size: var(--typography-body-sm-font-size); }
+  .table :where(th, td) { padding-inline-end: var(--spacing-xs); }
+}

@@ -59,7 +59,7 @@ interface TimePickerProps
   disabled?: boolean; invalid?: boolean;
   minuteStep?: number; placeholder?: string;
   format?: (value: Date, locale?: string) => string; locale?: string;
-  alignment?: PopupAlignment;
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   confirmLabel?: string; cancelLabel?: string;
   hoursLabel?: string; minutesLabel?: string; meridiemLabel?: string;
   amLabel?: string; pmLabel?: string; dialogLabel?: string;
@@ -70,7 +70,7 @@ interface TimePickerProps
 ## Defaults
 
 ```txt
-size: md; context: default; minuteStep: 5; alignment: bottomLeft
+size: md; context: default; minuteStep: 5; alignment: bottomStart
 format: locale 12-hour time (04:30 PM)
 ```
 

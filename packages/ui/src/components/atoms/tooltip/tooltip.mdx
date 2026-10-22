@@ -60,13 +60,13 @@ import * as TooltipStories from './tooltip.stories';
 <UseFor>
 
 - Saying more about an icon-only control than its name does.
-- A short reason a control is disabled, alongside visible text when people need it to go on.
 - A brief, supplemental explanation that people can do without.
 
 </UseFor>
 <UseInstead>
 
 - **Information people need to finish the task:** visible text, such as a <DocLink to="Components/Forms/Field" /> message or a <DocLink to="Components/Feedback/Section Message" />.
+- **Why a control is disabled:** visible helper text, such as a <DocLink to="Components/Forms/Field" /> message. Keyboard users can't reach a tooltip on a disabled control.
 - **The tooltip on an Icon Button that repeats its name:** <DocLink to="Components/Actions/Icon Button" /> shows its `aria-label` as a tooltip on its own.
 - **Floating content with links, buttons, or fields:** <DocLink to="Components/Overlays/Popup" />, or <DocLink to="Components/Actions/Dropdown Menu" /> for actions.
 - **A status with more detail behind it:** <DocLink to="Components/Feedback/Inline Message" />.
@@ -86,7 +86,7 @@ import * as TooltipStories from './tooltip.stories';
           <EditIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip content="Select a row to export it">
+      <Tooltip content="Export the selected rows">
         <IconButton aria-label="Export" disabled>
           <DownloadIcon />
         </IconButton>
@@ -151,8 +151,9 @@ dialog, such as its Close button, shows over the dialog.
 A disabled control may not get pointer events, so Tooltip wraps a disabled trigger in a `span` that
 shows the tooltip on hover. It counts a native `button`, `input`, `select`, or `textarea` with
 `disabled`, or a component with `disabled` or `isDisabled`, as disabled. The span isn't focusable,
-and a disabled control is skipped by Tab, so keyboard users never see this tooltip: don't make it
-the only place a reason is given.
+and a disabled control is skipped by Tab, so keyboard users never see this tooltip. Keep it to what
+the control does, as on an enabled one, and don't use it to say why the control is disabled: put the
+reason in visible helper text, such as a Field message, where everyone can read it.
 
 </Subsection>
 
@@ -217,7 +218,7 @@ Popup or Dropdown Menu, can wrap a Tooltip, and the attributes it adds still rea
     <Button>Export</Button>
   </Tooltip>
 </Do>
-<Dont caption="Put what people need to go on only in a tooltip on a disabled button. Keyboard users can't focus it, so they never see it." code={`<Tooltip content="Accept the terms before you continue">
+<Dont caption="Explain why a button is disabled in a tooltip. Keyboard users can't focus a disabled button, so they never see it: put the reason in visible helper text." code={`<Tooltip content="Accept the terms before you continue">
     <Button disabled>Continue</Button>
 </Tooltip>`}>
   <Tooltip content="Accept the terms before you continue">

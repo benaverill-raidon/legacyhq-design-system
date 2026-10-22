@@ -171,7 +171,7 @@
  * treatment this follows the precedent Toggle Button and Toggle Icon Button already set for the same
  * gap: disabled wins outright.
  */
-.root[data-disabled='true'] .segment,
+.root:is([data-disabled='true'], :where(:has(:disabled))) .segment,
 .segment:disabled {
   border-color: var(--color-border-input);
   background: var(--color-background-disabled);

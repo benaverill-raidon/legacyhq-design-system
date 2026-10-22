@@ -14,12 +14,13 @@
 /*
  * Figma's `alignment` axis measures `primaryAxisAlignItems: MIN` / `MAX` - which edge the chips pack
  * against. (Tag Group's identically-named prop means something else entirely: where its overflow tag
- * renders. Chip Group has no overflow, so here it is literally justify-content.)
+ * renders. Chip Group has no overflow, so here it is literally justify-content.) flex-start and
+ * flex-end follow the writing direction, so `start` and `end` hold in a right-to-left page too.
  */
-.alignment_left {
+.alignment_start {
   justify-content: flex-start;
 }
 
-.alignment_right {
+.alignment_end {
   justify-content: flex-end;
 }

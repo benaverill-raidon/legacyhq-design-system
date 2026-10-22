@@ -184,6 +184,34 @@ through Field.
 
 </Subsection>
 
+<Subsection title="Disabling a group of fields">
+
+To disable several fields at once, put them in a native `fieldset` with `disabled`. Every form
+control in the system follows it as it follows its own `disabled`: it looks disabled, leaves the tab
+order, and can't be changed or opened. A FormSection is a `div`, so put the `fieldset` inside it,
+and clear the browser's own border, padding, and margin. Field's label doesn't dim, with a fieldset
+or the control's own `disabled`.
+
+<Example of={FormStories.DisabledFieldset} caption="A closed matter's details, locked by a disabled fieldset until the matter is reopened." />
+
+</Subsection>
+
+<Subsection title="When errors show">
+
+Form doesn't check anything itself, but when its errors show follows one rule across the system:
+
+1. **Check when the form is submitted**, not while someone is still typing.
+2. **Show every error at once**: a Section Message with `tone="error"` at the top of the form,
+   naming each field that needs fixing and linking to it, and each field's own error through Field.
+   Move focus to the summary.
+3. **Then update each field's error as its value changes**, so it clears as soon as it's fixed. The
+   summary is a live region, so it changes only on the next submit.
+
+Set `noValidate` when you show the system's errors, so the browser's own messages don't come first.
+<DocLink to="Patterns/Forms and Validation" /> builds the whole flow.
+
+</Subsection>
+
 </Section>
 
 <Section title="Do and don't">
@@ -297,6 +325,8 @@ through Field.
 - The required legend is read as text, `*` included. Field hides its own `*` from assistive
   technology and sets the control's native `required` instead.
 - Each field's name, description, and error come from Field. Form doesn't change them.
+- Errors show on submit, all at once, so nobody is interrupted while typing. Form doesn't move focus
+  when a submit fails: move it to the summary at the top, which links to each field.
 
 Form adds no keys of its own; the browser handles moving through fields and submitting.
 

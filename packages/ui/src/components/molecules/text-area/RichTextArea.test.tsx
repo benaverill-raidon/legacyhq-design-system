@@ -178,6 +178,40 @@ describe('RichTextArea', () => {
       expect(getSlashSpan()).toBeNull();
       expect(onSearch).not.toHaveBeenCalled();
     });
+
+    it('follows a disabled fieldset around it, as a native control does, and its changes', async () => {
+      const { rerender } = render(
+        <fieldset disabled>
+          <RichTextArea value={[]} onChange={noop} onSearch={() => []} aria-label="Note" />
+        </fieldset>,
+      );
+
+      const editor = getEditor();
+      expect(editor).toHaveAttribute('contenteditable', 'false');
+      expect(editor).toHaveAttribute('data-disabled', 'true');
+      expect(editor).toHaveAttribute('aria-disabled', 'true');
+      expect(editor).toHaveAttribute('tabindex', '-1');
+
+      rerender(
+        <fieldset>
+          <RichTextArea value={[]} onChange={noop} onSearch={() => []} aria-label="Note" />
+        </fieldset>,
+      );
+      await waitFor(() => expect(getEditor()).toHaveAttribute('contenteditable', 'true'));
+      expect(getEditor()).not.toHaveAttribute('aria-disabled');
+    });
+
+    it("isn't disabled by a disabled fieldset when it sits in that fieldset's legend", () => {
+      render(
+        <fieldset disabled>
+          <legend>
+            <RichTextArea value={[]} onChange={noop} onSearch={() => []} aria-label="Note" />
+          </legend>
+        </fieldset>,
+      );
+
+      expect(getEditor()).toHaveAttribute('contenteditable', 'true');
+    });
   });
 
   describe('value hydration', () => {

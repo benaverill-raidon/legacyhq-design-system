@@ -35,6 +35,21 @@ function calendarDay(day: number) {
 afterEach(cleanup);
 
 describe('DateTimePicker', () => {
+  it('opens neither half inside a disabled fieldset', () => {
+    render(
+      <fieldset disabled>
+        <DateTimePicker defaultValue={MARCH_9_430PM} today={MARCH_9_430PM} aria-label="When" />
+      </fieldset>,
+    );
+    for (const field of [dateField(), timeField()]) {
+      expect(field).toBeDisabled();
+      fireEvent.click(field);
+      fireEvent.keyDown(field, { key: 'Enter' });
+    }
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   it('renders a date field and a time field in a labelled group', () => {
     renderPicker();
     const group = screen.getByRole('group', { name: 'When' });

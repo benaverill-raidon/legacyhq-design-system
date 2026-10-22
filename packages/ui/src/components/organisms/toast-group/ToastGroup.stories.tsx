@@ -80,8 +80,8 @@ export const Playground: Story = {
         <Button onClick={() => toast.warning('Your trial ends soon', { description: 'Three days remaining.' })}>
           Warning
         </Button>
-        <Button onClick={() => toast.info('A new version is available', { description: 'Refresh to update.' })}>
-          Info
+        <Button onClick={() => toast.information('A new version is available', { description: 'Refresh to update.' })}>
+          Information
         </Button>
         <Button
           onClick={() => {
@@ -98,7 +98,7 @@ export const Playground: Story = {
           prominence="tertiary"
           onClick={() => {
             toast.success('First');
-            toast.info('Second');
+            toast.information('Second');
             toast.warning('Third');
             toast.error('Fourth');
             toast('Fifth');

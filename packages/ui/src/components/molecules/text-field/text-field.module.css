@@ -38,7 +38,7 @@
  * an inactive field, per explicit design feedback. The `background` shorthand also clears the
  * autofill tint, so hover replaces it (see Autofill below).
  */
-.root:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.root:not([data-disabled='true'], :where(:has(.input:disabled))):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-elevation-surface-raised-hover);
 }
 
@@ -70,7 +70,7 @@
   box-shadow: inset 0 0 0 calc(var(--border-width-md) - var(--border-width-sm)) var(--color-border-error);
 }
 
-.root[data-disabled='true'] {
+.root:is([data-disabled='true'], :where(:has(.input:disabled))) {
   background: var(--color-background-disabled);
   border-color: var(--color-border-disabled);
   cursor: not-allowed;
@@ -135,7 +135,7 @@
   border-bottom-right-radius: 0;
 }
 
-.context_inline:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.context_inline:not([data-disabled='true'], :where(:has(.input:disabled))):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-elevation-surface-raised-hover);
 }
 
@@ -145,7 +145,7 @@
  * design feedback, hover should never mask the invalid state, the same way the default/standard
  * appearance's hover (background-only, no border-color touch) never does.
  */
-.context_inline:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.context_inline:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   border-bottom-color: var(--color-border-input);
 }
 
@@ -175,7 +175,7 @@
   box-shadow: inset 0 calc(-1 * (var(--border-width-md) - var(--border-width-sm))) 0 0 var(--color-border-error);
 }
 
-.context_inline[data-disabled='true'] {
+.context_inline:is([data-disabled='true'], :where(:has(.input:disabled))) {
   background: transparent;
   border-color: transparent;
 }
@@ -193,8 +193,8 @@
  * documentation-only pin.
  * No transition of its own: the change fades with `.root`'s, which reduced motion switches off.
  */
-.context_default:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']),
-.context_inline:not([data-disabled='true']):is(:has(.input:autofill), [data-force-state='autofill']):focus-within {
+.context_default:not([data-disabled='true'], :where(:has(.input:disabled))):is(:has(.input:autofill), [data-force-state='autofill']),
+.context_inline:not([data-disabled='true'], :where(:has(.input:disabled))):is(:has(.input:autofill), [data-force-state='autofill']):focus-within {
   background: linear-gradient(var(--color-background-autofill-default), var(--color-background-autofill-default)), var(--color-elevation-surface-raised-default);
 }
 
@@ -335,7 +335,7 @@
   --text-field-height: 40px;
 }
 
-.root[data-editable-cell]:not([data-disabled='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.root[data-editable-cell]:not([data-disabled='true'], :where(:has(.input:disabled))):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   background: var(--color-background-neutral-overlay-bold-hover);
   border-radius: 0;
 }
@@ -349,7 +349,7 @@
   border-bottom-color: var(--color-border-focus);
 }
 
-.root[data-editable-cell]:not([data-disabled='true']):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
+.root[data-editable-cell]:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-invalid='true']):not(:focus-within):not([data-force-state='focus']):is(:hover, [data-force-state='hover']) {
   border-bottom-color: var(--color-border-input);
 }
 
@@ -357,7 +357,7 @@
   border-bottom-color: var(--color-border-error);
 }
 
-.root[data-editable-cell][data-disabled='true'] {
+.root[data-editable-cell]:is([data-disabled='true'], :where(:has(.input:disabled))) {
   border-bottom-color: var(--editable-cell-divider, transparent);
   box-shadow: none;
 }
@@ -369,7 +369,7 @@
   inline-size: 0;
 }
 
-.root[data-editable-cell]:not([data-disabled='true']) .input::placeholder {
+.root[data-editable-cell]:not([data-disabled='true'], :where(:has(.input:disabled))) .input::placeholder {
   color: var(--color-content-default);
 }
 

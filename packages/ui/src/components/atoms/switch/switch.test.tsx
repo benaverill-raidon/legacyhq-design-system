@@ -199,10 +199,10 @@ describe('Switch', () => {
 
   it('suppresses the hover/press track treatment while loading, matching disabled', () => {
     expect(switchCss).toContain(
-      ".root:not([data-disabled='true']):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator",
+      ".root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:hover, [data-force-state='hover']) .indicator",
     );
     expect(switchCss).toContain(
-      ".root:not([data-disabled='true']):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator",
+      ".root:not([data-disabled='true'], :where(:has(.input:disabled))):not([data-loading='true']):is(:active, [data-force-state='press']) .indicator",
     );
     expect(switchCss).toContain("cursor: progress;");
   });

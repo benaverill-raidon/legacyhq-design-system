@@ -1,12 +1,13 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { RichTextArea } from '../text-area';
 import { TextField } from '../text-field';
 import { Field } from './field';
 import fieldStyles from './field.module.css';
+import { EdgeCases } from './Field.stories';
 
 const fieldCss = readFileSync('packages/ui/src/components/molecules/field/field.module.css', 'utf8');
 
@@ -101,12 +102,33 @@ describe('Field', () => {
 
   it('does not set aria-invalid when state is not error', () => {
     render(
-      <Field label="Email" state="valid" message="Looks good">
+      <Field label="Email" state="success" message="Looks good">
         <TextField aria-label="Email" />
       </Field>,
     );
 
     expect(screen.getByRole('textbox')).not.toHaveAttribute('aria-invalid');
+  });
+
+  it('still accepts the deprecated state="valid", rendered exactly as success', () => {
+    const { container: success } = render(
+      <Field label="Email" state="success" message="Looks good">
+        <TextField aria-label="Email" />
+      </Field>,
+    );
+    const expected = success.innerHTML.replace(/id="[^"]*"|aria-(?:labelledby|describedby)="[^"]*"|for="[^"]*"/g, '');
+    cleanup();
+
+    const { container: valid } = render(
+      <Field label="Email" state="valid" message="Looks good">
+        <TextField aria-label="Email" />
+      </Field>,
+    );
+    const root = valid.firstElementChild as HTMLElement;
+    expect(root).toHaveAttribute('data-state', 'success');
+    expect(root).toHaveClass(fieldStyles.state_success);
+    expect(valid.querySelector(`.${fieldStyles.messageIcon}`)).not.toBeNull();
+    expect(valid.innerHTML.replace(/id="[^"]*"|aria-(?:labelledby|describedby)="[^"]*"|for="[^"]*"/g, '')).toBe(expected);
   });
 
   it('lets the control_s own aria-invalid win over the field state', () => {
@@ -146,7 +168,7 @@ describe('Field', () => {
     expect(screen.getByRole('textbox')).not.toBeRequired();
   });
 
-  it('renders a status icon for error and valid, but not for default', () => {
+  it('renders a status icon for error and success, but not for default', () => {
     const { container: errorContainer } = render(
       <Field label="Email" state="error" message="Required">
         <TextField aria-label="Email" />
@@ -156,7 +178,7 @@ describe('Field', () => {
     cleanup();
 
     const { container: validContainer } = render(
-      <Field label="Email" state="valid" message="Good">
+      <Field label="Email" state="success" message="Good">
         <TextField aria-label="Email" />
       </Field>,
     );
@@ -285,11 +307,37 @@ describe('Field', () => {
 
   it('recolours the message per state with content tokens', () => {
     expect(fieldCss).toMatch(/\.state_error \.message\s*\{\s*color: var\(--color-content-error\);/);
-    expect(fieldCss).toMatch(/\.state_valid \.message\s*\{\s*color: var\(--color-content-success\);/);
+    expect(fieldCss).toMatch(/\.state_success \.message\s*\{\s*color: var\(--color-content-success\);/);
   });
 
   it('indents the inline context to match the control_s inner padding per size', () => {
     expect(fieldCss).toMatch(/\.context_inline\.size_lg[^{]*\{\s*padding-inline-start: var\(--spacing-md\);/);
     expect(fieldCss).toContain('padding-inline-start: var(--spacing-sm);');
+  });
+
+  it('its live validation story checks on submit, shows every error with a summary, then follows each value', () => {
+    render(<>{EdgeCases.render?.({} as never, {} as never)}</>);
+    const name = screen.getByRole('textbox', { name: 'Client name' });
+    const email = screen.getByRole('textbox', { name: 'Work email' });
+
+    // Nothing is checked before the first submit, even though the email is incomplete.
+    expect(email).not.toHaveAttribute('aria-invalid');
+    expect(screen.queryByText(/to save$/)).toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(name).toHaveAttribute('aria-invalid', 'true');
+    expect(email).toHaveAttribute('aria-invalid', 'true');
+    const summary = screen.getByText('Fix 2 fields to save').closest('[tabindex="-1"]') as HTMLElement;
+    expect(summary).toHaveFocus();
+    expect(within(summary).getByRole('link', { name: 'Client name' })).toBeInTheDocument();
+
+    // After the submit, each field's error follows its value; the summary waits for the next submit.
+    fireEvent.change(name, { target: { value: 'Jordan Lee' } });
+    expect(name).not.toHaveAttribute('aria-invalid');
+    expect(email).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByText('Fix 2 fields to save')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(screen.getByText('Fix 1 field to save')).toBeInTheDocument();
   });
 });

@@ -121,18 +121,18 @@ toast.success('Changes saved', { description: 'Your matter is up to date.' });`}
 
 <Subsection title="The toast() API">
 
-Each call adds a toast at the front of the stack and returns its id. The helpers set `tone`;
-`toast.info` sets `information`, and a `toast.loading` toast stays until it's updated or dismissed.
+Each call adds a toast at the front of the stack and returns its id. The helpers set `tone`. A
+`toast.loading` toast has no dismiss button and stays until it's updated or dismissed.
 `toast.dismiss(id)` removes one toast at once, without the fade, and `toast.dismiss()` removes them
-all.
+all. `toast.info`, the earlier name for `toast.information`, is still accepted.
 
 <CodeSample
   code={`toast(title, options?)            // default tone
 toast.success(title, options?)
 toast.error(title, options?)
 toast.warning(title, options?)
-toast.info(title, options?)       // information
-toast.loading(title, options?)    // stays until updated or dismissed
+toast.information(title, options?)
+toast.loading(title, options?)    // no dismiss button; stays until updated or dismissed
 toast.dismiss(id?)                // one toast, or all of them
 
 options: { id, tone, description, actions, duration, isDismissible }`}
@@ -143,9 +143,10 @@ options: { id, tone, description, actions, duration, isDismissible }`}
 <Subsection title="Updating a toast">
 
 Call `toast()` again with the same `id` to replace that toast in place; it keeps its spot in the
-stack, and its timer starts over. Options you leave out keep their earlier values. The exception is
-a loading toast's duration: when it's replaced with another tone, the result gets the group's
-`duration` unless you pass one, so it goes away on its own.
+stack, and its timer starts over. Options you leave out keep their earlier values. The exceptions
+are a loading toast's duration and dismiss button: when it's replaced with another tone, the result
+gets the group's `duration` and a dismiss button unless you pass `duration` or `isDismissible`, so it
+goes away on its own and can be closed.
 
 <CodeSample
   code={`const id = toast.loading('Uploading contract.pdf…');
@@ -173,7 +174,8 @@ Each toast is removed after it's been in view for its `duration`, or the group's
 default. The timers pause while the stack is expanded and carry on with the time that was left when
 it collapses. A waiting toast's timer doesn't start until it comes into view. A toast also goes when
 its dismiss button is clicked, or when it's dragged sideways more than 80px; a shorter drag springs
-back. It fades out, then it's removed.
+back. It fades out, then it's removed. A loading toast has no dismiss button unless you pass
+`isDismissible: true`: it's replaced with its result, which has one.
 
 </Subsection>
 
@@ -236,6 +238,11 @@ toast.success('contract.pdf uploaded');`}
 - Moving focus into the stack expands it and pauses the timers, so keyboard users can reach each
   toast's dismiss button and actions before they go. It stays expanded while focus is inside, even if
   the pointer leaves; moving focus out collapses it again.
+- When a toast is dismissed from the keyboard, its button goes with it, so focus moves to the next
+  toast in the list (the one behind it), else the previous one, skipping toasts with nothing to
+  focus. When no toast is left to take it, focus goes back to where it was before it entered the
+  stack, and only if that's gone, to the page. A pointer click leaves focus where it is, so the stack
+  can collapse when the pointer leaves.
 - The list sits where Toast Group is mounted in the page, so that's where it comes in the tab order.
   There's no key to jump to it, and Escape doesn't dismiss a toast.
 - Waiting toasts past `maxVisible` are `inert` and `aria-hidden`: screen readers don't read them and
@@ -246,8 +253,8 @@ toast.success('contract.pdf uploaded');`}
 <Keyboard>
   <Key keys="Tab">Moves into the stack, which expands it and pauses the timers, then through each toast's dismiss button and actions.</Key>
   <Key keys="Shift + Tab">Moves back; leaving the stack collapses it.</Key>
-  <Key keys="Enter">On a dismiss button, fades the toast out and removes it.</Key>
-  <Key keys="Space">On a dismiss button, fades the toast out and removes it.</Key>
+  <Key keys="Enter">On a dismiss button, fades the toast out and removes it, and moves focus to the next toast, the previous one, or back where it came from.</Key>
+  <Key keys="Space">On a dismiss button, does the same as Enter.</Key>
 </Keyboard>
 
 </Section>

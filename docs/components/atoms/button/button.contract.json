@@ -312,6 +312,7 @@
     }
   ],
   "behaviorRules": [
+    "Inside a disabled <fieldset>, the native button is disabled without the disabled prop; its disabled styling keys off :disabled, so it looks the same.",
     "Render a native button element.",
     "Default type must be button.",
     "Suppress onClick when disabled is true.",

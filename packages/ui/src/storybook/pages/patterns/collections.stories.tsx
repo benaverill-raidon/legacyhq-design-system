@@ -87,7 +87,7 @@ function MatterActions({ matter, onClose, onDelete }: { matter: Matter; onClose:
       onOpenChange={setOpen}
       showSearch={false}
       size="sm"
-      alignment="right"
+      alignment="end"
       sections={[
         {
           id: 'actions',
@@ -226,7 +226,7 @@ export const MattersTable: Story = {
               onOpenChange={setAddingFilter}
               showSearch={false}
               size="sm"
-              alignment="right"
+              alignment="end"
               sections={[
                 {
                   id: 'filters',

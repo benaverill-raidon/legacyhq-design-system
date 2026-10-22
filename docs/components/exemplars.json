@@ -207,10 +207,10 @@
       {
         "name": "Programmatically shown status message",
         "description": "The shape Inline Message will build on - shown after an action completes, not on a direct trigger click.",
-        "jsx": "const [open, setOpen] = useState(false);\n\nasync function handleSave() {\n  await save();\n  setOpen(true);\n}\n\n<Popup open={open} onOpenChange={setOpen} role=\"status\" alignment=\"bottomLeft\" content={<span>Saved</span>}>\n  <Button onClick={handleSave}>Save</Button>\n</Popup>",
+        "jsx": "const [open, setOpen] = useState(false);\n\nasync function handleSave() {\n  await save();\n  setOpen(true);\n}\n\n<Popup open={open} onOpenChange={setOpen} role=\"status\" alignment=\"bottomStart\" content={<span>Saved</span>}>\n  <Button onClick={handleSave}>Save</Button>\n</Popup>",
         "props": {
           "role": "status",
-          "alignment": "bottomLeft"
+          "alignment": "bottomStart"
         }
       },
       {
@@ -833,6 +833,12 @@
         "description": null,
         "jsx": "<Slider type='slider-centered' value={0} />",
         "props": {}
+      },
+      {
+        "name": "Range in a form, with its own field names",
+        "description": null,
+        "jsx": "<SliderRange label=\"Budget\" name=\"budget\" minName=\"budgetFrom\" maxName=\"budgetTo\" defaultValue={[20, 80]} />",
+        "props": {}
       }
     ],
     "antiExamples": [],
@@ -1015,20 +1021,20 @@
         "props": {}
       },
       {
-        "name": "Disabled explanation",
-        "description": null,
-        "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>",
-        "props": {}
-      },
-      {
         "name": "Supplemental clarification",
         "description": null,
         "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>",
         "props": {}
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Explaining why a control is disabled",
+        "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>",
+        "reason": "Keyboard users can't reach a tooltip on a disabled control. Put the reason in visible helper text, such as Field's message."
+      }
+    ],
+    "exemplarCompleteness": "partial"
   },
   {
     "id": "avatar-group",
@@ -1264,7 +1270,7 @@
       {
         "name": "Naming a panel explicitly",
         "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
-        "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeAriaLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
         "props": {
           "mode": "filter"
         }
@@ -1319,9 +1325,9 @@
       {
         "name": "Packing chips against the trailing edge",
         "description": "alignment maps to justify-content - which edge the chips pack against. Note this is not Tag Group's alignment, which places an overflow tag.",
-        "jsx": "<ChipGroup alignment=\"right\" size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"search\" label=\"Documents\" />\n</ChipGroup>",
+        "jsx": "<ChipGroup alignment=\"end\" size=\"md\">\n  <Chip mode=\"search\" label=\"Matters\" isSelected />\n  <Chip mode=\"search\" label=\"Documents\" />\n</ChipGroup>",
         "props": {
-          "alignment": "right",
+          "alignment": "end",
           "size": "md"
         }
       },
@@ -1399,11 +1405,11 @@
         }
       },
       {
-        "name": "Valid state",
+        "name": "Success state",
         "description": null,
-        "jsx": "<Field label=\"Email\" state=\"valid\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
+        "jsx": "<Field label=\"Email\" state=\"success\" message=\"Looks good.\">\n  <TextField type=\"email\" defaultValue=\"you@example.com\" />\n</Field>",
         "props": {
-          "state": "valid",
+          "state": "success",
           "message": "Looks good."
         }
       },
@@ -1427,7 +1433,7 @@
       {
         "name": "Wrapping a Text Area",
         "description": null,
-        "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Bio is required.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
+        "jsx": "<Field label=\"Bio\" state=\"error\" message=\"Add a sentence or two about yourself.\">\n  <TextArea invalid placeholder=\"Tell us about yourself\" />\n</Field>",
         "props": {
           "state": "error"
         }
@@ -2158,11 +2164,11 @@
       },
       {
         "name": "Overflow tag leading instead of trailing",
-        "description": "alignment='right' matches Figma's alignment=right variant - the overflow tag renders before the visible tags, same tags visible either way.",
-        "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} alignment=\"right\" />",
+        "description": "alignment='end' matches Figma's alignment=right variant - the overflow tag renders before the visible tags, same tags visible either way.",
+        "jsx": "<TagGroup tags={fifteenEntityTags} maxVisible={10} alignment=\"end\" />",
         "props": {
           "maxVisible": 10,
-          "alignment": "right"
+          "alignment": "end"
         }
       },
       {
@@ -2741,11 +2747,11 @@
         }
       },
       {
-        "name": "Right-aligned menu from a trailing trigger",
-        "description": "alignment='right' keeps the panel from overflowing past the trigger's right edge when the trigger sits near the end of a row.",
-        "jsx": "<DropdownMenu\n  aria-label=\"Table row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  alignment=\"right\"\n  showSearch={false}\n  sections={[{ id: 'actions', items: rowActionItems }]}\n>\n  <IconButton aria-label=\"Row actions\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
+        "name": "End-aligned menu from a trailing trigger",
+        "description": "alignment='end' keeps the panel from overflowing past the trigger's end edge when the trigger sits near the end of a row.",
+        "jsx": "<DropdownMenu\n  aria-label=\"Table row actions\"\n  open={open}\n  onOpenChange={setOpen}\n  alignment=\"end\"\n  showSearch={false}\n  sections={[{ id: 'actions', items: rowActionItems }]}\n>\n  <IconButton aria-label=\"Row actions\" onClick={() => setOpen((current) => !current)}>\n    <MoreVertIcon size=\"sm\" decorative />\n  </IconButton>\n</DropdownMenu>",
         "props": {
-          "alignment": "right",
+          "alignment": "end",
           "showSearch": false
         }
       }
@@ -3424,7 +3430,7 @@
       },
       {
         "name": "Loading",
-        "description": "A non-dismissible loading toast that resolves later.",
+        "description": "A non-dismissible loading toast that resolves later. Rendered on its own, turn dismissing off yourself; Toast Group's toast.loading() does it for you.",
         "jsx": "<Toast tone=\"loading\" title=\"Uploading your file...\" isDismissible={false} />",
         "props": {
           "tone": "loading",
@@ -3477,8 +3483,14 @@
       },
       {
         "name": "Loading updated to success",
-        "description": "Reuse the id to update a loading toast in place when it resolves; the result gets the group's duration unless you pass one.",
+        "description": "Reuse the id to update a loading toast in place when it resolves. The loading toast has no dismiss button; the result gets the group's duration and a dismiss button unless you pass duration or isDismissible.",
         "jsx": "const id = toast.loading('Uploading...'); await upload(); toast.success('Uploaded', { id });",
+        "props": {}
+      },
+      {
+        "name": "Information toast",
+        "description": "toast.information sets the information tone (toast.info is the deprecated alias).",
+        "jsx": "toast.information('A new version is available', { description: 'Refresh to update.' })",
         "props": {}
       },
       {

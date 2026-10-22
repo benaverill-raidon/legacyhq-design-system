@@ -1,6 +1,11 @@
 import * as React from 'react';
 
-export type PopupAlignment = 'topLeft' | 'topRight' | 'topCenter' | 'bottomLeft' | 'bottomRight' | 'bottomCenter';
+export type PopupAlignment = 'topStart' | 'topEnd' | 'topCenter' | 'bottomStart' | 'bottomEnd' | 'bottomCenter';
+/**
+ * @deprecated Use `topStart`, `topEnd`, `bottomStart`, or `bottomEnd`: alignment is named by logical
+ * start and end, as Table and Form name it. Still accepted, and placed the same.
+ */
+export type DeprecatedPopupAlignment = 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
 export type PopupPadding = 'none' | 'sm' | 'md' | 'lg';
 
@@ -13,8 +18,15 @@ export interface PopupProps {
   open: boolean;
   /** Called with `false` on Escape or a press outside the trigger and the panel. Popup doesn't close itself: set `open` in response. */
   onOpenChange?: (open: boolean) => void;
-  /** The side of the trigger the panel opens on and the edge it lines up with. A preference: if it overflows the viewport, the panel moves to the alignment that overflows least. */
-  alignment?: PopupAlignment;
+  /**
+   * The side of the trigger the panel opens on and the edge it lines up with: `Start` lines the
+   * panel up with the trigger's start edge, `End` with its end edge. Placement is left-to-right
+   * only: start is the left edge, even in a right-to-left page. A preference: if it overflows the
+   * viewport, the panel moves to the alignment that overflows least. `topLeft`, `topRight`,
+   * `bottomLeft`, and `bottomRight` are the deprecated names for the start and end alignments,
+   * still accepted.
+   */
+  alignment?: PopupAlignment | DeprecatedPopupAlignment;
   /** Calls `onOpenChange(false)` when Escape is pressed while open, wherever focus is, if this is the topmost open Popup or dialog: one opened inside a Modal Dialog or another Popup closes first. Even with it off, an open Popup keeps the layers under it from taking Escape. */
   closeOnEscape?: boolean;
   /** Calls `onOpenChange(false)` on a pointer press outside the trigger and the panel. */

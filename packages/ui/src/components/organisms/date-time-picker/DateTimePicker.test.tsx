@@ -94,6 +94,44 @@ describe('DateTimePicker', () => {
     expect(timeField()).toHaveValue('07:30 PM');
   });
 
+  it("passes its halves' built-in labels through, for translation", () => {
+    const labels = {
+      dateDialogLabel: 'Elegir una fecha',
+      timeDialogLabel: 'Elegir una hora',
+      confirmLabel: 'Confirmar',
+      cancelLabel: 'Cancelar',
+      hoursLabel: 'Horas',
+      minutesLabel: 'Minutos',
+      meridiemLabel: 'a. m./p. m.',
+      amLabel: 'a. m.',
+      pmLabel: 'p. m.',
+    };
+    const { unmount } = renderPicker(labels);
+
+    fireEvent.click(dateField());
+    expect(screen.getByRole('dialog', { name: 'Elegir una fecha' })).toBeInTheDocument();
+    unmount();
+
+    renderPicker(labels);
+    fireEvent.click(timeField());
+    const dialog = screen.getByRole('dialog', { name: 'Elegir una hora' });
+    expect(within(dialog).getByRole('listbox', { name: 'Horas' })).toBeInTheDocument();
+    expect(within(dialog).getByRole('listbox', { name: 'Minutos' })).toBeInTheDocument();
+    const meridiem = within(dialog).getByRole('listbox', { name: 'a. m./p. m.' });
+    expect(within(meridiem).getByRole('option', { name: 'a. m.' })).toBeInTheDocument();
+    expect(within(meridiem).getByRole('option', { name: 'p. m.' })).toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Confirmar' })).toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Cancelar' })).toBeInTheDocument();
+  });
+
+  it("keeps its halves' English defaults when no labels are passed", () => {
+    renderPicker();
+    fireEvent.click(timeField());
+    const dialog = screen.getByRole('dialog', { name: 'Choose a time' });
+    expect(within(dialog).getByRole('listbox', { name: 'AM/PM' })).toBeInTheDocument();
+    expect(within(dialog).getByRole('button', { name: 'Confirm' })).toBeInTheDocument();
+  });
+
   it('is controlled by value', () => {
     const onChange = vi.fn();
     const { rerender } = renderPicker({ value: MARCH_9_430PM, onChange });

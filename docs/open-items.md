@@ -27,13 +27,19 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    them against the designs when those are done; each page lists its assumptions under Open
    questions.
 7. Status: done. Draft, Beta, Stable, Deprecated, authored in each contract and checked against the
-   evidence (componentStatus in component-registry-governance.json). 15 Stable, 43 Beta.
-8. **Now: the held items.** Gaps done 2026-10-22 (Section Message `errors`, Checkbox
-   `errorMessage`, Slider `invalid` and Field wiring, Inline Edit `validate`, Table title size by
-   `size`, Progress Bar's empty ring, and the Table, Label, and Tag Group decisions). Done so far: the naming and behavior decisions (start/end alignment,
-   `removeLabel`, `toast.information()`, Field `success`, when errors show, loading toasts,
-   focus after removal, disabled fieldsets, Slider field names, and the Table, Link, Modal
-   Dialog, and Tooltip decisions). Next: the gaps, the bugs, and docs tooling.
+   evidence (componentStatus in component-registry-governance.json). Started at 15 Stable, 43 Beta.
+8. **Now: the held items.**
+   - Naming and behavior decisions, done 2026-10-22: start/end alignment, `removeLabel`,
+     `toast.information()`, Field `success`, when errors show, loading toasts, focus after
+     removal, disabled fieldsets, Slider field names, and the Table, Link, Modal Dialog, and
+     Tooltip decisions.
+   - Gaps, done 2026-10-22: Section Message `errors`, Checkbox `errorMessage`, Slider `invalid` and
+     Field wiring, Inline Edit `validate`, Table title size by `size`, Progress Bar's empty ring,
+     and the Table, Label, and Tag Group decisions.
+   - Bugs, done 2026-10-23: 27 known issues closed across 16 components. Now 25 Stable, 33 Beta.
+   - **Next: docs tooling** (union-prop API tables, light-only canvas, overlay anatomy, the code
+     samples' indent on component pages), then the remaining known issues that need decisions or
+     Figma.
 
 ## Figma (the owner's checklist)
 
@@ -62,6 +68,20 @@ component's known issues, so they show on Introduction / Status too.
 - [ ] Inline Edit: an error state (the message under the field, in Field's error look).
 - [ ] Section Message: an errors list (linked field names under the description).
 - [ ] Checkbox: an error message under a single checkbox.
+- [ ] Select: turn on the trigger's `elemBeforeInput` icon slot in the single, has-value variants
+  (the code now shows the chosen option's icon there).
+- [ ] Slider: the room now kept above the track for the value bubble (every horizontal Slider is
+  taller by the bubble's height plus `spacing-sm`).
+
+**Progress Bar (code matched to the revised Figma 2026-10-23)**
+
+- [ ] Tokens v1.0.0: `component/progress-bar/circular/size` 72 → 80 (the repo's token is 80 now).
+- [ ] Tokens v1.0.0: remove the now-unused linear `pad` (sm/md/lg) and `root-size` (sm/md/lg)
+  variables; the repo removes them after (and `token-data.test.ts`'s root-size check with them).
+- [ ] Circular `sm`: Figma has none; code draws an 8px ring. Add it, or drop `sm` for circular.
+- [ ] Clean up `progress-bar-circular`: a hidden 72px "donut" layer in `progress=100, size=md`
+  still bound to `color/data-viz/sequence/prussian/300`, and an empty 72px "donut" layer in every
+  `lg` variant except 100.
 
 **Check a value**
 
@@ -119,6 +139,10 @@ component's known issues, so they show on Introduction / Status too.
   right-to-left page `start` stays on the left. Recorded as a known limitation on Popup and
   Dropdown Menu; supporting right-to-left is a separate piece of work.
 
+- **A Modal Dialog opened from inside a Popup paints below it**: dialogs are layered at 1000 and
+  popups at 1200 (`primitives/layers.ts`). Today nothing opens a dialog from a popup; decide the
+  rule if something needs to.
+
 ## Found recently (2026-10-22)
 
 While carrying out the naming and behavior decisions. Each is also its component's known issue.
@@ -138,6 +162,15 @@ Found while closing the gaps:
 - Templates / Document Generation still builds its own error list inside Section Message; it can
   use Section Message's new `errors`.
 - Inline Edit inside Field wires nothing (now Inline Edit's known issue).
+
+Found while fixing the bugs (2026-10-23):
+
+- When the last filter chip is removed, or Clear filters is pressed, focus falls to the page: Table's
+  WithToolbar and FullShell stories and Patterns / Collections unmount the whole Chip Group and its
+  Clear button. Per the focus rule, the page should move focus to a stable element.
+- Table's CellVariants story titles ("Cell variants — MD/SM") render very faint; not looked at yet.
+- Progress Bar no longer accepts a `role` (it's always `progressbar`): a type-level break if the
+  LegacyHQ app passes one.
 
 ## Docs tooling
 

@@ -1,6 +1,5 @@
 .root {
-  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-md);
-  --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-md);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-md);
   --progress-bar-circular-size: var(--component-progress-bar-circular-size);
 
   position: relative;
@@ -9,24 +8,22 @@
 }
 
 .size_sm {
-  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-sm);
-  --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-sm);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-sm);
 }
 
 .size_md {
-  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-md);
-  --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-md);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-md);
 }
 
 .size_lg {
-  --progress-bar-linear-root-size: var(--component-progress-bar-linear-root-size-lg);
-  --progress-bar-linear-pad: var(--component-progress-bar-linear-pad-lg);
+  --progress-bar-track-size: var(--component-progress-bar-track-size-lg);
 }
 
+/* The linear bar is exactly the track size tall: Figma has no spacing around the track. */
 .variant_linear {
   display: block;
   inline-size: 100%;
-  block-size: var(--progress-bar-linear-root-size);
+  block-size: var(--progress-bar-track-size);
   overflow: visible;
 }
 
@@ -44,13 +41,15 @@
 
 /*
  * The remaining track is the full-height rounded pill: a light surface fill with a bold border.
- * It is always present under the progress fill, so an empty bar still shows the bordered track and
- * a full bar frames the fill. Colors map to the brand palette (surface + border/bold), not the old
- * data-viz sequence.
+ * It is always present, so an empty bar still shows the bordered track and a full bar frames the
+ * fill. It holds the fill and clips it to its inner (padding-box) edge, so the fill never covers
+ * the border, even where a very small or nearly full fill meets the rounded ends. Colors map to
+ * the brand palette (surface + border/bold), not the old data-viz sequence.
  */
 .remainingTrack {
   position: absolute;
   inset: 0;
+  overflow: hidden;
   border-radius: var(--border-radius-full-round);
   border: var(--border-width-sm) solid var(--color-border-bold);
   background: var(--color-elevation-surface-deep-default);
@@ -58,21 +57,26 @@
 }
 
 /*
- * The progress fill is a fully-rounded brand-colored pill inset within the track by the linear pad
- * on the block axis and the inline-start edge, so it floats inside the bordered track rather than
- * meeting its edges. Its inline size is the fill fraction of the track's inner (padded) width, so
- * at 100% it leaves an equal pad on the inline-end edge. Matches the inset progress-segment shape
- * in Figma. A value change eases the fill to its new size with --fade-quick, as Progress Tracker's
- * fill does.
+ * The progress fill is positioned in the remaining track's padding box, so it sits inside the
+ * --border-width-sm border on the block axis and inline-start, runs the full inner height, and its
+ * inline size is the fill fraction of the inner width. While partial it is rounded at its start and
+ * square at its end, where the remaining track continues; at 100 it is rounded at both ends. Matches
+ * Figma's progress-segment, which meets the track-segment with a square edge. A value change eases
+ * the fill to its new size with --fade-quick, as Progress Tracker's fill does.
  */
 .progressSegment {
   position: absolute;
-  inset-block: var(--progress-bar-linear-pad);
-  inset-inline-start: var(--progress-bar-linear-pad);
-  inline-size: calc(var(--progress-bar-fill, 0) * (100% - 2 * var(--progress-bar-linear-pad)));
-  border-radius: var(--border-radius-full-round);
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: calc(var(--progress-bar-fill, 0) * 100%);
+  border-start-start-radius: var(--border-radius-full-round);
+  border-end-start-radius: var(--border-radius-full-round);
   background: var(--color-background-brand-primary-bold-default);
   transition: inline-size var(--fade-quick);
+}
+
+.variant_linear[data-complete='true'] .progressSegment {
+  border-radius: var(--border-radius-full-round);
 }
 
 .circularViewport {
@@ -97,9 +101,10 @@
 }
 
 /*
- * The track ring is a light surface stroke with a slightly wider bold-border stroke behind it, so
- * the bold border frames both edges of the ring - and, because the progress arc is drawn narrower
- * on top, it frames the filled portion too. The progress arc itself carries no border.
+ * The track ring is a light surface stroke with a bold-border stroke 2 units wider behind it, so a
+ * 1px border frames both edges of the ring. The progress arc is drawn on top at the ring's full
+ * thickness, so the same border frames the filled part too. The progress arc carries no border of
+ * its own.
  */
 .circularTrackBorder {
   stroke: var(--color-border-bold);
@@ -112,23 +117,22 @@
 /*
  * At value 0 the circular variant shows its empty track ring and border, as the linear variant
  * shows its empty bordered track, so a completion summary at 0 still reads as a progress ring.
- * Only the progress arc is hidden: a zero-length arc with a round cap would otherwise render as a
- * small dot at 12 o'clock.
+ * Only the progress arc is hidden, so no sliver of it can show at the 12 o'clock seam.
  */
 .variant_circular[data-empty='true'] .circularProgress {
   display: none;
 }
 
 /*
- * The progress arc is capped with rounded ends so the ring reads as a rounded stroke rather than a
- * hard-edged wedge. Matches the rounded arc ends in Figma. A value change eases the arc with
+ * The progress arc is a filled wedge across the ring's full thickness, with straight (butt) ends,
+ * as in Figma, where it starts at 12 o'clock and runs clockwise. A value change eases the arc with
  * --fade-quick, like the linear fill; the dash array transitions too, so reaching or leaving 100
  * (an explicit dash/gap split) still eases. At 0 the arc is hidden (above), so arriving at or
  * leaving 0 shows or hides the arc at once; the track ring stays.
  */
 .circularProgress {
   stroke: var(--color-background-brand-primary-bold-default);
-  stroke-linecap: round;
+  stroke-linecap: butt;
   transition:
     stroke-dashoffset var(--fade-quick),
     stroke-dasharray var(--fade-quick);

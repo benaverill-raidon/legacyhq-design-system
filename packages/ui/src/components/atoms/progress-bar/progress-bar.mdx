@@ -70,9 +70,9 @@ import * as ProgressBarStories from './progress-bar.stories';
 
 <Anatomy specimen={<ProgressBar value={60} size="lg" label="Uploading client files" style={{ inlineSize: '20rem' }} />}>
   <Part name="root" target={progressBarStyles.root}>The `div` with `role="progressbar"`, shared by both variants. A linear bar is as wide as its container.</Part>
-  <Part name="track" target={progressBarStyles.track}>A wrapper that fills the root and holds the two layers below it.</Part>
-  <Part name="progressSegment" target={progressBarStyles.progressSegment}>The brand-colored fill, 4px in from the track's edges. Its width is the value's share of the track.</Part>
-  <Part name="remainingTrack" target={progressBarStyles.remainingTrack}>The bordered, rounded track under the fill. It spans the whole bar, so whatever the fill doesn't cover reads as remaining.</Part>
+  <Part name="track" target={progressBarStyles.track}>A wrapper that fills the root and holds the remaining track.</Part>
+  <Part name="progressSegment" target={progressBarStyles.progressSegment}>The brand-colored fill, inside the track's 1px border and the full height inside it. Its width is the value's share of the track's inner width. It's rounded at the start and square at the end, where the track continues, and rounded at both ends at 100.</Part>
+  <Part name="remainingTrack" target={progressBarStyles.remainingTrack}>The bordered, rounded track. It spans the whole bar and holds the fill, clipped to its inner edge, so whatever the fill doesn't cover reads as remaining.</Part>
 </Anatomy>
 
 </Subsection>
@@ -80,9 +80,9 @@ import * as ProgressBarStories from './progress-bar.stories';
 <Subsection title="Circular">
 
 <Anatomy specimen={<ProgressBar variant="circular" value={60} size="lg" label="Roadmap completion" />}>
-  <Part name="svg" target={progressBarStyles.circularSvg}>An inline SVG, 72px across at every size. The ring starts at 12 o'clock and fills clockwise.</Part>
-  <Part name="trackCircle">The ring under the arc: a surface-colored stroke over one 2px wider in the bold border color, which shows as a border on both edges. It's the same circle as the arc, so it isn't outlined separately.</Part>
-  <Part name="progressCircle" target={progressBarStyles.circularProgress}>The brand-colored arc, with rounded ends, 4px in from each edge of the ring.</Part>
+  <Part name="svg" target={progressBarStyles.circularSvg}>An inline SVG, 80px across at every size. The ring starts at 12 o'clock and fills clockwise.</Part>
+  <Part name="trackCircle">The ring under the arc: a surface-colored stroke over one 2px wider in the bold border color, which shows as a 1px border on both edges. It's the same circle as the arc, so it isn't outlined separately.</Part>
+  <Part name="progressCircle" target={progressBarStyles.circularProgress}>The brand-colored wedge, across the ring's full thickness, with straight ends. The border shows around it too.</Part>
 </Anatomy>
 
 </Subsection>
@@ -98,9 +98,10 @@ Use `circular` for a compact summary, such as a dashboard tile. Both take the sa
 
 <Subsection title="Sizes">
 
-`size` sets the thickness. Linear bars are 24, 32, or 40px tall for `sm`, `md`, and `lg`, with the
-fill 4px in from the track's edges. The circular ring is 72px across at every size; only its stroke
-gets thicker. Neither variant sets its own width or shows any text.
+`size` sets the thickness. Linear bars are 16, 24, or 32px tall for `sm`, `md`, and `lg`, and the
+fill runs the full height inside the track's border. The circular ring is 80px across at every
+size; only the ring gets thicker: 16px for `md` and 28px for `lg`. Figma has no circular `sm`; the
+code draws an 8px ring for it. Neither variant sets its own width or shows any text.
 
 <Example of={ProgressBarStories.Sizes} />
 
@@ -115,7 +116,7 @@ gets thicker. Neither variant sets its own width or shows any text.
 `value` runs from 0 to 100. Any other number is clamped, for both the fill and what's announced:
 below 0 and `NaN` show 0, above 100 shows 100. At 0 both variants show only their empty track, with
 its border: the bar and the ring keep their shape, so a completion summary at 0 still reads as one.
-At 100 the fill reaches the end of the track and the ring closes.
+At 100 the fill reaches the end of the track, rounded at both ends, and the ring closes.
 
 <Example of={ProgressBarStories.States} />
 
@@ -195,13 +196,15 @@ once either way; the ring's track stays.
 
 <PropsTable of={ProgressBarStories} native="div" />
 
+It takes every `div` attribute except `role`: the root is always `role="progressbar"`, which its
+`aria-value*` attributes need.
+
 </Section>
 
 <Section title="Design tokens">
 
 Every token Progress Bar's stylesheet uses, by family, with the property it sets and when. "Base" is
-the bar with no modifiers, which is the `md` size; the size rows set its height and the fill's
-inset. Under Other, `progress-bar-fill` is the value as a fraction, which the component sets on the
+the bar with no modifiers, which is the `md` size; the size rows set the linear bar's height. Under Other, `progress-bar-fill` is the value as a fraction, which the component sets on the
 root and the fill's width reads.
 
 <TokensTable id="progress-bar" />

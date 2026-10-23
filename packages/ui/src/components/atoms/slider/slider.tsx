@@ -571,7 +571,12 @@ export function SliderBaseComponent(
             onKeyDown?.(event);
           }}
           onPointerCancel={() => stopDragging()}
-          onPointerDown={() => startDragging()}
+          onPointerDown={(event) => {
+            // A disabled input (or one in a disabled fieldset) never starts a drag, as the track doesn't.
+            if (!event.currentTarget.matches(':disabled')) {
+              startDragging();
+            }
+          }}
           onPointerUp={() => stopDragging()}
         />
       </div>

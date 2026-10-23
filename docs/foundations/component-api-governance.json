@@ -111,11 +111,13 @@
                     "closeLabel, dismissLabel, clearSearchLabel, previousPageLabel, statusLabel, newTabLabel",
                     "getRangeLabel(start, end, total), getPageCountLabel(pageCount), selectionCountLabel(count)",
                     "searchLabel (Menu, Table), getStepLabel (Progress Indicator), requiredLabel (Checkbox Group), selectedLabel / getPresenceLabel / getStatusLabel (Avatar), unnamedLabel (Avatar Group), labelText (Chip)",
-                    "dialogLabel (Date Picker, Time Picker), amLabel / pmLabel (Time Picker)"
+                    "dialogLabel (Date Picker, Time Picker), amLabel / pmLabel (Time Picker)",
+        "getRemoveLabel(label) (Select), requiredLegendLabel (Form), dateDialogLabel / timeDialogLabel and Time Picker's own labels passed through (Date Time Picker)",
+        "emptyLabel, getPaginationLabel(name), getSelectionLabel(row), getResultCountLabel(count) (Table), removeLabel / removeTooltipLabel (Chip), getOverflowButtonLabel(hiddenCount) (Avatar Group)"
                 ]
             },
             "knownViolations": [
-                "Select names its chips’ remove buttons in English (Remove <label>). Form’s required legend (“indicates a required field”) is hard-coded. Date Time Picker can’t pass its halves’ labels through (dialogLabel, amLabel, pmLabel, Confirm/Cancel, column and month names)."
+                "Date Picker doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English in Date Picker and Date Time Picker."
             ]
         },
         {
@@ -131,7 +133,7 @@
                     "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`",
                     "Toggle Button, Toggle Icon Button, Tag, and Avatar accept isDisabled for disabled; Rich Text Area accepts appearance for context; Tabs accepts type for appearance; Empty State accepts type for appearance; Breadcrumbs, Pagination, and Badge accept ariaLabel (Badge: for label)",
         "Popup, Dropdown Menu, Chip Group, Tag Group, Date Picker, and Time Picker accept left / right (and topLeft, bottomRight...) for start / end",
-        "Chip accepts removeAriaLabel for removeLabel; Toast Group accepts toast.info for toast.information; Field accepts state `valid` for `success`"
+        "Chip accepts removeAriaLabel for removeLabel; Toast Group accepts toast.info for toast.information; Field accepts state `valid` for `success`; Table accepts emptyHeadingLabel for emptyLabel"
                 ]
             },
             "knownViolations": []

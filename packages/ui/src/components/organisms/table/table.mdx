@@ -164,8 +164,9 @@ table's size; size the controls you put in cells to match, as the cell examples 
 <Subsection title="Columns and cells">
 
 Each column is a `TableColumn` (listed under API). A cell shows `row[key]` as text unless the column
-has a `render`, which can return any content: a Link, Tag, Badge, Avatar, Switch, or Buttons. Table
-has no cell types of its own.
+has a `render`, which can return any content: a Link, Tag, Label, Avatar, Switch, or Buttons. Table
+has no cell types of its own. Show a status in words with a Label, whose tones mean something; Badge
+is for counts of one to four characters.
 
 Mark the column that identifies the row with `emphasis: 'strong'`, which sets it at the heading
 weight, and use a strong Link if it opens the record. Align numbers and dates to the end with
@@ -192,8 +193,12 @@ field stays open while it has text, shows a clear button then, and closes again 
 while empty. Table doesn't filter anything: filter `data` in `onSearchChange`. Table keeps the text
 itself (start it with `defaultSearchValue`), or control it with `searchValue`.
 
-The second row holds `activeFilters`, the filter Chips you render and control, and a Clear filters
-button when you pass `onClearFilters`. Pass `toolbar` to replace both rows with your own.
+The second row holds `activeFilters`, the filters you render and control, and a Clear filters
+button when you pass `onClearFilters`. Pass a <DocLink to="Components/Forms/Chip Group" /> named
+with `aria-label`, such as "Active filters", holding the filter Chips: it's announced as one set, and
+when someone removes a chip, focus moves to the next one instead of falling to the page. Table lays
+the row out but doesn't wrap it in a group of its own, so the group you pass isn't nested in another.
+Pass `toolbar` to replace both rows with your own.
 
 <Example of={TableStories.WithToolbar} caption="A title, search, filter and settings buttons, and active filter Chips." />
 
@@ -246,6 +251,12 @@ Pass `pageSize` and Table shows that many rows per page and keeps the current pa
 with `page` and `onPageChange`. To page on the server, set `manualPagination` with `pageCount`,
 `page`, and `onPageChange`, and pass only the current page's rows.
 
+A new search or filter starts again from the first page. The page Table keeps goes back to 1 when
+the rows in `data` become a different set, by row id: rows added or removed, as a search or filter
+does. Editing rows or changing their order keeps the page. A controlled `page` is yours, and Table
+never changes it, so set it back to 1 when the search or a filter changes; do the same with
+`manualPagination`, where every page is a new set of rows.
+
 The footer appears when there's more than one page, or when you pass `itemsPerPageOptions`, so a
 page size that fits every row doesn't take the page-size Select away. It has the page-size Select
 (Table calls `onPageSizeChange` and leaves `pageSize` to you), the range of rows shown, a page Select,
@@ -257,7 +268,8 @@ the rows you pass count as one page.
 
 Every piece of footer text is a prop with an English default, for translation: `itemsPerPageLabel`
 (shown as given, so include its colon), `getRangeLabel`, `pageLabel`, `getPageCountLabel`,
-`previousPageLabel`, `nextPageLabel`, and `paginationLabel`, the footer's accessible name.
+`previousPageLabel`, `nextPageLabel`, and `getPaginationLabel`, the footer's accessible name built
+from the table's name ("Members pagination"), or `paginationLabel` to give it as is.
 
 <Example of={TableStories.Pagination} />
 
@@ -297,13 +309,19 @@ Select's `onChange`. Give each editor an accessible name that includes its row.
 <Subsection title="Loading and empty">
 
 `loading` keeps the headers, shows `skeletonRowCount` rows of Skeletons in place of the data (5 by
-default), and sets `aria-busy` on the table.
+default), and sets `aria-busy` on the table. Each skeleton sits where its column's content does, so
+an `align: 'end'` column's skeletons line up at the end.
 
 <Example of={TableStories.Loading} />
 
-With no rows, the table shows `empty` across every column. The default is a "No results" heading and
-"There is nothing to show here yet." on the deep surface, set by `emptyHeadingLabel` and
-`emptyDescriptionLabel`. Pass an Empty State that says why the list is empty and what to do next.
+With no rows, the table shows `empty` across every column. The default is one statement, "No items
+to show" (`emptyLabel`), which is true whether nothing exists yet or a search found nothing, on the
+table's own surface, as an Empty State is. Pass an Empty State that says which it is and what to do
+next. `emptyHeadingLabel` and `emptyDescriptionLabel`, the earlier names, still work.
+
+When the number of results changes after the table first renders, such as after a search or a
+filter, a polite live region announces it: "No results", "1 result", or "12 results"
+(`getResultCountLabel`). The count is `totalItems`, or else the rows in `data`.
 
 <Example of={TableStories.EmptyStateStory} />
 
@@ -402,7 +420,11 @@ With no rows, the table shows `empty` across every column. The default is a "No 
   announced as mixed when only some rows are selected, and one per row named by `getSelectionLabel`.
   Without it, every row's Checkbox is named "Select row", so always pass it.
 - When the number of selected rows changes, a polite live region announces the count, such as
-  "3 selected" (`selectionCountLabel`). It isn't announced when the table first renders.
+  "3 selected" (`selectionCountLabel`). When the number of results changes, as after a search or a
+  filter, the same region announces it, such as "No results" (`getResultCountLabel`). Neither is
+  announced when the table first renders, and results aren't while it's loading.
+- Pass `activeFilters` a Chip Group named with `aria-label`, so the filters are announced as one
+  set.
 - Each resize handle is a focusable `separator`, vertical, named by `getResizeLabel` ("Resize Name").
   It reports the column's width in pixels as `aria-valuenow` from the start, with 64 as
   `aria-valuemin` and the scroll region's width as `aria-valuemax`.
@@ -500,7 +522,7 @@ stylesheet.
 - <DocLink to="Components/Data Display/Key Value List" /> for one record's details.
 - <DocLink to="Components/Data Display/Card" /> for summaries that each need their own layout.
 - <DocLink to="Components/Navigation/Pagination" /> for paging through content outside a table.
-- <DocLink to="Components/Forms/Chip" /> for the filters in `activeFilters`.
+- <DocLink to="Components/Forms/Chip Group" /> and <DocLink to="Components/Forms/Chip" /> for the filters in `activeFilters`.
 - <DocLink to="Components/Actions/Dropdown Menu" /> for a filter or settings menu opened from `toolbarActions`.
 - <DocLink to="Components/Forms/Inline Edit" />, <DocLink to="Components/Forms/Select" />, <DocLink to="Components/Forms/Date Picker" />, and <DocLink to="Components/Forms/Time Picker" /> for editable cells.
 - <DocLink to="Components/Navigation/Link" /> to open a record from its row.

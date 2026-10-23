@@ -529,7 +529,12 @@ export const SliderRange = React.memo(
             }}
             onKeyDown={lowerFocusRing.handleKeyDown}
             onPointerCancel={() => stopDragging()}
-            onPointerDown={() => {
+            onPointerDown={(event) => {
+              // A disabled handle (or one in a disabled fieldset) never starts a drag, as the track doesn't.
+              if (event.currentTarget.matches(':disabled')) {
+                return;
+              }
+
               setActiveThumb(0);
               startDragging();
             }}
@@ -566,7 +571,12 @@ export const SliderRange = React.memo(
             }}
             onKeyDown={upperFocusRing.handleKeyDown}
             onPointerCancel={() => stopDragging()}
-            onPointerDown={() => {
+            onPointerDown={(event) => {
+              // A disabled handle (or one in a disabled fieldset) never starts a drag, as the track doesn't.
+              if (event.currentTarget.matches(':disabled')) {
+                return;
+              }
+
               setActiveThumb(1);
               startDragging();
             }}

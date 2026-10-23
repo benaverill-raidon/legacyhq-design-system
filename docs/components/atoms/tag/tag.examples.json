@@ -15,6 +15,10 @@
     {
       "name": "Linked & Removable",
       "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>"
+    },
+    {
+      "name": "Clickable & Removable",
+      "jsx": "<Tag isRemovable onClick={() => openPreview('vacation-home')} onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>"
     }
   ]
 }

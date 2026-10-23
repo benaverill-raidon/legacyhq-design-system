@@ -138,8 +138,9 @@ also up to the code that renders it.
 When a chip is removed while someone is using it, from the keyboard or with a click, focus stays in
 the group instead of falling to the page. It moves to the chip that takes the removed one's place,
 or to the one before it if the removed chip was last, landing on the control in the same place (from
-one remove button to the next). Once no chips are left, focus moves to the group itself, so name the
-group with `aria-label` and it's announced. If your `onRemove` moves focus somewhere itself, or the
+one remove button to the next). Once no chips are left, focus moves to the group itself, which then
+grows to the size of a chip so its focus ring shows; name the group with `aria-label` and it's
+announced. If your `onRemove` moves focus somewhere itself, or the
 page removes the whole group, Chip Group leaves focus alone; then move it to a stable element, as
 in Patterns / Collections.
 
@@ -229,7 +230,8 @@ A group can hold chips of different modes and disabled chips, which sit in the r
   movement between chips.
 - When a chip is removed while it holds focus (or was just pressed), focus moves to the next chip,
   the previous one if it was last, or the group itself, which takes `tabindex="-1"` and shows the
-  focus ring, once none are left. Focus is never dropped to the page.
+  focus ring, once none are left. While empty and focused, the group is the size of a chip, so the
+  ring has something to go around. Focus is never dropped to the page.
 - It doesn't manage selection: each search chip announces its own state with `aria-pressed`.
 
 <Keyboard>

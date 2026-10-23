@@ -27,9 +27,9 @@
     },
     {
       "name": "Removable tags in a bounded group",
-      "description": "Each TagGroupItem's own isRemovable/onRemove forwards straight to the rendered Tag, unaffected by truncation.",
-      "jsx": "<TagGroup\n  tags={[\n    { id: 'vacation-home', label: 'Vacation Home', isRemovable: true, onRemove: () => handleRemove('vacation-home') },\n    { id: 'rental', label: 'Rental Property', isRemovable: true, onRemove: () => handleRemove('rental') },\n  ]}\n/>",
-      "props": {}
+      "description": "Each TagGroupItem's own isRemovable/onRemove forwards straight to the rendered Tag, unaffected by truncation. Name the group: when the last tag is removed, focus lands on it.",
+      "jsx": "<TagGroup\n  aria-label=\"Linked assets\"\n  tags={[\n    { id: 'vacation-home', label: 'Vacation Home', isRemovable: true, onRemove: () => handleRemove('vacation-home') },\n    { id: 'rental', label: 'Rental Property', isRemovable: true, onRemove: () => handleRemove('rental') },\n  ]}\n/>",
+      "props": { "aria-label": "Linked assets" }
     }
   ],
   "antiExamples": [

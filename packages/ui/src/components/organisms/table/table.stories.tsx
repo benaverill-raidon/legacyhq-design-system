@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar } from '../../atoms/avatar';
-import { Badge } from '../../atoms/badge';
 import { Button } from '../../atoms/button';
 import { IconButton } from '../../atoms/icon-button';
 import { Label } from '../../atoms/label';
@@ -11,6 +10,7 @@ import { Switch } from '../../atoms/switch';
 import { Tag } from '../../atoms/tag';
 import { FilterIcon, MoreVertIcon, SettingsIcon } from '../../../assets/icons';
 import { Chip } from '../../molecules/chip';
+import { ChipGroup } from '../../molecules/chip-group';
 import { InlineEdit } from '../../molecules/inline-edit';
 import { TextField } from '../../molecules/text-field';
 import { Select } from '../../molecules/select';
@@ -239,7 +239,7 @@ export const WithToolbar: Story = {
         }
         activeFilters={
           hasFilters ? (
-            <>
+            <ChipGroup aria-label="Active filters">
               {roleFilter != null ? (
                 <Chip
                   mode="filter"
@@ -276,7 +276,7 @@ export const WithToolbar: Story = {
                   onRemove={() => setDeptFilter(null)}
                 />
               ) : null}
-            </>
+            </ChipGroup>
           ) : undefined
         }
         onClearFilters={hasFilters ? () => { setRoleFilter(null); setStatusFilter(null); setDeptFilter(null); } : undefined}
@@ -347,7 +347,7 @@ export const FullShell: Story = {
         }
         activeFilters={
           hasFilters ? (
-            <>
+            <ChipGroup aria-label="Active filters">
               {roleFilter != null ? (
                 <Chip
                   mode="filter"
@@ -384,7 +384,7 @@ export const FullShell: Story = {
                   onRemove={() => setDeptFilter(null)}
                 />
               ) : null}
-            </>
+            </ChipGroup>
           ) : undefined
         }
         onClearFilters={hasFilters ? () => { setRoleFilter(null); setStatusFilter(null); setDeptFilter(null); } : undefined}
@@ -413,9 +413,10 @@ export const FullShell: Story = {
 
 /* ---------- Cell Variants: all content types at both sizes ---------- */
 
+// A status in words is a Label, whose tones mean something (Badge is for counts of one to four characters).
 const statusTone = (s: string) => {
   if (s === 'Active') return 'success' as const;
-  if (s === 'Invited') return 'brand' as const;
+  if (s === 'Invited') return 'information' as const;
   return 'error' as const;
 };
 
@@ -461,7 +462,7 @@ function cellVariantColumns(tableSize: 'md' | 'sm'): Array<TableColumn<Member>> 
     {
       key: 'status',
       header: 'Status',
-      render: (m) => <Badge tone={statusTone(m.status)}>{m.status}</Badge>,
+      render: (m) => <Label size={labelSize} tone={statusTone(m.status)}>{m.status}</Label>,
     },
     {
       key: 'completion',
@@ -501,7 +502,7 @@ export const CellVariants: Story = {
         data={members.slice(0, 5)}
         getRowId={getRowId}
         title="Cell variants — MD"
-        description="Avatar + Link, text, Label, Tag, Badge, Progress Bar, Switch, Button + IconButton."
+        description="Avatar + Link, text, Tag, Label (department, and status with a tone), Progress Bar, Switch, Button + IconButton."
         selectable
         defaultSort={{ columnKey: 'name', direction: 'asc' }}
       />

@@ -15,9 +15,15 @@
     },
     {
       "name": "Options with leading icons",
-      "description": "option.icon appears in both the row and (multi) the chip. Decorative.",
+      "description": "option.icon appears in the row, before the chosen value in a single-select trigger, and on the chip (multi). Decorative.",
       "jsx": "<Select\n  options={[\n    { value: 'jordan', label: 'Jordan Ellis', icon: <Avatar name=\"Jordan Ellis\" size=\"xs\" decorative /> },\n    { value: 'priya', label: 'Priya Nair', icon: <Avatar name=\"Priya Nair\" size=\"xs\" decorative /> },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Assign to\"\n/>",
       "props": {}
+    },
+    {
+      "name": "Translated chip remove buttons",
+      "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`.",
+      "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  aria-label=\"Responsables\"\n/>",
+      "props": { "inputType": "multi" }
     },
     {
       "name": "Grouped options",

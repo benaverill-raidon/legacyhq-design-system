@@ -63,6 +63,29 @@ describe('Select', () => {
       expect(combobox()).toHaveValue('Approved');
     });
 
+    it("shows the chosen option's icon before the value in the trigger, hidden from assistive technology", () => {
+      const withIcons: SelectOption[] = [
+        { value: 'draft', label: 'Draft', icon: <svg data-testid="draft-icon" /> },
+        { value: 'approved', label: 'Approved', icon: <svg data-testid="approved-icon" /> },
+        { value: 'plain', label: 'Plain' },
+      ];
+      const { rerender } = render(<Select options={withIcons} value="approved" onChange={vi.fn()} />);
+      const frame = combobox().parentElement as HTMLElement;
+      const before = frame.querySelector(`.${textFieldStyles.before}`);
+
+      expect(before).toHaveAttribute('aria-hidden', 'true');
+      expect(within(before as HTMLElement).getByTestId('approved-icon')).toBeInTheDocument();
+      expect(screen.queryByTestId('draft-icon')).not.toBeInTheDocument();
+      // The accessible value is still the label alone.
+      expect(combobox()).toHaveValue('Approved');
+
+      rerender(<Select options={withIcons} value="plain" onChange={vi.fn()} />);
+      expect(frame.querySelector(`.${textFieldStyles.before}`)).not.toBeInTheDocument();
+
+      rerender(<Select options={withIcons} value={null} onChange={vi.fn()} />);
+      expect(frame.querySelector(`.${textFieldStyles.before}`)).not.toBeInTheDocument();
+    });
+
     it('marks the selected option checked', () => {
       render(<Select options={OPTIONS} value="approved" onChange={vi.fn()} />);
       open();
@@ -138,6 +161,24 @@ describe('Select', () => {
 
       fireEvent.click(screen.getByRole('button', { name: 'Remove Draft' }));
       expect(onChange).toHaveBeenCalledWith(['approved']);
+    });
+
+    it("names the chips' remove buttons with getRemoveLabel, for translation", () => {
+      const onChange = vi.fn();
+      render(
+        <Select
+          inputType="multi"
+          options={OPTIONS}
+          value={['draft', 'approved']}
+          onChange={onChange}
+          getRemoveLabel={(label) => `Retirer ${label}`}
+        />,
+      );
+
+      expect(screen.queryByRole('button', { name: 'Remove Draft' })).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: 'Retirer Draft' }));
+      expect(onChange).toHaveBeenCalledWith(['approved']);
+      expect(screen.getByRole('button', { name: 'Retirer Approved' })).toBeInTheDocument();
     });
 
     it('removes the last chip on Backspace when the query is empty', () => {

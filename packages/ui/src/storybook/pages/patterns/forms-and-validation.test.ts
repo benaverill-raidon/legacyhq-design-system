@@ -31,7 +31,8 @@ describe('Forms and Validation cites', () => {
   it("Form: a native form, and the required legend's words", () => {
     const form = source('organisms/form/form.tsx');
     expect(form).toMatch(/<form \{\.\.\.rest\}/);
-    expect(form).toMatch(/<\/span> indicates a required field/);
+    expect(form).toMatch(/requiredLegendLabel = 'indicates a required field'/);
+    expect(form).toMatch(/<\/span> \{requiredLegendLabel\}/);
   });
 
   it('Button: type button by default, and loading that keeps the label and ignores clicks', () => {

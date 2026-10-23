@@ -155,7 +155,7 @@ describe('Table', () => {
   it('shows an empty state when there are no rows', () => {
     render(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" />);
 
-    expect(screen.getByText('There is nothing to show here yet.')).toBeInTheDocument();
+    expect(screen.getByText('No items to show')).toBeInTheDocument();
   });
 
   it('renders a custom empty slot', () => {
@@ -637,21 +637,142 @@ describe('Table', () => {
         data={[]}
         getRowId={getRowId}
         caption={<span>Personas</span>}
-        emptyHeadingLabel="Sin resultados"
-        emptyDescriptionLabel="Todavía no hay nada aquí."
+        emptyLabel="No hay elementos"
         scrollRegionLabel="Tabla"
         getResizeLabel={(column) => `Cambiar el ancho de ${column}`}
       />,
     );
 
-    expect(screen.getByText('Sin resultados')).toBeInTheDocument();
-    expect(screen.getByText('Todavía no hay nada aquí.')).toBeInTheDocument();
+    expect(screen.getByText('No hay elementos')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Tabla' })).toBeInTheDocument();
     expect(screen.getByRole('separator', { name: 'Cambiar el ancho de Name' })).toBeInTheDocument();
 
     rerender(<Table columns={columns} data={[]} getRowId={getRowId} caption={<span>People</span>} />);
-    expect(screen.getByText('No results')).toBeInTheDocument();
+    expect(screen.getByText('No items to show')).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Table' })).toBeInTheDocument();
     expect(screen.getByRole('separator', { name: 'Resize Name' })).toBeInTheDocument();
+  });
+
+  it('goes back to the first page when the rows become a different set, in uncontrolled paging', () => {
+    const many: Row[] = Array.from({ length: 5 }, (_, i) => ({ id: i + 1, name: `Row ${i + 1}`, score: i }));
+    const { rerender } = render(<Table columns={columns} data={many} getRowId={getRowId} caption="People" pageSize={2} />);
+    const footer = () => screen.getByRole('navigation', { name: /pagination/i });
+
+    fireEvent.click(within(footer()).getByRole('button', { name: 'Next page' }));
+    expect(bodyRowNames()).toEqual(['Row 3', 'Row 4']);
+
+    // Editing a row keeps the set of ids, so the page stays.
+    const edited = many.map((row) => (row.id === 3 ? { ...row, name: 'Row 3 (edited)' } : row));
+    rerender(<Table columns={columns} data={edited} getRowId={getRowId} caption="People" pageSize={2} />);
+    expect(bodyRowNames()).toEqual(['Row 3 (edited)', 'Row 4']);
+
+    // A filter that leaves page 2 in place, but with other rows on it, goes back to page 1.
+    const filtered = many.filter((row) => row.id !== 1);
+    rerender(<Table columns={columns} data={filtered} getRowId={getRowId} caption="People" pageSize={2} />);
+    expect(bodyRowNames()).toEqual(['Row 2', 'Row 3']);
+    expect(within(footer()).getByRole('combobox', { name: 'Page' })).toHaveValue('1');
+  });
+
+  it('leaves a controlled page alone when the rows change', () => {
+    const many: Row[] = Array.from({ length: 6 }, (_, i) => ({ id: i + 1, name: `Row ${i + 1}`, score: i }));
+    const onPageChange = vi.fn();
+    const { rerender } = render(
+      <Table columns={columns} data={many} getRowId={getRowId} caption="People" pageSize={2} page={2} onPageChange={onPageChange} />,
+    );
+    rerender(
+      <Table columns={columns} data={many.slice(1)} getRowId={getRowId} caption="People" pageSize={2} page={2} onPageChange={onPageChange} />,
+    );
+    expect(bodyRowNames()).toEqual(['Row 4', 'Row 5']);
+    expect(onPageChange).not.toHaveBeenCalled();
+  });
+
+  it('lines skeleton rows up with the column, like its cells', () => {
+    expect(tableCss).toMatch(/\.cell\[data-align='center'\] \.skeletonText \{[^}]*margin-inline: auto;/);
+    expect(tableCss).toMatch(/\.cell\[data-align='end'\] \.skeletonText \{[^}]*margin-inline-start: auto;/);
+    render(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" loading skeletonRowCount={1} />);
+    const cells = within(screen.getByRole('table')).getAllByRole('cell');
+    expect(cells[1]).toHaveAttribute('data-align', 'end');
+  });
+
+  it('builds the footer name and the row Checkbox names from props, for translation', () => {
+    const { rerender } = render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" pageSize={2} selectable />);
+    expect(screen.getByRole('navigation', { name: 'People pagination' })).toBeInTheDocument();
+    expect(screen.getAllByRole('checkbox', { name: 'Select row' })).toHaveLength(2);
+
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} caption={<span>People</span>} pageSize={2} selectable />);
+    expect(screen.getByRole('navigation', { name: 'Table pagination' })).toBeInTheDocument();
+
+    rerender(
+      <Table
+        columns={columns}
+        data={rows}
+        getRowId={getRowId}
+        caption="Personas"
+        pageSize={2}
+        selectable
+        getPaginationLabel={(name) => (name ? `Paginación de ${name}` : 'Paginación')}
+        getSelectionLabel={() => 'Seleccionar fila'}
+      />,
+    );
+    expect(screen.getByRole('navigation', { name: 'Paginación de Personas' })).toBeInTheDocument();
+    expect(screen.getAllByRole('checkbox', { name: 'Seleccionar fila' })).toHaveLength(2);
+  });
+
+  it('says there is nothing to show in one neutral statement, on the surface beneath it', () => {
+    render(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" />);
+    const cell = within(screen.getByRole('table')).getByRole('cell');
+    expect(cell).toHaveTextContent(/^No items to show$/);
+    // Transparent, as a passed Empty State is: no fill of its own.
+    expect(tableCss).toMatch(/\.emptyContainer \{(?![^}]*background)[^}]*\}/);
+  });
+
+  it('takes emptyLabel, and still takes the deprecated emptyHeadingLabel and emptyDescriptionLabel', () => {
+    const { rerender } = render(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" emptyLabel="No hay elementos" />);
+    const emptyCell = () => within(screen.getByRole('table')).getByRole('cell');
+    expect(emptyCell()).toHaveTextContent(/^No hay elementos$/);
+    const withNewName = emptyCell().innerHTML;
+
+    rerender(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" emptyHeadingLabel="No hay elementos" />);
+    expect(emptyCell().innerHTML).toBe(withNewName);
+
+    rerender(
+      <Table columns={columns} data={[]} getRowId={getRowId} caption="People" emptyHeadingLabel="Sin resultados" emptyDescriptionLabel="Todavía no hay nada aquí." />,
+    );
+    expect(screen.getByText('Sin resultados')).toBeInTheDocument();
+    expect(screen.getByText('Todavía no hay nada aquí.')).toBeInTheDocument();
+  });
+
+  it('announces the result count politely when it changes, not on the first render or while loading', () => {
+    const { rerender } = render(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable />);
+    const status = screen.getByRole('status');
+    expect(status).toHaveAttribute('aria-live', 'polite');
+    expect(status).toHaveTextContent('');
+
+    rerender(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" searchable />);
+    expect(status).toHaveTextContent(/^No results$/);
+
+    rerender(<Table columns={columns} data={rows.slice(0, 1)} getRowId={getRowId} caption="People" searchable />);
+    expect(status).toHaveTextContent(/^1 result$/);
+
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable loading />);
+    expect(status).toHaveTextContent(/^1 result$/);
+
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" searchable />);
+    expect(status).toHaveTextContent(/^3 results$/);
+
+    rerender(
+      <Table columns={columns} data={rows.slice(0, 2)} getRowId={getRowId} caption="People" searchable getResultCountLabel={(n) => `${n} resultados`} />,
+    );
+    expect(status).toHaveTextContent(/^2 resultados$/);
+  });
+
+  it('counts totalItems as the results, and stays quiet after a first load', () => {
+    const { rerender } = render(<Table columns={columns} data={[]} getRowId={getRowId} caption="People" loading />);
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" />);
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('');
+
+    rerender(<Table columns={columns} data={rows} getRowId={getRowId} caption="People" manualPagination pageCount={4} totalItems={40} />);
+    expect(status).toHaveTextContent(/^40 results$/);
   });
 });

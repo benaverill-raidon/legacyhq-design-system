@@ -5,11 +5,11 @@
   "knownIssues": [
     {
       "kind": "gap",
-      "summary": "Names its chips' remove buttons in English (`Remove <label>`), with no prop (built-in-labels)."
+      "summary": "Its chips' remove tooltips stay \"Remove\" in English: it could pass Chip's new `removeTooltipLabel` through."
     },
     {
       "kind": "gap",
-      "summary": "A single Select doesn't show the chosen option's icon; only menu rows and multi-select chips do."
+      "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
     },
     {
       "kind": "gap",
@@ -77,6 +77,7 @@
     "options": { "type": "SelectOption[]", "required": true, "default": null, "description": "The full option list. Each: { value, label, icon?, description?, disabled?, group? }." },
     "value": { "type": "string | null (single) | string[] (multi)", "required": true, "default": null, "description": "Controlled selection. Scalar for single, array for multi." },
     "onChange": { "type": "(value) => void", "required": true, "default": null, "description": "Called with the next selection - string|null (single) or string[] (multi)." },
+    "getRemoveLabel": { "type": "(label: string) => string", "required": false, "default": "(label) => `Remove ${label}`", "description": "Multi-select only. Builds each chip's remove-button name from the option's label, passed to Chip's removeLabel; pass a translation (built-in-labels)." },
     "inputType": { "type": "'single' | 'multi'", "required": false, "default": "single", "description": "Discriminates the union. single: radio rows, scalar value, label in trigger. multi: checkbox rows, array value, removable chips in trigger." },
     "size": { "type": "SelectSize", "required": false, "default": "md", "enum": ["sm", "md", "lg"], "description": "Trigger height 32/40/48; also sets the chip size. The panel matches the field frame's width at every size." },
     "context": { "type": "SelectContext", "required": false, "default": "default", "enum": ["default", "inline"], "description": "The trigger's context, as Text Field's - default (bordered) or inline (chromeless until hovered or focused, for a field inside a row)." },
@@ -98,11 +99,11 @@
   },
   "sizes": ["sm", "md", "lg"],
   "slots": [
-    { "name": "option.icon", "required": false, "allowedContent": "Icon or Avatar, decorative - shown in the row and (multi) the chip" }
+    { "name": "option.icon", "required": false, "allowedContent": "Icon or Avatar, decorative - shown in the row, before the chosen value in the trigger (single, TextField's iconBefore = Figma's elemBeforeInput slot), and on the chip (multi)" }
   ],
   "variants": {
     "inputType": {
-      "single": { "purpose": "One value; radio rows; the chosen label fills the trigger." },
+      "single": { "purpose": "One value; radio rows; the chosen label fills the trigger, after the chosen option's icon if it has one." },
       "multi": { "purpose": "Several values; checkbox rows; removable chips fill the trigger." }
     },
     "context": {
@@ -132,7 +133,8 @@
   "behaviorRules": [
     "Inside a disabled <fieldset>, the input is disabled without the disabled prop; the frame, caret, and multi-select chips look disabled (CSS :has(input:disabled)) and the menu doesn't open.",
     "Holds its own open and (uncontrolled) query state; value is always controlled by the consumer.",
-    "single: choosing a row calls onChange(value), returns focus to the input, and closes; the trigger shows the chosen label.",
+    "single: choosing a row calls onChange(value), returns focus to the input, and closes; the trigger shows the chosen label, with the chosen option's icon (if any) before it in TextField's iconBefore slot, hidden from assistive technology. The icon stays while the menu is open, since the value hasn't changed.",
+    "multi: each chip's remove button is named getRemoveLabel(option.label), `Remove <label>` by default.",
     "multi: choosing a row toggles the value in the array, keeps the panel open, and clears the query; values render as removable chips.",
     "Filters options itself unless searchValue/onSearchChange are provided, in which case filtering is the caller's.",
     "size sets the trigger height and the chip size together; the panel always matches the field frame's width.",
@@ -140,7 +142,7 @@
   ],
   "compositionRules": [
     "Pass a flat SelectOption[]; Select builds the Menu sections, selection, and typeahead itself.",
-    "Keep option.icon decorative - it appears in both the row and (multi) the chip.",
+    "Keep option.icon decorative - it appears in the row, before the chosen value (single), and on the chip (multi).",
     "Hold value in the consumer and update it from onChange; Select never mutates selection on its own."
   ],
   "responsiveRules": [

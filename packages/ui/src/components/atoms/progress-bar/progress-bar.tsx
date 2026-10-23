@@ -7,23 +7,17 @@ type ProgressBarStyle = React.CSSProperties & {
   '--progress-bar-fill'?: number;
 };
 
-const circularDiameter = 72;
-const circularRadiusBySize: Record<ProgressBarSize, number> = {
-  sm: 28,
-  md: 24,
-  lg: 20,
-};
-
-const circularStrokeWidthBySize: Record<ProgressBarSize, number> = {
-  sm: 16,
-  md: 24,
-  lg: 32,
-};
-
-const circularProgressPadBySize: Record<ProgressBarSize, number> = {
-  sm: 4,
-  md: 4,
-  lg: 4,
+// The circular geometry, in viewBox units (1 unit = 1px at the 80px token size). Figma
+// (progress-bar-circular): the ring's outer edge is radius 38 from the center, with a 1px border
+// outside it on both edges; the hole radius sets the thickness. Figma has md and lg only; sm is
+// code-only (an 8px ring).
+const circularViewBox = 80;
+const circularCenter = circularViewBox / 2;
+const circularOuterRadius = 38;
+const circularHoleRadiusBySize: Record<ProgressBarSize, number> = {
+  sm: 30,
+  md: 22,
+  lg: 10,
 };
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
@@ -79,42 +73,27 @@ function getCircularDashProps(clampedValue: number) {
 }
 
 function renderCircularSvg(size: ProgressBarSize, clampedValue: number) {
-  const radius = circularRadiusBySize[size];
-  const strokeWidth = circularStrokeWidthBySize[size];
-  const innerStrokeWidth = Math.max(strokeWidth - 2, 0);
-  const progressStrokeWidth = Math.max(strokeWidth - 2 * circularProgressPadBySize[size], 0);
+  const holeRadius = circularHoleRadiusBySize[size];
+  const thickness = circularOuterRadius - holeRadius;
+  // Every circle is drawn at the ring's mid radius, so a stroke of the thickness fills the ring.
+  const radius = holeRadius + thickness / 2;
   const dashProps = getCircularDashProps(clampedValue);
+  const circleProps = { cx: circularCenter, cy: circularCenter, r: radius, pathLength: 100 };
 
   return (
     <svg
       className={styles.circularSvg}
-      viewBox={`0 0 ${circularDiameter} ${circularDiameter}`}
+      viewBox={`0 0 ${circularViewBox} ${circularViewBox}`}
       focusable="false"
       aria-hidden="true"
     >
-      <circle
-        className={styles.circularTrackBorder}
-        cx={circularDiameter / 2}
-        cy={circularDiameter / 2}
-        r={radius}
-        pathLength={100}
-        strokeWidth={strokeWidth}
-      />
-      <circle
-        className={styles.circularTrack}
-        cx={circularDiameter / 2}
-        cy={circularDiameter / 2}
-        r={radius}
-        pathLength={100}
-        strokeWidth={innerStrokeWidth}
-      />
+      {/* 2 wider than the ring, so 1px of border shows outside both edges. */}
+      <circle className={styles.circularTrackBorder} {...circleProps} strokeWidth={thickness + 2} />
+      <circle className={styles.circularTrack} {...circleProps} strokeWidth={thickness} />
       <circle
         className={styles.circularProgress}
-        cx={circularDiameter / 2}
-        cy={circularDiameter / 2}
-        r={radius}
-        pathLength={100}
-        strokeWidth={progressStrokeWidth}
+        {...circleProps}
+        strokeWidth={thickness}
         strokeDasharray={dashProps.strokeDasharray}
         strokeDashoffset={dashProps.strokeDashoffset}
       />
@@ -132,7 +111,6 @@ export const ProgressBar = React.memo(
       getValueText,
       className,
       style,
-      role,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
       'aria-valuetext': ariaValueText,
@@ -160,7 +138,9 @@ export const ProgressBar = React.memo(
         {...rest}
         {...accessibleNameProps}
         ref={forwardedRef}
-        role={role ?? 'progressbar'}
+        // Always a progressbar: aria-valuenow and the rest need that role, and it's what the bar is.
+        // Set after the spread, so a role from a plain-JS caller can't replace it.
+        role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={clampedValue}
@@ -174,8 +154,10 @@ export const ProgressBar = React.memo(
       >
         {variant === 'linear' ? (
           <div className={styles.track} aria-hidden="true">
-            <span className={styles.remainingTrack} />
-            <span className={styles.progressSegment} />
+            {/* The fill sits inside the remaining track, which clips it to its inner edge. */}
+            <span className={styles.remainingTrack}>
+              <span className={styles.progressSegment} />
+            </span>
           </div>
         ) : (
           <div className={styles.circularViewport} aria-hidden="true">

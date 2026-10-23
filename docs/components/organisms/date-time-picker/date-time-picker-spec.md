@@ -46,6 +46,16 @@ export interface DateTimePickerProps
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string;
   timeLabel?: string;
+  // Each half's built-in labels, passed through (each half's English default when undefined).
+  dateDialogLabel?: string;         // Date Picker's dialogLabel
+  timeDialogLabel?: string;         // Time Picker's dialogLabel
+  confirmLabel?: string;            // the rest under Time Picker's own names
+  cancelLabel?: string;
+  hoursLabel?: string;
+  minutesLabel?: string;
+  meridiemLabel?: string;
+  amLabel?: string;
+  pmLabel?: string;
   id?: string;                      // goes to the date input, not the group
   'aria-label'?: string;            // ignored when aria-labelledby is set
   'aria-labelledby'?: string;
@@ -72,6 +82,12 @@ dateLabel = 'Date'; timeLabel = 'Time'
 - Pass `size` / `context` / `disabled` / `invalid` / `locale` to both halves; date constraints
   (`min` / `max` / `isDateDisabled` / `weekStartsOn` / `today`) to the calendar and `minuteStep` to
   the time selector.
+- Pass each half's built-in labels through, for translation: `dateDialogLabel` and
+  `timeDialogLabel` become each half's `dialogLabel` (prefixed because both halves have one, as
+  `datePlaceholder` / `timePlaceholder` are); the time half's `confirmLabel`, `cancelLabel`,
+  `hoursLabel`, `minutesLabel`, `meridiemLabel`, `amLabel`, and `pmLabel` keep Time Picker's names
+  (only the time half has them, as `minuteStep`). Undefined ones fall back to each half's default.
+  Month and weekday names come from `locale`.
 - Join the halves: collapse the shared border (negative margin) and square the inner corners.
 
 ## Accessibility
@@ -101,6 +117,8 @@ dateLabel = 'Date'; timeLabel = 'Time'
 renders a date field and a time field in a labelled group
 selecting a date keeps the time
 confirming a time keeps the date
+passes its halves' built-in labels through (dialogs, Confirm/Cancel, columns, AM/PM)
+keeps its halves' English defaults when no labels are passed
 is controlled by value
 disables both fields
 applies size and context on the group

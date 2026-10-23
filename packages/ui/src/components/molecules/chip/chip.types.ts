@@ -89,6 +89,11 @@ export interface ChipSelectProps extends ChipCommonProps {
   /** @deprecated Use `removeLabel`, the name Tag uses. Still accepted; `removeLabel` wins when both are set. */
   removeAriaLabel?: string;
   /**
+   * The text of the tooltip the remove button shows on hover and focus. Defaults to "Remove". Set it
+   * to translate it. It isn't the button's name: that's `removeLabel`.
+   */
+  removeTooltipLabel?: string;
+  /**
    * The label as plain text, for the names Chip builds from it: the remove button ("Remove <label>").
    * Defaults to `label` when that's a string; set it when `label` is JSX, or those names lose the
    * property.
@@ -129,6 +134,11 @@ export interface ChipFilterProps extends ChipCommonProps {
   removeLabel?: string;
   /** @deprecated Use `removeLabel`, the name Tag uses. Still accepted; `removeLabel` wins when both are set. */
   removeAriaLabel?: string;
+  /**
+   * The text of the tooltip the remove button shows on hover and focus. Defaults to "Remove". Set it
+   * to translate it. It isn't the button's name: that's `removeLabel`.
+   */
+  removeTooltipLabel?: string;
   /**
    * The label as plain text, for the names Chip builds from it: the remove button ("Remove
    * <label>"), the operator and value menus ("<label> value"), and the operator and value buttons,

@@ -117,6 +117,12 @@ prop to open one from outside. `min`, `max`, `isDateDisabled`, and `weekStartsOn
 `minuteStep` goes to the time columns; `locale` goes to both. `datePlaceholder`, `timePlaceholder`,
 `dateFormat`, and `timeFormat` set each half's empty text and format.
 
+Each half's built-in text passes through, for a translation. `dateDialogLabel` and
+`timeDialogLabel` name the calendar and the time panel (each half's `dialogLabel`). The time half's
+`confirmLabel`, `cancelLabel`, `hoursLabel`, `minutesLabel`, `meridiemLabel`, `amLabel`, and
+`pmLabel` keep Time Picker's names. Any left out keep the half's English default. Month and weekday
+names follow `locale`.
+
 </Subsection>
 
 <Subsection title="States">
@@ -154,7 +160,7 @@ The control is 480px wide: two 240px halves, side by side on one line.
   <DateTimePicker defaultValue={HEARING} today={TODAY} />
 </Dont>
 <Do
-  caption="Translate dateLabel and timeLabel along with the Field's label. They name the two halves."
+  caption="Translate dateLabel and timeLabel along with the Field's label, and the halves' own text (dialogs, Confirm and Cancel, the time columns, AM and PM) the same way."
   code={`<Field label="Audiencia">
     <DateTimePicker dateLabel="Fecha" timeLabel="Hora" />
 </Field>`}

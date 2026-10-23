@@ -155,6 +155,55 @@ describe('Tag', () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
+  it('makes the content of a removable tag without href a button when onClick is set', () => {
+    const handleClick = vi.fn();
+    const handleRemove = vi.fn();
+
+    render(
+      <Tag isRemovable onClick={handleClick} onRemove={handleRemove}>
+        Trust
+      </Tag>,
+    );
+
+    const content = screen.getByRole('button', { name: 'Trust' });
+    expect(content).toHaveAttribute('type', 'button');
+    expect(content).toHaveClass(styles.content, styles.contentInteractive, focusRingClassNames.focusRing);
+
+    fireEvent.click(content);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(handleRemove).not.toHaveBeenCalled();
+
+    // The remove button stays its own control, and its click doesn't reach onClick.
+    fireEvent.click(screen.getByRole('button', { name: 'Remove Trust' }));
+    expect(handleRemove).toHaveBeenCalledTimes(1);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('makes the content of a removable tag without href a button with isInteractive', () => {
+    render(
+      <Tag isRemovable isInteractive onRemove={() => undefined}>
+        Trust
+      </Tag>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Trust' })).toHaveClass(styles.content);
+  });
+
+  it('disables the content button of a removable tag along with its remove button', () => {
+    const handleClick = vi.fn();
+    render(
+      <Tag isRemovable disabled onClick={handleClick} onRemove={() => undefined}>
+        Trust
+      </Tag>,
+    );
+
+    const content = screen.getByRole('button', { name: 'Trust' });
+    expect(content).toBeDisabled();
+    fireEvent.click(content);
+    expect(handleClick).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'Remove Trust' })).toBeDisabled();
+  });
+
   it('disabled prevents navigation', () => {
     const handleClick = vi.fn();
 
@@ -333,6 +382,20 @@ describe('Tag', () => {
       expect(root).toHaveAttribute('tabindex', '0');
       expect(root).toHaveAttribute('aria-describedby', 'tag-help');
       expect(screen.getByRole('button', { name: 'Remove Trust' })).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('go to the content button, not the wrapper, of a removable tag with onClick', () => {
+      const { container } = render(
+        <Tag isRemovable onClick={() => undefined} onRemove={() => undefined} tabIndex={-1} aria-describedby="tag-help">
+          Trust
+        </Tag>,
+      );
+      const content = screen.getByRole('button', { name: 'Trust' });
+
+      expect(content).toHaveAttribute('tabindex', '-1');
+      expect(content).toHaveAttribute('aria-describedby', 'tag-help');
+      expect(container.firstElementChild).not.toHaveAttribute('tabindex');
+      expect(container.firstElementChild).not.toHaveAttribute('aria-describedby');
     });
 
     it('go to the link, not the wrapper, of a removable tag with href', () => {

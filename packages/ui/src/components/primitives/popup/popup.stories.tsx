@@ -73,6 +73,7 @@ function PopupDemo({
   closeOnEscape,
   closeOnOutsideClick,
   role,
+  ariaLabel,
   content,
 }: {
   label: string;
@@ -81,6 +82,7 @@ function PopupDemo({
   closeOnEscape?: boolean;
   closeOnOutsideClick?: boolean;
   role?: React.AriaRole;
+  ariaLabel?: string;
   content?: ReactNode;
 }) {
   const [open, setOpen] = React.useState(false);
@@ -94,6 +96,7 @@ function PopupDemo({
       closeOnEscape={closeOnEscape}
       closeOnOutsideClick={closeOnOutsideClick}
       role={role}
+      aria-label={ariaLabel}
       content={content ?? <MenuContent />}
     >
       <Button prominence={open ? 'primary' : 'secondary'} onClick={() => setOpen((current) => !current)}>
@@ -182,8 +185,8 @@ export const Content: Story = {
     <div style={stack}>
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
         <h3 style={headingStyle}>Action menu</h3>
-        <p style={captionStyle}>The shape Dropdown Menu builds on: a list of actions, role=&quot;menu&quot;.</p>
-        <PopupDemo label="Row actions" role="menu" />
+        <p style={captionStyle}>The shape Dropdown Menu builds on: a list of actions, role=&quot;menu&quot;, named with aria-label.</p>
+        <PopupDemo label="Row actions" role="menu" ariaLabel="Row actions" />
       </section>
 
       <section style={{ display: 'grid', gap: 'var(--spacing-md)' }}>

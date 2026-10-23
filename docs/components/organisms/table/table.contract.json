@@ -4,36 +4,12 @@
   "status": "beta",
   "knownIssues": [
     {
+      "kind": "bug",
+      "summary": "Its examples file's \"Selectable with a bulk-actions bar\" example gives Button the legacy `appearance` instead of `prominence`."
+    },
+    {
       "kind": "decision",
       "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
-    },
-    {
-      "kind": "gap",
-      "summary": "Two defaults are built from English inside it: the footer name and \"Select row\"."
-    },
-    {
-      "kind": "bug",
-      "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
-    },
-    {
-      "kind": "gap",
-      "summary": "Its default empty text (\"No results\" over \"There is nothing to show here yet.\") mixes two kinds of empty, and sits on the deep surface where a passed Empty State is transparent."
-    },
-    {
-      "kind": "gap",
-      "summary": "Nothing announces that a search found nothing: its only live region is the selection count."
-    },
-    {
-      "kind": "bug",
-      "summary": "Skeleton rows ignore a column's `align: 'end'`."
-    },
-    {
-      "kind": "gap",
-      "summary": "`activeFilters` renders in a plain div, and its WithToolbar and FullShell stories pass filter Chips without the named Chip Group Chip Group's page asks for."
-    },
-    {
-      "kind": "gap",
-      "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
     }
   ],
   "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
@@ -122,7 +98,7 @@
     "searchLabel": { "type": "string", "required": false, "default": "Search", "description": "Accessible name for the search field and the Icon Button that opens it." },
     "clearSearchLabel": { "type": "string", "required": false, "default": "Clear search", "description": "Accessible name for the search field's clear button." },
     "toolbarActions": { "type": "React.ReactNode", "required": false, "default": null, "description": "Right-aligned toolbar actions beside the search field — typically a filter Icon Button and a configure Icon Button. The consumer owns the buttons and their dropdown/popover content." },
-    "activeFilters": { "type": "React.ReactNode", "required": false, "default": null, "description": "Applied filter chips rendered below the search row. Pass Chip mode='filter' components and an optional '+' IconButton. The consumer renders the chips directly so filter-chip segments stay fully controlled." },
+    "activeFilters": { "type": "React.ReactNode", "required": false, "default": null, "description": "Applied filters rendered below the search row. Pass a Chip Group named with aria-label (\"Active filters\") holding Chip mode='filter' components, so the set is announced and focus stays in the group when a chip is removed. Table lays the row out but doesn't wrap it in a group (a consumer's group would be nested in a second one). The consumer renders and controls the chips." },
     "onClearFilters": { "type": "() => void", "required": false, "description": "When set, renders a Clear filters button at the trailing edge of the active-filters row." },
     "clearFiltersLabel": { "type": "string", "required": false, "default": "Clear filters", "description": "The Clear filters button's text." },
     "sort": { "type": "TableSort | null", "required": false, "description": "Controlled sort. Pair with onSortChange." },
@@ -134,17 +110,18 @@
     "defaultSelectedIds": { "type": "Array<string | number>", "required": false, "default": "[]", "description": "Initial selection (uncontrolled)." },
     "onSelectionChange": { "type": "(ids: Array<string | number>) => void", "required": false },
     "selectionColumnLabel": { "type": "string", "required": false, "default": "Select all rows" },
-    "getSelectionLabel": { "type": "(row: Row, index: number) => string", "required": false, "default": "Select row" },
+    "getSelectionLabel": { "type": "(row: Row, index: number) => string", "required": false, "default": "() => 'Select row'", "description": "Accessible name for a row's selection Checkbox, from the row, such as 'Select Ada Lovelace'. Pass it: the default names every row the same." },
     "bulkActions": { "type": "React.ReactNode", "required": false, "description": "Actions shown on the right of the selection bar when one or more rows are selected." },
     "selectionCountLabel": { "type": "(count: number) => string", "required": false, "default": "(n) => `${n} selected`", "description": "Formats the selection-bar count, which a polite live region also announces when it changes (not on the first render)." },
-    "page": { "type": "number", "required": false, "description": "Controlled current page (1-based)." },
+    "page": { "type": "number", "required": false, "description": "Controlled current page (1-based). Table never changes it: set it back to 1 when the search or a filter changes data. Uncontrolled, with client-side paging, the page goes back to 1 when the rows in data become a different set of ids." },
     "pageCount": { "type": "number", "required": false, "description": "Total pages (required for manualPagination)." },
     "onPageChange": { "type": "(page: number) => void", "required": false },
     "pageSize": { "type": "number", "required": false, "description": "Rows per page; enables client-side pagination. With manualPagination it places the range text (without it, the rows passed count as one page)." },
     "manualPagination": { "type": "boolean", "required": false, "default": false, "description": "Consumer paginates server-side; Table shows pageCount pages and does not slice." },
     "previousPageLabel": { "type": "string", "required": false, "default": "Previous page", "description": "Accessible name for the footer's previous-page button." },
     "nextPageLabel": { "type": "string", "required": false, "default": "Next page", "description": "Accessible name for the footer's next-page button." },
-    "paginationLabel": { "type": "string", "required": false, "default": "<name> pagination, or Table pagination", "description": "Accessible name for the footer's navigation region." },
+    "paginationLabel": { "type": "string", "required": false, "description": "Accessible name for the footer's navigation region, as given. Wins over getPaginationLabel." },
+    "getPaginationLabel": { "type": "(tableName: string | undefined) => string", "required": false, "default": "(tableName) => tableName ? `${tableName} pagination` : 'Table pagination'", "description": "Accessible name for the footer's navigation region, from the table's name (a string caption or title)." },
     "itemsPerPageLabel": { "type": "string", "required": false, "default": "Items per page:", "description": "The footer's page-size label, shown as given (Table adds no colon), which also names its Select." },
     "getRangeLabel": { "type": "(start: number, end: number, total: number) => string", "required": false, "default": "(start, end, total) => `${start}–${end} of ${total} items`", "description": "The footer's range text, from the page's first and last row shown and the total (0–0 with no rows)." },
     "pageLabel": { "type": "string", "required": false, "default": "Page", "description": "Accessible name for the footer's page Select." },
@@ -153,9 +130,11 @@
     "getResizeLabel": { "type": "(columnLabel: string) => string", "required": false, "default": "(columnLabel) => `Resize ${columnLabel}`", "description": "Accessible name for a column's resize handle." },
     "loading": { "type": "boolean", "required": false, "default": false, "description": "Show skeleton rows; sets aria-busy." },
     "skeletonRowCount": { "type": "number", "required": false, "default": 5 },
-    "empty": { "type": "React.ReactNode", "required": false, "default": "emptyHeadingLabel over emptyDescriptionLabel on a deep surface", "description": "Shown when there are no rows." },
-    "emptyHeadingLabel": { "type": "string", "required": false, "default": "No results", "description": "The default empty content's heading." },
-    "emptyDescriptionLabel": { "type": "string", "required": false, "default": "There is nothing to show here yet.", "description": "The default empty content's description." },
+    "empty": { "type": "React.ReactNode", "required": false, "default": "emptyLabel, transparent on the table's surface", "description": "Shown when there are no rows, such as an Empty State that says why and what to do next." },
+    "emptyLabel": { "type": "string", "required": false, "default": "No items to show", "description": "The default empty content: one neutral statement, true whether nothing exists yet or a search found nothing." },
+    "emptyHeadingLabel": { "type": "string", "required": false, "default": null, "description": "Deprecated - use emptyLabel (renamed: the default empty content is one statement, not a heading). Still accepted, and rendered the same; an explicit emptyLabel wins." },
+    "emptyDescriptionLabel": { "type": "string", "required": false, "default": null, "description": "Deprecated - the default empty content is one statement, emptyLabel. Still accepted, and shown under emptyLabel; for a heading and description, pass an Empty State as empty." },
+    "getResultCountLabel": { "type": "(count: number) => string", "required": false, "default": "(count) => count === 0 ? 'No results' : `${count} result(s)`", "description": "The result count (totalItems, else data.length), announced politely when it changes after the first render, as after a search or filter. Not announced while loading." },
     "scrollRegionLabel": { "type": "string", "required": false, "default": "Table", "description": "Accessible name for the scroll region when neither caption nor title is a string." },
     "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root class list." },
     "id": { "type": "string", "required": false, "default": null }
@@ -171,7 +150,7 @@
     { "name": "bulkActions", "required": false, "supports": ["Button", "Icon Button"], "interactive": true },
     { "name": "toolbar", "required": false, "supports": ["a full custom toolbar"], "interactive": true },
     { "name": "toolbarActions", "required": false, "supports": ["Icon Button (filter)", "Icon Button (configure)"], "interactive": true },
-    { "name": "activeFilters", "required": false, "supports": ["Chip mode='filter'", "Icon Button (add filter)"], "interactive": true },
+    { "name": "activeFilters", "required": false, "supports": ["Chip Group (named with aria-label) of Chip mode='filter'", "Icon Button (add filter)"], "interactive": true },
     { "name": "empty", "required": false, "supports": ["Empty State", "any content"], "interactive": true }
   ],
   "tokens": {
@@ -209,7 +188,7 @@
     "requirements": [
       "A semantic <table> with thead/tbody/th(scope=col)/td and a visually-hidden <caption> (or the title) as the accessible name - always give it a name.",
       "Each column header is named by its label alone (not the controls inside it). Sortable headers set aria-sort (ascending/descending/none) and wrap the label in a <button> named by the same label.",
-      "When the selected count changes, a polite live region announces selectionCountLabel(count); it is silent on the first render.",
+      "One polite live region, silent on the first render: when the result count (totalItems, else data.length) changes, as after a search or filter, it announces getResultCountLabel(count) ('No results', '12 results'; not while loading); when the selected count changes, selectionCountLabel(count). The result count wins when both change at once.",
       "The selection column uses real Checkboxes; the header select-all is labelled and goes indeterminate when only some visible rows are selected. Selection is checkbox-only - rows are never clickable, so controls inside a row act independently.",
       "Column resize handles are role=separator (aria-orientation=vertical), keyboard-focusable, operable with Arrow keys, and report aria-valuenow (the width in px), aria-valuemin (64), and aria-valuemax (the scroll region's width) from the first render.",
       "The scrollable grid is a keyboard-focusable role=region with an accessible name (WCAG 2.1.1).",
@@ -235,7 +214,8 @@
     "Columns are resizable by default (resizableColumns): drag the header-edge separator or use Arrow keys; per-column opt-out via column.resizable=false. The first resize freezes every column's width (fixed table-layout) so a resize doesn't reflow the others and the widths persist across page/data changes.",
     "column.emphasis='strong' renders a cell at the heading weight (an identifier); otherwise body weight.",
     "Pagination is client-side when pageSize is set (Table slices + owns the page) or server-driven when manualPagination (Table shows pageCount pages).",
-    "loading shows skeleton rows and sets aria-busy; an empty data set shows the empty slot (default: a 'No results' heading and description on the deep surface, which meets the table's edges - the empty cell has no padding).",
+    "A new result set starts from the first page: with client-side paging and no page prop, Table goes back to page 1 when the rows in data become a different set of ids (rows added or removed, as a search or filter does); editing or reordering rows keeps the page. A controlled page, and the page with manualPagination, are never changed: the consumer resets them.",
+    "loading shows skeleton rows and sets aria-busy; skeletons sit where their column's content does (align center / end); an empty data set shows the empty slot (default: emptyLabel, 'No items to show', one neutral statement in body/md content/subtle on the table's own surface, transparent like a passed Empty State).",
     "Render the header when there's a title or description; render the toolbar for search/toolbarActions/actions/clear/active-filters or a selection; render the footer when pagination is enabled and there's more than one page or itemsPerPageOptions is set."
   ],
   "interactionRules": [
@@ -251,7 +231,9 @@
     "Compose rich cells with `column.render` (Tag, Avatar, Link, Button, ...); keep them accessible.",
     "Mark the identifier column with `emphasis: 'strong'` (and, if it routes, a `<Link emphasis=\"strong\">`); leave other columns at body weight / default Links.",
     "Provide `bulkActions` (Buttons) for the selection bar when `selectable`.",
-    "Pass filter/configure Icon Buttons through `toolbarActions`; render Chip mode='filter' through `activeFilters`; drive filter state from the consumer.",
+    "Pass filter/configure Icon Buttons through `toolbarActions`; pass `activeFilters` a Chip Group named with aria-label ('Active filters') holding Chip mode='filter'; drive filter state from the consumer.",
+    "Set a controlled `page` back to 1 when the search or a filter changes `data`.",
+    "Show a status in words with Label (its tones mean something); Badge is for counts of one to four characters.",
     "For large/server datasets, use manualSort + manualPagination and fetch on the callbacks."
   ],
   "contentRules": [
@@ -294,8 +276,8 @@
     "Columns resize via a role=separator header handle (pointer drag + Arrow keys); resizableColumns=false / column.resizable=false opt out.",
     "column.emphasis='strong' renders the cell at the heading weight.",
     "pageSize paginates client-side; manualPagination shows pageCount pages with the range placed by page and pageSize; the footer stays while there are page sizes to pick; search works uncontrolled or controlled.",
-    "Every piece of built-in text (footer, resize handle, default empty content, scroll region fallback name) is a prop with an English default, so it can be translated.",
-    "loading shows skeleton rows + aria-busy; an empty data set shows a 'No results' message by default.",
+    "Every piece of built-in text (footer and its name, row Checkbox names, resize handle, default empty content, result count, scroll region fallback name) is a prop with an English default, so it can be translated.",
+    "loading shows skeleton rows (aligned like their columns) + aria-busy; an empty data set shows 'No items to show' by default; a changed result count is announced politely; an uncontrolled client-side page goes back to 1 on a new result set.",
     "Composes className + data-size; uses only semantic tokens; works in light and dark themes.",
     "Storybook includes Basic, Sortable, Selectable, Pagination, Sizes, WithToolbar, Loading, Empty, and FullShell.",
     "Tests cover render/default+custom cell, sort (client + manual), selection + select-all/indeterminate + checkbox-only, selection bar, resize handles, emphasis, client pagination, loading, empty, search, and size/className."

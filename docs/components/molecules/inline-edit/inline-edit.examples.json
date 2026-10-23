@@ -8,6 +8,12 @@
       "props": {}
     },
     {
+      "name": "In a Field",
+      "description": "Field's label names the field and its message describes it, through Inline Edit, which passes Field's id and ARIA props on to its child. A rejected draft shows validate's message under the field, above Field's; the field reads both.",
+      "jsx": "function DocketNumber() {\n  const [value, setValue] = useState('MER-L-001482-26');\n\n  return (\n    <Field label=\"Docket number\" required message=\"As it appears on the court notice.\">\n      <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} actionPlacement=\"end\">\n        <TextField context=\"inline\" />\n      </InlineEdit>\n    </Field>\n  );\n}",
+      "props": {}
+    },
+    {
       "name": "Read-only display (before any interaction)",
       "description": "Inline Edit always starts read-only - the confirm/cancel buttons only appear once the field is clicked or focused.",
       "jsx": "<InlineEdit value=\"Q3 Planning\">\n  <TextField context=\"inline\" aria-label=\"Title\" />\n</InlineEdit>",

@@ -15,6 +15,11 @@ export interface FormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement
    * same `*` Field shows on a required field. Independent of `description`.
    */
   requiredLegend?: boolean;
+  /**
+   * The legend's text after the `*`, shown with `requiredLegend`. Defaults to `indicates a required
+   * field`; pass a translation.
+   */
+  requiredLegendLabel?: string;
   /** The form body: FormSections, and a FormFooter for the actions. */
   children?: React.ReactNode;
   /** Added to the header's classes. */

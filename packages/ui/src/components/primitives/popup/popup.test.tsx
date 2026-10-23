@@ -4,6 +4,7 @@ import * as React from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { ModalDialog } from '../../organisms/modal-dialog';
 import { LAYERS } from '../layers';
 import { Popup } from './popup';
 import styles from './popup.module.css';
@@ -113,6 +114,26 @@ describe('Popup', () => {
     render(<ControlledPopup open role="menu" />);
 
     expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
+  it('names the panel, not the trigger, with aria-label', () => {
+    render(<ControlledPopup open role="dialog" aria-label="Matter details" />);
+
+    expect(screen.getByRole('dialog', { name: 'Matter details' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Trigger' })).not.toHaveAttribute('aria-label');
+  });
+
+  it('names the panel from a heading in its content with aria-labelledby', () => {
+    render(
+      <ControlledPopup
+        open
+        role="dialog"
+        aria-labelledby="popup-heading"
+        content={<h2 id="popup-heading">Matter details</h2>}
+      />,
+    );
+
+    expect(screen.getByRole('dialog', { name: 'Matter details' })).toBeInTheDocument();
   });
 
   it('applies no role by default', () => {
@@ -505,6 +526,53 @@ describe('Popup', () => {
     rerender(<Nested innerOpen={false} />);
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(outerChange).toHaveBeenCalledWith(false);
+  });
+
+  it('puts a popup inside a dialog above it on Escape when both open in the same render', () => {
+    const dialogClose = vi.fn();
+    const popupChange = vi.fn();
+    // Both mount already open: React runs the popup's effects before the dialog's, so ordering by
+    // when they open would put the dialog on top.
+    render(
+      <ModalDialog open onClose={dialogClose} title="Dialog">
+        <Popup open onOpenChange={popupChange} content={<span>Inside</span>}>
+          <button type="button">Trigger</button>
+        </Popup>
+      </ModalDialog>,
+    );
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(popupChange).toHaveBeenCalledWith(false);
+    expect(dialogClose).not.toHaveBeenCalled();
+  });
+
+  it('puts a popup inside another popup above it on Escape when both open in the same render', () => {
+    const outerChange = vi.fn();
+    const innerChange = vi.fn();
+    render(
+      <Popup
+        open
+        onOpenChange={outerChange}
+        content={
+          <Popup open onOpenChange={innerChange} content={<span>Inner</span>}>
+            <button type="button">Inner trigger</button>
+          </Popup>
+        }
+      >
+        <button type="button">Outer trigger</button>
+      </Popup>,
+    );
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(innerChange).toHaveBeenCalledWith(false);
+    expect(outerChange).not.toHaveBeenCalled();
+
+    // The outer panel's portal lands after the inner one in the DOM, so the inner panel needs the
+    // higher z-index to paint above it.
+    const outerPanel = screen.getByRole('button', { name: 'Inner trigger' }).parentElement as HTMLElement;
+    const innerPanel = screen.getByText('Inner').parentElement as HTMLElement;
+    expect(outerPanel.style.zIndex).toBe(String(LAYERS.popup));
+    expect(Number(innerPanel.style.zIndex)).toBeGreaterThan(LAYERS.popup);
   });
 
   it('keeps an open popup with closeOnEscape off on top, so the layer below it stays open', () => {

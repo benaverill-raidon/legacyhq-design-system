@@ -52,7 +52,8 @@ column rows, and an actions footer. Form is that shared, native container.
 ## Content
 
 ### What content can be displayed?
-- Header: title, description, and/or the "* indicates a required field" legend
+- Header: title, description, and/or the "* indicates a required field" legend (its text after the
+  `*` is `requiredLegendLabel`, for a translation)
 - Body: FormSections (optional titles) containing Fields and/or FormRows
 - Footer: action Buttons, aligned end or start
 

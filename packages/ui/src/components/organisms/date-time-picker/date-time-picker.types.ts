@@ -48,6 +48,30 @@ export interface DateTimePickerProps
   /** Accessible label for the time field. Defaults to `Time`. */
   timeLabel?: string;
   /**
+   * Accessible name for the date half's calendar dialog: Date Picker's `dialogLabel`. Defaults to
+   * `Choose a date`; pass a translation.
+   */
+  dateDialogLabel?: string;
+  /**
+   * Accessible name for the time half's panel: Time Picker's `dialogLabel`. Defaults to `Choose a
+   * time`; pass a translation.
+   */
+  timeDialogLabel?: string;
+  /** Label for the time panel's Confirm button, passed to Time Picker. Defaults to `Confirm`. */
+  confirmLabel?: string;
+  /** Label for the time panel's Cancel button, passed to Time Picker. Defaults to `Cancel`. */
+  cancelLabel?: string;
+  /** Accessible label for the time panel's hours column, passed to Time Picker. Defaults to `Hours`. */
+  hoursLabel?: string;
+  /** Accessible label for the time panel's minutes column, passed to Time Picker. Defaults to `Minutes`. */
+  minutesLabel?: string;
+  /** Accessible label for the time panel's AM/PM column, passed to Time Picker. Defaults to `AM/PM`. */
+  meridiemLabel?: string;
+  /** Text of the morning option in the AM/PM column, passed to Time Picker. Defaults to `AM`. */
+  amLabel?: string;
+  /** Text of the afternoon option in the AM/PM column, passed to Time Picker. Defaults to `PM`. */
+  pmLabel?: string;
+  /**
    * Id for the date input, not the group. Field sets it, so clicking Field's label focuses the date
    * field while the label still names the group through `aria-labelledby`.
    */

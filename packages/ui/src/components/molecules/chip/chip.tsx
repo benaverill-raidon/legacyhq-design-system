@@ -216,7 +216,11 @@ export const Chip = React.memo(function Chip(props: ChipProps) {
    *    it would detach from the pill as its own fully-rounded, fully-bordered island. Not mounting
    *    Tooltip at all avoids the wrapper rather than trying to style around it.
    */
-  const removeButton = disabled ? removeControl : <Tooltip content="Remove">{removeControl}</Tooltip>;
+  const removeButton = disabled ? (
+    removeControl
+  ) : (
+    <Tooltip content={props.removeTooltipLabel ?? 'Remove'}>{removeControl}</Tooltip>
+  );
 
   if (props.mode === 'select') {
     return root(

@@ -22,8 +22,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    */
   isInverse?: boolean;
   /**
-   * Shows a Spinner over the content without changing the button's size, sets `aria-busy`, and ignores
-   * clicks. The label stays the accessible name.
+   * Shows a Spinner over the content without changing the button's size, sets `aria-busy` and
+   * `aria-disabled`, and ignores clicks. It stays focusable (it isn't natively `disabled`), so focus
+   * doesn't jump while the action runs. The label stays the accessible name.
    */
   isLoading?: boolean;
   /** Fills the width of the container, for a form footer or a mobile action bar. */

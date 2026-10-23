@@ -81,11 +81,3 @@
   display: flex;
   justify-content: flex-end;
 }
-
-.errorList {
-  display: grid;
-  gap: var(--spacing-xs);
-  margin: 0;
-  padding-inline-start: var(--spacing-lg);
-  list-style: disc;
-}

@@ -6,6 +6,20 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
 }
 
+function warnForMissingAccessibleName(decorative: boolean, ariaLabel?: string) {
+  if (import.meta.env?.PROD) {
+    return;
+  }
+
+  if (decorative || ariaLabel) {
+    return;
+  }
+
+  console.warn(
+    'IconTile with `decorative={false}` needs `ariaLabel` for an accessible name. Without it, the tile is an unnamed image.',
+  );
+}
+
 export const IconTile = React.memo(function IconTile({
   children,
   tone: requestedTone = 'brand',
@@ -18,6 +32,10 @@ export const IconTile = React.memo(function IconTile({
 }: IconTileProps) {
   // `gray` is the deprecated name for `taupe`.
   const tone = requestedTone === 'gray' ? 'taupe' : requestedTone;
+
+  React.useEffect(() => {
+    warnForMissingAccessibleName(decorative, ariaLabel);
+  }, [decorative, ariaLabel]);
   const classNames = mergeClassNames(
     styles.root,
     styles[`tone_${tone}`],

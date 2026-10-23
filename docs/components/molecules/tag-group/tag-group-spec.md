@@ -48,6 +48,8 @@ interface TagGroupProps {
     tag: TagGroupItem,
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
   ) => void;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
   id?: string;
   className?: string;
 }
@@ -157,7 +159,11 @@ a clicked button) leaves the DOM and focus falls to the page, focus moves to the
 place (a hidden tag moving up, or the overflow tag), else the previous tag, landing on the control
 in the same position counted from the end (one remove button to the next); tags with no enabled
 control are skipped. With no tag left, the root takes `tabindex="-1"` and focus, with the shared
-Focus Ring. Focus the page has already moved is left alone. The root watches its children with a
+Focus Ring, and is announced by its name when it has one. Empty, the root would have no height (and
+no width in a row), so while it's `:empty` and focused it takes the size of a tag
+(`--size-control-xs`, or `--size-control-sm` in a `md` group, read from `data-size`) as
+`min-block-size` and `min-inline-size`; at rest an empty group still takes no space. Focus the page
+has already moved is left alone. The root watches its children with a
 MutationObserver (`primitives/focus-after-removal.ts`, shared with Chip Group).
 
 ## Overflow tag: Tag's `isInteractive` form
@@ -186,6 +192,9 @@ onOverflowTagSelect={(tag, event) => {
 
 ## Accessibility
 
+- `role="group"` only when `aria-label` or `aria-labelledby` is given, as Chip Group and Button Group
+  do: an unnamed group is a boundary a screen-reader user steps through for no benefit. Name a group
+  of removable tags, since focus lands on the root when the last one goes.
 - The overflow tag is a real `<button>` (Tag's `isInteractive` form) - Enter/Space activation and
   the native `disabled` attribute come for free, no custom key handling.
 - `aria-expanded`/`aria-controls` on the overflow tag come from Popup (via Dropdown Menu), reflecting
@@ -264,6 +273,9 @@ moves focus to the next tag when a tag is removed by a click that did not focus 
 moves focus to the previous tag when the last tag is removed
 moves focus to the tag that takes the place of the last visible one, before the overflow tag
 moves focus to the group itself when its only tag is removed
+lands on a group named by aria-label when its only tag is removed
+gives the empty, focused group the size of a tag, so its focus ring shows
+is a named group with aria-label / aria-labelledby, and has no group role without a name
 ```
 
 ## Future considerations

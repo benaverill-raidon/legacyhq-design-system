@@ -31,6 +31,16 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
       timeFormat,
       dateLabel = 'Date',
       timeLabel = 'Time',
+      // Each half's own built-in labels, passed through. Left undefined, each half keeps its default.
+      dateDialogLabel,
+      timeDialogLabel,
+      confirmLabel,
+      cancelLabel,
+      hoursLabel,
+      minutesLabel,
+      meridiemLabel,
+      amLabel,
+      pmLabel,
       id,
       className,
       'aria-label': ariaLabel,
@@ -124,6 +134,7 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
           format={dateFormat}
           required={required}
           aria-label={dateLabel}
+          dialogLabel={dateDialogLabel}
         />
         <TimePicker
           className={styles.time}
@@ -139,6 +150,14 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
           format={timeFormat}
           required={required}
           aria-label={timeLabel}
+          dialogLabel={timeDialogLabel}
+          confirmLabel={confirmLabel}
+          cancelLabel={cancelLabel}
+          hoursLabel={hoursLabel}
+          minutesLabel={minutesLabel}
+          meridiemLabel={meridiemLabel}
+          amLabel={amLabel}
+          pmLabel={pmLabel}
         />
       </div>
     );

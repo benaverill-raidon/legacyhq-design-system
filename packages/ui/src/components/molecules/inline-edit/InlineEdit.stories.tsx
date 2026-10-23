@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Field } from '../field';
 import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
 
@@ -189,6 +190,38 @@ export const Validation: Story = {
         <Cell label="The buttons stay level with the field while the error shows">
           <div style={fieldStyle}>
             <ValidatedDocketExample actionPlacement="end" />
+          </div>
+        </Cell>
+      </Group>
+    </div>
+  ),
+};
+
+function DocketInFieldExample() {
+  const [value, setValue] = useState('MER-L-001482-26');
+
+  return (
+    <Field label="Docket number" required message="As it appears on the court notice.">
+      {/* At the end, so the floating buttons don't cover Field's message below. */}
+      <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} actionPlacement="end" confirmLabel="Save docket number">
+        <TextField context="inline" />
+      </InlineEdit>
+    </Field>
+  );
+}
+
+/**
+ * In a Field, Field's label names the field and its message describes it, through Inline Edit. A
+ * rejected draft shows `validate`'s message under the field, above Field's message, and the field
+ * reads both.
+ */
+export const InField: Story = {
+  render: () => (
+    <div style={stack}>
+      <Group title="Field's label and message">
+        <Cell label="Change it to 1482 and press Enter: both messages show, and the field reads both">
+          <div style={fieldStyle}>
+            <DocketInFieldExample />
           </div>
         </Cell>
       </Group>

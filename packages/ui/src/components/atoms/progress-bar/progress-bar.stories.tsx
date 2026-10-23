@@ -112,7 +112,10 @@ export const Variants: Story = {
   ),
 };
 
-/** Size is a meaningful axis: track thickness and stroke width scale, circular diameter does not. */
+/**
+ * Size is a meaningful axis: the linear bar's height and the ring's thickness scale, the circular
+ * diameter does not. Figma has no circular sm; code draws an 8px ring.
+ */
 export const Sizes: Story = {
   render: () => (
     <div style={stack}>

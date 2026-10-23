@@ -126,7 +126,9 @@ No fill, no stroke, no radius. The group contributes exactly one token reference
   the chip now in its place, else the previous chip, on the control in the same position counted
   from the end (one remove button to the next); chips with no enabled control are skipped. With no
   chip left, the root takes `tabindex="-1"` and focus, with the shared Focus Ring, and is announced
-  by its name. Focus the page has already moved (in `onRemove`) is left alone. Removal is watched
+  by its name. Empty, the root would have no height (and no width in a row), so while it's `:empty`
+  and focused it takes the size of a chip (`--size-control-sm`, or `--size-control-xs` in a `sm`
+  group) as `min-block-size` and `min-inline-size`; at rest an empty group still takes no space. Focus the page has already moved (in `onRemove`) is left alone. Removal is watched
   with a MutationObserver on the root (`primitives/focus-after-removal.ts`), so it works however
   the chip was removed. Other keyboard behaviour belongs to the Chips inside.
 
@@ -174,6 +176,7 @@ moves focus to the next chip when a chip is removed from the keyboard
 moves focus to the next chip when a chip is removed by a click that did not focus it
 moves focus to the previous chip when the last chip is removed
 moves focus to the group itself when its only chip is removed
+gives the empty, focused group the size of a chip, so its focus ring shows
 leaves focus alone when it is not in the group as a chip is removed
 leaves focus where the page put it in onRemove
 ```

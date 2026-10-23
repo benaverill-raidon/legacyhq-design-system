@@ -162,10 +162,18 @@ export function iconUsage(tsxByPath: Record<string, string>) {
 /** Components that render library icons. */
 export const iconUsers = (tsxByPath: Record<string, string>) => [...new Set(Object.values(iconUsage(tsxByPath)).flat())].sort();
 
-/** Icons a component renders at a fixed size other than the default: `[{ component, icon, size }]`. */
+/**
+ * Icons a component renders at a fixed size other than the default: `[{ component, icon }]`. An icon
+ * named directly (`<CloseIcon size="sm" />`) is read from the tag. One picked from a lookup
+ * (`<status.Icon size="sm" />`, Field's status icon) is read from the lookup's entries, the icons
+ * assigned to that property in the same file (`Icon: StatusErrorIcon`).
+ */
 export function fixedSizes(tsxByPath: Record<string, string>, size: string) {
   return sourcesOf(tsxByPath).flatMap(({ component, source }) =>
-    [...source.matchAll(new RegExp(`<(\\w+Icon)\\b[^>]*\\bsize="${size}"`, 'g'))].map(([, icon]) => ({ component: titleCase(component), icon })),
+    [...source.matchAll(new RegExp(`<(?:\\w+\\.(\\w+)|(\\w+Icon))\\b[^>]*\\bsize="${size}"`, 'g'))].flatMap(([, property, icon]) => {
+      const names = icon ? [icon] : [...source.matchAll(new RegExp(`\\b${property}:\\s*(\\w+Icon)\\b`, 'g'))].map(([, name]) => name);
+      return [...new Set(names)].map((name) => ({ component: titleCase(component), icon: name }));
+    }),
   );
 }
 

@@ -35,7 +35,7 @@
       "circular": {
         "size": {
           "$type": "dimension",
-          "$value": "{Primitive.Value.measurement-72}"
+          "$value": "{Primitive.Value.measurement-80}"
         }
       }
     }

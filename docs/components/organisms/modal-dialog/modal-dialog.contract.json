@@ -166,7 +166,7 @@
   "implementationNotes": [
     "Use React.memo; createPortal into document.body; render null when closed or on the server.",
     "Focus trap via a capture-phase keydown listener; scroll lock via document.body.style.overflow.",
-    "Escape via a bubble-phase document keydown listener and useLayer (primitives/layers.ts), the layer stack Popup shares: acts only when the dialog is the topmost open layer and the key isn't already preventDefault()-ed, then calls preventDefault() itself.",
+    "Escape via a bubble-phase document keydown listener and useLayer (primitives/layers.ts), the layer stack Popup shares: acts only when the dialog is the topmost open layer and the key isn't already preventDefault()-ed, then calls preventDefault() itself. Everything it shows is inside its layer (LayerContext), so a popup or dialog opened from it is above it even when both mount open in the same render.",
     "The backdrop's z-index is LAYERS.dialog from primitives/layers.ts, set inline, below Toast Group (LAYERS.toast) and Popup (LAYERS.popup). z-index is not a design token.",
     "Use CSS Modules.",
     "No MUI.",

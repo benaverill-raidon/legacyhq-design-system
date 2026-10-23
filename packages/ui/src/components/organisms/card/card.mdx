@@ -157,8 +157,11 @@ when you need one. An empty card is only as tall as its border.
 
 <Subsection title="Interactive content">
 
-Card has no hover, pressed, selected, or disabled state, and handles no events. Controls inside it,
-like the form here, keep their own behavior.
+Card has no hover, pressed, selected, or disabled state, and adds no event handling of its own.
+It passes the HTML attributes and handlers you give it, such as `style`, `data-*`, or `onClick`, to
+its `div` unchanged, but a handler there doesn't make the card a control: it gets no role, no tab
+stop, and no keyboard activation. For a card people can open, put a link or button inside it, as in
+Do and don't below. Controls inside it, like the form here, keep their own behavior.
 
 <Example of={CardStories.WithForm} caption="A form inside a card, with its own submit button." />
 
@@ -235,8 +238,9 @@ like the form here, keep their own behavior.
 
 <Section title="Accessibility">
 
-- Card renders a plain `div`: no role, no landmark, no tab stop, and no keyboard behavior. Screen
-  readers don't announce it, and it doesn't change how its content is read.
+- Card renders a plain `div`: no role, no landmark, no tab stop, and no keyboard behavior, even
+  with an `onClick` passed to it. Screen readers don't announce it, and it doesn't change how its
+  content is read.
 - The content brings the semantics. Use headings, and a `section` or `article` named by its heading,
   as the examples do, when the card holds a group people should find.
 - Controls inside keep their own focus and keyboard behavior. The card clips at its edge, so keep

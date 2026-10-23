@@ -1,13 +1,7 @@
 {
   "name": "Button",
   "category": "actions",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "The `isLoading` JSDoc leaves out the `aria-disabled` it sets (the Docs page mentions it)."
-    }
-  ],
+  "status": "stable",
   "purpose": "Trigger a user-initiated action.",
   "intent": "Provide a consistent native action control with separate visual emphasis and semantic tone.",
   "figmaSource": {
@@ -317,7 +311,7 @@
     "Default type must be button.",
     "Suppress onClick when disabled is true.",
     "Suppress onClick when isLoading is true.",
-    "Set aria-busy when isLoading is true.",
+    "Set aria-busy and aria-disabled when isLoading is true; the button stays focusable (not natively disabled).",
     "Set data-loading when isLoading is true.",
     "Render Spinner centered over the content when isLoading is true.",
     "Hide the content with opacity while loading, so the button keeps its size and the label stays the accessible name.",

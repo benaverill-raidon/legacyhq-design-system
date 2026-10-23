@@ -249,6 +249,18 @@ describe('ChipGroup focus when a chip is removed', () => {
     const group = screen.getByRole('group', { name: 'Applied filters' });
     expect(group).toHaveFocus();
     expect(group).toHaveAttribute('tabindex', '-1');
+    // Empty and focused, it takes the size of a chip (CSS below), so its focus ring shows.
+    expect(group.matches(':empty:focus')).toBe(true);
+  });
+
+  it('gives the empty, focused group the size of a chip, so its focus ring shows', () => {
+    // jsdom has no layout, so this reads the rule. md chips are --size-control-sm; sm, -xs.
+    expect(chipGroupCss).toMatch(
+      /\.root:empty:focus\s*\{[^}]*min-block-size:\s*var\(--size-control-sm\)[^}]*min-inline-size:\s*var\(--size-control-sm\)/,
+    );
+    expect(chipGroupCss).toMatch(
+      /\.root\[data-size='sm'\]:empty:focus\s*\{[^}]*min-block-size:\s*var\(--size-control-xs\)[^}]*min-inline-size:\s*var\(--size-control-xs\)/,
+    );
   });
 
   it('leaves focus alone when it is not in the group as a chip is removed', async () => {

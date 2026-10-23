@@ -22,6 +22,7 @@ import {
   UseFor,
   UseInstead,
 } from '../../../storybook/blocks/component-page';
+import { KeyValueList } from '../key-value-list';
 import { KeyValuePair } from '../key-value-pair';
 import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
@@ -39,12 +40,15 @@ export function LiveValue({ label, initial, context = 'inline' }) {
 
 export function LivePair({ label, initial }) {
   const [value, setValue] = React.useState(initial);
+  // A Key Value Pair is a `dt` and `dd`, so it sits in a Key Value List (a `dl`), even on its own.
   return (
-    <KeyValuePair label={label} underline>
-      <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
-        <TextField context="inline" aria-label={label} />
-      </InlineEdit>
-    </KeyValuePair>
+    <KeyValueList>
+      <KeyValuePair label={label} underline>
+        <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
+          <TextField context="inline" aria-label={label} />
+        </InlineEdit>
+      </KeyValuePair>
+    </KeyValueList>
   );
 }
 
@@ -171,6 +175,25 @@ the draft and the error. Inline Edit only checks: saving can still fail, so hand
 
 </Subsection>
 
+<Subsection title="In a Field">
+
+Field wires Inline Edit as it wires a Text Field. Inline Edit passes what Field gives it on to its
+child, read-only and editing: the `id`, so clicking Field's label focuses the field; the label, as
+`aria-labelledby`; the message, added to `aria-describedby`; Field's error, as `aria-invalid`;
+`required`; and `context="inline"` when Field is inline. The child's own values win, as they do with
+Field, so leave the child unnamed and without an `id` inside a Field.
+
+`validate`'s message and Field's message both show: `validate`'s under the field while it rejects
+the draft, and Field's below Inline Edit as always. They say different things: `validate`'s is about
+the draft being edited, and Field's is help, or an error about the saved value, such as one from the
+server. The field is described by both, Field's first, and stays invalid while either says so.
+The buttons float over what's below the field, Field's message included, so in a Field use
+`actionPlacement="end"` and leave room beside the field.
+
+<Example of={InlineEditStories.InField} />
+
+</Subsection>
+
 <Subsection title="In a Table">
 
 Inside a Table's editable cell, the read-only field shows an edit icon after the value, and a click
@@ -260,7 +283,9 @@ field.
 <Section title="Accessibility">
 
 - Inline Edit renders a `div` with no role or name. The child keeps its own: name it with
-  `aria-label`, or with the label of the Field or Key Value Pair around it.
+  `aria-label`, or with the label of the Field or Key Value Pair around it. In a Field, Inline Edit
+  passes Field's `id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, and `required` on to
+  the child; the child's own values win.
 - While read-only, the child has the native `readOnly` attribute, so it stays in the tab order and is
   announced as read-only. Focusing it starts editing and removes `readOnly`.
 - The cancel and confirm buttons are Icon Buttons named by `cancelLabel` and `confirmLabel`, which
@@ -269,7 +294,7 @@ field.
 - After Enter, Escape, cancel, or confirm, focus is on the read-only field, so it isn't lost to the
   page. Enter or a click there starts editing again.
 - When `validate` rejects the draft, the field gets `aria-invalid` and the message is added to its
-  `aria-describedby`, after any description it already has. The message is in a polite live region,
+  `aria-describedby`, after any description it already has, Field's message included. The message is in a polite live region,
   so it's read out after Enter, when focus doesn't move. Its status icon is hidden, so the text
   carries the meaning. Focus stays in the field after Enter or the confirm button.
 
@@ -290,7 +315,9 @@ The child must accept `value`, `onChange`, `onFocus`, and `readOnly`, which Inli
 Text Field and Text Area do. Inline Edit replaces the child's own `onChange` while editing and its
 `onFocus` while read-only. While read-only it also wraps the child's `onClick` and `onKeyDown`: they
 still run, then a click or Enter starts editing. While `validate` rejects the draft, Inline Edit also
-sets `invalid` and `aria-invalid` on the child and adds the message to its `aria-describedby`.
+sets `invalid` and `aria-invalid` on the child and adds the message to its `aria-describedby`. Its
+own `id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`, and `context`, which
+Field sets, go on to the child in both modes, unless the child sets its own.
 
 </Section>
 
@@ -316,7 +343,7 @@ child's size, set the height of the action row only with `actionPlacement="end"`
 - <DocLink to="Components/Data Display/Table" />, whose editable cells can hold an Inline Edit.
 - <DocLink to="Components/Actions/Icon Button" />, the cancel and confirm buttons.
 - <DocLink to="Components/Actions/Button Group" />, which holds them.
-- <DocLink to="Components/Forms/Field" />, whose error look the `validate` message shares.
+- <DocLink to="Components/Forms/Field" />, to add a label and a message; its error look is the one the `validate` message shares.
 
 </Related>
 

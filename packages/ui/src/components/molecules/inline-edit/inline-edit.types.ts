@@ -22,10 +22,21 @@ export interface InlineEditableProps {
   iconAfter?: React.ReactNode;
   /** Set to `true` while `validate` rejects the draft, for the control's error border. Its own `true` wins. */
   invalid?: boolean;
-  /** Set to `true` while `validate` rejects the draft. Its own value wins. */
+  /** Set to `true` while `validate` rejects the draft, or passed on from Inline Edit's own (Field's). Its own value wins. */
   'aria-invalid'?: boolean | 'true' | 'false' | 'grammar' | 'spelling';
-  /** The error message's id is added after the child's own, while `validate` rejects the draft. */
+  /**
+   * Inline Edit's own `aria-describedby` (Field's message) is added after the child's own, and the
+   * error message's id after both, while `validate` rejects the draft.
+   */
   'aria-describedby'?: string;
+  /** Inline Edit's own `id` (Field's) is passed on when the child sets none. */
+  id?: string;
+  /** Inline Edit's own `aria-labelledby` (Field's label) is passed on when the child has no name of its own. */
+  'aria-labelledby'?: string;
+  /** Inline Edit's own `required` (Field's) is passed on when the child sets none. */
+  required?: boolean;
+  /** Inline Edit's own `context` (Field's) is passed on when the child sets none. */
+  context?: 'default' | 'inline';
 }
 
 export interface InlineEditProps {
@@ -61,4 +72,33 @@ export interface InlineEditProps {
   cancelLabel?: string;
   /** Added to the root `div`'s classes. */
   className?: string;
+  /**
+   * Passed on to the child, so a Field around Inline Edit wires its control: clicking Field's label
+   * focuses it. The child's own `id` wins.
+   */
+  id?: string;
+  /**
+   * Ids of the elements that name the child, such as Field's label. Passed on unless the child has
+   * its own `aria-labelledby` or `aria-label`.
+   */
+  'aria-labelledby'?: string;
+  /**
+   * Ids of elements that describe the child, such as Field's message. Added after the child's own,
+   * and before `validate`'s message while it shows.
+   */
+  'aria-describedby'?: string;
+  /**
+   * Marks the child invalid, as Field does for an error. Passed on; the child's own wins. `validate`
+   * sets it too while it rejects the draft.
+   */
+  'aria-invalid'?: boolean | 'true' | 'false';
+  /** Sets the child's native `required`, as Field does. Passed on; the child's own wins. */
+  required?: boolean;
+  /**
+   * `inline` is passed on to a child that sets no `context` of its own (nor a deprecated
+   * `appearance` or `tone`), as Field passes it when it's inline.
+   */
+  context?: 'default' | 'inline';
+  /** Internal: Field's Storybook state preview, passed on to a child that has none. */
+  'data-force-state'?: string;
 }

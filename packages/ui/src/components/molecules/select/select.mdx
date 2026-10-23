@@ -115,7 +115,7 @@ export function AssigneeSelect() {
     />
   }
 >
-  <Part name="trigger" target={selectStyles.trigger}>A Text Field whose input is the combobox: it shows the chosen label, or the text being typed while the menu is open.</Part>
+  <Part name="trigger" target={selectStyles.trigger}>A Text Field whose input is the combobox: it shows the chosen label, or the text being typed while the menu is open. In single-select, the chosen option's icon sits before the input.</Part>
   <Part name="chips" target={chipStyles.root}>Multi-select only. A removable select Chip for each chosen value, inside the field before the input.</Part>
   <Part name="caret" target={selectStyles.caret}>A caret after the input that opens and closes the menu on click. It turns over while the menu is open.</Part>
   <Part name="panel">A Dropdown Menu below the field, as wide as the field, listing the options. Shown only while open.</Part>
@@ -129,7 +129,7 @@ export function AssigneeSelect() {
 
 `inputType` decides how many values someone can choose, and the props are typed by it: `value` is a
 string or `null` for `single`, the default, and an array for `multi`. A single-select field shows
-the chosen option's label, and its menu rows are radio rows. A multi-select field shows each chosen
+the chosen option's label, after its `icon` if it has one, and its menu rows are radio rows. A multi-select field shows each chosen
 value as a select Chip before the input, and its rows are checkbox rows.
 
 <Example of={SelectStories.InputTypes} />
@@ -289,6 +289,7 @@ The field stays one line high. When chips run out of room, they shrink and clip 
   Escape, and Tab also close the menu. Focus moving anywhere outside the field and its menu closes
   the menu.
 - Each chip's remove button is its own tab stop before the input, named "Remove" plus the value.
+  `getRemoveLabel` builds that name from the value's label, for a translation.
 - The caret is hidden from assistive technology and works only with a pointer; the keys below do
   the same from the input.
 - `disabled` is the native attribute: the input and the chips' remove buttons leave the tab order.
@@ -341,6 +342,7 @@ onChange: (value: string | null) => void;  // required
 inputType: 'multi';
 value: string[];                     // required
 onChange: (value: string[]) => void; // required
+getRemoveLabel?: (label: string) => string;  // each chip's remove-button name; default \`Remove \${label}\`
 
 // Each option
 { value: string; label: string; icon?: React.ReactNode; description?: React.ReactNode;
@@ -350,8 +352,8 @@ onChange: (value: string[]) => void; // required
 tone?: 'default' | 'subtle' | 'inline';
 appearance?: 'default' | 'subtle' | 'inline';`} />
 
-An option's `icon` is decorative: it shows in its row and on its chip, hidden from assistive
-technology.
+An option's `icon` is decorative: it shows in its row, before the chosen value in a single-select
+field, and on its chip, hidden from assistive technology.
 
 </Section>
 

@@ -4,12 +4,8 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "gap",
-      "summary": "Wrapping it in Field wires nothing: Inline Edit doesn't pass on the id and ARIA props Field gives it, so Field's label and message don't reach the control."
-    },
-    {
       "kind": "bug",
-      "summary": "Its Docs page shows a Key Value Pair on its own, without a `dl` (invalid HTML)."
+      "summary": "With the default `actionPlacement=\"below\"`, its confirm and cancel buttons float over whatever sits below the field, including Field's message."
     }
   ],
   "purpose": "Let a single displayed value switch between a read-only display and an editable control in place, starting on click, with an explicit confirm/cancel step.",
@@ -78,7 +74,13 @@
     "actionAlignment": { "type": "'center' | 'start'", "required": false, "default": "center", "description": "With actionPlacement=\"end\": center the actions on the field, or keep them level with its first line (one control height) as a multi-line field grows." },
     "confirmLabel": { "type": "string", "required": false, "default": "Confirm", "description": "Accessible name (aria-label) for the confirm IconButton." },
     "cancelLabel": { "type": "string", "required": false, "default": "Cancel", "description": "Accessible name (aria-label) for the cancel IconButton." },
-    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root's class list." }
+    "className": { "type": "string", "required": false, "default": null, "description": "Composes with the root's class list." },
+    "id": { "type": "string", "required": false, "default": null, "description": "Passed on to the child (Field sets it, so clicking Field's label focuses the field). The child's own id wins." },
+    "aria-labelledby": { "type": "string", "required": false, "default": null, "description": "Passed on to the child (Field's label), unless the child has its own aria-labelledby or aria-label." },
+    "aria-describedby": { "type": "string", "required": false, "default": null, "description": "Added to the child's aria-describedby after its own (Field's message), and before validate's message while it shows." },
+    "aria-invalid": { "type": "boolean | 'true' | 'false'", "required": false, "default": null, "description": "Passed on to the child (Field's error). The child's own wins; validate sets it too while it rejects the draft." },
+    "required": { "type": "boolean", "required": false, "default": null, "description": "Passed on to the child as its native required (Field's). The child's own wins." },
+    "context": { "type": "'default' | 'inline'", "required": false, "default": null, "description": "inline is passed on to a child that sets no context (nor deprecated appearance/tone), as Field passes it when inline." }
   },
   "variants": {},
   "sizes": [],
@@ -107,7 +109,8 @@
       "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
       "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
       "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
-      "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby; the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
+      "In a Field, Field's id, aria-labelledby, aria-describedby, aria-invalid, and required reach the child through Inline Edit, so Field's label names it and its message describes it.",
+      "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby (after the child's own and Field's message); the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
       "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
     ]
   },
@@ -128,10 +131,13 @@
     "Enter/Escape confirm/cancel handling is scoped to the internal editing state and never fires before editing starts.",
     "Enter and Escape leave focus on the field after calling onConfirm/onCancel (Escape from an action button moves it to the field first); the action buttons' clicks move focus to the field before ending the edit, since they unmount.",
     "onBlur on the root: if the newly-focus element (event.relatedTarget) is outside the root, or unavailable, call confirm() when the draft differs from value, otherwise just end editing; if it is the cancel/confirm button itself, no-op and let that button's own onClick handle it.",
-    "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button)."
+    "A mousedown-set ref flag on both action buttons suppresses the same-tick blur's auto-confirm, covering browsers that don't reliably move focus to a clicked <button> (where relatedTarget would otherwise be unavailable even for a click on Inline Edit's own button).",
+    "In a Field (or with the props set directly), Inline Edit passes its id, aria-labelledby, aria-describedby, aria-invalid, required, inline context, and data-force-state on to the child in both modes, filling in only what the child leaves unset, as Field does: the child's own values win (its own aria-label also keeps Field's aria-labelledby off), and descriptions add up - the child's own, then Field's message, then validate's message while it shows.",
+    "validate's message and Field's message coexist: validate's shows under the field (inside Inline Edit) while it rejects the draft, and Field's below Inline Edit as always. The child reads both, and stays aria-invalid while either Field's error or validate says so."
   ],
   "compositionRules": [
     "Clone a single controlled input-like child appropriate for editing one value - TextField today (typically context=inline), Select/DatePicker/TimePicker/DateTimePicker once built.",
+    "Wrap Inline Edit (not its child) in a Field for a visible label and message; leave the child without its own name or id so Field's reach it.",
     "Do not use for multiple related fields - use a real form instead."
   ],
   "contentRules": [
@@ -177,6 +183,7 @@
     "Clicking cancel or confirm never also triggers an auto-confirm from the blur clicking them causes.",
     "With validate, a rejected draft (Enter, confirm button, or blur) keeps editing with the message under the field, aria-invalid on it, and focus in it after Enter/confirm; the message follows the draft; Escape still cancels.",
     "confirmLabel/cancelLabel set the accessible names of the action buttons.",
+    "In a Field, the child is named by Field's label, described by its message, and gets Field's id, error, required, and inline context, read-only and editing; the child's own values win. validate's message and Field's both show, and the child reads both.",
     "className applies to the root.",
     "Works in light and dark themes.",
     "Storybook includes Playground, Variants, Content, and Edge Cases, every example using a TextField with context='inline'.",

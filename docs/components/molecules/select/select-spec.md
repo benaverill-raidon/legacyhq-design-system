@@ -17,6 +17,7 @@ composes two molecules — TextField and Chip — which is ordinary molecule-on-
 Select
 └─ DropdownMenu (Popup + Menu)
    ├─ trigger: TextField (role=combobox)
+   │  ├─ iconBefore: the chosen option's icon (single only, aria-hidden; Figma's elemBeforeInput)
    │  ├─ leadingContent: chips (multi only) — removable Chip per value
    │  ├─ input — the typeahead search field / selected-label display
    │  └─ iconAfter: caret (rotates when open)
@@ -73,6 +74,8 @@ interface SelectMultiProps extends SelectCommonProps {
   inputType: 'multi';
   value: string[];
   onChange: (value: string[]) => void;
+  /** Each chip's remove-button name, passed to Chip's removeLabel. Default `Remove ${label}`. */
+  getRemoveLabel?: (label: string) => string;
 }
 
 type SelectProps = SelectSingleProps | SelectMultiProps;
@@ -103,7 +106,12 @@ emptyMessage: "No matches"
 - **Panel** — `DropdownMenu` with `showSearch={false}` (the trigger *is* the search field), the
   option rows built by Select, and `emptyMessage` for no-results.
 - **Chips** — multi-select values render as `Chip mode="select"` in the trigger's `leadingContent`
-  slot; `sm` chips in sm/md triggers, `md` in lg, matching Figma.
+  slot; `sm` chips in sm/md triggers, `md` in lg, matching Figma. Each chip's remove button is
+  named `getRemoveLabel(option.label)` (Chip's `removeLabel`), `Remove <label>` by default.
+- **Chosen icon** — a single-select field passes the chosen option's `icon` to TextField's
+  `iconBefore`, the slot Figma's `select-trigger` has as the text-field's `elemBeforeInput` (an
+  icon slot, hidden in the static variants). It's decorative and stays while the menu is open,
+  since the value doesn't change until a new pick.
 
 ### The TextField extension
 
@@ -218,6 +226,7 @@ single: renders a combobox trigger with the placeholder when empty
 single: opens on interaction and lists options as radio items
 single: onChange + close on choose
 single: shows the selected label when closed
+single: shows the chosen option's icon before the value (aria-hidden), and none without one
 single: marks the selected option aria-checked
 typeahead: filters by case-insensitive substring
 typeahead: empty message when nothing matches
@@ -226,6 +235,7 @@ multi: removable chip per value, not labels in the input
 multi: checkbox rows, toggle without closing
 multi: re-pick deselects
 multi: chip remove button removes the value
+multi: getRemoveLabel names the chips' remove buttons
 multi: Backspace removes the last chip on an empty query
 multi: no Backspace-remove while the query is non-empty
 grouping: a section heading per group

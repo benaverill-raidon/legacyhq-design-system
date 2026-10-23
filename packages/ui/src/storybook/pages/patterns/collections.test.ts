@@ -38,16 +38,18 @@ describe('Collections cites Table', () => {
   });
 
   it('names every row Checkbox "Select row" without getSelectionLabel', () => {
-    expect(table).toMatch(/aria-label=\{getSelectionLabel\?\.\(row, index\) \?\? 'Select row'\}/);
+    expect(table).toMatch(/getSelectionLabel = \(\) => 'Select row',/);
+    expect(table).toMatch(/aria-label=\{getSelectionLabel\(row, index\)\}/);
   });
 
   it('names the table by caption, or title, and the footer for the table', () => {
     expect(table).toMatch(/const captionContent = caption \?\? title;/);
-    expect(table).toMatch(/role="navigation" aria-label=\{paginationLabel \?\? \(name \? `\$\{name\} pagination` : 'Table pagination'\)\}/);
+    expect(table).toMatch(/getPaginationLabel = \(tableName\) => \(tableName \? `\$\{tableName\} pagination` : 'Table pagination'\),/);
+    expect(table).toMatch(/role="navigation" aria-label=\{paginationLabel \?\? getPaginationLabel\(name\)\}/);
   });
 
-  it('has a default empty description written for a list with nothing in it yet', () => {
-    expect(table).toMatch(/emptyDescriptionLabel = 'There is nothing to show here yet\.',/);
+  it('has a default empty text that does not say a search found nothing', () => {
+    expect(table).toMatch(/emptyLabel \?\? emptyHeadingLabel \?\? 'No items to show'/);
   });
 
   it('takes the props the page uses', () => {

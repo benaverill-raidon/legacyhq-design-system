@@ -5,10 +5,6 @@
   "knownIssues": [
     {
       "kind": "gap",
-      "summary": "Its remove button's tooltip says \"Remove\" in English, with no prop to translate it (built-in-labels)."
-    },
-    {
-      "kind": "gap",
       "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
     }
   ],
@@ -185,6 +181,12 @@
       "required": false,
       "default": "Remove ${labelText}",
       "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`. removeAriaLabel, the earlier name (renamed 2026-10-20 to match Tag's removeLabel, built-in-labels), is still accepted; removeLabel wins when both are set."
+    },
+    "removeTooltipLabel": {
+      "type": "string",
+      "required": false,
+      "default": "Remove",
+      "description": "filter and select. The text of the remove button's tooltip, shown on hover and focus (not while disabled). Not the button's name, which is removeLabel. A prop with an English default so it can be translated (built-in-labels)."
     },
     "labelText": {
       "type": "string",

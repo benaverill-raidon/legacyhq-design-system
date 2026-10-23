@@ -37,21 +37,21 @@ describe('AvatarGroup', () => {
     for (let index = 5; index <= 6; index += 1) {
       expect(screen.queryByRole('img', { name: `Person ${index}` })).not.toBeInTheDocument();
     }
-    expect(screen.getByRole('button', { name: '+2' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '+2 more people' })).toBeInTheDocument();
   });
 
   it('keeps at least one avatar visible even when maxVisible is 0', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={0} />);
 
     expect(screen.getByRole('img', { name: 'Person 1' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '+4' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '+4 more people' })).toBeInTheDocument();
   });
 
   it('keeps at least one avatar visible even when maxVisible is negative', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={-3} />);
 
     expect(screen.getByRole('img', { name: 'Person 1' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '+4' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '+4 more people' })).toBeInTheDocument();
   });
 
   it('warns in development when maxVisible is clamped to 1', () => {
@@ -74,7 +74,7 @@ describe('AvatarGroup', () => {
   it('opens a menu holding the remaining truncated avatars when the overflow trigger is activated', () => {
     render(<AvatarGroup avatars={makeAvatars(6)} maxVisible={4} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+2' }));
+    fireEvent.click(screen.getByRole('button', { name: '+2 more people' }));
 
     const menu = screen.getByRole('menu');
     expect(within(menu).getByRole('menuitem', { name: 'Person 5' })).toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('AvatarGroup', () => {
     const handleSelect = vi.fn();
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} onOverflowAvatarSelect={handleSelect} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
     fireEvent.click(screen.getByRole('menuitem', { name: 'Person 5' }));
 
     expect(handleSelect).toHaveBeenCalledTimes(1);
@@ -95,7 +95,7 @@ describe('AvatarGroup', () => {
   it('closes the overflow panel, returning focus to the trigger, when a truncated avatar is selected', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
     fireEvent.click(screen.getByRole('menuitem', { name: 'Person 5' }));
 
     expect(screen.queryByRole('menu')).not.toBeInTheDocument();
@@ -104,7 +104,7 @@ describe('AvatarGroup', () => {
   it('closes the overflow panel on an outside click and on Escape, inherited from Popup', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
     expect(screen.getByRole('menu')).toBeInTheDocument();
 
     fireEvent.keyDown(document, { key: 'Escape' });
@@ -114,13 +114,34 @@ describe('AvatarGroup', () => {
   it('uses a custom overflowLabel to render the overflow trigger text', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} overflowLabel={(count) => `${count} more`} />);
 
-    expect(screen.getByRole('button', { name: '1 more' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '+1 more person' })).toHaveTextContent('1 more');
+  });
+
+  it('names the overflow button for what it reveals, starting with its visible text', () => {
+    render(<AvatarGroup avatars={makeAvatars(6)} maxVisible={3} />);
+
+    const button = screen.getByRole('button', { name: '+3 more people' });
+    expect(button).toHaveTextContent('+3');
+  });
+
+  it('names a one-person overflow in the singular', () => {
+    render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} />);
+
+    expect(screen.getByRole('button', { name: '+1 more person' })).toBeInTheDocument();
+  });
+
+  it('takes the overflow button name from getOverflowButtonLabel, for translation', () => {
+    const getLabel = vi.fn((count: number) => `+${count} personnes de plus`);
+    render(<AvatarGroup avatars={makeAvatars(6)} maxVisible={4} getOverflowButtonLabel={getLabel} />);
+
+    expect(screen.getByRole('button', { name: '+2 personnes de plus' })).toBeInTheDocument();
+    expect(getLabel).toHaveBeenCalledWith(2);
   });
 
   it('defaults the overflow menu accessible name to "{count} more people"', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
 
     expect(screen.getByRole('menu', { name: '1 more people' })).toBeInTheDocument();
   });
@@ -128,7 +149,7 @@ describe('AvatarGroup', () => {
   it('supports a custom overflowMenuAriaLabel', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} overflowMenuAriaLabel="Hidden people" />);
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
 
     expect(screen.getByRole('menu', { name: 'Hidden people' })).toBeInTheDocument();
   });
@@ -137,7 +158,7 @@ describe('AvatarGroup', () => {
     render(<AvatarGroup avatars={makeAvatars(5)} maxVisible={4} size="sm" />);
 
     expect(screen.getByRole('img', { name: 'Person 1' })).toHaveAttribute('data-size', 'sm');
-    expect(screen.getByRole('button', { name: '+1' })).toHaveClass(buttonStyles.size_sm);
+    expect(screen.getByRole('button', { name: '+1 more person' })).toHaveClass(buttonStyles.size_sm);
   });
 
   it("forwards each avatar item's own props (src, isInteractive, onClick, isDisabled) to the rendered Avatar", () => {
@@ -168,7 +189,7 @@ describe('AvatarGroup', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '+2' }));
+    fireEvent.click(screen.getByRole('button', { name: '+2 more people' }));
 
     const menu = screen.getByRole('menu');
     expect(within(menu).getByRole('menuitem', { name: 'Alt text only' })).toBeInTheDocument();
@@ -187,7 +208,7 @@ describe('AvatarGroup', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
 
     const row = screen.getByRole('menuitem', { name: 'Averill & Partners' });
     expect(row.querySelector('[data-avatar-fallback]')).toHaveAttribute('data-entity-type', 'team');
@@ -204,14 +225,14 @@ describe('AvatarGroup', () => {
     const avatars = makeAvatars(3);
     avatars[2] = { ...avatars[2], disabled: true };
     render(<AvatarGroup avatars={avatars} maxVisible={2} />);
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
     expect(screen.getByRole('menuitem', { name: 'Person 3' })).toBeDisabled();
   });
 
   it('names a hidden person with no name or alt by unnamedLabel, for translation', () => {
     const avatars: AvatarGroupItem[] = [...makeAvatars(1), { id: 'nameless' }];
     render(<AvatarGroup avatars={avatars} maxVisible={1} unnamedLabel="Sin nombre" />);
-    fireEvent.click(screen.getByRole('button', { name: '+1' }));
+    fireEvent.click(screen.getByRole('button', { name: '+1 more person' }));
     expect(screen.getByRole('menuitem', { name: 'Sin nombre' })).toBeInTheDocument();
   });
 });

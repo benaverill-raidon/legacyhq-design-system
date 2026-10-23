@@ -17,6 +17,8 @@ let panelIdCounter = 0;
 /** Chips sit at sm inside the sm/md triggers and md inside the lg trigger, matching Figma. */
 const CHIP_SIZE_FOR: Record<SelectSize, 'sm' | 'md'> = { sm: 'sm', md: 'sm', lg: 'md' };
 
+const defaultGetRemoveLabel = (label: string) => `Remove ${label}`;
+
 /** A label's text, leaving out the field itself when the label wraps it (its chips' text). */
 function getLabelText(label: HTMLLabelElement, field: Element | null) {
   let text = '';
@@ -292,6 +294,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
         ? selectedSingleOption.label // show the current choice as a hint while typing a new query
         : placeholder;
 
+  const getRemoveLabel = (multi ? props.getRemoveLabel : undefined) ?? defaultGetRemoveLabel;
+
   const chips = multi
     ? selectedValues.map((value) => {
         const option = options.find((o) => o.value === value);
@@ -304,7 +308,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
             label={option.label}
             elemBefore={option.icon}
             disabled={disabled}
-            removeLabel={`Remove ${option.label}`}
+            removeLabel={getRemoveLabel(option.label)}
             onRemove={() => removeValue(value)}
           />
         );
@@ -340,6 +344,9 @@ export const Select = React.memo(function Select(props: SelectProps) {
         autoComplete="off"
         placeholder={inputPlaceholder}
         value={inputValue}
+        // Single-select shows the chosen option's icon before its label (Figma's elemBeforeInput slot);
+        // it stays while the menu is open, since the value doesn't change until a new pick.
+        iconBefore={selectedSingleOption?.icon}
         leadingContent={chips}
         iconAfter={
           <span

@@ -164,12 +164,15 @@ before it, and the overflow button paints over the last.
 - The root is a `div` with no role or name, and Avatar Group adds nothing to the visible avatars:
   each is an Avatar, an image named by its `name`, or a button when it's interactive. Say what the
   people are in the text around the group, such as a “Team” heading.
-- The overflow button is a native `button`. Its visible text, `+3` by default, is its accessible
-  name. It gets `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` from Dropdown Menu.
+- The overflow button is a native `button`. Its accessible name says what it reveals:
+  `getOverflowButtonLabel`, “+3 more people” by default (“+1 more person” for one). It starts with
+  the visible text, `+3`, so people using speech input can say what they see; if you change
+  `overflowLabel`, change `getOverflowButtonLabel` to match, and translate it with the rest of your
+  interface. It gets `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` from Dropdown Menu.
 - The menu has `role="menu"` and is named by `overflowMenuAriaLabel`, “3 more people” by default.
   Each row is a `menuitem` named by the person's name; its avatar is decorative. Translate
   `overflowMenuAriaLabel` with the rest of your interface. A person with no name or `alt` gets the
-  row name “Unnamed”, which has no prop to translate it yet.
+  row name `unnamedLabel`, “Unnamed” by default.
 - Opening the menu moves focus to the first enabled row. Choosing a row, Escape, or Tab out of the
   menu closes it and returns focus to the overflow button.
 - Focus shows the shared Focus Ring on the overflow button and on interactive avatars.

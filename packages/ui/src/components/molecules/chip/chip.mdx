@@ -306,8 +306,8 @@ with its full text.
 - Each menu is a Menu, announced as a menu and named "Due date value" or "Due date operator" by
   default, or by `menuAriaLabel`.
 - The remove button is a native button named by `removeLabel`, `Remove` plus the label by
-  default (`removeAriaLabel` is its deprecated name, still accepted). The default names need the label as text: a string `label`, or `labelText`. A "Remove" tooltip shows on hover and focus; it isn't the button's name, and it's not
-  shown while disabled.
+  default (`removeAriaLabel` is its deprecated name, still accepted). The default names need the label as text: a string `label`, or `labelText`. A tooltip, `removeTooltipLabel` ("Remove" by default), shows on hover and focus; it isn't the button's name, and it's not
+  shown while disabled. Translate both with the rest of your interface.
 - `elemBefore` and `valuePreview` are hidden from assistive technology, so the label and value text
   must carry the meaning.
 - `disabled` sets the native attribute on every control in the chip, so they leave the tab order.
@@ -350,12 +350,14 @@ operator?: ChipSegment;
 valuePreview?: React.ReactNode;      // decorative, before the value text
 onRemove: (event) => void;           // required
 removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
+removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
 labelText?: string;                  // the label as text, for the built names; set it when label is JSX
 size?: 'md';                         // filter chips are md only
 
 // mode="select"
 onRemove: (event) => void;           // required
 removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
+removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
 labelText?: string;                  // the label as text, for the remove button's name
 
 // mode="search"

@@ -539,6 +539,18 @@
         "default": null,
         "description": "ARIA role for the panel. No default - depends on what the consumer is building."
       },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the panel (set on the panel, not the trigger), for a role that needs a name such as dialog or menu when nothing visible in the content names it. When a heading in the content does, use aria-labelledby instead. A tooltip needs neither."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "The id of the element in the content that names the panel, such as its heading. Set on the panel. Preferred to aria-label when the name is visible."
+      },
       "className": {
         "type": "string",
         "required": false,
@@ -633,6 +645,7 @@
         "aria-controls points at the panel id only while open, by default.",
         "manageTriggerAria=false skips both attributes entirely, for consumers with their own trigger ARIA relationship (e.g. aria-describedby).",
         "No default role is added to the panel - the consumer supplies one appropriate to its content.",
+        "aria-label and aria-labelledby land on the panel, never the trigger: a panel whose role needs a name (dialog, menu) is named with aria-labelledby pointing at a visible heading in its content, or aria-label when there is none.",
         "Popup does not make the trigger focusable or change its semantics beyond the two aria attributes above."
       ]
     },
@@ -659,30 +672,19 @@
         "padding gained a fourth value, `none`, on 2026-08-19 when Dropdown Menu was built on top of Popup: its Figma instance of `popup` wraps a `menu` panel with zero outer padding around it (the menu's own search field and rows already carry their own insets, matching the padding=0 measured directly on the dropdown-menu component's nested panelSurface/content/menu node chain). `sm`/`md`/`lg` were insufficient for this real consumer, so the enum grew rather than having Dropdown Menu reach for `unstyled` and re-declare background/border/radius/shadow itself."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "No `aria-label` prop."
-      },
-      {
-        "kind": "bug",
-        "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -1269,26 +1271,19 @@
       "variantCount": 176,
       "verifiedAt": "2026-09-01"
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "The `isLoading` JSDoc leaves out the `aria-disabled` it sets (the Docs page mentions it)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -1967,9 +1962,7 @@
         "borderWidth": "border-width-sm"
       },
       "componentAllowed": [
-        "linear root size",
-        "linear pad (progress fill inset)",
-        "track thickness",
+        "track thickness (linear bar height)",
         "circular diameter"
       ],
       "componentForbidden": [
@@ -2017,13 +2010,13 @@
           "variantCount": 12
         }
       ],
-      "verifiedAt": "2026-08-06"
+      "verifiedAt": "2026-10-23"
     },
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "bug",
-        "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
+        "kind": "decision",
+        "summary": "Figma has no circular sm; code draws an 8px ring. Add it in Figma or drop sm for circular."
       }
     ],
     "replacedBy": null,
@@ -2604,26 +2597,12 @@
       "verifiedAt": "2026-08-06"
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "A pointer press on a disabled single Slider still sets `data-dragging=\"true\"`; the disabled styles hide it."
-      },
-      {
-        "kind": "bug",
-        "summary": "Its examples file uses a `type` prop that doesn't exist (`<Slider type=\"slider-range\">`)."
-      },
-      {
-        "kind": "bug",
-        "summary": "The hover-only value bubble floats over the label."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
-        "noKnownIssues"
+        "examples"
       ],
       "evidence": {
         "docsPage": true,
@@ -2631,7 +2610,7 @@
         "figma": true,
         "contract": true,
         "examples": false,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -2855,10 +2834,6 @@
     },
     "status": "beta",
     "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "A removable Tag without `href` ignores `onClick`."
-      },
       {
         "kind": "decision",
         "summary": "`tone` holds color names (blue, green, purple), which by tone-is-meaning is `appearance`. Rename it, or keep it as Toggle Button's is kept."
@@ -3234,6 +3209,12 @@
         "default": "(n) => `+${n}`",
         "description": "The overflow trigger's text, given the truncated count."
       },
+      "getOverflowButtonLabel": {
+        "type": "(hiddenCount: number) => string",
+        "required": false,
+        "default": "(n) => `+${n} more people` (`+1 more person` for one)",
+        "description": "The overflow trigger's accessible name, given the truncated count: what the button reveals. Starts with the default visible text so speech-input users can say what they see; change it with overflowLabel, and translate it."
+      },
       "overflowMenuAriaLabel": {
         "type": "string",
         "required": false,
@@ -3273,6 +3254,7 @@
     },
     "accessibility": {
       "overflowTriggerRole": "button (Button, unmodified)",
+      "overflowTriggerName": "getOverflowButtonLabel(hiddenCount), default \"+3 more people\" (\"+1 more person\" for one) - says what it reveals and starts with the visible \"+3\"",
       "ariaExpanded": "set on the overflow trigger by Popup (via Dropdown Menu), reflecting the panel's open state",
       "ariaControls": "set on the overflow trigger by Popup, pointing at the panel id while open",
       "overflowPanelRole": "menu (set by Menu, via Dropdown Menu), named by overflowMenuAriaLabel",
@@ -3306,26 +3288,19 @@
         "position: relative on .avatarRing and .overflowTrigger fixes a stacking-order bug verified live in a browser (not reproducible under jsdom): Avatar's own root is already position: relative, which - since neither wrapper creates its own stacking context - promotes it into .root's 'positioned' paint tier, a tier that always paints above plain static content regardless of DOM order. Button's own root is position: static, so without this the overflow trigger (last in DOM, meant to be on top) always lost to the avatar before it. Confirmed via document.elementFromPoint() at each overlap boundary both before and after the fix."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "The overflow button is named only \"+3\", without saying what it reveals."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -3732,6 +3707,12 @@
         "default": "Remove ${labelText}",
         "description": "filter and select. Falls back to `Remove ${labelText}` (labelText, or label when it is a string), otherwise `Remove`. removeAriaLabel, the earlier name (renamed 2026-10-20 to match Tag's removeLabel, built-in-labels), is still accepted; removeLabel wins when both are set."
       },
+      "removeTooltipLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Remove",
+        "description": "filter and select. The text of the remove button's tooltip, shown on hover and focus (not while disabled). Not the button's name, which is removeLabel. A prop with an English default so it can be translated (built-in-labels)."
+      },
       "labelText": {
         "type": "string",
         "required": false,
@@ -3843,10 +3824,6 @@
     "knownIssues": [
       {
         "kind": "gap",
-        "summary": "Its remove button's tooltip says \"Remove\" in English, with no prop to translate it (built-in-labels)."
-      },
-      {
-        "kind": "gap",
         "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
       }
     ],
@@ -3949,7 +3926,7 @@
       "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit",
       "focusOrder": "DOM order of the children; Chip Group adds no roving tabindex or arrow-key handling, because its children are independent controls rather than a single composite widget",
       "selection": "not managed - each search Chip carries its own aria-pressed",
-      "focusAfterRemoval": "When the chip holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the chip that takes its place, else the previous chip, landing on the control in the same position counted from the end (remove button to remove button); chips with no enabled control are skipped. With no chip left, the group root takes tabindex=-1 and focus, with the shared Focus Ring. Focus the page has already moved is left alone.",
+      "focusAfterRemoval": "When the chip holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the chip that takes its place, else the previous chip, landing on the control in the same position counted from the end (remove button to remove button); chips with no enabled control are skipped. With no chip left, the group root takes tabindex=-1 and focus, with the shared Focus Ring; while empty and focused it is the size of a chip (min-block-size and min-inline-size from --size-control-sm, or --size-control-xs at sm), so the ring shows. Focus the page has already moved is left alone.",
       "note": "Chip Group renders no interactive element of its own; apart from keeping focus when a chip is removed, its focus and keyboard behaviour is its children's."
     },
     "relatedComponents": [
@@ -3978,26 +3955,19 @@
         "`role=\"group\"` is applied only when an accessible name is given (aria-label/aria-labelledby), matching Button Group - an unnamed group is a boundary a screen-reader user steps through for no benefit."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -4363,7 +4333,7 @@
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Accessible label used only when decorative is false."
+        "description": "Accessible label used only when decorative is false. With decorative=false and no ariaLabel, the tile warns in development (skipped when import.meta.env.PROD)."
       },
       "className": {
         "type": "string",
@@ -4517,6 +4487,7 @@
         "Do not add button behavior.",
         "Do not add keyboard interaction.",
         "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
+        "decorative=false without ariaLabel warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
         "Ensure color contrast meets requirements for all tone/appearance combinations."
       ]
     },
@@ -4583,8 +4554,8 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "bug",
-        "summary": "With `decorative={false}` and no label it has no accessible name, and no warning says so."
+        "kind": "gap",
+        "summary": "Takes camelCase `ariaLabel`, where Badge, Breadcrumbs, and Pagination moved to `aria-label` (kept as an alias)."
       }
     ],
     "replacedBy": null,
@@ -4693,6 +4664,42 @@
         "required": false,
         "default": null,
         "description": "Composes with the root's class list."
+      },
+      "id": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Passed on to the child (Field sets it, so clicking Field's label focuses the field). The child's own id wins."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Passed on to the child (Field's label), unless the child has its own aria-labelledby or aria-label."
+      },
+      "aria-describedby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Added to the child's aria-describedby after its own (Field's message), and before validate's message while it shows."
+      },
+      "aria-invalid": {
+        "type": "boolean | 'true' | 'false'",
+        "required": false,
+        "default": null,
+        "description": "Passed on to the child (Field's error). The child's own wins; validate sets it too while it rejects the draft."
+      },
+      "required": {
+        "type": "boolean",
+        "required": false,
+        "default": null,
+        "description": "Passed on to the child as its native required (Field's). The child's own wins."
+      },
+      "context": {
+        "type": "'default' | 'inline'",
+        "required": false,
+        "default": null,
+        "description": "inline is passed on to a child that sets no context (nor deprecated appearance/tone), as Field passes it when inline."
       }
     },
     "sizes": [],
@@ -4726,7 +4733,8 @@
         "The cloned child stays in the tab order in both states (readOnly, not disabled) - focusing/clicking it starts editing.",
         "Enter calls onConfirm (with the draft, and preventDefault) while editing a single-line field; in a textarea Enter adds a line and Ctrl/Cmd+Enter confirms. Enter on a focused cancel/confirm button activates that button instead. Escape calls onCancel while editing. Neither confirms nor cancels before editing starts; Enter on the focused read-only field starts editing. After Enter, Escape, cancel, or confirm, focus is on the read-only field.",
         "Clicking/Tab-ing focus to anywhere outside the root while editing calls onConfirm with the draft (auto-save on blur) when it differs from value, and otherwise just ends editing; moving focus to the cancel/confirm buttons themselves does not.",
-        "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby; the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
+        "In a Field, Field's id, aria-labelledby, aria-describedby, aria-invalid, and required reach the child through Inline Edit, so Field's label names it and its message describes it.",
+        "When validate rejects the draft, the child gets aria-invalid and the message's id appended to its aria-describedby (after the child's own and Field's message); the message sits in a polite live region (present from the start of editing) so it's announced after Enter. Focus stays in the field after Enter or the confirm button; a blur isn't reversed.",
         "No roving tabindex or custom focus management - native Tab order through the child, then cancel, then confirm."
       ]
     },
@@ -4784,12 +4792,8 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "gap",
-        "summary": "Wrapping it in Field wires nothing: Inline Edit doesn't pass on the id and ARIA props Field gives it, so Field's label and message don't reach the control."
-      },
-      {
         "kind": "bug",
-        "summary": "Its Docs page shows a Key Value Pair on its own, without a `dl` (invalid HTML)."
+        "summary": "With the default `actionPlacement=\"below\"`, its confirm and cancel buttons float over whatever sits below the field, including Field's message."
       }
     ],
     "replacedBy": null,
@@ -5676,6 +5680,12 @@
         "default": null,
         "description": "Called with the next selection - string|null (single) or string[] (multi)."
       },
+      "getRemoveLabel": {
+        "type": "(label: string) => string",
+        "required": false,
+        "default": "(label) => `Remove ${label}`",
+        "description": "Multi-select only. Builds each chip's remove-button name from the option's label, passed to Chip's removeLabel; pass a translation (built-in-labels)."
+      },
       "inputType": {
         "type": "'single' | 'multi'",
         "required": false,
@@ -5877,11 +5887,11 @@
     "knownIssues": [
       {
         "kind": "gap",
-        "summary": "Names its chips' remove buttons in English (`Remove <label>`), with no prop (built-in-labels)."
+        "summary": "Its chips' remove tooltips stay \"Remove\" in English: it could pass Chip's new `removeTooltipLabel` through."
       },
       {
         "kind": "gap",
-        "summary": "A single Select doesn't show the chosen option's icon; only menu rows and multi-select chips do."
+        "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
       },
       {
         "kind": "gap",
@@ -6263,7 +6273,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "A wrapping flex row (gap: spacing-sm) - the only styling Tag Group owns."
+        "description": "A wrapping flex row (gap: spacing-sm) - the only styling Tag Group owns, plus the size of a tag while it's empty and focused. A role=\"group\" when named. Carries data-alignment and data-size."
       },
       {
         "name": "visible tags",
@@ -6329,6 +6339,18 @@
         "default": null,
         "description": "Called when a truncated tag is selected from the overflow panel. Dropdown Menu then closes the panel and returns focus to the overflow tag (unless the callback calls event.preventDefault()); Tag Group does not navigate or remove on its own."
       },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Names the group and makes the root a role=\"group\". Name a group of removable tags: when the last one is removed, focus lands on the root."
+      },
+      "aria-labelledby": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Same, by reference to a visible element such as a heading."
+      },
       "id": {
         "type": "string",
         "required": false,
@@ -6358,12 +6380,13 @@
       "note": "tag-group.module.css declares exactly one token reference - gap: var(--spacing-sm), matching Figma's measured 8px itemSpacing/counterAxisSpacing on both axes of the wrap layout. Every other value is Tag's own tone/size tokens or Dropdown Menu/Menu's own panel/row tokens - see their respective contract.json files."
     },
     "accessibility": {
+      "role": "group, but only when aria-label or aria-labelledby is provided - an unnamed group adds a boundary with no benefit (Chip Group's and Button Group's rule)",
       "overflowTagRole": "button (Tag's isInteractive form - a real <button>)",
       "ariaExpanded": "set on the overflow tag by Popup (via Dropdown Menu), reflecting the panel's open state",
       "ariaControls": "set on the overflow tag by Popup, pointing at the panel id while open",
       "overflowPanelRole": "menu (set by Menu, via Dropdown Menu), named by overflowMenuAriaLabel",
       "visibleTagAccessibility": "unchanged from Tag's own documented accessibility - Tag Group applies no ARIA of its own to visible tags",
-      "focusAfterRemoval": "When the tag holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the tag now in its place (a hidden tag moving up, or the overflow tag), else the previous tag, landing on the control in the same position counted from the end (remove button to remove button); tags with no enabled control are skipped. With no tag left, the root takes tabindex=-1 and focus, with the shared Focus Ring; it has no name. Focus the page has already moved is left alone."
+      "focusAfterRemoval": "When the tag holding focus (or the one just pressed) is removed and focus falls to the page, focus moves to the tag now in its place (a hidden tag moving up, or the overflow tag), else the previous tag, landing on the control in the same position counted from the end (remove button to remove button); tags with no enabled control are skipped. With no tag left, the root takes tabindex=-1 and focus, with the shared Focus Ring, announced by its aria-label / aria-labelledby when given; while empty and focused it is the size of a tag (min-block-size and min-inline-size from --size-control-xs, or --size-control-sm at md), so the ring shows. Focus the page has already moved is left alone."
     },
     "relatedComponents": [
       "Tag",
@@ -6390,30 +6413,19 @@
         "Figma's nested `dropdown-menu` instance has an empty `content` slot in the static file (isOpen=false, never toggled open in the source), so the overflow panel's actual content (a Menu row per truncated tag) is a code-level design decision, not something measured from an open Figma variant - informed directly by Dropdown Menu's own established 'always renders a Menu built from sections' rule."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "When its last item is removed, focus moves to the group root, which is 0×0 when empty, so its focus ring barely shows."
-      },
-      {
-        "kind": "gap",
-        "summary": "It takes no `aria-label`, so when its last tag is removed focus lands on a group root with no name."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -7126,7 +7138,7 @@
         "type": "React.HTMLAttributes<HTMLDivElement>",
         "required": false,
         "default": null,
-        "description": "Native div attributes, style, and consumer event handlers."
+        "description": "Native div attributes, style, and consumer event handlers, passed to the div unchanged. Card adds no handlers of its own, and a handler passed here gives the div no role, tab stop, or keyboard activation: a clickable card is a Link or Button inside it."
       }
     },
     "sizes": [],
@@ -7272,26 +7284,19 @@
         "Surface=none has no fill and maps to transparent, independently of the border. It does not apply opacity to children."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "It spreads `onClick` and other props onto its `div`, while its page says it handles no events."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -7528,19 +7533,26 @@
       },
       "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
     },
-    "status": "stable",
-    "knownIssues": [],
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "It doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English here and in Date Time Picker (built-in-labels)."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "stable",
-      "unmet": [],
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },
@@ -7910,6 +7922,60 @@
         "default": "Time",
         "description": null
       },
+      "dateDialogLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Choose a date",
+        "description": "Date Picker's dialogLabel: the calendar dialog's name. Prefixed because both halves have a dialogLabel."
+      },
+      "timeDialogLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Choose a time",
+        "description": "Time Picker's dialogLabel: the time panel's name."
+      },
+      "confirmLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Confirm",
+        "description": "Passed to Time Picker, under its own name (only the time half has it)."
+      },
+      "cancelLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Cancel",
+        "description": "Passed to Time Picker."
+      },
+      "hoursLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Hours",
+        "description": "Passed to Time Picker: the hours column's name."
+      },
+      "minutesLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Minutes",
+        "description": "Passed to Time Picker: the minutes column's name."
+      },
+      "meridiemLabel": {
+        "type": "string",
+        "required": false,
+        "default": "AM/PM",
+        "description": "Passed to Time Picker: the AM/PM column's name."
+      },
+      "amLabel": {
+        "type": "string",
+        "required": false,
+        "default": "AM",
+        "description": "Passed to Time Picker: the morning option's text."
+      },
+      "pmLabel": {
+        "type": "string",
+        "required": false,
+        "default": "PM",
+        "description": "Passed to Time Picker: the afternoon option's text."
+      },
       "id": {
         "type": "string",
         "required": false,
@@ -7954,6 +8020,7 @@
       "rootRole": "group",
       "label": "aria-label or aria-labelledby on the group",
       "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
+      "builtInLabels": "every built-in label of the halves passes through: dateDialogLabel and timeDialogLabel (each half's dialogLabel, prefixed because both have one, as datePlaceholder/timePlaceholder are), and the time half's confirmLabel, cancelLabel, hoursLabel, minutesLabel, meridiemLabel, amLabel, pmLabel under Time Picker's own names (only the time half has them, as minuteStep). Left undefined, each half keeps its English default. Month and weekday names come from locale, which goes to both halves.",
       "fieldWiring": "Field's label names the group via aria-labelledby; Field's id goes to the date input, so the label's htmlFor focuses the date half; required makes the form validate both halves",
       "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
     },
@@ -7978,26 +8045,19 @@
       },
       "notes": "WIP in Figma: only context x size is defined (no combined open/disabled/hover/filled states) - interaction states come from the inner pickers. The set is 480px (two 240px halves). In code the control composes the DatePicker and TimePicker organisms over one shared Date; the joined look is achieved by pulling the two field frames together (negative margin) and squaring their inner corners."
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Can't pass its halves' labels through (dialogLabel, amLabel, pmLabel, Confirm and Cancel, column and month names)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -8449,6 +8509,12 @@
         "default": false,
         "description": "Renders the '* indicates a required field' legend, with the '*' in the error colour."
       },
+      "requiredLegendLabel": {
+        "type": "string",
+        "required": false,
+        "default": "indicates a required field",
+        "description": "The legend's text after the '*', shown with requiredLegend. Pass a translation (built-in-labels); the '*' mark stays as it is."
+      },
       "children": {
         "type": "React.ReactNode",
         "required": false,
@@ -8576,26 +8642,19 @@
         "Form owns no form state - it renders a native <form> and forwards onSubmit and all native form attributes; validation and each field's state stay native / on Field."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "The required legend (\"indicates a required field\") is hard-coded English (built-in-labels)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -9724,7 +9783,7 @@
         "type": "React.ReactNode",
         "required": false,
         "default": null,
-        "description": "Applied filter chips rendered below the search row. Pass Chip mode='filter' components and an optional '+' IconButton. The consumer renders the chips directly so filter-chip segments stay fully controlled."
+        "description": "Applied filters rendered below the search row. Pass a Chip Group named with aria-label (\"Active filters\") holding Chip mode='filter' components, so the set is announced and focus stays in the group when a chip is removed. Table lays the row out but doesn't wrap it in a group (a consumer's group would be nested in a second one). The consumer renders and controls the chips."
       },
       "onClearFilters": {
         "type": "() => void",
@@ -9795,8 +9854,8 @@
       "getSelectionLabel": {
         "type": "(row: Row, index: number) => string",
         "required": false,
-        "default": "Select row",
-        "description": null
+        "default": "() => 'Select row'",
+        "description": "Accessible name for a row's selection Checkbox, from the row, such as 'Select Ada Lovelace'. Pass it: the default names every row the same."
       },
       "bulkActions": {
         "type": "React.ReactNode",
@@ -9814,7 +9873,7 @@
         "type": "number",
         "required": false,
         "default": null,
-        "description": "Controlled current page (1-based)."
+        "description": "Controlled current page (1-based). Table never changes it: set it back to 1 when the search or a filter changes data. Uncontrolled, with client-side paging, the page goes back to 1 when the rows in data become a different set of ids."
       },
       "pageCount": {
         "type": "number",
@@ -9855,8 +9914,14 @@
       "paginationLabel": {
         "type": "string",
         "required": false,
-        "default": "<name> pagination, or Table pagination",
-        "description": "Accessible name for the footer's navigation region."
+        "default": null,
+        "description": "Accessible name for the footer's navigation region, as given. Wins over getPaginationLabel."
+      },
+      "getPaginationLabel": {
+        "type": "(tableName: string | undefined) => string",
+        "required": false,
+        "default": "(tableName) => tableName ? `${tableName} pagination` : 'Table pagination'",
+        "description": "Accessible name for the footer's navigation region, from the table's name (a string caption or title)."
       },
       "itemsPerPageLabel": {
         "type": "string",
@@ -9909,20 +9974,32 @@
       "empty": {
         "type": "React.ReactNode",
         "required": false,
-        "default": "emptyHeadingLabel over emptyDescriptionLabel on a deep surface",
-        "description": "Shown when there are no rows."
+        "default": "emptyLabel, transparent on the table's surface",
+        "description": "Shown when there are no rows, such as an Empty State that says why and what to do next."
+      },
+      "emptyLabel": {
+        "type": "string",
+        "required": false,
+        "default": "No items to show",
+        "description": "The default empty content: one neutral statement, true whether nothing exists yet or a search found nothing."
       },
       "emptyHeadingLabel": {
         "type": "string",
         "required": false,
-        "default": "No results",
-        "description": "The default empty content's heading."
+        "default": null,
+        "description": "Deprecated - use emptyLabel (renamed: the default empty content is one statement, not a heading). Still accepted, and rendered the same; an explicit emptyLabel wins."
       },
       "emptyDescriptionLabel": {
         "type": "string",
         "required": false,
-        "default": "There is nothing to show here yet.",
-        "description": "The default empty content's description."
+        "default": null,
+        "description": "Deprecated - the default empty content is one statement, emptyLabel. Still accepted, and shown under emptyLabel; for a heading and description, pass an Empty State as empty."
+      },
+      "getResultCountLabel": {
+        "type": "(count: number) => string",
+        "required": false,
+        "default": "(count) => count === 0 ? 'No results' : `${count} result(s)`",
+        "description": "The result count (totalItems, else data.length), announced politely when it changes after the first render, as after a search or filter. Not announced while loading."
       },
       "scrollRegionLabel": {
         "type": "string",
@@ -10003,7 +10080,7 @@
       "requirements": [
         "A semantic <table> with thead/tbody/th(scope=col)/td and a visually-hidden <caption> (or the title) as the accessible name - always give it a name.",
         "Each column header is named by its label alone (not the controls inside it). Sortable headers set aria-sort (ascending/descending/none) and wrap the label in a <button> named by the same label.",
-        "When the selected count changes, a polite live region announces selectionCountLabel(count); it is silent on the first render.",
+        "One polite live region, silent on the first render: when the result count (totalItems, else data.length) changes, as after a search or filter, it announces getResultCountLabel(count) ('No results', '12 results'; not while loading); when the selected count changes, selectionCountLabel(count). The result count wins when both change at once.",
         "The selection column uses real Checkboxes; the header select-all is labelled and goes indeterminate when only some visible rows are selected. Selection is checkbox-only - rows are never clickable, so controls inside a row act independently.",
         "Column resize handles are role=separator (aria-orientation=vertical), keyboard-focusable, operable with Arrow keys, and report aria-valuenow (the width in px), aria-valuemin (64), and aria-valuemax (the scroll region's width) from the first render.",
         "The scrollable grid is a keyboard-focusable role=region with an accessible name (WCAG 2.1.1).",
@@ -10105,36 +10182,12 @@
     "status": "beta",
     "knownIssues": [
       {
+        "kind": "bug",
+        "summary": "Its examples file's \"Selectable with a bulk-actions bar\" example gives Button the legacy `appearance` instead of `prominence`."
+      },
+      {
         "kind": "decision",
         "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
-      },
-      {
-        "kind": "gap",
-        "summary": "Two defaults are built from English inside it: the footer name and \"Select row\"."
-      },
-      {
-        "kind": "bug",
-        "summary": "Its page isn't reset when the data shrinks, only clamped to the page count."
-      },
-      {
-        "kind": "gap",
-        "summary": "Its default empty text (\"No results\" over \"There is nothing to show here yet.\") mixes two kinds of empty, and sits on the deep surface where a passed Empty State is transparent."
-      },
-      {
-        "kind": "gap",
-        "summary": "Nothing announces that a search found nothing: its only live region is the selection count."
-      },
-      {
-        "kind": "bug",
-        "summary": "Skeleton rows ignore a column's `align: 'end'`."
-      },
-      {
-        "kind": "gap",
-        "summary": "`activeFilters` renders in a plain div, and its WithToolbar and FullShell stories pass filter Chips without the named Chip Group Chip Group's page asks for."
-      },
-      {
-        "kind": "gap",
-        "summary": "Its CellVariants story puts status words in a Badge, which is for one to four characters (use Label)."
       }
     ],
     "replacedBy": null,

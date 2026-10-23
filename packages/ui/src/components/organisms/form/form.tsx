@@ -15,7 +15,16 @@ function mergeClassNames(...classNames: Array<string | undefined | false>) {
  */
 export const Form = React.memo(
   React.forwardRef<HTMLFormElement, FormProps>(function Form(
-    { title, description, requiredLegend = false, children, className, headerClassName, ...rest },
+    {
+      title,
+      description,
+      requiredLegend = false,
+      requiredLegendLabel = 'indicates a required field',
+      children,
+      className,
+      headerClassName,
+      ...rest
+    },
     forwardedRef,
   ) {
     const hasHeader = title != null || description != null || requiredLegend;
@@ -29,7 +38,7 @@ export const Form = React.memo(
             {requiredLegend ? (
               <p className={styles.description}>
                 {/* Not aria-hidden: this legend explains what the `*` means, so it is real content. */}
-                <span className={styles.requiredMark}>*</span> indicates a required field
+                <span className={styles.requiredMark}>*</span> {requiredLegendLabel}
               </p>
             ) : null}
           </div>

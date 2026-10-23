@@ -358,7 +358,7 @@
   --component-progress-bar-track-size-sm: var(--measurement-16);
   --component-progress-bar-track-size-md: var(--measurement-24);
   --component-progress-bar-track-size-lg: var(--measurement-32);
-  --component-progress-bar-circular-size: var(--measurement-72);
+  --component-progress-bar-circular-size: var(--measurement-80);
   --component-progress-indicator-dot-container-size-sm: var(--measurement-16);
   --component-progress-indicator-dot-container-size-md: var(--measurement-20);
   --component-slider-track-height-xs: var(--measurement-16);

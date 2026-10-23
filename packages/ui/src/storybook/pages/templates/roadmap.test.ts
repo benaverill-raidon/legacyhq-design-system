@@ -74,13 +74,13 @@ describe('Roadmap cites the components', () => {
     expect(source('atoms/label/label.mdx')).toMatch(/It has no border, icon, or remove control, by design/);
   });
 
-  it('a single Select shows only the chosen label; option icons are in the rows and on multi-select chips', () => {
+  it("a single Select shows the chosen option's icon, as the rows and multi-select chips do", () => {
     const select = source('molecules/select/select.tsx');
     expect(select).toMatch(/leadingElement: option\.icon/);
     expect(select).toMatch(/const chips = multi\s*\?/);
     expect(select).toMatch(/elemBefore=\{option\.icon\}/);
     expect(select).toMatch(/leadingContent=\{chips\}/);
-    expect(select).not.toMatch(/iconBefore=\{selectedSingleOption/);
+    expect(select).toMatch(/iconBefore=\{selectedSingleOption\?\.icon\}/);
   });
 
   it('icons, avatars, chip previews, and menu-row icons are decorative', () => {

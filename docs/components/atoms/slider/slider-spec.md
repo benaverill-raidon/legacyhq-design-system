@@ -262,11 +262,12 @@ Do not render excessive stops that would harm performance or visual clarity.
 The value indicator (a native `output` bubble above the handle) shows on hover, keyboard focus,
 and while dragging, whatever `showValue` is.
 
-`showValue` (false by default) keeps it showing. A horizontal slider with `showValue` makes room
-for it: the control gets a top margin of the bubble's height (`body-sm` line height plus
-`spacing-xs` padding top and bottom) plus `spacing-sm`, so the bubble sits between the label and the
-track and never overlaps the label. Without `showValue`, the bubble shows over whatever is above
-while the slider is in use. On vertical sliders it sits beside the handle.
+`showValue` (false by default) keeps it showing. A horizontal slider always makes room for the
+bubble, with or without `showValue`: the control gets a top margin of the bubble's height
+(`body-sm` line height plus `spacing-xs` padding top and bottom) plus `spacing-sm`, so the bubble
+sits between the label and the track and never covers the label - the slider's own, or Field's,
+which sits `spacing-xs` above the slider. The room is the same either way, so the slider doesn't
+move when the bubble appears. On vertical sliders it sits beside the handle.
 
 For `SliderRange`, both values show.
 
@@ -275,6 +276,8 @@ For `SliderRange`, both values show.
 - The native range input has `pointer-events: none`; the `.control` element owns pointer handling,
   with pointer capture while dragging. A press away from the handle moves the value to that point
   (on SliderRange, the nearer handle moves), then dragging continues from there.
+- A disabled slider (by `disabled` or a disabled `<fieldset>`, checked with `:disabled`) never
+  starts a drag: neither the control's nor the input's pointer handler sets `data-dragging`.
 - Because the pressed element and the focused input are never the same node, focus is moved with an
   explicit `.focus()` call. Chromium's `:focus-visible` heuristic then treats it as keyboard focus,
   so `usePointerFocusRing` marks pointer-originated focus with `data-pointer-focus="true"` and the

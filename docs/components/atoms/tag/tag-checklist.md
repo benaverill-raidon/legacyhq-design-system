@@ -307,6 +307,7 @@ Test:
 - keeps the elemBefore/remove icon a constant 16px regardless of size
 - supports data-force-state hover/press preview on both the content and remove areas
 - renders a button (not a span) when isInteractive or onClick is provided with no href/isRemovable
+- in a removable tag without href, onClick or isInteractive makes the content a button beside the remove button, disabled with the tag
 - interactive tag button is natively disabled and uses the shared focus ring classes
 - the deprecated isDisabled alias still works, and disabled wins when both are set
 - tabIndex and aria-describedby reach the root of a display-only tag and of a removable tag without href, and the link or button otherwise

@@ -35,6 +35,18 @@ export interface PopupProps {
   id?: string;
   /** The panel's role, such as `menu`, `dialog`, or `tooltip`. There's no default: pass the role of what you're building. */
   role?: React.AriaRole;
+  /**
+   * Names the panel: it's set on the panel, not the trigger. Use it with a role that needs a name,
+   * such as `dialog` or `menu`, when nothing visible in the content names the panel. When a heading
+   * in the content does, pass its id as `aria-labelledby` instead. A `tooltip` needs neither: its
+   * text is its name.
+   */
+  'aria-label'?: string;
+  /**
+   * The id of the element in the content that names the panel, such as its heading. Set on the
+   * panel. Prefer it to `aria-label` when the name is visible, so what people see and hear match.
+   */
+  'aria-labelledby'?: string;
   /** Added to the panel's classes. */
   className?: string;
   /** Leaves off Popup's surface (background, border, padding, radius, shadow), keeping position and the fade. For a different look of your own, as Tooltip has. */

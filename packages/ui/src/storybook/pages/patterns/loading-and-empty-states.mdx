@@ -186,8 +186,8 @@ the action you give it.
   </Choice>
 </Choices>
 
-In a table, pass the Empty State as Table's `empty`. Its default, "No results" over "There is
-nothing to show here yet.", doesn't say which kind of empty it is.
+In a table, pass the Empty State as Table's `empty`. Its default, "No items to show", is true of
+either kind of empty but doesn't say which it is.
 
 </Subsection>
 
@@ -260,9 +260,9 @@ nothing to show here yet.", doesn't say which kind of empty it is.
   beside it for sighted people.
 - A loading toast is announced through Toast Group's polite live region. Loading reads no status
   word before the title, so the title has to say what's running.
-- Empty State isn't a live region, and Table doesn't announce its rows running out. When a search
-  empties the results, announce it from a region that stays on the page, such as a status message
-  with the result count.
+- Empty State isn't a live region. Table announces its result count politely when it changes, such
+  as "No results" after a search. Anywhere else, when a search empties the results, announce it from
+  a region that stays on the page, such as a status message with the result count.
 - Section Message is a polite live region by default, so a failure that appears in place of the
   content is read out.
 - With reduced motion, Skeleton stops pulsing, Spinner stops turning, and Progress Bar's fill

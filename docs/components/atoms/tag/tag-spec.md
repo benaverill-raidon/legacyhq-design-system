@@ -179,11 +179,14 @@ Render a native anchor.
 
 ### removable without href
 
-Render a wrapper with a non-interactive content area and a native remove button.
+Render a wrapper with a content area and a native remove button. The content area is a native
+button when `onClick` or `isInteractive` is set, and a non-interactive span otherwise.
 
 ```tsx
 <span className={styles.root}>
   <span className={styles.content}>...</span>
+  {/* or, with onClick / isInteractive: */}
+  <button type="button" className={styles.content} onClick={onClick}>...</button>
   <button type="button" className={styles.removeButton} />
 </span>
 ```
@@ -281,9 +284,11 @@ remove button fades with the `fade-quick` motion recipe, switched off under
 `-default`/`-hover`/`-press` tokens; the `--tag-background-*-layer` variables are always `none`.
 
 `tabIndex` and `aria-describedby` go to the link or the interactive button when there is one (in a
-removable linked tag, the content anchor, not the wrapper). Otherwise they go to the root: the
-display-only span, or the wrapper span of a removable tag without `href`. They're never dropped. `onClick` and `isInteractive` are ignored by a removable tag without `href`, whose content
-is a plain span; with `href`, `onClick` runs from the anchor's click handler, not while disabled.
+removable tag, the content anchor or button, not the wrapper). Otherwise they go to the root: the
+display-only span, or the wrapper span of a removable tag without `href` or `onClick`. They're never
+dropped. In a removable tag without `href`, `onClick` or `isInteractive` makes the content a native
+button beside the remove button, natively disabled with the tag; with `href`, `onClick` runs from
+the anchor's click handler, not while disabled. The remove button's click never reaches `onClick`.
 
 ## Leading element
 
@@ -491,6 +496,7 @@ supports data-force-state hover/press preview on both the content and remove are
 renders a button when isInteractive is set with no href/isRemovable
 renders a button when onClick is provided with no href/isRemovable, even without isInteractive
 calls onClick when the interactive tag button is activated
+makes the content of a removable tag without href a button when onClick (or isInteractive) is set
 disables the interactive tag button natively when disabled is true
 the deprecated isDisabled alias still disables the link, the remove button, and an interactive tag
 disabled wins over the deprecated isDisabled when both are set

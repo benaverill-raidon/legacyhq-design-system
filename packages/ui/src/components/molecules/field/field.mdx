@@ -138,7 +138,9 @@ several elements.
 Every form control in the system passes them on: Text Field, Text Area, Select, Date Picker, Time
 Picker, and Slider to their input; Rich Text Area to its editor; Date Time Picker names its group and
 marks both inputs; Slider Range names its group, points the label at its lower handle, and gives
-both handles the message, the error, and `required`.
+both handles the message, the error, and `required`. Inline Edit passes them on to its child, so a
+Field around an Inline Edit names and describes the field inside it; while Inline Edit's `validate`
+rejects a draft, its message shows under the field, above Field's, and the field reads both.
 
 <Example of={FieldStories.AnyControl} caption="The same label, message, and state on a Text Field, a Text Area, and a Slider." />
 

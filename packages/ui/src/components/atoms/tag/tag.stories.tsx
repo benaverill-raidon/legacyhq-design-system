@@ -154,6 +154,12 @@ export const Variants: Story = {
         </Tag>
       </Group>
 
+      <Group title="Clickable + removable (button + button)">
+        <Tag isRemovable onClick={() => undefined} onRemove={() => undefined}>
+          Click + remove
+        </Tag>
+      </Group>
+
       <Group title="Interactive (button)">
         <Tag isInteractive onClick={() => undefined}>
           +5 more

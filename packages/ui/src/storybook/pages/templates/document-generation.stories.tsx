@@ -145,29 +145,17 @@ const PageHeading = 'h3';
 const StepHeading = 'h4';
 const TABLE_HEADING_LEVEL = 5;
 
-/** A failed step's summary: what to fix, each line a link that moves focus to its field. */
-function ErrorSummary({ errors, action, onFocusField, summaryRef }: { errors: FieldError[]; action: string; onFocusField: (key: string) => void; summaryRef: React.Ref<HTMLDivElement> }) {
+/** A failed step's summary: what to fix, each line a link (Section Message's `errors`) that moves focus to its field. */
+function ErrorSummary({ errors, action, idOf, summaryRef }: { errors: FieldError[]; action: string; idOf: (key: string) => string; summaryRef: React.Ref<HTMLDivElement> }) {
   return (
     <FormSection>
-      <SectionMessage ref={summaryRef} tabIndex={-1} tone="error" title={`Fix ${count(errors.length, 'field', 'fields')} to ${action}`}>
-        <ul className={styles.errorList}>
-          {errors.map(({ key, label, message }) => (
-            <li key={key}>
-              <Link
-                href={`#${key}`}
-                emphasis="default"
-                onClick={(event) => {
-                  event.preventDefault();
-                  onFocusField(key);
-                }}
-              >
-                {label}
-              </Link>
-              : {message}
-            </li>
-          ))}
-        </ul>
-      </SectionMessage>
+      <SectionMessage
+        ref={summaryRef}
+        tabIndex={-1}
+        tone="error"
+        title={`Fix ${count(errors.length, 'field', 'fields')} to ${action}`}
+        errors={errors.map(({ key, label, message }) => ({ label, message, targetId: idOf(key) }))}
+      />
     </FormSection>
   );
 }
@@ -270,11 +258,6 @@ function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = f
   const goTo = (next: Step) => {
     setStep(next);
     requestFocus('heading');
-  };
-
-  const focusField = (key: string) => {
-    const target = key === 'documents' ? document.querySelector<HTMLInputElement>(`input[name="${idOf('documents')}"]`) : document.getElementById(idOf(key));
-    target?.focus();
   };
 
   const finish = (ids: DocumentId[]) => {
@@ -495,12 +478,13 @@ function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = f
           <>
             {stepHeading('Choose documents')}
             <Form className={styles.narrow} description="The estate plan package is chosen to start with. Uncheck any document the client doesn't need." requiredLegend noValidate onSubmit={submitDocuments}>
-              {summary[1].length > 0 ? <ErrorSummary errors={summary[1]} action="continue" onFocusField={focusField} summaryRef={summaryRef} /> : null}
+              {summary[1].length > 0 ? <ErrorSummary errors={summary[1]} action="continue" idOf={idOf} summaryRef={summaryRef} /> : null}
               <FormSection>
                 <CheckboxGroup
                   label="Documents"
                   description="Each is drawn up from the firm's template, with the details you confirm next."
                   required
+                  id={idOf('documents')}
                   name={idOf('documents')}
                   invalid={documentErrors.length > 0}
                   errorMessage={documentErrors[0]?.message}
@@ -528,7 +512,7 @@ function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = f
               noValidate
               onSubmit={submitDetails}
             >
-              {summary[2].length > 0 ? <ErrorSummary errors={summary[2]} action="generate the documents" onFocusField={focusField} summaryRef={summaryRef} /> : null}
+              {summary[2].length > 0 ? <ErrorSummary errors={summary[2]} action="generate the documents" idOf={idOf} summaryRef={summaryRef} /> : null}
               {shown(CLIENT_DETAILS).length > 0 ? (
                 <FormSection title="Client">
                   {needed.has('clientName') || needed.has('county') ? rowsOf(shown(CLIENT_DETAILS).filter(({ key }) => key !== 'address')) : null}

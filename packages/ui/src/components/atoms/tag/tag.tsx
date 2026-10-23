@@ -70,15 +70,18 @@ export const Tag = React.memo(
       isDisabled && styles.disabled,
       className,
     );
+    const isButton = isInteractive || typeof onClick === 'function';
+    // Beside a remove button, the content is a link with `href`, a button with `onClick` or
+    // `isInteractive`, and otherwise only displays.
+    const isContentControl = Boolean(href) || isButton;
     const contentClassName = mergeClassNames(
       styles.content,
-      href && styles.contentInteractive,
-      href && focusRingClassNames.focusRing,
-      href && focusRingClassNames.focusRingDefault,
+      isContentControl && styles.contentInteractive,
+      isContentControl && focusRingClassNames.focusRing,
+      isContentControl && focusRingClassNames.focusRingDefault,
     );
     const sharedContent = renderTagInnerContent(elemBefore, children);
     const computedRemoveLabel = getTagRemoveLabel(removeLabel, children);
-    const isButton = isInteractive || typeof onClick === 'function';
 
     const handleNavigateClick = React.useCallback(
       (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -183,9 +186,9 @@ export const Tag = React.memo(
         {...rest}
         ref={forwardedRef as React.ForwardedRef<HTMLSpanElement>}
         className={mergeClassNames(rootClassName, styles.wrapper)}
-        // With a link inside, the link takes these; without one, the wrapper is the tag's only element.
-        aria-describedby={href ? undefined : ariaDescribedBy}
-        tabIndex={href ? undefined : tabIndex}
+        // With a link or button inside, it takes these; without one, the wrapper is the tag's only element.
+        aria-describedby={isContentControl ? undefined : ariaDescribedBy}
+        tabIndex={isContentControl ? undefined : tabIndex}
         data-disabled={isDisabled ? 'true' : undefined}
         data-size={size}
         data-tone={tone}
@@ -203,6 +206,17 @@ export const Tag = React.memo(
           >
             {sharedContent}
           </a>
+        ) : isButton ? (
+          <button
+            type="button"
+            className={contentClassName}
+            disabled={isDisabled}
+            aria-describedby={ariaDescribedBy}
+            tabIndex={tabIndex}
+            onClick={onClick}
+          >
+            {sharedContent}
+          </button>
         ) : (
           <span className={styles.content}>{sharedContent}</span>
         )}

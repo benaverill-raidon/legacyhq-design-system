@@ -12,7 +12,8 @@
 ## Deliverables
 
 - [x] Component, types, CSS Module, and index exports.
-- [x] Composition tests for root/ref/attributes, child state, and native form submission.
+- [x] Composition tests for root/ref/attributes, passed-through handlers (no role, tab stop, or key activation added), child state, and native form submission.
+- [x] Docs say Card adds no handlers of its own and passes yours to its div, and that a clickable card is a Link or Button inside it.
 - [x] Playground, all variants, transparent/borderless panels, arbitrary content, edge-to-edge, and working form stories.
 - [x] Attached Storybook MDX documentation.
 - [x] Usage, spec, implementation brief, checklist, contract, and examples.

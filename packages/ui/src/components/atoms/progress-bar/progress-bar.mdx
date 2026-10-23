@@ -24,6 +24,16 @@ import { ProgressBar } from './progress-bar';
 import progressBarStyles from './progress-bar.module.css';
 import * as ProgressBarStories from './progress-bar.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<span>42%</span>
+<ProgressBar value={42} />`;
+export const sample2 = `<ProgressBar
+  value={60}
+  label="Preparing documents"
+  getValueText={() => '6 of 10 documents prepared'}
+/>`;
+
 <Meta of={ProgressBarStories} name="Docs" />
 
 <Unstyled>
@@ -151,8 +161,7 @@ once either way; the ring's track stays.
 </Do>
 <Dont
   caption="Leave the bar unnamed and rely on a percentage shown beside it, which screen readers don't connect to the bar."
-  code={`<span>42%</span>
-<ProgressBar value={42} />`}
+  code={sample1}
 />
 <Do caption="Use Spinner when you can't measure how far along the work is." code={`<Spinner label="Loading matters" />`}>
   <Spinner label="Loading matters" />
@@ -162,11 +171,7 @@ once either way; the ring's track stays.
 </Dont>
 <Do
   caption="Put counted progress in getValueText, and keep label for the name."
-  code={`<ProgressBar
-  value={60}
-  label="Preparing documents"
-  getValueText={() => '6 of 10 documents prepared'}
-/>`}
+  code={sample2}
 >
   <ProgressBar value={60} label="Preparing documents" getValueText={() => '6 of 10 documents prepared'} />
 </Do>

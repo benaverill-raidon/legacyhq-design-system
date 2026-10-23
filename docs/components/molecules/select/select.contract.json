@@ -10,10 +10,6 @@
     {
       "kind": "gap",
       "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
-    },
-    {
-      "kind": "gap",
-      "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
     }
   ],
   "purpose": "Pick one option (or several) from a searchable list, shown in a field-styled trigger.",
@@ -178,7 +174,8 @@
   "knownLimitations": [
     "Menu a11y pattern, not a strict combobox/listbox - screen readers announce a menu, and focus moves into the panel on ArrowDown rather than staying in the input.",
     "The multi-select trigger is single-line; with many values the chips clip - there is no wrap or overflow-count affordance (Figma models none).",
-    "Inherits every Menu limitation for the panel (no typeahead-within-menu beyond Select's own filter, no virtualization for very large lists)."
+    "Inherits every Menu limitation for the panel (no typeahead-within-menu beyond Select's own filter, no virtualization for very large lists).",
+    "Union props aren't read by docgen: `SelectProps` is a union of the single and multi props, which Storybook's react-docgen can't read, so the Docs page lists Select's props by hand."
   ],
   "futureEnhancements": [
     "A clear-all affordance for multi-select, if a real use needs it.",

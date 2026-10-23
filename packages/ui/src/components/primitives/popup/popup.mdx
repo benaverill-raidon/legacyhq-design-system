@@ -71,6 +71,49 @@ export const MatterDetails = ({ alignment = 'bottomStart' }) => {
   );
 };
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `const [open, setOpen] = useState(false);
+const triggerRef = useRef(null);
+const linkRef = useRef(null);
+
+useEffect(() => {
+  if (!open) return undefined;
+  const frame = requestAnimationFrame(() => linkRef.current?.focus());
+  return () => cancelAnimationFrame(frame);
+}, [open]);
+
+function handleOpenChange(next) {
+  setOpen(next);
+  if (!next) triggerRef.current?.focus();
+}
+
+<Popup open={open} onOpenChange={handleOpenChange} content={…}>
+  <Button ref={triggerRef} onClick={() => setOpen(!open)}>Matter details</Button>
+</Popup>`;
+export const sample2 = `const [open, setOpen] = useState(false);
+
+<Popup open={open} onOpenChange={setOpen} content={…}>
+  <Button onClick={() => setOpen(!open)}>Matter details</Button>
+</Popup>`;
+export const sample3 = `<Popup open={open} content={…}>
+  <Button onClick={() => setOpen(!open)}>Matter details</Button>
+</Popup>`;
+export const sample4 = `<Popup open={open} onOpenChange={setOpen} content={…}>
+  <Button onClick={() => setOpen(!open)}>Matter details</Button>
+</Popup>`;
+export const sample5 = `<Popup open={open} onOpenChange={setOpen} content={…}>
+  <span>
+    <Button onClick={() => setOpen(!open)}>Matter details</Button>
+  </span>
+</Popup>`;
+export const sample6 = `<Tooltip content="Saves every open draft">
+  <Button>Save all</Button>
+</Tooltip>`;
+export const sample7 = `<Popup open={hovered} content="Saves every open draft" role="tooltip">
+  <Button onPointerEnter={() => setHovered(true)}>Save all</Button>
+</Popup>`;
+
 <Meta of={PopupStories} name="Docs" />
 
 <Unstyled>
@@ -170,24 +213,7 @@ moving focus in: the first time the panel opens, it stays hidden until it's posi
 hidden element can't take focus.
 
 <CodeSample
-  code={`const [open, setOpen] = useState(false);
-const triggerRef = useRef(null);
-const linkRef = useRef(null);
-
-useEffect(() => {
-    if (!open) return undefined;
-    const frame = requestAnimationFrame(() => linkRef.current?.focus());
-    return () => cancelAnimationFrame(frame);
-}, [open]);
-
-function handleOpenChange(next) {
-    setOpen(next);
-    if (!next) triggerRef.current?.focus();
-}
-
-<Popup open={open} onOpenChange={handleOpenChange} content={…}>
-    <Button ref={triggerRef} onClick={() => setOpen(!open)}>Matter details</Button>
-</Popup>`}
+  code={sample1}
 />
 
 </Subsection>
@@ -233,48 +259,32 @@ off when the user prefers reduced motion.
 <Guidelines>
 <Do
   caption="Keep open in your state, toggle it from the trigger, and pass onOpenChange."
-  code={`const [open, setOpen] = useState(false);
-
-<Popup open={open} onOpenChange={setOpen} content={…}>
-    <Button onClick={() => setOpen(!open)}>Matter details</Button>
-</Popup>`}
+  code={sample2}
 >
   <MatterDetails />
 </Do>
 <Dont
   caption="Leave out onOpenChange. Escape and presses outside then can't close the panel."
-  code={`<Popup open={open} content={…}>
-    <Button onClick={() => setOpen(!open)}>Matter details</Button>
-</Popup>`}
+  code={sample3}
 />
 <Do
   caption="Pass the focusable element itself as the trigger."
-  code={`<Popup open={open} onOpenChange={setOpen} content={…}>
-    <Button onClick={() => setOpen(!open)}>Matter details</Button>
-</Popup>`}
+  code={sample4}
 >
   <MatterDetails />
 </Do>
 <Dont
   caption="Wrap the trigger in another element. The wrapper gets aria-expanded and the position, and the button doesn't."
-  code={`<Popup open={open} onOpenChange={setOpen} content={…}>
-    <span>
-        <Button onClick={() => setOpen(!open)}>Matter details</Button>
-    </span>
-</Popup>`}
+  code={sample5}
 />
-<Do caption="Use Tooltip for a hint on hover or focus." code={`<Tooltip content="Saves every open draft">
-    <Button>Save all</Button>
-</Tooltip>`}>
+<Do caption="Use Tooltip for a hint on hover or focus." code={sample6}>
   <Tooltip content="Saves every open draft">
     <Button>Save all</Button>
   </Tooltip>
 </Do>
 <Dont
   caption="Build a hover hint from Popup. You'd rebuild Tooltip's timing, aria-describedby, and disabled handling."
-  code={`<Popup open={hovered} content="Saves every open draft" role="tooltip">
-    <Button onPointerEnter={() => setHovered(true)}>Save all</Button>
-</Popup>`}
+  code={sample7}
 />
 </Guidelines>
 

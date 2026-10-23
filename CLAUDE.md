@@ -299,6 +299,23 @@ token-governance.json). Current rules:
 
 Check that file before introducing a new prop name pattern.
 
+## Storybook setup
+
+- **Toast Group is mounted once, globally**, in `.storybook/preview.js` (its own React
+  root at the end of `<body>`). Stories and MDX call `toast()` and never mount
+  `<ToastGroup />`; the Toast Group Playground's controls drive the global group.
+- **The toolbar theme sits on `<html>`** (`data-theme`), so portalled overlays follow it, and
+  the canvas body takes its background and text color from tokens. **Docs pages are always
+  light**, whatever the toolbar says.
+- **Multi-line code samples are MDX exports** on every Docs, pattern, and template page
+  (`export const sample1 = …`, then `code={sample1}`): MDX strips two spaces from every line of
+  a multi-line string in a JSX attribute. `component-pages.test.ts` and `pattern-pages.test.ts`
+  enforce it.
+- **API tables come from react-docgen**, which can't read union prop types (Chip and Select
+  list their props by hand) or props inherited through `Omit<>` from another file. Switching to
+  react-docgen-typescript was tried and dropped (2026-10-23): it loses defaults through
+  `React.memo`.
+
 ## Component status
 
 Every component has a status, authored as `status` in its `.contract.json`:
@@ -355,7 +372,8 @@ Do and don't, Components used.
 
 - **Examples are stories built only from system components** (and the
   system's icons); a local CSS Module may lay them out, never restyle them.
-  Story title `Patterns/<Name>`. Mount at most one `ToastGroup` per page.
+  Story title `Patterns/<Name>`. Stories call `toast()` and never mount
+  `<ToastGroup />` (see "Storybook setup" below).
 - **Multi-line Do/Don't code samples are MDX exports** (`export const
   sample1 = …`, then `code={sample1}`): MDX strips two spaces from
   every line of a multi-line string written in a JSX attribute.

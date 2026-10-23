@@ -30,6 +30,15 @@ import * as DatePickerCalendarStories from './DatePickerCalendar.stories';
 export const TODAY = new Date(2026, 2, 9);
 export const isWeekend = (date) => date.getDay() === 0 || date.getDay() === 6;
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Filing deadline">
+  <DatePicker value={deadline} onChange={setDeadline} />
+</Field>`;
+export const sample2 = `<Popup open={open} onOpenChange={setOpen} content={<DatePickerCalendar onChange={setDeadline} />}>
+  <TextField readOnly value={formatted} onClick={() => setOpen(true)} />
+</Popup>`;
+
 <Meta of={DatePickerCalendarStories} name="Docs" />
 
 <Unstyled>
@@ -135,9 +144,7 @@ surface, as Date Picker does.
 <Guidelines>
 <Do
   caption="Use Date Picker for a date field in a form. It opens this calendar and handles focus."
-  code={`<Field label="Filing deadline">
-    <DatePicker value={deadline} onChange={setDeadline} />
-</Field>`}
+  code={sample1}
 >
   <Field label="Filing deadline">
     <DatePicker defaultValue={new Date(2026, 2, 24)} today={TODAY} />
@@ -145,9 +152,7 @@ surface, as Date Picker does.
 </Do>
 <Dont
   caption="Build your own field and popup around the calendar. You'd have to rebuild the focus and the closing that Date Picker already has."
-  code={`<Popup open={open} onOpenChange={setOpen} content={<DatePickerCalendar onChange={setDeadline} />}>
-    <TextField readOnly value={formatted} onClick={() => setOpen(true)} />
-</Popup>`}
+  code={sample2}
 />
 <Do
   caption="Set weekStartsOn along with locale for a region whose week starts on Monday."

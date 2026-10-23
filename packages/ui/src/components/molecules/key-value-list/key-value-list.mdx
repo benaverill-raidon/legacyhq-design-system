@@ -25,6 +25,26 @@ import { KeyValueList } from './key-value-list';
 import keyValueListStyles from './key-value-list.module.css';
 import * as KeyValueListStories from './KeyValueList.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<h3>Account</h3>
+<KeyValueList>
+  <KeyValuePair label="Account type" value="Trust" underline />
+  <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`;
+export const sample2 = `<KeyValueList>
+  <h3>Account</h3>
+  <KeyValuePair label="Account type" value="Trust" />
+</KeyValueList>`;
+export const sample3 = `<KeyValueList>
+  <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+  <KeyValuePair size="sm" label="Status" value="Active" />
+</KeyValueList>`;
+export const sample4 = `<KeyValueList>
+  <KeyValuePair size="sm" label="Account type" value="Trust" underline />
+  <KeyValuePair size="lg" label="Status" value="Active" />
+</KeyValueList>`;
+
 <Meta of={KeyValueListStories} name="Docs" />
 
 <Unstyled>
@@ -123,25 +143,15 @@ and divider. A row grows with its value, and the rows below move down.
 <Guidelines>
 <Do
   caption="Name the list with a heading outside it, and put only pairs inside."
-  code={`<h3>Account</h3>
-<KeyValueList>
-    <KeyValuePair label="Account type" value="Trust" underline />
-    <KeyValuePair label="Status" value="Active" />
-</KeyValueList>`}
+  code={sample1}
 />
 <Dont
   caption="Put a heading or other content in the list. A dl can hold only dt and dd groups, so the markup isn't valid."
-  code={`<KeyValueList>
-    <h3>Account</h3>
-    <KeyValuePair label="Account type" value="Trust" />
-</KeyValueList>`}
+  code={sample2}
 />
 <Do
   caption="Give every pair in a list the same size."
-  code={`<KeyValueList>
-    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
-    <KeyValuePair size="sm" label="Status" value="Active" />
-</KeyValueList>`}
+  code={sample3}
 >
   <KeyValueList>
     <KeyValuePair size="sm" label="Account type" value="Trust" underline />
@@ -150,10 +160,7 @@ and divider. A row grows with its value, and the rows below move down.
 </Do>
 <Dont
   caption="Mix sizes in one list. The rows change height and text size from one to the next."
-  code={`<KeyValueList>
-    <KeyValuePair size="sm" label="Account type" value="Trust" underline />
-    <KeyValuePair size="lg" label="Status" value="Active" />
-</KeyValueList>`}
+  code={sample4}
 >
   <KeyValueList>
     <KeyValuePair size="sm" label="Account type" value="Trust" underline />

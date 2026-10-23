@@ -28,6 +28,18 @@ import { TextArea } from './text-area';
 import textAreaStyles from './text-area.module.css';
 import * as TextAreaStories from './TextArea.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Bio" message="Up to 240 characters.">
+  <TextArea rows={4} maxLength={240} />
+</Field>`;
+export const sample2 = `<Field label="Matter name">
+  <TextField />
+</Field>`;
+export const sample3 = `<Field label="Matter name">
+  <TextArea rows={1} />
+</Field>`;
+
 <Meta of={TextAreaStories} name="Docs" />
 
 <Unstyled>
@@ -185,9 +197,7 @@ and a message; a count is text you show beside it.
 <Guidelines>
 <Do
   caption="Give the field a label with Field, and say any limit in the message."
-  code={`<Field label="Bio" message="Up to 240 characters.">
-    <TextArea rows={4} maxLength={240} />
-</Field>`}
+  code={sample1}
 >
   <Field label="Bio" message="Up to 240 characters.">
     <TextArea rows={4} maxLength={240} />
@@ -198,9 +208,7 @@ and a message; a count is text you show beside it.
 </Dont>
 <Do
   caption="Use Text Field for a value on one line."
-  code={`<Field label="Matter name">
-    <TextField />
-</Field>`}
+  code={sample2}
 >
   <Field label="Matter name">
     <TextField />
@@ -208,9 +216,7 @@ and a message; a count is text you show beside it.
 </Do>
 <Dont
   caption="Use a one-row Text Area for a single line. Enter adds a new line, and the field can be dragged taller."
-  code={`<Field label="Matter name">
-    <TextArea rows={1} />
-</Field>`}
+  code={sample3}
 >
   <Field label="Matter name">
     <TextArea rows={1} />

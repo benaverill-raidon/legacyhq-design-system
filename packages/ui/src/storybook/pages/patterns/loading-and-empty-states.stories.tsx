@@ -15,7 +15,7 @@ import { Form, FormFooter, FormRow, FormSection } from '../../../components/orga
 import { SectionMessage } from '../../../components/organisms/section-message';
 import { Table } from '../../../components/organisms/table';
 import type { TableColumn } from '../../../components/organisms/table';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './loading-and-empty-states.module.css';
 
 // Examples for Patterns / Loading and Empty States, built only from system components. The local
@@ -142,7 +142,6 @@ export const BusyControls: Story = {
             </Button>
           </FormFooter>
         </Form>
-        <ToastGroup />
       </>
     );
   },

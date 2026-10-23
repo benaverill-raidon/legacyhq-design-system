@@ -27,6 +27,21 @@ import richTextAreaStyles from './rich/rich-text-area.module.css';
 import { TextArea } from './text-area';
 import * as RichTextAreaStories from './RichTextArea.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `entityConfig={{
+  account: { tone: 'blue', icon: <TeamAndPartnersIcon decorative /> },
+  matter: { tone: 'teal', icon: <FolderIcon decorative /> },
+}}`;
+export const sample2 = `entityConfig={{
+  account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },
+  matter: { tone: 'default', icon: <FolderIcon decorative /> },
+}}`;
+export const sample3 = `<RichTextArea value={note} onChange={setNote} onSearch={search} aria-label="Note" />
+
+// Later. The editor still shows the old text.
+setNote([]);`;
+
 <Meta of={RichTextAreaStories} name="Docs" />
 
 export const entityConfig = {
@@ -203,19 +218,13 @@ Accessibility).
 <Guidelines>
 <Do
   caption="Give each record type its own tone, so a tag's color says what it links to."
-  code={`entityConfig={{
-    account: { tone: 'blue', icon: <TeamAndPartnersIcon decorative /> },
-    matter: { tone: 'teal', icon: <FolderIcon decorative /> },
-}}`}
+  code={sample1}
 >
   <RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={entityConfig} />
 </Do>
 <Dont
   caption="Give every type the same tone. People can't tell a person from a matter at a glance."
-  code={`entityConfig={{
-    account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },
-    matter: { tone: 'default', icon: <FolderIcon decorative /> },
-}}`}
+  code={sample2}
 >
   <RichTextArea aria-label="Note" rows={2} value={note} onChange={() => {}} onSearch={search} entityConfig={sameTone} />
 </Dont>
@@ -231,10 +240,7 @@ Accessibility).
 </Do>
 <Dont
   caption="Clear or replace the note by passing a new value. The editor reads value only when it mounts."
-  code={`<RichTextArea value={note} onChange={setNote} onSearch={search} aria-label="Note" />
-
-// Later. The editor still shows the old text.
-setNote([]);`}
+  code={sample3}
 />
 </Guidelines>
 

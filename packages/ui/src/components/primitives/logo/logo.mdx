@@ -24,6 +24,23 @@ import { Logo } from './logo';
 import logoStyles from './logo.module.css';
 import * as LogoStories from './Logo.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Link href="/">
+  <Logo ariaLabel="LegacyHQ home" size="sm" />
+</Link>`;
+export const sample2 = `<Link href="/">
+  <Logo decorative size="sm" />
+</Link>`;
+export const sample3 = `<Link href="/">
+  <Logo type="mark" size="xs" decorative /> LegacyHQ
+</Link>`;
+export const sample4 = `<Link href="/">
+  <Logo type="mark" size="xs" /> LegacyHQ
+</Link>`;
+export const sample5 = `<h1 className={styles.brandName}>LegacyHQ</h1>
+<Logo className={styles.grayscale} />`;
+
 <Meta of={LogoStories} name="Docs" />
 
 <Unstyled>
@@ -113,9 +130,7 @@ no prop to recolor it, and it shouldn't be recolored.
 <Guidelines>
 <Do
   caption="Let the logo name a link to home when it's the link's only content."
-  code={`<Link href="/">
-    <Logo ariaLabel="LegacyHQ home" size="sm" />
-</Link>`}
+  code={sample1}
 >
   <Link href="#">
     <Logo ariaLabel="LegacyHQ home" size="sm" />
@@ -123,15 +138,11 @@ no prop to recolor it, and it shouldn't be recolored.
 </Do>
 <Dont
   caption="Give a link an empty name by marking its only content decorative."
-  code={`<Link href="/">
-    <Logo decorative size="sm" />
-</Link>`}
+  code={sample2}
 />
 <Do
   caption="Mark the logo decorative when text beside it already says LegacyHQ."
-  code={`<Link href="/">
-    <Logo type="mark" size="xs" decorative /> LegacyHQ
-</Link>`}
+  code={sample3}
 >
   <Link href="#">
     <Logo type="mark" size="xs" decorative /> LegacyHQ
@@ -139,17 +150,14 @@ no prop to recolor it, and it shouldn't be recolored.
 </Do>
 <Dont
   caption="Leave it informative beside the same text. The link is read as LegacyHQ LegacyHQ."
-  code={`<Link href="/">
-    <Logo type="mark" size="xs" /> LegacyHQ
-</Link>`}
+  code={sample4}
 />
 <Do caption="Use the wordmark for the product name as artwork." code={`<Logo type="wordmark" size="md" />`}>
   <Logo type="wordmark" size="md" />
 </Do>
 <Dont
   caption="Recreate the wordmark in a heading font, or recolor, stretch, or crop the artwork."
-  code={`<h1 className={styles.brandName}>LegacyHQ</h1>
-<Logo className={styles.grayscale} />`}
+  code={sample5}
 />
 </Guidelines>
 

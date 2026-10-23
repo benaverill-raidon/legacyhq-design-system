@@ -52,6 +52,41 @@ export function LivePair({ label, initial }) {
   );
 }
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<InlineEdit value={title} onConfirm={setTitle}>
+  <TextField context="inline" aria-label="Title" />
+</InlineEdit>`;
+export const sample2 = `<InlineEdit value={title} onConfirm={setTitle}>
+  <TextField aria-label="Title" />
+</InlineEdit>`;
+export const sample3 = `const [title, setTitle] = useState('Q3 Planning');
+
+<InlineEdit value={title} onConfirm={setTitle}>
+  <TextField context="inline" aria-label="Title" />
+</InlineEdit>`;
+export const sample4 = `<InlineEdit value="Q3 Planning">
+  <TextField context="inline" aria-label="Title" />
+</InlineEdit>`;
+export const sample5 = `<InlineEdit value={first} onConfirm={setFirst}>
+  <TextField context="inline" aria-label="First name" />
+</InlineEdit>
+<InlineEdit value={last} onConfirm={setLast}>
+  <TextField context="inline" aria-label="Last name" />
+</InlineEdit>`;
+export const sample6 = `<InlineEdit value={docket} onConfirm={setDocket} validate={(value) => (DOCKET.test(value) ? undefined : 'Enter it as it appears on the court notice.')}>
+  <TextField context="inline" aria-label="Docket number" />
+</InlineEdit>`;
+export const sample7 = `<InlineEdit value={docket} onConfirm={(value) => { if (DOCKET.test(value)) setDocket(value); }}>
+  <TextField context="inline" aria-label="Docket number" />
+</InlineEdit>`;
+export const sample8 = `<InlineEdit value={name} onConfirm={setName}>
+  <div>
+    <TextField aria-label="First name" />
+    <TextField aria-label="Last name" />
+  </div>
+</InlineEdit>`;
+
 <Meta of={InlineEditStories} name="Docs" />
 
 <Unstyled>
@@ -218,63 +253,39 @@ field.
 <Guidelines>
 <Do
   caption={`Use a Text Field with context="inline", so the value reads as text until someone edits it.`}
-  code={`<InlineEdit value={title} onConfirm={setTitle}>
-    <TextField context="inline" aria-label="Title" />
-</InlineEdit>`}
+  code={sample1}
 >
   <LiveValue label="Title" initial="Q3 Planning" />
 </Do>
 <Dont
   caption="Use a bordered field. It looks like a form input that's always open."
-  code={`<InlineEdit value={title} onConfirm={setTitle}>
-    <TextField aria-label="Title" />
-</InlineEdit>`}
+  code={sample2}
 >
   <LiveValue label="Title" initial="Q3 Planning" context="default" />
 </Dont>
 <Do
   caption="Save the confirmed value in onConfirm and pass it back as value."
-  code={`const [title, setTitle] = useState('Q3 Planning');
-
-<InlineEdit value={title} onConfirm={setTitle}>
-    <TextField context="inline" aria-label="Title" />
-</InlineEdit>`}
+  code={sample3}
 />
 <Dont
   caption="Pass a fixed value with no onConfirm. After confirming, the field shows the old value again."
-  code={`<InlineEdit value="Q3 Planning">
-    <TextField context="inline" aria-label="Title" />
-</InlineEdit>`}
+  code={sample4}
 />
 <Do
   caption="Wrap one field in each Inline Edit."
-  code={`<InlineEdit value={first} onConfirm={setFirst}>
-    <TextField context="inline" aria-label="First name" />
-</InlineEdit>
-<InlineEdit value={last} onConfirm={setLast}>
-    <TextField context="inline" aria-label="Last name" />
-</InlineEdit>`}
+  code={sample5}
 />
 <Do
   caption="Reject a draft that can't be saved with validate, saying what to do. The draft stays in the field to fix."
-  code={`<InlineEdit value={docket} onConfirm={setDocket} validate={(value) => (DOCKET.test(value) ? undefined : 'Enter it as it appears on the court notice.')}>
-    <TextField context="inline" aria-label="Docket number" />
-</InlineEdit>`}
+  code={sample6}
 />
 <Dont
   caption="Ignore or quietly fix a bad draft in onConfirm. Editing has already ended, so people don't learn what was wrong."
-  code={`<InlineEdit value={docket} onConfirm={(value) => { if (DOCKET.test(value)) setDocket(value); }}>
-    <TextField context="inline" aria-label="Docket number" />
-</InlineEdit>`}
+  code={sample7}
 />
 <Dont
   caption="Wrap several fields in one. Inline Edit sets value and readOnly on the wrapper, not on the fields."
-  code={`<InlineEdit value={name} onConfirm={setName}>
-    <div>
-      <TextField aria-label="First name" />
-      <TextField aria-label="Last name" />
-    </div>
-</InlineEdit>`}
+  code={sample8}
 />
 </Guidelines>
 

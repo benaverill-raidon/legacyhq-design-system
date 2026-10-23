@@ -25,6 +25,28 @@ import { Breadcrumbs } from './breadcrumbs';
 import breadcrumbsStyles from './breadcrumbs.module.css';
 import * as BreadcrumbsStories from './Breadcrumbs.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Breadcrumbs
+  items={[
+    { label: 'Matters', href: '/matters' },
+    { label: 'Estate of Ada Lovelace' },
+  ]}
+/>`;
+export const sample2 = `<Breadcrumbs
+  items={[
+    { label: 'Matters', href: '/matters' },
+    { label: 'Estate of Ada Lovelace', href: '/matters/42' },
+  ]}
+/>`;
+export const sample3 = `<Breadcrumbs
+  items={[
+    { label: 'Clients', href: '/clients' },
+    { label: 'Ada Lovelace', href: '/clients/7' },
+    { label: 'Matters' },
+  ]}
+/>`;
+
 <Meta of={BreadcrumbsStories} name="Docs" />
 
 <Unstyled>
@@ -131,29 +153,13 @@ so a deep trail still fits its container.
 <Section title="Do and don't">
 
 <Guidelines>
-<Do caption="Leave href off the current page, so it's text marked as the current page." code={`<Breadcrumbs
-    items={[
-      { label: 'Matters', href: '/matters' },
-      { label: 'Estate of Ada Lovelace' },
-    ]}
-/>`}>
+<Do caption="Leave href off the current page, so it's text marked as the current page." code={sample1}>
   <Breadcrumbs items={[{ label: 'Matters', href: '#' }, { label: 'Estate of Ada Lovelace' }]} />
 </Do>
-<Dont caption="Give the current page an href, which makes it a link to itself and marks nothing as current." code={`<Breadcrumbs
-    items={[
-      { label: 'Matters', href: '/matters' },
-      { label: 'Estate of Ada Lovelace', href: '/matters/42' },
-    ]}
-/>`}>
+<Dont caption="Give the current page an href, which makes it a link to itself and marks nothing as current." code={sample2}>
   <Breadcrumbs items={[{ label: 'Matters', href: '#' }, { label: 'Estate of Ada Lovelace', href: '#' }]} />
 </Dont>
-<Do caption="Use Breadcrumbs for levels of a hierarchy." code={`<Breadcrumbs
-    items={[
-      { label: 'Clients', href: '/clients' },
-      { label: 'Ada Lovelace', href: '/clients/7' },
-      { label: 'Matters' },
-    ]}
-/>`}>
+<Do caption="Use Breadcrumbs for levels of a hierarchy." code={sample3}>
   <Breadcrumbs items={[{ label: 'Clients', href: '#' }, { label: 'Ada Lovelace', href: '#' }, { label: 'Matters' }]} />
 </Do>
 <Dont caption="Use it for the steps of a flow, where every unvisited step is marked as the current page." code={`<Breadcrumbs items={[{ label: 'Details' }, { label: 'Parties' }, { label: 'Review' }]} />`}>

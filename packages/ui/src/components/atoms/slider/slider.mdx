@@ -27,6 +27,14 @@ import { Slider, SliderRange } from './index';
 import sliderStyles from './slider.module.css';
 import * as SliderStories from './slider.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Slider label="Lowest price" defaultValue={25} />
+<Slider label="Highest price" defaultValue={75} />`;
+export const sample2 = `<Field label="Retainer amount">
+  <TextField iconBefore="$" inputMode="decimal" />
+</Field>`;
+
 <Meta of={SliderStories} name="Docs" />
 
 <Unstyled>
@@ -166,8 +174,7 @@ than the input, which fills the whole control. Hover and press change the handle
 <Do caption="Use Slider Range for a low and a high value. It keeps them in order and apart." code={`<SliderRange label="Price range" defaultValue={[25, 75]} />`}>
   <SliderRange label="Price range" defaultValue={[25, 75]} />
 </Do>
-<Dont caption="Pair two Sliders for a range. Nothing stops the lowest price going above the highest." code={`<Slider label="Lowest price" defaultValue={25} />
-<Slider label="Highest price" defaultValue={75} />`}>
+<Dont caption="Pair two Sliders for a range. Nothing stops the lowest price going above the highest." code={sample1}>
   <Slider label="Lowest price" defaultValue={25} />
   <Slider label="Highest price" defaultValue={75} />
 </Dont>
@@ -177,9 +184,7 @@ than the input, which fills the whole control. Hover and press change the handle
 <Dont caption="Mark stops with steps that step doesn't match. The dots read as the only choices, but the handle lands between them." code={`<Slider label="Discount, in percent" showSteps steps={[0, 10, 25, 50, 100]} />`}>
   <Slider label="Discount, in percent" defaultValue={37} showSteps steps={[0, 10, 25, 50, 100]} showValue />
 </Dont>
-<Do caption="Use a Text Field when the exact number matters." code={`<Field label="Retainer amount">
-    <TextField iconBefore="$" inputMode="decimal" />
-</Field>`}>
+<Do caption="Use a Text Field when the exact number matters." code={sample2}>
   <Field label="Retainer amount">
     <TextField iconBefore="$" inputMode="decimal" defaultValue="12,500" />
   </Field>

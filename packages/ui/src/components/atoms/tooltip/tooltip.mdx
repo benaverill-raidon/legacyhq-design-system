@@ -29,6 +29,33 @@ import { Tooltip } from './tooltip';
 import tooltipStyles from './tooltip.module.css';
 import * as TooltipStories from './tooltip.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Tooltip content="Edit the matter's details">
+  <IconButton aria-label="Edit">
+    <EditIcon />
+  </IconButton>
+</Tooltip>`;
+export const sample2 = `<Tooltip content="Edit">
+  <button type="button">
+    <EditIcon />
+  </button>
+</Tooltip>`;
+export const sample3 = `<IconButton aria-label="Edit">
+  <EditIcon />
+</IconButton>`;
+export const sample4 = `<Tooltip content="Edit">
+  <IconButton aria-label="Edit">
+    <EditIcon />
+  </IconButton>
+</Tooltip>`;
+export const sample5 = `<Tooltip content="Exports the visible rows as a CSV file">
+  <Button>Export</Button>
+</Tooltip>`;
+export const sample6 = `<Tooltip content="Accept the terms before you continue">
+  <Button disabled>Continue</Button>
+</Tooltip>`;
+
 <Meta of={TooltipStories} name="Docs" />
 
 <Unstyled>
@@ -176,11 +203,7 @@ Popup or Dropdown Menu, can wrap a Tooltip, and the attributes it adds still rea
 <Guidelines>
 <Do
   caption="Give the trigger its own name, and use the tooltip to add to it."
-  code={`<Tooltip content="Edit the matter's details">
-    <IconButton aria-label="Edit">
-        <EditIcon />
-    </IconButton>
-</Tooltip>`}
+  code={sample1}
 >
   <Tooltip content="Edit the matter's details">
     <IconButton aria-label="Edit">
@@ -190,37 +213,23 @@ Popup or Dropdown Menu, can wrap a Tooltip, and the attributes it adds still rea
 </Do>
 <Dont
   caption="Rely on the tooltip to name the control. It's only a description, and only while it shows."
-  code={`<Tooltip content="Edit">
-    <button type="button">
-        <EditIcon />
-    </button>
-</Tooltip>`}
+  code={sample2}
 />
-<Do caption="Let an Icon Button show its own name as its tooltip." code={`<IconButton aria-label="Edit">
-    <EditIcon />
-</IconButton>`}>
+<Do caption="Let an Icon Button show its own name as its tooltip." code={sample3}>
   <IconButton aria-label="Edit">
     <EditIcon />
   </IconButton>
 </Do>
 <Dont
   caption="Wrap an Icon Button in Tooltip only to repeat its name."
-  code={`<Tooltip content="Edit">
-    <IconButton aria-label="Edit">
-        <EditIcon />
-    </IconButton>
-</Tooltip>`}
+  code={sample4}
 />
-<Do caption="Keep a tooltip to a short hint people can do without." code={`<Tooltip content="Exports the visible rows as a CSV file">
-    <Button>Export</Button>
-</Tooltip>`}>
+<Do caption="Keep a tooltip to a short hint people can do without." code={sample5}>
   <Tooltip content="Exports the visible rows as a CSV file">
     <Button>Export</Button>
   </Tooltip>
 </Do>
-<Dont caption="Explain why a button is disabled in a tooltip. Keyboard users can't focus a disabled button, so they never see it: put the reason in visible helper text." code={`<Tooltip content="Accept the terms before you continue">
-    <Button disabled>Continue</Button>
-</Tooltip>`}>
+<Dont caption="Explain why a button is disabled in a tooltip. Keyboard users can't focus a disabled button, so they never see it: put the reason in visible helper text." code={sample6}>
   <Tooltip content="Accept the terms before you continue">
     <Button disabled>Continue</Button>
   </Tooltip>

@@ -26,6 +26,37 @@ import { Field } from './field';
 import fieldStyles from './field.module.css';
 import * as FieldStories from './Field.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Email">
+  <TextField type="email" />
+</Field>`;
+export const sample2 = `<Field label="Email">
+  <TextField type="email" aria-label="Email address" />
+</Field>`;
+export const sample3 = `<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
+  <TextField type="email" invalid defaultValue="jordan.lee@" />
+</Field>`;
+export const sample4 = `<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
+  <TextField type="email" defaultValue="jordan.lee@" />
+</Field>`;
+export const sample5 = `<Field label="Phone" state="error" message="Enter a 10-digit phone number.">
+  <TextField type="tel" invalid defaultValue="555-01" />
+</Field>`;
+export const sample6 = `<Field label="Phone" state="error" message="Invalid input.">
+  <TextField type="tel" invalid defaultValue="555-01" />
+</Field>`;
+export const sample7 = `const errors = submitted ? check(values) : {};
+
+<Field label="Work email" state={errors.email ? 'error' : 'default'} message={errors.email}>
+  <TextField type="email" invalid={Boolean(errors.email)} value={values.email} onChange={onEmailChange} />
+</Field>`;
+export const sample8 = `const error = values.email && !isEmail(values.email);
+
+<Field label="Work email" state={error ? 'error' : 'default'} message={error ? 'Enter an email address.' : undefined}>
+  <TextField type="email" invalid={error} value={values.email} onChange={onEmailChange} />
+</Field>`;
+
 <Meta of={FieldStories} name="Docs" />
 
 <Unstyled>
@@ -177,9 +208,7 @@ When you show the errors follows one rule across the system:
 <Guidelines>
 <Do
   caption="Let Field's label name the control."
-  code={`<Field label="Email">
-    <TextField type="email" />
-</Field>`}
+  code={sample1}
 >
   <Field label="Email">
     <TextField type="email" />
@@ -187,15 +216,11 @@ When you show the errors follows one rule across the system:
 </Do>
 <Dont
   caption="Add an aria-label to a control Field already labels. It replaces the visible label as the name, and the two can drift apart."
-  code={`<Field label="Email">
-    <TextField type="email" aria-label="Email address" />
-</Field>`}
+  code={sample2}
 />
 <Do
   caption={`Pair state="error" with the control's own invalid, so the border and the message agree.`}
-  code={`<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
-    <TextField type="email" invalid defaultValue="jordan.lee@" />
-</Field>`}
+  code={sample3}
 >
   <Field label="Email" state="error" message="Enter an email address, like name@example.com.">
     <TextField type="email" invalid defaultValue="jordan.lee@" />
@@ -203,9 +228,7 @@ When you show the errors follows one rule across the system:
 </Do>
 <Dont
   caption={`Set state="error" alone. Field doesn't change the control's border.`}
-  code={`<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
-    <TextField type="email" defaultValue="jordan.lee@" />
-</Field>`}
+  code={sample4}
 >
   <Field label="Email" state="error" message="Enter an email address, like name@example.com.">
     <TextField type="email" defaultValue="jordan.lee@" />
@@ -213,9 +236,7 @@ When you show the errors follows one rule across the system:
 </Dont>
 <Do
   caption="Write the error as what to do to fix it."
-  code={`<Field label="Phone" state="error" message="Enter a 10-digit phone number.">
-    <TextField type="tel" invalid defaultValue="555-01" />
-</Field>`}
+  code={sample5}
 >
   <Field label="Phone" state="error" message="Enter a 10-digit phone number.">
     <TextField type="tel" invalid defaultValue="555-01" />
@@ -223,9 +244,7 @@ When you show the errors follows one rule across the system:
 </Do>
 <Dont
   caption="Say only that something is wrong. People are left to guess what the field wants."
-  code={`<Field label="Phone" state="error" message="Invalid input.">
-    <TextField type="tel" invalid defaultValue="555-01" />
-</Field>`}
+  code={sample6}
 >
   <Field label="Phone" state="error" message="Invalid input.">
     <TextField type="tel" invalid defaultValue="555-01" />
@@ -233,19 +252,11 @@ When you show the errors follows one rule across the system:
 </Dont>
 <Do
   caption="Wait for the submit before showing an error, then update it as the value changes."
-  code={`const errors = submitted ? check(values) : {};
-
-<Field label="Work email" state={errors.email ? 'error' : 'default'} message={errors.email}>
-    <TextField type="email" invalid={Boolean(errors.email)} value={values.email} onChange={onEmailChange} />
-</Field>`}
+  code={sample7}
 />
 <Dont
   caption="Show an error from the first keystroke. People are told they're wrong before they've finished typing."
-  code={`const error = values.email && !isEmail(values.email);
-
-<Field label="Work email" state={error ? 'error' : 'default'} message={error ? 'Enter an email address.' : undefined}>
-    <TextField type="email" invalid={error} value={values.email} onChange={onEmailChange} />
-</Field>`}
+  code={sample8}
 />
 </Guidelines>
 

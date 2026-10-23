@@ -25,6 +25,13 @@ import { Switch } from './switch';
 import switchStyles from './switch.module.css';
 import * as SwitchStories from './switch.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<form onSubmit={applyFilters}>
+  <Switch label="Include archived matters" name="includeArchived" />
+  <Button type="submit">Apply filters</Button>
+</form>`;
+
 <Meta of={SwitchStories} name="Docs" />
 
 <Unstyled>
@@ -151,10 +158,7 @@ are switched off when someone asks for reduced motion.
 <Do caption="Use Switch for a setting that applies as soon as it's flipped." code={`<Switch label="Auto-archive closed matters" checked={autoArchive} onCheckedChange={saveAutoArchive} />`}>
   <Switch label="Auto-archive closed matters" defaultChecked />
 </Do>
-<Dont caption="Put a Switch in a form that waits for a submit button. People expect it to apply at once; use a Checkbox." code={`<form onSubmit={applyFilters}>
-    <Switch label="Include archived matters" name="includeArchived" />
-    <Button type="submit">Apply filters</Button>
-</form>`} />
+<Dont caption="Put a Switch in a form that waits for a submit button. People expect it to apply at once; use a Checkbox." code={sample1} />
 </Guidelines>
 
 </Section>

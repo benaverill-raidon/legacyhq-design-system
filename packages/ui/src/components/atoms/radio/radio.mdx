@@ -26,6 +26,11 @@ import { RadioGroup } from './radio-group';
 import radioStyles from './radio.module.css';
 import * as RadioStories from './radio.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Radio name="method" value="email" label="Email" checked={method === 'email'} onCheckedChange={() => setMethod('email')} />
+<Radio name="method" value="phone" label="Phone" checked={method === 'phone'} onCheckedChange={() => setMethod('phone')} />`;
+
 <Meta of={RadioStories} name="Docs" />
 
 <Unstyled>
@@ -163,8 +168,7 @@ around the circle, as on Checkbox.
     ]}
   />
 </Do>
-<Dont caption="Wire up loose radios by hand. The set has no legend, and every radio needs its own name and checked logic." code={`<Radio name="method" value="email" label="Email" checked={method === 'email'} onCheckedChange={() => setMethod('email')} />
-<Radio name="method" value="phone" label="Phone" checked={method === 'phone'} onCheckedChange={() => setMethod('phone')} />`} />
+<Dont caption="Wire up loose radios by hand. The set has no legend, and every radio needs its own name and checked logic." code={sample1} />
 <Do caption="Set required on the group when the question needs an answer. The * goes after the legend." code={`<RadioGroup label="Preferred contact method" required options={options} />`}>
   <RadioGroup
     label="Preferred contact method"

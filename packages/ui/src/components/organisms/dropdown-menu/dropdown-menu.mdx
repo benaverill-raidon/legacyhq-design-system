@@ -70,6 +70,37 @@ export const RowActionsDropdown = () => {
   );
 };
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `const [open, setOpen] = useState(false);
+
+<DropdownMenu
+  aria-label="Matter actions"
+  open={open}
+  onOpenChange={setOpen}
+  showSearch={false}
+  sections={[{ id: 'actions', items: [
+    { id: 'rename', label: 'Rename', onSelect: rename },
+  ] }]}
+>
+  <Button onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`;
+export const sample2 = `<DropdownMenu open={open} sections={sections}>
+  <Button onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`;
+export const sample3 = `<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
+  <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
+    <MoreVertIcon />
+  </IconButton>
+</DropdownMenu>`;
+export const sample4 = `<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
+  <span>
+    <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
+      <MoreVertIcon />
+    </IconButton>
+  </span>
+</DropdownMenu>`;
+
 <Meta of={DropdownMenuStories} name="Docs" />
 
 <Unstyled>
@@ -206,47 +237,23 @@ Menu's sections, headings, and dividers all work inside the panel.
 <Guidelines>
 <Do
   caption="Pass onOpenChange and toggle from the trigger. Choosing an item calls onOpenChange(false)."
-  code={`const [open, setOpen] = useState(false);
-
-<DropdownMenu
-    aria-label="Matter actions"
-    open={open}
-    onOpenChange={setOpen}
-    showSearch={false}
-    sections={[{ id: 'actions', items: [
-        { id: 'rename', label: 'Rename', onSelect: rename },
-    ] }]}
->
-    <Button onClick={() => setOpen(!open)}>Actions</Button>
-</DropdownMenu>`}
+  code={sample1}
 >
   <ActionsDropdown />
 </Do>
 <Dont
   caption="Leave out onOpenChange. Choosing an item, Escape, and clicks outside can't close the menu."
-  code={`<DropdownMenu open={open} sections={sections}>
-    <Button onClick={() => setOpen(!open)}>Actions</Button>
-</DropdownMenu>`}
+  code={sample2}
 />
 <Do
   caption="Pass the button itself as the trigger."
-  code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
-    <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
-        <MoreVertIcon />
-    </IconButton>
-</DropdownMenu>`}
+  code={sample3}
 >
   <RowActionsDropdown />
 </Do>
 <Dont
   caption="Wrap the trigger in another element. The wrapper gets the ARIA and the returning focus, and the button doesn't."
-  code={`<DropdownMenu aria-label="Row actions" open={open} onOpenChange={setOpen} sections={rowActions}>
-    <span>
-        <IconButton aria-label="Row actions" onClick={() => setOpen(!open)}>
-            <MoreVertIcon />
-        </IconButton>
-    </span>
-</DropdownMenu>`}
+  code={sample4}
 />
 <Do caption="Turn search off for a short list of actions." code={`<DropdownMenu showSearch={false} … />`}>
   <ActionsDropdown />

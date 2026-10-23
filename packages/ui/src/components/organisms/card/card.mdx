@@ -27,6 +27,28 @@ import cardStyles from './card.module.css';
 import storyStyles from './card-stories.module.css';
 import * as CardStories from './Card.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Card>
+  <section className={styles.content}>
+    <h3>Project overview</h3>
+    <p>The content brings its own padding.</p>
+  </section>
+</Card>`;
+export const sample2 = `<Card>
+  <h3>Project overview</h3>
+  <p>The content brings its own padding.</p>
+</Card>`;
+export const sample3 = `<Card>
+  <section className={styles.content}>
+    <h3>Community projects</h3>
+    <Button>View projects</Button>
+  </section>
+</Card>`;
+export const sample4 = `<Card onClick={() => navigate('/projects')}>
+  <h3>Community projects</h3>
+</Card>`;
+
 <Meta of={CardStories} name="Docs" />
 
 <Unstyled>
@@ -174,12 +196,7 @@ Do and don't below. Controls inside it, like the form here, keep their own behav
 <Guidelines>
 <Do
   caption="Put the padding in the content, where it belongs to the layout you're building."
-  code={`<Card>
-    <section className={styles.content}>
-      <h3>Project overview</h3>
-      <p>The content brings its own padding.</p>
-    </section>
-</Card>`}
+  code={sample1}
 >
   <Card className={storyStyles.example}>
     <section className={storyStyles.content}>
@@ -190,10 +207,7 @@ Do and don't below. Controls inside it, like the form here, keep their own behav
 </Do>
 <Dont
   caption="Expect the card to pad its content. The text runs into the border."
-  code={`<Card>
-    <h3>Project overview</h3>
-    <p>The content brings its own padding.</p>
-</Card>`}
+  code={sample2}
 >
   <Card className={storyStyles.example}>
     <h3 className={storyStyles.heading}>Project overview</h3>
@@ -202,12 +216,7 @@ Do and don't below. Controls inside it, like the form here, keep their own behav
 </Dont>
 <Do
   caption="Put a real link or button inside the card for its action."
-  code={`<Card>
-    <section className={styles.content}>
-      <h3>Community projects</h3>
-      <Button>View projects</Button>
-    </section>
-</Card>`}
+  code={sample3}
 >
   <Card className={storyStyles.example}>
     <section className={storyStyles.content}>
@@ -220,9 +229,7 @@ Do and don't below. Controls inside it, like the form here, keep their own behav
 </Do>
 <Dont
   caption="Make the whole card a click target. It's a div: keyboard users can't reach it, and it isn't announced as a link or button."
-  code={`<Card onClick={() => navigate('/projects')}>
-    <h3>Community projects</h3>
-</Card>`}
+  code={sample4}
 />
 <Do
   caption="Keep the border on a raised card that sits on the page. Its border is what sets it apart."

@@ -47,10 +47,12 @@ function undoAction() {
  * Trigger toasts from anywhere with the imperative `toast()` API. They stack in the bottom-right;
  * hover (or focus into) the stack to expand it into a vertical list. Toasts auto-dismiss after their
  * duration (the timers pause while the stack is expanded and resume when it collapses), can be
- * swiped away, and show at most `maxVisible` at once.
+ * swiped away, and show at most `maxVisible` at once. Storybook mounts one Toast Group for the whole
+ * preview (`.storybook/preview.js`); this story's controls set its `maxVisible`, `duration`, and
+ * `label` while the story is open on its own.
  */
 export const Playground: Story = {
-  render: (args) => (
+  render: () => (
     <div style={panel}>
       <h3
         style={{
@@ -121,8 +123,6 @@ export const Playground: Story = {
       >
         Hover or tab into the stack to expand it. Swipe a toast sideways to dismiss it.
       </p>
-
-      <ToastGroup {...args} />
     </div>
   ),
 };

@@ -28,6 +28,15 @@ import { ToggleButton } from './toggle-button';
 import toggleButtonStyles from './toggle-button.module.css';
 import * as ToggleButtonStories from './toggle-button.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<ToggleButton isSelected={showArchived} onClick={() => setShowArchived(!showArchived)}>
+  Show archived
+</ToggleButton>`;
+export const sample2 = `<ToggleButton isSelected={showArchived}>
+  {showArchived ? 'Hide archived' : 'Show archived'}
+</ToggleButton>`;
+
 <Meta of={ToggleButtonStories} name="Docs" />
 
 <Unstyled>
@@ -150,9 +159,7 @@ only its fill, to the selected hover and press fills.
 <Section title="Do and don't">
 
 <Guidelines>
-<Do caption="Use Toggle Button for an option that stays on until it's turned off." code={`<ToggleButton isSelected={showArchived} onClick={() => setShowArchived(!showArchived)}>
-  Show archived
-</ToggleButton>`}>
+<Do caption="Use Toggle Button for an option that stays on until it's turned off." code={sample1}>
   <ToggleButton isSelected>Show archived</ToggleButton>
   <ToggleButton>Show archived</ToggleButton>
 </Do>
@@ -162,9 +169,7 @@ only its fill, to the selected hover and press fills.
 <Do caption="Keep the label the same, and let the selected look and aria-pressed show the state." code={`<ToggleButton isSelected={showArchived}>Show archived</ToggleButton>`}>
   <ToggleButton isSelected>Show archived</ToggleButton>
 </Do>
-<Dont caption="Change the label with the state, so people hear Hide archived, pressed, and can't tell what pressing does." code={`<ToggleButton isSelected={showArchived}>
-  {showArchived ? 'Hide archived' : 'Show archived'}
-</ToggleButton>`}>
+<Dont caption="Change the label with the state, so people hear Hide archived, pressed, and can't tell what pressing does." code={sample2}>
   <ToggleButton isSelected>Hide archived</ToggleButton>
 </Dont>
 <Do caption="Use Switch for a setting that takes effect right away, outside a toolbar." code={`<Switch label="Email notifications" />`}>

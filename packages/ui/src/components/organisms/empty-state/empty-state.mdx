@@ -28,6 +28,21 @@ import { EmptyState } from './empty-state';
 import emptyStateStyles from './empty-state.module.css';
 import * as EmptyStateStories from './EmptyState.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<EmptyState
+  heading="No documents yet"
+  actions={<Button prominence="primary">Upload a document</Button>}
+>
+  Documents you upload to this matter appear here.
+</EmptyState>`;
+export const sample2 = `<SectionMessage tone="error" title="We couldn't load the documents">
+  Check your connection and try again.
+</SectionMessage>`;
+export const sample3 = `<EmptyState heading="Nothing to show">
+  The documents couldn't be loaded.
+</EmptyState>`;
+
 <Meta of={EmptyStateStories} name="Docs" />
 
 <Unstyled>
@@ -140,12 +155,7 @@ the heading to a few words and the description to a sentence or two.
 <Guidelines>
 <Do
   caption="Say what's missing, and offer the next step."
-  code={`<EmptyState
-    heading="No documents yet"
-    actions={<Button prominence="primary">Upload a document</Button>}
->
-    Documents you upload to this matter appear here.
-</EmptyState>`}
+  code={sample1}
 >
   <EmptyState heading="No documents yet" actions={<Button prominence="primary">Upload a document</Button>}>
     Documents you upload to this matter appear here.
@@ -156,9 +166,7 @@ the heading to a few words and the description to a sentence or two.
 </Dont>
 <Do
   caption="Show a load that failed as an error, with a way to try again."
-  code={`<SectionMessage tone="error" title="We couldn't load the documents">
-    Check your connection and try again.
-</SectionMessage>`}
+  code={sample2}
 >
   <SectionMessage tone="error" title="We couldn't load the documents">
     Check your connection and try again.
@@ -166,9 +174,7 @@ the heading to a few words and the description to a sentence or two.
 </Do>
 <Dont
   caption="Use an Empty State for an error. It reads as though there's simply nothing there."
-  code={`<EmptyState heading="Nothing to show">
-    The documents couldn't be loaded.
-</EmptyState>`}
+  code={sample3}
 >
   <EmptyState heading="Nothing to show">The documents couldn't be loaded.</EmptyState>
 </Dont>

@@ -29,6 +29,18 @@ import * as DateTimePickerStories from './DateTimePicker.stories';
 export const HEARING = new Date(2026, 2, 24, 9, 30);
 export const TODAY = new Date(2026, 2, 9);
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Hearing">
+  <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`;
+export const sample2 = `<Field label="Audiencia">
+  <DateTimePicker dateLabel="Fecha" timeLabel="Hora" />
+</Field>`;
+export const sample3 = `<Field label="Audiencia">
+  <DateTimePicker />
+</Field>`;
+
 <Meta of={DateTimePickerStories} name="Docs" />
 
 <Unstyled>
@@ -145,9 +157,7 @@ The control is 480px wide: two 240px halves, side by side on one line.
 <Guidelines>
 <Do
   caption="Give the control one label with Field. It names the group, and each half adds Date or Time."
-  code={`<Field label="Hearing">
-    <DateTimePicker value={hearing} onChange={setHearing} />
-</Field>`}
+  code={sample1}
 >
   <Field label="Hearing">
     <DateTimePicker defaultValue={HEARING} today={TODAY} />
@@ -161,9 +171,7 @@ The control is 480px wide: two 240px halves, side by side on one line.
 </Dont>
 <Do
   caption="Translate dateLabel and timeLabel along with the Field's label, and the halves' own text (dialogs, Confirm and Cancel, the time columns, AM and PM) the same way."
-  code={`<Field label="Audiencia">
-    <DateTimePicker dateLabel="Fecha" timeLabel="Hora" />
-</Field>`}
+  code={sample2}
 >
   <Field label="Audiencia">
     <DateTimePicker dateLabel="Fecha" timeLabel="Hora" defaultValue={HEARING} today={TODAY} />
@@ -171,9 +179,7 @@ The control is 480px wide: two 240px halves, side by side on one line.
 </Do>
 <Dont
   caption="Translate only the label. The halves are still named Date and Time."
-  code={`<Field label="Audiencia">
-    <DateTimePicker />
-</Field>`}
+  code={sample3}
 />
 </Guidelines>
 

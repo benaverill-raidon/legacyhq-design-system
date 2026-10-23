@@ -19,7 +19,7 @@ import { ProgressTracker } from '../../../components/organisms/progress-tracker'
 import { SectionMessage } from '../../../components/organisms/section-message';
 import { Table } from '../../../components/organisms/table';
 import type { TableColumn } from '../../../components/organisms/table';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './document-generation.module.css';
 
 // Templates / Document Generation: a draft of the whole workflow, built only from system components
@@ -194,15 +194,13 @@ interface DocumentGenerationProps {
   initialStep?: 1 | 2;
   /** The first generation stops after this many documents, so it fails partway. A retry finishes. */
   failAfter?: number;
-  /** Mounts the page's one Toast Group. */
-  withToasts?: boolean;
 }
 
 /**
  * The whole workflow for one matter. Every value people enter lives here, above the steps, so going
  * back to an earlier step keeps it.
  */
-function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = false }: DocumentGenerationProps) {
+function DocumentGeneration({ matter, initialStep = 1, failAfter }: DocumentGenerationProps) {
   const prefix = React.useId();
   const idOf = (key: string) => `${prefix}-${key}`;
   const blocked = matter.client == null;
@@ -633,7 +631,6 @@ function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = f
           </>
         ) : null}
       </section>
-      {withToasts ? <ToastGroup /> : null}
     </div>
   );
 }
@@ -646,7 +643,7 @@ function DocumentGeneration({ matter, initialStep = 1, failAfter, withToasts = f
  * entered.
  */
 export const GenerateAPackage: Story = {
-  render: () => <DocumentGeneration matter={LEE} withToasts />,
+  render: () => <DocumentGeneration matter={LEE} />,
 };
 
 /**

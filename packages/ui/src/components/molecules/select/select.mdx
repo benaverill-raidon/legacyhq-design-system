@@ -61,6 +61,61 @@ export function AssigneeSelect() {
   );
 }
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const ownFiltering = `<Select
+  options={matches}
+  value={client}
+  onChange={setClient}
+  searchValue={query}
+  onSearchChange={setQuery}
+  aria-label="Client"
+/>`;
+export const labelWithField = `<Field label="Matter status">
+  <Select options={statusOptions} value={status} onChange={setStatus} />
+</Field>`;
+export const twoOptions = `<Field label="Billing">
+  <Select options={[hourly, flatFee]} value={billing} onChange={setBilling} />
+</Field>`;
+export const actionsMenu = `<DropdownMenu sections={matterActions} open={open} onOpenChange={setOpen} aria-label="Matter actions">
+  <Button isExpanded={open} onClick={() => setOpen(!open)}>Actions</Button>
+</DropdownMenu>`;
+export const propsByInputType = `// Both input types
+options: SelectOption[];             // required
+size?: 'sm' | 'md' | 'lg';           // default 'md'
+context?: 'default' | 'inline';      // default 'default'
+placeholder?: string;
+disabled?: boolean;
+invalid?: boolean;                   // sets aria-invalid on the input
+searchValue?: string;                // controls the typed text
+onSearchChange?: (value: string) => void;  // while set, Select doesn't filter
+emptyMessage?: React.ReactNode;      // default 'No matches'
+'aria-label'?: string;
+'aria-labelledby'?: string;          // passed to the input and the menu; else the menu takes a native label's name
+'aria-describedby'?: string;
+'aria-invalid'?: boolean | 'true' | 'false';
+required?: boolean;
+id?: string;                         // on the input
+className?: string;                  // added to the field frame
+
+// inputType="single" (the default)
+value: string | null;                // required
+onChange: (value: string | null) => void;  // required
+
+// inputType="multi"
+inputType: 'multi';
+value: string[];                     // required
+onChange: (value: string[]) => void; // required
+getRemoveLabel?: (label: string) => string;  // each chip's remove-button name; default \`Remove \${label}\`
+
+// Each option
+{ value: string; label: string; icon?: React.ReactNode; description?: React.ReactNode;
+  disabled?: boolean; group?: string }
+
+// Deprecated, still accepted: use context
+tone?: 'default' | 'subtle' | 'inline';
+appearance?: 'default' | 'subtle' | 'inline';`;
+
 <Meta of={SelectStories} name="Docs" />
 
 <Unstyled>
@@ -188,14 +243,7 @@ headings are visual only.
 With `onSearchChange`, Select stops filtering and calls it with the typed text, so you can pass the
 matching options yourself, such as results from a server. Pass `searchValue` too to control the text.
 
-<CodeSample code={`<Select
-    options={matches}
-    value={client}
-    onChange={setClient}
-    searchValue={query}
-    onSearchChange={setQuery}
-    aria-label="Client"
-/>`} />
+<CodeSample code={ownFiltering} />
 
 </Subsection>
 
@@ -224,9 +272,7 @@ The field stays one line high. When chips run out of room, they shrink and clip 
 <Guidelines>
 <Do
   caption="Give Select a visible label with Field, which also names it and its menu."
-  code={`<Field label="Matter status">
-    <Select options={statusOptions} value={status} onChange={setStatus} />
-</Field>`}
+  code={labelWithField}
 >
   <StatusSelect />
 </Do>
@@ -252,15 +298,11 @@ The field stays one line high. When chips run out of room, they shrink and clip 
 </Do>
 <Dont
   caption="Hide two options behind a Select. It takes a click to see either."
-  code={`<Field label="Billing">
-    <Select options={[hourly, flatFee]} value={billing} onChange={setBilling} />
-</Field>`}
+  code={twoOptions}
 />
 <Do
   caption="Use a Dropdown Menu for a list of actions."
-  code={`<DropdownMenu sections={matterActions} open={open} onOpenChange={setOpen} aria-label="Matter actions">
-    <Button isExpanded={open} onClick={() => setOpen(!open)}>Actions</Button>
-</DropdownMenu>`}
+  code={actionsMenu}
 />
 <Dont
   caption="Run actions from a Select's onChange. Its rows are announced as options to choose, not actions to run."
@@ -310,47 +352,13 @@ The field stays one line high. When chips run out of room, they shrink and clip 
 
 <Section title="API">
 
-Select's props are a union typed by `inputType`, and the generated table can't list them yet:
-Storybook's docgen skips a union of props types. Until it can, these are the props, from
-select.types.ts.
+Select's props are a union typed by `inputType`, so `value` and `onChange` take one value or a list
+to match. Storybook's docgen can't read a union of props types, so there's no generated table:
+these are the props, copied from select.types.ts.
 
 <PropsTable of={SelectStories} />
 
-<CodeSample code={`// Both input types
-options: SelectOption[];             // required
-size?: 'sm' | 'md' | 'lg';           // default 'md'
-context?: 'default' | 'inline';      // default 'default'
-placeholder?: string;
-disabled?: boolean;
-invalid?: boolean;                   // sets aria-invalid on the input
-searchValue?: string;                // controls the typed text
-onSearchChange?: (value: string) => void;  // while set, Select doesn't filter
-emptyMessage?: React.ReactNode;      // default 'No matches'
-'aria-label'?: string;
-'aria-labelledby'?: string;          // passed to the input and the menu; else the menu takes a native label's name
-'aria-describedby'?: string;
-'aria-invalid'?: boolean | 'true' | 'false';
-required?: boolean;
-id?: string;                         // on the input
-className?: string;                  // added to the field frame
-
-// inputType="single" (the default)
-value: string | null;                // required
-onChange: (value: string | null) => void;  // required
-
-// inputType="multi"
-inputType: 'multi';
-value: string[];                     // required
-onChange: (value: string[]) => void; // required
-getRemoveLabel?: (label: string) => string;  // each chip's remove-button name; default \`Remove \${label}\`
-
-// Each option
-{ value: string; label: string; icon?: React.ReactNode; description?: React.ReactNode;
-  disabled?: boolean; group?: string }
-
-// Deprecated, still accepted: use context
-tone?: 'default' | 'subtle' | 'inline';
-appearance?: 'default' | 'subtle' | 'inline';`} />
+<CodeSample code={propsByInputType} />
 
 An option's `icon` is decorative: it shows in its row, before the chosen value in a single-select
 field, and on its chip, hidden from assistive technology.
@@ -385,8 +393,8 @@ use their own components' tokens.
 
 <DocFooter>
   The design tokens read select.module.css, and the Figma source comes from registry.json, so they
-  follow the code. The props listed under API are copied from select.types.ts by hand until the
-  generated table can read them.
+  follow the code. The props listed under API are copied from select.types.ts by hand, because
+  docgen can't read a union of props types.
 </DocFooter>
 
 </ComponentPage>

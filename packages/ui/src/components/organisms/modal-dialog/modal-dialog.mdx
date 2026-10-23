@@ -60,6 +60,32 @@ export const DialogExample = ({ trigger, tone = 'default', title, label, body, c
   );
 };
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<ModalDialog
+  tone="error"
+  title="Delete this matter?"
+  footer={
+    <ButtonGroup>
+      <Button prominence="tertiary" onClick={close}>Cancel</Button>
+      <Button prominence="primary" tone="error" onClick={remove}>Delete matter</Button>
+    </ButtonGroup>
+  }
+  …
+/>`;
+export const sample2 = `<ModalDialog
+  tone="error"
+  title="Delete this matter?"
+  footer={<Button prominence="primary" onClick={remove}>Delete matter</Button>}
+  …
+/>`;
+export const sample3 = `<ModalDialog open={open} onClose={close} aria-label="Notification settings" …>
+  …
+</ModalDialog>`;
+export const sample4 = `<ModalDialog open={open} onClose={close}>
+  …
+</ModalDialog>`;
+
 <Meta of={ModalDialogStories} name="Docs" />
 
 <Unstyled>
@@ -242,17 +268,7 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 <Guidelines>
 <Do
   caption="Give a destructive dialog the error tone, and the Confirm button the error tone too."
-  code={`<ModalDialog
-    tone="error"
-    title="Delete this matter?"
-    footer={
-        <ButtonGroup>
-            <Button prominence="tertiary" onClick={close}>Cancel</Button>
-            <Button prominence="primary" tone="error" onClick={remove}>Delete matter</Button>
-        </ButtonGroup>
-    }
-    …
-/>`}
+  code={sample1}
 >
   <DialogExample
     trigger="Delete matter"
@@ -264,12 +280,7 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 </Do>
 <Dont
   caption="Expect the dialog's tone to style its buttons. Here the Confirm button stays the brand color."
-  code={`<ModalDialog
-    tone="error"
-    title="Delete this matter?"
-    footer={<Button prominence="primary" onClick={remove}>Delete matter</Button>}
-    …
-/>`}
+  code={sample2}
 />
 <Do
   caption="Name the action in the title and on the Confirm button."
@@ -289,9 +300,7 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 />
 <Do
   caption="Pass a title, or aria-label when there's no visible title."
-  code={`<ModalDialog open={open} onClose={close} aria-label="Notification settings" …>
-    …
-</ModalDialog>`}
+  code={sample3}
 >
   <DialogExample
     trigger="Notification settings"
@@ -302,9 +311,7 @@ reduced motion, the dialog appears at once. It leaves at once when it closes.
 </Do>
 <Dont
   caption="Leave the dialog unnamed. A screen reader announces only that a dialog opened."
-  code={`<ModalDialog open={open} onClose={close}>
-    …
-</ModalDialog>`}
+  code={sample4}
 />
 </Guidelines>
 

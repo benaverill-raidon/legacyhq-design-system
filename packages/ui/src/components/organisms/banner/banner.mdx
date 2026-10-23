@@ -26,6 +26,22 @@ import { Banner } from './banner';
 import bannerStyles from './banner.module.css';
 import * as BannerStories from './Banner.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
+  We couldn't reach the server.
+</Banner>`;
+export const sample2 = `<Banner tone="error" actions={<Button size="sm">Retry</Button>}>
+  We couldn't reach the server.
+</Banner>`;
+export const sample3 = `<Banner actions={<Button size="sm" isInverse>See what's new</Button>}>
+  A new version is available.
+</Banner>`;
+export const sample4 = `<Banner>
+  A new version is available, with faster search, a redesigned matter list, and changes
+  to how deadlines are calculated for courts that close on state holidays.
+</Banner>`;
+
 <Meta of={BannerStories} name="Docs" />
 
 <Unstyled>
@@ -147,9 +163,7 @@ Banner has no close button and no dismissed state. If people can dismiss it, put
 <Guidelines>
 <Do
   caption="Set isInverse on Buttons that sit on the dark default and error bars."
-  code={`<Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
-    We couldn't reach the server.
-</Banner>`}
+  code={sample1}
 >
   <Banner tone="error" actions={<Button size="sm" isInverse>Retry</Button>}>
     We couldn't reach the server.
@@ -157,9 +171,7 @@ Banner has no close button and no dismissed state. If people can dismiss it, put
 </Do>
 <Dont
   caption="Put an ordinary Button on a dark bar, where its outline and text are hard to see."
-  code={`<Banner tone="error" actions={<Button size="sm">Retry</Button>}>
-    We couldn't reach the server.
-</Banner>`}
+  code={sample2}
 >
   <Banner tone="error" actions={<Button size="sm">Retry</Button>}>
     We couldn't reach the server.
@@ -167,18 +179,13 @@ Banner has no close button and no dismissed state. If people can dismiss it, put
 </Dont>
 <Do
   caption="Keep the message short, and put the detail behind an action."
-  code={`<Banner actions={<Button size="sm" isInverse>See what's new</Button>}>
-    A new version is available.
-</Banner>`}
+  code={sample3}
 >
   <Banner actions={<Button size="sm" isInverse>See what's new</Button>}>A new version is available.</Banner>
 </Do>
 <Dont
   caption="Write a paragraph. It's cut off at the edge of the bar, and nobody can read the rest."
-  code={`<Banner>
-    A new version is available, with faster search, a redesigned matter list, and changes
-    to how deadlines are calculated for courts that close on state holidays.
-</Banner>`}
+  code={sample4}
 >
   <Banner>{"A new version is available, with faster search, a redesigned matter list, and changes to how deadlines are calculated for courts that close on state holidays."}</Banner>
 </Dont>

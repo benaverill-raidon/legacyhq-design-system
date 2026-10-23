@@ -25,6 +25,16 @@ import { Spinner } from './spinner';
 import spinnerStyles from './spinner.module.css';
 import * as SpinnerStories from './spinner.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<p>
+  <Spinner size="sm" />
+  Loading matters
+</p>`;
+export const sample2 = `<Button prominence="primary">
+  <Spinner size="md" /> Saving…
+</Button>`;
+
 <Meta of={SpinnerStories} name="Docs" />
 
 <Unstyled>
@@ -130,10 +140,7 @@ use one too. Use those loading states rather than adding a Spinner yourself.
 <Guidelines>
 <Do
   caption="Pair a decorative spinner with visible text that says what's loading."
-  code={`<p>
-  <Spinner size="sm" />
-  Loading matters
-</p>`}
+  code={sample1}
 >
   <Spinner size="sm" />
   Loading matters
@@ -148,9 +155,7 @@ use one too. Use those loading states rather than adding a Spinner yourself.
 </Do>
 <Dont
   caption="Swap a Spinner into a button's label, which resizes the button and doesn't mark it busy."
-  code={`<Button prominence="primary">
-  <Spinner size="md" /> Saving…
-</Button>`}
+  code={sample2}
 >
   <Button prominence="primary">
     <Spinner size="md" /> Saving…

@@ -24,6 +24,13 @@ import { Badge } from './badge';
 import badgeStyles from './badge.module.css';
 import * as BadgeStories from './Badge.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Badge tone="success">+2</Badge>
+<Badge tone="error">-1</Badge>`;
+export const sample2 = `<Badge tone="success">2</Badge>
+<Badge tone="error">1</Badge>`;
+
 <Meta of={BadgeStories} name="Docs" />
 
 <Unstyled>
@@ -125,13 +132,11 @@ to the words that say what it counts.
 <Dont caption="Pass a raw count. Badge doesn't cap it, so a large number stretches the badge." code={`<Badge>{unreadCount}</Badge>`}>
   <Badge>184320</Badge>
 </Dont>
-<Do caption="Keep the sign in a change, so its direction doesn't depend on color." code={`<Badge tone="success">+2</Badge>
-<Badge tone="error">-1</Badge>`}>
+<Do caption="Keep the sign in a change, so its direction doesn't depend on color." code={sample1}>
   <Badge tone="success">+2</Badge>
   <Badge tone="error">-1</Badge>
 </Do>
-<Dont caption="Show a change by tone alone. The colors aren't read out, and not everyone can tell them apart." code={`<Badge tone="success">2</Badge>
-<Badge tone="error">1</Badge>`}>
+<Dont caption="Show a change by tone alone. The colors aren't read out, and not everyone can tell them apart." code={sample2}>
   <Badge tone="success">2</Badge>
   <Badge tone="error">1</Badge>
 </Dont>

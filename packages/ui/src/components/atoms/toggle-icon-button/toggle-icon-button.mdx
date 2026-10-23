@@ -29,6 +29,31 @@ import { ToggleIconButton } from './toggle-icon-button';
 import toggleIconButtonStyles from './toggle-icon-button.module.css';
 import * as ToggleIconButtonStories from './toggle-icon-button.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Tooltip content="Pin matter">
+  <ToggleIconButton aria-label="Pin matter" isSelected={isPinned} onClick={togglePinned}>
+    <PinIcon />
+  </ToggleIconButton>
+</Tooltip>`;
+export const sample2 = `<Tooltip content="Pin matter">
+  <ToggleIconButton isSelected={isPinned} onClick={togglePinned}>
+    <PinIcon />
+  </ToggleIconButton>
+</Tooltip>`;
+export const sample3 = `<ToggleIconButton aria-label="Favorite" isSelected={isFavorite} onClick={toggleFavorite}>
+  {isFavorite ? <StarStarredIcon /> : <StarUnstarredIcon />}
+</ToggleIconButton>`;
+export const sample4 = `<ToggleIconButton
+  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+  isSelected={isFavorite}
+>
+  <StarStarredIcon />
+</ToggleIconButton>`;
+export const sample5 = `<ToggleIconButton aria-label="Show archived" isSelected={showArchived}>
+  <ArchiveIcon />
+</ToggleIconButton>`;
+
 <Meta of={ToggleIconButtonStories} name="Docs" />
 
 <Unstyled>
@@ -159,11 +184,7 @@ only its fill, to the selected hover and press fills.
 <Section title="Do and don't">
 
 <Guidelines>
-<Do caption="Name it with aria-label, and wrap it in Tooltip to show that name on hover and focus." code={`<Tooltip content="Pin matter">
-  <ToggleIconButton aria-label="Pin matter" isSelected={isPinned} onClick={togglePinned}>
-    <PinIcon />
-  </ToggleIconButton>
-</Tooltip>`}>
+<Do caption="Name it with aria-label, and wrap it in Tooltip to show that name on hover and focus." code={sample1}>
   <Tooltip content="Pin matter">
     <ToggleIconButton aria-label="Pin matter" isSelected>
       <PinIcon />
@@ -172,34 +193,21 @@ only its fill, to the selected hover and press fills.
 </Do>
 <Dont
   caption="Name it only with a Tooltip, which describes the button only while it shows, so the button has no name."
-  code={`<Tooltip content="Pin matter">
-  <ToggleIconButton isSelected={isPinned} onClick={togglePinned}>
-    <PinIcon />
-  </ToggleIconButton>
-</Tooltip>`}
+  code={sample2}
 />
-<Do caption="Keep the name the same, and let aria-pressed say whether it's on." code={`<ToggleIconButton aria-label="Favorite" isSelected={isFavorite} onClick={toggleFavorite}>
-  {isFavorite ? <StarStarredIcon /> : <StarUnstarredIcon />}
-</ToggleIconButton>`}>
+<Do caption="Keep the name the same, and let aria-pressed say whether it's on." code={sample3}>
   <ToggleIconButton aria-label="Favorite" isSelected>
     <StarStarredIcon />
   </ToggleIconButton>
 </Do>
 <Dont
   caption="Change the name with the state, so people hear Remove from favorites, pressed, and can't tell what pressing does."
-  code={`<ToggleIconButton
-  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-  isSelected={isFavorite}
->
-  <StarStarredIcon />
-</ToggleIconButton>`}
+  code={sample4}
 />
 <Do caption="Use Toggle Button when there's room for a label." code={`<ToggleButton isSelected={showArchived}>Show archived</ToggleButton>`}>
   <ToggleButton isSelected>Show archived</ToggleButton>
 </Do>
-<Dont caption="Use an icon that isn't familiar on its own, which people have to guess at." code={`<ToggleIconButton aria-label="Show archived" isSelected={showArchived}>
-  <ArchiveIcon />
-</ToggleIconButton>`}>
+<Dont caption="Use an icon that isn't familiar on its own, which people have to guess at." code={sample5}>
   <ToggleIconButton aria-label="Show archived" isSelected>
     <ArchiveIcon />
   </ToggleIconButton>

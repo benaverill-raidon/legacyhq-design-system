@@ -26,6 +26,14 @@ import { Label } from './label';
 import labelStyles from './label.module.css';
 import * as LabelStories from './Label.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Matter name">
+  <TextField />
+</Field>`;
+export const sample2 = `<Label>Matter name</Label>
+<TextField />`;
+
 <Meta of={LabelStories} name="Docs" />
 
 <Unstyled>
@@ -143,15 +151,12 @@ it.
   <Tag href="#" tone="green">Averill Family Living Trust</Tag>
 </Do>
 <Dont caption="Add a click handler to a Label. It isn't focusable, so keyboard users can't reach it." code={`<Label tone="information" onClick={openTrust}>Averill Family Living Trust</Label>`} />
-<Do caption="Name a form control with Field, whose label is tied to the control." code={`<Field label="Matter name">
-    <TextField />
-</Field>`}>
+<Do caption="Name a form control with Field, whose label is tied to the control." code={sample1}>
   <Field label="Matter name">
     <TextField />
   </Field>
 </Do>
-<Dont caption="Use Label above a control as its name. It isn't a form label, so the control stays unnamed." code={`<Label>Matter name</Label>
-<TextField />`} />
+<Dont caption="Use Label above a control as its name. It isn't a form label, so the control stays unnamed." code={sample2} />
 </Guidelines>
 
 </Section>

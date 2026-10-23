@@ -38,19 +38,59 @@ export function docsTitleOf(entry: RegistryEntry) {
   return `Components/${group}/${displayNameOf(entry.name)}`;
 }
 
-const COMPONENT_IDS = new Set((registry as Array<{ id: string }>).map(({ id }) => id));
+const ENTRIES = registry as Array<{ id: string; name: string }>;
+const COMPONENT_IDS = new Set(ENTRIES.map(({ id }) => id));
+
+// Every component's types file, named for its registry id. Only the paths are used here: the
+// folder that holds `<id>.types.ts` is where that component's code lives. That's usually
+// `<tier>s/<id>`, but not always: Rich Text Area's is `molecules/text-area/rich`. The same glob as
+// component-types.ts, so Storybook loads these modules once.
+const typesFiles = Object.keys(import.meta.glob('../../components/**/*.types.ts', { query: '?raw', import: 'default', eager: true }));
+
+/** Each component's code folder under `components/`, by registry id. */
+export const CODE_FOLDERS: ReadonlyMap<string, string> = new Map(
+  typesFiles.flatMap((path) => {
+    const [, folder, id] = path.match(/components\/(.+)\/([\w-]+)\.types\.ts$/) ?? [];
+    return id && COMPONENT_IDS.has(id) ? [[id, folder] as const] : [];
+  }),
+);
+
+/** The component whose code folder holds a path under `components/`, the deepest one if they nest. */
+function componentAt(path: string) {
+  let found: { id: string; folder: string } | undefined;
+  for (const [id, folder] of CODE_FOLDERS) {
+    if ((path === folder || path.startsWith(`${folder}/`)) && folder.length > (found?.folder.length ?? -1)) found = { id, folder };
+  }
+  return found?.id;
+}
 
 /**
- * The components a source file imports from the library, by folder (`organisms/banner` ->
- * `banner`), in the order they're first imported. Only registry components count: a shared module
- * such as `primitives/layers` isn't one. Commented-out imports are ignored.
+ * The components a source file imports from the library, in the order they're first imported. An
+ * import names the components it brings in when they're exported from that path (`RichTextArea`
+ * from `molecules/text-area`); otherwise it counts as the component whose code folder it's in
+ * (`toast` from `organisms/toast-group`, `RichTextArea` from `molecules/text-area/rich`). Only
+ * registry components count: a shared module such as `primitives/layers` isn't one. Commented-out
+ * imports are ignored.
  */
 export function componentImports(source: string) {
   const code = withoutComments(source).replace(/^\s*\/\/.*$/gm, '');
-  const ids = [...code.matchAll(/from\s+['"](?:\.\.?\/)+components\/(?:primitives|atoms|molecules|organisms)\/([a-z-]+)(?:\/[\w.-]+)?['"]/g)].map(
-    ([, id]) => id,
+  const ids = [...code.matchAll(/import\s+([\w$*\s{},]+?)\s+from\s+['"](?:\.\.?\/)+components\/([\w/.-]+?)(?:\/index)?(?:\.tsx?)?['"]/g)].flatMap(
+    ([, clause, path]) => {
+      const at = componentAt(path);
+      const names = (clause.match(/\{([^}]*)\}/)?.[1] ?? '')
+        .split(',')
+        .map((name) => name.trim().replace(/^type\s+/, '').split(/\s+as\s+/)[0])
+        .filter(Boolean);
+      const named = names.flatMap((name) => {
+        const entry = ENTRIES.find((candidate) => candidate.name === name);
+        const folder = entry && CODE_FOLDERS.get(entry.id);
+        // Only a component this path exports: its own, or one re-exported from a folder below it.
+        return folder && (entry.id === at || folder.startsWith(`${path}/`)) ? [entry.id] : [];
+      });
+      return named.length > 0 ? named : at ? [at] : [];
+    },
   );
-  return [...new Set(ids)].filter((id) => COMPONENT_IDS.has(id));
+  return [...new Set(ids)];
 }
 
 /** The registry entries for those imports, with their Docs titles. */

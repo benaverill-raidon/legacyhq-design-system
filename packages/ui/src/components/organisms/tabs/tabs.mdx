@@ -32,6 +32,25 @@ export const matterTabs = [
   { value: 'documents', label: 'Documents' },
 ];
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Tabs
+  tabs={[
+    { value: 'overview', label: 'Overview' },
+    { value: 'activity', label: 'Activity' },
+    { value: 'documents', label: 'Documents' },
+  ]}
+  aria-label="Matter sections"
+/>`;
+export const sample2 = `<Tabs
+  tabs={[
+    { value: 'details', label: '1. Details' },
+    { value: 'parties', label: '2. Parties' },
+    { value: 'review', label: '3. Review' },
+  ]}
+  aria-label="Matter setup"
+/>`;
+
 <Meta of={TabsStories} name="Docs" />
 
 <Unstyled>
@@ -144,24 +163,10 @@ skip it. `showBorder={false}` is shown here too.
   <Tabs tabs={matterTabs} defaultValue="overview" aria-label="Matter sections" />
 </Do>
 <Dont caption="Leave the tab list unnamed, so it's announced as a bare tab list." code={`<Tabs tabs={tabs} />`} />
-<Do caption="Use Tabs for views people switch between in any order." code={`<Tabs
-    tabs={[
-      { value: 'overview', label: 'Overview' },
-      { value: 'activity', label: 'Activity' },
-      { value: 'documents', label: 'Documents' },
-    ]}
-    aria-label="Matter sections"
-/>`}>
+<Do caption="Use Tabs for views people switch between in any order." code={sample1}>
   <Tabs tabs={matterTabs} defaultValue="activity" aria-label="Matter sections" />
 </Do>
-<Dont caption="Use Tabs for the steps of a flow, where the order matters; use Progress Tracker." code={`<Tabs
-    tabs={[
-      { value: 'details', label: '1. Details' },
-      { value: 'parties', label: '2. Parties' },
-      { value: 'review', label: '3. Review' },
-    ]}
-    aria-label="Matter setup"
-/>`}>
+<Dont caption="Use Tabs for the steps of a flow, where the order matters; use Progress Tracker." code={sample2}>
   <Tabs
     tabs={[
       { value: 'details', label: '1. Details' },

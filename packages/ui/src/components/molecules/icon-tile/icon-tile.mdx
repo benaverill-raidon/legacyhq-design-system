@@ -25,6 +25,23 @@ import { IconTile } from './icon-tile';
 import iconTileStyles from './icon-tile.module.css';
 import * as IconTileStories from './IconTile.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<IconTile tone="green">
+  <TrustIcon />
+</IconTile>
+<span>Averill Family Living Trust</span>`;
+export const sample2 = `<IconTile tone="green" decorative={false} ariaLabel="Trust">
+  <TrustIcon />
+</IconTile>
+<span>Averill Family Living Trust</span>`;
+export const sample3 = `<IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+  <CloseIcon />
+</IconTile>`;
+export const sample4 = `<IconTile tone="red" appearance="bold" decorative={false}>
+  <CloseIcon />
+</IconTile>`;
+
 <Meta of={IconTileStories} name="Docs" />
 
 <Unstyled>
@@ -137,10 +154,7 @@ set works as it is: the tile overrides its own size and color.
 <Guidelines>
 <Do
   caption="Leave the tile decorative when the text beside it says what it means."
-  code={`<IconTile tone="green">
-    <TrustIcon />
-</IconTile>
-<span>Averill Family Living Trust</span>`}
+  code={sample1}
 >
   <IconTile tone="green">
     <TrustIcon />
@@ -149,16 +163,11 @@ set works as it is: the tile overrides its own size and color.
 </Do>
 <Dont
   caption="Label a tile that repeats the text beside it. Screen readers then read the same thing twice."
-  code={`<IconTile tone="green" decorative={false} ariaLabel="Trust">
-    <TrustIcon />
-</IconTile>
-<span>Averill Family Living Trust</span>`}
+  code={sample2}
 />
 <Do
   caption="Name a tile that stands alone with decorative={false} and ariaLabel."
-  code={`<IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
-    <CloseIcon />
-</IconTile>`}
+  code={sample3}
 >
   <IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
     <CloseIcon />
@@ -166,9 +175,7 @@ set works as it is: the tile overrides its own size and color.
 </Do>
 <Dont
   caption="Set decorative={false} without ariaLabel. The tile becomes an image with no name, and warns in development."
-  code={`<IconTile tone="red" appearance="bold" decorative={false}>
-    <CloseIcon />
-</IconTile>`}
+  code={sample4}
 />
 <Do caption="Use Badge for a count." code={`<Badge>3</Badge>`}>
   <Badge>3</Badge>

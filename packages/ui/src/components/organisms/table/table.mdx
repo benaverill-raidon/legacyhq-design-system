@@ -28,6 +28,63 @@ import { Table } from './table';
 import tableStyles from './table.module.css';
 import * as TableStories from './table.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Table
+  columns={columns}
+  data={members}
+  getRowId={(member) => member.id}
+  selectable
+/>`;
+export const sample2 = `{
+  key: 'name',
+  header: 'Name',
+  emphasis: 'strong',
+  render: (member) => (
+    <Link href={'/members/' + member.id} emphasis="strong">
+      {member.name}
+    </Link>
+  ),
+}`;
+export const sample3 = `{
+  key: 'name',
+  header: 'Name',
+  render: (member) => (
+    <span onClick={() => navigate('/members/' + member.id)}>
+      {member.name}
+    </span>
+  ),
+}`;
+export const sample4 = `{
+  key: string;                        // required; also the default value, row[key]
+  header: React.ReactNode;            // required
+  render?: (row, rowIndex) => React.ReactNode;   // defaults to String(row[key])
+  sortable?: boolean;                 // makes the header a sort button
+  sortValue?: (row) => string | number | boolean | null | undefined;   // what the built-in sort compares
+  align?: 'start' | 'center' | 'end'; // default 'start'; 'end' for numbers and dates
+  emphasis?: 'strong' | 'default';    // 'strong' for the column that identifies the row
+  width?: number | string;            // a number is px
+  minWidth?: number | string;         // a number is px
+  resizable?: boolean;                // default true; false keeps this column's width
+  cellAppearance?: 'default' | 'editable';       // 'editable' for an editor returned by render
+  headerLabel?: string;               // names the column when header isn't text
+  className?: string;                 // added to the column's td cells
+  headerClassName?: string;           // added to its th
+}`;
+export const sample5 = `{
+  key: 'status',
+  header: 'Status',
+  cellAppearance: 'editable',
+  render: (row) => (
+    <Select
+      aria-label={'Status, ' + row.name}
+      value={row.status}
+      options={statusOptions}
+      onChange={(status) => save(row.id, { status })}
+    />
+  ),
+}`;
+
 <Meta of={TableStories} name="Docs" />
 
 export const members = [
@@ -334,12 +391,7 @@ filter, a polite live region announces it: "No results", "1 result", or "12 resu
 <Guidelines>
 <Do
   caption="Pass a getRowId that returns the record's id, so selection stays with the record when the data changes."
-  code={`<Table
-    columns={columns}
-    data={members}
-    getRowId={(member) => member.id}
-    selectable
-/>`}
+  code={sample1}
 />
 <Dont
   caption="Leave out getRowId on a table people select. The row's position in data becomes its id, so after a filter, a server sort, or a reload, the selection lands on other records."
@@ -347,30 +399,13 @@ filter, a polite live region announces it: "No results", "1 result", or "12 resu
 />
 <Do
   caption="Open a record from a Link in the identifier column. People can tab to it and open it in a new tab."
-  code={`{
-    key: 'name',
-    header: 'Name',
-    emphasis: 'strong',
-    render: (member) => (
-      <Link href={'/members/' + member.id} emphasis="strong">
-        {member.name}
-      </Link>
-    ),
-}`}
+  code={sample2}
 >
   <Table caption="Team members" columns={memberColumns.slice(0, 2)} data={members.slice(0, 2)} getRowId={memberId} resizableColumns={false} size="sm" />
 </Do>
 <Dont
   caption="Make a cell or row clickable to open the record. Keyboard and screen reader users can't reach it, and it competes with the row's selection Checkbox."
-  code={`{
-    key: 'name',
-    header: 'Name',
-    render: (member) => (
-      <span onClick={() => navigate('/members/' + member.id)}>
-        {member.name}
-      </span>
-    ),
-}`}
+  code={sample3}
 />
 <Do
   caption="Align numbers to the end, so their digits line up."
@@ -457,22 +492,7 @@ Picker, and Time Picker cells, and the footer's Selects, keep their own keyboard
 
 Each item in `columns` is a `TableColumn<Row>`:
 
-<CodeSample code={`{
-    key: string;                        // required; also the default value, row[key]
-    header: React.ReactNode;            // required
-    render?: (row, rowIndex) => React.ReactNode;   // defaults to String(row[key])
-    sortable?: boolean;                 // makes the header a sort button
-    sortValue?: (row) => string | number | boolean | null | undefined;   // what the built-in sort compares
-    align?: 'start' | 'center' | 'end'; // default 'start'; 'end' for numbers and dates
-    emphasis?: 'strong' | 'default';    // 'strong' for the column that identifies the row
-    width?: number | string;            // a number is px
-    minWidth?: number | string;         // a number is px
-    resizable?: boolean;                // default true; false keeps this column's width
-    cellAppearance?: 'default' | 'editable';       // 'editable' for an editor returned by render
-    headerLabel?: string;               // names the column when header isn't text
-    className?: string;                 // added to the column's td cells
-    headerClassName?: string;           // added to its th
-}`} />
+<CodeSample code={sample4} />
 
 `sort`, `defaultSort`, and `onSortChange` use a `TableSort`, and selection uses row ids
 (`string | number`):
@@ -485,19 +505,7 @@ Each item in `columns` is a `TableColumn<Row>`:
 
 An editable column returns its control from `render` and saves through the control's own callback:
 
-<CodeSample code={`{
-    key: 'status',
-    header: 'Status',
-    cellAppearance: 'editable',
-    render: (row) => (
-      <Select
-        aria-label={'Status, ' + row.name}
-        value={row.status}
-        options={statusOptions}
-        onChange={(status) => save(row.id, { status })}
-      />
-    ),
-}`} />
+<CodeSample code={sample5} />
 
 </Subsection>
 

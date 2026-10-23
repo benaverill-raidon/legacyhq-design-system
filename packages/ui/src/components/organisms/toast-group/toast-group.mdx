@@ -23,9 +23,49 @@ import {
 } from '../../../storybook/blocks/component-page';
 import { Button } from '../../atoms/button';
 import { Toast } from '../toast';
-import { ToastGroup } from './toast-group';
 import { toast } from './toast-store';
 import * as ToastGroupStories from './ToastGroup.stories';
+
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const setup = `import { ToastGroup, toast } from '@ui/components/organisms/toast-group';
+
+function App() {
+  return (
+    <>
+      <Routes />
+      <ToastGroup />
+    </>
+  );
+}
+
+// Anywhere in the app:
+toast.success('Changes saved', { description: 'Your matter is up to date.' });`;
+export const toastApi = `toast(title, options?)            // default tone
+toast.success(title, options?)
+toast.error(title, options?)
+toast.warning(title, options?)
+toast.information(title, options?)
+toast.loading(title, options?)    // no dismiss button; stays until updated or dismissed
+toast.dismiss(id?)                // one toast, or all of them
+
+options: { id, tone, description, actions, duration, isDismissible }`;
+export const updateLoading = `const id = toast.loading('Uploading contract.pdf…');
+await upload(file);
+toast.success('contract.pdf uploaded', { id });`;
+export const mountOnce = `<>
+  <Routes />
+  <ToastGroup />
+</>`;
+export const mountPerPage = `<MattersPage>
+  <MatterList />
+  <ToastGroup />
+</MattersPage>`;
+export const replaceLoading = `const id = toast.loading('Uploading contract.pdf…');
+// when it's done:
+toast.success('contract.pdf uploaded', { id });`;
+export const dismissAndAdd = `toast.dismiss(id);
+toast.success('contract.pdf uploaded');`;
 
 <Meta of={ToastGroupStories} name="Docs" />
 
@@ -53,7 +93,6 @@ import * as ToastGroupStories from './ToastGroup.stories';
       <Button prominence="tertiary" onClick={() => toast.dismiss()}>
         Clear all
       </Button>
-      <ToastGroup />
     </>
   }
 >
@@ -102,19 +141,7 @@ Mount one Toast Group, at the end of the app's root so it comes last in the tab 
 corner. Every Toast Group shows every toast, so a second one shows each toast twice.
 
 <CodeSample
-  code={`import { ToastGroup, toast } from '@ui/components/organisms/toast-group';
-
-function App() {
-    return (
-      <>
-        <Routes />
-        <ToastGroup />
-      </>
-    );
-}
-
-// Anywhere in the app:
-toast.success('Changes saved', { description: 'Your matter is up to date.' });`}
+  code={setup}
 />
 
 </Subsection>
@@ -127,15 +154,7 @@ Each call adds a toast at the front of the stack and returns its id. The helpers
 all. `toast.info`, the earlier name for `toast.information`, is still accepted.
 
 <CodeSample
-  code={`toast(title, options?)            // default tone
-toast.success(title, options?)
-toast.error(title, options?)
-toast.warning(title, options?)
-toast.information(title, options?)
-toast.loading(title, options?)    // no dismiss button; stays until updated or dismissed
-toast.dismiss(id?)                // one toast, or all of them
-
-options: { id, tone, description, actions, duration, isDismissible }`}
+  code={toastApi}
 />
 
 </Subsection>
@@ -149,9 +168,7 @@ gets the group's `duration` and a dismiss button unless you pass `duration` or `
 goes away on its own and can be closed.
 
 <CodeSample
-  code={`const id = toast.loading('Uploading contract.pdf…');
-await upload(file);
-toast.success('contract.pdf uploaded', { id });`}
+  code={updateLoading}
 />
 
 </Subsection>
@@ -194,28 +211,19 @@ transition is instant.
 <Guidelines>
 <Do
   caption="Mount one Toast Group at the end of the app's root."
-  code={`<>
-    <Routes />
-    <ToastGroup />
-</>`}
+  code={mountOnce}
 />
 <Dont
   caption="Mount a Toast Group in each page or feature. Each one shows every toast, so they appear more than once."
-  code={`<MattersPage>
-    <MatterList />
-    <ToastGroup />
-</MattersPage>`}
+  code={mountPerPage}
 />
 <Do
   caption="Replace a loading toast with its result, using the same id, so it keeps its place."
-  code={`const id = toast.loading('Uploading contract.pdf…');
-// when it's done:
-toast.success('contract.pdf uploaded', { id });`}
+  code={replaceLoading}
 />
 <Dont
   caption="Dismiss the loading toast and add a new one. The result jumps to the front of the stack, and the loading toast fades out separately."
-  code={`toast.dismiss(id);
-toast.success('contract.pdf uploaded');`}
+  code={dismissAndAdd}
 />
 <Do caption="Use a toast for news people can miss without harm." code={`toast.success('Matter archived');`}>
   <Toast tone="success" title="Matter archived" expanded={false} />

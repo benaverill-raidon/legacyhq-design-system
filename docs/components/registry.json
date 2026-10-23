@@ -1962,9 +1962,7 @@
         "borderWidth": "border-width-sm"
       },
       "componentAllowed": [
-        "linear root size",
-        "linear pad (progress fill inset)",
-        "track thickness",
+        "track thickness (linear bar height)",
         "circular diameter"
       ],
       "componentForbidden": [
@@ -2012,15 +2010,21 @@
           "variantCount": 12
         }
       ],
-      "verifiedAt": "2026-08-06"
+      "verifiedAt": "2026-10-23"
     },
     "status": "beta",
-    "knownIssues": [],
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Figma has no circular sm; code draws an 8px ring. Add it in Figma or drop sm for circular."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples"
+        "examples",
+        "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
@@ -2028,7 +2032,7 @@
         "figma": true,
         "contract": true,
         "examples": false,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },

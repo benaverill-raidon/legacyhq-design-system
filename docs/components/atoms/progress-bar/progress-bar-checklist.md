@@ -30,25 +30,25 @@
 
 - [ ] Width is fluid.
 - [ ] No fixed Figma canvas width is copied.
-- [ ] `sm`: 24px root / 16px track / 4px inset.
-- [ ] `md`: 32px root / 24px track / 4px inset.
-- [ ] `lg`: 40px root / 32px track / 4px inset.
-- [ ] Progress fill and remaining track are both fully-rounded pills at every value.
-- [ ] Progress fill floats inset within the track (block axis + inline-start), sized to the fill fraction of the padded inner width.
+- [ ] Bar is exactly the track size tall, with no outer spacing: `sm` 16px, `md` 24px, `lg` 32px.
+- [ ] Remaining track is a fully-rounded pill with a 1px bold border.
+- [ ] Progress fill sits inside the 1px border (block axis + inline-start), runs the full inner height, and is the fill fraction of the inner width.
+- [ ] Progress fill is rounded at its start and square at its end while partial, and rounded at both ends at 100.
+- [ ] The remaining track clips the fill to its inner edge, so small and nearly full values don't cover the border.
 - [ ] Only the remaining track carries the bold border; the progress fill has none.
 
 ## Circular
 
 - [ ] Uses inline SVG.
 - [ ] Does not use Figma-exported donut images.
-- [ ] Diameter is 72px.
-- [ ] `sm` track thickness is 16px.
-- [ ] `md` track thickness is 24px.
-- [ ] `lg` track thickness is 32px.
+- [ ] Diameter is 80px; the ring's outer edge is radius 38, with a 1px border outside both ring edges.
+- [ ] `md` ring is 16px thick (hole radius 22).
+- [ ] `lg` ring is 28px thick (hole radius 10).
+- [ ] `sm` ring is 8px thick (hole radius 30); not in Figma (open decision in the contract).
 - [ ] Progress begins at 12 o'clock.
 - [ ] Progress advances clockwise.
-- [ ] Progress arc is inset within the track ring by the pad (4px), matching the linear inset.
-- [ ] Progress arc is capped with rounded ends and has no border of its own.
+- [ ] Progress arc fills the ring's full thickness, with no inset.
+- [ ] Progress arc has straight (butt) ends and no border of its own; the ring's border shows around it.
 - [ ] At value 0, the track ring and its border render and the progress arc is hidden (no dot at 12 o'clock).
 - [ ] Circular geometry scales without raster artifacts.
 

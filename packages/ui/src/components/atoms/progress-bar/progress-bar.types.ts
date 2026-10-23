@@ -10,11 +10,11 @@ export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivEleme
    * values show and announce as 0, above 100 as 100.
    */
   value: number;
-  /** `linear` fills the width its container gives it; `circular` is a 72px ring at every size. */
+  /** `linear` fills the width its container gives it; `circular` is an 80px ring at every size. */
   variant?: ProgressBarVariant;
   /**
-   * The thickness of the bar or ring. Linear bars are 24, 32, or 40px tall for `sm`, `md`, and
-   * `lg`; the circular ring stays 72px across and only its stroke changes.
+   * The thickness of the bar or ring. Linear bars are 16, 24, or 32px tall for `sm`, `md`, and
+   * `lg`. The circular ring stays 80px across and only its thickness changes: 8, 16, or 28px.
    */
   size?: ProgressBarSize;
   /**

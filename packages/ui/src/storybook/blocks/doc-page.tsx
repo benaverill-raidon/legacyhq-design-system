@@ -132,7 +132,8 @@ export function DocTokenTable({ rows, sampleLabel, sampleClassName }: { rows: Do
 export function DocFooter({ children }: { children: React.ReactNode }) {
   return (
     <footer className={doc.footer}>
-      <p className={doc.small}>{children}</p>
+      {/* A div: MDX wraps multi-line footer text in its own paragraph. */}
+      <div className={doc.small}>{children}</div>
     </footer>
   );
 }

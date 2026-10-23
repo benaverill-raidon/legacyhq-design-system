@@ -73,6 +73,16 @@ component's known issues, so they show on Introduction / Status too.
 - [ ] Slider: the room now kept above the track for the value bubble (every horizontal Slider is
   taller by the bubble's height plus `spacing-sm`).
 
+**Progress Bar (code matched to the revised Figma 2026-10-23)**
+
+- [ ] Tokens v1.0.0: `component/progress-bar/circular/size` 72 → 80 (the repo's token is 80 now).
+- [ ] Tokens v1.0.0: remove the now-unused linear `pad` (sm/md/lg) and `root-size` (sm/md/lg)
+  variables; the repo removes them after (and `token-data.test.ts`'s root-size check with them).
+- [ ] Circular `sm`: Figma has none; code draws an 8px ring. Add it, or drop `sm` for circular.
+- [ ] Clean up `progress-bar-circular`: a hidden 72px "donut" layer in `progress=100, size=md`
+  still bound to `color/data-viz/sequence/prussian/300`, and an empty 72px "donut" layer in every
+  `lg` variant except 100.
+
 **Check a value**
 
 - [ ] Table header fill (node `2956:29798`): surface sunken (the CSS) or surface default (the

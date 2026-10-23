@@ -10,6 +10,7 @@ import styles from './progress-bar.module.css';
 afterEach(cleanup);
 
 const progressBarCss = readFileSync('packages/ui/src/components/atoms/progress-bar/progress-bar.module.css', 'utf8');
+const tokensCss = readFileSync('packages/ui/src/tokens/generated/tokens.css', 'utf8');
 
 describe('ProgressBar', () => {
   it('uses linear and md as defaults', () => {
@@ -154,9 +155,12 @@ describe('ProgressBar', () => {
 
     expect(remainingTrack).toBeInTheDocument();
     expect(progressSegment).toBeInTheDocument();
-    // The stop markers were removed in the Figma revision: the track holds exactly the two
-    // segments and nothing else.
-    expect(track?.children).toHaveLength(2);
+    // The stop markers were removed in the Figma revision: the track holds the bordered remaining
+    // track, and the fill sits inside it (clipped to its inner edge), with nothing else.
+    expect(track?.children).toHaveLength(1);
+    expect(track?.firstElementChild).toBe(remainingTrack);
+    expect(remainingTrack?.children).toHaveLength(1);
+    expect(remainingTrack?.firstElementChild).toBe(progressSegment);
     // No CSS remains for the removed stop anatomy.
     expect(progressBarCss).not.toContain('stopShape');
     expect(progressBarCss).not.toContain('stopContainer');
@@ -176,17 +180,34 @@ describe('ProgressBar', () => {
     expect(progressBarCss).not.toContain('circularProgressBorder');
   });
 
-  it('insets the circular progress arc inside the track ring by the pad', () => {
-    // md track thickness 24, pad 4 -> progress arc 24 - 2*4 = 16, narrower than the 24 track ring.
-    const { container } = render(<ProgressBar value={50} variant="circular" label="Inset circular" />);
-    const trackBorder = container.querySelector(`.${styles.circularTrackBorder}`);
-    const progress = container.querySelector(`.${styles.circularProgress}`);
-    const trackWidth = Number(trackBorder?.getAttribute('stroke-width'));
-    const progressWidth = Number(progress?.getAttribute('stroke-width'));
+  it.each([
+    // Figma (4217:98931): outer edge radius 38 in an 80 box; hole radius md 22, lg 10. Figma has
+    // no circular sm; code draws an 8px ring (hole 30).
+    ['sm', 30, 8],
+    ['md', 22, 16],
+    ['lg', 10, 28],
+  ] as const)('draws the %s circular ring at hole radius %i, %ipx thick, with the progress across its full thickness', (size, hole, thickness) => {
+    const { container } = render(<ProgressBar value={50} variant="circular" size={size} label="Ring geometry" />);
+    const svg = container.querySelector('svg');
+    const circles = (className: string) => container.querySelector(`.${className}`);
+    const border = circles(styles.circularTrackBorder);
+    const track = circles(styles.circularTrack);
+    const progress = circles(styles.circularProgress);
+    const midRadius = hole + thickness / 2;
 
-    expect(trackWidth).toBe(24);
-    expect(progressWidth).toBe(16);
-    expect(progressWidth).toBeLessThan(trackWidth);
+    expect(svg).toHaveAttribute('viewBox', '0 0 80 80');
+    for (const circle of [border, track, progress]) {
+      expect(circle).toHaveAttribute('cx', '40');
+      expect(circle).toHaveAttribute('cy', '40');
+      expect(Number(circle?.getAttribute('r'))).toBe(midRadius);
+    }
+    // The ring's outer edge is radius 38 at every size.
+    expect(midRadius + thickness / 2).toBe(38);
+    // The border stroke is 2 wider than the ring, so 1px of border shows outside both edges.
+    expect(Number(border?.getAttribute('stroke-width'))).toBe(thickness + 2);
+    expect(Number(track?.getAttribute('stroke-width'))).toBe(thickness);
+    // No inset pad: the progress wedge fills the ring's full thickness.
+    expect(Number(progress?.getAttribute('stroke-width'))).toBe(thickness);
   });
 
   it('shows the empty track and its border at value 0, in both variants, and hides only the circular arc', () => {
@@ -198,7 +219,7 @@ describe('ProgressBar', () => {
     expect(container.querySelector(`.${styles.circularTrackBorder}`)).toBeInTheDocument();
     expect(container.querySelector(`.${styles.circularTrack}`)).toBeInTheDocument();
     // jsdom doesn't compute the CSS, so read the rules: the only thing the empty state hides is the
-    // circular progress arc (a zero-length arc with a round cap would draw a dot at 12 o'clock).
+    // circular progress arc, so no sliver of it can show at the 12 o'clock seam.
     const emptySelectors = [...progressBarCss.matchAll(/([^{}]*\[data-empty='true'\][^{}]*){([^}]*)}/g)].map(
       ([, selector]) => selector.replace(/\/\*[\s\S]*?\*\//g, '').trim(),
     );
@@ -214,26 +235,43 @@ describe('ProgressBar', () => {
     expect(container.querySelector(`.${styles.remainingTrack}`)).toBeInTheDocument();
   });
 
-  it('gives the linear track and progress fill fully rounded corners at every value', () => {
-    // Both the remaining track and the progress fill are full-round pills - no per-corner or
-    // completion-conditional rounding, so the progress fill is a rounded pill at any value.
-    expect(progressBarCss).toMatch(
-      /\.remainingTrack\s*{[^}]*border-radius:\s*var\(--border-radius-full-round\)/,
+  it('rounds the linear fill at its start, squares its end while partial, and rounds both ends at 100', () => {
+    const rule = (selector: string) =>
+      progressBarCss.match(new RegExp(`(?:^|\\n)${selector.replace(/[.[\]']/g, '\\$&')}\\s*{([^}]*)}`))?.[1] ?? '';
+    // The remaining track is a full pill, and clips the fill to its inner edge.
+    expect(rule('.remainingTrack')).toMatch(/border-radius:\s*var\(--border-radius-full-round\)/);
+    expect(rule('.remainingTrack')).toMatch(/overflow:\s*hidden/);
+    // Partial fill: only the start corners are rounded.
+    const fill = rule('.progressSegment');
+    expect(fill).toMatch(/border-start-start-radius:\s*var\(--border-radius-full-round\)/);
+    expect(fill).toMatch(/border-end-start-radius:\s*var\(--border-radius-full-round\)/);
+    expect(fill).not.toMatch(/(^|[^-])border-radius:/);
+    expect(fill).not.toMatch(/border-(start-end|end-end)-radius/);
+    // Complete: both ends rounded.
+    expect(rule(".variant_linear[data-complete='true'] .progressSegment")).toMatch(
+      /border-radius:\s*var\(--border-radius-full-round\)/,
     );
-    expect(progressBarCss).toMatch(
-      /\.progressSegment\s*{[^}]*border-radius:\s*var\(--border-radius-full-round\)/,
-    );
-    expect(progressBarCss).not.toContain('border-start-start-radius');
-    expect(progressBarCss).not.toContain('border-end-end-radius');
   });
 
-  it('insets the progress fill inside the bordered track by the linear pad', () => {
-    // The fill floats inside the track: inset by the pad on the block axis and inline-start, and
-    // sized to the fill fraction of the padded inner width so 100% leaves an equal inline-end pad.
-    expect(progressBarCss).toMatch(/\.progressSegment\s*{[^}]*inset-block:\s*var\(--progress-bar-linear-pad\)/);
-    expect(progressBarCss).toMatch(
-      /inline-size:\s*calc\(var\(--progress-bar-fill[^)]*\) \* \(100% - 2 \* var\(--progress-bar-linear-pad\)\)\)/,
-    );
+  it('sizes the linear bar to the track size, with the fill inside the 1px border at full inner height', () => {
+    // Figma removed the outer spacing: the bar is the track size tall, with no pad.
+    for (const size of ['sm', 'md', 'lg']) {
+      expect(progressBarCss).toMatch(
+        new RegExp(`\\.size_${size}\\s*{[^}]*--progress-bar-track-size:\\s*var\\(--component-progress-bar-track-size-${size}\\)`),
+      );
+    }
+    expect(progressBarCss).toMatch(/\.variant_linear\s*{[^}]*block-size:\s*var\(--progress-bar-track-size\)/);
+    expect(progressBarCss).not.toContain('--component-progress-bar-linear-root-size');
+    expect(progressBarCss).not.toContain('--component-progress-bar-linear-pad');
+    expect(progressBarCss).not.toContain('--progress-bar-linear-pad');
+    // The fill is positioned in the remaining track's padding box, which is inside its
+    // --border-width-sm border: it starts at the border, runs the full inner height, and is the
+    // fill fraction of the inner width.
+    expect(progressBarCss).toMatch(/\.remainingTrack\s*{[^}]*border:\s*var\(--border-width-sm\) solid var\(--color-border-bold\)/);
+    const fill = progressBarCss.match(/\n\.progressSegment\s*{([^}]*)}/)?.[1] ?? '';
+    expect(fill).toMatch(/inset-block:\s*0;/);
+    expect(fill).toMatch(/inset-inline-start:\s*0;/);
+    expect(fill).toMatch(/inline-size:\s*calc\(var\(--progress-bar-fill, 0\) \* 100%\)/);
     render(<ProgressBar data-testid="pb" value={37} label="Fill fraction" />);
     expect(screen.getByTestId('pb')).toHaveStyle({ '--progress-bar-fill': '0.37' });
   });
@@ -246,9 +284,14 @@ describe('ProgressBar', () => {
     expect(progressBarCss).not.toContain('data-viz-sequence-prussian');
   });
 
-  it('caps the circular progress arc with rounded ends', () => {
-    expect(progressBarCss).toMatch(/\.circularProgress\s*{[^}]*stroke-linecap:\s*round/);
-    expect(progressBarCss).not.toContain('stroke-linecap: butt');
+  it('ends the circular progress wedge with straight edges, not rounded caps', () => {
+    expect(progressBarCss).toMatch(/\.circularProgress\s*{[^}]*stroke-linecap:\s*butt/);
+    expect(progressBarCss).not.toContain('stroke-linecap: round');
+  });
+
+  it('sizes the circular box from the 80px token', () => {
+    expect(progressBarCss).toMatch(/--progress-bar-circular-size:\s*var\(--component-progress-bar-circular-size\)/);
+    expect(tokensCss).toMatch(/--component-progress-bar-circular-size:\s*var\(--measurement-80\);/);
   });
 
   it('keeps the linear geometry fluid and tokenized', () => {

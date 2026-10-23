@@ -2,6 +2,12 @@
   "name": "ProgressBar",
   "category": "feedback",
   "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "Figma has no circular sm; code draws an 8px ring. Add it in Figma or drop sm for circular."
+    }
+  ],
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
   "figmaSource": {
@@ -22,7 +28,7 @@
         "variantCount": 12
       }
     ],
-    "verifiedAt": "2026-08-06"
+    "verifiedAt": "2026-10-23"
   },
   "useCases": [
     "Document generation",
@@ -94,7 +100,7 @@
       "direction": "inline-start-to-inline-end"
     },
     "circular": {
-      "diameter": "72px",
+      "diameter": "80px",
       "startAngle": -90,
       "direction": "clockwise",
       "implementation": "inline-svg"
@@ -102,22 +108,22 @@
   },
   "sizes": {
     "sm": {
-      "linearRoot": "24px",
+      "linearRoot": "16px",
       "trackThickness": "16px",
-      "progressInset": "4px",
-      "circularDiameter": "72px"
+      "circularDiameter": "80px",
+      "circularRingThickness": "8px"
     },
     "md": {
-      "linearRoot": "32px",
+      "linearRoot": "24px",
       "trackThickness": "24px",
-      "progressInset": "4px",
-      "circularDiameter": "72px"
+      "circularDiameter": "80px",
+      "circularRingThickness": "16px"
     },
     "lg": {
-      "linearRoot": "40px",
+      "linearRoot": "32px",
       "trackThickness": "32px",
-      "progressInset": "4px",
-      "circularDiameter": "72px"
+      "circularDiameter": "80px",
+      "circularRingThickness": "28px"
     }
   },
   "states": [
@@ -133,9 +139,7 @@
       "borderWidth": "border-width-sm"
     },
     "componentAllowed": [
-      "linear root size",
-      "linear pad (progress fill inset)",
-      "track thickness",
+      "track thickness (linear bar height)",
       "circular diameter"
     ],
     "componentForbidden": [
@@ -168,11 +172,11 @@
     "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular progress arc is hidden, so reaching or leaving 0 shows or hides the arc at once; the track ring stays.",
     "Linear width is controlled by the parent.",
     "Circular progress starts at 12 o'clock and advances clockwise.",
-    "The linear progress fill and remaining track are both fully-rounded pills (border-radius-full-round) at every value.",
-    "The linear progress fill is inset within the bordered remaining track by the pad (4px) on the block axis and both inline edges, so it floats inside the track rather than meeting its edges.",
-    "The circular progress arc is inset within the track ring by the same pad on both radial edges, so a light gap of track shows around the fill - matching the linear inset.",
+    "The remaining track is a fully-rounded pill (border-radius-full-round). The linear progress fill is rounded at its start and square at its end while partial, and rounded at both ends at 100.",
+    "The linear bar is exactly the track size tall (16/24/32px), with no outer spacing. The progress fill sits inside the remaining track's 1px border (border-width-sm) on the block axis and inline-start, runs the full inner height, and its width is the fill fraction of the inner width. The remaining track clips the fill to its inner edge.",
+    "The circular ring's outer edge is radius 38 in an 80-unit viewBox, with a 1px bold border outside both the outer edge and the hole edge. Hole radius sm 30 / md 22 / lg 10 (ring 8 / 16 / 28px thick). The progress arc fills the ring's full thickness, so the border frames the filled part too.",
     "Only the remaining track carries the bold border; the progress fill has none.",
-    "The circular progress arc is capped with rounded ends and carries no border.",
+    "The circular progress arc is a wedge with straight (butt) ends and carries no border of its own.",
     "At value 0 the circular variant draws its empty track ring and border, and hides only the progress arc, as the linear variant shows its empty bordered track.",
     "Colors map to the brand palette (progress = brand primary bold, track = deep surface, border = border/bold), and are theme-aware in light and dark."
   ],

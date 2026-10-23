@@ -46,8 +46,8 @@ size = 'md'
 ```txt
 root
 └─ track
-   ├─ progress segment
    └─ remaining track segment
+      └─ progress segment
 ```
 
 ### Circular
@@ -59,17 +59,19 @@ root
    └─ progress circle
 ```
 
-In the DOM the linear remaining track comes first and spans the whole track, with the progress
-segment layered on top of it. The circular track circle is drawn as two circles: a bold-border
-circle (`.circularTrackBorder`) and the surface track circle (`.circularTrack`) 2px narrower on top
-of it. A `div` (`.circularViewport`) wraps the SVG. Both the linear track and the circular viewport
+In the DOM the linear remaining track spans the whole track and holds the progress segment, which
+it clips to its inner (padding-box) edge, inside its 1px border. The circular track circle is drawn
+as two circles: a bold-border circle (`.circularTrackBorder`) and the surface track circle
+(`.circularTrack`) 2px narrower on top of it. A `div` (`.circularViewport`) wraps the SVG. Both the linear track and the circular viewport
 are `aria-hidden`.
 
 The Figma-only `progress-segment` and `track-segment` parts should not become public React components. Implement them as private anatomy inside Progress Bar.
 
-Both linear segments are fully-rounded pills (`border-radius-full-round`) at every value, and the
-circular progress arc is capped with rounded ends - see Token mapping and Value behavior. The
-earlier `track-stop` marks were removed in the Figma revision and are no longer part of the anatomy.
+The linear remaining track is a fully-rounded pill (`border-radius-full-round`); the progress
+segment is rounded at its start and square at its end while partial, and rounded at both ends at
+100. The circular progress arc is a wedge with straight (butt) ends - see Token mapping and Value
+behavior. The earlier `track-stop` marks were removed in the Figma revision and are no longer part
+of the anatomy.
 
 ## Variants
 
@@ -79,8 +81,10 @@ Use when horizontal space is available and the relationship between completed an
 
 - Fluid width; do not reproduce Figma's fixed 404px width.
 - Progress fills from inline-start to inline-end.
-- The progress fill and the remaining track are both fully-rounded pills at every value.
-- The progress fill is inset within the bordered remaining track by the pad (4px, every size) on the block axis and both inline edges, so it floats inside the track. Its inline size is the fill fraction of the track's inner (padded) width, so at 100% it leaves an equal pad on the inline-end edge.
+- The bar is exactly the track size tall (16/24/32px), with no outer spacing.
+- The remaining track is a fully-rounded pill with a 1px bold border, filled with the deep surface.
+- The progress fill sits inside that border (`border-width-sm`) on the block axis and inline-start and runs the full inner height. Its inline size is the fill fraction of the inner width (inside the borders), so at 100% it meets the border on the inline-end edge.
+- While partial the fill is rounded at its start and square at its end, where the remaining track continues; at 100% it is rounded at both ends. The remaining track clips the fill to its inner edge, so a very small or nearly full fill never covers the border at the rounded ends.
 - Only the remaining track carries the bold border; the progress fill has none.
 - Use logical properties so direction can be adapted later without restructuring.
 
@@ -89,42 +93,61 @@ Use when horizontal space is available and the relationship between completed an
 Use when horizontal space is constrained or the indicator is paired with a compact summary.
 
 - Render with inline SVG, not exported raster assets.
-- Diameter remains 72px for the current component.
+- Diameter is 80px (`component-progress-bar-circular-size`) at every size.
 - Progress begins at 12 o'clock.
 - Progress advances clockwise.
 - Use `stroke-dasharray` and `stroke-dashoffset`, or an equivalent SVG implementation.
-- The progress arc is inset within the track ring by the pad (4px, every size) on both radial edges, matching the linear inset, so a light gap of track shows around the fill.
-- The progress arc is capped with rounded ends (`stroke-linecap: round`) and carries no border.
-- At value 0, draw the empty track ring and its border, and hide only the progress arc (a zero-length arc with a round cap would show as a dot at 12 o'clock). This matches the linear variant, which shows its empty bordered track at 0.
+- The ring's outer edge is radius 38 from the center, with a 1px bold border outside both the outer edge and the hole edge.
+- The progress arc is a filled wedge across the ring's full thickness (no inset), with straight ends (`stroke-linecap: butt`) and no border of its own; the ring's border frames the filled part too.
+- At value 0, draw the empty track ring and its border, and hide only the progress arc, so no sliver of it shows at the 12 o'clock seam. This matches the linear variant, which shows its empty bordered track at 0.
 - Do not use images generated from Figma.
 
 ## Sizes
 
-The `size` prop controls track thickness and the progress inset (pad). The linear root block size is derived as `track thickness + 2 × pad`.
+The `size` prop controls the linear bar's height and the circular ring's thickness. There is no
+outer spacing: the linear bar is exactly the track size tall.
 
 ### Linear
 
-| Size | Root block size | Track thickness | Progress inset (pad) |
-|---|---:|---:|---:|
-| `sm` | 24px | 16px | 4px |
-| `md` | 32px | 24px | 4px |
-| `lg` | 40px | 32px | 4px |
+| Size | Bar block size (track thickness) | Progress fill height |
+|---|---:|---:|
+| `sm` | 16px | 14px (inside the 1px border) |
+| `md` | 24px | 22px |
+| `lg` | 32px | 30px |
 
-Track thickness is the `component-progress-bar-track-size-*` token, which is the progress fill's
-thickness; the bordered remaining track fills the whole root block size.
+The bar's block size is the `component-progress-bar-track-size-*` token. The bordered remaining
+track fills it, and the progress fill runs the full height inside the 1px border.
 
 ### Circular
 
-| Size | Diameter | Track thickness | Progress inset (pad) |
-|---|---:|---:|---:|
-| `sm` | 72px | 16px | 4px |
-| `md` | 72px | 24px | 4px |
-| `lg` | 72px | 32px | 4px |
+| Size | Diameter | Hole radius | Ring thickness | In Figma |
+|---|---:|---:|---:|---|
+| `sm` | 80px | 30 | 8px | No (code-only) |
+| `md` | 80px | 22 | 16px | Yes |
+| `lg` | 80px | 10 | 28px | Yes |
 
-The circular geometry is set in `progress-bar.tsx`, not tokens: a 72-unit viewBox, a ring radius of
-28/24/20 for `sm`/`md`/`lg` so the ring's outer edge always meets the 72px box, a bold border stroke
-of the track thickness, the surface track stroke 2px narrower (a 1px border shows on each edge), and
-the progress arc 8px narrower (the 4px inset on each edge).
+The circular geometry is set in `progress-bar.tsx`, not tokens: an 80-unit viewBox centered at
+(40, 40), the ring's outer edge at radius 38, and the hole radius per size. Every circle is drawn at
+the ring's mid radius: a bold border stroke 2 wider than the ring (so a 1px border shows outside the
+outer edge, out to radius 39, and inside the hole edge), the surface track stroke of the ring's
+thickness on top, and the progress arc, also the ring's full thickness, on top of that.
+
+### Figma notes
+
+- **2026-10-23:** the owner removed the outer spacing from both components in Figma
+  (`progress-bar-linear` 3978:81552, `progress-bar-circular` 4217:98931). Linear: the bar is now
+  one bordered pill exactly the track size tall (it was track + 2 x 4px pad: 24/32/40px), and the
+  fill runs the full inner height, square at its end while partial (it was a fully-rounded pill 4px
+  in from the track). Circular: the box is 80px (was 72), the ring's outer edge is radius 38 with
+  a 1px border outside, the hole radius is 22 (md) or 10 (lg), and the progress is a wedge across
+  the full ring with straight edges (it was an arc 4px in from each edge, with rounded caps).
+- Figma has no circular `sm`. The code keeps `size="sm"` working with an 8px ring (hole radius
+  30); this is recorded as an open decision in the contract's `knownIssues`.
+- Figma draws the linear progress segment with its own border on three sides beside a separate
+  track segment, clipped by a rounded frame; code draws one bordered track holding the fill, which
+  looks the same.
+- The linear fill widths in Figma's demonstration variants are approximate (for example the
+  `progress=20` fill is 25% of the track). Code uses the exact fraction.
 
 ## Value behavior
 
@@ -177,14 +200,15 @@ CSS directly to primitive color values, and do not use the old `data-viz/sequenc
 Keep component tokens only for anatomy-specific dimensions:
 
 ```txt
---component-progress-bar-linear-root-size-md   (calc: track-size + 2 × pad)
---component-progress-bar-linear-root-size-lg   (calc: track-size + 2 × pad)
---component-progress-bar-linear-pad-md
---component-progress-bar-linear-pad-lg
+--component-progress-bar-track-size-sm   (linear bar height)
 --component-progress-bar-track-size-md
 --component-progress-bar-track-size-lg
---component-progress-bar-circular-size
+--component-progress-bar-circular-size   (80px)
 ```
+
+`--component-progress-bar-linear-root-size-*` and `--component-progress-bar-linear-pad-*` are still
+in the token data but no longer used by the component, since Figma removed the outer spacing. They
+are to be removed Figma-first.
 
 If existing semantic dimension tokens already express one of these values without losing component intent, prefer the semantic token and omit the component alias.
 

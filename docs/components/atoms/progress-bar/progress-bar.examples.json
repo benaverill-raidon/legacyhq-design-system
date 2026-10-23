@@ -17,6 +17,11 @@
       "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />"
     },
     {
+      "name": "Large circular summary",
+      "description": "The thicker lg ring, for a summary that leads its tile. Circular takes md and lg.",
+      "jsx": "<ProgressBar variant=\"circular\" size=\"lg\" value={75} label=\"Roadmap completion\" />"
+    },
+    {
       "name": "Circular summary at 0",
       "description": "Nothing complete yet: the ring shows its empty track and border, with no progress arc, so the summary keeps its shape.",
       "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />"
@@ -30,6 +35,13 @@
       "name": "Complete",
       "description": "Shows a completed process.",
       "jsx": "<ProgressBar value={100} label=\"Import complete\" />"
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Circular sm",
+      "jsx": "<ProgressBar variant=\"circular\" size=\"sm\" value={75} label=\"Roadmap completion\" />",
+      "reason": "Circular has md and lg only, as Figma does. A circular sm is deprecated and renders exactly as md, so write size=\"md\" (or leave the default)."
     }
   ]
 }

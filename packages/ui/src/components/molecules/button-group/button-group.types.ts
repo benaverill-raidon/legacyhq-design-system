@@ -2,6 +2,8 @@ import type * as React from 'react';
 
 export type ButtonGroupOrientation = 'horizontal' | 'vertical';
 
+export type ButtonGroupSpacing = 'default' | 'compact';
+
 export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * The buttons to lay out, in order: usually Buttons, Icon Buttons, or Toggle Buttons. Each keeps
@@ -10,6 +12,11 @@ export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   /** `horizontal` lays the buttons out in a row; `vertical` stacks them in a column. Neither wraps. */
   orientation?: ButtonGroupOrientation;
+  /**
+   * The gap between the buttons, in either orientation. `default` is 8px; `compact` is 4px, for a
+   * tight row such as a set of Icon Buttons in a dense toolbar.
+   */
+  spacing?: ButtonGroupSpacing;
   /**
    * Names the set of actions. With a name, the group gets `role="group"`; without one, it has no
    * role. Leave it off when a heading or a dialog title already says what the buttons are for.

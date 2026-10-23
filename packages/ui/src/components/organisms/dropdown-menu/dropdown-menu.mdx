@@ -5,6 +5,7 @@ import { DocFooter } from '../../../storybook/blocks/doc-page';
 import { DocLink } from '../../../storybook/blocks/doc-link';
 import {
   Anatomy,
+  CodeSample,
   ComponentHeader,
   ComponentPage,
   Do,
@@ -71,6 +72,24 @@ export const RowActionsDropdown = () => {
 };
 
 {/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const menuProps = `// From Menu, passed to the Menu in the panel
+sections: MenuSection[];             // required
+size?: 'sm' | 'md' | 'lg';           // default 'sm'; 192, 240, or 288px wide
+showSearch?: boolean;                // default true; focuses the field each time the menu opens
+searchValue?: string;                // the search text and the filter
+onSearchChange?: (value: string) => void;  // without it, typing doesn't filter
+searchPlaceholder?: string;
+searchLabel?: string;                // the search field's name; default 'Search'
+clearSearchLabel?: string;           // the clear button's name and tooltip; default 'Clear search'
+showScrollbar?: boolean;             // default true; scrolls once taller than maxHeight
+maxHeight?: number | string;         // no limit by default
+loading?: boolean;                   // replaces the sections with a loading row
+loadingLabel?: React.ReactNode;      // default 'Loading…'
+emptyMessage?: React.ReactNode;      // default 'No results'
+fullWidth?: boolean;                 // also set by matchTriggerWidth
+'aria-label'?: string;               // names the menu; set it or aria-labelledby
+'aria-labelledby'?: string;`;
 
 export const sample1 = `const [open, setOpen] = useState(false);
 
@@ -297,12 +316,12 @@ Menu's sections, headings, and dividers all work inside the panel.
 
 <PropsTable of={DropdownMenuStories} />
 
-Dropdown Menu's other props are Menu's, passed to the Menu in the panel: `sections`, `size`,
-`showSearch`, `searchValue`, `onSearchChange`, `searchPlaceholder`, `searchLabel`,
-`clearSearchLabel`, `showScrollbar`, `maxHeight`, `loading`, `loadingLabel`, `emptyMessage`,
-`fullWidth`, `aria-label`, and `aria-labelledby`. See <DocLink to="Components/Actions/Menu" /> for
-what each does. `matchTriggerWidth` also sets `fullWidth`. Each item's `onSelect` is wrapped so that
-choosing it closes the menu.
+Dropdown Menu's other props are Menu's, passed to the Menu in the panel. Storybook's docgen doesn't
+read props inherited from another file, so the table above leaves them out: these are copied from
+menu.types.ts. See <DocLink to="Components/Actions/Menu" /> for what each does. Each item's
+`onSelect` is wrapped so that choosing it closes the menu.
+
+<CodeSample code={menuProps} />
 
 </Section>
 
@@ -331,7 +350,8 @@ these are Popup's tokens and its padding rows don't apply; the rows' tokens are 
 
 <DocFooter>
   The API table reads dropdown-menu.types.ts, the design tokens read popup.module.css, and the Figma
-  source comes from registry.json, so they follow the code.
+  source comes from registry.json, so they follow the code. The props Dropdown Menu takes from Menu
+  are copied from menu.types.ts by hand, because docgen doesn't follow them into another file.
 </DocFooter>
 
 </ComponentPage>

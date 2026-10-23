@@ -146,7 +146,9 @@ When `isExpanded` is true:
 aria-expanded={true}
 ```
 
-Use for menu/disclosure triggers. Do not use `aria-pressed` for expanded state.
+Use for menu/disclosure triggers. Do not use `aria-pressed` for expanded state. A "more actions"
+trigger uses `MoreVertIcon` (vertical dots), the same glyph as Dropdown Menu and Table row actions;
+not `MoreHorizIcon`.
 
 ## Inverse behavior
 

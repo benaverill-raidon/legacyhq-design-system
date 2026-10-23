@@ -19,7 +19,8 @@ export interface TagProps extends React.HTMLAttributes<HTMLElement> {
   size?: TagSize;
   /**
    * The color set for the fill, border, and text. `default` is neutral and `brand` is the product
-   * color; the others are accent colors with no fixed meaning, for telling kinds of records apart.
+   * color; the others are accent colors with no fixed meaning, for telling kinds of records apart,
+   * as Icon Tile's are. For a status, use Label, whose tones carry meaning.
    */
   tone?: TagTone;
   /** Makes the tag a link to this address: the whole tag, or the content beside the remove button. */

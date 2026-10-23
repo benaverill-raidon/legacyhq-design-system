@@ -53,6 +53,11 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
     'aria-invalid': ariaInvalid,
     required,
     dialogLabel = 'Choose a date',
+    // The calendar's own built-in labels, passed through. Left undefined, the calendar keeps its defaults.
+    previousMonthLabel,
+    nextMonthLabel,
+    previousYearLabel,
+    nextYearLabel,
     ...rest
   },
   forwardedRef,
@@ -204,6 +209,10 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(func
             weekStartsOn={weekStartsOn}
             today={today}
             locale={locale}
+            previousMonthLabel={previousMonthLabel}
+            nextMonthLabel={nextMonthLabel}
+            previousYearLabel={previousYearLabel}
+            nextYearLabel={nextYearLabel}
           />
         }
       >

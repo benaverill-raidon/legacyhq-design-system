@@ -11,6 +11,7 @@ export const ButtonGroup = React.memo(
     {
       children,
       orientation = 'horizontal',
+      spacing = 'default',
       className,
       role,
       'aria-label': ariaLabel,
@@ -23,12 +24,18 @@ export const ButtonGroup = React.memo(
       <div
         {...rest}
         ref={forwardedRef}
-        className={mergeClassNames(styles.root, styles[`orientation_${orientation}`], className)}
+        className={mergeClassNames(
+          styles.root,
+          styles[`orientation_${orientation}`],
+          spacing === 'compact' && styles.spacing_compact,
+          className,
+        )}
         // A role you pass, such as toolbar, wins; otherwise a named group is a `group`.
         role={role ?? (ariaLabel || ariaLabelledBy ? 'group' : undefined)}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         data-orientation={orientation}
+        data-spacing={spacing}
       >
         {children}
       </div>

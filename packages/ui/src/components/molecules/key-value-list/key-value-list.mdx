@@ -40,6 +40,22 @@ export const sample3 = `<KeyValueList>
   <KeyValuePair size="sm" label="Account type" value="Trust" underline />
   <KeyValuePair size="sm" label="Status" value="Active" />
 </KeyValueList>`;
+export const sample5 = `<KeyValueList>
+  <KeyValuePair label="Client name" underline>
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+      <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+  </KeyValuePair>
+  <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`;
+export const sample6 = `<KeyValueList>
+  <KeyValuePair label="Client name" underline>
+    <InlineEdit value={name} onConfirm={setName}>
+      <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+  </KeyValuePair>
+  <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`;
 export const sample4 = `<KeyValueList>
   <KeyValuePair size="sm" label="Account type" value="Trust" underline />
   <KeyValuePair size="lg" label="Status" value="Active" />
@@ -132,6 +148,11 @@ and text size.
 Read-only pairs and pairs with an inline control sit in the same list, and keep the same key column
 and divider. A row grows with its value, and the rows below move down.
 
+A pair edited with <DocLink to="Components/Forms/Inline Edit" /> puts the cancel and confirm buttons
+at the end of the value, with `actionPlacement="end"`, so its row keeps its height while editing and
+the rows below stay where they are. Inline Edit's default placement, below the field, makes room
+for the buttons and moves the rest of the list down.
+
 <Example of={KeyValueListStories.MixedEditable} caption="A Text Field and a Text Area in Inline Edit, between static pairs." />
 
 </Subsection>
@@ -167,6 +188,14 @@ and divider. A row grows with its value, and the rows below move down.
     <KeyValuePair size="lg" label="Status" value="Active" />
   </KeyValueList>
 </Dont>
+<Do
+  caption={`Put Inline Edit's buttons at the end of an editable pair, with actionPlacement="end". The list doesn't shift while someone edits.`}
+  code={sample5}
+/>
+<Dont
+  caption="Leave Inline Edit's buttons below the value. The row grows while editing, and the rest of the list moves down."
+  code={sample6}
+/>
 </Guidelines>
 
 </Section>

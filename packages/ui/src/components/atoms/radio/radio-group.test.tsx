@@ -228,4 +228,19 @@ describe('RadioGroup', () => {
     expect(radioCss).toMatch(/\.options \{[^}]*gap: var\(--spacing-none\);/);
     expect(radioCss).not.toContain('gap: -');
   });
+
+  it("styles the legend as Field's label: its type style and color, and a `*` with no gap", () => {
+    const fieldCss = readFileSync('packages/ui/src/components/molecules/field/field.module.css', 'utf8');
+    const rule = (css: string, selector: string) =>
+      css.match(new RegExp(`(?:^|\\n)${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+    const declarations = (block: string) =>
+      block.split(';').map((line) => line.trim()).filter((line) => /^(color|font-|line-height|letter-spacing)/.test(line));
+
+    const fieldLabel = declarations(rule(fieldCss, '.label'));
+    expect(fieldLabel).toContain('font-size: var(--typography-heading-xxs-font-size)');
+    expect(declarations(rule(radioCss, '.legend')).sort()).toEqual(fieldLabel.sort());
+    // Field's `*` follows the label text directly; the legend's does too.
+    expect(rule(fieldCss, '.required')).not.toContain('margin');
+    expect(rule(radioCss, '.legend .requiredIndicator')).toContain('margin-inline-start: var(--spacing-none);');
+  });
 });

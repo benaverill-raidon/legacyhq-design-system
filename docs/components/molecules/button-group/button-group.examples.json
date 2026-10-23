@@ -22,6 +22,15 @@
       }
     },
     {
+      "name": "Compact spacing",
+      "description": "A 4px gap for a tight set of Icon Buttons, such as a dense toolbar.",
+      "jsx": "<ButtonGroup spacing=\"compact\" aria-label=\"Row actions\">\n  <IconButton aria-label=\"Edit\"><EditIcon /></IconButton>\n  <IconButton aria-label=\"Delete\"><DeleteIcon /></IconButton>\n</ButtonGroup>",
+      "props": {
+        "spacing": "compact",
+        "aria-label": "Row actions"
+      }
+    },
+    {
       "name": "Labelled group",
       "description": "role=group is added automatically once aria-label is present.",
       "jsx": "<ButtonGroup aria-label=\"Document actions\">\n  <Button prominence=\"primary\">Save</Button>\n  <Button prominence=\"tertiary\">Cancel</Button>\n</ButtonGroup>",

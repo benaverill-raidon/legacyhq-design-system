@@ -34,6 +34,10 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
       // Each half's own built-in labels, passed through. Left undefined, each half keeps its default.
       dateDialogLabel,
       timeDialogLabel,
+      previousMonthLabel,
+      nextMonthLabel,
+      previousYearLabel,
+      nextYearLabel,
       confirmLabel,
       cancelLabel,
       hoursLabel,
@@ -135,6 +139,10 @@ export const DateTimePicker = React.forwardRef<HTMLDivElement, DateTimePickerPro
           required={required}
           aria-label={dateLabel}
           dialogLabel={dateDialogLabel}
+          previousMonthLabel={previousMonthLabel}
+          nextMonthLabel={nextMonthLabel}
+          previousYearLabel={previousYearLabel}
+          nextYearLabel={nextYearLabel}
         />
         <TimePicker
           className={styles.time}

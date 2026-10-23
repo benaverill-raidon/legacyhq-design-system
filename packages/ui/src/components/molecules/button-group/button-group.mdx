@@ -119,7 +119,7 @@ export const sample6 = `<ModalDialog
     </ButtonGroup>
   }
 >
-  <Part name="root" target={buttonGroupStyles.root}>A `div` that sets the direction and the 8px gap. It has no fill, border, or padding of its own.</Part>
+  <Part name="root" target={buttonGroupStyles.root}>A `div` that sets the direction and the gap: 8px, or 4px with `spacing="compact"`. It has no fill, border, or padding of its own.</Part>
   <Part name="children" target={buttonStyles.button}>The buttons you pass, in order. Each keeps its own size and style, and none is stretched to match another.</Part>
 </Anatomy>
 
@@ -130,11 +130,21 @@ export const sample6 = `<ModalDialog
 <Subsection title="Orientation">
 
 `horizontal`, the default, lays the buttons out in a row; `vertical` stacks them in a column. Both
-use the same 8px gap, and neither wraps, so use `vertical` where a row won't fit. The group is only
+use the same gap, and neither wraps, so use `vertical` where a row won't fit. The group is only
 as wide as its buttons. In a vertical group, give each button `isFullWidth` to make them all as wide
 as the widest one.
 
 <Example of={ButtonGroupStories.Variants} caption="Horizontal and vertical, with two, three, and four buttons." />
+
+</Subsection>
+
+<Subsection title="Spacing">
+
+The gap between buttons is 8px by default, in either orientation. `spacing="compact"` narrows it to
+4px, for a tight set of controls such as Icon Buttons in a dense toolbar or a table row. Keep
+`default` for a dialog's or a form's actions, where the buttons are separate decisions.
+
+<Example of={ButtonGroupStories.Spacing} caption="The default 8px gap and the compact 4px gap, in a row of Icon Buttons, a row of Buttons, and a column." />
 
 </Subsection>
 
@@ -247,8 +257,9 @@ handles its own Enter and Space.
 
 <Section title="Design tokens">
 
-Button Group's stylesheet sets only the gap between buttons. Every color, size, radius, and type
-style comes from the buttons inside it.
+Button Group's stylesheet sets only the gap between buttons: `spacing-sm` by default and
+`spacing-xs` when compact. Every color, size, radius, and type style comes from the buttons inside
+it.
 
 <TokensTable id="button-group" />
 

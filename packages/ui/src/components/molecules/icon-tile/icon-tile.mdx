@@ -31,11 +31,11 @@ export const sample1 = `<IconTile tone="green">
   <TrustIcon />
 </IconTile>
 <span>Averill Family Living Trust</span>`;
-export const sample2 = `<IconTile tone="green" decorative={false} ariaLabel="Trust">
+export const sample2 = `<IconTile tone="green" decorative={false} aria-label="Trust">
   <TrustIcon />
 </IconTile>
 <span>Averill Family Living Trust</span>`;
-export const sample3 = `<IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+export const sample3 = `<IconTile tone="red" appearance="bold" decorative={false} aria-label="Error">
   <CloseIcon />
 </IconTile>`;
 export const sample4 = `<IconTile tone="red" appearance="bold" decorative={false}>
@@ -166,15 +166,15 @@ set works as it is: the tile overrides its own size and color.
   code={sample2}
 />
 <Do
-  caption="Name a tile that stands alone with decorative={false} and ariaLabel."
+  caption="Name a tile that stands alone with decorative={false} and aria-label."
   code={sample3}
 >
-  <IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+  <IconTile tone="red" appearance="bold" decorative={false} aria-label="Error">
     <CloseIcon />
   </IconTile>
 </Do>
 <Dont
-  caption="Set decorative={false} without ariaLabel. The tile becomes an image with no name, and warns in development."
+  caption="Set decorative={false} without aria-label. The tile becomes an image with no name, and warns in development."
   code={sample4}
 />
 <Do caption="Use Badge for a count." code={`<Badge>3</Badge>`}>
@@ -193,9 +193,9 @@ set works as it is: the tile overrides its own size and color.
   handler, so there's nothing to operate with the keyboard.
 - By default it's decorative: the root is `aria-hidden="true"` with no role, so assistive technology
   skips it and the text beside it carries the meaning.
-- With `decorative={false}`, the root gets `role="img"` and `aria-label` from `ariaLabel`. Without
-  `ariaLabel` it's an image with no name, and Icon Tile warns in the console during development
-  (not in production builds).
+- With `decorative={false}`, the root gets `role="img"` and the `aria-label` you pass. Without
+  `aria-label` it's an image with no name, and Icon Tile warns in the console during development
+  (not in production builds). `ariaLabel`, the earlier name, is still accepted.
 - The tone's color doesn't carry meaning on its own: pair the tile with text, or name it.
 
 <Example of={IconTileStories.Composition} caption="Decorative tiles beside a feature list and an empty state's heading, and one tile named on its own." />

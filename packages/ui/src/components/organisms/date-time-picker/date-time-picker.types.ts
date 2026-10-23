@@ -57,6 +57,14 @@ export interface DateTimePickerProps
    * time`; pass a translation.
    */
   timeDialogLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's previous-month button, passed to Date Picker. Defaults to `Previous month`. */
+  previousMonthLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's next-month button, passed to Date Picker. Defaults to `Next month`. */
+  nextMonthLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's previous-year button, passed to Date Picker. Defaults to `Previous year`. */
+  previousYearLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's next-year button, passed to Date Picker. Defaults to `Next year`. */
+  nextYearLabel?: string;
   /** Label for the time panel's Confirm button, passed to Time Picker. Defaults to `Confirm`. */
   confirmLabel?: string;
   /** Label for the time panel's Cancel button, passed to Time Picker. Defaults to `Cancel`. */

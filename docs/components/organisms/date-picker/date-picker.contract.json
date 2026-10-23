@@ -1,13 +1,8 @@
 {
   "name": "DatePicker",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "It doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English here and in Date Time Picker (built-in-labels)."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Enter a single date via a field that opens a calendar popup.",
   "intent": "A read-only date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.",
   "figmaSource": {
@@ -64,7 +59,11 @@
     "aria-label": { "type": "string", "required": false },
     "aria-labelledby": { "type": "string", "required": false },
     "required": { "type": "boolean", "required": false, "description": "Native required on the input, plus a hidden input the form's validation checks (a read-only input is never validated)." },
-    "dialogLabel": { "type": "string", "default": "Choose a date", "required": false, "description": "Accessible name for the calendar dialog." }
+    "dialogLabel": { "type": "string", "default": "Choose a date", "required": false, "description": "Accessible name for the calendar dialog." },
+    "previousMonthLabel": { "type": "string", "default": "Previous month", "required": false, "description": "The calendar's previous-month button name (and tooltip), passed to Date Picker Calendar under its own name." },
+    "nextMonthLabel": { "type": "string", "default": "Next month", "required": false, "description": "The calendar's next-month button name (and tooltip), passed to Date Picker Calendar." },
+    "previousYearLabel": { "type": "string", "default": "Previous year", "required": false, "description": "The calendar's previous-year button name (and tooltip), passed to Date Picker Calendar." },
+    "nextYearLabel": { "type": "string", "default": "Next year", "required": false, "description": "The calendar's next-year button name (and tooltip), passed to Date Picker Calendar." }
   },
   "variants": {
     "size": ["sm", "md", "lg"],

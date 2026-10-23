@@ -1,6 +1,10 @@
 import type * as React from 'react';
 
 export type ProgressBarVariant = 'linear' | 'circular';
+/**
+ * Shared by both variants. Linear takes all three; circular takes `md` and `lg`, as Figma does, and
+ * renders the deprecated circular `sm` exactly as `md`.
+ */
 export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
 // No `role`: the root is always `role="progressbar"`, which its `aria-value*` attributes need.
@@ -14,7 +18,10 @@ export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivEleme
   variant?: ProgressBarVariant;
   /**
    * The thickness of the bar or ring. Linear bars are 16, 24, or 32px tall for `sm`, `md`, and
-   * `lg`. The circular ring stays 80px across and only its thickness changes: 8, 16, or 28px.
+   * `lg`. The circular ring stays 80px across and only its thickness changes: 16px for `md` and 28px
+   * for `lg`.
+   *
+   * With `variant="circular"`, `sm` is deprecated: use `md`, which it now renders exactly as.
    */
   size?: ProgressBarSize;
   /**

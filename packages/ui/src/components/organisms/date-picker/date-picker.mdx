@@ -249,6 +249,9 @@ inline context.
 - The calendar is a `dialog` named "Choose a date", added at the end of the page. Change the name
   with `dialogLabel`, for example to translate it. Inside it, the days are a grid labelled by the
   month: see <DocLink to="Components/Forms/Date Picker Calendar" /> for how it's announced.
+- The calendar's month and year buttons are named "Previous year", "Previous month", "Next month",
+  and "Next year", which also show as their tooltips. `previousYearLabel`, `previousMonthLabel`,
+  `nextMonthLabel`, and `nextYearLabel` pass through to the calendar, for a translation.
 - Opening moves focus into the calendar. Picking a day, Escape, and Tab out of the calendar close it
   and return focus to the field, so the tab order runs field, calendar, then the rest of the page.
 - The calendar icon is decorative and hidden from assistive technology.

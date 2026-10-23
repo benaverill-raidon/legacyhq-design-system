@@ -38,13 +38,13 @@ export function LiveValue({ label, initial, context = 'inline' }) {
   );
 }
 
-export function LivePair({ label, initial }) {
+export function LivePair({ label, initial, actionPlacement = 'end' }) {
   const [value, setValue] = React.useState(initial);
   // A Key Value Pair is a `dt` and `dd`, so it sits in a Key Value List (a `dl`), even on its own.
   return (
     <KeyValueList>
       <KeyValuePair label={label} underline>
-        <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
+        <InlineEdit value={value} onConfirm={setValue} actionPlacement={actionPlacement}>
           <TextField context="inline" aria-label={label} />
         </InlineEdit>
       </KeyValuePair>
@@ -80,6 +80,20 @@ export const sample6 = `<InlineEdit value={docket} onConfirm={setDocket} validat
 export const sample7 = `<InlineEdit value={docket} onConfirm={(value) => { if (DOCKET.test(value)) setDocket(value); }}>
   <TextField context="inline" aria-label="Docket number" />
 </InlineEdit>`;
+export const sample9 = `<KeyValueList>
+  <KeyValuePair label="Matter name" underline>
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+      <TextField context="inline" aria-label="Matter name" />
+    </InlineEdit>
+  </KeyValuePair>
+</KeyValueList>`;
+export const sample10 = `<KeyValueList>
+  <KeyValuePair label="Matter name" underline>
+    <InlineEdit value={name} onConfirm={setName}>
+      <TextField context="inline" aria-label="Matter name" />
+    </InlineEdit>
+  </KeyValuePair>
+</KeyValueList>`;
 export const sample8 = `<InlineEdit value={name} onConfirm={setName}>
   <div>
     <TextField aria-label="First name" />
@@ -130,7 +144,7 @@ export const sample8 = `<InlineEdit value={name} onConfirm={setName}>
 >
   <Part name="root" target={inlineEditStyles.root}>A `div` that fills its container's width. It has no border or fill of its own.</Part>
   <Part name="content" target={inlineEditStyles.content}>Holds the child, usually a Text Field: read-only and showing `value`, or editable and showing the draft.</Part>
-  <Part name="actions">A Button Group of a cancel and a confirm Icon Button. Shown only while editing, unless `actionButtons` is `false`; it floats below the field, so it isn't on the specimen.</Part>
+  <Part name="actions">A Button Group of a cancel and a confirm Icon Button. Shown only while editing, unless `actionButtons` is `false`, so it isn't on the specimen.</Part>
   <Part name="message">The error from `validate`, under the field in Field's error look. Shown only while editing, when `validate` rejects the draft, so it isn't on the specimen.</Part>
 </Anatomy>
 
@@ -140,12 +154,14 @@ export const sample8 = `<InlineEdit value={name} onConfirm={setName}>
 
 <Subsection title="Action placement">
 
-The cancel and confirm buttons float over the page rather than taking space, so the field keeps its
-width while editing. `actionPlacement="below"`, the default, puts them 8px under the field, lined up
-with its trailing edge. `actionPlacement="end"` puts them 8px past the field's trailing edge,
-centered on it; use it in a row such as a Key Value Pair, and leave room beside the field. With
-`end`, `actionAlignment="start"` keeps the buttons level with the first line of a Text Area that
-grows, instead of centered on it.
+The cancel and confirm buttons never share the field's row, so the field keeps its width while
+editing. `actionPlacement="below"`, the default, puts them 8px under the field, lined up with its
+trailing edge. They take their own space while editing, so nothing below is covered, Field's message
+included: what's below Inline Edit moves down by the buttons' height until editing ends.
+`actionPlacement="end"` puts them 8px past the field's trailing edge, centered on it. They float
+there and take no space, so leave room beside the field. Use `end` in a Key Value Pair. With `end`,
+`actionAlignment="start"` keeps the buttons level with the first line of a Text Area that grows,
+instead of centered on it.
 
 `actionButtons={false}` hides the buttons. Enter and Escape still confirm and cancel.
 
@@ -222,10 +238,18 @@ Field, so leave the child unnamed and without an `id` inside a Field.
 the draft, and Field's below Inline Edit as always. They say different things: `validate`'s is about
 the draft being edited, and Field's is help, or an error about the saved value, such as one from the
 server. The field is described by both, Field's first, and stays invalid while either says so.
-The buttons float over what's below the field, Field's message included, so in a Field use
-`actionPlacement="end"` and leave room beside the field.
+With the default placement, the buttons sit below `validate`'s message and Field's message moves
+down to make room for them while editing.
 
 <Example of={InlineEditStories.InField} />
+
+</Subsection>
+
+<Subsection title="In a Key Value Pair">
+
+In a <DocLink to="Components/Data Display/Key Value Pair" />, set `actionPlacement="end"`, so the
+buttons sit beside the value. The pair keeps its height while editing, and the label and the pairs
+below it stay where they are. Leave room for the buttons past the value's trailing edge.
 
 </Subsection>
 
@@ -283,6 +307,18 @@ field.
   caption="Ignore or quietly fix a bad draft in onConfirm. Editing has already ended, so people don't learn what was wrong."
   code={sample7}
 />
+<Do
+  caption={`In a Key Value Pair, put the buttons at the end with actionPlacement="end". The pair keeps its height while editing.`}
+  code={sample9}
+>
+  <LivePair label="Matter name" initial="Averill Living Trust" />
+</Do>
+<Dont
+  caption="Leave the buttons below the value in a Key Value Pair. The pair grows while editing, and the pairs below it move down."
+  code={sample10}
+>
+  <LivePair label="Matter name" initial="Averill Living Trust" actionPlacement="below" />
+</Dont>
 <Dont
   caption="Wrap several fields in one. Inline Edit sets value and readOnly on the wrapper, not on the fields."
   code={sample8}

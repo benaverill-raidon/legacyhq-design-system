@@ -5,7 +5,7 @@
   "knownIssues": [
     {
       "kind": "decision",
-      "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs; they sit side by side in one form."
+      "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
     }
   ],
   "knownLimitations": [

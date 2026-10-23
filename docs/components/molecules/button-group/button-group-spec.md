@@ -12,7 +12,7 @@ with a single, consistent gap between them.
 
 ### Tier
 Molecule: it composes Button/IconButton atoms into a named layout unit with its own variant
-surface (`orientation`), without adding any visual treatment of its own.
+surface (`orientation`, `spacing`), without adding any visual treatment of its own.
 
 ### Design Reference
 - Figma Component: `button-group` (component set, node `1690:7026`, file `Components v1.0.0`)
@@ -70,6 +70,15 @@ Figma names this axis' values `inline`/`stacked`. The component renames them to
 (`'vertical' | 'horizontal'`), so every "group of controls" component in the library shares the same
 orientation vocabulary.
 
+### Spacing
+
+| Spacing | Gap | Token | Description |
+|---------|-----|-------|-------------|
+| default | 8px | `--spacing-sm` | The default, in either orientation |
+| compact | 4px | `--spacing-xs` | A tight set of controls, such as Icon Buttons in a dense toolbar |
+
+Named after Icon's `spacing` prop. Figma has no compact variant yet.
+
 Figma's `count` axis (2, 3, 4) is not a real prop - it only demonstrates the pattern with different
 numbers of example buttons. The component accepts any number of `children`.
 
@@ -92,6 +101,7 @@ No fixed limit - Figma demonstrates 2-4 buttons, but the component does not cap 
 |-----------|--------|----------|---------|
 | children | ReactNode | Yes | - |
 | orientation | `'horizontal' \| 'vertical'` | No | `'horizontal'` |
+| spacing | `'default' \| 'compact'` | No | `'default'` |
 | ...rest | `React.HTMLAttributes<HTMLDivElement>` | No | - |
 
 `aria-label` / `aria-labelledby` are accepted via the native `div` attributes (not a bespoke
@@ -131,8 +141,8 @@ Example:
 ## Design Tokens
 
 ### Spacing
-Gap between buttons is `--spacing-sm` (8px) in both orientations. (This was updated from the
-original `--spacing-xs`/4px per design direction; keep the code and Figma `itemSpacing` in sync.)
+Gap between buttons is `--spacing-sm` (8px) in both orientations by default, and `--spacing-xs`
+(4px) with `spacing="compact"`. Keep the code and Figma's `itemSpacing` (8) in sync.
 
 ### Layout
 `display: inline-flex` (hugs content, matching Figma's `AUTO` sizing on both axes), `flex-direction`
@@ -186,6 +196,7 @@ no state of its own.
 
 ### Visual
 - [ ] Matches Figma spacing (8px) in both orientations
+- [ ] `spacing="compact"` narrows the gap to 4px in both orientations
 - [ ] Buttons keep their own width/height (no stretch)
 - [ ] Light mode works
 - [ ] Dark mode works

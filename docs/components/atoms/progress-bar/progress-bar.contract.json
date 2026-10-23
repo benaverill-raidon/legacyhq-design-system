@@ -2,12 +2,6 @@
   "name": "ProgressBar",
   "category": "feedback",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "Figma has no circular sm; code draws an 8px ring. Add it in Figma or drop sm for circular."
-    }
-  ],
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
   "figmaSource": {
@@ -83,7 +77,8 @@
         "md",
         "lg"
       ],
-      "default": "md"
+      "default": "md",
+      "description": "Linear takes sm, md, and lg. Circular takes md and lg, as Figma does; a circular sm is deprecated and renders exactly as md (mapped inside the component)."
     },
     "label": {
       "type": "string",
@@ -110,8 +105,7 @@
     "sm": {
       "linearRoot": "16px",
       "trackThickness": "16px",
-      "circularDiameter": "80px",
-      "circularRingThickness": "8px"
+      "circular": "deprecated: renders as md (80px diameter, 16px ring)"
     },
     "md": {
       "linearRoot": "24px",
@@ -174,7 +168,7 @@
     "Circular progress starts at 12 o'clock and advances clockwise.",
     "The remaining track is a fully-rounded pill (border-radius-full-round). The linear progress fill is rounded at its start and square at its end while partial, and rounded at both ends at 100.",
     "The linear bar is exactly the track size tall (16/24/32px), with no outer spacing. The progress fill sits inside the remaining track's 1px border (border-width-sm) on the block axis and inline-start, runs the full inner height, and its width is the fill fraction of the inner width. The remaining track clips the fill to its inner edge.",
-    "The circular ring's outer edge is radius 38 in an 80-unit viewBox, with a 1px bold border outside both the outer edge and the hole edge. Hole radius sm 30 / md 22 / lg 10 (ring 8 / 16 / 28px thick). The progress arc fills the ring's full thickness, so the border frames the filled part too.",
+    "The circular ring's outer edge is radius 38 in an 80-unit viewBox, with a 1px bold border outside both the outer edge and the hole edge. Hole radius md 22 / lg 10 (ring 16 / 28px thick); the deprecated circular sm renders as md. The progress arc fills the ring's full thickness, so the border frames the filled part too.",
     "Only the remaining track carries the bold border; the progress fill has none.",
     "The circular progress arc is a wedge with straight (butt) ends and carries no border of its own.",
     "At value 0 the circular variant draws its empty track ring and border, and hides only the progress arc, as the linear variant shows its empty bordered track.",

@@ -53,22 +53,22 @@
             "id": "tone-is-meaning",
             "name": "`tone` is meaning, `appearance` is visual style",
             "status": "convention",
-            "description": "A prop that says what a component means (status, intent) is `tone`. A prop that changes how it looks without changing what it means is `appearance` (or `prominence` for the Button family's weight). The two never share a name.",
+            "description": "A prop that says what a component means (status, intent) is `tone`. A prop that changes how it looks without changing what it means is `appearance` (or `prominence` for the Button family's weight). The two never share a name. `tone` also names an accent color family with no fixed meaning (blue, green, purple, ...), the colors Tag and Icon Tile use to tell items apart: it's still the color role, while `appearance` stays the emphasis (decided with the owner 2026-10-23).",
             "rationale": [
                 "Separating emphasis from meaning is the reference pattern (Button: `prominence` x `tone`); one name per axis keeps every component readable the same way.",
                 "Banner, Section Message, Toast, and Modal Dialog used `appearance` for status until 2026-10-13; they now take `tone`, matching Button, Badge, Label, and Inline Message."
             ],
             "correct": {
                 "examples": [
-                    "tone (meaning): Button, Badge, Label, Inline Message, Banner, Section Message, Toast, Modal Dialog, Tag, Icon Tile",
+                    "tone (meaning): Button, Badge, Label, Inline Message, Banner, Section Message, Toast, Modal Dialog",
+        "tone (accent colors): Tag and Icon Tile (blue, green, teal, purple, ...), with Icon Tile's appearance as its emphasis",
                     "appearance (style): Link, Icon Tile (default | bold), Skeleton, Progress Indicator, Tabs (line | contained), Empty State (inherited | informative)"
                 ]
             },
             "knownViolations": [
                 "Toggle Button and Toggle Icon Button use `tone` (default | subtle) for visual style; kept by decision on 2026-10-13, and named the same in Figma.",
                 "Icon Button, Link Button, and Split Button still take the legacy `appearance` (default | primary | subtle) while Figma has moved them to `tone` + `prominence`; part of the pending Button-family revision.",
-                "Tag’s tone holds accent colors with no fixed meaning (blue, green, purple, …), which by this rule is appearance. Not yet decided: rename in code and Figma, or keep as Toggle Button’s is kept.",
-                "Split Button’s tone reaches only its main action (Icon Button has no tone yet), so the two halves can disagree. Waiting on the Button-family revision."
+    "Split Button's `tone` is deprecated (2026-10-23): it reaches only the main action until Icon Button has a tone."
             ]
         },
         {
@@ -116,9 +116,7 @@
         "emptyLabel, getPaginationLabel(name), getSelectionLabel(row), getResultCountLabel(count) (Table), removeLabel / removeTooltipLabel (Chip), getOverflowButtonLabel(hiddenCount) (Avatar Group)"
                 ]
             },
-            "knownViolations": [
-                "Date Picker doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English in Date Picker and Date Time Picker."
-            ]
+            "knownViolations": []
         },
         {
             "id": "deprecated-aliases",
@@ -133,7 +131,8 @@
                     "Modal Dialog accepts small/medium/large/extraLarge; Progress Indicator `inverted`; Icon Tile `gray`; Skeleton `circle`",
                     "Toggle Button, Toggle Icon Button, Tag, and Avatar accept isDisabled for disabled; Rich Text Area accepts appearance for context; Tabs accepts type for appearance; Empty State accepts type for appearance; Breadcrumbs, Pagination, and Badge accept ariaLabel (Badge: for label)",
         "Popup, Dropdown Menu, Chip Group, Tag Group, Date Picker, and Time Picker accept left / right (and topLeft, bottomRight...) for start / end",
-        "Chip accepts removeAriaLabel for removeLabel; Toast Group accepts toast.info for toast.information; Field accepts state `valid` for `success`; Table accepts emptyHeadingLabel for emptyLabel"
+        "Chip accepts removeAriaLabel for removeLabel; Toast Group accepts toast.info for toast.information; Field accepts state `valid` for `success`; Table accepts emptyHeadingLabel for emptyLabel",
+        "Icon Tile accepts ariaLabel for aria-label; Progress Bar accepts circular size sm, drawn as md; Split Button's deprecated tone still reaches its main action"
                 ]
             },
             "knownViolations": []

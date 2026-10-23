@@ -70,6 +70,7 @@ onCheckedChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>)
 
 - Checkbox includes its label by default.
 - Label typography uses `body-md`.
+- Checkbox Group's legend uses Field's label style (`heading-xxs`, `color-content-subtle`), its `*` with no gap.
 - Checkbox visual size is 24px (`size-choice-indicator`).
 - Interaction/focus target is 32px (`size-choice-target`), inside a 32px row min-height (`size-choice-row`).
 - Required indicator appears after the label.

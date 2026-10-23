@@ -33,7 +33,7 @@ Tags may be display-only, navigational, removable, or both navigational and remo
 
 ## Core use cases
 
-- Display a classification or category
+- Display a classification or category (a status or a state is a Label, whose tones carry meaning)
 - Link to a referenced entity
 - Show a selected/reference item in task or note content
 - Remove a referenced entity from a collection

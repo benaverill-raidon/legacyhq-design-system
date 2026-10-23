@@ -61,6 +61,7 @@ No tokens consumed directly — pure layout.
 
 - **`<dl>` element** for semantic HTML.
 - **No own spacing** — each child KeyValuePair manages its own padding and dividers.
+- **Editable pairs use Inline Edit's `actionPlacement="end"`**, so a row keeps its height while editing and the list doesn't shift.
 - **`display: flex; flex-direction: column`** for clean vertical stacking.
 - **Reset browser defaults** — `margin: 0; padding: 0` on the `<dl>`.
 

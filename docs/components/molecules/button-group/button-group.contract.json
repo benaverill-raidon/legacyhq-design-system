@@ -1,13 +1,7 @@
 {
   "name": "ButtonGroup",
   "category": "actions",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "The space between buttons: Figma's stacked variants are 8px and the contract's 4px is stale; the horizontal gap uses `spacing-lg`, which Figma has no value for."
-    }
-  ],
+  "status": "stable",
   "purpose": "Lay out a set of related, independent action buttons with consistent spacing and direction.",
   "intent": "Centralize the recurring 'N buttons, one gap, one direction' layout without introducing any new visual treatment - all color/radius/typography comes from the Button/IconButton children.",
   "nativeElement": "div",
@@ -30,7 +24,7 @@
       "orientation": ["inline", "stacked"]
     },
     "figmaLayoutData": {
-      "itemSpacing": 4,
+      "itemSpacing": 8,
       "layoutWrap": "NO_WRAP",
       "primaryAxisSizingMode": "AUTO",
       "counterAxisSizingMode": "AUTO",
@@ -40,7 +34,8 @@
     "apiAdaptationNotes": [
       "Figma's `count` (2/3/4) variant axis is not a real prop - it only demonstrates the pattern with different numbers of example buttons. The component accepts any number of children.",
       "Figma's `inline`/`stacked` orientation values were renamed to `horizontal`/`vertical` to match this system's existing RadioGroup.orientation vocabulary.",
-      "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention."
+      "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention.",
+      "The `spacing` prop (default 8px, compact 4px) was added in code on 2026-10-23 by owner decision; Figma has no compact variant yet."
     ]
   },
   "useCases": [
@@ -64,7 +59,7 @@
       "part": "children",
       "element": "ReactNode",
       "required": true,
-      "description": "Typically Button and/or IconButton elements, laid out with a consistent 8px gap."
+      "description": "Typically Button and/or IconButton elements, laid out with one gap: 8px by default, 4px with spacing=compact."
     }
   ],
   "props": {
@@ -80,12 +75,23 @@
       "default": "horizontal",
       "enum": ["horizontal", "vertical"],
       "description": "Layout direction - horizontal (row) or vertical (column)."
+    },
+    "spacing": {
+      "type": "ButtonGroupSpacing",
+      "required": false,
+      "default": "default",
+      "enum": ["default", "compact"],
+      "description": "The gap between buttons in either orientation - default (8px, --spacing-sm) or compact (4px, --spacing-xs). Named after Icon's spacing prop."
     }
   },
   "variants": {
     "orientation": {
       "horizontal": { "purpose": "Row layout (Figma inline).", "className": "orientation_horizontal" },
       "vertical": { "purpose": "Column layout (Figma stacked).", "className": "orientation_vertical" }
+    },
+    "spacing": {
+      "default": { "purpose": "8px gap, for dialog and form actions and most rows.", "className": null },
+      "compact": { "purpose": "4px gap, for a tight set of controls such as Icon Buttons in a dense toolbar.", "className": "spacing_compact" }
     }
   },
   "sizes": [],
@@ -99,7 +105,8 @@
   ],
   "tokens": {
     "layout": {
-      "gap": "--spacing-sm"
+      "gap": "--spacing-sm",
+      "gapCompact": "--spacing-xs"
     }
   },
   "accessibility": {
@@ -124,6 +131,7 @@
     "Do not restyle or override child button appearance.",
     "Default orientation is horizontal.",
     "Apply data-orientation equal to the selected orientation.",
+    "Default spacing is default (8px); spacing=compact narrows the gap to 4px. Apply data-spacing equal to the selected spacing.",
     "Add role=group only when aria-label or aria-labelledby is provided.",
     "Forward all other native div attributes via rest props."
   ],
@@ -145,7 +153,7 @@
     "Use CSS Modules.",
     "No MUI.",
     "No Tailwind.",
-    "No hardcoded spacing - gap comes from --spacing-sm.",
+    "No hardcoded spacing - gap comes from --spacing-sm, or --spacing-xs when compact.",
     "align-items: flex-start on the root, matching Figma's MIN counter-axis alignment, so children keep their own width/height instead of stretching to match a sibling."
   ],
   "relatedComponents": ["Button", "IconButton", "ToggleButton"],
@@ -166,10 +174,10 @@
     "Applies data-orientation for the selected orientation.",
     "No role when unlabeled; role=group when aria-label/aria-labelledby is present.",
     "Forwards native div attributes (className, data-*, etc.) via rest props.",
-    "Uses --spacing-sm for the gap between children in both orientations.",
+    "Uses --spacing-sm for the gap between children in both orientations, and --spacing-xs with spacing=compact.",
     "Works with 2, 3, 4, or more children.",
-    "Storybook includes Playground, Variants, and Composition.",
-    "Tests cover children ordering, orientation, aria/role behavior, and native attribute forwarding."
+    "Storybook includes Playground, Variants, Spacing, and Composition.",
+    "Tests cover children ordering, orientation, spacing, aria/role behavior, and native attribute forwarding."
   ],
   "knownLimitations": [
     "No fullWidth/stretched-children variant (Figma source has none).",

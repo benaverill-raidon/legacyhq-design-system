@@ -127,7 +127,8 @@ Exactly one icon. No text, no multiple icons.
 | shape | `'square' \| 'round'` | No | `'square'` |
 | size | `'xxs' \| 'xs' \| 'sm' \| 'md' \| 'lg'` | No | `'md'` |
 | decorative | boolean | No | `true` |
-| ariaLabel | string | No | undefined |
+| aria-label | string | No | undefined |
+| ariaLabel (deprecated) | string | No | undefined |
 | className | string | No | undefined |
 
 ---
@@ -141,16 +142,16 @@ Not applicable. Icon Tile is not interactive and not focusable.
 
 - Default (`decorative=true`): `aria-hidden="true"`, no role - the icon is assumed to be
   reinforcing meaning already present in surrounding text.
-- `decorative={false}`: `role="img"` and `aria-label={ariaLabel}` - use when the tile is the sole
+- `decorative={false}`: `role="img"` and `aria-label` - use when the tile is the sole
   carrier of meaning (no adjacent text label).
-- `decorative={false}` without `ariaLabel` logs a development-only `console.warn` (skipped when
+- `decorative={false}` without `aria-label` logs a development-only `console.warn` (skipped when
   `import.meta.env.PROD`), the way Icon Button warns about a missing name: the tile would be an
   unnamed image.
 
 Example:
 
 ```tsx
-<IconTile decorative={false} ariaLabel="Verified">
+<IconTile decorative={false} aria-label="Verified">
   <CheckIcon />
 </IconTile>
 ```
@@ -257,8 +258,9 @@ No interaction. No animation.
 
 ### Accessibility
 - [ ] decorative default hides the tile from the accessibility tree
-- [ ] decorative=false + ariaLabel exposes role="img" and the label
-- [ ] decorative=false without ariaLabel warns in development; decorative or named tiles don't
+- [ ] decorative=false + aria-label exposes role="img" and the label
+- [ ] The deprecated ariaLabel still names the tile the same way
+- [ ] decorative=false without aria-label warns in development; decorative or named tiles don't
 
 ---
 

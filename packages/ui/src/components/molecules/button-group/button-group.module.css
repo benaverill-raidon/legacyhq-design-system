@@ -4,6 +4,10 @@
   gap: var(--spacing-sm);
 }
 
+.spacing_compact {
+  gap: var(--spacing-xs);
+}
+
 .orientation_horizontal {
   flex-direction: row;
 }

@@ -117,7 +117,7 @@ export const sample8 = `const error = values.email && !isEmail(values.email);
   <Part name="required" target={fieldStyles.required}>The `*` after the label, shown when `required` is set. Decorative: the control's own `required` carries the meaning.</Part>
   <Part name="control" target={textFieldStyles.root}>The one control you pass as `children`, at full width. Field passes it the wiring it needs.</Part>
   <Part name="message" target={fieldStyles.message}>Helper, error, or success text, added to the control's description. Left out when there's no `message`.</Part>
-  <Part name="messageIcon" target={fieldStyles.messageIcon}>A status icon before an error or success message. Decorative.</Part>
+  <Part name="messageIcon" target={fieldStyles.messageIcon}>A status icon before an error or success message, beside its first line. Decorative.</Part>
 </Anatomy>
 
 </Section>
@@ -128,7 +128,8 @@ export const sample8 = `const error = values.email && !isEmail(values.email);
 
 `state` is `default`, `error`, or `success`. `default` shows the message as quiet helper text.
 `error` and `success` color the message and put a status icon before it, and `error` also sets
-`aria-invalid` on the control. `state` doesn't change the control's border: pass the control's own
+`aria-invalid` on the control. The icon sits beside the message's first line, so a message that
+wraps keeps it at the top. `state` doesn't change the control's border: pass the control's own
 `invalid` too, so the border and the message agree. `valid`, the earlier name for `success`, is
 still accepted and looks the same.
 

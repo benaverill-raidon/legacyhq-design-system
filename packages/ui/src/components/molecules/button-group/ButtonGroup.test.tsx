@@ -6,6 +6,7 @@ import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it } from 'vitest';
 import { Button } from '../../atoms/button';
 import { ButtonGroup } from './button-group';
+import styles from './button-group.module.css';
 
 const buttonGroupCss = readFileSync(
   'packages/ui/src/components/molecules/button-group/button-group.module.css',
@@ -149,5 +150,40 @@ describe('ButtonGroup', () => {
 
   it('uses the semantic sm spacing token for the gap', () => {
     expect(buttonGroupCss).toContain('gap: var(--spacing-sm);');
+  });
+
+  it('uses the default 8px spacing unless told otherwise', () => {
+    render(
+      <ButtonGroup data-testid="group">
+        <Button>First</Button>
+        <Button>Second</Button>
+      </ButtonGroup>,
+    );
+
+    const group = screen.getByTestId('group');
+    expect(group).toHaveAttribute('data-spacing', 'default');
+    expect(group).not.toHaveClass(styles.spacing_compact);
+  });
+
+  it('narrows the gap to 4px with spacing="compact", in either orientation', () => {
+    const { rerender } = render(
+      <ButtonGroup spacing="compact" data-testid="group">
+        <Button>First</Button>
+        <Button>Second</Button>
+      </ButtonGroup>,
+    );
+
+    const group = screen.getByTestId('group');
+    expect(group).toHaveAttribute('data-spacing', 'compact');
+    expect(group).toHaveClass(styles.root, styles.spacing_compact);
+
+    rerender(
+      <ButtonGroup spacing="compact" orientation="vertical" data-testid="group">
+        <Button>First</Button>
+        <Button>Second</Button>
+      </ButtonGroup>,
+    );
+    expect(screen.getByTestId('group')).toHaveClass(styles.orientation_vertical, styles.spacing_compact);
+    expect(buttonGroupCss).toMatch(/\.spacing_compact\s*\{\s*gap: var\(--spacing-xs\);\s*\}/);
   });
 });

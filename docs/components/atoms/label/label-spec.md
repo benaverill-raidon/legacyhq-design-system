@@ -2,7 +2,7 @@
 
 ## Component Overview
 
-`Label` is a compact, non-interactive visual indicator used to communicate status, category, or classification. It is optimized for quick recognition in dense interfaces such as tables, cards, lists, and metadata rows.
+`Label` is a compact, non-interactive visual indicator used to communicate a status or a state, in a tone that carries meaning. Categories and classifications use Tag. It is optimized for quick recognition in dense interfaces such as tables, cards, lists, and metadata rows.
 
 The component is inspired by lozenge-style status indicators but uses the CounselPro design system name `Label`.
 
@@ -47,13 +47,13 @@ icon beside the Label, composed by the page (see Templates / Roadmap). It's reco
 
 | Tone | Purpose |
 |---|---|
-| `default` | Neutral/default classification |
-| `information` | Informational status or category |
+| `default` | Neutral status or state |
+| `information` | Informational status |
 | `warning` | Warning or attention state |
 | `error` | Error, danger, failed, or destructive status |
 | `success` | Success, complete, active, or positive status |
-| `law` | Law-specific product/category label |
-| `wealth` | Wealth-specific product/category label |
+| `law` | The item belongs to law |
+| `wealth` | The item belongs to wealth |
 
 ### Emphasis
 
@@ -232,7 +232,7 @@ Show a matrix of:
 Show realistic usage examples:
 
 - Status in a table row
-- Category metadata in a card
+- A status in a card
 - Law and wealth labels
 - Multiple labels in a compact row
 

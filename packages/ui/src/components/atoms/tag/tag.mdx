@@ -78,7 +78,7 @@ export const sample3 = `<Tag isRemovable onRemove={remove}>
 </UseFor>
 <UseInstead>
 
-- **A status:** <DocLink to="Components/Data Display/Label" />. Its tones mean something; Tag's colors don't.
+- **A status or a state, such as Active or At risk:** <DocLink to="Components/Data Display/Label" />. Its tones mean something; Tag's colors don't.
 - **A count:** <DocLink to="Components/Data Display/Badge" />.
 - **A filter people apply or change:** <DocLink to="Components/Forms/Chip" />.
 - **A link inside a sentence that isn't a record reference:** <DocLink to="Components/Navigation/Link" />.
@@ -112,7 +112,8 @@ export const sample3 = `<Tag isRemovable onRemove={remove}>
 `tone` picks a color set for the fill, border, and text. `default` is neutral and `brand` is the
 product color. The other eight are accent colors with no fixed meaning, for telling kinds of records
 apart: Rich Text Area, for one, shows accounts and people in blue, matters in teal, and roadmaps in
-purple by default. Don't use them to say whether something is good or bad.
+purple by default. Don't use them to say whether something is good or bad. They're the same
+accent colors as <DocLink to="Components/Data Display/Icon Tile" />'s `tone`, and work the same way.
 
 <Example of={TagStories.Variants} caption="Every tone, then each form: display, link, removable, link and removable, and interactive." />
 
@@ -259,7 +260,7 @@ table also lists it under `background-image`, which Tag always sets to `none`.
 <Related>
 
 - <DocLink to="Components/Data Display/Tag Group" /> to lay out a row of tags, with an overflow tag for the rest.
-- <DocLink to="Components/Data Display/Label" /> for a status or a category that doesn't link.
+- <DocLink to="Components/Data Display/Label" /> for a status or a state, in a color that carries meaning.
 - <DocLink to="Components/Data Display/Badge" /> for a count.
 - <DocLink to="Components/Forms/Chip" /> for a filter people apply or change.
 - <DocLink to="Components/Forms/Rich Text Area" />, which shows a linked record in its text as a small Tag.

@@ -11,9 +11,9 @@
  * Caret color is Figma-verified on the select-trigger's caret_down vector: content/subtle at rest,
  * content/disabled when the field is disabled. Set explicitly here (rather than leaning on TextField's
  * `.action` slot color) so the disabled case is covered - TextField's disabled state repaints the
- * frame but not its action slot. The CaretDownIcon inherits this via TextField's own
- * `.action :global([data-color]) { color: inherit }` rule. A disabled fieldset disables the input
- * without the `disabled` prop, so the caret follows the input too.
+ * frame but not its action slot. The CaretDownIcon inherits this through Icon's default
+ * `color="inherit"`. A disabled fieldset disables the input without the `disabled` prop, so the
+ * caret follows the input too.
  */
 .caret {
   display: inline-flex;
@@ -45,57 +45,14 @@
 
 /*
  * The chosen option's icon in a single Select keeps its own color, as it has in its menu row: Text
- * Field's leading slot makes every icon inherit its subtle color (`.before [data-color]`), which
- * would turn a colored status icon grey. These restate Icon's named colors (icon.module.css) for
- * that one icon, one class stronger than Text Field's rule; an icon left at `inherit` still follows
- * the slot. Only the chosen-option icon is wrapped, so the trigger's other icons are untouched.
- * A disabled Select greys it, like the caret.
+ * Field's leading slot leaves an icon's named color alone. A disabled Select greys it, like the
+ * caret: the wrapper gives this one rule a hook, stronger than Icon's color classes, without
+ * touching the trigger's other icons.
  */
 .optionIcon {
   display: inline-flex;
 }
 
-.trigger .optionIcon :global([data-color='default']) {
-  color: var(--color-content-default);
-}
-
-.trigger .optionIcon :global([data-color='subtle']) {
-  color: var(--color-content-subtle);
-}
-
-.trigger .optionIcon :global([data-color='inverse']) {
-  color: var(--color-content-inverse-default);
-}
-
-.trigger .optionIcon :global([data-color='brand']) {
-  color: var(--color-content-brand-primary-default);
-}
-
-.trigger .optionIcon :global([data-color='selected']) {
-  color: var(--color-content-selected);
-}
-
-.trigger .optionIcon :global([data-color='success']) {
-  color: var(--color-content-success);
-}
-
-.trigger .optionIcon :global([data-color='warning']) {
-  color: var(--color-content-warning);
-}
-
-.trigger .optionIcon :global([data-color='error']) {
-  color: var(--color-content-error);
-}
-
-.trigger .optionIcon :global([data-color='information']) {
-  color: var(--color-content-information);
-}
-
-.trigger .optionIcon :global([data-color='disabled']) {
-  color: var(--color-content-disabled);
-}
-
-/* After the colors, at the same specificity, so it wins. */
 .trigger:where(:has(input:disabled)) .optionIcon :global([data-color]) {
   color: var(--color-content-disabled);
 }

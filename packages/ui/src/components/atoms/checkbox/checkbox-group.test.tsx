@@ -241,4 +241,28 @@ describe('CheckboxGroup', () => {
     expect(rule(fieldCss, '.required')).not.toContain('margin');
     expect(rule(checkboxCss, '.legend .requiredIndicator')).toContain('margin-inline-start: var(--spacing-none);');
   });
+
+  it("styles the description and error message as Field's message: its type style, color, and space above", () => {
+    const fieldCss = readFileSync('packages/ui/src/components/molecules/field/field.module.css', 'utf8');
+    const rule = (css: string, selector: string) =>
+      css.match(new RegExp(`(?:^|\\n)${selector.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+    const declarations = (block: string, pattern: RegExp) =>
+      block.split(';').map((line) => line.trim()).filter((line) => pattern.test(line));
+    const type = /^(font-|line-height|letter-spacing)/;
+    const color = /^color:/;
+
+    const fieldType = declarations(rule(fieldCss, '.message'), type);
+    expect(fieldType).toContain('font-size: var(--typography-body-sm-font-size)');
+    expect(declarations(rule(checkboxCss, '.description'), type).sort()).toEqual(fieldType.sort());
+    expect(declarations(rule(checkboxCss, '.errorMessage'), type).sort()).toEqual(fieldType.sort());
+    // Field's resting message is the description's color; its error state is the error message's.
+    expect(declarations(rule(checkboxCss, '.description'), color)).toEqual(declarations(rule(fieldCss, '.message'), color));
+    expect(declarations(rule(checkboxCss, '.errorMessage'), color)).toEqual(
+      declarations(rule(fieldCss, '.state_error .message'), color),
+    );
+    // Field's message sits a step below its control; the group's text sits the same step below what's above it.
+    expect(rule(fieldCss, '.message')).toContain('padding-top: var(--spacing-xs);');
+    expect(rule(checkboxCss, '.description')).toContain('margin-block-start: var(--spacing-xs);');
+    expect(rule(checkboxCss, '.errorMessage')).toContain('margin-block-start: var(--spacing-xs);');
+  });
 });

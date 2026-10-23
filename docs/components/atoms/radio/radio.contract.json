@@ -2,12 +2,7 @@
   "name": "Radio",
   "category": "forms",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
-    }
-  ],
+  "knownIssues": [],
   "publicExports": [
     "Radio",
     "RadioGroup"
@@ -256,7 +251,8 @@
       "disabledBorder": "color-border-disabled",
       "disabledBackground": "color-background-disabled",
       "typography": "body-md",
-      "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)"
+      "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)",
+      "groupMessageTypography": "body-sm (matches Field's message): description in color-content-subtle, error message in color-content-error, spacing-xs above"
     },
     "componentAllowed": [
       "indicator size (size-choice-indicator)",

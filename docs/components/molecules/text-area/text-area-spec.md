@@ -50,8 +50,10 @@ The ref forwards to the `<textarea>` (not the wrapper). Every native textarea at
 
 `iconAfter` renders a trailing icon or interactive control (e.g. an edit pencil IconButton) after
 the textarea inside the wrapper. The slot is not `aria-hidden` — it may hold a real focusable action.
-`context="inline"` combined with `iconAfter` is the standard pattern for embedding inside a Key
-Value Pair.
+Its color is `--field-icon-color` (default `color-content-subtle`): an icon left at Icon's default
+`color="inherit"` follows it, and an icon with a named `color` keeps its own.
+`context="inline"` combined with `iconAfter`, in Inline Edit with `actionPlacement="end"`, is the
+standard pattern for embedding inside a Key Value Pair.
 
 ## Defaults
 

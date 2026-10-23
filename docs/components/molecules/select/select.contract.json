@@ -123,11 +123,11 @@
     "Holds its own open and (uncontrolled) query state; value is always controlled by the consumer.",
     "single: choosing a row calls onChange(value), returns focus to the input, and closes; the trigger shows the chosen label, with the chosen option's icon (if any) before it in TextField's iconBefore slot, hidden from assistive technology. The icon stays while the menu is open, since the value hasn't changed.",
     "multi: each chip's remove button is named getRemoveLabel(option.label), `Remove <label>` by default; its tooltip is removeTooltipLabel, `Remove` by default.",
-    "single: the chosen option's icon keeps its own color in the trigger, as in its menu row (Select restates Icon's named colors over Text Field's inherit rule); an inherit icon takes the slot's subtle color; a disabled field greys it.",
+    "single: the chosen option's icon keeps its own color in the trigger, as in its menu row (Text Field's leading slot leaves a named Icon color alone); an inherit icon takes the slot's subtle color; a disabled field greys it.",
     "multi: choosing a row toggles the value in the array, keeps the panel open, and clears the query; values render as removable chips.",
     "Filters options itself unless searchValue/onSearchChange are provided, in which case filtering is the caller's.",
     "size sets the trigger height and the chip size together; the panel always matches the field frame's width.",
-    "disabled blocks opening and disables chip removal."
+    "disabled blocks opening and disables chip removal: a disabled Select (the prop or a disabled <fieldset>) never opens its menu, by pointer (field, frame, caret) or keyboard (Arrow Down/Up, Enter, Space, typing), in a form or a table cell."
   ],
   "compositionRules": [
     "Pass a flat SelectOption[]; Select builds the Menu sections, selection, and typeahead itself.",

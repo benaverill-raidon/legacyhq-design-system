@@ -347,8 +347,8 @@ export const Select = React.memo(function Select(props: SelectProps) {
         placeholder={inputPlaceholder}
         value={inputValue}
         // Single-select shows the chosen option's icon before its label (Figma's elemBeforeInput slot);
-        // it stays while the menu is open, since the value doesn't change until a new pick. The
-        // wrapper keeps the icon's own color, as its menu row does, over Text Field's subtle slot.
+        // it stays while the menu is open, since the value doesn't change until a new pick. It keeps
+        // its own color, as its menu row does; the wrapper lets a disabled Select grey it.
         iconBefore={selectedSingleOption?.icon ? <span className={styles.optionIcon}>{selectedSingleOption.icon}</span> : undefined}
         leadingContent={chips}
         iconAfter={

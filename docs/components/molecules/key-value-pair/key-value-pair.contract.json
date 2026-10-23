@@ -4,8 +4,8 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "bug",
-      "summary": "Its examples file's editable pairs use a Text Field with an edit icon instead of Inline Edit, and two of its page's code samples show a pair with no Key Value List around it."
+      "kind": "decision",
+      "summary": "Its stories and live example put an edit icon (`iconAfter`) beside the value inside Inline Edit, while Inline Edit's own page shows none. Does the edit icon belong in a Key Value Pair?"
     }
   ],
   "purpose": "Map a descriptive label to a static or inline-editable value for scannable metadata presentation.",

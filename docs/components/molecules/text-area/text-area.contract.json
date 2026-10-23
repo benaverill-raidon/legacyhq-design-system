@@ -2,12 +2,7 @@
   "name": "TextArea",
   "category": "forms",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Its examples file says the Key Value Pair example is \"wrapped in InlineEdit\", but the code shows no Inline Edit."
-    }
-  ],
+  "knownIssues": [],
   "purpose": "Let a user write or edit multi-line free text - notes, descriptions, comments - in a bordered, resizable field.",
   "intent": "The multi-line counterpart of Text Field: a real native <textarea> in the same bordered frame, sharing Text Field's size, context, invalid, and state treatment so the two read as one family. Grouped with Text Field as a molecule for that reason, though it composes no other component.",
   "sourceFiles": {
@@ -221,7 +216,7 @@
     "Hover tint is suppressed once the field is focused.",
     "An autofilled field (the textarea matches :autofill) layers --color-background-autofill-default over the raised surface and keeps each context's resting stroke. Hover replaces the tint; focus and invalid keep it; context=inline stays chromeless at rest and shows the tint only while focused. The browser's own autofill fill on the textarea is hidden.",
     "A disabled field cannot be resized.",
-    "iconAfter renders a trailing icon or interactive control at the end of the wrapper row.",
+    "iconAfter renders a trailing icon or interactive control at the end of the wrapper row. An icon left at Icon's default color=\"inherit\" takes the slot's subtle color (--field-icon-color); an icon with a named color keeps it.",
     "context='inline' is chromeless at rest, with the raised-hover background and a bottom-only border on hover and a bottom-only focus/error line on focus/invalid — keeps padding, height, and top-corner radius.",
     "The deprecated appearance prop maps to context: subtle and inline map to inline, default to default. An explicit context wins."
   ],

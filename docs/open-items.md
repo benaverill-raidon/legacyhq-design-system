@@ -96,6 +96,15 @@ component's known issues, so they show on Introduction / Status too.
 - [ ] Icon Button: the "more" icon is `MoreVertIcon` (vertical) everywhere.
 - [ ] Split Button: `tone` is deprecated until Icon Button has one.
 - [ ] Label is for statuses; Tag is for categories (docs).
+- [ ] Tag: add `law` and `wealth` tones, as Label has (Label's law is the brand color, its wealth
+  accent green; Tag already has `brand` and `green` tones in those colors). The code follows once
+  Figma defines how they look on a Tag.
+- [ ] Radio Group and Checkbox Group: the description and error text take Field's message style
+  (`body-sm`).
+- [ ] Text Field: should a disabled field grey its leading icon or prefix? (Today it doesn't; Select
+  greys its chosen option's icon itself when disabled.)
+- [ ] Key Value Pair: does the edit icon beside an Inline Edit value belong? (Its stories show one;
+  Inline Edit's page doesn't.)
 
 **Create tokens**
 

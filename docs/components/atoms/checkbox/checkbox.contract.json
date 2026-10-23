@@ -2,12 +2,7 @@
   "name": "Checkbox",
   "category": "forms",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
-    }
-  ],
+  "knownIssues": [],
   "knownLimitations": [
     "Wrapping a single Checkbox in Field replaces its own label as its name; give it its own errorMessage instead."
   ],
@@ -60,7 +55,7 @@
   "behaviorRules": [
     "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "A disabled CheckboxGroup disables every checkbox inside it, from options or children, and they look disabled.",
-    "errorMessage on a single Checkbox renders the message under the box (body-md, content-error, spacing-xs above), outside the label, adds its id to aria-describedby after any existing description, and marks the checkbox invalid (aria-invalid and the error color). The label and message are then wrapped in a div that takes className.",
+    "errorMessage on a single Checkbox renders the message under the box (body-sm, like Field's message; content-error, spacing-xs above), outside the label, adds its id to aria-describedby after any existing description, and marks the checkbox invalid (aria-invalid and the error color). The label and message are then wrapped in a div that takes className.",
     "required on CheckboxGroup shows an aria-hidden * after the legend and adds hidden requiredLabel text to the group's name; it doesn't make any checkbox natively required."
   ],
   "compositionRules": [],

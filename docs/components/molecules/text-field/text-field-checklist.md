@@ -56,7 +56,7 @@ screen styling its own `<input>`.
 
 ### What content can be displayed?
 - A single line of typed text, appropriate to the native `type` in use
-- An optional leading icon or short text prefix (`iconBefore`) - always decorative
+- An optional leading icon or short text prefix (`iconBefore`) - always decorative; an icon takes the slot's subtle color unless it has a named `color`, which it keeps (same for `iconAfter`)
 - An optional trailing icon or interactive action (`iconAfter`) - typically an `IconButton`
   (`appearance="subtle"`, `shape="square"`) for a clear action, or a `Button` for a labeled action
 

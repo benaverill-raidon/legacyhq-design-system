@@ -4,7 +4,7 @@
     {
       "name": "Static value",
       "description": "A read-only key/value row with a plain text value.",
-      "jsx": "<KeyValuePair label=\"Client name\" value=\"Jane Doe\" />",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" />\n</KeyValueList>",
       "props": {
         "label": "Client name",
         "value": "Jane Doe"
@@ -12,26 +12,26 @@
     },
     {
       "name": "Underlined pair",
-      "description": "Add underline for a bottom border divider between pairs.",
-      "jsx": "<KeyValuePair label=\"Account type\" value=\"Trust\" underline />",
+      "description": "Add underline for a bottom border divider between pairs; leave it off the last pair, so the list doesn't end on a line.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
       "props": {
         "label": "Account type",
         "underline": true
       }
     },
     {
-      "name": "Inline editable with TextField",
-      "description": "Pass a TextField with context='inline' as children for inline editing. The edit icon provides the affordance.",
-      "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "name": "Inline editable with TextField in Inline Edit",
+      "description": "Pass a TextField with context=\"inline\" in Inline Edit as children, so an edit is confirmed or cancelled. actionPlacement=\"end\" puts Inline Edit's buttons at the end of the value, so the row keeps its height while editing. Give the field an aria-label matching the key.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
       "props": {
         "label": "Client name",
         "underline": true
       }
     },
     {
-      "name": "Inline editable with TextArea",
-      "description": "Pass a TextArea with context='inline' for multi-line inline editing.",
-      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "name": "Inline editable with TextArea in Inline Edit",
+      "description": "Pass a TextArea with context=\"inline\" in Inline Edit for multi-line editing. actionPlacement=\"end\" keeps the buttons at the end of the value, and with autoResize, actionAlignment=\"start\" keeps them level with the first line as the field grows.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Notes\" underline>\n    <InlineEdit value={notes} onConfirm={setNotes} actionPlacement=\"end\" actionAlignment=\"start\">\n      <TextArea autoResize context=\"inline\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
       "props": {
         "label": "Notes",
         "underline": true
@@ -40,7 +40,7 @@
     {
       "name": "Small size",
       "description": "The sm size uses tighter padding and smaller typography.",
-      "jsx": "<KeyValuePair size=\"sm\" label=\"Status\" value=\"Active\" />",
+      "jsx": "<KeyValueList>\n  <KeyValuePair size=\"sm\" label=\"Status\" value=\"Active\" />\n</KeyValueList>",
       "props": {
         "size": "sm",
         "label": "Status"

@@ -1,17 +1,8 @@
 {
   "name": "TextField",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Its examples file says the Key Value Pair example is \"wrapped in InlineEdit\", but the code shows no Inline Edit."
-    },
-    {
-      "kind": "gap",
-      "summary": "Its leading slot's `color: inherit` rule greys any colored icon passed through `iconBefore` (Select works around it for its chosen option's icon)."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Let a user write or edit a single line of free text.",
   "intent": "Provide one consistent, accessible native text-input control - sizing, borders, and interaction states - that every free-text entry point in the product shares. Composes an optional leading icon/text slot and an optional trailing icon/action slot (which may itself compose a real Icon Button or Button), which is why it lives at the molecule tier rather than atom.",
   "nativeElement": "input",
@@ -388,6 +379,7 @@
     "context=inline rests at 1px border-width, the same as context=default, at every state - focus/invalid look thicker via box-shadow only, never a real border-bottom-width change.",
     "Hover never overrides the invalid border color on context=inline - only the background changes on hover when invalid is also true.",
     "iconBefore is icon-or-text only, always aria-hidden; iconAfter is icon-or-action, never forced aria-hidden.",
+    "Both slots color an icon left at Icon's default color=\"inherit\" subtle (--field-icon-color, default color-content-subtle); an icon with a named color keeps it.",
     "Support className (root) and inputClassName (input) composition."
   ],
   "compositionRules": [

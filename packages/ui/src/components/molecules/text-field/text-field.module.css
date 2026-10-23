@@ -226,6 +226,10 @@
  * aria-hidden in the markup. The text example ("$", a currency-style prefix) is bound to body-lg
  * typography at every field size, confirmed directly from Figma rather than assumed to scale with
  * the field's own size - this rule intentionally does not vary per `.size_*`.
+ *
+ * The slot sets the subtle color, and an icon follows it through Icon's default `color="inherit"`.
+ * An icon given a named color (a success or error status icon, say) keeps it: the slot doesn't
+ * override Icon's color classes.
  */
 .before {
   display: inline-flex;
@@ -240,17 +244,14 @@
   letter-spacing: var(--typography-body-lg-letter-spacing);
 }
 
-.before :global([data-color]) {
-  color: inherit;
-}
-
 /*
  * The trailing slot is icon-or-button-or-label (confirmed from Figma's elemAfterInput component:
  * an IconButton for a clear/reveal-style action, a full Button, or a Label pill for compact
  * metadata/status) - unlike `.before`, this frequently holds a real interactive control, so it is
  * never forced aria-hidden here. A plain decorative icon or a Label passed on its own already
  * defaults to non-focusable through its own component; an IconButton/Button passed here manages
- * its own accessibility and must stay focusable.
+ * its own accessibility and must stay focusable. Like `.before`, the slot's color reaches an icon
+ * left at Icon's default `color="inherit"`; an icon with a named color keeps its own.
  */
 .action {
   display: inline-flex;
@@ -258,10 +259,6 @@
   justify-content: center;
   flex: 0 0 auto;
   color: var(--field-icon-color, var(--color-content-subtle));
-}
-
-.action :global([data-color]) {
-  color: inherit;
 }
 
 /*

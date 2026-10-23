@@ -65,6 +65,9 @@ Not applicable - Button Group has no text content of its own.
 ### Orientation
 - horizontal (default), vertical
 
+### Spacing
+- default (8px gap), compact (4px gap)
+
 ---
 
 ## States

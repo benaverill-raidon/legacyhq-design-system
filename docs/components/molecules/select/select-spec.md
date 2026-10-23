@@ -76,6 +76,8 @@ interface SelectMultiProps extends SelectCommonProps {
   onChange: (value: string[]) => void;
   /** Each chip's remove-button name, passed to Chip's removeLabel. Default `Remove ${label}`. */
   getRemoveLabel?: (label: string) => string;
+  /** Each chip's remove-button tooltip, passed to Chip's removeTooltipLabel. Default `Remove`. */
+  removeTooltipLabel?: string;
 }
 
 type SelectProps = SelectSingleProps | SelectMultiProps;
@@ -107,11 +109,17 @@ emptyMessage: "No matches"
   option rows built by Select, and `emptyMessage` for no-results.
 - **Chips** — multi-select values render as `Chip mode="select"` in the trigger's `leadingContent`
   slot; `sm` chips in sm/md triggers, `md` in lg, matching Figma. Each chip's remove button is
-  named `getRemoveLabel(option.label)` (Chip's `removeLabel`), `Remove <label>` by default.
+  named `getRemoveLabel(option.label)` (Chip's `removeLabel`), `Remove <label>` by default; its
+  tooltip is `removeTooltipLabel` (Chip's `removeTooltipLabel`), `Remove` by default.
 - **Chosen icon** — a single-select field passes the chosen option's `icon` to TextField's
   `iconBefore`, the slot Figma's `select-trigger` has as the text-field's `elemBeforeInput` (an
   icon slot, hidden in the static variants). It's decorative and stays while the menu is open,
-  since the value doesn't change until a new pick.
+  since the value doesn't change until a new pick. It keeps its own color, as in its menu row:
+  TextField's leading slot leaves an icon's named color alone, and an `inherit` icon takes the
+  slot's subtle color. Select wraps it in `.optionIcon` only so a disabled field (the prop or a
+  disabled fieldset) greys it with `content/disabled`, like the caret
+  (`.trigger:where(:has(input:disabled)) .optionIcon [data-color]`). The trigger's other icons are
+  untouched.
 
 ### The TextField extension
 
@@ -227,6 +235,7 @@ single: opens on interaction and lists options as radio items
 single: onChange + close on choose
 single: shows the selected label when closed
 single: shows the chosen option's icon before the value (aria-hidden), and none without one
+single: keeps the chosen option's icon in its own color (Text Field leaves named colors alone; disabled greys it)
 single: marks the selected option aria-checked
 typeahead: filters by case-insensitive substring
 typeahead: empty message when nothing matches
@@ -236,10 +245,12 @@ multi: checkbox rows, toggle without closing
 multi: re-pick deselects
 multi: chip remove button removes the value
 multi: getRemoveLabel names the chips' remove buttons
+multi: removeTooltipLabel sets the chips' remove tooltips ('Remove' by default)
 multi: Backspace removes the last chip on an empty query
 multi: no Backspace-remove while the query is non-empty
 grouping: a section heading per group
 states: does not open when disabled
+states: never opens by pointer or keyboard when disabled by the prop or a disabled fieldset, in a form or a table cell
 states: aria-invalid when invalid
 states: opens on ArrowDown
 states: size and context map to the TextField trigger

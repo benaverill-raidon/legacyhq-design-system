@@ -1,13 +1,7 @@
 {
   "name": "DropdownMenu",
   "category": "actions",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Its generated API table misses the 14 props it inherits from Menu through `Omit<MenuProps, …>` (sections, size, showSearch, searchValue, loading, emptyMessage, …): react-docgen doesn't follow props from another file."
-    }
-  ],
+  "status": "stable",
   "purpose": "Pairs any trigger element with a floating Menu panel.",
   "intent": "A thin composition of Popup (positioning/dismissal) and Menu (search/sectioning/selection/keyboard nav) preconfigured for the click-to-open action-menu use case, rather than a third independent implementation of either concern.",
   "sourceFiles": {
@@ -130,7 +124,8 @@
   "knownLimitations": [
     "No support for non-Menu panel content - a consumer needing that composes Popup directly instead.",
     "Placement is left-to-right only, as Popup's is: start is the trigger's left edge even in a right-to-left page.",
-    "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead)."
+    "Inherits every one of Menu's own knownLimitations (no custom scrollbar widget, no typeahead).",
+    "react-docgen doesn't read props inherited through Omit<> from another file (the 16 Menu props: sections, size, showSearch, searchValue, loading, emptyMessage, ...); the page lists them by hand."
   ],
   "futureEnhancements": [
     "Arrow Down/Up on the trigger to open the menu on its first/last row (the full menu-button keyboard model)."

@@ -28,8 +28,8 @@ and the default empty content is Table's own markup, not Empty State.
   `figma-parts / column / <type>` - a column per cell content type (text, avatar, tag, link, badge,
   checkbox, radio, button, progress-bar, toggle, inline editors, ...). The code expresses these via a
   column's `render`, not one component per type.
-- Header cell (`cell / table-head`, `2956:29798`, deep-verified via the Desktop Bridge): background
-  `elevation/surface/default` (a subtle grey band), a Title in `heading/xs` SemiBold coloured
+- Header cell (`cell / table-head`, `2956:29798`, deep-verified via the Desktop Bridge): each cell
+  filled with `elevation/surface/sunken` (a subtle grey band), a Title in `heading/xs` SemiBold coloured
   `content/subtle`, an always-visible sort arrow + a column-menu (⋮) dropdown, a drag-handle divider,
   and a bottom border; height 40 (md) / 32 (sm). Body cell (`cell / text`, `2957:59685`): `--spacing-sm`
   inline padding, `body/md`, `content/default`, transparent, bottom row divider; height 64 (md) / 40
@@ -94,6 +94,11 @@ Table (div.table, data-size)
 - A real, row-oriented `<table>`; Figma's column-oriented layout is expressed as the `columns` config.
 - Header cells are `position: sticky` at the top of the scroll region; the row/header heights, the
   40px selection column, and the 280px search field are structural px (not token-gated).
+- The header fill (`--color-elevation-surface-sunken-default`) is set on each header cell, not on the
+  `<thead>` or its row, as Figma fills each header cell. Keep it per cell: a sticky header needs each
+  cell to carry its own background over the rows scrolling beneath it, since a sticky cell shows
+  whatever its own box paints. The scroll region has no height limit yet, so the header only sticks
+  once a height-limited table (a planned enhancement) exists; the per-cell fill is ready for it.
 - The table body wraps toolbar + grid + footer (no border or radius); the header sits above it with
   its own padding (block: 3xl/lg, inline: 2xl).
 
@@ -222,7 +227,7 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 | Aspect | Token |
 |---|---|
 | Table body surface | `--color-elevation-surface-raised-default` (white, no border/radius) |
-| Header cell background | `--color-elevation-surface-sunken-default` (Figma's header cell reads `elevation/surface/default`; see Design Reference) |
+| Header cell background | `--color-elevation-surface-sunken-default`, on each cell, as in Figma (see Structure Notes) |
 | Header cell text | `--color-content-subtle` (SemiBold) |
 | Selection bar | background `--color-background-selected-default-default`, border `--border-width-sm` `--color-border-selected`, text `--color-content-selected`, radius `--border-radius-lg` |
 | Toolbar / grid separator | `--border-width-sm` `--color-border-default` (border-block-start on the scroll region) |

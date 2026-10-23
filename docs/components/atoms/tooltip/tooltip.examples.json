@@ -1,19 +1,63 @@
 {
+  "component": "Tooltip",
   "examples": [
     {
       "name": "External icon button composition",
-      "jsx": "<Tooltip content='Search'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
+      "description": "Wrap an Icon Button in Tooltip only when the hint says more than its name; Icon Button leaves its own tooltip out inside a Tooltip, so the two never stack.",
+      "jsx": "<Tooltip content='Search matters by name or number'><IconButton aria-label='Search' tooltip={false}><SearchIcon /></IconButton></Tooltip>",
+      "props": { "content": "Search matters by name or number" }
     },
     {
       "name": "Supplemental clarification",
-      "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>"
+      "description": "truncate={false} wraps a longer hint (at 240px) instead of ending it with an ellipsis on one line.",
+      "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><MoreVertIcon /></IconButton></Tooltip>",
+      "props": { "content": "Supplemental clarification", "truncate": false }
+    },
+    {
+      "name": "A short hint on a labelled Button",
+      "description": "The trigger keeps its own name; the tooltip adds a description people can do without.",
+      "jsx": "<Tooltip content=\"Exports the visible rows as a CSV file\">\n  <Button>Export</Button>\n</Tooltip>",
+      "props": { "content": "Exports the visible rows as a CSV file" }
+    },
+    {
+      "name": "Disabled trigger",
+      "description": "Tooltip wraps a disabled trigger in a span so hovering still shows the tooltip. Keyboard users can't reach it, so keep it to what the control does.",
+      "jsx": "<Tooltip content=\"Export the selected rows\">\n  <IconButton aria-label=\"Export\" disabled>\n    <DownloadIcon />\n  </IconButton>\n</Tooltip>",
+      "props": { "content": "Export the selected rows" }
+    },
+    {
+      "name": "Longer delay",
+      "description": "delay is the milliseconds between hover or focus and showing the tooltip; it defaults to 300.",
+      "jsx": "<Tooltip content=\"Copy the matter number\" delay={600}>\n  <IconButton aria-label=\"Copy\">\n    <CopyIcon />\n  </IconButton>\n</Tooltip>",
+      "props": { "content": "Copy the matter number", "delay": 600 }
+    },
+    {
+      "name": "Tooltip turned off",
+      "description": "disabled turns the tooltip off without unmounting the child. It isn't the trigger's disabled state.",
+      "jsx": "<Tooltip content=\"Edit the matter's details\" disabled>\n  <Button>Edit</Button>\n</Tooltip>",
+      "props": { "content": "Edit the matter's details", "disabled": true }
     }
   ],
   "antiExamples": [
     {
       "name": "Explaining why a control is disabled",
       "reason": "Keyboard users can't reach a tooltip on a disabled control. Put the reason in visible helper text, such as Field's message.",
-      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>"
+      "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><EditIcon /></IconButton></Tooltip>"
+    },
+    {
+      "name": "The tooltip as the only name",
+      "jsx": "<Tooltip content=\"Edit\">\n  <button type=\"button\">\n    <EditIcon />\n  </button>\n</Tooltip>",
+      "reason": "A tooltip is only a description, and only while it shows, so this button has no name. Give the trigger its own name: visible text, or aria-label on an icon-only control."
+    },
+    {
+      "name": "Repeating an Icon Button's name",
+      "jsx": "<Tooltip content=\"Edit\">\n  <IconButton aria-label=\"Edit\">\n    <EditIcon />\n  </IconButton>\n</Tooltip>",
+      "reason": "Icon Button already shows its aria-label as a tooltip on its own. Wrap it in Tooltip only when the hint should say more than its name."
+    },
+    {
+      "name": "Interactive content in the tooltip",
+      "jsx": "<Tooltip content={<a href=\"/help/exports\">Learn more</a>}>\n  <Button>Export</Button>\n</Tooltip>",
+      "reason": "Tooltip text is read as a description, not content people can move to, so a link inside it can't be reached. Use Popup for floating content with links, buttons, or fields."
     }
   ]
 }

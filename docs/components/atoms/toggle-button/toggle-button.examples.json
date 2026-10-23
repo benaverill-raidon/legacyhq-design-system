@@ -1,22 +1,62 @@
 {
+  "component": "ToggleButton",
   "examples": [
     {
       "name": "Default",
-      "jsx": "<ToggleButton>Bold</ToggleButton>"
+      "jsx": "<ToggleButton>Bold</ToggleButton>",
+      "props": { "children": "Bold" }
     },
     {
       "name": "Selected (tone=default)",
       "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
-      "jsx": "<ToggleButton isSelected>Bold</ToggleButton>"
+      "jsx": "<ToggleButton isSelected>Bold</ToggleButton>",
+      "props": { "isSelected": true }
     },
     {
       "name": "Selected (tone=subtle)",
       "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
-      "jsx": "<ToggleButton tone=\"subtle\" isSelected>Bold</ToggleButton>"
+      "jsx": "<ToggleButton tone=\"subtle\" isSelected>Bold</ToggleButton>",
+      "props": { "tone": "subtle", "isSelected": true }
     },
     {
       "name": "With icon",
-      "jsx": "<ToggleButton iconBefore={<Icon name='bold'/>}>Bold</ToggleButton>"
+      "description": "iconBefore supports the label, never replaces it. The icon is the same size at every toggle button size.",
+      "jsx": "<ToggleButton iconBefore={<TextBoldIcon />}>Bold</ToggleButton>",
+      "props": { "iconBefore": "TextBoldIcon" }
+    },
+    {
+      "name": "Controlled by the parent",
+      "description": "Toggle Button never changes on its own: isSelected comes from your state and onClick flips it. The label stays the same in both states; aria-pressed says whether it's on.",
+      "jsx": "const [showArchived, setShowArchived] = useState(false);\n\n<ToggleButton isSelected={showArchived} onClick={() => setShowArchived(!showArchived)}>\n  Show archived\n</ToggleButton>",
+      "props": { "isSelected": "showArchived", "onClick": "() => setShowArchived(!showArchived)" }
+    },
+    {
+      "name": "Disabled while selected",
+      "description": "The native disabled takes the button out of the tab order and ignores clicks. Disabled looks the same selected or not, but aria-pressed still reports the state.",
+      "jsx": "<ToggleButton isSelected disabled>Show archived</ToggleButton>",
+      "props": { "isSelected": true, "disabled": true }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "A one-off action",
+      "jsx": "<ToggleButton onClick={saveChanges}>Save changes</ToggleButton>",
+      "reason": "It's announced as a toggle button, not pressed, and doesn't stay on. Use Button for an action that happens once."
+    },
+    {
+      "name": "Changing the label with the state",
+      "jsx": "<ToggleButton isSelected={showArchived}>\n  {showArchived ? 'Hide archived' : 'Show archived'}\n</ToggleButton>",
+      "reason": "People hear \"Hide archived, pressed\" and can't tell what pressing does. Keep the label the same and let the selected look and aria-pressed show the state."
+    },
+    {
+      "name": "A settings switch",
+      "jsx": "<ToggleButton isSelected={notificationsOn}>Email notifications</ToggleButton>",
+      "reason": "It's announced as a pressable button, not an on and off setting. Use Switch for a setting that takes effect right away, outside a toolbar."
+    },
+    {
+      "name": "Navigation",
+      "jsx": "<ToggleButton onClick={() => navigate('/clients')}>Clients</ToggleButton>",
+      "reason": "Toggle Button is a native button with aria-pressed, so it isn't announced as a link and can't be opened in a new tab. Use Link Button to go somewhere."
     }
   ]
 }

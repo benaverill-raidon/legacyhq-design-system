@@ -1,7 +1,8 @@
 {
   "name": "KeyValueList",
   "category": "data-display",
-  "status": "beta",
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Stack Key Value Pair items vertically in a semantic <dl> element.",
   "intent": "A thin layout wrapper that provides the <dl> (description list) structure screen readers need to announce key/value pairs correctly. Resets browser default margins and uses a flex column layout. Individual pairs manage their own padding and dividers.",
   "sourceFiles": {
@@ -25,6 +26,10 @@
       "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
     ]
   },
+  "useCases": [
+    "a record's details, one Key Value Pair per row: a summary card, a side panel, a settings overview",
+    "a mix of read-only details and details people can edit in place"
+  ],
   "props": {
     "children": {
       "type": "React.ReactNode",
@@ -60,17 +65,34 @@
     "role": "A <dl> element — screen readers announce the description list structure.",
     "structure": "Children must be KeyValuePair items (or equivalent <dt>/<dd> structures)."
   },
+  "behaviorRules": [
+    "Render a <dl> holding the children; className composes onto it, and no other attributes are passed through.",
+    "Stack the rows in a column with no gap, margin, or padding of its own (the <dl>'s browser defaults are cleared).",
+    "The list has no size or divider of its own: each Key Value Pair sets its own height, size, and underline. Figma's underlined/clean list variants are underline on every pair but the last, or on none.",
+    "A row grows with its value, and the rows below move down. A pair edited with Inline Edit's actionPlacement=\"end\" keeps its height while editing, so the rows below stay where they are; the default placement (below) moves the rest of the list down.",
+    "The <dl> has no accessible name of its own; a heading before it names the group.",
+    "The list is not focusable and has no keyboard behavior; the inline controls in its pairs keep their own."
+  ],
   "tokens": {},
   "relatedComponents": [
     "KeyValuePair"
   ],
   "do": [
     "Use as the wrapper for multiple Key Value Pair items.",
-    "Control underlines per-pair with KeyValuePair's underline prop."
+    "Control underlines per-pair with KeyValuePair's underline prop.",
+    "Give a pair edited with InlineEdit actionPlacement=\"end\", so the list doesn't shift while someone edits."
   ],
   "dont": [
     "Don't nest non-KeyValuePair content directly — the <dl> expects <dt>/<dd> children.",
     "Don't use for tabular data that needs sorting/filtering."
+  ],
+  "acceptanceCriteria": [
+    "Renders a <dl> element.",
+    "Renders multiple Key Value Pair children, with every key and value shown.",
+    "className applies to the <dl>.",
+    "Adds no spacing or tokens of its own; rows sit directly against each other.",
+    "Storybook includes StaticUnderlined, StaticClean, MixedEditable, and Sizes.",
+    "Tests cover the <dl> root, multiple Key Value Pair children, and className."
   ],
   "behaviorNotes": [
     "Pure layout container — no interactive states, no spacing of its own.",

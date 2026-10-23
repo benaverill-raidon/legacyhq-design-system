@@ -3,6 +3,7 @@ import { DocFooter } from '../../../storybook/blocks/doc-page';
 import { DocLink } from '../../../storybook/blocks/doc-link';
 import {
   Anatomy,
+  CodeSample,
   ComponentHeader,
   ComponentPage,
   Do,
@@ -65,6 +66,11 @@ export const sample4 = `sections={[{ id: 'misc', items: [
   { id: 'export', label: 'Export to PDF', onSelect: exportPdf },
   { id: 'delete', label: 'Delete', onSelect: remove },
 ] }]}`;
+export const buttonProps = `// From Button, passed to the main action only
+prominence?: 'primary' | 'secondary' | 'tertiary';  // set from appearance, so passing it changes nothing
+isInverse?: boolean;                 // the main action only: the caret doesn't get it, so the halves don't match
+isExpanded?: boolean;                // sets aria-expanded on the main action, not the caret
+type?: 'button' | 'submit' | 'reset';  // default 'button'`;
 export const sample5 = `<SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
   Delete matter
 </SplitButton>`;
@@ -176,9 +182,12 @@ so nobody picks another action while the first one runs.
 
 <Subsection title="What each half gets">
 
-`size`, `appearance`, and `disabled` apply to both halves. `onClick`, `iconBefore`, `iconAfter`,
-`tone`, a `ref`, and any other button attribute go to the main action only. `id` and `className` go
-to the wrapping `div`. There's no full-width Split Button.
+`size`, `appearance`, and `disabled` apply to both halves. `onClick`, `iconBefore`, `iconAfter`, a
+`ref`, and any other button attribute go to the main action only. `id` and `className` go to the
+wrapping `div`. There's no full-width Split Button.
+
+`tone` is deprecated. It reaches only the main action until Icon Button has a tone, so the caret
+doesn't match it. It still works as it did, but leave it unset.
 
 </Subsection>
 
@@ -218,7 +227,7 @@ to the wrapping `div`. There's no full-width Split Button.
   <Button prominence="primary" tone="error">Delete matter</Button>
 </Do>
 <Dont
-  caption="Set a tone on a Split Button. It reaches only the main action, so the two halves don't match."
+  caption="Set a tone on a Split Button. It's deprecated: it reaches only the main action, so the two halves don't match."
   code={sample5}
 >
   <SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
@@ -261,9 +270,11 @@ to the wrapping `div`. There's no full-width Split Button.
 
 <PropsTable of={SplitButtonStories} native="button" classNameOn="wrapping div" />
 
-Split Button also takes Button's other props, and they go to the main action too: `prominence` is
-set from `appearance`, so passing it changes nothing, and `isInverse` and `isExpanded` reach only
-the main action.
+Split Button also takes Button's other props, and they go to the main action too. Storybook's
+docgen doesn't read props inherited from another file, so the table above leaves them out: these
+are copied from button.types.ts.
+
+<CodeSample code={buttonProps} />
 
 </Section>
 
@@ -293,7 +304,9 @@ Menu.
 
 <DocFooter>
   The API table reads split-button.types.ts, the design tokens read split-button.module.css, and the
-  Figma source comes from registry.json, so they follow the code.
+  Figma source comes from registry.json, so they follow the code. The props Split Button takes from
+  Button are copied from button.types.ts by hand, because docgen doesn't follow them into another
+  file.
 </DocFooter>
 
 </ComponentPage>

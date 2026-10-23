@@ -130,7 +130,10 @@ the input keep it. `onCheckedChange` gets the next value as a boolean, then the 
 <Subsection title="Checkbox Group">
 
 Checkbox Group renders a `fieldset` with your `label` as its `legend`, then the options, then
-`errorMessage`. Pass `options` and it renders a Checkbox for each, gives them one `name`, and keeps
+`errorMessage`. The legend is styled like Field's label, `heading-xxs` in the subtle text color
+with the `*` straight after the text, so a group and the fields beside it in a form read alike. Its
+`description` and `errorMessage` are styled like Field's message, `body-sm`, in the subtle and error
+text colors (a single Checkbox's `errorMessage` too). Pass `options` and it renders a Checkbox for each, gives them one `name`, and keeps
 the checked values as an array in `value` or `defaultValue`. Pass `children` instead for a layout of
 your own: set their names, values, and other states yourself. The group's `disabled` still reaches
 them, so a disabled group's checkboxes look disabled too.

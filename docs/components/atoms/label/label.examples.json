@@ -1,16 +1,82 @@
 {
+  "component": "Label",
   "examples": [
     {
       "name": "Default",
-      "jsx": "<Label>Draft</Label>"
+      "description": "A neutral status in the default subtle emphasis and md size.",
+      "jsx": "<Label>Draft</Label>",
+      "props": {
+        "children": "Draft"
+      }
     },
     {
       "name": "Law",
-      "jsx": "<Label tone='law'>Estate</Label>"
+      "description": "tone=\"law\" says the item belongs to law (tone=\"wealth\" for wealth), not a matter category.",
+      "jsx": "<Label tone='law'>Law</Label>",
+      "props": {
+        "tone": "law",
+        "children": "Law"
+      }
     },
     {
       "name": "Bold",
-      "jsx": "<Label emphasis='bold'>Approved</Label>"
+      "description": "emphasis=\"bold\" is a solid fill for a label that has to stand out in a busy row; it doesn't change the meaning.",
+      "jsx": "<Label emphasis='bold'>Approved</Label>",
+      "props": {
+        "emphasis": "bold",
+        "children": "Approved"
+      }
+    },
+    {
+      "name": "Status tone",
+      "description": "information, warning, error, and success are statuses; the words carry the meaning and the tone's color supports it.",
+      "jsx": "<Label tone=\"warning\">At risk</Label>",
+      "props": {
+        "tone": "warning",
+        "children": "At risk"
+      }
+    },
+    {
+      "name": "Small, in a dense table",
+      "description": "size=\"sm\" uses heading-xxs and less padding, for dense tables and compact cards.",
+      "jsx": "<Label tone=\"success\" size=\"sm\">Active</Label>",
+      "props": {
+        "tone": "success",
+        "size": "sm",
+        "children": "Active"
+      }
+    },
+    {
+      "name": "Qualifier after a Text Field's input",
+      "description": "A short, non-interactive unit or qualifier in Text Field's iconAfter slot.",
+      "jsx": "<TextField\n  defaultValue=\"12\"\n  aria-label=\"Weight\"\n  iconAfter={<Label size=\"sm\" tone=\"default\">kg</Label>}\n/>",
+      "props": {
+        "size": "sm",
+        "tone": "default",
+        "children": "kg"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "A sentence in a Label",
+      "jsx": "<Label tone=\"warning\">Needs review before the filing deadline</Label>",
+      "reason": "Label doesn't wrap and has no ellipsis, so in a narrow space a sentence runs past its container. Keep it to a status or a state in one to three words."
+    },
+    {
+      "name": "A category in a status tone",
+      "jsx": "<Label tone=\"information\">Estate planning</Label>",
+      "reason": "Label's tones mean something, so a category in information blue reads as a status. Use Tag for a category or classification: <Tag tone=\"purple\">Estate planning</Tag>."
+    },
+    {
+      "name": "A clickable Label",
+      "jsx": "<Label tone=\"information\" onClick={() => openTrust('averill-family')}>Averill Family Living Trust</Label>",
+      "reason": "Label renders a span that isn't focusable, so keyboard users can't reach the click handler. Use Tag with href for a value that links to a record."
+    },
+    {
+      "name": "Label as a form control's name",
+      "jsx": "<Label>Matter name</Label>\n<TextField />",
+      "reason": "Label isn't a form label: it isn't tied to the control, so the field stays unnamed. Name a control with Field: <Field label=\"Matter name\"><TextField /></Field>."
     }
   ]
 }

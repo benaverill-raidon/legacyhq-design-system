@@ -81,19 +81,30 @@ component's known issues, so they show on Introduction / Status too.
 - [ ] Tokens v1.0.0: `component/progress-bar/circular/size` 72 → 80 (the repo's token is 80 now).
 - [ ] Tokens v1.0.0: remove the now-unused linear `pad` (sm/md/lg) and `root-size` (sm/md/lg)
   variables; the repo removes them after (and `token-data.test.ts`'s root-size check with them).
-- [ ] Circular `sm`: Figma has none; code draws an 8px ring. Add it, or drop `sm` for circular.
 - [ ] Clean up `progress-bar-circular`: a hidden 72px "donut" layer in `progress=100, size=md`
   still bound to `color/data-viz/sequence/prussian/300`, and an empty 72px "donut" layer in every
   `lg` variant except 100.
 
-**Check a value**
+**From the issue review (2026-10-23)**
 
-- [ ] Table header fill (node `2956:29798`): surface sunken (the CSS) or surface default (the
-  contract)?
-- [ ] Button Group gap: confirm the stacked variants' 8px; there's no value for the horizontal gap.
-- [ ] Field: is the status icon meant to center against a message that wraps?
-- [ ] Field's label (`heading-xxs`) vs Radio's and Checkbox's group legends (`body-md`), and the
-  required `*` spacing: which is right?
+- [ ] Button Group: add the 4px (`spacing=compact`) variant beside the default 8px gap.
+- [ ] Progress Bar: circular stays `md` and `lg` only (code now treats circular `sm` as `md`).
+- [ ] Field: align the status icon to the first line of a wrapping message.
+- [ ] Radio Group and Checkbox Group: the group legend takes Field's label style (`heading-xxs`,
+  `content-subtle`) and the same required `*` spacing. Figma's radio-group (1355:200060) has no
+  legend layer at all; add one.
+- [ ] Icon Button: the "more" icon is `MoreVertIcon` (vertical) everywhere.
+- [ ] Split Button: `tone` is deprecated until Icon Button has one.
+- [ ] Label is for statuses; Tag is for categories (docs).
+- [ ] Tag: add `law` and `wealth` tones, as Label has (Label's law is the brand color, its wealth
+  accent green; Tag already has `brand` and `green` tones in those colors). The code follows once
+  Figma defines how they look on a Tag.
+- [ ] Radio Group and Checkbox Group: the description and error text take Field's message style
+  (`body-sm`).
+- [ ] Text Field: should a disabled field grey its leading icon or prefix? (Today it doesn't; Select
+  greys its chosen option's icon itself when disabled.)
+- [ ] Key Value Pair: does the edit icon beside an Inline Edit value belong? (Its stories show one;
+  Inline Edit's page doesn't.)
 
 **Create tokens**
 
@@ -115,13 +126,6 @@ component's known issues, so they show on Introduction / Status too.
   radio_unchecked.
 - [ ] `incapacitated` and `life-insurance-policy` are the same glyph.
 - [ ] The icon wrapper defaults to `Size=sm` (code: md), and the property is capitalized.
-- [ ] Decide the "more" icon: horizontal (Icon Button's page) or vertical (row actions).
-
-**Decide**
-
-- [ ] Tag `tone` holds color names: rename to `appearance`, or keep.
-- [ ] Tag or Label for categories on a record.
-- [ ] Split Button `tone`: drop, or deprecate until Icon Button has one.
 
 **Earlier clean-up, if not done**
 

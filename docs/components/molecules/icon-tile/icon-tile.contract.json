@@ -1,13 +1,7 @@
 {
   "name": "IconTile",
   "category": "data-display",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Takes camelCase `ariaLabel`, where Badge, Breadcrumbs, and Pagination moved to `aria-label` (kept as an alias)."
-    }
-  ],
+  "status": "stable",
   "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
   "intent": "Provide a non-interactive, scannable colored icon container distinct from Icon Button (interactive) and Badge/Tag (text content).",
   "nativeElement": "div",
@@ -112,13 +106,20 @@
       "type": "boolean",
       "required": false,
       "default": true,
-      "description": "When true, the tile is aria-hidden. When false, renders role=img with ariaLabel."
+      "description": "When true, the tile is aria-hidden. When false, renders role=img with aria-label."
+    },
+    "aria-label": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Accessible label used only when decorative is false. With decorative=false and no aria-label, the tile warns in development (skipped when import.meta.env.PROD)."
     },
     "ariaLabel": {
       "type": "string",
       "required": false,
       "default": null,
-      "description": "Accessible label used only when decorative is false. With decorative=false and no ariaLabel, the tile warns in development (skipped when import.meta.env.PROD)."
+      "deprecated": true,
+      "description": "Deprecated alias for aria-label, still accepted. aria-label wins when both are set."
     },
     "className": {
       "type": "string",
@@ -210,13 +211,13 @@
       "prop": "decorative",
       "default": true,
       "whenTrue": "aria-hidden=true, no role",
-      "whenFalse": "role=img, aria-label from ariaLabel"
+      "whenFalse": "role=img, aria-label from the aria-label prop (or the deprecated ariaLabel)"
     },
     "requirements": [
       "Do not add button behavior.",
       "Do not add keyboard interaction.",
-      "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
-      "decorative=false without ariaLabel warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
+      "Use decorative=false with aria-label only when no adjacent text already conveys the same meaning.",
+      "decorative=false without aria-label warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
       "Ensure color contrast meets requirements for all tone/appearance combinations."
     ]
   },
@@ -274,8 +275,9 @@
     "Supports all IconTileTone, IconTileAppearance, IconTileShape, and IconTileSize values.",
     "Applies data-tone, data-appearance, data-shape, and data-size for the selected values.",
     "decorative=true (default) renders aria-hidden with no role.",
-    "decorative=false renders role=img with aria-label from ariaLabel.",
-    "decorative=false without ariaLabel warns in development.",
+    "decorative=false renders role=img with aria-label from the aria-label prop.",
+    "The deprecated ariaLabel still names the tile the same way.",
+    "decorative=false without aria-label warns in development.",
     "Supports className.",
     "Uses tokenized sizing, radius, and colors for every tone/appearance/shape/size combination.",
     "Icon inherits tile color and fills the computed icon-size box regardless of the icon's own defaults.",

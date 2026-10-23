@@ -4,6 +4,7 @@ import { createRef } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { StatusErrorIcon, StatusSuccessIcon } from '../../../assets/icons';
 import { TextField } from './text-field';
 import textFieldStyles from './text-field.module.css';
 
@@ -73,6 +74,27 @@ describe('TextField', () => {
 
     expect(screen.getByTestId('icon-before')).toBeInTheDocument();
     expect(screen.getByTestId('icon-after')).toBeInTheDocument();
+  });
+
+  it("keeps a named icon color in either slot, and gives a plain icon the slot's subtle color", () => {
+    const iconCss = readFileSync('packages/ui/src/components/primitives/icon/icon.module.css', 'utf8');
+    render(
+      <TextField
+        aria-label="Status"
+        iconBefore={<StatusSuccessIcon color="success" testId="named-before" />}
+        iconAfter={<StatusErrorIcon color="error" testId="named-after" />}
+      />,
+    );
+
+    // The icon carries its own color class, and nothing in the slots overrides it.
+    expect(screen.getByTestId('named-before')).toHaveAttribute('data-color', 'success');
+    expect(screen.getByTestId('named-before').closest(`.${textFieldStyles.before}`)).not.toBeNull();
+    expect(screen.getByTestId('named-after').closest(`.${textFieldStyles.action}`)).not.toBeNull();
+    expect(textFieldCss).not.toContain('[data-color]');
+    // A plain icon inherits, so it takes each slot's subtle color.
+    expect(iconCss).toMatch(/\.color_inherit\s*\{\s*color: inherit;/);
+    expect(textFieldCss).toMatch(/\.before\s*\{[^}]*color: var\(--field-icon-color, var\(--color-content-subtle\)\);/);
+    expect(textFieldCss).toMatch(/\.action\s*\{[^}]*color: var\(--field-icon-color, var\(--color-content-subtle\)\);/);
   });
 
   it('hides iconBefore from the accessibility tree (always decorative)', () => {

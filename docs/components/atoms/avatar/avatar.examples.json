@@ -4,42 +4,121 @@
     {
       "name": "Presence badge",
       "description": "Shows availability when no calendar status is present.",
-      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" />"
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" />",
+      "props": {
+        "name": "Ben Averill",
+        "presence": "online"
+      }
     },
     {
       "name": "Offline badge",
       "description": "Uses the semantic subtle content color for the offline badge icon.",
-      "jsx": "<Avatar name=\"Ben Averill\" presence=\"offline\" />"
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"offline\" />",
+      "props": {
+        "name": "Ben Averill",
+        "presence": "offline"
+      }
     },
     {
       "name": "Calendar status badge",
       "description": "Shows calendar invite response status.",
-      "jsx": "<Avatar name=\"Ben Averill\" status=\"accepted\" />"
+      "jsx": "<Avatar name=\"Ben Averill\" status=\"accepted\" />",
+      "props": {
+        "name": "Ben Averill",
+        "status": "accepted"
+      }
     },
     {
       "name": "Status wins over presence",
       "description": "Renders accepted status badge instead of online presence badge.",
-      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" status=\"accepted\" />"
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" status=\"accepted\" />",
+      "props": {
+        "name": "Ben Averill",
+        "presence": "online",
+        "status": "accepted"
+      }
     },
     {
       "name": "Disabled interactive avatar",
       "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
-      "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />"
+      "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />",
+      "props": {
+        "name": "Ben Averill",
+        "isInteractive": true,
+        "disabled": true,
+        "onClick": "handleClick"
+      }
     },
     {
       "name": "Selectable interactive avatar",
       "description": "An avatar people pick: given isSelected, the button is a toggle with aria-pressed, and its name is \"Ben Averill, busy\" without the word selected.",
-      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />"
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />",
+      "props": {
+        "name": "Ben Averill",
+        "presence": "busy",
+        "isInteractive": true,
+        "isSelected": "isPicked (state)",
+        "onClick": "togglePicked"
+      }
     },
     {
       "name": "Translated status words",
       "description": "The words Avatar adds to the accessible name are props with English defaults.",
-      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />"
+      "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />",
+      "props": {
+        "name": "Ben Averill",
+        "presence": "busy",
+        "getPresenceLabel": "(presence) => t(`presence.${presence}`)"
+      }
     },
     {
       "name": "Team/partner entity, no image",
       "description": "entityType=\"team\" swaps the fallback artwork to a two-person silhouette instead of the default individual one, for a firm or partner entity appearing alongside people.",
-      "jsx": "<Avatar name=\"Averill & Partners\" entityType=\"team\" />"
+      "jsx": "<Avatar name=\"Averill & Partners\" entityType=\"team\" />",
+      "props": {
+        "name": "Averill & Partners",
+        "entityType": "team"
+      }
+    },
+    {
+      "name": "Photo with a name",
+      "description": "Give every avatar a name, even with a photo. It names the fallback when the photo fails.",
+      "jsx": "<Avatar src={photo} name=\"Ben Averill\" />",
+      "props": {
+        "src": "photo",
+        "name": "Ben Averill"
+      }
+    },
+    {
+      "name": "Decorative, beside a visible name",
+      "description": "decorative hides a static avatar from assistive technology when a visible name sits next to it.",
+      "jsx": "<Avatar src={photo} decorative />\n<span>Ben Averill</span>",
+      "props": {
+        "src": "photo",
+        "decorative": true
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Photo alone, no name",
+      "jsx": "<Avatar src={photo} />",
+      "reason": "The avatar has no accessible name, and a failed photo leaves an unnamed silhouette. Set name even when there's a photo."
+    },
+    {
+      "name": "State written into name",
+      "jsx": "<Avatar name=\"Ben Averill, busy\" presence=\"busy\" />",
+      "reason": "Avatar already adds the badge word to the accessible name, so the state is read twice. Pass the plain name and let presence or status add it."
+    },
+    {
+      "name": "decorative on an interactive avatar",
+      "jsx": "<Avatar src={photo} decorative isInteractive onClick={select} />",
+      "reason": "decorative is ignored on an interactive avatar, and without a name the button is unnamed. Give it a name."
+    },
+    {
+      "name": "Several Avatars in a row for a group of people",
+      "jsx": "<Avatar name=\"Ben Averill\" />\n<Avatar name=\"Jordan Lee\" />\n<Avatar name=\"Sam Ortiz\" />",
+      "reason": "Several people together belong in Avatar Group, which overlaps them and counts the rest."
     }
   ]
 }

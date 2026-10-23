@@ -4,6 +4,8 @@ import { ProgressBar } from './progress-bar';
 import type { ProgressBarSize } from './progress-bar.types';
 
 const sizes: ProgressBarSize[] = ['sm', 'md', 'lg'];
+// Circular has md and lg, as Figma does; circular sm is deprecated and renders as md.
+const circularSizes: ProgressBarSize[] = ['md', 'lg'];
 
 const meta = {
   title: 'Components/Feedback/Progress Bar',
@@ -114,7 +116,7 @@ export const Variants: Story = {
 
 /**
  * Size is a meaningful axis: the linear bar's height and the ring's thickness scale, the circular
- * diameter does not. Figma has no circular sm; code draws an 8px ring.
+ * diameter does not. Linear has sm, md, and lg; circular has md and lg, as Figma does.
  */
 export const Sizes: Story = {
   render: () => (
@@ -128,7 +130,7 @@ export const Sizes: Story = {
         ))}
       </Group>
       <Group title="Circular">
-        {sizes.map((size) => (
+        {circularSizes.map((size) => (
           <Cell key={size} label={size}>
             <ProgressBar value={60} variant="circular" size={size} label={`Circular ${size} progress`} />
           </Cell>

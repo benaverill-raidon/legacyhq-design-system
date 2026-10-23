@@ -239,9 +239,21 @@ Use semantic CSS variables only. Do not hardcode visual design values unless a t
 - Label gap: `spacing-xxs` (2px); the 32px target adds 4px around the 24px circle.
 - RadioGroup option gap: 0 when vertical; `spacing-lg` between options when horizontal.
 
+### Group legend
+
+- RadioGroup's `legend` matches Field's label (an owner decision), so groups and fields read alike in
+  one form: `heading-xxs` typography in `color-content-subtle`.
+- Its required `*` follows the legend text with no gap (`.legend .requiredIndicator` sets
+  `margin-inline-start: var(--spacing-none)`), as Field's `*` does; a single Radio's label keeps
+  its `spacing-xxs` gap.
+
 ### Typography
 
 - Label: `body-md` typography token set.
+- Group legend: `heading-xxs`, like Field's label.
+- Group description and error message: `body-sm`, like Field's message (an owner decision), in
+  `color-content-subtle` and `color-content-error` (Field's resting and error message colors), with
+  `spacing-xs` above.
 
 ### Color Tokens
 

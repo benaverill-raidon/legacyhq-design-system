@@ -133,7 +133,7 @@ export const Variants: Story = {
       </Group>
 
       <Group title="Display-only (span)">
-        <Tag tone="green">Active</Tag>
+        <Tag tone="purple">Estate planning</Tag>
       </Group>
 
       <Group title="Navigational (anchor)">
@@ -376,7 +376,7 @@ export const Content: Story = {
         <h3 style={headingStyle}>Tag row that wraps</h3>
         <p style={captionStyle}>Tags wrap onto new lines as a row fills, rather than overflowing.</p>
         <div style={{ ...row, inlineSize: '320px' }}>
-          <Tag tone="green">Active</Tag>
+          <Tag tone="green">Tax</Tag>
           <Tag tone="blue">Investments</Tag>
           <Tag tone="purple">Estate planning</Tag>
           <Tag tone="teal">Follow-up</Tag>

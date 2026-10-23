@@ -4,32 +4,94 @@
     {
       "name": "Linear document generation",
       "description": "Shows determinate progress for a document package.",
-      "jsx": "<ProgressBar value={42} label=\"Generating document package\" />"
+      "jsx": "<ProgressBar value={42} label=\"Generating document package\" />",
+      "props": {
+        "value": 42,
+        "label": "Generating document package"
+      }
     },
     {
       "name": "Large linear upload",
       "description": "Uses the larger track for a prominent upload process.",
-      "jsx": "<ProgressBar value={68} size=\"lg\" label=\"Uploading client files\" />"
+      "jsx": "<ProgressBar value={68} size=\"lg\" label=\"Uploading client files\" />",
+      "props": {
+        "value": 68,
+        "size": "lg",
+        "label": "Uploading client files"
+      }
     },
     {
       "name": "Circular summary",
       "description": "Uses a compact circular visualization.",
-      "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />"
+      "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />",
+      "props": {
+        "variant": "circular",
+        "value": 75,
+        "label": "Roadmap completion"
+      }
+    },
+    {
+      "name": "Large circular summary",
+      "description": "The thicker lg ring, for a summary that leads its tile. Circular takes md and lg.",
+      "jsx": "<ProgressBar variant=\"circular\" size=\"lg\" value={75} label=\"Roadmap completion\" />",
+      "props": {
+        "variant": "circular",
+        "size": "lg",
+        "value": 75,
+        "label": "Roadmap completion"
+      }
     },
     {
       "name": "Circular summary at 0",
       "description": "Nothing complete yet: the ring shows its empty track and border, with no progress arc, so the summary keeps its shape.",
-      "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />"
+      "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />",
+      "props": {
+        "variant": "circular",
+        "value": 0,
+        "label": "Roadmap completion",
+        "getValueText": "() => \"0 of 12 tasks complete\""
+      }
     },
     {
       "name": "Domain-specific value text",
       "description": "Announces completed items instead of only a percentage.",
-      "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />"
+      "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />",
+      "props": {
+        "value": 60,
+        "label": "Document preparation",
+        "getValueText": "() => \"6 of 10 documents prepared\""
+      }
     },
     {
       "name": "Complete",
       "description": "Shows a completed process.",
-      "jsx": "<ProgressBar value={100} label=\"Import complete\" />"
+      "jsx": "<ProgressBar value={100} label=\"Import complete\" />",
+      "props": {
+        "value": 100,
+        "label": "Import complete"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Circular sm",
+      "jsx": "<ProgressBar variant=\"circular\" size=\"sm\" value={75} label=\"Roadmap completion\" />",
+      "reason": "Circular has md and lg only, as Figma does. A circular sm is deprecated and renders exactly as md, so write size=\"md\" (or leave the default)."
+    },
+    {
+      "name": "Unnamed bar with a percentage beside it",
+      "jsx": "<span>42%</span>\n<ProgressBar value={42} />",
+      "reason": "The bar has no accessible name, and screen readers don't connect the percentage beside it to the bar. Name the process with label: <ProgressBar value={42} label=\"Generating document package\" />."
+    },
+    {
+      "name": "A made-up value for loading",
+      "jsx": "<ProgressBar value={30} label=\"Loading matters\" />",
+      "reason": "Progress Bar has no indeterminate mode, so a value that isn't measured tells people something false. Use Spinner when you can't measure how far along the work is: <Spinner label=\"Loading matters\" />."
+    },
+    {
+      "name": "A count in the label",
+      "jsx": "<ProgressBar value={60} label=\"Preparing documents, 6 of 10 done\" />",
+      "reason": "label is read as the name, and the value is still announced as a percentage. Keep label for the name and put counted progress in getValueText: getValueText={() => '6 of 10 documents prepared'}."
     }
   ]
 }

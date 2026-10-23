@@ -305,6 +305,17 @@ describe('Field', () => {
     expect(fieldCss).toContain('font-size: var(--typography-body-sm-font-size);');
   });
 
+  it("aligns the status icon to the message's first line, so a wrapped message keeps it beside line one", () => {
+    const rule = (selector: string) =>
+      fieldCss.match(new RegExp(`(?:^|\\n)${selector.replace('.', '\\.')}\\s*\\{([^}]*)\\}`))?.[1] ?? '';
+
+    expect(rule('.message')).toContain('align-items: flex-start;');
+    expect(rule('.message')).not.toContain('align-items: center;');
+    // One line of the message's type tall, with the icon centered in it.
+    expect(rule('.messageIcon')).toContain('block-size: var(--typography-body-sm-line-height);');
+    expect(rule('.messageIcon')).toContain('align-items: center;');
+  });
+
   it('recolours the message per state with content tokens', () => {
     expect(fieldCss).toMatch(/\.state_error \.message\s*\{\s*color: var\(--color-content-error\);/);
     expect(fieldCss).toMatch(/\.state_success \.message\s*\{\s*color: var\(--color-content-success\);/);

@@ -6,13 +6,14 @@
     {
       "kind": "gap",
       "summary": "Takes the legacy `appearance` (default | primary | subtle) while Figma has moved it to `tone` and `prominence` (tone-is-meaning)."
-    },
-    {
-      "kind": "decision",
-      "summary": "Which \"more\" glyph is standard: `MoreHorizIcon` (this page) or `MoreVertIcon` (Dropdown Menu and Table row actions)."
     }
   ],
   "purpose": "Icon-only action button.",
+  "useCases": [
+    "A familiar action whose icon is clear on its own: search, edit, close, more actions",
+    "A compact row of actions, such as a toolbar or a table row",
+    "Opening a menu from a \"more actions\" icon, with isExpanded"
+  ],
   "figmaSource": {
     "file": "Components v1.0.0",
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -56,5 +57,43 @@
     "Forwarded ref resolves to the native button.",
     "Supports isInverse (boolean) as an orthogonal on-dark treatment for placement on dark/bold surfaces such as Banner; flattened by disabled like the appearance."
   ],
-  "relatedComponents": ["Button", "Tooltip", "ToggleIconButton", "Spinner"]
+  "relatedComponents": ["Button", "Tooltip", "ToggleIconButton", "Spinner"],
+  "do": [
+    "Name the action in aria-label, which is both the accessible name and the tooltip.",
+    "Name the action (\"Delete matter\"), not the icon (\"Trash\").",
+    "Use Button with a visible label when the icon alone doesn't say what happens.",
+    "Use Toggle Icon Button for something that stays on, so it's announced as pressed.",
+    "Set isExpanded on a button that opens a menu or panel, and use MoreVertIcon for \"more actions\".",
+    "Set tooltip (or tooltip={false}) yourself when the button is named with aria-labelledby."
+  ],
+  "dont": [
+    "Do not put the name only in tooltip: it describes the button only while it shows, so the button has no name.",
+    "Do not rely on the tooltip to explain an unfamiliar icon.",
+    "Do not show a state by switching the appearance, which assistive technology can't hear.",
+    "Do not use Icon Button for navigation: it's a native button and can't be opened in a new tab (use Link Button).",
+    "Do not use it for a destructive action that needs a warning or error look: there's no tone, so use a labelled Button.",
+    "Do not mix square and round shapes in one toolbar."
+  ],
+  "acceptanceCriteria": [
+    "Renders a native button.",
+    "Defaults to type button.",
+    "Forwards its ref to the native button.",
+    "Renders children as the icon content, hidden from assistive technology.",
+    "Supports aria-label and aria-labelledby as the accessible name.",
+    "Uses a string aria-label as the default tooltip content.",
+    "Uses custom tooltip content without changing the accessible name.",
+    "tooltip={false} suppresses tooltip rendering.",
+    "Does not infer tooltip text from aria-labelledby.",
+    "Skips its own tooltip inside an external Tooltip.",
+    "Supports appearances default, primary, subtle.",
+    "Supports sizes xs, sm, md, lg as a fixed square on the Button control heights.",
+    "Supports shapes square and round.",
+    "Supports isInverse for placement on dark or bold surfaces.",
+    "Uses native disabled and suppresses click while disabled.",
+    "Shows a tooltip on hover while disabled.",
+    "Renders Spinner and sets aria-busy while loading, suppressing click without disabling the button.",
+    "isExpanded sets aria-expanded (true or false); an aria-expanded a wrapper passes is kept when isExpanded is unset.",
+    "Applies shared focus ring classes.",
+    "Uses semantic tokens for sizing, radius, and color."
+  ]
 }

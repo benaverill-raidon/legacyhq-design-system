@@ -1,17 +1,8 @@
 {
   "name": "Field",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "The status icon is centered against a message that wraps onto two lines. Check the intent in Figma."
-    },
-    {
-      "kind": "decision",
-      "summary": "Its label is `heading-xxs` while Radio's and Checkbox's group legends are `body-md`, and the required `*` spacing differs."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Wrap a single form control with a label, an optional message, and a validation state, wiring the three together for accessibility.",
   "intent": "Be the 'form field' layer the control components deliberately leave out. Text Field, Text Area, and Select render only their control frame with no label of their own; Field is where the label and helper/error text live, and where the htmlFor / aria-labelledby / aria-describedby / aria-invalid / required wiring is done once (by cloning the single wrapped control) instead of at every call site. It's a molecule because it composes the Icon primitive (the message's status glyph) and a native label around a control slot; the control is passed in as children rather than owned.",
   "nativeElement": "div (with a nested native label)",
@@ -119,7 +110,7 @@
       "part": "messageIcon",
       "element": "span.messageIcon (aria-hidden)",
       "required": false,
-      "description": "Decorative sm status Icon shown on error (status_error) / success (status_success) only."
+      "description": "Decorative sm status Icon shown on error (status_error) / success (status_success) only. Aligned to the message's first line: the message row aligns to the top (align-items: flex-start), and the icon's box is one body-sm line tall (--typography-body-sm-line-height) with the icon centered in it, so a wrapped message keeps the icon beside line one."
     }
   ],
   "props": {
@@ -215,6 +206,7 @@
       "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
       "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
       "messageIconToTextGap": "--spacing-075 (Figma spacing/075)",
+      "messageIconBlockSize": "--typography-body-sm-line-height (one message line, so the icon sits on the first line of a wrapped message)",
       "inlineIndent_lg": "--spacing-md",
       "inlineIndent_sm_md": "--spacing-sm"
     },

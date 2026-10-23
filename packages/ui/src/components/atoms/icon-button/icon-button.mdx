@@ -1,5 +1,5 @@
 import { Meta, Unstyled } from '@storybook/addon-docs/blocks';
-import { ArchiveIcon, EditIcon, MoreHorizIcon, PinIcon, SearchIcon } from '../../../assets/icons';
+import { ArchiveIcon, EditIcon, MoreVertIcon, PinIcon, SearchIcon } from '../../../assets/icons';
 import { DocFooter } from '../../../storybook/blocks/doc-page';
 import { DocLink } from '../../../storybook/blocks/doc-link';
 import {
@@ -63,7 +63,7 @@ export const sample5 = `<IconButton aria-label="Pin matter" appearance={isPinned
         <EditIcon />
       </IconButton>
       <IconButton aria-label="More actions">
-        <MoreHorizIcon />
+        <MoreVertIcon />
       </IconButton>
     </ButtonGroup>
   }
@@ -99,7 +99,7 @@ export const sample5 = `<IconButton aria-label="Pin matter" appearance={isPinned
 <Anatomy
   specimen={
     <IconButton size="lg" aria-label="More actions">
-      <MoreHorizIcon />
+      <MoreVertIcon />
     </IconButton>
   }
 >
@@ -181,6 +181,8 @@ technology the action is running.
 On an Icon Button that opens a menu or panel, set `isExpanded` to whether it's open, as on Button.
 It sets `aria-expanded` to match and keeps the hover fill while open. Leave it unset on a button that
 doesn't open anything. <DocLink to="Components/Actions/Dropdown Menu" /> wires its trigger for you.
+A "more actions" button uses `MoreVertIcon`, the vertical dots, as Dropdown Menu and Table's row
+actions do.
 
 </Subsection>
 

@@ -195,6 +195,12 @@ describe('TextArea', () => {
     expect(screen.getByTestId('edit-icon').parentElement).toHaveClass(styles.action);
   });
 
+  it("keeps a named icon color in the action slot, and gives a plain icon the slot's subtle color", () => {
+    // Nothing in the slot overrides Icon's color class; a plain icon inherits the slot's color.
+    expect(textAreaCss).not.toContain('[data-color]');
+    expect(textAreaCss).toMatch(/\.action\s*\{[^}]*color: var\(--field-icon-color, var\(--color-content-subtle\)\);/);
+  });
+
   it('does not render the action slot when iconAfter is absent', () => {
     const { container } = render(<TextArea aria-label="Notes" />);
 

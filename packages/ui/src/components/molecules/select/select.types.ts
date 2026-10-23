@@ -93,6 +93,12 @@ export interface SelectMultiProps extends SelectCommonProps {
    * Defaults to `Remove <label>`; pass a translation.
    */
   getRemoveLabel?: (label: string) => string;
+  /**
+   * The text of the tooltip each chip's remove button shows on hover and focus, passed to Chip's
+   * `removeTooltipLabel`. Defaults to `Remove`; pass a translation. It isn't the button's name:
+   * that's `getRemoveLabel`.
+   */
+  removeTooltipLabel?: string;
 }
 
 /**

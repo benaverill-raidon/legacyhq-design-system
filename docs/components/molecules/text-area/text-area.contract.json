@@ -1,7 +1,8 @@
 {
   "name": "TextArea",
   "category": "forms",
-  "status": "beta",
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Let a user write or edit multi-line free text - notes, descriptions, comments - in a bordered, resizable field.",
   "intent": "The multi-line counterpart of Text Field: a real native <textarea> in the same bordered frame, sharing Text Field's size, context, invalid, and state treatment so the two read as one family. Grouped with Text Field as a molecule for that reason, though it composes no other component.",
   "sourceFiles": {
@@ -35,6 +36,11 @@
       "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
     ]
   },
+  "useCases": [
+    "notes, descriptions, comments, and message bodies",
+    "any free text that can run past one line",
+    "a multi-line value edited in place inside a row (context=\"inline\", e.g. a Key Value Pair value in Inline Edit)"
+  ],
   "anatomy": [
     {
       "part": "root",
@@ -180,6 +186,23 @@
     "focus": "the wrapper's own focus border is the focus affordance (via :focus-within, since the focusable textarea is a child of the wrapper).",
     "iconAfter": "iconAfter is never forced aria-hidden - it may hold a real interactive control (e.g. an IconButton) which must keep its own accessible name and stay keyboard-reachable."
   },
+  "behaviorRules": [
+    "Render a real native <textarea> inside a wrapper <div> frame. Every other native attribute and the ref go to the textarea; className goes to the wrapper.",
+    "Default size=md, context=default, resize=vertical, invalid=false, autoResize=false, maxRows=6.",
+    "The deprecated appearance prop maps to context: subtle and inline map to inline, default to default. An explicit context wins.",
+    "hover/focus/autofill are never props - they derive from :hover, :focus-within, and the textarea's :autofill. data-force-state pins them for documentation only.",
+    "invalid sets aria-invalid on the textarea and keeps the error border through hover and focus.",
+    "Focus and invalid replace the border color and paint the extra thickness with an inset box-shadow, never a border-width change, so the text never shifts.",
+    "Hover is suppressed once the field is focused.",
+    "context=inline is chromeless at rest; hover shows the raised-hover background and a bottom border, focus/invalid a bottom-only line; it keeps the size's padding, height, and top-corner radius, and its bottom corners are always square.",
+    "An autofilled field layers --color-background-autofill-default over the raised surface and keeps each context's resting stroke. Hover replaces the tint; focus and invalid keep it; context=inline shows the tint only while focused; a disabled field shows its disabled look instead. The browser's own autofill fill is hidden.",
+    "resize maps to the CSS resize property. A disabled field cannot be resized.",
+    "autoResize renders the textarea at one row and sizes it to its content, from the size's control height (32/40/48px) up to maxRows lines, then scrolls vertically. It replaces rows and the resize grip, remeasures on input, controlled value changes, width changes, and font loading, and restores native sizing when turned off.",
+    "iconAfter renders in span.action only when provided, pinned to the top of the frame, and is never aria-hidden. An icon left at Icon's default color=\"inherit\" takes the slot's subtle color; a named color is kept.",
+    "Inside a disabled <fieldset>, the textarea is disabled without the disabled prop and looks and behaves exactly as with disabled.",
+    "Text Area has no label, helper text, or character count of its own; Field supplies the label and message, and passes context=\"inline\" when the Field is inline.",
+    "Enter starts a new line (native textarea behavior). Inside Inline Edit, Enter stays a new line: Ctrl+Enter or Cmd+Enter confirms and Escape cancels."
+  ],
   "tokens": {
     "surface": "background: --color-elevation-surface-raised-default (rest) / -hover (hover)",
     "autofill": "--color-background-autofill-default layered over --color-elevation-surface-raised-default (context=default unless hovered; context=inline only while focused)",
@@ -207,6 +230,25 @@
     "Don't use it to choose from a fixed set of options - use Select.",
     "Don't use Text Area when the text needs to link to records - use RichTextArea, its inline entity-tagging sibling."
   ],
+  "acceptanceCriteria": [
+    "Renders a real native textarea inside a wrapper div.",
+    "Defaults to size=md, context=default, resize=vertical.",
+    "Supports each size, context, and resize value; deprecated appearance values map to a context.",
+    "invalid sets aria-invalid on the textarea and data-invalid on the wrapper; neither is set by default.",
+    "disabled disables the textarea, marks the wrapper disabled, and locks resize.",
+    "Native textarea props (rows, placeholder, maxLength, onChange, ...) and the ref reach the textarea; className applies to the wrapper.",
+    "Focus and invalid on both contexts are painted with box-shadow, not a border-width change.",
+    "Hover background never shows while the field is focused.",
+    "context=inline is chromeless at rest, with the hover fill and bottom-only states, and rests at a 1px bottom-only border.",
+    "iconAfter renders in the action slot when provided and no slot renders without it; a plain icon takes the slot's subtle color and a named color is kept.",
+    "Without autoResize, native rows and height are kept.",
+    "With autoResize, existing content is sized on mount, the field grows on input, caps at maxRows (6 by default), shrinks after deletion, follows controlled value and maxRows changes, remeasures on width changes, and restores native sizing when turned off.",
+    "An autofilled context=default field shows the autofill tint over the raised surface (not when disabled), hover replaces it, and the browser's own fill is hidden; context=inline shows it only while focused; each context keeps its resting stroke; no motion is added.",
+    "Reuses Text Field's semantic tokens for surface, border, and radius - no new tokens.",
+    "Works in light and dark themes.",
+    "Storybook includes Playground, AutoResize, Variants, States, Resize, Content, IconAfter, and Edge Cases.",
+    "Tests cover rendering, size/context/resize, the deprecated appearance mapping, invalid, disabled, native prop and ref forwarding, iconAfter, the box-shadow focus/invalid technique, the inline context, autoResize, and the autofill treatment."
+  ],
   "behaviorNotes": [
     "Inside a disabled <fieldset>, the native control is disabled without the disabled prop, and the component looks and behaves exactly as with disabled (its disabled styling also keys off :disabled, via :has() on the wrapper).",
     "The frame styling lives on a wrapper <div>, matching Text Field's pattern. The <textarea> is a transparent, borderless child inside it.",
@@ -215,7 +257,7 @@
     "Hover tint is suppressed once the field is focused.",
     "An autofilled field (the textarea matches :autofill) layers --color-background-autofill-default over the raised surface and keeps each context's resting stroke. Hover replaces the tint; focus and invalid keep it; context=inline stays chromeless at rest and shows the tint only while focused. The browser's own autofill fill on the textarea is hidden.",
     "A disabled field cannot be resized.",
-    "iconAfter renders a trailing icon or interactive control at the end of the wrapper row.",
+    "iconAfter renders a trailing icon or interactive control at the end of the wrapper row. An icon left at Icon's default color=\"inherit\" takes the slot's subtle color (--field-icon-color); an icon with a named color keeps it.",
     "context='inline' is chromeless at rest, with the raised-hover background and a bottom-only border on hover and a bottom-only focus/error line on focus/invalid — keeps padding, height, and top-corner radius.",
     "The deprecated appearance prop maps to context: subtle and inline map to inline, default to default. An explicit context wins."
   ],

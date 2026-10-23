@@ -230,14 +230,7 @@
   "contentCompleteness": {
     "description": "Each registry entry gets a structurally-derived contentCompleteness: full | partial | stub, based on how many of 8 near-universal substantive sections (purpose, useCases, states, accessibility, behaviorRules, do, dont, acceptanceCriteria) are present and non-empty in the source file.",
     "purpose": "Surfaces real content gaps (not shape drift) as a queryable signal instead of only living in prose a reader might skip.",
-    "knownContentGaps": [
-      {
-        "component": "IconButton",
-        "file": "docs/components/atoms/icon-button/icon-button.contract.json",
-        "issue": "12 top-level keys - missing tokens entirely, plus useCases, do/dont, acceptanceCriteria.",
-        "resolution": "Author the missing sections from the real icon-button.tsx behavior when Icon Button is next substantively touched (Avatar and Tooltip were filled in on 2026-10-17, during the Docs page rollout)."
-      }
-    ]
+    "knownContentGaps": []
   },
   "knownShapeDrift": {
     "description": "Contract.json files authored before this normalization convention existed may use any of the rawShapesHandled variants documented above per field. This is expected and handled automatically by the generator - it is not a per-file violations ledger (roughly 24 of 28 files deviate from a single canonical shape in at least one field, which would make an enumerated list unwieldy and low-value).",

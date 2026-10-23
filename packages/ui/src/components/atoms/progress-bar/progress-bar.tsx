@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styles from './progress-bar.module.css';
-import type { ProgressBarProps, ProgressBarSize } from './progress-bar.types';
+import type { ProgressBarProps, ProgressBarSize, ProgressBarVariant } from './progress-bar.types';
 
 type ProgressBarStyle = React.CSSProperties & {
   '--progress-bar-value'?: string;
@@ -9,16 +9,26 @@ type ProgressBarStyle = React.CSSProperties & {
 
 // The circular geometry, in viewBox units (1 unit = 1px at the 80px token size). Figma
 // (progress-bar-circular): the ring's outer edge is radius 38 from the center, with a 1px border
-// outside it on both edges; the hole radius sets the thickness. Figma has md and lg only; sm is
-// code-only (an 8px ring).
+// outside it on both edges; the hole radius sets the thickness. Figma has md and lg only, so the
+// circular variant does too.
 const circularViewBox = 80;
 const circularCenter = circularViewBox / 2;
 const circularOuterRadius = 38;
-const circularHoleRadiusBySize: Record<ProgressBarSize, number> = {
-  sm: 30,
+type CircularSize = Exclude<ProgressBarSize, 'sm'>;
+const circularHoleRadiusBySize: Record<CircularSize, number> = {
   md: 22,
   lg: 10,
 };
+
+/** The deprecated circular `sm` renders exactly as `md`. */
+function toCircularSize(size: ProgressBarSize): CircularSize {
+  return size === 'sm' ? 'md' : size;
+}
+
+/** The size that renders, for the root's class and `data-size`. */
+function resolveSize(variant: ProgressBarVariant, size: ProgressBarSize): ProgressBarSize {
+  return variant === 'circular' ? toCircularSize(size) : size;
+}
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -72,7 +82,7 @@ function getCircularDashProps(clampedValue: number) {
   return { strokeDasharray: '100', strokeDashoffset: 100 - clampedValue };
 }
 
-function renderCircularSvg(size: ProgressBarSize, clampedValue: number) {
+function renderCircularSvg(size: CircularSize, clampedValue: number) {
   const holeRadius = circularHoleRadiusBySize[size];
   const thickness = circularOuterRadius - holeRadius;
   // Every circle is drawn at the ring's mid radius, so a stroke of the thickness fills the ring.
@@ -106,7 +116,7 @@ export const ProgressBar = React.memo(
     {
       value,
       variant = 'linear',
-      size = 'md',
+      size: sizeProp = 'md',
       label,
       getValueText,
       className,
@@ -118,6 +128,7 @@ export const ProgressBar = React.memo(
     },
     forwardedRef,
   ) {
+    const size = resolveSize(variant, sizeProp);
     const clampedValue = clampValue(value);
     const accessibleNameProps = getAccessibleNameProps(ariaLabel, ariaLabelledBy, label);
     const rootClassName = mergeClassNames(
@@ -161,7 +172,7 @@ export const ProgressBar = React.memo(
           </div>
         ) : (
           <div className={styles.circularViewport} aria-hidden="true">
-            {renderCircularSvg(size, clampedValue)}
+            {renderCircularSvg(toCircularSize(size), clampedValue)}
           </div>
         )}
       </div>

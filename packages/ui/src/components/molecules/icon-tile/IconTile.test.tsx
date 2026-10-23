@@ -16,7 +16,7 @@ afterEach(cleanup);
 describe('IconTile', () => {
   it('renders its icon child', () => {
     render(
-      <IconTile decorative={false} ariaLabel="Verified">
+      <IconTile decorative={false} aria-label="Verified">
         <CheckIcon testId="check-icon" />
       </IconTile>,
     );
@@ -26,7 +26,7 @@ describe('IconTile', () => {
 
   it('uses the default tone, appearance, shape, and size', () => {
     render(
-      <IconTile decorative={false} ariaLabel="Default">
+      <IconTile decorative={false} aria-label="Default">
         <CheckIcon />
       </IconTile>,
     );
@@ -40,7 +40,7 @@ describe('IconTile', () => {
 
   it('applies a selected tone', () => {
     render(
-      <IconTile tone="teal" decorative={false} ariaLabel="Teal">
+      <IconTile tone="teal" decorative={false} aria-label="Teal">
         <CheckIcon />
       </IconTile>,
     );
@@ -50,7 +50,7 @@ describe('IconTile', () => {
 
   it('applies a selected appearance', () => {
     render(
-      <IconTile appearance="bold" decorative={false} ariaLabel="Bold">
+      <IconTile appearance="bold" decorative={false} aria-label="Bold">
         <CheckIcon />
       </IconTile>,
     );
@@ -60,7 +60,7 @@ describe('IconTile', () => {
 
   it('applies a selected shape', () => {
     render(
-      <IconTile shape="round" decorative={false} ariaLabel="Round">
+      <IconTile shape="round" decorative={false} aria-label="Round">
         <CheckIcon />
       </IconTile>,
     );
@@ -70,7 +70,7 @@ describe('IconTile', () => {
 
   it('applies a selected size', () => {
     render(
-      <IconTile size="lg" decorative={false} ariaLabel="Large">
+      <IconTile size="lg" decorative={false} aria-label="Large">
         <CheckIcon />
       </IconTile>,
     );
@@ -92,9 +92,9 @@ describe('IconTile', () => {
     );
   });
 
-  it('exposes role img and ariaLabel when not decorative', () => {
+  it('exposes role img and aria-label when not decorative', () => {
     render(
-      <IconTile decorative={false} ariaLabel="1 unread notification">
+      <IconTile decorative={false} aria-label="1 unread notification">
         <CheckIcon />
       </IconTile>,
     );
@@ -102,7 +102,7 @@ describe('IconTile', () => {
     expect(screen.getByRole('img', { name: '1 unread notification' })).toBeInTheDocument();
   });
 
-  it('warns in development when a tile that is not decorative has no ariaLabel', () => {
+  it('warns in development when a tile that is not decorative has no aria-label', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     render(
       <IconTile decorative={false}>
@@ -111,8 +111,38 @@ describe('IconTile', () => {
     );
 
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('IconTile'));
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('ariaLabel'));
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('aria-label'));
     warn.mockRestore();
+  });
+
+  it('still accepts the deprecated ariaLabel, named the same and without a warning', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { rerender } = render(
+      <IconTile decorative={false} ariaLabel="1 unread notification">
+        <CheckIcon />
+      </IconTile>,
+    );
+    const deprecated = screen.getByRole('img', { name: '1 unread notification' });
+    const deprecatedMarkup = deprecated.outerHTML;
+
+    rerender(
+      <IconTile decorative={false} aria-label="1 unread notification">
+        <CheckIcon />
+      </IconTile>,
+    );
+    expect(screen.getByRole('img', { name: '1 unread notification' }).outerHTML).toBe(deprecatedMarkup);
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('prefers aria-label when both names are set', () => {
+    render(
+      <IconTile decorative={false} aria-label="Verified" ariaLabel="Old name">
+        <CheckIcon />
+      </IconTile>,
+    );
+
+    expect(screen.getByRole('img', { name: 'Verified' })).toBeInTheDocument();
   });
 
   it('does not warn when the tile is decorative or named', () => {
@@ -122,7 +152,7 @@ describe('IconTile', () => {
         <IconTile>
           <CheckIcon />
         </IconTile>
-        <IconTile decorative={false} ariaLabel="Verified">
+        <IconTile decorative={false} aria-label="Verified">
           <CheckIcon />
         </IconTile>
       </>,
@@ -134,7 +164,7 @@ describe('IconTile', () => {
 
   it('applies className', () => {
     render(
-      <IconTile className="custom-icon-tile" decorative={false} ariaLabel="Custom">
+      <IconTile className="custom-icon-tile" decorative={false} aria-label="Custom">
         <CheckIcon />
       </IconTile>,
     );
@@ -165,13 +195,13 @@ describe('IconTile', () => {
 
   it('uses taupe for the neutral tone, and still accepts the deprecated gray', () => {
     const { rerender } = render(
-      <IconTile tone="taupe" decorative={false} ariaLabel="Neutral">
+      <IconTile tone="taupe" decorative={false} aria-label="Neutral">
         <CheckIcon />
       </IconTile>,
     );
     expect(screen.getByRole('img', { name: 'Neutral' })).toHaveAttribute('data-tone', 'taupe');
     rerender(
-      <IconTile tone="gray" decorative={false} ariaLabel="Neutral">
+      <IconTile tone="gray" decorative={false} aria-label="Neutral">
         <CheckIcon />
       </IconTile>,
     );

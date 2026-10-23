@@ -13,7 +13,7 @@
     },
     {
       "name": "Selectable with a bulk-actions bar",
-      "jsx": "const [selected, setSelected] = useState([]);\n\n<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  selectable\n  selectedIds={selected}\n  onSelectionChange={setSelected}\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  bulkActions={\n    <>\n      <Button appearance=\"subtle\" size=\"sm\" onClick={() => setSelected([])}>Clear</Button>\n      <Button appearance=\"primary\" tone=\"error\" size=\"sm\">Remove</Button>\n    </>\n  }\n/>",
+      "jsx": "const [selected, setSelected] = useState([]);\n\n<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  selectable\n  selectedIds={selected}\n  onSelectionChange={setSelected}\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  bulkActions={\n    <>\n      <Button prominence=\"tertiary\" size=\"sm\" onClick={() => setSelected([])}>Clear</Button>\n      <Button prominence=\"primary\" tone=\"error\" size=\"sm\">Remove</Button>\n    </>\n  }\n/>",
       "props": {
         "selectable": true
       }

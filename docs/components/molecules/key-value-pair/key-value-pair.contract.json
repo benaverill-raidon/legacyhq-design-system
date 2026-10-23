@@ -2,6 +2,12 @@
   "name": "KeyValuePair",
   "category": "data-display",
   "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "decision",
+      "summary": "Its stories and live example put an edit icon (`iconAfter`) beside the value inside Inline Edit, while Inline Edit's own page shows none. Does the edit icon belong in a Key Value Pair?"
+    }
+  ],
   "purpose": "Map a descriptive label to a static or inline-editable value for scannable metadata presentation.",
   "intent": "Present metadata as label/value rows using semantic <dt>/<dd> elements. Supports both static text values and inline-editable controls (TextField/TextArea/Select with context='inline'). Grouped as a molecule because it composes text controls for its inline-editable mode.",
   "sourceFiles": {
@@ -29,6 +35,11 @@
       "Inline fields in the value slot keep the standard context='inline' treatment, including the raised-hover background, matching Figma. Key Value Pair only squares their frames: .value [data-context='inline'] { border-radius: 0; }."
     ]
   },
+  "useCases": [
+    "the details of a record, one per row: a client's name, an account type, a status, a date",
+    "a detail people can correct where it's shown, with an inline Text Field, Text Area, or Select in Inline Edit",
+    "several details in a column, inside a Key Value List"
+  ],
   "props": {
     "label": {
       "type": "string",
@@ -112,6 +123,23 @@
     "label": "The key (<dt>) provides the label; inline-editable children must provide their own aria-label.",
     "structure": "Must be wrapped in a Key Value List (<dl>) for screen readers to announce the description list structure."
   },
+  "behaviorRules": [
+    "Render a div root holding a <dt> with the label and a <dd> with the value; the <dl> comes from the surrounding Key Value List.",
+    "Default size=md, underline=false.",
+    "children, when set, replace value in the <dd>; otherwise value renders as static text.",
+    "The key takes a fixed 40% of the row at every size and the value fills the rest; long text wraps in its column. There is no prop to change the split.",
+    "Key and value sit --spacing-lg (16px) apart; the key and a static value are inset --spacing-sm (8px) from their column's edge, --spacing-md (12px) at lg.",
+    "size sets the row's minimum height (--size-control-sm/md/lg: 32/40/48px) and the text (body-sm/md/lg). It does not size an inline control in children - give the control the same size.",
+    "The key stays at the top of the row, centered within the first control-height band; a static value is centered in the row's height.",
+    "underline draws a 1px bottom divider (--border-width-sm, --color-border-default).",
+    "An inline control in the value keeps its own context=\"inline\" treatment, including its hover fill; Key Value Pair only squares its corners (border-radius 0 on [data-context='inline']).",
+    "An inline Text Area with autoResize grows the row as it grows, and the rows below move down.",
+    "With Inline Edit's actionPlacement=\"end\", the cancel/confirm buttons sit past the field's trailing edge and the row keeps its height while editing; the default placement (below) makes room for them and grows the row. A growing Text Area adds actionAlignment=\"start\" to keep them level with its first line.",
+    "The key does not name an inline control; the control needs its own aria-label.",
+    "The pair is not focusable and has no keyboard behavior; an inline control and Inline Edit's buttons keep their own focus and keys.",
+    "Key Value Pair adds no edit affordance of its own. Any edit icon is the inline control's own iconAfter: its stories, its Docs page's live examples, and its examples pass <EditIcon color=\"subtle\" /> there, while Inline Edit's own page shows none. Whether the icon belongs is an open decision (see knownIssues), not settled here.",
+    "Only className reaches the root; no other attributes are passed through."
+  ],
   "tokens": {
     "color": {
       "key_text": "--color-content-subtle",
@@ -145,12 +173,25 @@
     "Wrap in a Key Value List (<dl>) for proper semantic structure.",
     "Use context='inline' on TextField/TextArea/Select children for inline editing.",
     "Provide aria-label on inline-editable children for accessibility.",
+    "Wrap an editable value in InlineEdit with actionPlacement=\"end\", so its buttons sit beside the value and the row keeps its height while editing.",
     "Use underline to visually separate pairs in a list."
   ],
   "dont": [
     "Don't use for full form layouts - use the Form organism with Field molecules.",
     "Don't pass both value and children expecting both to render - children wins.",
     "Don't use outside a <dl> context - the <dt>/<dd> elements need it for correct semantics."
+  ],
+  "acceptanceCriteria": [
+    "Renders the label as a <dt> and a static value as a <dd>.",
+    "Defaults to size=md; applies each of sm, md, and lg.",
+    "underline renders the bottom divider; none renders by default.",
+    "children render in the value slot instead of value; value renders as static text when there are no children.",
+    "className applies to the root.",
+    "An inline Text Area in Inline Edit allows newlines (Enter and Shift+Enter), grows with its draft, and restores both the saved value and its height when cancelled.",
+    "Ctrl+Enter or Cmd+Enter confirms a multiline edit; the confirm button confirms; Escape cancels a later edit back to the saved value.",
+    "Works in light and dark themes.",
+    "Storybook includes Playground, Static, InlineEditable, Underline, Sizes, and GrowingNotes.",
+    "Tests cover the dt/dd structure, sizes, underline, children vs. value, className, and multiline inline editing with Inline Edit."
   ],
   "behaviorNotes": [
     "children takes precedence over value when both are provided.",

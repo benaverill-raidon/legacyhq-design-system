@@ -58,6 +58,7 @@ background); Key Value Pair only squares their frame corners.
 - Renders `<dt>` (key) and `<dd>` (value) — correct semantics inside a `<dl>`.
 - Must be wrapped in a Key Value List (`<dl>`) for screen readers.
 - Inline-editable children must provide their own `aria-label`.
+- An editable value in Inline Edit uses `actionPlacement="end"`, so the row keeps its height while editing.
 
 ---
 

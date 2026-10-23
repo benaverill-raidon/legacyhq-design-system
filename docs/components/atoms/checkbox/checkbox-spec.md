@@ -148,6 +148,12 @@ Use CSS variables only. Do not use hardcoded colors, spacing, typography, or bor
 - Row min-height: `32px` (`size-choice-row`).
 - Label gap: use semantic spacing token.
 - Label typography: `body-md`.
+- Group legend typography: `heading-xxs` in `color-content-subtle`, matching Field's label (an owner
+  decision); its required `*` follows the text with no gap (`.legend .requiredIndicator`,
+  `--spacing-none`), as Field's does. A single Checkbox's label keeps its `spacing-xxs` gap.
+- Group description and error message (and a single Checkbox's error message): `body-sm`, like
+  Field's message (an owner decision), in `color-content-subtle` and `color-content-error` (Field's
+  resting and error message colors), with `spacing-xs` above.
 
 ### Color Intent
 

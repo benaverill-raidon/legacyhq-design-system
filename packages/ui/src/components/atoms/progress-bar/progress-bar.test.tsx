@@ -182,8 +182,8 @@ describe('ProgressBar', () => {
 
   it.each([
     // Figma (4217:98931): outer edge radius 38 in an 80 box; hole radius md 22, lg 10. Figma has
-    // no circular sm; code draws an 8px ring (hole 30).
-    ['sm', 30, 8],
+    // no circular sm, so the deprecated circular sm draws the md ring.
+    ['sm', 22, 16],
     ['md', 22, 16],
     ['lg', 10, 28],
   ] as const)('draws the %s circular ring at hole radius %i, %ipx thick, with the progress across its full thickness', (size, hole, thickness) => {
@@ -208,6 +208,28 @@ describe('ProgressBar', () => {
     expect(Number(track?.getAttribute('stroke-width'))).toBe(thickness);
     // No inset pad: the progress wedge fills the ring's full thickness.
     expect(Number(progress?.getAttribute('stroke-width'))).toBe(thickness);
+  });
+
+  it('renders the deprecated circular sm exactly as md, and keeps sm for the linear bar', () => {
+    const { container: smContainer } = render(
+      <ProgressBar data-testid="circular-sm" value={50} variant="circular" size="sm" label="Ring" />,
+    );
+    const { container: mdContainer } = render(
+      <ProgressBar data-testid="circular-md" value={50} variant="circular" size="md" label="Ring" />,
+    );
+    const circularSm = screen.getByTestId('circular-sm');
+
+    expect(circularSm).toHaveClass(styles.size_md);
+    expect(circularSm).not.toHaveClass(styles.size_sm);
+    expect(circularSm).toHaveAttribute('data-size', 'md');
+    expect(circularSm.className).toBe(screen.getByTestId('circular-md').className);
+    expect(smContainer.querySelector('svg')?.outerHTML).toBe(mdContainer.querySelector('svg')?.outerHTML);
+
+    render(<ProgressBar data-testid="linear-sm" value={50} size="sm" label="Bar" />);
+    const linearSm = screen.getByTestId('linear-sm');
+
+    expect(linearSm).toHaveClass(styles.size_sm);
+    expect(linearSm).toHaveAttribute('data-size', 'sm');
   });
 
   it('shows the empty track and its border at value 0, in both variants, and hides only the circular arc', () => {

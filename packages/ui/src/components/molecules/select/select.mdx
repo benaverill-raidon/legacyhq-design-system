@@ -107,6 +107,7 @@ inputType: 'multi';
 value: string[];                     // required
 onChange: (value: string[]) => void; // required
 getRemoveLabel?: (label: string) => string;  // each chip's remove-button name; default \`Remove \${label}\`
+removeTooltipLabel?: string;         // each chip's remove tooltip; default 'Remove'
 
 // Each option
 { value: string; label: string; icon?: React.ReactNode; description?: React.ReactNode;
@@ -250,8 +251,10 @@ matching options yourself, such as results from a server. Pass `searchValue` too
 <Subsection title="States">
 
 `invalid` gives the field Text Field's error border and sets `aria-invalid`; in a Field with
-`state="error"`, Field sets it for you. `disabled` disables the input, so the menu can't open, and
-disables the chips' remove buttons.
+`state="error"`, Field sets it for you. `disabled` disables the input and the chips' remove
+buttons. A disabled Select never opens its menu, from a click on the field or its caret or from
+the keyboard, and neither does a Select inside a disabled `fieldset`, which disables it without the
+prop.
 
 <Example of={SelectStories.States} />
 
@@ -331,7 +334,8 @@ The field stays one line high. When chips run out of room, they shrink and clip 
   Escape, and Tab also close the menu. Focus moving anywhere outside the field and its menu closes
   the menu.
 - Each chip's remove button is its own tab stop before the input, named "Remove" plus the value.
-  `getRemoveLabel` builds that name from the value's label, for a translation.
+  `getRemoveLabel` builds that name from the value's label, for a translation. The button's
+  tooltip says "Remove"; `removeTooltipLabel` sets it, for a translation.
 - The caret is hidden from assistive technology and works only with a pointer; the keys below do
   the same from the input.
 - `disabled` is the native attribute: the input and the chips' remove buttons leave the tab order.
@@ -361,14 +365,18 @@ these are the props, copied from select.types.ts.
 <CodeSample code={propsByInputType} />
 
 An option's `icon` is decorative: it shows in its row, before the chosen value in a single-select
-field, and on its chip, hidden from assistive technology.
+field, and on its chip, hidden from assistive technology. Before the chosen value it keeps its own
+color, as in its row, so a green status icon stays green; an icon with no color of its own takes
+the field's subtle icon color, and a disabled field greys it.
 
 </Section>
 
 <Section title="Design tokens">
 
-Select's stylesheet styles only the caret: its color, its color when disabled, the motion of its
-turn, and its size inside a Table cell. `--field-icon-color` is an override Text Field's icons share;
+Select's stylesheet styles the caret, its color, its color when disabled, the motion of its turn,
+and its size inside a Table cell, and greys the chosen option's icon before the value when
+disabled; otherwise that icon keeps its own color, as Text Field's leading slot leaves a named Icon
+color alone. `--field-icon-color` is an override Text Field's icons share;
 nothing sets it today, so the caret uses `color-content-subtle`. The field, the chips, and the menu
 use their own components' tokens.
 

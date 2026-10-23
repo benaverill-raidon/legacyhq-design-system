@@ -1,15 +1,9 @@
 {
   "name": "Label",
   "category": "data-display",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
-    }
-  ],
+  "status": "stable",
   "purpose": "Display short metadata.",
-  "intent": "Compact semantic annotation.",
+  "intent": "Compact semantic annotation: a status or a state in words, in a tone that carries meaning. Categories and classifications are Tag's job (decided 2026-10-23).",
   "figmaSource": {
     "file": "Components v1.0.0",
     "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -20,12 +14,13 @@
   },
   "useCases": [
     "Status",
-    "Category",
-    "Metadata"
+    "State",
+    "Law or wealth"
   ],
   "antiPatterns": [
     "Navigation",
-    "Actions"
+    "Actions",
+    "Categories and classifications (use Tag)"
   ],
   "anatomy": [
     "container",

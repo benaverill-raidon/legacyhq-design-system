@@ -2,6 +2,20 @@
   "name": "RichTextArea",
   "category": "forms",
   "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "In Firefox and Safari the caret can drift out of the `/` query box at its edge: the box is an inline editable span, and there's no caret-correction guard yet (checked only in Chrome)."
+    },
+    {
+      "kind": "bug",
+      "summary": "Backspace doesn't remove a tag as one unit in every position: the tag is atomic to the caret, but the surrounding deletion cases aren't fully handled."
+    },
+    {
+      "kind": "bug",
+      "summary": "Pasted rich HTML isn't sanitized into the value's node model; multi-line serialization handles `<br>` but not every paste shape."
+    }
+  ],
   "purpose": "Let a user write multi-line text that mixes plain prose with inline links to real records - typing `/` opens a grouped entity picker and each choice is inserted as a navigational tag.",
   "intent": "Text Area's `type=rich-inline` mode, built as its own component because the contenteditable path and its props are disjoint from the plain <textarea>. It reuses Text Area's frame tokens exactly, so the two read as one field; the difference is entirely behavioral. Composes the Menu organism as the picker and the Tag atom as the inserted tag, rather than inventing either.",
   "sourceFiles": {
@@ -36,6 +50,10 @@
       "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
     ]
   },
+  "useCases": [
+    "a note or comment that mentions people, matters, or documents by name",
+    "text where each mention should link to the record it names"
+  ],
   "anatomy": [
     { "part": "editor", "element": "div.editor (role=textbox, aria-multiline, contenteditable)", "required": true, "description": "The frame and the editable surface in one: Text Area's frame tokens around the text and the inline tags. It sits in a div.wrapper, the same size, which positions the picker and takes className." },
     { "part": "tag", "element": "span.tagHost (contenteditable=false) > Tag", "required": false, "description": "One per linked entity: a non-editable host span with a NavTag (a Tag atom, an <a> when href is set) portaled into it, so the caret treats the tag as one unit." },
@@ -84,6 +102,25 @@
     "tags": "Each tag renders a Tag with tabIndex -1 so the caret walk is not interrupted by tab stops; a tag with `href` is a real <a> and is reachable from the rendered content.",
     "picker": "Focus deliberately stays in the editor so typing continues to reach the `/` query. While the picker is open, aria-controls names its Menu and aria-activedescendant points at the highlighted row (each row's id is `<pickerId>-option-<index>`), so the active entity is announced; both are removed when it closes. Tab closes the picker and lets focus move on."
   },
+  "behaviorRules": [
+    "Render a contenteditable div (role=textbox, aria-multiline=\"true\", aria-haspopup=\"menu\") with Text Area's frame, inside a wrapper div that positions the picker and takes className.",
+    "Default size=md, context=default, resize=vertical, rows=3, searchPlaceholder=\"Type to search\", emptyMessage=\"No matches\".",
+    "The deprecated appearance prop maps to context: subtle and inline map to inline, default to default. An explicit context wins.",
+    "Hydrate the editor from value once, on mount; after that the DOM leads, onChange reports the whole re-serialized node array after every edit (including adding or removing a tag), and a value passed later is ignored.",
+    "`/` starts a command only at the start of the editor or after whitespace; anywhere else it is typed as a slash.",
+    "While a command is active, the query is typed into an inline span.slashInput (showing searchPlaceholder until a query is typed) and the picker opens under it, grouped into one Menu section per EntitySection.",
+    "An empty query resolves immediately from recents when given, otherwise from onSearch(''); non-empty queries are debounced 150ms, and a response to an older query never replaces a newer one.",
+    "With the picker open, ArrowDown/ArrowUp move the active row, clamped at both ends; Enter inserts the active row as a tag followed by a space, replacing the /query span.",
+    "Escape, a space, the caret leaving the query span, or a pointer press outside the field closes the picker and keeps what was typed as plain text. Tab closes it the same way and lets focus move on.",
+    "Focus stays in the editor while the picker is open; aria-controls names the picker's Menu and aria-activedescendant points at the active row (id `<pickerId>-option-<index>`), and both are removed when it closes.",
+    "Each tag is a non-editable host span with a NavTag (a Tag with tabIndex -1, an <a> when the entity has href), so the caret treats it as one unit. Its tone and icon come from entityConfig, merged over the built-in tones (account and person blue, matter teal, roadmap purple, document default).",
+    "Deleting a tag leaves the space after it, which is ordinary text.",
+    "invalid, or an aria-invalid of true/'true', sets aria-invalid and the error border, which stays while the editor has focus.",
+    "disabled turns off contenteditable, sets tabIndex -1 and aria-disabled, and suppresses the slash command. A disabled <fieldset> around the editor (outside its first legend) does the same, and the component follows changes to its disabled attribute.",
+    "required sets aria-required; id, aria-label, aria-labelledby, and aria-describedby go on the editor. A <label htmlFor> cannot name it; Field names it with aria-labelledby.",
+    "The editor starts rows lines tall (the --rta-rows custom property) and grows with its content without limit; dragging the resize grip sets a fixed height, after which it scrolls.",
+    "placeholder shows while the editor is empty, as an overlay from data-placeholder, never in the text flow."
+  ],
   "tokens": {
     "frame": "All of Text Area's frame tokens, unchanged - surface, border, radius, padding, typography per size.",
     "slashInput": "Text Field's small-input look: `elevation/surface/raised/default` background, `border/input`, `border-radius-md`.",
@@ -104,6 +141,22 @@
     "Don't treat the value as HTML or Markdown - it is a flat node array by design.",
     "Don't re-render it from `value` on every keystroke expecting the editor to follow; it hydrates once and then leads."
   ],
+  "acceptanceCriteria": [
+    "Renders a multiline textbox (role=textbox, aria-multiline) with aria-haspopup=\"menu\".",
+    "Defaults to size=md and resize=vertical; applies each size, context, and resize value; the deprecated appearance maps subtle and inline to context=inline.",
+    "Takes the wiring Field passes: named by aria-labelledby, described by aria-describedby, aria-required from required, aria-invalid from aria-invalid.",
+    "invalid sets aria-invalid and data-invalid on the editor.",
+    "placeholder is exposed as data-placeholder with data-empty while empty; rows sets --rta-rows.",
+    "disabled is not editable, not focusable, aria-disabled, and never opens the picker; a disabled fieldset around it does the same and its changes are followed, except inside the fieldset's legend.",
+    "Hydrates text and entity nodes from value, each entity as a navigational tag, and a newline in a text node as a line break.",
+    "`/` opens the picker and wraps the query in the slash input only at the start or after whitespace; ordinary typing leaves the picker closed and never calls onSearch.",
+    "An empty query shows recents instead of searching; a typed query searches.",
+    "Enter inserts the active entity and reports the new value; ArrowUp/ArrowDown move the active row and stop at the ends; Escape closes the picker and leaves the query as plain text; Tab closes it and removes aria-controls.",
+    "aria-activedescendant points at the highlighted row while the picker is open, and is absent while it is closed.",
+    "onChange reports text and entities in document order, and drops an entity when its tag is removed.",
+    "Storybook includes Playground, Prefilled, States, and Variants.",
+    "Tests cover rendering, Field wiring, disabled (including fieldsets), hydration, the slash lifecycle, picker keyboard and aria-activedescendant, and serialization. Real caret behavior is verified live in Storybook (Chrome), since jsdom cannot simulate contenteditable typing."
+  ],
   "behaviorNotes": [
     "Inside a disabled <fieldset> (outside its first legend), the editor is disabled as with disabled: not editable, out of the tab order, aria-disabled. A div isn't disabled by a fieldset natively, so the component checks the fieldsets around it and watches their disabled attribute.",
     "`/` only starts a command at the beginning of the editor or after whitespace - mid-word slashes stay literal characters.",
@@ -116,9 +169,6 @@
     "An empty query resolves from `recents` when provided; non-empty queries are debounced 150ms, and out-of-order responses are discarded by sequence number."
   ],
   "knownLimitations": [
-    "The `/` mini-input relies on the browser keeping typing inside an inline editable span. Verified in Chrome (Storybook's engine); Firefox and Safari can let the caret drift out of an inline element at its boundary, and no caret-correction guard is in place yet.",
-    "Backspace does not yet delete a tag as a single unit in every position - a tag is atomic to the caret, but the surrounding deletion cases are not fully hardened.",
-    "Multi-line serialization handles `<br>` but has not been hardened against every paste shape; pasted rich HTML is not sanitized into the node model.",
     "No maxRows: the editor grows with its content from the `rows` minimum without limit, and dragging the resize grip sets a fixed height, after which it scrolls.",
     "Tests cover rendering, hydration, the slash lifecycle, picker keyboard, and serialization. They cannot cover real caret behavior - jsdom does not simulate contenteditable typing - so caret correctness is verified live in Storybook, not in CI."
   ],

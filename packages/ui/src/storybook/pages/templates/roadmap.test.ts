@@ -80,7 +80,7 @@ describe('Roadmap cites the components', () => {
     expect(select).toMatch(/const chips = multi\s*\?/);
     expect(select).toMatch(/elemBefore=\{option\.icon\}/);
     expect(select).toMatch(/leadingContent=\{chips\}/);
-    expect(select).toMatch(/iconBefore=\{selectedSingleOption\?\.icon\}/);
+    expect(select).toMatch(/iconBefore=\{selectedSingleOption\?\.icon \?/);
   });
 
   it('icons, avatars, chip previews, and menu-row icons are decorative', () => {

@@ -51,6 +51,10 @@ alignment: start
 matchTriggerWidth: false
 ```
 
+The Docs page's generated API table leaves these inherited props out (react-docgen doesn't read
+props inherited through `Omit<>` from another file), so the page lists them by hand, copied from
+menu.types.ts.
+
 Every `MenuProps` default (`size: sm`, `showSearch: true`, `showScrollbar: true`, `loading: false`,
 `loadingLabel: 'Loading…'`, `emptyMessage: 'No results'`) applies unchanged, since those props pass
 straight through to the rendered Menu.

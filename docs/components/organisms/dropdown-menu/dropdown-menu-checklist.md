@@ -145,3 +145,5 @@ Final implementation decisions:
 - Choosing an item closes the panel (after the item's `onSelect`) unless that `onSelect` calls
   `event.preventDefault()`; a `role="combobox"` trigger (Select) is left to close it itself.
 - The trigger gets `aria-haspopup="menu"` unless it sets its own.
+- The Docs page lists the props inherited from Menu through `Omit<MenuProps, 'id' | 'className'>`
+  by hand: react-docgen doesn't read props inherited from another file.

@@ -98,6 +98,10 @@ describe('DateTimePicker', () => {
     const labels = {
       dateDialogLabel: 'Elegir una fecha',
       timeDialogLabel: 'Elegir una hora',
+      previousMonthLabel: 'Mes anterior',
+      nextMonthLabel: 'Mes siguiente',
+      previousYearLabel: 'Año anterior',
+      nextYearLabel: 'Año siguiente',
       confirmLabel: 'Confirmar',
       cancelLabel: 'Cancelar',
       hoursLabel: 'Horas',
@@ -109,7 +113,10 @@ describe('DateTimePicker', () => {
     const { unmount } = renderPicker(labels);
 
     fireEvent.click(dateField());
-    expect(screen.getByRole('dialog', { name: 'Elegir una fecha' })).toBeInTheDocument();
+    const calendar = screen.getByRole('dialog', { name: 'Elegir una fecha' });
+    for (const name of ['Año anterior', 'Mes anterior', 'Mes siguiente', 'Año siguiente']) {
+      expect(within(calendar).getByRole('button', { name })).toBeInTheDocument();
+    }
     unmount();
 
     renderPicker(labels);

@@ -1,9 +1,10 @@
 /*
  * Column layout: the confirm/cancel row sits below the field, not beside it, so the field never
  * has to shrink to make room for the actions while editing - per explicit design feedback. A
- * one-column grid: the field in the first row, `validate`'s error message in the second. Actions
- * placed beside the field (end placement, editable cells) take the first row as their containing
- * block, so a message below doesn't move them.
+ * one-column grid: the field in the first row, `validate`'s error message in the second, and the
+ * actions (with the default placement) in the third. Actions placed beside the field (end
+ * placement, editable cells) take the first row as their containing block, so a message below
+ * doesn't move them.
  */
 .root {
   --inline-edit-control-height: var(--size-control-md);
@@ -11,7 +12,7 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   position: relative;
   inline-size: 100%;
 }
@@ -34,7 +35,8 @@
 /*
  * `validate`'s error message, in Field's error look: body-sm in the error color with the small
  * status icon, 4px below the field. Indented like Field's inline context, to line up with the text
- * inside the inline control (8px for sm and md, 12px for lg).
+ * inside the inline control (8px for sm and md, 12px for lg). As in Field, the icon sits on the
+ * message's first line (a box one body-sm line tall), so a wrapped message keeps it beside line one.
  */
 .messageRegion {
   grid-row: 2;
@@ -43,7 +45,7 @@
 
 .message {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-075);
   padding-top: var(--spacing-xs);
   padding-inline-start: var(--inline-edit-text-inset);
@@ -59,6 +61,7 @@
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
+  block-size: var(--typography-body-sm-line-height);
 }
 
 .messageText {
@@ -66,17 +69,18 @@
 }
 
 /*
- * The confirm/cancel pair is a Button Group. Absolutely positioned below the field so it floats
- * above surrounding page content like a popup — matching Figma's inline-edit pattern. The gap is
- * tightened to 4px; the icon-only pair reads better closer together than Button Group's default 8px.
- * The descendant selector outranks Button Group's own `.root` gap so the override wins regardless of
- * stylesheet order.
+ * The confirm/cancel pair is a Button Group. With the default placement it takes its own row below
+ * the field (and below `validate`'s message), 8px down and lined up with the trailing edge. It's in
+ * the flow, so its space is reserved while editing: whatever sits below Inline Edit, Field's message
+ * included, moves down rather than being covered. The gap is tightened to 4px; the icon-only pair
+ * reads better closer together than Button Group's default 8px. The descendant selector outranks
+ * Button Group's own `.root` gap so the override wins regardless of stylesheet order.
  */
 .root .actions {
-  position: absolute;
-  inset-block-start: calc(100% + var(--spacing-sm));
-  inset-inline-end: 0;
-  z-index: 1;
+  grid-row: 3;
+  grid-column: 1;
+  justify-self: end;
+  margin-block-start: var(--spacing-sm);
   gap: var(--spacing-xs);
 }
 
@@ -104,8 +108,11 @@
  */
 /* Both lines are explicit: an absolutely positioned item's `auto` line is the container's edge. */
 .placement_end .actions {
+  position: absolute;
+  z-index: 1;
   grid-row: 1 / 2;
   grid-column: 1 / 2;
+  justify-self: auto;
   inset-block: 0;
   inset-inline-start: calc(100% + var(--spacing-sm));
   inset-inline-end: auto;
@@ -131,7 +138,9 @@
 .root[data-editable-cell] .actions {
   grid-row: 1 / 2;
   grid-column: 1 / 2;
+  justify-self: auto;
   position: absolute;
+  z-index: 1;
   inset-inline-end: var(--spacing-sm);
   inset-block-start: 50%;
   inset-block-end: auto;

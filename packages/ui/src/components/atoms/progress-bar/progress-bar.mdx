@@ -109,9 +109,10 @@ Use `circular` for a compact summary, such as a dashboard tile. Both take the sa
 <Subsection title="Sizes">
 
 `size` sets the thickness. Linear bars are 16, 24, or 32px tall for `sm`, `md`, and `lg`, and the
-fill runs the full height inside the track's border. The circular ring is 80px across at every
-size; only the ring gets thicker: 16px for `md` and 28px for `lg`. Figma has no circular `sm`; the
-code draws an 8px ring for it. Neither variant sets its own width or shows any text.
+fill runs the full height inside the track's border. The circular ring has `md` and `lg`, as in
+Figma. It's 80px across at both; only the ring gets thicker: 16px for `md` and 28px for `lg`. A
+circular `sm` is deprecated and renders exactly as `md`, so use `md`. Neither variant sets its own
+width or shows any text.
 
 <Example of={ProgressBarStories.Sizes} />
 

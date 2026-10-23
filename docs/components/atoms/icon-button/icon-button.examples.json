@@ -1,20 +1,71 @@
 {
+  "component": "IconButton",
   "examples": [
     {
       "name": "Default tooltip from aria-label",
-      "jsx": "<IconButton aria-label='Search'><Icon name='search' /></IconButton>"
+      "jsx": "<IconButton aria-label='Search'><SearchIcon /></IconButton>",
+      "props": { "aria-label": "Search" }
     },
     {
       "name": "Custom tooltip content",
-      "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><Icon name='edit' /></IconButton>"
+      "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><EditIcon /></IconButton>",
+      "props": { "aria-label": "Edit", "tooltip": "Edit record details" }
     },
     {
       "name": "External tooltip composition",
-      "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>"
+      "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><SearchIcon /></IconButton></Tooltip>",
+      "props": { "aria-label": "Search", "tooltip": false }
     },
     {
       "name": "Inverse (on a dark surface)",
-      "jsx": "<IconButton aria-label='Dismiss' isInverse><Icon name='close' /></IconButton>"
+      "jsx": "<IconButton aria-label='Dismiss' isInverse><CloseIcon /></IconButton>",
+      "props": { "aria-label": "Dismiss", "isInverse": true }
+    },
+    {
+      "name": "Appearance, shape, and size",
+      "description": "appearance sets how much attention it draws (default is outlined, primary has the brand fill, subtle has no border or fill until hover); round is a full circle at every size. The icon stays its default size at every button size.",
+      "jsx": "<IconButton aria-label=\"Add note\" appearance=\"primary\" shape=\"round\" size=\"lg\">\n  <AddIcon />\n</IconButton>",
+      "props": { "aria-label": "Add note", "appearance": "primary", "shape": "round", "size": "lg" }
+    },
+    {
+      "name": "Loading",
+      "description": "Shows a Spinner in place of the icon at the same size, sets aria-busy, and ignores clicks. The button stays focusable and keeps its name.",
+      "jsx": "<IconButton aria-label=\"Refresh\" isLoading>\n  <RefreshIcon />\n</IconButton>",
+      "props": { "aria-label": "Refresh", "isLoading": true }
+    },
+    {
+      "name": "More actions menu trigger",
+      "description": "isExpanded sets aria-expanded to match whether the menu is open and keeps the hover fill while open. A \"more actions\" button uses MoreVertIcon, as Dropdown Menu and Table's row actions do.",
+      "jsx": "const [open, setOpen] = useState(false);\n\n<IconButton aria-label=\"More actions\" appearance=\"subtle\" isExpanded={open} onClick={() => setOpen(!open)}>\n  <MoreVertIcon />\n</IconButton>",
+      "props": { "aria-label": "More actions", "appearance": "subtle", "isExpanded": "open", "onClick": "() => setOpen(!open)" }
+    },
+    {
+      "name": "Named by visible text (aria-labelledby)",
+      "description": "Icon Button can't read the text aria-labelledby points to, so set tooltip yourself (or tooltip={false}).",
+      "jsx": "<span id=\"edit-button-label\">Edit</span>\n<IconButton aria-labelledby=\"edit-button-label\" tooltip=\"Edit\">\n  <EditIcon />\n</IconButton>",
+      "props": { "aria-labelledby": "edit-button-label", "tooltip": "Edit" }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Named only by tooltip",
+      "jsx": "<IconButton tooltip=\"Search matters\">\n  <SearchIcon />\n</IconButton>",
+      "reason": "tooltip describes the button only while it shows, so the button has no accessible name (and warns in development). Name the action in aria-label, which is both the name and the tooltip."
+    },
+    {
+      "name": "An icon the tooltip has to explain",
+      "jsx": "<IconButton aria-label=\"Archive matter\">\n  <ArchiveIcon />\n</IconButton>",
+      "reason": "People have to hover to find out what an unfamiliar icon does. Use Button with a visible label (and the icon beside it if it helps)."
+    },
+    {
+      "name": "Showing a state by switching the appearance",
+      "jsx": "<IconButton aria-label=\"Pin matter\" appearance={isPinned ? 'primary' : 'default'}>\n  <PinIcon />\n</IconButton>",
+      "reason": "Assistive technology can't hear an appearance change. Use Toggle Icon Button for something that stays on, so it's announced as pressed."
+    },
+    {
+      "name": "aria-labelledby with no tooltip set",
+      "jsx": "<span id=\"edit-button-label\">Edit</span>\n<IconButton aria-labelledby=\"edit-button-label\">\n  <EditIcon />\n</IconButton>",
+      "reason": "Icon Button doesn't infer tooltip text from aria-labelledby, so this shows no tooltip and warns in development. Set tooltip explicitly, or tooltip={false} when no tooltip is wanted."
     }
   ]
 }

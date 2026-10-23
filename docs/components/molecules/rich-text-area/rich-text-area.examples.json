@@ -11,25 +11,25 @@
       "name": "Recents on open",
       "description": "Supply `recents` so opening the picker is instant - `onSearch` is then only called once a query is typed.",
       "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  recents={RECENTS}\n/>",
-      "props": {}
+      "props": { "aria-label": "Note", "recents": "EntitySection[] (RECENTS)" }
     },
     {
       "name": "Tone and icon per entity type",
       "description": "entityConfig drives both the picker's section heading tile and the inserted tag, so color encodes type consistently in both places.",
-      "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <UserIcon /> },\n  matter: { tone: 'teal', icon: <BriefcaseIcon /> },\n  roadmap: { tone: 'purple', icon: <MapIcon /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
-      "props": {}
+      "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <PersonIcon decorative /> },\n  matter: { tone: 'teal', icon: <FolderIcon decorative /> },\n  roadmap: { tone: 'purple', icon: <RoadmapIcon decorative /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
+      "props": { "aria-label": "Note", "entityConfig": "{ person: blue + PersonIcon, matter: teal + FolderIcon, roadmap: purple + RoadmapIcon }" }
     },
     {
       "name": "Prefilled from stored content",
       "description": "Hydrate from a saved node array. The editor reads it on mount and leads from then on - onChange reports every later edit.",
       "jsx": "const stored: RichTextValue = [\n  { type: 'text', text: 'Ask ' },\n  { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1' } },\n  { type: 'text', text: ' about the filing' },\n];\n\n<RichTextArea aria-label=\"Note\" value={stored} onChange={setValue} onSearch={search} />",
-      "props": {}
+      "props": { "aria-label": "Note", "value": "RichTextValue (stored: text, entity, text)" }
     },
     {
       "name": "People rows with avatars",
       "description": "A row leading with an Avatar or AvatarGroup renders inline and hugs its width, with no description line - matching Figma's People and Families lists.",
-      "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};",
-      "props": {}
+      "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};\n\n<RichTextArea aria-label=\"Note\" value={value} onChange={setValue} onSearch={() => [section]} />",
+      "props": { "aria-label": "Note", "onSearch": "() => [section]" }
     },
     {
       "name": "Sizes, context and states",
@@ -41,7 +41,7 @@
       "name": "Labelled by Field",
       "description": "Field names the editor by aria-labelledby (a label's htmlFor can't name a div) and passes its message, error, and required, which the editor sets as aria-describedby, aria-invalid, and aria-required.",
       "jsx": "<Field label=\"Notes\" message=\"Type / to link a matter\" state=\"error\" required>\n  <RichTextArea value={value} onChange={setValue} onSearch={search} />\n</Field>",
-      "props": {}
+      "props": { "value": "RichTextValue (value)", "onChange": "setValue", "onSearch": "search" }
     }
   ],
   "antiExamples": [
@@ -59,6 +59,16 @@
       "name": "Storing the value as HTML",
       "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
       "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
+    },
+    {
+      "name": "The same tone for every entity type",
+      "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={{\n    account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },\n    matter: { tone: 'default', icon: <FolderIcon decorative /> },\n  }}\n/>",
+      "reason": "With one tone for every type, people can't tell a person from a matter at a glance. Give each entityType its own tone, so a tag's color says what it links to."
+    },
+    {
+      "name": "Clearing the note by passing a new value",
+      "jsx": "<RichTextArea value={note} onChange={setNote} onSearch={search} aria-label=\"Note\" />\n\n// Later. The editor still shows the old text.\nsetNote([]);",
+      "reason": "The editor reads value only when it mounts, so a new value passed later - including an empty array to clear it - is ignored and the old text stays on screen."
     }
   ]
 }

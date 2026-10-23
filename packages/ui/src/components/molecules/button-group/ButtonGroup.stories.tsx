@@ -4,15 +4,17 @@ import { DeleteIcon, EditIcon } from '../../../assets/icons';
 import { Button } from '../../atoms/button';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from './button-group';
-import type { ButtonGroupOrientation } from './button-group.types';
+import type { ButtonGroupOrientation, ButtonGroupSpacing } from './button-group.types';
 
 const orientations: ButtonGroupOrientation[] = ['horizontal', 'vertical'];
+const spacings: ButtonGroupSpacing[] = ['default', 'compact'];
 
 const meta = {
   title: 'Components/Actions/Button Group',
   component: ButtonGroup,
   args: {
     orientation: 'horizontal',
+    spacing: 'default',
     children: (
       <>
         <Button size="sm">Button 1</Button>
@@ -22,6 +24,7 @@ const meta = {
   },
   argTypes: {
     orientation: { control: 'inline-radio', options: orientations },
+    spacing: { control: 'inline-radio', options: spacings },
     children: { control: false },
     className: { control: false },
   },
@@ -98,6 +101,40 @@ export const Variants: Story = {
               </ButtonGroup>
             </Cell>
           ))}
+        </Group>
+      ))}
+    </div>
+  ),
+};
+
+/** The default 8px gap and the compact 4px gap, in both orientations. */
+export const Spacing: Story = {
+  render: () => (
+    <div style={stack}>
+      {spacings.map((spacing) => (
+        <Group key={spacing} title={`Spacing: ${spacing}`}>
+          <Cell label="horizontal, Icon Buttons">
+            <ButtonGroup spacing={spacing} aria-label="Row actions">
+              <IconButton aria-label="Edit">
+                <EditIcon />
+              </IconButton>
+              <IconButton aria-label="Delete">
+                <DeleteIcon />
+              </IconButton>
+            </ButtonGroup>
+          </Cell>
+          <Cell label="horizontal, Buttons">
+            <ButtonGroup spacing={spacing}>
+              <Button size="sm">Button 1</Button>
+              <Button size="sm">Button 2</Button>
+            </ButtonGroup>
+          </Cell>
+          <Cell label="vertical">
+            <ButtonGroup spacing={spacing} orientation="vertical">
+              <Button size="sm">Button 1</Button>
+              <Button size="sm">Button 2</Button>
+            </ButtonGroup>
+          </Cell>
         </Group>
       ))}
     </div>

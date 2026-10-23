@@ -82,7 +82,7 @@ Required:
 - default, hover, focus, typing, hasValue, invalid, disabled
 
 Not required:
-- A combined open+disabled — a disabled Select can't open.
+- A combined open+disabled — a disabled Select (the prop or a disabled fieldset) can't open, by pointer or keyboard.
 
 ---
 
@@ -94,7 +94,7 @@ Yes. Type to filter; ArrowDown opens/moves into the menu; Enter/arrows/Home/End 
 closes it and returns focus to the input; focus leaving the field and menu closes the menu; a
 single-select pick returns focus to the input; with only a native `<label>`, the menu is named from it.
 Each chip's remove button is named `getRemoveLabel(label)`, `Remove <label>` by default, for a
-translation.
+translation; its tooltip is `removeTooltipLabel`, `Remove` by default.
 
 ### What ARIA is applied?
 `role="combobox"` + `aria-haspopup="menu"` + `aria-autocomplete="list"` on the input;

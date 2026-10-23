@@ -49,6 +49,11 @@ export interface DatePickerProps
   'aria-invalid'?: boolean | 'true' | 'false';  // same as invalid
   required?: boolean;               // native required + a hidden input the form validates
   dialogLabel?: string;             // the calendar dialog's name; 'Choose a date'
+  // The calendar's built-in labels, passed through (its English default when undefined).
+  previousMonthLabel?: string;      // 'Previous month'
+  nextMonthLabel?: string;          // 'Next month'
+  previousYearLabel?: string;       // 'Previous year'
+  nextYearLabel?: string;           // 'Next year'
 }
 ```
 
@@ -127,6 +132,7 @@ opens on click and marks the field expanded
 opens with Enter and Arrow Down
 moves focus into the calendar when opened, once the panel is shown
 names the calendar dialog (dialogLabel, default 'Choose a date')
+passes the calendar's month and year button labels through (English defaults when left out)
 closes and returns focus to the field on Tab / Shift+Tab out of the calendar
 selects a day: fills the field, closes, returns focus (uncontrolled)
 controlled by value: onChange fires; field changes only on value change

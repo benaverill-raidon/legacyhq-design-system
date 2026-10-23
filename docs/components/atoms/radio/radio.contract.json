@@ -1,13 +1,8 @@
 {
   "name": "Radio",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "decision",
-      "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "publicExports": [
     "Radio",
     "RadioGroup"
@@ -255,7 +250,9 @@
       "errorBorder": "color-border-error",
       "disabledBorder": "color-border-disabled",
       "disabledBackground": "color-background-disabled",
-      "typography": "body-md"
+      "typography": "body-md",
+      "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)",
+      "groupMessageTypography": "body-sm (matches Field's message): description in color-content-subtle, error message in color-content-error, spacing-xs above"
     },
     "componentAllowed": [
       "indicator size (size-choice-indicator)",

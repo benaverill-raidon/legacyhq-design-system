@@ -48,8 +48,8 @@
     },
     {
       "name": "Inline context inside Key Value Pair",
-      "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
-      "jsx": "<KeyValuePair label=\"Client name\" underline>\n  <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit with actionPlacement=\"end\", is the standard pattern for embedding inside a Key Value Pair (in a Key Value List) - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid. Inline Edit supplies the value and confirms or cancels the edit; its buttons sit at the end so the row keeps its height.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
       "props": { "context": "inline", "iconAfter": "EditIcon" }
     }
   ],

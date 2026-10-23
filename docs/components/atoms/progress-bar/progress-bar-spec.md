@@ -18,6 +18,7 @@ atom
 
 ```ts
 export type ProgressBarVariant = 'linear' | 'circular';
+// Shared by both variants. Circular takes md and lg; a circular sm is deprecated and renders as md.
 export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
 export interface ProgressBarProps
@@ -120,11 +121,17 @@ track fills it, and the progress fill runs the full height inside the 1px border
 
 ### Circular
 
-| Size | Diameter | Hole radius | Ring thickness | In Figma |
-|---|---:|---:|---:|---|
-| `sm` | 80px | 30 | 8px | No (code-only) |
-| `md` | 80px | 22 | 16px | Yes |
-| `lg` | 80px | 10 | 28px | Yes |
+| Size | Diameter | Hole radius | Ring thickness |
+|---|---:|---:|---:|
+| `md` | 80px | 22 | 16px |
+| `lg` | 80px | 10 | 28px |
+
+The circular variant has `md` and `lg` only, as Figma does. `size="sm"` with `variant="circular"`
+is deprecated and stays accepted: the component maps it to `md` inside, so it renders exactly as
+`md` (the `size_md` class, `data-size="md"`, and the md ring). The size type stays shared by both
+variants, with the circular restriction documented in its JSDoc, rather than splitting the props
+by variant: one `size` prop keeps the API table and the controls simple, and the old value keeps
+working without a type error.
 
 The circular geometry is set in `progress-bar.tsx`, not tokens: an 80-unit viewBox centered at
 (40, 40), the ring's outer edge at radius 38, and the hole radius per size. Every circle is drawn at
@@ -141,8 +148,8 @@ thickness on top, and the progress arc, also the ring's full thickness, on top o
   in from the track). Circular: the box is 80px (was 72), the ring's outer edge is radius 38 with
   a 1px border outside, the hole radius is 22 (md) or 10 (lg), and the progress is a wedge across
   the full ring with straight edges (it was an arc 4px in from each edge, with rounded caps).
-- Figma has no circular `sm`. The code keeps `size="sm"` working with an 8px ring (hole radius
-  30); this is recorded as an open decision in the contract's `knownIssues`.
+- Figma has no circular `sm`, so neither does the code: a circular `size="sm"` is deprecated and
+  renders as `md` (it used to draw a code-only 8px ring, hole radius 30).
 - Figma draws the linear progress segment with its own border on three sides beside a separate
   track segment, clipped by a rounded frame; code draws one bordered track holding the fill, which
   looks the same.

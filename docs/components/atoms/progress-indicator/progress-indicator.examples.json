@@ -4,27 +4,84 @@
     {
       "name": "Client onboarding",
       "description": "Shows the current position in a five-step onboarding journey.",
-      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" />"
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" />",
+      "props": {
+        "currentStep": 2,
+        "totalSteps": 5,
+        "label": "Client onboarding"
+      }
     },
     {
       "name": "Primary account setup",
       "description": "Uses the brand appearance for a primary setup flow.",
-      "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />"
+      "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />",
+      "props": {
+        "currentStep": 3,
+        "totalSteps": 5,
+        "appearance": "primary",
+        "label": "Account setup"
+      }
     },
     {
       "name": "Inverse",
-      "description": "Appears on a bold surface (color-background-neutral-bold-default).",
-      "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />"
+      "description": "Appears on a bold surface (color-background-neutral-bold-default). On the page's own surface the inverse selected dot almost disappears.",
+      "jsx": "<div style={{ background: 'var(--color-background-neutral-bold-default)' }}>\n  <ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />\n</div>",
+      "props": {
+        "currentStep": 4,
+        "totalSteps": 5,
+        "appearance": "inverse",
+        "label": "Document setup"
+      }
+    },
+    {
+      "name": "Medium dots",
+      "description": "size=\"md\" is a 12px dot in a 20px space; sm, the default, is an 8px dot in a 16px space.",
+      "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} size=\"md\" label=\"Trust setup\" />",
+      "props": {
+        "currentStep": 1,
+        "totalSteps": 4,
+        "size": "md",
+        "label": "Trust setup"
+      }
     },
     {
       "name": "Custom value text",
       "description": "Uses domain-specific accessible value language.",
-      "jsx": "<ProgressIndicator currentStep={2} totalSteps={4} label=\"Estate plan setup\" getValueText={(step, total) => `Section ${step} of ${total}`} />"
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={4} label=\"Estate plan setup\" getValueText={(step, total) => `Section ${step} of ${total}`} />",
+      "props": {
+        "currentStep": 2,
+        "totalSteps": 4,
+        "label": "Estate plan setup",
+        "getValueText": "(step, total) => `Section ${step} of ${total}`"
+      }
     },
     {
       "name": "Interactive dots",
-      "description": "Allows direct one-based step selection while remaining controlled from outside the component.",
-      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />"
+      "description": "Allows direct one-based step selection while remaining controlled from outside the component: each dot becomes a button named \"Go to step N\", and the root a named group. Update currentStep in onStepChange.",
+      "jsx": "const [step, setStep] = useState(2);\n\n<ProgressIndicator currentStep={step} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />",
+      "props": {
+        "currentStep": "step",
+        "totalSteps": 5,
+        "label": "Client onboarding",
+        "onStepChange": "setStep"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Unnamed indicator",
+      "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} />",
+      "reason": "Without label (or aria-label / aria-labelledby), a screen reader hears only the step number. Name the journey: label=\"Client onboarding\"."
+    },
+    {
+      "name": "Progress Indicator for a task's progress",
+      "jsx": "<ProgressIndicator currentStep={3} totalSteps={10} label=\"Uploading documents\" />",
+      "reason": "Progress Indicator is position, not completion, and announces the upload as steps. Use Progress Bar for how much of a task is done: <ProgressBar value={30} label=\"Uploading documents\" />."
+    },
+    {
+      "name": "Inverse on the page's own surface",
+      "jsx": "<ProgressIndicator appearance=\"inverse\" currentStep={4} totalSteps={5} label=\"Document setup\" />",
+      "reason": "inverse is for a bold surface only; on the page's own surface its selected dot almost disappears. Use default or primary there."
     }
   ]
 }

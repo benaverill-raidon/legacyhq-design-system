@@ -1,12 +1,55 @@
 {
+  "component": "Spinner",
   "examples": [
     {
       "name": "Standalone",
-      "jsx": "<Spinner />"
+      "description": "The only sign of loading, so it has a label: the spinner becomes a polite status region holding the label as visually hidden text.",
+      "jsx": "<Spinner label=\"Loading matters\" />",
+      "props": {
+        "label": "Loading matters"
+      }
+    },
+    {
+      "name": "Beside visible text",
+      "description": "Visible text already says what's loading, so the spinner has no label and is hidden from assistive technology.",
+      "jsx": "<p>\n  <Spinner size=\"sm\" />\n  Loading matters\n</p>",
+      "props": {
+        "size": "sm"
+      }
+    },
+    {
+      "name": "Large, in a panel",
+      "description": "size=\"xl\" (48px box, 32px arc) for a wait that fills a panel or card, with a label because nothing else says what's loading.",
+      "jsx": "<Spinner size=\"xl\" label=\"Loading documents\" />",
+      "props": {
+        "size": "xl",
+        "label": "Loading documents"
+      }
     },
     {
       "name": "Button",
-      "jsx": "<Button isLoading>Save</Button>"
+      "description": "Use Button's isLoading rather than adding a Spinner: it centers a md Spinner over the content, keeps the button's size, and sets aria-busy.",
+      "jsx": "<Button isLoading>Save</Button>",
+      "props": {
+        "isLoading": true
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "No label and no text",
+      "jsx": "<Spinner />",
+      "reason": "Without a label the spinner is hidden from assistive technology, so with no visible text nearby, screen readers skip the loading state entirely. Add a label, or pair it with text that says what's loading."
+    },
+    {
+      "name": "Spinner swapped into a button's label",
+      "jsx": "<Button prominence=\"primary\">\n  <Spinner size=\"md\" /> Saving…\n</Button>",
+      "reason": "Swapping the label resizes the button and doesn't mark it busy. Set isLoading on the button whose action is running."
+    },
+    {
+      "name": "A percentage in a spinner's label",
+      "jsx": "<Spinner label=\"Uploading, 42% complete\" />",
+      "reason": "The label is visually hidden, so sighted users never see the percentage. When you can measure progress, use Progress Bar: <ProgressBar value={42} label=\"Uploading client files\" />."
     }
   ]
 }

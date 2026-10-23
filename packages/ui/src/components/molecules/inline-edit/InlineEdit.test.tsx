@@ -461,21 +461,47 @@ describe('InlineEdit', () => {
     expect(container.firstChild).toHaveAttribute('data-editing', 'true');
   });
 
-  it('floats the action row as a popup below the field by default, anchored to the right edge, with a 4px gap', () => {
+  it('puts the action row in its own row below the field by default, so it takes space instead of covering what is below', () => {
     const rootRule = inlineEditCss.match(/\.root\s*\{([^}]*)\}/);
-    const actionsRule = inlineEditCss.match(/\.actions\s*\{([^}]*)\}/);
+    const actionsRule = inlineEditCss.match(/\.root \.actions\s*\{([^}]*)\}/);
 
     expect(rootRule?.[1]).toContain('display: grid;');
     expect(rootRule?.[1]).toContain('grid-template-columns: minmax(0, 1fr);');
+    expect(rootRule?.[1]).toContain('grid-template-rows: auto auto auto;');
     expect(rootRule?.[1]).toContain('position: relative;');
-    expect(actionsRule?.[1]).toContain('position: absolute;');
-    expect(actionsRule?.[1]).toContain('inset-block-start: calc(100% + var(--spacing-sm));');
-    expect(actionsRule?.[1]).toContain('inset-inline-end: 0;');
+    // In the flow (the third grid row, after validate's message), anchored to the trailing edge, 8px down.
+    expect(actionsRule?.[1]).not.toContain('position: absolute;');
+    expect(actionsRule?.[1]).toContain('grid-row: 3;');
+    expect(actionsRule?.[1]).toContain('justify-self: end;');
+    expect(actionsRule?.[1]).toContain('margin-block-start: var(--spacing-sm);');
     expect(actionsRule?.[1]).toContain('gap: var(--spacing-xs);');
+  });
+
+  it('renders the default-placed action row after the field and its message, inside the root', () => {
+    const { container } = render(
+      <Field label="Matter name" message="Shown on every document.">
+        <InlineEdit value="Lee Living Trust" validate={() => 'Enter a matter name.'}>
+          <TextField context="inline" />
+        </InlineEdit>
+      </Field>,
+    );
+    const field = screen.getByRole('textbox');
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'x' } });
+    fireEvent.keyDown(field, { key: 'Enter' });
+
+    const root = container.querySelector(`.${styles.root}`);
+    const actions = screen.getByRole('button', { name: 'Confirm' }).closest(`.${styles.actions}`);
+    expect(actions?.parentElement).toBe(root);
+    const message = screen.getByText('Enter a matter name.');
+    const fieldMessage = screen.getByText('Shown on every document.');
+    expect(message.compareDocumentPosition(actions!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(actions!.compareDocumentPosition(fieldMessage) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('places actions outside the input trailing edge when actionPlacement="end"', () => {
     const placementEndActionsRule = inlineEditCss.match(/\.placement_end\s+\.actions\s*\{([^}]*)\}/);
+    expect(placementEndActionsRule?.[1]).toContain('position: absolute;');
     expect(placementEndActionsRule?.[1]).toContain('inset-inline-start: calc(100% + var(--spacing-sm));');
     expect(placementEndActionsRule?.[1]).toContain('inset-inline-end: auto;');
     expect(placementEndActionsRule?.[1]).toContain('inset-block: 0;');

@@ -1,17 +1,7 @@
 {
   "name": "Table",
   "category": "data-display",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Its examples file's \"Selectable with a bulk-actions bar\" example gives Button the legacy `appearance` instead of `prominence`."
-    },
-    {
-      "kind": "decision",
-      "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
-    }
-  ],
+  "status": "stable",
   "purpose": "Present a large, sortable, filterable set of records - the workhorse of list/index (\"All X\") pages.",
   "intent": "A data-table shell: a section header (title + description), a toolbar (search + filter/configure icon buttons + actions + active-filter Chip mode='filter' pills), a column-config-driven grid (sortable headers, a selection column, row/loading/empty states), and a pagination footer. Driven by `columns` + `data`; sorting, selection, and search are owned by default (uncontrolled) with controlled overrides, and pagination is client-side or server-driven. Composes Text Field, Select, Checkbox, Icon Button, Button, and Skeleton (and hosts consumer-rendered Chips) into one complete section - which is why it lives at the organism tier.",
   "nativeElement": "table (semantic thead/tbody/th/td, with a visually-hidden caption)",
@@ -36,7 +26,7 @@
       { "name": "table / head", "componentNodeId": "2949:40307", "note": "The section header: {title} (heading/lg), {description} (body/md, content/subtle), and a right-aligned button-group of two Buttons + an overflow Icon Button. Maps to the `title` / `description` / `actions` props." },
       { "name": "table / filters", "componentNodeId": "2948:37536", "note": "The toolbar: a search Text Field (left, flex-growing up to 600px) + filter/configure Icon Buttons (right), a row of Chip mode='filter' active-filter pills + a '+' add-filter Icon Button + a 'Clear all filters' action (right), over a bottom border separator. Code maps this to search (`searchable`) + `toolbarActions` (Icon Buttons) + `activeFilters` (consumer-rendered Chip mode='filter' ReactNode) + `onClearFilters`. The filter/configure dropdowns are consumer-owned." },
       { "name": "table / columns", "componentNodeId": "2953:23358", "note": "The grid, laid out column-by-column: a 24px left/right gutter (`column / padding`), up to 8 (wide) or 16 (narrow) column slots, and vertical/horizontal scrollbars. In code this is a normal row-oriented <table>; the per-column layout is expressed as the `columns` config." },
-      { "name": "cell / table-head", "componentNodeId": "2956:29798", "note": "The header cell (deep-verified via the Desktop Bridge): background elevation/surface/default (a subtle grey band vs. the white body rows), a Title label in heading/xs SemiBold coloured content/SUBTLE (not default), an always-visible sort Icon Button (arrow_down) + a column-menu (⋮) dropdown, a vertical drag-handle divider (border/default) between columns, and a bottom border (border/default). Header height 40 (md) / 32 (sm). Code renders the sort control (asc/desc/none, with aria-sort; the arrow stays visible and takes content/default when active) and defers the column-menu ⋮ and drag-resize to future work." },
+      { "name": "cell / table-head", "componentNodeId": "2956:29798", "note": "The header cell (deep-verified via the Desktop Bridge): background elevation/surface/sunken on each header cell (a subtle grey band vs. the white body rows), a Title label in heading/xs SemiBold coloured content/SUBTLE (not default), an always-visible sort Icon Button (arrow_down) + a column-menu (⋮) dropdown, a vertical drag-handle divider (border/default) between columns, and a bottom border (border/default). Header height 40 (md) / 32 (sm). Code renders the sort control (asc/desc/none, with aria-sort; the arrow stays visible and takes content/default when active) and defers the column-menu ⋮ and drag-resize to future work." },
       { "name": "cell / text (and 20+ other cell types)", "componentNodeId": "2957:59685", "note": "Body cell (deep-verified): content at --spacing-sm inline padding, body/md, content/default, transparent background, with a bottom row divider (--color-border-default). Row height 64 (md) / 40 (sm). Figma ships a `column / <type>` for each cell content type; the code does NOT hard-code these - a column's `render` returns any content composed from existing atoms/molecules (see cellContentTypes)." },
       { "name": "container-pagination", "componentNodeId": "2948:39041", "note": "The footer: the Pagination molecule, centered, over a top border." }
     ],
@@ -49,7 +39,7 @@
       "Pagination is controlled or client-side. Pass `pageSize` for client-side slicing (the table computes the page count and owns the page), or `manualPagination` + `page`/`pageCount`/`onPageChange` for server-driven paging. Search text is uncontrolled by default (`defaultSearchValue`) or controlled (`searchValue`); either way `onSearchChange` reports it and the consumer owns the data query.",
       "The toolbar renders the shell (search + `toolbarActions` Icon Buttons + active-filter Chip mode='filter' pills + Clear filters); the filter/configure dropdowns are consumer-owned, since specific filter categories do not generalise. Pass `toolbar` to replace the built-in toolbar entirely.",
       "Accessibility: a real <table> with a visually-hidden <caption> (or the `title`) for the accessible name; each header cell is named by its label alone (aria-labelledby its label, or aria-label = headerLabel); sortable headers set aria-sort and wrap the label in a <button> named by the same label; the scroll region is a keyboard-focusable role=region; `aria-busy` marks the loading state.",
-      "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/default, header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
+      "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/sunken (on each cell, which a sticky header needs), header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
       "Deferred from v1 (Figma page is in-progress): single-select (radio) column, the per-column ⋮ menu, column resize/reorder, sticky first column, and row expansion. The sortable header + selection Checkbox cover the primary interactions."
     ]
   },

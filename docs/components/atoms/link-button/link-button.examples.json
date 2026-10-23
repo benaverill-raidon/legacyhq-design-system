@@ -1,16 +1,67 @@
 {
+  "component": "LinkButton",
   "examples": [
     {
       "name": "Internal navigation",
-      "jsx": "<LinkButton href='/clients'>View clients</LinkButton>"
+      "jsx": "<LinkButton href='/clients'>View clients</LinkButton>",
+      "props": { "href": "/clients" }
     },
     {
       "name": "External navigation",
-      "jsx": "<LinkButton href='https://example.com' external>Documentation</LinkButton>"
+      "description": "With target=\"_blank\" and no rel, Link Button adds rel=\"noopener noreferrer\" and hidden text after the label, \"(opens in a new tab)\" (set it with newTabLabel).",
+      "jsx": "<LinkButton href='https://example.com' target='_blank'>Documentation</LinkButton>",
+      "props": { "href": "https://example.com", "target": "_blank" }
     },
     {
       "name": "Inverse (on a dark surface)",
-      "jsx": "<LinkButton href='/learn-more' isInverse>Learn more</LinkButton>"
+      "jsx": "<LinkButton href='/learn-more' isInverse>Learn more</LinkButton>",
+      "props": { "href": "/learn-more", "isInverse": true }
+    },
+    {
+      "name": "Primary with a warning tone",
+      "description": "tone changes only appearance=\"primary\": warning and error give it their own fill.",
+      "jsx": "<LinkButton href=\"/invoices/overdue\" appearance=\"primary\" tone=\"warning\">\n  Review overdue invoices\n</LinkButton>",
+      "props": { "href": "/invoices/overdue", "appearance": "primary", "tone": "warning" }
+    },
+    {
+      "name": "With icons",
+      "description": "iconBefore supports the label; iconAfter is for something like an arrow to continue. Icons are the same size at every link button size.",
+      "jsx": "<LinkButton href=\"/documents\" appearance=\"primary\" size=\"lg\" iconBefore={<DocumentsIcon />} iconAfter={<ArrowRightIcon />}>\n  View documents\n</LinkButton>",
+      "props": { "href": "/documents", "appearance": "primary", "size": "lg", "iconBefore": "DocumentsIcon", "iconAfter": "ArrowRightIcon" }
+    },
+    {
+      "name": "Jump to a section on this page",
+      "jsx": "<LinkButton href=\"#billing\" appearance=\"subtle\">Jump to billing</LinkButton>",
+      "props": { "href": "#billing", "appearance": "subtle" }
+    },
+    {
+      "name": "Loading",
+      "description": "Shows a Spinner over the content without changing the size, sets aria-busy and aria-disabled, and removes the href so it can't be opened. It stays focusable and the label stays the accessible name.",
+      "jsx": "<LinkButton href=\"/reports/annual\" isLoading>Open report</LinkButton>",
+      "props": { "href": "/reports/annual", "isLoading": true }
+    },
+    {
+      "name": "Disabled",
+      "description": "Anchors have no native disabled, so isDisabled removes the href, sets aria-disabled=\"true\", and takes the link out of the tab order.",
+      "jsx": "<LinkButton href=\"/clients\" isDisabled>View clients</LinkButton>",
+      "props": { "href": "/clients", "isDisabled": true }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "An action given an href to borrow the look",
+      "jsx": "<LinkButton href=\"#\" onClick={openDialog}>Add note</LinkButton>",
+      "reason": "It's announced as a link but goes nowhere. Use Button for an action that stays on this page, such as opening a dialog."
+    },
+    {
+      "name": "A rel that drops the new-tab defaults",
+      "jsx": "<LinkButton href=\"https://example.com\" target=\"_blank\" rel=\"external\">\n  Visit the help center\n</LinkButton>",
+      "reason": "A rel you pass replaces noopener noreferrer instead of adding to it. Let rel default on a link that opens in a new tab."
+    },
+    {
+      "name": "A tone on the default appearance",
+      "jsx": "<LinkButton href=\"/invoices/overdue\" tone=\"warning\">\n  Review overdue invoices\n</LinkButton>",
+      "reason": "warning and error restyle appearance=\"primary\" only; on any other appearance the tone changes nothing. Pair the tone with appearance=\"primary\"."
     }
   ]
 }

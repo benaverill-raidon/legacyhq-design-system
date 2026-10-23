@@ -867,20 +867,18 @@
         "entityType has no corresponding Figma variant - added 2026-08-21 (re-verified against the avatar component set's own componentPropertyDefinitions, which only defines size/status/state/presence/isInteractive/isDisabled/selected - no team/entity axis) so Avatar's fallback artwork can distinguish an individual (the existing person silhouette) from a team/partner entity (a new two-person silhouette) when there is no src. The team silhouette is not invented art - it's the real, already-shipped team-and-partners icon glyph (packages/ui/src/assets/icons/source/team-and-partners.svg), rescaled and recolored to exactly match the person fallback's own template (a 200x200 flat-color square with a centered glyph, same two light/dark color pairs) rather than drawn from scratch."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1334,27 +1332,19 @@
       "variantCount": 27,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs; they sit side by side in one form."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples",
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
-        "noKnownIssues": false
+        "examples": true,
+        "noKnownIssues": true
       }
     }
   },
@@ -1426,7 +1416,7 @@
       "ToggleIconButton",
       "Spinner"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -1441,26 +1431,20 @@
       {
         "kind": "gap",
         "summary": "Takes the legacy `appearance` (default | primary | subtle) while Figma has moved it to `tone` and `prominence` (tone-is-meaning)."
-      },
-      {
-        "kind": "decision",
-        "summary": "Which \"more\" glyph is standard: `MoreHorizIcon` (this page) or `MoreVertIcon` (Dropdown Menu and Table row actions)."
       }
     ],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract",
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
-        "examples": false,
+        "contract": true,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -1568,27 +1552,19 @@
       "variantCount": 32,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples",
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
-        "noKnownIssues": false
+        "examples": true,
+        "noKnownIssues": true
       }
     }
   },
@@ -1746,20 +1722,18 @@
         "Default appearance colour is content/brand/primary/default (matches Figma)."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1844,7 +1818,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -1852,7 +1825,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -1914,7 +1887,7 @@
         "type": "enum",
         "required": false,
         "default": "md",
-        "description": null,
+        "description": "Linear takes sm, md, and lg. Circular takes md and lg, as Figma does; a circular sm is deprecated and renders exactly as md (mapped inside the component).",
         "enum": [
           "sm",
           "md",
@@ -2012,27 +1985,19 @@
       ],
       "verifiedAt": "2026-10-23"
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "Figma has no circular sm; code draws an 8px ring. Add it in Figma or drop sm for circular."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples",
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
-        "noKnownIssues": false
+        "examples": true,
+        "noKnownIssues": true
       }
     }
   },
@@ -2200,7 +2165,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -2208,7 +2172,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -2439,7 +2403,9 @@
         "errorBorder": "color-border-error",
         "disabledBorder": "color-border-disabled",
         "disabledBackground": "color-background-disabled",
-        "typography": "body-md"
+        "typography": "body-md",
+        "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)",
+        "groupMessageTypography": "body-sm (matches Field's message): description in color-content-subtle, error message in color-content-error, spacing-xs above"
       },
       "componentAllowed": [
         "indicator size (size-choice-indicator)",
@@ -2494,27 +2460,19 @@
       ],
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples",
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
-        "noKnownIssues": false
+        "examples": true,
+        "noKnownIssues": true
       }
     }
   },
@@ -2596,20 +2554,18 @@
       ],
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2662,20 +2618,18 @@
       "variantCount": 4,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2744,20 +2698,18 @@
       "variantCount": 20,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2832,31 +2784,19 @@
         "isInteractive has no corresponding Figma variant - added 2026-08-20 so Tag can be composed as a plain focusable button trigger (no navigation, no remove affordance) elsewhere in the system. Gated as isInteractive || typeof onClick === 'function', the same pattern Avatar already uses for its own isInteractive prop. First consumer: Tag Group's '+N more' overflow tag, which opens a Dropdown Menu on click."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "`tone` holds color names (blue, green, purple), which by tone-is-meaning is `appearance`. Rename it, or keep it as Toggle Button's is kept."
-      },
-      {
-        "kind": "decision",
-        "summary": "Tag and Label both claim \"a category or a classification\" on a record. Pick one."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples",
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
-        "noKnownIssues": false
+        "examples": true,
+        "noKnownIssues": true
       }
     }
   },
@@ -2926,20 +2866,18 @@
       "variantCount": 48,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -3008,20 +2946,18 @@
       "variantCount": 96,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -3141,7 +3077,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -3149,7 +3084,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -3484,7 +3419,7 @@
       },
       {
         "name": "children",
-        "description": "Typically Button and/or IconButton elements, laid out with a consistent 8px gap."
+        "description": "Typically Button and/or IconButton elements, laid out with one gap: 8px by default, 4px with spacing=compact."
       }
     ],
     "props": {
@@ -3503,6 +3438,16 @@
           "horizontal",
           "vertical"
         ]
+      },
+      "spacing": {
+        "type": "ButtonGroupSpacing",
+        "required": false,
+        "default": "default",
+        "description": "The gap between buttons in either orientation - default (8px, --spacing-sm) or compact (4px, --spacing-xs). Named after Icon's spacing prop.",
+        "enum": [
+          "default",
+          "compact"
+        ]
       }
     },
     "sizes": [],
@@ -3513,12 +3458,17 @@
       "orientation": [
         "horizontal",
         "vertical"
+      ],
+      "spacing": [
+        "default",
+        "compact"
       ]
     },
     "subComponents": [],
     "tokens": {
       "layout": {
-        "gap": "--spacing-sm"
+        "gap": "--spacing-sm",
+        "gapCompact": "--spacing-xs"
       }
     },
     "accessibility": {
@@ -3561,7 +3511,7 @@
         ]
       },
       "figmaLayoutData": {
-        "itemSpacing": 4,
+        "itemSpacing": 8,
         "layoutWrap": "NO_WRAP",
         "primaryAxisSizingMode": "AUTO",
         "counterAxisSizingMode": "AUTO",
@@ -3571,29 +3521,23 @@
       "apiAdaptationNotes": [
         "Figma's `count` (2/3/4) variant axis is not a real prop - it only demonstrates the pattern with different numbers of example buttons. The component accepts any number of children.",
         "Figma's `inline`/`stacked` orientation values were renamed to `horizontal`/`vertical` to match this system's existing RadioGroup.orientation vocabulary.",
-        "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention."
+        "aria-label/aria-labelledby are exposed via native React.HTMLAttributes<HTMLDivElement>, not a bespoke ariaLabel prop, matching the Button/IconButton family's convention.",
+        "The `spacing` prop (default 8px, compact 4px) was added in code on 2026-10-23 by owner decision; Figma has no compact variant yet."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The space between buttons: Figma's stacked variants are 8px and the contract's 4px is stale; the horizontal gap uses `spacing-lg`, which Figma has no value for."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -3993,7 +3937,7 @@
       },
       {
         "name": "messageIcon",
-        "description": "Decorative sm status Icon shown on error (status_error) / success (status_success) only."
+        "description": "Decorative sm status Icon shown on error (status_error) / success (status_success) only. Aligned to the message's first line: the message row aligns to the top (align-items: flex-start), and the icon's box is one body-sm line tall (--typography-body-sm-line-height) with the icon centered in it, so a wrapped message keeps the icon beside line one."
       }
     ],
     "props": {
@@ -4108,6 +4052,7 @@
         "labelToControlGap": "--spacing-xs (label padding-bottom; Figma space/050)",
         "controlToMessageGap": "--spacing-xs (message padding-top; Figma spacing/xs)",
         "messageIconToTextGap": "--spacing-075 (Figma spacing/075)",
+        "messageIconBlockSize": "--typography-body-sm-line-height (one message line, so the icon sits on the first line of a wrapped message)",
         "inlineIndent_lg": "--spacing-md",
         "inlineIndent_sm_md": "--spacing-sm"
       },
@@ -4215,30 +4160,19 @@
         "Figma's `valid` (the <field> state axis and the <message> boolean) is `success` in code since 2026-10-22, the name every message component uses (shared-value-names). `valid` is still accepted as a deprecated alias and renders the same (data-state='success')."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The status icon is centered against a message that wraps onto two lines. Check the intent in Figma."
-      },
-      {
-        "kind": "decision",
-        "summary": "Its label is `heading-xxs` while Radio's and Checkbox's group legends are `body-md`, and the required `*` spacing differs."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -4320,13 +4254,19 @@
         "type": "boolean",
         "required": false,
         "default": true,
-        "description": "When true, the tile is aria-hidden. When false, renders role=img with ariaLabel."
+        "description": "When true, the tile is aria-hidden. When false, renders role=img with aria-label."
+      },
+      "aria-label": {
+        "type": "string",
+        "required": false,
+        "default": null,
+        "description": "Accessible label used only when decorative is false. With decorative=false and no aria-label, the tile warns in development (skipped when import.meta.env.PROD)."
       },
       "ariaLabel": {
         "type": "string",
         "required": false,
         "default": null,
-        "description": "Accessible label used only when decorative is false. With decorative=false and no ariaLabel, the tile warns in development (skipped when import.meta.env.PROD)."
+        "description": "Deprecated alias for aria-label, still accepted. aria-label wins when both are set."
       },
       "className": {
         "type": "string",
@@ -4474,13 +4414,13 @@
         "prop": "decorative",
         "default": true,
         "whenTrue": "aria-hidden=true, no role",
-        "whenFalse": "role=img, aria-label from ariaLabel"
+        "whenFalse": "role=img, aria-label from the aria-label prop (or the deprecated ariaLabel)"
       },
       "requirements": [
         "Do not add button behavior.",
         "Do not add keyboard interaction.",
-        "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
-        "decorative=false without ariaLabel warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
+        "Use decorative=false with aria-label only when no adjacent text already conveys the same meaning.",
+        "decorative=false without aria-label warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
         "Ensure color contrast meets requirements for all tone/appearance combinations."
       ]
     },
@@ -4544,26 +4484,19 @@
         "Figma's `icon` INSTANCE_SWAP property is exposed as `children`, matching Icon Button's convention for a component whose sole content is an icon."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Takes camelCase `ariaLabel`, where Badge, Breadcrumbs, and Pagination moved to `aria-label` (kept as an alias)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -4576,7 +4509,7 @@
     "anatomy": [
       {
         "name": "root",
-        "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1) and validate's message (row 2), with the action row positioned absolutely against it (against row 1 with actionPlacement=\"end\" and in a Table cell)."
+        "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1), validate's message (row 2), and the default-placed action row (row 3); with actionPlacement=\"end\" and in a Table cell, the action row is positioned absolutely against row 1."
       },
       {
         "name": "content",
@@ -4584,7 +4517,7 @@
       },
       {
         "name": "actions",
-        "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill."
+        "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. By default it takes its own row 8px (--spacing-sm) below the field (and validate's message) at its trailing edge, so its space is reserved while editing and nothing below Inline Edit (Field's message included) is covered; content below moves down while editing. With actionPlacement=\"end\" it's absolutely positioned 8px past the field's trailing edge and takes no space. The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill."
       },
       {
         "name": "message",
@@ -4632,7 +4565,7 @@
         "type": "'below' | 'end'",
         "required": false,
         "default": "below",
-        "description": "Where the action row floats: below the field at its trailing edge, or past its trailing edge. Neither takes space from the field; leave room for the buttons."
+        "description": "Where the action row goes: below the field at its trailing edge, reserving its own space while editing (content below moves down), or floating past its trailing edge, taking no space (leave room beside the field). Neither takes width from the field. Use end in a Key Value Pair."
       },
       "actionAlignment": {
         "type": "'center' | 'start'",
@@ -4703,7 +4636,7 @@
     "subComponents": [],
     "tokens": {
       "layout": {
-        "actionsOffset": "--spacing-sm (8px between the field and the floating action row, below it or past its trailing edge)",
+        "actionsOffset": "--spacing-sm (8px between the field and the action row, below it or past its trailing edge)",
         "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)",
         "messageOffset": "--spacing-xs (4px above validate's message, as Field's)",
         "messageIconGap": "--spacing-075",
@@ -4779,29 +4712,22 @@
         "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
         "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys leave focus on the field, now read-only (they blurred it until 2026-10-17, dropping focus to the page); the action buttons move focus back to the field since they unmount. A click or Enter on the focused read-only field starts editing again.",
         "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
-        "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation floats the action row instead (absolutely positioned 8px below the field at its trailing edge, or 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
+        "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation moves the action row off the field's row instead (its own row 8px below the field at its trailing edge, taking space, or absolutely positioned 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "With the default `actionPlacement=\"below\"`, its confirm and cancel buttons float over whatever sits below the field, including Field's message."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -5016,7 +4942,7 @@
     "relatedComponents": [
       "KeyValuePair"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -5030,19 +4956,17 @@
         "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "contract"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
         "noKnownIssues": true
       }
@@ -5159,7 +5083,7 @@
       "TextArea",
       "Field"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -5178,20 +5102,25 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [],
+    "knownIssues": [
+      {
+        "kind": "decision",
+        "summary": "Its stories and live example put an edit icon (`iconAfter`) beside the value inside Inline Edit, while Inline Edit's own page shows none. Does the edit icon belong in a Key Value Pair?"
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract"
+        "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },
@@ -5589,7 +5518,7 @@
       "Avatar",
       "IconTile"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -5613,20 +5542,33 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [],
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "In Firefox and Safari the caret can drift out of the `/` query box at its edge: the box is an inline editable span, and there's no caret-correction guard yet (checked only in Chrome)."
+      },
+      {
+        "kind": "bug",
+        "summary": "Backspace doesn't remove a tag as one unit in every position: the tag is atomic to the caret, but the surrounding deletion cases aren't fully handled."
+      },
+      {
+        "kind": "bug",
+        "summary": "Pasted rich HTML isn't sanitized into the value's node model; multi-line serialization handles `<br>` but not every paste shape."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract"
+        "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },
@@ -5678,6 +5620,12 @@
         "required": false,
         "default": "(label) => `Remove ${label}`",
         "description": "Multi-select only. Builds each chip's remove-button name from the option's label, passed to Chip's removeLabel; pass a translation (built-in-labels)."
+      },
+      "removeTooltipLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Remove",
+        "description": "Multi-select only. The text of each chip's remove-button tooltip, passed to Chip's removeTooltipLabel; pass a translation (built-in-labels). Not the button's name: that's getRemoveLabel."
       },
       "inputType": {
         "type": "'single' | 'multi'",
@@ -5876,30 +5824,19 @@
         "`inputType` is not offered as a runtime-mixable prop; a Select is single or multi for its lifetime, as its value type differs. This mirrors Chip's mode union."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Its chips' remove tooltips stay \"Remove\" in English: it could pass Chip's new `removeTooltipLabel` through."
-      },
-      {
-        "kind": "gap",
-        "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -6142,7 +6079,7 @@
         "type": "ButtonTone",
         "required": false,
         "default": "default",
-        "description": "Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)."
+        "description": "Deprecated 2026-10-23: it reaches only the main action until Icon Button has a tone. Still accepted and behaves as before. Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)."
       },
       "iconBefore": {
         "type": "React.ReactNode",
@@ -6228,14 +6165,6 @@
     },
     "status": "beta",
     "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Its generated API table misses the props it inherits from Button (prominence, isInverse, isExpanded, type): react-docgen doesn't follow props from another file."
-      },
-      {
-        "kind": "decision",
-        "summary": "`tone` reaches only its main action (Icon Button has no tone yet), so the halves can disagree. Drop it, or deprecate it until Icon Button has one."
-      },
       {
         "kind": "gap",
         "summary": "Takes the legacy `appearance` while Button uses `prominence` for the same axis, pending its Figma revision (tone-is-meaning)."
@@ -6573,7 +6502,7 @@
       "Label",
       "KeyValuePair"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -6597,19 +6526,17 @@
         "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "contract"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
         "noKnownIssues": true
       }
@@ -7470,6 +7397,30 @@
         "required": false,
         "default": "Choose a date",
         "description": "Accessible name for the calendar dialog."
+      },
+      "previousMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous month",
+        "description": "The calendar's previous-month button name (and tooltip), passed to Date Picker Calendar under its own name."
+      },
+      "nextMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next month",
+        "description": "The calendar's next-month button name (and tooltip), passed to Date Picker Calendar."
+      },
+      "previousYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous year",
+        "description": "The calendar's previous-year button name (and tooltip), passed to Date Picker Calendar."
+      },
+      "nextYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next year",
+        "description": "The calendar's next-year button name (and tooltip), passed to Date Picker Calendar."
       }
     },
     "sizes": [],
@@ -7526,26 +7477,19 @@
       },
       "notes": "context passes straight to the Text Field's own context: 'default' (bordered); 'inline' (borderless), matching the text-field's context=inline variant. The 'open' state is rendered by pinning the field focus treatment (data-force-state='focus'): a border/focus box for default, a border/focus underline for inline. 'filled' is just the value-present field. Field is read-only (v1); manual date entry is future."
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "It doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English here and in Date Time Picker (built-in-labels)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -7927,6 +7871,30 @@
         "default": "Choose a time",
         "description": "Time Picker's dialogLabel: the time panel's name."
       },
+      "previousMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous month",
+        "description": "Passed through Date Picker to its calendar, under the calendar's own name (only the date half has it)."
+      },
+      "nextMonthLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next month",
+        "description": "Passed through Date Picker to its calendar."
+      },
+      "previousYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Previous year",
+        "description": "Passed through Date Picker to its calendar."
+      },
+      "nextYearLabel": {
+        "type": "string",
+        "required": false,
+        "default": "Next year",
+        "description": "Passed through Date Picker to its calendar."
+      },
       "confirmLabel": {
         "type": "string",
         "required": false,
@@ -8013,7 +7981,7 @@
       "rootRole": "group",
       "label": "aria-label or aria-labelledby on the group",
       "halves": "each half is an independent field with its own accessible name (dateLabel / timeLabel), role=dialog popup, and keyboard model",
-      "builtInLabels": "every built-in label of the halves passes through: dateDialogLabel and timeDialogLabel (each half's dialogLabel, prefixed because both have one, as datePlaceholder/timePlaceholder are), and the time half's confirmLabel, cancelLabel, hoursLabel, minutesLabel, meridiemLabel, amLabel, pmLabel under Time Picker's own names (only the time half has them, as minuteStep). Left undefined, each half keeps its English default. Month and weekday names come from locale, which goes to both halves.",
+      "builtInLabels": "every built-in label of the halves passes through: dateDialogLabel and timeDialogLabel (each half's dialogLabel, prefixed because both have one, as datePlaceholder/timePlaceholder are), the calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, nextYearLabel (through Date Picker, under the calendar's own names: only the date half has them), and the time half's confirmLabel, cancelLabel, hoursLabel, minutesLabel, meridiemLabel, amLabel, pmLabel under Time Picker's own names (only the time half has them, as minuteStep). Left undefined, each half keeps its English default. Month and weekday names come from locale, which goes to both halves.",
       "fieldWiring": "Field's label names the group via aria-labelledby; Field's id goes to the date input, so the label's htmlFor focuses the date half; required makes the form validate both halves",
       "note": "See Date Picker and Time Picker for the per-half ARIA and keyboard details."
     },
@@ -8260,26 +8228,19 @@
         "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Its generated API table misses the 14 props it inherits from Menu through `Omit<MenuProps, …>` (sections, size, showSearch, searchValue, loading, emptyMessage, …): react-docgen doesn't follow props from another file."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -10129,7 +10090,7 @@
         {
           "name": "cell / table-head",
           "componentNodeId": "2956:29798",
-          "note": "The header cell (deep-verified via the Desktop Bridge): background elevation/surface/default (a subtle grey band vs. the white body rows), a Title label in heading/xs SemiBold coloured content/SUBTLE (not default), an always-visible sort Icon Button (arrow_down) + a column-menu (⋮) dropdown, a vertical drag-handle divider (border/default) between columns, and a bottom border (border/default). Header height 40 (md) / 32 (sm). Code renders the sort control (asc/desc/none, with aria-sort; the arrow stays visible and takes content/default when active) and defers the column-menu ⋮ and drag-resize to future work."
+          "note": "The header cell (deep-verified via the Desktop Bridge): background elevation/surface/sunken on each header cell (a subtle grey band vs. the white body rows), a Title label in heading/xs SemiBold coloured content/SUBTLE (not default), an always-visible sort Icon Button (arrow_down) + a column-menu (⋮) dropdown, a vertical drag-handle divider (border/default) between columns, and a bottom border (border/default). Header height 40 (md) / 32 (sm). Code renders the sort control (asc/desc/none, with aria-sort; the arrow stays visible and takes content/default when active) and defers the column-menu ⋮ and drag-resize to future work."
         },
         {
           "name": "cell / text (and 20+ other cell types)",
@@ -10175,34 +10136,23 @@
         "Pagination is controlled or client-side. Pass `pageSize` for client-side slicing (the table computes the page count and owns the page), or `manualPagination` + `page`/`pageCount`/`onPageChange` for server-driven paging. Search text is uncontrolled by default (`defaultSearchValue`) or controlled (`searchValue`); either way `onSearchChange` reports it and the consumer owns the data query.",
         "The toolbar renders the shell (search + `toolbarActions` Icon Buttons + active-filter Chip mode='filter' pills + Clear filters); the filter/configure dropdowns are consumer-owned, since specific filter categories do not generalise. Pass `toolbar` to replace the built-in toolbar entirely.",
         "Accessibility: a real <table> with a visually-hidden <caption> (or the `title`) for the accessible name; each header cell is named by its label alone (aria-labelledby its label, or aria-label = headerLabel); sortable headers set aria-sort and wrap the label in a <button> named by the same label; the scroll region is a keyboard-focusable role=region; `aria-busy` marks the loading state.",
-        "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/default, header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
+        "Token fidelity was confirmed via the Desktop Bridge deep read (resolving boundVariables to token names): header cell background = elevation/surface/sunken (on each cell, which a sticky header needs), header text = content/subtle, cell text = content/default, all borders/dividers = border/default. The row HOVER and SELECTED backgrounds are not specified in the (in-progress ⏲️) Figma page, so they use inferred semantic tokens (neutral-overlay-subtle-hover / brand-primary-subtle) - revisit them when the design specifies row states.",
         "Deferred from v1 (Figma page is in-progress): single-select (radio) column, the per-column ⋮ menu, column resize/reorder, sticky first column, and row expansion. The sortable header + selection Checkbox cover the primary interactions."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "Its examples file's \"Selectable with a bulk-actions bar\" example gives Button the legacy `appearance` instead of `prominence`."
-      },
-      {
-        "kind": "decision",
-        "summary": "Header fill: the CSS uses surface sunken, the contract and spec say surface default. Check node 2956:29798 in Figma."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },

@@ -202,8 +202,8 @@ function DocketInFieldExample() {
 
   return (
     <Field label="Docket number" required message="As it appears on the court notice.">
-      {/* At the end, so the floating buttons don't cover Field's message below. */}
-      <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} actionPlacement="end" confirmLabel="Save docket number">
+      {/* The default placement: the buttons take their own row, and Field's message moves down for them. */}
+      <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} confirmLabel="Save docket number">
         <TextField context="inline" />
       </InlineEdit>
     </Field>
@@ -213,7 +213,8 @@ function DocketInFieldExample() {
 /**
  * In a Field, Field's label names the field and its message describes it, through Inline Edit. A
  * rejected draft shows `validate`'s message under the field, above Field's message, and the field
- * reads both.
+ * reads both. While editing, the buttons sit below the field and Field's message moves down for
+ * them, so nothing is covered.
  */
 export const InField: Story = {
   render: () => (

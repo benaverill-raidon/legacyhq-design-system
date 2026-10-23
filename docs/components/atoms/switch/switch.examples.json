@@ -1,24 +1,87 @@
 {
+  "component": "Switch",
   "examples": [
     {
       "name": "Default",
-      "jsx": "<Switch>Notifications</Switch>"
+      "description": "A setting that applies as soon as it's flipped. The label is passed as the label prop, not as children: Switch renders label after the track, and children would reach the native input.",
+      "jsx": "<Switch label=\"Notifications\" />",
+      "props": {
+        "label": "Notifications"
+      }
     },
     {
       "name": "Checked",
-      "jsx": "<Switch defaultChecked>Email alerts</Switch>"
+      "description": "Uncontrolled and on at first.",
+      "jsx": "<Switch label=\"Email alerts\" defaultChecked />",
+      "props": {
+        "label": "Email alerts",
+        "defaultChecked": true
+      }
     },
     {
       "name": "Disabled",
-      "jsx": "<Switch disabled>Automatic updates</Switch>"
+      "description": "The native disabled attribute: the switch can't be changed and leaves the tab order.",
+      "jsx": "<Switch label=\"Automatic updates\" disabled />",
+      "props": {
+        "label": "Automatic updates",
+        "disabled": true
+      }
     },
     {
       "name": "Loading",
-      "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>"
+      "description": "isLoading shows a Spinner in the track and ignores toggles while a change is saved; the switch stays focusable and sets aria-busy.",
+      "jsx": "<Switch label=\"Syncing calendar\" isLoading defaultChecked />",
+      "props": {
+        "label": "Syncing calendar",
+        "isLoading": true,
+        "defaultChecked": true
+      }
+    },
+    {
+      "name": "Controlled, saving the change",
+      "description": "Keep the value in your state and set isLoading while the change saves, so the switch stays focused and can't be flipped twice.",
+      "jsx": "<Switch label=\"Sync calendar\" checked={on} isLoading={saving} onCheckedChange={save} />",
+      "props": {
+        "label": "Sync calendar",
+        "checked": "on (state)",
+        "isLoading": "saving (state)",
+        "onCheckedChange": "save"
+      }
     },
     {
       "name": "Icons hidden",
-      "jsx": "<Switch label=\"Compact setting\" showIcons={false} />"
+      "description": "showIcons={false} draws a plain track without the check and X marks; the loading Spinner shows either way.",
+      "jsx": "<Switch label=\"Compact setting\" showIcons={false} />",
+      "props": {
+        "label": "Compact setting",
+        "showIcons": false
+      }
+    },
+    {
+      "name": "Small",
+      "description": "size=\"sm\" is a 32 by 16px track with a smaller label; md, the default, is 40 by 20px.",
+      "jsx": "<Switch label=\"Show archived matters\" size=\"sm\" />",
+      "props": {
+        "label": "Show archived matters",
+        "size": "sm"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Label written as an instruction",
+      "jsx": "<Switch label=\"Turn on email notifications\" />",
+      "reason": "It reads wrong once the switch is on. Name the setting in the label (\"Email notifications\"); the switch shows whether it's on."
+    },
+    {
+      "name": "Disabling the switch while the change saves",
+      "jsx": "<Switch label=\"Sync calendar\" checked={on} disabled={saving} onCheckedChange={save} />",
+      "reason": "It drops out of the tab order, so keyboard focus is lost, and it reads as unavailable. Set isLoading while the change saves."
+    },
+    {
+      "name": "Switch in a form that waits for a submit button",
+      "jsx": "<form onSubmit={applyFilters}>\n  <Switch label=\"Include archived matters\" name=\"includeArchived\" />\n  <Button type=\"submit\">Apply filters</Button>\n</form>",
+      "reason": "People expect a switch to apply at once. For a choice that's saved when a form is submitted, use a Checkbox."
     }
   ]
 }

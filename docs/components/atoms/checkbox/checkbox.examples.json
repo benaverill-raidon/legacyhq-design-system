@@ -1,20 +1,121 @@
 {
+  "component": "Checkbox",
   "examples": [
     {
       "name": "Basic",
-      "jsx": "<Checkbox>Receive updates</Checkbox>"
+      "description": "A single checkbox with its visible label. The label is passed as the label prop, not as children: Checkbox renders label after the box, and children would reach the native input.",
+      "jsx": "<Checkbox label=\"Receive updates\" />",
+      "props": {
+        "label": "Receive updates"
+      }
     },
     {
       "name": "Checked",
-      "jsx": "<Checkbox defaultChecked>Receive updates</Checkbox>"
+      "description": "Uncontrolled and checked at first; the input keeps the value.",
+      "jsx": "<Checkbox label=\"Receive updates\" defaultChecked />",
+      "props": {
+        "label": "Receive updates",
+        "defaultChecked": true
+      }
     },
     {
       "name": "Disabled",
-      "jsx": "<Checkbox disabled>Receive updates</Checkbox>"
+      "description": "The native disabled attribute: the checkbox can't be changed and leaves the tab order.",
+      "jsx": "<Checkbox label=\"Receive updates\" disabled />",
+      "props": {
+        "label": "Receive updates",
+        "disabled": true
+      }
     },
     {
       "name": "Error message",
-      "jsx": "<Checkbox label=\"I've run a conflict check\" required errorMessage=\"Run a conflict check before you open the matter.\" />"
+      "description": "A single checkbox's own errorMessage: shown under the box, added to its aria-describedby, and marks it invalid, so invalid isn't needed with it.",
+      "jsx": "<Checkbox label=\"I've run a conflict check\" required errorMessage=\"Run a conflict check before you open the matter.\" />",
+      "props": {
+        "label": "I've run a conflict check",
+        "required": true,
+        "errorMessage": "Run a conflict check before you open the matter."
+      }
+    },
+    {
+      "name": "Partial selection",
+      "description": "indeterminate on the checkbox that stands for a partly selected group, such as a select-all. It shows a dash and is announced as mixed; work out the next indeterminate from the items.",
+      "jsx": "<Checkbox label=\"All matters\" indeterminate={someSelected && !allSelected} checked={allSelected} onCheckedChange={toggleAll} />",
+      "props": {
+        "label": "All matters",
+        "indeterminate": "someSelected && !allSelected",
+        "checked": "allSelected",
+        "onCheckedChange": "toggleAll"
+      }
+    },
+    {
+      "name": "No visible label",
+      "description": "A checkbox in a list row, named by aria-label because the row shows what it selects.",
+      "jsx": "<Checkbox aria-label=\"Select Probate review\" />",
+      "props": {
+        "aria-label": "Select Probate review"
+      }
+    },
+    {
+      "name": "Checkbox Group with an error",
+      "description": "A set of checkboxes under one legend, from options. Explain the error in words with errorMessage and set invalid with it.",
+      "jsx": "<CheckboxGroup\n  label=\"Send matter updates by\"\n  invalid\n  errorMessage=\"Choose at least one way to send updates.\"\n  options={[\n    { value: 'email', label: 'Email' },\n    { value: 'sms', label: 'SMS' },\n  ]}\n/>",
+      "props": {
+        "label": "Send matter updates by",
+        "invalid": true,
+        "errorMessage": "Choose at least one way to send updates.",
+        "options": [
+          { "value": "email", "label": "Email" },
+          { "value": "sms", "label": "SMS" }
+        ]
+      }
+    },
+    {
+      "name": "Controlled Checkbox Group",
+      "description": "The checked values as an array in your state; onValueChange gets the next array, then the change event.",
+      "jsx": "const [channels, setChannels] = useState(['email']);\n\n<CheckboxGroup\n  label=\"Send matter updates by\"\n  value={channels}\n  onValueChange={setChannels}\n  options={[\n    { value: 'email', label: 'Email' },\n    { value: 'sms', label: 'SMS' },\n    { value: 'in-app', label: 'In-app' },\n  ]}\n/>",
+      "props": {
+        "label": "Send matter updates by",
+        "value": "channels (state)",
+        "onValueChange": "setChannels",
+        "options": [
+          { "value": "email", "label": "Email" },
+          { "value": "sms", "label": "SMS" },
+          { "value": "in-app", "label": "In-app" }
+        ]
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Checking the group's checkbox for a partial selection",
+      "jsx": "<Checkbox label=\"All matters\" checked={someSelected} />",
+      "reason": "A checked select-all reads as all of its items being checked. When only some are, set indeterminate on it so it shows a dash and is announced as mixed."
+    },
+    {
+      "name": "No accessible name",
+      "jsx": "<Checkbox />",
+      "reason": "Without label, aria-label, or aria-labelledby the box still shows, but assistive technology can't say what it's for, and nothing warns you."
+    },
+    {
+      "name": "Invalid with no message",
+      "jsx": "<CheckboxGroup label=\"Send matter updates by\" invalid options={[{ value: 'email', label: 'Email' }, { value: 'sms', label: 'SMS' }]} />",
+      "reason": "The red boxes alone don't say what's wrong, and not everyone can see the color. Pair invalid with an errorMessage that explains the problem."
+    },
+    {
+      "name": "One-option Checkbox Group to show an error",
+      "jsx": "<CheckboxGroup label=\"Conflict check\" invalid errorMessage=\"Run a conflict check.\" options={[{ value: 'done', label: \"I've run a conflict check\" }]} />",
+      "reason": "The legend and the only option say the same thing twice. Give the single Checkbox its own errorMessage instead."
+    },
+    {
+      "name": "Wrapping a single Checkbox in Field for its error",
+      "jsx": "<Field label=\"Conflict check\" state=\"error\" message=\"Run a conflict check before you open the matter.\">\n  <Checkbox label=\"I've run a conflict check\" />\n</Field>",
+      "reason": "Field's label replaces the checkbox's own label as its accessible name. Use the Checkbox's errorMessage for a single checkbox's error."
+    },
+    {
+      "name": "Checkboxes for mutually exclusive choices",
+      "jsx": "<CheckboxGroup label=\"Preferred contact method\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+      "reason": "Checkboxes let people choose any number of options. When exactly one answer applies, use Radio Group, which keeps the choice to one."
     }
   ]
 }

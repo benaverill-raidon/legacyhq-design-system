@@ -91,10 +91,15 @@ export const sample1 = `<Radio name="method" value="email" label="Email" checked
 
 Radio Group is a native `fieldset` that holds, in order:
 
-1. The `legend`, from `label`, with a `*` after it when `required` is set.
+1. The `legend`, from `label`, with a `*` after it when `required` is set. It's styled like
+   Field's label, `heading-xxs` in the subtle text color with the `*` straight after the text, so
+   a group and the fields beside it in a form read alike.
 2. The `description`, when it's set.
 3. The options: a Radio for each entry in `options`, or your `children`.
 4. The `errorMessage`, when it's set.
+
+The description and error message are styled like Field's message, `body-sm`: the description in
+the subtle text color, the error message in the error color.
 
 </Subsection>
 

@@ -37,7 +37,8 @@ const meta = {
     shape: { control: 'inline-radio', options: shapes },
     size: { control: 'inline-radio', options: sizes },
     decorative: { control: 'boolean' },
-    ariaLabel: { control: 'text' },
+    'aria-label': { control: 'text' },
+    ariaLabel: { control: false },
     children: { control: false },
     className: { control: false },
   },
@@ -189,7 +190,7 @@ export const Composition: Story = {
       </Group>
 
       <Group title="Sole carrier of meaning (decorative=false)">
-        <IconTile tone="red" appearance="bold" decorative={false} ariaLabel="Error">
+        <IconTile tone="red" appearance="bold" decorative={false} aria-label="Error">
           <CloseIcon />
         </IconTile>
       </Group>

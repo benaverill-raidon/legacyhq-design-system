@@ -4,6 +4,7 @@ import * as React from 'react';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { EditableCellContext } from '../../primitives/editable-cell-context';
 import { Field } from '../field';
 import { Select } from './select';
 import type { SelectOption } from './select.types';
@@ -84,6 +85,27 @@ describe('Select', () => {
 
       rerender(<Select options={withIcons} value={null} onChange={vi.fn()} />);
       expect(frame.querySelector(`.${textFieldStyles.before}`)).not.toBeInTheDocument();
+    });
+
+    it("keeps the chosen option's icon in its own color in the trigger, as in its menu row", () => {
+      const withStatus: SelectOption[] = [
+        { value: 'approved', label: 'Approved', icon: <span data-testid="approved-icon" data-color="success" /> },
+      ];
+      render(<Select options={withStatus} value="approved" onChange={vi.fn()} />);
+      const icon = screen.getByTestId('approved-icon');
+      // Text Field's leading slot holds it and leaves its named color alone; Select's wrapper is
+      // there only for the disabled grey.
+      expect(icon.parentElement).toHaveClass(selectStyles.optionIcon);
+      expect(icon.parentElement?.parentElement).toHaveClass(textFieldStyles.before);
+      expect(selectCss).not.toMatch(/\[data-color='[a-z]+'\]/);
+    });
+
+    it("greys the chosen option's icon when disabled, like the caret", () => {
+      // Stronger than Icon's single color class, so it wins over a named color too. Keyed off the
+      // input's :disabled, so a disabled fieldset greys it as the prop does.
+      expect(selectCss).toMatch(
+        /\.trigger:where\(:has\(input:disabled\)\) \.optionIcon :global\(\[data-color\]\) \{\s*color: var\(--color-content-disabled\);/,
+      );
     });
 
     it('marks the selected option checked', () => {
@@ -181,6 +203,30 @@ describe('Select', () => {
       expect(screen.getByRole('button', { name: 'Retirer Approved' })).toBeInTheDocument();
     });
 
+    it("passes removeTooltipLabel to the chips' remove tooltips, with an English default", () => {
+      vi.useFakeTimers();
+      try {
+        const hover = (element: HTMLElement) => {
+          fireEvent.pointerEnter(element);
+          act(() => {
+            vi.advanceTimersByTime(300);
+          });
+        };
+        const { unmount } = render(<Select inputType="multi" options={OPTIONS} value={['draft']} onChange={vi.fn()} />);
+        hover(screen.getByRole('button', { name: 'Remove Draft' }));
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Remove');
+        unmount();
+
+        render(
+          <Select inputType="multi" options={OPTIONS} value={['draft']} onChange={vi.fn()} removeTooltipLabel="Retirer" />,
+        );
+        hover(screen.getByRole('button', { name: 'Remove Draft' }));
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Retirer');
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
     it('removes the last chip on Backspace when the query is empty', () => {
       const onChange = vi.fn();
       render(<Select inputType="multi" options={OPTIONS} value={['draft', 'approved']} onChange={onChange} />);
@@ -235,6 +281,35 @@ describe('Select', () => {
       fireEvent.mouseDown(container.querySelector(`.${textFieldStyles.root}`) as Element);
       fireEvent.mouseDown(container.querySelector(`.${selectStyles.caret}`) as Element);
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it.each([
+      ['the disabled prop', (select: React.ReactElement) => select, true],
+      ['a disabled fieldset', (select: React.ReactElement) => <fieldset disabled>{select}</fieldset>, false],
+    ])('never opens its menu by pointer or keyboard when disabled by %s, in a form or a table cell', (_, wrap, disabledProp) => {
+      for (const cell of [null, 'md'] as const) {
+        const onChange = vi.fn();
+        const { container, unmount } = render(
+          <EditableCellContext.Provider value={cell}>
+            {wrap(<Select options={OPTIONS} value="draft" onChange={onChange} aria-label="Status" disabled={disabledProp} />)}
+          </EditableCellContext.Provider>,
+        );
+        const input = combobox();
+        expect(input).toBeDisabled();
+
+        fireEvent.mouseDown(input);
+        fireEvent.click(input);
+        fireEvent.mouseDown(container.querySelector(`.${textFieldStyles.root}`) as Element);
+        fireEvent.click(container.querySelector(`.${textFieldStyles.root}`) as Element);
+        fireEvent.mouseDown(container.querySelector(`.${selectStyles.caret}`) as Element);
+        for (const key of ['ArrowDown', 'ArrowUp', 'Enter', ' ']) fireEvent.keyDown(input, { key });
+        fireEvent.change(input, { target: { value: 'App' } });
+
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        expect(input).toHaveAttribute('aria-expanded', 'false');
+        expect(onChange).not.toHaveBeenCalled();
+        unmount();
+      }
     });
 
     it('sets aria-invalid when invalid', () => {
@@ -428,8 +503,8 @@ describe('Select', () => {
 
   it('colors the caret content/subtle at rest and content/disabled when disabled (Figma-verified)', () => {
     // Verified live against Figma's select-trigger caret_down vector: content/subtle default,
-    // content/disabled when isDisabled. The CaretDownIcon inherits this via TextField's own
-    // `.action :global([data-color]) { color: inherit }`.
+    // content/disabled when isDisabled. The CaretDownIcon inherits this through Icon's default
+    // `color="inherit"`.
     expect(selectCss).toMatch(/\.caret\s*\{[^}]*color:\s*var\(--field-icon-color,\s*var\(--color-content-subtle\)\)/);
     expect(selectCss).toMatch(/\.caretDisabled,\s*\.trigger:where\(:has\(input:disabled\)\) \.caret\s*\{[^}]*color:\s*var\(--color-content-disabled\)/);
   });

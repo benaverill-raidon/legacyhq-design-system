@@ -82,6 +82,10 @@ exactly; Figma never shows a subtle split button.
 ### Size
 - xs, sm, md, lg (default: md) - matches Button's own four sizes exactly.
 
+### Tone (deprecated)
+- `tone` is `@deprecated`: it reaches only the main action until Icon Button has a tone, so the two
+  halves don't match. Still accepted and forwarded exactly as before; leave it unset.
+
 ### Token Mapping
 No new tokens - the divider (`border-width-sm`, `size-control-xs/sm/md/lg`, `color-border-input` /
 `color-border-brand-primary-subtle` / `color-border-disabled`) and the squared corners (`0`, an
@@ -213,3 +217,5 @@ Final implementation decisions:
   primary secondary action looked identical to a disabled default one. This is an IconButton-atom
   fix (icon-button.module.css), not Split-Button-specific, but Split Button's primary+disabled
   secondary action is what surfaced it.
+- The Docs page lists the props inherited from Button (`prominence`, `isInverse`, `isExpanded`,
+  `type`) by hand: react-docgen doesn't read props inherited from another file.

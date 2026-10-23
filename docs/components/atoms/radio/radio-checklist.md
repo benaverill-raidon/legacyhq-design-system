@@ -92,6 +92,7 @@ RadioGroup:
 ## Design Decisions
 
 - Label typography: `body-md`.
+- Group legend: Field's label style (`heading-xxs`, `color-content-subtle`), its `*` with no gap.
 - Default RadioGroup layout: vertical.
 - Default RadioGroup gap: `0`; horizontal groups put `spacing-lg` between options.
 - Radio visual size: 24px (`size-choice-indicator`).

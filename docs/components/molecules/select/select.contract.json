@@ -1,17 +1,8 @@
 {
   "name": "Select",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Its chips' remove tooltips stay \"Remove\" in English: it could pass Chip's new `removeTooltipLabel` through."
-    },
-    {
-      "kind": "gap",
-      "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Pick one option (or several) from a searchable list, shown in a field-styled trigger.",
   "intent": "A combobox composed from the pieces the system already has - a TextField trigger, a Dropdown Menu panel, and Chips for multi-select values - preconfigured for the choose-from-a-list use case, rather than a fourth independent implementation of a field, a floating panel, or a token input.",
   "tierNote": "Classified as a molecule, but its panel composes Dropdown Menu (an organism, itself Menu + Popup) - the same deliberate, documented exception Tag Group, Avatar Group, Split Button, and Chip already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here. Select also composes two molecules (TextField, Chip), which is ordinary molecule-on-molecule composition.",
@@ -74,6 +65,7 @@
     "value": { "type": "string | null (single) | string[] (multi)", "required": true, "default": null, "description": "Controlled selection. Scalar for single, array for multi." },
     "onChange": { "type": "(value) => void", "required": true, "default": null, "description": "Called with the next selection - string|null (single) or string[] (multi)." },
     "getRemoveLabel": { "type": "(label: string) => string", "required": false, "default": "(label) => `Remove ${label}`", "description": "Multi-select only. Builds each chip's remove-button name from the option's label, passed to Chip's removeLabel; pass a translation (built-in-labels)." },
+    "removeTooltipLabel": { "type": "string", "required": false, "default": "Remove", "description": "Multi-select only. The text of each chip's remove-button tooltip, passed to Chip's removeTooltipLabel; pass a translation (built-in-labels). Not the button's name: that's getRemoveLabel." },
     "inputType": { "type": "'single' | 'multi'", "required": false, "default": "single", "description": "Discriminates the union. single: radio rows, scalar value, label in trigger. multi: checkbox rows, array value, removable chips in trigger." },
     "size": { "type": "SelectSize", "required": false, "default": "md", "enum": ["sm", "md", "lg"], "description": "Trigger height 32/40/48; also sets the chip size. The panel matches the field frame's width at every size." },
     "context": { "type": "SelectContext", "required": false, "default": "default", "enum": ["default", "inline"], "description": "The trigger's context, as Text Field's - default (bordered) or inline (chromeless until hovered or focused, for a field inside a row)." },
@@ -95,7 +87,7 @@
   },
   "sizes": ["sm", "md", "lg"],
   "slots": [
-    { "name": "option.icon", "required": false, "allowedContent": "Icon or Avatar, decorative - shown in the row, before the chosen value in the trigger (single, TextField's iconBefore = Figma's elemBeforeInput slot), and on the chip (multi)" }
+    { "name": "option.icon", "required": false, "allowedContent": "Icon or Avatar, decorative - shown in the row, before the chosen value in the trigger (single, TextField's iconBefore = Figma's elemBeforeInput slot, in its own color as in its row; greyed when disabled), and on the chip (multi)" }
   ],
   "variants": {
     "inputType": {
@@ -130,7 +122,8 @@
     "Inside a disabled <fieldset>, the input is disabled without the disabled prop; the frame, caret, and multi-select chips look disabled (CSS :has(input:disabled)) and the menu doesn't open.",
     "Holds its own open and (uncontrolled) query state; value is always controlled by the consumer.",
     "single: choosing a row calls onChange(value), returns focus to the input, and closes; the trigger shows the chosen label, with the chosen option's icon (if any) before it in TextField's iconBefore slot, hidden from assistive technology. The icon stays while the menu is open, since the value hasn't changed.",
-    "multi: each chip's remove button is named getRemoveLabel(option.label), `Remove <label>` by default.",
+    "multi: each chip's remove button is named getRemoveLabel(option.label), `Remove <label>` by default; its tooltip is removeTooltipLabel, `Remove` by default.",
+    "single: the chosen option's icon keeps its own color in the trigger, as in its menu row (Select restates Icon's named colors over Text Field's inherit rule); an inherit icon takes the slot's subtle color; a disabled field greys it.",
     "multi: choosing a row toggles the value in the array, keeps the panel open, and clears the query; values render as removable chips.",
     "Filters options itself unless searchValue/onSearchChange are provided, in which case filtering is the caller's.",
     "size sets the trigger height and the chip size together; the panel always matches the field frame's width.",

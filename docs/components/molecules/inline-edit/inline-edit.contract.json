@@ -1,13 +1,8 @@
 {
   "name": "InlineEdit",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "With the default `actionPlacement=\"below\"`, its confirm and cancel buttons float over whatever sits below the field, including Field's message."
-    }
-  ],
+  "status": "stable",
+  "knownIssues": [],
   "purpose": "Let a single displayed value switch between a read-only display and an editable control in place, starting on click, with an explicit confirm/cancel step.",
   "intent": "Provide the shared click-to-edit trigger, draft tracking, trailing confirm/cancel chrome, and keyboard shortcuts for 'click a value to edit it' UIs, so every call site doesn't reimplement read/edit state and draft-vs-confirmed-value tracking itself.",
   "nativeElement": "div",
@@ -45,7 +40,7 @@
       "value/onConfirm mirror TextField's own controlled value pattern: the parent supplies the last confirmed value and receives it back via onConfirm only on commit, not per keystroke. Cancel discards the draft and reverts to value, calling onCancel with no value argument (the parent already has it).",
       "Enter-to-confirm and Escape-to-cancel are an explicit addition beyond the two visible icon buttons Figma shows, confirmed as wanted by the user. Enter also calls preventDefault so a nested control inside a native <form> doesn't trigger an accidental submission. Both keys leave focus on the field, now read-only (they blurred it until 2026-10-17, dropping focus to the page); the action buttons move focus back to the field since they unmount. A click or Enter on the focused read-only field starts editing again.",
       "children is expected to be a single controlled input-like element (TextField today, typically context=inline so it reads as plain text at rest) rather than two separate read/edit elements the parent swaps between.",
-      "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation floats the action row instead (absolutely positioned 8px below the field at its trailing edge, or 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
+      "Figma's literal state=edit layout puts the action buttons trailing in the same row as the field, which would force the field to shrink to make room once editing starts. Per explicit design feedback, this implementation moves the action row off the field's row instead (its own row 8px below the field at its trailing edge, taking space, or absolutely positioned 8px past that edge with actionPlacement=\"end\") so the field keeps its full width in both states."
     ]
   },
   "useCases": [
@@ -58,9 +53,9 @@
     "an edit that needs its own dedicated space (dialog or separate screen)"
   ],
   "anatomy": [
-    { "part": "root", "element": "div", "required": true, "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1) and validate's message (row 2), with the action row positioned absolutely against it (against row 1 with actionPlacement=\"end\" and in a Table cell)." },
+    { "part": "root", "element": "div", "required": true, "description": "Layout wrapper with no color or border tokens of its own: a full-width one-column grid holding the content (row 1), validate's message (row 2), and the default-placed action row (row 3); with actionPlacement=\"end\" and in a Table cell, the action row is positioned absolutely against row 1." },
     { "part": "content", "element": "div", "required": true, "description": "Holds the cloned children element - readOnly+value when not editing, draft+onChange when editing. Full width in both states." },
-    { "part": "actions", "element": "ButtonGroup (div)", "required": false, "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. Absolutely positioned so it floats over the content below instead of taking space: 8px (--spacing-sm) below the field at its trailing edge by default, or 8px past its trailing edge with actionPlacement=\"end\". The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill." },
+    { "part": "actions", "element": "ButtonGroup (div)", "required": false, "description": "Cancel then confirm IconButton (size xs), wrapped in a ButtonGroup; renders only once editing has started, when actionButtons is not false. By default it takes its own row 8px (--spacing-sm) below the field (and validate's message) at its trailing edge, so its space is reserved while editing and nothing below Inline Edit (Field's message included) is covered; content below moves down while editing. With actionPlacement=\"end\" it's absolutely positioned 8px past the field's trailing edge and takes no space. The .actions class tightens the gap to 4px (--spacing-xs), overriding Button Group's default 8px, and pins the buttons to the neutral-subtle fill." },
     { "part": "message", "element": "div", "required": false, "description": "validate's error, shown only while editing and while validate rejects the draft: Field's error look (status error icon sm, body-sm, --color-content-error, --spacing-075 between icon and text, --spacing-xs above), indented by the inline control's text inset (--spacing-sm, --spacing-md for lg). Inside a polite live region that exists while editing with validate set." }
   ],
   "props": {
@@ -70,7 +65,7 @@
     "onCancel": { "type": "() => void", "required": false, "default": null, "description": "Called when the cancel button (or Escape) discards the draft and reverts to value." },
     "validate": { "type": "(value: string) => string | undefined", "required": false, "default": null, "description": "Checks the draft on every confirm (Enter, the confirm button, focus leaving). A returned message rejects it: editing goes on, the message shows under the field, the field gets invalid/aria-invalid and the message in aria-describedby, and focus stays in the field (or, after a blur, the draft waits there). After a rejection the message follows the draft. Escape/cancel still discard." },
     "actionButtons": { "type": "boolean", "required": false, "default": true, "description": "Whether to render the confirm/cancel IconButton pair while editing. Enter/Escape still work when false." },
-    "actionPlacement": { "type": "'below' | 'end'", "required": false, "default": "below", "description": "Where the action row floats: below the field at its trailing edge, or past its trailing edge. Neither takes space from the field; leave room for the buttons." },
+    "actionPlacement": { "type": "'below' | 'end'", "required": false, "default": "below", "description": "Where the action row goes: below the field at its trailing edge, reserving its own space while editing (content below moves down), or floating past its trailing edge, taking no space (leave room beside the field). Neither takes width from the field. Use end in a Key Value Pair." },
     "actionAlignment": { "type": "'center' | 'start'", "required": false, "default": "center", "description": "With actionPlacement=\"end\": center the actions on the field, or keep them level with its first line (one control height) as a multi-line field grows." },
     "confirmLabel": { "type": "string", "required": false, "default": "Confirm", "description": "Accessible name (aria-label) for the confirm IconButton." },
     "cancelLabel": { "type": "string", "required": false, "default": "Cancel", "description": "Accessible name (aria-label) for the cancel IconButton." },
@@ -90,7 +85,7 @@
   ],
   "tokens": {
     "layout": {
-      "actionsOffset": "--spacing-sm (8px between the field and the floating action row, below it or past its trailing edge)",
+      "actionsOffset": "--spacing-sm (8px between the field and the action row, below it or past its trailing edge)",
       "actionsGap": "--spacing-xs (4px, between the cancel and confirm buttons; InlineEdit overrides Button Group's default 8px for this tight icon-only pair)",
       "messageOffset": "--spacing-xs (4px above validate's message, as Field's)",
       "messageIconGap": "--spacing-075",
@@ -154,7 +149,7 @@
     "No MUI.",
     "No Tailwind.",
     "No hardcoded spacing - the root gap comes from --spacing-sm; the gap between the action buttons is --spacing-xs (4px), an InlineEdit override of Button Group's default 8px applied via a higher-specificity `.root .actions` rule.",
-    "The action row is absolutely positioned (below the field by default, past its trailing edge with actionPlacement=\"end\") - deviates from Figma's own single-row layout so the field never shrinks to make room for the action buttons.",
+    "The action row sits in its own grid row below the field by default (in the flow, so its space is reserved while editing), and is absolutely positioned past the field's trailing edge with actionPlacement=\"end\" - deviates from Figma's own single-row layout so the field never shrinks to make room for the action buttons.",
     "The confirm/cancel pair is wrapped in ButtonGroup (a molecule composing another molecule - the same actions-row grouping Figma's inline-edit uses) rather than a bespoke flex span, so the row layout stays consistent with every other action row in the system.",
     "Use React.cloneElement, not a render-prop or two separate elements, so focus persists across the read/edit transition."
   ],
@@ -162,7 +157,8 @@
   "do": [
     "Pass a single TextField with context='inline' (or similar controlled input) as children most of the time.",
     "Control value from the parent and update it in onConfirm.",
-    "Use actionButtons=false only when you have another confirm/cancel mechanism (Enter/Escape still work)."
+    "Use actionButtons=false only when you have another confirm/cancel mechanism (Enter/Escape still work).",
+    "In a Key Value Pair, set actionPlacement=\"end\", so the buttons sit beside the value and the pair's row doesn't grow while editing."
   ],
   "dont": [
     "Do not use for multiple related fields - use a real form.",

@@ -18,6 +18,11 @@ TextField/TextArea/Select with `context="inline"`).
 
 When `underline` is true, the root gets a 1px bottom border (`border/default`).
 
+An editable value goes in `InlineEdit actionPlacement="end"` (an owner decision): the cancel and
+confirm buttons sit 8px past the field's trailing edge, so the row keeps its height while editing.
+Inline Edit's default `below` placement reserves a row for the buttons under the field, which would
+grow the pair and move the rows below it.
+
 For editable multiline values, use `TextArea autoResize size={size} context="inline"` inside
 `InlineEdit actionPlacement="end" actionAlignment="start"`. The minimum field height matches
 TextField's `--size-control-sm/md/lg` token. Content grows the field and row in normal flow up to

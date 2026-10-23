@@ -180,9 +180,9 @@ export const Content: Story = {
 
         <div style={cardStyle}>
           <Label tone="information" emphasis="subtle">
-            Research
+            In review
           </Label>
-          <span>Category metadata in a card.</span>
+          <span>A status in a card.</span>
         </div>
 
         <div style={row}>

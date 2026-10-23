@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Label is a compact visual indicator used to help users quickly recognize an item's status, category, or classification.
+Label is a compact visual indicator used to help users quickly recognize an item's status or state, in a tone that carries meaning.
 
 It should support fast scanning without becoming a primary action, navigation element, or form control.
 
@@ -18,13 +18,13 @@ It should support fast scanning without becoming a primary action, navigation el
 Use Label for:
 
 - Status indicators
-- Classification tags
-- Small metadata markers
-- Domain-specific categorizations such as law or wealth
+- States such as Overdue, Archived, or Signed
+- Whether an item belongs to law or wealth
 - Compact visual annotations in cards, tables, lists, and page headers
 
 Do not use Label for:
 
+- Categories or classifications (use Tag, whose accent colors have no fixed meaning)
 - Buttons
 - Links
 - Dropdown triggers

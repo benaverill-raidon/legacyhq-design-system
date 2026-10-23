@@ -66,6 +66,8 @@ interface DatePickerProps
   id?: string;
   'aria-label'?: string; 'aria-labelledby'?: string;
   required?: boolean; dialogLabel?: string;
+  previousMonthLabel?: string; nextMonthLabel?: string;   // the calendar's, passed through
+  previousYearLabel?: string; nextYearLabel?: string;
 }
 ```
 

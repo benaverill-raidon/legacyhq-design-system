@@ -28,11 +28,11 @@ import { KeyValuePair } from './key-value-pair';
 import keyValuePairStyles from './key-value-pair.module.css';
 import * as KeyValuePairStories from './KeyValuePair.stories';
 
-export function EditablePair({ label, initial, size }) {
+export function EditablePair({ label, initial, size, actionPlacement = 'end' }) {
   const [value, setValue] = React.useState(initial);
   return (
     <KeyValuePair label={label} size={size} underline>
-      <InlineEdit value={value} onConfirm={setValue} actionPlacement="end">
+      <InlineEdit value={value} onConfirm={setValue} actionPlacement={actionPlacement}>
         <TextField size={size} context="inline" aria-label={label} iconAfter={<EditIcon color="subtle" />} />
       </InlineEdit>
     </KeyValuePair>
@@ -58,6 +58,22 @@ export const sample4 = `<KeyValuePair label="Client name">
     <TextField context="inline" />
   </InlineEdit>
 </KeyValuePair>`;
+export const sample7 = `<KeyValueList>
+  <KeyValuePair label="Client name" underline>
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+      <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+  </KeyValuePair>
+  <KeyValuePair label="Account type" value="Revocable trust" />
+</KeyValueList>`;
+export const sample8 = `<KeyValueList>
+  <KeyValuePair label="Client name" underline>
+    <InlineEdit value={name} onConfirm={setName}>
+      <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+  </KeyValuePair>
+  <KeyValuePair label="Account type" value="Revocable trust" />
+</KeyValueList>`;
 export const sample5 = `<KeyValuePair size="lg" label="Client name">
   <TextField size="lg" context="inline" aria-label="Client name" />
 </KeyValuePair>`;
@@ -171,6 +187,17 @@ rows below move down.
 
 </Subsection>
 
+<Subsection title="Editing in place">
+
+Put Inline Edit's cancel and confirm buttons at the end of the value, with
+`actionPlacement="end"` on the <DocLink to="Components/Forms/Inline Edit" />. They sit 8px past the
+field's trailing edge, so the row keeps its height while editing and the pairs below it don't move.
+Inline Edit's default placement puts the buttons below the field and makes room for them, which
+grows the row. With an inline Text Area that grows, add `actionAlignment="start"` so the buttons
+stay level with its first line.
+
+</Subsection>
+
 </Section>
 
 <Section title="Do and don't">
@@ -197,6 +224,24 @@ rows below move down.
   caption="Leave the control unnamed. The key isn't linked to the field, so the field has no accessible name."
   code={sample4}
 />
+<Do
+  caption={`Put Inline Edit's buttons at the end of the value, with actionPlacement="end". The row keeps its height while editing.`}
+  code={sample7}
+>
+  <KeyValueList>
+    <EditablePair label="Client name" initial="Jane Doe" />
+    <KeyValuePair label="Account type" value="Revocable trust" />
+  </KeyValueList>
+</Do>
+<Dont
+  caption="Leave Inline Edit's buttons below the value. The row grows while editing, and the pairs below it move down."
+  code={sample8}
+>
+  <KeyValueList>
+    <EditablePair label="Client name" initial="Jane Doe" actionPlacement="below" />
+    <KeyValuePair label="Account type" value="Revocable trust" />
+  </KeyValueList>
+</Dont>
 <Do
   caption="Give the inline control the pair's size."
   code={sample5}

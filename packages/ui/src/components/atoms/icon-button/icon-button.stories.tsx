@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CloseIcon, EditIcon, MenuIcon, MoreHorizIcon, SearchIcon } from '../../../assets/icons';
+import { CloseIcon, EditIcon, MenuIcon, MoreVertIcon, SearchIcon } from '../../../assets/icons';
 import { Tooltip } from '../tooltip';
 import { IconButton } from './icon-button';
 import type { IconButtonSize } from './icon-button.types';
@@ -19,7 +19,7 @@ const meta = {
     isLoading: false,
     isExpanded: false,
     'aria-label': 'More actions',
-    children: <MoreHorizIcon />,
+    children: <MoreVertIcon />,
   },
   argTypes: {
     appearance: { control: 'inline-radio', options: ['default', 'primary', 'subtle'] },
@@ -128,17 +128,17 @@ export const Variants: Story = {
       <Group title="Appearance">
         <Cell label="default">
           <IconButton aria-label="Default" appearance="default">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="primary">
           <IconButton aria-label="Primary" appearance="primary">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="subtle">
           <IconButton aria-label="Subtle" appearance="subtle">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
       </Group>
@@ -166,7 +166,7 @@ export const Sizes: Story = {
       {sizes.map((size) => (
         <Cell key={size} label={size}>
           <IconButton aria-label={size + ' size'} size={size}>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
       ))}
@@ -185,32 +185,32 @@ export const States: Story = {
       <Group title="Default appearance">
         <Cell label="Default">
           <IconButton aria-label="Default">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Hover">
           <IconButton aria-label="Hover" data-force-state="hover">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Focus visible">
           <IconButton aria-label="Focus" data-force-state="focus">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Press">
           <IconButton aria-label="Press" data-force-state="press">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Disabled">
           <IconButton aria-label="Disabled" disabled>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Loading">
           <IconButton aria-label="Loading" isLoading>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Expanded">
@@ -223,27 +223,27 @@ export const States: Story = {
       <Group title="Primary appearance">
         <Cell label="Default">
           <IconButton aria-label="Default" appearance="primary">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Hover">
           <IconButton aria-label="Hover" appearance="primary" data-force-state="hover">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Focus visible">
           <IconButton aria-label="Focus" appearance="primary" data-force-state="focus">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Press">
           <IconButton aria-label="Press" appearance="primary" data-force-state="press">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Disabled">
           <IconButton aria-label="Disabled" appearance="primary" disabled>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
       </Group>
@@ -279,22 +279,22 @@ export const Inverse: Story = {
       <Group title="States (on a dark surface)">
         <Cell label="Default">
           <IconButton aria-label="Default" isInverse tooltip={false}>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Hover">
           <IconButton aria-label="Hover" isInverse tooltip={false} data-force-state="hover">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Focus visible">
           <IconButton aria-label="Focus" isInverse tooltip={false} data-force-state="focus">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Press">
           <IconButton aria-label="Press" isInverse tooltip={false} data-force-state="press">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Expanded">
@@ -304,12 +304,12 @@ export const Inverse: Story = {
         </Cell>
         <Cell label="Disabled">
           <IconButton aria-label="Disabled" isInverse tooltip={false} disabled>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
         <Cell label="Loading">
           <IconButton aria-label="Loading" isInverse tooltip={false} isLoading>
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </Cell>
       </Group>
@@ -358,7 +358,7 @@ export const Content: Story = {
       </Group>
       <div style={row}>
         <IconButton aria-labelledby="icon-button-story-label" tooltip="More actions menu" aria-haspopup="menu">
-          <MoreHorizIcon />
+          <MoreVertIcon />
         </IconButton>
         <Tooltip content="Externally composed explanation">
           <IconButton aria-label="Edit" tooltip={false}>
@@ -382,7 +382,7 @@ export const Content: Story = {
               <CloseIcon />
             </IconButton>
             <IconButton aria-label="More actions toolbar" aria-haspopup="menu" isExpanded>
-              <MoreHorizIcon />
+              <MoreVertIcon />
             </IconButton>
           </div>
         </div>
@@ -402,7 +402,7 @@ export const EdgeCases: Story = {
           warning - IconButton has no visible text to fall back on.
         </p>
         <IconButton>
-          <MoreHorizIcon />
+          <MoreVertIcon />
         </IconButton>
       </section>
 
@@ -466,7 +466,7 @@ export const EdgeCases: Story = {
             <EditIcon />
           </IconButton>
           <IconButton aria-label="Dark subtle" appearance="subtle">
-            <MoreHorizIcon />
+            <MoreVertIcon />
           </IconButton>
         </div>
       </section>

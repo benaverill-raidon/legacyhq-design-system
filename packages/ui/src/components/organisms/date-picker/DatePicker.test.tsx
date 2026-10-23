@@ -1,7 +1,7 @@
 // @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
 import { readFileSync } from 'node:fs';
 import * as React from 'react';
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Field } from '../../molecules/field';
@@ -74,6 +74,28 @@ describe('DatePicker', () => {
     renderPicker({ dialogLabel: 'Elegir una fecha' });
     fireEvent.click(field());
     expect(screen.getByRole('dialog', { name: 'Elegir una fecha' })).toBeInTheDocument();
+  });
+
+  it("passes the calendar's month and year button labels through, for translation", () => {
+    const { unmount } = renderPicker();
+    fireEvent.click(field());
+    for (const name of ['Previous year', 'Previous month', 'Next month', 'Next year']) {
+      expect(screen.getByRole('button', { name })).toBeInTheDocument();
+    }
+    unmount();
+
+    renderPicker({
+      previousMonthLabel: 'Mes anterior',
+      nextMonthLabel: 'Mes siguiente',
+      previousYearLabel: 'Año anterior',
+      nextYearLabel: 'Año siguiente',
+    });
+    fireEvent.click(field());
+    const dialog = screen.getByRole('dialog', { name: 'Choose a date' });
+    for (const name of ['Año anterior', 'Mes anterior', 'Mes siguiente', 'Año siguiente']) {
+      expect(within(dialog).getByRole('button', { name })).toBeInTheDocument();
+    }
+    expect(within(dialog).queryByRole('button', { name: 'Next month' })).not.toBeInTheDocument();
   });
 
   it('closes and returns focus to the field when Tab leaves the calendar', async () => {

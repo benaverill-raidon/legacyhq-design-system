@@ -148,6 +148,15 @@ describe('SplitButton', () => {
     expect(screen.getByRole('button', { name: 'More Save options' })).toHaveClass(iconButtonStyles.appearance_primary);
   });
 
+  it('still passes the deprecated tone to the main action only, as before', () => {
+    renderSplitButton({ appearance: 'primary', tone: 'error' });
+
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveClass(buttonStyles.tone_error);
+    const caret = screen.getByRole('button', { name: 'More Save options' });
+    expect(caret).toHaveClass(iconButtonStyles.appearance_primary);
+    expect(caret.className).not.toMatch(/tone/);
+  });
+
   it('applies size to both the primary and secondary actions', () => {
     renderSplitButton({ size: 'sm' });
 

@@ -33,8 +33,9 @@ describe('status data', () => {
   });
 
   it('says what Stable still needs, leaving known issues to their own list', () => {
-    const row = statusRows(statusEntries).find(({ id }) => id === 'table');
-    expect(row?.status).toBe('beta');
+    // Any component that still has known issues: which one changes as issues are fixed.
+    const row = statusRows(statusEntries).find(({ issues }) => issues.length > 0);
+    expect(row?.status).not.toBe('stable');
     expect(row?.missing).not.toContain('No known issues');
     expect(row?.issues.length).toBeGreaterThan(0);
   });

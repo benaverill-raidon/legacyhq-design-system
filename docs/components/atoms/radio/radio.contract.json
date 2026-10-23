@@ -5,7 +5,7 @@
   "knownIssues": [
     {
       "kind": "decision",
-      "summary": "The group legend is `body-md` while Field's label is `heading-xxs`, and the required `*` spacing differs."
+      "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
     }
   ],
   "publicExports": [
@@ -255,7 +255,8 @@
       "errorBorder": "color-border-error",
       "disabledBorder": "color-border-disabled",
       "disabledBackground": "color-background-disabled",
-      "typography": "body-md"
+      "typography": "body-md",
+      "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)"
     },
     "componentAllowed": [
       "indicator size (size-choice-indicator)",

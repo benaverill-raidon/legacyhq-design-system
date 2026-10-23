@@ -45,10 +45,10 @@ Tag
 
 ### Display-only Tag
 
-A non-interactive classification tag.
+A non-interactive category tag.
 
 ```tsx
-<Tag tone="green">Active</Tag>
+<Tag tone="purple">Estate planning</Tag>
 ```
 
 ### Navigational Tag
@@ -330,7 +330,9 @@ brand
 
 Tone should map to semantic color tokens for background, border, and content. `default` is the
 neutral default and `brand` ties to the product's own color; the rest are general-purpose accent
-tones with no fixed semantic meaning of their own. Figma's own `tone` variant calls this option
+tones with no fixed semantic meaning of their own, for telling kinds of records apart - the same
+accent colors, and the same `tone` name, as Icon Tile's (kept as `tone` by decision on 2026-10-23).
+Use Label, whose tones do carry meaning, for a status or a state. Figma's own `tone` variant calls this option
 `standard` - the code deliberately renames it to `default` for clarity, since `default` is what
 every other atom in this system calls its neutral/no-emphasis option (Button's `appearance`,
 Toggle Button's `tone`, etc.). This is an intentional naming divergence from Figma, not a mismatch

@@ -17,6 +17,11 @@ padding and optional underline divider, so the list adds no gap or spacing of it
 </dl.root>
 ```
 
+Editable pairs wrap their control in `InlineEdit actionPlacement="end"` (an owner decision), so the
+cancel and confirm buttons sit beside the value and a row keeps its height while editing; with Inline
+Edit's default `below` placement the buttons take a row under the field and the rest of the list
+moves down.
+
 ## Public API
 
 ```ts

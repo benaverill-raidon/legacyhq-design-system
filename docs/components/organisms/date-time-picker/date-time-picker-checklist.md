@@ -55,6 +55,8 @@ interface DateTimePickerProps
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string; timeLabel?: string;
   dateDialogLabel?: string; timeDialogLabel?: string; // each half's dialogLabel
+  previousMonthLabel?: string; nextMonthLabel?: string; // the calendar's, through Date Picker
+  previousYearLabel?: string; nextYearLabel?: string;
   confirmLabel?: string; cancelLabel?: string;        // Time Picker's, passed through
   hoursLabel?: string; minutesLabel?: string; meridiemLabel?: string;
   amLabel?: string; pmLabel?: string;

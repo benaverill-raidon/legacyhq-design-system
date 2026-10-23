@@ -21,8 +21,8 @@
     },
     {
       "name": "Translated chip remove buttons",
-      "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`.",
-      "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  aria-label=\"Responsables\"\n/>",
+      "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`. removeTooltipLabel translates the remove tooltip (default `Remove`).",
+      "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  removeTooltipLabel=\"Retirer\"\n  aria-label=\"Responsables\"\n/>",
       "props": { "inputType": "multi" }
     },
     {

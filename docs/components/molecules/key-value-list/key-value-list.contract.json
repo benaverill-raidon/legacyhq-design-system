@@ -2,6 +2,12 @@
   "name": "KeyValueList",
   "category": "data-display",
   "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "Its examples file's editable pairs use a Text Field with an edit icon instead of Inline Edit."
+    }
+  ],
   "purpose": "Stack Key Value Pair items vertically in a semantic <dl> element.",
   "intent": "A thin layout wrapper that provides the <dl> (description list) structure screen readers need to announce key/value pairs correctly. Resets browser default margins and uses a flex column layout. Individual pairs manage their own padding and dividers.",
   "sourceFiles": {
@@ -66,7 +72,8 @@
   ],
   "do": [
     "Use as the wrapper for multiple Key Value Pair items.",
-    "Control underlines per-pair with KeyValuePair's underline prop."
+    "Control underlines per-pair with KeyValuePair's underline prop.",
+    "Give a pair edited with InlineEdit actionPlacement=\"end\", so the list doesn't shift while someone edits."
   ],
   "dont": [
     "Don't nest non-KeyValuePair content directly — the <dl> expects <dt>/<dd> children.",

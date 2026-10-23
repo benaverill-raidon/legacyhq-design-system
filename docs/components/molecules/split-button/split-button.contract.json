@@ -5,14 +5,6 @@
   "knownIssues": [
     {
       "kind": "gap",
-      "summary": "Its generated API table misses the props it inherits from Button (prominence, isInverse, isExpanded, type): react-docgen doesn't follow props from another file."
-    },
-    {
-      "kind": "decision",
-      "summary": "`tone` reaches only its main action (Icon Button has no tone yet), so the halves can disagree. Drop it, or deprecate it until Icon Button has one."
-    },
-    {
-      "kind": "gap",
       "summary": "Takes the legacy `appearance` while Button uses `prominence` for the same axis, pending its Figma revision (tone-is-meaning)."
     }
   ],
@@ -75,7 +67,7 @@
     "disabled": { "type": "boolean", "required": false, "default": false, "description": "Disables both segments together." },
     "isLoading": { "type": "boolean", "required": false, "default": false, "description": "Applies Button's own loading treatment to the primary action only; also disables the secondary action." },
     "onClick": { "type": "(event) => void", "required": false, "default": null, "description": "The primary action's own click handler." },
-    "tone": { "type": "ButtonTone", "required": false, "default": "default", "description": "Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)." },
+    "tone": { "type": "ButtonTone", "required": false, "default": "default", "deprecated": true, "description": "Deprecated 2026-10-23: it reaches only the main action until Icon Button has a tone. Still accepted and behaves as before. Forwarded to the primary action only - the secondary action's IconButton has no tone, so the two segments stop matching. Button's own pairing rules apply (warning renders only at primary prominence)." },
     "iconBefore": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
     "iconAfter": { "type": "React.ReactNode", "required": false, "default": null, "description": "Forwarded to the primary action, unchanged from Button's own prop." },
     "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root element." },
@@ -150,7 +142,8 @@
   ],
   "knownLimitations": [
     "No built-in support for more than a small, static list of actions - very large sections arrays inherit Menu's own eager-rendering behavior (no virtualization).",
-    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead)."
+    "Inherits every one of Dropdown Menu's and Menu's own knownLimitations for the panel (no typeahead).",
+    "react-docgen doesn't read props inherited through Omit<> from another file (prominence, isInverse, isExpanded, type from Button); the page lists them by hand."
   ],
   "futureEnhancements": [
     "A renderSecondaryAction/custom-icon escape hatch, if a real use case needs something other than the caret.",

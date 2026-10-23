@@ -59,7 +59,7 @@ accessible scaffold.
 - A helper/error/success message, with a status icon on error/success
 
 ### Character Limits
-None - the label and message wrap.
+None - the label and message wrap. A wrapped message keeps its status icon beside its first line.
 
 ---
 

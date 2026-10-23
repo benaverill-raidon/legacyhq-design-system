@@ -65,7 +65,7 @@
     {
       "name": "Setting a tone",
       "jsx": "<SplitButton appearance=\"primary\" tone=\"error\" secondaryActionLabel=\"More delete options\" sections={deleteAlternatives} onClick={() => remove()}>\n  Delete matter\n</SplitButton>",
-      "reason": "tone forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
+      "reason": "tone is deprecated: it forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
     }
   ]
 }

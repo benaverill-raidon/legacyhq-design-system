@@ -144,6 +144,7 @@ system's rule for when:
 | Label -> control gap | `--spacing-xs` (label `padding-bottom`) | Figma space/050 (4px) |
 | Control -> message gap | `--spacing-xs` (message `padding-top`) | Figma spacing/xs (4px) |
 | Message icon -> text gap | `--spacing-075` | Figma spacing/075 (6px) |
+| Message icon box height | `--typography-body-sm-line-height` (message `align-items: flex-start`) | Keeps the icon on the message's first line when it wraps (owner decision) |
 | Message typography | `--typography-body-sm-*` | Figma body/sm |
 | Message colour (default) | `--color-content-subtle` | |
 | Message colour (error) | `--color-content-error` | |

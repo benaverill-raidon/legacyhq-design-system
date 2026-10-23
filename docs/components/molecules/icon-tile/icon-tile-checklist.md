@@ -98,11 +98,11 @@ Icon Tile is non-interactive.
 ### Does the icon need additional context?
 Default: no - `aria-hidden`, assumed decorative alongside labeled text.
 
-When the tile is the only carrier of meaning: `decorative={false}` + `ariaLabel`.
+When the tile is the only carrier of meaning: `decorative={false}` + `aria-label` (`ariaLabel` is the deprecated name, still accepted).
 
 ### Is aria-label needed?
 Optional, only meaningful when `decorative={false}`, where it's required: a tile with
-`decorative={false}` and no `ariaLabel` warns in development.
+`decorative={false}` and no `aria-label` warns in development.
 
 ---
 

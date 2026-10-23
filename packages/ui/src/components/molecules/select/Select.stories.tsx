@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Avatar } from '../../atoms/avatar';
-import { TaskNotStartedIcon } from '../../../assets/icons';
+import { TaskCompleteIcon, TaskInProgressIcon, TaskNotStartedIcon } from '../../../assets/icons';
 import { Select } from './select';
 import type { SelectContext, SelectOption, SelectSize } from './select.types';
 
@@ -215,14 +215,24 @@ export const States: Story = {
   },
 };
 
-/** A realistic form row - an icon-bearing status select wired to live state. */
+/**
+ * A realistic form row - an icon-bearing status select wired to live state. The colored status
+ * icons keep their color before the chosen value, as they have in the menu.
+ */
 export const Content: Story = {
   render: () => {
     function StatusPicker() {
       const [value, setValue] = React.useState<string | null>('in-review');
       const withIcons: SelectOption[] = STATUS_OPTIONS.map((o) => ({
         ...o,
-        icon: <TaskNotStartedIcon decorative />,
+        icon:
+          o.value === 'in-review' ? (
+            <TaskInProgressIcon color="information" decorative />
+          ) : o.value === 'approved' || o.value === 'filed' ? (
+            <TaskCompleteIcon color="success" decorative />
+          ) : (
+            <TaskNotStartedIcon decorative />
+          ),
       }));
       return (
         <div style={stack}>

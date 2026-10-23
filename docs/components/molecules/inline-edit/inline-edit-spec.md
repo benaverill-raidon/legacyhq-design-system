@@ -48,8 +48,9 @@ Molecule
 InlineEdit
 └─ div (root, column layout, no visual chrome of its own)
    ├─ div.content (full width, holds the cloned child - read-only or editable depending on state)
-   └─ ButtonGroup.actions (optional, only once editing has started && actionButtons; absolutely
-      positioned below the field at its trailing edge, or past that edge with actionPlacement="end")
+   └─ ButtonGroup.actions (optional, only once editing has started && actionButtons; its own row
+      below the field at its trailing edge, taking space, or absolutely positioned past that edge
+      with actionPlacement="end")
       ├─ IconButton (cancel/close), size xs
       └─ IconButton (confirm/check), size xs
 ```
@@ -75,12 +76,16 @@ consumer would want to render the confirm/cancel buttons before the field is int
 
 Figma's literal `state=edit` layout puts the action buttons trailing in the *same row* as the field,
 which means the field has to shrink to make room for them once editing starts. Per explicit design
-feedback, this implementation instead floats the action row: it's absolutely positioned 8px
-(`--spacing-sm`) below the field at its trailing edge, or with `actionPlacement="end"` 8px past the
-field's trailing edge (centered on it, or with `actionAlignment="start"` held at the first line's
-control height so it stays put as a multi-line field grows). The field keeps its full width whether
-or not it's being edited, the layout never shifts, and the buttons float over whatever sits below or
-beside the field, so the container has to leave room for them.
+feedback, this implementation instead moves the action row off the field's row, so the field keeps
+its full width whether or not it's being edited. With the default `actionPlacement="below"` the row
+sits 8px (`--spacing-sm`) below the field (and below `validate`'s message) at its trailing edge, in
+the flow: its space is reserved while editing, so whatever sits below Inline Edit, Field's message
+included, moves down by the row's height while editing rather than being covered (an owner decision;
+earlier it floated over that content). With `actionPlacement="end"` it's absolutely positioned 8px
+past the field's trailing edge (centered on it, or with `actionAlignment="start"` held at the first
+line's control height so it stays put as a multi-line field grows) and takes no space, so the
+container has to leave room beside the field. In a Key Value Pair, use `end`: the row of the pair
+doesn't grow while editing.
 
 Figma's `state=default` variant contains no read-mode UI at all - not even a text value or an edit
 trigger. Rather than invent a separate one, Inline Edit clones the *same* single child for both
@@ -236,19 +241,20 @@ Inline Edit, not the consumer, renders those buttons.
 ## Design Tokens
 
 ### Spacing
-The action row floats `--spacing-sm` (8px) from the field: below it, or past its trailing edge with
-`actionPlacement="end"`. The gap between the two action buttons is `--spacing-xs` (4px), matching
+The action row sits `--spacing-sm` (8px) from the field: below it (`margin-block-start`), or past
+its trailing edge with `actionPlacement="end"`. The gap between the two action buttons is `--spacing-xs` (4px), matching
 Figma's `itemSpacing: 4`; `.root .actions` overrides Button Group's default 8px.
 
 ### Layout
 The root diverges from Figma's own single-row layout, per explicit design feedback: a one-column
-grid (`grid-template-columns: minmax(0, 1fr)`, rows for the field and `validate`'s message), so the
+grid (`grid-template-columns: minmax(0, 1fr)`, rows for the field, `validate`'s message, and the
+default-placed action row), so the
 field always keeps its full width instead of sharing a row with (and shrinking to make room for)
 the action buttons. With `actionPlacement="end"` and in a Table cell, the action row is placed in
 the first grid row, so that row is its containing block and a message below doesn't move it. The content area is
-`inline-size: 100%`; the action row is absolutely positioned (`z-index: 1`) below the field at its
-trailing edge, or past that edge with `actionPlacement="end"`, rather than Figma's literal
-same-row-trailing placement. Inside a Table's editable cell (`data-editable-cell`), the read-only
+`inline-size: 100%`; the action row takes the third grid row, `justify-self: end`, below the field
+at its trailing edge, or is absolutely positioned (`z-index: 1`) past that edge with
+`actionPlacement="end"`, rather than Figma's literal same-row-trailing placement. Inside a Table's editable cell (`data-editable-cell`), the read-only
 child gets an edit icon in `iconAfter` and starts editing on click too; while editing, the actions
 sit inside the cell at its trailing edge, vertically centered, the child reserves padding for them,
 and it shows a focus-colored bottom line. Root is `inline-size: 100%`, matching Figma's `FILL` sizing and
@@ -258,7 +264,9 @@ and it shows a focus-colored bottom line. Root is `inline-size: 100%`, matching 
 `validate`'s message copies Field's error look: the small error status icon (`sm`, no spacing,
 `color="error"`), `--spacing-075` before the text, `body-sm` in `--color-content-error`, and
 `--spacing-xs` above it. It's indented like Field's inline context, by the inline control's text
-inset: `--spacing-sm` for `sm`/`md`, `--spacing-md` for `lg`.
+inset: `--spacing-sm` for `sm`/`md`, `--spacing-md` for `lg`. As in Field, the icon sits on the
+message's first line (its box is one `body-sm` line tall), so a message that wraps keeps the icon
+beside its first line.
 
 Apart from that message, no color, radius, or typography tokens are owned by Inline Edit itself -
 all visual styling comes from the cloned child, and the confirm/cancel `IconButton`s carry their own
@@ -329,11 +337,12 @@ Cancel, Escape, a new edit, a successful confirm, and a blur with an unchanged d
 ### Visual
 - [ ] Renders read-only (no action row) before any interaction
 - [ ] Focusing/clicking the field starts editing and shows the cancel/confirm icon-button pair below
-      the field, anchored to the right edge
+      the field, anchored to the right edge; its space is reserved, so nothing below it (Field's
+      message included) is covered
 - [ ] The field keeps its full width whether or not the action row is showing (never shrinks to make
       room for the buttons)
 - [ ] `actionButtons={false}` hides the icon-button pair while still editing
-- [ ] The action row floats `--spacing-sm` (8px) from the field; the gap between the two action
+- [ ] The action row sits `--spacing-sm` (8px) from the field; the gap between the two action
       buttons is `--spacing-xs` (4px)
 - [ ] Light mode works
 - [ ] Dark mode works

@@ -220,17 +220,26 @@
   color: var(--color-content-default);
 }
 
+/*
+ * The legend matches Field's label, so a group and the fields beside it in a form read alike:
+ * heading-xxs in the subtle text color, with the required `*` straight after the text in the error
+ * color and no gap (Field's `.label` and `.required`).
+ */
 .legend {
   display: inline-flex;
   align-items: baseline;
   padding: var(--spacing-none);
-  color: var(--color-content-default);
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
-  text-transform: var(--typography-body-md-text-transform);
+  color: var(--color-content-subtle);
+  font-family: var(--typography-heading-xxs-font-family);
+  font-size: var(--typography-heading-xxs-font-size);
+  font-weight: var(--typography-heading-xxs-font-weight);
+  line-height: var(--typography-heading-xxs-line-height);
+  letter-spacing: var(--typography-heading-xxs-letter-spacing);
+}
+
+/* Outranks the single control's `.requiredIndicator`, which keeps its gap after a Radio's or Checkbox's own label. */
+.legend .requiredIndicator {
+  margin-inline-start: var(--spacing-none);
 }
 
 .description {

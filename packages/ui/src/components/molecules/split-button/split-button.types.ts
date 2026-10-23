@@ -38,8 +38,9 @@ export interface SplitButtonProps extends Omit<ButtonProps, 'appearance' | 'isFu
   /** An icon after the main action's label. The caret is separate, so don't add another. */
   iconAfter?: React.ReactNode;
   /**
-   * Passed to the main action only: the caret takes no tone, so the two halves don't match. Leave it
-   * unset.
+   * @deprecated It reaches only the main action until Icon Button has a tone, so the caret doesn't
+   * match it. It still works as before. Leave it unset, and use a Button with a tone for a
+   * destructive action.
    */
   tone?: ButtonTone;
   /** Set on the wrapping `div`, not on either button. */

@@ -11,7 +11,7 @@
 - [ ] Exports `ProgressBar`.
 - [ ] Supports `value: number`.
 - [ ] Supports `variant: 'linear' | 'circular'`.
-- [ ] Supports `size: 'sm' | 'md' | 'lg'`.
+- [ ] Supports `size: 'sm' | 'md' | 'lg'` for linear, and `md` and `lg` for circular.
 - [ ] Defaults to linear/md.
 - [ ] Supports `label`.
 - [ ] Supports `getValueText`.
@@ -44,7 +44,7 @@
 - [ ] Diameter is 80px; the ring's outer edge is radius 38, with a 1px border outside both ring edges.
 - [ ] `md` ring is 16px thick (hole radius 22).
 - [ ] `lg` ring is 28px thick (hole radius 10).
-- [ ] `sm` ring is 8px thick (hole radius 30); not in Figma (open decision in the contract).
+- [ ] A circular `sm` is deprecated and renders exactly as `md` (class, `data-size`, and ring); Figma has no circular `sm`.
 - [ ] Progress begins at 12 o'clock.
 - [ ] Progress advances clockwise.
 - [ ] Progress arc fills the ring's full thickness, with no inset.

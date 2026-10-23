@@ -32,9 +32,14 @@
   color: var(--color-content-error);
 }
 
+/*
+ * The status icon sits on the message's first line: the row aligns to the top, and the icon's box
+ * is one line of the message's type (body-sm's line height) tall with the icon centered in it, so a
+ * message that wraps onto two lines keeps the icon beside its first line rather than between them.
+ */
 .message {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--spacing-075);
   padding-top: var(--spacing-xs);
   color: var(--color-content-subtle);
@@ -49,6 +54,7 @@
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
+  block-size: var(--typography-body-sm-line-height);
 }
 
 .messageText {

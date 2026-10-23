@@ -38,8 +38,7 @@
     "purpose": "Surfaces the real 12-vs-16 completeness split as a queryable signal instead of only living in prose a reader might skip.",
     "knownThinComponents": [
       "checkbox", "icon-button", "label", "link-button", "link", "slider", "spinner", "switch",
-      "tag", "toggle-button", "toggle-icon-button", "tooltip", "avatar", "progress-bar",
-      "progress-indicator", "radio"
+      "tag", "toggle-button", "toggle-icon-button", "avatar", "progress-indicator", "radio"
     ],
     "resolution": "When a component's examples.json is next substantively touched, add at least one antiExample (a real anti-pattern with a reason, not an invented one) and a props map per example. Same 'migrate when next touched' philosophy as component-api-governance.json's knownViolations and component-registry-governance.json's knownContentGaps - not something to backfill in bulk without real domain review of what's actually wrong for each component."
   },

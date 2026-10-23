@@ -6,7 +6,7 @@
     },
     {
       "name": "Supplemental clarification",
-      "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>"
+      "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-vert' /></IconButton></Tooltip>"
     }
   ],
   "antiExamples": [

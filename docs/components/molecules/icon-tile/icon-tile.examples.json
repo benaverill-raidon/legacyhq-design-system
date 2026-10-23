@@ -44,12 +44,12 @@
     {
       "name": "Large size with accessible label",
       "description": "Tile is the sole carrier of meaning, so decorative is turned off.",
-      "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} ariaLabel=\"Error\"><CheckIcon /></IconTile>",
+      "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} aria-label=\"Error\"><CheckIcon /></IconTile>",
       "props": {
         "size": "lg",
         "tone": "red",
         "decorative": false,
-        "ariaLabel": "Error"
+        "aria-label": "Error"
       }
     }
   ],

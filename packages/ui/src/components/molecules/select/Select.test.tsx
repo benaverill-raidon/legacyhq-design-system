@@ -86,6 +86,39 @@ describe('Select', () => {
       expect(frame.querySelector(`.${textFieldStyles.before}`)).not.toBeInTheDocument();
     });
 
+    it("keeps the chosen option's icon in its own color in the trigger, as in its menu row", () => {
+      const withStatus: SelectOption[] = [
+        { value: 'approved', label: 'Approved', icon: <span data-testid="approved-icon" data-color="success" /> },
+      ];
+      render(<Select options={withStatus} value="approved" onChange={vi.fn()} />);
+      const icon = screen.getByTestId('approved-icon');
+      // Wrapped, so Select's rules (not Text Field's inherit) set its color.
+      expect(icon.parentElement).toHaveClass(selectStyles.optionIcon);
+      expect(icon.parentElement?.parentElement).toHaveClass(textFieldStyles.before);
+    });
+
+    it("restates every named Icon color for the chosen-option icon, and greys it when disabled", () => {
+      const iconTypes = readFileSync('packages/ui/src/components/primitives/icon/icon.types.ts', 'utf8');
+      const iconCss = readFileSync('packages/ui/src/components/primitives/icon/icon.module.css', 'utf8');
+      const union = iconTypes.match(/export type IconColor =([^;]*);/)?.[1] ?? '';
+      const colors = [...union.matchAll(/'([a-z]+)'/g)].map(([, color]) => color).filter((color) => color !== 'inherit');
+
+      expect(colors.length).toBeGreaterThan(5);
+      for (const color of colors) {
+        const iconColor = iconCss.match(new RegExp(`\\.color_${color}\\s*\\{\\s*color: (var\\([^)]*\\));`))?.[1];
+        expect(iconColor, color).toBeDefined();
+        // Same token as Icon's own class, one class stronger than Text Field's `.before [data-color]`.
+        expect(selectCss).toMatch(
+          new RegExp(`\\.trigger \\.optionIcon :global\\(\\[data-color='${color}'\\]\\) \\{\\s*color: ${iconColor?.replace(/[()]/g, '\\$&')};`),
+        );
+      }
+      expect(selectCss).toMatch(
+        /\.trigger:where\(:has\(input:disabled\)\) \.optionIcon :global\(\[data-color\]\) \{\s*color: var\(--color-content-disabled\);/,
+      );
+      // The disabled rule comes after the colors, so it wins at the same specificity.
+      expect(selectCss.lastIndexOf(":has(input:disabled)) .optionIcon")).toBeGreaterThan(selectCss.lastIndexOf("[data-color='success']"));
+    });
+
     it('marks the selected option checked', () => {
       render(<Select options={OPTIONS} value="approved" onChange={vi.fn()} />);
       open();
@@ -179,6 +212,30 @@ describe('Select', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Retirer Draft' }));
       expect(onChange).toHaveBeenCalledWith(['approved']);
       expect(screen.getByRole('button', { name: 'Retirer Approved' })).toBeInTheDocument();
+    });
+
+    it("passes removeTooltipLabel to the chips' remove tooltips, with an English default", () => {
+      vi.useFakeTimers();
+      try {
+        const hover = (element: HTMLElement) => {
+          fireEvent.pointerEnter(element);
+          act(() => {
+            vi.advanceTimersByTime(300);
+          });
+        };
+        const { unmount } = render(<Select inputType="multi" options={OPTIONS} value={['draft']} onChange={vi.fn()} />);
+        hover(screen.getByRole('button', { name: 'Remove Draft' }));
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Remove');
+        unmount();
+
+        render(
+          <Select inputType="multi" options={OPTIONS} value={['draft']} onChange={vi.fn()} removeTooltipLabel="Retirer" />,
+        );
+        hover(screen.getByRole('button', { name: 'Remove Draft' }));
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Retirer');
+      } finally {
+        vi.useRealTimers();
+      }
     });
 
     it('removes the last chip on Backspace when the query is empty', () => {

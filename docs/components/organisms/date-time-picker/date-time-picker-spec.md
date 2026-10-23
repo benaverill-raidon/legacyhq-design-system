@@ -49,6 +49,10 @@ export interface DateTimePickerProps
   // Each half's built-in labels, passed through (each half's English default when undefined).
   dateDialogLabel?: string;         // Date Picker's dialogLabel
   timeDialogLabel?: string;         // Time Picker's dialogLabel
+  previousMonthLabel?: string;      // the calendar's, through Date Picker, under its own names
+  nextMonthLabel?: string;
+  previousYearLabel?: string;
+  nextYearLabel?: string;
   confirmLabel?: string;            // the rest under Time Picker's own names
   cancelLabel?: string;
   hoursLabel?: string;
@@ -84,7 +88,9 @@ dateLabel = 'Date'; timeLabel = 'Time'
   the time selector.
 - Pass each half's built-in labels through, for translation: `dateDialogLabel` and
   `timeDialogLabel` become each half's `dialogLabel` (prefixed because both halves have one, as
-  `datePlaceholder` / `timePlaceholder` are); the time half's `confirmLabel`, `cancelLabel`,
+  `datePlaceholder` / `timePlaceholder` are); the calendar's `previousMonthLabel`,
+  `nextMonthLabel`, `previousYearLabel`, and `nextYearLabel` go through Date Picker under their own
+  names (only the date half has them); the time half's `confirmLabel`, `cancelLabel`,
   `hoursLabel`, `minutesLabel`, `meridiemLabel`, `amLabel`, and `pmLabel` keep Time Picker's names
   (only the time half has them, as `minuteStep`). Undefined ones fall back to each half's default.
   Month and weekday names come from `locale`.

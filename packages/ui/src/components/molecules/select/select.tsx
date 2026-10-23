@@ -295,6 +295,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
         : placeholder;
 
   const getRemoveLabel = (multi ? props.getRemoveLabel : undefined) ?? defaultGetRemoveLabel;
+  const removeTooltipLabel = (multi ? props.removeTooltipLabel : undefined) ?? 'Remove';
 
   const chips = multi
     ? selectedValues.map((value) => {
@@ -309,6 +310,7 @@ export const Select = React.memo(function Select(props: SelectProps) {
             elemBefore={option.icon}
             disabled={disabled}
             removeLabel={getRemoveLabel(option.label)}
+            removeTooltipLabel={removeTooltipLabel}
             onRemove={() => removeValue(value)}
           />
         );
@@ -345,8 +347,9 @@ export const Select = React.memo(function Select(props: SelectProps) {
         placeholder={inputPlaceholder}
         value={inputValue}
         // Single-select shows the chosen option's icon before its label (Figma's elemBeforeInput slot);
-        // it stays while the menu is open, since the value doesn't change until a new pick.
-        iconBefore={selectedSingleOption?.icon}
+        // it stays while the menu is open, since the value doesn't change until a new pick. The
+        // wrapper keeps the icon's own color, as its menu row does, over Text Field's subtle slot.
+        iconBefore={selectedSingleOption?.icon ? <span className={styles.optionIcon}>{selectedSingleOption.icon}</span> : undefined}
         leadingContent={chips}
         iconAfter={
           <span

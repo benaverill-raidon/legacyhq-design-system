@@ -1,7 +1,17 @@
 {
   "name": "TextField",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "bug",
+      "summary": "Its examples file says the Key Value Pair example is \"wrapped in InlineEdit\", but the code shows no Inline Edit."
+    },
+    {
+      "kind": "gap",
+      "summary": "Its leading slot's `color: inherit` rule greys any colored icon passed through `iconBefore` (Select works around it for its chosen option's icon)."
+    }
+  ],
   "purpose": "Let a user write or edit a single line of free text.",
   "intent": "Provide one consistent, accessible native text-input control - sizing, borders, and interaction states - that every free-text entry point in the product shares. Composes an optional leading icon/text slot and an optional trailing icon/action slot (which may itself compose a real Icon Button or Button), which is why it lives at the molecule tier rather than atom.",
   "nativeElement": "input",

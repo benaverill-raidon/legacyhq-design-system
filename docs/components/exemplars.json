@@ -692,6 +692,12 @@
         "props": {}
       },
       {
+        "name": "Large circular summary",
+        "description": "The thicker lg ring, for a summary that leads its tile. Circular takes md and lg.",
+        "jsx": "<ProgressBar variant=\"circular\" size=\"lg\" value={75} label=\"Roadmap completion\" />",
+        "props": {}
+      },
+      {
         "name": "Circular summary at 0",
         "description": "Nothing complete yet: the ring shows its empty track and border, with no progress arc, so the summary keeps its shape.",
         "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />",
@@ -710,8 +716,14 @@
         "props": {}
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Circular sm",
+        "jsx": "<ProgressBar variant=\"circular\" size=\"sm\" value={75} label=\"Roadmap completion\" />",
+        "reason": "Circular has md and lg only, as Figma does. A circular sm is deprecated and renders exactly as md, so write size=\"md\" (or leave the default)."
+      }
+    ],
+    "exemplarCompleteness": "partial"
   },
   {
     "id": "progress-indicator",
@@ -1054,7 +1066,7 @@
       {
         "name": "Supplemental clarification",
         "description": null,
-        "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-horiz' /></IconButton></Tooltip>",
+        "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-vert' /></IconButton></Tooltip>",
         "props": {}
       }
     ],
@@ -1220,6 +1232,15 @@
         "jsx": "<ButtonGroup orientation=\"vertical\">\n  <Button size=\"sm\">Button 1</Button>\n  <Button size=\"sm\">Button 2</Button>\n</ButtonGroup>",
         "props": {
           "orientation": "vertical"
+        }
+      },
+      {
+        "name": "Compact spacing",
+        "description": "A 4px gap for a tight set of Icon Buttons, such as a dense toolbar.",
+        "jsx": "<ButtonGroup spacing=\"compact\" aria-label=\"Row actions\">\n  <IconButton aria-label=\"Edit\"><EditIcon /></IconButton>\n  <IconButton aria-label=\"Delete\"><DeleteIcon /></IconButton>\n</ButtonGroup>",
+        "props": {
+          "spacing": "compact",
+          "aria-label": "Row actions"
         }
       },
       {
@@ -1570,12 +1591,12 @@
       {
         "name": "Large size with accessible label",
         "description": "Tile is the sole carrier of meaning, so decorative is turned off.",
-        "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} ariaLabel=\"Error\"><CheckIcon /></IconTile>",
+        "jsx": "<IconTile size=\"lg\" tone=\"red\" decorative={false} aria-label=\"Error\"><CheckIcon /></IconTile>",
         "props": {
           "size": "lg",
           "tone": "red",
           "decorative": false,
-          "ariaLabel": "Error"
+          "aria-label": "Error"
         }
       }
     ],
@@ -2001,8 +2022,8 @@
       },
       {
         "name": "Translated chip remove buttons",
-        "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`.",
-        "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  aria-label=\"Responsables\"\n/>",
+        "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`. removeTooltipLabel translates the remove tooltip (default `Remove`).",
+        "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  removeTooltipLabel=\"Retirer\"\n  aria-label=\"Responsables\"\n/>",
         "props": {
           "inputType": "multi"
         }
@@ -2203,7 +2224,7 @@
       {
         "name": "Setting a tone",
         "jsx": "<SplitButton appearance=\"primary\" tone=\"error\" secondaryActionLabel=\"More delete options\" sections={deleteAlternatives} onClick={() => remove()}>\n  Delete matter\n</SplitButton>",
-        "reason": "tone forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
+        "reason": "tone is deprecated: it forwards to the primary action only - the caret's IconButton has no tone - so the two segments render in different colors. With appearance=\"default\" (Button's secondary prominence) a warning tone renders nothing at all. Use a Button with tone=\"error\" for a destructive action."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2779,8 +2800,8 @@
       },
       {
         "name": "Translated",
-        "description": "dateLabel and timeLabel name the halves; each half's built-in text passes through (dateDialogLabel, timeDialogLabel, and Time Picker's own label props); locale sets the month and weekday names.",
-        "jsx": "<Field label=\"Audiencia\">\n  <DateTimePicker\n    locale=\"es\"\n    dateLabel=\"Fecha\"\n    timeLabel=\"Hora\"\n    dateDialogLabel=\"Elegir una fecha\"\n    timeDialogLabel=\"Elegir una hora\"\n    confirmLabel=\"Confirmar\"\n    cancelLabel=\"Cancelar\"\n    hoursLabel=\"Horas\"\n    minutesLabel=\"Minutos\"\n    meridiemLabel=\"a. m./p. m.\"\n    amLabel=\"a. m.\"\n    pmLabel=\"p. m.\"\n  />\n</Field>",
+        "description": "dateLabel and timeLabel name the halves; each half's built-in text passes through (dateDialogLabel, timeDialogLabel, the calendar's month and year button labels, and Time Picker's own label props); locale sets the month and weekday names.",
+        "jsx": "<Field label=\"Audiencia\">\n  <DateTimePicker\n    locale=\"es\"\n    dateLabel=\"Fecha\"\n    timeLabel=\"Hora\"\n    dateDialogLabel=\"Elegir una fecha\"\n    timeDialogLabel=\"Elegir una hora\"\n    previousMonthLabel=\"Mes anterior\"\n    nextMonthLabel=\"Mes siguiente\"\n    previousYearLabel=\"Año anterior\"\n    nextYearLabel=\"Año siguiente\"\n    confirmLabel=\"Confirmar\"\n    cancelLabel=\"Cancelar\"\n    hoursLabel=\"Horas\"\n    minutesLabel=\"Minutos\"\n    meridiemLabel=\"a. m./p. m.\"\n    amLabel=\"a. m.\"\n    pmLabel=\"p. m.\"\n  />\n</Field>",
         "props": {
           "locale": "es"
         }
@@ -3314,7 +3335,7 @@
       {
         "name": "Selectable with a bulk-actions bar",
         "description": null,
-        "jsx": "const [selected, setSelected] = useState([]);\n\n<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  selectable\n  selectedIds={selected}\n  onSelectionChange={setSelected}\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  bulkActions={\n    <>\n      <Button appearance=\"subtle\" size=\"sm\" onClick={() => setSelected([])}>Clear</Button>\n      <Button appearance=\"primary\" tone=\"error\" size=\"sm\">Remove</Button>\n    </>\n  }\n/>",
+        "jsx": "const [selected, setSelected] = useState([]);\n\n<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={members}\n  selectable\n  selectedIds={selected}\n  onSelectionChange={setSelected}\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  bulkActions={\n    <>\n      <Button prominence=\"tertiary\" size=\"sm\" onClick={() => setSelected([])}>Clear</Button>\n      <Button prominence=\"primary\" tone=\"error\" size=\"sm\">Remove</Button>\n    </>\n  }\n/>",
         "props": {
           "selectable": true
         }

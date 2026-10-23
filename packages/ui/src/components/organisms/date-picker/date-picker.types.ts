@@ -63,4 +63,12 @@ export interface DatePickerProps
   required?: boolean;
   /** Accessible name for the calendar dialog. Defaults to `Choose a date`. */
   dialogLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's previous-month button: Date Picker Calendar's own. Defaults to `Previous month`. */
+  previousMonthLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's next-month button: Date Picker Calendar's own. Defaults to `Next month`. */
+  nextMonthLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's previous-year button: Date Picker Calendar's own. Defaults to `Previous year`. */
+  previousYearLabel?: string;
+  /** Accessible name, and tooltip, of the calendar's next-year button: Date Picker Calendar's own. Defaults to `Next year`. */
+  nextYearLabel?: string;
 }

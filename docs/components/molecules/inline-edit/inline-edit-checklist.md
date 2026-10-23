@@ -72,7 +72,9 @@ maps to internal editing state, not a set of visual choices.
 Required:
 - Read-only (not editing) - renders the cloned child with `value`, no action row
 - Editing (started by click/focus) - renders the cloned child with the in-progress draft, plus the
-  confirm/cancel action pair
+  confirm/cancel action pair: by default in its own row below the field, so its space is reserved
+  and nothing below Inline Edit (Field's message included) is covered; with `actionPlacement="end"`
+  floating past the field's trailing edge (the placement to use in a Key Value Pair)
 - Editing with an error - `validate` rejected the draft: the message under the field in Field's
   error look, the child marked invalid (`invalid`, `aria-invalid`, `aria-describedby`)
 

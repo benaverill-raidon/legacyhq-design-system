@@ -407,6 +407,9 @@ function PropTable({ rows }: { rows: PropRow[] }) {
  */
 export function PropsTable({ of, component, native, classNameOn }: { of?: StoriesModule; component?: unknown; native?: string; classNameOn?: string }) {
   const { current, deprecated } = propRows(docgenOf(component ?? of?.default.component));
+  // Say so rather than draw an empty table: docgen can't read a union of props types (Chip, Select),
+  // and those pages list their props by hand after this.
+  if (!current.length && !deprecated.length) return <p className={doc.caption}>{"Storybook's docgen read no props from this component's types."}</p>;
   return (
     <>
       <PropTable rows={current} />

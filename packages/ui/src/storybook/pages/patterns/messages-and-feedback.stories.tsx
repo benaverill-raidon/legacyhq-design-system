@@ -10,7 +10,7 @@ import { Banner } from '../../../components/organisms/banner';
 import { Form, FormFooter, FormRow, FormSection } from '../../../components/organisms/form';
 import { ModalDialog } from '../../../components/organisms/modal-dialog';
 import { SectionMessage } from '../../../components/organisms/section-message';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './messages-and-feedback.module.css';
 
 // Examples for Patterns / Messages and Feedback, built only from system components. The local
@@ -108,7 +108,6 @@ export const Confirmations: Story = {
         >
           This deletes Rivera v. Atlantic Insurance, its documents, and its history. You can&apos;t undo it.
         </ModalDialog>
-        <ToastGroup />
       </>
     );
   },

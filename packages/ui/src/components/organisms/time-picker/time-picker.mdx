@@ -30,6 +30,32 @@ import * as TimePickerStories from './TimePicker.stories';
 
 export const NINE_THIRTY = new Date(2026, 2, 24, 9, 30);
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Appointment time">
+  <TimePicker minuteStep={15} value={time} onChange={setTime} />
+</Field>`;
+export const sample2 = `<Field label="Appointment time" state={time.getMinutes() % 15 ? 'error' : 'default'} message="Choose a quarter hour.">
+  <TimePicker value={time} onChange={setTime} />
+</Field>`;
+export const sample3 = `<Field label="Hearing">
+  <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`;
+export const sample4 = `<Field label="Hora de la audiencia">
+  <TimePicker
+    confirmLabel="Confirmar"
+    cancelLabel="Cancelar"
+    hoursLabel="Horas"
+    minutesLabel="Minutos"
+    amLabel="a. m."
+    pmLabel="p. m."
+    dialogLabel="Elegir una hora"
+  />
+</Field>`;
+export const sample5 = `<Field label="Hora de la audiencia">
+  <TimePicker />
+</Field>`;
+
 <Meta of={TimePickerStories} name="Docs" />
 
 <Unstyled>
@@ -206,9 +232,7 @@ context, and the panel lines its options up at the start with a line beside the 
 <Guidelines>
 <Do
   caption="Set minuteStep to the precision the time needs, such as quarter hours for appointments."
-  code={`<Field label="Appointment time">
-    <TimePicker minuteStep={15} value={time} onChange={setTime} />
-</Field>`}
+  code={sample1}
 >
   <Field label="Appointment time">
     <TimePicker minuteStep={15} defaultValue={NINE_THIRTY} />
@@ -216,15 +240,11 @@ context, and the panel lines its options up at the start with a line beside the 
 </Do>
 <Dont
   caption="Offer 5-minute steps, then reject times that aren't on the quarter hour."
-  code={`<Field label="Appointment time" state={time.getMinutes() % 15 ? 'error' : 'default'} message="Choose a quarter hour.">
-    <TimePicker value={time} onChange={setTime} />
-</Field>`}
+  code={sample2}
 />
 <Do
   caption="Use Date Time Picker when the day matters as well as the time."
-  code={`<Field label="Hearing">
-    <DateTimePicker value={hearing} onChange={setHearing} />
-</Field>`}
+  code={sample3}
 >
   <Field label="Hearing">
     <DateTimePicker defaultValue={NINE_THIRTY} today={NINE_THIRTY} />
@@ -236,17 +256,7 @@ context, and the panel lines its options up at the start with a line beside the 
 />
 <Do
   caption="Translate the panel's words along with the field's label."
-  code={`<Field label="Hora de la audiencia">
-    <TimePicker
-      confirmLabel="Confirmar"
-      cancelLabel="Cancelar"
-      hoursLabel="Horas"
-      minutesLabel="Minutos"
-      amLabel="a. m."
-      pmLabel="p. m."
-      dialogLabel="Elegir una hora"
-    />
-</Field>`}
+  code={sample4}
 >
   <Field label="Hora de la audiencia">
     <TimePicker defaultValue={NINE_THIRTY} confirmLabel="Confirmar" cancelLabel="Cancelar" hoursLabel="Horas" minutesLabel="Minutos" amLabel="a. m." pmLabel="p. m." dialogLabel="Elegir una hora" />
@@ -254,9 +264,7 @@ context, and the panel lines its options up at the start with a line beside the 
 </Do>
 <Dont
   caption="Translate only the label. The panel's buttons and column names stay in English."
-  code={`<Field label="Hora de la audiencia">
-    <TimePicker />
-</Field>`}
+  code={sample5}
 />
 </Guidelines>
 

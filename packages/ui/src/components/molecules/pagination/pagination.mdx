@@ -27,6 +27,15 @@ import { Pagination } from './pagination';
 import paginationStyles from './pagination.module.css';
 import * as PaginationStories from './Pagination.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `const [page, setPage] = useState(1);
+
+<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />`;
+export const sample2 = `{totalPages > 1 && (
+  <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+)}`;
+
 <Meta of={PaginationStories} name="Docs" />
 
 <Unstyled>
@@ -107,15 +116,11 @@ near either end of a long range.
 <Section title="Do and don't">
 
 <Guidelines>
-<Do caption="Keep currentPage in state and update it from onPageChange." code={`const [page, setPage] = useState(1);
-
-<Pagination currentPage={page} totalPages={20} onPageChange={setPage} />`}>
+<Do caption="Keep currentPage in state and update it from onPageChange." code={sample1}>
   <Pagination currentPage={1} totalPages={20} onPageChange={() => {}} />
 </Do>
 <Dont caption="Load the new page's results without updating currentPage, so the selected page never moves." code={`<Pagination currentPage={1} totalPages={20} onPageChange={(page) => loadResults(page)} />`} />
-<Do caption="Show Pagination only when there's more than one page." code={`{totalPages > 1 && (
-    <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />
-)}`}>
+<Do caption="Show Pagination only when there's more than one page." code={sample2}>
   <Pagination currentPage={2} totalPages={5} onPageChange={() => {}} />
 </Do>
 <Dont caption="Render it for a single page: two disabled arrows around one button." code={`<Pagination currentPage={1} totalPages={1} onPageChange={setPage} />`}>

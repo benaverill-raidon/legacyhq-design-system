@@ -29,6 +29,18 @@ import { TagGroup } from './tag-group';
 import tagGroupStyles from './tag-group.module.css';
 import * as TagGroupStories from './TagGroup.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<TagGroup
+  tags={tags}
+  maxVisible={4}
+  onOverflowTagSelect={(tag) => tag.href && navigate(tag.href)}
+/>`;
+export const sample2 = `<ChipGroup aria-label="Search scopes">
+  <Chip mode="search" label="Matters" isSelected />
+  <Chip mode="search" label="Documents" />
+</ChipGroup>`;
+
 <Meta of={TagGroupStories} name="Docs" />
 
 export const records = [
@@ -175,11 +187,7 @@ Patterns / Collections.
 </Dont>
 <Do
   caption="Follow a hidden tag's link from onOverflowTagSelect, which is the only thing a menu row calls."
-  code={`<TagGroup
-    tags={tags}
-    maxVisible={4}
-    onOverflowTagSelect={(tag) => tag.href && navigate(tag.href)}
-/>`}
+  code={sample1}
 />
 <Dont
   caption="Expect a hidden tag's href to work from the menu. The row isn't a link, so nothing happens."
@@ -187,10 +195,7 @@ Patterns / Collections.
 />
 <Do
   caption="Use Chip Group for filters and search scopes people change."
-  code={`<ChipGroup aria-label="Search scopes">
-    <Chip mode="search" label="Matters" isSelected />
-    <Chip mode="search" label="Documents" />
-</ChipGroup>`}
+  code={sample2}
 >
   <ChipGroup aria-label="Search scopes">
     <Chip mode="search" label="Matters" isSelected />

@@ -24,6 +24,23 @@ import { Skeleton } from './skeleton';
 import skeletonStyles from './skeleton.module.css';
 import * as SkeletonStories from './Skeleton.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Skeleton
+  shape="round"
+  style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }}
+/>
+<Skeleton style={{ inlineSize: '12rem' }} />`;
+export const sample2 = `<Skeleton shape="round" />
+<Skeleton />`;
+export const sample3 = `<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+<Skeleton style={{ inlineSize: '8rem' }} />`;
+export const sample4 = `<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
+<span>Loading profile…</span>`;
+export const sample5 = `<Skeleton />
+<Skeleton />
+<Skeleton />`;
+
 <Meta of={SkeletonStories} name="Docs" />
 
 <Unstyled>
@@ -119,32 +136,25 @@ region is loading, label one of them, not each.
 <Guidelines>
 <Do
   caption="Size each skeleton to match the content it stands in for."
-  code={`<Skeleton
-  shape="round"
-  style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }}
-/>
-<Skeleton style={{ inlineSize: '12rem' }} />`}
+  code={sample1}
 >
   <Skeleton shape="round" style={{ inlineSize: 'var(--size-avatar-md)', blockSize: 'var(--size-avatar-md)' }} />
   <Skeleton style={{ inlineSize: '12rem' }} />
 </Do>
-<Dont caption="Leave skeletons at the default size for content of another shape, which reads as a rendering bug." code={`<Skeleton shape="round" />
-<Skeleton />`}>
+<Dont caption="Leave skeletons at the default size for content of another shape, which reads as a rendering bug." code={sample2}>
   <Skeleton shape="round" />
   <Skeleton />
 </Dont>
 <Do
   caption="Label one skeleton when skeletons are the only sign that the region is loading."
-  code={`<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
-<Skeleton style={{ inlineSize: '8rem' }} />`}
+  code={sample3}
 >
   <Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
   <Skeleton style={{ inlineSize: '8rem' }} />
 </Do>
 <Dont
   caption="Add visible loading text beside a labelled skeleton, so screen readers hear it twice."
-  code={`<Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
-<span>Loading profile…</span>`}
+  code={sample4}
 >
   <Skeleton label="Loading profile" style={{ inlineSize: '12rem' }} />
   Loading profile…
@@ -154,9 +164,7 @@ region is loading, label one of them, not each.
 </Do>
 <Dont
   caption="Guess at a layout with skeletons for results whose shape you don't know."
-  code={`<Skeleton />
-<Skeleton />
-<Skeleton />`}
+  code={sample5}
 />
 </Guidelines>
 

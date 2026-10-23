@@ -29,6 +29,24 @@ import { IconButton } from './icon-button';
 import iconButtonStyles from './icon-button.module.css';
 import * as IconButtonStories from './icon-button.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<IconButton aria-label="Search matters">
+  <SearchIcon />
+</IconButton>`;
+export const sample2 = `<IconButton tooltip="Search matters">
+  <SearchIcon />
+</IconButton>`;
+export const sample3 = `<IconButton aria-label="Archive matter">
+  <ArchiveIcon />
+</IconButton>`;
+export const sample4 = `<ToggleIconButton aria-label="Pin matter" isSelected={isPinned}>
+  <PinIcon />
+</ToggleIconButton>`;
+export const sample5 = `<IconButton aria-label="Pin matter" appearance={isPinned ? 'primary' : 'default'}>
+  <PinIcon />
+</IconButton>`;
+
 <Meta of={IconButtonStories} name="Docs" />
 
 <Unstyled>
@@ -180,39 +198,29 @@ signals at once.
 <Section title="Do and don't">
 
 <Guidelines>
-<Do caption="Name the action in aria-label, which is both the accessible name and the tooltip." code={`<IconButton aria-label="Search matters">
-  <SearchIcon />
-</IconButton>`}>
+<Do caption="Name the action in aria-label, which is both the accessible name and the tooltip." code={sample1}>
   <IconButton aria-label="Search matters">
     <SearchIcon />
   </IconButton>
 </Do>
 <Dont
   caption="Put the name only in tooltip, which describes the button only while it shows, so the button has no name."
-  code={`<IconButton tooltip="Search matters">
-  <SearchIcon />
-</IconButton>`}
+  code={sample2}
 />
 <Do caption="Use Button with a label when the icon alone doesn't say what happens." code={`<Button iconBefore={<ArchiveIcon />}>Archive matter</Button>`}>
   <Button iconBefore={<ArchiveIcon />}>Archive matter</Button>
 </Do>
-<Dont caption="Rely on the tooltip to explain an unfamiliar icon, so people have to hover to find out what it does." code={`<IconButton aria-label="Archive matter">
-  <ArchiveIcon />
-</IconButton>`}>
+<Dont caption="Rely on the tooltip to explain an unfamiliar icon, so people have to hover to find out what it does." code={sample3}>
   <IconButton aria-label="Archive matter">
     <ArchiveIcon />
   </IconButton>
 </Dont>
-<Do caption="Use Toggle Icon Button for something that stays on, so it's announced as pressed." code={`<ToggleIconButton aria-label="Pin matter" isSelected={isPinned}>
-  <PinIcon />
-</ToggleIconButton>`}>
+<Do caption="Use Toggle Icon Button for something that stays on, so it's announced as pressed." code={sample4}>
   <ToggleIconButton aria-label="Pin matter" isSelected>
     <PinIcon />
   </ToggleIconButton>
 </Do>
-<Dont caption="Show a state by switching the appearance, which assistive technology can't hear." code={`<IconButton aria-label="Pin matter" appearance={isPinned ? 'primary' : 'default'}>
-  <PinIcon />
-</IconButton>`}>
+<Dont caption="Show a state by switching the appearance, which assistive technology can't hear." code={sample5}>
   <IconButton aria-label="Pin matter" appearance="primary">
     <PinIcon />
   </IconButton>

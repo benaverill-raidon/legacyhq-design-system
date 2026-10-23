@@ -30,6 +30,11 @@ import buttonStyles from './button.module.css';
 import * as ButtonStories from './button.stories';
 import contract from '../../../../../../docs/components/atoms/button/button.contract.json';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Button prominence="primary" tone="error">Delete matter</Button>
+<Button prominence="secondary" tone="error">Remove collaborator</Button>`;
+
 <Meta of={ButtonStories} name="Docs" />
 
 <Unstyled>
@@ -180,8 +185,7 @@ signals at once. Don't give a button a focus style that looks unrelated to its h
 <Guidelines>
 <Do
   caption={<>Use the error tone for a destructive action: primary for the confirming step, secondary when it shouldn't be the loudest control.</>}
-  code={`<Button prominence="primary" tone="error">Delete matter</Button>
-<Button prominence="secondary" tone="error">Remove collaborator</Button>`}
+  code={sample1}
 >
   <Button prominence="primary" tone="error">Delete matter</Button>
   <Button prominence="secondary" tone="error">Remove collaborator</Button>

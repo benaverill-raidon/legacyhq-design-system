@@ -39,6 +39,32 @@ export function EditablePair({ label, initial, size }) {
   );
 }
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<KeyValueList>
+  <KeyValuePair label="Account type" value="Trust" underline />
+  <KeyValuePair label="Status" value="Active" />
+</KeyValueList>`;
+export const sample2 = `<div>
+  <KeyValuePair label="Account type" value="Trust" />
+</div>`;
+export const sample3 = `<KeyValuePair label="Client name">
+  <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+    <TextField context="inline" aria-label="Client name" />
+  </InlineEdit>
+</KeyValuePair>`;
+export const sample4 = `<KeyValuePair label="Client name">
+  <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+    <TextField context="inline" />
+  </InlineEdit>
+</KeyValuePair>`;
+export const sample5 = `<KeyValuePair size="lg" label="Client name">
+  <TextField size="lg" context="inline" aria-label="Client name" />
+</KeyValuePair>`;
+export const sample6 = `<KeyValuePair size="lg" label="Client name">
+  <TextField context="inline" aria-label="Client name" />
+</KeyValuePair>`;
+
 <Meta of={KeyValuePairStories} name="Docs" />
 
 <Unstyled>
@@ -152,10 +178,7 @@ rows below move down.
 <Guidelines>
 <Do
   caption="Put pairs in a Key Value List, which renders the dl their dt and dd need."
-  code={`<KeyValueList>
-    <KeyValuePair label="Account type" value="Trust" underline />
-    <KeyValuePair label="Status" value="Active" />
-</KeyValueList>`}
+  code={sample1}
 >
   <KeyValueList>
     <KeyValuePair label="Account type" value="Trust" underline />
@@ -164,37 +187,23 @@ rows below move down.
 </Do>
 <Dont
   caption="Use pairs without a list around them. A dt and a dd outside a dl aren't valid HTML, and screen readers don't announce them as a list."
-  code={`<div>
-    <KeyValuePair label="Account type" value="Trust" />
-</div>`}
+  code={sample2}
 />
 <Do
   caption="Give an inline control an aria-label that matches the key."
-  code={`<KeyValuePair label="Client name">
-    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
-        <TextField context="inline" aria-label="Client name" />
-    </InlineEdit>
-</KeyValuePair>`}
+  code={sample3}
 />
 <Dont
   caption="Leave the control unnamed. The key isn't linked to the field, so the field has no accessible name."
-  code={`<KeyValuePair label="Client name">
-    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
-        <TextField context="inline" />
-    </InlineEdit>
-</KeyValuePair>`}
+  code={sample4}
 />
 <Do
   caption="Give the inline control the pair's size."
-  code={`<KeyValuePair size="lg" label="Client name">
-    <TextField size="lg" context="inline" aria-label="Client name" />
-</KeyValuePair>`}
+  code={sample5}
 />
 <Dont
   caption="Size only the pair. The control stays 40px tall in a 48px row, and its text is smaller than the key's."
-  code={`<KeyValuePair size="lg" label="Client name">
-    <TextField context="inline" aria-label="Client name" />
-</KeyValuePair>`}
+  code={sample6}
 />
 </Guidelines>
 

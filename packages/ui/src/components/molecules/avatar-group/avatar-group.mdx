@@ -25,6 +25,18 @@ import { AvatarGroup } from './avatar-group';
 import avatarGroupStyles from './avatar-group.module.css';
 import * as AvatarGroupStories from './AvatarGroup.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<AvatarGroup
+  avatars={team}
+  maxVisible={4}
+  onOverflowAvatarSelect={(person) => openProfile(person.id)}
+/>`;
+export const sample2 = `<AvatarGroup
+  avatars={team.map((person) => ({ ...person, onClick: () => openProfile(person.id) }))}
+  maxVisible={4}
+/>`;
+
 <Meta of={AvatarGroupStories} name="Docs" />
 
 export const people = (count) =>
@@ -140,18 +152,11 @@ before it, and the overflow button paints over the last.
 </Dont>
 <Do
   caption="Open the person from onOverflowAvatarSelect, which is the only thing a menu row calls."
-  code={`<AvatarGroup
-    avatars={team}
-    maxVisible={4}
-    onOverflowAvatarSelect={(person) => openProfile(person.id)}
-/>`}
+  code={sample1}
 />
 <Dont
   caption="Rely on a person's own onClick once they're hidden. The menu row doesn't call it."
-  code={`<AvatarGroup
-    avatars={team.map((person) => ({ ...person, onClick: () => openProfile(person.id) }))}
-    maxVisible={4}
-/>`}
+  code={sample2}
 />
 <Do caption="Give every person a name. It names their avatar and their row in the menu." code={`{ id: 'person-1', name: 'Ben Averill', src: photo }`} />
 <Dont caption="Leave out the name and the alt. The avatar has no accessible name, and its menu row reads “Unnamed”." code={`{ id: 'person-1', src: photo }`} />

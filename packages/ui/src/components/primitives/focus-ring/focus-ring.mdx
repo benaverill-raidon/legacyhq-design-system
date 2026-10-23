@@ -27,6 +27,39 @@ import { FocusRing } from './focus-ring';
 import focusRingStyles from './focus-ring.module.css';
 import * as FocusRingStories from './focus-ring.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `import { focusRingClassNames } from '../../primitives/focus-ring';
+
+<button
+  className={mergeClassNames(
+    styles.root,
+    focusRingClassNames.focusRing,
+    focusRingClassNames.focusRingDefault,
+  )}
+/>`;
+export const sample2 = `<FocusRing>
+  <a href="/matters/42/history">Matter history</a>
+</FocusRing>`;
+export const sample3 = `.root {
+  --focus-ring-offset: var(--spacing-xxs);
+}`;
+export const sample4 = `.myControl:focus-visible {
+  outline: 2px solid blue;
+}`;
+export const sample5 = `<FocusRing>
+  <a href="/matters/42/history">Matter history</a>
+</FocusRing>`;
+export const sample6 = `<FocusRing>
+  <div onClick={open}>Matter history</div>
+</FocusRing>`;
+export const sample7 = `.input {
+  --focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);
+}`;
+export const sample8 = `.root:focus-visible {
+  outline-offset: -2px;
+}`;
+
 <Meta of={FocusRingStories} name="Docs" />
 
 <Unstyled>
@@ -96,24 +129,14 @@ Components compose the classes onto their own element with `focusRingClassNames`
 own classes. Every system component that shows the ring does it this way.
 
 <CodeSample
-  code={`import { focusRingClassNames } from '../../primitives/focus-ring';
-
-<button
-    className={mergeClassNames(
-        styles.root,
-        focusRingClassNames.focusRing,
-        focusRingClassNames.focusRingDefault,
-    )}
-/>`}
+  code={sample1}
 />
 
 In product code, wrap one focusable element in `FocusRing`. It clones the element and adds the
 same classes to its `className`, after the element's own.
 
 <CodeSample
-  code={`<FocusRing>
-    <a href="/matters/42/history">Matter history</a>
-</FocusRing>`}
+  code={sample2}
 />
 
 </Subsection>
@@ -132,9 +155,7 @@ draws the ring on another element, such as Slider's thumb, reads the same proper
 outline.
 
 <CodeSample
-  code={`.root {
-    --focus-ring-offset: var(--spacing-xxs);
-}`}
+  code={sample3}
 />
 
 </Subsection>
@@ -159,15 +180,11 @@ visual tests, as on this page. It isn't for product code.
 </Do>
 <Dont
   caption="Write a new focus style in a component's stylesheet. It drifts from every other control."
-  code={`.myControl:focus-visible {
-    outline: 2px solid blue;
-}`}
+  code={sample4}
 />
 <Do
   caption="Wrap the one focusable element."
-  code={`<FocusRing>
-    <a href="/matters/42/history">Matter history</a>
-</FocusRing>`}
+  code={sample5}
 >
   <FocusRing>
     <a href="#" data-force-state="focus">Matter history</a>
@@ -175,23 +192,17 @@ visual tests, as on this page. It isn't for product code.
 </Do>
 <Dont
   caption="Wrap an element that can't take focus. Nothing shows, because Focus Ring doesn't make it focusable."
-  code={`<FocusRing>
-    <div onClick={open}>Matter history</div>
-</FocusRing>`}
+  code={sample6}
 />
 <Do
   caption="Set --focus-ring-offset on the component's own class to move the ring, as Checkbox does to circle the box."
-  code={`.input {
-    --focus-ring-offset: calc((var(--size-choice-target) - var(--size-choice-indicator)) / -2);
-}`}
+  code={sample7}
 >
   <Checkbox label="Notify the client" data-force-state="focus" />
 </Do>
 <Dont
   caption="Override the outline itself to move it. The color and width stop following the shared ring."
-  code={`.root:focus-visible {
-    outline-offset: -2px;
-}`}
+  code={sample8}
 />
 </Guidelines>
 

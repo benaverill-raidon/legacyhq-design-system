@@ -27,6 +27,11 @@ import * as AvatarStories from './avatar.stories';
 
 export const { photoA, photoB, photoC } = AvatarStories.avatarPhotos;
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Avatar src={photo} decorative />
+<span>Ben Averill</span>`;
+
 <Meta of={AvatarStories} name="Docs" />
 
 <Unstyled>
@@ -165,8 +170,7 @@ place, and a new `src` is tried again. You don't need to check the URL first.
   <Avatar src={photoB} name="Ben Averill" presence="busy" isSelected isInteractive onClick={() => undefined} />
 </Do>
 <Dont caption="Write the state into name yourself. It's read twice." code={`<Avatar name="Ben Averill, busy" presence="busy" />`} />
-<Do caption="Mark an avatar decorative when a visible name sits next to it." code={`<Avatar src={photo} decorative />
-<span>Ben Averill</span>`}>
+<Do caption="Mark an avatar decorative when a visible name sits next to it." code={sample1}>
   <Avatar src={photoC} decorative />
   <span>Ben Averill</span>
 </Do>

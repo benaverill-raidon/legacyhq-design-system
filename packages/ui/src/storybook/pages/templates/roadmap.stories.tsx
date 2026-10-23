@@ -21,7 +21,7 @@ import { DropdownMenu } from '../../../components/organisms/dropdown-menu';
 import { EmptyState } from '../../../components/organisms/empty-state';
 import { Table } from '../../../components/organisms/table';
 import type { TableColumn } from '../../../components/organisms/table';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './roadmap.module.css';
 
 // Templates / Roadmap: one client's roadmap, built only from system components. A draft, made
@@ -500,12 +500,7 @@ function RoadmapLoading() {
  * confirms with a toast; reassign it or move its due date in place; filter by status or assignee.
  */
 export const Roadmap: Story = {
-  render: () => (
-    <>
-      <RoadmapScreen />
-      <ToastGroup />
-    </>
-  ),
+  render: () => <RoadmapScreen />,
 };
 
 /** Filters that match no task: an Empty State that says so, with a way to clear them. */

@@ -1,13 +1,7 @@
 {
   "name": "Chip",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
-    }
-  ],
+  "status": "stable",
   "purpose": "Show and edit an applied filter, an applied property, or a selectable search scope, as one compact segmented pill.",
   "intent": "Give the three closely-related chip uses one component and one mental model, with each use's own props typed so they cannot be mixed up - rather than three near-identical components or one component with a pile of conditionally-meaningful props.",
   "tierNote": "Classified as a molecule, but `mode=\"filter\"` composes Dropdown Menu (an organism, itself Menu + Popup) for its operator and value segments - the same deliberate, documented exception Tag Group, Avatar Group, and Split Button already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here.",
@@ -321,7 +315,8 @@
     "No non-removable select/filter variant, matching the verified Figma set.",
     "Inherits every Dropdown Menu and Menu limitation for the segment panels (no typeahead, no built-in focus-first-item-on-open, no virtualization for very long section lists).",
     "The label segment has no hover/press feedback by design, so a search chip signals interactivity through cursor, focus ring, and its selected state rather than a hover fill.",
-    "Because the seam and corner rules are structural, Chip cannot render a segment inside a wrapper element - a constraint worth knowing before adding per-segment tooltips or popovers."
+    "Because the seam and corner rules are structural, Chip cannot render a segment inside a wrapper element - a constraint worth knowing before adding per-segment tooltips or popovers.",
+    "Union props aren't read by docgen: `ChipProps` is a union discriminated on `mode`, which Storybook's react-docgen can't read, so the Docs page lists Chip's props by hand, by mode."
   ],
   "futureEnhancements": [
     "Reintroduce a `tone` axis if a real Figma chip variant needs a non-default tone.",

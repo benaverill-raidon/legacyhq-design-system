@@ -23,7 +23,7 @@ import { EmptyState } from '../../../components/organisms/empty-state';
 import { ModalDialog } from '../../../components/organisms/modal-dialog';
 import { Table } from '../../../components/organisms/table';
 import type { RowId, TableColumn } from '../../../components/organisms/table';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './collections.module.css';
 
 // Examples for Patterns / Collections, built only from system components. The local stylesheet lays
@@ -317,7 +317,6 @@ export const MattersTable: Story = {
             : 'This deletes the selected matters, their documents, and their history.'}{' '}
           You can&apos;t undo it.
         </ModalDialog>
-        <ToastGroup />
       </>
     );
   },

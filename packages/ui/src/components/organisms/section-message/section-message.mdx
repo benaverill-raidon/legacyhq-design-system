@@ -34,6 +34,39 @@ export const errorsSample = `<SectionMessage
   errors={[{ label: 'Docket number', message: 'Enter it as it appears on the court notice.', targetId: 'docket-number' }]}
 />`;
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<SectionMessage tone="success" isDismissible>
+  Your changes were published.
+</SectionMessage>`;
+export const sample2 = `<SectionMessage tone="warning" title="Restricted access" isDismissible>
+  Only the matter's owners can change who has access to it.
+</SectionMessage>`;
+export const sample3 = `<SectionMessage
+  tone="error"
+  title="The filing was rejected"
+  actions={<LinkButton href="/filings/1042" appearance="subtle" size="sm">View the court's notice</LinkButton>}
+>
+  The court returned the filing because the signature page is missing.
+</SectionMessage>`;
+export const sample4 = `<SectionMessage
+  tone="error"
+  title="The filing was rejected"
+  actions={
+    <ButtonGroup>
+      <LinkButton href="/notice" appearance="subtle" size="sm">View notice</LinkButton>
+      <LinkButton href="/edit" appearance="subtle" size="sm">Edit filing</LinkButton>
+      <LinkButton href="/court" appearance="subtle" size="sm">Contact court</LinkButton>
+      <LinkButton href="/help" appearance="subtle" size="sm">Get help</LinkButton>
+    </ButtonGroup>
+  }
+>
+  The court returned the filing because the signature page is missing.
+</SectionMessage>`;
+export const sample5 = `<SectionMessage tone="error" title="The form has errors">
+  Check the docket number and try again.
+</SectionMessage>`;
+
 <Meta of={SectionMessageStories} name="Docs" />
 
 <Unstyled>
@@ -184,9 +217,7 @@ warning that still applies dismissible.
 <Guidelines>
 <Do
   caption="Let people dismiss a message once it has done its job, such as a confirmation."
-  code={`<SectionMessage tone="success" isDismissible>
-    Your changes were published.
-</SectionMessage>`}
+  code={sample1}
 >
   <SectionMessage tone="success" isDismissible>
     Your changes were published.
@@ -194,9 +225,7 @@ warning that still applies dismissible.
 </Do>
 <Dont
   caption="Make a restriction dismissible. It still applies after the message is gone."
-  code={`<SectionMessage tone="warning" title="Restricted access" isDismissible>
-    Only the matter's owners can change who has access to it.
-</SectionMessage>`}
+  code={sample2}
 >
   <SectionMessage tone="warning" title="Restricted access" isDismissible>
     Only the matter's owners can change who has access to it.
@@ -204,13 +233,7 @@ warning that still applies dismissible.
 </Dont>
 <Do
   caption="Offer one or two related links as actions."
-  code={`<SectionMessage
-    tone="error"
-    title="The filing was rejected"
-    actions={<LinkButton href="/filings/1042" appearance="subtle" size="sm">View the court's notice</LinkButton>}
->
-    The court returned the filing because the signature page is missing.
-</SectionMessage>`}
+  code={sample3}
 >
   <SectionMessage
     tone="error"
@@ -222,20 +245,7 @@ warning that still applies dismissible.
 </Do>
 <Dont
   caption="Fill the actions with every next step. The message turns into a toolbar, and the main step gets lost."
-  code={`<SectionMessage
-    tone="error"
-    title="The filing was rejected"
-    actions={
-      <ButtonGroup>
-        <LinkButton href="/notice" appearance="subtle" size="sm">View notice</LinkButton>
-        <LinkButton href="/edit" appearance="subtle" size="sm">Edit filing</LinkButton>
-        <LinkButton href="/court" appearance="subtle" size="sm">Contact court</LinkButton>
-        <LinkButton href="/help" appearance="subtle" size="sm">Get help</LinkButton>
-      </ButtonGroup>
-    }
->
-    The court returned the filing because the signature page is missing.
-</SectionMessage>`}
+  code={sample4}
 />
 <Do
   caption="List the fields that need fixing in errors, so each one is a link that takes people to it."
@@ -249,9 +259,7 @@ warning that still applies dismissible.
 </Do>
 <Dont
   caption="Write the fields into the description. People have to find each one themselves."
-  code={`<SectionMessage tone="error" title="The form has errors">
-    Check the docket number and try again.
-</SectionMessage>`}
+  code={sample5}
 >
   <SectionMessage tone="error" title="The form has errors">
     Check the docket number and try again.

@@ -31,6 +31,20 @@ import * as DatePickerStories from './DatePicker.stories';
 
 export const TODAY = new Date(2026, 2, 9);
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Hearing date">
+  <DatePicker min={today} isDateDisabled={isCourtHoliday} />
+</Field>`;
+export const sample2 = `<Field label="Hearing date" state={isPast(date) ? 'error' : 'default'} message="Choose a future date.">
+  <DatePicker value={date} onChange={setDate} />
+</Field>`;
+export const sample3 = `<Field label="Hearing">
+  <DateTimePicker value={hearing} onChange={setHearing} />
+</Field>`;
+export const sample4 = `<Field label="Hearing date"><DatePicker value={date} onChange={setDate} /></Field>
+<Field label="Hearing time"><TimePicker value={time} onChange={setTime} /></Field>`;
+
 <Meta of={DatePickerStories} name="Docs" />
 
 <Unstyled>
@@ -189,9 +203,7 @@ inline context.
 <Guidelines>
 <Do
   caption="Rule out dates that can't be chosen with min, max, or isDateDisabled, so the calendar shows them as unavailable."
-  code={`<Field label="Hearing date">
-    <DatePicker min={today} isDateDisabled={isCourtHoliday} />
-</Field>`}
+  code={sample1}
 >
   <Field label="Hearing date">
     <DatePicker min={TODAY} today={TODAY} placeholder="MM/DD/YYYY" />
@@ -199,15 +211,11 @@ inline context.
 </Do>
 <Dont
   caption="Let someone pick any date, then reject it with an error. They learn the rule only after they've chosen."
-  code={`<Field label="Hearing date" state={isPast(date) ? 'error' : 'default'} message="Choose a future date.">
-    <DatePicker value={date} onChange={setDate} />
-</Field>`}
+  code={sample2}
 />
 <Do
   caption="Use Date Time Picker for one moment that needs a date and a time."
-  code={`<Field label="Hearing">
-    <DateTimePicker value={hearing} onChange={setHearing} />
-</Field>`}
+  code={sample3}
 >
   <Field label="Hearing">
     <DateTimePicker defaultValue={new Date(2026, 2, 24, 9, 30)} today={TODAY} />
@@ -215,8 +223,7 @@ inline context.
 </Do>
 <Dont
   caption="Put a Date Picker and a Time Picker side by side for one moment. You get two labels and two values to join."
-  code={`<Field label="Hearing date"><DatePicker value={date} onChange={setDate} /></Field>
-<Field label="Hearing time"><TimePicker value={time} onChange={setTime} /></Field>`}
+  code={sample4}
 >
   <Field label="Hearing date">
     <DatePicker defaultValue={new Date(2026, 2, 24)} today={TODAY} />

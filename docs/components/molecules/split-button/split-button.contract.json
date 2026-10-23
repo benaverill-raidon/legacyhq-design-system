@@ -4,6 +4,10 @@
   "status": "beta",
   "knownIssues": [
     {
+      "kind": "gap",
+      "summary": "Its generated API table misses the props it inherits from Button (prominence, isInverse, isExpanded, type): react-docgen doesn't follow props from another file."
+    },
+    {
       "kind": "decision",
       "summary": "`tone` reaches only its main action (Icon Button has no tone yet), so the halves can disagree. Drop it, or deprecate it until Icon Button has one."
     },

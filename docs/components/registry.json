@@ -3820,26 +3820,19 @@
         "size resolves as size ?? groupSize ?? md, where groupSize comes from ChipSizeContext. Chip Group provides it via context rather than by cloning children, because cloning only reaches direct children - a Chip behind a Tooltip, from a map, or behind a conditional would silently miss it. Explicit per-Chip size still wins."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "gap",
-        "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -5892,10 +5885,6 @@
       {
         "kind": "gap",
         "summary": "The chosen option's icon in a single Select takes the trigger's subtle icon color, so a colored status icon turns grey."
-      },
-      {
-        "kind": "gap",
-        "summary": "Its union prop types leave the generated API table empty, so the page lists its props by hand."
       }
     ],
     "replacedBy": null,
@@ -6239,6 +6228,10 @@
     },
     "status": "beta",
     "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Its generated API table misses the props it inherits from Button (prominence, isInverse, isExpanded, type): react-docgen doesn't follow props from another file."
+      },
       {
         "kind": "decision",
         "summary": "`tone` reaches only its main action (Icon Button has no tone yet), so the halves can disagree. Drop it, or deprecate it until Icon Button has one."
@@ -8267,19 +8260,26 @@
         "DropdownMenuProps extends MenuProps (minus id/className, which apply to Popup's panel instead) rather than accepting an opaque `content: React.ReactNode` the way Popup does - every real Figma instance of dropdown-menu nests a `menu` instance specifically, never arbitrary content, so the code API guides toward that same shape directly instead of requiring the consumer to manually construct a <Menu> every time."
       ]
     },
-    "status": "stable",
-    "knownIssues": [],
+    "status": "beta",
+    "knownIssues": [
+      {
+        "kind": "gap",
+        "summary": "Its generated API table misses the 14 props it inherits from Menu through `Omit<MenuProps, …>` (sections, size, showSearch, searchValue, loading, emptyMessage, …): react-docgen doesn't follow props from another file."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "stable",
-      "unmet": [],
+      "supported": "beta",
+      "unmet": [
+        "noKnownIssues"
+      ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },

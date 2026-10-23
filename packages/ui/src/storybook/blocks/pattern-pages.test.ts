@@ -3,7 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { loadCsf } from 'storybook/internal/csf-tools';
 import { describe, expect, it } from 'vitest';
 import { registryEntry } from './component-page-data';
-import { componentImports, componentsUsed, docsTitleOf, PATTERN_PAGE_SECTIONS, propValues, TEMPLATE_PAGE_SECTIONS, toneMatrix } from './pattern-page-data';
+import { CODE_FOLDERS, componentImports, componentsUsed, docsTitleOf, PATTERN_PAGE_SECTIONS, propValues, TEMPLATE_PAGE_SECTIONS, toneMatrix } from './pattern-page-data';
 
 // Keeps every pattern page (an MDX page using <PatternPage>) and template page (<TemplatePage>) to
 // its standard, and its facts true: the sections in order, examples that are stories built from
@@ -46,6 +46,26 @@ import { LAYERS } from '../../../components/primitives/layers';
 // import { Tag } from '../../../components/atoms/tag';
 import { Button as Again } from '../../../components/atoms/button/button';`;
     expect(componentImports(source)).toEqual(['button', 'toast-group']);
+  });
+
+  it("counts an import as the component whose code it is, not the folder it's in", () => {
+    expect(CODE_FOLDERS.get('rich-text-area')).toBe('molecules/text-area/rich');
+    // Its code folder, a file in it, and the re-export from Text Area's index.
+    expect(componentImports(`import { RichTextArea } from '../../../components/molecules/text-area/rich';`)).toEqual(['rich-text-area']);
+    expect(componentImports(`import { RichTextArea } from '../../../components/molecules/text-area/rich/rich-text-area';`)).toEqual(['rich-text-area']);
+    expect(componentImports(`import { RichTextArea } from '../../../components/molecules/text-area';`)).toEqual(['rich-text-area']);
+    expect(componentImports(`import { TextArea, RichTextArea } from '../../../components/molecules/text-area';`)).toEqual(['text-area', 'rich-text-area']);
+    expect(componentImports(`import { TextArea } from '../../../components/molecules/text-area';`)).toEqual(['text-area']);
+    // A helper, not a component, counts as the component whose folder it's in.
+    expect(componentImports(`import { toast } from '../../../components/organisms/toast-group';`)).toEqual(['toast-group']);
+    expect(componentsUsed(`import { RichTextArea } from '../../../components/molecules/text-area';`)).toEqual([
+      { id: 'rich-text-area', name: 'Rich Text Area', title: 'Components/Forms/Rich Text Area' },
+    ]);
+  });
+
+  it('finds every registry component\'s code folder', () => {
+    expect([...CODE_FOLDERS.keys()].sort()).toEqual(filesIn('docs/components', /\.contract\.json$/).map((path) => path.split('/').slice(-2)[0]).sort());
+    for (const [id, folder] of CODE_FOLDERS) expect(read(`${COMPONENTS}/${folder}/${id}.types.ts`)).not.toBe('');
   });
 
   it("reads a prop's values from its first type, leaving the deprecated one out", () => {

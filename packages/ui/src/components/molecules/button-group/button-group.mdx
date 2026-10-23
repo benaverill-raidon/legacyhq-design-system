@@ -28,6 +28,34 @@ import { ButtonGroup } from './button-group';
 import buttonGroupStyles from './button-group.module.css';
 import * as ButtonGroupStories from './ButtonGroup.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<ButtonGroup aria-label="View">
+  <ToggleButton isSelected={view === 'list'} onClick={() => setView('list')}>List</ToggleButton>
+  <ToggleButton isSelected={view === 'grid'} onClick={() => setView('grid')}>Grid</ToggleButton>
+</ButtonGroup>`;
+export const sample2 = `<ButtonGroup>
+  <Button onClick={() => setView('list')}>List</Button>
+  <Button onClick={() => setView('grid')}>Grid</Button>
+</ButtonGroup>`;
+export const sample3 = `<ButtonGroup>
+  <Button size="sm" prominence="primary">Save</Button>
+  <Button size="sm">Cancel</Button>
+</ButtonGroup>`;
+export const sample4 = `<ButtonGroup>
+  <Button size="lg" prominence="primary">Save</Button>
+  <Button size="sm">Cancel</Button>
+</ButtonGroup>`;
+export const sample5 = `<ButtonGroup aria-label="Row actions">
+  <IconButton aria-label="Edit"><EditIcon /></IconButton>
+  <IconButton aria-label="Delete"><DeleteIcon /></IconButton>
+</ButtonGroup>`;
+export const sample6 = `<ModalDialog
+  title="Discard unsaved changes?"
+  footer={<ButtonGroup aria-label="Discard unsaved changes actions">…</ButtonGroup>}
+  …
+/>`;
+
 <Meta of={ButtonGroupStories} name="Docs" />
 
 <Unstyled>
@@ -140,10 +168,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 <Guidelines>
 <Do
   caption="Use Toggle Buttons for a choice between views, and select the one that matches your state."
-  code={`<ButtonGroup aria-label="View">
-    <ToggleButton isSelected={view === 'list'} onClick={() => setView('list')}>List</ToggleButton>
-    <ToggleButton isSelected={view === 'grid'} onClick={() => setView('grid')}>Grid</ToggleButton>
-</ButtonGroup>`}
+  code={sample1}
 >
   <ButtonGroup aria-label="View">
     <ToggleButton isSelected>List</ToggleButton>
@@ -152,10 +177,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 </Do>
 <Dont
   caption="Build the choice from plain Buttons. Nothing shows or announces which view is on."
-  code={`<ButtonGroup>
-    <Button onClick={() => setView('list')}>List</Button>
-    <Button onClick={() => setView('grid')}>Grid</Button>
-</ButtonGroup>`}
+  code={sample2}
 >
   <ButtonGroup>
     <Button>List</Button>
@@ -164,10 +186,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 </Dont>
 <Do
   caption="Give every button in the group the same size."
-  code={`<ButtonGroup>
-    <Button size="sm" prominence="primary">Save</Button>
-    <Button size="sm">Cancel</Button>
-</ButtonGroup>`}
+  code={sample3}
 >
   <ButtonGroup>
     <Button size="sm" prominence="primary">Save</Button>
@@ -176,10 +195,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 </Do>
 <Dont
   caption="Mix sizes and expect the group to even them out. It doesn't resize or stretch its buttons."
-  code={`<ButtonGroup>
-    <Button size="lg" prominence="primary">Save</Button>
-    <Button size="sm">Cancel</Button>
-</ButtonGroup>`}
+  code={sample4}
 >
   <ButtonGroup>
     <Button size="lg" prominence="primary">Save</Button>
@@ -188,10 +204,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 </Dont>
 <Do
   caption="Name a group whose purpose isn't clear from what's around it, such as a toolbar of icon-only actions."
-  code={`<ButtonGroup aria-label="Row actions">
-    <IconButton aria-label="Edit"><EditIcon /></IconButton>
-    <IconButton aria-label="Delete"><DeleteIcon /></IconButton>
-</ButtonGroup>`}
+  code={sample5}
 >
   <ButtonGroup aria-label="Row actions">
     <IconButton aria-label="Edit">
@@ -204,11 +217,7 @@ is a plain `div` with no role. A `role` you pass, such as `toolbar`, replaces ei
 </Do>
 <Dont
   caption="Repeat a name the context already gives. In a dialog footer, the dialog's title already says what the buttons are for."
-  code={`<ModalDialog
-    title="Discard unsaved changes?"
-    footer={<ButtonGroup aria-label="Discard unsaved changes actions">…</ButtonGroup>}
-    …
-/>`}
+  code={sample6}
 />
 </Guidelines>
 

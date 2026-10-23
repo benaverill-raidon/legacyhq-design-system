@@ -27,6 +27,15 @@ import { Link } from './link';
 import linkStyles from './link.module.css';
 import * as LinkStories from './link.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Link href="https://example.com" target="_blank">
+  Court filing guidelines
+</Link>`;
+export const sample2 = `<Link href="https://example.com" target="_blank">
+  Court filing guidelines (opens in a new tab) <LinkExternalIcon />
+</Link>`;
+
 <Meta of={LinkStories} name="Docs" />
 
 <Unstyled>
@@ -158,16 +167,12 @@ Link has no disabled state: if a destination isn't available, show plain text in
 <Dont caption="Link “click here”, which says nothing about where it goes when read out of context." code={`<p>To review the client profile, <Link href="/clients/42">click here</Link>.</p>`}>
   <p>To review the client profile, <Link href="#">click here</Link>.</p>
 </Dont>
-<Do caption="Let a new-tab link add its own icon and hidden new-tab text." code={`<Link href="https://example.com" target="_blank">
-    Court filing guidelines
-</Link>`}>
+<Do caption="Let a new-tab link add its own icon and hidden new-tab text." code={sample1}>
   <Link href="https://example.com" target="_blank">
     Court filing guidelines
   </Link>
 </Do>
-<Dont caption="Add your own icon or new-tab text, which then shows twice and is read twice." code={`<Link href="https://example.com" target="_blank">
-    Court filing guidelines (opens in a new tab) <LinkExternalIcon />
-</Link>`}>
+<Dont caption="Add your own icon or new-tab text, which then shows twice and is read twice." code={sample2}>
   <Link href="https://example.com" target="_blank">
     Court filing guidelines (opens in a new tab) <LinkExternalIcon />
   </Link>

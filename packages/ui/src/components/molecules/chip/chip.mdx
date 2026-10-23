@@ -61,6 +61,49 @@ export const dateSections = [
   },
 ];
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const segmentShape = `{
+  label: React.ReactNode;       // the current operator or value, shown in the segment
+  sections: MenuSection[];      // the rows the segment's menu lists
+  menuAriaLabel?: string;       // names the menu; defaults to "<label> operator" or "<label> value"
+  tooltip?: React.ReactNode;    // shown on hover and focus, such as the full value when it's cut off
+}`;
+export const labelTextDo = `<Chip
+  mode="filter"
+  label={<strong>Status</strong>}
+  labelText="Status"
+  value={{ label: '2 statuses', sections }}
+  onRemove={clearStatus}
+/>`;
+export const propsByMode = `// Every mode
+label: React.ReactNode;              // required
+elemBefore?: React.ReactNode;        // a decorative icon or Avatar; an Avatar is sized to the chip
+size?: 'sm' | 'md';                  // defaults to Chip Group's size, else 'md'
+disabled?: boolean;                  // disables every control in the chip
+id?: string;                         // on the root div
+className?: string;                  // added to the root div
+
+// mode="filter"
+value: ChipSegment;                  // required
+operator?: ChipSegment;
+valuePreview?: React.ReactNode;      // decorative, before the value text
+onRemove: (event) => void;           // required
+removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
+removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
+labelText?: string;                  // the label as text, for the built names; set it when label is JSX
+size?: 'md';                         // filter chips are md only
+
+// mode="select"
+onRemove: (event) => void;           // required
+removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
+removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
+labelText?: string;                  // the label as text, for the remove button's name
+
+// mode="search"
+isSelected?: boolean;                // default false; sets aria-pressed
+onSelectedChange?: (isSelected: boolean) => void;`;
+
 <Meta of={ChipStories} name="Docs" />
 
 <Unstyled>
@@ -191,12 +234,7 @@ several values. Escape, Tab out of the menu, or a click outside also closes it.
 
 Each segment takes a `ChipSegment`, whose `sections` are Menu's own sections:
 
-<CodeSample code={`{
-    label: React.ReactNode;       // the current operator or value, shown in the segment
-    sections: MenuSection[];      // the rows the segment's menu lists
-    menuAriaLabel?: string;       // names the menu; defaults to "<label> operator" or "<label> value"
-    tooltip?: React.ReactNode;    // shown on hover and focus, such as the full value when it's cut off
-}`} />
+<CodeSample code={segmentShape} />
 
 The menu is named after the property and the segment's role, such as "Due date value", because the
 segment's own text is the current value, which says nothing about what choosing does. That default
@@ -268,13 +306,7 @@ with its full text.
 </Dont>
 <Do
   caption="Give the label as text in labelText when label is JSX, so the menus and the remove button are named after it."
-  code={`<Chip
-    mode="filter"
-    label={<strong>Status</strong>}
-    labelText="Status"
-    value={{ label: '2 statuses', sections }}
-    onRemove={clearStatus}
-/>`}
+  code={labelTextDo}
 >
   <Chip
     mode="filter"
@@ -331,38 +363,13 @@ with its full text.
 
 <Section title="API">
 
-Chip's props are a union typed by `mode`, and the generated table can't list them yet: Storybook's
-docgen skips a union of props types. Until it can, these are the props by mode, from chip.types.ts.
+Chip's props are a union typed by `mode`, so each mode accepts only its own props. Storybook's docgen
+can't read a union of props types, so there's no generated table: these are the props by mode,
+copied from chip.types.ts.
 
 <PropsTable of={ChipStories} />
 
-<CodeSample code={`// Every mode
-label: React.ReactNode;              // required
-elemBefore?: React.ReactNode;        // a decorative icon or Avatar; an Avatar is sized to the chip
-size?: 'sm' | 'md';                  // defaults to Chip Group's size, else 'md'
-disabled?: boolean;                  // disables every control in the chip
-id?: string;                         // on the root div
-className?: string;                  // added to the root div
-
-// mode="filter"
-value: ChipSegment;                  // required
-operator?: ChipSegment;
-valuePreview?: React.ReactNode;      // decorative, before the value text
-onRemove: (event) => void;           // required
-removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
-removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
-labelText?: string;                  // the label as text, for the built names; set it when label is JSX
-size?: 'md';                         // filter chips are md only
-
-// mode="select"
-onRemove: (event) => void;           // required
-removeLabel?: string;                // defaults to "Remove <label>"; removeAriaLabel is its deprecated name
-removeTooltipLabel?: string;         // the remove button's tooltip text; defaults to "Remove"
-labelText?: string;                  // the label as text, for the remove button's name
-
-// mode="search"
-isSelected?: boolean;                // default false; sets aria-pressed
-onSelectedChange?: (isSelected: boolean) => void;`} />
+<CodeSample code={propsByMode} />
 
 </Section>
 
@@ -394,8 +401,8 @@ on the segments, which share one border, fill, and type style.
 
 <DocFooter>
   The design tokens read chip.module.css, and the Figma source comes from registry.json, so they
-  follow the code. The props listed under API are copied from chip.types.ts by hand until the
-  generated table can read them.
+  follow the code. The props listed under API are copied from chip.types.ts by hand, because docgen
+  can't read a union of props types.
 </DocFooter>
 
 </ComponentPage>

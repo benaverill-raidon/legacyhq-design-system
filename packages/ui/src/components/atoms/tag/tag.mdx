@@ -27,6 +27,19 @@ import { Tag } from './tag';
 import tagStyles from './tag.module.css';
 import * as TagStories from './tag.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Tag tone="green" onClick={() => navigate('/trusts/123')}>
+  Averill Family Living Trust
+</Tag>`;
+export const sample2 = `<Tag isRemovable onRemove={remove}>Averill Family Living Trust</Tag>
+<Tag isRemovable onRemove={remove} removeLabel="Remove Averill Family Living Trust">
+  <TrustName id={123} />
+</Tag>`;
+export const sample3 = `<Tag isRemovable onRemove={remove}>
+  <TrustName id={123} />
+</Tag>`;
+
 <Meta of={TagStories} name="Docs" />
 
 <Unstyled>
@@ -180,20 +193,13 @@ there's no tooltip with the full text. Tags in a wrapping row move to the next l
     Averill Family Living Trust
   </Tag>
 </Do>
-<Dont caption="Navigate from onClick. The tag becomes a button, which can't be opened in a new tab or show where it goes." code={`<Tag tone="green" onClick={() => navigate('/trusts/123')}>
-    Averill Family Living Trust
-</Tag>`} />
-<Do caption="Give a removable tag plain text, or a removeLabel that names the record." code={`<Tag isRemovable onRemove={remove}>Averill Family Living Trust</Tag>
-<Tag isRemovable onRemove={remove} removeLabel="Remove Averill Family Living Trust">
-    <TrustName id={123} />
-</Tag>`}>
+<Dont caption="Navigate from onClick. The tag becomes a button, which can't be opened in a new tab or show where it goes." code={sample1} />
+<Do caption="Give a removable tag plain text, or a removeLabel that names the record." code={sample2}>
   <Tag isRemovable onRemove={() => undefined}>
     Averill Family Living Trust
   </Tag>
 </Do>
-<Dont caption="Pass other content without a removeLabel. Every remove button is then named “Remove tag”." code={`<Tag isRemovable onRemove={remove}>
-    <TrustName id={123} />
-</Tag>`} />
+<Dont caption="Pass other content without a removeLabel. Every remove button is then named “Remove tag”." code={sample3} />
 <Do caption="Use Label for a status." code={`<Label tone="success">Active</Label>`}>
   <Label tone="success">Active</Label>
 </Do>

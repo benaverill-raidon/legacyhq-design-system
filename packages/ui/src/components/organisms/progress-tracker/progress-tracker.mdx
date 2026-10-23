@@ -36,6 +36,27 @@ export const matterSetup = [
 {/* Progress Tracker fills its container's width; these frames center their content and give it none. */}
 export const filled = { inlineSize: '100%', maxInlineSize: '40rem' };
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<ProgressTracker
+  steps={[
+    { label: 'Details', href: '/matters/new/details' },
+    { label: 'Parties', href: '/matters/new/parties' },
+    { label: 'Review' },
+  ]}
+  currentStep={3}
+  aria-label="Matter setup"
+/>`;
+export const sample2 = `<ProgressTracker
+  steps={[
+    { label: 'Details', href: '/matters/new/details' },
+    { label: 'Parties', href: '/matters/new/parties' },
+    { label: 'Review', href: '/matters/new/review' },
+  ]}
+  currentStep={1}
+  aria-label="Matter setup"
+/>`;
+
 <Meta of={ProgressTrackerStories} name="Docs" />
 
 <Unstyled>
@@ -139,26 +160,10 @@ even after it's done. Neither sets `aria-disabled`.
     style={filled}
   />
 </Dont>
-<Do caption="Give the steps before the current one an href, so people can go back to them." code={`<ProgressTracker
-    steps={[
-      { label: 'Details', href: '/matters/new/details' },
-      { label: 'Parties', href: '/matters/new/parties' },
-      { label: 'Review' },
-    ]}
-    currentStep={3}
-    aria-label="Matter setup"
-/>`}>
+<Do caption="Give the steps before the current one an href, so people can go back to them." code={sample1}>
   <ProgressTracker steps={[{ label: 'Details', href: '#' }, { label: 'Parties', href: '#' }, { label: 'Review' }]} currentStep={3} aria-label="Matter setup" style={filled} />
 </Do>
-<Dont caption="Expect an href to link an upcoming step: only steps before the current one become links." code={`<ProgressTracker
-    steps={[
-      { label: 'Details', href: '/matters/new/details' },
-      { label: 'Parties', href: '/matters/new/parties' },
-      { label: 'Review', href: '/matters/new/review' },
-    ]}
-    currentStep={1}
-    aria-label="Matter setup"
-/>`} />
+<Dont caption="Expect an href to link an upcoming step: only steps before the current one become links." code={sample2} />
 </Guidelines>
 
 </Section>

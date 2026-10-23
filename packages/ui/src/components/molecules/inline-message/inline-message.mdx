@@ -25,6 +25,24 @@ import { InlineMessage } from './inline-message';
 import inlineMessageStyles from './inline-message.module.css';
 import * as InlineMessageStories from './InlineMessage.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<InlineMessage
+  tone="error"
+  title="Filing rejected"
+  content="The court returned the filing: the signature page is missing."
+/>`;
+export const sample2 = `<InlineMessage
+  tone="information"
+  title="Shared with 2 people"
+  content="Both can view and comment on this matter."
+/>`;
+export const sample3 = `<InlineMessage
+  tone="information"
+  title="Shared with 2 people"
+  content={<Link href="/sharing">Manage access</Link>}
+/>`;
+
 <Meta of={InlineMessageStories} name="Docs" />
 
 <Unstyled>
@@ -147,31 +165,19 @@ and secondary text, so keep all three short.
 </Dont>
 <Do
   caption="Write a title that says what happened. Assistive technology hears only the status word before it, not the icon."
-  code={`<InlineMessage
-  tone="error"
-  title="Filing rejected"
-  content="The court returned the filing: the signature page is missing."
-/>`}
+  code={sample1}
 >
   <InlineMessage tone="error" title="Filing rejected" content="The court returned the filing: the signature page is missing." />
 </Do>
 <Dont caption="Leave what happened to the icon and its color, with a title that doesn't say it." code={`<InlineMessage tone="error" title="Filing" secondaryText="Updated today" />`}>
   <InlineMessage tone="error" title="Filing" secondaryText="Updated today" />
 </Dont>
-<Do caption="Keep the detail to a sentence of plain text." code={`<InlineMessage
-  tone="information"
-  title="Shared with 2 people"
-  content="Both can view and comment on this matter."
-/>`}>
+<Do caption="Keep the detail to a sentence of plain text." code={sample2}>
   <InlineMessage tone="information" title="Shared with 2 people" content="Both can view and comment on this matter." />
 </Do>
 <Dont
   caption="Put links or buttons in content. The popup sits at the end of the page, so keyboard users reach them only after everything else."
-  code={`<InlineMessage
-  tone="information"
-  title="Shared with 2 people"
-  content={<Link href="/sharing">Manage access</Link>}
-/>`}
+  code={sample3}
 />
 </Guidelines>
 

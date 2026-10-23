@@ -28,6 +28,34 @@ import { ChipGroup } from './chip-group';
 import chipGroupStyles from './chip-group.module.css';
 import * as ChipGroupStories from './ChipGroup.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<ChipGroup size="sm" aria-label="Search scopes">
+  <Chip mode="search" label="Matters" isSelected />
+  <Chip mode="search" label="Documents" />
+  <Chip mode="search" label="People" />
+</ChipGroup>`;
+export const sample2 = `<ChipGroup aria-label="Search scopes">
+  <Chip mode="search" label="Matters" size="sm" isSelected />
+  <Chip mode="search" label="Documents" size="sm" />
+  <Chip mode="search" label="People" />
+</ChipGroup>`;
+export const sample3 = `<ChipGroup aria-label="Search scope">
+  {scopes.map((scope) => (
+    <Chip
+      key={scope.id}
+      mode="search"
+      label={scope.label}
+      isSelected={scope.id === selected}
+      onSelectedChange={() => setSelected(scope.id)}
+    />
+  ))}
+</ChipGroup>`;
+export const sample4 = `<ChipGroup aria-label="Search scope">
+  <Chip mode="search" label="Matters" isSelected={matters} onSelectedChange={setMatters} />
+  <Chip mode="search" label="Documents" isSelected={documents} onSelectedChange={setDocuments} />
+</ChipGroup>`;
+
 <Meta of={ChipGroupStories} name="Docs" />
 
 <Unstyled>
@@ -163,11 +191,7 @@ A group can hold chips of different modes and disabled chips, which sit in the r
 <Guidelines>
 <Do
   caption="Set size once, on the group."
-  code={`<ChipGroup size="sm" aria-label="Search scopes">
-    <Chip mode="search" label="Matters" isSelected />
-    <Chip mode="search" label="Documents" />
-    <Chip mode="search" label="People" />
-</ChipGroup>`}
+  code={sample1}
 >
   <ChipGroup size="sm" aria-label="Search scopes">
     <Chip mode="search" label="Matters" isSelected />
@@ -177,11 +201,7 @@ A group can hold chips of different modes and disabled chips, which sit in the r
 </Do>
 <Dont
   caption="Set size on each chip. Miss one, and it breaks the row."
-  code={`<ChipGroup aria-label="Search scopes">
-    <Chip mode="search" label="Matters" size="sm" isSelected />
-    <Chip mode="search" label="Documents" size="sm" />
-    <Chip mode="search" label="People" />
-</ChipGroup>`}
+  code={sample2}
 >
   <ChipGroup aria-label="Search scopes">
     <Chip mode="search" label="Matters" size="sm" isSelected />
@@ -199,24 +219,11 @@ A group can hold chips of different modes and disabled chips, which sit in the r
 />
 <Do
   caption="Keep one-of-a-set selection in your own state, and pass each chip its isSelected."
-  code={`<ChipGroup aria-label="Search scope">
-    {scopes.map((scope) => (
-      <Chip
-        key={scope.id}
-        mode="search"
-        label={scope.label}
-        isSelected={scope.id === selected}
-        onSelectedChange={() => setSelected(scope.id)}
-      />
-    ))}
-</ChipGroup>`}
+  code={sample3}
 />
 <Dont
   caption="Expect the group to turn the other chips off. Each search chip toggles on its own."
-  code={`<ChipGroup aria-label="Search scope">
-    <Chip mode="search" label="Matters" isSelected={matters} onSelectedChange={setMatters} />
-    <Chip mode="search" label="Documents" isSelected={documents} onSelectedChange={setDocuments} />
-</ChipGroup>`}
+  code={sample4}
 />
 </Guidelines>
 

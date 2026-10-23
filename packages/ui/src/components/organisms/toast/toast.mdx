@@ -27,6 +27,15 @@ import { Toast } from './toast';
 import toastStyles from './toast.module.css';
 import * as ToastStories from './Toast.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const undoAction = `toast.success('Matter archived', {
+  actions: <Button size="xs" prominence="tertiary">Undo</Button>,
+});`;
+export const onlyAction = `toast.warning('New billing terms', {
+  actions: <Button size="xs" prominence="tertiary">Accept terms</Button>,
+});`;
+
 <Meta of={ToastStories} name="Docs" />
 
 <Unstyled>
@@ -150,17 +159,13 @@ render a loading Toast on its own.
 </Dont>
 <Do
   caption="Use toast actions as shortcuts to something people can also do elsewhere, such as undo."
-  code={`toast.success('Matter archived', {
-    actions: <Button size="xs" prominence="tertiary">Undo</Button>,
-});`}
+  code={undoAction}
 >
   <Toast tone="success" title="Matter archived" actions={<Button size="xs" prominence="tertiary">Undo</Button>} />
 </Do>
 <Dont
   caption="Put the only way to do something important in a toast. It disappears on its own, and its actions only show while the stack is expanded."
-  code={`toast.warning('New billing terms', {
-    actions: <Button size="xs" prominence="tertiary">Accept terms</Button>,
-});`}
+  code={onlyAction}
 >
   <Toast tone="warning" title="New billing terms" actions={<Button size="xs" prominence="tertiary">Accept terms</Button>} />
 </Dont>

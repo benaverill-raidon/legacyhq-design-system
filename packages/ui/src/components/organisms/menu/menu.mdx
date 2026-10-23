@@ -71,6 +71,33 @@ export const SearchableMenu = () => {
   );
 };
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `{
+  id: 'drafts',
+  label: 'Show drafts',
+  selectionType: 'checkbox',
+  selected: showDrafts,
+  leadingElement: showDrafts
+    ? <CheckboxFillIcon spacing="spacious" decorative />
+    : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />,
+  onSelect: toggleDrafts,
+}`;
+export const sample2 = `{
+  id: 'drafts',
+  label: 'Show drafts',
+  leadingElement: <Checkbox checked={showDrafts} onCheckedChange={toggleDrafts} />,
+}`;
+export const sample3 = `items: sortOptions.map((option) => ({
+  id: option.id,
+  label: option.label,
+  selectionType: 'radio',
+  selected: sort === option.id,
+  onSelect: () => setSort(option.id),
+}))`;
+export const sample4 = `{ id: 'recent', label: 'Most recent', selectionType: 'radio', selected: true },
+{ id: 'name', label: 'Name (A-Z)', selectionType: 'radio', selected: true },`;
+
 <Meta of={MenuStories} name="Docs" />
 
 <Unstyled>
@@ -222,16 +249,7 @@ trigger; call `event.preventDefault()` in the item's `onSelect` to keep it open.
 <Guidelines>
 <Do
   caption="Make a checkable row with selectionType, and show its state with a checkbox icon."
-  code={`{
-    id: 'drafts',
-    label: 'Show drafts',
-    selectionType: 'checkbox',
-    selected: showDrafts,
-    leadingElement: showDrafts
-      ? <CheckboxFillIcon spacing="spacious" decorative />
-      : <CheckboxEmptyIcon spacing="spacious" color="subtle" decorative />,
-    onSelect: toggleDrafts,
-}`}
+  code={sample1}
 >
   <Menu
     aria-label="View options"
@@ -249,21 +267,11 @@ trigger; call `event.preventDefault()` in the item's `onSelect` to keep it open.
 </Do>
 <Dont
   caption="Put a real Checkbox in a row. It's a control inside a button, which is invalid, and the row has two ways to toggle."
-  code={`{
-    id: 'drafts',
-    label: 'Show drafts',
-    leadingElement: <Checkbox checked={showDrafts} onCheckedChange={toggleDrafts} />,
-}`}
+  code={sample2}
 />
 <Do
   caption="Select exactly one row in a radio-style choice. Menu doesn't do it for you."
-  code={`items: sortOptions.map((option) => ({
-    id: option.id,
-    label: option.label,
-    selectionType: 'radio',
-    selected: sort === option.id,
-    onSelect: () => setSort(option.id),
-}))`}
+  code={sample3}
 >
   <Menu
     aria-label="Sort by"
@@ -282,8 +290,7 @@ trigger; call `event.preventDefault()` in the item's `onSelect` to keep it open.
 </Do>
 <Dont
   caption="Leave two radio-style rows selected. Menu shows and announces exactly what it's given."
-  code={`{ id: 'recent', label: 'Most recent', selectionType: 'radio', selected: true },
-{ id: 'name', label: 'Name (A-Z)', selectionType: 'radio', selected: true },`}
+  code={sample4}
 >
   <Menu
     aria-label="Sort by"

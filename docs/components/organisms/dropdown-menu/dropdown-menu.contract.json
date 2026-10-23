@@ -1,7 +1,13 @@
 {
   "name": "DropdownMenu",
   "category": "actions",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "Its generated API table misses the 14 props it inherits from Menu through `Omit<MenuProps, …>` (sections, size, showSearch, searchValue, loading, emptyMessage, …): react-docgen doesn't follow props from another file."
+    }
+  ],
   "purpose": "Pairs any trigger element with a floating Menu panel.",
   "intent": "A thin composition of Popup (positioning/dismissal) and Menu (search/sectioning/selection/keyboard nav) preconfigured for the click-to-open action-menu use case, rather than a third independent implementation of either concern.",
   "sourceFiles": {

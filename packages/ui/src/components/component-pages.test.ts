@@ -7,9 +7,9 @@ import { COMPONENT_PAGE_SECTIONS } from '../storybook/blocks/component-page-data
 // The component Docs page standard (packages/ui/src/storybook/blocks/component-page.tsx). Every
 // MDX page written with <ComponentPage> must list the standard sections in order, with the required
 // ones present; name a component in registry.json; label that component's anatomy parts, as its
-// contract names them; read a stylesheet that exists; and document every prop in the component's
-// types, since its API table is generated from them. Pages not yet converted are counted, not
-// failed, while the standard rolls out.
+// contract names them; read a stylesheet that exists; document every prop in the component's
+// types, since its API table is generated from them; and write multi-line code samples as MDX
+// exports. Pages not yet converted are counted, not failed, while the standard rolls out.
 
 const COMPONENTS = 'packages/ui/src/components';
 
@@ -90,6 +90,12 @@ describe('component Docs pages', () => {
     const sources = typesOf(page.id);
     expect(sources.length).toBeGreaterThan(0);
     expect(sources.flatMap((path) => undocumentedProps(read(path)))).toEqual([]);
+  });
+
+  it.each(standard.map((page) => [page.id, page] as const))('%s writes multi-line code samples as exports, so they keep their indent', (_id, page) => {
+    // MDX strips two spaces from every line of a multi-line string in a JSX attribute.
+    const inline = [...page.mdx.matchAll(/code=\{`([^`]*)`\}/g)].filter(([, code]) => code.includes('\n')).map(([, code]) => code.split('\n')[0]);
+    expect(inline).toEqual([]);
   });
 
   it('reads JSDoc coverage from interfaces and object types', () => {

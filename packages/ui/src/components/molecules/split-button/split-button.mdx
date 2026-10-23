@@ -48,6 +48,27 @@ export const sendSections = [
 
 export const deleteSections = [{ id: 'delete', items: [{ id: 'delete-notify', label: 'Delete and notify the client' }] }];
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<SplitButton secondaryActionLabel="More save options" sections={saveSections}>
+  Save
+</SplitButton>`;
+export const sample2 = `<SplitButton secondaryActionLabel="More" sections={saveSections}>
+  Save
+</SplitButton>`;
+export const sample3 = `sections={[{ id: 'save', items: [
+  { id: 'save-as', label: 'Save as…', onSelect: saveAs },
+  { id: 'save-copy', label: 'Save a copy', onSelect: saveCopy },
+] }]}`;
+export const sample4 = `sections={[{ id: 'misc', items: [
+  { id: 'share', label: 'Share', onSelect: share },
+  { id: 'export', label: 'Export to PDF', onSelect: exportPdf },
+  { id: 'delete', label: 'Delete', onSelect: remove },
+] }]}`;
+export const sample5 = `<SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
+  Delete matter
+</SplitButton>`;
+
 <Meta of={SplitButtonStories} name="Docs" />
 
 <Unstyled>
@@ -168,9 +189,7 @@ to the wrapping `div`. There's no full-width Split Button.
 <Guidelines>
 <Do
   caption="Name the caret after the main action, so it makes sense heard on its own."
-  code={`<SplitButton secondaryActionLabel="More save options" sections={saveSections}>
-    Save
-</SplitButton>`}
+  code={sample1}
 >
   <SplitButton secondaryActionLabel="More save options" sections={saveSections}>
     Save
@@ -178,16 +197,11 @@ to the wrapping `div`. There's no full-width Split Button.
 </Do>
 <Dont
   caption={`Use a generic caret label like "More". Heard on its own, "More, button" doesn't say more of what.`}
-  code={`<SplitButton secondaryActionLabel="More" sections={saveSections}>
-    Save
-</SplitButton>`}
+  code={sample2}
 />
 <Do
   caption="Keep the menu to variations of the main action."
-  code={`sections={[{ id: 'save', items: [
-    { id: 'save-as', label: 'Save as…', onSelect: saveAs },
-    { id: 'save-copy', label: 'Save a copy', onSelect: saveCopy },
-] }]}`}
+  code={sample3}
 >
   <SplitButton secondaryActionLabel="More save options" sections={saveSections}>
     Save
@@ -195,11 +209,7 @@ to the wrapping `div`. There's no full-width Split Button.
 </Do>
 <Dont
   caption="Fill it with unrelated actions. Use a Dropdown Menu for a set of different actions."
-  code={`sections={[{ id: 'misc', items: [
-    { id: 'share', label: 'Share', onSelect: share },
-    { id: 'export', label: 'Export to PDF', onSelect: exportPdf },
-    { id: 'delete', label: 'Delete', onSelect: remove },
-] }]}`}
+  code={sample4}
 />
 <Do
   caption="Use a Button with the error tone for a destructive action."
@@ -209,9 +219,7 @@ to the wrapping `div`. There's no full-width Split Button.
 </Do>
 <Dont
   caption="Set a tone on a Split Button. It reaches only the main action, so the two halves don't match."
-  code={`<SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
-    Delete matter
-</SplitButton>`}
+  code={sample5}
 >
   <SplitButton appearance="primary" tone="error" secondaryActionLabel="More delete options" sections={deleteSections}>
     Delete matter

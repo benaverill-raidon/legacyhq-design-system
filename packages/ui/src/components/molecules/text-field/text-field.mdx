@@ -29,6 +29,28 @@ import { TextField } from './text-field';
 import textFieldStyles from './text-field.module.css';
 import * as TextFieldStories from './TextField.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<Field label="Email">
+  <TextField type="email" />
+</Field>`;
+export const sample2 = `<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
+  <TextField type="email" invalid defaultValue="jordan.lee@" />
+</Field>`;
+export const sample3 = `<Field label="Email">
+  <TextField type="email" invalid defaultValue="jordan.lee@" />
+</Field>`;
+export const sample4 = `<TextField
+  aria-label="Filter"
+  value={value}
+  onChange={(event) => setValue(event.target.value)}
+  iconAfter={
+    <IconButton appearance="subtle" shape="square" size="xs" aria-label="Clear" onClick={() => setValue('')}>
+      <CloseIcon />
+    </IconButton>
+  }
+/>`;
+
 <Meta of={TextFieldStories} name="Docs" />
 
 <Unstyled>
@@ -186,9 +208,7 @@ the field scrolls inside the input.
 <Guidelines>
 <Do
   caption="Give the field a visible label with Field, which also names it for assistive technology."
-  code={`<Field label="Email">
-    <TextField type="email" />
-</Field>`}
+  code={sample1}
 >
   <Field label="Email">
     <TextField type="email" />
@@ -199,9 +219,7 @@ the field scrolls inside the input.
 </Dont>
 <Do
   caption="Pair invalid with a message that says how to fix the value."
-  code={`<Field label="Email" state="error" message="Enter an email address, like name@example.com.">
-    <TextField type="email" invalid defaultValue="jordan.lee@" />
-</Field>`}
+  code={sample2}
 >
   <Field label="Email" state="error" message="Enter an email address, like name@example.com.">
     <TextField type="email" invalid defaultValue="jordan.lee@" />
@@ -209,9 +227,7 @@ the field scrolls inside the input.
 </Do>
 <Dont
   caption="Mark the field invalid with no message. The red border alone doesn't say what's wrong."
-  code={`<Field label="Email">
-    <TextField type="email" invalid defaultValue="jordan.lee@" />
-</Field>`}
+  code={sample3}
 >
   <Field label="Email">
     <TextField type="email" invalid defaultValue="jordan.lee@" />
@@ -219,16 +235,7 @@ the field scrolls inside the input.
 </Dont>
 <Do
   caption="Put a real Icon Button in iconAfter for a clear action, with its own label."
-  code={`<TextField
-    aria-label="Filter"
-    value={value}
-    onChange={(event) => setValue(event.target.value)}
-    iconAfter={
-      <IconButton appearance="subtle" shape="square" size="xs" aria-label="Clear" onClick={() => setValue('')}>
-        <CloseIcon />
-      </IconButton>
-    }
-/>`}
+  code={sample4}
 >
   <TextField
     aria-label="Filter"

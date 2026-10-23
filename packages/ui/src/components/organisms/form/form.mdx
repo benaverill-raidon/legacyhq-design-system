@@ -32,6 +32,35 @@ import * as FormStories from './Form.stories';
 
 export const stop = (event) => event.preventDefault();
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<FormFooter>
+  <Button prominence="tertiary" onClick={onCancel}>Cancel</Button>
+  <Button prominence="primary" type="submit">Create matter</Button>
+</FormFooter>`;
+export const sample2 = `<FormFooter>
+  <Button prominence="primary">Create matter</Button>
+</FormFooter>`;
+export const sample3 = `<FormRow>
+  <Field label="City"><TextField /></Field>
+  <Field label="State"><TextField /></Field>
+  <Field label="ZIP"><TextField inputMode="numeric" /></Field>
+</FormRow>`;
+export const sample4 = `<FormRow>
+  <Field label="Notes"><TextArea /></Field>
+  <Field label="Email"><TextField type="email" /></Field>
+</FormRow>`;
+export const sample5 = `<Form title="New matter" requiredLegend>
+  <FormSection>
+    <Field label="Matter name" required><TextField /></Field>
+  </FormSection>
+</Form>`;
+export const sample6 = `<Form title="New matter">
+  <FormSection>
+    <Field label="Matter name" required><TextField /></Field>
+  </FormSection>
+</Form>`;
+
 <Meta of={FormStories} name="Docs" />
 
 <Unstyled>
@@ -220,10 +249,7 @@ Set `noValidate` when you show the system's errors, so the browser's own message
 <Guidelines>
 <Do
   caption="Give the submitting Button type submit, so it submits the form."
-  code={`<FormFooter>
-    <Button prominence="tertiary" onClick={onCancel}>Cancel</Button>
-    <Button prominence="primary" type="submit">Create matter</Button>
-</FormFooter>`}
+  code={sample1}
 >
   <Form onSubmit={stop}>
     <FormFooter>
@@ -234,17 +260,11 @@ Set `noValidate` when you show the system's errors, so the browser's own message
 </Do>
 <Dont
   caption="Leave the submitting Button's type unset. Button defaults to type button, so it doesn't submit."
-  code={`<FormFooter>
-    <Button prominence="primary">Create matter</Button>
-</FormFooter>`}
+  code={sample2}
 />
 <Do
   caption="Put short, related fields in a row, such as city, state, and ZIP."
-  code={`<FormRow>
-    <Field label="City"><TextField /></Field>
-    <Field label="State"><TextField /></Field>
-    <Field label="ZIP"><TextField inputMode="numeric" /></Field>
-</FormRow>`}
+  code={sample3}
 >
   <Form onSubmit={stop}>
     <FormRow>
@@ -262,10 +282,7 @@ Set `noValidate` when you show the system's errors, so the browser's own message
 </Do>
 <Dont
   caption="Put a long field beside an unrelated one to save space. The row never stacks, so both get cramped."
-  code={`<FormRow>
-    <Field label="Notes"><TextArea /></Field>
-    <Field label="Email"><TextField type="email" /></Field>
-</FormRow>`}
+  code={sample4}
 >
   <Form onSubmit={stop}>
     <FormRow>
@@ -280,11 +297,7 @@ Set `noValidate` when you show the system's errors, so the browser's own message
 </Dont>
 <Do
   caption="Set requiredLegend when the form marks required fields, so the * is explained."
-  code={`<Form title="New matter" requiredLegend>
-    <FormSection>
-        <Field label="Matter name" required><TextField /></Field>
-    </FormSection>
-</Form>`}
+  code={sample5}
 >
   <Form title="New matter" requiredLegend onSubmit={stop}>
     <FormSection>
@@ -296,11 +309,7 @@ Set `noValidate` when you show the system's errors, so the browser's own message
 </Do>
 <Dont
   caption="Mark fields required with no legend. Not everyone knows what the * means."
-  code={`<Form title="New matter">
-    <FormSection>
-        <Field label="Matter name" required><TextField /></Field>
-    </FormSection>
-</Form>`}
+  code={sample6}
 >
   <Form title="New matter" onSubmit={stop}>
     <FormSection>

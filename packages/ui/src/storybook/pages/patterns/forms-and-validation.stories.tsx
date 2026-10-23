@@ -15,7 +15,7 @@ import { DatePicker } from '../../../components/organisms/date-picker';
 import { DateTimePicker } from '../../../components/organisms/date-time-picker';
 import { Form, FormFooter, FormRow, FormSection } from '../../../components/organisms/form';
 import { SectionMessage } from '../../../components/organisms/section-message';
-import { toast, ToastGroup } from '../../../components/organisms/toast-group';
+import { toast } from '../../../components/organisms/toast-group';
 import styles from './forms-and-validation.module.css';
 
 // Examples for Patterns / Forms and Validation, built only from system components. The local
@@ -285,7 +285,6 @@ export const SubmitAndValidate: Story = {
             </Button>
           </FormFooter>
         </Form>
-        <ToastGroup />
       </>
     );
   },

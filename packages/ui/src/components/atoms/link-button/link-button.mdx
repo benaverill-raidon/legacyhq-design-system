@@ -28,6 +28,21 @@ import { LinkButton } from './link-button';
 import linkButtonStyles from './link-button.module.css';
 import * as LinkButtonStories from './link-button.stories';
 
+{/* Multi-line code samples. Written as exports, because MDX strips two spaces of indent from every line of a multi-line string in a JSX attribute. */}
+
+export const sample1 = `<LinkButton href="https://example.com" target="_blank">
+  Visit the help center
+</LinkButton>`;
+export const sample2 = `<LinkButton href="https://example.com" target="_blank" rel="external">
+  Visit the help center
+</LinkButton>`;
+export const sample3 = `<LinkButton href="/invoices/overdue" appearance="primary" tone="warning">
+  Review overdue invoices
+</LinkButton>`;
+export const sample4 = `<LinkButton href="/invoices/overdue" tone="warning">
+  Review overdue invoices
+</LinkButton>`;
+
 <Meta of={LinkButtonStories} name="Docs" />
 
 <Unstyled>
@@ -172,29 +187,21 @@ signals at once.
   caption="Give an action an href to borrow Link Button's look, since it's announced as a link but goes nowhere."
   code={`<LinkButton href="#" onClick={openDialog}>Add note</LinkButton>`}
 />
-<Do caption="Let rel default on a link that opens in a new tab." code={`<LinkButton href="https://example.com" target="_blank">
-  Visit the help center
-</LinkButton>`}>
+<Do caption="Let rel default on a link that opens in a new tab." code={sample1}>
   <LinkButton href="https://example.com" target="_blank">
     Visit the help center
   </LinkButton>
 </Do>
 <Dont
   caption="Pass a different rel without the defaults, which replaces noopener noreferrer instead of adding to it."
-  code={`<LinkButton href="https://example.com" target="_blank" rel="external">
-  Visit the help center
-</LinkButton>`}
+  code={sample2}
 />
-<Do caption="Use a tone with the primary appearance, the only one with warning and error styles." code={`<LinkButton href="/invoices/overdue" appearance="primary" tone="warning">
-  Review overdue invoices
-</LinkButton>`}>
+<Do caption="Use a tone with the primary appearance, the only one with warning and error styles." code={sample3}>
   <LinkButton href="#" appearance="primary" tone="warning">
     Review overdue invoices
   </LinkButton>
 </Do>
-<Dont caption="Set a tone on the default appearance and expect it to change the look." code={`<LinkButton href="/invoices/overdue" tone="warning">
-  Review overdue invoices
-</LinkButton>`}>
+<Dont caption="Set a tone on the default appearance and expect it to change the look." code={sample4}>
   <LinkButton href="#" tone="warning">
     Review overdue invoices
   </LinkButton>

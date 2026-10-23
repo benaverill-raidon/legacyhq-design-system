@@ -37,9 +37,12 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
      Field wiring, Inline Edit `validate`, Table title size by `size`, Progress Bar's empty ring,
      and the Table, Label, and Tag Group decisions.
    - Bugs, done 2026-10-23: 27 known issues closed across 16 components. Now 25 Stable, 33 Beta.
-   - **Next: docs tooling** (union-prop API tables, light-only canvas, overlay anatomy, the code
-     samples' indent on component pages), then the remaining known issues that need decisions or
-     Figma.
+   - Docs tooling, done 2026-10-23: code samples keep their indent on every page (190 samples on
+     51 pages), the toolbar theme reaches overlays and the canvas, one global Toast Group,
+     "Components used" by code folder; union-prop tables, overlay anatomy, the tone table, and
+     template heading levels recorded as limitations.
+   - **Next:** the remaining known issues that need decisions or Figma (on Introduction / Status
+     and in the Figma checklist above).
 
 ## Figma (the owner's checklist)
 
@@ -174,29 +177,29 @@ Found while fixing the bugs (2026-10-23):
 
 ## Docs tooling
 
-- Union prop types leave the generated API table empty (Chip and Select list theirs by hand; both
-  carry it as a known issue). Fix with react-docgen-typescript, or a PropsTable that merges a
-  union's members.
-- The Anatomy block can't outline portalled or fixed overlays (Popup, Tooltip, Modal Dialog,
-  Toast Group).
+- **Limitation (decided 2026-10-23):** react-docgen can't read union prop types, so Chip and Select
+  list their props by hand. react-docgen-typescript was tried: it reads unions but drops 189 of
+  261 defaults (it can't see through `React.memo`), orders union values oddly, and shows
+  deprecated values in the lists, so it was reverted. Props inherited through `Omit<>` from another
+  file are also missed (Dropdown Menu, Split Button: their known issues).
+- **Limitation (decided 2026-10-23):** the Anatomy block can't outline portalled or fixed overlays
+  (Popup, Tooltip, Modal Dialog, Toast Group). Their pages show a non-portalled specimen where the
+  component can render one, or keep the written part list; no docs-only rendering mode.
 - **Code samples lose their indent on 51 component Docs pages** (180 samples): MDX strips two
   spaces from every line of a multi-line string in a JSX attribute (`code={`...`}`). The pattern
   pages write them as MDX exports instead, and their test enforces it; the component pages need
   the same change (scriptable), plus the rule in component-pages.test.ts. Empty State's page
   compensates with extra spaces, which an export would double.
-- Pattern blocks: "Components used" identifies components by folder, so Rich Text Area (in
-  `molecules/text-area`) would show as Text Area; `ToneMatrix` reads only string values (no table
-  of which controls take the boolean `invalid`) and only the first declaration of a prop, so it
-  can't read Chip's `mode` from its union of prop types.
-- Storybook's Dark toolbar themes only a wrapper, so portalled overlays render light in dark mode.
-  With the OS in dark mode, the canvas body is transparent and takes the browser's dark color while
-  the tokens stay light, so a story's own text reads dark on dark.
-- Only one Toast Group can mount per docs page, so a story's toasts show only when the story that
-  mounts it is on the page (Document Generation's failure story, viewed alone).
-- Foundations / Icons under-counts the components that use `sm` icons: its detector misses an icon
-  picked from a lookup (Field's status icon).
-- Template screens start their headings at `h3` so they sit inside the docs outline; the product's
-  own levels are stated in prose only. The blocks have no way to set a base level.
+- `typesOf` (Storybook's `component-types.ts`, and the pattern page test) looks for
+  `<id>/<id>.types.ts`, so it finds nothing for Rich Text Area (its types are in
+  `text-area/rich`); a `<ToneMatrix>` naming it would be empty. `CODE_FOLDERS` in
+  `pattern-page-data.ts` already maps every component to its code folder and could fix it.
+- **Limitation (decided 2026-10-23):** `ToneMatrix` reads only string values (no table of which
+  controls take the boolean `invalid`) and only the first declaration of a prop, so it can't read
+  Chip's `mode` from its union of prop types. No page needs either today.
+- **Limitation (decided 2026-10-23):** template screens start their headings at `h3` so they sit
+  inside the docs outline; the product's own levels are stated in prose only. Revisit with the
+  Document Generation and Roadmap designs.
 
 ## Housekeeping
 

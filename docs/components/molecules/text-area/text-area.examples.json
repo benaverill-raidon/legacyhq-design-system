@@ -59,12 +59,11 @@
     },
     {
       "name": "Inline context inside Key Value Pair",
-      "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit, is the standard pattern for embedding inside a Key Value Pair - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid.",
-      "jsx": "<KeyValuePair label=\"Notes\" underline>\n  <TextArea context=\"inline\" defaultValue=\"Awaiting trust schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n</KeyValuePair>",
+      "description": "context=\"inline\" combined with iconAfter, wrapped in InlineEdit with actionPlacement=\"end\", is the standard pattern for embedding inside a Key Value Pair (in a Key Value List) - chromeless at rest, with the raised-hover background and a bottom border on hover and a bottom focus/error line on focus/invalid. With autoResize the field grows, so actionAlignment=\"start\" keeps Inline Edit's buttons level with its first line.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Notes\" underline>\n    <InlineEdit value={notes} onConfirm={setNotes} actionPlacement=\"end\" actionAlignment=\"start\">\n      <TextArea autoResize context=\"inline\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
       "props": {
         "context": "inline",
-        "rows": 2,
-        "resize": "none",
+        "autoResize": true,
         "iconAfter": "EditIcon"
       }
     }

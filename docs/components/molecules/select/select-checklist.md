@@ -82,7 +82,7 @@ Required:
 - default, hover, focus, typing, hasValue, invalid, disabled
 
 Not required:
-- A combined open+disabled — a disabled Select can't open.
+- A combined open+disabled — a disabled Select (the prop or a disabled fieldset) can't open, by pointer or keyboard.
 
 ---
 

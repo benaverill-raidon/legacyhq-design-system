@@ -1335,18 +1335,12 @@
       "verifiedAt": "2026-08-06"
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
-        "noKnownIssues"
+        "examples"
       ],
       "evidence": {
         "docsPage": true,
@@ -1354,7 +1348,7 @@
         "figma": true,
         "contract": true,
         "examples": false,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -2424,7 +2418,8 @@
         "disabledBorder": "color-border-disabled",
         "disabledBackground": "color-background-disabled",
         "typography": "body-md",
-        "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)"
+        "groupLegendTypography": "heading-xxs, in color-content-subtle (matches Field's label); its required * has no gap (spacing-none)",
+        "groupMessageTypography": "body-sm (matches Field's message): description in color-content-subtle, error message in color-content-error, spacing-xs above"
       },
       "componentAllowed": [
         "indicator size (size-choice-indicator)",
@@ -2480,18 +2475,12 @@
       "verifiedAt": "2026-08-06"
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "decision",
-        "summary": "The group's description and error text are `body-md` while Field's message is `body-sm`, so the legend (now Field's label style) is smaller than its own description."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
-        "noKnownIssues"
+        "examples"
       ],
       "evidence": {
         "docsPage": true,
@@ -2499,7 +2488,7 @@
         "figma": true,
         "contract": true,
         "examples": false,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -4997,18 +4986,12 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "Its examples file's editable pairs use a Text Field with an edit icon instead of Inline Edit."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract",
-        "noKnownIssues"
+        "contract"
       ],
       "evidence": {
         "docsPage": true,
@@ -5016,7 +4999,7 @@
         "figma": true,
         "contract": false,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -5152,8 +5135,8 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "bug",
-        "summary": "Its examples file's editable pairs use a Text Field with an edit icon instead of Inline Edit, and two of its page's code samples show a pair with no Key Value List around it."
+        "kind": "decision",
+        "summary": "Its stories and live example put an edit icon (`iconAfter`) beside the value inside Inline Edit, while Inline Edit's own page shows none. Does the edit icon belong in a Key Value Pair?"
       }
     ],
     "replacedBy": null,
@@ -6563,18 +6546,12 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "Its examples file says the Key Value Pair example is \"wrapped in InlineEdit\", but the code shows no Inline Edit."
-      }
-    ],
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract",
-        "noKnownIssues"
+        "contract"
       ],
       "evidence": {
         "docsPage": true,
@@ -6582,7 +6559,7 @@
         "figma": true,
         "contract": false,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },
@@ -6864,30 +6841,19 @@
         "Gained an additive leadingContent slot so Select can render multi-select chips inside the field frame without a second bordered frame or duplicated state CSS. In-frame, before the input, not aria-hidden (unlike the decorative iconBefore); shrinks/clips to keep the field single-line. Additive and opt-in - existing TextField usage is unchanged. Not derived from a TextField Figma variant; it exists to serve Select, whose own select-trigger nests chips inside its text-field instance."
       ]
     },
-    "status": "beta",
-    "knownIssues": [
-      {
-        "kind": "bug",
-        "summary": "Its examples file says the Key Value Pair example is \"wrapped in InlineEdit\", but the code shows no Inline Edit."
-      },
-      {
-        "kind": "gap",
-        "summary": "Its leading slot's `color: inherit` rule greys any colored icon passed through `iconBefore` (Select works around it for its chosen option's icon)."
-      }
-    ],
+    "status": "stable",
+    "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "noKnownIssues"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
         "examples": true,
-        "noKnownIssues": false
+        "noKnownIssues": true
       }
     }
   },

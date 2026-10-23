@@ -15,8 +15,8 @@
     },
     {
       "name": "Mixed editable and static pairs",
-      "description": "Some pairs are inline-editable (with TextField/TextArea), others are static.",
-      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <TextField context=\"inline\" defaultValue=\"Jane Doe\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <TextArea context=\"inline\" defaultValue=\"Awaiting schedule.\" aria-label=\"Notes\" rows={2} resize=\"none\" iconAfter={<EditIcon color=\"subtle\" />} />\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "description": "Some pairs are editable in place (an inline TextField or TextArea in Inline Edit, with actionPlacement=\"end\" so a row keeps its height while editing), others are static.",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <InlineEdit value={notes} onConfirm={setNotes} actionPlacement=\"end\" actionAlignment=\"start\">\n      <TextArea autoResize context=\"inline\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
       "props": {}
     }
   ],

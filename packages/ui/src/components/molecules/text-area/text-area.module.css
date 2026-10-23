@@ -246,7 +246,9 @@
 /*
  * The trailing slot holds an icon or interactive control (e.g. an edit IconButton). Not aria-hidden:
  * may hold a real interactive control. Aligns to the top of the wrapper so it stays pinned even as the
- * textarea grows with content.
+ * textarea grows with content. The slot's subtle color reaches an icon left at Icon's default
+ * `color="inherit"`; an icon with a named color keeps its own (the slot doesn't override Icon's
+ * color classes).
  */
 .action {
   display: inline-flex;
@@ -256,10 +258,6 @@
   inline-size: var(--size-control-xs);
   block-size: var(--size-control-xs);
   color: var(--field-icon-color, var(--color-content-subtle));
-}
-
-.action :global([data-color]) {
-  color: inherit;
 }
 
 /* Fit one line inside the existing control height, then let content expand the normal flow. */

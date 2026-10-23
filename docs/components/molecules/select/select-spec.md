@@ -114,12 +114,12 @@ emptyMessage: "No matches"
 - **Chosen icon** — a single-select field passes the chosen option's `icon` to TextField's
   `iconBefore`, the slot Figma's `select-trigger` has as the text-field's `elemBeforeInput` (an
   icon slot, hidden in the static variants). It's decorative and stays while the menu is open,
-  since the value doesn't change until a new pick. Select wraps it in `.optionIcon` so it keeps its
-  own color, as in its menu row: TextField's `.before [data-color] { color: inherit }` would turn a
-  colored icon subtle, so `select.module.css` restates Icon's named colors for that one icon
-  (`.trigger .optionIcon [data-color='<color>']`, one class stronger), leaves `inherit` icons on
-  the slot's subtle color, and greys it with `content/disabled` when the field is disabled. The
-  trigger's other icons (the caret) are untouched.
+  since the value doesn't change until a new pick. It keeps its own color, as in its menu row:
+  TextField's leading slot leaves an icon's named color alone, and an `inherit` icon takes the
+  slot's subtle color. Select wraps it in `.optionIcon` only so a disabled field (the prop or a
+  disabled fieldset) greys it with `content/disabled`, like the caret
+  (`.trigger:where(:has(input:disabled)) .optionIcon [data-color]`). The trigger's other icons are
+  untouched.
 
 ### The TextField extension
 
@@ -235,7 +235,7 @@ single: opens on interaction and lists options as radio items
 single: onChange + close on choose
 single: shows the selected label when closed
 single: shows the chosen option's icon before the value (aria-hidden), and none without one
-single: keeps the chosen option's icon in its own color (every named Icon color restated; disabled greys it)
+single: keeps the chosen option's icon in its own color (Text Field leaves named colors alone; disabled greys it)
 single: marks the selected option aria-checked
 typeahead: filters by case-insensitive substring
 typeahead: empty message when nothing matches
@@ -250,6 +250,7 @@ multi: Backspace removes the last chip on an empty query
 multi: no Backspace-remove while the query is non-empty
 grouping: a section heading per group
 states: does not open when disabled
+states: never opens by pointer or keyboard when disabled by the prop or a disabled fieldset, in a form or a table cell
 states: aria-invalid when invalid
 states: opens on ArrowDown
 states: size and context map to the TextField trigger

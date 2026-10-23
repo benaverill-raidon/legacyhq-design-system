@@ -48,16 +48,20 @@ export const sample1 = `<KeyValueList>
 export const sample2 = `<div>
   <KeyValuePair label="Account type" value="Trust" />
 </div>`;
-export const sample3 = `<KeyValuePair label="Client name">
-  <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
-    <TextField context="inline" aria-label="Client name" />
-  </InlineEdit>
-</KeyValuePair>`;
-export const sample4 = `<KeyValuePair label="Client name">
-  <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
-    <TextField context="inline" />
-  </InlineEdit>
-</KeyValuePair>`;
+export const sample3 = `<KeyValueList>
+  <KeyValuePair label="Client name">
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+      <TextField context="inline" aria-label="Client name" />
+    </InlineEdit>
+  </KeyValuePair>
+</KeyValueList>`;
+export const sample4 = `<KeyValueList>
+  <KeyValuePair label="Client name">
+    <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
+      <TextField context="inline" />
+    </InlineEdit>
+  </KeyValuePair>
+</KeyValueList>`;
 export const sample7 = `<KeyValueList>
   <KeyValuePair label="Client name" underline>
     <InlineEdit value={name} onConfirm={setName} actionPlacement="end">
@@ -74,12 +78,16 @@ export const sample8 = `<KeyValueList>
   </KeyValuePair>
   <KeyValuePair label="Account type" value="Revocable trust" />
 </KeyValueList>`;
-export const sample5 = `<KeyValuePair size="lg" label="Client name">
-  <TextField size="lg" context="inline" aria-label="Client name" />
-</KeyValuePair>`;
-export const sample6 = `<KeyValuePair size="lg" label="Client name">
-  <TextField context="inline" aria-label="Client name" />
-</KeyValuePair>`;
+export const sample5 = `<KeyValueList>
+  <KeyValuePair size="lg" label="Client name">
+    <TextField size="lg" context="inline" aria-label="Client name" />
+  </KeyValuePair>
+</KeyValueList>`;
+export const sample6 = `<KeyValueList>
+  <KeyValuePair size="lg" label="Client name">
+    <TextField context="inline" aria-label="Client name" />
+  </KeyValuePair>
+</KeyValueList>`;
 
 <Meta of={KeyValuePairStories} name="Docs" />
 

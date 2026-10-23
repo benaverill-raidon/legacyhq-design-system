@@ -251,6 +251,9 @@ Use semantic CSS variables only. Do not hardcode visual design values unless a t
 
 - Label: `body-md` typography token set.
 - Group legend: `heading-xxs`, like Field's label.
+- Group description and error message: `body-sm`, like Field's message (an owner decision), in
+  `color-content-subtle` and `color-content-error` (Field's resting and error message colors), with
+  `spacing-xs` above.
 
 ### Color Tokens
 

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { EditableCellContext } from '../../primitives/editable-cell-context';
 import { Field } from '../field';
 import { Select } from './select';
 import type { SelectOption } from './select.types';
@@ -92,31 +93,19 @@ describe('Select', () => {
       ];
       render(<Select options={withStatus} value="approved" onChange={vi.fn()} />);
       const icon = screen.getByTestId('approved-icon');
-      // Wrapped, so Select's rules (not Text Field's inherit) set its color.
+      // Text Field's leading slot holds it and leaves its named color alone; Select's wrapper is
+      // there only for the disabled grey.
       expect(icon.parentElement).toHaveClass(selectStyles.optionIcon);
       expect(icon.parentElement?.parentElement).toHaveClass(textFieldStyles.before);
+      expect(selectCss).not.toMatch(/\[data-color='[a-z]+'\]/);
     });
 
-    it("restates every named Icon color for the chosen-option icon, and greys it when disabled", () => {
-      const iconTypes = readFileSync('packages/ui/src/components/primitives/icon/icon.types.ts', 'utf8');
-      const iconCss = readFileSync('packages/ui/src/components/primitives/icon/icon.module.css', 'utf8');
-      const union = iconTypes.match(/export type IconColor =([^;]*);/)?.[1] ?? '';
-      const colors = [...union.matchAll(/'([a-z]+)'/g)].map(([, color]) => color).filter((color) => color !== 'inherit');
-
-      expect(colors.length).toBeGreaterThan(5);
-      for (const color of colors) {
-        const iconColor = iconCss.match(new RegExp(`\\.color_${color}\\s*\\{\\s*color: (var\\([^)]*\\));`))?.[1];
-        expect(iconColor, color).toBeDefined();
-        // Same token as Icon's own class, one class stronger than Text Field's `.before [data-color]`.
-        expect(selectCss).toMatch(
-          new RegExp(`\\.trigger \\.optionIcon :global\\(\\[data-color='${color}'\\]\\) \\{\\s*color: ${iconColor?.replace(/[()]/g, '\\$&')};`),
-        );
-      }
+    it("greys the chosen option's icon when disabled, like the caret", () => {
+      // Stronger than Icon's single color class, so it wins over a named color too. Keyed off the
+      // input's :disabled, so a disabled fieldset greys it as the prop does.
       expect(selectCss).toMatch(
         /\.trigger:where\(:has\(input:disabled\)\) \.optionIcon :global\(\[data-color\]\) \{\s*color: var\(--color-content-disabled\);/,
       );
-      // The disabled rule comes after the colors, so it wins at the same specificity.
-      expect(selectCss.lastIndexOf(":has(input:disabled)) .optionIcon")).toBeGreaterThan(selectCss.lastIndexOf("[data-color='success']"));
     });
 
     it('marks the selected option checked', () => {
@@ -292,6 +281,35 @@ describe('Select', () => {
       fireEvent.mouseDown(container.querySelector(`.${textFieldStyles.root}`) as Element);
       fireEvent.mouseDown(container.querySelector(`.${selectStyles.caret}`) as Element);
       expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    });
+
+    it.each([
+      ['the disabled prop', (select: React.ReactElement) => select, true],
+      ['a disabled fieldset', (select: React.ReactElement) => <fieldset disabled>{select}</fieldset>, false],
+    ])('never opens its menu by pointer or keyboard when disabled by %s, in a form or a table cell', (_, wrap, disabledProp) => {
+      for (const cell of [null, 'md'] as const) {
+        const onChange = vi.fn();
+        const { container, unmount } = render(
+          <EditableCellContext.Provider value={cell}>
+            {wrap(<Select options={OPTIONS} value="draft" onChange={onChange} aria-label="Status" disabled={disabledProp} />)}
+          </EditableCellContext.Provider>,
+        );
+        const input = combobox();
+        expect(input).toBeDisabled();
+
+        fireEvent.mouseDown(input);
+        fireEvent.click(input);
+        fireEvent.mouseDown(container.querySelector(`.${textFieldStyles.root}`) as Element);
+        fireEvent.click(container.querySelector(`.${textFieldStyles.root}`) as Element);
+        fireEvent.mouseDown(container.querySelector(`.${selectStyles.caret}`) as Element);
+        for (const key of ['ArrowDown', 'ArrowUp', 'Enter', ' ']) fireEvent.keyDown(input, { key });
+        fireEvent.change(input, { target: { value: 'App' } });
+
+        expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+        expect(input).toHaveAttribute('aria-expanded', 'false');
+        expect(onChange).not.toHaveBeenCalled();
+        unmount();
+      }
     });
 
     it('sets aria-invalid when invalid', () => {
@@ -485,8 +503,8 @@ describe('Select', () => {
 
   it('colors the caret content/subtle at rest and content/disabled when disabled (Figma-verified)', () => {
     // Verified live against Figma's select-trigger caret_down vector: content/subtle default,
-    // content/disabled when isDisabled. The CaretDownIcon inherits this via TextField's own
-    // `.action :global([data-color]) { color: inherit }`.
+    // content/disabled when isDisabled. The CaretDownIcon inherits this through Icon's default
+    // `color="inherit"`.
     expect(selectCss).toMatch(/\.caret\s*\{[^}]*color:\s*var\(--field-icon-color,\s*var\(--color-content-subtle\)\)/);
     expect(selectCss).toMatch(/\.caretDisabled,\s*\.trigger:where\(:has\(input:disabled\)\) \.caret\s*\{[^}]*color:\s*var\(--color-content-disabled\)/);
   });

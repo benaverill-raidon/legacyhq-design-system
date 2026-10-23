@@ -218,6 +218,10 @@ mirror each other:
   state - not a bare icon standing in for a button. The `label` case nests a real `Label` atom
   (`tone="default"`, `emphasis="subtle"`) for compact, non-interactive metadata/status after the
   input - confirmed directly from the nested instance's own component properties.
+- Both slots set `--field-icon-color` (default `color-content-subtle`) as their text color. An icon
+  left at Icon's default `color="inherit"` follows it; an icon with a named `color` (subtle,
+  information, success, warning, error, ...) keeps its own, since neither slot overrides Icon's color
+  classes. (Earlier, a `[data-color] { color: inherit }` rule in each slot turned every icon subtle.)
 
 ---
 

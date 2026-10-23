@@ -242,14 +242,19 @@
   margin-inline-start: var(--spacing-none);
 }
 
+/*
+ * The description and error message match Field's message, as the legend matches its label: body-sm,
+ * subtle for the description and the error color for the error (Field's `.message` and its error
+ * state), the same space above.
+ */
 .description {
   margin-block-start: var(--spacing-xs);
   color: var(--color-content-subtle);
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
 }
 
 .options {
@@ -284,11 +289,11 @@
 .errorMessage {
   margin-block-start: var(--spacing-xs);
   color: var(--color-content-error);
-  font-family: var(--typography-body-md-font-family);
-  font-size: var(--typography-body-md-font-size);
-  font-weight: var(--typography-body-md-font-weight);
-  line-height: var(--typography-body-md-line-height);
-  letter-spacing: var(--typography-body-md-letter-spacing);
+  font-family: var(--typography-body-sm-font-family);
+  font-size: var(--typography-body-sm-font-size);
+  font-weight: var(--typography-body-sm-font-weight);
+  line-height: var(--typography-body-sm-line-height);
+  letter-spacing: var(--typography-body-sm-letter-spacing);
 }
 
 .visuallyHidden {

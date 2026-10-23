@@ -2,12 +2,7 @@
   "name": "KeyValueList",
   "category": "data-display",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Its examples file's editable pairs use a Text Field with an edit icon instead of Inline Edit."
-    }
-  ],
+  "knownIssues": [],
   "purpose": "Stack Key Value Pair items vertically in a semantic <dl> element.",
   "intent": "A thin layout wrapper that provides the <dl> (description list) structure screen readers need to announce key/value pairs correctly. Resets browser default margins and uses a flex column layout. Individual pairs manage their own padding and dividers.",
   "sourceFiles": {

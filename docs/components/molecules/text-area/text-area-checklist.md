@@ -12,7 +12,7 @@ Molecule (grouped with Text Field, its single-line sibling; composes no other co
 - Text Field (single-line free text; shares the frame token-for-token)
 - Select (choosing from a fixed set of options)
 - Label (a trailing unit/status pill, as Text Field uses)
-- Key Value Pair (embeds Text Area with `context="inline"` and `iconAfter`)
+- Key Value Pair (embeds Text Area with `context="inline"` and `iconAfter`, in Inline Edit with `actionPlacement="end"`)
 
 ---
 
@@ -112,6 +112,7 @@ exactly as Figma binds it.
 - resize axis renders per option; disabled locks it ✓
 - Dark surface renders correctly; no console errors ✓
 - iconAfter: decorative icon, interactive IconButton, and inline context all render correctly ✓
+- iconAfter: a plain icon takes the slot's subtle color; an icon with a named `color` keeps it
 - inline: chromeless at rest, square bottom corners, hover background + bottom-only border on
   hover/focus/invalid, keeps padding and top radius ✓
 - Key Value Pair embedding with inline TextArea + iconAfter ✓

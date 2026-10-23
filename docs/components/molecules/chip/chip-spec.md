@@ -60,6 +60,7 @@ interface ChipSelectProps extends ChipCommonProps {
   removeLabel?: string;
   /** @deprecated Use removeLabel (Tag's name). Still accepted; removeLabel wins. */
   removeAriaLabel?: string;
+  removeTooltipLabel?: string; // the remove button's tooltip text, for translation
   labelText?: string; // the label as plain text, for the built names
 }
 
@@ -72,6 +73,7 @@ interface ChipFilterProps extends ChipCommonProps {
   removeLabel?: string;
   /** @deprecated Use removeLabel (Tag's name). Still accepted; removeLabel wins. */
   removeAriaLabel?: string;
+  removeTooltipLabel?: string; // the remove button's tooltip text, for translation
   labelText?: string; // the label as plain text, for the built names
 }
 
@@ -93,6 +95,7 @@ disabled: false
 isSelected: false      (search)
 labelText: `label` when it is a string
 removeLabel: `Remove ${labelText}` when there is label text, otherwise `Remove`
+removeTooltipLabel: `Remove`
 ```
 
 `size` resolves as `size ?? groupSize ?? 'md'`. An explicit prop wins; otherwise Chip inherits the
@@ -123,8 +126,9 @@ is not expected inside a `sm` group).
 on at once, and turning one on does not turn another off - Chip never coordinates siblings. Any
 one-of-N behaviour belongs to the consumer holding the state, exactly as with Toggle Button.
 
-**The remove button carries a "Remove" Tooltip** on hover/focus, and Tooltip is **not mounted at all**
-while `disabled`. The button's own `aria-label` remains its accessible name, so the tooltip is
+**The remove button carries a Tooltip** on hover/focus, `removeTooltipLabel` ("Remove" by default,
+a prop with an English default per built-in-labels, so it can be translated), and Tooltip is **not
+mounted at all** while `disabled`. The button's own `aria-label` remains its accessible name, so the tooltip is
 supplementary rather than the sole one. `disabled` also disables the remove button itself, so removal
 is impossible both by pointer and by keyboard.
 
@@ -371,6 +375,7 @@ makes the label icon track the label colour, without touching the value preview
 search: toggles independently per chip rather than behaving as a radio group
 select: disables the remove button when the chip is disabled, and suppresses its click
 tooltip: shows a Remove tooltip on hover
+tooltip: takes the tooltip text from removeTooltipLabel (select and filter)
 tooltip: does not show the tooltip while disabled
 tooltip: keeps aria-label as the accessible name
 ```

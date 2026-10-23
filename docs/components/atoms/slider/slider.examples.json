@@ -2,15 +2,15 @@
   "examples": [
     {
       "name": "Single",
-      "jsx": "<Slider value={50} />"
+      "jsx": "<Slider label=\"Volume\" defaultValue={50} />"
     },
     {
       "name": "Range",
-      "jsx": "<Slider type='slider-range' value={[25,75]} />"
+      "jsx": "<SliderRange label=\"Price\" defaultValue={[25, 75]} />"
     },
     {
       "name": "Centered",
-      "jsx": "<Slider type='slider-centered' value={0} />"
+      "jsx": "<SliderCentered label=\"Balance\" defaultValue={0} />"
     },
     {
       "name": "Range in a form, with its own field names",

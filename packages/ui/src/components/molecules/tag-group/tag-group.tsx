@@ -33,6 +33,8 @@ export const TagGroup = React.memo(function TagGroup({
   onOverflowTagSelect,
   id,
   className,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 }: TagGroupProps) {
   const alignment = ALIGNMENTS[requestedAlignment] ?? 'start';
   const [overflowOpen, setOverflowOpen] = React.useState(false);
@@ -94,7 +96,15 @@ export const TagGroup = React.memo(function TagGroup({
         focusRingClassNames.focusRingDefault,
         className,
       )}
+      /*
+       * Only a named group is announced as one - an unnamed `role="group"` adds a boundary a
+       * screen-reader user has to step through for no benefit. Same rule as Chip Group and Button Group.
+       */
+      role={ariaLabel || ariaLabelledBy ? 'group' : undefined}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       data-alignment={alignment}
+      data-size={size}
       onFocus={removalFocus.handleFocus}
       onBlur={removalFocus.handleBlur}
       onPointerDown={removalFocus.handlePointerDown}

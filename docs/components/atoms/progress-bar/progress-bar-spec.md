@@ -201,6 +201,10 @@ aria-valuemax="100"
 aria-valuenow={clampedValue}
 ```
 
+The role is fixed: `ProgressBarProps` omits `role`, and the component sets it after spreading the
+rest, so a role passed from plain JavaScript can't replace it. The `aria-value*` attributes need a
+range role, and another role would hide that this is progress.
+
 Accessible naming priority:
 
 1. `aria-label`

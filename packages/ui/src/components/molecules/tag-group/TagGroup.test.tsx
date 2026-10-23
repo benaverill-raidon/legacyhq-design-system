@@ -1,3 +1,5 @@
+// @ts-expect-error This project does not include Node built-in type declarations for Vitest-only file reads.
+import { readFileSync } from 'node:fs';
 import * as React from 'react';
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
@@ -7,11 +9,37 @@ import type { TagGroupItem } from './tag-group.types';
 
 afterEach(cleanup);
 
+const tagGroupCss = readFileSync('packages/ui/src/components/molecules/tag-group/tag-group.module.css', 'utf8');
+
 function makeTags(count: number): TagGroupItem[] {
   return Array.from({ length: count }, (_, index) => ({ id: `tag-${index + 1}`, label: `Tag ${index + 1}` }));
 }
 
 describe('TagGroup', () => {
+  it('is a named group with aria-label', () => {
+    render(<TagGroup tags={makeTags(2)} aria-label="Matter tags" />);
+
+    expect(screen.getByRole('group', { name: 'Matter tags' })).toBeInTheDocument();
+  });
+
+  it('is a named group with aria-labelledby', () => {
+    render(
+      <>
+        <h3 id="tags-heading">Matter tags</h3>
+        <TagGroup tags={makeTags(2)} aria-labelledby="tags-heading" />
+      </>,
+    );
+
+    expect(screen.getByRole('group', { name: 'Matter tags' })).toBeInTheDocument();
+  });
+
+  it('has no group role without a name', () => {
+    render(<TagGroup tags={makeTags(2)} id="group" />);
+
+    expect(screen.queryByRole('group')).not.toBeInTheDocument();
+    expect(document.getElementById('group')).not.toHaveAttribute('role');
+  });
+
   it('renders every tag when there is no maxVisible', () => {
     render(<TagGroup tags={makeTags(4)} />);
 
@@ -201,11 +229,12 @@ describe('TagGroup focus when a tag is removed', () => {
     });
   }
 
-  function RemovableTags({ count = 3, maxVisible }: { count?: number; maxVisible?: number }) {
+  function RemovableTags({ count = 3, maxVisible, ...rest }: { count?: number; maxVisible?: number } & Partial<React.ComponentProps<typeof TagGroup>>) {
     const [tags, setTags] = React.useState(() => makeTags(count));
     return (
       <TagGroup
         id="group"
+        {...rest}
         maxVisible={maxVisible}
         tags={tags.map((tag) => ({
           ...tag,
@@ -275,5 +304,28 @@ describe('TagGroup focus when a tag is removed', () => {
     const group = document.getElementById('group') as HTMLElement;
     expect(group).toHaveFocus();
     expect(group).toHaveAttribute('tabindex', '-1');
+    // Empty and focused, it takes the size of a tag (CSS below), so its focus ring shows.
+    expect(group.matches(':empty:focus')).toBe(true);
+  });
+
+  it('lands on a group named by aria-label when its only tag is removed', async () => {
+    render(<RemovableTags count={1} aria-label="Matter tags" />);
+    const remove = screen.getByRole('button', { name: 'Remove Tag 1' });
+    remove.focus();
+
+    fireEvent.click(remove);
+    await flushRemoval();
+
+    expect(screen.getByRole('group', { name: 'Matter tags' })).toHaveFocus();
+  });
+
+  it('gives the empty, focused group the size of a tag, so its focus ring shows', () => {
+    // jsdom has no layout, so this reads the rule. sm tags (the default) are --size-control-xs; md, -sm.
+    expect(tagGroupCss).toMatch(
+      /\.root:empty:focus\s*\{[^}]*min-block-size:\s*var\(--size-control-xs\)[^}]*min-inline-size:\s*var\(--size-control-xs\)/,
+    );
+    expect(tagGroupCss).toMatch(
+      /\.root\[data-size='md'\]:empty:focus\s*\{[^}]*min-block-size:\s*var\(--size-control-sm\)[^}]*min-inline-size:\s*var\(--size-control-sm\)/,
+    );
   });
 });

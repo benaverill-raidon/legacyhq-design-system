@@ -419,6 +419,28 @@ describe('Slider', () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
+  it('does not start a drag on a pointer press while disabled, on the handle or the track', () => {
+    const { container } = render(
+      <>
+        <Slider aria-label="Disabled" disabled defaultValue={50} />
+        <fieldset disabled>
+          <Slider aria-label="In fieldset" defaultValue={50} />
+        </fieldset>
+      </>,
+    );
+
+    for (const name of ['Disabled', 'In fieldset']) {
+      const slider = screen.getByRole('slider', { name });
+      const root = slider.closest(`.${styles.root}`);
+
+      fireEvent.pointerDown(slider, { pointerId: 1 });
+      expect(root).not.toHaveAttribute('data-dragging');
+      fireEvent.pointerDown(slider.closest(`.${styles.control}`) as Element, { clientX: 0, pointerId: 1 });
+      expect(root).not.toHaveAttribute('data-dragging');
+    }
+    expect(container.querySelectorAll('[data-dragging]')).toHaveLength(0);
+  });
+
   it('tracks drag state and clears it on pointer up', () => {
     const { container } = render(<Slider aria-label="Drag" defaultValue={50} />);
     const slider = screen.getByRole('slider', { name: 'Drag' });
@@ -985,6 +1007,14 @@ describe('SliderRange', () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
+  it('does not start a drag on a pointer press on a disabled range handle', () => {
+    const { container } = render(<SliderRange label="Budget" disabled defaultValue={[25, 75]} />);
+
+    fireEvent.pointerDown(screen.getByRole('slider', { name: /Minimum value/ }), { pointerId: 1 });
+    fireEvent.pointerDown(screen.getByRole('slider', { name: /Maximum value/ }), { pointerId: 1 });
+    expect(container.firstChild).not.toHaveAttribute('data-dragging');
+  });
+
   it('tracks drag state for range handles and clears it on pointer up', () => {
     const { container } = render(<SliderRange label="Budget" defaultValue={[25, 75]} />);
     const lower = screen.getByRole('slider', { name: /Minimum value/ });
@@ -1112,14 +1142,16 @@ describe('slider CSS contract', () => {
     expect(sliderCss).not.toContain('outline: var(--border-width-md) solid var(--color-border-focus);');
   });
 
-  it('makes room above the track for a value bubble that always shows, so it never lands on the label', () => {
+  it('makes room above the track for the value bubble, shown on hover or always, so it never lands on the label', () => {
     expect(sliderCss).toContain(
       '--slider-value-indicator-block-size: calc(var(--typography-body-sm-line-height) + var(--spacing-xs) * 2);',
     );
     expect(sliderCss).toMatch(/\.valueIndicator \{[^}]*block-size: var\(--slider-value-indicator-block-size\);/s);
     expect(sliderCss).toMatch(
-      /\.root\[data-orientation='horizontal'\]\[data-show-value='true'\] \.control \{[^}]*margin-block-start: calc\(var\(--slider-value-indicator-block-size\) \+ var\(--spacing-sm\)\);/s,
+      /\.root\[data-orientation='horizontal'\] \.control \{[^}]*margin-block-start: calc\(var\(--slider-value-indicator-block-size\) \+ var\(--spacing-sm\)\);/s,
     );
+    // Not only with showValue: the hover-only bubble needs the same room.
+    expect(sliderCss).not.toContain("[data-show-value='true'] .control");
     // The bubble sits the same gap above the handle that the room leaves for it.
     expect(sliderCss).toMatch(/\.valueIndicator \{[^}]*inset-block-end: calc\(100% \+ var\(--spacing-sm\)\);/s);
   });

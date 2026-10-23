@@ -42,6 +42,22 @@ describe('Form', () => {
     expect(container.querySelector(`.${styles.requiredMark}`)).toHaveTextContent('*');
   });
 
+  it('takes the legend text from requiredLegendLabel, for translation, keeping the * mark', () => {
+    const { container } = render(<Form title="Inscription" requiredLegend requiredLegendLabel="indique un champ obligatoire" />);
+    const mark = container.querySelector(`.${styles.requiredMark}`);
+
+    expect(screen.queryByText(/indicates a required field/)).not.toBeInTheDocument();
+    expect(mark).toHaveTextContent('*');
+    expect(mark?.parentElement).toHaveTextContent('* indique un champ obligatoire');
+  });
+
+  it('shows no legend from requiredLegendLabel alone', () => {
+    const { container } = render(<Form requiredLegendLabel="indique un champ obligatoire" />);
+
+    expect(screen.queryByText(/indique un champ obligatoire/)).not.toBeInTheDocument();
+    expect(container.querySelector(`.${styles.header}`)).not.toBeInTheDocument();
+  });
+
   it('renders no header when there is no title, description, or legend', () => {
     const { container } = render(
       <Form>

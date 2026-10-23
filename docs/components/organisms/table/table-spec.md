@@ -67,8 +67,9 @@ Table (div.table, data-size)
    │  │  └─ div.selectionPill  [while rows are selected - REPLACES the button group]
    │  │     ├─ span.selectionCount (selectionCountLabel)
    │  │     └─ div.bulkActions (bulkActions)
-   │  └─ div.activeFiltersRow (div.activeFilters: activeFilters + Clear filters Button at the end)
-   ├─ span.announcer (role=status, aria-live=polite; visually hidden)  [when selectable, no `toolbar`]
+   │  └─ div.activeFiltersRow (div.activeFilters: activeFilters, a named Chip Group the consumer
+   │                           passes + Clear filters Button at the end)
+   ├─ span.announcer (role=status, aria-live=polite; visually hidden; result and selection counts)
    ├─ div.scroll (role=region, tabIndex 0, border-block-start)
    │  └─ table.grid (data-resized, data-has-editable-cells; caption = visually-hidden name; aria-busy while loading)
    │     ├─ colgroup                                       [once a column is resized or a row selected]
@@ -81,9 +82,9 @@ Table (div.table, data-size)
    │        ├─ tr.row (data-selected)
    │        │  ├─ td.selectCell (Checkbox)                   [when selectable]
    │        │  └─ td.cell (data-align, data-emphasis, data-editable; render(row) or row[key])
-   │        ├─ skeleton rows                                  [when loading]
+   │        ├─ skeleton rows (each Skeleton placed by the column's align)  [when loading]
    │        └─ empty row (td.emptyCell colSpan) → `empty`, or div.emptyContainer
-   │             (emptyHeadingLabel + emptyDescriptionLabel)  [when no rows]
+   │             (p.emptyLabel: emptyLabel, "No items to show"; transparent)  [when no rows]
    └─ div.footer (role=navigation)  [when more than one page, or itemsPerPageOptions]
       ├─ div.footerGroup: itemsPerPageLabel ("Items per page:") naming its Select [when itemsPerPageOptions], range text
       └─ div.footerGroup: page Select, page-count text, div.footerNav (previous / next Icon Buttons)
@@ -133,31 +134,51 @@ Table (div.table, data-size)
   that plus the rows shown, minus one, capped at the total (`0–0` with no rows). With
   `manualPagination`, pass `pageSize` and `totalItems`; without `pageSize` the rows passed count as one
   page. `onPageSizeChange` reports a pick; the consumer updates `pageSize`.
+- **Page reset.** A new result set starts from the first page. With client-side paging and an
+  uncontrolled page, Table goes back to page 1 when the rows in `data` become a different set of ids
+  (`getRowId`): rows added or removed, as a search, filter, or delete does. Editing rows in place or
+  reordering them keeps the page. A controlled `page` is never changed (the consumer sets it back to
+  1 when the search or a filter changes), and neither is the page with `manualPagination`, where
+  every page is a new set of rows. With the default index ids, a filter that keeps the row count
+  isn't seen as a new set, so pass a real `getRowId`. (Before 2026-10-22 the page was only clamped
+  to the page count.)
 - **Search.** `searchable` renders a search Icon Button that expands into a 280px Text Field and
   focuses it; the field collapses on blur when the search text is empty, and its clear button shows
   only when it isn't. Table never filters `data`. The text is uncontrolled by default (Table keeps it;
   `defaultSearchValue` starts it, and the field starts open when that isn't empty) or controlled with
   `searchValue`; `onSearchChange` reports every change either way.
-- **Selection announcement.** While Table shows its own selection bar (`selectable`, no `toolbar`), a
-  visually hidden polite live region announces `selectionCountLabel(count)` when the count changes,
-  including to 0, but not on the first render.
+- **Announcements.** One visually hidden polite live region, never on the first render:
+  - the result count, `getResultCountLabel(count)` ("No results", "1 result", "12 results"), when it
+    changes, as after a search or a filter. The count is `totalItems`, or else `data.length`. It
+    isn't tracked while `loading`, and the first count after a load that started out loading is
+    taken silently;
+  - while Table shows its own selection bar (`selectable`, no `toolbar`), `selectionCountLabel(count)`
+    when the selected count changes, including to 0.
+  If both change in one render, the result count is announced.
 - **Built-in text.** Every piece of it is a prop with an English default, so it can be translated:
-  `paginationLabel`, `itemsPerPageLabel` (shown as given; the default "Items per page:" carries its
-  colon), `getRangeLabel(start, end, total)`, `pageLabel`, `getPageCountLabel(pageCount)` ("of 1 page",
-  "of 5 pages"), `previousPageLabel`, `nextPageLabel`, `getResizeLabel(columnLabel)`,
-  `emptyHeadingLabel`, `emptyDescriptionLabel`, and `scrollRegionLabel`.
+  `getPaginationLabel(tableName)` ("Members pagination", or "Table pagination" when the name isn't a
+  string; `paginationLabel` gives it as is), `itemsPerPageLabel` (shown as given; the default "Items
+  per page:" carries its colon), `getRangeLabel(start, end, total)`, `pageLabel`,
+  `getPageCountLabel(pageCount)` ("of 1 page", "of 5 pages"), `previousPageLabel`, `nextPageLabel`,
+  `getResizeLabel(columnLabel)`, `getSelectionLabel(row, index)` ("Select row"), `emptyLabel`,
+  `getResultCountLabel(count)`, and `scrollRegionLabel`. `emptyHeadingLabel` (now `emptyLabel`) and
+  `emptyDescriptionLabel` (shown under it) are deprecated and still accepted.
 - **Column header names.** Each `th` is named by its label alone (`aria-labelledby` its label span, or
   `aria-label` = `headerLabel`), so the resize handle's name inside it isn't read as part of each
   cell's column. A sort button is named by the same label; the sort state is `aria-sort` on the `th`.
 - **Toolbar.** Row 1: a right-aligned button group - search, then `toolbarActions` Icon Buttons,
-  then `actions` - or the selection bar while rows are selected. Row 2: `activeFilters` (Chip
-  `mode="filter"` pills + an optional "+" add-filter Icon Button) + a "Clear filters" Button
+  then `actions` - or the selection bar while rows are selected. Row 2: `activeFilters` (a Chip Group
+  named with `aria-label`, such as "Active filters", holding Chip `mode="filter"` pills; Table lays it
+  out but doesn't wrap it, so a consumer's group isn't nested in a second one) + a "Clear filters" Button
   (`clearFiltersLabel`; trailing edge, only when `onClearFilters` is provided). `toolbar` replaces
   both rows, including the selection bar. The scroll region's top border separates the toolbar from
   the grid.
-- **States.** `loading` → skeleton rows + `aria-busy`; empty `data` → the `empty` slot (default: a
-  "No results" heading and "There is nothing to show here yet." on `--color-elevation-surface-deep-default`,
-  from `emptyHeadingLabel` and `emptyDescriptionLabel`).
+- **States.** `loading` → skeleton rows + `aria-busy`, each Skeleton placed where its column's
+  content sits (centered or at the end for `align: 'center'` / `'end'`); empty `data` → the `empty`
+  slot. The default is one neutral statement, `emptyLabel` ("No items to show"), true whether nothing
+  exists yet or a search found nothing, in `body/md` `content/subtle` on the table's own surface
+  (transparent, as a passed Empty State is). Decided 2026-10-22; it replaced a "No results" heading
+  over "There is nothing to show here yet." on the deep surface.
 
 ---
 
@@ -211,7 +232,8 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 | Row hover, all rows *(inferred - not in Figma)* | `--color-background-neutral-overlay-bold-hover` |
 | Row selected / selected+hover *(inferred)* | `--color-background-brand-primary-subtle-default` / `-hover` |
 | Row divider / header border | `--color-border-default` (dropped for a lone row, or the last row with no footer) |
-| Empty cell padding | none (the default empty content's deep background meets the table's edges) |
+| Empty cell padding | none; the default empty content pads itself (`--spacing-3xl` / `--spacing-xl`) and has no fill |
+| Default empty text | `--typography-body-md-*`, `--color-content-subtle` |
 | Focus ring | `--color-border-focus`, `--border-width-md` |
 | Title (md / sm) / header cell / body cell type | `--typography-heading-lg-*` / `--typography-heading-md-*` / `--typography-heading-xs-*` / `--typography-body-md-*` |
 | Header padding | block `--spacing-3xl` / `--spacing-lg`, inline `--spacing-2xl` |
@@ -273,13 +295,17 @@ that context. Text uses InlineEdit + TextField; the other three render their own
 - Search works uncontrolled (`defaultSearchValue`) or controlled (`searchValue`).
 - Column headers are named by their label alone; resize handles report value, minimum, and maximum
   from the start; selection count changes are announced politely; `title` renders at `headingLevel`.
-- `loading` shows skeleton rows + `aria-busy`; an empty data set shows the empty slot.
+- `loading` shows skeleton rows + `aria-busy`, aligned like their columns; an empty data set shows
+  the empty slot, by default "No items to show" on the table's surface.
+- A changed result count is announced politely; an uncontrolled client-side page goes back to 1
+  when the rows become a different set.
 - Rows have no click behavior; selection is checkbox-only.
 - Composes `className` + `data-size`; uses only semantic tokens; works in light and dark themes.
 - Storybook includes Basic, Sortable, Selectable, Pagination, Sizes, WithToolbar, Loading, Empty, and
   FullShell.
 - Tests cover render/default+custom cell, sort (client + manual), selection + select-all/indeterminate +
   checkbox-only, the selection bar and its announcement, resize handles and their values, column
-  header names, emphasis, client and manual pagination ranges, the one-page footer, loading, empty,
-  controlled and uncontrolled search, toolbar slots, built-in text props, heading level, and
-  size/className.
+  header names, emphasis, client and manual pagination ranges, the one-page footer, the page reset on
+  a new result set (and a controlled page left alone), loading and skeleton alignment, empty and its
+  deprecated label names, the result-count announcement, controlled and uncontrolled search, toolbar
+  slots, built-in text props, heading level, and size/className.

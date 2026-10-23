@@ -1,13 +1,7 @@
 {
   "name": "AvatarGroup",
   "category": "data-display",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "The overflow button is named only \"+3\", without saying what it reveals."
-    }
-  ],
+  "status": "stable",
   "purpose": "Lays out an overlapping stack of Avatars with an optional overflow trigger that opens a Dropdown Menu holding whichever people got truncated.",
   "intent": "A thin composition of Avatar (every visible avatar), Button (the overflow trigger, reshaped into a circle), and Dropdown Menu (the overflow panel), preconfigured for the bounded-people-list-with-overflow use case, rather than a third independent implementation of overlap layout or floating-panel behavior.",
   "tierNote": "Classified as a molecule, but its overflow panel composes Dropdown Menu (an organism, itself built from Menu + Popup) - the same deliberate, documented exception to CLAUDE.md's 'molecules compose only from atoms/primitives' rule that Tag Group already established. See tag-group.contract.json's own tierNote for the full reasoning; not re-derived here.",
@@ -60,6 +54,7 @@
     "maxVisible": { "type": "number", "required": false, "default": null, "description": "Once avatars.length exceeds this, only the first maxVisible avatars render - the rest are truncated behind the overflow trigger. No truncation, and no overflow trigger, when omitted." },
     "size": { "type": "AvatarGroupSize", "required": false, "default": "lg", "enum": ["xs", "sm", "md", "lg"], "description": "Applied uniformly to every rendered avatar, including the overflow trigger." },
     "overflowLabel": { "type": "(hiddenCount: number) => React.ReactNode", "required": false, "default": "(n) => `+${n}`", "description": "The overflow trigger's text, given the truncated count." },
+    "getOverflowButtonLabel": { "type": "(hiddenCount: number) => string", "required": false, "default": "(n) => `+${n} more people` (`+1 more person` for one)", "description": "The overflow trigger's accessible name, given the truncated count: what the button reveals. Starts with the default visible text so speech-input users can say what they see; change it with overflowLabel, and translate it." },
     "overflowMenuAriaLabel": { "type": "string", "required": false, "default": "`${hiddenCount} more people`", "description": "Accessible name for the overflow panel (forwarded to Dropdown Menu's aria-label, then to Menu's role=\"menu\" container)." },
     "onOverflowAvatarSelect": { "type": "(avatar: AvatarGroupItem, event) => void", "required": false, "default": null, "description": "Called when a truncated avatar is selected from the overflow panel. Dropdown Menu then closes the panel and returns focus to the overflow trigger (unless the callback calls event.preventDefault()); Avatar Group does not navigate on its own." },
     "id": { "type": "string", "required": false, "default": null, "description": "Applied to the root element." },
@@ -71,6 +66,7 @@
   "states": ["no-overflow", "overflow-closed", "overflow-open"],
   "accessibility": {
     "overflowTriggerRole": "button (Button, unmodified)",
+    "overflowTriggerName": "getOverflowButtonLabel(hiddenCount), default \"+3 more people\" (\"+1 more person\" for one) - says what it reveals and starts with the visible \"+3\"",
     "ariaExpanded": "set on the overflow trigger by Popup (via Dropdown Menu), reflecting the panel's open state",
     "ariaControls": "set on the overflow trigger by Popup, pointing at the panel id while open",
     "overflowPanelRole": "menu (set by Menu, via Dropdown Menu), named by overflowMenuAriaLabel",
@@ -124,7 +120,8 @@
     "Selecting a truncated avatar calls onOverflowAvatarSelect(avatar, event), then closes the panel and returns focus to the overflow trigger; it performs no navigation on its own.",
     "Applies size uniformly to every visible avatar and the overflow trigger.",
     "The overflow trigger (and every avatar past the first) visually paints on top of the avatar immediately before it, matching Figma's own layer order - verified live in a browser, not meaningfully testable under jsdom.",
-    "Supports a custom id/className on the root and a custom overflowLabel/overflowMenuAriaLabel."
+    "Supports a custom id/className on the root and a custom overflowLabel/overflowMenuAriaLabel.",
+    "Names the overflow trigger for what it reveals (getOverflowButtonLabel, default \"+3 more people\"), not only its visible \"+3\"."
   ],
   "knownLimitations": [
     "No built-in virtualization - a very large avatars array renders every visible avatar eagerly, same as Menu's own sections.",

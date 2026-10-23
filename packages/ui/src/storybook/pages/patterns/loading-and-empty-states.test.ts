@@ -30,7 +30,7 @@ describe('Loading and Empty States cites', () => {
     const code = source('atoms/progress-bar/progress-bar.tsx');
     expect(propValues(types, 'variant')).toEqual(['linear', 'circular']);
     expect(types).not.toMatch(/indeterminate/i);
-    expect(code).toMatch(/role=\{role \?\? 'progressbar'\}/);
+    expect(code).toMatch(/role="progressbar"/);
     expect(code).toMatch(/aria-valuemin=\{0\}/);
     expect(code).toMatch(/aria-valuemax=\{100\}/);
     expect(code).toMatch(/getValueText \? getValueText\(clampedValue\)/);
@@ -79,11 +79,11 @@ describe('Loading and Empty States cites', () => {
     expect(code).toMatch(/skeletonRowCount = 5,/);
     expect(code).toMatch(/aria-busy=\{loading \|\| undefined\}/);
     expect(code).toMatch(/<Skeleton className=\{styles\.skeletonText\} \/>/);
-    expect(code).toMatch(/emptyHeadingLabel = 'No results',/);
-    expect(code).toMatch(/emptyDescriptionLabel = 'There is nothing to show here yet\.',/);
+    expect(code).toMatch(/emptyLabel \?\? emptyHeadingLabel \?\? 'No items to show'/);
     expect(code).toMatch(/\{empty \?\? \(/);
-    // Its only live region announces the selection count, not the rows running out.
-    expect([...code.matchAll(/aria-live="polite">\s*\{(\w+)/g)].map(([, value]) => value)).toEqual(['selectionAnnouncement']);
+    // One polite live region, which announces the result count when it changes (and the selection count).
+    expect([...code.matchAll(/aria-live="polite">\s*\{(\w+)/g)].map(([, value]) => value)).toEqual(['announcement']);
+    expect(code).toMatch(/count === 0 \? 'No results'/);
   });
 
   it('Empty State: appearance sets only the background, it has no role and no live region', () => {

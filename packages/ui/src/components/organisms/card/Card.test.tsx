@@ -26,6 +26,24 @@ describe('Card', () => {
     expect(screen.getByText('Any content can go here.').parentElement).toBe(card);
   });
 
+  it('passes handlers through to its div without adding any of its own or making itself a control', () => {
+    const handleClick = vi.fn();
+    render(
+      <Card data-testid="card" onClick={handleClick}>
+        <p>Content</p>
+      </Card>,
+    );
+    const card = screen.getByTestId('card');
+
+    fireEvent.click(card);
+    expect(handleClick).toHaveBeenCalledTimes(1);
+    // A handler doesn't turn the div into a control: no role, no tab stop, no key handling.
+    expect(card).not.toHaveAttribute('role');
+    expect(card).not.toHaveAttribute('tabindex');
+    fireEvent.keyDown(card, { key: 'Enter' });
+    expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
   it('preserves child input state and native form behavior when surface and border change', () => {
     const submit = vi.fn((event) => event.preventDefault());
     const content = <form onSubmit={submit}>

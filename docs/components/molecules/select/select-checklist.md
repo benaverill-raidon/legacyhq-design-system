@@ -57,7 +57,8 @@ these into the Menu; grouping is automatic from `group`.
 ## Variants
 
 ### inputType
-- `single` (default) — scalar value, radio rows, chosen label in the trigger
+- `single` (default) — scalar value, radio rows, chosen label in the trigger, after the chosen
+  option's icon if it has one
 - `multi` — array value, checkbox rows, removable chips in the trigger
 
 ### Size
@@ -92,6 +93,8 @@ Yes. Type to filter; ArrowDown opens/moves into the menu; Enter/arrows/Home/End 
 (Menu's own); Backspace removes the last chip (multi, empty query); Escape closes (from inside the menu, focus returns to the input); Tab or Shift+Tab inside the menu
 closes it and returns focus to the input; focus leaving the field and menu closes the menu; a
 single-select pick returns focus to the input; with only a native `<label>`, the menu is named from it.
+Each chip's remove button is named `getRemoveLabel(label)`, `Remove <label>` by default, for a
+translation.
 
 ### What ARIA is applied?
 `role="combobox"` + `aria-haspopup="menu"` + `aria-autocomplete="list"` on the input;

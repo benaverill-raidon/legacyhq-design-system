@@ -483,6 +483,7 @@
   padding: 0;
 }
 
+/* Transparent, like a passed Empty State (appearance inherited): it shows the table's surface. */
 .emptyContainer {
   display: flex;
   flex-direction: column;
@@ -490,21 +491,10 @@
   justify-content: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-3xl) var(--spacing-xl);
-  background: var(--color-elevation-surface-deep-default);
   text-align: center;
 }
 
-.emptyHeading {
-  margin: 0;
-  color: var(--color-content-subtle);
-  font-family: var(--typography-heading-sm-font-family);
-  font-size: var(--typography-heading-sm-font-size);
-  font-weight: var(--typography-heading-sm-font-weight);
-  line-height: var(--typography-heading-sm-line-height);
-  letter-spacing: var(--typography-heading-sm-letter-spacing);
-}
-
-.emptyDescription {
+.emptyLabel {
   margin: 0;
   color: var(--color-content-subtle);
   font-family: var(--typography-body-md-font-family);
@@ -518,6 +508,15 @@
 .skeletonText {
   block-size: var(--size-200);
   inline-size: 70%;
+}
+
+/* Skeleton is a block, so text-align doesn't move it: line it up with the column's content. */
+.cell[data-align='center'] .skeletonText {
+  margin-inline: auto;
+}
+
+.cell[data-align='end'] .skeletonText {
+  margin-inline-start: auto;
 }
 
 .skeletonCheckbox {

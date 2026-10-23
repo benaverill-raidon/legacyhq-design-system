@@ -84,6 +84,7 @@ Required:
 - [ ] Removing the chip in use (keyboard or click) moves focus to the next chip, the previous one
       if it was last, or the group itself (tabindex -1, Focus Ring) if none remain; never to the
       page. Focus the page moved itself is left alone.
+- [ ] The empty, focused group is the size of a chip (size tokens), so its focus ring shows.
 - [ ] Forwards a ref and passes native div attributes through.
 
 ---

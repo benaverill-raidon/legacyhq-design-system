@@ -12,7 +12,10 @@ export interface SelectOption {
   value: string;
   /** Visible row label, and (single-select) the text shown in the trigger once chosen. */
   label: string;
-  /** Optional leading icon/avatar for the option row and, in multi-select, its chip. Decorative. */
+  /**
+   * Optional leading icon/avatar for the option row, for the trigger once it's chosen (single-select,
+   * before the value), and for its chip (multi-select). Decorative: the label carries the meaning.
+   */
   icon?: React.ReactNode;
   /** Optional secondary text under the label in the option row. */
   description?: React.ReactNode;
@@ -85,6 +88,11 @@ export interface SelectMultiProps extends SelectCommonProps {
   value: string[];
   /** Called with the next array when a row is toggled, a chip is removed, or Backspace removes the last chip. */
   onChange: (value: string[]) => void;
+  /**
+   * Builds each chip's remove-button name from the option's label, passed to Chip's `removeLabel`.
+   * Defaults to `Remove <label>`; pass a translation.
+   */
+  getRemoveLabel?: (label: string) => string;
 }
 
 /**

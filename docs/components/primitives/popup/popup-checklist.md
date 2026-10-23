@@ -117,7 +117,7 @@ Not required:
 ### Does this support keyboard navigation?
 Escape dismisses by default (`closeOnEscape`), but only the topmost open layer: a Popup opened
 inside a Modal Dialog or another Popup closes before the layer under it (`useLayer` in
-`primitives/layers.ts`). Popup does not manage focus movement into or out of the panel - that's
+`primitives/layers.ts`), even when both mount already open in the same render. Popup does not manage focus movement into or out of the panel - that's
 left to the consumer, since the right focus target depends on what's inside.
 
 ### What ARIA is applied?
@@ -125,7 +125,9 @@ By default (`manageTriggerAria=true`): `aria-expanded` on the trigger, and `aria
 trigger pointing at the panel id while open. Set `manageTriggerAria={false}` when the consumer
 already manages its own trigger ARIA (Tooltip's `aria-describedby`) - those attributes are
 disclosure-widget semantics and don't apply to every consumer. No default `role` on the panel - the
-consumer supplies one appropriate to what it's building.
+consumer supplies one appropriate to what it's building - and names the panel with
+`aria-labelledby` (a visible heading in the content) or `aria-label` (none visible), both set on
+the panel, when that role needs a name.
 
 ### Is this an interactive component?
 Popup itself renders no interactive control. Its trigger and content are supplied by the consumer
@@ -165,7 +167,9 @@ Final implementation decisions:
   both `true`), calling `onOpenChange(false)` rather than changing its own visibility.
 - Escape goes to the topmost open layer only (popups and Modal Dialogs share one stack in
   `primitives/layers.ts`), and the panel's z-index is `LAYERS.popup` from the same file, above
-  dialogs and toasts.
+  dialogs and toasts. A layer opened from inside another (through `LayerContext`) is above it
+  whichever registered first, and a nested Popup adds its depth to its z-index.
+- `aria-label` / `aria-labelledby` name the panel, not the trigger.
 - The trigger's own ref is read from `child.props.ref`, not the deprecated `element.ref`.
 - `alignment` defaults to `topStart`, matching Figma's own declared default variant (`top left`).
 - The panel hugs its content on both axes - no stretch-to-fill.

@@ -66,7 +66,7 @@
 
 ## Accessibility
 
-- [ ] Root uses `role="progressbar"`.
+- [ ] Root uses `role="progressbar"`, and a passed `role` can't replace it (`role` isn't a prop).
 - [ ] Root exposes `aria-valuemin="0"`.
 - [ ] Root exposes `aria-valuemax="100"`.
 - [ ] Root exposes clamped `aria-valuenow`.

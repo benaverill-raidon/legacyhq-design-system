@@ -143,6 +143,9 @@ Not applicable. Icon Tile is not interactive and not focusable.
   reinforcing meaning already present in surrounding text.
 - `decorative={false}`: `role="img"` and `aria-label={ariaLabel}` - use when the tile is the sole
   carrier of meaning (no adjacent text label).
+- `decorative={false}` without `ariaLabel` logs a development-only `console.warn` (skipped when
+  `import.meta.env.PROD`), the way Icon Button warns about a missing name: the tile would be an
+  unnamed image.
 
 Example:
 
@@ -255,6 +258,7 @@ No interaction. No animation.
 ### Accessibility
 - [ ] decorative default hides the tile from the accessibility tree
 - [ ] decorative=false + ariaLabel exposes role="img" and the label
+- [ ] decorative=false without ariaLabel warns in development; decorative or named tiles don't
 
 ---
 

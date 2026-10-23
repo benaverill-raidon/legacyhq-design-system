@@ -4,9 +4,10 @@
     {
       "name": "Click-to-open action menu",
       "description": "The shape Dropdown Menu will build on - a click-triggered, role=\"menu\" panel.",
-      "jsx": "const [open, setOpen] = useState(false);\n\n<Popup\n  open={open}\n  onOpenChange={setOpen}\n  role=\"menu\"\n  content={\n    <>\n      <button type=\"button\" role=\"menuitem\">Rename</button>\n      <button type=\"button\" role=\"menuitem\">Delete</button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</Popup>",
+      "jsx": "const [open, setOpen] = useState(false);\n\n<Popup\n  open={open}\n  onOpenChange={setOpen}\n  role=\"menu\"\n  aria-label=\"Actions\"\n  content={\n    <>\n      <button type=\"button\" role=\"menuitem\">Rename</button>\n      <button type=\"button\" role=\"menuitem\">Delete</button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</Popup>",
       "props": {
-        "role": "menu"
+        "role": "menu",
+        "aria-label": "Actions"
       }
     },
     {

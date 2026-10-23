@@ -52,8 +52,10 @@ export const MatterDetails = ({ alignment = 'bottomStart' }) => {
       open={open}
       onOpenChange={handleOpenChange}
       alignment={alignment}
+      role="dialog"
+      aria-label="Matter details"
       content={
-        <div role="dialog" aria-label="Matter details">
+        <div>
           <KeyValueList>
             <KeyValuePair label="Owner" value="Dana Reyes" size="sm" />
             <KeyValuePair label="Opened" value="12 March 2026" size="sm" />
@@ -200,15 +202,18 @@ another element, as the pickers do with their field frame.
 
 The panel sits above Modal Dialog and Toast Group, so a Popup opened from inside a dialog or a
 toast shows over it. The order (dialog, then toast, then popup) is kept in one place,
-`primitives/layers.ts`; z-index isn't a design token. Popups open on top of one another in the
-order they open.
+`primitives/layers.ts`; z-index isn't a design token. A Popup opened from inside a dialog or another
+Popup's content is above it, for Escape and on screen, even when both mount already open; others
+stack in the order they open.
 
 </Subsection>
 
 <Subsection title="Content">
 
 Popup renders whatever you pass, and its panel has no role of its own. Pass the role of what you're
-building, such as `menu` or `dialog`, and name it on your content, since the panel takes no label.
+building, such as `menu` or `dialog`, and name the panel: `aria-labelledby` with the id of a
+heading in the content when one is visible, otherwise `aria-label`. Both are set on the panel, not
+the trigger.
 
 <Example of={PopupStories.Content} caption="A menu-shaped panel and a one-line message, the shapes Dropdown Menu and Inline Message use." />
 
@@ -282,12 +287,15 @@ off when the user prefers reduced motion.
   trigger keeps any `aria-controls` of its own. Set `manageTriggerAria={false}` when the trigger
   relates to the panel another way, as Tooltip does with `aria-describedby`.
 - The panel is a `div` with no role unless you pass `role`. Give it the role of what you're building
-  and name it on the content.
+  and, when that role needs a name (`dialog`, `menu`), name the panel: `aria-labelledby` pointing
+  at a visible heading in the content, or `aria-label` when there's none. A `tooltip` is named by
+  its text.
 - Popup doesn't move or return focus. Because the panel is added at the end of the page, move focus
   into interactive content when it opens and back to the trigger when it closes.
 - While open, Escape calls `onOpenChange(false)` wherever focus is, unless `closeOnEscape` is off,
   but only when this Popup is the topmost open layer: a menu or tooltip opened inside a Modal
-  Dialog, or inside another Popup, closes first, and the next Escape goes to the layer under it.
+  Dialog, or inside another Popup, closes first, even when both mounted open in the same render,
+  and the next Escape goes to the layer under it.
   An Escape that content inside already handled with `preventDefault()` is left alone.
 - The fade is turned off when the user prefers reduced motion.
 

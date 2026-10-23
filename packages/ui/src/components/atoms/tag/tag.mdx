@@ -86,7 +86,7 @@ import * as TagStories from './tag.stories';
   }
 >
   <Part name="container" target={tagStyles.root}>The root. A `span` to display, an `a` with `href`, a `button` when interactive, or a wrapper `span` around the content and the remove button when removable. It draws the border.</Part>
-  <Part name="content area" target={tagStyles.content}>Only in a removable tag: an `a` with `href`, otherwise a `span`. In every other form, the container is the content.</Part>
+  <Part name="content area" target={tagStyles.content}>Only in a removable tag: an `a` with `href`, a `button` with `onClick` or `isInteractive`, otherwise a `span`. In every other form, the container is the content.</Part>
   <Part name="optional leading icon" target={tagStyles.elemBefore}>`elemBefore`, set to 16px at both sizes, in the tag's text color.</Part>
   <Part name="label" target={tagStyles.text}>The `children`, on one line. It ends with an ellipsis when the tag is narrower than its text.</Part>
   <Part name="optional remove button" target={tagStyles.removeButton}>With `isRemovable`: a native `button` with a close icon, named by `removeLabel`. It's never inside the link.</Part>
@@ -124,12 +124,13 @@ Tag renders a different root for each job:
 - **No `href`, not removable:** a `span` that only displays.
 - **`href`:** the whole tag is an `a`. With `target="_blank"` and no `rel`, Tag adds
   `rel="noopener noreferrer"`. A `rel` you pass is used as given.
-- **`isRemovable`:** a wrapper `span` holding the content, which is a link when `href` is set, and a
-  separate remove button.
+- **`isRemovable`:** a wrapper `span` holding the content and a separate remove button. The content
+  is a link when `href` is set, a button with `onClick` or `isInteractive`, and a `span` otherwise.
 - **`isInteractive` or `onClick`, with no `href` and not removable:** a `button`, for a tag that
   opens something, such as Tag Group's overflow tag.
 
-A removable tag without `href` ignores `onClick` and `isInteractive`: its content stays a `span`.
+In a removable tag, the content and the remove button are separate controls: `onClick` runs from
+the content, and the remove button's click never reaches it.
 
 </Subsection>
 
@@ -218,7 +219,7 @@ there's no tooltip with the full text. Tags in a wrapping row move to the next l
   with their button.
 
 <Keyboard>
-  <Key keys="Tab">Moves to the link, then to its remove button, as separate stops. Display-only and disabled tags are skipped.</Key>
+  <Key keys="Tab">Moves to the link or interactive content, then to its remove button, as separate stops. Display-only and disabled tags are skipped.</Key>
   <Key keys="Enter">Follows the link, or activates the remove button or an interactive tag.</Key>
   <Key keys="Space">Activates the remove button or an interactive tag. On a link it scrolls the page, as on any link.</Key>
 </Keyboard>

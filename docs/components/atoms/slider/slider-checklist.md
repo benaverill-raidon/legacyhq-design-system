@@ -113,7 +113,9 @@ SliderRange must:
 - Label is optional.
 - If a label is shown, keep it concise.
 - `showValue` is optional and false by default.
-- When `showValue` is true, show the value indicator only while hovered, focused, or dragging.
+- The value indicator shows while hovered, focused, or dragging; `showValue` keeps it showing.
+- A horizontal slider always has room above the track for the value indicator, so it never covers
+  the label (its own or Field's).
 - Stops are optional.
 
 ## Token Rules
@@ -163,7 +165,8 @@ Do not hardcode:
 - Default min/max/step are applied.
 - Value updates by mouse/touch.
 - Value updates by keyboard.
-- Disabled state prevents interaction.
+- Disabled state prevents interaction, and a pointer press while disabled (or in a disabled
+  fieldset) sets no `data-dragging`.
 - Focus-visible state is visible.
 - Accessible labels are available.
 - `SliderCentered` fills from center.

@@ -381,7 +381,8 @@ Button must:
 
 Recommended loading accessibility:
 
-- apply `aria-busy="true"` when loading
+- apply `aria-busy="true"` and `aria-disabled="true"` when loading, keeping the button focusable
+  (not natively `disabled`) so focus doesn't jump while the action runs
 - disable activation while loading
 - keep the action label visible
 

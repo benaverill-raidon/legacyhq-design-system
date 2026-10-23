@@ -122,8 +122,10 @@ export interface TableProps<Row> {
    */
   toolbarActions?: React.ReactNode;
   /**
-   * The applied filters, in a row below the toolbar's buttons: Chip `mode="filter"` components and an
-   * optional Icon Button to add one. You render and control the chips.
+   * The applied filters, in a row below the toolbar's buttons. Pass a Chip Group named with
+   * `aria-label` (such as "Active filters") holding Chip `mode="filter"` components, so the filters are
+   * announced as a set and focus stays in the group when one is removed. Table lays the row out but
+   * doesn't wrap it in a group. You render and control the chips.
    */
   activeFilters?: React.ReactNode;
   /** When set, shows a Clear filters button at the end of the active-filters row, which calls it. */
@@ -152,7 +154,10 @@ export interface TableProps<Row> {
   onSelectionChange?: (ids: RowId[]) => void;
   /** Accessible name for the header's select-all Checkbox. Defaults to "Select all rows". */
   selectionColumnLabel?: string;
-  /** Accessible name for a row's selection Checkbox, such as "Select Ada Lovelace". Defaults to "Select row" for every row. */
+  /**
+   * Accessible name for a row's selection Checkbox, from the row, such as "Select Ada Lovelace".
+   * Defaults to "Select row" for every row, so pass it.
+   */
   getSelectionLabel?: (row: Row, index: number) => string;
   /**
    * Bulk actions shown on the right of the selection bar when one or more rows are selected
@@ -163,7 +168,11 @@ export interface TableProps<Row> {
   selectionCountLabel?: (count: number) => string;
 
   // --- Pagination ---
-  /** The current page, counting from 1, controlled. Pass it with `onPageChange`. */
+  /**
+   * The current page, counting from 1, controlled. Pass it with `onPageChange`, and set it back to 1
+   * yourself when a search or filter changes `data`. Without it, Table keeps the page, and goes back to
+   * the first page when the rows in `data` become a different set.
+   */
   page?: number;
   /** The number of pages, for `manualPagination`. */
   pageCount?: number;
@@ -181,8 +190,14 @@ export interface TableProps<Row> {
   previousPageLabel?: string;
   /** Accessible name for the footer's next-page button. Defaults to "Next page". */
   nextPageLabel?: string;
-  /** Accessible name for the footer's navigation region. Defaults to "<name> pagination", or "Table pagination". */
+  /** Accessible name for the footer's navigation region, as given. Wins over `getPaginationLabel`. */
   paginationLabel?: string;
+  /**
+   * Accessible name for the footer's navigation region, from the table's name (a string `caption` or
+   * `title`), when `paginationLabel` isn't set. Defaults to "Members pagination", or "Table
+   * pagination" when the table's name isn't a string.
+   */
+  getPaginationLabel?: (tableName: string | undefined) => string;
   /** The footer's page-size label, shown as given, which also names its Select. Defaults to "Items per page:". */
   itemsPerPageLabel?: string;
   /**
@@ -220,12 +235,29 @@ export interface TableProps<Row> {
   loading?: boolean;
   /** How many skeleton rows to show while `loading`. */
   skeletonRowCount?: number;
-  /** Content shown when there are no rows. Defaults to `emptyHeadingLabel` over `emptyDescriptionLabel`. */
+  /**
+   * Content shown when there are no rows, such as an Empty State that says why and what to do next.
+   * Defaults to `emptyLabel`.
+   */
   empty?: React.ReactNode;
-  /** The default empty content's heading, when `empty` isn't set. Defaults to "No results". */
+  /**
+   * The text shown when there are no rows and `empty` isn't set: one statement, true whether nothing
+   * exists yet or a search found nothing. Defaults to "No items to show".
+   */
+  emptyLabel?: string;
+  /** @deprecated Renamed to `emptyLabel`: the default empty content is one statement, not a heading. Still accepted. */
   emptyHeadingLabel?: string;
-  /** The default empty content's description, when `empty` isn't set. Defaults to "There is nothing to show here yet.". */
+  /**
+   * @deprecated The default empty content is one statement, `emptyLabel`. Still accepted, and shown
+   * under it; for a heading and a description, pass an Empty State as `empty`.
+   */
   emptyDescriptionLabel?: string;
+  /**
+   * The result count, announced politely when it changes after the first render, such as after a
+   * search or a filter: `totalItems`, or else the number of rows in `data`. Not announced while
+   * `loading`. Defaults to "No results", "1 result", or "12 results".
+   */
+  getResultCountLabel?: (count: number) => string;
   /** Accessible name for the scroll region around the table when neither `caption` nor `title` is a string. Defaults to "Table". */
   scrollRegionLabel?: string;
 

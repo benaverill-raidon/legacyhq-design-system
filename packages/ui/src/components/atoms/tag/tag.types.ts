@@ -39,7 +39,8 @@ export interface TagProps extends React.HTMLAttributes<HTMLElement> {
   isDisabled?: boolean;
   /**
    * Renders a tag with no `href` as a `button`, for a tag that opens something, such as Tag Group's
-   * overflow tag. Passing `onClick` does the same. Ignored with `href` or `isRemovable`.
+   * overflow tag. Passing `onClick` does the same. In a removable tag, the content beside the remove
+   * button becomes the button. Ignored with `href`.
    */
   isInteractive?: boolean;
   /** An icon before the text, set to 16px at both sizes. It takes the tag's text color. */
@@ -52,8 +53,9 @@ export interface TagProps extends React.HTMLAttributes<HTMLElement> {
    */
   removeLabel?: string;
   /**
-   * Makes a tag with no `href` a `button`, like `isInteractive`. On a link it runs on click, and not
-   * while disabled. A removable tag without `href` ignores it.
+   * Makes a tag with no `href` a `button`, like `isInteractive`: in a removable tag, the content
+   * beside the remove button. On a link it runs on click. Not called while disabled, and never by
+   * the remove button.
    */
   onClick?: React.MouseEventHandler<HTMLElement>;
   /** The visible text, on one line. Required. It ends with an ellipsis when the tag is narrower than its text. */

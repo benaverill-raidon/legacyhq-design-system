@@ -41,6 +41,15 @@ export interface TagGroupProps {
     tag: TagGroupItem,
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>,
   ) => void;
+  /**
+   * Names the group, such as "Matter tags", making it a `role="group"`. Name it when the tags belong
+   * together, and always when they're removable: when the last one is removed, focus moves to the
+   * group, which then has a name to announce. Use `aria-labelledby` instead when a visible heading
+   * names it.
+   */
+  'aria-label'?: string;
+  /** The id of a visible element, such as a heading, that names the group. Makes it a `role="group"`, like `aria-label`. */
+  'aria-labelledby'?: string;
   /** The root element's `id`. */
   id?: string;
   /** Added to the root element's classes. */

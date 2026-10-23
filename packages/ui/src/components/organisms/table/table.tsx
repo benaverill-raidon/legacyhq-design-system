@@ -24,6 +24,13 @@ function defaultCompare(a: unknown, b: unknown): number {
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
 }
 
+/** Whether two lists hold the same row ids, in any order. */
+function sameRowIds(a: RowId[], b: RowId[]): boolean {
+  if (a.length !== b.length) return false;
+  const ids = new Set(a);
+  return b.every((rid) => ids.has(rid));
+}
+
 function accessibleString(...values: React.ReactNode[]): string | undefined {
   for (const value of values) {
     if (typeof value === 'string') return value;
@@ -62,7 +69,7 @@ export function Table<Row>({
   defaultSelectedIds = [],
   onSelectionChange,
   selectionColumnLabel = 'Select all rows',
-  getSelectionLabel,
+  getSelectionLabel = () => 'Select row',
   bulkActions,
   selectionCountLabel = (count) => `${count} selected`,
   page,
@@ -73,6 +80,7 @@ export function Table<Row>({
   previousPageLabel = 'Previous page',
   nextPageLabel = 'Next page',
   paginationLabel,
+  getPaginationLabel = (tableName) => (tableName ? `${tableName} pagination` : 'Table pagination'),
   itemsPerPageLabel = 'Items per page:',
   getRangeLabel = (start, end, total) =>
     `${start.toLocaleString()}–${end.toLocaleString()} of ${total.toLocaleString()} items`,
@@ -86,8 +94,11 @@ export function Table<Row>({
   loading = false,
   skeletonRowCount = 5,
   empty,
-  emptyHeadingLabel = 'No results',
-  emptyDescriptionLabel = 'There is nothing to show here yet.',
+  emptyLabel,
+  emptyHeadingLabel,
+  emptyDescriptionLabel,
+  getResultCountLabel = (count) =>
+    count === 0 ? 'No results' : `${count.toLocaleString()} ${count === 1 ? 'result' : 'results'}`,
   scrollRegionLabel = 'Table',
   className,
   id,
@@ -137,6 +148,18 @@ export function Table<Row>({
     : clientPaginated
       ? Math.max(1, Math.ceil(sortedRows.length / pageSize))
       : 1;
+
+  // A new result set goes back to the first page: when the rows in `data` become a different set of
+  // ids (rows added or removed, as a search or filter does), the page Table keeps itself resets to 1.
+  // Editing or reordering rows keeps the page. A controlled `page` is the caller's to reset, and with
+  // manualPagination every page is a new set of rows, so neither is touched. Adjusted during render,
+  // so the reset lands with the new rows.
+  const rowIds = rows.map((r) => r.id);
+  const [pagedRowIds, setPagedRowIds] = React.useState(rowIds);
+  if (!sameRowIds(pagedRowIds, rowIds)) {
+    setPagedRowIds(rowIds);
+    if (clientPaginated && page === undefined && internalPage !== 1) setInternalPage(1);
+  }
 
   const requestedPage = page ?? internalPage;
   const currentPage = Math.min(Math.max(1, requestedPage), resolvedPageCount);
@@ -287,11 +310,22 @@ export function Table<Row>({
 
   const selectedCount = currentSelectedIds.length;
 
-  // The selection bar's count is announced through a polite live region when it changes, not on the
-  // first render (adjusting state during render, so the announcement lands with the change).
-  const [selectionAnnouncement, setSelectionAnnouncement] = React.useState({ count: selectedCount, text: '' });
-  if (selectionAnnouncement.count !== selectedCount) {
-    setSelectionAnnouncement({ count: selectedCount, text: selectionCountLabel(selectedCount) });
+  // One polite live region announces what changed, not on the first render (adjusting state during
+  // render, so the announcement lands with the change): the selection bar's count, and the result
+  // count after a search or filter. The result count isn't tracked while loading, and when the table
+  // first renders loading, the count its first load brings is taken silently. The selection is announced only while Table
+  // shows the selection bar (a custom `toolbar` replaces it).
+  const announceSelection = selectable && toolbar == null;
+  const resultCount = totalItems ?? data.length;
+  const [announcement, setAnnouncement] = React.useState<{ selectedCount: number; resultCount: number | null; text: string }>(
+    { selectedCount, resultCount: loading ? null : resultCount, text: '' },
+  );
+  const resultCountChanged = !loading && announcement.resultCount !== resultCount;
+  if (announcement.selectedCount !== selectedCount || resultCountChanged) {
+    let text = announcement.text;
+    if (resultCountChanged && announcement.resultCount !== null) text = getResultCountLabel(resultCount);
+    else if (announcement.selectedCount !== selectedCount && announceSelection) text = selectionCountLabel(selectedCount);
+    setAnnouncement({ selectedCount, resultCount: loading ? announcement.resultCount : resultCount, text });
   }
 
   const columnCount = columns.length + (selectable ? 1 : 0);
@@ -392,11 +426,9 @@ export function Table<Row>({
           </div>
         ) : null}
 
-        {selectable && toolbar == null ? (
-          <span className={styles.announcer} role="status" aria-live="polite">
-            {selectionAnnouncement.text}
-          </span>
-        ) : null}
+        <span className={styles.announcer} role="status" aria-live="polite">
+          {announcement.text}
+        </span>
 
         {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
         <div ref={scrollRef} className={styles.scroll} role="region" aria-label={name ?? scrollRegionLabel} tabIndex={0}>
@@ -511,6 +543,7 @@ export function Table<Row>({
                         <Skeleton shape="rectangle" className={styles.skeletonCheckbox} />
                       </td>
                     ) : null}
+                    {/* data-align lines each skeleton up where the column's content sits (see the CSS). */}
                     {columns.map((column) => (
                       <td key={column.key} className={styles.cell} data-align={column.align}>
                         <Skeleton className={styles.skeletonText} />
@@ -523,8 +556,10 @@ export function Table<Row>({
                   <td colSpan={columnCount} className={styles.emptyCell}>
                     {empty ?? (
                       <div className={styles.emptyContainer}>
-                        <p className={styles.emptyHeading}>{emptyHeadingLabel}</p>
-                        <p className={styles.emptyDescription}>{emptyDescriptionLabel}</p>
+                        {/* `emptyHeadingLabel` is the deprecated name for `emptyLabel`; a deprecated
+                            `emptyDescriptionLabel` still shows under it. */}
+                        <p className={styles.emptyLabel}>{emptyLabel ?? emptyHeadingLabel ?? 'No items to show'}</p>
+                        {emptyDescriptionLabel != null ? <p className={styles.emptyLabel}>{emptyDescriptionLabel}</p> : null}
                       </div>
                     )}
                   </td>
@@ -539,7 +574,7 @@ export function Table<Row>({
                           <Checkbox
                             checked={isSelected}
                             onCheckedChange={(checked) => toggleRow(rowId, checked)}
-                            aria-label={getSelectionLabel?.(row, index) ?? 'Select row'}
+                            aria-label={getSelectionLabel(row, index)}
                           />
                         </td>
                       ) : null}
@@ -567,7 +602,7 @@ export function Table<Row>({
         </div>
 
         {showFooter ? (
-          <div className={styles.footer} role="navigation" aria-label={paginationLabel ?? (name ? `${name} pagination` : 'Table pagination')}>
+          <div className={styles.footer} role="navigation" aria-label={paginationLabel ?? getPaginationLabel(name)}>
             <div className={styles.footerGroup}>
               {hasPageSizeOptions ? (
                 <>

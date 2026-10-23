@@ -102,6 +102,8 @@ Focus after removal:
 - [ ] Removing the tag in use (keyboard or click) moves focus to the next tag, the previous one if it
       was last, or the root (tabindex -1, Focus Ring) if none remain; never to the page. Focus the
       page moved itself is left alone.
+- [ ] The empty, focused root is the size of a tag (size tokens), so its focus ring shows.
+- [ ] `aria-label` / `aria-labelledby` name the root as a `role="group"`; unnamed, it has no role.
 
 ---
 
@@ -113,6 +115,7 @@ a real `<button>` (Tag's `isInteractive` form) so Enter/Space activation is nati
 keys/Home/End/Enter navigate the open overflow panel (Menu).
 
 ### What ARIA is applied?
+`role="group"` on the root when it's named (`aria-label` / `aria-labelledby`), none when it isn't;
 `aria-expanded`/`aria-controls` on the overflow tag (Popup, via Dropdown Menu); `role="menu"` with
 an accessible name (`overflowMenuAriaLabel`, default `${hiddenCount} more tags`) and per-row
 `menuitem` on the panel (Menu).

@@ -277,8 +277,8 @@ the search text and the filters you hold.
 - **Confirm what can't be undone.** Deleting, from a row or in bulk, asks in a Modal Dialog with
   `tone="error"`, then confirms with a toast, as <DocLink to="Patterns/Messages and Feedback" /> sets out.
 - **Say why a list is empty.** When a search or filter finds nothing, pass Table an `empty` Empty
-  State that says so and offers a way back, such as clearing the filters. The default says "There is
-  nothing to show here yet.", which is wrong for a search. <DocLink to="Patterns/Loading and Empty States" />
+  State that says so and offers a way back, such as clearing the filters. The default, "No items to
+  show", doesn't say that the search found nothing. <DocLink to="Patterns/Loading and Empty States" />
   covers lists with nothing in them yet.
 - **Status is a Label.** Show a record's status in words with Label, whose tones mean something.
   Badge is for counts of one to four characters.

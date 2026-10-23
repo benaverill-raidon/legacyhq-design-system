@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { EditableCellContext, useEditableCellSize } from '../editable-cell-context';
-import { LAYERS, useLayer } from '../layers';
+import { LAYERS, LayerContext, useLayer } from '../layers';
 import styles from './popup.module.css';
 import type { DeprecatedPopupAlignment, PopupAlignment, PopupPadding, PopupProps } from './popup.types';
 
@@ -148,6 +148,8 @@ export const Popup = React.memo(function Popup({
   closeOnOutsideClick = true,
   id,
   role,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
   className,
   unstyled = false,
   padding = 'lg',
@@ -166,8 +168,8 @@ export const Popup = React.memo(function Popup({
   const [panelWidth, setPanelWidth] = React.useState<number | null>(null);
   const [triggerOutOfView, setTriggerOutOfView] = React.useState(false);
   // Every open Popup is a layer, even with closeOnEscape off, so a dialog under it doesn't take
-  // the Escape that belongs to it.
-  const claimEscape = useLayer(open);
+  // the Escape that belongs to it. A popup or dialog opened from its content is a layer above it.
+  const { claimEscape, layer } = useLayer(open);
 
   // The element the panel positions against and matches width to - the anchor (e.g. a field frame)
   // when given, otherwise the cloned trigger child itself.
@@ -307,6 +309,8 @@ export const Popup = React.memo(function Popup({
               ref={panelRef}
               id={contentId}
               role={role}
+              aria-label={ariaLabel}
+              aria-labelledby={ariaLabelledBy}
               className={mergeClassNames(
                 styles.panel,
                 !unstyled && styles.panelSurface,
@@ -315,19 +319,23 @@ export const Popup = React.memo(function Popup({
               )}
               data-alignment={resolvedAlignment}
               data-trigger-out-of-view={triggerOutOfView ? 'true' : undefined}
-              // z-index comes from the one layer scale (layers.ts): above dialogs and toasts.
+              // z-index comes from the one layer scale (layers.ts): above dialogs and toasts, plus
+              // the layers it's inside, so a popup opened from another popup's content is above it
+              // even when both mount open in the same render (and the outer portal lands later).
               style={
                 triggerOutOfView || !position
-                  ? { zIndex: LAYERS.popup, visibility: 'hidden' }
+                  ? { zIndex: LAYERS.popup + layer.depth, visibility: 'hidden' }
                   : {
-                      zIndex: LAYERS.popup,
+                      zIndex: LAYERS.popup + layer.depth,
                       top: `${position.top}px`,
                       left: `${position.left}px`,
                       ...(matchTriggerWidth && panelWidth !== null ? { width: `${panelWidth}px` } : {}),
                     }
               }
             >
-              <EditableCellContext.Provider value={null}>{content}</EditableCellContext.Provider>
+              <LayerContext.Provider value={layer}>
+                <EditableCellContext.Provider value={null}>{content}</EditableCellContext.Provider>
+              </LayerContext.Provider>
             </div>,
             document.body,
           )

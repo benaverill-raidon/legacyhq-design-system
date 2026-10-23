@@ -50,7 +50,7 @@ Form (form.root, native <form>, flex column, gap 0)
 ├─ div.header (optional; flex column, gap --spacing-md)
 │  ├─ div.title        (title, --typography-heading-lg)
 │  ├─ p.description     (description, --typography-body-md)
-│  └─ p.description     (requiredLegend: <span.requiredMark>*</span> indicates a required field)
+│  └─ p.description     (requiredLegend: <span.requiredMark>*</span> {requiredLegendLabel})
 ├─ {children}
 │  ├─ FormSection (div.section, padding-top --spacing-3xl, flex column gap --spacing-lg)
 │  │  ├─ div.sectionTitle (optional, --typography-heading-sm)
@@ -130,7 +130,9 @@ Form (form.root, native <form>, flex column, gap 0)
 - Form renders a native `<form>` and forwards its ref and native attributes (`onSubmit`, `name`,
   `noValidate`, ...).
 - Renders the header from `title` / `description` / `requiredLegend`; the legend shows a coloured
-  `*` and reads "* indicates a required field"; no header renders when all three are absent.
+  `*` and reads "* indicates a required field", the text after the `*` coming from
+  `requiredLegendLabel` (that English default; pass a translation); no header renders when all three
+  are absent.
 - FormSection renders an optional title and adds `--spacing-3xl` top spacing.
 - FormRow lays its children out as equal-width columns.
 - FormFooter defaults to `align="end"` and supports `align="start"` via `data-align`.

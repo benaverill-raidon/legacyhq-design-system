@@ -68,11 +68,13 @@
 }
 
 /*
- * A value bubble that always shows (`showValue`) sits above the handle, so the control makes room
- * for it: the bubble's height plus the gap below it. Otherwise it would land in the label row.
- * Vertical sliders show it beside the handle instead.
+ * The value bubble sits above the handle, so a horizontal control always makes room for it: the
+ * bubble's height plus the gap below it. Without the room it would land on whatever is above - the
+ * slider's own label, or Field's label, which sits `spacing-xs` above the slider. The room is the
+ * same whether the bubble shows on hover, focus, and drag or always (`showValue`), so the slider
+ * doesn't jump. Vertical sliders show it beside the handle instead.
  */
-.root[data-orientation='horizontal'][data-show-value='true'] .control {
+.root[data-orientation='horizontal'] .control {
   margin-block-start: calc(var(--slider-value-indicator-block-size) + var(--spacing-sm));
 }
 

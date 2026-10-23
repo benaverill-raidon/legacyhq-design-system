@@ -146,9 +146,8 @@ for a guided flow, and it shows position in a sequence, not completion.
 
 - **The status is an icon beside a Label.** Label has no icon slot, so the task icon sits before it
   in the cell. The icon is decorative; the Label says the status in words.
-- **The assignee cell shows the name, not the Avatar.** A single Select shows the chosen option's
-  label only; its `icon` appears in the menu rows (and on multi-select chips). The Avatars show in
-  the menu, in the filter chip, and beside the owner's name.
+- **The assignee cell shows the Avatar beside the name.** A single Select shows the chosen
+  option's `icon` before its label, as the menu rows and multi-select chips do.
 - **The filters sit above every stage, not in a Table.** Table's `activeFilters` belongs to one
   table, and these filters narrow all of them, so they're a Chip Group of their own, with the Add
   filter menu and a Clear filters button beside it.

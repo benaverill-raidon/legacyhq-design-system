@@ -137,7 +137,8 @@ export const stop = (event) => event.preventDefault();
 
 `title` and `description` make the header, and `requiredLegend` adds the line "\* indicates a
 required field", with the `*` in the error color to match Field's required mark. Set it when any
-field is required. Without all three, there's no header.
+field is required. Without all three, there's no header. The text after the `*` is
+`requiredLegendLabel`; pass a translation.
 
 <Example of={FormStories.Playground} />
 

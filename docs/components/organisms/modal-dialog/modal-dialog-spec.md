@@ -119,8 +119,10 @@ the topmost open layer and nothing has already handled the key (`preventDefault(
 the key calls `preventDefault()` itself. So Escape in an open Dropdown Menu, picker, or tooltip in
 the dialog closes that first, and with two stacked dialogs only the top one closes. A control that
 handles Escape itself without `preventDefault()` (Inline Edit's cancel) still lets the dialog close
-too. The Tab focus trap stays a capture-phase listener. Layers order by when they open, so a popup
-and a dialog that both mount open in the same render order child-first (the popup under the dialog).
+too. The Tab focus trap stays a capture-phase listener. The dialog provides its layer to everything
+it shows (`LayerContext`), so a popup or dialog opened from inside it is above it whichever
+registered first: a popup and a dialog that both mount open in the same render register child-first,
+and the popup still goes above the dialog. Otherwise layers order by when they open.
 There's no exit animation, by decision (2026-10-20): the dialog unmounts when `open` is false and
 leaves at once, as the motion rules have every overlay but Toast Group do (token-governance.json
 `motion.overlays`). It's not an open question.

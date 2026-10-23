@@ -2,20 +2,6 @@
   "name": "Slider",
   "category": "forms",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "A pointer press on a disabled single Slider still sets `data-dragging=\"true\"`; the disabled styles hide it."
-    },
-    {
-      "kind": "bug",
-      "summary": "Its examples file uses a `type` prop that doesn't exist (`<Slider type=\"slider-range\">`)."
-    },
-    {
-      "kind": "bug",
-      "summary": "The hover-only value bubble floats over the label."
-    }
-  ],
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",
   "figmaSource": {
@@ -100,7 +86,8 @@
     "Supports disableSwap.",
     "Supports minDistance.",
     "SliderRange submits the lower value under minName and the upper under maxName; they default to name and `${name}Max`.",
-    "showValue keeps the value bubble showing and makes room for it above the track, so it never overlaps the label.",
+    "The value bubble shows on hover, focus, and drag; showValue keeps it showing. A horizontal slider always makes room for it above the track, so it never covers the label (its own or Field's).",
+    "A disabled slider (disabled, or inside a disabled fieldset) never starts a drag: a pointer press sets no data-dragging.",
     "SliderRange is a group named by label, aria-labelledby, or aria-label; each handle's name is that name plus minLabel or maxLabel.",
     "invalid (or an aria-invalid of true, which Field passes for an error) sets data-invalid on the root, which swaps the handle, track, and step-dot custom properties to the error colors, and sets aria-invalid on the handle (both handles on SliderRange). Disabled colors win.",
     "Field wires Slider like its other controls: its id, aria-labelledby, aria-describedby, aria-invalid, and required reach the input. On SliderRange, id is the lower handle's id (the other ids start with it: <id>-max, <id>-range), aria-labelledby names the group, and aria-describedby, aria-invalid, and required go to both handles, not the group. required never blocks a submit: a range always has a value."

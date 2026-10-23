@@ -4,10 +4,6 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "bug",
-      "summary": "A removable Tag without `href` ignores `onClick`."
-    },
-    {
       "kind": "decision",
       "summary": "`tone` holds color names (blue, green, purple), which by tone-is-meaning is `appearance`. Rename it, or keep it as Toggle Button's is kept."
     },
@@ -93,9 +89,9 @@
     "Navigation and removal are separate interactive regions.",
     "Remove button uses independent hover, press, and focus states.",
     "Tag body uses tone-specific interaction states.",
-    "When there is no href and isRemovable is false, isInteractive (or a plain onClick) renders a native button instead of a non-interactive span - no navigation, no remove affordance, just a focusable click target.",
+    "When there is no href and isRemovable is false, isInteractive (or a plain onClick) renders a native button instead of a non-interactive span - no navigation, no remove affordance, just a focusable click target. In a removable tag without href, isInteractive or onClick makes the content area a native button beside the remove button; the remove button's click never reaches onClick.",
     "Disabled state is the native-named disabled prop. isDisabled is a deprecated alias mapped to disabled; disabled wins when both are set.",
-    "tabIndex and aria-describedby go to the link or the interactive button when there is one (the content anchor in a removable linked tag); otherwise to the root span (display-only, or the wrapper of a removable tag without href)."
+    "tabIndex and aria-describedby go to the link or the interactive button when there is one (the content anchor in a removable linked tag); otherwise to the root span (display-only, or the wrapper of a removable tag without href or onClick)."
   ],
   "compositionRules": [
     "May contain icon.",
@@ -134,6 +130,7 @@
     "Visible focus",
     "Independent interaction states",
     "Renders a native button (not a span) when isInteractive or onClick is set with no href/isRemovable",
+    "In a removable tag without href, isInteractive or onClick makes the content a native button, separate from the remove button",
     "Takes disabled; the deprecated isDisabled still works",
     "Forwards tabIndex and aria-describedby in every form"
   ]

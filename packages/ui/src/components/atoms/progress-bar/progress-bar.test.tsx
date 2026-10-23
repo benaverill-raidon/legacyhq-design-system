@@ -127,6 +127,15 @@ describe('ProgressBar', () => {
     expect(progressBar).toHaveAttribute('aria-describedby', 'progress-help');
   });
 
+  it('is always role="progressbar", even when a role is passed', () => {
+    // `role` isn't in ProgressBarProps; a plain-JS caller can still pass one.
+    const props = { role: 'status' } as unknown as Record<string, never>;
+    render(<ProgressBar data-testid="progress-bar" value={40} label="Uploading" {...props} />);
+
+    expect(screen.getByTestId('progress-bar')).toHaveAttribute('role', 'progressbar');
+    expect(screen.getByRole('progressbar', { name: 'Uploading' })).toBeInTheDocument();
+  });
+
   it('supports zero and complete states', () => {
     const { rerender } = render(<ProgressBar data-testid="progress-bar" value={0} label="Zero progress" />);
 

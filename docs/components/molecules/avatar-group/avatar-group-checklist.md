@@ -114,6 +114,8 @@ trigger is a real `<button>` (Button, unmodified) so Enter/Space activation is n
 keys/Home/End/Enter navigate the open overflow panel (Menu).
 
 ### What ARIA is applied?
+An accessible name on the overflow trigger that says what it reveals (`getOverflowButtonLabel`,
+default `+${hiddenCount} more people`, `+1 more person` for one, starting with the visible `+N`);
 `aria-expanded`/`aria-controls` on the overflow trigger (Popup, via Dropdown Menu); `role="menu"`
 with an accessible name (`overflowMenuAriaLabel`, default `${hiddenCount} more people`) and per-row
 `menuitem` on the panel (Menu), each with a decorative leading avatar.

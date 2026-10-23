@@ -3,7 +3,8 @@ import type * as React from 'react';
 export type ProgressBarVariant = 'linear' | 'circular';
 export type ProgressBarSize = 'sm' | 'md' | 'lg';
 
-export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+// No `role`: the root is always `role="progressbar"`, which its `aria-value*` attributes need.
+export interface ProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children' | 'role'> {
   /**
    * How much of the process is done, from 0 to 100. Any number is accepted: below 0 and non-finite
    * values show and announce as 0, above 100 as 100.

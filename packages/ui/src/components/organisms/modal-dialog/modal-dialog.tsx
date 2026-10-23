@@ -4,7 +4,7 @@ import { CloseIcon, GrowDiagonalIcon, StatusErrorIcon, StatusWarningIcon } from 
 import type { IconColor, IconProps } from '../../primitives/icon';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../../molecules/button-group';
-import { LAYERS, useLayer } from '../../primitives/layers';
+import { LAYERS, LayerContext, useLayer } from '../../primitives/layers';
 import styles from './modal-dialog.module.css';
 import type { DeprecatedModalWidth, ModalDialogProps, ModalTone, ModalWidth } from './modal-dialog.types';
 
@@ -76,8 +76,9 @@ export const ModalDialog = React.memo(function ModalDialog({
   const onCloseRef = React.useRef(onClose);
   onCloseRef.current = onClose;
   // The dialog is a layer: Escape closes it only when nothing opened above it (a menu, a tooltip,
-  // another dialog) is still open. See primitives/layers.ts.
-  const claimEscape = useLayer(open);
+  // another dialog) is still open. See primitives/layers.ts. What it shows is inside its layer, so a
+  // popup or dialog opened from it is above it.
+  const { claimEscape, layer } = useLayer(open);
 
   React.useEffect(() => {
     if (open) {
@@ -212,49 +213,52 @@ export const ModalDialog = React.memo(function ModalDialog({
   return (
     <>
       {createPortal(
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        <div
-          className={styles.backdrop}
-          // z-index comes from the one layer scale (primitives/layers.ts): below popups and toasts.
-          style={{ zIndex: LAYERS.dialog }}
-          onMouseDown={handleBackdropMouseDown}
-          onMouseUp={handleBackdropMouseUp}
-        >
+        // Everything the dialog shows is inside its layer: a popup or dialog opened from it is above it.
+        <LayerContext.Provider value={layer}>
+          {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
           <div
-            ref={panelRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={title != null ? titleId : undefined}
-            aria-label={title == null ? ariaLabel : undefined}
-            tabIndex={-1}
-            className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
-            data-tone={tone}
-            data-has-header={hasHeader ? 'true' : undefined}
-            data-has-footer={footer != null ? 'true' : undefined}
+            className={styles.backdrop}
+            // z-index comes from the one layer scale (primitives/layers.ts): below popups and toasts.
+            style={{ zIndex: LAYERS.dialog }}
+            onMouseDown={handleBackdropMouseDown}
+            onMouseUp={handleBackdropMouseUp}
           >
-            {hasHeader ? (
-              <div className={styles.header}>
-                <div className={styles.titleArea}>
-                  {status ? (
-                    <span className={styles.statusIcon} aria-hidden="true">
-                      <status.Icon size="md" color={status.color} />
-                    </span>
-                  ) : null}
-                  {title != null ? (
-                    <h2 id={titleId} className={styles.title}>
-                      {title}
-                    </h2>
-                  ) : null}
+            <div
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby={title != null ? titleId : undefined}
+              aria-label={title == null ? ariaLabel : undefined}
+              tabIndex={-1}
+              className={mergeClassNames(styles.panel, styles[`width_${width}`], className)}
+              data-tone={tone}
+              data-has-header={hasHeader ? 'true' : undefined}
+              data-has-footer={footer != null ? 'true' : undefined}
+            >
+              {hasHeader ? (
+                <div className={styles.header}>
+                  <div className={styles.titleArea}>
+                    {status ? (
+                      <span className={styles.statusIcon} aria-hidden="true">
+                        <status.Icon size="md" color={status.color} />
+                      </span>
+                    ) : null}
+                    {title != null ? (
+                      <h2 id={titleId} className={styles.title}>
+                        {title}
+                      </h2>
+                    ) : null}
+                  </div>
+                  {headerActions}
                 </div>
-                {headerActions}
-              </div>
-            ) : null}
+              ) : null}
 
-            <div className={styles.body}>{children}</div>
+              <div className={styles.body}>{children}</div>
 
-            {footer != null ? <div className={styles.footer}>{footer}</div> : null}
+              {footer != null ? <div className={styles.footer}>{footer}</div> : null}
+            </div>
           </div>
-        </div>,
+        </LayerContext.Provider>,
         document.body,
       )}
     </>

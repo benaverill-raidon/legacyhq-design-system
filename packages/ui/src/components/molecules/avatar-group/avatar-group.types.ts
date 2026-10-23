@@ -15,8 +15,15 @@ export interface AvatarGroupProps {
   maxVisible?: number;
   /** The size of every avatar and of the overflow button: 24, 32, 40, or 48px from `xs` to `lg`. */
   size?: AvatarGroupSize;
-  /** The overflow button's text, from the number of hidden people. Defaults to `+3` for three. */
+  /** The overflow button's visible text, from the number of hidden people. Defaults to `+3` for three. */
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
+  /**
+   * The overflow button's accessible name, from the number of hidden people: what the button
+   * reveals. Defaults to “+3 more people” for three and “+1 more person” for one. Start it with the
+   * button's visible text, so people using speech input can say what they see, and translate it with
+   * the rest of your interface.
+   */
+  getOverflowButtonLabel?: (hiddenCount: number) => string;
   /** The overflow menu's accessible name. Defaults to “3 more people” for three. */
   overflowMenuAriaLabel?: string;
   /** The overflow menu's name for a hidden person with no `name` or `alt`. Defaults to "Unnamed". */

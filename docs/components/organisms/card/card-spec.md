@@ -14,7 +14,9 @@
 Export `Card`, `CardProps`, `CardSurface`, and `CardBorderRadius` from the component index.
 Render one native `div` with `children` directly inside it. Forward the root ref and native div
 attributes; compose the consumer's class with the CSS Module class. Use `data-surface` and
-`data-border-radius` plus `data-border` for the independent visual axes. No generated IDs, state, or event handlers.
+`data-border-radius` plus `data-border` for the independent visual axes. No generated IDs, state, or event handlers
+of its own: handlers the consumer passes (`onClick`, `onKeyDown`, ...) reach the `div` unchanged, with no role, tab
+stop, or keyboard activation added, so a clickable card is a Link or Button inside it, not a handler on it.
 
 | Prop | Values | Default |
 | --- | --- | --- |

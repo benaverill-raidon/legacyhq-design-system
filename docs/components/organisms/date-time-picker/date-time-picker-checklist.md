@@ -54,6 +54,10 @@ interface DateTimePickerProps
   dateFormat?: (date: Date, locale?: string) => string;
   timeFormat?: (value: Date, locale?: string) => string;
   dateLabel?: string; timeLabel?: string;
+  dateDialogLabel?: string; timeDialogLabel?: string; // each half's dialogLabel
+  confirmLabel?: string; cancelLabel?: string;        // Time Picker's, passed through
+  hoursLabel?: string; minutesLabel?: string; meridiemLabel?: string;
+  amLabel?: string; pmLabel?: string;
   id?: string; // the date input's
   'aria-label'?: string; 'aria-labelledby'?: string;
 }
@@ -64,6 +68,7 @@ interface DateTimePickerProps
 ```txt
 size: md; context: default; weekStartsOn: 0; minuteStep: 5
 dateLabel: Date; timeLabel: Time
+the passed-through labels: undefined, so each half keeps its own default
 ```
 
 ## Tokens

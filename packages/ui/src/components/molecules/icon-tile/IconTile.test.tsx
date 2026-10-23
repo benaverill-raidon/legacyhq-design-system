@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { cleanup, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { CheckIcon } from '../../../assets/icons';
 import { IconTile } from './icon-tile';
 
@@ -100,6 +100,36 @@ describe('IconTile', () => {
     );
 
     expect(screen.getByRole('img', { name: '1 unread notification' })).toBeInTheDocument();
+  });
+
+  it('warns in development when a tile that is not decorative has no ariaLabel', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    render(
+      <IconTile decorative={false}>
+        <CheckIcon />
+      </IconTile>,
+    );
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('IconTile'));
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('ariaLabel'));
+    warn.mockRestore();
+  });
+
+  it('does not warn when the tile is decorative or named', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    render(
+      <>
+        <IconTile>
+          <CheckIcon />
+        </IconTile>
+        <IconTile decorative={false} ariaLabel="Verified">
+          <CheckIcon />
+        </IconTile>
+      </>,
+    );
+
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
   });
 
   it('applies className', () => {

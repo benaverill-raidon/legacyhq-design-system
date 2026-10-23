@@ -156,6 +156,8 @@ Final implementation decisions:
 - **The remove button is named by `removeLabel`**, the name Tag uses (built-in-labels). It was
   `removeAriaLabel` until 2026-10-20; that name is still accepted as a deprecated alias, and
   `removeLabel` wins when both are set.
+- **The remove button's tooltip text is `removeTooltipLabel`**, "Remove" by default, so it can be
+  translated (built-in-labels). It isn't the button's name; `removeLabel` is.
 - **`tone` is unexposed.** chip-base supports five tones but all 14 chip variants use
   `tone=default`, so a chip-level mapping would be extrapolated rather than verified.
 - **The seam rule applies to every segment, not just the leading one.** Each segment drops its own

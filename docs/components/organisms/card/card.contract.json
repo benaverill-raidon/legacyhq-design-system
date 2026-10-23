@@ -1,13 +1,7 @@
 {
   "name": "Card",
   "category": "data-display",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "It spreads `onClick` and other props onto its `div`, while its page says it handles no events."
-    }
-  ],
+  "status": "stable",
   "purpose": "Wrap arbitrary content in an optional theme-aware surface and border with rounded corners.",
   "intent": "A surface shell with a single unrestricted children slot. Content owns padding, layout, semantics, and interactions. Tier exception: it lives with organisms as a container for complete content sections, while importing no other UI components.",
   "nativeElement": "div",
@@ -71,7 +65,7 @@
     "children": { "type": "React.ReactNode", "default": null, "required": false, "description": "Unrestricted slot rendered directly inside the card." },
     "className": { "type": "string", "default": null, "required": false, "description": "Composes with the root CSS Module class." },
     "ref": { "type": "React.Ref<HTMLDivElement>", "default": null, "required": false, "description": "Forwarded to the root div." },
-    "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "default": null, "required": false, "description": "Native div attributes, style, and consumer event handlers." }
+    "...rest": { "type": "React.HTMLAttributes<HTMLDivElement>", "default": null, "required": false, "description": "Native div attributes, style, and consumer event handlers, passed to the div unchanged. Card adds no handlers of its own, and a handler passed here gives the div no role, tab stop, or keyboard activation: a clickable card is a Link or Button inside it." }
   },
   "variants": { "surface": ["raised", "default", "sunken", "deep", "none"], "borderRadius": ["lg", "xl", "xxl"], "border": ["true", "false"] },
   "states": ["default"],

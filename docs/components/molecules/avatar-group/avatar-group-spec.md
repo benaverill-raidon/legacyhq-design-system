@@ -34,6 +34,7 @@ interface AvatarGroupProps {
   maxVisible?: number;
   size?: AvatarGroupSize;
   overflowLabel?: (hiddenCount: number) => React.ReactNode;
+  getOverflowButtonLabel?: (hiddenCount: number) => string;
   overflowMenuAriaLabel?: string;
   onOverflowAvatarSelect?: (
     avatar: AvatarGroupItem,
@@ -53,6 +54,7 @@ already supports `isInteractive`/`onClick` for individually-clickable avatars, a
 ```txt
 size: lg
 overflowLabel: (hiddenCount) => `+${hiddenCount}`
+getOverflowButtonLabel: (hiddenCount) => `+${hiddenCount} more people` (`+1 more person` for one)
 overflowMenuAriaLabel: `${hiddenCount} more people`
 ```
 
@@ -122,7 +124,13 @@ Where `overflowTrigger` (only rendered when `hasOverflow`) is:
     })),
   }]}
 >
-  <Button size={size} prominence="tertiary" className={styles.overflowTrigger} onClick={() => setOverflowOpen((c) => !c)}>
+  <Button
+    size={size}
+    prominence="tertiary"
+    className={styles.overflowTrigger}
+    aria-label={getOverflowButtonLabel(hiddenAvatars.length)}
+    onClick={() => setOverflowOpen((c) => !c)}
+  >
     {overflowLabel(hiddenAvatars.length)}
   </Button>
 </DropdownMenu>
@@ -242,6 +250,11 @@ Figma's own auto-layout `itemSpacing`, so this can't use `gap` directly).
   Avatar Group changes none of it besides applying a uniform `size`.
 - The overflow trigger is a real `<button>` (Button, unmodified) - Enter/Space activation and the
   native `disabled` attribute come for free, no custom key handling.
+- The overflow trigger's accessible name is `getOverflowButtonLabel(hiddenCount)`, default
+  `+3 more people` (`+1 more person`): it says what the button reveals, and starts with the default
+  visible text (`+3`) so speech-input users can say what they see. It's a function prop with an
+  English default, per the built-in-labels rule; a consumer who changes `overflowLabel` should
+  change it to match.
 - `aria-expanded`/`aria-controls` on the overflow trigger come from Popup (via Dropdown Menu),
   reflecting the panel's open state.
 - The overflow panel carries `role="menu"` (from Menu) with the accessible name
@@ -301,6 +314,7 @@ calls onOverflowAvatarSelect with the selected truncated avatar
 closes the overflow panel, returning focus to the trigger, when a truncated avatar is selected
 closes the overflow panel on outside click / Escape, inherited from Popup
 supports a custom overflowLabel
+names the overflow button "+N more people" ("+1 more person" for one), or from getOverflowButtonLabel
 defaults the overflow menu accessible name to "{count} more people"
 supports a custom overflowMenuAriaLabel
 applies size uniformly to every visible avatar and the overflow trigger

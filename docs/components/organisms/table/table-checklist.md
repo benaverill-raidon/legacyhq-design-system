@@ -9,7 +9,7 @@ Table
 Organism
 
 ### Related Components
-- Checkbox (selection), Text Field (search), Select + Icon Button (footer), Chip mode="filter" (consumer-rendered active filters)
+- Checkbox (selection), Text Field (search), Select + Icon Button (footer), Chip mode="filter" in a named Chip Group (consumer-rendered active filters)
 - Button / Icon Button (header + toolbar actions)
 - Skeleton (loading rows), Empty State (a good `empty` slot)
 
@@ -55,8 +55,8 @@ states right in one place keeps those pages consistent and correct.
 ### What content can be displayed?
 - Header: a title and a description
 - Toolbar: a search Icon Button that opens a 280px search field + filter/configure Icon Buttons +
-  `actions` (or the selection bar while rows are selected), then active Chip mode="filter" pills +
-  a "Clear filters" action
+  `actions` (or the selection bar while rows are selected), then active Chip mode="filter" pills in
+  a Chip Group the consumer names ("Active filters") + a "Clear filters" action
 - Grid: sortable column headers, a selection column, and cells rendering any content via `render`
 - Footer: items-per-page Select, range text, page Select, page count, previous/next Icon Buttons
 
@@ -75,11 +75,14 @@ None - long cell content wraps or is rendered by the consumer; the grid scrolls 
 ## States
 
 Required:
-- default, loading (skeleton rows + aria-busy), empty (the `empty` slot, or a default "No results" message)
+- default, loading (skeleton rows, aligned like their columns, + aria-busy), empty (the `empty` slot,
+  or a default "No items to show" on the table's surface)
 - row hover, row selected, sorted (aria-sort on the header)
 
 Not Required:
 - Sorting, selection, and page are owned by default (uncontrolled) unless the consumer controls them.
+  An uncontrolled client-side page goes back to 1 when the rows become a different set; a
+  controlled page is the consumer's to reset.
 
 ---
 
@@ -96,15 +99,18 @@ it isn't read with every cell.
 
 ### Is selection accessible?
 Yes - real Checkboxes; the header select-all is labelled and goes indeterminate for a partial
-selection. Changes to the selected count are announced in a polite live region.
+selection. Changes to the selected count are announced in a polite live region, and so are changes
+to the result count after a search or filter ("No results", "12 results").
 
 ### Can it be operated by keyboard?
 Yes - toolbar controls, sort buttons, checkboxes, in-cell controls, and pagination are all reachable;
 the scrollable grid is a keyboard-focusable `role="region"` (WCAG 2.1.1).
 
 ### What must the consumer still do?
-Give the table an accessible name; pass a stable `getRowId` when selecting; keep in-cell content
-(action buttons, links) accessible. Selection is kept across filters (rows a filter hides stay
+Give the table an accessible name; pass a stable `getRowId` when selecting; pass
+`getSelectionLabel`; pass `activeFilters` a Chip Group named with `aria-label`; set a controlled
+`page` back to 1 when the search or a filter changes; keep in-cell content (action buttons, links)
+accessible. Selection is kept across filters (rows a filter hides stay
 selected, are counted, and are acted on by `bulkActions`), so a bulk action's confirmation names the
 count it will act on.
 
@@ -126,7 +132,7 @@ resize by default (drag / Arrow keys); each handle reports its width from the st
 is checkbox-only (rows are never clickable); selecting rows shows a selection bar (count +
 `bulkActions`) in place of the toolbar's buttons. Follow the interaction rules: checkbox = selection, Link = navigation (strong Link for
 the identifier, default for other entity links), Button = action; in-row controls act independently.
-The default empty content is Table's own "No results" message on the deep surface. Composes existing
+The default empty content is Table's own "No items to show" (`emptyLabel`), on the table's surface. Composes existing
 components and uses only semantic tokens - no new tokens. The Figma page is still in-progress (✅⏲️);
 single-select, the column ⋮ menu, column reorder, sticky columns, and row expansion are deferred. See
 `table-spec.md` for the full reasoning.

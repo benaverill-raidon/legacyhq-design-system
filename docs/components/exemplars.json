@@ -199,9 +199,10 @@
       {
         "name": "Click-to-open action menu",
         "description": "The shape Dropdown Menu will build on - a click-triggered, role=\"menu\" panel.",
-        "jsx": "const [open, setOpen] = useState(false);\n\n<Popup\n  open={open}\n  onOpenChange={setOpen}\n  role=\"menu\"\n  content={\n    <>\n      <button type=\"button\" role=\"menuitem\">Rename</button>\n      <button type=\"button\" role=\"menuitem\">Delete</button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</Popup>",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<Popup\n  open={open}\n  onOpenChange={setOpen}\n  role=\"menu\"\n  aria-label=\"Actions\"\n  content={\n    <>\n      <button type=\"button\" role=\"menuitem\">Rename</button>\n      <button type=\"button\" role=\"menuitem\">Delete</button>\n    </>\n  }\n>\n  <Button onClick={() => setOpen((current) => !current)}>Actions</Button>\n</Popup>",
         "props": {
-          "role": "menu"
+          "role": "menu",
+          "aria-label": "Actions"
         }
       },
       {
@@ -831,19 +832,19 @@
       {
         "name": "Single",
         "description": null,
-        "jsx": "<Slider value={50} />",
+        "jsx": "<Slider label=\"Volume\" defaultValue={50} />",
         "props": {}
       },
       {
         "name": "Range",
         "description": null,
-        "jsx": "<Slider type='slider-range' value={[25,75]} />",
+        "jsx": "<SliderRange label=\"Price\" defaultValue={[25, 75]} />",
         "props": {}
       },
       {
         "name": "Centered",
         "description": null,
-        "jsx": "<Slider type='slider-centered' value={0} />",
+        "jsx": "<SliderCentered label=\"Balance\" defaultValue={0} />",
         "props": {}
       },
       {
@@ -958,6 +959,12 @@
         "name": "Linked & Removable",
         "description": null,
         "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+        "props": {}
+      },
+      {
+        "name": "Clickable & Removable",
+        "description": null,
+        "jsx": "<Tag isRemovable onClick={() => openPreview('vacation-home')} onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
         "props": {}
       }
     ],
@@ -1076,6 +1083,14 @@
         "name": "Truncated stack with a '+N' overflow trigger",
         "description": "The common case - once avatars.length exceeds maxVisible, the rest collapse behind an overflow trigger that opens a Dropdown Menu.",
         "jsx": "<AvatarGroup avatars={nineTeamMembers} maxVisible={5} />",
+        "props": {
+          "maxVisible": 5
+        }
+      },
+      {
+        "name": "Translating the overflow button's name",
+        "description": "The overflow button is named for what it reveals, \"+4 more people\" by default. Translate it with getOverflowButtonLabel, starting with the button's visible text.",
+        "jsx": "<AvatarGroup\n  avatars={nineTeamMembers}\n  maxVisible={5}\n  getOverflowButtonLabel={(count) => t('people.showMore', { count })}\n/>",
         "props": {
           "maxVisible": 5
         }
@@ -1294,7 +1309,7 @@
       {
         "name": "Naming a panel explicitly",
         "description": "Panels default to `${labelText} value` / `${labelText} operator`, from labelText or a string label. Override with menuAriaLabel when the composed name would read poorly; with a JSX label, pass labelText so the defaults (and the remove button's name) keep the property.",
-        "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeLabel=\"Clear the status filter\"\n  onRemove={() => clearFilter('status')}\n/>",
+        "jsx": "<Chip\n  mode=\"filter\"\n  label={<strong>Status</strong>}\n  value={{ label: '2 statuses', sections: statusSections, menuAriaLabel: 'Choose statuses' }}\n  removeLabel=\"Clear the status filter\"\n  removeTooltipLabel=\"Clear\"\n  onRemove={() => clearFilter('status')}\n/>",
         "props": {
           "mode": "filter"
         }
@@ -1593,6 +1608,12 @@
         "name": "Basic click-to-edit text value",
         "description": "value/onConfirm mirror TextField's own controlled value pattern - onConfirm fires only on commit, not per keystroke. An inline TextField (context='inline') is the recommended child for most cases.",
         "jsx": "function EditableTitle() {\n  const [value, setValue] = useState('Q3 Planning');\n\n  return (\n    <InlineEdit value={value} onConfirm={setValue}>\n      <TextField context=\"inline\" aria-label=\"Title\" />\n    </InlineEdit>\n  );\n}",
+        "props": {}
+      },
+      {
+        "name": "In a Field",
+        "description": "Field's label names the field and its message describes it, through Inline Edit, which passes Field's id and ARIA props on to its child. A rejected draft shows validate's message under the field, above Field's; the field reads both.",
+        "jsx": "function DocketNumber() {\n  const [value, setValue] = useState('MER-L-001482-26');\n\n  return (\n    <Field label=\"Docket number\" required message=\"As it appears on the court notice.\">\n      <InlineEdit value={value} onConfirm={setValue} validate={checkDocket} actionPlacement=\"end\">\n        <TextField context=\"inline\" />\n      </InlineEdit>\n    </Field>\n  );\n}",
         "props": {}
       },
       {
@@ -1974,9 +1995,17 @@
       },
       {
         "name": "Options with leading icons",
-        "description": "option.icon appears in both the row and (multi) the chip. Decorative.",
+        "description": "option.icon appears in the row, before the chosen value in a single-select trigger, and on the chip (multi). Decorative.",
         "jsx": "<Select\n  options={[\n    { value: 'jordan', label: 'Jordan Ellis', icon: <Avatar name=\"Jordan Ellis\" size=\"xs\" decorative /> },\n    { value: 'priya', label: 'Priya Nair', icon: <Avatar name=\"Priya Nair\" size=\"xs\" decorative /> },\n  ]}\n  value={value}\n  onChange={setValue}\n  placeholder=\"Assign to\"\n/>",
         "props": {}
+      },
+      {
+        "name": "Translated chip remove buttons",
+        "description": "getRemoveLabel builds each chip's remove-button name from the option's label; the default is `Remove <label>`.",
+        "jsx": "<Select\n  inputType=\"multi\"\n  options={people}\n  value={assignees}\n  onChange={setAssignees}\n  getRemoveLabel={(label) => `Retirer ${label}`}\n  aria-label=\"Responsables\"\n/>",
+        "props": {
+          "inputType": "multi"
+        }
       },
       {
         "name": "Grouped options",
@@ -2218,9 +2247,11 @@
       },
       {
         "name": "Removable tags in a bounded group",
-        "description": "Each TagGroupItem's own isRemovable/onRemove forwards straight to the rendered Tag, unaffected by truncation.",
-        "jsx": "<TagGroup\n  tags={[\n    { id: 'vacation-home', label: 'Vacation Home', isRemovable: true, onRemove: () => handleRemove('vacation-home') },\n    { id: 'rental', label: 'Rental Property', isRemovable: true, onRemove: () => handleRemove('rental') },\n  ]}\n/>",
-        "props": {}
+        "description": "Each TagGroupItem's own isRemovable/onRemove forwards straight to the rendered Tag, unaffected by truncation. Name the group: when the last tag is removed, focus lands on it.",
+        "jsx": "<TagGroup\n  aria-label=\"Linked assets\"\n  tags={[\n    { id: 'vacation-home', label: 'Vacation Home', isRemovable: true, onRemove: () => handleRemove('vacation-home') },\n    { id: 'rental', label: 'Rental Property', isRemovable: true, onRemove: () => handleRemove('rental') },\n  ]}\n/>",
+        "props": {
+          "aria-label": "Linked assets"
+        }
       }
     ],
     "antiExamples": [
@@ -2745,6 +2776,14 @@
         "props": {
           "minuteStep": 15
         }
+      },
+      {
+        "name": "Translated",
+        "description": "dateLabel and timeLabel name the halves; each half's built-in text passes through (dateDialogLabel, timeDialogLabel, and Time Picker's own label props); locale sets the month and weekday names.",
+        "jsx": "<Field label=\"Audiencia\">\n  <DateTimePicker\n    locale=\"es\"\n    dateLabel=\"Fecha\"\n    timeLabel=\"Hora\"\n    dateDialogLabel=\"Elegir una fecha\"\n    timeDialogLabel=\"Elegir una hora\"\n    confirmLabel=\"Confirmar\"\n    cancelLabel=\"Cancelar\"\n    hoursLabel=\"Horas\"\n    minutesLabel=\"Minutos\"\n    meridiemLabel=\"a. m./p. m.\"\n    amLabel=\"a. m.\"\n    pmLabel=\"p. m.\"\n  />\n</Field>",
+        "props": {
+          "locale": "es"
+        }
       }
     ],
     "antiExamples": [
@@ -3267,9 +3306,9 @@
         "props": {}
       },
       {
-        "name": "Identifier as a strong Link; other columns at body weight",
+        "name": "Identifier as a strong Link; a status in a Label",
         "description": null,
-        "jsx": "<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={[\n    { key: 'name', header: 'Name', sortable: true, emphasis: 'strong', render: (m) => (\n      <Link href={`/members/${m.id}`} emphasis=\"strong\">{m.name}</Link>\n    ) },\n    { key: 'status', header: 'Status', render: (m) => <Tag tone={m.status === 'Active' ? 'success' : 'neutral'}>{m.status}</Tag> },\n  ]}\n  data={members}\n/>",
+        "jsx": "<Table\n  caption=\"Team members\"\n  getRowId={(m) => m.id}\n  columns={[\n    { key: 'name', header: 'Name', sortable: true, emphasis: 'strong', render: (m) => (\n      <Link href={`/members/${m.id}`} emphasis=\"strong\">{m.name}</Link>\n    ) },\n    { key: 'status', header: 'Status', render: (m) => <Label tone={m.status === 'Active' ? 'success' : 'default'}>{m.status}</Label> },\n  ]}\n  data={members}\n/>",
         "props": {}
       },
       {
@@ -3300,7 +3339,7 @@
       {
         "name": "Full list page (header + toolbar + grid + pagination)",
         "description": null,
-        "jsx": "<Table\n  title=\"All members\"\n  description=\"Everyone with access to this workspace.\"\n  actions={<><Button appearance=\"subtle\">Export</Button><Button appearance=\"primary\">Invite member</Button></>}\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={filtered}\n  searchable\n  searchValue={search}\n  onSearchChange={setSearch}\n  filters={<Select aria-label=\"Role\" placeholder=\"Role\" inputType=\"multi\" options={roleOptions} value={role} onChange={setRole} />}\n  onClearFilters={() => { setSearch(''); setRole([]); }}\n  activeFilters={role.map((r) => ({ id: r, label: r, onRemove: () => setRole((p) => p.filter((x) => x !== r)) }))}\n  selectable\n  pageSize={10}\n/>",
+        "jsx": "<Table\n  title=\"All members\"\n  description=\"Everyone with access to this workspace.\"\n  actions={<Button prominence=\"primary\">Invite member</Button>}\n  getRowId={(m) => m.id}\n  columns={columns}\n  data={filtered}\n  searchable\n  searchValue={search}\n  onSearchChange={setSearch}\n  toolbarActions={<IconButton appearance=\"subtle\" aria-label=\"Filter\"><FilterIcon /></IconButton>}\n  activeFilters={role ? (\n    <ChipGroup aria-label=\"Active filters\">\n      <Chip mode=\"filter\" label=\"Role\" value={{ label: role, sections: roleSections }} onRemove={() => setRole(null)} />\n    </ChipGroup>\n  ) : undefined}\n  onClearFilters={role ? () => setRole(null) : undefined}\n  selectable\n  getSelectionLabel={(m) => `Select ${m.name}`}\n  pageSize={10}\n/>",
         "props": {
           "searchable": true,
           "selectable": true,
@@ -3314,6 +3353,12 @@
         "props": {
           "loading": true
         }
+      },
+      {
+        "name": "Empty, with an Empty State that says why",
+        "description": null,
+        "jsx": "<Table\n  caption=\"Matters\"\n  columns={columns}\n  data={[]}\n  empty={\n    <EmptyState heading=\"No matters match\" headingLevel={3} actions={<Button onClick={clearFilters}>Clear filters</Button>}>\n      Try another name, or remove a filter.\n    </EmptyState>\n  }\n/>",
+        "props": {}
       }
     ],
     "antiExamples": [
@@ -3330,12 +3375,17 @@
       {
         "name": "Baking domain filters into the table",
         "jsx": "<Table columns={columns} data={rows} statusFilter typeFilter /* invented props */ />",
-        "reason": "Table does not know your filter domain. Render your Selects in the `filters` slot and drive `data` + `activeFilters` from your own state."
+        "reason": "Table does not know your filter domain. Pass your filter Icon Buttons through `toolbarActions`, render the applied filters as Chips in a named Chip Group through `activeFilters`, and filter `data` from your own state."
       },
       {
         "name": "A data table for a card grid",
         "jsx": "<Table columns={oneColumn} data={cards} render={(c) => <Card {...c} />} />",
         "reason": "A dashboard of cards is a layout grid, not tabular data - use layout primitives, not <table> semantics."
+      },
+      {
+        "name": "Filter Chips without a named Chip Group",
+        "jsx": "<Table columns={columns} data={rows} activeFilters={<>{filterChips}</>} />",
+        "reason": "Table lays out activeFilters but does not wrap them in a group. Pass a Chip Group named with aria-label (\"Active filters\"), so the filters are announced as one set and focus stays in the group when a chip is removed."
       }
     ],
     "exemplarCompleteness": "full"

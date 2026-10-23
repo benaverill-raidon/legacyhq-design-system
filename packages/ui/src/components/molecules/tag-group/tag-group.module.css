@@ -4,3 +4,19 @@
   align-items: center;
   gap: var(--spacing-sm);
 }
+
+/*
+ * When its last tag is removed, focus falls back to the group itself (primitives/focus-after-removal).
+ * Empty, it has no height (and no width in a row), so its focus ring would barely show. While empty
+ * and focused it takes the size of a tag: sm, the group's default, or md. Only while focused, so an
+ * empty group at rest still takes no space.
+ */
+.root:empty:focus {
+  min-block-size: var(--size-control-xs);
+  min-inline-size: var(--size-control-xs);
+}
+
+.root[data-size='md']:empty:focus {
+  min-block-size: var(--size-control-sm);
+  min-inline-size: var(--size-control-sm);
+}

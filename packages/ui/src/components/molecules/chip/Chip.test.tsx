@@ -191,6 +191,30 @@ describe('Chip', () => {
       expect(screen.getByRole('tooltip')).toHaveTextContent('Remove');
     });
 
+    it('takes the tooltip text from removeTooltipLabel, for translation', () => {
+      render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} removeTooltipLabel="Supprimer" />);
+
+      hover(screen.getByRole('button', { name: 'Remove Trusts' }));
+
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Supprimer');
+    });
+
+    it('takes removeTooltipLabel on a filter chip too', () => {
+      render(
+        <Chip
+          mode="filter"
+          label="Status"
+          value={{ label: 'Open', sections: [] }}
+          onRemove={vi.fn()}
+          removeTooltipLabel="Supprimer"
+        />,
+      );
+
+      hover(screen.getByRole('button', { name: 'Remove Status' }));
+
+      expect(screen.getByRole('tooltip')).toHaveTextContent('Supprimer');
+    });
+
     it('does not show the tooltip while disabled', () => {
       // "Remove" on a chip that cannot be removed is misleading rather than explanatory.
       render(<Chip mode="select" label="Trusts" onRemove={vi.fn()} disabled />);

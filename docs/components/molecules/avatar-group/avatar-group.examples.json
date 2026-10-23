@@ -14,6 +14,12 @@
       "props": { "maxVisible": 5 }
     },
     {
+      "name": "Translating the overflow button's name",
+      "description": "The overflow button is named for what it reveals, \"+4 more people\" by default. Translate it with getOverflowButtonLabel, starting with the button's visible text.",
+      "jsx": "<AvatarGroup\n  avatars={nineTeamMembers}\n  maxVisible={5}\n  getOverflowButtonLabel={(count) => t('people.showMore', { count })}\n/>",
+      "props": { "maxVisible": 5 }
+    },
+    {
       "name": "Smaller size for a dense row",
       "description": "size applies uniformly to every avatar, including the overflow trigger.",
       "jsx": "<AvatarGroup avatars={teamMembers} maxVisible={4} size=\"sm\" />",

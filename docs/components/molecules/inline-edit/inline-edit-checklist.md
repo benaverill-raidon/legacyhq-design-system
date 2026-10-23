@@ -86,7 +86,10 @@ Not Required:
 
 ### Does it need a label?
 No label of its own - Inline Edit is a transparent wrapper. Any labelling belongs to the cloned
-child (e.g. `TextField`'s own `aria-label`).
+child (e.g. `TextField`'s own `aria-label`), or comes from a Field around Inline Edit: Inline Edit
+passes Field's `id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`, and inline
+`context` on to the child, filling in what the child leaves unset. With `validate`, its message
+shows under the field and Field's below Inline Edit; the child reads both.
 
 ### Are the action buttons labelled?
 Yes, always - via `confirmLabel`/`cancelLabel` props (default `'Confirm'`/`'Cancel'`), passed as

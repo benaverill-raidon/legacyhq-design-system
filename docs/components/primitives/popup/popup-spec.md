@@ -34,6 +34,8 @@ interface PopupProps {
   closeOnOutsideClick?: boolean;
   id?: string;
   role?: React.AriaRole;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
   className?: string;
   unstyled?: boolean;
   padding?: PopupPadding;
@@ -82,9 +84,13 @@ What Popup does own, once `open` becomes true:
   outside both the trigger and the panel (`closeOnOutsideClick`, default `true`).
 - Escape goes to the topmost open layer only. Every open Popup registers as a layer
   (`useLayer` in `primitives/layers.ts`, shared with Modal Dialog), even with `closeOnEscape`
-  off, and acts on Escape only when it's the most recently opened layer still open; claiming the
-  key calls `preventDefault()`, and an Escape that content inside already handled that way isn't
-  claimed. So a menu or tooltip opened inside a dialog, or inside another Popup, closes first.
+  off, and acts on Escape only when it's the topmost layer still open; claiming the key calls
+  `preventDefault()`, and an Escape that content inside already handled that way isn't claimed.
+  Popup and Modal Dialog provide their layer to what they show (`LayerContext`), so a layer opened
+  from inside another is always above it, whichever registered first: React runs a child's effects
+  before its parent's, so a dialog and the menu inside it that mount already open in the same
+  render register the menu first. Otherwise layers order by when they open. So a menu or tooltip
+  opened inside a dialog, or inside another Popup, closes first.
 - Reading the trigger child's own ref from `child.props.ref` (React 19 passes `ref` as a prop;
   `element.ref` is deprecated and warns in development), merged with Popup's measurement ref.
 
@@ -132,6 +138,10 @@ mounted.
   to `false` in that case rather than shipping a second, conflicting ARIA relationship.
 - Does not set a `role` on the panel by default - `role` is an optional prop the consumer supplies
   once it knows what it's building (`menu`, `dialog`, `status`, `tooltip`, ...).
+- `aria-label` and `aria-labelledby` are set on the panel, never the trigger. A role that needs a
+  name (`dialog`, `menu`) gets `aria-labelledby` pointing at a visible heading in the content when
+  there is one, so what people see and hear match, and `aria-label` otherwise. A `tooltip` is named
+  by its text and needs neither.
 - Does not manage focus. Moving focus into the panel on open, or returning it to the trigger on
   close, is left to the consumer - a generic primitive can't assume the right focus target for
   every future use case (a menu wants its first item focused; an inline confirmation might not want
@@ -208,7 +218,10 @@ no exit animation: the panel is removed as soon as `open` is false. Under
 The panel's `z-index` is set inline from `LAYERS.popup` (1200) in `primitives/layers.ts`, the one
 place the overlay stacking order lives: Modal Dialog (`LAYERS.dialog`, 1000), then Toast Group
 (`LAYERS.toast`, 1100), then Popup. So a Popup opened inside a Modal Dialog or over the toast stack
-renders above it. z-index isn't a design token (it has no Figma counterpart or theme).
+renders above it. A Popup adds its layer depth (`layer.depth` from `useLayer`: how many dialogs and
+popups it's inside), so one opened from another Popup's content paints above it even when both
+mount open in the same render, when the outer panel's portal lands later in the DOM. z-index isn't
+a design token (it has no Figma counterpart or theme).
 
 Content items inside the panel get `--spacing-xs` (4px) of gap when there's more than one, matching
 the Figma component's own inner `itemSpacing`.

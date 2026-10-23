@@ -2,12 +2,6 @@
   "name": "ProgressBar",
   "category": "feedback",
   "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "bug",
-      "summary": "Its page says it renders `role=\"progressbar\"`, but a `role` you pass replaces it."
-    }
-  ],
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
   "figmaSource": {
@@ -169,6 +163,7 @@
   "behaviorRules": [
     "Clamp rendered and announced value to 0\u2013100.",
     "Support arbitrary numeric values.",
+    "The root is always role=progressbar: role is omitted from the props, and set after the spread so a passed role can't replace it.",
     "Do not add indeterminate behavior.",
     "Value changes ease with the fade-quick recipe (linear inline size; circular dash offset and dash array), never a spring; no transition under prefers-reduced-motion: reduce. At value 0 the circular progress arc is hidden, so reaching or leaving 0 shows or hides the arc at once; the track ring stays.",
     "Linear width is controlled by the parent.",

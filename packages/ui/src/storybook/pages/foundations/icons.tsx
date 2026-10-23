@@ -226,7 +226,7 @@ function Size() {
       <p className={doc.body}>
         Use <Code>md</Code>, {md?.px}px. It’s the default, and the size in every component at every control size. <Code>sm</Code>,{' '}
         {sm?.px}px, is for dense marks beside small text. {inWords(smComponents.length + 1).replace(/^\w/, (c) => c.toUpperCase())}{' '}
-        components use it: Inline Edit’s error message, Menu’s clear-search button, Table’s sort arrows, and Link’s external-link icon at the <Code>sm</Code>{' '}
+        components use it: Field’s status icon, Inline Edit’s error message, Menu’s clear-search button, Table’s sort arrows, and Link’s external-link icon at the <Code>sm</Code>{' '}
         link size.
       </p>
       <table className={doc.table}>

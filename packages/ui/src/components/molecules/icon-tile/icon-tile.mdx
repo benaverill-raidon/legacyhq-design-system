@@ -165,7 +165,7 @@ set works as it is: the tile overrides its own size and color.
   </IconTile>
 </Do>
 <Dont
-  caption="Set decorative={false} without ariaLabel. The tile becomes an image with no name."
+  caption="Set decorative={false} without ariaLabel. The tile becomes an image with no name, and warns in development."
   code={`<IconTile tone="red" appearance="bold" decorative={false}>
     <CloseIcon />
 </IconTile>`}
@@ -186,8 +186,9 @@ set works as it is: the tile overrides its own size and color.
   handler, so there's nothing to operate with the keyboard.
 - By default it's decorative: the root is `aria-hidden="true"` with no role, so assistive technology
   skips it and the text beside it carries the meaning.
-- With `decorative={false}`, the root gets `role="img"` and `aria-label` from `ariaLabel`. Icon Tile
-  doesn't check that `ariaLabel` is set, so a tile without it is an image with no name.
+- With `decorative={false}`, the root gets `role="img"` and `aria-label` from `ariaLabel`. Without
+  `ariaLabel` it's an image with no name, and Icon Tile warns in the console during development
+  (not in production builds).
 - The tone's color doesn't carry meaning on its own: pair the tile with text, or name it.
 
 <Example of={IconTileStories.Composition} caption="Decorative tiles beside a feature list and an empty state's heading, and one tile named on its own." />

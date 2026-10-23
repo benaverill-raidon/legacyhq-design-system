@@ -1,7 +1,13 @@
 {
   "name": "DatePicker",
   "category": "forms",
-  "status": "stable",
+  "status": "beta",
+  "knownIssues": [
+    {
+      "kind": "gap",
+      "summary": "It doesn't pass its calendar's previousMonthLabel, nextMonthLabel, previousYearLabel, and nextYearLabel through, so they stay English here and in Date Time Picker (built-in-labels)."
+    }
+  ],
   "purpose": "Enter a single date via a field that opens a calendar popup.",
   "intent": "A read-only date field (Text Field trigger) that opens the Date Picker Calendar in a Popup.",
   "figmaSource": {

@@ -169,6 +169,25 @@ Not applicable - Inline Edit has no text content of its own.
 | confirmLabel | string | No | `'Confirm'` |
 | cancelLabel | string | No | `'Cancel'` |
 | className | string | No | undefined |
+| id | string | No | undefined |
+| aria-labelledby | string | No | undefined |
+| aria-describedby | string | No | undefined |
+| aria-invalid | `boolean \| 'true' \| 'false'` | No | undefined |
+| required | boolean | No | undefined |
+| context | `'default' \| 'inline'` | No | undefined |
+
+`id`, `aria-labelledby`, `aria-describedby`, `aria-invalid`, `required`, and `context` are the
+wiring a Field around Inline Edit sets on it (it also passes `data-force-state` for Storybook's
+state previews). Inline Edit passes them on to the child in both modes, filling in only what the
+child leaves unset, as Field does: the child's own values win, a child with its own `aria-label`
+keeps Field's `aria-labelledby` off, and descriptions add up - the child's own, then Field's
+message, then `validate`'s message while it shows. `context` is passed only when it's `inline` and
+the child sets no `context` (or deprecated `appearance` / `tone`).
+
+`validate`'s message and Field's message both show: `validate`'s under the field, inside Inline
+Edit, while it rejects the draft; Field's below Inline Edit as always. One is about the draft, the
+other is help or an error about the saved value, so neither replaces the other. The child stays
+`aria-invalid` while either says so.
 
 `confirmLabel`/`cancelLabel` are the accessible names (`aria-label`) for the internal confirm/cancel
 `IconButton`s - exposed as props (rather than requiring the consumer to reach into internals) since

@@ -4,6 +4,7 @@ import { type ComponentProps, useState } from 'react';
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Field } from '../field';
 import { TextField } from '../text-field';
 import { InlineEdit } from './inline-edit';
 import styles from './inline-edit.module.css';
@@ -617,5 +618,125 @@ describe('InlineEdit validate', () => {
     expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*color: var\(--color-content-error\);/);
     expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*font-size: var\(--typography-body-sm-font-size\);/);
     expect(inlineEditCss).toMatch(/\.message\s*\{[^}]*padding-top: var\(--spacing-xs\);/);
+  });
+});
+
+describe('InlineEdit in a Field', () => {
+  const requireName = (value: string) => (value.trim() ? undefined : 'Enter a matter name.');
+
+  function renderInField(fieldProps: Partial<ComponentProps<typeof Field>> = {}, editProps: Partial<ComponentProps<typeof InlineEdit>> = {}) {
+    const onConfirm = vi.fn();
+    const utils = render(
+      <Field label="Matter name" message="Shown on every document." {...fieldProps}>
+        <InlineEdit value="Lee Living Trust" onConfirm={onConfirm} {...editProps}>
+          <TextField context="inline" />
+        </InlineEdit>
+      </Field>,
+    );
+    return { ...utils, onConfirm, field: () => screen.getByRole('textbox') };
+  }
+
+  it("names the control with Field's label and describes it with Field's message, read-only and editing", () => {
+    const { field } = renderInField();
+
+    expect(field()).toHaveAccessibleName('Matter name');
+    expect(field()).toHaveAccessibleDescription('Shown on every document.');
+    // The label's htmlFor reaches the input, so clicking the label focuses it.
+    const label = screen.getByText('Matter name').closest('label') as HTMLLabelElement;
+    expect(label.htmlFor).toBe(field().id);
+
+    fireEvent.focus(field());
+    expect(field()).not.toHaveAttribute('readOnly');
+    expect(field()).toHaveAccessibleName('Matter name');
+    expect(field()).toHaveAccessibleDescription('Shown on every document.');
+  });
+
+  it("passes Field's required and error on to the control", () => {
+    const { field } = renderInField({ required: true, state: 'error', message: 'This name is taken.' });
+
+    expect(field()).toBeRequired();
+    expect(field()).toHaveAttribute('aria-invalid', 'true');
+    expect(field()).toHaveAccessibleDescription('This name is taken.');
+  });
+
+  it("passes Field's inline context to a child that sets none, and the child's own context wins", () => {
+    const { container, rerender } = render(
+      <Field label="Matter name" context="inline">
+        <InlineEdit value="Lee Living Trust">
+          <TextField />
+        </InlineEdit>
+      </Field>,
+    );
+    const frame = () => container.querySelector('input')?.parentElement as HTMLElement;
+    expect(frame().className).toMatch(/context_inline/);
+
+    rerender(
+      <Field label="Matter name" context="inline">
+        <InlineEdit value="Lee Living Trust">
+          <TextField context="default" />
+        </InlineEdit>
+      </Field>,
+    );
+    expect(frame().className).not.toMatch(/context_inline/);
+  });
+
+  it("keeps the child's own name and description first, adding Field's message after them", () => {
+    render(
+      <>
+        <p id="own-hint">Own hint.</p>
+        <Field label="Matter name" message="Field message.">
+          <InlineEdit value="Lee Living Trust">
+            <TextField context="inline" aria-label="Own name" aria-describedby="own-hint" />
+          </InlineEdit>
+        </Field>
+      </>,
+    );
+    const field = screen.getByRole('textbox');
+
+    expect(field).toHaveAccessibleName('Own name');
+    expect(field).toHaveAccessibleDescription('Own hint. Field message.');
+  });
+
+  it("shows validate's message under the control and Field's message below, and the control reads both", () => {
+    const { field, onConfirm } = renderInField({}, { validate: requireName });
+
+    fireEvent.focus(field());
+    fireEvent.change(field(), { target: { value: '  ' } });
+    fireEvent.keyDown(field(), { key: 'Enter' });
+
+    expect(onConfirm).not.toHaveBeenCalled();
+    expect(field()).toHaveAttribute('aria-invalid', 'true');
+    expect(field()).toHaveAccessibleDescription('Shown on every document. Enter a matter name.');
+    const validateMessage = screen.getByText('Enter a matter name.');
+    const fieldMessage = screen.getByText('Shown on every document.');
+    expect(validateMessage.compareDocumentPosition(fieldMessage) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+
+    fireEvent.change(field(), { target: { value: 'Lee Family Trust' } });
+    expect(field()).not.toHaveAttribute('aria-invalid');
+    expect(field()).toHaveAccessibleDescription('Shown on every document.');
+  });
+
+  it("keeps Field's error on the control after validate's clears", () => {
+    const { field } = renderInField({ state: 'error', message: 'This name is taken.' }, { validate: requireName });
+
+    fireEvent.focus(field());
+    fireEvent.change(field(), { target: { value: '  ' } });
+    fireEvent.keyDown(field(), { key: 'Enter' });
+    fireEvent.change(field(), { target: { value: 'Lee Family Trust' } });
+
+    expect(field()).toHaveAttribute('aria-invalid', 'true');
+  });
+});
+
+describe('InlineEdit Docs page', () => {
+  it('puts every Key Value Pair inside a Key Value List, so the dt and dd are in a dl', () => {
+    const mdx = readFileSync('packages/ui/src/components/molecules/inline-edit/inline-edit.mdx', 'utf8');
+    const pairs = [...mdx.matchAll(/<KeyValuePair[\s>]/g)];
+
+    expect(pairs.length).toBeGreaterThan(0);
+    for (const pair of pairs) {
+      const before = mdx.slice(0, pair.index);
+      expect(before.lastIndexOf('<KeyValueList')).toBeGreaterThan(before.lastIndexOf('</KeyValueList>'));
+    }
   });
 });

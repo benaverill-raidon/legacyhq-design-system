@@ -24,6 +24,12 @@
       "description": "Date constraints go to the calendar; minuteStep to the time selector.",
       "jsx": "<DateTimePicker min={new Date(2026, 2, 1)} max={new Date(2026, 2, 31)} minuteStep={15} aria-label='When' />",
       "props": { "minuteStep": 15 }
+    },
+    {
+      "name": "Translated",
+      "description": "dateLabel and timeLabel name the halves; each half's built-in text passes through (dateDialogLabel, timeDialogLabel, and Time Picker's own label props); locale sets the month and weekday names.",
+      "jsx": "<Field label=\"Audiencia\">\n  <DateTimePicker\n    locale=\"es\"\n    dateLabel=\"Fecha\"\n    timeLabel=\"Hora\"\n    dateDialogLabel=\"Elegir una fecha\"\n    timeDialogLabel=\"Elegir una hora\"\n    confirmLabel=\"Confirmar\"\n    cancelLabel=\"Cancelar\"\n    hoursLabel=\"Horas\"\n    minutesLabel=\"Minutos\"\n    meridiemLabel=\"a. m./p. m.\"\n    amLabel=\"a. m.\"\n    pmLabel=\"p. m.\"\n  />\n</Field>",
+      "props": { "locale": "es" }
     }
   ],
   "antiExamples": [

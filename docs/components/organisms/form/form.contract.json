@@ -1,13 +1,7 @@
 {
   "name": "Form",
   "category": "forms",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "The required legend (\"indicates a required field\") is hard-coded English (built-in-labels)."
-    }
-  ],
+  "status": "stable",
   "purpose": "Lay out a set of fields the user fills in and submits together - a native <form> with a header, grouped/rowed fields, and a footer of actions.",
   "intent": "Be a thin layout organism, not a form-state manager. Figma's Form is pure layout + slots, and this system already puts labelling/description/validation on Field and native behaviour on the control - so Form renders a real <form> (native submission + validation for free), an optional header, and the section/row/footer spacing, and owns no form state. Composes molecules (Field and its controls) into a complete UI section, so it lives at the organism tier.",
   "nativeElement": "form",
@@ -68,6 +62,7 @@
     "title": { "type": "React.ReactNode", "required": false, "default": null, "description": "Header title (heading/lg). Presentational text - not a semantic heading." },
     "description": { "type": "React.ReactNode", "required": false, "default": null, "description": "Supporting text under the title (body/md)." },
     "requiredLegend": { "type": "boolean", "required": false, "default": false, "description": "Renders the '* indicates a required field' legend, with the '*' in the error colour." },
+    "requiredLegendLabel": { "type": "string", "required": false, "default": "indicates a required field", "description": "The legend's text after the '*', shown with requiredLegend. Pass a translation (built-in-labels); the '*' mark stays as it is." },
     "children": { "type": "React.ReactNode", "required": false, "default": null, "description": "The form body: FormSection / FormRow groups and a FormFooter." },
     "headerClassName": { "type": "string", "required": false, "default": null, "description": "Composes with the header's class list." },
     "className": { "type": "string", "required": false, "default": null, "description": "Composes with the form element's class list." },
@@ -151,7 +146,7 @@
   "behaviorRules": [
     "Render a native <form>; forward ref and native form attributes (onSubmit, name, noValidate, ...).",
     "Render the header only when title, description, or requiredLegend is set.",
-    "requiredLegend renders '* indicates a required field' with the '*' in --color-content-error.",
+    "requiredLegend renders '* ' plus requiredLegendLabel ('indicates a required field' by default) with the '*' in --color-content-error.",
     "Spacing lives on the blocks (section padding-top 3xl, footer padding-top 4xl); the <form> has gap 0.",
     "FormSection adds --spacing-3xl top spacing and spaces its children by --spacing-lg; title optional.",
     "FormRow lays its children out as equal-width columns (flex:1 1 0), gap --spacing-lg.",

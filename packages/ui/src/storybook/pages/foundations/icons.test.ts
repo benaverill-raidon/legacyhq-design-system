@@ -99,6 +99,9 @@ describe('icon usage', () => {
 
   it('cites the components that use sm', () => {
     expect(fixedSizes(componentTsx, 'sm')).toEqual([
+      // Field picks its status icon from a lookup: `<status.Icon size="sm" />`.
+      { component: 'Field', icon: 'StatusErrorIcon' },
+      { component: 'Field', icon: 'StatusSuccessIcon' },
       { component: 'Inline Edit', icon: 'StatusErrorIcon' },
       { component: 'Menu', icon: 'CloseIcon' },
       { component: 'Table', icon: 'ArrowUpIcon' },

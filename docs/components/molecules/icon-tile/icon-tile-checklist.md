@@ -101,7 +101,8 @@ Default: no - `aria-hidden`, assumed decorative alongside labeled text.
 When the tile is the only carrier of meaning: `decorative={false}` + `ariaLabel`.
 
 ### Is aria-label needed?
-Optional, only meaningful when `decorative={false}`.
+Optional, only meaningful when `decorative={false}`, where it's required: a tile with
+`decorative={false}` and no `ariaLabel` warns in development.
 
 ---
 

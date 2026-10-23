@@ -32,7 +32,10 @@ export interface IconTileProps {
   size?: IconTileSize;
   /** Hides the tile from assistive technology, for a tile beside text that already says what it means. Set it to `false`, with `ariaLabel`, when the tile carries meaning on its own. */
   decorative?: boolean;
-  /** The accessible name of a tile that isn't decorative. Ignored while `decorative` is `true`. */
+  /**
+   * The accessible name of a tile that isn't decorative. Ignored while `decorative` is `true`. A tile
+   * with `decorative={false}` and no `ariaLabel` warns in development: it would be an unnamed image.
+   */
   ariaLabel?: string;
   /** Added to the root element's classes. */
   className?: string;

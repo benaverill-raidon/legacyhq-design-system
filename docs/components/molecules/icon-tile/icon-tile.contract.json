@@ -4,8 +4,8 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "bug",
-      "summary": "With `decorative={false}` and no label it has no accessible name, and no warning says so."
+      "kind": "gap",
+      "summary": "Takes camelCase `ariaLabel`, where Badge, Breadcrumbs, and Pagination moved to `aria-label` (kept as an alias)."
     }
   ],
   "purpose": "Pair a single icon with a colored, sized background shape for use cases that need greater visual emphasis.",
@@ -118,7 +118,7 @@
       "type": "string",
       "required": false,
       "default": null,
-      "description": "Accessible label used only when decorative is false."
+      "description": "Accessible label used only when decorative is false. With decorative=false and no ariaLabel, the tile warns in development (skipped when import.meta.env.PROD)."
     },
     "className": {
       "type": "string",
@@ -216,6 +216,7 @@
       "Do not add button behavior.",
       "Do not add keyboard interaction.",
       "Use decorative=false with ariaLabel only when no adjacent text already conveys the same meaning.",
+      "decorative=false without ariaLabel warns in development (console.warn, skipped when import.meta.env.PROD), as Icon Button does for a missing name.",
       "Ensure color contrast meets requirements for all tone/appearance combinations."
     ]
   },
@@ -274,6 +275,7 @@
     "Applies data-tone, data-appearance, data-shape, and data-size for the selected values.",
     "decorative=true (default) renders aria-hidden with no role.",
     "decorative=false renders role=img with aria-label from ariaLabel.",
+    "decorative=false without ariaLabel warns in development.",
     "Supports className.",
     "Uses tokenized sizing, radius, and colors for every tone/appearance/shape/size combination.",
     "Icon inherits tile color and fills the computed icon-size box regardless of the icon's own defaults.",

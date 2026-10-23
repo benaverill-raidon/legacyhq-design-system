@@ -152,7 +152,9 @@ When a tag is removed while someone is using it, from the keyboard or with a cli
 the group instead of falling to the page. It moves to the tag that takes the removed one's place
 (a hidden tag moving up, or the overflow tag), or to the one before it if the removed tag was last,
 landing on the control in the same place (from one remove button to the next). Once no tags are
-left, focus moves to the group itself. If your `onRemove` moves focus somewhere itself, or the page
+left, focus moves to the group itself, which then grows to the size of a tag so its focus ring
+shows; name removable groups with `aria-label` or `aria-labelledby`, so it's announced. If your
+`onRemove` moves focus somewhere itself, or the page
 removes the whole group, Tag Group leaves focus alone; then move it to a stable element, as in
 Patterns / Collections.
 
@@ -202,8 +204,9 @@ Patterns / Collections.
 
 <Section title="Accessibility">
 
-- The root is a `div` with no role or name, and Tag Group adds nothing to the visible tags: each is a
-  Tag, with its own link and remove button.
+- The root is a `div`. Named with `aria-label` or `aria-labelledby`, it's a `role="group"` with that
+  name; unnamed, it has no role, so it adds no boundary to step through. Tag Group adds nothing to
+  the visible tags: each is a Tag, with its own link and remove button.
 - The overflow tag is a native `button`. Its visible text, `+5 more` by default, is its accessible
   name. It gets `aria-haspopup="menu"`, `aria-expanded`, and `aria-controls` from Dropdown Menu.
 - The menu has `role="menu"` and is named by `overflowMenuAriaLabel`, “5 more tags” by default.
@@ -213,8 +216,9 @@ Patterns / Collections.
   menu closes it and returns focus to the overflow tag.
 - When a tag is removed while it holds focus (or was just pressed), focus moves to the next tag, the
   previous one if it was last, or the group root, which takes `tabindex="-1"` and shows the focus
-  ring, once none are left. The root has no name, so it's announced only by what's around it. Focus
-  is never dropped to the page.
+  ring, once none are left. While empty and focused, the root is the size of a tag, so the ring has
+  something to go around. Name a group of removable tags, so the root is announced by its name when
+  focus lands there. Focus is never dropped to the page.
 - Focus shows the shared Focus Ring on each link, remove button, and the overflow tag.
 
 <Keyboard>

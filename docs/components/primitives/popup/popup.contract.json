@@ -1,16 +1,7 @@
 {
   "name": "Popup",
   "category": "overlays",
-  "status": "beta",
-  "knownIssues": [
-    {
-      "kind": "gap",
-      "summary": "No `aria-label` prop."
-    },
-    {
-      "kind": "bug",
-      "summary": "Layers order by when they open, so a popup and a dialog that mount already open in the same render stack with the popup under the dialog."
-    }  ],
+  "status": "stable",
   "purpose": "Anchor a floating, dismissible panel of arbitrary content to a trigger element.",
   "intent": "Give components that need a positioned, dismissible floating panel (Tooltip, Inline Message, Dropdown Menu, ...) a shared primitive instead of each hand-rolling their own viewport-aware positioning and Escape/outside-click handling.",
   "sourceFiles": {
@@ -124,6 +115,18 @@
       "default": null,
       "description": "ARIA role for the panel. No default - depends on what the consumer is building."
     },
+    "aria-label": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "Names the panel (set on the panel, not the trigger), for a role that needs a name such as dialog or menu when nothing visible in the content names it. When a heading in the content does, use aria-labelledby instead. A tooltip needs neither."
+    },
+    "aria-labelledby": {
+      "type": "string",
+      "required": false,
+      "default": null,
+      "description": "The id of the element in the content that names the panel, such as its heading. Set on the panel. Preferred to aria-label when the name is visible."
+    },
     "className": {
       "type": "string",
       "required": false,
@@ -214,11 +217,12 @@
       "aria-controls points at the panel id only while open, by default.",
       "manageTriggerAria=false skips both attributes entirely, for consumers with their own trigger ARIA relationship (e.g. aria-describedby).",
       "No default role is added to the panel - the consumer supplies one appropriate to its content.",
+      "aria-label and aria-labelledby land on the panel, never the trigger: a panel whose role needs a name (dialog, menu) is named with aria-labelledby pointing at a visible heading in its content, or aria-label when there is none.",
       "Popup does not make the trigger focusable or change its semantics beyond the two aria attributes above."
     ]
   },
   "keyboardInteraction": [
-    "Escape calls onOpenChange(false) when closeOnEscape is true (default) and this Popup is the topmost open layer (popup or Modal Dialog); a menu or tooltip inside a dialog closes before the dialog.",
+    "Escape calls onOpenChange(false) when closeOnEscape is true (default) and this Popup is the topmost open layer (popup or Modal Dialog); a menu or tooltip inside a dialog closes before the dialog, even when both mount already open in the same render.",
     "No other keyboard behavior is owned by Popup - content-specific navigation (e.g. arrow keys in a menu) belongs to the consumer."
   ],
   "behaviorRules": [
@@ -228,8 +232,8 @@
     "Positions via a portal at document.body with position: fixed, recalculating on trigger/panel resize, window resize, and scroll.",
     "Tries the preferred alignment first, then the same alignment on the opposite side, then the remaining four, and resolves to whichever overflows the viewport least, exposed via data-alignment.",
     "Escape (document keydown) and outside pointer press (document pointerdown, capture phase) both gate on their respective closeOn* prop before calling onOpenChange.",
-    "Every open Popup is a layer (useLayer in primitives/layers.ts, shared with Modal Dialog), even with closeOnEscape off. Escape is acted on only by the topmost open layer, once per key press: claiming it calls preventDefault(), and an Escape already handled with preventDefault() inside is left alone.",
-    "The panel's z-index is LAYERS.popup from primitives/layers.ts, set inline, above Modal Dialog (LAYERS.dialog) and Toast Group (LAYERS.toast), so a Popup opened from inside a dialog or a toast shows over it. z-index is not a design token.",
+    "Every open Popup is a layer (useLayer in primitives/layers.ts, shared with Modal Dialog), even with closeOnEscape off. Escape is acted on only by the topmost open layer, once per key press: claiming it calls preventDefault(), and an Escape already handled with preventDefault() inside is left alone. Popup provides its layer to its content (LayerContext), as Modal Dialog does, so a layer opened from inside another is always above it, whichever registered first; otherwise layers order by when they open.",
+    "The panel's z-index is LAYERS.popup from primitives/layers.ts, set inline, above Modal Dialog (LAYERS.dialog) and Toast Group (LAYERS.toast), so a Popup opened from inside a dialog or a toast shows over it. A Popup adds its layer depth (how many dialogs and popups it's inside) to that value, so one opened from another Popup's content paints above it even when both mount open in the same render and the outer panel's portal lands later in the DOM. z-index is not a design token.",
     "The trigger child's own ref is read from child.props.ref (React 19), not the deprecated element.ref, and merged with Popup's measurement ref.",
     "A pointer press inside the panel or on the trigger itself never triggers outside-click dismissal.",
     "Renders nothing but the cloned trigger when open is false - no empty portal node stays mounted.",

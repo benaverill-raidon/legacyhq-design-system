@@ -46,8 +46,8 @@ export interface SliderBaseProps {
    */
   steps?: number[];
   /**
-   * Keeps the value bubble above the handle showing, and makes room for it between the label and
-   * the track. Without it, the bubble shows on hover, focus, and drag, over whatever is above.
+   * Keeps the value bubble above the handle showing. Without it, the bubble shows on hover, focus,
+   * and drag. Either way a horizontal slider keeps room for it between the label and the track.
    */
   showValue?: boolean;
   /** Added to the root element's classes. */

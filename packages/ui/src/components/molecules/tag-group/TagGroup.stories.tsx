@@ -125,6 +125,7 @@ export const Removal: Story = {
       return (
         <div style={stack}>
           <TagGroup
+            aria-label="Linked records"
             tags={labels.map((label) => ({
               id: label,
               label,

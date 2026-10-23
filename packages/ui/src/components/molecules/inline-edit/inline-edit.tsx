@@ -4,7 +4,7 @@ import { useEditableCellSize } from '../../primitives/editable-cell-context';
 import { IconButton } from '../../atoms/icon-button';
 import { ButtonGroup } from '../button-group';
 import styles from './inline-edit.module.css';
-import type { InlineEditProps } from './inline-edit.types';
+import type { InlineEditableProps, InlineEditProps } from './inline-edit.types';
 
 function mergeClassNames(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(' ');
@@ -22,6 +22,13 @@ export const InlineEdit = React.memo(function InlineEdit({
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   className,
+  id,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
+  'aria-invalid': ariaInvalid,
+  required,
+  context,
+  'data-force-state': dataForceState,
 }: InlineEditProps) {
   const cellSize = useEditableCellSize();
   const [isEditing, setIsEditing] = React.useState(false);
@@ -152,7 +159,12 @@ export const InlineEdit = React.memo(function InlineEdit({
 
   // While read-only, the field may already have focus (after Enter or Escape), so focusing it again
   // can't start editing: a click or Enter does. The child's own handlers still run first.
-  const childProps = children.props;
+  const childProps = children.props as InlineEditableProps & {
+    'aria-label'?: string;
+    appearance?: unknown;
+    tone?: unknown;
+    'data-force-state'?: string;
+  };
   const handleReadOnlyClick = (event: React.MouseEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     childProps.onClick?.(event);
     if (!event.defaultPrevented) startEditing();
@@ -172,20 +184,36 @@ export const InlineEdit = React.memo(function InlineEdit({
   // While `validate` rejects the draft, the field is marked invalid and described by the message;
   // the child's own values win, and its own description keeps its place.
   const hasError = isEditing && error !== undefined;
+  // The wiring a Field around Inline Edit gives it (or a caller sets) goes on to the child, in both
+  // modes, the way Field fills it in: the child's own values win, and descriptions add up - the
+  // child's own, then Inline Edit's (Field's message), then validate's message while it shows.
+  const wiring = {
+    id: childProps.id ?? id,
+    // A name the child already has wins, as with Field: its own aria-label too.
+    'aria-labelledby': childProps['aria-labelledby'] ?? (childProps['aria-label'] ? undefined : ariaLabelledBy),
+    'aria-describedby':
+      [childProps['aria-describedby'], ariaDescribedBy, hasError ? errorId : undefined].filter(Boolean).join(' ') ||
+      undefined,
+    'aria-invalid': childProps['aria-invalid'] ?? ariaInvalid ?? (hasError ? true : undefined),
+    required: childProps.required ?? required,
+    'data-force-state': childProps['data-force-state'] ?? dataForceState,
+    ...(context === 'inline' &&
+    childProps.context === undefined &&
+    childProps.appearance === undefined &&
+    childProps.tone === undefined
+      ? { context }
+      : {}),
+  };
   const control = isEditing
     ? React.cloneElement(children, {
+        ...wiring,
         value: draft,
         onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => changeDraft(event.target.value),
         ...(cellSize ? { iconAfter: undefined } : {}),
-        ...(hasError
-          ? {
-              invalid: true,
-              'aria-invalid': childProps['aria-invalid'] ?? true,
-              'aria-describedby': [childProps['aria-describedby'], errorId].filter(Boolean).join(' '),
-            }
-          : {}),
+        ...(hasError ? { invalid: true } : {}),
       })
     : React.cloneElement(children, {
+        ...wiring,
         value,
         readOnly: true,
         onFocus: startEditing,

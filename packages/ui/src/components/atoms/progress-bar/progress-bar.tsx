@@ -132,7 +132,6 @@ export const ProgressBar = React.memo(
       getValueText,
       className,
       style,
-      role,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
       'aria-valuetext': ariaValueText,
@@ -160,7 +159,9 @@ export const ProgressBar = React.memo(
         {...rest}
         {...accessibleNameProps}
         ref={forwardedRef}
-        role={role ?? 'progressbar'}
+        // Always a progressbar: aria-valuenow and the rest need that role, and it's what the bar is.
+        // Set after the spread, so a role from a plain-JS caller can't replace it.
+        role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={clampedValue}

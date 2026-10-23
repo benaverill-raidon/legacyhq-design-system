@@ -14,6 +14,11 @@ function defaultOverflowLabel(hiddenCount: number) {
   return `+${hiddenCount}`;
 }
 
+// Starts with the default visible text, "+3", so speech-input users can say what they see.
+function defaultOverflowButtonLabel(hiddenCount: number) {
+  return `+${hiddenCount} more ${hiddenCount === 1 ? 'person' : 'people'}`;
+}
+
 function overflowItemLabel(avatar: AvatarGroupItem, unnamedLabel: string) {
   return avatar.name ?? avatar.alt ?? unnamedLabel;
 }
@@ -36,6 +41,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
   maxVisible,
   size = 'lg',
   overflowLabel = defaultOverflowLabel,
+  getOverflowButtonLabel = defaultOverflowButtonLabel,
   overflowMenuAriaLabel,
   unnamedLabel = 'Unnamed',
   onOverflowAvatarSelect,
@@ -98,6 +104,7 @@ export const AvatarGroup = React.memo(function AvatarGroup({
           size={size}
           prominence="tertiary"
           className={styles.overflowTrigger}
+          aria-label={getOverflowButtonLabel(hiddenAvatars.length)}
           onClick={() => setOverflowOpen((current) => !current)}
         >
           {overflowLabel(hiddenAvatars.length)}

@@ -1,12 +1,97 @@
 {
+  "component": "Link",
   "examples": [
     {
       "name": "Internal",
-      "jsx": "<Link href='/clients'>Clients</Link>"
+      "description": "A route in the app. Without a target, Link renders target=\"_self\".",
+      "jsx": "<Link href='/clients'>Clients</Link>",
+      "props": {
+        "href": "/clients",
+        "children": "Clients"
+      }
     },
     {
       "name": "External",
-      "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>"
+      "description": "target=\"_blank\" adds the external-link icon, the hidden \"(opens in a new tab)\" text, and noopener noreferrer in rel on its own.",
+      "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>",
+      "props": {
+        "href": "https://example.com",
+        "target": "_blank",
+        "children": "Documentation"
+      }
+    },
+    {
+      "name": "Inline in a sentence",
+      "description": "emphasis=\"default\" is the body weight for a link in running text; the text names the destination.",
+      "jsx": "<p>Review the <Link href=\"/clients/42\" emphasis=\"default\">client profile</Link> before you continue.</p>",
+      "props": {
+        "href": "/clients/42",
+        "emphasis": "default",
+        "children": "client profile"
+      }
+    },
+    {
+      "name": "Name in a table cell",
+      "description": "The default strong emphasis is a heading weight for a name or first-column identifier; size=\"sm\" sets heading-xxs for a dense table.",
+      "jsx": "<td><Link href=\"/clients/42\" size=\"sm\">Ben Averill</Link></td>",
+      "props": {
+        "href": "/clients/42",
+        "size": "sm",
+        "children": "Ben Averill"
+      }
+    },
+    {
+      "name": "Subtle",
+      "description": "appearance=\"subtle\" is the quieter content color, for a light surface where the brand color would be too loud.",
+      "jsx": "<Link href=\"/matters/17\" appearance=\"subtle\">Averill estate plan</Link>",
+      "props": {
+        "href": "/matters/17",
+        "appearance": "subtle",
+        "children": "Averill estate plan"
+      }
+    },
+    {
+      "name": "Inverse on a dark surface",
+      "description": "appearance=\"inverse\" is for a dark or bold surface only; on a light one it has almost no contrast.",
+      "jsx": "<Link href=\"/clients/42\" appearance=\"inverse\">Client profile</Link>",
+      "props": {
+        "href": "/clients/42",
+        "appearance": "inverse",
+        "children": "Client profile"
+      }
+    },
+    {
+      "name": "Translated new-tab text",
+      "description": "newTabLabel replaces the hidden text read after a new-tab link, for translation.",
+      "jsx": "<Link href=\"https://example.com\" target=\"_blank\" newTabLabel=\"(se abre en una pestaña nueva)\">Guía de presentación</Link>",
+      "props": {
+        "href": "https://example.com",
+        "target": "_blank",
+        "newTabLabel": "(se abre en una pestaña nueva)",
+        "children": "Guía de presentación"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "\"Click here\" link text",
+      "jsx": "<p>To review the client profile, <Link href=\"/clients/42\">click here</Link>.</p>",
+      "reason": "\"Click here\" says nothing about where the link goes when it's read out of context, as in a screen reader's list of links. Name the destination in the link text."
+    },
+    {
+      "name": "Adding your own new-tab icon and text",
+      "jsx": "<Link href=\"https://example.com\" target=\"_blank\">\n  Court filing guidelines (opens in a new tab) <LinkExternalIcon />\n</Link>",
+      "reason": "With target=\"_blank\", Link already adds the icon and hidden new-tab text, so yours shows twice and is read twice."
+    },
+    {
+      "name": "Link as a standalone call to action",
+      "jsx": "<Link href=\"/matters/new\">Start a new matter</Link>",
+      "reason": "On its own, a Link reads as text rather than a control. Use Link Button for a call to action that stands on its own: <LinkButton href=\"/matters/new\" appearance=\"primary\">Start a new matter</LinkButton>."
+    },
+    {
+      "name": "Link for an action",
+      "jsx": "<Link href=\"#\" onClick={() => saveMatter()}>Save</Link>",
+      "reason": "Link is for going somewhere. Saving, submitting a form, or opening a dialog is an action on this page: use Button."
     }
   ]
 }

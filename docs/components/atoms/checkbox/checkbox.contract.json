@@ -1,7 +1,7 @@
 {
   "name": "Checkbox",
   "category": "forms",
-  "status": "beta",
+  "status": "stable",
   "knownIssues": [],
   "knownLimitations": [
     "Wrapping a single Checkbox in Field replaces its own label as its name; give it its own errorMessage instead."
@@ -77,5 +77,16 @@
   "dont": [
     "Use for exclusive choices"
   ],
-  "acceptanceCriteria": []
+  "acceptanceCriteria": [
+    "Renders a native input[type=checkbox] inside a label - no role=checkbox recreation.",
+    "Space toggles the focused checkbox, and clicking the label toggles it.",
+    "Supports controlled (checked with onCheckedChange) and uncontrolled (defaultChecked) usage; onCheckedChange receives the next checked value and the change event.",
+    "indeterminate sets the native indeterminate and aria-checked=\"mixed\", and visually overrides checked.",
+    "invalid sets aria-invalid; errorMessage renders under the box outside the label, is added to aria-describedby after any existing description, and marks the checkbox invalid.",
+    "disabled and required are the native attributes; the required * is aria-hidden.",
+    "Visible focus uses the shared Focus Ring primitive.",
+    "CheckboxGroup renders a fieldset named by its legend, supports options and children, controlled and uncontrolled values, and its disabled reaches every checkbox inside it.",
+    "A required CheckboxGroup adds hidden requiredLabel text to its name.",
+    "No hardcoded colors, typography, radii, border widths, or spacing values."
+  ]
 }

@@ -83,6 +83,11 @@
       "name": "Expecting inline tags or formatting",
       "jsx": "<TextArea aria-label=\"Body\" defaultValue=\"Assigned to /Jordan\" />",
       "reason": "Text Area is plain text only - `/` is a literal character here. The inline entity-tagging mode (`type=rich-inline` in Figma) ships as RichTextArea; use that when the text needs to link to records."
+    },
+    {
+      "name": "Horizontal resizing in a form",
+      "jsx": "<TextArea rows={4} resize=\"both\" aria-label=\"Notes\" />",
+      "reason": "A horizontal drag can push the field past its column. Keep the default resize=\"vertical\", so people can make the field taller without changing its width."
     }
   ]
 }

@@ -138,15 +138,14 @@ inconsistent raw shapes into one consistent, machine-readable structure — it
 trades per-component nuance (exact per-size/per-variant token detail) for
 reliable cross-component structure. See
 `docs/foundations/component-registry-governance.json` for the normalization
-rules and known content gaps (Avatar, Tooltip, IconButton have real missing
-content, not just reshaped data).
+rules and known content gaps (none today: every contract is full, 2026-10-23).
 
 `docs/components/exemplars.json` is generated from every component's
 `.examples.json` (`npm run generate:exemplars`) and normalizes presence
 (fills in missing `antiExamples`/`props` defaults, never fabricates values).
-Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — 16
-of 34 components are `thin` (no anti-pattern examples, no per-example props
-map yet). See `docs/foundations/component-exemplars-governance.json` for the
+Each entry has an `exemplarCompleteness` (`full`/`partial`/`thin`) flag — all
+58 components are `full` (2026-10-23): every example has a props map and each
+has anti-examples taken from its Docs page's Don'ts. See `docs/foundations/component-exemplars-governance.json` for the
 completeness backlog and the quality bar for filling one in.
 
 Every component's `.contract.json` carries a `figmaSource` block linking it

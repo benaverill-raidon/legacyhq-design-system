@@ -5,19 +5,25 @@
       "name": "Static underlined list",
       "description": "A read-only metadata list with underline dividers between pairs.",
       "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" underline />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-      "props": {}
+      "props": {
+        "children": "3 KeyValuePair (static; underline on all but the last)"
+      }
     },
     {
       "name": "Static clean list (no underlines)",
       "description": "A read-only metadata list without dividers.",
       "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-      "props": {}
+      "props": {
+        "children": "3 KeyValuePair (static; no underline)"
+      }
     },
     {
       "name": "Mixed editable and static pairs",
       "description": "Some pairs are editable in place (an inline TextField or TextArea in Inline Edit, with actionPlacement=\"end\" so a row keeps its height while editing), others are static.",
       "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <InlineEdit value={notes} onConfirm={setNotes} actionPlacement=\"end\" actionAlignment=\"start\">\n      <TextArea autoResize context=\"inline\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-      "props": {}
+      "props": {
+        "children": "4 KeyValuePair (2 static; TextField and TextArea with context=\"inline\" in InlineEdit actionPlacement=\"end\")"
+      }
     }
   ],
   "antiExamples": [
@@ -25,6 +31,21 @@
       "name": "Non-KeyValuePair children",
       "jsx": "<KeyValueList>\n  <div>Not a pair</div>\n</KeyValueList>",
       "reason": "The <dl> element expects <dt>/<dd> children. Use KeyValuePair items inside KeyValueList."
+    },
+    {
+      "name": "A heading inside the list",
+      "jsx": "<KeyValueList>\n  <h3>Account</h3>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" />\n</KeyValueList>",
+      "reason": "A <dl> can hold only <dt>/<dd> groups, so the markup isn't valid. Name the list with a heading outside it, and put only pairs inside."
+    },
+    {
+      "name": "Mixed sizes in one list",
+      "jsx": "<KeyValueList>\n  <KeyValuePair size=\"sm\" label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair size=\"lg\" label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "reason": "The rows change height and text size from one to the next. Give every pair in a list the same size."
+    },
+    {
+      "name": "Inline Edit's buttons below an editable pair",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName}>\n      <TextField context=\"inline\" aria-label=\"Client name\" />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+      "reason": "With Inline Edit's default placement the row grows while editing, and the rest of the list moves down. Use actionPlacement=\"end\" so the list doesn't shift while someone edits."
     }
   ]
 }

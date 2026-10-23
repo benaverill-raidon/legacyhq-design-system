@@ -1,22 +1,57 @@
 {
+  "component": "ToggleIconButton",
   "examples": [
     {
       "name": "Default",
-      "jsx": "<ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+      "jsx": "<ToggleIconButton aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+      "props": { "aria-label": "Bold" }
     },
     {
       "name": "Selected (tone=default)",
       "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
-      "jsx": "<ToggleIconButton isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+      "jsx": "<ToggleIconButton isSelected aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+      "props": { "isSelected": true, "aria-label": "Bold" }
     },
     {
       "name": "Selected (tone=subtle)",
       "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
-      "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>"
+      "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+      "props": { "tone": "subtle", "isSelected": true, "aria-label": "Bold" }
     },
     {
       "name": "With Tooltip",
-      "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton></Tooltip>"
+      "description": "Toggle Icon Button has no tooltip of its own, unlike Icon Button. Wrap it in Tooltip to show its name on hover and keyboard focus; aria-label stays the name.",
+      "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><TextBoldIcon /></ToggleIconButton></Tooltip>",
+      "props": { "aria-label": "Bold" }
+    },
+    {
+      "name": "Controlled favorite",
+      "description": "The parent owns the state: isSelected comes from your state and onClick flips it. The name stays the same in both states; aria-pressed says whether it's on.",
+      "jsx": "const [isFavorite, setIsFavorite] = useState(false);\n\n<ToggleIconButton aria-label=\"Favorite\" isSelected={isFavorite} onClick={() => setIsFavorite(!isFavorite)}>\n  {isFavorite ? <StarStarredIcon /> : <StarUnstarredIcon />}\n</ToggleIconButton>",
+      "props": { "aria-label": "Favorite", "isSelected": "isFavorite", "onClick": "() => setIsFavorite(!isFavorite)" }
+    },
+    {
+      "name": "Round and small",
+      "description": "shape is separate from tone: round is a full circle at every size. Sizes match Icon Button so the two line up in a toolbar.",
+      "jsx": "<ToggleIconButton aria-label=\"Pin matter\" shape=\"round\" size=\"sm\" isSelected>\n  <PinIcon />\n</ToggleIconButton>",
+      "props": { "aria-label": "Pin matter", "shape": "round", "size": "sm", "isSelected": true }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Named only by a Tooltip",
+      "jsx": "<Tooltip content=\"Pin matter\">\n  <ToggleIconButton isSelected>\n    <PinIcon />\n  </ToggleIconButton>\n</Tooltip>",
+      "reason": "A tooltip describes the button only while it shows, so the button has no accessible name. Name it with aria-label."
+    },
+    {
+      "name": "Changing the name with the state",
+      "jsx": "<ToggleIconButton\n  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}\n  isSelected={isFavorite}\n>\n  <StarStarredIcon />\n</ToggleIconButton>",
+      "reason": "People hear \"Remove from favorites, pressed\" and can't tell what pressing does. Keep the name the same and let aria-pressed say whether it's on."
+    },
+    {
+      "name": "An unfamiliar icon",
+      "jsx": "<ToggleIconButton aria-label=\"Show archived\" isSelected>\n  <ArchiveIcon />\n</ToggleIconButton>",
+      "reason": "An icon that isn't familiar on its own makes people guess. Use Toggle Button with a visible label when there's room."
     }
   ]
 }

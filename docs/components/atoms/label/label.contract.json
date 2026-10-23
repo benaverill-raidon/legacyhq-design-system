@@ -1,7 +1,7 @@
 {
   "name": "Label",
   "category": "data-display",
-  "status": "beta",
+  "status": "stable",
   "purpose": "Display short metadata.",
   "intent": "Compact semantic annotation: a status or a state in words, in a tone that carries meaning. Categories and classifications are Tag's job (decided 2026-10-23).",
   "figmaSource": {

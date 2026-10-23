@@ -57,6 +57,21 @@
       "name": "Using for a form layout",
       "jsx": "<KeyValuePair label=\"Email\">\n  <TextField placeholder=\"Enter email\" />\n</KeyValuePair>",
       "reason": "Key Value Pair is for compact metadata display, not full form layouts. Use the Form organism with Field molecules for forms."
+    },
+    {
+      "name": "Unnamed inline control",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\">\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
+      "reason": "The key isn't linked to the field, so the field has no accessible name. Give the inline control an aria-label that matches the key."
+    },
+    {
+      "name": "Inline Edit's buttons below the value",
+      "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName}>\n      <TextField context=\"inline\" aria-label=\"Client name\" />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Revocable trust\" />\n</KeyValueList>",
+      "reason": "Inline Edit's default placement puts the buttons below the field and makes room for them, so the row grows while editing and the pairs below it move down. Use actionPlacement=\"end\"."
+    },
+    {
+      "name": "Sizing only the pair",
+      "jsx": "<KeyValueList>\n  <KeyValuePair size=\"lg\" label=\"Client name\">\n    <TextField context=\"inline\" aria-label=\"Client name\" />\n  </KeyValuePair>\n</KeyValueList>",
+      "reason": "The pair's size doesn't reach the control: it stays 40px tall in a 48px row, and its text is smaller than the key's. Give the inline control the pair's size."
     }
   ]
 }

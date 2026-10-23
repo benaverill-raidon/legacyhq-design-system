@@ -1,7 +1,7 @@
 {
   "name": "Slider",
   "category": "forms",
-  "status": "beta",
+  "status": "stable",
   "purpose": "Numeric range selection.",
   "intent": "Accessible visual value selection.",
   "figmaSource": {

@@ -1,7 +1,7 @@
 {
   "name": "ToggleIconButton",
   "category": "actions",
-  "status": "beta",
+  "status": "stable",
   "purpose": "Persistent icon-only toggle control.",
   "intent": "Combine compact icon-only presentation with toggle behavior.",
   "figmaSource": {

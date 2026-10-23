@@ -1,7 +1,7 @@
 {
   "name": "Radio",
   "category": "forms",
-  "status": "beta",
+  "status": "stable",
   "knownIssues": [],
   "publicExports": [
     "Radio",

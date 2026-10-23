@@ -1,24 +1,104 @@
 {
+  "component": "Tag",
   "examples": [
     {
       "name": "Static",
-      "jsx": "<Tag>Estate</Tag>"
+      "description": "A display-only category on a record: renders a span with no hover or focus.",
+      "jsx": "<Tag>Estate</Tag>",
+      "props": {
+        "children": "Estate"
+      }
     },
     {
       "name": "Linked",
-      "jsx": "<Tag href='/clients/1'>Ben Averill</Tag>"
+      "description": "href makes the whole tag an a, so the reference opens the record and can be opened in a new tab.",
+      "jsx": "<Tag href='/clients/1'>Ben Averill</Tag>",
+      "props": {
+        "href": "/clients/1",
+        "children": "Ben Averill"
+      }
     },
     {
       "name": "Removable",
-      "jsx": "<Tag isRemovable onRemove={() => handleRemove('filter')}>Filter</Tag>"
+      "description": "isRemovable adds a separate remove button named \"Remove Filter\". Tag doesn't remove itself: take it out of your list in onRemove.",
+      "jsx": "<Tag isRemovable onRemove={() => handleRemove('filter')}>Filter</Tag>",
+      "props": {
+        "isRemovable": true,
+        "onRemove": "() => handleRemove('filter')",
+        "children": "Filter"
+      }
     },
     {
       "name": "Linked & Removable",
-      "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>"
+      "description": "The content is a link and the remove button is a separate control beside it; removing never navigates.",
+      "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+      "props": {
+        "href": "/asset/1",
+        "isRemovable": true,
+        "onRemove": "() => handleRemove('vacation-home')",
+        "children": "Vacation Home"
+      }
     },
     {
       "name": "Clickable & Removable",
-      "jsx": "<Tag isRemovable onClick={() => openPreview('vacation-home')} onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>"
+      "description": "onClick makes the content beside the remove button a button, for a tag that opens something in place rather than navigating.",
+      "jsx": "<Tag isRemovable onClick={() => openPreview('vacation-home')} onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
+      "props": {
+        "isRemovable": true,
+        "onClick": "() => openPreview('vacation-home')",
+        "onRemove": "() => handleRemove('vacation-home')",
+        "children": "Vacation Home"
+      }
+    },
+    {
+      "name": "Record reference with tone and icon",
+      "description": "An accent tone tells kinds of records apart (no fixed meaning); elemBefore is a decorative 16px icon in the tag's text color.",
+      "jsx": "<Tag href=\"/trusts/123\" tone=\"green\" elemBefore={<TrustIcon />}>Averill Family Living Trust</Tag>",
+      "props": {
+        "href": "/trusts/123",
+        "tone": "green",
+        "elemBefore": "TrustIcon",
+        "children": "Averill Family Living Trust"
+      }
+    },
+    {
+      "name": "Small, with a removeLabel for non-text content",
+      "description": "size=\"sm\" is 24px tall, for dense rows and inline text. When children aren't a plain string, removeLabel names the record so the remove button isn't just \"Remove tag\".",
+      "jsx": "<Tag size=\"sm\" isRemovable onRemove={() => handleRemove('trust-123')} removeLabel=\"Remove Averill Family Living Trust\">\n  <TrustName id={123} />\n</Tag>",
+      "props": {
+        "size": "sm",
+        "isRemovable": true,
+        "onRemove": "() => handleRemove('trust-123')",
+        "removeLabel": "Remove Averill Family Living Trust",
+        "children": "<TrustName id={123} />"
+      }
+    },
+    {
+      "name": "Disabled link",
+      "description": "disabled greys the tag out; a link keeps its href, gets aria-disabled, leaves the tab order, and doesn't navigate.",
+      "jsx": "<Tag href=\"/trusts/123\" disabled>Averill Family Living Trust</Tag>",
+      "props": {
+        "href": "/trusts/123",
+        "disabled": true,
+        "children": "Averill Family Living Trust"
+      }
+    }
+  ],
+  "antiExamples": [
+    {
+      "name": "Navigating from onClick",
+      "jsx": "<Tag tone=\"green\" onClick={() => navigate('/trusts/123')}>\n  Averill Family Living Trust\n</Tag>",
+      "reason": "onClick turns the tag into a button, which can't be opened in a new tab or show where it goes. Use href for a tag that opens a record."
+    },
+    {
+      "name": "Non-text content without a removeLabel",
+      "jsx": "<Tag isRemovable onRemove={() => handleRemove('trust-123')}>\n  <TrustName id={123} />\n</Tag>",
+      "reason": "When children isn't a string, Tag can't build a name from it, so every remove button is named \"Remove tag\". Pass a removeLabel that names the record."
+    },
+    {
+      "name": "A Tag's color as a status",
+      "jsx": "<Tag tone=\"green\">Active</Tag>",
+      "reason": "Tag's tones are accent colors with no fixed meaning, and a tag reads as a reference. Use Label for a status: <Label tone=\"success\">Active</Label>."
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "name": "ProgressBar",
   "category": "feedback",
-  "status": "beta",
+  "status": "stable",
   "purpose": "Communicate determinate process completion from 0 to 100.",
   "intent": "Provide linear and circular visualizations driven by one read-only value model.",
   "figmaSource": {

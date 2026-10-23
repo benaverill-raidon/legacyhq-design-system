@@ -249,53 +249,123 @@
         "name": "Presence badge",
         "description": "Shows availability when no calendar status is present.",
         "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "presence": "online"
+        }
       },
       {
         "name": "Offline badge",
         "description": "Uses the semantic subtle content color for the offline badge icon.",
         "jsx": "<Avatar name=\"Ben Averill\" presence=\"offline\" />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "presence": "offline"
+        }
       },
       {
         "name": "Calendar status badge",
         "description": "Shows calendar invite response status.",
         "jsx": "<Avatar name=\"Ben Averill\" status=\"accepted\" />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "status": "accepted"
+        }
       },
       {
         "name": "Status wins over presence",
         "description": "Renders accepted status badge instead of online presence badge.",
         "jsx": "<Avatar name=\"Ben Averill\" presence=\"online\" status=\"accepted\" />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "presence": "online",
+          "status": "accepted"
+        }
       },
       {
         "name": "Disabled interactive avatar",
         "description": "Suppresses interaction and applies disabled visual treatment without a badge combination.",
         "jsx": "<Avatar name=\"Ben Averill\" isInteractive disabled onClick={handleClick} />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "isInteractive": true,
+          "disabled": true,
+          "onClick": "handleClick"
+        }
       },
       {
         "name": "Selectable interactive avatar",
         "description": "An avatar people pick: given isSelected, the button is a toggle with aria-pressed, and its name is \"Ben Averill, busy\" without the word selected.",
         "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" isInteractive isSelected={isPicked} onClick={togglePicked} />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "presence": "busy",
+          "isInteractive": true,
+          "isSelected": "isPicked (state)",
+          "onClick": "togglePicked"
+        }
       },
       {
         "name": "Translated status words",
         "description": "The words Avatar adds to the accessible name are props with English defaults.",
         "jsx": "<Avatar name=\"Ben Averill\" presence=\"busy\" getPresenceLabel={(presence) => t(`presence.${presence}`)} />",
-        "props": {}
+        "props": {
+          "name": "Ben Averill",
+          "presence": "busy",
+          "getPresenceLabel": "(presence) => t(`presence.${presence}`)"
+        }
       },
       {
         "name": "Team/partner entity, no image",
         "description": "entityType=\"team\" swaps the fallback artwork to a two-person silhouette instead of the default individual one, for a firm or partner entity appearing alongside people.",
         "jsx": "<Avatar name=\"Averill & Partners\" entityType=\"team\" />",
-        "props": {}
+        "props": {
+          "name": "Averill & Partners",
+          "entityType": "team"
+        }
+      },
+      {
+        "name": "Photo with a name",
+        "description": "Give every avatar a name, even with a photo. It names the fallback when the photo fails.",
+        "jsx": "<Avatar src={photo} name=\"Ben Averill\" />",
+        "props": {
+          "src": "photo",
+          "name": "Ben Averill"
+        }
+      },
+      {
+        "name": "Decorative, beside a visible name",
+        "description": "decorative hides a static avatar from assistive technology when a visible name sits next to it.",
+        "jsx": "<Avatar src={photo} decorative />\n<span>Ben Averill</span>",
+        "props": {
+          "src": "photo",
+          "decorative": true
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Photo alone, no name",
+        "jsx": "<Avatar src={photo} />",
+        "reason": "The avatar has no accessible name, and a failed photo leaves an unnamed silhouette. Set name even when there's a photo."
+      },
+      {
+        "name": "State written into name",
+        "jsx": "<Avatar name=\"Ben Averill, busy\" presence=\"busy\" />",
+        "reason": "Avatar already adds the badge word to the accessible name, so the state is read twice. Pass the plain name and let presence or status add it."
+      },
+      {
+        "name": "decorative on an interactive avatar",
+        "jsx": "<Avatar src={photo} decorative isInteractive onClick={select} />",
+        "reason": "decorative is ignored on an interactive avatar, and without a name the button is unnamed. Give it a name."
+      },
+      {
+        "name": "Several Avatars in a row for a group of people",
+        "jsx": "<Avatar name=\"Ben Averill\" />\n<Avatar name=\"Jordan Lee\" />\n<Avatar name=\"Sam Ortiz\" />",
+        "reason": "Several people together belong in Avatar Group, which overlaps them and counts the rest."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "badge",
@@ -529,31 +599,137 @@
     "examples": [
       {
         "name": "Basic",
-        "description": null,
-        "jsx": "<Checkbox>Receive updates</Checkbox>",
-        "props": {}
+        "description": "A single checkbox with its visible label. The label is passed as the label prop, not as children: Checkbox renders label after the box, and children would reach the native input.",
+        "jsx": "<Checkbox label=\"Receive updates\" />",
+        "props": {
+          "label": "Receive updates"
+        }
       },
       {
         "name": "Checked",
-        "description": null,
-        "jsx": "<Checkbox defaultChecked>Receive updates</Checkbox>",
-        "props": {}
+        "description": "Uncontrolled and checked at first; the input keeps the value.",
+        "jsx": "<Checkbox label=\"Receive updates\" defaultChecked />",
+        "props": {
+          "label": "Receive updates",
+          "defaultChecked": true
+        }
       },
       {
         "name": "Disabled",
-        "description": null,
-        "jsx": "<Checkbox disabled>Receive updates</Checkbox>",
-        "props": {}
+        "description": "The native disabled attribute: the checkbox can't be changed and leaves the tab order.",
+        "jsx": "<Checkbox label=\"Receive updates\" disabled />",
+        "props": {
+          "label": "Receive updates",
+          "disabled": true
+        }
       },
       {
         "name": "Error message",
-        "description": null,
+        "description": "A single checkbox's own errorMessage: shown under the box, added to its aria-describedby, and marks it invalid, so invalid isn't needed with it.",
         "jsx": "<Checkbox label=\"I've run a conflict check\" required errorMessage=\"Run a conflict check before you open the matter.\" />",
-        "props": {}
+        "props": {
+          "label": "I've run a conflict check",
+          "required": true,
+          "errorMessage": "Run a conflict check before you open the matter."
+        }
+      },
+      {
+        "name": "Partial selection",
+        "description": "indeterminate on the checkbox that stands for a partly selected group, such as a select-all. It shows a dash and is announced as mixed; work out the next indeterminate from the items.",
+        "jsx": "<Checkbox label=\"All matters\" indeterminate={someSelected && !allSelected} checked={allSelected} onCheckedChange={toggleAll} />",
+        "props": {
+          "label": "All matters",
+          "indeterminate": "someSelected && !allSelected",
+          "checked": "allSelected",
+          "onCheckedChange": "toggleAll"
+        }
+      },
+      {
+        "name": "No visible label",
+        "description": "A checkbox in a list row, named by aria-label because the row shows what it selects.",
+        "jsx": "<Checkbox aria-label=\"Select Probate review\" />",
+        "props": {
+          "aria-label": "Select Probate review"
+        }
+      },
+      {
+        "name": "Checkbox Group with an error",
+        "description": "A set of checkboxes under one legend, from options. Explain the error in words with errorMessage and set invalid with it.",
+        "jsx": "<CheckboxGroup\n  label=\"Send matter updates by\"\n  invalid\n  errorMessage=\"Choose at least one way to send updates.\"\n  options={[\n    { value: 'email', label: 'Email' },\n    { value: 'sms', label: 'SMS' },\n  ]}\n/>",
+        "props": {
+          "label": "Send matter updates by",
+          "invalid": true,
+          "errorMessage": "Choose at least one way to send updates.",
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "sms",
+              "label": "SMS"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Controlled Checkbox Group",
+        "description": "The checked values as an array in your state; onValueChange gets the next array, then the change event.",
+        "jsx": "const [channels, setChannels] = useState(['email']);\n\n<CheckboxGroup\n  label=\"Send matter updates by\"\n  value={channels}\n  onValueChange={setChannels}\n  options={[\n    { value: 'email', label: 'Email' },\n    { value: 'sms', label: 'SMS' },\n    { value: 'in-app', label: 'In-app' },\n  ]}\n/>",
+        "props": {
+          "label": "Send matter updates by",
+          "value": "channels (state)",
+          "onValueChange": "setChannels",
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "sms",
+              "label": "SMS"
+            },
+            {
+              "value": "in-app",
+              "label": "In-app"
+            }
+          ]
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Checking the group's checkbox for a partial selection",
+        "jsx": "<Checkbox label=\"All matters\" checked={someSelected} />",
+        "reason": "A checked select-all reads as all of its items being checked. When only some are, set indeterminate on it so it shows a dash and is announced as mixed."
+      },
+      {
+        "name": "No accessible name",
+        "jsx": "<Checkbox />",
+        "reason": "Without label, aria-label, or aria-labelledby the box still shows, but assistive technology can't say what it's for, and nothing warns you."
+      },
+      {
+        "name": "Invalid with no message",
+        "jsx": "<CheckboxGroup label=\"Send matter updates by\" invalid options={[{ value: 'email', label: 'Email' }, { value: 'sms', label: 'SMS' }]} />",
+        "reason": "The red boxes alone don't say what's wrong, and not everyone can see the color. Pair invalid with an errorMessage that explains the problem."
+      },
+      {
+        "name": "One-option Checkbox Group to show an error",
+        "jsx": "<CheckboxGroup label=\"Conflict check\" invalid errorMessage=\"Run a conflict check.\" options={[{ value: 'done', label: \"I've run a conflict check\" }]} />",
+        "reason": "The legend and the only option say the same thing twice. Give the single Checkbox its own errorMessage instead."
+      },
+      {
+        "name": "Wrapping a single Checkbox in Field for its error",
+        "jsx": "<Field label=\"Conflict check\" state=\"error\" message=\"Run a conflict check before you open the matter.\">\n  <Checkbox label=\"I've run a conflict check\" />\n</Field>",
+        "reason": "Field's label replaces the checkbox's own label as its accessible name. Use the Checkbox's errorMessage for a single checkbox's error."
+      },
+      {
+        "name": "Checkboxes for mutually exclusive choices",
+        "jsx": "<CheckboxGroup label=\"Preferred contact method\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+        "reason": "Checkboxes let people choose any number of options. When exactly one answer applies, use Radio Group, which keeps the choice to one."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "icon-button",
@@ -564,30 +740,102 @@
       {
         "name": "Default tooltip from aria-label",
         "description": null,
-        "jsx": "<IconButton aria-label='Search'><Icon name='search' /></IconButton>",
-        "props": {}
+        "jsx": "<IconButton aria-label='Search'><SearchIcon /></IconButton>",
+        "props": {
+          "aria-label": "Search"
+        }
       },
       {
         "name": "Custom tooltip content",
         "description": null,
-        "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><Icon name='edit' /></IconButton>",
-        "props": {}
+        "jsx": "<IconButton aria-label='Edit' tooltip='Edit record details'><EditIcon /></IconButton>",
+        "props": {
+          "aria-label": "Edit",
+          "tooltip": "Edit record details"
+        }
       },
       {
         "name": "External tooltip composition",
         "description": null,
-        "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>",
-        "props": {}
+        "jsx": "<Tooltip content='Custom explanation'><IconButton aria-label='Search' tooltip={false}><SearchIcon /></IconButton></Tooltip>",
+        "props": {
+          "aria-label": "Search",
+          "tooltip": false
+        }
       },
       {
         "name": "Inverse (on a dark surface)",
         "description": null,
-        "jsx": "<IconButton aria-label='Dismiss' isInverse><Icon name='close' /></IconButton>",
-        "props": {}
+        "jsx": "<IconButton aria-label='Dismiss' isInverse><CloseIcon /></IconButton>",
+        "props": {
+          "aria-label": "Dismiss",
+          "isInverse": true
+        }
+      },
+      {
+        "name": "Appearance, shape, and size",
+        "description": "appearance sets how much attention it draws (default is outlined, primary has the brand fill, subtle has no border or fill until hover); round is a full circle at every size. The icon stays its default size at every button size.",
+        "jsx": "<IconButton aria-label=\"Add note\" appearance=\"primary\" shape=\"round\" size=\"lg\">\n  <AddIcon />\n</IconButton>",
+        "props": {
+          "aria-label": "Add note",
+          "appearance": "primary",
+          "shape": "round",
+          "size": "lg"
+        }
+      },
+      {
+        "name": "Loading",
+        "description": "Shows a Spinner in place of the icon at the same size, sets aria-busy, and ignores clicks. The button stays focusable and keeps its name.",
+        "jsx": "<IconButton aria-label=\"Refresh\" isLoading>\n  <RefreshIcon />\n</IconButton>",
+        "props": {
+          "aria-label": "Refresh",
+          "isLoading": true
+        }
+      },
+      {
+        "name": "More actions menu trigger",
+        "description": "isExpanded sets aria-expanded to match whether the menu is open and keeps the hover fill while open. A \"more actions\" button uses MoreVertIcon, as Dropdown Menu and Table's row actions do.",
+        "jsx": "const [open, setOpen] = useState(false);\n\n<IconButton aria-label=\"More actions\" appearance=\"subtle\" isExpanded={open} onClick={() => setOpen(!open)}>\n  <MoreVertIcon />\n</IconButton>",
+        "props": {
+          "aria-label": "More actions",
+          "appearance": "subtle",
+          "isExpanded": "open",
+          "onClick": "() => setOpen(!open)"
+        }
+      },
+      {
+        "name": "Named by visible text (aria-labelledby)",
+        "description": "Icon Button can't read the text aria-labelledby points to, so set tooltip yourself (or tooltip={false}).",
+        "jsx": "<span id=\"edit-button-label\">Edit</span>\n<IconButton aria-labelledby=\"edit-button-label\" tooltip=\"Edit\">\n  <EditIcon />\n</IconButton>",
+        "props": {
+          "aria-labelledby": "edit-button-label",
+          "tooltip": "Edit"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Named only by tooltip",
+        "jsx": "<IconButton tooltip=\"Search matters\">\n  <SearchIcon />\n</IconButton>",
+        "reason": "tooltip describes the button only while it shows, so the button has no accessible name (and warns in development). Name the action in aria-label, which is both the name and the tooltip."
+      },
+      {
+        "name": "An icon the tooltip has to explain",
+        "jsx": "<IconButton aria-label=\"Archive matter\">\n  <ArchiveIcon />\n</IconButton>",
+        "reason": "People have to hover to find out what an unfamiliar icon does. Use Button with a visible label (and the icon beside it if it helps)."
+      },
+      {
+        "name": "Showing a state by switching the appearance",
+        "jsx": "<IconButton aria-label=\"Pin matter\" appearance={isPinned ? 'primary' : 'default'}>\n  <PinIcon />\n</IconButton>",
+        "reason": "Assistive technology can't hear an appearance change. Use Toggle Icon Button for something that stays on, so it's announced as pressed."
+      },
+      {
+        "name": "aria-labelledby with no tooltip set",
+        "jsx": "<span id=\"edit-button-label\">Edit</span>\n<IconButton aria-labelledby=\"edit-button-label\">\n  <EditIcon />\n</IconButton>",
+        "reason": "Icon Button doesn't infer tooltip text from aria-labelledby, so this shows no tooltip and warns in development. Set tooltip explicitly, or tooltip={false} when no tooltip is wanted."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "label",
@@ -597,25 +845,83 @@
     "examples": [
       {
         "name": "Default",
-        "description": null,
+        "description": "A neutral status in the default subtle emphasis and md size.",
         "jsx": "<Label>Draft</Label>",
-        "props": {}
+        "props": {
+          "children": "Draft"
+        }
       },
       {
         "name": "Law",
-        "description": null,
-        "jsx": "<Label tone='law'>Estate</Label>",
-        "props": {}
+        "description": "tone=\"law\" says the item belongs to law (tone=\"wealth\" for wealth), not a matter category.",
+        "jsx": "<Label tone='law'>Law</Label>",
+        "props": {
+          "tone": "law",
+          "children": "Law"
+        }
       },
       {
         "name": "Bold",
-        "description": null,
+        "description": "emphasis=\"bold\" is a solid fill for a label that has to stand out in a busy row; it doesn't change the meaning.",
         "jsx": "<Label emphasis='bold'>Approved</Label>",
-        "props": {}
+        "props": {
+          "emphasis": "bold",
+          "children": "Approved"
+        }
+      },
+      {
+        "name": "Status tone",
+        "description": "information, warning, error, and success are statuses; the words carry the meaning and the tone's color supports it.",
+        "jsx": "<Label tone=\"warning\">At risk</Label>",
+        "props": {
+          "tone": "warning",
+          "children": "At risk"
+        }
+      },
+      {
+        "name": "Small, in a dense table",
+        "description": "size=\"sm\" uses heading-xxs and less padding, for dense tables and compact cards.",
+        "jsx": "<Label tone=\"success\" size=\"sm\">Active</Label>",
+        "props": {
+          "tone": "success",
+          "size": "sm",
+          "children": "Active"
+        }
+      },
+      {
+        "name": "Qualifier after a Text Field's input",
+        "description": "A short, non-interactive unit or qualifier in Text Field's iconAfter slot.",
+        "jsx": "<TextField\n  defaultValue=\"12\"\n  aria-label=\"Weight\"\n  iconAfter={<Label size=\"sm\" tone=\"default\">kg</Label>}\n/>",
+        "props": {
+          "size": "sm",
+          "tone": "default",
+          "children": "kg"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "A sentence in a Label",
+        "jsx": "<Label tone=\"warning\">Needs review before the filing deadline</Label>",
+        "reason": "Label doesn't wrap and has no ellipsis, so in a narrow space a sentence runs past its container. Keep it to a status or a state in one to three words."
+      },
+      {
+        "name": "A category in a status tone",
+        "jsx": "<Label tone=\"information\">Estate planning</Label>",
+        "reason": "Label's tones mean something, so a category in information blue reads as a status. Use Tag for a category or classification: <Tag tone=\"purple\">Estate planning</Tag>."
+      },
+      {
+        "name": "A clickable Label",
+        "jsx": "<Label tone=\"information\" onClick={() => openTrust('averill-family')}>Averill Family Living Trust</Label>",
+        "reason": "Label renders a span that isn't focusable, so keyboard users can't reach the click handler. Use Tag with href for a value that links to a record."
+      },
+      {
+        "name": "Label as a form control's name",
+        "jsx": "<Label>Matter name</Label>\n<TextField />",
+        "reason": "Label isn't a form label: it isn't tied to the control, so the field stays unnamed. Name a control with Field: <Field label=\"Matter name\"><TextField /></Field>."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "link",
@@ -625,19 +931,98 @@
     "examples": [
       {
         "name": "Internal",
-        "description": null,
+        "description": "A route in the app. Without a target, Link renders target=\"_self\".",
         "jsx": "<Link href='/clients'>Clients</Link>",
-        "props": {}
+        "props": {
+          "href": "/clients",
+          "children": "Clients"
+        }
       },
       {
         "name": "External",
-        "description": null,
+        "description": "target=\"_blank\" adds the external-link icon, the hidden \"(opens in a new tab)\" text, and noopener noreferrer in rel on its own.",
         "jsx": "<Link href='https://example.com' target='_blank'>Documentation</Link>",
-        "props": {}
+        "props": {
+          "href": "https://example.com",
+          "target": "_blank",
+          "children": "Documentation"
+        }
+      },
+      {
+        "name": "Inline in a sentence",
+        "description": "emphasis=\"default\" is the body weight for a link in running text; the text names the destination.",
+        "jsx": "<p>Review the <Link href=\"/clients/42\" emphasis=\"default\">client profile</Link> before you continue.</p>",
+        "props": {
+          "href": "/clients/42",
+          "emphasis": "default",
+          "children": "client profile"
+        }
+      },
+      {
+        "name": "Name in a table cell",
+        "description": "The default strong emphasis is a heading weight for a name or first-column identifier; size=\"sm\" sets heading-xxs for a dense table.",
+        "jsx": "<td><Link href=\"/clients/42\" size=\"sm\">Ben Averill</Link></td>",
+        "props": {
+          "href": "/clients/42",
+          "size": "sm",
+          "children": "Ben Averill"
+        }
+      },
+      {
+        "name": "Subtle",
+        "description": "appearance=\"subtle\" is the quieter content color, for a light surface where the brand color would be too loud.",
+        "jsx": "<Link href=\"/matters/17\" appearance=\"subtle\">Averill estate plan</Link>",
+        "props": {
+          "href": "/matters/17",
+          "appearance": "subtle",
+          "children": "Averill estate plan"
+        }
+      },
+      {
+        "name": "Inverse on a dark surface",
+        "description": "appearance=\"inverse\" is for a dark or bold surface only; on a light one it has almost no contrast.",
+        "jsx": "<Link href=\"/clients/42\" appearance=\"inverse\">Client profile</Link>",
+        "props": {
+          "href": "/clients/42",
+          "appearance": "inverse",
+          "children": "Client profile"
+        }
+      },
+      {
+        "name": "Translated new-tab text",
+        "description": "newTabLabel replaces the hidden text read after a new-tab link, for translation.",
+        "jsx": "<Link href=\"https://example.com\" target=\"_blank\" newTabLabel=\"(se abre en una pestaña nueva)\">Guía de presentación</Link>",
+        "props": {
+          "href": "https://example.com",
+          "target": "_blank",
+          "newTabLabel": "(se abre en una pestaña nueva)",
+          "children": "Guía de presentación"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "\"Click here\" link text",
+        "jsx": "<p>To review the client profile, <Link href=\"/clients/42\">click here</Link>.</p>",
+        "reason": "\"Click here\" says nothing about where the link goes when it's read out of context, as in a screen reader's list of links. Name the destination in the link text."
+      },
+      {
+        "name": "Adding your own new-tab icon and text",
+        "jsx": "<Link href=\"https://example.com\" target=\"_blank\">\n  Court filing guidelines (opens in a new tab) <LinkExternalIcon />\n</Link>",
+        "reason": "With target=\"_blank\", Link already adds the icon and hidden new-tab text, so yours shows twice and is read twice."
+      },
+      {
+        "name": "Link as a standalone call to action",
+        "jsx": "<Link href=\"/matters/new\">Start a new matter</Link>",
+        "reason": "On its own, a Link reads as text rather than a control. Use Link Button for a call to action that stands on its own: <LinkButton href=\"/matters/new\" appearance=\"primary\">Start a new matter</LinkButton>."
+      },
+      {
+        "name": "Link for an action",
+        "jsx": "<Link href=\"#\" onClick={() => saveMatter()}>Save</Link>",
+        "reason": "Link is for going somewhere. Saving, submitting a form, or opening a dialog is an action on this page: use Button."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "link-button",
@@ -649,23 +1034,96 @@
         "name": "Internal navigation",
         "description": null,
         "jsx": "<LinkButton href='/clients'>View clients</LinkButton>",
-        "props": {}
+        "props": {
+          "href": "/clients"
+        }
       },
       {
         "name": "External navigation",
-        "description": null,
-        "jsx": "<LinkButton href='https://example.com' external>Documentation</LinkButton>",
-        "props": {}
+        "description": "With target=\"_blank\" and no rel, Link Button adds rel=\"noopener noreferrer\" and hidden text after the label, \"(opens in a new tab)\" (set it with newTabLabel).",
+        "jsx": "<LinkButton href='https://example.com' target='_blank'>Documentation</LinkButton>",
+        "props": {
+          "href": "https://example.com",
+          "target": "_blank"
+        }
       },
       {
         "name": "Inverse (on a dark surface)",
         "description": null,
         "jsx": "<LinkButton href='/learn-more' isInverse>Learn more</LinkButton>",
-        "props": {}
+        "props": {
+          "href": "/learn-more",
+          "isInverse": true
+        }
+      },
+      {
+        "name": "Primary with a warning tone",
+        "description": "tone changes only appearance=\"primary\": warning and error give it their own fill.",
+        "jsx": "<LinkButton href=\"/invoices/overdue\" appearance=\"primary\" tone=\"warning\">\n  Review overdue invoices\n</LinkButton>",
+        "props": {
+          "href": "/invoices/overdue",
+          "appearance": "primary",
+          "tone": "warning"
+        }
+      },
+      {
+        "name": "With icons",
+        "description": "iconBefore supports the label; iconAfter is for something like an arrow to continue. Icons are the same size at every link button size.",
+        "jsx": "<LinkButton href=\"/documents\" appearance=\"primary\" size=\"lg\" iconBefore={<DocumentsIcon />} iconAfter={<ArrowRightIcon />}>\n  View documents\n</LinkButton>",
+        "props": {
+          "href": "/documents",
+          "appearance": "primary",
+          "size": "lg",
+          "iconBefore": "DocumentsIcon",
+          "iconAfter": "ArrowRightIcon"
+        }
+      },
+      {
+        "name": "Jump to a section on this page",
+        "description": null,
+        "jsx": "<LinkButton href=\"#billing\" appearance=\"subtle\">Jump to billing</LinkButton>",
+        "props": {
+          "href": "#billing",
+          "appearance": "subtle"
+        }
+      },
+      {
+        "name": "Loading",
+        "description": "Shows a Spinner over the content without changing the size, sets aria-busy and aria-disabled, and removes the href so it can't be opened. It stays focusable and the label stays the accessible name.",
+        "jsx": "<LinkButton href=\"/reports/annual\" isLoading>Open report</LinkButton>",
+        "props": {
+          "href": "/reports/annual",
+          "isLoading": true
+        }
+      },
+      {
+        "name": "Disabled",
+        "description": "Anchors have no native disabled, so isDisabled removes the href, sets aria-disabled=\"true\", and takes the link out of the tab order.",
+        "jsx": "<LinkButton href=\"/clients\" isDisabled>View clients</LinkButton>",
+        "props": {
+          "href": "/clients",
+          "isDisabled": true
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "An action given an href to borrow the look",
+        "jsx": "<LinkButton href=\"#\" onClick={openDialog}>Add note</LinkButton>",
+        "reason": "It's announced as a link but goes nowhere. Use Button for an action that stays on this page, such as opening a dialog."
+      },
+      {
+        "name": "A rel that drops the new-tab defaults",
+        "jsx": "<LinkButton href=\"https://example.com\" target=\"_blank\" rel=\"external\">\n  Visit the help center\n</LinkButton>",
+        "reason": "A rel you pass replaces noopener noreferrer instead of adding to it. Let rel default on a link that opens in a new tab."
+      },
+      {
+        "name": "A tone on the default appearance",
+        "jsx": "<LinkButton href=\"/invoices/overdue\" tone=\"warning\">\n  Review overdue invoices\n</LinkButton>",
+        "reason": "warning and error restyle appearance=\"primary\" only; on any other appearance the tone changes nothing. Pair the tone with appearance=\"primary\"."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "progress-bar",
@@ -677,43 +1135,71 @@
         "name": "Linear document generation",
         "description": "Shows determinate progress for a document package.",
         "jsx": "<ProgressBar value={42} label=\"Generating document package\" />",
-        "props": {}
+        "props": {
+          "value": 42,
+          "label": "Generating document package"
+        }
       },
       {
         "name": "Large linear upload",
         "description": "Uses the larger track for a prominent upload process.",
         "jsx": "<ProgressBar value={68} size=\"lg\" label=\"Uploading client files\" />",
-        "props": {}
+        "props": {
+          "value": 68,
+          "size": "lg",
+          "label": "Uploading client files"
+        }
       },
       {
         "name": "Circular summary",
         "description": "Uses a compact circular visualization.",
         "jsx": "<ProgressBar variant=\"circular\" value={75} label=\"Roadmap completion\" />",
-        "props": {}
+        "props": {
+          "variant": "circular",
+          "value": 75,
+          "label": "Roadmap completion"
+        }
       },
       {
         "name": "Large circular summary",
         "description": "The thicker lg ring, for a summary that leads its tile. Circular takes md and lg.",
         "jsx": "<ProgressBar variant=\"circular\" size=\"lg\" value={75} label=\"Roadmap completion\" />",
-        "props": {}
+        "props": {
+          "variant": "circular",
+          "size": "lg",
+          "value": 75,
+          "label": "Roadmap completion"
+        }
       },
       {
         "name": "Circular summary at 0",
         "description": "Nothing complete yet: the ring shows its empty track and border, with no progress arc, so the summary keeps its shape.",
         "jsx": "<ProgressBar variant=\"circular\" value={0} label=\"Roadmap completion\" getValueText={() => \"0 of 12 tasks complete\"} />",
-        "props": {}
+        "props": {
+          "variant": "circular",
+          "value": 0,
+          "label": "Roadmap completion",
+          "getValueText": "() => \"0 of 12 tasks complete\""
+        }
       },
       {
         "name": "Domain-specific value text",
         "description": "Announces completed items instead of only a percentage.",
         "jsx": "<ProgressBar value={60} label=\"Document preparation\" getValueText={() => \"6 of 10 documents prepared\"} />",
-        "props": {}
+        "props": {
+          "value": 60,
+          "label": "Document preparation",
+          "getValueText": "() => \"6 of 10 documents prepared\""
+        }
       },
       {
         "name": "Complete",
         "description": "Shows a completed process.",
         "jsx": "<ProgressBar value={100} label=\"Import complete\" />",
-        "props": {}
+        "props": {
+          "value": 100,
+          "label": "Import complete"
+        }
       }
     ],
     "antiExamples": [
@@ -721,9 +1207,24 @@
         "name": "Circular sm",
         "jsx": "<ProgressBar variant=\"circular\" size=\"sm\" value={75} label=\"Roadmap completion\" />",
         "reason": "Circular has md and lg only, as Figma does. A circular sm is deprecated and renders exactly as md, so write size=\"md\" (or leave the default)."
+      },
+      {
+        "name": "Unnamed bar with a percentage beside it",
+        "jsx": "<span>42%</span>\n<ProgressBar value={42} />",
+        "reason": "The bar has no accessible name, and screen readers don't connect the percentage beside it to the bar. Name the process with label: <ProgressBar value={42} label=\"Generating document package\" />."
+      },
+      {
+        "name": "A made-up value for loading",
+        "jsx": "<ProgressBar value={30} label=\"Loading matters\" />",
+        "reason": "Progress Bar has no indeterminate mode, so a value that isn't measured tells people something false. Use Spinner when you can't measure how far along the work is: <Spinner label=\"Loading matters\" />."
+      },
+      {
+        "name": "A count in the label",
+        "jsx": "<ProgressBar value={60} label=\"Preparing documents, 6 of 10 done\" />",
+        "reason": "label is read as the name, and the value is still announced as a percentage. Keep label for the name and put counted progress in getValueText: getValueText={() => '6 of 10 documents prepared'}."
       }
     ],
-    "exemplarCompleteness": "partial"
+    "exemplarCompleteness": "full"
   },
   {
     "id": "progress-indicator",
@@ -735,35 +1236,86 @@
         "name": "Client onboarding",
         "description": "Shows the current position in a five-step onboarding journey.",
         "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" />",
-        "props": {}
+        "props": {
+          "currentStep": 2,
+          "totalSteps": 5,
+          "label": "Client onboarding"
+        }
       },
       {
         "name": "Primary account setup",
         "description": "Uses the brand appearance for a primary setup flow.",
         "jsx": "<ProgressIndicator currentStep={3} totalSteps={5} appearance=\"primary\" label=\"Account setup\" />",
-        "props": {}
+        "props": {
+          "currentStep": 3,
+          "totalSteps": 5,
+          "appearance": "primary",
+          "label": "Account setup"
+        }
       },
       {
         "name": "Inverse",
-        "description": "Appears on a bold surface (color-background-neutral-bold-default).",
-        "jsx": "<ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />",
-        "props": {}
+        "description": "Appears on a bold surface (color-background-neutral-bold-default). On the page's own surface the inverse selected dot almost disappears.",
+        "jsx": "<div style={{ background: 'var(--color-background-neutral-bold-default)' }}>\n  <ProgressIndicator currentStep={4} totalSteps={5} appearance=\"inverse\" label=\"Document setup\" />\n</div>",
+        "props": {
+          "currentStep": 4,
+          "totalSteps": 5,
+          "appearance": "inverse",
+          "label": "Document setup"
+        }
+      },
+      {
+        "name": "Medium dots",
+        "description": "size=\"md\" is a 12px dot in a 20px space; sm, the default, is an 8px dot in a 16px space.",
+        "jsx": "<ProgressIndicator currentStep={1} totalSteps={4} size=\"md\" label=\"Trust setup\" />",
+        "props": {
+          "currentStep": 1,
+          "totalSteps": 4,
+          "size": "md",
+          "label": "Trust setup"
+        }
       },
       {
         "name": "Custom value text",
         "description": "Uses domain-specific accessible value language.",
         "jsx": "<ProgressIndicator currentStep={2} totalSteps={4} label=\"Estate plan setup\" getValueText={(step, total) => `Section ${step} of ${total}`} />",
-        "props": {}
+        "props": {
+          "currentStep": 2,
+          "totalSteps": 4,
+          "label": "Estate plan setup",
+          "getValueText": "(step, total) => `Section ${step} of ${total}`"
+        }
       },
       {
         "name": "Interactive dots",
-        "description": "Allows direct one-based step selection while remaining controlled from outside the component.",
-        "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />",
-        "props": {}
+        "description": "Allows direct one-based step selection while remaining controlled from outside the component: each dot becomes a button named \"Go to step N\", and the root a named group. Update currentStep in onStepChange.",
+        "jsx": "const [step, setStep] = useState(2);\n\n<ProgressIndicator currentStep={step} totalSteps={5} label=\"Client onboarding\" onStepChange={setStep} />",
+        "props": {
+          "currentStep": "step",
+          "totalSteps": 5,
+          "label": "Client onboarding",
+          "onStepChange": "setStep"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Unnamed indicator",
+        "jsx": "<ProgressIndicator currentStep={2} totalSteps={5} />",
+        "reason": "Without label (or aria-label / aria-labelledby), a screen reader hears only the step number. Name the journey: label=\"Client onboarding\"."
+      },
+      {
+        "name": "Progress Indicator for a task's progress",
+        "jsx": "<ProgressIndicator currentStep={3} totalSteps={10} label=\"Uploading documents\" />",
+        "reason": "Progress Indicator is position, not completion, and announces the upload as steps. Use Progress Bar for how much of a task is done: <ProgressBar value={30} label=\"Uploading documents\" />."
+      },
+      {
+        "name": "Inverse on the page's own surface",
+        "jsx": "<ProgressIndicator appearance=\"inverse\" currentStep={4} totalSteps={5} label=\"Document setup\" />",
+        "reason": "inverse is for a bold surface only; on the page's own surface its selected dot almost disappears. Use default or primary there."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "radio",
@@ -775,65 +1327,210 @@
         "name": "Standalone radio",
         "description": "A single labeled radio outside a group.",
         "jsx": "<Radio label=\"Email\" name=\"contact-method\" value=\"email\" />",
-        "props": {}
+        "props": {
+          "label": "Email",
+          "name": "contact-method",
+          "value": "email"
+        }
       },
       {
         "name": "Label-less table radio",
         "description": "Row selection where the row content already provides visible context, described instead by aria-label.",
         "jsx": "<Radio aria-label=\"Select primary matter\" name=\"matter-radio\" value=\"primary\" defaultChecked />",
-        "props": {}
+        "props": {
+          "aria-label": "Select primary matter",
+          "name": "matter-radio",
+          "value": "primary",
+          "defaultChecked": true
+        }
       },
       {
         "name": "Disabled",
         "description": "A non-interactive option.",
         "jsx": "<Radio label=\"Overnight\" name=\"delivery-speed\" value=\"overnight\" disabled />",
-        "props": {}
+        "props": {
+          "label": "Overnight",
+          "name": "delivery-speed",
+          "value": "overnight",
+          "disabled": true
+        }
       },
       {
         "name": "Controlled RadioGroup",
         "description": "Single selection driven by external state via the options API.",
         "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" value={value} onValueChange={setValue} options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }, { value: 'mail', label: 'Mail' }]} />",
-        "props": {}
+        "props": {
+          "label": "Preferred contact method",
+          "name": "contact-method",
+          "value": "value (state)",
+          "onValueChange": "setValue",
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            },
+            {
+              "value": "mail",
+              "label": "Mail"
+            }
+          ]
+        }
       },
       {
         "name": "Uncontrolled RadioGroup",
         "description": "Single selection with an initial value, owned by the native fieldset.",
         "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />",
-        "props": {}
+        "props": {
+          "label": "Delivery speed",
+          "name": "delivery-speed",
+          "defaultValue": "standard",
+          "options": [
+            {
+              "value": "standard",
+              "label": "Standard"
+            },
+            {
+              "value": "expedited",
+              "label": "Expedited"
+            },
+            {
+              "value": "overnight",
+              "label": "Overnight"
+            }
+          ]
+        }
       },
       {
         "name": "RadioGroup with children composition",
         "description": "A custom layout of manually-wired Radio instances, used instead of the options API.",
         "jsx": "<RadioGroup label=\"Status\" name=\"status\" description=\"Grouped manually instead of using the options API\"><Radio label=\"Draft\" name=\"status\" value=\"draft\" defaultChecked /><Radio label=\"In review\" name=\"status\" value=\"in-review\" /><Radio label=\"Final\" name=\"status\" value=\"final\" /></RadioGroup>",
-        "props": {}
+        "props": {
+          "label": "Status",
+          "name": "status",
+          "description": "Grouped manually instead of using the options API",
+          "children": "Radio (draft, defaultChecked), Radio (in-review), Radio (final)"
+        }
       },
       {
         "name": "Horizontal orientation",
         "description": "Options laid out in a row that wraps rather than overflowing.",
         "jsx": "<RadioGroup label=\"Delivery speed\" name=\"delivery-speed\" orientation=\"horizontal\" defaultValue=\"standard\" options={[{ value: 'standard', label: 'Standard' }, { value: 'expedited', label: 'Expedited' }, { value: 'overnight', label: 'Overnight' }]} />",
-        "props": {}
+        "props": {
+          "label": "Delivery speed",
+          "name": "delivery-speed",
+          "orientation": "horizontal",
+          "defaultValue": "standard",
+          "options": [
+            {
+              "value": "standard",
+              "label": "Standard"
+            },
+            {
+              "value": "expedited",
+              "label": "Expedited"
+            },
+            {
+              "value": "overnight",
+              "label": "Overnight"
+            }
+          ]
+        }
       },
       {
         "name": "Required RadioGroup",
         "description": "A required group-level question, with the indicator shown after the legend.",
         "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" required options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
-        "props": {}
+        "props": {
+          "label": "Preferred contact method",
+          "name": "contact-method",
+          "required": true,
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            }
+          ]
+        }
       },
       {
         "name": "Invalid RadioGroup with error message",
         "description": "Invalid state paired with a visible, described error rather than color alone.",
         "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" invalid errorMessage=\"Choose one option before continuing.\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
-        "props": {}
+        "props": {
+          "label": "Preferred contact method",
+          "name": "contact-method",
+          "invalid": true,
+          "errorMessage": "Choose one option before continuing.",
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            }
+          ]
+        }
       },
       {
         "name": "Disabled RadioGroup",
         "description": "Every generated option is disabled together.",
         "jsx": "<RadioGroup label=\"Preferred contact method\" name=\"contact-method\" disabled defaultValue=\"email\" options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
-        "props": {}
+        "props": {
+          "label": "Preferred contact method",
+          "name": "contact-method",
+          "disabled": true,
+          "defaultValue": "email",
+          "options": [
+            {
+              "value": "email",
+              "label": "Email"
+            },
+            {
+              "value": "phone",
+              "label": "Phone"
+            }
+          ]
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Loose radios wired by hand",
+        "jsx": "<Radio name=\"method\" value=\"email\" label=\"Email\" checked={method === 'email'} onCheckedChange={() => setMethod('email')} />\n<Radio name=\"method\" value=\"phone\" label=\"Phone\" checked={method === 'phone'} onCheckedChange={() => setMethod('phone')} />",
+        "reason": "The set has no legend, and every radio needs its own name and checked logic. Use RadioGroup's options, which shares the name and keeps the value for you."
+      },
+      {
+        "name": "Marking one option required",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" options={[{ value: 'email', label: 'Email', required: true }, { value: 'phone', label: 'Phone' }]} />",
+        "reason": "The browser still asks for an answer, but the * looks as if only that option is required. Set required on the group, which puts the * after the legend."
+      },
+      {
+        "name": "Invalid with no message",
+        "jsx": "<RadioGroup label=\"Preferred contact method\" invalid options={[{ value: 'email', label: 'Email' }, { value: 'phone', label: 'Phone' }]} />",
+        "reason": "The red circles alone don't say what's wrong, and not everyone can see the color. Pair invalid with an errorMessage that explains the problem."
+      },
+      {
+        "name": "Radios for independent choices",
+        "jsx": "<RadioGroup label=\"Send matter updates by\" options={[{ value: 'email', label: 'Email' }, { value: 'sms', label: 'SMS' }]} />",
+        "reason": "Radios allow exactly one answer. When any number of options can apply, use Checkbox (Checkbox Group)."
+      },
+      {
+        "name": "No accessible name",
+        "jsx": "<Radio name=\"matter-radio\" value=\"primary\" />",
+        "reason": "Without label, aria-label, or aria-labelledby the radio is announced with no name. Name a label-less radio, such as one in a table row, with aria-label."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "slider",
@@ -843,43 +1540,112 @@
     "examples": [
       {
         "name": "Single",
-        "description": null,
+        "description": "Slider fills from min to the value. The label is a native label for the range input.",
         "jsx": "<Slider label=\"Volume\" defaultValue={50} />",
-        "props": {}
+        "props": {
+          "label": "Volume",
+          "defaultValue": 50
+        }
       },
       {
         "name": "Range",
-        "description": null,
+        "description": "Slider Range has two handles and keeps the lower and upper values in order and apart.",
         "jsx": "<SliderRange label=\"Price\" defaultValue={[25, 75]} />",
-        "props": {}
+        "props": {
+          "label": "Price",
+          "defaultValue": [
+            25,
+            75
+          ]
+        }
       },
       {
         "name": "Centered",
-        "description": null,
+        "description": "Slider Centered fills from zero to the value, either way; its range defaults to -100 to 100.",
         "jsx": "<SliderCentered label=\"Balance\" defaultValue={0} />",
-        "props": {}
+        "props": {
+          "label": "Balance",
+          "defaultValue": 0
+        }
+      },
+      {
+        "name": "Steps from step",
+        "description": "Let step place the dots with showSteps, so every dot is a value the handle can land on.",
+        "jsx": "<Slider label=\"Review interval, in weeks\" min={0} max={12} step={3} defaultValue={6} showSteps />",
+        "props": {
+          "label": "Review interval, in weeks",
+          "min": 0,
+          "max": 12,
+          "step": 3,
+          "defaultValue": 6,
+          "showSteps": true
+        }
       },
       {
         "name": "Range in a form, with its own field names",
-        "description": null,
+        "description": "Without minName and maxName the values submit as name and name + Max; set them to submit under other names.",
         "jsx": "<SliderRange label=\"Budget\" name=\"budget\" minName=\"budgetFrom\" maxName=\"budgetTo\" defaultValue={[20, 80]} />",
-        "props": {}
+        "props": {
+          "label": "Budget",
+          "name": "budget",
+          "minName": "budgetFrom",
+          "maxName": "budgetTo",
+          "defaultValue": [
+            20,
+            80
+          ]
+        }
       },
       {
         "name": "In a Field, with an error",
-        "description": null,
+        "description": "Field's label names the range and starts each handle's name; its message and error go to both handles. Leave out the slider's own label.",
         "jsx": "<Field label=\"Fee range\" required state=\"error\" message=\"Set a range at least $500 wide.\"><SliderRange min={0} max={5000} step={100} defaultValue={[1000, 1200]} /></Field>",
-        "props": {}
+        "props": {
+          "min": 0,
+          "max": 5000,
+          "step": 100,
+          "defaultValue": [
+            1000,
+            1200
+          ],
+          "Field": "label=\"Fee range\", required, state=\"error\", message"
+        }
       },
       {
         "name": "Invalid, with its own label",
-        "description": null,
-        "jsx": "<Slider label=\"Confidence\" invalid aria-describedby=\"confidence-error\" />",
-        "props": {}
+        "description": "Outside Field, pair invalid with a visible message and connect it with aria-describedby: the error color isn't the message.",
+        "jsx": "<Slider label=\"Confidence\" defaultValue={20} invalid aria-describedby=\"confidence-error\" />\n<p id=\"confidence-error\">Set a confidence of at least 50.</p>",
+        "props": {
+          "label": "Confidence",
+          "defaultValue": 20,
+          "invalid": true,
+          "aria-describedby": "confidence-error"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Two Sliders for a range",
+        "jsx": "<Slider label=\"Lowest price\" defaultValue={25} />\n<Slider label=\"Highest price\" defaultValue={75} />",
+        "reason": "Nothing stops the lowest price going above the highest. Use Slider Range, which keeps the two values in order and apart."
+      },
+      {
+        "name": "Step dots that step doesn't match",
+        "jsx": "<Slider label=\"Discount, in percent\" showSteps steps={[0, 10, 25, 50, 100]} />",
+        "reason": "steps only places dots; the handle still snaps to step (1 here). The dots read as the only choices, but the handle lands between them. Keep steps in line with step, or let step place the dots."
+      },
+      {
+        "name": "Slider for an exact amount",
+        "jsx": "<Slider label=\"Retainer amount\" max={50000} step={100} showValue />",
+        "reason": "Reaching one value by dragging, or one step at a time by keyboard, is slow. Use a Text Field when the exact number matters."
+      },
+      {
+        "name": "Invalid with no message",
+        "jsx": "<Slider label=\"Confidence\" invalid />",
+        "reason": "The error colors alone don't say what to change. Pair invalid with text, such as Field's error message, which Field connects with aria-describedby."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "spinner",
@@ -889,19 +1655,56 @@
     "examples": [
       {
         "name": "Standalone",
-        "description": null,
-        "jsx": "<Spinner />",
-        "props": {}
+        "description": "The only sign of loading, so it has a label: the spinner becomes a polite status region holding the label as visually hidden text.",
+        "jsx": "<Spinner label=\"Loading matters\" />",
+        "props": {
+          "label": "Loading matters"
+        }
+      },
+      {
+        "name": "Beside visible text",
+        "description": "Visible text already says what's loading, so the spinner has no label and is hidden from assistive technology.",
+        "jsx": "<p>\n  <Spinner size=\"sm\" />\n  Loading matters\n</p>",
+        "props": {
+          "size": "sm"
+        }
+      },
+      {
+        "name": "Large, in a panel",
+        "description": "size=\"xl\" (48px box, 32px arc) for a wait that fills a panel or card, with a label because nothing else says what's loading.",
+        "jsx": "<Spinner size=\"xl\" label=\"Loading documents\" />",
+        "props": {
+          "size": "xl",
+          "label": "Loading documents"
+        }
       },
       {
         "name": "Button",
-        "description": null,
+        "description": "Use Button's isLoading rather than adding a Spinner: it centers a md Spinner over the content, keeps the button's size, and sets aria-busy.",
         "jsx": "<Button isLoading>Save</Button>",
-        "props": {}
+        "props": {
+          "isLoading": true
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "No label and no text",
+        "jsx": "<Spinner />",
+        "reason": "Without a label the spinner is hidden from assistive technology, so with no visible text nearby, screen readers skip the loading state entirely. Add a label, or pair it with text that says what's loading."
+      },
+      {
+        "name": "Spinner swapped into a button's label",
+        "jsx": "<Button prominence=\"primary\">\n  <Spinner size=\"md\" /> Saving…\n</Button>",
+        "reason": "Swapping the label resizes the button and doesn't mark it busy. Set isLoading on the button whose action is running."
+      },
+      {
+        "name": "A percentage in a spinner's label",
+        "jsx": "<Spinner label=\"Uploading, 42% complete\" />",
+        "reason": "The label is visually hidden, so sighted users never see the percentage. When you can measure progress, use Progress Bar: <ProgressBar value={42} label=\"Uploading client files\" />."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "switch",
@@ -911,37 +1714,88 @@
     "examples": [
       {
         "name": "Default",
-        "description": null,
-        "jsx": "<Switch>Notifications</Switch>",
-        "props": {}
+        "description": "A setting that applies as soon as it's flipped. The label is passed as the label prop, not as children: Switch renders label after the track, and children would reach the native input.",
+        "jsx": "<Switch label=\"Notifications\" />",
+        "props": {
+          "label": "Notifications"
+        }
       },
       {
         "name": "Checked",
-        "description": null,
-        "jsx": "<Switch defaultChecked>Email alerts</Switch>",
-        "props": {}
+        "description": "Uncontrolled and on at first.",
+        "jsx": "<Switch label=\"Email alerts\" defaultChecked />",
+        "props": {
+          "label": "Email alerts",
+          "defaultChecked": true
+        }
       },
       {
         "name": "Disabled",
-        "description": null,
-        "jsx": "<Switch disabled>Automatic updates</Switch>",
-        "props": {}
+        "description": "The native disabled attribute: the switch can't be changed and leaves the tab order.",
+        "jsx": "<Switch label=\"Automatic updates\" disabled />",
+        "props": {
+          "label": "Automatic updates",
+          "disabled": true
+        }
       },
       {
         "name": "Loading",
-        "description": null,
-        "jsx": "<Switch isLoading defaultChecked>Syncing calendar</Switch>",
-        "props": {}
+        "description": "isLoading shows a Spinner in the track and ignores toggles while a change is saved; the switch stays focusable and sets aria-busy.",
+        "jsx": "<Switch label=\"Syncing calendar\" isLoading defaultChecked />",
+        "props": {
+          "label": "Syncing calendar",
+          "isLoading": true,
+          "defaultChecked": true
+        }
+      },
+      {
+        "name": "Controlled, saving the change",
+        "description": "Keep the value in your state and set isLoading while the change saves, so the switch stays focused and can't be flipped twice.",
+        "jsx": "<Switch label=\"Sync calendar\" checked={on} isLoading={saving} onCheckedChange={save} />",
+        "props": {
+          "label": "Sync calendar",
+          "checked": "on (state)",
+          "isLoading": "saving (state)",
+          "onCheckedChange": "save"
+        }
       },
       {
         "name": "Icons hidden",
-        "description": null,
+        "description": "showIcons={false} draws a plain track without the check and X marks; the loading Spinner shows either way.",
         "jsx": "<Switch label=\"Compact setting\" showIcons={false} />",
-        "props": {}
+        "props": {
+          "label": "Compact setting",
+          "showIcons": false
+        }
+      },
+      {
+        "name": "Small",
+        "description": "size=\"sm\" is a 32 by 16px track with a smaller label; md, the default, is 40 by 20px.",
+        "jsx": "<Switch label=\"Show archived matters\" size=\"sm\" />",
+        "props": {
+          "label": "Show archived matters",
+          "size": "sm"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Label written as an instruction",
+        "jsx": "<Switch label=\"Turn on email notifications\" />",
+        "reason": "It reads wrong once the switch is on. Name the setting in the label (\"Email notifications\"); the switch shows whether it's on."
+      },
+      {
+        "name": "Disabling the switch while the change saves",
+        "jsx": "<Switch label=\"Sync calendar\" checked={on} disabled={saving} onCheckedChange={save} />",
+        "reason": "It drops out of the tab order, so keyboard focus is lost, and it reads as unavailable. Set isLoading while the change saves."
+      },
+      {
+        "name": "Switch in a form that waits for a submit button",
+        "jsx": "<form onSubmit={applyFilters}>\n  <Switch label=\"Include archived matters\" name=\"includeArchived\" />\n  <Button type=\"submit\">Apply filters</Button>\n</form>",
+        "reason": "People expect a switch to apply at once. For a choice that's saved when a form is submitted, use a Checkbox."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "tag",
@@ -951,37 +1805,105 @@
     "examples": [
       {
         "name": "Static",
-        "description": null,
+        "description": "A display-only category on a record: renders a span with no hover or focus.",
         "jsx": "<Tag>Estate</Tag>",
-        "props": {}
+        "props": {
+          "children": "Estate"
+        }
       },
       {
         "name": "Linked",
-        "description": null,
+        "description": "href makes the whole tag an a, so the reference opens the record and can be opened in a new tab.",
         "jsx": "<Tag href='/clients/1'>Ben Averill</Tag>",
-        "props": {}
+        "props": {
+          "href": "/clients/1",
+          "children": "Ben Averill"
+        }
       },
       {
         "name": "Removable",
-        "description": null,
+        "description": "isRemovable adds a separate remove button named \"Remove Filter\". Tag doesn't remove itself: take it out of your list in onRemove.",
         "jsx": "<Tag isRemovable onRemove={() => handleRemove('filter')}>Filter</Tag>",
-        "props": {}
+        "props": {
+          "isRemovable": true,
+          "onRemove": "() => handleRemove('filter')",
+          "children": "Filter"
+        }
       },
       {
         "name": "Linked & Removable",
-        "description": null,
+        "description": "The content is a link and the remove button is a separate control beside it; removing never navigates.",
         "jsx": "<Tag href='/asset/1' isRemovable onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
-        "props": {}
+        "props": {
+          "href": "/asset/1",
+          "isRemovable": true,
+          "onRemove": "() => handleRemove('vacation-home')",
+          "children": "Vacation Home"
+        }
       },
       {
         "name": "Clickable & Removable",
-        "description": null,
+        "description": "onClick makes the content beside the remove button a button, for a tag that opens something in place rather than navigating.",
         "jsx": "<Tag isRemovable onClick={() => openPreview('vacation-home')} onRemove={() => handleRemove('vacation-home')}>Vacation Home</Tag>",
-        "props": {}
+        "props": {
+          "isRemovable": true,
+          "onClick": "() => openPreview('vacation-home')",
+          "onRemove": "() => handleRemove('vacation-home')",
+          "children": "Vacation Home"
+        }
+      },
+      {
+        "name": "Record reference with tone and icon",
+        "description": "An accent tone tells kinds of records apart (no fixed meaning); elemBefore is a decorative 16px icon in the tag's text color.",
+        "jsx": "<Tag href=\"/trusts/123\" tone=\"green\" elemBefore={<TrustIcon />}>Averill Family Living Trust</Tag>",
+        "props": {
+          "href": "/trusts/123",
+          "tone": "green",
+          "elemBefore": "TrustIcon",
+          "children": "Averill Family Living Trust"
+        }
+      },
+      {
+        "name": "Small, with a removeLabel for non-text content",
+        "description": "size=\"sm\" is 24px tall, for dense rows and inline text. When children aren't a plain string, removeLabel names the record so the remove button isn't just \"Remove tag\".",
+        "jsx": "<Tag size=\"sm\" isRemovable onRemove={() => handleRemove('trust-123')} removeLabel=\"Remove Averill Family Living Trust\">\n  <TrustName id={123} />\n</Tag>",
+        "props": {
+          "size": "sm",
+          "isRemovable": true,
+          "onRemove": "() => handleRemove('trust-123')",
+          "removeLabel": "Remove Averill Family Living Trust",
+          "children": "<TrustName id={123} />"
+        }
+      },
+      {
+        "name": "Disabled link",
+        "description": "disabled greys the tag out; a link keeps its href, gets aria-disabled, leaves the tab order, and doesn't navigate.",
+        "jsx": "<Tag href=\"/trusts/123\" disabled>Averill Family Living Trust</Tag>",
+        "props": {
+          "href": "/trusts/123",
+          "disabled": true,
+          "children": "Averill Family Living Trust"
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Navigating from onClick",
+        "jsx": "<Tag tone=\"green\" onClick={() => navigate('/trusts/123')}>\n  Averill Family Living Trust\n</Tag>",
+        "reason": "onClick turns the tag into a button, which can't be opened in a new tab or show where it goes. Use href for a tag that opens a record."
+      },
+      {
+        "name": "Non-text content without a removeLabel",
+        "jsx": "<Tag isRemovable onRemove={() => handleRemove('trust-123')}>\n  <TrustName id={123} />\n</Tag>",
+        "reason": "When children isn't a string, Tag can't build a name from it, so every remove button is named \"Remove tag\". Pass a removeLabel that names the record."
+      },
+      {
+        "name": "A Tag's color as a status",
+        "jsx": "<Tag tone=\"green\">Active</Tag>",
+        "reason": "Tag's tones are accent colors with no fixed meaning, and a tag reads as a reference. Use Label for a status: <Label tone=\"success\">Active</Label>."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "toggle-button",
@@ -993,29 +1915,77 @@
         "name": "Default",
         "description": null,
         "jsx": "<ToggleButton>Bold</ToggleButton>",
-        "props": {}
+        "props": {
+          "children": "Bold"
+        }
       },
       {
         "name": "Selected (tone=default)",
         "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
         "jsx": "<ToggleButton isSelected>Bold</ToggleButton>",
-        "props": {}
+        "props": {
+          "isSelected": true
+        }
       },
       {
         "name": "Selected (tone=subtle)",
         "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
         "jsx": "<ToggleButton tone=\"subtle\" isSelected>Bold</ToggleButton>",
-        "props": {}
+        "props": {
+          "tone": "subtle",
+          "isSelected": true
+        }
       },
       {
         "name": "With icon",
-        "description": null,
-        "jsx": "<ToggleButton iconBefore={<Icon name='bold'/>}>Bold</ToggleButton>",
-        "props": {}
+        "description": "iconBefore supports the label, never replaces it. The icon is the same size at every toggle button size.",
+        "jsx": "<ToggleButton iconBefore={<TextBoldIcon />}>Bold</ToggleButton>",
+        "props": {
+          "iconBefore": "TextBoldIcon"
+        }
+      },
+      {
+        "name": "Controlled by the parent",
+        "description": "Toggle Button never changes on its own: isSelected comes from your state and onClick flips it. The label stays the same in both states; aria-pressed says whether it's on.",
+        "jsx": "const [showArchived, setShowArchived] = useState(false);\n\n<ToggleButton isSelected={showArchived} onClick={() => setShowArchived(!showArchived)}>\n  Show archived\n</ToggleButton>",
+        "props": {
+          "isSelected": "showArchived",
+          "onClick": "() => setShowArchived(!showArchived)"
+        }
+      },
+      {
+        "name": "Disabled while selected",
+        "description": "The native disabled takes the button out of the tab order and ignores clicks. Disabled looks the same selected or not, but aria-pressed still reports the state.",
+        "jsx": "<ToggleButton isSelected disabled>Show archived</ToggleButton>",
+        "props": {
+          "isSelected": true,
+          "disabled": true
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "A one-off action",
+        "jsx": "<ToggleButton onClick={saveChanges}>Save changes</ToggleButton>",
+        "reason": "It's announced as a toggle button, not pressed, and doesn't stay on. Use Button for an action that happens once."
+      },
+      {
+        "name": "Changing the label with the state",
+        "jsx": "<ToggleButton isSelected={showArchived}>\n  {showArchived ? 'Hide archived' : 'Show archived'}\n</ToggleButton>",
+        "reason": "People hear \"Hide archived, pressed\" and can't tell what pressing does. Keep the label the same and let the selected look and aria-pressed show the state."
+      },
+      {
+        "name": "A settings switch",
+        "jsx": "<ToggleButton isSelected={notificationsOn}>Email notifications</ToggleButton>",
+        "reason": "It's announced as a pressable button, not an on and off setting. Use Switch for a setting that takes effect right away, outside a toolbar."
+      },
+      {
+        "name": "Navigation",
+        "jsx": "<ToggleButton onClick={() => navigate('/clients')}>Clients</ToggleButton>",
+        "reason": "Toggle Button is a native button with aria-pressed, so it isn't announced as a link and can't be opened in a new tab. Use Link Button to go somewhere."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "toggle-icon-button",
@@ -1026,30 +1996,78 @@
       {
         "name": "Default",
         "description": null,
-        "jsx": "<ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
-        "props": {}
+        "jsx": "<ToggleIconButton aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+        "props": {
+          "aria-label": "Bold"
+        }
       },
       {
         "name": "Selected (tone=default)",
         "description": "tone=default keeps a visible border when selected, matching its own resting bordered look.",
-        "jsx": "<ToggleIconButton isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
-        "props": {}
+        "jsx": "<ToggleIconButton isSelected aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+        "props": {
+          "isSelected": true,
+          "aria-label": "Bold"
+        }
       },
       {
         "name": "Selected (tone=subtle)",
         "description": "tone=subtle stays borderless when selected - the same background/text as tone=default's selected state, without a border, matching its own resting borderless look.",
-        "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><Icon name='bold' /></ToggleIconButton>",
-        "props": {}
+        "jsx": "<ToggleIconButton tone='subtle' isSelected aria-label='Bold'><TextBoldIcon /></ToggleIconButton>",
+        "props": {
+          "tone": "subtle",
+          "isSelected": true,
+          "aria-label": "Bold"
+        }
       },
       {
         "name": "With Tooltip",
-        "description": null,
-        "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><Icon name='bold' /></ToggleIconButton></Tooltip>",
-        "props": {}
+        "description": "Toggle Icon Button has no tooltip of its own, unlike Icon Button. Wrap it in Tooltip to show its name on hover and keyboard focus; aria-label stays the name.",
+        "jsx": "<Tooltip content='Bold'><ToggleIconButton aria-label='Bold'><TextBoldIcon /></ToggleIconButton></Tooltip>",
+        "props": {
+          "aria-label": "Bold"
+        }
+      },
+      {
+        "name": "Controlled favorite",
+        "description": "The parent owns the state: isSelected comes from your state and onClick flips it. The name stays the same in both states; aria-pressed says whether it's on.",
+        "jsx": "const [isFavorite, setIsFavorite] = useState(false);\n\n<ToggleIconButton aria-label=\"Favorite\" isSelected={isFavorite} onClick={() => setIsFavorite(!isFavorite)}>\n  {isFavorite ? <StarStarredIcon /> : <StarUnstarredIcon />}\n</ToggleIconButton>",
+        "props": {
+          "aria-label": "Favorite",
+          "isSelected": "isFavorite",
+          "onClick": "() => setIsFavorite(!isFavorite)"
+        }
+      },
+      {
+        "name": "Round and small",
+        "description": "shape is separate from tone: round is a full circle at every size. Sizes match Icon Button so the two line up in a toolbar.",
+        "jsx": "<ToggleIconButton aria-label=\"Pin matter\" shape=\"round\" size=\"sm\" isSelected>\n  <PinIcon />\n</ToggleIconButton>",
+        "props": {
+          "aria-label": "Pin matter",
+          "shape": "round",
+          "size": "sm",
+          "isSelected": true
+        }
       }
     ],
-    "antiExamples": [],
-    "exemplarCompleteness": "thin"
+    "antiExamples": [
+      {
+        "name": "Named only by a Tooltip",
+        "jsx": "<Tooltip content=\"Pin matter\">\n  <ToggleIconButton isSelected>\n    <PinIcon />\n  </ToggleIconButton>\n</Tooltip>",
+        "reason": "A tooltip describes the button only while it shows, so the button has no accessible name. Name it with aria-label."
+      },
+      {
+        "name": "Changing the name with the state",
+        "jsx": "<ToggleIconButton\n  aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}\n  isSelected={isFavorite}\n>\n  <StarStarredIcon />\n</ToggleIconButton>",
+        "reason": "People hear \"Remove from favorites, pressed\" and can't tell what pressing does. Keep the name the same and let aria-pressed say whether it's on."
+      },
+      {
+        "name": "An unfamiliar icon",
+        "jsx": "<ToggleIconButton aria-label=\"Show archived\" isSelected>\n  <ArchiveIcon />\n</ToggleIconButton>",
+        "reason": "An icon that isn't familiar on its own makes people guess. Use Toggle Button with a visible label when there's room."
+      }
+    ],
+    "exemplarCompleteness": "full"
   },
   {
     "id": "tooltip",
@@ -1059,25 +2077,79 @@
     "examples": [
       {
         "name": "External icon button composition",
-        "description": null,
-        "jsx": "<Tooltip content='Search'><IconButton aria-label='Search' tooltip={false}><Icon name='search' /></IconButton></Tooltip>",
-        "props": {}
+        "description": "Wrap an Icon Button in Tooltip only when the hint says more than its name; Icon Button leaves its own tooltip out inside a Tooltip, so the two never stack.",
+        "jsx": "<Tooltip content='Search matters by name or number'><IconButton aria-label='Search' tooltip={false}><SearchIcon /></IconButton></Tooltip>",
+        "props": {
+          "content": "Search matters by name or number"
+        }
       },
       {
         "name": "Supplemental clarification",
-        "description": null,
-        "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><Icon name='more-vert' /></IconButton></Tooltip>",
-        "props": {}
+        "description": "truncate={false} wraps a longer hint (at 240px) instead of ending it with an ellipsis on one line.",
+        "jsx": "<Tooltip content='Supplemental clarification' truncate={false}><IconButton aria-label='More actions' tooltip={false}><MoreVertIcon /></IconButton></Tooltip>",
+        "props": {
+          "content": "Supplemental clarification",
+          "truncate": false
+        }
+      },
+      {
+        "name": "A short hint on a labelled Button",
+        "description": "The trigger keeps its own name; the tooltip adds a description people can do without.",
+        "jsx": "<Tooltip content=\"Exports the visible rows as a CSV file\">\n  <Button>Export</Button>\n</Tooltip>",
+        "props": {
+          "content": "Exports the visible rows as a CSV file"
+        }
+      },
+      {
+        "name": "Disabled trigger",
+        "description": "Tooltip wraps a disabled trigger in a span so hovering still shows the tooltip. Keyboard users can't reach it, so keep it to what the control does.",
+        "jsx": "<Tooltip content=\"Export the selected rows\">\n  <IconButton aria-label=\"Export\" disabled>\n    <DownloadIcon />\n  </IconButton>\n</Tooltip>",
+        "props": {
+          "content": "Export the selected rows"
+        }
+      },
+      {
+        "name": "Longer delay",
+        "description": "delay is the milliseconds between hover or focus and showing the tooltip; it defaults to 300.",
+        "jsx": "<Tooltip content=\"Copy the matter number\" delay={600}>\n  <IconButton aria-label=\"Copy\">\n    <CopyIcon />\n  </IconButton>\n</Tooltip>",
+        "props": {
+          "content": "Copy the matter number",
+          "delay": 600
+        }
+      },
+      {
+        "name": "Tooltip turned off",
+        "description": "disabled turns the tooltip off without unmounting the child. It isn't the trigger's disabled state.",
+        "jsx": "<Tooltip content=\"Edit the matter's details\" disabled>\n  <Button>Edit</Button>\n</Tooltip>",
+        "props": {
+          "content": "Edit the matter's details",
+          "disabled": true
+        }
       }
     ],
     "antiExamples": [
       {
         "name": "Explaining why a control is disabled",
-        "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><Icon name='edit' /></IconButton></Tooltip>",
+        "jsx": "<Tooltip content='Disabled until a record is selected'><IconButton aria-label='Edit' disabled tooltip={false}><EditIcon /></IconButton></Tooltip>",
         "reason": "Keyboard users can't reach a tooltip on a disabled control. Put the reason in visible helper text, such as Field's message."
+      },
+      {
+        "name": "The tooltip as the only name",
+        "jsx": "<Tooltip content=\"Edit\">\n  <button type=\"button\">\n    <EditIcon />\n  </button>\n</Tooltip>",
+        "reason": "A tooltip is only a description, and only while it shows, so this button has no name. Give the trigger its own name: visible text, or aria-label on an icon-only control."
+      },
+      {
+        "name": "Repeating an Icon Button's name",
+        "jsx": "<Tooltip content=\"Edit\">\n  <IconButton aria-label=\"Edit\">\n    <EditIcon />\n  </IconButton>\n</Tooltip>",
+        "reason": "Icon Button already shows its aria-label as a tooltip on its own. Wrap it in Tooltip only when the hint should say more than its name."
+      },
+      {
+        "name": "Interactive content in the tooltip",
+        "jsx": "<Tooltip content={<a href=\"/help/exports\">Learn more</a>}>\n  <Button>Export</Button>\n</Tooltip>",
+        "reason": "Tooltip text is read as a description, not content people can move to, so a link inside it can't be reached. Use Popup for floating content with links, buttons, or fields."
       }
     ],
-    "exemplarCompleteness": "partial"
+    "exemplarCompleteness": "full"
   },
   {
     "id": "avatar-group",
@@ -1750,19 +2822,25 @@
         "name": "Static underlined list",
         "description": "A read-only metadata list with underline dividers between pairs.",
         "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" underline />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-        "props": {}
+        "props": {
+          "children": "3 KeyValuePair (static; underline on all but the last)"
+        }
       },
       {
         "name": "Static clean list (no underlines)",
         "description": "A read-only metadata list without dividers.",
         "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" value=\"Jane Doe\" />\n  <KeyValuePair label=\"Account type\" value=\"Trust\" />\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-        "props": {}
+        "props": {
+          "children": "3 KeyValuePair (static; no underline)"
+        }
       },
       {
         "name": "Mixed editable and static pairs",
         "description": "Some pairs are editable in place (an inline TextField or TextArea in Inline Edit, with actionPlacement=\"end\" so a row keeps its height while editing), others are static.",
         "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" aria-label=\"Client name\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair label=\"Notes\" underline>\n    <InlineEdit value={notes} onConfirm={setNotes} actionPlacement=\"end\" actionAlignment=\"start\">\n      <TextArea autoResize context=\"inline\" aria-label=\"Notes\" iconAfter={<EditIcon color=\"subtle\" />} />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
-        "props": {}
+        "props": {
+          "children": "4 KeyValuePair (2 static; TextField and TextArea with context=\"inline\" in InlineEdit actionPlacement=\"end\")"
+        }
       }
     ],
     "antiExamples": [
@@ -1770,6 +2848,21 @@
         "name": "Non-KeyValuePair children",
         "jsx": "<KeyValueList>\n  <div>Not a pair</div>\n</KeyValueList>",
         "reason": "The <dl> element expects <dt>/<dd> children. Use KeyValuePair items inside KeyValueList."
+      },
+      {
+        "name": "A heading inside the list",
+        "jsx": "<KeyValueList>\n  <h3>Account</h3>\n  <KeyValuePair label=\"Account type\" value=\"Trust\" />\n</KeyValueList>",
+        "reason": "A <dl> can hold only <dt>/<dd> groups, so the markup isn't valid. Name the list with a heading outside it, and put only pairs inside."
+      },
+      {
+        "name": "Mixed sizes in one list",
+        "jsx": "<KeyValueList>\n  <KeyValuePair size=\"sm\" label=\"Account type\" value=\"Trust\" underline />\n  <KeyValuePair size=\"lg\" label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+        "reason": "The rows change height and text size from one to the next. Give every pair in a list the same size."
+      },
+      {
+        "name": "Inline Edit's buttons below an editable pair",
+        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName}>\n      <TextField context=\"inline\" aria-label=\"Client name\" />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Status\" value=\"Active\" />\n</KeyValueList>",
+        "reason": "With Inline Edit's default placement the row grows while editing, and the rest of the list moves down. Use actionPlacement=\"end\" so the list doesn't shift while someone edits."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1836,6 +2929,21 @@
         "name": "Using for a form layout",
         "jsx": "<KeyValuePair label=\"Email\">\n  <TextField placeholder=\"Enter email\" />\n</KeyValuePair>",
         "reason": "Key Value Pair is for compact metadata display, not full form layouts. Use the Form organism with Field molecules for forms."
+      },
+      {
+        "name": "Unnamed inline control",
+        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\">\n    <InlineEdit value={name} onConfirm={setName} actionPlacement=\"end\">\n      <TextField context=\"inline\" />\n    </InlineEdit>\n  </KeyValuePair>\n</KeyValueList>",
+        "reason": "The key isn't linked to the field, so the field has no accessible name. Give the inline control an aria-label that matches the key."
+      },
+      {
+        "name": "Inline Edit's buttons below the value",
+        "jsx": "<KeyValueList>\n  <KeyValuePair label=\"Client name\" underline>\n    <InlineEdit value={name} onConfirm={setName}>\n      <TextField context=\"inline\" aria-label=\"Client name\" />\n    </InlineEdit>\n  </KeyValuePair>\n  <KeyValuePair label=\"Account type\" value=\"Revocable trust\" />\n</KeyValueList>",
+        "reason": "Inline Edit's default placement puts the buttons below the field and makes room for them, so the row grows while editing and the pairs below it move down. Use actionPlacement=\"end\"."
+      },
+      {
+        "name": "Sizing only the pair",
+        "jsx": "<KeyValueList>\n  <KeyValuePair size=\"lg\" label=\"Client name\">\n    <TextField context=\"inline\" aria-label=\"Client name\" />\n  </KeyValuePair>\n</KeyValueList>",
+        "reason": "The pair's size doesn't reach the control: it stays 40px tall in a 48px row, and its text is smaller than the key's. Give the inline control the pair's size."
       }
     ],
     "exemplarCompleteness": "full"
@@ -1935,25 +3043,37 @@
         "name": "Recents on open",
         "description": "Supply `recents` so opening the picker is instant - `onSearch` is then only called once a query is typed.",
         "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  recents={RECENTS}\n/>",
-        "props": {}
+        "props": {
+          "aria-label": "Note",
+          "recents": "EntitySection[] (RECENTS)"
+        }
       },
       {
         "name": "Tone and icon per entity type",
         "description": "entityConfig drives both the picker's section heading tile and the inserted tag, so color encodes type consistently in both places.",
-        "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <UserIcon /> },\n  matter: { tone: 'teal', icon: <BriefcaseIcon /> },\n  roadmap: { tone: 'purple', icon: <MapIcon /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
-        "props": {}
+        "jsx": "const entityConfig = {\n  person: { tone: 'blue', icon: <PersonIcon decorative /> },\n  matter: { tone: 'teal', icon: <FolderIcon decorative /> },\n  roadmap: { tone: 'purple', icon: <RoadmapIcon decorative /> },\n};\n\n<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={entityConfig}\n/>",
+        "props": {
+          "aria-label": "Note",
+          "entityConfig": "{ person: blue + PersonIcon, matter: teal + FolderIcon, roadmap: purple + RoadmapIcon }"
+        }
       },
       {
         "name": "Prefilled from stored content",
         "description": "Hydrate from a saved node array. The editor reads it on mount and leads from then on - onChange reports every later edit.",
         "jsx": "const stored: RichTextValue = [\n  { type: 'text', text: 'Ask ' },\n  { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1' } },\n  { type: 'text', text: ' about the filing' },\n];\n\n<RichTextArea aria-label=\"Note\" value={stored} onChange={setValue} onSearch={search} />",
-        "props": {}
+        "props": {
+          "aria-label": "Note",
+          "value": "RichTextValue (stored: text, entity, text)"
+        }
       },
       {
         "name": "People rows with avatars",
         "description": "A row leading with an Avatar or AvatarGroup renders inline and hugs its width, with no description line - matching Figma's People and Families lists.",
-        "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};",
-        "props": {}
+        "jsx": "const section = {\n  id: 'people', heading: 'People', entityType: 'person',\n  items: [{\n    id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1',\n    leadingElement: <Avatar size=\"xs\" name=\"Ben Averill\" />,\n  }],\n};\n\n<RichTextArea aria-label=\"Note\" value={value} onChange={setValue} onSearch={() => [section]} />",
+        "props": {
+          "aria-label": "Note",
+          "onSearch": "() => [section]"
+        }
       },
       {
         "name": "Sizes, context and states",
@@ -1970,7 +3090,11 @@
         "name": "Labelled by Field",
         "description": "Field names the editor by aria-labelledby (a label's htmlFor can't name a div) and passes its message, error, and required, which the editor sets as aria-describedby, aria-invalid, and aria-required.",
         "jsx": "<Field label=\"Notes\" message=\"Type / to link a matter\" state=\"error\" required>\n  <RichTextArea value={value} onChange={setValue} onSearch={search} />\n</Field>",
-        "props": {}
+        "props": {
+          "value": "RichTextValue (value)",
+          "onChange": "setValue",
+          "onSearch": "search"
+        }
       }
     ],
     "antiExamples": [
@@ -1988,6 +3112,16 @@
         "name": "Storing the value as HTML",
         "jsx": "onChange={(nodes) => save(nodesToHtml(nodes))}",
         "reason": "The node array is the stable contract. Round-tripping through HTML leaks the editor's DOM shape into your data and forces every consumer to parse it back out - persist the nodes, or map them to your own shape."
+      },
+      {
+        "name": "The same tone for every entity type",
+        "jsx": "<RichTextArea\n  aria-label=\"Note\"\n  value={value}\n  onChange={setValue}\n  onSearch={search}\n  entityConfig={{\n    account: { tone: 'default', icon: <TeamAndPartnersIcon decorative /> },\n    matter: { tone: 'default', icon: <FolderIcon decorative /> },\n  }}\n/>",
+        "reason": "With one tone for every type, people can't tell a person from a matter at a glance. Give each entityType its own tone, so a tag's color says what it links to."
+      },
+      {
+        "name": "Clearing the note by passing a new value",
+        "jsx": "<RichTextArea value={note} onChange={setNote} onSearch={search} aria-label=\"Note\" />\n\n// Later. The editor still shows the old text.\nsetNote([]);",
+        "reason": "The editor reads value only when it mounts, so a new value passed later - including an empty array to clear it - is ignored and the old text stays on screen."
       }
     ],
     "exemplarCompleteness": "full"
@@ -2377,6 +3511,11 @@
         "name": "Expecting inline tags or formatting",
         "jsx": "<TextArea aria-label=\"Body\" defaultValue=\"Assigned to /Jordan\" />",
         "reason": "Text Area is plain text only - `/` is a literal character here. The inline entity-tagging mode (`type=rich-inline` in Figma) ships as RichTextArea; use that when the text needs to link to records."
+      },
+      {
+        "name": "Horizontal resizing in a form",
+        "jsx": "<TextArea rows={4} resize=\"both\" aria-label=\"Notes\" />",
+        "reason": "A horizontal drag can push the field past its column. Keep the default resize=\"vertical\", so people can make the field taller without changing its width."
       }
     ],
     "exemplarCompleteness": "full"

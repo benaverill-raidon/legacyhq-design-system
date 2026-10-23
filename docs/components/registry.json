@@ -867,20 +867,18 @@
         "entityType has no corresponding Figma variant - added 2026-08-21 (re-verified against the avatar component set's own componentPropertyDefinitions, which only defines size/status/state/presence/isInteractive/isDisabled/selected - no team/entity axis) so Avatar's fallback artwork can distinguish an individual (the existing person silhouette) from a team/partner entity (a new two-person silhouette) when there is no src. The team silhouette is not invented art - it's the real, already-shipped team-and-partners icon glyph (packages/ui/src/assets/icons/source/team-and-partners.svg), rescaled and recolored to exactly match the person fallback's own template (a 200x200 flat-color square with a centered glyph, same two light/dark color pairs) rather than drawn from scratch."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1334,20 +1332,18 @@
       "variantCount": 27,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1420,7 +1416,7 @@
       "ToggleIconButton",
       "Spinner"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -1441,16 +1437,14 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract",
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
-        "examples": false,
+        "contract": true,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -1558,20 +1552,18 @@
       "variantCount": 32,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1730,20 +1722,18 @@
         "Default appearance colour is content/brand/primary/default (matches Figma)."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -1828,7 +1818,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -1836,7 +1825,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -1996,20 +1985,18 @@
       ],
       "verifiedAt": "2026-10-23"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2178,7 +2165,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -2186,7 +2172,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -2474,20 +2460,18 @@
       ],
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2570,20 +2554,18 @@
       ],
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2636,20 +2618,18 @@
       "variantCount": 4,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2718,20 +2698,18 @@
       "variantCount": 20,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2806,20 +2784,18 @@
         "isInteractive has no corresponding Figma variant - added 2026-08-20 so Tag can be composed as a plain focusable button trigger (no navigation, no remove affordance) elsewhere in the system. Gated as isInteractive || typeof onClick === 'function', the same pattern Avatar already uses for its own isInteractive prop. First consumer: Tag Group's '+N more' overflow tag, which opens a Dropdown Menu on click."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2890,20 +2866,18 @@
       "variantCount": 48,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -2972,20 +2946,18 @@
       "variantCount": 96,
       "verifiedAt": "2026-08-06"
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "examples"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": true
       }
     }
@@ -3105,7 +3077,6 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "examples",
         "noKnownIssues"
       ],
       "evidence": {
@@ -3113,7 +3084,7 @@
         "tests": true,
         "figma": true,
         "contract": true,
-        "examples": false,
+        "examples": true,
         "noKnownIssues": false
       }
     }
@@ -4971,7 +4942,7 @@
     "relatedComponents": [
       "KeyValuePair"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -4985,19 +4956,17 @@
         "The list renders a <dl> for semantic HTML. Figma uses an auto-layout frame."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "contract"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
         "noKnownIssues": true
       }
@@ -5114,7 +5083,7 @@
       "TextArea",
       "Field"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -5143,14 +5112,13 @@
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract",
         "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
         "noKnownIssues": false
       }
@@ -5550,7 +5518,7 @@
       "Avatar",
       "IconTile"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -5574,20 +5542,33 @@
       ]
     },
     "status": "beta",
-    "knownIssues": [],
+    "knownIssues": [
+      {
+        "kind": "bug",
+        "summary": "In Firefox and Safari the caret can drift out of the `/` query box at its edge: the box is an inline editable span, and there's no caret-correction guard yet (checked only in Chrome)."
+      },
+      {
+        "kind": "bug",
+        "summary": "Backspace doesn't remove a tag as one unit in every position: the tag is atomic to the caret, but the surrounding deletion cases aren't fully handled."
+      },
+      {
+        "kind": "bug",
+        "summary": "Pasted rich HTML isn't sanitized into the value's node model; multi-line serialization handles `<br>` but not every paste shape."
+      }
+    ],
     "replacedBy": null,
     "statusCheck": {
       "supported": "beta",
       "unmet": [
-        "contract"
+        "noKnownIssues"
       ],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
-        "noKnownIssues": true
+        "noKnownIssues": false
       }
     }
   },
@@ -6521,7 +6502,7 @@
       "Label",
       "KeyValuePair"
     ],
-    "contentCompleteness": "partial",
+    "contentCompleteness": "full",
     "figmaSource": {
       "file": "Components v1.0.0",
       "fileKey": "M0eINB6n1BfrXu7ntYqb1i",
@@ -6545,19 +6526,17 @@
         "Adds a `resize` prop (none/vertical/horizontal/both, default vertical) mapping to the CSS `resize` property - not a Figma axis, but the standard, expected control for a text area. A disabled field locks resize to none."
       ]
     },
-    "status": "beta",
+    "status": "stable",
     "knownIssues": [],
     "replacedBy": null,
     "statusCheck": {
-      "supported": "beta",
-      "unmet": [
-        "contract"
-      ],
+      "supported": "stable",
+      "unmet": [],
       "evidence": {
         "docsPage": true,
         "tests": true,
         "figma": true,
-        "contract": false,
+        "contract": true,
         "examples": true,
         "noKnownIssues": true
       }

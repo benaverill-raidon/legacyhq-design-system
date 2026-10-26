@@ -1,0 +1,168 @@
+{
+  "description": "MCP-02 benchmark tasks. Each prompt is sent unchanged under every condition. A check passes when every condition in `require` holds and none in `forbid` does. A condition is a regular expression over the answer's code (`code`), or an element in its JSX (`element`) with the attributes in `has` (true: present; a string: a regular expression the attribute's value or expression text must match). score.mjs also runs the general checks on every answer. Each check names the repo source that makes it the right answer.",
+  "tasks": [
+    {
+      "id": "choose-control",
+      "title": "Choose a form control",
+      "prompt": "On the LegacyHQ matter intake form, people choose how a matter is billed: hourly, flat fee, or contingency. Which LegacyHQ design system component should I use for this? Give me the JSX for it.",
+      "checks": [
+        {
+          "id": "uses-radio-group",
+          "kind": "choice",
+          "describe": "Uses RadioGroup: one answer from a few options people should see side by side.",
+          "source": "Patterns / Forms and Validation, Choosing: Radio",
+          "require": [{ "element": "RadioGroup" }]
+        },
+        {
+          "id": "not-select-or-switch",
+          "kind": "choice",
+          "describe": "Doesn't use Select, Switch, Checkbox, or Toggle Button for three options to compare.",
+          "source": "Patterns / Forms and Validation, Rules: a few options people should compare are radios, not a Select",
+          "forbid": [{ "element": "Select" }, { "element": "Switch" }, { "element": "Checkbox" }, { "element": "CheckboxGroup" }, { "element": "ToggleButton" }]
+        },
+        {
+          "id": "group-label",
+          "kind": "accessibility",
+          "describe": "Labels the group with RadioGroup's label, the fieldset's legend.",
+          "source": "radio.examples.json; Forms and Validation, Accessibility",
+          "require": [{ "element": "RadioGroup", "has": { "label": true } }]
+        },
+        {
+          "id": "three-options",
+          "kind": "choice",
+          "describe": "Offers hourly, flat fee, and contingency.",
+          "source": "the prompt",
+          "require": [{ "code": "[Hh]ourly" }, { "code": "[Ff]lat" }, { "code": "[Cc]ontingen" }]
+        }
+      ]
+    },
+    {
+      "id": "find-tokens",
+      "title": "Find the semantic tokens for a use case",
+      "prompt": "Write the CSS Module for a custom \"matter summary\" panel on a LegacyHQ page. It rests on the page as a raised surface with a border and rounded corners, has 16px of padding inside, uses the default body text color, and has a .secondary class for muted supporting text. Use the LegacyHQ design system's tokens.",
+      "checks": [
+        {
+          "id": "raised-surface",
+          "kind": "token",
+          "describe": "Background is the raised surface, var(--color-elevation-surface-raised-default).",
+          "source": "token-governance.json elevation.surfaceColor",
+          "require": [{ "code": "background(-color)?\\s*:\\s*var\\(--color-elevation-surface-raised-default\\)" }]
+        },
+        {
+          "id": "no-shadow",
+          "kind": "token",
+          "describe": "No shadow: a raised surface rests on the page and casts none; its border separates it.",
+          "source": "token-governance.json elevation.surfaceColor",
+          "forbid": [{ "code": "box-shadow\\s*:\\s*(?!none)" }]
+        },
+        {
+          "id": "border-tokens",
+          "kind": "token",
+          "describe": "Border width and color are tokens: var(--border-width-*) and a var(--color-border-*).",
+          "source": "CLAUDE.md, Strokes; token-governance.json shape",
+          "require": [{ "code": "var\\(--border-width-(sm|md|lg)\\)" }, { "code": "var\\(--color-border-[a-z-]+\\)" }]
+        },
+        {
+          "id": "radius-token",
+          "kind": "token",
+          "describe": "Corners use a var(--border-radius-*) token.",
+          "source": "CLAUDE.md, Strokes: radius tokens are for corners",
+          "require": [{ "code": "border-radius\\s*:\\s*var\\(--border-radius-[a-z-]+\\)" }]
+        },
+        {
+          "id": "padding-spacing-lg",
+          "kind": "token",
+          "describe": "16px of padding is var(--spacing-lg).",
+          "source": "CLAUDE.md, Dimensions: 16px of padding is --spacing-lg",
+          "require": [{ "code": "padding(-[a-z]+)?\\s*:\\s*var\\(--spacing-lg\\)" }]
+        },
+        {
+          "id": "body-text-color",
+          "kind": "token",
+          "describe": "Body text is var(--color-content-default).",
+          "source": "semantic color tokens (color-content-*)",
+          "require": [{ "code": "(^|[^-])color\\s*:\\s*var\\(--color-content-default\\)" }]
+        },
+        {
+          "id": "muted-text-color",
+          "kind": "token",
+          "describe": ".secondary uses var(--color-content-subtle).",
+          "source": "semantic color tokens; Card's stories use it for supporting text",
+          "require": [{ "code": "\\.secondary\\s*\\{[^}]*(^|[^-])color\\s*:\\s*var\\(--color-content-subtle\\)" }]
+        }
+      ]
+    },
+    {
+      "id": "implement-pattern",
+      "title": "Implement a documented pattern",
+      "prompt": "Build a \"New contact\" form in React with the LegacyHQ design system. The contact's name and email are required, and \"Send me updates by email\" is a yes or no choice that's saved with the form. A Save button submits it. Handle validation errors the way the design system documents.",
+      "checks": [
+        {
+          "id": "uses-form",
+          "kind": "choice",
+          "describe": "Uses Form.",
+          "source": "Patterns / Forms and Validation",
+          "require": [{ "element": "Form" }]
+        },
+        {
+          "id": "field-text-field",
+          "kind": "choice",
+          "describe": "Name and email are TextFields inside Field.",
+          "source": "Forms and Validation, Choosing: Text Field, with Field",
+          "require": [{ "element": "Field" }, { "element": "TextField" }]
+        },
+        {
+          "id": "checkbox-not-switch",
+          "kind": "choice",
+          "describe": "The choice saved with the form is a Checkbox, not a Switch.",
+          "source": "Forms and Validation, Rules: a Switch takes effect right away, so it doesn't belong in a form with a submit button",
+          "require": [{ "element": "Checkbox" }],
+          "forbid": [{ "element": "Switch" }]
+        },
+        {
+          "id": "required",
+          "kind": "accessibility",
+          "describe": "Marks the required fields with Field's required, and sets the form's requiredLegend.",
+          "source": "Forms and Validation, Rules: mark required fields with required and set the form's requiredLegend",
+          "require": [{ "element": "Field", "has": { "required": true } }, { "element": "Form", "has": { "requiredLegend": true } }]
+        },
+        {
+          "id": "no-validate",
+          "kind": "choice",
+          "describe": "Sets noValidate on Form, so the system's errors show instead of the browser's.",
+          "source": "Forms and Validation, Rules: use your own check or the browser's, not both",
+          "require": [{ "element": "Form", "has": { "noValidate": true } }]
+        },
+        {
+          "id": "field-errors",
+          "kind": "accessibility",
+          "describe": "Each field shows its error: Field's state (\"error\") and message, with the control's invalid.",
+          "source": "Forms and Validation, Rules and Choosing",
+          "require": [{ "element": "Field", "has": { "state": "error", "message": true } }, { "element": "TextField", "has": { "invalid": true } }]
+        },
+        {
+          "id": "error-summary",
+          "kind": "accessibility",
+          "describe": "A failed submit shows a Section Message with tone \"error\" and errors.",
+          "source": "Forms and Validation, Rules: show a failed submit at the top and at each field",
+          "require": [{ "element": "SectionMessage", "has": { "tone": "error", "errors": true } }]
+        },
+        {
+          "id": "focus-summary",
+          "kind": "accessibility",
+          "describe": "Moves focus to the summary after a failed submit: tabIndex={-1} and a focus() call.",
+          "source": "Forms and Validation, Accessibility: no component moves focus when a submit fails; move it to the summary yourself",
+          "require": [{ "element": "SectionMessage", "has": { "tabIndex": "-1" } }, { "code": "\\.focus\\(" }]
+        },
+        {
+          "id": "submit-button",
+          "kind": "choice",
+          "describe": "Save is a Button with type \"submit\" that isn't disabled while saving.",
+          "source": "Forms and Validation, Rules: show the submit is busy on its button; don't disable it",
+          "require": [{ "element": "Button", "has": { "type": "submit" } }],
+          "forbid": [{ "element": "Button", "has": { "type": "submit", "disabled": true } }]
+        }
+      ]
+    }
+  ]
+}

@@ -26,7 +26,7 @@ Atom
 
 ## Design Decisions
 
-- Use `appearance` and `tone` separately to avoid a large variant matrix.
+- Use `prominence` and `tone` separately to avoid a large variant matrix.
 - Use `children` for button text/content instead of a `buttonText` prop.
 - Keep Button text-first; icon-only buttons should be handled by a separate IconButton component.
 - Support icons before and after content, but do not expose icon size controls.
@@ -48,15 +48,16 @@ Atom
 - `md`
 - `lg`
 
-### Appearance
+### Prominence
 
-- `default`
 - `primary`
-- `subtle`
+- `secondary` (default)
+- `tertiary`
 
 ### Tone
 
-- `neutral`
+- `default`
+- `brand`
 - `warning`
 - `error`
 
@@ -77,9 +78,9 @@ Atom
 - Support `type="submit"` and `type="reset"` when provided.
 - Do not use ARIA roles to recreate native button behavior.
 - Disabled buttons should use the native `disabled` attribute.
-- Disabled visual treatment must match the appearance's own resting border: bordered
-  (`color-border-disabled`) for `appearance="default"`; borderless (`border-color: transparent`) for
-  `appearance="primary"`/`appearance="subtle"`, at every tone.
+- Disabled visual treatment must match the prominence's own resting border: bordered
+  (`color-border-disabled`) for `prominence="secondary"`; borderless (`border-color: transparent`) for
+  `prominence="primary"`/`prominence="tertiary"`, at every tone.
 - Loading buttons should prevent repeated activation.
 - Loading buttons should expose loading state accessibly.
 - Focus must be visible with keyboard navigation.
@@ -164,7 +165,7 @@ Stories should document behavior, not create one story per variant permutation.
 
 - Button renders text content correctly.
 - Button supports all sizes.
-- Button supports all appearances.
+- Button supports all prominences.
 - Button supports all tones.
 - Button supports hover, press, focus, disabled, and loading states.
 - Loading state holds the button's size.

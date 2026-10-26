@@ -7,6 +7,8 @@ reading the repo's files.
 - `query/`: the library. Everything below answers through it.
 - `cli/`: `legacyhq`, the library on the command line.
 - `mcp/`: an MCP server over the same library, for agent clients.
+- `benchmark/`: tasks, runner, and scorer comparing docs alone, the CLI, and MCP in headless
+  Claude Code, with the recorded runs and the [report](benchmark/REPORT.md).
 
 Nothing here writes, uses the network, or is published to npm. The answers come from:
 

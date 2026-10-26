@@ -188,11 +188,12 @@ other primitive types aren't checked (no component CSS uses a primitive
 dimension token today, but nothing enforces it). See the `enforcement`
 block in that file and the Commands section below.
 
-1. **Primitive** — raw values only, no intent. `color.blue.500`,
-   `spacing.4`. **Components must never consume these directly.**
+1. **Primitive** — raw values only, no intent. `--color-blue-solid-500`,
+   `--measurement-16`. **Components must never consume these directly.**
 2. **Semantic** — the primary layer components should consume. Represents
-   intent/meaning. `color.background.brand`, `color.text.primary`. Maps to
-   primitives.
+   intent/meaning. `--color-background-brand-primary-bold-default`,
+   `--color-content-default` (text colors are `color-content-*`; there is no
+   `color-text-*`). Maps to primitives.
 3. **Component** — exceptions only, not defaults. `button.primary.background`.
    Should alias semantic tokens. Only create one when a component needs
    independent theming/control that the semantic layer can't express.
@@ -244,7 +245,7 @@ in token-governance.json.
 already expresses the same meaning — reuse it. Don't create component tokens
 that just duplicate a semantic token under a different name (e.g. don't make
 `badge.primary.background` and `toast.primary.background` if
-`color.background.brand` already covers it).
+`--color-background-brand-primary-bold-default` already covers it).
 
 ## Component conventions (from the Button doc set — treat as the reference pattern)
 

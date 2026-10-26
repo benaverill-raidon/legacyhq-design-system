@@ -195,6 +195,27 @@ describe('rules', () => {
     expect(getRules('componentTokenCreationRule').content).toEqual(tokenGovernance.componentTokenCreationRule);
   });
 
+  it('names only real tokens in the governance examples, except the ones marked hypothetical', () => {
+    const g = read('docs/foundations/token-governance.json');
+    // An alias is one token name, or one per mode ({ light, dark }).
+    const aliases = (value) => (value === undefined ? [] : typeof value === 'string' ? [value] : Object.values(value));
+    const named = [
+      ...g.architecture.tiers.flatMap((tier) => [...tier.examples, tier.exampleMapping.token, ...aliases(tier.exampleMapping.aliases)]),
+      ...Object.values(g.namingConventions).flatMap((convention) => convention.examples),
+      g.componentTokenCreationRule.preferredExample.token,
+      g.componentTokenCreationRule.avoidExample.aliases,
+      ...g.antiPatternExamples.map((example) => example.good),
+    ];
+    expect(named.length).toBeGreaterThan(20);
+    for (const name of named) expect(getToken(name).name, name).toBe(name);
+    expect(getToken(g.architecture.tiers[0].exampleMapping.token).values[0].css).toBe(g.architecture.tiers[0].exampleMapping.value);
+    expect(g.componentTokenCreationRule.avoidExample.hypothetical).toBe(true);
+    for (const example of g.antiPatternExamples) {
+      expect(example.hypothetical).toBe(true);
+      for (const name of example.bad) expect(thrown(() => getToken(name)).code, name).toBe('NOT_FOUND');
+    }
+  });
+
   it('returns each component API rule by its id', () => {
     for (const rule of read('docs/foundations/component-api-governance.json').rules) {
       expect(getRules(rule.id).content).toEqual(rule);

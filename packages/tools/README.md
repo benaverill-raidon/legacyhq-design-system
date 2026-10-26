@@ -6,7 +6,7 @@ reading the repo's files.
 
 - `query/`: the library. Everything below answers through it.
 - `cli/`: `legacyhq`, the library on the command line.
-- `mcp/`: an MCP server over the same library (planned).
+- `mcp/`: an MCP server over the same library, for agent clients.
 
 Nothing here writes, uses the network, or is published to npm. The answers come from:
 
@@ -82,6 +82,45 @@ same components, and match their sources, and that the token sources validate. E
 the file and the command that fixes it. It isn't `npm run validate`, which also typechecks, lints,
 and runs every test, and which CI runs on every pull request.
 
+## MCP server
+
+`mcp/server.mjs` is a local MCP server over stdio. The repo's `.mcp.json` registers it as
+`legacyhq-design-system`, with a relative path, so it works from any clone:
+
+```json
+{ "mcpServers": { "legacyhq-design-system": { "command": "node", "args": ["packages/tools/mcp/server.mjs"] } } }
+```
+
+In Claude Code, run `npm install`, then open the repo: Claude Code asks once whether to use the
+project's servers. `/mcp` shows whether it's connected. Other clients that read a project
+`.mcp.json`, or let you add a stdio server, run the same command from the repo root.
+
+| Tool | Library function | CLI equivalent |
+|---|---|---|
+| `search_components` | `searchComponents` | `components search` |
+| `get_component` | `getComponent` | `components get` |
+| `get_examples` | `getExamples` | `examples` |
+| `search_tokens` | `searchTokens` | `tokens search` |
+| `get_token` | `getToken` | `tokens get` |
+| `get_rules` | `getRules`, or `listRuleTopics` with no topic (as `{ topics }`) | `rules` |
+| `search_icons` | `searchIcons` | `icons search` |
+| `check_system` | `checkSystem` | `doctor` |
+
+- Each result's structured content is the library result, the same JSON the CLI prints with
+  `--json`. Its text is a short summary followed by that JSON, for clients that only read text.
+- Searches return compact rows; `get_component` gives one component in full. There's no tool that
+  lists every component.
+- Inputs are checked before anything runs: limits are 1-200, and category, tier, status, token
+  type, mode, icon category, and rule topic only accept values that exist in the schema and data.
+- Errors come back as tool errors (`isError`) with `{ error: { code, message, suggestions?, allowed? } }`,
+  the CLI's JSON error. Ids are looked up in the registry, never used as file paths.
+- stdout carries only the protocol; anything else goes to stderr. The server exits when the client
+  disconnects. Every tool is marked read-only; none writes or uses the network.
+- `check_system` runs the `doctor` checks. It never runs `npm run validate`.
+
+If MCP isn't available, use the CLI; failing that, read `docs/components/registry.json` and
+`exemplars.json` directly.
+
 ## Using the library
 
 ```js
@@ -100,5 +139,9 @@ stable order for ties. The only errors thrown on purpose are `QueryError`s: `NOT
 
 ## Tests
 
-`query/query.test.mjs` and `cli/cli.test.mjs` run with `npm test`, and so in `npm run validate` and CI.
-They check the answers against the repo's own files, not hand-copied values.
+`query/query.test.mjs`, `cli/cli.test.mjs`, and `mcp/server.test.mjs` run with `npm test`, and so in
+`npm run validate` and CI. They check the answers against the repo's own files, not hand-copied
+values. The MCP tests also check each tool's structured result equals the CLI's `--json` output.
+
+The `.mjs` files here keep LF line endings (`.gitattributes`): a shebang line ending in `\r` breaks
+the program on Unix, and vitest can't parse it on a Windows checkout.

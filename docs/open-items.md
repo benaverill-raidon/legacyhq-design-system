@@ -28,7 +28,7 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    questions.
 7. Status: done. Draft, Beta, Stable, Deprecated, authored in each contract and checked against the
    evidence (componentStatus in component-registry-governance.json). Started at 15 Stable, 43 Beta.
-8. **Now: the held items.**
+8. Held items: done, except what waits on Figma, a decision, or the designs.
    - Naming and behavior decisions, done 2026-10-22: start/end alignment, `removeLabel`,
      `toast.information()`, Field `success`, when errors show, loading toasts, focus after
      removal, disabled fieldsets, Slider field names, and the Table, Link, Modal Dialog, and
@@ -36,13 +36,33 @@ keeps what isn't about one component. Some of that is tracked next to its rules 
    - Gaps, done 2026-10-22: Section Message `errors`, Checkbox `errorMessage`, Slider `invalid` and
      Field wiring, Inline Edit `validate`, Table title size by `size`, Progress Bar's empty ring,
      and the Table, Label, and Tag Group decisions.
-   - Bugs, done 2026-10-23: 27 known issues closed across 16 components. Now 25 Stable, 33 Beta.
+   - Bugs, done 2026-10-23: 27 known issues closed across 16 components, plus Progress Bar matched
+     to its revised Figma (no outer spacing).
    - Docs tooling, done 2026-10-23: code samples keep their indent on every page (190 samples on
      51 pages), the toolbar theme reaches overlays and the canvas, one global Toast Group,
      "Components used" by code folder; union-prop tables, overlay anatomy, the tone table, and
      template heading levels recorded as limitations.
-   - **Next:** the remaining known issues that need decisions or Figma (on Introduction / Status
-     and in the Figma checklist above).
+   - Issue review, done 2026-10-23: the owner's decisions (Tag keeps `tone` for accent colors,
+     Tag for categories and Label for statuses, the vertical "more" icon, legends and group text
+     in Field's style, Field's icon on the first line, circular Progress Bar `md`/`lg`, Button
+     Group `spacing="compact"`, Table's sunken header, Split Button's deprecated `tone`) and the
+     code fixes that needed none.
+   - Examples and contracts, done 2026-10-23: every component's examples (props maps, and
+     anti-examples from its Docs page's Don'ts) and contract (all eight sections) are full.
+   - Leftover subtasks, done 2026-10-26: the Light taupe transparent colors matched to Figma, and
+     Button's icon gap at 6px; the temporary Button case-study story deleted.
+   - Rich Text Area's three bugs, done 2026-10-26: pasting and dropping take plain text only,
+     Backspace and Delete remove a tag whole, and a caret guard keeps typing in the `/` box. Also
+     fixed: a doubled space after a hydrated tag, and Ctrl+B/I/U markup the value couldn't keep.
+9. **Now: 47 Stable, 11 Beta.** What's left is on Introduction / Status and below:
+   - Figma tokens: Focus Ring, Progress Indicator, Skeleton, Toast, Tooltip.
+   - The icon reconciliation in Figma: Icon.
+   - The Button family revision in Figma: Icon Button, Link Button, Split Button.
+   - A decision: the edit icon beside an Inline Edit value in Key Value Pair.
+   - Rich Text Area: check the caret guard live in Firefox and Safari, and make undo step through
+     the edits it makes itself.
+   - The Figma checklist below (publish, renames, variants, tokens, icons, cleanup).
+   - Templates: revise Document Generation and Roadmap against their designs when they're done.
 
 ## Figma (the owner's checklist)
 

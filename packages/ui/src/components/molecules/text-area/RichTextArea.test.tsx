@@ -256,6 +256,29 @@ describe('RichTextArea', () => {
 
       expect(getEditor().querySelectorAll('br')).toHaveLength(1);
     });
+
+    it('shows a trailing newline as an empty last line, and reports it back once', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'text', text: 'one\n' }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+
+      const editor = getEditor();
+      expect(editor.querySelectorAll('br')).toHaveLength(2);
+      fireEvent.input(editor);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'one\n' }]);
+    });
+
+    it('reports the value back unchanged, adding no space between a tag and the text after it', () => {
+      const onChange = vi.fn();
+      const value: RichTextValue = [
+        { type: 'text', text: 'Ask ' },
+        { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill', href: '/people/p1' } },
+        { type: 'text', text: ' about it' },
+      ];
+      render(<RichTextArea value={value} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+
+      fireEvent.input(getEditor());
+      expect(onChange).toHaveBeenLastCalledWith(value);
+    });
   });
 
   describe('slash command', () => {
@@ -472,6 +495,576 @@ describe('RichTextArea', () => {
       // The separating space that follows a tag is ordinary text, so deleting the
       // tag leaves it behind - the surrounding runs then merge into one node.
       expect(onChange).toHaveBeenCalledWith([{ type: 'text', text: 'Ask  ' }]);
+    });
+
+    it('cancels bold, italic, and underline, which the value has no way to keep', () => {
+      render(<RichTextArea value={[{ type: 'text', text: 'Ask' }]} onChange={noop} onSearch={() => []} aria-label="Note" />);
+
+      for (const inputType of ['formatBold', 'formatItalic', 'formatUnderline']) {
+        const event = new InputEvent('beforeinput', { inputType, bubbles: true, cancelable: true });
+        getEditor().dispatchEvent(event);
+        expect(event.defaultPrevented).toBe(true);
+      }
+    });
+  });
+
+  describe('paste and drop', () => {
+    const RICH_HTML = [
+      '<script>window.__pwned = true</script>',
+      '<img src="x" onerror="window.__pwned = true">',
+      '<span style="color: red; font-size: 40px">Styled</span> ',
+      '<a href="javascript:alert(1)">link</a>',
+      '<p>second line</p>',
+    ].join('');
+    const RICH_PLAIN = 'Styled link\r\nsecond line';
+
+    function clipboard(data: Record<string, string>) {
+      return { getData: (type: string) => data[type] ?? '', types: Object.keys(data) };
+    }
+
+    /** No element in the editor other than line breaks and tag hosts with their tags. */
+    function foreignElements(editor: HTMLElement) {
+      return Array.from(editor.querySelectorAll('*')).filter(
+        (el) => el.tagName !== 'BR' && !el.closest('[data-entity-id]'),
+      );
+    }
+
+    it('pastes rich HTML as plain text only: no scripts, images, styles, links, or attributes', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor, 0);
+
+      const notCancelled = fireEvent.paste(editor, {
+        clipboardData: clipboard({ 'text/html': RICH_HTML, 'text/plain': RICH_PLAIN }),
+      });
+
+      expect(notCancelled).toBe(false);
+      expect(foreignElements(editor)).toEqual([]);
+      expect(editor.innerHTML).not.toMatch(/script|img|onerror|style=|href|javascript/i);
+      expect(editor.innerHTML).toBe('Styled link<br>second line');
+      expect((window as unknown as { __pwned?: boolean }).__pwned).toBeUndefined();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Styled link\nsecond line' }]);
+    });
+
+    it('keeps each pasted line break as a line break, and puts the caret after the paste', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'text', text: 'ab' }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor.firstChild as Text, 1);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'one\ntwo\r\n\nthree' }) });
+
+      expect(editor.querySelectorAll('br')).toHaveLength(3);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'aone\ntwo\n\nthreeb' }]);
+      // Typing would continue right after the pasted text, before the "b".
+      const selection = window.getSelection() as Selection;
+      expect(selection.anchorNode?.textContent).toBe('threeb');
+      expect(selection.anchorOffset).toBe(5);
+    });
+
+    it('pasted text ending in a line break at the end opens the new empty line', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'text', text: 'a' }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor.firstChild as Text, 1);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'b\n' }) });
+
+      // The second <br> is the placeholder that shows the empty line; the value has one line break.
+      expect(editor.innerHTML).toBe('ab<br><br>');
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'ab\n' }]);
+      expect(window.getSelection()?.anchorNode).toBe(editor);
+      expect(window.getSelection()?.anchorOffset).toBe(2);
+    });
+
+    it('replaces the selected text, and never pastes an image or other non-text', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'text', text: 'hello world' }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      const text = editor.firstChild as Text;
+      const range = document.createRange();
+      range.setStart(text, 6);
+      range.setEnd(text, 11);
+      window.getSelection()?.removeAllRanges();
+      window.getSelection()?.addRange(range);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'there' }) });
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'hello there' }]);
+
+      caretAt(editor.firstChild as Text, 0);
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'image/png': 'binary', 'text/html': '<img src="x">' }) });
+      expect(editor.querySelector('img')).toBeNull();
+      expect(editor.textContent).toBe('hello there');
+    });
+
+    it('pastes beside a tag without splitting or copying it', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor, 0);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'Ask ' }) });
+
+      expect(editor.querySelectorAll('[data-entity-id]')).toHaveLength(1);
+      expect(onChange).toHaveBeenLastCalledWith([
+        { type: 'text', text: 'Ask ' },
+        { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } },
+        { type: 'text', text: ' ' },
+      ]);
+    });
+
+    it('pastes a single word into an open `/` query, and anything with spaces closes it as text', async () => {
+      const onSearch = vi.fn(() => PEOPLE);
+      render(<RichTextArea value={[]} onChange={noop} onSearch={onSearch} aria-label="Note" />);
+      const editor = getEditor();
+      pressSlash(editor);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'ben' }) });
+      expect(getSlashSpan()).toHaveTextContent('/ben');
+      await waitFor(() => expect(onSearch).toHaveBeenCalledWith('ben'));
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': ' and <b>Jess</b>' }) });
+      expect(getSlashSpan()).toBeNull();
+      expect(editor.innerHTML).toBe('/ben and &lt;b&gt;Jess&lt;/b&gt;');
+    });
+
+    it('drops text from outside as plain text at the drop point', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'text', text: 'ab' }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      const text = editor.firstChild as Text;
+      const doc = document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range };
+      doc.caretRangeFromPoint = () => {
+        const range = document.createRange();
+        range.setStart(text, 1);
+        return range;
+      };
+      try {
+        const notCancelled = fireEvent.drop(editor, {
+          clientX: 10,
+          clientY: 10,
+          dataTransfer: clipboard({ 'text/html': '<img src="x" onerror="alert(1)"><i>x</i>', 'text/plain': 'x' }),
+        });
+        expect(notCancelled).toBe(false);
+      } finally {
+        delete doc.caretRangeFromPoint;
+      }
+      expect(foreignElements(editor)).toEqual([]);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'axb' }]);
+    });
+
+    it('moves a tag dragged within the editor, keeping it a tag', () => {
+      const onChange = vi.fn();
+      const value: RichTextValue = [
+        { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } },
+        { type: 'text', text: ' then' },
+      ];
+      render(<RichTextArea value={value} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      const host = editor.querySelector('[data-entity-id="p1"]') as HTMLElement;
+      const end = editor.lastChild as Text;
+      const doc = document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range };
+      doc.caretRangeFromPoint = () => {
+        const range = document.createRange();
+        range.setStart(end, end.length);
+        return range;
+      };
+      try {
+        fireEvent.dragStart(host.firstChild as HTMLElement, { dataTransfer: clipboard({}) });
+        fireEvent.drop(editor, { clientX: 10, clientY: 10, dataTransfer: clipboard({ 'text/plain': 'Ben Averill' }) });
+      } finally {
+        delete doc.caretRangeFromPoint;
+      }
+      expect(editor.querySelectorAll('[data-entity-id]')).toHaveLength(1);
+      expect(editor.lastChild).toBe(host);
+      expect(onChange).toHaveBeenLastCalledWith([
+        { type: 'text', text: ' then' },
+        { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } },
+      ]);
+    });
+
+    it('handles a drop onto a tag too, putting the text after the tag', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[{ type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } }]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      const label = screen.getByText('Ben Averill');
+      const doc = document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range };
+      doc.caretRangeFromPoint = () => {
+        const range = document.createRange();
+        range.setStart(label.firstChild as Text, 3);
+        return range;
+      };
+      try {
+        // A tag is a portal: the drop lands in it, and the editor must still handle it.
+        const notCancelled = fireEvent.drop(label, { clientX: 10, clientY: 10, dataTransfer: clipboard({ 'text/html': '<b>bold</b>', 'text/plain': 'bold' }) });
+        expect(notCancelled).toBe(false);
+      } finally {
+        delete doc.caretRangeFromPoint;
+      }
+      expect(label).toHaveTextContent('Ben Averill');
+      expect(foreignElements(editor)).toEqual([]);
+      expect(onChange).toHaveBeenLastCalledWith([
+        { type: 'entity', entity: { id: 'p1', entityType: 'person', label: 'Ben Averill' } },
+        { type: 'text', text: 'bold ' },
+      ]);
+    });
+
+    it('takes only plain text from a paste that reaches beforeinput', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[]} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor, 0);
+      const event = new InputEvent('beforeinput', { inputType: 'insertFromPaste', bubbles: true, cancelable: true });
+      Object.defineProperty(event, 'dataTransfer', {
+        value: clipboard({ 'text/html': '<img src=x onerror=alert(1)>', 'text/plain': 'safe' }),
+      });
+
+      editor.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(editor.innerHTML).toBe('safe');
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'safe' }]);
+    });
+
+    it('ignores paste and drop while disabled', () => {
+      const onChange = vi.fn();
+      render(<RichTextArea value={[]} onChange={onChange} onSearch={() => []} disabled aria-label="Note" />);
+      const editor = getEditor();
+      caretAt(editor, 0);
+
+      fireEvent.paste(editor, { clipboardData: clipboard({ 'text/plain': 'x' }) });
+      fireEvent.drop(editor, { dataTransfer: clipboard({ 'text/plain': 'x' }) });
+
+      expect(editor.textContent).toBe('');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('deleting a tag', () => {
+    const BEN = { id: 'p1', entityType: 'person', label: 'Ben Averill' };
+    const JESS = { id: 'p2', entityType: 'person', label: 'Jess Averill' };
+
+    function host(id = 'p1') {
+      return getEditor().querySelector(`[data-entity-id="${id}"]`) as HTMLElement;
+    }
+
+    /** No empty text nodes and no zero-width characters anywhere in the editor's own text. */
+    function expectClean(editor: HTMLElement) {
+      editor.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          expect((node as Text).length).toBeGreaterThan(0);
+          expect((node as Text).data).not.toMatch(/[\u200B\uFEFF]/);
+        }
+      });
+    }
+
+    function renderValue(value: RichTextValue) {
+      const onChange = vi.fn();
+      render(<RichTextArea value={value} onChange={onChange} onSearch={() => []} aria-label="Note" />);
+      return { editor: getEditor(), onChange };
+    }
+
+    it('Backspace directly after a tag removes the whole tag, merging the text either side', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      caretAt(host().nextSibling as Text, 0);
+
+      expect(fireEvent.keyDown(editor, { key: 'Backspace' })).toBe(false);
+
+      expect(host()).toBeNull();
+      expect(editor.childNodes).toHaveLength(1);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask  ' }]);
+      expect(window.getSelection()?.anchorOffset).toBe(4);
+    });
+
+    it('Backspace in text after a tag deletes a character, as usual', () => {
+      const { editor } = renderValue([{ type: 'entity', entity: BEN }, { type: 'text', text: 'more' }]);
+      caretAt(editor.lastChild as Text, 2);
+
+      expect(fireEvent.keyDown(editor, { key: 'Backspace' })).toBe(true);
+      expect(host()).not.toBeNull();
+    });
+
+    it('Backspace removes a tag at the start of a line, and keeps the line break', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'one\n' }, { type: 'entity', entity: BEN }]);
+      caretAt(host().nextSibling as Text, 0);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(host()).toBeNull();
+      expect(editor.querySelectorAll('br')).toHaveLength(1);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'one\n ' }]);
+      expectClean(editor);
+    });
+
+    it('Backspace at the start of a line under a tag joins the lines, leaving the tag', () => {
+      const { editor } = renderValue([{ type: 'entity', entity: BEN }, { type: 'text', text: '\ntwo' }]);
+      caretAt(editor.lastChild as Text, 0);
+
+      expect(fireEvent.keyDown(editor, { key: 'Backspace' })).toBe(true);
+      expect(host()).not.toBeNull();
+    });
+
+    it('Backspace removes a tag at the end of a line, with an empty text node left between', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'one ' }, { type: 'entity', entity: BEN }, { type: 'text', text: '\ntwo' }]);
+      // The user deleted text after the tag, leaving an empty text node before the line break.
+      const empty = document.createTextNode('');
+      host().after(empty);
+      caretAt(empty, 0);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'one \ntwo' }]);
+      expectClean(editor);
+    });
+
+    it("doesn't report the placeholder <br> a browser leaves where a line ended on a tag as a line break", () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      // Chrome, deleting the space after a tag at the end, puts a placeholder <br> in its place.
+      host().nextSibling?.remove();
+      editor.appendChild(document.createElement('br'));
+      fireEvent.input(editor);
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+
+      caretAt(editor, 2);
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask ' }]);
+    });
+
+    it('Backspace and Delete between two adjacent tags remove the tag on their side', () => {
+      const { editor, onChange } = renderValue([{ type: 'entity', entity: BEN }, { type: 'entity', entity: JESS }]);
+      // The user deleted the space between them.
+      host('p1').nextSibling?.remove();
+      caretAt(editor, 1);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+      expect(host('p1')).toBeNull();
+      expect(host('p2')).not.toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'entity', entity: JESS }, { type: 'text', text: ' ' }]);
+
+      // The tags as they were, caret between them again: Delete takes the one after.
+      cleanup();
+      const second = renderValue([{ type: 'entity', entity: BEN }, { type: 'entity', entity: JESS }]);
+      host('p1').nextSibling?.remove();
+      caretAt(second.editor, 1);
+      fireEvent.keyDown(second.editor, { key: 'Delete' });
+      expect(host('p2')).toBeNull();
+      expect(host('p1')).not.toBeNull();
+      expect(second.onChange).toHaveBeenLastCalledWith([{ type: 'entity', entity: BEN }, { type: 'text', text: ' ' }]);
+    });
+
+    it('Delete at the start of the editor removes a tag there; Backspace there does nothing', () => {
+      const { editor, onChange } = renderValue([{ type: 'entity', entity: BEN }, { type: 'text', text: 'x' }]);
+      caretAt(editor, 0);
+
+      expect(fireEvent.keyDown(editor, { key: 'Backspace' })).toBe(true);
+      expect(host()).not.toBeNull();
+
+      fireEvent.keyDown(editor, { key: 'Delete' });
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'x' }]);
+      expectClean(editor);
+    });
+
+    it('Delete directly before a tag in text removes it', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      caretAt(editor.firstChild as Text, 4);
+
+      fireEvent.keyDown(editor, { key: 'Delete' });
+
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask  ' }]);
+    });
+
+    it('Backspace removes a tag at the end of the editor', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      host().nextSibling?.remove();
+      caretAt(editor, editor.childNodes.length);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask ' }]);
+      expectClean(editor);
+    });
+
+    it('Backspace removes a tag that is the only content, leaving the editor empty', () => {
+      const { editor, onChange } = renderValue([{ type: 'entity', entity: BEN }]);
+      host().nextSibling?.remove();
+      caretAt(editor, 1);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(editor.childNodes).toHaveLength(0);
+      expect(editor).toHaveAttribute('data-empty', 'true');
+      expect(onChange).toHaveBeenLastCalledWith([]);
+    });
+
+    it('removes zero-width filler between the caret and the tag along with it', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      const after = host().nextSibling as Text;
+      after.data = '\uFEFF ';
+      editor.insertBefore(document.createTextNode('\u200B'), after);
+      caretAt(after, 1);
+
+      fireEvent.keyDown(editor, { key: 'Backspace' });
+
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask  ' }]);
+      expectClean(editor);
+    });
+
+    it('removes a tag whole from a beforeinput delete (keyboards without a usable keydown)', () => {
+      const { editor, onChange } = renderValue([{ type: 'text', text: 'Ask ' }, { type: 'entity', entity: BEN }]);
+      caretAt(host().nextSibling as Text, 0);
+      const event = new InputEvent('beforeinput', { inputType: 'deleteContentBackward', bubbles: true, cancelable: true });
+
+      editor.dispatchEvent(event);
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(host()).toBeNull();
+      expect(onChange).toHaveBeenLastCalledWith([{ type: 'text', text: 'Ask  ' }]);
+    });
+  });
+
+  describe('query box caret guard', () => {
+    /** Open the query box between two runs of text: "ask " + [/] + "later". */
+    function openBetween() {
+      const onSearch = vi.fn(() => PEOPLE);
+      render(<RichTextArea value={[{ type: 'text', text: 'ask later' }]} onChange={noop} onSearch={onSearch} aria-label="Note" />);
+      const editor = getEditor();
+      const text = editor.firstChild as Text;
+      pressSlash(editor, text, 4);
+      const span = getSlashSpan() as HTMLElement;
+      return { editor, span, before: span.previousSibling as Text, after: span.nextSibling as Text, onSearch };
+    }
+
+    function selectionChange() {
+      document.dispatchEvent(new Event('selectionchange'));
+    }
+
+    function typeChar(editor: HTMLElement, data: string) {
+      const event = new InputEvent('beforeinput', { inputType: 'insertText', data, bubbles: true, cancelable: true });
+      editor.dispatchEvent(event);
+      return event;
+    }
+
+    it('moves a caret on the outside end edge of the box back inside it', async () => {
+      const { span, after } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(after, 0);
+
+      selectionChange();
+
+      const selection = window.getSelection() as Selection;
+      expect(selection.anchorNode).toBe(span.firstChild);
+      expect(selection.anchorOffset).toBe(1);
+      expect(getSlashSpan()).toBe(span);
+    });
+
+    it('moves a caret on the element-level edges, or in front of the `/`, to just after the `/`', async () => {
+      const { editor, span, before } = openBetween();
+      await screen.findByRole('menu');
+
+      caretAt(before, before.length);
+      selectionChange();
+      expect(window.getSelection()?.anchorNode).toBe(span.firstChild);
+      expect(window.getSelection()?.anchorOffset).toBe(1);
+
+      caretAt(span.firstChild as Text, 0);
+      selectionChange();
+      expect(window.getSelection()?.anchorOffset).toBe(1);
+
+      typeQuery(editor, 'be');
+      caretAt(editor, Array.prototype.indexOf.call(editor.childNodes, span) + 1);
+      selectionChange();
+      expect(window.getSelection()?.anchorNode).toBe(span.firstChild);
+      expect(window.getSelection()?.anchorOffset).toBe(3);
+    });
+
+    it('closes the box when the caret moves away from it, leaving the caret there', async () => {
+      const { before } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(before, 1);
+
+      selectionChange();
+
+      await waitFor(() => expect(screen.queryByRole('menu')).not.toBeInTheDocument());
+      expect(getSlashSpan()).toBeNull();
+      expect(window.getSelection()?.anchorNode).toBe(before);
+      expect(window.getSelection()?.anchorOffset).toBe(1);
+    });
+
+    it('routes text typed on the outside edge into the query', async () => {
+      const { editor, span, after, onSearch } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(after, 0);
+
+      const event = typeChar(editor, 'b');
+
+      expect(event.defaultPrevented).toBe(true);
+      expect(span).toHaveTextContent('/b');
+      expect(after.data).toBe('later');
+      await waitFor(() => expect(onSearch).toHaveBeenCalledWith('b'));
+      expect(window.getSelection()?.anchorNode).toBe(span.firstChild);
+      expect(window.getSelection()?.anchorOffset).toBe(2);
+    });
+
+    it('a space typed into the query ends it, keeping the text and the caret after the space', async () => {
+      const { editor, span } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(span.firstChild as Text, 1);
+      typeChar(editor, 'b');
+
+      typeChar(editor, ' ');
+
+      expect(getSlashSpan()).toBeNull();
+      expect(editor.textContent).toBe('ask /b later');
+      const selection = window.getSelection() as Selection;
+      expect(selection.anchorNode?.textContent).toBe('/b ');
+      expect(selection.anchorOffset).toBe(3);
+    });
+
+    it('lets text typed away from the box go where the caret is, and closes the box', async () => {
+      const { editor, before } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(before, 0);
+
+      const event = typeChar(editor, 'x');
+
+      expect(event.defaultPrevented).toBe(false);
+      expect(getSlashSpan()).toBeNull();
+    });
+
+    it('closes the box when the arrow keys move past either end of the query', async () => {
+      const { editor, span } = openBetween();
+      await screen.findByRole('menu');
+      typeQuery(editor, 'be');
+
+      caretAt(span.firstChild as Text, 2);
+      fireEvent.keyDown(editor, { key: 'ArrowRight' });
+      expect(getSlashSpan()).toBe(span);
+
+      caretAt(span.firstChild as Text, 3);
+      fireEvent.keyDown(editor, { key: 'ArrowRight' });
+      expect(getSlashSpan()).toBeNull();
+      expect(editor.textContent).toBe('ask /belater');
+      // The caret stays where it was in the text; the browser's own arrow move happens from there.
+      expect(window.getSelection()?.anchorNode?.textContent).toBe('/be');
+      expect(window.getSelection()?.anchorOffset).toBe(3);
+    });
+
+    it('ArrowLeft over the `/` closes the box too', async () => {
+      const { editor, span } = openBetween();
+      await screen.findByRole('menu');
+      caretAt(span.firstChild as Text, 1);
+
+      fireEvent.keyDown(editor, { key: 'ArrowLeft' });
+
+      expect(getSlashSpan()).toBeNull();
     });
   });
 });

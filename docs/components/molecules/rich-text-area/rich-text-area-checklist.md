@@ -117,6 +117,23 @@ No new tokens.
    consumer's test run.
 10. **`context`, with `appearance` kept as a deprecated alias** - the axis takes Text Area's and
     Figma's name; `subtle` and `inline` map to `inline`, so existing call sites keep working.
+11. **Paste and drop are plain text, inserted as text nodes and `<br>`s** - never parsed markup, so
+    nothing from the clipboard can add an element, attribute, style, script, or URL. There's no
+    formatting model to map rich content into. A drag within the editor moves its own nodes, so a
+    tag dragged elsewhere stays a tag.
+12. **Backspace/Delete beside a tag remove the whole tag** in the component, from keydown and from
+    `beforeinput` (mobile keyboards), merging the text either side, rather than trusting each
+    browser's handling of a non-editable inline.
+13. **A caret guard on the `/` query box** (`selectionchange` + `beforeinput`), because Firefox and
+    Safari can leave the caret, and the typed text, just outside an inline editable span.
+14. **Native listeners for paste, drop, drag, and `beforeinput`** - React bubbles events from a
+    portal (each tag) to the wrapper, not the editor.
+15. **A block's last `<br>` isn't a line break** - it's the browser's placeholder for an empty line,
+    so it's left out of the value; hydration adds one after a trailing line break.
+16. **Hydration adds no space where text follows a tag**, so a value reports back unchanged (it
+    used to double the space in `' about the '`).
+17. **Ctrl+B, I, and U are cancelled** (`format*` in `beforeinput`): the value has no formatting, so
+    the `<b>`/`<i>`/`<u>` they added was invisible to it.
 
 ---
 
@@ -128,6 +145,17 @@ No new tokens.
 - Arrow keys move the active row; Enter inserts a blue tag that replaces the query span.
 - Escape restores the typed text as plain text.
 - The value round-trips: insert a tag, read `onChange`, re-hydrate from that array.
+- Backspace right after a tag and Delete right before one remove the whole tag (mid-line, at the end
+  of the editor after Chrome's placeholder `<br>`, at the start of an Enter-made line), and the value
+  has no stray line break.
+- A paste event carrying a `<script>`, an `<img onerror>`, a styled span, a `javascript:` link, and a
+  paragraph inserts only its plain text and line breaks; nothing runs; typing continues on the new
+  line. (The event was dispatched in the page: the test browser couldn't write the system clipboard,
+  so a real Ctrl+V of rich text wasn't exercised.)
+- With the query open, arrows move inside it and close it past either end; a caret placed just after
+  the box moves back in and typing lands in the query; a caret moved elsewhere closes it in place;
+  clicking a row still links it.
+- Chromium only. Firefox and Safari, which the caret guard is for, weren't checked live.
 - Console clean; full suite green.
 
 ---

@@ -1203,7 +1203,7 @@
           "smPaddingInline": "--spacing-sm",
           "mdPaddingInline": "--spacing-md",
           "lgPaddingInline": "--spacing-lg",
-          "gap": "--spacing-sm",
+          "gap": "--spacing-075",
           "focusRingOffset": "--spacing-xxs"
         },
         "border": {
@@ -5536,6 +5536,8 @@
         "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. The editor's aria-activedescendant points assistive technology at that row (the picker gives each row the id `<pickerId>-option-<index>`), and aria-controls names the picker's Menu while it is open.",
         "Figma's text-area `context` axis (default/inline) is the `context` prop, as on Text Area. It replaces the earlier `appearance` prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline map to context=inline, default to context=default; an explicit context wins.",
         "Each tag is a non-editable host span with a `NavTag` portaled into it. contenteditable would otherwise let the caret walk into the tag's internals; a host span keeps each tag atomic to the caret while still being a real React subtree.",
+        "Paste, drop, drag, and beforeinput are native listeners on the editor, not React props: React bubbles an event from inside a portal through the React tree (to the wrapper), so a drop on a tag would otherwise miss the editor's handlers and fall through to the browser's own HTML drop.",
+        "Pasting and dropping take only the text/plain data and insert it as text nodes and `<br>`s - never parsed markup - so no element, attribute, style, or URL from the clipboard reaches the DOM or the value. The editor has no formatting model to map rich content into.",
         "`NavTag` is a preset over the Tag atom, not a new component - Tag already does tone (color), `elemBefore` (icon), and `href` (navigation). An entityType only needs to resolve to a tone plus an icon.",
         "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
         "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
@@ -5544,16 +5546,12 @@
     "status": "beta",
     "knownIssues": [
       {
-        "kind": "bug",
-        "summary": "In Firefox and Safari the caret can drift out of the `/` query box at its edge: the box is an inline editable span, and there's no caret-correction guard yet (checked only in Chrome)."
+        "kind": "gap",
+        "summary": "The `/` query box's caret guard, added for Firefox and Safari, where the caret could drift out of the box at its edge, hasn't been checked live in either browser: its logic is unit-tested and Chrome is unchanged, but Firefox and WebKit weren't available to test."
       },
       {
-        "kind": "bug",
-        "summary": "Backspace doesn't remove a tag as one unit in every position: the tag is atomic to the caret, but the surrounding deletion cases aren't fully handled."
-      },
-      {
-        "kind": "bug",
-        "summary": "Pasted rich HTML isn't sanitized into the value's node model; multi-line serialization handles `<br>` but not every paste shape."
+        "kind": "gap",
+        "summary": "Undo doesn't step through the edits the component makes itself (pasting, dropping, linking or removing a tag, typing in the `/` query box): the browser's undo stack doesn't record them, so Ctrl+Z after one also discards it with the typing before it."
       }
     ],
     "replacedBy": null,

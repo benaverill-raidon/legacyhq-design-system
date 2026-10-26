@@ -4,16 +4,12 @@
   "status": "beta",
   "knownIssues": [
     {
-      "kind": "bug",
-      "summary": "In Firefox and Safari the caret can drift out of the `/` query box at its edge: the box is an inline editable span, and there's no caret-correction guard yet (checked only in Chrome)."
+      "kind": "gap",
+      "summary": "The `/` query box's caret guard, added for Firefox and Safari, where the caret could drift out of the box at its edge, hasn't been checked live in either browser: its logic is unit-tested and Chrome is unchanged, but Firefox and WebKit weren't available to test."
     },
     {
-      "kind": "bug",
-      "summary": "Backspace doesn't remove a tag as one unit in every position: the tag is atomic to the caret, but the surrounding deletion cases aren't fully handled."
-    },
-    {
-      "kind": "bug",
-      "summary": "Pasted rich HTML isn't sanitized into the value's node model; multi-line serialization handles `<br>` but not every paste shape."
+      "kind": "gap",
+      "summary": "Undo doesn't step through the edits the component makes itself (pasting, dropping, linking or removing a tag, typing in the `/` query box): the browser's undo stack doesn't record them, so Ctrl+Z after one also discards it with the typing before it."
     }
   ],
   "purpose": "Let a user write multi-line text that mixes plain prose with inline links to real records - typing `/` opens a grouped entity picker and each choice is inserted as a navigational tag.",
@@ -22,6 +18,7 @@
     "component": "rich/rich-text-area.tsx",
     "picker": "rich/entity-picker.tsx",
     "tag": "rich/nav-tag.tsx",
+    "editing": "rich/editing.ts",
     "types": "rich/rich-text-area.types.ts",
     "styles": "rich/rich-text-area.module.css",
     "stories": "RichTextArea.stories.tsx",
@@ -45,6 +42,8 @@
       "Focus stays in the editor while the picker is open; the keyboard-active row is marked with a class rather than by moving focus, so typing continues to land in the `/` span. The editor's aria-activedescendant points assistive technology at that row (the picker gives each row the id `<pickerId>-option-<index>`), and aria-controls names the picker's Menu while it is open.",
       "Figma's text-area `context` axis (default/inline) is the `context` prop, as on Text Area. It replaces the earlier `appearance` prop (default/subtle/inline), which is deprecated but still accepted: subtle and inline map to context=inline, default to context=default; an explicit context wins.",
       "Each tag is a non-editable host span with a `NavTag` portaled into it. contenteditable would otherwise let the caret walk into the tag's internals; a host span keeps each tag atomic to the caret while still being a real React subtree.",
+      "Paste, drop, drag, and beforeinput are native listeners on the editor, not React props: React bubbles an event from inside a portal through the React tree (to the wrapper), so a drop on a tag would otherwise miss the editor's handlers and fall through to the browser's own HTML drop.",
+      "Pasting and dropping take only the text/plain data and insert it as text nodes and `<br>`s - never parsed markup - so no element, attribute, style, or URL from the clipboard reaches the DOM or the value. The editor has no formatting model to map rich content into.",
       "`NavTag` is a preset over the Tag atom, not a new component - Tag already does tone (color), `elemBefore` (icon), and `href` (navigation). An entityType only needs to resolve to a tone plus an icon.",
       "Non-empty queries are debounced 150ms; an empty query resolves immediately from `recents` (or `onSearch('')`) so opening the picker feels instant.",
       "`scrollIntoView` on the active row is called optionally - jsdom does not implement it, and an unguarded call throws inside any consumer's test."
@@ -111,10 +110,15 @@
     "While a command is active, the query is typed into an inline span.slashInput (showing searchPlaceholder until a query is typed) and the picker opens under it, grouped into one Menu section per EntitySection.",
     "An empty query resolves immediately from recents when given, otherwise from onSearch(''); non-empty queries are debounced 150ms, and a response to an older query never replaces a newer one.",
     "With the picker open, ArrowDown/ArrowUp move the active row, clamped at both ends; Enter inserts the active row as a tag followed by a space, replacing the /query span.",
-    "Escape, a space, the caret leaving the query span, or a pointer press outside the field closes the picker and keeps what was typed as plain text. Tab closes it the same way and lets focus move on.",
+    "Escape, a space, the caret leaving the query span, or a pointer press outside the field closes the picker and keeps what was typed as plain text, with the caret where it was. Tab closes it the same way and lets focus move on.",
+    "While the query span is open, the caret stays in it: a caret on its outside edge (the boundary Firefox and Safari can leave it on) or in front of the `/` is moved back in after the `/`, and text typed there goes into the query. A caret moved anywhere else in the editor closes the picker at once. ArrowLeft over the `/` or ArrowRight past the last character closes it and moves on; inside the query, arrows move as usual.",
     "Focus stays in the editor while the picker is open; aria-controls names the picker's Menu and aria-activedescendant points at the active row (id `<pickerId>-option-<index>`), and both are removed when it closes.",
     "Each tag is a non-editable host span with a NavTag (a Tag with tabIndex -1, an <a> when the entity has href), so the caret treats it as one unit. Its tone and icon come from entityConfig, merged over the built-in tones (account and person blue, matter teal, roadmap purple, document default).",
+    "Backspace with the caret directly after a tag, or Delete directly before one, removes the whole tag - mid-line, at a line's start or end, between two tags, at either end of the editor, or as its only content - along with any empty or zero-width text between, and merges the text either side. At the start of a line, Backspace still joins the line to the one above. A mobile keyboard's beforeinput delete does the same.",
     "Deleting a tag leaves the space after it, which is ordinary text.",
+    "Paste is plain text only: the clipboard's text/plain, never its HTML, styles, scripts, or images, replacing any selection, each line break as the editor's `<br>`, and the caret after it. A single word pasted into the `/` query goes into the query; anything else closes the query and goes into the text. A paste with no text inserts nothing.",
+    "A drop from outside inserts its text/plain at the drop point, like a paste. A drag that starts in the editor (selected text, or a tag) moves those nodes, tags included, to the drop point.",
+    "A block's last `<br>` is the browser's placeholder for an empty line, not a line break of its own, so it isn't reported in the value; a value ending in a line break hydrates with one.",
     "invalid, or an aria-invalid of true/'true', sets aria-invalid and the error border, which stays while the editor has focus.",
     "disabled turns off contenteditable, sets tabIndex -1 and aria-disabled, and suppresses the slash command. A disabled <fieldset> around the editor (outside its first legend) does the same, and the component follows changes to its disabled attribute.",
     "required sets aria-required; id, aria-label, aria-labelledby, and aria-describedby go on the editor. A <label htmlFor> cannot name it; Field names it with aria-labelledby.",
@@ -148,21 +152,28 @@
     "invalid sets aria-invalid and data-invalid on the editor.",
     "placeholder is exposed as data-placeholder with data-empty while empty; rows sets --rta-rows.",
     "disabled is not editable, not focusable, aria-disabled, and never opens the picker; a disabled fieldset around it does the same and its changes are followed, except inside the fieldset's legend.",
-    "Hydrates text and entity nodes from value, each entity as a navigational tag, and a newline in a text node as a line break.",
+    "Hydrates text and entity nodes from value, each entity as a navigational tag, and a newline in a text node as a line break; the value reports back unchanged (a space is added after a tag only where no text follows it).",
+    "Bold, italic, and underline (Ctrl+B, I, U) are cancelled: the value has no formatting to keep them in.",
     "`/` opens the picker and wraps the query in the slash input only at the start or after whitespace; ordinary typing leaves the picker closed and never calls onSearch.",
     "An empty query shows recents instead of searching; a typed query searches.",
     "Enter inserts the active entity and reports the new value; ArrowUp/ArrowDown move the active row and stop at the ends; Escape closes the picker and leaves the query as plain text; Tab closes it and removes aria-controls.",
     "aria-activedescendant points at the highlighted row while the picker is open, and is absent while it is closed.",
     "onChange reports text and entities in document order, and drops an entity when its tag is removed.",
+    "Pasting HTML with a <script>, an <img onerror>, styled spans, and links leaves only its plain text in the DOM and the value; line breaks in pasted text become <br>s and \\n in the value; a paste replaces the selection, and a paste with no text inserts nothing. Drops, including onto a tag, insert plain text; a tag dragged within the editor moves and stays a tag. Paste and drop do nothing while disabled.",
+    "Backspace directly after a tag and Delete directly before one remove the whole tag mid-line, at a line's start and end, between two adjacent tags, at the start and end of the editor, and when it's the only content, leaving no empty text nodes or zero-width characters; elsewhere they delete as usual.",
+    "While the `/` query is open, a caret on the box's outside edge or in front of the `/` moves back into it, text typed there goes into the query, a caret moved elsewhere closes it in place, and ArrowLeft/ArrowRight past either end close it.",
     "Storybook includes Playground, Prefilled, States, and Variants.",
-    "Tests cover rendering, Field wiring, disabled (including fieldsets), hydration, the slash lifecycle, picker keyboard and aria-activedescendant, and serialization. Real caret behavior is verified live in Storybook (Chrome), since jsdom cannot simulate contenteditable typing."
+    "Tests cover rendering, Field wiring, disabled (including fieldsets), hydration, the slash lifecycle, picker keyboard and aria-activedescendant, serialization, paste and drop, deleting a tag, and the query box caret guard, driving the editor with explicit selections. Real caret behavior is verified live in Storybook (Chrome), since jsdom cannot simulate contenteditable typing."
   ],
   "behaviorNotes": [
     "Inside a disabled <fieldset> (outside its first legend), the editor is disabled as with disabled: not editable, out of the tab order, aria-disabled. A div isn't disabled by a fieldset natively, so the component checks the fieldsets around it and watches their disabled attribute.",
     "`/` only starts a command at the beginning of the editor or after whitespace - mid-word slashes stay literal characters.",
-    "The query types inline into a small bordered span; Escape (or a caret leaving the span) unwraps it back to plain text, keeping what was typed.",
+    "The query types inline into a small bordered span; Escape (or a caret leaving the span) unwraps it back to plain text, keeping what was typed and the caret's place.",
+    "While the span is open, a selectionchange guard keeps the caret in it (after the `/`), and a beforeinput guard routes typed text into it, so typing at the span's edge goes into the query in every browser rather than the text beside it.",
     "Enter inserts the active row as a tag, replacing the `/query` span and adding a trailing space.",
     "That trailing space is ordinary text - deleting a tag afterwards leaves the space behind.",
+    "Backspace and Delete beside a tag remove it whole and merge the text around it; the component handles both the keydown and the beforeinput delete.",
+    "Paste and drop are plain text, inserted as text nodes and <br>s; a drag within the editor moves its own nodes, so a dragged tag stays a tag.",
     "ArrowUp/ArrowDown move the active row and are clamped at both ends.",
     "A pointer press outside the field closes the picker.",
     "Tab with the picker open closes it, keeping the typed text, and lets focus move on.",
@@ -170,11 +181,11 @@
   ],
   "knownLimitations": [
     "No maxRows: the editor grows with its content from the `rows` minimum without limit, and dragging the resize grip sets a fixed height, after which it scrolls.",
-    "Tests cover rendering, hydration, the slash lifecycle, picker keyboard, and serialization. They cannot cover real caret behavior - jsdom does not simulate contenteditable typing - so caret correctness is verified live in Storybook, not in CI."
+    "Paste and drop are plain text only, so a tag copied out of the editor pastes back as its label; link it again with `/`. Moving a tag by dragging keeps it a tag.",
+    "Tests cover rendering, hydration, the slash lifecycle, picker keyboard, serialization, paste and drop, tag deletion, and the caret guard by placing selections and dispatching events. They cannot cover real caret behavior - jsdom does not simulate contenteditable typing - so caret correctness is verified live in Storybook, not in CI."
   ],
   "futureEnhancements": [
-    "A caret-correction guard for Firefox/Safari at the inline span boundary.",
-    "Harden backspace-deletes-a-tag and paste handling, including sanitizing pasted HTML into the node model.",
+    "Copy and paste tags within the editor (a private clipboard type carrying the node array, validated on paste).",
     "Async loading affordance in the picker beyond the Menu's own loading row.",
     "Mention-style triggers beyond `/` (for example `@`), driven by the same picker."
   ]

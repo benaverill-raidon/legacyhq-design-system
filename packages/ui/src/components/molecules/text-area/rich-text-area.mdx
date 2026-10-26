@@ -160,6 +160,10 @@ it shows the matching records, grouped by type. Arrow keys move the highlight, E
 highlighted record as a tag followed by a space, and Escape, a space, or a click outside the field
 closes the list and keeps what was typed as plain text.
 
+While the list is open, the caret stays in the query box, in every browser: typing at the box's
+edge goes into the query, not the text beside it. Left and Right move within the query; moving past
+either end, or clicking elsewhere in the text, closes the list and leaves the caret there.
+
 <Example of={RichTextAreaStories.Playground} caption="Type / to link an account, matter, roadmap, or document. The node array below updates as you edit." />
 
 </Subsection>
@@ -177,7 +181,20 @@ one.
 
 `entityConfig` gives each record type a tag tone and an icon, used for the tag and for its group's
 heading in the list. Tags aren't tab stops; a tag with an `href` is a link.
-Deleting a tag leaves the space after it.
+
+A tag is one unit: Backspace just after it, or Delete just before it, removes the whole tag,
+wherever it sits, including at the start or end of a line, next to another tag, or alone in the
+field. Deleting a tag leaves the space after it. Dragging a tag moves it, still a tag.
+
+</Subsection>
+
+<Subsection title="Paste and drop">
+
+Pasting always pastes plain text: the words and line breaks, never the formatting, links, images,
+or code of what was copied, so nothing from another page gets into the note or its value. Text
+dropped into the field is treated the same way. A tag copied out of the field pastes back as its
+name; link it again with `/`. Bold, italic, and underline shortcuts do nothing: the note is plain
+text with links.
 
 </Subsection>
 
@@ -204,9 +221,10 @@ focus. `disabled` turns off editing.
 
 <Subsection title="Known limits">
 
-Rich Text Area is in beta. The `/` query box is checked in Chrome; in Firefox and Safari the caret
-can slip out of it. Backspace doesn't remove a tag as one unit in every position, and pasted rich
-text isn't cleaned into the value. Each is a known issue, shown in the header above.
+Rich Text Area is in beta. The guard that keeps the caret in the `/` query box was added for
+Firefox and Safari but has only been checked live in Chrome. Undo doesn't step back through edits
+the field makes itself, such as a paste, a new tag, or a removed tag: Ctrl+Z after one also undoes
+the typing before it. Both are known issues, shown in the header above.
 
 </Subsection>
 
@@ -267,6 +285,10 @@ text isn't cleaned into the value. Each is a known issue, shown in the header ab
   <Key keys="Escape">With the list open, closes it and keeps what was typed as plain text.</Key>
   <Key keys="Tab">With the list open, closes it and moves focus on, keeping what was typed as text.</Key>
   <Key keys="Space">While typing a query, ends the link and closes the list; what was typed stays as text.</Key>
+  <Key keys="ArrowLeft">With the list open, moves within the query; over the `/`, closes the list and keeps the text.</Key>
+  <Key keys="ArrowRight">With the list open, moves within the query; past its end, closes the list and keeps the text.</Key>
+  <Key keys="Backspace">Just after a tag, removes the whole tag. Otherwise deletes as usual.</Key>
+  <Key keys="Delete">Just before a tag, removes the whole tag. Otherwise deletes as usual.</Key>
   <Key keys="Tab">Moves focus to the editor and out of it. A disabled editor is skipped.</Key>
 </Keyboard>
 

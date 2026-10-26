@@ -1,5 +1,19 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import {
+  deleteTagAtCaret,
+  indexOf,
+  insertIntoSlash,
+  insertPlainText,
+  isPlaceholderBreak,
+  isTagHost,
+  rangeFromPoint,
+  setCaret,
+  slashOffsetAt,
+  slashTextNode,
+  textOffsetIn,
+  toPlainText,
+} from './editing';
 import { EntityPicker } from './entity-picker';
 import { NavTag, resolveEntityConfig } from './nav-tag';
 import styles from './rich-text-area.module.css';
@@ -94,7 +108,11 @@ function serializeDom(root: HTMLElement): RichTextValue {
       } else if (child.nodeType === Node.ELEMENT_NODE) {
         const el = child as HTMLElement;
         if (el.dataset.entityId) out.push({ type: 'entity', entity: entityFromEl(el) });
-        else if (el.tagName === 'BR') pushText('\n');
+        // A block's last <br> only holds an empty line open for the caret (browsers add one when a
+        // line ends on a tag); it isn't a line break of its own.
+        else if (el.tagName === 'BR') {
+          if (!isPlaceholderBreak(el, root)) pushText('\n');
+        }
         else {
           const isInline = window.getComputedStyle(el).display.startsWith('inline');
           if (el.previousSibling && !isInline) pushText('\n');
@@ -209,7 +227,7 @@ export function RichTextArea({
     if (!editor || hydratedRef.current) return;
     hydratedRef.current = true;
     const newHosts: HTMLElement[] = [];
-    value.forEach((node) => {
+    value.forEach((node, index) => {
       if (node.type === 'text') {
         node.text.split('\n').forEach((part, i) => {
           if (i > 0) editor.appendChild(document.createElement('br'));
@@ -218,10 +236,13 @@ export function RichTextArea({
       } else {
         const host = createHostEl(node.entity);
         editor.appendChild(host);
-        editor.appendChild(document.createTextNode(' '));
+        // Room for the caret after a tag, as inserting one leaves; text that follows already gives it.
+        if (value[index + 1]?.type !== 'text') editor.appendChild(document.createTextNode(' '));
         newHosts.push(host);
       }
     });
+    // A value ending in a line break needs a placeholder <br> to show the empty last line.
+    if (editor.lastChild?.nodeName === 'BR') editor.appendChild(document.createElement('br'));
     setHosts(newHosts);
     updateEmpty();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -259,19 +280,35 @@ export function RichTextArea({
     slashSpanRef.current = null;
   }, []);
 
-  // Turn the `/query` span back into plain text (Escape / caret leaving / a space typed).
+  // Turn the `/query` span back into plain text (Escape / caret leaving / a space typed). A
+  // selection inside the box keeps its place in the text; one anywhere else is left where it is.
   const unwrapSlashSpan = React.useCallback(() => {
     const span = slashSpanRef.current;
     slashSpanRef.current = null;
     if (!span || !editorRef.current?.contains(span)) return;
-    const textNode = document.createTextNode(span.textContent ?? '');
-    span.replaceWith(textNode);
-    const caret = document.createRange();
-    caret.setStart(textNode, textNode.length);
-    caret.collapse(true);
-    const sel = window.getSelection();
-    sel?.removeAllRanges();
-    sel?.addRange(caret);
+    const selection = window.getSelection();
+    const range = selection && selection.rangeCount ? selection.getRangeAt(0) : null;
+    const inside =
+      range && span.contains(range.startContainer) && span.contains(range.endContainer)
+        ? [textOffsetIn(span, range.startContainer, range.startOffset), textOffsetIn(span, range.endContainer, range.endOffset)]
+        : null;
+    const text = span.textContent ?? '';
+    const parent = span.parentNode as Node;
+    const index = indexOf(span);
+    if (text) {
+      const textNode = document.createTextNode(text);
+      span.replaceWith(textNode);
+      if (inside && selection) {
+        const restored = document.createRange();
+        restored.setStart(textNode, inside[0]);
+        restored.setEnd(textNode, inside[1]);
+        selection.removeAllRanges();
+        selection.addRange(restored);
+      }
+    } else {
+      span.remove();
+      if (inside) setCaret(parent, index);
+    }
   }, []);
 
   const closePicker = React.useCallback(() => {
@@ -318,6 +355,13 @@ export function RichTextArea({
   const startSlash = React.useCallback(
     (range: Range) => {
       const span = createSlashSpan(searchPlaceholder);
+      // At either end of a text node, insert beside it rather than splitting off an empty one.
+      const { startContainer, startOffset } = range;
+      if (startContainer.nodeType === Node.TEXT_NODE && startContainer.parentNode) {
+        if (startOffset === 0) range.setStartBefore(startContainer);
+        else if (startOffset === (startContainer as Text).length) range.setStartAfter(startContainer);
+        range.collapse(true);
+      }
       range.insertNode(span);
       const textNode = span.firstChild as Text;
       const caret = document.createRange();
@@ -336,7 +380,9 @@ export function RichTextArea({
     [searchPlaceholder, positionAt, runSearch, updateEmpty],
   );
 
-  const handleInput = () => {
+  // After any edit, the browser's or the component's own: drop the tags that were removed, follow
+  // the `/` command, and report the value.
+  const syncAfterEdit = () => {
     setHosts((prev) => prev.filter((h) => editorRef.current?.contains(h)));
     const ctx = getSlashContext(editorRef.current);
     if (ctx) openOrUpdate(ctx.query, ctx.span);
@@ -344,6 +390,228 @@ export function RichTextArea({
     else if (open) resetPicker();
     emitChange();
   };
+
+  const handleInput = syncAfterEdit;
+
+  /**
+   * Put pasted text at the selection, as plain text. A single word pasted into the `/` query goes
+   * into the query; anything else closes the query (keeping it as text) and goes into the text.
+   */
+  const insertTextAtSelection = (raw: string) => {
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+    const inEditor = () => {
+      const range = selection && selection.rangeCount ? selection.getRangeAt(0) : null;
+      return range && editor?.contains(range.startContainer) && editor.contains(range.endContainer) ? range : null;
+    };
+    const range = inEditor();
+    if (!editor || !range) return;
+    const text = toPlainText(raw);
+    const span = slashSpanRef.current;
+    if (span) {
+      const start = slashOffsetAt(span, range.startContainer, range.startOffset);
+      const end = range.collapsed ? start : slashOffsetAt(span, range.endContainer, range.endOffset);
+      if (start !== null && end !== null && !/\s/.test(text)) {
+        insertIntoSlash(span, start, Math.max(start, end), text);
+        syncAfterEdit();
+        return;
+      }
+      closePicker();
+    }
+    const target = inEditor();
+    if (!target) return;
+    insertPlainText(editor, target.cloneRange(), text);
+    syncAfterEdit();
+  };
+
+  // Paste is always plain text: the clipboard's text/plain, never its HTML, styles, or images.
+  const handlePaste = (event: ClipboardEvent) => {
+    event.preventDefault();
+    if (disabled) return;
+    insertTextAtSelection(event.clipboardData?.getData('text/plain') ?? '');
+  };
+
+  // A drag that starts in the editor moves its own nodes, tags included; nothing else is dragged.
+  const dragSourceRef = React.useRef<Range | null>(null);
+
+  const handleDragStart = (event: DragEvent) => {
+    const editor = editorRef.current;
+    dragSourceRef.current = null;
+    if (disabled || !editor) {
+      event.preventDefault();
+      return;
+    }
+    let host: Node | null = event.target as Node;
+    while (host && host !== editor && !isTagHost(host)) host = host.parentNode;
+    let source: Range | null = null;
+    if (host && host !== editor) {
+      source = document.createRange();
+      source.selectNode(host);
+    } else {
+      const selection = window.getSelection();
+      const range = selection && selection.rangeCount ? selection.getRangeAt(0) : null;
+      if (range && !range.collapsed && editor.contains(range.startContainer) && editor.contains(range.endContainer)) {
+        source = range.cloneRange();
+      }
+    }
+    if (!source) {
+      event.preventDefault();
+      return;
+    }
+    dragSourceRef.current = source;
+    if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragEnd = () => {
+    dragSourceRef.current = null;
+  };
+
+  // A drop from outside is plain text, like a paste, at the drop point.
+  const handleDrop = (event: DragEvent) => {
+    event.preventDefault();
+    const editor = editorRef.current;
+    const source = dragSourceRef.current;
+    dragSourceRef.current = null;
+    if (disabled || !editor) return;
+    if (slashSpanRef.current) closePicker();
+    const selection = window.getSelection();
+    const target =
+      rangeFromPoint(event.clientX, event.clientY) ?? (selection && selection.rangeCount ? selection.getRangeAt(0).cloneRange() : null);
+    if (!target || !editor.contains(target.startContainer)) return;
+    let host: Node | null = target.startContainer;
+    while (host && host !== editor && !isTagHost(host)) host = host.parentNode;
+    if (host && host !== editor) target.setStartAfter(host);
+    target.collapse(true);
+    editor.focus({ preventScroll: true });
+    if (source) {
+      if (source.isPointInRange(target.startContainer, target.startOffset)) return;
+      // At either end of a text node, insert beside it rather than splitting off an empty one.
+      const { startContainer, startOffset } = target;
+      if (startContainer.nodeType === Node.TEXT_NODE) {
+        if (startOffset === 0) target.setStartBefore(startContainer);
+        else if (startOffset === (startContainer as Text).length) target.setStartAfter(startContainer);
+        target.collapse(true);
+      }
+      const fragment = source.extractContents();
+      const last = fragment.lastChild;
+      target.insertNode(fragment);
+      if (last && last.nodeType === Node.TEXT_NODE) setCaret(last, (last as Text).length);
+      else if (last?.parentNode) setCaret(last.parentNode, indexOf(last) + 1);
+    } else {
+      insertPlainText(editor, target, event.dataTransfer?.getData('text/plain') ?? '');
+    }
+    syncAfterEdit();
+  };
+
+  // The native beforeinput: what the keyboard handler and the paste and drop handlers can't see.
+  const handleBeforeInput = (event: InputEvent) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+    // Ctrl+B, I, U and the like: the value has no formatting, so the markup they add would be lost.
+    if (event.inputType.startsWith('format')) {
+      event.preventDefault();
+      return;
+    }
+    switch (event.inputType) {
+      case 'insertFromPaste':
+      case 'insertFromPasteAsQuotation':
+      case 'insertFromYank':
+        // The paste handler normally cancels these first; this catches a paste that skipped it.
+        event.preventDefault();
+        insertTextAtSelection(event.dataTransfer?.getData('text/plain') ?? event.data ?? '');
+        return;
+      case 'insertFromDrop':
+        // The drop handler inserts the text; never take the browser's own drop markup.
+        event.preventDefault();
+        return;
+      case 'deleteContentBackward':
+      case 'deleteContentForward':
+        // Keyboards that send no usable keydown (mobile) still remove a tag whole.
+        if (!slashSpanRef.current && deleteTagAtCaret(editor, event.inputType === 'deleteContentBackward' ? 'backward' : 'forward')) {
+          event.preventDefault();
+          syncAfterEdit();
+        }
+        return;
+      case 'insertText': {
+        // Typing while the query box is open goes into the box, even with the caret on its outside
+        // edge (where Firefox and Safari can leave it). A caret that has left the box closes it.
+        const span = slashSpanRef.current;
+        const selection = window.getSelection();
+        if (!span || !selection || !selection.rangeCount) return;
+        const range = selection.getRangeAt(0);
+        const start = slashOffsetAt(span, range.startContainer, range.startOffset);
+        const end = range.collapsed ? start : slashOffsetAt(span, range.endContainer, range.endOffset);
+        if (start === null || end === null) {
+          closePicker();
+          return;
+        }
+        event.preventDefault();
+        insertIntoSlash(span, start, Math.max(start, end), event.data ?? '');
+        syncAfterEdit();
+        return;
+      }
+      default:
+    }
+  };
+
+  // Native listeners, not React props: a tag is a portal, so React would bubble an event from it to
+  // the wrapper rather than the editor, and a drag or drop on a tag would miss the editor's handlers.
+  React.useEffect(() => {
+    const editor = editorRef.current;
+    if (!editor) return undefined;
+    editor.addEventListener('beforeinput', handleBeforeInput);
+    editor.addEventListener('paste', handlePaste);
+    editor.addEventListener('dragstart', handleDragStart);
+    editor.addEventListener('dragend', handleDragEnd);
+    editor.addEventListener('drop', handleDrop);
+    return () => {
+      editor.removeEventListener('beforeinput', handleBeforeInput);
+      editor.removeEventListener('paste', handlePaste);
+      editor.removeEventListener('dragstart', handleDragStart);
+      editor.removeEventListener('dragend', handleDragEnd);
+      editor.removeEventListener('drop', handleDrop);
+    };
+  });
+
+  // While the query box is open, a caret on its outside edge is moved back in, and one in front of
+  // the `/` is moved after it. A caret anywhere else has left the box, which closes the picker.
+  const lastSnapRef = React.useRef<{ node: Node; offset: number; time: number } | null>(null);
+  const guardSlashCaret = React.useCallback(() => {
+    const span = slashSpanRef.current;
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+    if (!span || !editor || !editor.contains(span) || !selection || !selection.rangeCount) return;
+    const range = selection.getRangeAt(0);
+    // Focus left the editor (a click on the list, or outside, which closes it separately).
+    if (!editor.contains(range.startContainer) || !editor.contains(range.endContainer)) return;
+    const start = slashOffsetAt(span, range.startContainer, range.startOffset);
+    if (!range.collapsed) {
+      const end = slashOffsetAt(span, range.endContainer, range.endOffset);
+      if (start === null || end === null) closePicker();
+      return;
+    }
+    if (start === null) {
+      closePicker();
+      return;
+    }
+    if (range.startContainer === span.firstChild && range.startOffset === start) return;
+    // Never fight a browser that moves the caret straight back to where it was corrected from.
+    const now = Date.now();
+    const last = lastSnapRef.current;
+    if (last && last.node === range.startContainer && last.offset === range.startOffset && now - last.time < 50) return;
+    lastSnapRef.current = { node: range.startContainer, offset: range.startOffset, time: now };
+    setCaret(slashTextNode(span), start);
+  }, [closePicker]);
+
+  React.useEffect(() => {
+    if (!open) return undefined;
+    document.addEventListener('selectionchange', guardSlashCaret);
+    return () => document.removeEventListener('selectionchange', guardSlashCaret);
+  }, [open, guardSlashCaret]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) {
@@ -368,6 +636,23 @@ export function RichTextArea({
       } else if (event.key === 'Tab') {
         // Focus is leaving: close the list and let Tab move on.
         closePicker();
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        // Arrowing past either end of the query (over the `/`, or past its last character) leaves
+        // it: close the list, keep the text, and let the caret move on. Inside, arrows move as usual.
+        const span = slashSpanRef.current;
+        const selection = window.getSelection();
+        const at = span && selection?.anchorNode ? slashOffsetAt(span, selection.anchorNode, selection.anchorOffset) : null;
+        const length = span?.textContent?.length ?? 0;
+        if (at === null || (event.key === 'ArrowLeft' ? at <= 1 : at >= length)) closePicker();
+      }
+      return;
+    }
+    if ((event.key === 'Backspace' || event.key === 'Delete') && !event.metaKey && !event.nativeEvent.isComposing) {
+      // Directly beside a tag, Backspace and Delete remove the whole tag.
+      const editor = editorRef.current;
+      if (editor && deleteTagAtCaret(editor, event.key === 'Backspace' ? 'backward' : 'forward')) {
+        event.preventDefault();
+        syncAfterEdit();
       }
       return;
     }

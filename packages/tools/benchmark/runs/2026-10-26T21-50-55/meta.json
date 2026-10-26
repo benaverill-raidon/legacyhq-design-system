@@ -1,0 +1,132 @@
+{
+  "commit": "83c257afddc95db93a513999202966c0e1278285",
+  "model": "claude-sonnet-5-5",
+  "claudeVersion": "2.1.311 (Claude Code)",
+  "date": "2026-10-26T21:50:55.285Z",
+  "repeat": 1,
+  "conditions": {
+    "docs": {
+      "describe": "CLAUDE.md, llms.txt, and the repo files; no CLI or MCP",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "allowed": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "mcp": false,
+      "args": [
+        "-p",
+        "<prompt>",
+        "--model",
+        "claude-sonnet-5-5",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "dontAsk",
+        "--setting-sources",
+        "project",
+        "--no-session-persistence",
+        "--max-turns",
+        "40",
+        "--tools",
+        "Read,Grep,Glob",
+        "--allowedTools",
+        "Read",
+        "Grep",
+        "Glob",
+        "--strict-mcp-config"
+      ]
+    },
+    "cli": {
+      "describe": "the same, plus Bash limited to the legacyhq CLI (npm run -s ds)",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash"
+      ],
+      "allowed": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash(npm run -s ds:*)"
+      ],
+      "mcp": false,
+      "args": [
+        "-p",
+        "<prompt>",
+        "--model",
+        "claude-sonnet-5-5",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "dontAsk",
+        "--setting-sources",
+        "project",
+        "--no-session-persistence",
+        "--max-turns",
+        "40",
+        "--tools",
+        "Read,Grep,Glob,Bash",
+        "--allowedTools",
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash(npm run -s ds:*)",
+        "--strict-mcp-config"
+      ]
+    },
+    "mcp": {
+      "describe": "the same, plus the legacyhq-design-system MCP server",
+      "tools": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "allowed": [
+        "Read",
+        "Grep",
+        "Glob",
+        "mcp__legacyhq-design-system"
+      ],
+      "mcp": true,
+      "args": [
+        "-p",
+        "<prompt>",
+        "--model",
+        "claude-sonnet-5-5",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--permission-mode",
+        "dontAsk",
+        "--setting-sources",
+        "project",
+        "--no-session-persistence",
+        "--max-turns",
+        "40",
+        "--tools",
+        "Read,Grep,Glob",
+        "--allowedTools",
+        "Read",
+        "Grep",
+        "Glob",
+        "mcp__legacyhq-design-system",
+        "--strict-mcp-config",
+        "--mcp-config",
+        ".mcp.json"
+      ]
+    }
+  },
+  "prompts": {
+    "choose-control": "On the LegacyHQ matter intake form, people choose how a matter is billed: hourly, flat fee, or contingency. Which LegacyHQ design system component should I use for this? Give me the JSX for it.",
+    "find-tokens": "Write the CSS Module for a custom \"matter summary\" panel on a LegacyHQ page. It rests on the page as a raised surface with a border and rounded corners, has 16px of padding inside, uses the default body text color, and has a .secondary class for muted supporting text. Use the LegacyHQ design system's tokens.",
+    "implement-pattern": "Build a \"New contact\" form in React with the LegacyHQ design system. The contact's name and email are required, and \"Send me updates by email\" is a yes or no choice that's saved with the form. A Save button submits it. Handle validation errors the way the design system documents."
+  }
+}

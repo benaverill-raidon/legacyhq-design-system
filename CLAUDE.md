@@ -52,6 +52,8 @@ packages/tools/         # read-only tooling over the generated data; plain .mjs,
   cli/                  # `legacyhq` (npm run ds --): the library on the command line
   mcp/                  # the library as a local stdio MCP server, registered in
                         # .mcp.json (tools search_components, get_component, ...)
+  benchmark/            # MCP-02: docs vs. CLI vs. MCP in headless Claude Code;
+                        # tasks, runner, scorer, recorded runs, REPORT.md
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)

@@ -43,6 +43,12 @@ packages/ui/src/storybook/   # Storybook-only docs; never exported as components
                 # standard; see "Component Docs pages" below). Extract here only
                 # once a second page needs it.
 
+packages/tools/query/   # read-only query library over the generated data
+                        # (components, examples, tokens, rules, icons, freshness),
+                        # shared by the CLI and MCP server; plain .mjs, tests in
+                        # query.test.mjs. Imports the generators' build functions
+                        # and scripts/lib/tokens.cjs rather than re-reading formats.
+
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
   foundations/component-registry-governance.json  # registry.json normalization rules

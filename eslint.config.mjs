@@ -42,9 +42,9 @@ export default tseslint.config(
     },
   },
   {
-    // Root-level Node tooling: CommonJS config files and standalone scripts,
-    // not library source.
-    files: ['*.config.js', 'scripts/**/*.mjs', 'scripts/**/*.cjs'],
+    // Node tooling: CommonJS config files, standalone scripts, and the
+    // query library / CLI / MCP server in packages/tools. Not library source.
+    files: ['*.config.js', 'scripts/**/*.mjs', 'scripts/**/*.cjs', 'packages/tools/**/*.mjs'],
     languageOptions: {
       globals: globals.node,
     },

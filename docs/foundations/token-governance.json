@@ -27,11 +27,11 @@
                 "name": "Primitive Tokens",
                 "purpose": "Raw design values.",
                 "examples": [
-                    "color.blue.500",
-                    "color.gray.100",
-                    "spacing.4",
-                    "radius.md",
-                    "shadow.sm"
+                    "color-blue-solid-500",
+                    "color-brand-taupe-solid-100",
+                    "measurement-16",
+                    "border-radius-5",
+                    "shadow-md-blur"
                 ],
                 "rules": [
                     "Primitive tokens contain raw values only.",
@@ -42,8 +42,8 @@
                 "containsRawValues": true,
                 "componentConsumptionAllowed": false,
                 "exampleMapping": {
-                    "token": "color.blue.500",
-                    "value": "#0057FF"
+                    "token": "color-blue-solid-500",
+                    "value": "#28a9ff"
                 }
             },
             {
@@ -52,11 +52,11 @@
                 "name": "Semantic Tokens",
                 "purpose": "Meaning and design intent.",
                 "examples": [
-                    "color.background.primary",
-                    "color.background.brand",
-                    "color.text.primary",
-                    "color.text.inverse",
-                    "color.border.default"
+                    "color-background-brand-primary-bold-default",
+                    "color-elevation-surface-default",
+                    "color-content-default",
+                    "color-content-inverse-default",
+                    "color-border-default"
                 ],
                 "rules": [
                     "Semantic tokens should be the primary tokens consumed throughout the system.",
@@ -67,8 +67,11 @@
                 "mapsTo": "primitive",
                 "primaryConsumptionLayer": true,
                 "exampleMapping": {
-                    "token": "color.background.brand",
-                    "aliases": "color.blue.500"
+                    "token": "color-background-brand-primary-bold-default",
+                    "aliases": {
+                        "light": "color-brand-prussian-solid-900",
+                        "dark": "color-brand-prussian-solid-500"
+                    }
                 }
             },
             {
@@ -77,9 +80,10 @@
                 "name": "Component Tokens",
                 "purpose": "Component-specific decisions.",
                 "examples": [
-                    "button.primary.background",
-                    "button.primary.text",
-                    "alert.success.icon"
+                    "component-switch-md-thumb-size",
+                    "component-slider-handle-width-md",
+                    "component-menu-width-md",
+                    "component-skeleton-color-default"
                 ],
                 "rules": [
                     "Component tokens are exceptions, not defaults.",
@@ -91,8 +95,9 @@
                 "mapsTo": "semantic",
                 "defaultPolicy": "exception",
                 "exampleMapping": {
-                    "token": "button.primary.background",
-                    "aliases": "color.background.brand"
+                    "token": "component-switch-md-thumb-size",
+                    "aliases": "measurement-16",
+                    "note": "A dimension token for geometry unique to Switch, the documented exception (dimensions.componentTokenException). No component color token aliases a semantic token today."
                 }
             }
         ]
@@ -111,30 +116,32 @@
         },
         "preferredExample": {
             "label": "Button Background",
-            "token": "color.background.brand"
+            "token": "color-background-brand-primary-bold-default",
+            "usedBy": "Button prominence=\"primary\""
         },
         "avoidExample": {
-            "token": "button.primary.background",
-            "aliases": "color.background.brand",
+            "token": "component-button-primary-background",
+            "aliases": "color-background-brand-primary-bold-default",
+            "hypothetical": true,
             "allowedOnlyWhen": "There is a documented need for independent control."
         }
     },
     "namingConventions": {
         "primitive": {
-            "format": "category.scale.value",
+            "format": "category-scale-value, e.g. color-<hue>-solid-<step>, color-<hue>-alpha-<step>-<opacity>, measurement-<px>",
             "examples": [
-                "color.blue.500",
-                "spacing.4",
-                "radius.md"
+                "color-blue-solid-500",
+                "color-brand-taupe-alpha-1100-08",
+                "measurement-16"
             ]
         },
         "semantic": {
-            "format": "category.role.state",
+            "format": "category-property-role[-emphasis]-state, e.g. color-background-brand-primary-bold-default; dimension families by size step, e.g. spacing-lg",
             "examples": [
-                "color.background.primary",
-                "color.background.brand",
-                "color.text.primary",
-                "color.border.default"
+                "color-elevation-surface-default",
+                "color-background-brand-primary-bold-default",
+                "color-content-default",
+                "color-border-default"
             ],
             "interactionStateVocabulary": {
                 "summary": "One canonical word per interaction state, used identically in Figma variable names, generated CSS custom properties, component variant axes, and the data-force-state escape hatch. Unified across Figma and code together - there is no longer a past-participle form anywhere.",
@@ -149,7 +156,7 @@
                 ],
                 "rules": [
                     "Use the bare-verb form: hover (not hover), press (not press), focus (not focus).",
-                    "A token whose name ends in a state uses exactly one of these words, e.g. color.background.neutral.overlay.bold.hover / .bold.press, color.border.focus, color.border.selected.",
+                    "A token whose name ends in a state uses exactly one of these words, e.g. color-background-neutral-overlay-bold-hover / -bold-press, color-border-focus, color-border-selected.",
                     "The Storybook data-force-state escape hatch takes the same vocabulary: data-force-state=\"hover\" | \"focus\" | \"press\". It is documentation-only and never part of a public API."
                 ],
                 "notCovered": [
@@ -161,11 +168,11 @@
             }
         },
         "component": {
-            "format": "component.variant.property",
+            "format": "component-<component>-<part or size>-<property>, e.g. component-switch-md-thumb-size",
             "examples": [
-                "button.primary.background",
-                "button.primary.text",
-                "alert.success.icon"
+                "component-switch-md-thumb-size",
+                "component-slider-handle-width-md",
+                "component-progress-bar-track-size-md"
             ]
         }
     },
@@ -180,12 +187,13 @@
         {
             "type": "duplicatedComponentMeaning",
             "bad": [
-                "button.primary.background",
-                "badge.primary.background",
-                "toast.primary.background"
+                "component-button-primary-background",
+                "component-badge-primary-background",
+                "component-toast-primary-background"
             ],
             "reason": "All represent the same meaning.",
-            "good": "color.background.brand"
+            "good": "color-background-brand-primary-bold-default",
+            "hypothetical": true
         }
     ],
     "decisionFramework": {

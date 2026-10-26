@@ -8,6 +8,7 @@ import {
   QueryError,
   REPO_ROOT,
   checkFreshness,
+  checkSystem,
   componentFilterValues,
   getComponent,
   getExamples,
@@ -223,32 +224,89 @@ describe('icons', () => {
   });
 });
 
-describe('freshness', () => {
-  const copies = [];
-  afterAll(() => copies.forEach((dir) => rmSync(dir, { recursive: true, force: true })));
+// A temporary copy of just the data the library reads: the docs, the component folders' Docs pages
+// and tests (which the registry's status evidence comes from), and the token sources.
+const copies = [];
+afterAll(() => copies.forEach((dir) => rmSync(dir, { recursive: true, force: true })));
 
+function copyRepoData() {
+  const root = mkdtempSync(path.join(tmpdir(), 'legacyhq-query-'));
+  copies.push(root);
+  cpSync(path.join(REPO_ROOT, 'docs'), path.join(root, 'docs'), { recursive: true });
+  const code = 'packages/ui/src/components';
+  cpSync(path.join(REPO_ROOT, code), path.join(root, code), {
+    recursive: true,
+    filter: (source) => statSync(source).isDirectory() || /\.(mdx|test\.tsx?)$/.test(source),
+  });
+  cpSync(path.join(REPO_ROOT, 'packages/ui/src/tokens'), path.join(root, 'packages/ui/src/tokens'), { recursive: true });
+  return root;
+}
+
+function editJson(root, relPath, edit) {
+  const file = path.join(root, relPath);
+  const data = JSON.parse(readFileSync(file, 'utf8'));
+  edit(data);
+  writeFileSync(file, JSON.stringify(data));
+}
+
+const touchButtonExample = (examples) => {
+  examples.examples[0].jsx += ' ';
+};
+
+describe('freshness', () => {
   it('finds the checked-in generated files current', async () => {
     for (const result of await checkFreshness()) expect(result).toMatchObject({ fresh: true, changed: [] });
   });
 
   it('names the stale file, the component, and the command to run', async () => {
-    // A copy of just what the generators read: the docs, and the component folders' Docs pages and tests.
-    const root = mkdtempSync(path.join(tmpdir(), 'legacyhq-freshness-'));
-    copies.push(root);
-    cpSync(path.join(REPO_ROOT, 'docs'), path.join(root, 'docs'), { recursive: true });
-    const code = 'packages/ui/src/components';
-    cpSync(path.join(REPO_ROOT, code), path.join(root, code), {
-      recursive: true,
-      filter: (source) => statSync(source).isDirectory() || /\.(mdx|test\.tsx?)$/.test(source),
-    });
-    const examplesFile = path.join(root, 'docs/components/atoms/button/button.examples.json');
-    const examples = JSON.parse(readFileSync(examplesFile, 'utf8'));
-    examples.examples[0].jsx += ' ';
-    writeFileSync(examplesFile, JSON.stringify(examples));
+    const root = copyRepoData();
+    editJson(root, 'docs/components/atoms/button/button.examples.json', touchButtonExample);
 
     const [exemplarsResult, registryResult] = await checkFreshness({ root });
     expect(exemplarsResult).toEqual({ file: 'docs/components/exemplars.json', fresh: false, command: 'npm run generate:exemplars', changed: ['button'] });
     expect(registryResult.fresh).toBe(true);
+  });
+});
+
+describe('system check', () => {
+  const failed = (result) => result.checks.filter((check) => !check.ok);
+
+  it('passes on the repo as it is', async () => {
+    const result = await checkSystem();
+    expect(failed(result)).toEqual([]);
+    expect(result.ok).toBe(true);
+  });
+
+  it('fails a stale generated file, with the command that fixes it', async () => {
+    const root = copyRepoData();
+    editJson(root, 'docs/components/atoms/button/button.examples.json', touchButtonExample);
+    const result = await checkSystem({ root });
+    expect(result.ok).toBe(false);
+    expect(failed(result)).toEqual([expect.objectContaining({ id: 'fresh:docs/components/exemplars.json', fix: 'Run npm run generate:exemplars.' })]);
+  });
+
+  it('fails when the generated files disagree on components', async () => {
+    const root = copyRepoData();
+    const file = path.join(root, 'docs/components/exemplars.json');
+    writeFileSync(file, JSON.stringify(JSON.parse(readFileSync(file, 'utf8')).filter((entry) => entry.id !== 'button')));
+    const ids = failed(await checkSystem({ root })).find((check) => check.id === 'ids');
+    expect(ids.message).toContain('only in registry.json: button');
+  });
+
+  it('fails an unreadable generated file without throwing', async () => {
+    const root = copyRepoData();
+    writeFileSync(path.join(root, 'docs/components/registry.json'), '{ not json');
+    const result = await checkSystem({ root });
+    expect(failed(result).map((check) => check.id)).toEqual(['parse:docs/components/registry.json']);
+  });
+
+  it('fails a broken token reference', async () => {
+    const root = copyRepoData();
+    editJson(root, 'packages/ui/src/tokens/src/semantic/semantic-motion.json', (motion) => {
+      motion['Semantic: Motion']['fade-quick'].$value.duration = '{Primitive.Value.no-such-token}';
+    });
+    const tokens = failed(await checkSystem({ root })).find((check) => check.id === 'tokens');
+    expect(tokens.message).toContain('no-such-token');
   });
 });
 
@@ -273,6 +331,7 @@ describe('read-only', () => {
     getRules('motion');
     searchIcons('add');
     await checkFreshness();
+    await checkSystem();
     expect(snapshot()).toEqual(before);
   });
 });

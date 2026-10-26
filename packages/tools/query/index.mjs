@@ -9,3 +9,4 @@ export { getToken, searchTokens, tokenFilterValues } from './tokens.mjs';
 export { getRules, listRuleTopics } from './rules.mjs';
 export { iconCategories, searchIcons } from './icons.mjs';
 export { checkFreshness } from './freshness.mjs';
+export { checkSystem } from './system.mjs';

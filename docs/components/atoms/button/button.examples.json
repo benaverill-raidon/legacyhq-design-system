@@ -12,27 +12,27 @@
     {
       "name": "Primary action",
       "description": "The main action in a form, dialog, or workflow.",
-      "jsx": "<Button appearance=\"primary\">Save changes</Button>",
+      "jsx": "<Button prominence=\"primary\">Save changes</Button>",
       "props": {
-        "appearance": "primary",
+        "prominence": "primary",
         "children": "Save changes"
       }
     },
     {
-      "name": "Subtle action",
+      "name": "Tertiary action",
       "description": "A low-emphasis action.",
-      "jsx": "<Button appearance=\"subtle\">Preview</Button>",
+      "jsx": "<Button prominence=\"tertiary\">Preview</Button>",
       "props": {
-        "appearance": "subtle",
+        "prominence": "tertiary",
         "children": "Preview"
       }
     },
     {
       "name": "Warning action",
       "description": "A cautionary action.",
-      "jsx": "<Button appearance=\"primary\" tone=\"warning\">Archive matter</Button>",
+      "jsx": "<Button prominence=\"primary\" tone=\"warning\">Archive matter</Button>",
       "props": {
-        "appearance": "primary",
+        "prominence": "primary",
         "tone": "warning",
         "children": "Archive matter"
       }
@@ -40,9 +40,9 @@
     {
       "name": "Destructive action",
       "description": "A high-risk or destructive action.",
-      "jsx": "<Button appearance=\"primary\" tone=\"error\">Delete matter</Button>",
+      "jsx": "<Button prominence=\"primary\" tone=\"error\">Delete matter</Button>",
       "props": {
-        "appearance": "primary",
+        "prominence": "primary",
         "tone": "error",
         "children": "Delete matter"
       }
@@ -62,7 +62,7 @@
       "description": "A loading form submit button that keeps its size and accessible name.",
       "jsx": "<Button prominence=\"primary\" type=\"submit\" isLoading>Save matter</Button>",
       "props": {
-        "appearance": "primary",
+        "prominence": "primary",
         "type": "submit",
         "isLoading": true,
         "children": "Save matter"
@@ -105,8 +105,8 @@
       }
     },
     {
-      "name": "Disabled (default appearance)",
-      "description": "A disabled button using native disabled behavior. appearance=\"default\" keeps a visible border (color-border-disabled), matching its own resting bordered look.",
+      "name": "Disabled (secondary prominence)",
+      "description": "A disabled button using native disabled behavior. prominence=\"secondary\" (the default) keeps a visible border (color-border-disabled), matching its own resting bordered look.",
       "jsx": "<Button disabled>Disabled</Button>",
       "props": {
         "disabled": true,
@@ -114,11 +114,11 @@
       }
     },
     {
-      "name": "Disabled (primary/subtle appearance)",
-      "description": "appearance=\"primary\" and appearance=\"subtle\" stay borderless when disabled (border-color: transparent), matching their own resting borderless look - applying the same border color used on appearance=\"default\" here would draw a border that was never part of the design.",
-      "jsx": "<Button appearance=\"primary\" disabled>Disabled</Button>",
+      "name": "Disabled (primary/tertiary prominence)",
+      "description": "prominence=\"primary\" and prominence=\"tertiary\" stay borderless when disabled (border-color: transparent), matching their own resting borderless look - applying the same border color used on prominence=\"secondary\" here would draw a border that was never part of the design.",
+      "jsx": "<Button prominence=\"primary\" disabled>Disabled</Button>",
       "props": {
-        "appearance": "primary",
+        "prominence": "primary",
         "disabled": true,
         "children": "Disabled"
       }

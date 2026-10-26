@@ -40,17 +40,18 @@ Loading holds the button's size: the spinner sits centered over the content, and
 ```ts
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
 
-export type ButtonAppearance = 'default' | 'primary' | 'subtle';
+export type ButtonProminence = 'primary' | 'secondary' | 'tertiary';
 
-export type ButtonTone = 'neutral' | 'warning' | 'error';
+export type ButtonTone = 'default' | 'brand' | 'warning' | 'error';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
-  appearance?: ButtonAppearance;
+  prominence?: ButtonProminence;
   tone?: ButtonTone;
   isInverse?: boolean;
   isLoading?: boolean;
   isFullWidth?: boolean;
+  isExpanded?: boolean;
   iconBefore?: React.ReactNode;
   iconAfter?: React.ReactNode;
   children: React.ReactNode;
@@ -61,8 +62,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 ```ts
 size = 'md'
-appearance = 'default'
-tone = 'neutral'
+prominence = 'secondary'
+tone = 'default'
 isInverse = false
 type = 'button'
 disabled = false
@@ -81,25 +82,29 @@ isFullWidth = false
 | md | 40px | `spacing-150` | `border-radius-sm` | `border-width-default` |
 | lg | 48px | `spacing-200` | `border-radius-sm` | `border-width-default` |
 
-### Appearance
-
-#### Default
-
-A standard button for secondary or neutral actions. Usually bordered with a neutral surface.
+### Prominence
 
 #### Primary
 
-A high-emphasis button for the primary action in a section, form, or workflow.
+A high-emphasis button for the primary action in a section, form, or workflow. Brand fill.
 
-#### Subtle
+#### Secondary (default)
 
-A low-emphasis button for secondary, inline, or lower-priority actions.
+A standard button for secondary or neutral actions. Bordered, with no fill.
+
+#### Tertiary
+
+A low-emphasis button for inline or lower-priority actions. No border, no fill.
 
 ### Tone
 
-#### Neutral
+#### Default
 
 Default action tone.
+
+#### Brand
+
+The brand color at every prominence. At primary it matches the default look.
 
 #### Warning
 
@@ -109,13 +114,15 @@ Used for actions that require caution.
 
 Used for destructive or high-risk actions.
 
-## Appearance and Tone Matrix
+## Prominence and Tone Matrix
 
-| Appearance | Neutral | Warning | Error |
-|---|---|---|---|
-| default | standard neutral | warning outline/default | error outline/default |
-| primary | primary brand | warning bold | error bold |
-| subtle | neutral subtle | warning subtle | error subtle |
+| Prominence | Default | Brand | Warning | Error |
+|---|---|---|---|---|
+| primary | brand bold | brand bold | warning bold | error bold |
+| secondary | neutral outline | brand outline | (secondary default) | error outline |
+| tertiary | neutral, no border | brand text, no border | (tertiary default) | (tertiary default) |
+
+Pairings in parentheses are valid props but render the prominence's default look.
 
 ## States
 
@@ -142,8 +149,8 @@ When `disabled` is true:
 
 - pass the native `disabled` attribute
 - prevent activation
-- apply disabled visual treatment - bordered for `appearance="default"`, borderless for
-  `appearance="primary"`/`appearance="subtle"` (see Color Token Intent > Disabled below)
+- apply disabled visual treatment - bordered for `prominence="secondary"`, borderless for
+  `prominence="primary"`/`prominence="tertiary"` (see Color Token Intent > Disabled below)
 
 ### Loading
 
@@ -274,18 +281,20 @@ gap: var(--spacing-075);
 
 Use available semantic color tokens from the theme CSS.
 
-### Default + Neutral
+### Secondary + Default
 
 - border: `color-border-input`
-- content: `color-content-subtle` or existing text/content subtle token
-- background: transparent or surface/input token based on Figma
+- content: `color-content-subtle`
+- background: transparent
+- hover / focus: `color-background-neutral-overlay-bold-hover`
+- pressed: `color-background-neutral-overlay-bold-press`
 
-### Primary + Neutral
+### Primary + Default (and Primary + Brand)
 
-- background: `color-background-brand-bold-default`
-- hover: `color-background-brand-bold-hover`
-- pressed: `color-background-brand-bold-press`
-- content/icon: `color-content-inverse`
+- background: `color-background-brand-primary-bold-default`
+- hover: `color-background-brand-primary-bold-hover`
+- pressed: `color-background-brand-primary-bold-press`
+- content/icon: `color-content-inverse-default`
 
 ### Primary + Warning
 
@@ -328,17 +337,22 @@ Supported prominence x tone pairings: primary (default, brand, warning, error); 
 brand, error); tertiary (default, brand). Warning is primary only. Other pairings render the
 prominence's default look.
 
-### Subtle
+### Tertiary
 
-Use neutral or semantic subtle background tokens for hover/press states, with default transparent/no-fill base where appropriate.
+- border and background: transparent at rest
+- content: `color-content-subtle` (`color-content-brand-primary-default` with `tone="brand"`)
+- hover / focus: `color-background-neutral-overlay-bold-hover`
+  (`color-background-brand-primary-overlay-hover` with `tone="brand"`)
+- pressed: `color-background-neutral-overlay-bold-press`
+  (`color-background-brand-primary-overlay-press` with `tone="brand"`)
 
 If an exact semantic token is missing, document it and use the closest existing approved token from the generated theme files.
 
 ### Inverse (`isInverse`)
 
 An orthogonal on-dark treatment for buttons placed on dark or bold-colored surfaces (e.g. Banner).
-It is a boolean prop, not part of the `tone` axis, so it can later compose with any `appearance`
-(the outlined `default` inverse treatment is planned). It overrides the resting appearance fill:
+It is a boolean prop, not part of the `tone` axis, so it can later compose with any `prominence`
+(the outlined `secondary` inverse treatment is planned). It overrides the resting prominence fill:
 
 - background: transparent
 - border: transparent
@@ -348,18 +362,18 @@ It is a boolean prop, not part of the `tone` axis, so it can later compose with 
 - pressed: `color-background-neutral-overlay-subtle-press`
 - focus: white subtle hover fill plus the shared focus ring
 
-Declared after the appearance rules so it wins the cascade at equal specificity. The higher-
+Declared after the prominence rules so it wins the cascade at equal specificity. The higher-
 specificity `:disabled` rules still flatten it, so a disabled inverse button uses the shared
 disabled treatment - matching how `tone` is flattened when disabled.
 
 ### Disabled
 
-Two disabled treatments, matching each appearance's own resting border visibility rather than one
+Two disabled treatments, matching each prominence's own resting border visibility rather than one
 shared look applied uniformly:
 
-- **`appearance="default"`** already shows a visible border at rest - disabled keeps a border,
+- **`prominence="secondary"`** already shows a visible border at rest - disabled keeps a border,
   using `color-border-disabled`.
-- **`appearance="primary"` and `appearance="subtle"`** (any tone) are borderless at rest - applying
+- **`prominence="primary"` and `prominence="tertiary"`** (any tone) are borderless at rest - applying
   `color-border-disabled` there would draw a border that was never part of their resting look, so
   disabled stays borderless (`border-color: transparent`) instead.
 
@@ -410,7 +424,7 @@ Button
 Controls for:
 
 - size
-- appearance
+- prominence
 - tone
 - isInverse
 - disabled
@@ -425,7 +439,7 @@ Controls for:
 Show:
 
 - sizes
-- appearances
+- prominences
 - tones
 - inverse (on a dark surface)
 - disabled
@@ -440,7 +454,7 @@ Show:
 
 - primary action
 - secondary action
-- subtle action
+- tertiary action
 - warning action
 - error/destructive action
 - loading submit button
@@ -459,7 +473,7 @@ Test:
 - defaults to `type="button"`
 - supports custom `type`
 - supports size variants
-- supports appearance variants
+- supports prominence variants
 - supports tone variants
 - supports the inverse treatment (isInverse)
 - disabled behavior

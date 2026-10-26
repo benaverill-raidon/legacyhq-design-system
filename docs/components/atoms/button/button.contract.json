@@ -96,7 +96,7 @@
       "type": "boolean",
       "default": false,
       "required": false,
-      "description": "Render the on-dark treatment for placement on dark or bold-colored surfaces (e.g. Banner). Overrides the resting appearance treatment with a transparent fill, the inverse content token, and white subtle overlays on hover/press. Flattened by disabled like tone."
+      "description": "Render the on-dark treatment for placement on dark or bold-colored surfaces (e.g. Banner). Overrides the resting prominence treatment with a transparent fill, the inverse content token, and white subtle overlays on hover/press. Flattened by disabled like tone."
     },
     "disabled": {
       "type": "boolean",
@@ -271,7 +271,7 @@
         "inverseContent": "--color-content-inverse",
         "inverseHoverBackground": "--color-background-neutral-overlay-subtle-hover",
         "inversePressBackground": "--color-background-neutral-overlay-subtle-press",
-        "disabledBorder": "--color-border-disabled (appearance=default only - appearance=primary/subtle stay border-color: transparent when disabled, matching their own resting borderless look)",
+        "disabledBorder": "--color-border-disabled (prominence=secondary only - prominence=primary/tertiary stay border-color: transparent when disabled, matching their own resting borderless look)",
         "disabledBackground": "--color-background-disabled",
         "disabledContent": "--color-content-disabled"
       }
@@ -318,10 +318,10 @@
     "Use iconBefore only when not loading.",
     "Render iconAfter when provided.",
     "Set inline-size to 100% when isFullWidth is true.",
-    "Apply the inverse on-dark treatment when isInverse is true; it overrides the resting appearance fill/content and uses the white subtle overlays on hover/press.",
+    "Apply the inverse on-dark treatment when isInverse is true; it overrides the resting prominence fill/content and uses the white subtle overlays on hover/press.",
     "Apply disabled visual treatment with native disabled attribute.",
     "Disabled flattens the inverse treatment the same way it flattens tone (the disabled rules win at higher specificity).",
-    "Disabled shows a border only for appearance=default (matching its resting border); appearance=primary/subtle stay borderless when disabled, matching their own resting look."
+    "Disabled shows a border only for prominence=secondary (matching its resting border); prominence=primary/tertiary stay borderless when disabled, matching their own resting look."
   ],
   "compositionRules": [
     "Use Button for actions, not navigation.",
@@ -366,7 +366,7 @@
   ],
   "do": [
     "Use Button for user-triggered actions.",
-    "Use appearance to control emphasis.",
+    "Use prominence to control emphasis.",
     "Use tone to control semantic intent.",
     "Use children for label content.",
     "Use native button props when needed.",

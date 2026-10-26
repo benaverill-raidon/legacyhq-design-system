@@ -207,9 +207,6 @@ Found while fixing the bugs (2026-10-23):
 
 ## Housekeeping
 
-- The stale `.claude/worktrees` folder breaks `npm run validate` at lint. Until it's removed, lint
-  with `npx eslint . --ignore-pattern ".claude/**"`.
-- `packages/ui/src/components/atoms/button/button-case-study.stories.tsx` is a temporary, untracked
-  portfolio capture. Delete it once the Button Docs page replaces it.
-- 61 deprecated CSS aliases and the `@deprecated` prop aliases stay until the LegacyHQ app has
-  been searched for their use.
+- The deprecated CSS aliases (76 alias declarations in `css-recipes.json`: the old `catergory`,
+  `pink`, `green-alpha-500-4` names and others) and the `@deprecated` prop aliases stay until the
+  LegacyHQ app has been searched for their use. Not pursued for now (owner, 2026-10-26).

@@ -1,0 +1,3 @@
+# Node programs with a shebang must keep LF endings: a "#!/usr/bin/env node\r" line breaks the
+# program on Unix and the shebang stripping vitest does before parsing on Windows checkouts.
+packages/tools/**/*.mjs text eol=lf

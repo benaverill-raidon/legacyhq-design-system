@@ -50,6 +50,8 @@ packages/tools/         # read-only tooling over the generated data; plain .mjs,
                         # functions and scripts/lib/tokens.cjs rather than
                         # re-reading formats. Shared by the CLI and MCP server.
   cli/                  # `legacyhq` (npm run ds --): the library on the command line
+  mcp/                  # the library as a local stdio MCP server, registered in
+                        # .mcp.json (tools search_components, get_component, ...)
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
@@ -134,7 +136,7 @@ is ~1360 lines. Match the file(s) to your task shape:
 | Structural query across many components (e.g. "which components support a `tone` prop") | `docs/components/registry.json` | individual `.contract.json` files |
 | Trace a component back to its Figma source | `figmaSource` in the component's `.contract.json` or `registry.json` | — |
 | Need a runnable usage example for a component | `docs/components/exemplars.json` | individual `.examples.json` (unless you need the full antiExample/props detail it may not carry) |
-| One fact: which component fits, a component's props or examples, a token's CSS name, a rule, an icon name | `npm run -s ds -- <command>` (see `packages/tools/README.md`) | the full JSON files |
+| One fact: which component fits, a component's props or examples, a token's CSS name, a rule, an icon name | the `legacyhq-design-system` MCP tools when connected; otherwise `npm run -s ds -- <command>` (see `packages/tools/README.md`); failing both, `registry.json` / `exemplars.json` | the full JSON files |
 
 Full component index: [`llms.txt`](llms.txt). Load
 `docs/foundations/token-governance.json` and
@@ -469,6 +471,11 @@ change.)
   checks the generated files are current and the token sources validate; it's
   a quick data check, not a substitute for `npm run validate`. Commands and
   output: [`packages/tools/README.md`](packages/tools/README.md).
+- MCP server (`packages/tools/mcp/server.mjs`) — the same lookups as MCP
+  tools, over stdio. It's registered in the committed `.mcp.json`, so Claude
+  Code offers to connect it when you open the repo (after `npm install`);
+  approve it once, and `/mcp` shows its status. Read-only, no network.
+  `check_system` is `doctor`, not `npm run validate`.
 
 ## Notes
 

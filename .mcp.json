@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "legacyhq-design-system": {
+      "command": "node",
+      "args": ["packages/tools/mcp/server.mjs"]
+    }
+  }
+}

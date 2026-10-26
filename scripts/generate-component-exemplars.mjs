@@ -1,11 +1,9 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { validateAgainstSchema } from './lib/validate-schema.mjs';
 
-const rootDir = process.cwd();
-const componentsDir = path.join(rootDir, 'docs/components');
-const schemaPath = path.join(rootDir, 'docs/foundations/component-exemplars.schema.json');
-const outputPath = path.join(componentsDir, 'exemplars.json');
+const OUTPUT = 'docs/components/exemplars.json';
 
 const TIER_DIRS = ['primitives', 'atoms', 'molecules', 'organisms'];
 
@@ -84,9 +82,14 @@ function normalizeComponent({ id, tier, raw, relPath }) {
   };
 }
 
-async function main() {
+/**
+ * Builds exemplars from every component's examples.json, validated against its schema, without
+ * writing them.
+ * @param {string} rootDir repository root
+ */
+export async function buildExemplars(rootDir) {
+  const componentsDir = path.join(rootDir, 'docs/components');
   const exemplars = [];
-  const counts = { primitive: 0, atom: 0, molecule: 0, organism: 0 };
 
   for (const tierDir of TIER_DIRS) {
     const tier = tierDir.slice(0, -1);
@@ -101,22 +104,34 @@ async function main() {
       const raw = JSON.parse(await readFile(examplesPath, 'utf8'));
       const relPath = path.relative(rootDir, examplesPath).split(path.sep).join('/');
       exemplars.push(normalizeComponent({ id, tier, raw, relPath }));
-      counts[tier] += 1;
     }
   }
 
-  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const schema = JSON.parse(await readFile(path.join(rootDir, 'docs/foundations/component-exemplars.schema.json'), 'utf8'));
   validateAgainstSchema(exemplars, schema, '$exemplars');
+  return exemplars;
+}
 
-  await writeFile(outputPath, `${JSON.stringify(exemplars, null, 2)}\n`, 'utf8');
+/** Exemplars exactly as generate:exemplars writes them. */
+export const serializeExemplars = (exemplars) => `${JSON.stringify(exemplars, null, 2)}\n`;
 
+async function main() {
+  const rootDir = process.cwd();
+  const exemplars = await buildExemplars(rootDir);
+  await writeFile(path.join(rootDir, OUTPUT), serializeExemplars(exemplars), 'utf8');
+
+  const counts = { primitive: 0, atom: 0, molecule: 0, organism: 0 };
+  for (const entry of exemplars) counts[entry.tier] += 1;
   console.log(
     `Generated exemplars for ${exemplars.length} components ` +
       `(${counts.primitive} primitives, ${counts.atom} atoms, ${counts.molecule} molecules, ${counts.organism} organisms).`,
   );
 }
 
-main().catch((error) => {
-  console.error('generate-component-exemplars failed:', error.message);
-  process.exit(1);
-});
+// Run only as a script, not when the query library imports buildExemplars.
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error('generate-component-exemplars failed:', error.message);
+    process.exit(1);
+  });
+}

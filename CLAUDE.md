@@ -43,11 +43,13 @@ packages/ui/src/storybook/   # Storybook-only docs; never exported as components
                 # standard; see "Component Docs pages" below). Extract here only
                 # once a second page needs it.
 
-packages/tools/query/   # read-only query library over the generated data
-                        # (components, examples, tokens, rules, icons, freshness),
-                        # shared by the CLI and MCP server; plain .mjs, tests in
-                        # query.test.mjs. Imports the generators' build functions
-                        # and scripts/lib/tokens.cjs rather than re-reading formats.
+packages/tools/         # read-only tooling over the generated data; plain .mjs,
+                        # not published (see packages/tools/README.md)
+  query/                # the library: components, examples, tokens, rules, icons,
+                        # freshness, system check. Imports the generators' build
+                        # functions and scripts/lib/tokens.cjs rather than
+                        # re-reading formats. Shared by the CLI and MCP server.
+  cli/                  # `legacyhq` (npm run ds --): the library on the command line
 
 docs/
   foundations/token-governance.json   # token architecture rules (see below)
@@ -132,6 +134,7 @@ is ~1360 lines. Match the file(s) to your task shape:
 | Structural query across many components (e.g. "which components support a `tone` prop") | `docs/components/registry.json` | individual `.contract.json` files |
 | Trace a component back to its Figma source | `figmaSource` in the component's `.contract.json` or `registry.json` | — |
 | Need a runnable usage example for a component | `docs/components/exemplars.json` | individual `.examples.json` (unless you need the full antiExample/props detail it may not carry) |
+| One fact: which component fits, a component's props or examples, a token's CSS name, a rule, an icon name | `npm run -s ds -- <command>` (see `packages/tools/README.md`) | the full JSON files |
 
 Full component index: [`llms.txt`](llms.txt). Load
 `docs/foundations/token-governance.json` and
@@ -460,6 +463,12 @@ change.)
 - `npm run generate:exemplars` — regenerates `docs/components/exemplars.json`
   from every component's `.examples.json`; re-run when an examples.json
   changes. Not wired into `npm run validate`/CI, same as `generate:icons`.
+- `npm run -s ds -- <command>` — the `legacyhq` CLI (`packages/tools/cli/`):
+  `components list|search|get`, `examples`, `tokens search|get`, `rules`,
+  `icons search`, `doctor`; every command takes `--json`. Read-only. `doctor`
+  checks the generated files are current and the token sources validate; it's
+  a quick data check, not a substitute for `npm run validate`. Commands and
+  output: [`packages/tools/README.md`](packages/tools/README.md).
 
 ## Notes
 

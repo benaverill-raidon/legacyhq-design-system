@@ -33,6 +33,11 @@ rules, and the task→file routing table that says which of a component's up to
   `registry.json`) carries — real Figma node IDs, verified live, not
   invented. Load when tracing a component back to its design source or
   when re-verifying Figma mapping data.
+- [packages/tools/README.md](packages/tools/README.md): the `legacyhq` CLI
+  (`npm run -s ds -- <command> --json`). Answers one question without loading
+  the files above: which component fits, a component's props or examples, a
+  token's CSS name and values, a governance rule, an icon name. `doctor`
+  checks the generated files are current.
 
 The index below is grouped by **tier** (compositional complexity: what a
 component is built from). Each component also has an independent

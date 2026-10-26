@@ -2,9 +2,14 @@
   "name": "design-system",
   "version": "1.0.0",
   "description": "Design system for LegacyHQ",
+  "private": true,
   "main": "index.js",
+  "bin": {
+    "legacyhq": "packages/tools/cli/legacyhq.mjs"
+  },
   "scripts": {
     "build": "style-dictionary build -c style-dictionary.config.js",
+    "ds": "node packages/tools/cli/legacyhq.mjs",
     "generate:icons": "node scripts/generate-icons.mjs",
     "generate:registry": "node scripts/generate-component-registry.mjs",
     "generate:exemplars": "node scripts/generate-component-exemplars.mjs",

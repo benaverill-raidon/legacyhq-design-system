@@ -39,9 +39,9 @@ function recipeTier(declaration, byName) {
  * writes for it; `references` are the CSS names it points at. `inCss` is false when the build leaves
  * a token out of the CSS (css-recipes.json `omitTokens`), so it can't be used as a var().
  */
-export function loadTokens() {
-  const { tokens, byId } = tokenLib.validateSources(tokenLib.readSources(path.join(REPO_ROOT, SOURCE_DIR)));
-  const recipes = readJson(tokenLib.RECIPE_FILE);
+export function loadTokens({ root = REPO_ROOT } = {}) {
+  const { tokens, byId } = tokenLib.validateSources(tokenLib.readSources(path.join(root, SOURCE_DIR)));
+  const recipes = readJson(tokenLib.RECIPE_FILE, root);
   const omitted = new Set(recipes.omitTokens);
   const byName = new Map();
 

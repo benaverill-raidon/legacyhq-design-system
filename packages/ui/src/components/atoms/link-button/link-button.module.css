@@ -22,7 +22,7 @@
   letter-spacing: var(--typography-heading-xs-letter-spacing);
   text-decoration: none;
   text-transform: var(--typography-heading-xs-text-transform);
-  gap: var(--spacing-sm);
+  gap: var(--spacing-075);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;

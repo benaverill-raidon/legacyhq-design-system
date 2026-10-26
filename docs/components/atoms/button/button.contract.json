@@ -242,7 +242,7 @@
         "smPaddingInline": "--spacing-sm",
         "mdPaddingInline": "--spacing-md",
         "lgPaddingInline": "--spacing-lg",
-        "gap": "--spacing-sm",
+        "gap": "--spacing-075",
         "focusRingOffset": "--spacing-xxs"
       },
       "border": {

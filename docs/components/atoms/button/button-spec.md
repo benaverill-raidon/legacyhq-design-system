@@ -267,7 +267,7 @@ Common values:
 ```css
 border-radius: var(--border-radius-sm);
 border-width: var(--border-width-sm);
-gap: var(--spacing-sm);
+gap: var(--spacing-075);
 ```
 
 ## Color Token Intent

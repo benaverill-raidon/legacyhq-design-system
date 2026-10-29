@@ -211,6 +211,14 @@ Not every raw length needs a token. The rules are in the `dimensions` block of
 token-governance.json, with open findings; Storybook's Foundations / Spacing
 page documents them for people.
 
+**Typography: interface or document.** Interface roles (`display`, `heading`,
+`body`, no prefix: `typography-heading-sm-*`) set the product's own text.
+Document roles (`typography-document-{title,heading-lg,heading-md,body-md,body-sm,meta}-*`,
+Times New Roman) set only the text of a legal document being edited or generated,
+never the editor around it. In Figma the interface variables sit under
+`typography/interface/`; the CSS names keep no prefix. See Foundations / Typography
+and the `typography` block in token-governance.json.
+
 **Strokes: border-width tokens set thickness whatever draws the stroke** —
 border, outline, inset/outset shadow, divider, indicator, or SVG stroke. An
 unblurred shadow is a stroke; a blurred one is elevation. A stroke that

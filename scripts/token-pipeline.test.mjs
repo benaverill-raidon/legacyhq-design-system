@@ -62,6 +62,15 @@ test('shadow composites validate each layer and serialize to a CSS box-shadow li
   ]) assert.throws(() => validateSources(source(tree(bad))));
 });
 
+test('font family stacks quote family names and leave generic families as keywords', () => {
+  const { tokens: entries, byId } = validateSources(source({
+    stack: token('fontFamily', ['Times New Roman', 'Times', 'serif']),
+    single: token('fontFamily', 'Public Sans')
+  }));
+  assert.equal(cssValue(entries[0], byId), '"Times New Roman", "Times", serif');
+  assert.equal(cssValue(entries[1], byId), '"Public Sans"');
+});
+
 test('same CSS name in a primitive and a mode alias is emitted as a literal, never a CSS cycle', () => {
   const { tokens: entries, byId } = validateSources(source({
     Primitive: { Value: { size: token('dimension', { value: 12, unit: 'px' }) } },

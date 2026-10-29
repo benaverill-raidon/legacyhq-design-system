@@ -2678,6 +2678,15 @@
           }
         }
       },
+      "typography-font-weight-700": {
+        "$type": "fontWeight",
+        "$value": 700,
+        "$extensions": {
+          "com.legacyhq": {
+            "originalName": "typography/font-weight/700"
+          }
+        }
+      },
       "typography-letter-spacing-minus-2": {
         "$type": "dimension",
         "$value": {
@@ -3008,6 +3017,20 @@
         "$extensions": {
           "com.legacyhq": {
             "originalName": "typography/font-family/public-sans"
+          }
+        }
+      },
+      "typography-font-family-times-new-roman": {
+        "$type": "fontFamily",
+        "$value": [
+          "Times New Roman",
+          "Times",
+          "Liberation Serif",
+          "serif"
+        ],
+        "$extensions": {
+          "com.legacyhq": {
+            "originalName": "typography/font-family/times-new-roman"
           }
         }
       },

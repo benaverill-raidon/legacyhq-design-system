@@ -4,7 +4,9 @@ import { inWords, listOf, titleCase } from '../../blocks/doc-helpers';
 import { DocLink } from '../../blocks/doc-link';
 import { Code, doc, DocAnatomy, DocFooter, DocHeader, DocPage, DocSection, DocSubsection, UsedBy } from '../../blocks/doc-page';
 import {
+  allRoles,
   componentTypographyTokens,
+  documentRoles,
   displayOnlySizes,
   displayOverlapSizes,
   figmaStyleOf,
@@ -29,7 +31,7 @@ import type { Group, Role } from './typography-data';
 import styles from './typography.module.css';
 
 const ascending = (sizes: number[]) => [...sizes].sort((a, b) => a - b).map(String);
-const faceOf = (group: Group) => {
+const faceOf = (group: Group | 'document') => {
   const face = groupFace(group);
   return face ? `${face.family} ${weightName(face.weight)}` : undefined;
 };
@@ -49,12 +51,23 @@ const SPECIMENS: Record<Group, string> = {
   heading: 'Estate plan for the Morgan family',
   body: 'Review the trust documents and confirm each beneficiary before the next client meeting.',
 };
+/** Keyed by role, not group: a document's heading and body sizes each do a different job. */
+const DOCUMENT_SPECIMENS: Record<string, string> = {
+  'document-title': 'Last Will and Testament of Jordan Morgan',
+  'document-heading-lg': 'Article III. Disposition of Property',
+  'document-heading-md': 'Section 3.1 Tangible Personal Property',
+  'document-body-md': 'I give all of my tangible personal property to my spouse, if my spouse survives me by thirty days.',
+  'document-body-sm': '1. “Spouse” has the meaning given in Article I.',
+  'document-meta': 'Page 2 of 7',
+};
+const specimenOf = (role: Role) =>
+  role.classification === 'document' ? (DOCUMENT_SPECIMENS[role.name] ?? role.name) : SPECIMENS[role.group as Group];
 
 function RoleRow({ role }: { role: Role }) {
   return (
     <li className={styles.roleRow}>
       <p className={styles.specimen} style={roleStyle(role)}>
-        {SPECIMENS[role.group]}
+        {specimenOf(role)}
       </p>
       <dl className={styles.spec}>
         <div>
@@ -92,12 +105,12 @@ function RoleRow({ role }: { role: Role }) {
   );
 }
 
-function RoleGroup({ group, children }: { group: Group; children: React.ReactNode }) {
+function RoleGroup({ group, children }: { group: Group | 'document'; children: React.ReactNode }) {
   return (
     <DocSubsection title={titleCase(group)}>
       <p className={doc.body}>{children}</p>
       <ol className={styles.roleList}>
-        {rolesIn(group).map((role) => (
+        {(group === 'document' ? documentRoles : rolesIn(group)).map((role) => (
           <RoleRow key={role.name} role={role} />
         ))}
       </ol>
@@ -108,6 +121,7 @@ function RoleGroup({ group, children }: { group: Group; children: React.ReactNod
 function Structure() {
   const { families, sizes, weights, lineHeights, letterSpacings, paragraphSpacings } = primitiveScale;
   const example = roles.find(({ name }) => name === 'heading-sm') ?? roles[0];
+  const documentExample = documentRoles.find(({ name }) => name === 'document-body-md') ?? documentRoles[0];
   return (
     <DocSection number={1} title="How typography is structured">
       <p className={doc.body}>
@@ -116,7 +130,9 @@ function Structure() {
           ? `plus ${componentTypographyTokens.length} component-level typography tokens.`
           : 'with no component-level typography tokens.'}{' '}
         Each role is a bundle of {inWords(PROPERTIES.length)} properties (family, size, weight, line height, letter spacing,
-        and paragraph spacing) applied together, so a role reads the same wherever it’s used.
+        and paragraph spacing) applied together, so a role reads the same wherever it’s used. Roles fall into two
+        classifications: <strong>interface</strong> roles (display, heading, and body) set the product’s own text, and{' '}
+        <strong>document</strong> roles set the text of a legal document being edited or generated.
         {themed ? ' Some values change between Light and Dark.' : ' Nothing changes between Light and Dark.'}
       </p>
       <dl className={doc.definitions}>
@@ -131,8 +147,8 @@ function Structure() {
         <div>
           <dt className={doc.title}>Semantic roles</dt>
           <dd className={doc.small}>
-            {roles.length} roles × {PROPERTIES.length} properties = {semanticTokenCount} tokens:{' '}
-            {GROUPS.map((group) => `${rolesIn(group).length} ${group}`).join(' · ')}
+            {allRoles.length} roles × {PROPERTIES.length} properties = {semanticTokenCount} tokens:{' '}
+            {[...GROUPS.map((group) => `${rolesIn(group).length} ${group}`), `${documentRoles.length} document`].join(' · ')}
           </dd>
         </div>
       </dl>
@@ -144,8 +160,12 @@ function Structure() {
           ['font-size', 'Property'],
         ]}
       >
-        A role’s tokens share the first three parts; only the property changes. In Figma, the same roles are text styles
-        named by group and size, such as <Code>{figmaStyleOf(example)}</Code>.
+        A role’s tokens share the first three parts; only the property changes. Document roles add{' '}
+        <Code>document</Code> after the category, as in <Code>typography-document-body-md-font-size</Code>. Interface roles
+        carry no prefix in code; in Figma their variables sit under <Code>typography/interface/</Code>. In Figma each role is
+        also a text style named by group and size, such as <Code>{figmaStyleOf(example)}</Code>, with document styles
+        under <Code>Document/</Code>, such as{' '}
+        <Code>{figmaStyleOf(documentExample)}</Code>.
       </DocAnatomy>
     </DocSection>
   );
@@ -178,6 +198,13 @@ function TypeRoles() {
       <RoleGroup group="body">
         Running text and most interface copy{faceOf('body') ? `, in ${faceOf('body')}` : ''}. <Code>body-md</Code> is the
         default interface text; <Code>body-sm</Code> is for supporting text such as helper messages and tooltips.
+      </RoleGroup>
+      <RoleGroup group="document">
+        Document roles set the text of a will, trust, or other legal document, in{' '}
+        {documentRoles[0]?.family ?? 'a serif'}, the convention for legal documents. Use them only for the document itself
+        (its title, articles and sections, clauses, footnotes, and page headers and footers), never for the editor or
+        screens around it, which stay in interface roles. Body text is 16px, which prints at 12pt.
+        {documentRoles.every((role) => !usersOf(`typography-${role.name}-`).length) && ' No component uses them yet.'}
       </RoleGroup>
     </DocSection>
   );
@@ -252,6 +279,11 @@ function Usage() {
           themselves have no italic or uppercase styles, and casing is preserved as authored; introducing uppercase needs a
           design decision.
         </p>
+        <p className={doc.body}>
+          Documents follow the same rule: a defined term in bold or a case name in italics is <Code>strong</Code> or{' '}
+          <Code>em</Code> over <Code>document-body-md</Code>, not another role. A title a firm sets in capitals is written in
+          capitals in the template.
+        </p>
       </DocSubsection>
       <DocSubsection title="Wrapping and truncation">
         <p className={doc.body}>
@@ -317,8 +349,8 @@ export function Typography() {
     <DocPage>
       <DocHeader
         title="Typography"
-        lede="Typography tokens define a small set of named text roles (display, heading, and body) so text looks and reads the same wherever it appears."
-        context={`${families.length} typefaces · ${roles.length} roles · ${sizes.length} sizes · ${weights.length} weights · ${
+        lede="Typography tokens define a small set of named text roles (display, heading, and body for the interface, plus a set for legal documents) so text looks and reads the same wherever it appears."
+        context={`${families.length} typefaces · ${allRoles.length} roles · ${sizes.length} sizes · ${weights.length} weights · ${
           themed ? 'varies by theme' : 'the same in Light and Dark'
         }`}
       />

@@ -73,10 +73,13 @@ function assembleSources(sources) {
 function scope(token) {
   return token.path.includes('Dark') ? 'dark' : token.path.includes('Light') ? 'light' : 'tokens';
 }
+const GENERIC_FAMILIES = new Set(['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif', 'ui-monospace', 'math']);
 function cssLiteral(type, value) {
   switch (type) {
     case 'dimension': case 'duration': return `${value.value}${value.unit}`;
-    case 'fontFamily': return (Array.isArray(value) ? value : [value]).map(v => JSON.stringify(v)).join(', ');
+    // Generic families are CSS keywords; quoted, they would name a font called "serif".
+    case 'fontFamily': return (Array.isArray(value) ? value : [value])
+      .map(v => GENERIC_FAMILIES.has(v) ? v : JSON.stringify(v)).join(', ');
     case 'cubicBezier': return value.every((n, i) => n === [0, 0, 1, 1][i]) ? 'linear' : `cubic-bezier(${value.join(', ')})`;
     case 'color': {
       const rgb = value.components.map(v => Math.round(v * 255));

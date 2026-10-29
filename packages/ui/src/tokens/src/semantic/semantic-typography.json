@@ -5,7 +5,7 @@
       "$value": "{Primitive.Value.typography-font-family-merriweather}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/font-family"
+          "originalName": "typography/interface/display/lg/font-family"
         }
       }
     },
@@ -14,7 +14,7 @@
       "$value": "{Primitive.Value.typography-font-weight-500}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/font-weight"
+          "originalName": "typography/interface/display/lg/font-weight"
         }
       }
     },
@@ -23,7 +23,7 @@
       "$value": "{Primitive.Value.typography-font-size-48}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/font-size"
+          "originalName": "typography/interface/display/lg/font-size"
         }
       }
     },
@@ -32,7 +32,7 @@
       "$value": "{Primitive.Value.typography-line-height-56}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/line-height"
+          "originalName": "typography/interface/display/lg/line-height"
         }
       }
     },
@@ -41,7 +41,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/letter-spacing"
+          "originalName": "typography/interface/display/lg/letter-spacing"
         }
       }
     },
@@ -50,7 +50,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/lg/paragraph-spacing"
+          "originalName": "typography/interface/display/lg/paragraph-spacing"
         }
       }
     },
@@ -59,7 +59,7 @@
       "$value": "{Primitive.Value.typography-font-family-merriweather}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/font-family"
+          "originalName": "typography/interface/display/md/font-family"
         }
       }
     },
@@ -68,7 +68,7 @@
       "$value": "{Primitive.Value.typography-font-weight-500}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/font-weight"
+          "originalName": "typography/interface/display/md/font-weight"
         }
       }
     },
@@ -77,7 +77,7 @@
       "$value": "{Primitive.Value.typography-font-size-40}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/font-size"
+          "originalName": "typography/interface/display/md/font-size"
         }
       }
     },
@@ -86,7 +86,7 @@
       "$value": "{Primitive.Value.typography-line-height-48}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/line-height"
+          "originalName": "typography/interface/display/md/line-height"
         }
       }
     },
@@ -95,7 +95,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/letter-spacing"
+          "originalName": "typography/interface/display/md/letter-spacing"
         }
       }
     },
@@ -104,7 +104,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/md/paragraph-spacing"
+          "originalName": "typography/interface/display/md/paragraph-spacing"
         }
       }
     },
@@ -113,7 +113,7 @@
       "$value": "{Primitive.Value.typography-font-family-merriweather}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/font-family"
+          "originalName": "typography/interface/display/sm/font-family"
         }
       }
     },
@@ -122,7 +122,7 @@
       "$value": "{Primitive.Value.typography-font-weight-500}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/font-weight"
+          "originalName": "typography/interface/display/sm/font-weight"
         }
       }
     },
@@ -131,7 +131,7 @@
       "$value": "{Primitive.Value.typography-font-size-32}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/font-size"
+          "originalName": "typography/interface/display/sm/font-size"
         }
       }
     },
@@ -140,7 +140,7 @@
       "$value": "{Primitive.Value.typography-line-height-40}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/line-height"
+          "originalName": "typography/interface/display/sm/line-height"
         }
       }
     },
@@ -149,7 +149,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/letter-spacing"
+          "originalName": "typography/interface/display/sm/letter-spacing"
         }
       }
     },
@@ -158,7 +158,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/sm/paragraph-spacing"
+          "originalName": "typography/interface/display/sm/paragraph-spacing"
         }
       }
     },
@@ -167,7 +167,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/font-family"
+          "originalName": "typography/interface/heading/xxl/font-family"
         }
       }
     },
@@ -176,7 +176,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/font-weight"
+          "originalName": "typography/interface/heading/xxl/font-weight"
         }
       }
     },
@@ -185,7 +185,7 @@
       "$value": "{Primitive.Value.typography-font-size-32}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/font-size"
+          "originalName": "typography/interface/heading/xxl/font-size"
         }
       }
     },
@@ -194,7 +194,7 @@
       "$value": "{Primitive.Value.typography-line-height-36}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/line-height"
+          "originalName": "typography/interface/heading/xxl/line-height"
         }
       }
     },
@@ -203,7 +203,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/letter-spacing"
+          "originalName": "typography/interface/heading/xxl/letter-spacing"
         }
       }
     },
@@ -212,7 +212,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxl/paragraph-spacing"
+          "originalName": "typography/interface/heading/xxl/paragraph-spacing"
         }
       }
     },
@@ -221,7 +221,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/font-family"
+          "originalName": "typography/interface/heading/xl/font-family"
         }
       }
     },
@@ -230,7 +230,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/font-weight"
+          "originalName": "typography/interface/heading/xl/font-weight"
         }
       }
     },
@@ -239,7 +239,7 @@
       "$value": "{Primitive.Value.typography-font-size-28}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/font-size"
+          "originalName": "typography/interface/heading/xl/font-size"
         }
       }
     },
@@ -248,7 +248,7 @@
       "$value": "{Primitive.Value.typography-line-height-32}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/line-height"
+          "originalName": "typography/interface/heading/xl/line-height"
         }
       }
     },
@@ -257,7 +257,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/letter-spacing"
+          "originalName": "typography/interface/heading/xl/letter-spacing"
         }
       }
     },
@@ -266,7 +266,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xl/paragraph-spacing"
+          "originalName": "typography/interface/heading/xl/paragraph-spacing"
         }
       }
     },
@@ -275,7 +275,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/font-family"
+          "originalName": "typography/interface/heading/lg/font-family"
         }
       }
     },
@@ -284,7 +284,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/font-weight"
+          "originalName": "typography/interface/heading/lg/font-weight"
         }
       }
     },
@@ -293,7 +293,7 @@
       "$value": "{Primitive.Value.typography-font-size-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/font-size"
+          "originalName": "typography/interface/heading/lg/font-size"
         }
       }
     },
@@ -302,7 +302,7 @@
       "$value": "{Primitive.Value.typography-line-height-28}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/line-height"
+          "originalName": "typography/interface/heading/lg/line-height"
         }
       }
     },
@@ -311,7 +311,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/letter-spacing"
+          "originalName": "typography/interface/heading/lg/letter-spacing"
         }
       }
     },
@@ -320,7 +320,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/lg/paragraph-spacing"
+          "originalName": "typography/interface/heading/lg/paragraph-spacing"
         }
       }
     },
@@ -329,7 +329,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/font-family"
+          "originalName": "typography/interface/heading/md/font-family"
         }
       }
     },
@@ -338,7 +338,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/font-weight"
+          "originalName": "typography/interface/heading/md/font-weight"
         }
       }
     },
@@ -347,7 +347,7 @@
       "$value": "{Primitive.Value.typography-font-size-20}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/font-size"
+          "originalName": "typography/interface/heading/md/font-size"
         }
       }
     },
@@ -356,7 +356,7 @@
       "$value": "{Primitive.Value.typography-line-height-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/line-height"
+          "originalName": "typography/interface/heading/md/line-height"
         }
       }
     },
@@ -365,7 +365,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/letter-spacing"
+          "originalName": "typography/interface/heading/md/letter-spacing"
         }
       }
     },
@@ -374,7 +374,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/md/paragraph-spacing"
+          "originalName": "typography/interface/heading/md/paragraph-spacing"
         }
       }
     },
@@ -383,7 +383,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/font-family"
+          "originalName": "typography/interface/heading/sm/font-family"
         }
       }
     },
@@ -392,7 +392,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/font-family"
+          "originalName": "typography/interface/heading/xs/font-family"
         }
       }
     },
@@ -401,7 +401,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/font-weight"
+          "originalName": "typography/interface/heading/xs/font-weight"
         }
       }
     },
@@ -410,7 +410,7 @@
       "$value": "{Primitive.Value.typography-font-size-14}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/font-size"
+          "originalName": "typography/interface/heading/xs/font-size"
         }
       }
     },
@@ -419,7 +419,7 @@
       "$value": "{Primitive.Value.typography-line-height-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/line-height"
+          "originalName": "typography/interface/heading/xs/line-height"
         }
       }
     },
@@ -428,7 +428,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/letter-spacing"
+          "originalName": "typography/interface/heading/xs/letter-spacing"
         }
       }
     },
@@ -437,7 +437,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xs/paragraph-spacing"
+          "originalName": "typography/interface/heading/xs/paragraph-spacing"
         }
       }
     },
@@ -446,7 +446,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/font-weight"
+          "originalName": "typography/interface/heading/sm/font-weight"
         }
       }
     },
@@ -455,7 +455,7 @@
       "$value": "{Primitive.Value.typography-font-size-16}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/font-size"
+          "originalName": "typography/interface/heading/sm/font-size"
         }
       }
     },
@@ -464,7 +464,7 @@
       "$value": "{Primitive.Value.typography-line-height-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/line-height"
+          "originalName": "typography/interface/heading/sm/line-height"
         }
       }
     },
@@ -473,7 +473,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/letter-spacing"
+          "originalName": "typography/interface/heading/sm/letter-spacing"
         }
       }
     },
@@ -482,7 +482,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/sm/paragraph-spacing"
+          "originalName": "typography/interface/heading/sm/paragraph-spacing"
         }
       }
     },
@@ -491,7 +491,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/font-family"
+          "originalName": "typography/interface/heading/xxs/font-family"
         }
       }
     },
@@ -500,7 +500,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/font-family"
+          "originalName": "typography/interface/body/xl/font-family"
         }
       }
     },
@@ -509,7 +509,7 @@
       "$value": "{Primitive.Value.typography-font-weight-400}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/font-weight"
+          "originalName": "typography/interface/body/xl/font-weight"
         }
       }
     },
@@ -518,7 +518,7 @@
       "$value": "{Primitive.Value.typography-font-size-20}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/font-size"
+          "originalName": "typography/interface/body/xl/font-size"
         }
       }
     },
@@ -527,7 +527,7 @@
       "$value": "{Primitive.Value.typography-line-height-28}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/line-height"
+          "originalName": "typography/interface/body/xl/line-height"
         }
       }
     },
@@ -536,7 +536,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/letter-spacing"
+          "originalName": "typography/interface/body/xl/letter-spacing"
         }
       }
     },
@@ -545,7 +545,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-20}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/xl/paragraph-spacing"
+          "originalName": "typography/interface/body/xl/paragraph-spacing"
         }
       }
     },
@@ -554,7 +554,7 @@
       "$value": "{Primitive.Value.typography-font-weight-600}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/font-weight"
+          "originalName": "typography/interface/heading/xxs/font-weight"
         }
       }
     },
@@ -563,7 +563,7 @@
       "$value": "{Primitive.Value.typography-font-size-12}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/font-size"
+          "originalName": "typography/interface/heading/xxs/font-size"
         }
       }
     },
@@ -572,7 +572,7 @@
       "$value": "{Primitive.Value.typography-line-height-16}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/line-height"
+          "originalName": "typography/interface/heading/xxs/line-height"
         }
       }
     },
@@ -581,7 +581,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/letter-spacing"
+          "originalName": "typography/interface/heading/xxs/letter-spacing"
         }
       }
     },
@@ -590,7 +590,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/heading/xxs/paragraph-spacing"
+          "originalName": "typography/interface/heading/xxs/paragraph-spacing"
         }
       }
     },
@@ -599,7 +599,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/font-family"
+          "originalName": "typography/interface/body/lg/font-family"
         }
       }
     },
@@ -608,7 +608,7 @@
       "$value": "{Primitive.Value.typography-font-weight-400}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/font-weight"
+          "originalName": "typography/interface/body/lg/font-weight"
         }
       }
     },
@@ -617,7 +617,7 @@
       "$value": "{Primitive.Value.typography-font-size-16}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/font-size"
+          "originalName": "typography/interface/body/lg/font-size"
         }
       }
     },
@@ -626,7 +626,7 @@
       "$value": "{Primitive.Value.typography-line-height-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/line-height"
+          "originalName": "typography/interface/body/lg/line-height"
         }
       }
     },
@@ -635,7 +635,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/letter-spacing"
+          "originalName": "typography/interface/body/lg/letter-spacing"
         }
       }
     },
@@ -644,7 +644,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-16}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/lg/paragraph-spacing"
+          "originalName": "typography/interface/body/lg/paragraph-spacing"
         }
       }
     },
@@ -653,7 +653,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/font-family"
+          "originalName": "typography/interface/body/md/font-family"
         }
       }
     },
@@ -662,7 +662,7 @@
       "$value": "{Primitive.Value.typography-font-weight-400}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/font-weight"
+          "originalName": "typography/interface/body/md/font-weight"
         }
       }
     },
@@ -671,7 +671,7 @@
       "$value": "{Primitive.Value.typography-font-size-14}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/font-size"
+          "originalName": "typography/interface/body/md/font-size"
         }
       }
     },
@@ -680,7 +680,7 @@
       "$value": "{Primitive.Value.typography-line-height-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/line-height"
+          "originalName": "typography/interface/body/md/line-height"
         }
       }
     },
@@ -689,7 +689,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/letter-spacing"
+          "originalName": "typography/interface/body/md/letter-spacing"
         }
       }
     },
@@ -698,7 +698,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-12}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/md/paragraph-spacing"
+          "originalName": "typography/interface/body/md/paragraph-spacing"
         }
       }
     },
@@ -707,7 +707,7 @@
       "$value": "{Primitive.Value.typography-font-family-public-sans}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/font-family"
+          "originalName": "typography/interface/body/sm/font-family"
         }
       }
     },
@@ -716,7 +716,7 @@
       "$value": "{Primitive.Value.typography-font-weight-400}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/font-weight"
+          "originalName": "typography/interface/body/sm/font-weight"
         }
       }
     },
@@ -725,7 +725,7 @@
       "$value": "{Primitive.Value.typography-font-size-12}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/font-size"
+          "originalName": "typography/interface/body/sm/font-size"
         }
       }
     },
@@ -734,7 +734,7 @@
       "$value": "{Primitive.Value.typography-line-height-16}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/line-height"
+          "originalName": "typography/interface/body/sm/line-height"
         }
       }
     },
@@ -743,7 +743,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/letter-spacing"
+          "originalName": "typography/interface/body/sm/letter-spacing"
         }
       }
     },
@@ -752,7 +752,7 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/body/sm/paragraph-spacing"
+          "originalName": "typography/interface/body/sm/paragraph-spacing"
         }
       }
     },
@@ -761,7 +761,7 @@
       "$value": "{Primitive.Value.typography-font-family-merriweather}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/font-family"
+          "originalName": "typography/interface/display/xs/font-family"
         }
       }
     },
@@ -770,7 +770,7 @@
       "$value": "{Primitive.Value.typography-font-weight-500}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/font-weight"
+          "originalName": "typography/interface/display/xs/font-weight"
         }
       }
     },
@@ -779,7 +779,7 @@
       "$value": "{Primitive.Value.typography-font-size-24}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/font-size"
+          "originalName": "typography/interface/display/xs/font-size"
         }
       }
     },
@@ -788,7 +788,7 @@
       "$value": "{Primitive.Value.typography-line-height-28}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/line-height"
+          "originalName": "typography/interface/display/xs/line-height"
         }
       }
     },
@@ -797,7 +797,7 @@
       "$value": "{Primitive.Value.typography-letter-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/letter-spacing"
+          "originalName": "typography/interface/display/xs/letter-spacing"
         }
       }
     },
@@ -806,7 +806,331 @@
       "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
       "$extensions": {
         "com.legacyhq": {
-          "originalName": "typography/display/xs/paragraph-spacing"
+          "originalName": "typography/interface/display/xs/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-title-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/font-family"
+        }
+      }
+    },
+    "typography-document-title-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-700}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/font-weight"
+        }
+      }
+    },
+    "typography-document-title-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-20}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/font-size"
+        }
+      }
+    },
+    "typography-document-title-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-28}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/line-height"
+        }
+      }
+    },
+    "typography-document-title-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/letter-spacing"
+        }
+      }
+    },
+    "typography-document-title-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-24}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/title/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-heading-lg-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/font-family"
+        }
+      }
+    },
+    "typography-document-heading-lg-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-700}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/font-weight"
+        }
+      }
+    },
+    "typography-document-heading-lg-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/font-size"
+        }
+      }
+    },
+    "typography-document-heading-lg-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-24}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/line-height"
+        }
+      }
+    },
+    "typography-document-heading-lg-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/letter-spacing"
+        }
+      }
+    },
+    "typography-document-heading-lg-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/lg/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-heading-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/font-family"
+        }
+      }
+    },
+    "typography-document-heading-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-700}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/font-weight"
+        }
+      }
+    },
+    "typography-document-heading-md-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/font-size"
+        }
+      }
+    },
+    "typography-document-heading-md-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-24}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/line-height"
+        }
+      }
+    },
+    "typography-document-heading-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/letter-spacing"
+        }
+      }
+    },
+    "typography-document-heading-md-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/heading/md/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-body-md-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/font-family"
+        }
+      }
+    },
+    "typography-document-body-md-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-400}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/font-weight"
+        }
+      }
+    },
+    "typography-document-body-md-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/font-size"
+        }
+      }
+    },
+    "typography-document-body-md-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-24}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/line-height"
+        }
+      }
+    },
+    "typography-document-body-md-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/letter-spacing"
+        }
+      }
+    },
+    "typography-document-body-md-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/md/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-body-sm-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/font-family"
+        }
+      }
+    },
+    "typography-document-body-sm-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-400}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/font-weight"
+        }
+      }
+    },
+    "typography-document-body-sm-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-14}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/font-size"
+        }
+      }
+    },
+    "typography-document-body-sm-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-20}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/line-height"
+        }
+      }
+    },
+    "typography-document-body-sm-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/letter-spacing"
+        }
+      }
+    },
+    "typography-document-body-sm-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-12}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/body/sm/paragraph-spacing"
+        }
+      }
+    },
+    "typography-document-meta-font-family": {
+      "$type": "fontFamily",
+      "$value": "{Primitive.Value.typography-font-family-times-new-roman}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/font-family"
+        }
+      }
+    },
+    "typography-document-meta-font-weight": {
+      "$type": "fontWeight",
+      "$value": "{Primitive.Value.typography-font-weight-400}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/font-weight"
+        }
+      }
+    },
+    "typography-document-meta-font-size": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-font-size-12}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/font-size"
+        }
+      }
+    },
+    "typography-document-meta-line-height": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-line-height-16}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/line-height"
+        }
+      }
+    },
+    "typography-document-meta-letter-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-letter-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/letter-spacing"
+        }
+      }
+    },
+    "typography-document-meta-paragraph-spacing": {
+      "$type": "dimension",
+      "$value": "{Primitive.Value.typography-paragraph-spacing-0}",
+      "$extensions": {
+        "com.legacyhq": {
+          "originalName": "typography/document/meta/paragraph-spacing"
         }
       }
     }

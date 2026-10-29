@@ -19,8 +19,13 @@ const componentSources = import.meta.glob('../../../tokens/src/component/*.json'
   unknown
 >;
 
+/** Interface groups: the product's own text. */
 export const GROUPS = ['display', 'heading', 'body'] as const;
 export type Group = (typeof GROUPS)[number];
+/** Document groups: text inside a legal document being edited or generated, never the interface around it. */
+export const DOCUMENT_GROUPS = ['title', 'heading', 'body', 'meta'] as const;
+export type DocumentGroup = (typeof DOCUMENT_GROUPS)[number];
+export type Classification = 'interface' | 'document';
 export const PROPERTIES = ['font-family', 'font-weight', 'font-size', 'line-height', 'letter-spacing', 'paragraph-spacing'] as const;
 export type Property = (typeof PROPERTIES)[number];
 
@@ -32,14 +37,18 @@ const resolve = (value: unknown): unknown => {
   const alias = aliasName(value);
   return alias ? resolve(primitives[alias]?.$value) : value;
 };
+/** A family stack's first entry, e.g. `Times New Roman` from its fallbacks. */
+const familyName = (value: unknown) => String(Array.isArray(value) ? value[0] : value);
 const px = (value: unknown) => (value as Dimension | undefined)?.value;
 
 // --- Roles ------------------------------------------------------------------------------------
 
 export type Role = {
-  /** e.g. `heading-sm` - the middle of every token name for this role. */
+  /** e.g. `heading-sm` or `document-title` - the middle of every token name for this role. */
   name: string;
-  group: Group;
+  classification: Classification;
+  group: Group | DocumentGroup;
+  /** Empty for document roles that have a single size, such as `document-title`. */
   size: string;
   family: string;
   weight: number;
@@ -51,45 +60,69 @@ export type Role = {
   aliases: Record<Property, string | undefined>;
 };
 
-const parsed = new Map<string, Partial<Record<Property, unknown>> & { group: Group; size: string; aliases: Partial<Record<Property, string>> }>();
+type Parsed = Partial<Record<Property, unknown>> & {
+  classification: Classification;
+  group: Group | DocumentGroup;
+  size: string;
+  aliases: Partial<Record<Property, string>>;
+};
+const parsed = new Map<string, Parsed>();
 export const unmatchedTokens: string[] = [];
 for (const [name, entry] of Object.entries(semanticRoot)) {
-  const match = name.match(/^typography-(display|heading|body)-([a-z]+)-(font-family|font-weight|font-size|line-height|letter-spacing|paragraph-spacing)$/);
-  if (!match) {
+  const match = name.match(
+    /^typography-(document-)?([a-z]+?)(?:-(xxs|xs|sm|md|lg|xl|xxl))?-(font-family|font-weight|font-size|line-height|letter-spacing|paragraph-spacing)$/,
+  );
+  const [, documentPrefix, group, size = '', property] = (match ?? []) as unknown as [string, string | undefined, string, string, Property];
+  const classification: Classification = documentPrefix ? 'document' : 'interface';
+  const known =
+    classification === 'document' ? (DOCUMENT_GROUPS as readonly string[]).includes(group) : (GROUPS as readonly string[]).includes(group) && size;
+  if (!match || !known) {
     unmatchedTokens.push(name);
     continue;
   }
-  const [, group, size, property] = match as unknown as [string, Group, string, Property];
-  const role = `${group}-${size}`;
-  if (!parsed.has(role)) parsed.set(role, { group, size, aliases: {} });
+  const role = [documentPrefix && 'document', group, size].filter(Boolean).join('-');
+  if (!parsed.has(role)) parsed.set(role, { classification, group: group as Group | DocumentGroup, size, aliases: {} });
   const target = parsed.get(role)!;
   target[property] = resolve(entry.$value);
   target.aliases[property] = aliasName(entry.$value);
 }
 
-export const roles: Role[] = [...parsed]
-  .map(([name, role]) => ({
-    name,
-    group: role.group,
-    size: role.size,
-    family: String(role['font-family']),
-    weight: Number(role['font-weight']),
-    fontSize: px(role['font-size'])!,
-    lineHeight: px(role['line-height'])!,
-    letterSpacing: px(role['letter-spacing'])!,
-    paragraphSpacing: px(role['paragraph-spacing'])!,
-    aliases: Object.fromEntries(PROPERTIES.map((property) => [property, role.aliases[property]])) as Role['aliases'],
-  }))
-  .sort((a, b) => GROUPS.indexOf(a.group) - GROUPS.indexOf(b.group) || b.fontSize - a.fontSize);
+const allParsed: Role[] = [...parsed].map(([name, role]) => ({
+  name,
+  classification: role.classification,
+  group: role.group,
+  size: role.size,
+  family: familyName(role['font-family']),
+  weight: Number(role['font-weight']),
+  fontSize: px(role['font-size'])!,
+  lineHeight: px(role['line-height'])!,
+  letterSpacing: px(role['letter-spacing'])!,
+  paragraphSpacing: px(role['paragraph-spacing'])!,
+  aliases: Object.fromEntries(PROPERTIES.map((property) => [property, role.aliases[property]])) as Role['aliases'],
+  }));
+
+/** Interface roles, by group, largest first. */
+export const roles: Role[] = allParsed
+  .filter(({ classification }) => classification === 'interface')
+  .sort((a, b) => GROUPS.indexOf(a.group as Group) - GROUPS.indexOf(b.group as Group) || b.fontSize - a.fontSize);
+/** Document roles, in reading order: title, headings, body, then page furniture. */
+export const documentRoles: Role[] = allParsed
+  .filter(({ classification }) => classification === 'document')
+  .sort(
+    (a, b) =>
+      DOCUMENT_GROUPS.indexOf(a.group as DocumentGroup) - DOCUMENT_GROUPS.indexOf(b.group as DocumentGroup) || b.fontSize - a.fontSize,
+  );
+export const allRoles = [...roles, ...documentRoles];
 
 export const rolesIn = (group: Group) => roles.filter((role) => role.group === group);
 
-/** The Figma text style for a role, e.g. `heading-sm` -> `Heading/SM`. */
-export const figmaStyleOf = (role: Role) => `${titleCase(role.group)}/${role.size.toUpperCase()}`;
+/** The Figma text style for a role, e.g. `heading-sm` -> `Heading/SM`, `document-title` -> `Document/Title`. */
+export const figmaStyleOf = (role: Role) =>
+  [role.classification === 'document' && 'Document', titleCase(role.group), role.size.toUpperCase()].filter(Boolean).join('/');
 
 /** A group's family and weight, if every role in it shares them. */
-export function groupFace(group: Group) {
-  const members = rolesIn(group);
+export function groupFace(group: Group | 'document') {
+  const members = group === 'document' ? documentRoles : rolesIn(group);
   const families = new Set(members.map(({ family }) => family));
   const weights = new Set(members.map(({ weight }) => weight));
   return families.size === 1 && weights.size === 1 ? { family: members[0].family, weight: members[0].weight } : undefined;
@@ -101,7 +134,7 @@ const primitiveTypography = Object.entries(primitives).filter(([name]) => name.s
 const ofKind = (kind: string) => primitiveTypography.filter(([name]) => name.startsWith(`typography-${kind}-`));
 
 export const primitiveScale = {
-  families: ofKind('font-family').map(([, entry]) => String(entry.$value)),
+  families: ofKind('font-family').map(([, entry]) => familyName(entry.$value)),
   sizes: ofKind('font-size').map(([, entry]) => px(entry.$value)!).sort((a, b) => b - a),
   weights: ofKind('font-weight').map(([, entry]) => Number(entry.$value)).sort((a, b) => a - b),
   lineHeights: ofKind('line-height').map(([, entry]) => px(entry.$value)!),
@@ -134,12 +167,12 @@ export const componentTypographyTokens = Object.values(componentSources).flatMap
 
 // --- Letter spacing and casing (code-only) ----------------------------------------------------
 
-const letterSpacings = new Set(roles.map(({ letterSpacing }) => letterSpacing));
+const letterSpacings = new Set(allRoles.map(({ letterSpacing }) => letterSpacing));
 /** The single letter-spacing value every role uses, or undefined if roles differ. */
 export const uniformLetterSpacing = letterSpacings.size === 1 ? [...letterSpacings][0] : undefined;
 
 /** Per-role casing recipes (`typography-<role>-text-transform`) and the keyword each resolves to. */
-export const casing = roles.map((role) => {
+export const casing = allRoles.map((role) => {
   const recipe = recipes.find(({ name }) => name === `typography-${role.name}-text-transform`);
   const target = recipe?.value.kind === 'alias' ? recipes.find(({ name }) => name === recipe.value.target) : recipe;
   return { role: role.name, value: target?.value.kind === 'keyword' ? target.value.value : undefined };
@@ -165,5 +198,5 @@ export const displayOverlapSizes = sizesWhere(({ byGroup }) => byGroup.display.l
 export const displayOnlySizes = sizesWhere(
   ({ byGroup }) => byGroup.display.length > 0 && byGroup.heading.length === 0 && byGroup.body.length === 0,
 );
-export const smallestSize = Math.min(...roles.map(({ fontSize }) => fontSize));
-export const rolesAtSmallestSize = roles.filter(({ fontSize }) => fontSize === smallestSize);
+export const smallestSize = Math.min(...allRoles.map(({ fontSize }) => fontSize));
+export const rolesAtSmallestSize = allRoles.filter(({ fontSize }) => fontSize === smallestSize);

@@ -80,7 +80,7 @@
       "mode": "tokens",
       "after": "typography-display-lg-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-display-lg-text-transform",
-      "originalName": "typography/display/lg/text-transform",
+      "originalName": "typography/interface/display/lg/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -91,7 +91,7 @@
       "mode": "tokens",
       "after": "typography-display-md-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-display-md-text-transform",
-      "originalName": "typography/display/md/text-transform",
+      "originalName": "typography/interface/display/md/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -102,7 +102,7 @@
       "mode": "tokens",
       "after": "typography-display-sm-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-display-sm-text-transform",
-      "originalName": "typography/display/sm/text-transform",
+      "originalName": "typography/interface/display/sm/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -113,7 +113,7 @@
       "mode": "tokens",
       "after": "typography-heading-xxl-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-xxl-text-transform",
-      "originalName": "typography/heading/xxl/text-transform",
+      "originalName": "typography/interface/heading/xxl/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -124,7 +124,7 @@
       "mode": "tokens",
       "after": "typography-heading-xl-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-xl-text-transform",
-      "originalName": "typography/heading/xl/text-transform",
+      "originalName": "typography/interface/heading/xl/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -135,7 +135,7 @@
       "mode": "tokens",
       "after": "typography-heading-lg-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-lg-text-transform",
-      "originalName": "typography/heading/lg/text-transform",
+      "originalName": "typography/interface/heading/lg/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -146,7 +146,7 @@
       "mode": "tokens",
       "after": "typography-heading-md-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-md-text-transform",
-      "originalName": "typography/heading/md/text-transform",
+      "originalName": "typography/interface/heading/md/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -157,7 +157,7 @@
       "mode": "tokens",
       "after": "typography-heading-xs-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-xs-text-transform",
-      "originalName": "typography/heading/xs/text-transform",
+      "originalName": "typography/interface/heading/xs/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -168,7 +168,7 @@
       "mode": "tokens",
       "after": "typography-heading-sm-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-sm-text-transform",
-      "originalName": "typography/heading/sm/text-transform",
+      "originalName": "typography/interface/heading/sm/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -179,7 +179,7 @@
       "mode": "tokens",
       "after": "typography-body-xl-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-body-xl-text-transform",
-      "originalName": "typography/body/xl/text-transform",
+      "originalName": "typography/interface/body/xl/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -190,7 +190,7 @@
       "mode": "tokens",
       "after": "typography-heading-xxs-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-heading-xxs-text-transform",
-      "originalName": "typography/heading/xxs/text-transform",
+      "originalName": "typography/interface/heading/xxs/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -201,7 +201,7 @@
       "mode": "tokens",
       "after": "typography-body-lg-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-body-lg-text-transform",
-      "originalName": "typography/body/lg/text-transform",
+      "originalName": "typography/interface/body/lg/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -212,7 +212,7 @@
       "mode": "tokens",
       "after": "typography-body-md-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-body-md-text-transform",
-      "originalName": "typography/body/md/text-transform",
+      "originalName": "typography/interface/body/md/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -223,7 +223,7 @@
       "mode": "tokens",
       "after": "typography-body-sm-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-body-sm-text-transform",
-      "originalName": "typography/body/sm/text-transform",
+      "originalName": "typography/interface/body/sm/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"
@@ -234,7 +234,73 @@
       "mode": "tokens",
       "after": "typography-display-xs-paragraph-spacing",
       "sourcePath": "Semantic: Typography.typography-display-xs-text-transform",
-      "originalName": "typography/display/xs/text-transform",
+      "originalName": "typography/interface/display/xs/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-title-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-title-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-title-text-transform",
+      "originalName": "typography/document/title/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-heading-lg-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-heading-lg-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-heading-lg-text-transform",
+      "originalName": "typography/document/heading/lg/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-heading-md-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-heading-md-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-heading-md-text-transform",
+      "originalName": "typography/document/heading/md/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-body-md-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-body-md-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-body-md-text-transform",
+      "originalName": "typography/document/body/md/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-body-sm-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-body-sm-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-body-sm-text-transform",
+      "originalName": "typography/document/body/sm/text-transform",
+      "value": {
+        "kind": "alias",
+        "target": "typography-text-transform-none"
+      }
+    },
+    {
+      "name": "typography-document-meta-text-transform",
+      "mode": "tokens",
+      "after": "typography-document-meta-paragraph-spacing",
+      "sourcePath": "Semantic: Typography.typography-document-meta-text-transform",
+      "originalName": "typography/document/meta/text-transform",
       "value": {
         "kind": "alias",
         "target": "typography-text-transform-none"

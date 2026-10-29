@@ -95,7 +95,8 @@ referenced value instead; duplicate declarations within a mode are rejected.
 The current source has no such self-reference, but its regression test remains.
 
 Colors serialize to six-digit hex or rgba with 8-bit RGB channels; font families
-receive CSS quotes. Existing component-to-primitive references remain unchanged;
+receive CSS quotes, except generic families (`serif`, `sans-serif`, ...), which stay
+keywords at the end of a stack. Existing component-to-primitive references remain unchanged;
 this migration does not revise the three-tier governance policy.
 
 ### Deprecated aliases
@@ -157,6 +158,12 @@ For a future legacy `value`/`type`/`originalName` export:
    with the current source and recipes, preserving hand-authored component rules
    and intentional recent token changes. Copy only reviewed changes into place.
 4. Build and run validation; inspect every CSS difference.
+
+Two typography differences are expected and must not be copied over. Figma groups
+the interface type variables under `typography/interface/` while the CSS names keep
+no prefix (`typography-heading-sm-*`; the Figma name is the `originalName`), and
+Figma stores only `Times New Roman` where the source keeps the fallback stack. See
+the `typography` block in `token-governance.json`.
 
 The converter handles the specific historical export dialect, not arbitrary
 Figma API/plugin formats. It converts CSS aliases to unambiguous source paths,

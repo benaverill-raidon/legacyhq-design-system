@@ -3,8 +3,11 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { componentsMatching, componentsUsing } from '../../blocks/doc-helpers';
 import {
+  allRoles,
   casing,
   componentTypographyTokens,
+  documentRoles,
+  figmaStyleOf,
   PROPERTIES,
   primitiveScale,
   roles,
@@ -33,7 +36,7 @@ describe('Foundations / Typography data', () => {
   });
 
   it('resolves all six properties of every role', () => {
-    const broken = roles.flatMap((role) =>
+    const broken = allRoles.flatMap((role) =>
       [
         !role.family && 'font-family',
         !Number.isFinite(role.weight) && 'font-weight',
@@ -67,6 +70,29 @@ describe('Foundations / Typography data', () => {
     expect(users('heading-xs')).toEqual(expect.arrayContaining(['button', 'tabs']));
     expect(users('heading-xxs')).toEqual(expect.arrayContaining(['badge', 'field']));
     expect(users('body-sm')).toEqual(expect.arrayContaining(['field', 'tooltip']));
+  });
+
+  it('matches the document copy: Times New Roman, interface roles kept out, 16px body', () => {
+    expect(documentRoles.map(({ name }) => name)).toEqual([
+      'document-title',
+      'document-heading-lg',
+      'document-heading-md',
+      'document-body-md',
+      'document-body-sm',
+      'document-meta',
+    ]);
+    expect(documentRoles.every(({ family }) => family === 'Times New Roman')).toBe(true);
+    expect(documentRoles.map(figmaStyleOf)).toEqual([
+      'Document/Title',
+      'Document/Heading/LG',
+      'Document/Heading/MD',
+      'Document/Body/MD',
+      'Document/Body/SM',
+      'Document/Meta',
+    ]);
+    expect(roles.some(({ family }) => family === 'Times New Roman')).toBe(false);
+    expect(documentRoles.find(({ name }) => name === 'document-body-md')?.fontSize).toBe(16);
+    expect(documentRoles.flatMap(({ name }) => users(name))).toEqual([]);
   });
 
   it('matches the truncation copy: Label never truncates', () => {
